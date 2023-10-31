@@ -44,6 +44,7 @@ export class CommonService {
     isShowAgreementNotifyAction = false;
     isElasticAuthentiaction = false;
     isCoiReviewer = false;
+    isOPAReviewer = false;
     elasticUserName = '';
     elasticAuthScheme = '';
     elasticDelimiter = '';
@@ -220,6 +221,9 @@ export class CommonService {
         if (coiRights) {
             if ('IS_REVIEW_MEMBER' in coiRights) {
                 this.isCoiReviewer = coiRights.IS_REVIEW_MEMBER;
+            }
+            if ('IS_OPA_REVIEW_MEMBER' in coiRights) {
+                this.isOPAReviewer = coiRights.IS_OPA_REVIEW_MEMBER;
             }
             if (Array.isArray(coiRights.rights)) {
                 this.rightsArray = [...this.rightsArray, ...coiRights.rights];

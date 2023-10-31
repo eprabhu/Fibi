@@ -12,7 +12,7 @@
                         area-describedby="Click to view All Disclosures">
                     All Disclosures
                     </li>
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
                         [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
@@ -20,7 +20,7 @@
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions
                     </li>
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                         (keyup.space)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
@@ -29,7 +29,7 @@
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions Without SFI
                     </li>
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
                         (keyup.space)="changeTab('MY_REVIEWS')"
                         [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
@@ -43,7 +43,7 @@
                         class="p-3 position-relative text-center" title="Click to view All Reviews"
                         area-describedby="Click to view the list of all disclosures under all reviews">All Reviews
                     </li>
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="hasTravelDisclosureRights" tabindex="0" (click)="changeTab('TRAVEL_DISCLOSURES')"
                         (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
                         [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"

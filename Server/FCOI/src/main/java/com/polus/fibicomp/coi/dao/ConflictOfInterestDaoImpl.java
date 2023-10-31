@@ -1108,6 +1108,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					unit.setAcronym(resultSet.getString(ACRONYM));
 					unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 					disclosureView.setUnit(unit);
+					disclosureView.setHomeUnitName(resultSet.getString(UNIT_NAME));
 					disclosureView.setAdminGroupName(resultSet.getString(ADMIN_GROUP_NAME));
 					disclosureView.setAdministrator(resultSet.getString(ADMINISTRATOR));
 					disclosureViews.add(disclosureView);
@@ -4451,5 +4452,41 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("adminPersonId", adminPersonId);
 		query.setParameter("travelDisclosureId", travelDisclosureId);
 		return (boolean)query.getSingleResult();
+	}
+
+	@Override
+	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
+		try {
+			statement = connection.prepareCall("{call GET_COI_PERSON_ENTITY_REL_DETAILS(?)}");
+			statement.setString(1, loginPersonId);
+			statement.execute();
+			ResultSet	rset = statement.getResultSet();
+			while (rset.next()) {
+				relationshipDtos.add(PersonEntityRelationshipDto.builder()
+						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
+						.entityId(rset.getInt("ENTITY_ID"))
+						.entityNumber(rset.getInt("ENTITY_NUMBER"))
+						.entityName(rset.getString("ENTITY_NAME"))
+						.countryName(rset.getString("COUNTRY_NAME"))
+						.validPersonEntityRelType(rset.getString("RELATIONSHIPS"))
+						.entityType(rset.getString("ENTITY_TYPE"))
+						.entityRiskCategory(rset.getString("RISK"))
+						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
+						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
+						.involvementStartDate(rset.getDate("INVOLVEMENT_START_DATE"))
+						.involvementEndDate(rset.getDate("INVOLVEMENT_END_DATE"))
+						.build());
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getSFIRelationshipDetails {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
+		}
+		return relationshipDtos;
 	}
 }

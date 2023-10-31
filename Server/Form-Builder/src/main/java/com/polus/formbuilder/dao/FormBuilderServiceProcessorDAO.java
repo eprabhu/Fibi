@@ -41,7 +41,7 @@ public class FormBuilderServiceProcessorDAO {
 					and t1.IS_ACTIVE = 'Y'
 					and FN_EVALUATE_RULE(:moduleCode,:subModuleCode,NULL,t1.BUSINESS_RULE_ID,:documentOwnerPersonId,NULL,NULL) = 1
 
-							) t ORDER by t.FORM_ORDER_NUMBER
+					) t ORDER by t.FORM_ORDER_NUMBER
 
 							 """;
 
@@ -82,6 +82,7 @@ public class FormBuilderServiceProcessorDAO {
 					where t1.IS_ACTIVE = 'Y'
 					and t2.IS_ACTIVE = 'Y'
 					and t3.FORM_BUILDER_ID = :formId
+					ORDER BY t1.COMPONENT_ORDER_NUMBER
 
 
 				""";

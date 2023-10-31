@@ -1,12 +1,14 @@
-<div class="relationship-sfi-global-save mt-3 d-flex save-btn align-items-center justify-content-between" *ngIf="isEditMode">
+<div class="relationship-sfi-global-save mt-3 d-flex save-btn align-items-center justify-content-between">
+<ng-container *ngIf="entityProjectDetails.length && isEditMode">
     <div class="ms-3 fs-14">
-        Click 'Apply & Save' to update the Conflict of Interest (COI) status and description simultaneously for all Project SFI relationships.
+        Click 'Apply to All' to update the Conflict of Interest (COI) status and description simultaneously for all Project SFI relationships.
         </div>
         <button type="button" class="btn btn-primary btn-sm fs-14 my-2 px-3 mr-10" id="apply common coi status and description and save" title="Click to apply for all SFIs  and save" 
-        (click)="openSaveAllConfirmationModal()">Apply & Save</button>
+        (click)="openSaveAllConfirmationModal()">Apply to All</button>
+</ng-container>
 </div>
-  <div class="relationship-sfi-header card mt-3">
-    <div class="row m-0 p-3" *ngIf="entityProjectDetails.length"> 
+  <div *ngIf="entityProjectDetails.length" class="relationship-sfi-header card mt-3">
+    <div class="row m-0 p-3"> 
       <div title="List of SFIs" class="col-4 fs-14 border-end" [class.p-10]="!isEditMode">
           <div class="fw-600" tabindex="0" aria-label="Significant Financial Interest">Significant Financial Interest</div>
       </div>
@@ -21,7 +23,7 @@
     </div>
   </div>
   <!-- List of SFI's -->
-  <div>
+  <div class="mb-10">
   <ng-container *ngFor="let test of entityProjectDetails; let i = index">
     <div class="relationship-sfi-data row m-0"  [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
         <div class="col-4 fs-14 border-end"tabindex='0'>
@@ -59,7 +61,7 @@
   </ng-container>
 </div>
 
-<!-- Apply & Save modal -->
+<!-- Apply to All modal -->
 
 <div class="modal fade mySkinDialog" data-bs-backdrop="static" id="applyToAllConfirmationModal" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -113,8 +115,7 @@
         <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
           (click)="clearValues()" type="button">Cancel
         </button>
-        <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button" (click)="applyToAll()">Apply &
-          Save</button>
+        <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button" (click)="applyToAll()">Apply to All</button>
       </div>
     </div>
   </div>

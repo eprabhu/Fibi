@@ -2,6 +2,7 @@ package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,21 +57,11 @@ public class OPACompUncompDAO {
 		
 		OPADisclPersonEntity opaPersonEntity = opaCommonDAO.getOPAPersonEntity( opaRequest.getOpaDisclosureId(), 
 																				opaRequest.getPersonEntityId(),
-																				opaRequest.getUpdateUser());	
-		// START - If there is no entry in OPA_DISCL_PERSON_ENTITY table against an
-				// PERSON_ENTITY then Sync OPA_DISCL_PERSON_ENTITY table
-				if (opaPersonEntity == null) {
-					opaPersonEntity = opaCommonDAO.SyncOPADisclPersonEntity(opaRequest.getOpaDisclosureId(), 
-																			opaRequest.getPersonEntityId(),
-																			opaRequest.getUpdateUser());
-				}
-		// END - If there is no entry in OPA_DISCL_PERSON_ENTITY table against an
-		// PERSON_ENTITY then Sync OPA_DISCL_PERSON_ENTITY table
+																				opaRequest.getUpdateUser());			
 		
 		opaRequest.setOpaDisclPersonEntityId(opaPersonEntity.getOpaDisclPersonEntityId());
 		List<OPADiscActivityEntity> lsDiscActivity = InsertPEComponent(opaRequest);
-
-		List<OPACompUncompResponseDTO> output = prepareResponseDTO(opaRequest.getOpaDisclosureId(), lsDiscActivity);
+		List<OPACompUncompResponseDTO> output = prepareAddPEResponseDTO(opaRequest.getPersonEntityId(), lsDiscActivity);
 		return output;
 
 	}
@@ -140,11 +131,12 @@ public class OPACompUncompDAO {
 	}
 
 	private List<OPACompUncompResponseDTO> prepareResponseDTO(Integer OPADisclosureId,
-			List<OPADiscActivityEntity> lsDiscActivity) {
+															  List<OPADiscActivityEntity> lsDiscActivity
+															) {
 
 		List<OPACompUncompResponseDTO> output = new ArrayList<>();
-		Map<Integer, OPAPersonEntityInfoDTO> personInfoMap = opaCommonDAO.getOPAPersonEntityInfo(OPADisclosureId);
-
+		Map<Integer, OPAPersonEntityInfoDTO> personInfoMap =  opaCommonDAO.getOPAPersonEntityInfo(OPADisclosureId);
+					
 		for (OPADiscActivityEntity activity : lsDiscActivity) {
 			OPAPersonEntityInfoDTO personInfo = personInfoMap.get(activity.getOpaDisclPersonEntityId());
 			if (personInfo != null) {
@@ -161,6 +153,32 @@ public class OPACompUncompDAO {
 
 		}
 		
+		return output;
+
+	}
+	
+	private List<OPACompUncompResponseDTO> prepareAddPEResponseDTO(Integer personEntityId,
+																   List<OPADiscActivityEntity> lsDiscActivity) {
+
+		List<OPACompUncompResponseDTO> output = new ArrayList<>();
+		Map<Integer, OPAPersonEntityInfoDTO> personInfoMap = opaCommonDAO.getPersonEntityInfo(personEntityId);
+		
+		for (OPADiscActivityEntity activity : lsDiscActivity) {
+			OPAPersonEntityInfoDTO personInfo = personInfoMap.get(personEntityId);
+			if (personInfo != null) {
+				output.add(OPACompUncompResponseDTO.builder().opaDisclActivityId(activity.getOpaDisclActivityId())
+						.opaDisclosureId(activity.getOpaDisclosureId())
+						.opaDisclPersonEntityId(activity.getOpaDisclPersonEntityId())
+						.personEntityId(personInfo.getPersonEntityId()).natureOfWork(activity.getNatureOfWork())
+						.description1(activity.getDescription1()).description2(activity.getDescription2())
+						.isCompensated(activity.getIsCompensated()).numOfDaysAcademic(activity.getNumOfDaysAcademic())
+						.numOfDaysInYear(activity.getNumOfDaysInYear()).numOfDaysSummer(activity.getNumOfDaysSummer())
+						.updateTimestamp(activity.getUpdateTimestamp()).updateUser(activity.getUpdateUser())
+						.entityInfo(personInfo).build());
+			}
+
+		}
+
 		return output;
 
 	}

@@ -103,6 +103,7 @@ public class DisclosureView {
 	private String documentStatusDescription;
 	private String adminPersonId;
 	private Integer adminGroupId;
+	private String unitName;
 	private List<List<String>> reviewerList;
 
 }

@@ -681,11 +681,18 @@ public class ConflictOfInterestController {
    	public List<Attachments> loadAllAttachmentsForPerson(@PathVariable("personId") String personId) {
     	logger.info("Request for loadAllAttachmentsForPerson");
    		return conflictOfInterestService.loadAllAttachmentsForPerson(personId);
-   	};
+   	}
 
 	@PostMapping("/personEntity/history")
 	public ResponseEntity<Object> fetAllPersonEntityActionLog(@RequestBody PersonEntityDto personEntityDto) {
 		logger.info("Requesting for fetAllPersonEntityActionLog");
 		return actionLogService.getAllPersonEntityActionLog(personEntityDto);
 	}
+
+	@GetMapping("/getSFIRelationshipDetails")
+   	public ResponseEntity<Object> getSFIRelationshipDetails() {
+    	logger.info("Request for getSFIRelationshipDetails");
+   		return conflictOfInterestService.getSFIRelationshipDetails();
+   	}
+
 }

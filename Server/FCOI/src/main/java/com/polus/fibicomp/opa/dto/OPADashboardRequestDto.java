@@ -30,4 +30,9 @@ public class OPADashboardRequestDto {
     private List<String> dispositionStatusCodes;
     private List<String> opaDisclosureStatusCodes;
 	private Boolean fetchAllRecords;
+    private String personId;
+    private Integer entityId;
+    private Boolean isFaculty;
+    private String periodStartDate;
+    private String periodEndDate;
 }
