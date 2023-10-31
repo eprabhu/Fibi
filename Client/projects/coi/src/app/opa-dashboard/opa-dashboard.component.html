@@ -12,14 +12,14 @@
                         area-describedby="Click to view All Disclosures">
                         All Disclosures
                     </li>
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard"></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
                         [class.active]="_opaDashboardService.opaRequestObject.tabType=='NEW_SUBMISSIONS'"
                         class="p-3 position-relative text-center" title="Click to view New Submissions"
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard"></li>
                     <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
                         (keyup.space)="changeTab('MY_REVIEWS')" class="p-3 position-relative text-center"
                         [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
@@ -258,6 +258,18 @@
                                                 {{coi?.disclosureStatus}}
                                             </span>
                                         </app-no-data-label>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 p-013 mt-2" *ngIf="coi?.reviewers && coi?.reviewers.length">
+                                    <div class="col-12">
+                                        <label for="id" class="label-text">Reviewers:</label>
+                                        <span class="grey-text">
+                                            <ng-container *ngFor="let reviewer of coi?.reviewers; let isLast = last">
+                                                <span class="fileChips regularFont">
+                                                    {{reviewer[0]}} <ng-container *ngIf="reviewer[1] != 'null'">| {{reviewer[1]}} </ng-container> | <span class="reviewer-{{getReviewerStatus(reviewer[3])}}">{{reviewer[2]}}</span>
+                                                </span>
+                                            </ng-container>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

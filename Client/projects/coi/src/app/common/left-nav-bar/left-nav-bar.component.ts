@@ -26,9 +26,8 @@ export class LeftNavBarComponent implements OnInit {
         this.checkUserHasRight();
         this.isAdministrator = this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
             || this._commonService.isCoiReviewer;
-        this.isOPAAdministrator = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
-            // || this._commonService.isCoiReviewer;
-        
+        this.isOPAAdministrator = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA'])
+            || this._commonService.isOPAReviewer;
     }
 
     offClickSideBarHandler(event) {
