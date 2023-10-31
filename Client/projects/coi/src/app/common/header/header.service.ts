@@ -23,8 +23,4 @@ export class HeaderService {
         return this._http.post(this._commonService.baseUrl + '/saveOrUpdatePersonNote', req);
     }
 
-    createOPA(personId, homeUnit) {
-        return this._http.post(this._commonService.opaUrl + '/createOPA', { personId, homeUnit });
-    }
-
 }
