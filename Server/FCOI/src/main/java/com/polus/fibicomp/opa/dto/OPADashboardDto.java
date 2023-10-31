@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,10 +43,11 @@ public class OPADashboardDto {
     private String adminPersonId;
     private String adminPersonName;
     private Integer adminGroupId;
-    private Integer adminGroupName;
+    private String adminGroupName;
     private String updateUser;
     private Timestamp updateTimeStamp;
     private String updateUserFullName;
     private String dispositionStatus;
     private String disclosureStatus;
+    private List<List<String>> reviewers;
 }
