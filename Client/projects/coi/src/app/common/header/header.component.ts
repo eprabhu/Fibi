@@ -148,14 +148,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     }
 
-    createOPA() {
-        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
-            .subscribe((res: any) => {
-                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
-            }));
-    }
-
     private passwordAtleast7Characters() {
         if (this.resetPassword.password.length < 7) {
             this.passwordValidation.set('password-length', true);
