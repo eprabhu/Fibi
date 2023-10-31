@@ -94,4 +94,15 @@ public class GeneralDaoImpl implements GeneralDao {
         }
         return rightList;
 	}
+
+    @Override
+    public boolean isPersonInOPAReviewer(String personId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("select (CASE WHEN count(cr.opaReviewId) > 0 THEN true ELSE false END) ");
+        hqlQuery.append("FROM OPAReview cr where cr.assigneePersonId = :personId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("personId", personId);
+        return (Boolean) query.getSingleResult();
+    }
 }
