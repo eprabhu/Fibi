@@ -2,6 +2,7 @@ package com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,21 +57,10 @@ public class OPAOutsideFinancialInterestDAO {
 		OPADisclPersonEntity opaPersonEntity = opaCommonDAO.getOPAPersonEntity( opaRequest.getOpaDisclosureId(), 
 																				opaRequest.getPersonEntityId(),
 																				opaRequest.getUpdateUser());	
-		
-		// START - If there is no entry in OPA_DISCL_PERSON_ENTITY table against an
-		// PERSON_ENTITY then Sync OPA_DISCL_PERSON_ENTITY table
-		if (opaPersonEntity == null) {
-			opaPersonEntity = opaCommonDAO.SyncOPADisclPersonEntity(opaRequest.getOpaDisclosureId(), 
-																	opaRequest.getPersonEntityId(),
-																	opaRequest.getUpdateUser());
-		}
-		// END - If there is no entry in OPA_DISCL_PERSON_ENTITY table against an
-		// PERSON_ENTITY then Sync OPA_DISCL_PERSON_ENTITY table
-		
+						
 		opaRequest.setOpaDisclPersonEntityId(opaPersonEntity.getOpaDisclPersonEntityId());
 		List<OPAOutsideFinancialInterestEntity> lsFinInterest = InsertPEComponent(opaRequest);
-
-		List<OPAOutsideFinancialInterestResponseDTO> output = prepareResponseDTO(opaRequest.getOpaDisclosureId(), lsFinInterest);
+		List<OPAOutsideFinancialInterestResponseDTO> output = prepareAddPEResponseDTO(opaRequest.getPersonEntityId(), lsFinInterest);
 	
 		return output;
 	}
@@ -145,11 +135,12 @@ public class OPAOutsideFinancialInterestDAO {
 	}
 
 	private List<OPAOutsideFinancialInterestResponseDTO> prepareResponseDTO(Integer OPADisclosureId,
-			List<OPAOutsideFinancialInterestEntity> lsFinacialInterest) {
+																			List<OPAOutsideFinancialInterestEntity> lsFinacialInterest) {
 
 		List<OPAOutsideFinancialInterestResponseDTO> output = new ArrayList<>();
+		
 		Map<Integer, OPAPersonEntityInfoDTO> personInfoMap = opaCommonDAO.getOPAPersonEntityInfo(OPADisclosureId);
-
+		
 		for (OPAOutsideFinancialInterestEntity finInterest : lsFinacialInterest) {
 			OPAPersonEntityInfoDTO personInfo = personInfoMap.get(finInterest.getOpaDisclPersonEntityId());
 			if (personInfo != null) {
@@ -172,5 +163,32 @@ public class OPAOutsideFinancialInterestDAO {
 		return output;
 
 	}
-	
+
+	private List<OPAOutsideFinancialInterestResponseDTO> prepareAddPEResponseDTO(Integer personEntityId,
+			List<OPAOutsideFinancialInterestEntity> lsFinacialInterest) {
+
+		List<OPAOutsideFinancialInterestResponseDTO> output = new ArrayList<>();
+		
+		Map<Integer, OPAPersonEntityInfoDTO> personInfoMap = opaCommonDAO.getPersonEntityInfo(personEntityId);
+
+		for (OPAOutsideFinancialInterestEntity finInterest : lsFinacialInterest) {
+			OPAPersonEntityInfoDTO personInfo = personInfoMap.get(personEntityId);
+			if (personInfo != null) {
+				output.add(OPAOutsideFinancialInterestResponseDTO.builder()
+						.opaOutsideFinancialInterestId(finInterest.getOpaOutsideFinancialInterestId())
+						.opaDisclosureId(finInterest.getOpaDisclosureId())
+						.opaDisclPersonEntityId(finInterest.getOpaDisclPersonEntityId())
+						.personEntityId(personInfo.getPersonEntityId())
+						.personsRelationWithEntity(finInterest.getPersonsRelationWithEntity())
+						.entityRelationWithInstitute(finInterest.getEntityRelationWithInstitute())
+						.description1(finInterest.getDescription1()).description2(finInterest.getDescription2())
+						.updateTimestamp(finInterest.getUpdateTimestamp()).updateUser(finInterest.getUpdateUser())
+						.entityInfo(personInfo).build());
+			}
+
+		}
+
+		return output;
+
+	}
 }
