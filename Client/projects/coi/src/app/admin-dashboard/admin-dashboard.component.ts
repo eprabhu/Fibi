@@ -133,12 +133,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 private _navigationService: NavigationService
     ) { }
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.getPermissions();
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
         this.getDashboardDetails();
-        this.getPermissions();
         this.checkForSort();
         this.checkForPagination();
         this.checkForAdvanceSearch();
@@ -251,7 +251,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     setDashboardTab() {
         this.coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
-            sessionStorage.getItem('currentCOIAdminTab') : 'ALL_DISCLOSURES';
+            sessionStorage.getItem('currentCOIAdminTab') : this.isShowAdminDashboard ? 'ALL_DISCLOSURES' : 'MY_REVIEWS';
         this.checkForTravelDisclosureTabChange(this.coiAdminDashboardService.coiRequestObject.tabName);
     }
 

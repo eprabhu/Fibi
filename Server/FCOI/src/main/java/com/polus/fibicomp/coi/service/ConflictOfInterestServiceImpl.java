@@ -2810,4 +2810,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		requestDto.setId(AuthenticatedUser.getLoginPersonId());
 		return new ResponseEntity<>(conflictOfInterestDao.getEntityWithRelationShipInfo(requestDto), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Object> getSFIRelationshipDetails() {
+		return new ResponseEntity<>(conflictOfInterestDao.getSFIRelationshipDetails(AuthenticatedUser.getLoginPersonId()), HttpStatus.OK);
+	}
 }

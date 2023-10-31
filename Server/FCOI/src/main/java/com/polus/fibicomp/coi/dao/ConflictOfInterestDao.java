@@ -1274,4 +1274,11 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
+
+	/**
+	 * This method is used to fetch SFI relationship details
+	 * @param loginPersonId
+	 * @return
+	 */
+	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId);
 }

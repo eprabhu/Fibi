@@ -10,7 +10,7 @@ import { deepCloneObject, isEmptyObject } from '../../../../fibi/src/app/common/
 import { NavigationService } from '../common/services/navigation.service';
 import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
-import { DATE_PLACEHOLDER } from '../app-constants';
+import { DATE_PLACEHOLDER, OPA_DASHBOARD_RIGHTS } from '../app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 
 @Component({
@@ -25,7 +25,7 @@ import { ElasticConfigService } from '../../../../fibi/src/app/common/services/e
 })
 export class OpaDashboardComponent implements OnInit {
 
-    isShowAdminDashboard = true;
+    isShowAdminDashboard = false;
     localOPARequestObject: OPADashboardRequest = new OPADashboardRequest();
     localNameObject: any;
     sortCountObj: SortCountObj;
@@ -55,7 +55,7 @@ export class OpaDashboardComponent implements OnInit {
     };
     sortSectionsList = [
         { variableName: 'person', fieldName: 'Person' },
-        { variableName: 'homeUnitNumber', fieldName: 'Department' },
+        { variableName: 'homeUnitName', fieldName: 'Department' },
         { variableName: 'submissionTimestamp', fieldName: 'Certification Date' },
         { variableName: 'closeDate', fieldName: 'Expiration Date' },
         { variableName: 'dispositionStatus', fieldName: 'Disposition Status' },
@@ -70,7 +70,8 @@ export class OpaDashboardComponent implements OnInit {
         private _router: Router, public commonService: CommonService, private _navigationService: NavigationService
     ) { }
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.getPermissions();
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -160,7 +161,7 @@ export class OpaDashboardComponent implements OnInit {
 
     setDashboardTab() {
         this._opaDashboardService.opaRequestObject.tabType = sessionStorage.getItem('currentOPATab') ?
-            sessionStorage.getItem('currentOPATab') : 'ALL_DISCLOSURES';
+            sessionStorage.getItem('currentOPATab') : this.isShowAdminDashboard ? 'ALL_DISCLOSURES' : 'MY_REVIEWS';
     }
 
     setAdvanceSearch() {
@@ -212,6 +213,11 @@ export class OpaDashboardComponent implements OnInit {
                     this.isLoading = false;
                 }
             }));
+    }
+
+    async getPermissions() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.isShowAdminDashboard = rightsArray.some((right) => OPA_DASHBOARD_RIGHTS.has(right));
     }
 
     sortResult(sortFieldBy) {
@@ -374,5 +380,14 @@ export class OpaDashboardComponent implements OnInit {
 		}
 		return this.map.size < 1 ? true : false;
 	}
+
+    getReviewerStatus(statusCode) {
+        switch (statusCode) {
+            case '1': return 'info';
+            case '2': return 'success';
+            case '3': return 'warning';
+            default: return 'danger';
+        }
+    }
 
 }

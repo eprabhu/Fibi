@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonService } from '../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../app-constants';
 
 @Injectable()
 export class OpaDashboardService {
@@ -20,9 +21,9 @@ isCheckBoxSelected = {
 constructor(private _http: HttpClient,
   private _commonService: CommonService) { }
 
-
 getOPADashboard(params: any) {
   return this._http.post(this._commonService.formUrl + '/opa/dashboard', params).pipe(catchError((err) => {
+    this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching OPA Disclosure List failed. Please try again.');
     return of();
   }));
 }
@@ -55,6 +56,7 @@ export class SortCountObj {
   updateTimeStamp = 2;
   dispositionStatus = 0;
   disclosureStatus = 0;
+  homeUnitName = 0;
   closeDate = 0;
 }
 

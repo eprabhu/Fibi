@@ -77,6 +77,4 @@ export class PELayerComponent implements OnInit {
         RO.programmedElement = data.data;
         return RO;
     }
-
-
 }
