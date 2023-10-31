@@ -1,6 +1,12 @@
 package com.polus.fibicomp.coi.dto;
 
-import lombok.*;
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -19,5 +25,7 @@ public class PersonEntityRelationshipDto {
     private String entityRiskCategory;
     private String personEntityVersionStatus;
     private Boolean isRelationshipActive;
+	private Date involvementStartDate;
+	private Date involvementEndDate;
 
 }
