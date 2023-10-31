@@ -6,13 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import org.apache.logging.log4j.LogManager;
@@ -242,6 +247,18 @@ public class OPADaoImpl implements OPADao {
         try {
             ResultSet rset = getOPADashboardResultSet(requestDto, false);
             while (rset.next()) {
+                String reviewers = rset.getString("REVIEWERS");
+                List<List<String>> reviewerList = new ArrayList<>();
+                if (reviewers != null && !reviewers.isEmpty()) {
+                    String[] reviewerArray = reviewers.split(";");
+                    Arrays.stream(reviewerArray)
+                            .forEach(reviewer -> {
+                                List<String> subList = Arrays.stream(reviewer.split(":"))
+                                        .map(String::trim)
+                                        .collect(Collectors.toList());
+                                reviewerList.add(subList);
+                            });
+                }
                 opaDashboardDtos.add(
                         OPADashboardDto.builder()
                         .opaDisclosureId(rset.getInt("OPA_DISCLOSURE_ID"))
@@ -272,6 +289,9 @@ public class OPADaoImpl implements OPADao {
                         .updateTimeStamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
                         .updateUser(rset.getString("UPDATE_USER"))
                         .updateUserFullName(rset.getString("UPDATE_USER_FULL_NAME"))
+                        .adminPersonName(rset.getString("ADMIN_FULL_NAME"))
+                        .adminGroupName(rset.getString("ADMIN_GROUP_NAME"))
+                        .reviewers(reviewerList)
                         .build()
                 );
             }
@@ -300,7 +320,7 @@ public class OPADaoImpl implements OPADao {
         String submissionTimestamp = requestDto.getSubmissionTimestamp();
         String unitNumber = requestDto.getUnitNumber();
 		Boolean fetchAllRecords = requestDto.getFetchAllRecords();
-        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?)}");
+        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
         statement.setString(1, AuthenticatedUser.getLoginPersonId());
         statement.setString(2, requestDto.getFilterType());
         statement.setBoolean(3, isCount);
@@ -315,6 +335,11 @@ public class OPADaoImpl implements OPADao {
         statement.setString(10, submissionTimestamp);
         statement.setString(11, unitNumber);
 		statement.setBoolean(12, fetchAllRecords != null && fetchAllRecords);
+        statement.setString(13, requestDto.getPersonId());
+        statement.setString(14, requestDto.getEntityId() != null ? requestDto.getEntityId().toString() : null);
+        statement.setString(15, requestDto.getIsFaculty() != null ? requestDto.getIsFaculty().equals(Boolean.TRUE) ? "Y" : "N" : null);
+        statement.setString(16, requestDto.getPeriodStartDate());
+        statement.setString(17, requestDto.getPeriodEndDate());
         statement.execute();
         return  statement.getResultSet();
     }
@@ -332,9 +357,11 @@ public class OPADaoImpl implements OPADao {
                 } else if (mapElement.getKey().equals("updateTimeStamp")) {
                     sortOrder = (sortOrder == null ? "T.UPDATE_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
                 } else if (mapElement.getKey().equals("dispositionStatus")) {
-                    sortOrder = (sortOrder == null ? "T.DISPOSITION_STATUS " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
+                    sortOrder = (sortOrder == null ? "T.DISPOSITION_STATUS " + mapElement.getValue() : sortOrder + ", T.DISPOSITION_STATUS " + mapElement.getValue());
                 } else if (mapElement.getKey().equals("disclosureStatus")) {
-                    sortOrder = (sortOrder == null ? "T.OPA_DISCLOSURE_STATUS " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
+                    sortOrder = (sortOrder == null ? "T.OPA_DISCLOSURE_STATUS " + mapElement.getValue() : sortOrder + ", T.OPA_DISCLOSURE_STATUS " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("homeUnitName")) {
+                    sortOrder = (sortOrder == null ? "T.UNIT_NAME " + mapElement.getValue() : sortOrder + ", T.UNIT_NAME " + mapElement.getValue());
                 }
             }
         }
