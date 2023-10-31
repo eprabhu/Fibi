@@ -53,6 +53,7 @@ public class GeneralServiceImpl implements GeneralService{
         rights.addAll(generalDao.fetchAllCoiOpaRights(AuthenticatedUser.getLoginPersonId()));
         objectMap.put("rights", rights);
         objectMap.put("IS_REVIEW_MEMBER", generalDao.isPersonInReviewer(AuthenticatedUser.getLoginPersonId()));
+		objectMap.put("IS_OPA_REVIEW_MEMBER", generalDao.isPersonInOPAReviewer(AuthenticatedUser.getLoginPersonId()));
         return new ResponseEntity<>(objectMap, HttpStatus.OK);
 	}
 
