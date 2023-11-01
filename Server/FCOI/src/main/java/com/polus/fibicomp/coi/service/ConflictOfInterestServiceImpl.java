@@ -1239,10 +1239,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
 		vo.setTabName("IN_PROGRESS_DISCLOSURES");
 		Integer inProgressDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-		conflictOfInterestVO.setInProgressDisclosureCount(inProgressDisclosureCount);
 		vo.setTabName("APPROVED_DISCLOSURES");
 		Integer approvedDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
 		vo.setTabName("TRAVEL_DISCLOSURES");
 		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
 		conflictOfInterestVO.setTravelDisclosureCount(travelDisclosureCount);
@@ -1265,6 +1263,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			logger.error("Exception on getOPADashboard {}", e.getMessage());
             throw new ApplicationException("Unable to fetch opa dashboard details", e, Constants.DB_PROC_ERROR);	
 		}
+		conflictOfInterestVO.setInProgressDisclosureCount(inProgressDisclosureCount);
+		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
 		return commonDao.convertObjectToJSON(conflictOfInterestVO);
 	}
 
@@ -2259,6 +2259,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if (dashboardVO.getFilterType().equalsIgnoreCase(FILTER_TYPE_ALL) || dashboardVO.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) {
 			OPADashboardRequestDto opaDashboardRequestDto = new OPADashboardRequestDto();
 			opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
+			opaDashboardRequestDto.setFetchAllRecords(true);
 			OPADashboardResponseDto opaDashboardResponseDto = opaDao.getOPADashboard(opaDashboardRequestDto);
 			disclosureHistoryResponse.setOpaDashboardDtos(opaDashboardResponseDto.getData());
 		}
