@@ -131,7 +131,7 @@
                          area-describedby="Click to view the disclosure screening form">Form
                     </div>
                 </div>
-                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1'" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1' && checkForReviewerTab()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                      role="button">
                     <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                          area-describedby="Click to view the reviews">Reviews

@@ -68,7 +68,7 @@ export class OpaComponent implements OnInit {
         this.$subscriptions.push(this.opaService.submitOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
-                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa});
+                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
@@ -201,6 +201,10 @@ export class OpaComponent implements OnInit {
             this.opaService.triggerStartOrCompleteCoiReview(modalType);
             this.opaService.isEnableReviewActionModal = true;
         }
+    }
+
+    checkForReviewerTab() {
+        return this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE']);
     }
 
 }
