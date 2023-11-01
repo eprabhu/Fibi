@@ -10,6 +10,7 @@ import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
 import { RO } from '../coi-interface';
 import { listAnimation } from '../../common/utilities/animations';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
   selector: 'app-relationship',
@@ -68,7 +69,11 @@ export class RelationshipComponent implements OnInit {
     if (this._relationShipService.isSliderDataUpdated) {
       this.updateConflictStatus();
     }
-    this.loadProjectRelations();
+    if (this.isShowCollapsedConflictRelationship) {
+      this.updateRelationStatus();
+    } else {
+      this.loadProjectRelations();
+    }
   }
 
   ngOnInit() {
@@ -86,7 +91,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
   }
 
   private updateConflictStatus(): void {
-    this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+    this.$subscriptions.push( this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
       if (data) {
         this.coiData.coiDisclosure.coiConflictStatusType = data;
         this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
@@ -95,7 +100,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
       }
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
-    });
+    }));
   }
 
   private getDataFromStore() {
@@ -108,7 +113,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
     if (isFristTimeLoad) {
       this.isShowNoDataCard = false;
     }
-    this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
+    this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
         if (isFristTimeLoad) {
           this.isShowNoDataCard = true;
@@ -134,7 +139,16 @@ getDisclosureCount(typeCode, disclosureStatus) {
           this.isAnimationPaused = false;
         }
       }
-    });
+    }));
+  }
+  
+  updateRelationStatus() {
+    this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
+      if (data) {
+        const LINKED_MODULE = data?.awards[0] || data?.proposals[0];
+        this.awardList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
+      }
+    }));
   }
 
   /**
@@ -204,7 +218,7 @@ getDependencyDetails() {
   }
 
   getEntityList() {
-    this.$subscriptions.push(  this._relationShipService.getEntityList(
+    this.$subscriptions.push(this._relationShipService.getEntityList(
       this.moduleCode, this.moduleId, this.coiData.coiDisclosure.disclosureId,
       this.coiData.coiDisclosure.disclosureStatusCode, this.coiData.coiDisclosure.personId).subscribe((data: any) => {
       this.entityProjectDetails = data;
@@ -212,4 +226,9 @@ getDependencyDetails() {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong!');
     }));
   }
+
+  ngOnDestroy(): void {
+    subscriptionHandler(this.$subscriptions);
+}
+
 }

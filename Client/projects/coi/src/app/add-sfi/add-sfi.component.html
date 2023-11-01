@@ -25,23 +25,7 @@
 				</div>
 				<div class="col-4">
 					<div class="fw-bold me-2 fs-14 label-text">Sponsors Research </div>
-					<div class="col d-flex px-2" title="Click to toggle Yes/No">
-						<span class="py-1" aria-label="Disclosures_has_sfi" role="switch">
-							<a *ngIf="additionalDetails.sponsorsResearch" class="pl-2">
-								<label class="switch" (click)="additionalDetails.sponsorsResearch = false">
-									<input type="checkbox" checked>
-									<span class="slider round"><small class="fs-12 mt-1">Yes</small></span>
-								</label>
-							</a>
-							<a *ngIf="!additionalDetails.sponsorsResearch" class="pl-2">
-								<label class="switch" (click)="additionalDetails.sponsorsResearch = true">
-									<input type="checkbox">
-									<span class="slider round"><small
-											class="deactivate-text fs-12 mt-1">No</small></span>
-								</label>
-							</a>
-						</span>
-					</div>
+					<span class="text-color fs-14">{{additionalDetails.sponsorsResearch ? 'Yes' : 'No'}}</span>
 				</div>
 			</div>
 		</div>
@@ -59,7 +43,7 @@
 </div>
 <nav class="border-nav rounded-2 bg-white border mx-3 br-bottom d-flex fs-15 fw-bold mb-1 shadow-lg user-dashboard-nav"
 	*ngIf="!isEntityManagement">
-	<div class="navigation-icons p-2" role="button">
+	<div class="navigation-icons px-3 py-3" role="button">
 		Relationship Details
 	</div>
 </nav>
@@ -432,10 +416,10 @@
 								<div class="relation select-margin ml-09">
 									<div *ngFor="let relation of subsection.value;" class="form-check form-check-inline">
 										<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-											[value]="relation?.relationshipTypeCode" [(ngModel)]="isChecked[relation.relationshipTypeCode]"
+											[value]="relation?.validPersonEntityRelTypeCode" [(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
 											title="Click to select {{relation?.description}} relation">
 										<label class="r-title fs-14">
-											{{relation?.description}}
+											{{relation?.personEntityRelType?.description}}
 										</label>
 									</div>
 								</div>
@@ -573,28 +557,31 @@
             <div class="text-secondary fs-14 col-4">
               <label class="grey-text me-2">Entity Status</label>
               <span class="fs-14 fw-400 d-flex entity-risk-badge px-3"
-                [ngClass]="addEntityConfirmation?.isActive ? 'Active' : 'Inactive'">{{addEntityConfirmation?.isActive
+                [ngClass]="addEntityConfirmation?.isActive ? 'active' : 'inactive'">{{addEntityConfirmation?.isActive
                 ?'Active':'Inactive'}}</span>
             </div>
             <div class="text-secondary fs-14 col-8 mt-2">
-              <label class="grey-text me-2"> Address</label>
-              <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
-                <span> {{(addEntityConfirmation?.address |
-                  slice:0:55)}}
-                <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
-                </span></span>
-              </span>
-              <ng-template #showFullInfo>
-                <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
-                <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
-                  class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
-                </span>
-              </ng-template>
+              <div> 
+				<label class="grey-text me-2">Address</label></div>
+			  <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
+				<span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
+					<span> {{(addEntityConfirmation?.address |
+					  slice:0:55)}}
+					<span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+					</span></span>
+				  </span>
+				  <ng-template #showFullInfo>
+					<span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
+					<span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
+					  class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
+					</span>
+				  </ng-template>			
+				</app-no-data-label>
             </div>
             <div class="col text-secondary fs-14 align-items-center mt-2">
               <label class="fw-bold me-2">Risk </label>
               <span class="fw-normal">
-                <div class="text-color fs-14 d-flex">
+                <div class="text-color fs-14 d-flex align-items-center">
                   <span>
                     <mat-icon
                       class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>

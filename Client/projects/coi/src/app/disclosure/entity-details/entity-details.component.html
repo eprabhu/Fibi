@@ -104,8 +104,8 @@
                   [ngClass] = "subsection.key === 'OPA' ? 'mr-30' : subsection.key === 'Travel' ? 'mr-20' : ''">{{subsection.key}} : </label>
                 <div *ngFor="let relation of subsection.value;" class="form-check form-check-inline" [class.ms-3]="subsection.key === 'Financial'">
                   <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                    [value]="relation?.personEntityRelType?.relationshipTypeCode"
-                    [(ngModel)]="entityDetailService.isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
+                    [value]="relation?.validPersonEntityRelTypeCode"
+                    [(ngModel)]="entityDetailService.isChecked[relation?.validPersonEntityRelTypeCode]">
                   <label class="text-secondary r-title fs-14">
                     {{relation?.personEntityRelType?.description}}
                   </label>
