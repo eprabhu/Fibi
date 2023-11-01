@@ -1,6 +1,6 @@
 
-{    
-    "nodes": { 
+{
+    "nodes": {
         "Award" : {
             "colour": "#dd7d33",
             "size": 10,
@@ -189,11 +189,11 @@
         }
     },
     "externalLinks": {
-        "FIBI": "http://192.168.1.47:8080/fibi/",
-        "COI": "http://10.199.100.35:2222/"
+        "FIBI": "https://dev.fibiweb.com/fibi/",
+        "COI": "https://coi.fibiweb.com/fibicoi/"
     },
     "additionalImages": [
         {"id": "ESponsor", "image":"/assets/images/g_proposal.png"}
     ]
-      
+
 }
