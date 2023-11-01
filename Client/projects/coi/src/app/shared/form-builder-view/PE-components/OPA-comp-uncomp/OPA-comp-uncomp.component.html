@@ -142,11 +142,12 @@
                                                     [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
                     'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
                                                     [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isRelationshipActive)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isRelationshipActive)}}</span>
-                                                <p class="entity-title mt-3">
-                                                    <strong class="fs-14" tabindex="0"
-                                                        [attr.aria-label]="'entity name' + item?.entityName">{{item?.entityName
+                                                <p class="entity-title mt-3 clickable-content">
+                                                    <strong class="fs-14" tabindex="0" (click)="viewSlider(item.personEntityId)"
+                                                        [attr.aria-label]="'entity name' + item?.entityName">
+                                                        <u>{{item?.entityName
                                                         }} -
-                                                        ({{item?.countryName}})</strong>
+                                                        ({{item?.countryName}})</u></strong>
                                                 </p>
                                             </span>
                                         </div>
