@@ -35,11 +35,11 @@ public class GeneralServiceImpl implements GeneralService{
     private CommonDao commonDao;
 
     @Override
-	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
-		List<String> personIds = personDao.getAdministratorsByModuleCode(Constants.COI_MODULE_CODE);
+	public ResponseEntity<Object> fetchAdminGroupsAndPersons(Integer moduleCode) {
+		List<String> personIds = personDao.getAdministratorsByModuleCode(moduleCode);
 		Set<Person> persons = new HashSet<>();
 		personIds.forEach(personId -> persons.add(personDao.getPersonDetailById(personId)));
-		List<AdminGroup> adminGroups = commonDao.fetchAdminGroupsBasedOnModuleCode(Constants.COI_MODULE_CODE);
+		List<AdminGroup> adminGroups = commonDao.fetchAdminGroupsBasedOnModuleCode(moduleCode);
 		Map<String, Object> objectMap = new HashMap<>();
 		objectMap.put("persons", persons);
 		objectMap.put("adminGroups", adminGroups);
