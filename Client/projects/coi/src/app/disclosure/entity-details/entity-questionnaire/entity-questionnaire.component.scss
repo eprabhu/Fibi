@@ -2,8 +2,7 @@
   .active {
     border-bottom: 3px solid #007DEC;
     color: #007DEC;
-    margin-bottom: -0.2rem !important;
-    padding: 8.8px 16px !important;
+    padding: 10px 10px !important;
   }
 }
 
@@ -47,19 +46,6 @@
   position: relative;
   left: 1.4rem;
   border-radius: 0.5rem;
-}
-
-
-.fa-check{
-  font-weight: 600;
-  color: #28a745 !important;
-  margin-left: 5px;
-}
-
-.fa-exclamation-circle {
-  font-weight: 600;
-  color: #ffc107 !important;
-  margin-left: 5px;
 }
 
 
@@ -180,8 +166,6 @@
 }
 
 .custom-padding {
-  padding: 25px;
-  padding-left:0px;
   width: max-content;
 }
 
@@ -241,4 +225,23 @@
   height: 218px;
   font-weight: 500;
   font-size: 15px;
+}
+
+.no-data-card {
+  height: 150px;
+}
+
+.mr-20 {
+  margin-right: 28px;
+}
+
+.relation-header {
+    position: absolute;
+    top: -11px;
+    background-color: white;
+    left: 15px;
+}
+
+.pl-20 {
+  padding-left: 20px;
 }

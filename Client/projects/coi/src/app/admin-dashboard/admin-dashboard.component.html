@@ -1,21 +1,26 @@
 <div class="px-3" [@fadeInOutHeight]>
     <section class="section-advanced-search">
+        <div class="fs-18 fw-bold mt-3">COI Disclosure Dashboard</div>
+        <hr class="mt-1">
         <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
             <div class="align-items-center bg-white d-flex justify-content-between list">
                 <ul class="m-0 p-0">
-                    <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
-                        (keyup.space)="changeTab('MY_REVIEWS')"
-                        [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
-                        class="p-3 position-relative text-center" title="Click to view My Reviews"
-                        area-describedby="Click to view the list of all disclosures under my review">My Reviews
-                    <li class="separator"></li>
+                    <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
+                        (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
+                        [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
+                        class="p-3 position-relative text-center ml-3" title="Click to view All Disclosures"
+                        area-describedby="Click to view All Disclosures">
+                    All Disclosures
+                    </li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
                         [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
                         class="p-3 position-relative text-center" title="Click to view New Submissions"
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions
-                    <li class="separator"></li>
+                    </li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                         (keyup.space)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
@@ -23,6 +28,14 @@
                         class="p-3 position-relative text-center" title="Click to view New Submissions without SFI"
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions Without SFI
+                    </li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
+                    <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
+                        (keyup.space)="changeTab('MY_REVIEWS')"
+                        [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
+                        class="p-3 position-relative text-center" title="Click to view My Reviews"
+                        area-describedby="Click to view the list of all disclosures under my review">My Reviews
+                    </li>
                     <li class="separator"></li>
                     <li tabindex="0" (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
                         (keyup.space)="changeTab('ALL_REVIEWS')"
@@ -30,14 +43,7 @@
                         class="p-3 position-relative text-center" title="Click to view All Reviews"
                         area-describedby="Click to view the list of all disclosures under all reviews">All Reviews
                     </li>
-                    <li class="separator"></li>
-                    <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
-                        (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
-                        [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
-                        class="p-3 position-relative text-center ml-3" title="Click to view All Disclosures"
-                        area-describedby="Click to view All Disclosures">
-                        All Disclosures
-                    <li class="separator"></li>
+                    <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="hasTravelDisclosureRights" tabindex="0" (click)="changeTab('TRAVEL_DISCLOSURES')"
                         (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
                         [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
@@ -328,8 +334,8 @@
                                                 <img *ngIf="coi?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
                                                 <span class="text-nowrap mt-2">Project :</span>
                                                 <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(coi)
-                                                    : modalHeader(coi) | slice:0:180)}}
-                                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>180">...
+                                                    : modalHeader(coi) | slice:0:120)}}
+                                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>120">...
                                                         <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span
                                                                 class="readMore fw-500">Read More</span></a>
                                                     </span>

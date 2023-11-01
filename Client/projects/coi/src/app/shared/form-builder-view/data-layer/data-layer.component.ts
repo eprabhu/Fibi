@@ -13,6 +13,7 @@ export class DataLayerComponent {
     @Input() component: SectionComponent;
     @Input() fbConfiguration: FBConfiguration;
     @Input() saveEventForChildComponent;
+    @Input() isFormEditable: boolean;
     @Input() formBuilderId: number;
 
     constructor(private _formBuilderService: FormBuilderService) { }

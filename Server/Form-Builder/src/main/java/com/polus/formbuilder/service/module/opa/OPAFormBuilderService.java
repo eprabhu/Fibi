@@ -16,7 +16,7 @@ import com.polus.formbuilder.model.FormResponse;
 import com.polus.formbuilder.service.FormBuilderService;
 import com.polus.formbuilder.service.FormBuilderServiceProcessor;
 
-@Service
+@Service("Module_23_FormBuilderServiceImpl")
 public class OPAFormBuilderService implements FormBuilderService {
 
     private final FormBuilderServiceProcessor formBuilderProcessor;

@@ -41,7 +41,7 @@ public class FormBuilderServiceProcessorDAO {
 					and t1.IS_ACTIVE = 'Y'
 					and FN_EVALUATE_RULE(:moduleCode,:subModuleCode,NULL,t1.BUSINESS_RULE_ID,:documentOwnerPersonId,NULL,NULL) = 1
 
-							) t ORDER by t.FORM_ORDER_NUMBER
+					) t ORDER by t.FORM_ORDER_NUMBER
 
 							 """;
 
@@ -82,6 +82,7 @@ public class FormBuilderServiceProcessorDAO {
 					where t1.IS_ACTIVE = 'Y'
 					and t2.IS_ACTIVE = 'Y'
 					and t3.FORM_BUILDER_ID = :formId
+					ORDER BY t1.COMPONENT_ORDER_NUMBER
 
 
 				""";
@@ -117,14 +118,11 @@ public class FormBuilderServiceProcessorDAO {
 											  String moduleSubItemKey
 											 ) {
 		
-		Integer answerHeaderId = null;
-
-		String sql = " "
-				+ " select t1.QUESTIONNAIRE_ANS_HEADER_ID from quest_answer_header t1 \r\n"
-				+ " where t1.MODULE_ITEM_CODE = :moduleItemCode \r\n"
-				+ " and t1.MODULE_SUB_ITEM_CODE = :moduleSubItemCode \r\n"
-				+ " and t1.MODULE_ITEM_KEY = :moduleItemKey \r\n"
-				+ " and t1.MODULE_SUB_ITEM_KEY = :moduleSubItemKey ";
+		String sql = "SELECT t1.QUESTIONNAIRE_ANS_HEADER_ID FROM quest_answer_header t1 " +
+		             "WHERE t1.MODULE_ITEM_CODE = :moduleItemCode " +
+		             "AND t1.MODULE_SUB_ITEM_CODE = :moduleSubItemCode " +
+		             "AND t1.MODULE_ITEM_KEY = :moduleItemKey " +
+		             "AND t1.MODULE_SUB_ITEM_KEY = :moduleSubItemKey";
 
 		Query query = entityManager.createNativeQuery(sql);
 		query.setParameter("moduleItemCode", moduleItemCode);
@@ -133,16 +131,16 @@ public class FormBuilderServiceProcessorDAO {
 		query.setParameter("moduleSubItemKey", moduleSubItemKey);
 		
 		List<?> resultRows = query.getResultList();
-
-		for (Object row : resultRows) {
-			if (row instanceof Object[]) {
-				Object[] rowData = (Object[]) row;
-				answerHeaderId = ((Integer) rowData[0]);
-			}
-		}
 		
-		return answerHeaderId;
+		return (Integer) getSingleResultOrNull(resultRows);
 	}
 	
-
+	
+	public static <T> T getSingleResultOrNull(List<T> resultRows) {
+	    if (resultRows != null && !resultRows.isEmpty()) {
+	        return resultRows.get(0);
+	    }
+	    return null;
+	}
+	
 }

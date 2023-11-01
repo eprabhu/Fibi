@@ -8,7 +8,7 @@ import {DataStoreService} from './data-store.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL,
     HTTP_ERROR_STATUS,
-    HOME_URL,
+    REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL
 } from '../../app-constants';
 import {NavigationService} from '../../common/services/navigation.service';
@@ -64,7 +64,7 @@ export class ResolveServiceService {
     }
 
     setPreviousUrlPath(previousUrl: string) {
-        return previousUrl.includes('?') ? HOME_URL : previousUrl;
+        return previousUrl.includes('?') ? REPORTER_HOME_URL : previousUrl;
     }
 
     private updateProposalDataStore(data: any) {
@@ -95,7 +95,7 @@ export class ResolveServiceService {
             this._router.navigate(['/coi/error-handler/403']);
             return new Observable(null);
         } else {
-            this._router.navigate([HOME_URL]);
+            this._router.navigate([REPORTER_HOME_URL]);
             // this._commonService.showToast(HTTP_ERROR_STATUS,
             //     error.error !== 'DISCLOSURE_EXISTS' ? 'Please try again later.' : 'Disclosure already exists.');
             return new Observable(null);

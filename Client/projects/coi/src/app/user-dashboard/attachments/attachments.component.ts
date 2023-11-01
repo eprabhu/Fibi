@@ -17,6 +17,7 @@ export class AttachmentsComponent implements OnInit {
     isFirstTimeLoad = false;
     $subscriptions: Subscription[] = [];
     deployMap = environment.deployUrl;
+    isShowCreate = false;
 
     constructor(private _attachmentService: AttachmentsService, private _commonService: CommonService) { }
 
@@ -37,10 +38,14 @@ export class AttachmentsComponent implements OnInit {
 
     getAllAttachments() {
         this.isFirstTimeLoad = true;
+        this.isShowCreate = false;
         this.$subscriptions.push(this._attachmentService.fetchAllAttachmentsForPerson(this._commonService.getCurrentUserDetail('personId')).subscribe((data: any) => {
             if (data) {
                 this.attachmentLists = data;
                 this.isFirstTimeLoad = false;
+            } 
+            if (!data?.length) {
+                this.isShowCreate = true;
             }
         }, err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, "Error in fetching attachment list");

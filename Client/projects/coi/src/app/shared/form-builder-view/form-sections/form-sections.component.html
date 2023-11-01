@@ -15,6 +15,7 @@
           [component]="component" 
           [fbConfiguration]="fbConfiguration" 
           [formBuilderId]="formBuilderId"
+          [isFormEditable]="isFormEditable"
           [saveEventForChildComponent]="saveEventForChildComponent"
         ></app-data-layer>
       </div>
@@ -22,7 +23,13 @@
         <div [innerHTML] = "component.componentData"></div>
       </div>
       <div *ngIf="component.componentType === 'PE'">
-       <!-- to be developed -->
+        <app-PE-layer 
+          [component]="component" 
+          [fbConfiguration]="fbConfiguration" 
+          [formBuilderId]="formBuilderId"
+          [isFormEditable]="isFormEditable"
+          [saveEventForChildComponent]="saveEventForChildComponent">
+        </app-PE-layer>
       </div>
       <div *ngIf="component.componentType === 'HL'">
          <div class="line" [style]="component.componentData"></div>

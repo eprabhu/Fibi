@@ -29,10 +29,12 @@ import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.coi.pojo.Attachments;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -91,14 +93,14 @@ public interface ConflictOfInterestService {
 	 * @param personEntityRelationship
 	 * @return COIFinancialEntityDetails
 	 */
-	List<PersonEntityRelationship> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
+	ResponseEntity<Object> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
 
 	/**
 	 * This method is used to create SFI
-	 * @param vo
+	 * @param personEntity
 	 * @return vo
 	 */
-	ResponseEntity<Object> createSFI(ConflictOfInterestVO vo);
+	ResponseEntity<Object> createSFI(PersonEntity personEntity);
 
 	/**
 	 * This method is used to certifyDisclosure
@@ -129,7 +131,7 @@ public interface ConflictOfInterestService {
 	 * This method is used to revise Coi disclosure
 	 * @return counts
 	 */
-	String reviseDisclosure(ConflictOfInterestVO vo);
+	ResponseEntity<Object> reviseDisclosure(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for evaluate DisclosureQuestionnaire
@@ -150,7 +152,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return saved CoiReview object
 	 */
-	CoiReview saveOrUpdateCoiReview(ConflictOfInterestVO vo);
+	ResponseEntity<Object> saveOrUpdateCoiReview(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get CoiReview based on disclosureId
@@ -164,7 +166,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return CoiReview
 	 */
-	CoiReview startReview(ConflictOfInterestVO vo);
+	ResponseEntity<Object> startReview(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for add comments
@@ -186,7 +188,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return CoiReview
 	 */
-	CoiReview completeReview(ConflictOfInterestVO vo);
+	ResponseEntity<Object> completeReview(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for delete review
@@ -328,7 +330,7 @@ public interface ConflictOfInterestService {
 
 	public ResponseEntity<Object> getPersonEntityDetails(Integer personEntityId);
 
-	ResponseEntity<Object> getRelatioshipDetails(String tabName);
+	ResponseEntity<Object> getValidPersonRelationshipLookUp();
 
 	ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo);
 	
@@ -539,10 +541,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to fetch section type codes
-	 * @param ConflictOfInterestVO
+	 * @param conflictOfInterestVO
 	 * @return
 	 */
-	ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO vo);
+	ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO conflictOfInterestVO);
 
 	ResponseEntity<Object> modifyTravelDisclosureRisk(CoiTravelDisclosureDto travelDisclosureDto);
 
@@ -577,4 +579,16 @@ public interface ConflictOfInterestService {
     
     List<Attachments> loadAllAttachmentsForPerson(String personId);
 
+	/**
+	 * This method fetches all person entity with entity and relationship of a person
+	 * @param requestDto
+	 * @return
+	 */
+    ResponseEntity<Object> getEntityWithRelationShipInfo(CommonRequestDto requestDto);
+
+    /**
+	 * This method fetches SFI relationship details
+	 * @return
+	 */
+	ResponseEntity<Object> getSFIRelationshipDetails();
 }

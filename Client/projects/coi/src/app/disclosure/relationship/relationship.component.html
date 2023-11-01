@@ -226,17 +226,6 @@
                               dateFormatter}}</span>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Sponsor</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.sponsor">
-                              <span class="grey-text m-0">{{selectedProjectForView?.sponsor}}</span>
-                          </app-no-data-label>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-12 mb-3">
-                          <label class="d-block label-text">Lead Unit</label>
-                          <span class="grey-text m-0">
-                            {{selectedProjectForView?.unitNumber}} - {{selectedProjectForView?.unitName}}</span>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
                           <label class="d-block label-text">{{selectedProjectForView?.moduleCode == 3 ? 'Proposal' :
                               'Award'}} Status</label>
                           <app-no-data-label [valueToShow]="selectedProjectForView?.moduleStatus">
@@ -244,10 +233,21 @@
                           </app-no-data-label>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
+                          <label class="d-block label-text">Sponsor</label>
+                          <app-no-data-label [valueToShow]="selectedProjectForView?.sponsor">
+                              <span class="grey-text m-0">{{selectedProjectForView?.sponsor}}</span>
+                          </app-no-data-label>
+                      </div>
+                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
                           <label class="d-block label-text">Prime Sponsor</label>
                           <app-no-data-label [valueToShow]="selectedProjectForView?.primeSponsor">
                               <span class="grey-text m-0">{{selectedProjectForView?.primeSponsor}}</span>
                           </app-no-data-label>
+                      </div>
+                      <div class="col-lg-4 col-sm-6 col-12 mb-3">
+                          <label class="d-block label-text">Lead Unit</label>
+                          <span class="grey-text m-0">
+                            {{selectedProjectForView?.unitNumber}} - {{selectedProjectForView?.unitName}}</span>
                       </div>
                   </div>
               </div>

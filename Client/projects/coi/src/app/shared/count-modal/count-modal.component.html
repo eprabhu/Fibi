@@ -70,14 +70,14 @@
                 <div class="shadow tabSwitch">
                     <div class="listMargin">
                         <ul class="sub-Tabs mb-0">
-                            <li [ngClass]="currentModalTab == 'Proposal'?'active':'inActive'"
+                            <li [ngClass]="currentModalTab == 'Proposal'?'Active':'InActive'"
                                 (click)='currentModalTab = "Proposal"; switchTableData()'>
                                 <span class="pl-2 beforeline">{{inputType === 'SFI_TAB' ? 'Proposals related to this
                                     SFI' :
                                     'Proposals'}}</span>
                             </li>
                             <li class="separator"></li>
-                            <li [ngClass]="currentModalTab == 'Award'?'active':'inActive'"
+                            <li [ngClass]="currentModalTab == 'Award'?'Active':'InActive'"
                                 (click)='currentModalTab = "Award"; switchTableData()'>
                                 <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
                                     'Awards'}}</span>

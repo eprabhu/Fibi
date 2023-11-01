@@ -3,7 +3,7 @@ import {Subscription} from 'rxjs';
 import {ReviewService} from '../review.service';
 import {CommonService} from '../../../common/services/common.service';
 import {environment} from '../../../../environments/environment';
-import {DataStoreService} from '../../services/data-store.service';
+import {DataStoreService, StoreData} from '../../services/data-store.service';
 import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -18,7 +18,7 @@ import {
 import {PersonProjectOrEntity} from '../../../shared-components/shared-interface';
 import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
-import {OpaDisclosure} from "../../opa-interface";
+import {OPA, OpaDisclosure} from "../../opa-interface";
 
 @Component({
     selector: 'app-coi-review-location',
@@ -28,7 +28,6 @@ import {OpaDisclosure} from "../../opa-interface";
 export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
-    dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail', 'coiReviewerList'];
     opaDisclosure: OpaDisclosure = new OpaDisclosure();
     adminGroups: any = [];
     deployMap = environment.deployUrl;
@@ -37,7 +36,6 @@ export class LocationComponent implements OnInit, OnDestroy {
     modifyIndex = -1;
     reviewerList: any = [];
     validationMap = new Map();
-    disclosurePerson: any = {};
 
     reviewDetails: any = {};
     personElasticOptions: any = {};
@@ -51,13 +49,14 @@ export class LocationComponent implements OnInit, OnDestroy {
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     projectDetail: any = {};
     isMangeReviewAction = false;
-    disReviewLocation = 'COI_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
-    disReviewStatus = 'COI_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
+    disReviewLocation = 'OPA_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
+    disReviewStatus = 'OPA_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
     locationType: any = [];
-    reviewerStatusType: any = [];
+    reviewStatusType: any = [];
     reviewStartDate: any;
     reviewEndDate: any;
     collapseViewMore = {};
+    isCOIAdministrator = false;
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
@@ -73,7 +72,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.isMangeReviewAction = this._commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE', 'MANAGE_DISCLOSURE_REVIEW']);
+        // this.isMangeReviewAction = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR']);
+        this.isMangeReviewAction = this._commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE']);
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
@@ -98,22 +98,23 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.validationMap.delete('reviewStatus');
         if (event && event.length) {
             this.reviewDetails.reviewStatusTypeCode = event[0].code;
-            this.reviewDetails.reviewerStatusType = {};
-            this.reviewDetails.reviewerStatusType['description'] = event[0].description;
-            this.reviewDetails.reviewerStatusType['reviewStatusCode'] = event[0].code;
-            if (this.reviewDetails.reviewStatusTypeCode === '2') {
+            this.reviewDetails.reviewStatusType = {};
+            this.reviewDetails.reviewStatusType['description'] = event[0].description;
+            this.reviewDetails.reviewStatusType['reviewStatusCode'] = event[0].code;
+            if (this.reviewDetails.reviewStatusTypeCode === '3') {
                 this.reviewEndDate = new Date();
                 this.reviewEndDate.setHours(0, 0, 0, 0);
             }
         } else {
             this.reviewDetails.reviewStatusTypeCode = null;
-            this.reviewDetails.reviewerStatusType = {};
+            this.reviewDetails.reviewStatusType = {};
         }
     }
 
     getCoiReview() {
-        const DATA = this._dataStore.getData(['coiReviewerList']);
-        this.reviewerList = DATA.coiReviewerList || [];
+        this.$subscriptions.push(this._reviewService.getCoiReview(this.opaDisclosure.opaDisclosureId).subscribe((res) => {
+            this.reviewerList = res || [];
+        }));
     }
 
     adminGroupSelect(event: any): void {
@@ -139,10 +140,10 @@ export class LocationComponent implements OnInit, OnDestroy {
                 'description': this.reviewDetails.reviewLocationType.description
             });
         }
-        if (this.reviewDetails.reviewerStatusType) {
-            this.reviewerStatusType.push({
-                'code': this.reviewDetails.reviewerStatusType.reviewStatusCode,
-                'description': this.reviewDetails.reviewerStatusType.description
+        if (this.reviewDetails.reviewStatusType) {
+            this.reviewStatusType.push({
+                'code': this.reviewDetails.reviewStatusType.reviewStatusCode,
+                'description': this.reviewDetails.reviewStatusType.description
             });
         }
         this.modifyIndex = index;
@@ -154,9 +155,9 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     saveOrUpdateCoiReview() {
         if (this.validateReview()) {
-            this.reviewDetails.disclosureId = this.opaDisclosure.opaDisclosureId;
+            this.reviewDetails.opaDisclosureId = this.opaDisclosure.opaDisclosureId;
             this.getReviewDates();
-            this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview({coiReview: this.reviewDetails}).subscribe((res: any) => {
+            this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.modifyIndex = -1;
                 this.reviewDetails = {};
@@ -176,10 +177,10 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     addReviewToList(review: any) {
-        this.reviewerList.push(review);
-        this.opaDisclosure.opaDisclosureStatusType = review.coiDisclosure.coiReviewStatusType;
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], {
-            coiReviewerList: this.reviewerList,
+        const reviewer = this.setReviewAndOPAData(review);
+        this.reviewerList.push(reviewer);
+        this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
+            opaReviewerList: this.reviewerList,
             opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
@@ -187,11 +188,18 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
     }
 
+    private setReviewAndOPAData(review: any) {
+        const {opaDisclosure, ...reviewer} = review;
+        this.opaDisclosure.opaDisclosureStatusType = opaDisclosure.opaDisclosureStatusType;
+        this.opaDisclosure.opaDisclosureStatusCode = opaDisclosure.opaDisclosureStatusCode;
+        return reviewer;
+    }
+
     updateReview(review: any) {
-        this.reviewerList.splice(this.modifyIndex, 1, review);
-        this.opaDisclosure.opaDisclosureStatusType = review.coiDisclosure.coiReviewStatusType;
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], {
-            coiReviewerList: this.reviewerList,
+        const reviewer = this.setReviewAndOPAData(review);
+        this.reviewerList.splice(this.modifyIndex, 1, reviewer);
+        this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
+            opaReviewerList: this.reviewerList,
             opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
@@ -199,11 +207,11 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     deleteReview() {
-        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((_res: any) => {
+        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((_res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.opaDisclosure.opaDisclosureStatusType = _res.coiReviewStatusType;
-            this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], {
-                coiReviewerList: this.reviewerList,
+            this.setReviewAndOPAData(_res);
+            this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
+                opaReviewerList: this.reviewerList,
                 opaDisclosure: this.opaDisclosure
             });
             this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
@@ -233,7 +241,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         if (!this.reviewStartDate) {
             this.validationMap.set('reviewStartDate', 'Please select a review start date.');
         }
-        if (!this.reviewEndDate && this.reviewDetails.reviewStatusTypeCode == '2') {
+        if (!this.reviewEndDate && this.reviewDetails.reviewStatusTypeCode == '3') {
             this.validationMap.set('reviewEndDate', 'Please select a review end date.');
         }
         if (!this.reviewDetails.reviewStatusTypeCode) {
@@ -315,22 +323,18 @@ export class LocationComponent implements OnInit, OnDestroy {
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
             this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                if (dependencies.some((dep) => this.dependencies.includes(dep))) {
-                    this.isExpanded = true;
-                    this.getDataFromStore();
-                }
+                this.isExpanded = true;
+                this.getDataFromStore();
             })
         );
     }
 
     private getDataFromStore() {
-        const DATA = this._dataStore.getData();
-        this.opaDisclosure = DATA;
-        this.adminGroups = DATA.adminGroup || [];
-        this.disclosurePerson = DATA.person;
-        this.projectDetail = DATA.projectDetail;
-        this.setPersonProjectDetails();
+        const DATA: OPA = this._dataStore.getData();
+        this.opaDisclosure = DATA.opaDisclosure;
+        this.adminGroups = DATA.opaDisclosure.adminGroupId || [];
         this.commentConfiguration.disclosureId = this.opaDisclosure.opaDisclosureId;
+        this.isCOIAdministrator = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
         this.getCoiReview();
         this.setAdminGroupOptions();
     }
@@ -360,9 +364,9 @@ export class LocationComponent implements OnInit, OnDestroy {
             && ele.reviewStatusTypeCode === '1');
     }
 
-    private setPersonProjectDetails(): void {
-        this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
-        this.personProjectDetails.projectDetails = this.projectDetail;
-        this.personProjectDetails.unitDetails = this.opaDisclosure.homeUnitName;
-    }
+    // private setPersonProjectDetails(): void {
+    //     this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
+    //     this.personProjectDetails.projectDetails = this.projectDetail;
+    //     this.personProjectDetails.unitDetails = this.opaDisclosure.homeUnitName;
+    // }
 }

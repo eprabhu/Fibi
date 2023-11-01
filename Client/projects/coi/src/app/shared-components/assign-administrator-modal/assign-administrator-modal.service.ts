@@ -7,8 +7,8 @@ export class AssignAdministratorModalService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getAdminDetails() {
-        return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
+    getAdminDetails(moduleCode) {
+        return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons/' + moduleCode);
     }
 
     getPersonGroup(personId) {
@@ -18,7 +18,9 @@ export class AssignAdministratorModalService {
     }
 
     assignAdmin(path: string, params) {
-        return this._http.patch(this._commonService.baseUrl + `/${path}/assignAdmin`, params);
+        const url = path === 'opa' ? this._commonService.formUrl + '/opa/assignAdmin' :
+            this._commonService.baseUrl + `/${path}/assignAdmin`;
+        return this._http.patch(url, params);
     }
 
 }

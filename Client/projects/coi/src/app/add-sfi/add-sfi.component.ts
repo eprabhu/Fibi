@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { getDateObjectFromTimeStamp, compareDates } from '../../../../fibi/src/app/common/utilities/date-utilities';
+import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
@@ -57,12 +57,15 @@ export class AddSfiComponent implements OnInit {
     sfiType: string;
     existingEntityDetails: any = {};
     canShowEntityFields = false;
-    ENTITY_NAME_HELP_TEXT = "Type in the official name of the business or organization you need to report. Entities to report include foreign, domestic, public or private entities, but not federal agencies.";
-    RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
-    RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
-    RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
     addEntityConfirmation: any = null;
     isAddressReadMore: false;
+    isChecked = {};
+    relationLookup: any = [];
+    concurrencyPersonEntityId = null;
+    involvementDate =  {
+        involvementStartDate: null,
+        involvementEndDate: null
+    }
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -80,6 +83,7 @@ export class AddSfiComponent implements OnInit {
         this.setHeader();
         this.getSFILookup();
         this.setDefaultRiskLevel();
+        this.getRelationshipLookUp();
         if (this.coiEntityManageId) {
             this.getEntityDetails();
         }
@@ -154,7 +158,7 @@ export class AddSfiComponent implements OnInit {
                 this.clearCountryField = new String('false');
             }
         }, err => {
-            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl,'ONLY_ACTIVE');
+            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
         }));
     }
@@ -172,28 +176,33 @@ export class AddSfiComponent implements OnInit {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity ? 'Update ' : 'Created '}Entity Successfully completed.`);
     }
 
+    setDateValues() {
+        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementDate.involvementStartDate);
+        this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementDate.involvementEndDate);
+    }
+
     private saveAdditionalDetails(): void {
+        this.setDateValues();
         this.$subscriptions.push(this.sfiService.createSFI(
             {
-                personEntity: {
-                    entityId: this.entityDetails.coiEntity.entityId,
-                    entityNumber: this.entityDetails.coiEntity.entityNumber,
-                    ...this.additionalDetails
-                },
-                ...this.disclosureDetails
+                entityId: this.entityDetails.coiEntity.entityId,
+                entityNumber: this.entityDetails.coiEntity.entityNumber,
+                ...this.additionalDetails,
+                "validPersonEntityRelTypeCodes": this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
             }).subscribe((data: any) => {
-                if(data) {
+                if (data) {
                     this.additionalDetails = data.personEntity;
                     this.isSaving = false;
-                    this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
-                    this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
-                    if(data.personEntity) {
-                        this.sfiService.$addRelationService.next(data.personEntity.personEntityId);
-                    }
+                    this.navigateToSFI(data.personEntityId);
                 }
             }, _err => {
                 this.isSaving = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
+                    if (_err.status === 405) {
+                        this.concurrencyPersonEntityId = _err.error.personEntityId;
+                        openModal('sfi-concurrency-modal');
+                    } else {
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
+                    }
             }));
     }
 
@@ -244,7 +253,7 @@ export class AddSfiComponent implements OnInit {
             this.entityDetailsValidation();
         }
         if (!this.isEntityManagement) {
-            if (!this.additionalDetails.involvementStartDate) {
+            if (!this.involvementDate.involvementStartDate) {
                 this.mandatoryList.set('date', 'Please enter a start date.');
             }
             if (!this.additionalDetails.staffInvolvement) {
@@ -378,9 +387,14 @@ export class AddSfiComponent implements OnInit {
         this.entityDetails.coiEntity.majorVersion = this.modifyType === '2' ? true : false;
         this.createOrUpdateEntitySFI();
     }
+
     viewSfiDetails() {
-      this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
     }
+
+    editSfiDetails(personEntityId) {
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+      }
 
     viewEntityDetails(event) {
         this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: event } });
@@ -409,6 +423,31 @@ export class AddSfiComponent implements OnInit {
             default:
                 return;
         }
+    }
+
+
+    getSelectedRelationTypeCodes() {
+        return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
+    }
+
+    getRelationshipLookUp() {
+        this.$subscriptions.push(this.sfiService.addSFILookUp().subscribe((res: any) => {
+            if(res) {
+                this.relationLookup = this.groupBy(res.validPersonEntityRelTypes, "coiDisclosureType", "description");
+            }
+        }));
+    }
+
+    groupBy(jsonData, key, innerKey) {
+        return jsonData.reduce((relationsTypeGroup, item) => {
+            (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
+            return relationsTypeGroup;
+        }, {});
+    }
+
+    navigateToSFI(personEntityId) {
+        this.sfiService.isShowSfiNavBar = false;
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
     }
 
 } 

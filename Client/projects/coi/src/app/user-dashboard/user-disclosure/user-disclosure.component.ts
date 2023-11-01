@@ -3,7 +3,7 @@ import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL,
-         CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+         CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
@@ -12,6 +12,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
 import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import {HeaderService} from '../../common/header/header.service';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -29,16 +30,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         filter: 'ALL',
     };
     dashboardRequestObject = {
-        advancedSearch: 'L',
-        pageNumber: 20,
-        sort: {},
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         filterType: 'ALL',
-        currentPage: '1',
-        property2: ''
+        currentPage: 1
     };
-    filteredDisclosureArray: UserDisclosure[] = [];
+    completeDisclosureList: UserDisclosure[] = [];
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
     selectedModuleCode: number;
@@ -65,23 +62,28 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isShowCreate = false;
     showSlider = false;
     entityId: any;
-    differenceInDays:any;
-    dateWarningColor:any = false;
-    dateWarning:any = true;
-    hasPendingFCOI:any = false;
+    differenceInDays: any;
+    dateWarningColor: any = false;
+    dateWarning: any = true;
+    hasPendingFCOI: any = false;
     hasActiveFCOI = false;
+    hasPendingOPA = false;
+    hasActiveOPA = false;
+    completeDisclosureListCopy: any = []; /* Excat copy of original list which is to perform every array operations */
+    DATA_PER_PAGE: number = 20; /* Number of data to be shown in single page */
+    paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
 
     constructor(public userDisclosureService: UserDisclosureService,
-        public userDashboardService: UserDashboardService,
-        public commonService: CommonService,
-        private _router: Router) {
+                public userDashboardService: UserDashboardService,
+                public commonService: CommonService,
+                public headerService: HeaderService,
+                private _router: Router) {
     }
 
     ngOnInit() {
         this.loadDashboard();
         this.getDashboardBasedOnTab();
         this.loadDashboardCount();
-        this.getSearchList();
     }
 
     loadDashboard() {
@@ -93,7 +95,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             })).subscribe((res: any) => {
                 this.result = res;
                 if (this.result) {
-                    this.filteredDisclosureArray =  this.getDashboardList();
+                    this.completeDisclosureList =  this.getDashboardList();
+                    this.completeDisclosureListCopy = this.paginationArray = JSON.parse(JSON.stringify(this.completeDisclosureList));
+                    this.getArrayListForPagination();
                     this.loadingComplete();
                 }
             }), (err) => {
@@ -101,10 +105,19 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Description
+     * @returns {any}
+     * Here the sorting is applied for the merged array inorder to get the list based on the decreasing
+     * order of updateTimeStamp. If any action performed on a particular disclosure or if any disclosure
+     * created then that one will comes first in the list.
+     */
     private getDashboardList(): any {
-        const disclosureViews = this.result.disclosureViews || [];
-        const travelDashboardViews = this.result.travelDashboardViews || [];
-        return disclosureViews.concat(travelDashboardViews);
+        const DISCLOSURE_VIEWS = this.result.disclosureViews || [];
+        const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
+        const OPA_DETAILS = this.result.opaDashboardDto || [];
+        const MERGED_LIST = [...DISCLOSURE_VIEWS, ...TRAVEL_DASHBOARD_VIEWS, ...OPA_DETAILS];
+        return MERGED_LIST.sort((a, b) => b.updateTimeStamp - a.updateTimeStamp);
     }
 
     private loadingComplete() {
@@ -115,38 +128,101 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
             this.getDisclosureHistory();
         } else {
-            this.filteredDisclosureArray = [];
+            this.completeDisclosureList = [];
             this.$fetchDisclosures.next();
         }
     }
 
-    getDisclosures() {
-        this.dashboardRequestObject.currentPage = '1';
-        this.$debounceEventForDisclosureList.next();
-    }
-
-    getSearchList() {
-        this.$subscriptions.push(this.$debounceEventForDisclosureList.pipe(debounce(() => interval(800))).subscribe((data: any) => {
-        this.dashboardRequestObject.property2 = this.searchText;
-            this.isLoading = true;
-            this.filteredDisclosureArray = [];
-            this.$fetchDisclosures.next();
-        }
-        ));
-      }
-
+    /** The function will trigger for the close button in the search field */
     resetAndFetchDisclosure() {
         this.searchText = '';
-        this.filteredDisclosureArray = [];
-        this.dashboardRequestObject.property2 = '';
+        this.completeDisclosureList = [];
         this.getDashboardBasedOnTab();
     }
 
-    actionsOnPageChange(event) {
+    /**
+     * Description
+     * @param {any} event:number
+     * @returns {any}
+     * Basically for every page change, it will computes the data to be shown in that particular page by slicing the original disclosure
+     * list based on the start and end indices.
+     * For page 1 => data will shows from index 0 to index 19.
+     * For page 2 => data will shows from index 20 to index 39 and so on
+     */
+    actionsOnPageChange(event: number) {
         if (this.dashboardRequestObject.currentPage != event) {
             this.dashboardRequestObject.currentPage = event;
-            this.$fetchDisclosures.next();
+            this.getArrayListForPagination();
         }
+    }
+   
+    
+    /**
+     * Description
+     * @returns {any}
+     * Arranges data in each page according to the Maximum number of data. By default the maximum number of data shows in a page is 20.
+     * This function is implemented on purpose as we are removing the pagination functionality from server side. This is because we won't
+     * be having a huge data in the dashboard in real time(production environment). Hence we dont want to make unnecessary api calls to
+     * the server everytime for fetching the data.
+     */
+    private getArrayListForPagination(): void {
+        const [START_INDEX, END_INDEX] = [this.getStartIndex(), this.getEndIndex()];
+        this.completeDisclosureList = this.completeDisclosureListCopy.slice(START_INDEX, END_INDEX + 1);
+    }
+
+    /**
+     * Description
+     * @returns {any}
+     * If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
+     * i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
+     * on 2nd page, the starting point would be (2-1) * 20 = 20.
+     */
+    private getStartIndex(): number {
+        if (this.dashboardRequestObject.currentPage == 1) { return 0; }
+        return (this.dashboardRequestObject.currentPage - 1) * this.DATA_PER_PAGE;
+    }
+
+    /**
+     * Description
+     * @returns {any}
+     * If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
+     * i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
+     * on 2nd page, the ending point would be (20 * 2) - 1  = 39.
+     */
+    private getEndIndex(): number {
+        if (this.dashboardRequestObject.currentPage == 1) { return this.DATA_PER_PAGE - 1; }
+        return (this.DATA_PER_PAGE * this.dashboardRequestObject.currentPage) - 1;
+    }
+
+    getFilteredDisclosureListForSearchWord(): any {
+        this.dashboardRequestObject.currentPage = 1; /* To set the pagination while search */
+        this.completeDisclosureList = this.completeDisclosureListCopy.filter(disclosure => {
+            for (const value in disclosure) {
+                if (this.isExistSearchWord(disclosure, value)) { return true; }
+            }
+            return false;
+        });
+        this.resetDisclosureCopy();
+    }
+
+    isExistSearchWord(disclosure: any, value: string): boolean {
+        return disclosure[value] && disclosure[value].toString().toLowerCase().includes(this.searchText.toLowerCase());
+    }
+
+    resetDashboardAfterSearch(): void {
+        this.searchText = '';
+        this.completeDisclosureList =  this.getDashboardList();
+        this.resetDisclosureCopy();
+        this.getArrayListForPagination();
+    }
+
+    /**
+     * Description
+     * @returns {any}
+     * The function is to set the pagination array separately while searching with a keyword
+     */
+    resetDisclosureCopy(): void {
+        this.paginationArray = this.completeDisclosureList;
     }
 
     loadDashboardCount() {
@@ -160,8 +236,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     setIsShowCreateFlag() {
         if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount
             && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
-            !this.filteredDisclosureArray.length &&
-            this.dashboardRequestObject.currentPage == '1' && this.dashboardRequestObject.filterType == 'ALL') {
+            !this.completeDisclosureList.length &&
+            this.dashboardRequestObject.currentPage == 1 && this.dashboardRequestObject.filterType == 'ALL') {
                 this.isShowCreate = true;
         }
     }
@@ -181,7 +257,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     setTab(tabName: string, disclosureCount: number = 0) {
         this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
-        this.dashboardRequestObject.currentPage = '1';
+        this.dashboardRequestObject.currentPage = 1;
         this.dashboardRequestObject.filterType = 'ALL';
         this.currentSelected.filter = 'ALL';
         this.isShowFilterAndSearch = !!disclosureCount;
@@ -222,7 +298,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     setFilter(type = 'ALL') {
         this.currentSelected.filter = type;
         this.dashboardRequestObject.filterType = type;
-        this.dashboardRequestObject.currentPage = '1';
+        this.dashboardRequestObject.currentPage = 1;
         this.resetAndFetchDisclosure();
     }
 
@@ -234,22 +310,25 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     redirectToDisclosure(disclosure: UserDisclosure) {
         let redirectUrl;
-
         if (disclosure.travelDisclosureId) {
             const isTravelDisclosureEditPage = ['1', '4', '5'].includes(disclosure.reviewStatusCode);
             redirectUrl = isTravelDisclosureEditPage ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
+        } else if (disclosure.opaDisclosureId) {
+            redirectUrl = OPA_REDIRECT_URL;
         } else {
             const isDisclosureEditPage = ['1', '5', '6'].includes(disclosure.reviewStatusCode);
             redirectUrl = isDisclosureEditPage ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
-
         this._router.navigate([redirectUrl],
-            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId } });
+            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId} });
     }
 
     getColorBadges(disclosure: UserDisclosure) {
         if (disclosure?.travelDisclosureId) {
             return 'bg-travel-clip';
+        }
+        if (disclosure?.opaDisclosureId) {
+            return 'bg-opa-clip';
         }
         switch (disclosure.fcoiTypeCode) {
             case '1':
@@ -264,12 +343,14 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     modalHeader(disclosure: UserDisclosure) {
-        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
+        if (!disclosure.opaDisclosureId && (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3')) {
             if (disclosure.fcoiTypeCode === '2') {
                 return `#${disclosure.proposalId} - ${disclosure.proposalTitle}`;
             } else if (disclosure.fcoiTypeCode === '3') {
                 return `#${disclosure.awardId} - ${disclosure.awardTitle}`;
             }
+        } else {
+            return `#${disclosure.opaDisclosureId}`;
         }
     }
 
@@ -287,15 +368,21 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getDisclosureHistory() {
         this.isLoading = true;
-        this.filteredDisclosureArray =  [];
+        this.completeDisclosureList =  [];
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
-            this.filteredDisclosureArray =  data;
+            this.completeDisclosureList =  this.getAllDisclosureHistories(data);;
             this.loadingComplete();
         }));
     }
 
+    getAllDisclosureHistories(data: any): any {
+        const DISCLOSURE_HISTORY = data.disclosureHistoryDtos || [];
+        const OPA_HISTORY = data.opaDashboardDtos || [];
+        return [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
+    }
+
     openFCOIModal(type) {
-        this.userDashboardService.$openModal.next(type);
+        this.headerService.$openModal.next(type);
     }
 
     viewSlider(event) {
@@ -315,35 +402,49 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getActiveFCOI() {
         this.fcoiDatesRemaining();
-        return this.userDashboardService.activeDisclosures.filter(disclosure =>
+        return this.headerService.activeDisclosures.filter(disclosure =>
             disclosure?.fcoiTypeCode === '1' );
     }
 
-    triggerClickForId(targetIdName: string) {
-        document.getElementById(targetIdName)?.click();
+    fcoiDatesRemaining() {
+        this.headerService.activeDisclosures.forEach(disclosure => {
+            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
+                this.hasPendingFCOI = true;
+            }
+            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
+                this.hasActiveFCOI = true;
+            }
+        });
+        this.headerService.activeOPAs.forEach(disclosure => {
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '3') {
+                this.hasActiveOPA = true;
+            }
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '1') {
+                this.hasPendingOPA = true;
+            }
+        });
+        const disclosureDate = this.headerService.activeDisclosures.filter(disclosure =>
+            disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+        if (disclosureDate[0]) {
+            const expirationDate = (disclosureDate[0].expirationDate);
+            const currentDate = new Date().getTime();
+            this.differenceInDays = getDuration(currentDate, expirationDate);
+            if ((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) +
+                (this.differenceInDays.durInYears * 360)) < 10) {
+                this.dateWarningColor = true;
+            } else if ((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) +
+                (this.differenceInDays.durInYears * 360)) > 30) {
+                this.dateWarning = false;
+            }
+        }
     }
 
-    fcoiDatesRemaining() {
-            this.userDashboardService.activeDisclosures.forEach(disclosure => {
-                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
-                    this.hasPendingFCOI = true;
-                }
-                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
-                    this.hasActiveFCOI = true;
-                }
-            })
-            let disclosureDate  =  this.userDashboardService.activeDisclosures.filter(disclosure =>
-                disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
-            if ( disclosureDate[0]) {
-                const experationDate = (disclosureDate[0].expirationDate);
-                const currentDate = new Date().getTime()
-                this.differenceInDays = getDuration(currentDate, experationDate)
-                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) < 10){
-                    this.dateWarningColor = true;
-                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) > 30){
-                    this.dateWarning = false;
-                }
-            }
+    createOPA() {
+        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+            }));
     }
 
 }

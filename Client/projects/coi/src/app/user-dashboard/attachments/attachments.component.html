@@ -51,5 +51,21 @@
             </tbody>
         </table>
     </div>
-    <app-no-information *ngIf="!attachmentLists.length"></app-no-information>
+    <ng-container *ngIf="isShowCreate && !attachmentLists.length">
+        <div class="card">
+          <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
+            <p class="fs-14 m-0">
+              <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
+                You do not have any attachments added. Click on <strong>Add Attachments</strong>
+                to add on attachments.
+              </span>
+            </p>
+          </div>
+          <span class="create-button">
+            <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="_commonService.isOpenAttachmentModal = true">
+              Add Attachments
+            </button>
+          </span>
+        </div>
+      </ng-container>
 </ng-container>

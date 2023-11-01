@@ -492,6 +492,10 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
+    "/opa/review/*": {
+        "target": "http://10.199.100.62:8071/",
+        "secure": false
+    },
     "/getNoteDetailsForNoteId/noteId": {
         "target": "http://10.199.100.123:8070/coi/",
         "secure": false
@@ -515,6 +519,33 @@
     "/loadAllAttachmentsForPerson": {
         "target": "http://10.199.100.123:8070/coi/",
         "secure": false
+    },
+    "/opa/dashboard": {
+        "target": "http://10.199.100.62:8071/",
+        "secure": false
+    },
+    "/getEntityWithRelationShipInfo": {
+        "target": "http://10.199.100.62:8071/coi/",
+        "secure": false
+    },
+    "/personEntity/history": {
+        "target": "http://10.199.100.62:8070/coi/",
+        "secure": false
+    },
+    "/coi/saveOrUpdateCoiFinancialEntityDetails": {
+        "secure": false,
+        "target": "http://10.199.100.34:9090/"
+    },
+    "/coi/createSFI": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/coi/getEntityWithRelationShipInfo": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/coi/getSFIRelationshipDetails": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
     }
-
 }

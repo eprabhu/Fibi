@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -16,7 +16,6 @@ class ChangePassword {
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    providers: [HeaderService],
     encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -39,11 +38,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isAdministrator: boolean = false;
     ispersondetailsmodal = false;
     userDetails = null;
-    isShowCreateNoteModal = false;
     noteComment: any;
-    isOpenAttachmentModal = false;
+    isShowCreateOrReviseModal = false;
+    triggeredFrom = '';
+    reviseObject: any = { revisionComment: null, disclosureId: null };
 
-    constructor(public _router: Router, public commonService: CommonService, private _headerService: HeaderService) {
+    constructor(public router: Router, public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
@@ -56,10 +56,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
             personId: this.commonService.getCurrentUserDetail('personId'),
             fullName: this.commonService.getCurrentUserDetail('fullName')
         };
+        this.getActiveDisclosure();
+        this.openModalTriggeredFromChild();
+        this.refreshActiveDisclosures();
+    }
+
+    refreshActiveDisclosures() {
+        this.$subscriptions.push(this.router.events.subscribe((event: any) => {
+            if (event instanceof NavigationEnd && event.url.includes('coi/user-dashboard/disclosures')) {
+                this.getActiveDisclosure();
+            }
+        }));
+    }
+
+    getActiveDisclosure() {
+        this.$subscriptions.push(this.headerService.getActiveDisclosure().subscribe((res: any) => {
+            this.headerService.activeDisclosures = res.coiDisclosures || [];
+            this.headerService.activeOPAs = res.opaDisclosure || [];
+        }));
     }
 
     redirectToOpa() {
-        this._router.navigate(['/coi/opa/form'],
+        this.router.navigate(['/coi/opa/form'],
             {queryParams: {disclosureId: 2}});
     }
 
@@ -72,7 +90,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
-        this._router.navigate(['/logout']);
+        this.router.navigate(['/logout']);
     }
 
     changePassword() {
@@ -130,14 +148,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     }
 
-    createOPA() {
-        this._headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
-            .subscribe((res: any) => {
-                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
-            });
-    }
-
     private passwordAtleast7Characters() {
         if (this.resetPassword.password.length < 7) {
             this.passwordValidation.set('password-length', true);
@@ -149,16 +159,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.passwordValidation.set('same-password', true);
         }
     }
-    
+
     saveOrUpdateNote() {
         if (this.noteComment.trim()) {
-            this.$subscriptions.push(this._headerService.saveOrUpdatePersonNote({
+            this.$subscriptions.push(this.headerService.saveOrUpdatePersonNote({
                 'personId': this.commonService.getCurrentUserDetail('personId'),
                 'content': this.noteComment.trim()
             }).subscribe((ele: any) => {
-                this.isShowCreateNoteModal = false;
+                this.commonService.isShowCreateNoteModal = false;
                 this.noteComment = '';
-                if(this._router.url.includes('/coi/user-dashboard/notes')) {
+                if(this.router.url.includes('/coi/user-dashboard/notes')) {
                     this.commonService.$updateLatestNote.next(ele);
                 }
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Note added successfully.');
@@ -169,18 +179,53 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     showNotes() {
-        this.isShowCreateNoteModal = true;
+        this.commonService.isShowCreateNoteModal = true;
         setTimeout(() => {
             document.getElementById("textArea").focus();
         });
     }
 
     closeAddNote() {
-        this.isShowCreateNoteModal = false;
+        this.commonService.isShowCreateNoteModal = false;
         this.noteComment = '';
     }
 
     closeModal() {
-        this.isOpenAttachmentModal = false;
+        this.commonService.isOpenAttachmentModal = false;
+    }
+
+    outputEventAction(event) {
+        if (event.closeModal != null) {
+            this.isShowCreateOrReviseModal = event.closeModal;
+        }
+    }
+
+    openTravelDisclosure(): void {
+        this.triggeredFrom = 'TRAVEL_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openProjectDisclosure() {
+        this.triggeredFrom = 'PROJECT_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openReviseModal() {
+        this.reviseObject = {revisionComment: null, disclosureId: null};
+        this.reviseObject.revisionComment = '';
+        this.triggeredFrom = 'FCOI_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openCreateSFI() {
+        this.router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+    }
+
+    openModalTriggeredFromChild() {
+        this.$subscriptions.push(this.headerService.$openModal.subscribe((event: string) => {
+            if(event == 'FCOI') {
+                this.openReviseModal();
+            }
+        }))
     }
 }

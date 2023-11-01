@@ -5,16 +5,16 @@
                 <div class="align-self-center flex-fill d-flex justify-content-between">
                     <div class="d-flex row">
                         <p class="m-0 py-1">
-                            <strong># : OPA Disclosure By
+                            <strong>OPA Disclosure By
                                 <span (click)="openDetailModal()" class="clickable-content"><u class="cursor-pointer"
-                                                                                               title="Click to view details of {{opaData?.personName}}"
-                                >{{opaData?.personName}}</u></span>
+                                                                                               title="Click to view details of {{opa?.opaDisclosure?.personName}}"
+                                >{{opa?.opaDisclosure?.personName}}</u></span>
                             </strong>
                         </p>
                         <p class="m-0 label-text">
-                            <strong>{{opaData?.personPrimaryTitle}} |
-                                <span>{{opaData?.homeUnit}}-{{opaData?.homeUnitName}}</span> |
-                                {{opaData?.personEmail}}</strong>
+                            <strong>{{opa?.opaDisclosure?.personPrimaryTitle}} |
+                                <span>{{opa?.opaDisclosure?.homeUnit}}-{{opa?.opaDisclosure?.homeUnitName}}</span> |
+                                {{opa?.opaDisclosure?.personEmail}}</strong>
                         </p>
                     </div>
                     <div class="align-items-center d-flex f-14 label-color">
@@ -42,8 +42,8 @@
                                     <i class="fa fa-user-o fw-700 right-margin"
                                        aria-hidden="true"></i>Administrator : </label>
                                 <span class="grey-text ml-2">
-                                    <app-no-data-label [valueToShow]="opaData?.adminPersonName">
-                                        <span>{{opaData?.adminPersonName}}</span>
+                                    <app-no-data-label [valueToShow]="opa?.opaDisclosure?.adminPersonName">
+                                        <span>{{opa?.opaDisclosure?.adminPersonName}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -54,8 +54,8 @@
                                     <img class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
                                          alt="add-adminGroup icon">Admin Group : </label>
                                 <span class="grey-text ml-2">
-                                    <app-no-data-label [valueToShow]="opaData?.adminGroupName">
-                                        <span>{{opaData?.adminGroupName}}</span>
+                                    <app-no-data-label [valueToShow]="opa?.opaDisclosure?.adminGroupName">
+                                        <span>{{opa?.opaDisclosure?.adminGroupName}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -70,9 +70,9 @@
                                 <label class="label-text">Cycle : </label>
                                 <span class="grey-text ml-2">
                                     <app-no-data-label
-                                        [valueToShow]="opaData?.opaCycles?.periodStartDate && opaData?.opaCycles?.periodEndDate">
-                                            <span>{{opaData?.opaCycles?.periodStartDate | dateFormatterWithTimeZone}} -
-                                                {{opaData?.opaCycles?.periodEndDate | dateFormatterWithTimeZone}}</span>
+                                        [valueToShow]="opa?.opaDisclosure?.opaCycles?.periodStartDate && opa?.opaDisclosure?.opaCycles?.periodEndDate">
+                                            <span>{{opa?.opaDisclosure?.opaCycles?.periodStartDate | dateFormatterWithTimeZone}} -
+                                                {{opa?.opaDisclosure?.opaCycles?.periodEndDate | dateFormatterWithTimeZone}}</span>
                                         </app-no-data-label>
                                 </span>
                             </div>
@@ -81,15 +81,15 @@
                             <div class="col d-flex">
                                 <label class="label-text left-margin">Create : </label>
                                 <span class="grey-text ml-2">
-                                    <app-no-data-label [valueToShow]="opaData?.createTimestamp">
-                                        <span>{{opaData?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                    <app-no-data-label [valueToShow]="opa?.opaDisclosure?.createTimestamp">
+                                        <span>{{opa?.opaDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-auto status-card-width">
+                <div class="col-auto status-card-width min-width-status-card">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
@@ -98,22 +98,22 @@
                                     <td class="fw-600">Disposition :</td>
                                     <td class="ps-4">
                                         <app-no-data-label
-                                            [valueToShow]="opaData?.dispositionStatusType?.description">
+                                            [valueToShow]="opa?.opaDisclosure?.dispositionStatusType?.description">
                                             <span
-                                                class="{{commonService.getDispositionStatusBadge(opaData?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                                class="{{commonService.getDispositionStatusBadge(opa?.opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
                                             <span
-                                                class="badgeFont">{{opaData?.dispositionStatusType?.description}}</span>
+                                                class="badgeFont">{{opa?.opaDisclosure?.dispositionStatusType?.description}}</span>
                                         </app-no-data-label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-600">Disclosure :</td>
+                                    <td class="fw-600">Review :</td>
                                     <td class="ps-4">
                                         <app-no-data-label
-                                            [valueToShow]="opaData?.opaDisclosureStatusType?.description">
+                                            [valueToShow]="opa?.opaDisclosure?.opaDisclosureStatusType?.description">
                                             <span
-                                                class="{{commonService.getDisclosureConflictBadge(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
-                                            <span class="badgeFont">{{opaData?.opaDisclosureStatusType?.description}}
+                                                class="{{commonService.getReviewStatusBadge(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                            <span class="badgeFont">{{opa?.opaDisclosure?.opaDisclosureStatusType?.description}}
                                             </span>
                                         </app-no-data-label>
                                     </td>
@@ -131,13 +131,13 @@
                          area-describedby="Click to view the disclosure screening form">Form
                     </div>
                 </div>
-                <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1' && checkForReviewerTab()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                      role="button">
                     <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                          area-describedby="Click to view the reviews">Reviews
                     </div>
                 </div>
-                <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1'" [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
                      title="click to view history" role="button">
                     <div class="navigation-box-content" routerLinkActive="active">History</div>
                 </div>
@@ -151,11 +151,11 @@
             <div class="flex-fill h-100">
                 <ng-container *ngIf="isCardExpanded">
                     <div class="d-flex justify-content-between px-3 my-3">
-                        <button title="Go to COI home page"
+                        <button title="Go to COI home page" (click)="goToHomeUrl()"
                                 class="btn btn-outline-grey pb-0 fs-14 col me-2 fit-height">
                             <mat-icon>home</mat-icon>
                         </button>
-                        <button
+                        <button (click)="location.back()"
                             class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center fit-height">
                             <mat-icon class="me-2">reply</mat-icon>
                             Back
@@ -168,7 +168,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                     </div>
-                    <div *ngIf="['1', '5', '6', '7'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
                          title="Click to save your progress" (click)="triggerSave()"
                          class="d-flex justify-content-around px-3 pb-3 fit-height">
                         <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -176,7 +176,7 @@
                             Save
                         </span>
                     </div>
-                    <div *ngIf="['1', '5', '6', '7'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
                          class="d-flex justify-content-around px-3 mt-3">
                         <button (click)="submitOPA()"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center fit-height"
@@ -186,30 +186,48 @@
                         </button>
                     </div>
                     <div class="d-flex justify-content-around px-3"
-                         *ngIf="!opaData.adminPersonId && opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()">
+                         *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()">
                         <button title="Click to Assign Administrator/Admin Group"
-                                area-describedby="Click to assign administrator"
+                                aria-describedby="Click to assign administrator"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                 (click)="openAddAssignModal();">
                             <mat-icon class="me-1">group_add</mat-icon>
                             <span class="mt-1 ms-2"> Assign Admin </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3">
-                        <button *ngIf="['2','3', '8'].includes(opaData.opaDisclosureStatusType.opaDisclosureStatusCode)"
-                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode)">
+                        <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                             <mat-icon class="me-2">done</mat-icon>
+                            <span class="mt-1 ms-2"> Complete Review </span>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="opaService.isStartReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'">
+                        <button title="Click to start review" aria-describedby="Click to start review"
+                                (click)="updateOpaReview('START')"
+                                id="start-review-btn"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                            <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
+                            <span class="mt-1 ms-2"> Start Review </span>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'">
+                        <button title="Click to complete review" aria-describedby="Click to complete review" (click)="updateOpaReview('COMPLETE')"
+                                id="complete-review-btn"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                            <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                             <span class="mt-1 ms-2"> Complete Review </span>
                         </button>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!isCardExpanded">
                     <div class="d-flex justify-content-between px-3 my-3">
-                        <button title="Go to Home" class="btn btn-outline-grey pb-0 fs-14 col me-2 fit-height">
+                        <button title="Go to Home" class="btn btn-outline-grey pb-0 fs-14 col me-2 fit-height"
+                                (click)="goToHomeUrl()">
                             <mat-icon>home</mat-icon>
                         </button>
-                        <button title="Go back" class="btn btn-outline-grey pb-0 fs-14 col me-2 fit-height">
+                        <button title="Go back" class="btn btn-outline-grey pb-0 fs-14 col me-2 fit-height"
+                                (click)="location.back()">
                             <mat-icon>reply</mat-icon>
                         </button>
                         <button
@@ -220,7 +238,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                         <button
-                            *ngIf="!opaData.adminPersonId && opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()"
+                            *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()"
                             title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             class="ms-2 fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
@@ -228,35 +246,47 @@
                             <mat-icon class="me-1">group_add</mat-icon>
                         </button>
                         <button
-                            *ngIf="['1', '5', '6', '7'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
                             title="Click to save your disclosure"
                             class="btn btn-primary pb-0 fs-14 col mx-2 fit-height">
                             <mat-icon>save</mat-icon>
                         </button>
                         <button
-                            *ngIf="['1', '5', '6', '7'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
                             title="Click to submit your disclosure"
                             class="btn btn-primary pb-0 fs-14 col me-2 fit-height">
                             <mat-icon>done</mat-icon>
                         </button>
                         <button
-                            *ngIf="['2','3', '8'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
                             title="Click to complete review"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2"
                             data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                             <mat-icon class="me-2">done</mat-icon>
                         </button>
-
+                        <button *ngIf="opaService.isStartReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'"
+                                title="Click to start review" aria-describedby="Click to start review"
+                                (click)="updateOpaReview('START')"
+                                id="start-review-btn"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2">
+                            <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
+                        </button>
+                        <button *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'"
+                                title="Click to complete review" aria-describedby="Click to complete review" (click)="updateOpaReview('COMPLETE')"
+                                id="complete-review-btn"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2">
+                            <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
+                        </button>
                     </div>
                 </ng-container>
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
                     <ng-container
-                        *ngIf="opaData?.adminPersonId && ['2','3', '7', '8'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode) && getManageDisclosureRight()">
+                        *ngIf="opa?.opaDisclosure?.adminPersonId && ['2','3', '7', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode) && getManageDisclosureRight()">
                         <button mat-menu-item title="Click to Reassign Administrator/Admin Group"
                                 area-describedby="Click to assign administrator"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                 (click)="openAddAssignModal();"
-                                [ngClass]="(opaData?.adminPersonId || opaData?.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
+                                [ngClass]="(opa?.opaDisclosure?.adminPersonId || opa?.opaDisclosure?.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                         </button>
@@ -264,8 +294,8 @@
 
                     <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                     <!-- check logged person & disclosure created person is same -->
-                    <button mat-menu-item *ngIf="opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode == '2' && !(opaData.adminPersonId) &&
-                        (commonService?.getCurrentUserDetail('personId') == opaData?.personId)"
+                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode == '2' && !(opa?.opaDisclosure.adminPersonId) &&
+                        (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.personId)"
                             title="Click to Withdraw"
                             area-describedby="Click to Withdraw"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
@@ -277,8 +307,8 @@
                     <!-- return to pi -->
                     <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                     <!-- Check logged person and administrator are same -->
-                    <button mat-menu-item *ngIf="opaData?.adminPersonId && ['3','7','8'].includes(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode) &&
-                                (commonService?.getCurrentUserDetail('personId') == opaData?.adminPersonId)"
+                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.adminPersonId && ['3','7','8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode) &&
+                                (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.adminPersonId)"
                             title="Click to Return Disclosure"
                             (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
@@ -294,7 +324,7 @@
                 </mat-menu>
                 <div class="fs-14 ash-text px-3 {{isCardExpanded ? 'mt-3' : 'mt-0'}}">
                     <div><span class="fw-medium me-3">Last Updated By : </span></div>
-                    <div>{{opaData?.updateUserFullName}} On {{opaData?.updateTimestamp |
+                    <div>{{opa?.opaDisclosure?.updateUserFullName}} On {{opa?.opaDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>
@@ -307,8 +337,8 @@
 </div>
 
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
-                                [disclosureNumber]="opaData?.opaDisclosureNumber"
-                                [path]="'OPA_DISCLOSURES'" [disclosureId]="opaData?.opaDisclosureId"
+                                [disclosureNumber]="opa?.opaDisclosure?.opaDisclosureNumber"
+                                [path]="'OPA_DISCLOSURES'" [disclosureId]="opa?.opaDisclosure?.opaDisclosureId"
                                 [defaultAdminDetails]="defaultAdminDetails">
 </app-assign-administrator-modal>
 
@@ -323,7 +353,7 @@
                         [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
     <!-- modal header -->
     <ng-container header>
-        <span>{{primaryBtnName}} OPA Disclosure</span>
+        <span>{{primaryBtnName}} Disclosure : OPA Disclosure By {{personProjectDetails?.personFullName}}</span>
     </ng-container>
     <!-- modal content -->
     <ng-container content-sticky>
@@ -364,3 +394,4 @@
         </div>
     </div>
 </div>
+<app-reviewer-action-modal *ngIf="opaService.isEnableReviewActionModal"></app-reviewer-action-modal>

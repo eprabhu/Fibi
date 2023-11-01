@@ -17,6 +17,8 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -1133,6 +1135,150 @@ public interface ConflictOfInterestDao {
     
     List<Attachments> loadAllAttachmentsForPerson(String personId);
 
+	List<ValidPersonEntityRelType> fetchAllValidPersonEntityRelTypes();
+
 	DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode);
 
+	/**
+	 * This method fetches all person entities of a person
+	 * @param requestDto
+	 * @return
+	 */
+	List<PersonEntityRelationshipDto> getEntityWithRelationShipInfo(CommonRequestDto requestDto);
+
+	/**
+	 * This method fetches a person against in a review
+	 * @param coiReview
+	 * @return
+	 */
+    boolean isReviewAdded(CoiReview coiReview);
+
+	/**
+	 * This method checks a review status is in @param statuses
+	 * @param coiReviewId
+	 * @param statuses
+	 * @return
+	 */
+	boolean isReviewStatus(Integer coiReviewId, List<String> statuses);
+
+	/**
+	 * This method checks a disclosure statuses of dispositionStatusCode, reviewStatusCode, versionStatus
+	 * @param disclosureId
+	 * @param dispositionStatusCode
+	 * @param reviewStatusCode
+	 * @param versionStatus
+	 * @return
+	 */
+	boolean isDisclosureInStatuses(Integer disclosureId, String dispositionStatusCode, String reviewStatusCode, String versionStatus);
+
+	/**
+	 * This method fetches the person entity by entity number and personId
+	 * @param entityNumber
+	 * @param loginPersonId
+	 * @return
+	 */
+	List<PersonEntity> fetchPersonEntityByEntityNum(Integer entityNumber, String loginPersonId);
+
+	/**
+	 * This method fetches all person entity versions
+	 * @param personEntityNumber person entity number
+	 * @return List of objects with version number and person entity id
+	 */
+	List<PersonEntityDto> fetchAllPersonEntityVersions(Integer personEntityNumber);
+
+	/**
+	 * This method is used to the list of relationship is added or not against a person entity
+	 * @param validPersonEntityRelTypeCodes
+	 * @param personEntityId
+	 * @return
+	 */
+	boolean isRelationshipAdded(List<Integer> validPersonEntityRelTypeCodes, Integer personEntityId);
+
+	/**
+	 * This method is used to check given admin person and group is added or not
+	 * @param adminGroupId
+	 * @param adminPersonId
+	 * @param disclosureId
+	 */
+	boolean isAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+
+	/**
+	 *	This method checks a travel disclosure exists with certain conditions
+	 * @param vo
+	 * @return
+	 */
+	CoiTravelDisclosure isTravelDisclosureExists(ConflictOfInterestVO vo);
+
+	/**
+	 * This method checks a person entity is activated or not
+	 * @param personEntityNumber
+	 * @param isRelationshipActive
+	 * @param versionStatus
+	 * @return
+	 */
+	boolean isPersonEntityActiveOrNot(Integer personEntityId, Integer personEntityNumber, boolean isRelationshipActive, String versionStatus);
+
+	/**
+	 * This method checks a entity is approved or not
+	 * @param entityId
+	 * @return
+	 */
+	boolean isEntityApproved(Integer entityId);
+
+	/**
+	 * This method checks a risk is added against a disclosure
+	 * @param coiDisclosureDto
+	 * @return
+	 */
+	boolean isDisclosureRiskAdded(CoiDisclosureDto coiDisclosureDto);
+
+	/**
+	 * This
+	 * @param projectConflictStatusCode
+	 * @param disclosureDetailsId
+	 * @return
+	 */
+	boolean isDisclEntProjConflictAdded(String projectConflictStatusCode, Integer disclosureDetailsId);
+
+	/**
+	 * This method is used to check FCOI disclosure is exists or not
+	 * @param personId
+	 * @param versionStatus
+	 * @param fcoiTypeCode
+	 * @return
+	 */
+	CoiDisclosure isFCOIDisclosureExists(String personId, String fcoiTypeCode, String versionStatus);
+
+	/**
+	 * This method is used to check entity is active or not
+	 * @param entityId
+	 * @param entityNumber
+	 * @param isActive
+	 * @param versionStatus
+	 * @return
+	 */
+	boolean isEntityActiveOrNot(Integer entityId, Integer entityNumber, boolean isActive, String versionStatus);
+
+	/**
+	 * This method checks a risk is already added to a entity or not
+	 * @param entityDto
+	 * @return
+	 */
+	boolean isEntityRiskAdded(CoiEntityDto entityDto);
+
+	/**
+	 *
+	 * @param adminGroupId
+	 * @param adminPersonId
+	 * @param travelDisclosureId
+	 * @return
+	 */
+	boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
+
+	/**
+	 * This method is used to fetch SFI relationship details
+	 * @param loginPersonId
+	 * @return
+	 */
+	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId);
 }

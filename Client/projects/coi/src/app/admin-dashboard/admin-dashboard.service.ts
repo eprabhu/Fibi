@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonService } from '../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../app-constants';
 
 @Injectable()
 export class AdminDashboardService {
@@ -18,6 +19,7 @@ export class AdminDashboardService {
 
   getCOIAdminDashboard(params: any) {
       return this._http.post(this._commonService.baseUrl + '/getCOIAdminDashboard', params).pipe(catchError((err) => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching COI Disclosure List failed. Please try again.');
         return of();
       }));
   }
@@ -71,7 +73,7 @@ export class CoiDashboardRequest {
   advancedSearch = 'L';
   currentPage = 1;
   constructor(tabName?) {
-    this.tabName = tabName ? tabName : 'MY_REVIEWS';
+    this.tabName = tabName ? tabName : 'ALL_DISCLOSURES';
   }
 }
 

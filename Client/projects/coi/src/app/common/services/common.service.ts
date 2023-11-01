@@ -17,6 +17,8 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
+    opaUrl = '';
+    formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -42,6 +44,7 @@ export class CommonService {
     isShowAgreementNotifyAction = false;
     isElasticAuthentiaction = false;
     isCoiReviewer = false;
+    isOPAReviewer = false;
     elasticUserName = '';
     elasticAuthScheme = '';
     elasticDelimiter = '';
@@ -62,6 +65,8 @@ export class CommonService {
     enableGraph = false;
     $updateLatestNote = new Subject();
     $updateLatestAttachment = new Subject();
+    isShowCreateNoteModal = false;
+    isOpenAttachmentModal = false;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -109,6 +114,8 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
+        this.formUrl = configurationData.formUrl;
+        this.opaUrl = configurationData.opaUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -215,6 +222,9 @@ export class CommonService {
             if ('IS_REVIEW_MEMBER' in coiRights) {
                 this.isCoiReviewer = coiRights.IS_REVIEW_MEMBER;
             }
+            if ('IS_OPA_REVIEW_MEMBER' in coiRights) {
+                this.isOPAReviewer = coiRights.IS_OPA_REVIEW_MEMBER;
+            }
             if (Array.isArray(coiRights.rights)) {
                 this.rightsArray = [...this.rightsArray, ...coiRights.rights];
             }
@@ -255,8 +265,6 @@ export class CommonService {
                 toast.hide();
             }, timer);
         }
-
-
     }
 
   getDisclosureConflictBadge(statusCode: string) {
@@ -384,7 +392,4 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
       }
     }
 
-    onScrollEvent() {
-        return this.$ScrollAction.asObservable();
-    }
 }

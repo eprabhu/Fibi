@@ -1,8 +1,11 @@
 package com.polus.fibicomp.opa.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import org.springframework.stereotype.Service;
 
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
@@ -75,6 +78,14 @@ public interface OPADao {
 	OPADashboardResponseDto getOPADashboard(OPADashboardRequestDto requestDto);
 
 	/**
+	 *
+	 * @param requestDto
+	 * @param isCount
+	 * @return
+	 */
+	ResultSet getOPADashboardResultSet(OPADashboardRequestDto requestDto, boolean isCount) throws SQLException;
+
+	/**
 	 * This method is used for inserting details into opaformbuilderdetails table
 	 * @param opaFormBuilderDetails
 	 * @return
@@ -101,5 +112,29 @@ public interface OPADao {
 	 * @return
 	 */
 	List<OPADisclosure> getActiveAndPendingOpaDisclosure(String personId);
+
+	/**
+	 * This method updates the update details of a OPA Disclosure
+	 * @param opaDisclosureId
+	 * @param timesStamp
+	 * @return
+	 */
+	Timestamp updateOPADisclosureUpDetails(Integer opaDisclosureId, Timestamp timesStamp);
+
+	/**
+	 * This method updates the OPA disclosure statuses and update details
+	 * @param opaDisclosureId
+	 * @param opaDisclosureStatusCode
+	 * @param dispositionStatusCode
+	 * @return
+	 */
+	void updateOPADisclosureStatuses(Integer opaDisclosureId, Timestamp timestamp, String opaDisclosureStatusCode, String dispositionStatusCode);
+
+	/**
+	 *
+	 * @param statusTypeCode
+	 * @return
+	 */
+	OPADisclosureStatusType getOPADisclosureStatusType(String statusTypeCode);
 
 }

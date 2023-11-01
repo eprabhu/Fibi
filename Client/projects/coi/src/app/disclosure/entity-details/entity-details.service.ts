@@ -10,20 +10,32 @@ export class EntityDetailsService {
   lookups: any;
   $entityDetailsTest = new BehaviorSubject<object>({});
   globalSave$: Subject<any> = new Subject<any>();
-  isShowRelationButton: any;
   isRelationshipQuestionnaireChanged = false;
   isAdditionalDetailsChanged = false;
 
+  $openQuestionnaire = new Subject();
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = false;
   isHoverEntityCard = false;
   canMangeSfi = false;
-  $relationshipTabSwitch = new BehaviorSubject<object>(null)
   isSwitchCurrentTab = false;
   isShowHistoryInfo = true;
   unSavedSections = [];
   relationshipCompletedObject: any = {};
+  concurrentUpdateAction = '';
+  activeRelationship : any;
+  definedRelationships = [];
+  availableRelationships = [];
+  $triggerAddRelationModal = new Subject();
+  $emitUnsavedChangesModal = new Subject()
+  selectedTab = 'QUESTIONNAIRE';
+  clickedTab: 'QUESTIONNAIRE' | 'RELATION_DETAILS' | 'HISTORY';
+  currentVersionDetails: any = {};
+  currentRelationshipQuestionnaire: any;
+  isChecked = {};
+  groupedRelations = {};
+  $triggerAddRelation = new Subject();
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -35,8 +47,8 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
   }
 
-  async addSFILookUp(tabName): Promise<any> {
-    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup/${tabName}`).toPromise();
+  async addSFILookUp(): Promise<any> {
+    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup`).toPromise();
   }
 
   getCoiEntityDetails(personEntityId) {
@@ -83,4 +95,9 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
   }
 
+  sfiHistory(params) {
+    return this._http.post(this._commonService.baseUrl + '/personEntity/history', params);
+  }
+
 }
+

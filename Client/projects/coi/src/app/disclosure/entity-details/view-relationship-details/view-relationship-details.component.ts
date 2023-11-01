@@ -3,12 +3,13 @@ import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription, forkJoin } from 'rxjs';
-import { ADMIN_DASHBOARD_URL, HOME_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
+import { ADMIN_DASHBOARD_URL, REPORTER_HOME_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
+import { scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-view-relationship-details',
@@ -28,12 +29,9 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     isReadMoreUniversity = false;
     isReadMoreRelationWith = false;
     sfiStatus = '';
-    additionalDetails: any = {
-        sponsorsResearch: false
-    };
     datePlaceHolder = DATE_PLACEHOLDER;
-    mandatoryList = new Map();
     @Input() isEditMode = false;
+    @Input() isShowHeader: boolean;
     isQuestionnaireCompleted = false;
     @Input() isTriggeredFromSlider = false;
     isEnableActivateInactivateSfiModal = false;
@@ -42,21 +40,24 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     isHoverCardViewMore = false;
     hasUserExpanded = false;
     isFinalizeApi = false;
-    isChangesInFieldValue = false;
     isRelationshipActive = false;
-    @Input() deleteRelationshipEvent: any;
     @Output() closeEntityInfoCard: EventEmitter<boolean> = new EventEmitter<boolean>();
     previousUrlBeforeActivate = '';
-    involvementStartDate: any;
-    involvementEndDate: any;
-    RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
-    RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
-    RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
     isCOIAdministrator = true;
+    isChangesInFieldValue = false;
+    involvementDate =  {
+      involvementStartDate: null,
+      involvementEndDate: null
+    }
+    additionalDetails: any = {
+      sponsorsResearch: false
+    };
+    mandatoryList = new Map();
+    deleteRelationshipEvent: any;
 
     constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
                  private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService ) {
-    } 
+    }
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
@@ -81,15 +82,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.updateRelationshipDetails = [];
         }
         this.listenForQuestionnaireSave();
-        this.scrollEvent();
-        if (this.deleteRelationshipEvent && this.deleteRelationshipEvent.isDeleted) {
-            this.relationshipsDetails.updateTimestamp = this.deleteRelationshipEvent.updatedTimestamp;
-            let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipEvent.removeRelId);
-            if (delIndex >= 0) {
-                this.personEntityRelationships.splice(delIndex, 1);
-            }
-            this.deleteRelationshipEvent.isDeleted = false;
-        }
         if (this.isEditMode) {
             this.getQuestionnaire();
         }
@@ -104,6 +96,11 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.$subscriptions.push(this.entityDetailsServices.getRelationshipEntityDetails(personEntityId).subscribe((res: any) => {
                 this.relationshipsDetails = res.personEntity;
                 this.personEntityRelationships = res.personEntityRelationships;
+                this.entityDetailsServices.currentVersionDetails =  {
+                    versionNumber: this.relationshipsDetails.versionNumber, 
+                    personEntityNumber: this.relationshipsDetails.personEntityNumber, 
+                    personEntityId: this.relationshipsDetails.personEntityId
+                };
                 this.setAdditionalDetails(res.personEntity);
                 this.entityDetailsServices.canMangeSfi = this.relationshipsDetails.personId === this.commonService.currentUserDetails.personId ? true : false;
                 this.sfiStatus = this.getSfiStatus();
@@ -144,7 +141,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     private checkMandatoryFilled(): boolean {
         this.mandatoryList.clear();
-        if (!this.involvementStartDate) {
+        if (!this.involvementDate.involvementStartDate) {
             this.mandatoryList.set('date', 'Please enter a start date.');
         }
         if (!this.additionalDetails.staffInvolvement) {
@@ -156,7 +153,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         if (!this.additionalDetails.instituteResourceInvolvement) {
             this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
         }
-        if (this.involvementEndDate) {
+        if (this.involvementDate.involvementEndDate) {
             this.endDateValidation();
         }
         return this.mandatoryList.size !== 0 ? false : true;
@@ -164,15 +161,15 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     endDateValidation(): void {
         this.mandatoryList.delete('endDate');
-        if (this.involvementStartDate && this.involvementEndDate &&
-            (compareDates(this.involvementStartDate, this.involvementEndDate) === 1)) {
+        if (this.involvementDate.involvementStartDate && this.involvementDate.involvementEndDate &&
+            (compareDates(this.involvementDate.involvementStartDate, this.involvementDate.involvementEndDate) === 1)) {
             this.mandatoryList.set('endDate', 'Please provide a valid date.');
         }
     }
 
     setAdditionalDetails(details) {
-        this.involvementStartDate = getDateObjectFromTimeStamp(details.involvementStartDate);
-        this.involvementEndDate = getDateObjectFromTimeStamp(details.involvementEndDate);
+        this.involvementDate.involvementStartDate = getDateObjectFromTimeStamp(details.involvementStartDate);
+        this.involvementDate.involvementEndDate = getDateObjectFromTimeStamp(details.involvementEndDate);
         this.additionalDetails.sponsorsResearch = details.sponsorsResearch;
         this.additionalDetails.instituteResourceInvolvement = details.instituteResourceInvolvement;
         this.additionalDetails.studentInvolvement = details.studentInvolvement;
@@ -204,7 +201,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     goToHome() {
-        const reRouteUrl = this.isCOIAdministrator ? ADMIN_DASHBOARD_URL : HOME_URL;
+        const reRouteUrl = this.isCOIAdministrator ? ADMIN_DASHBOARD_URL : REPORTER_HOME_URL;
         this._router.navigate([reRouteUrl]);
     }
 
@@ -272,9 +269,11 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         this.entityDetailsServices.relationshipCompletedObject = {};
         this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
             this.allRelationQuestionnaires = [];
-            data.forEach((d: any) =>{ 
-                this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
-                this.combineQuestionnaireList(d.applicableQuestionnaire);
+            data.forEach((d: any) =>{
+                if(d.applicableQuestionnaire.length) {
+                    this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
+                    this.combineQuestionnaireList(d.applicableQuestionnaire);
+                }
             })
             this.isQuestionnaireCompleted = this.isAllQuestionnaireCompleted(this.allRelationQuestionnaires);
         }, err => {
@@ -291,14 +290,17 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     updatePersonEntityAdditionalDetails() {
-        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementStartDate);
-        if (this.involvementEndDate) {
-            this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementEndDate);
+        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementDate.involvementStartDate);
+        if (this.involvementDate.involvementEndDate) {
+            this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementDate.involvementEndDate);
         }
         this.$subscriptions.push(this.entityDetailsServices.updateAdditionalDetails(this.additionalDetails).subscribe((res: any) => {
             this.isChangesInFieldValue = false;
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Significant Financial Interest updated successfully.');
             this.relationshipsDetails.updateTimestamp = res.updateTimestamp;
+            this.relationshipsDetails.involvementStartDate = res.involvementStartDate;
+            this.relationshipsDetails.involvementEndDate = res.involvementEndDate;
+            this.relationshipsDetails.sponsorsResearch = res.sponsorsResearch;
             this.entityDetailsServices.isAdditionalDetailsChanged = false;
             let index = this.entityDetailsServices.unSavedSections.findIndex(ele => ele.includes(SFI_ADDITIONAL_DETAILS_SECTION_NAME));
             if (index >= 0) {
@@ -346,28 +348,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }));
     }
 
-    /**
-     * keep track of window scroll offset
-     */
-    scrollEvent() {
-        this.$subscriptions.push(this.commonService.onScrollEvent().subscribe((res) => {
-            if (!this.hasUserExpanded) {
-                const scrollHeight = res.pageYOffset;
-                if (this.isEditMode && (scrollHeight > 250)) {
-                    this.entityDetailsServices.isExpanded = false;
-                }
-                if (!this.isEditMode && scrollHeight > 130) {
-                    this.entityDetailsServices.isExpanded = false;
-                    this.isReadMoreUniversity = false;
-                    this.isReadMoreBusinessArea = false;
-                    this.isReadMoreRelationWith = false;
-                } else if (scrollHeight === 0) {
-                    this.entityDetailsServices.isExpanded = true;
-                }
-            }
-        }));
-    }
-
     addUnSavedChanges() {
         this.entityDetailsServices.isAdditionalDetailsChanged = true;
         this.isChangesInFieldValue = true;
@@ -376,12 +356,89 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }
     }
 
-      openRelationDetails() {
+    openRelationDetails() {
         this.$subscriptions.push(this.entityDetailsServices.getCurrentId(this.relationshipsDetails.personEntityNumber).subscribe((data: any) => {
             this._router.navigate(['/coi/entity-details/entity'],
-            { queryParams: { personEntityId: data, mode: 'view' } });
+                { queryParams: { personEntityId: data, mode: 'view' } });
         }, err => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in opening current version, please try again');
         }));
-      }
+    }
+
+    openRelationshipQuestionnaire(coiFinancialEntityDetail) {
+        this.entityDetailsServices.currentRelationshipQuestionnaire = coiFinancialEntityDetail;
+        this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
+        if (this.entityDetailsServices.isAdditionalDetailsChanged) {
+            this.entityDetailsServices.$emitUnsavedChangesModal.next();
+        } else {
+            this.entityDetailsServices.selectedTab = 'QUESTIONNAIRE';
+            setTimeout(() => {
+                this.entityDetailsServices.$openQuestionnaire.next(coiFinancialEntityDetail);
+            });
+        }
+    }
+
+    updateRelationship(event) {
+        this.updateRelationshipDetails = event;
+    }
+
+    scrollPosition(event) {
+        if (event) {
+            scrollIntoView('focusQuestionnaire');
+        }
+    }
+
+    async openRelationShipSection() {
+        this.entityDetailsServices.clickedTab = 'RELATION_DETAILS';
+        if (this.entityDetailsServices.isRelationshipQuestionnaireChanged) {
+            this.entityDetailsServices.$emitUnsavedChangesModal.next({ details: null, isLeaveFromRelationTab: true });
+        } else {
+            this.entityDetailsServices.selectedTab = 'RELATIONSHIP_DETAILS';
+            await this.getEntityDetails(this.getEntityId());
+            this.mandatoryList.clear();
+        }
+    }
+
+    openHistorySection() {
+        this.entityDetailsServices.clickedTab = 'HISTORY';
+        if (this.entityDetailsServices.isRelationshipQuestionnaireChanged || this.entityDetailsServices.isAdditionalDetailsChanged) {
+            this.entityDetailsServices.$emitUnsavedChangesModal.next({ details: null, isLeaveFromRelationTab: true });
+        } else {
+            this.entityDetailsServices.selectedTab = 'HISTORY';
+        }
+    }
+
+    emittedDeletedRelationship(event) {
+        this.deleteRelationshipEvent = event;
+        if (this.deleteRelationshipEvent && this.deleteRelationshipEvent.isDeleted) {
+            this.relationshipsDetails.updateTimestamp = this.deleteRelationshipEvent.updatedTimestamp;
+            let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipEvent.removeRelId);
+            if (delIndex >= 0) {
+                this.personEntityRelationships.splice(delIndex, 1);
+            }
+            this.deleteRelationshipEvent.isDeleted = false;
+        }
+        if (this.isEditMode) {
+            this.getQuestionnaire();
+        }
+    }
+
+    saveOrAddRelationshipModal() {
+        this.mandatoryList.clear();
+        if (!this.entityDetailsServices.isAdditionalDetailsChanged) {
+            setTimeout(() => {
+                this.entityDetailsServices.$triggerAddRelationModal.next(true);
+            });
+        } else {
+            if (this.checkMandatoryFilled()) {
+                this.saveRelationship();
+                setTimeout(() => {
+                    this.entityDetailsServices.$triggerAddRelationModal.next(true);
+                });
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Please fill mandatory fields to proceed with Add Relation');
+            }
+        }
+    }
+
 }

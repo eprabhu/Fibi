@@ -42,7 +42,23 @@
             </div>
         </ng-container>
     </div>
-    <app-no-information *ngIf="!notesList.length"></app-no-information>
+    <ng-container *ngIf="isShowCreate && !notesList.length">
+        <div class="card">
+          <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
+            <p class="fs-14 m-0">
+              <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
+                You do not have any notes added. Click on <strong>Add Notes</strong>
+                to add on notes.
+              </span>
+            </p>
+          </div>
+          <span class="create-button">
+            <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="showNotes()">
+              Add Notes
+            </button>
+          </span>
+        </div>
+      </ng-container>
 </ng-container>
 
 <ng-container *ngIf="showSlider">
@@ -83,3 +99,4 @@
         </ng-container>
     </app-coi-slider>
 </ng-container>
+

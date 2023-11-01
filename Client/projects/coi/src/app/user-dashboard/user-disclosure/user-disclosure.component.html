@@ -1,6 +1,6 @@
 <div class="row">
       <div  *ngIf="getActiveFCOI().length" class="col-6">
-        <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
+        <ng-container *ngFor="let disclosure of headerService.activeDisclosures">
                 <ng-container *ngIf="hasActiveFCOI">
                     <div class="card" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus != 'PENDING'">
                         <div class="card-header disclosure-master-header-bg">
@@ -13,12 +13,12 @@
                                     <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center" [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
-                                        [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                        [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
                                         <span class="hyper-link">View</span> <mat-icon class="hyper-link">chevron_right</mat-icon>
                                     </a></div>
                                 </div>
-    
+
                             </h4>
                         </div>
                         <div class="card-content">
@@ -76,7 +76,7 @@
                                             </span>
                                         </div>
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                 <button *ngIf="!hasPendingFCOI" (click)="triggerClickForId('create-fcoi-modal')"
                                         class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
                                         title="Click to Renew FCOI Disclosure"
-                                        area-describedby="Click to Renew FCOI Disclosure">
+                                        aria-describedby="Click to Renew FCOI Disclosure">
                                     <mat-icon class="me-1">restart_alt</mat-icon>
                                     Revise
                                 </button>
@@ -109,12 +109,12 @@
                                     <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center " [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
-                                        [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                        [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
                                         <span class="hyper-link">View</span> <mat-icon class="hyper-link">chevron_right</mat-icon>
                                     </a></div>
                                 </div>
-    
+
                             </h4>
                         </div>
                         <div class="card-content">
@@ -172,7 +172,7 @@
                                             </span>
                                         </div>
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                 </ng-container>
         </ng-container>
       </div>
-      <div class="col-6" *ngIf="!getActiveFCOI().length">
+    <div class="col-6" *ngIf="!getActiveFCOI().length">
         <div class="card">
             <div class="card-header disclosure-master-header-bg">
                 <h4 class="card-title">
@@ -192,105 +192,253 @@
                             <strong class="fs-15">FCOI
                                 Disclosure</strong>
                         </div>
-                        <!-- <div class="col d-flex justify-content-end text-muted"><a class="view-button" [queryParams]={disclosureId:disclosure.disclosureId}
-                            [routerLink]="['/coi/disclosure/summary']"
-                            title="Click to view FCOI Disclosure details"
-                            [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                            area-describedby="Click to view FCOI Disclosure details">
-                            View >
-                        </a></div> -->
                     </div>
-
                 </h4>
             </div>
             <div class="card-content">
-                <div class="card-body min-card-height disclosure-master-body-bg">
+                <div class="card-body min-card-height disclosure-master-body-bg fs-15">
                     <div class="row">
                         <div class="col">
-                            A conflict of interest occurs when your personal, financial, or other interests could influence or appear to influence your judgment and decision-making in the workplace. Please disclose any existing or potential conflicts of interest you may have with our organization.
+                            A conflict of interest occurs when your personal, financial, or other interests could
+                            influence or appear to influence your judgment and decision-making in the workplace. Please
+                            disclose any existing or potential conflicts of interest you may have with our organization.
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer disclosure-master-footer-bg py-3 justify-content-end">
                 <div class="col-auto d-flex justify-content-end mr-7">
-                    <!-- <button (click)="triggerClickForId('create-fcoi-modal')"
-                            class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14 me-2"
-                            title="Click to Renew FCOI Disclosure"
-                            area-describedby="Click to Renew FCOI Disclosure">
-                        <mat-icon class="me-1">restart_alt</mat-icon>
-                        Revise
-                    </button> -->
-                    <!-- <button [queryParams]={disclosureId:disclosure.disclosureId}
-                        [routerLink]="['/coi/disclosure/summary']"
-                        class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
-                        title="Click to view FCOI Disclosure details"
-                        [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                        area-describedby="Click to view FCOI Disclosure details">
-                        <mat-icon class="me-1">visibility</mat-icon>
-                        View
-                    </button> -->
-                    <button (click)="openFCOIModal('FCOI')" type="button" class="btn btn-primary fs-14 d-flex align-items-center"><mat-icon role="img" class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">add</mat-icon><span class="px-2">Create FCOI Disclosure</span></button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-6" >
-        <div class="card">
-            <div class="card-header disclosure-master-header-bg">
-                <h4 class="card-title">
-                    <div class="row">
-                        <div class="col pl">
-                            <strong class="fs-15">OPA
-                                Disclosure</strong>
-                        </div>
-                        <!-- <div class="col d-flex justify-content-end text-muted"><a class="view-button" [queryParams]={disclosureId:disclosure.disclosureId}
-                            [routerLink]="['/coi/disclosure/summary']"
-                            title="Click to view FCOI Disclosure details"
-                            [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                            area-describedby="Click to view FCOI Disclosure details">
-                            View >
-                        </a></div> -->
-                    </div>
-
-                </h4>
-            </div>
-            <div class="card-content">
-                <div class="card-body disclosure-master-body-bg min-card-height">
-                    <div class="row">
-                        <div class="col">
-                            OPA activities could include consulting, teaching, public speaking, or serving on boards. Please disclose any outside professional activities you are currently engaged in or plan to engage in. Include details such as the name of the organization, your role, and the time commitment involved.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer disclosure-master-footer-bg py-3 justify-content-end">
-                <div class="col-auto d-flex justify-content-end mr-7">
-                    <!-- <button (click)="triggerClickForId('create-fcoi-modal')"
-                            class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14 me-2"
-                            title="Click to Renew FCOI Disclosure"
-                            area-describedby="Click to Renew FCOI Disclosure">
-                        <mat-icon class="me-1">restart_alt</mat-icon>
-                        Revise
-                    </button> -->
-                    <!-- <button [queryParams]={disclosureId:disclosure.disclosureId}
-                        [routerLink]="['/coi/disclosure/summary']"
-                        class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
-                        title="Click to view FCOI Disclosure details"
-                        [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                        area-describedby="Click to view FCOI Disclosure details">
-                        <mat-icon class="me-1">visibility</mat-icon>
-                        View
-                    </button> -->
-                    <button type="button" class="btn btn-primary fs-14 d-flex  align-items-center"><mat-icon role="img" class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">add</mat-icon><span class="px-2">Create OPA Disclosure</span></button>
+                    <button (click)="openFCOIModal('FCOI')" type="button"
+                            class="btn btn-primary fs-14 d-flex align-items-center">
+                        <mat-icon role="img"
+                                  class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
+                                  aria-hidden="true" data-mat-icon-type="font">add
+                        </mat-icon>
+                        <span class="px-2">Create FCOI Disclosure</span></button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-6">
+        <ng-container *ngIf="!headerService.activeOPAs.length">
+            <ng-container *ngIf="!hasPendingOPA && !hasActiveOPA">
+                <div class="card">
+                    <div class="card-header disclosure-master-header-bg">
+                        <h4 class="card-title">
+                            <div class="row">
+                                <div class="col pl">
+                                    <strong class="fs-15">OPA
+                                        Disclosure</strong>
+                                </div>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body disclosure-master-body-bg min-card-height fs-15">
+                            <div class="row">
+                                <div class="col">
+                                    OPA activities could include consulting, teaching, public speaking, or serving on
+                                    boards.
+                                    Please disclose any outside professional activities you are currently engaged in or
+                                    plan to
+                                    engage in. Include details such as the name of the organization, your role, and the
+                                    time
+                                    commitment involved.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer disclosure-master-footer-bg py-3 justify-content-end">
+                        <div class="col-auto d-flex justify-content-end mr-7">
+                            <button (click)="createOPA()" type="button" class="btn btn-primary fs-14 d-flex  align-items-center">
+                                <mat-icon role="img"
+                                          class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
+                                          aria-hidden="true" data-mat-icon-type="font">add
+                                </mat-icon>
+                                <span class="px-2">Create OPA Disclosure</span></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
 
+        <ng-container *ngFor="let opaDisclosure of headerService.activeOPAs">
+            <ng-container *ngIf="hasPendingOPA && !hasActiveOPA">
+                <div class="card"
+                     *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '1'">
+                    <div class="card-header disclosure-master-header-bg fcoi-pending-cardbody">
+                        <h4 class="card-title">
+                            <div class="row">
+                                <div class="col pl">
+                                    <strong class="fs-15">OPA
+                                        Disclosure</strong>
+                                </div>
+                                <div class="col d-flex justify-content-end text-muted"><a
+                                    class="d-flex align-items-center"
+                                    [queryParams]={disclosureId:opaDisclosure.opaDisclosureId}
+                                    [routerLink]="['/coi/opa/form']"
+                                    title="Click to view OPA Disclosure details"
+                                    area-describedby="Click to view OPA Disclosure details">
+                                    <span class="hyper-link">View</span>
+                                    <mat-icon class="hyper-link">chevron_right</mat-icon>
+                                </a></div>
+                            </div>
+
+                        </h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body disclosure-master-body-bg fcoi-pending-cardbody min-card-height">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="label-text">Department:</span>
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
+                                                <span class="grey-text">
+                                                    #{{opaDisclosure?.homeUnitName}}</span>
+                                            </app-no-data-label>
+
+                                        </div>
+                                        <div class="col-12">
+                                            <span class="label-text">Period :</span>
+                                            <app-no-data-label
+                                                [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
+                                            <span
+                                                class="grey-text">{{opaDisclosure?.opaCycles?.periodStartDate | dateFormatterWithTimeZone}}
+                                                -
+                                                {{opaDisclosure?.opaCycles?.periodEndDate | dateFormatterWithTimeZone}}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                        <div class="col-12">
+                                            <span class="label-text me-2 fs-15">Create Date :</span>
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
+                                                <span
+                                                    class="grey-text">{{opaDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="col-12">
+                                        <span class="label-text me-2 p-0 ">Disposition Status :</span>
+                                        <app-no-data-label
+                                            [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
+                                            <span
+                                                class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaDisclosure?.dispositionStatusType?.description}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-12">
+                                        <span class="label-text me-2 p-0">Review Status :</span>
+                                        <app-no-data-label
+                                            [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
+                                            <span
+                                                class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
+                                            </span>
+                                        </app-no-data-label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="align-items-center d-flex disclosure-master-footer-bg px-3 py-3">
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="hasActiveOPA">
+                <div class="card"
+                     *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '3'">
+                    <div class="card-header disclosure-master-header-bg">
+                        <h4 class="card-title">
+                            <div class="row">
+                                <div class="col pl">
+                                    <strong class="fs-15">OPA
+                                        Disclosure</strong>
+                                </div>
+                                <div class="col d-flex justify-content-end text-muted"><a
+                                    class="d-flex align-items-center"
+                                    [queryParams]={disclosureId:opaDisclosure.opaDisclosureId}
+                                    [routerLink]="['/coi/opa/form']"
+                                    title="Click to view OPA Disclosure details"
+                                    aria-describedby="Click to view OPA Disclosure details">
+                                    <span class="hyper-link">View</span>
+                                    <mat-icon class="hyper-link">chevron_right</mat-icon>
+                                </a></div>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body disclosure-master-body-bg min-card-height">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="label-text">Department:</span>
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
+                                                <span class="grey-text">
+                                                    #{{opaDisclosure?.homeUnitName}}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                        <div class="col-12">
+                                            <span class="label-text">Period :</span>
+                                            <app-no-data-label
+                                                [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
+                                            <span
+                                                class="grey-text">{{opaDisclosure?.opaCycles?.periodStartDate | dateFormatterWithTimeZone}}
+                                                -
+                                                {{opaDisclosure?.opaCycles?.periodEndDate | dateFormatterWithTimeZone}}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                        <div class="col-12">
+                                            <span class="label-text me-2 fs-15">Create Date :</span>
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
+                                                <span
+                                                    class="grey-text">{{opaDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="col-12">
+                                        <span class="label-text me-2 p-0 ">Disposition Status :</span>
+                                        <app-no-data-label
+                                            [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
+                                            <span
+                                                class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaDisclosure?.dispositionStatusType?.description}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-12">
+                                        <span class="label-text me-2 p-0">Review Status :</span>
+                                        <app-no-data-label
+                                            [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
+                                            <span
+                                                class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
+                                            </span>
+                                        </app-no-data-label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="align-items-center d-flex disclosure-master-footer-bg px-3 py-3">
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
 </div>
 
+<!-- Dashboard tabs and counts -->
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav" *ngIf="!isShowCreate">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 py-1" role="button"
         title="Click to view In Progress Disclosures"
@@ -314,12 +462,13 @@
     </div>
 </nav>
 
+<!-- Search and filter -->
 <div class="advance-search-area border d-flex mt-2 rounded-1" *ngIf="isShowFilterAndSearch">
     <div class="fs-14 p-3" [class.border-end] = "currentSelected.tab != 'DISCLOSURE_HISTORY'" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active" role="button">All</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active mx-1" role="button">All</span>
         <span (click)="setFilter('FCOI')" [class.filter-active]="currentSelected.filter=='FCOI'"
             title="Click to filter by type: FCOI" area-describedby="Click to filter by type: FCOI"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
@@ -330,8 +479,8 @@
             [class.filter-active]="currentSelected.filter=='TRAVEL'"
             title="Click to filter by type: Travel" area-describedby="Click to filter by type: Travel"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Travel</span>
-        <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
+        <span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>
     </div>
     <div class="d-flex flex-fill  position-relative" *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
         [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
@@ -339,13 +488,13 @@
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
         <input class="advance-search-input border-0 px-4 fs-14 pe-5" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
-        type="text" [(ngModel)]="searchText" (ngModelChange)="getDisclosures()">
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>
+        type="text" [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
     </div>
 </div>
 <ng-container *ngIf="!isLoading">
-    <div [@listAnimation]="filteredDisclosureArray.length">
-        <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index; let isLast=last;">
+    <div [@listAnimation]="completeDisclosureList.length">
+        <ng-container *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
             <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
                 (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false" >
                 <div class="row mt-2">
@@ -353,45 +502,59 @@
                         <span class="d-flex">
                             <span
                                 class="entity-status shadow-sm align-items-center d-flex mt-2 {{getColorBadges(disclosure)}}">
-                                <span>{{disclosure?.travelDisclosureId? 'Travel' :
-                                    disclosure?.fcoiType}}</span>
+                                <span>{{disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType}}</span>
                             </span>
-
+<!-- For Travel Disclosure -->
                             <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.travellerName}}</strong>
                                 <ng-container>
                                 <span class="pipe me-1 mt-1"></span>
                                 <mat-icon class="fs-2">apartment</mat-icon>
                                 <span class="text-nowrap mt-2">Entity :</span>
-                                <span class="title-text ml-2 mt-2">{{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:180)}}
-                                        <span *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>180">...
+                                <span class="title-text ml-2 mt-2">{{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
+                                        <span *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">...
                                             <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
                                         </span>
                                         <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
                                         </span>
                              </ng-container>
                             </h4>
-
-                           <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
+<!-- For Coi Disclosure -->
+                           <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex label-text">
+                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.disclosurePersonFullName}}</strong>
                                 <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1">
                                     <span class="pipe me-2 mt-1"></span>
                                     <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon mt-1" src="{{deployMap}}assets/images/proposal.png">
                                     <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
                                     <span class="text-nowrap mt-2">Project :</span>
-                                    <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:180)}}
-                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>180">...
+                                    <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
+                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">...
                                         <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
                                     </span>
                                     <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
                                     </span>
                                 </ng-container>
                             </h4>
+<!-- For OPA Disclosure -->
+                            <h4 *ngIf="disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex label-text">
+                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
+                                <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.personName}}</strong>
+                                <ng-container class="ms-1">
+                                    <div class="col mt-2">
+                                        <span class="pipe me-2 mt-1"></span>
+                                        <span class="text-nowrap mt-2">Reporting Cycle :</span>
+                                        <span class="title-text ml-2 mt-2">
+                                                <span class="grey-text">{{disclosure?.periodStartDate |dateFormatter}} - {{disclosure?.periodEndDate |dateFormatter}}</span>
+                                        </span>
+                                    </div>
+                                </ng-container>
+                            </h4>
                         </span>
                     </div>
-                    <div class="col-3 ms-3 p-1 align-items-center mt-2">
+<!-- For Coi disclosures and travel disclosures -->
+                    <div class="col-3 ms-3 p-1 align-items-center mt-2" *ngIf="!disclosure?.opaDisclosureId">
                         <label for="status" class="label-text">Disclosure Status :</label>
                         <app-no-data-label [valueToShow]="disclosure?.conflictStatus"
                             *ngIf="!disclosure?.travelDisclosureId">
@@ -416,9 +579,10 @@
                     </div>
                 </div>
                 <div class="border-bottom">
-                    <ng-container *ngIf="!disclosure?.travelDisclosureId">
+<!-- For Coi disclosures -->
+                    <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId">
                         <div class="row mb-3 p-013 mt-2">
-                            <div class="col-5">
+                            <div class="col-4">
                                 <span class="label-text">Department:</span> <span class="grey-text">
                                     #{{disclosure?.unit?.unitDetail}} </span>
                             </div>
@@ -443,7 +607,7 @@
                             </div>
                         </div>
                         <div class="row mb-3 p-013 mt-2">
-                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-5">
+                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-4">
                                 <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
                                     'Description:' :
                                     'Revision Reason:'}}</label>
@@ -451,7 +615,7 @@
                                     <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
+                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-4">
                                 <label for="id" class="label-text">Description :</label>
                                 <app-no-data-label [valueToShow]="disclosure?.reviseComment">
                                     <span *ngIf="disclosure?.reviseComment" class="fs-14">
@@ -499,11 +663,12 @@
                             </div>
                         </div>
                     </ng-container>
+<!-- For Travel disclosures -->
                     <ng-container *ngIf="disclosure?.travelDisclosureId">
                         <div class="row mb-3 p-013 mt-2">
                             <div class="col-4 d-flex">
                                 <label for="department-id" class="label-text col-custom-travel">Department :</label>
-                                <span class="col">
+                                <span class="col"> 
                                     <app-no-data-label id="department-id" class=""
                                         [valueToShow]="disclosure?.travelEntityName">
                                         <span class="grey-text text-slice"
@@ -579,11 +744,60 @@
                             </div>
                         </div>
                     </ng-container>
+<!-- For OPA disclosures -->
+                    <ng-container *ngIf="disclosure?.opaDisclosureId">
+                        <div class="row mb-3 p-013 mt-2">
+                            <div class="col-4">
+                                <span class="label-text">Department:</span> <span class="grey-text">
+                                    #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                            </div>
+                            <div class="col-2">
+                                <label for="certify-date" class="label-text">Certification Date :</label>
+                                <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
+                                    <span class="grey-text">{{disclosure?.submissionTimestamp | dateFormatter}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-3"></div>
+                            <div class="col-3">
+                                <span class="label-text me-2">Disposition Status :</span> <span
+                                    class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
+                                    <span class="badgeFont">
+                                        {{disclosure?.dispositionStatus}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mb-3 p-013 mt-2">
+                            <div class="col-4">
+                                <label for="id" class="label-text">Administrator :</label>
+                                <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
+                                    <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-2">
+                                <label for="id" class="label-text">Admin Group :</label>
+                                <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
+                                    <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-3"></div>
+                            <div class="col-3">
+                                <label for="review-status" class="label-text mr-21">Review Status :</label>
+                                <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
+                                    <span
+                                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                                        class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{disclosure?.disclosureStatus}}
+                                    </span>
+                                </app-no-data-label>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
                 <div class="d-flex row align-items-center py-2 px-3">
                     <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                        <div class="col-5 d-flex">
-                            <div class="align-items-center col-6 d-flex fs-14"
+                        <div class="col-4 d-flex">
+                            <div class="align-items-center col-6 d-flex fs-14"  *ngIf="!disclosure?.opaDisclosureId"
                                 [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                                 [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                                 area-describedby="Click to view SFI list">
@@ -605,9 +819,9 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class=" text-secondary col-6 fs-14 d-flex">
+                            <div class=" text-secondary col-6 fs-14 d-flex" *ngIf="!disclosure?.opaDisclosureId">
                                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
-                                    <div class="align-items-center col-6 d-flex fs-14"
+                                    <div class="align-items-center col-4 d-flex fs-14"
                                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                         area-describedby="Click to view Proposal list">
@@ -626,7 +840,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="align-items-center col-6 d-flex fs-14"
+                                    <div class="align-items-center col-6 d-flex fs-14 pl-5"
                                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
                                         area-describedby="Click to view Award list">
@@ -678,15 +892,11 @@
                     </ng-container>
                     <div class="d-flex mr-2 justify-content-end px-0"
                         [ngClass]="disclosure.travelDisclosureId? 'col-3' : 'col-auto'">
-                        <!-- <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"
-                    class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
-                    <mat-icon class="me-1">restart_alt</mat-icon>
-                    Revise
-                </button> -->
                         <button (click)="redirectToDisclosure(disclosure)"
                             aria-describedby="Click to view Disclosure details"
                             class="d-flex align-items-center btn btn-outline-primary  fs-14"
-                            [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                            [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure details' :
+                                disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
                             <mat-icon class="me-1">visibility</mat-icon>
                             View
                         </button>
@@ -698,50 +908,16 @@
             </div>
         </ng-container>
     </div>
-    <app-no-information *ngIf="!filteredDisclosureArray.length && !isShowCreate"></app-no-information>
-    <!-- Pagination -->
-    <div [hidden]="isLoading" *ngIf="(filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
+    <app-no-information *ngIf="!paginationArray.length && !isShowCreate"></app-no-information>
+<!-- Pagination -->
+    <div [hidden]="isLoading" *ngIf="(paginationArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
         class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
         <nav aria-label="pagination section" class="pagination justify-content-end">
-            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
-                [totalCount]="result.totalServiceRequest" [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
+                [totalCount]="paginationArray.length" [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
         </nav>
     </div>
-    <!-- <ng-container *ngIf="isShowCreate">
-        <div class="card create-card">
-            <div class="border d-flex pi-info-text mx-4 mt-4 rounded-1 position-relative">
-                <span data-bs-toggle="tooltip" title="Relationship Help Text." data-bs-placement="top"
-                    class="d-inline-block">
-                    <mat-icon role="img"
-                        class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
-                        aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-                </span>
-                <div class="info-text fs-14">
-                    <div class="mt-2">
-                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create a new FCOI disclosure,
-                        click on the <strong>Create FCOI Disclosure</strong> button below or the quick link provided.
-                    </div>
-                    <div class="mt-2">
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create a new OPA disclosure, click on the <strong>Create OPA disclosure</strong> button below or the quick link provided.
-                        </div>
-                    <div class="mt-2">
-                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create new Project /Travel
-                        disclosure, click on the corresponding quick link provided.
-                    </div>
-                </div>
-            </div>
-            <span class="d-flex create-buttons">
-                <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mx-2" (click)="openFCOIModal('FCOI')">
-                    Create FCOI Disclosure
-                </button>
-                 <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mx-2" (click)="openFCOIModal('FCOI')">
-                        Create OPA Disclosure
-                    </button>
-            </span>
-        </div>
-    </ng-container> -->
 </ng-container>
-
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
@@ -760,101 +936,3 @@
     </app-coi-slider>
 </ng-container>
 
-
-<!-- <div class="row" *ngIf="getActiveFCOI().length">
-    <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
-        <div class="col-6" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'PENDING'">
-            <div class="card">
-                <div class="card-header disclosure-master-header-bg">
-                    <h4 class="card-title">
-                        <div class="row">
-                            <div class="col pl">
-                                <strong class="fs-15">FCOI
-                                    Disclosure</strong>
-                            </div>
-                            <div class="col d-flex justify-content-end text-muted"><a class="view-button" [queryParams]={disclosureId:disclosure.disclosureId}
-                                [routerLink]="['/coi/disclosure/summary']"
-                                title="Click to view FCOI Disclosure details"
-                                [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                area-describedby="Click to view FCOI Disclosure details">
-                                View >
-                            </a></div>
-                        </div>
-
-                    </h4>
-                </div>
-                <div class="card-content">
-                    <div class="card-body disclosure-master-body-bg">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <span class="label-text">Department:</span> <span class="grey-text">
-                                            #{{disclosure?.unit?.unitDetail}}</span>
-                                    </div>
-                                    <div class="col-12">
-                                        <span class="label-text">Certification Date :</span>
-                                        <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                            <span class="grey-text">{{disclosure?.certifiedAt |dateFormatter}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <div class="col-12">
-                                        <span class="label-text me-2 fs-15">Expiration Date :</span>
-                                        <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                            <span class="grey-text">{{disclosure?.expirationDate |
-                                                dateFormatter}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="col-12">
-                                    <span class="label-text me-2 p-0 ">Disclosure Status :</span>
-                                    <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
-                                        <span class="px-2 py-2">
-                                            <span
-                                            class="{{commonService.getDisclosureConflictBadge(disclosure?.coiConflictStatusType?.conflictStatusCode)}}"></span>
-                                        <span class="badgeFont">
-                                            {{disclosure?.coiConflictStatusType?.description}}
-                                        </span>
-                                        </span>
-                                    </app-no-data-label>
-                                </div>
-                                <div class="col-12">
-                                    <span class="label-text me-2 p-0">Disposition Status :</span>
-                                    <span
-                                        class="{{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
-                                    </span>
-                                    <span class="badgeFont">
-                                        {{disclosure?.coiDispositionStatusType?.description}}
-                                    </span>
-                                </div>
-                                <div class="col-12">
-                                    <span class="label-text me-2  p-26 ">Review Status :</span>
-                                    <span
-                                        class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
-                                    <span class=" badgeFont">
-                                        {{disclosure?.coiDispositionStatusType?.description}}
-                                    </span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer disclosure-master-footer-bg">
-                    <div class="col-auto d-flex justify-content-end mr-7">
-                        <button (click)="triggerClickForId('create-fcoi-modal')"
-                                class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14 me-2"
-                                title="Click to Renew FCOI Disclosure"
-                                area-describedby="Click to Renew FCOI Disclosure">
-                            <mat-icon class="me-1">restart_alt</mat-icon>
-                            Revise
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6"></div>
-    </ng-container>
-</div> -->

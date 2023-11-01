@@ -17,4 +17,8 @@ public class OPACommonDto {
     private String comment;
     private String description;
     private String updateUserFullName;
+    private String reviewerFullName;
+    private String reviewLocationType;
+    private String reviewStatusType;
+    private String personId;
 }

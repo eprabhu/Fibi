@@ -1,120 +1,28 @@
-<div class="mx-4" *ngIf="definedRelationships?.length">
-  <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 mb-1 shadow-sm user-dashboard-nav">
-    <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;let last = last">
-      <div (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail)" class="text-secondary {{isEditMode && availableRelationships?.length || !last ? 'border-end' :''}}" role="button"
-        [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
-        <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
-          [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
-          class="active r-title px-3 py-3">
-          {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}
-          <span id="qnr-complete-msg"
-            *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
-            class="fa fa-check" title="Completed">
-          </span>
-          <span id="qnr-incomplete-msg"
-            *ngIf="!entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
-            class="fa fa-exclamation-circle" title="Incomplete">
-          </span>
-        </span>
-        </div>
-    </ng-container>
-    <div *ngIf="availableRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="pt-1"  [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"
-    (mouseover)="isHoverAddRelationship = true" (mouseout)="isHoverAddRelationship = false"  role="button" (click)="saveOrAddRelationshipModal()">
-      <span class="px-2">
-        <mat-icon class="material-icons-outlined">add_circle_outline</mat-icon>
-        Add Relationship
-      </span>
-    </div>
-  </nav>
 
-</div>
-<div class="ml-15 mr-10 questionnaire-position">
-      <div *ngIf="definedRelationships?.length">
-        <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
+<div class="ml-15 mr-10 questionnaire-position" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
+  <div class="card no-data-card" *ngIf="!entityDetailsServices.definedRelationships?.length">
+    <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
+      <p class="fs-14 m-0">
+        <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
+          You currently do not have any relationships associated with the entity.
+        </span>
+      </p>
+    </div>
+  </div>
+        <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
           <button (click)="deleteRelationship()" class="btn-delete-position btn btn-tertiary">
             <mat-icon class="pt-1">delete_outline</mat-icon>
             <span class="fs-14 delete-content-position">Delete</span>
           </button>
         </div>
-<div [class.scrollable-table]="!isEditMode || !entityDetailsServices.canMangeSfi">
-  <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
-          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" (QuestionnaireEditEvent)="questionnaireEdit($event)">
+      <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
+          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" 
+          (QuestionnaireEditEvent)="questionnaireEdit($event)">
         </app-view-questionnaire-list>
 </div>
-        
-        </div>
-</div>
-<div class="card ml-15 mr-15 mt-3" *ngIf="!definedRelationships?.length">
-  <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
-    <p class="fs-14 m-0">
-      <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
-        You currently do not have any relationships associated with the entity. To add any relationship, click on the
-        <strong>Add Relationship</strong> button.
-      </span>
-    </p>
-  </div>
-  <span class="create-button">
-    <button class="btn btn-primary btn-sm d-block fs-15" (click)="saveOrAddRelationshipModal()">
-      Add Relationship
-    </button>
-  </span>
-</div>
-
 <!-- Modal -->
 <button id="open-relationship-modal" data-bs-target="#addRelationshipModal" data-bs-toggle="modal"
   class="d-none"></button>
 <button type="button" hidden=true id="hide-relationship-modal" data-bs-dismiss="modal"
   data-bs-target="#addRelationshipModal"></button>
 
-<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-mdb-backdrop="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header custom-height">
-        <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relationship</h3>
-        <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
-          id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div class="row m-0">
-          <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
-        </div>
-        <div *ngIf="availableRelationships?.length; else noData" class="relation d-flex justify-content-center mb-15 mt-15">
-          <div class="card custom-padding"
-          [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-            <div class="d-flex flex-row">
-              <div class="form-check form-check-inline color-black">
-                <label class="form-check-label ps-5 colour-black"><b>Select Relation :
-                  </b></label>
-              </div>
-              <div class="col d-flex">
-                <div *ngFor="let relation of availableRelationships;" class="form-check form-check-inline">
-                  <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                    [value]="relation?.personEntityRelType?.relationshipTypeCode"
-                    [(ngModel)]="isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
-                  <label class="text-secondary r-title fs-14">
-                    {{relation?.personEntityRelType?.description}}
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="relationValidationMap.has('relationRadio')"
-          class="invalid-feedback d-block fs-13 justify-content-center d-flex">
-          {{relationValidationMap.get('relationRadio')}}
-        </div>
-        <ng-template #noData>
-          <div class="m-3">
-            <app-no-information></app-no-information>
-          </div>
-        </ng-template>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
-          (click)="clearModal()">Cancel</button>
-        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="addRelation()">Add Relationship</button>
-      </div>
-    </div>
-  </div>
-</div>

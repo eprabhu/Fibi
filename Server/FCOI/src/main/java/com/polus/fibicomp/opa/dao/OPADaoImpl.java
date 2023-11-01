@@ -6,14 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
+import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -241,6 +247,18 @@ public class OPADaoImpl implements OPADao {
         try {
             ResultSet rset = getOPADashboardResultSet(requestDto, false);
             while (rset.next()) {
+                String reviewers = rset.getString("REVIEWERS");
+                List<List<String>> reviewerList = new ArrayList<>();
+                if (reviewers != null && !reviewers.isEmpty()) {
+                    String[] reviewerArray = reviewers.split(";");
+                    Arrays.stream(reviewerArray)
+                            .forEach(reviewer -> {
+                                List<String> subList = Arrays.stream(reviewer.split(":"))
+                                        .map(String::trim)
+                                        .collect(Collectors.toList());
+                                reviewerList.add(subList);
+                            });
+                }
                 opaDashboardDtos.add(
                         OPADashboardDto.builder()
                         .opaDisclosureId(rset.getInt("OPA_DISCLOSURE_ID"))
@@ -260,13 +278,20 @@ public class OPADaoImpl implements OPADao {
                         .receivedSummerComp(rset.getBoolean("RECEIVED_SUMMER_COMP"))
                         .summerCompMonths(rset.getBigDecimal("SUMMER_COMP_MONTHS"))
                         .hasPotentialConflict(rset.getBoolean("HAS_POTENTIAL_CONFLICT"))
-                        .hasPotentialConflict(rset.getBoolean("CONFLICT_DESCRIPTION"))
+                        .conflictDescription(rset.getString("CONFLICT_DESCRIPTION"))
                         .createTimestamp(rset.getTimestamp("CREATE_TIMESTAMP"))
                         .createUser(rset.getString("CREATE_USER"))
                         .submissionTimestamp(rset.getTimestamp("SUBMISSION_TIMESTAMP"))
-                        .updateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
+                        .opaDisclosureStatusCode(rset.getString("OPA_DISCLOSURE_STATUS_CODE"))
+                        .dispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"))
+                        .dispositionStatus(rset.getString("DISPOSITION_STATUS"))
+                        .disclosureStatus(rset.getString("OPA_DISCLOSURE_STATUS"))
+                        .updateTimeStamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
                         .updateUser(rset.getString("UPDATE_USER"))
                         .updateUserFullName(rset.getString("UPDATE_USER_FULL_NAME"))
+                        .adminPersonName(rset.getString("ADMIN_FULL_NAME"))
+                        .adminGroupName(rset.getString("ADMIN_GROUP_NAME"))
+                        .reviewers(reviewerList)
                         .build()
                 );
             }
@@ -283,13 +308,19 @@ public class OPADaoImpl implements OPADao {
         }
     }
 
-    ResultSet getOPADashboardResultSet(OPADashboardRequestDto requestDto, boolean isCount) throws SQLException {
+    @Override
+    public ResultSet getOPADashboardResultSet(OPADashboardRequestDto requestDto, boolean isCount) throws SQLException {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
         Integer currentPage = requestDto.getCurrentPage();
         Integer pageNumber = requestDto.getPageNumber();
-        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?)}");
+        List<String> disclosureStatusCodes = requestDto.getOpaDisclosureStatusCodes();
+        List<String> dispositionStatusCodes = requestDto.getDispositionStatusCodes();
+        String submissionTimestamp = requestDto.getSubmissionTimestamp();
+        String unitNumber = requestDto.getUnitNumber();
+		Boolean fetchAllRecords = requestDto.getFetchAllRecords();
+        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
         statement.setString(1, AuthenticatedUser.getLoginPersonId());
         statement.setString(2, requestDto.getFilterType());
         statement.setBoolean(3, isCount);
@@ -297,6 +328,18 @@ public class OPADaoImpl implements OPADao {
         statement.setInt(5, (currentPage == null ? 0 : currentPage - 1));
         statement.setInt(6, (pageNumber == null ? 0 : pageNumber));
         statement.setString(7, requestDto.getTabType());
+        statement.setString(8, disclosureStatusCodes != null &&
+                !disclosureStatusCodes.isEmpty() ? String.join(",", disclosureStatusCodes) : null);
+        statement.setString(9, dispositionStatusCodes != null &&
+                !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+        statement.setString(10, submissionTimestamp);
+        statement.setString(11, unitNumber);
+		statement.setBoolean(12, fetchAllRecords != null && fetchAllRecords);
+        statement.setString(13, requestDto.getPersonId());
+        statement.setString(14, requestDto.getEntityId() != null ? requestDto.getEntityId().toString() : null);
+        statement.setString(15, requestDto.getIsFaculty() != null ? requestDto.getIsFaculty().equals(Boolean.TRUE) ? "Y" : "N" : null);
+        statement.setString(16, requestDto.getPeriodStartDate());
+        statement.setString(17, requestDto.getPeriodEndDate());
         statement.execute();
         return  statement.getResultSet();
     }
@@ -307,6 +350,18 @@ public class OPADaoImpl implements OPADao {
             for (Map.Entry<String, String> mapElement : sort.entrySet()) {
                 if (mapElement.getKey().equals("createTimestamp")) {
                     sortOrder = (sortOrder == null ? "T.CREATE_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.CREATE_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("person")) {
+                    sortOrder = (sortOrder == null ? "T.PERSON_NAME " + mapElement.getValue() : sortOrder + ", T.PERSON_NAME " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("submissionTimestamp")) {
+                    sortOrder = (sortOrder == null ? "T.SUBMISSION_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.SUBMISSION_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("updateTimeStamp")) {
+                    sortOrder = (sortOrder == null ? "T.UPDATE_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("dispositionStatus")) {
+                    sortOrder = (sortOrder == null ? "T.DISPOSITION_STATUS " + mapElement.getValue() : sortOrder + ", T.DISPOSITION_STATUS " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("disclosureStatus")) {
+                    sortOrder = (sortOrder == null ? "T.OPA_DISCLOSURE_STATUS " + mapElement.getValue() : sortOrder + ", T.OPA_DISCLOSURE_STATUS " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("homeUnitName")) {
+                    sortOrder = (sortOrder == null ? "T.UNIT_NAME " + mapElement.getValue() : sortOrder + ", T.UNIT_NAME " + mapElement.getValue());
                 }
             }
         }
@@ -357,11 +412,13 @@ public class OPADaoImpl implements OPADao {
 				opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
 				opaDisclosure.setAdminPersonName(opaDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(opaDisclosure.getAdminPersonId()) : null);
 				opaDisclosure.setAdminGroupName(opaDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(opaDisclosure.getAdminGroupId()).getAdminGroupName() : null);
+				opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
 				opaDisclosures.add(opaDisclosure);
 			}
 			OPADisclosure opaDisclosure = getPendingOpaDisclosure(personId);
 			if (opaDisclosure != null) {
 				opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
+				opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
 				opaDisclosures.add(opaDisclosure);
 			}
 		} catch (Exception ex) {
@@ -382,4 +439,56 @@ public class OPADaoImpl implements OPADao {
 		return !opaDisclData.isEmpty() ? opaDisclData.get(0) : null;
 	}
 
+    @Override
+    public Timestamp updateOPADisclosureUpDetails(Integer opaDisclosureId, Timestamp timesStamp) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("UPDATE OPADisclosure d SET ");
+        hqlQuery.append("d.updateTimestamp = :updateTimestamp, d.updateUser = :updateUser ");
+        hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureId",opaDisclosureId);
+        query.setParameter("updateTimestamp", timesStamp);
+        query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+        query.executeUpdate();
+        return timesStamp;
+    }
+
+    @Override
+    public void updateOPADisclosureStatuses(Integer opaDisclosureId, Timestamp updateTimesStamp, String opaDisclosureStatusCode, String dispositionStatusCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("UPDATE OPADisclosure d SET ");
+        hqlQuery.append("d.updateTimestamp = :updateTimestamp, ");
+        hqlQuery.append("d.updateUser = :updateUser ");
+        if (opaDisclosureStatusCode != null)
+            hqlQuery.append(", d.opaDisclosureStatusCode = :opaDisclosureStatusCode ");
+        if (dispositionStatusCode != null)
+            hqlQuery.append(", d.dispositionStatusCode = :dispositionStatusCode ");
+        hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureId",opaDisclosureId);
+        if (opaDisclosureStatusCode != null)
+            query.setParameter("opaDisclosureStatusCode", opaDisclosureStatusCode);
+        if (dispositionStatusCode != null)
+            query.setParameter("dispositionStatusCode", dispositionStatusCode);
+        query.setParameter("updateTimestamp", updateTimesStamp);
+        query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+        query.executeUpdate();
+    }
+
+    @Override
+    public OPADisclosureStatusType getOPADisclosureStatusType(String statusTypeCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT s FROM  OPADisclosureStatusType s ");
+        hqlQuery.append("WHERE s.opaDisclosureStatusCode = :opaDisclosureStatusCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureStatusCode", statusTypeCode);
+        List<OPADisclosureStatusType> resultData = query.getResultList();
+        if(resultData != null  && !resultData.isEmpty()) {
+            return resultData.get(0);
+        }
+        return null;
+    }
 }

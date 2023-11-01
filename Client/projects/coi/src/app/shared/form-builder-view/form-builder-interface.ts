@@ -3,8 +3,10 @@ export class FormBuilder {
     form: Form;
 }
 
+type EventTypes = ['EXTERNAL_SAVE', 'SAVE', 'SAVE_COMPLETE', 'SAVE_COMPLETED', 'CONFIGURATION', 'IS_EDIT_MODE'];
+
 export class FormBuilderEvent {
-    eventType: string;
+    eventType: EventTypes[number];
     data?: any;
 }
 
@@ -37,7 +39,7 @@ export class SectionComponent {
     componentDescription: any;
     componentType: string;
     componentRefId?: string;
-    componentData?: string;
+    componentData?: any;
     componentHeader?: string;
     componentFooter: any;
     programmedElement: any;
@@ -228,6 +230,8 @@ export class FormBuilderSaveRO {
     moduleSubItemKey: string;
     componentId: number;
     componentType: string;
+    componentRefId: string;
+    componentData?: string;
     programmedElement: any;
     questionnaire: QuestionnaireVO;
     customElement: CustomElementVO;

@@ -21,4 +21,11 @@ public interface GeneralDao {
      * @return List<String> rights
      */
 	List<String> fetchAllCoiOpaRights(String loginPersonId);
+
+    /**
+     * This method checks the person is assigned to a OPA review
+     * @param loginPersonId
+     * @return
+     */
+    boolean isPersonInOPAReviewer(String loginPersonId);
 }

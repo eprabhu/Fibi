@@ -181,7 +181,7 @@ margin-top-3px{
 .pl-28 {
   padding-left: 28px;
 }
- 
+
 .search-area {
   background-color: white !important;
 }
@@ -370,5 +370,25 @@ padding-right: 17px;
 }
 
 .min-card-height{
-  min-height: 96px;
+    min-height: 96px;
+    max-height: 96px;
 }
+
+@media (max-width: 1500px) {
+  .min-card-height {
+    min-height: 135px;
+    max-height: 155px;  
+  }
+}
+
+@media (max-width: 1025px) {
+  .min-card-height {
+    min-height: 170px;
+    max-height: 170px;  
+  }
+}
+
+.ml-25 {
+  margin-left: 25px!important;
+}
+

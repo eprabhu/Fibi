@@ -1,6 +1,7 @@
 .disclosure-heading {
-  height: 45px;
-  background-color: #E8E8E8;
+  min-height: 55px;
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #0000000d;
 }
 
 .triple-card {
@@ -124,7 +125,7 @@ $bg-color: #E4F1FF;
 }
 
 .side-height {
-  height: 204.5px;
+  height: 214.5px;
 }
 
 .label-text{
@@ -194,12 +195,12 @@ table {
 }
 
 .min-height-189 {
-  min-height: 161px;
+  min-height: 169px;
   max-height: 160px;
 }
 
 .min-height-90 {
-  min-height: 90.5px;
+  min-height: 100.5px;
 }
 
 .btn-outline-grey {
@@ -364,4 +365,8 @@ table {
       color: #007DEC !important;
     }
   }
+}
+
+.keyboard-backspace {
+  transform: rotateY(180deg);
 }

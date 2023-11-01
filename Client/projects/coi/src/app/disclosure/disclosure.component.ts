@@ -18,7 +18,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app
 import { CommonService } from '../common/services/common.service';
 import {
     NO_DATA_FOUND_MESSAGE,
-    HOME_URL,
+    REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     CREATE_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
@@ -97,6 +97,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
     returnErrorMsg = 'Describe the reason for returning the disclosure';
     helpTexts = [];
+    isHomePageClicked = false;
     withdrawHelpTexts = [
         `Withdraw any disclosure in 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
@@ -108,7 +109,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
-    reviewList:any = [];
+    reviewList: any = [];
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -186,6 +187,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goToStep(stepPosition?: any) {
+        this.isHomePageClicked = false;
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
              openCommonModal('disclosure-unsaved-changes-modal');
@@ -202,7 +204,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.dataStore.dataChanged = false;
         this.coiService.unSavedModules = '';
         this.currentStepNumber = this.tempStepNumber;
-        this.navigateToStep();
+        !this.isHomePageClicked ? this.navigateToStep() : this.router.navigate(['/coi/user-dashboard']);
+
     }
 
     stayOnPageClicked() {
@@ -210,9 +213,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goBackStep() {
+        this.isHomePageClicked = false;
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = this.currentStepNumber - 1;
-             openCommonModal('disclsoure-unsaved-changes-modal');
+            openCommonModal('disclosure-unsaved-changes-modal');
         } else {
             if (this.currentStepNumber === 1) {
                 return;
@@ -241,6 +245,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     navigateToStep() {
         let nextStepUrl = '';
+        this.isHomePageClicked = false;
         switch (this.currentStepNumber) {
             case 1:
                 nextStepUrl = '/coi/create-disclosure/screening';
@@ -326,7 +331,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Submitted Successfully.');
         }, err => {
             this.isSaving = false;
+            if (err.status === 405) {
+            hideModal('confirmModal');
+            this.coiService.concurrentUpdateAction = 'Submit Disclosure';
+          } else {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error In Certifying Disclosure.');
+          }
         }));
     }
     validateRelationship() {
@@ -386,11 +396,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.updateDisclosureReviewStatus(res.body.coiDisclosure);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
+                if (_err.status === 405) {
+                    hideModal('completeReviewModalFromDashboard');
+                    this.coiService.concurrentUpdateAction = 'Complete Review';
+                } else {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
                 } else {
                     this.commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
                 }
+            }
             }));
     }
 
@@ -499,8 +514,17 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     goToHomeUrl() {
         // TODO admin/reviewer/pi based redirect once rights are implemented.
-        const reRouteUrl = this.coiService.previousHomeUrl || HOME_URL;
+        const reRouteUrl = this.coiService.previousHomeUrl || REPORTER_HOME_URL;
         this.router.navigate([reRouteUrl]);
+    }
+
+    goBackInEditMode() {
+        this.isHomePageClicked = true;
+        if (this.dataStore.dataChanged) {
+           openCommonModal('disclosure-unsaved-changes-modal');
+        } else {
+            this.router.navigate(['/coi/user-dashboard']);
+        }
     }
     unitTitle() {
         return getSponsorSearchDefaultValue(this.coiData.coiDisclosure.person.unit);
@@ -587,7 +611,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
       REQ_OBJ.searchWord = '';
       return REQ_OBJ;
     }
- 
+
     /**
      * 2 - Submitted
      * 3 - Review In Progress
@@ -596,7 +620,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
      * To be done - Admin group id check needs to be added.
      */
     checkForModifyRisk() {
-        return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
+        return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) &&
         (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
     }
 
@@ -613,7 +637,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
                     { queryParams: { disclosureId: this.coiData.coiDisclosure.disclosureId } });
             }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                if (_err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.coiService.concurrentUpdateAction = 'Withdraw Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                }
             }));
     }
 
@@ -627,7 +656,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure returned successfully.`);
                 this.goToHomeUrl();
             }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
+                if (_err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.coiService.concurrentUpdateAction = 'Return Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
+                }
             }));
     }
 
@@ -691,8 +725,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 				return IS_PROJECT_ADMINISTRATOR;
 		}
     }
-    
-    openReviewComment() {	
+
+    openReviewComment() {
         const COMMENT_META_DATA: coiReviewComment = {
             disclosureId: this.coiData.coiDisclosure.disclosureId,
             coiSectionsTypeCode: '3',
@@ -702,14 +736,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             componentSubRefId: null,
             coiSubSectionsTitle: null
         }
-        this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);	
-        this.coiService.isShowCommentNavBar = true;	
+        this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
+        this.coiService.isShowCommentNavBar = true;
     }
 
     closeReviewComment(event) {
         this.coiService.isShowCommentNavBar = event;
     }
 
-    
+    cancelConcurrency() {
+        this.coiService.concurrentUpdateAction = '';
+    }
 
 }

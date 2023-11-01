@@ -4,29 +4,24 @@
         <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
-        <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+        <ul *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
             <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures page' : 'Go to My Disclosures'"
-                aria-describedby="Goto home page">My Disclosures
-                <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures page' : 'Go to My Disclosures'"
+                aria-description="Goto my home page">My Disclosures
+                <span *ngIf="router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/entities') ? 'My Entities page' : 'Go to My Entities'"
-                aria-describedby="Goto Disclosures page">My Entities
-                <span *ngIf="_router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
-            </li>
-            <li (click)="redirectToOpa();" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/opa/form') ? 'My OPA page' : 'Go to My OPA page'"
-                aria-describedby="Goto My OPA page">My OPA
-                <span *ngIf="_router.url.includes('/coi/opa/form')" class="active-color"></span>
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/entities') ? 'My Entities page' : 'Go to My Entities'"
+                aria-description="Goto my Disclosures page">My Entities
+                <span *ngIf="router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/notes') ? 'Notes page' : 'Go to Notes page'"
-                aria-describedby="Goto Notes page">Notes
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/notes') ? 'My Notes page' : 'Go to My Notes page'"
+                aria-description="Goto my Notes page">My Notes
             </li>
             <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/attachments') ? 'Attachments page' : 'Go to Attachments page'"
-                aria-describedby="Goto Attachments page">Attachments
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/attachments') ? 'My Attachments page' : 'Go to My Attachments page'"
+                aria-description="Goto my Attachments page">My Attachments
             </li>
         </ul>
     </div>
@@ -41,9 +36,9 @@
                         </button>
                     </div>
                     <mat-menu #createActionMenu="matMenu" xPosition="before">
-                            <button (click)="triggerClickForId('create-sfi-modal')" mat-menu-item
+                            <button (click)="openCreateSFI()" mat-menu-item
                                 title="Click to Create Significant Financial Interest"
-                                area-describedby="Click to Create Significant Financial Interest"
+                                    aria-describedby="Click to Create Significant Financial Interest"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Significant Financial Interest</span>
                             </button>
@@ -52,21 +47,17 @@
                                 <span class="ms-2 fw-medium fs-14">Notes</span>
                             </button>
                             <button mat-menu-item title="Click to Add Attachments" area-describedby="Click to add attachments"
-                            (click)="isOpenAttachmentModal = true" class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            (click)="commonService.isOpenAttachmentModal = true" class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Attachments</span>
                             </button>
-                            <button (click)="triggerClickForId('create-project-modal')" mat-menu-item title="Click to Create Project Disclosure"
-                                area-describedby="Click to Create Project Disclosure"
+                            <button (click)="openProjectDisclosure()" mat-menu-item title="Click to Create Project Disclosure"
+                                    aria-describedby="Click to Create Project Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Project Disclosure</span>
                             </button>
-                        <button (click)="triggerClickForId('create-travel-modal')" mat-menu-item title="Click to Create Travel Disclosure" area-describedby="Click to Create Travel Disclosure"
+                        <button (click)="openTravelDisclosure()" mat-menu-item title="Click to Create Travel Disclosure" area-describedby="Click to Create Travel Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                             <span class="ms-2 fw-medium fs-14">Travel Disclosure</span>
-                        </button>
-                        <button (click)="createOPA()" mat-menu-item title="Click to Create OPA Disclosure" area-describedby="Click to Create OPA Disclosure"
-                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <span class="ms-2 fw-medium fs-14">OPA Disclosure</span>
                         </button>
                     </mat-menu>
                 </ng-container>
@@ -119,7 +110,7 @@
     </div>
 </header>
 
-<div class="card add-note" *ngIf="isShowCreateNoteModal" appDrag>
+<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
         <span class="btn-primary-icon btn-sm ms-auto mt-0 px-2" id="close-edit-home-unit" title="Return to main menu"
@@ -139,7 +130,11 @@
     </div>
 </div>
 
-<app-add-attachment-modal *ngIf="isOpenAttachmentModal" (closeModal)="closeModal($event)">
+<app-add-attachment-modal *ngIf="commonService.isOpenAttachmentModal" (closeModal)="closeModal($event)">
 </app-add-attachment-modal>
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
+
+<app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
+                             [activeDisclosures]="headerService.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
+</app-disclosure-create-modal>
