@@ -72,7 +72,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.isMangeReviewAction = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR']);
+        // this.isMangeReviewAction = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR']);
+        this.isMangeReviewAction = this._commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE']);
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
