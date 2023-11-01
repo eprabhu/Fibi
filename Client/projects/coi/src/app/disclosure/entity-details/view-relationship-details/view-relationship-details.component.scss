@@ -286,7 +286,6 @@ small {
 
 .border-nav {
   width: max-content;
-  border-radius: 15px 15px 0px 0px;
   position: relative;
   top: 0px;
   right: 15px;
@@ -307,7 +306,14 @@ small {
     border-bottom: 3px solid #007DEC;
     color: #007DEC;
     padding: 10px 10px !important;
+    background-color: #e6f3ff !important;
+    box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
   }
+}
+
+.nav-options:hover {
+  background-color: #e6f3ff !important;
+  box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
 }
 
 .user-dashboard-nav {
@@ -321,7 +327,6 @@ small {
 
 .border-nav {
   width: max-content;
-  border-radius: 15px 15px 0px 0px;
   position: relative;
   top: 0px;
   right: 15px;
@@ -337,4 +342,13 @@ small {
   font-weight: 600;
   color: #ffc107 !important;
   margin-left: 5px;
+}
+
+.add-relation {
+  margin-left: -15px;
+}
+
+.add-relation:hover {
+  background-color: #e6f3ff;
+  box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
 }

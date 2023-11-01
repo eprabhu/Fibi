@@ -125,12 +125,16 @@ small {
     font-style: italic;
 }
 
+.text-color {
+    color: #6A7980;
+}
+
 .border-nav {
     width: max-content;
     position: relative;
     top: 15px;
     left: 9px;
-    background-color: #EEF0FC !important;
+    background-color: #e6f3ff !important;
     border-bottom: 3px solid #007DEC !important;
     color: #007DEC !important;
 }
@@ -202,3 +206,36 @@ small {
     top: 54px;
     position: absolute;
 }
+
+  .invalid {
+    color: #ff0000;
+  }
+  
+  .medium-risk {
+    color: #ff8c00;
+  }
+  
+  .low-risk {
+    color: rgb(26, 172, 62);
+  }
+
+  .status-pill-position {
+    border-radius: 20px;
+    padding: 3px 9px 3px 9px;
+  }
+
+  .active {
+    background-color: #4CB57D !important;
+    color: #fff;
+    @extend .status-pill-position;
+  }
+  
+  .inactive {
+    background-color: #949494;
+    color: #fff;
+    @extend .status-pill-position;
+  }
+  .entity-risk-badge {
+    width: max-content !important;
+  }
+  
