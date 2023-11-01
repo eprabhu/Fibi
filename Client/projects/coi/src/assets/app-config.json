@@ -12,5 +12,5 @@
   "elasticPassword": "changeme",
   "elasticAuthScheme": "Basic",
   "elasticIndexUrl": "https://coi.fibiweb.com/elastic/",
-  "fibiApplicationUrl":"https://stage.fibiweb.com/fibi"
+  "fibiApplicationUrl":"https://dev.fibiweb.com/fibi"
 }
