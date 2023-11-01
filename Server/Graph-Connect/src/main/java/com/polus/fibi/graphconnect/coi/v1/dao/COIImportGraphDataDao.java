@@ -18,13 +18,13 @@ import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.polus.fibi.graphconnect.coi.entity.COIEntity;
-import com.polus.fibi.graphconnect.coi.entity.Country;
-import com.polus.fibi.graphconnect.coi.entity.Person;
-import com.polus.fibi.graphconnect.coi.repository.CountryRepository;
-import com.polus.fibi.graphconnect.coi.repository.EntityRepository;
-import com.polus.fibi.graphconnect.coi.repository.PersonRepository;
+import com.polus.fibi.graphconnect.entity.COIEntity;
+import com.polus.fibi.graphconnect.entity.Country;
+import com.polus.fibi.graphconnect.entity.Person;
 import com.polus.fibi.graphconnect.exceptions.CustomGraphException;
+import com.polus.fibi.graphconnect.repository.CountryRepository;
+import com.polus.fibi.graphconnect.repository.EntityRepository;
+import com.polus.fibi.graphconnect.repository.PersonRepository;
 
 @Repository
 public class COIImportGraphDataDao {
@@ -298,17 +298,6 @@ public class COIImportGraphDataDao {
 						FROM entity_relationship t1
 						INNER JOIN entity_relationship_type t2 on t1.ENTITY_REL_TYPE_CODE = t2.ENTITY_REL_TYPE_CODE
 						where t1.NODE_TYPE_CODE = 1
-
-						 UNION
-
-						SELECT DISTINCT
-						t1.ENTITY_NUMBER as FROM_ENTITY,
-						'Siblings from the same parent' as REL_TYPE,
-						t2.ENTITY_NUMBER as TO_ENTITY
-						FROM entity_relationship t1
-						inner join entity_relationship t2 on t1.NODE_ID = t2.NODE_ID and t1.ENTITY_REL_TYPE_CODE = t2.ENTITY_REL_TYPE_CODE
-						where t1.NODE_TYPE_CODE = 1
-						and t1.ENTITY_NUMBER > t2.ENTITY_NUMBER
 
 				""";
 
