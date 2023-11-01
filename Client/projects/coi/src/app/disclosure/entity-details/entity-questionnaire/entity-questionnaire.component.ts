@@ -92,7 +92,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   getQuestionnaire(data: any) {
     if(data) {
       this.currentRelationshipDetails = data;
-      this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.personEntityRelType.relationshipTypeCode;
+      this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
       this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
       this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
       this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
@@ -119,9 +119,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   questionnaireEdit(event) {
     if(event) {
       this.entityDetailsServices.isRelationshipQuestionnaireChanged = true;
-      let nameOfQuestionnaire = this.entityDetailsServices.definedRelationships.find(ele => ele.validPersonEntityRelType.personEntityRelType.relationshipTypeCode == this.entityDetailsServices.activeRelationship);
+      let nameOfQuestionnaire = this.entityDetailsServices.definedRelationships.find(ele => ele.validPersonEntityRelType.validPersonEntityRelTypeCode == this.entityDetailsServices.activeRelationship);
       if(!this.entityDetailsServices.unSavedSections.some(ele => ele.includes('Relationship Questionnaire'))) {
-        this.entityDetailsServices.unSavedSections.push( nameOfQuestionnaire.validPersonEntityRelType.personEntityRelType.description +' Relationship Questionnaire');
+        this.entityDetailsServices.unSavedSections.push( nameOfQuestionnaire.validPersonEntityRelType.description +' Relationship Questionnaire');
       }
     }
   }

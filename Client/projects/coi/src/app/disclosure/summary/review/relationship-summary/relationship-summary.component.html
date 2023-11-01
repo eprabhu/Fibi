@@ -125,7 +125,6 @@
 					</div>
 				</div>
 			</div>
-            <ng-container *ngIf="isShowNoDataCard">
               <table class="table fs-14 fw-medium mt-3" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
@@ -180,7 +179,6 @@
               <div *ngIf="!projectRelations.length">
                 <app-no-information> </app-no-information>
               </div>
-            </ng-container>
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
