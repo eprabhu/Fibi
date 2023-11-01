@@ -486,9 +486,9 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.returnTravelDisclosure(vo.getTravelDisclosureId(), vo.getDescription());
 	}
 
-	@GetMapping("/adminGroup/adminPersons")
-	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
-		return generalService.fetchAdminGroupsAndPersons();
+	@GetMapping("/adminGroup/adminPersons/{moduleCode}")
+	public ResponseEntity<Object> fetchAdminGroupsAndPersons(@PathVariable("moduleCode") Integer moduleCode) {
+		return generalService.fetchAdminGroupsAndPersons(moduleCode);
 	}
 
 	@GetMapping("/validateConflicts/{disclosureId}")
