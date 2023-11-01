@@ -7,8 +7,8 @@ export class AssignAdministratorModalService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getAdminDetails() {
-        return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
+    getAdminDetails(moduleCode) {
+        return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons/' + moduleCode);
     }
 
     getPersonGroup(personId) {

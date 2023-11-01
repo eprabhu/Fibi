@@ -161,7 +161,9 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.$subscriptions.push(this._disclosureCreateModalService.createDisclosure(this.getCreateProjectRequestObject()).subscribe((data: any) => {
                 if (data) {
                     hideModal('reviseOrCreateDisclosureModal');
-                    this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
+                    this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                        this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
+                    });
                     this.clearModal();
                 }
             }, err => { 

@@ -97,6 +97,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
     returnErrorMsg = 'Describe the reason for returning the disclosure';
     helpTexts = [];
+    isHomePageClicked = false;
     withdrawHelpTexts = [
         `Withdraw any disclosure in 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
@@ -186,6 +187,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goToStep(stepPosition?: any) {
+        this.isHomePageClicked = false;
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
              openCommonModal('disclosure-unsaved-changes-modal');
@@ -202,7 +204,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.dataStore.dataChanged = false;
         this.coiService.unSavedModules = '';
         this.currentStepNumber = this.tempStepNumber;
-        this.navigateToStep();
+        !this.isHomePageClicked ? this.navigateToStep() : this.router.navigate(['/coi/user-dashboard']);
+
     }
 
     stayOnPageClicked() {
@@ -210,9 +213,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goBackStep() {
+        this.isHomePageClicked = false;
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = this.currentStepNumber - 1;
-             openCommonModal('disclsoure-unsaved-changes-modal');
+            openCommonModal('disclosure-unsaved-changes-modal');
         } else {
             if (this.currentStepNumber === 1) {
                 return;
@@ -241,6 +245,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     navigateToStep() {
         let nextStepUrl = '';
+        this.isHomePageClicked = false;
         switch (this.currentStepNumber) {
             case 1:
                 nextStepUrl = '/coi/create-disclosure/screening';
@@ -511,6 +516,15 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         // TODO admin/reviewer/pi based redirect once rights are implemented.
         const reRouteUrl = this.coiService.previousHomeUrl || REPORTER_HOME_URL;
         this.router.navigate([reRouteUrl]);
+    }
+
+    goBackInEditMode() {
+        this.isHomePageClicked = true;
+        if (this.dataStore.dataChanged) {
+           openCommonModal('disclosure-unsaved-changes-modal');
+        } else {
+            this.router.navigate(['/coi/user-dashboard']);
+        }
     }
     unitTitle() {
         return getSponsorSearchDefaultValue(this.coiData.coiDisclosure.person.unit);

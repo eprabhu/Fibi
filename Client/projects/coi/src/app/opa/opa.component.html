@@ -131,7 +131,7 @@
                          area-describedby="Click to view the disclosure screening form">Form
                     </div>
                 </div>
-                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1'" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1' && checkForReviewerTab()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                      role="button">
                     <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                          area-describedby="Click to view the reviews">Reviews
@@ -353,7 +353,7 @@
                         [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
     <!-- modal header -->
     <ng-container header>
-        <span>{{primaryBtnName}} OPA Disclosure</span>
+        <span>{{primaryBtnName}} Disclosure : OPA Disclosure By {{personProjectDetails?.personFullName}}</span>
     </ng-container>
     <!-- modal content -->
     <ng-container content-sticky>
