@@ -35,3 +35,6 @@ export const EDITOR_CONFIGURATION = {
     image: {},
     mediaEmbed: {},
   };
+
+export const COI_MODULE_CODE = 8;
+export const OPA_MODULE_CODE = 23;

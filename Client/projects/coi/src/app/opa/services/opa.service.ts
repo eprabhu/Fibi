@@ -14,7 +14,6 @@ export class OpaService {
     $SelectedReviewerDetails = new BehaviorSubject({});
     isShowCommentNavBar = false;
     isEnableReviewActionModal = false;
-    isCOIAdministrator = false;
     formBuilderEvents = new Subject<FormBuilderEvent>();
     actionButtonId = null;
 
