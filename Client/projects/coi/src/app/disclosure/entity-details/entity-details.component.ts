@@ -165,7 +165,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.groupedRelations = {};
         if (this.entityDetailService.definedRelationships.length) {
             this.entityDetailService.definedRelationships.forEach(element => {
-                this.findRelation(element.validPersonEntityRelType.personEntityRelType.relationshipTypeCode);
+                this.findRelation(element.validPersonEntityRelType.validPersonEntityRelTypeCode);
             });
         } else {
             if (this.entityDetailService.availableRelationships.length) {
@@ -177,7 +177,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     private findRelation(financialEntityRelTypeCode: string) {
         this.entityDetailService.groupedRelations = {};
         const RELATION_INDEX = this.entityDetailService.availableRelationships.findIndex(element =>
-            element.personEntityRelType.relationshipTypeCode === financialEntityRelTypeCode);
+            element.validPersonEntityRelTypeCode === financialEntityRelTypeCode);
         if (RELATION_INDEX !== -1) {
             this.entityDetailService.availableRelationships.splice(RELATION_INDEX, 1);
         }
@@ -239,7 +239,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this.entityDetailService.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
                 res.forEach(ele => {
                     this.entityDetailService.definedRelationships.push(ele);
-                    this.findRelation(ele.validPersonEntityRelType.relationshipTypeCode);
+                    this.findRelation(ele.validPersonEntityRelTypeCode);
                 });
                 this.openQuestionnaire(res[0]);
                 this.clearRelationModal();

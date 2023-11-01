@@ -195,49 +195,49 @@
 </div>
 
 <div class="d-flex">
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav">
-        <ng-container *ngIf="entityDetailsServices.definedRelationships?.length">
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav" *ngIf="entityDetailsServices.definedRelationships?.length">
             <ng-container
-                *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let last = last">
+                *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let isLast = last">
                 <div (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);"
-                    class="text-secondary border-end" role="button"
+                    class="text-secondary nav-options" role="button" [class.border-end]="!isLast"
                     [ngClass]="(entityDetailsServices.selectedTab === 'QUESTIONNAIRE') && 
-          (entityDetailsServices.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode) ? 'navigation-icons':''">
+          (entityDetailsServices.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode) ? 'navigation-icons':''">
                     <span
-                        title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
-                        [ngClass]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE' && entityDetailsServices.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
+                        title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}} Questionnaire"
+                        [ngClass]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE' && entityDetailsServices.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode?'active fw-500':''"
                         class="active r-title px-3 py-3">
-                        {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}
+                        {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
                         <span id="qnr-complete-msg"
-                            *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
+                            *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                             class="fa fa-check" title="Completed">
                         </span>
                         <span id="qnr-incomplete-msg"
-                            *ngIf="!entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
+                            *ngIf="!entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                             class="fa fa-exclamation-circle" title="Incomplete">
                         </span>
                     </span>
                 </div>
             </ng-container>
-        </ng-container>
-        <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi" class="pt-1 mt-2 px-4 border-end"
-            [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"
-            (mouseover)="isHoverAddRelationship = true" (mouseout)="isHoverAddRelationship = false" role="button"
-            (click)="saveOrAddRelationshipModal()">
-            <span class="px-2 d-flex align-items-center">
-                <mat-icon class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
-                <span>Add Relationship</span>
-            </span>
-        </div>
     </nav>
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-auto shadow-sm user-dashboard-nav">
+    <nav class="fw-bold mt-3 add-relation" [class.ms-4]="!entityDetailsServices.definedRelationships?.length">
+        <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi" class="py-3" [class.px-3]="entityDetailsServices.definedRelationships?.length"
+        [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"
+        (mouseover)="isHoverAddRelationship = true" (mouseout)="isHoverAddRelationship = false" role="button"
+        (click)="saveOrAddRelationshipModal()">
+        <span class="px-2 d-flex align-items-center">
+            <mat-icon class="material-icons-outlined mr-2">add</mat-icon>
+            <span class="mr-2 fs-15">Add Relationship</span>
+        </span>
+    </div>
+    </nav>
+    <nav class="border-nav bg-white border br-bottom rounded-0 d-flex fs-15 fw-bold mt-3 ms-auto shadow-sm user-dashboard-nav">
         <div class="text-secondary navigation-icons border-end cursor-pointer" (click)="openRelationShipSection()">
-            <span title="Click to view History" class="r-title px-3 py-3 fw-500"
+            <span title="Click to view History" class="nav-options r-title px-3 py-3 fw-500"
                 [class.active]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'">
                 Relationship Details
             </span>
         </div>
-        <div class="text-secondary navigation-icons border-end cursor-pointer">
+        <div class="text-secondary navigation-icons border-end cursor-pointer nav-options">
             <span title="Click to view History" class="r-title px-3 py-3 fw-500" (click)="openHistorySection();"
                 [class.active]="entityDetailsServices.selectedTab === 'HISTORY'">
                 History
