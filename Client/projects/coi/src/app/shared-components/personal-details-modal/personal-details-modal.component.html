@@ -12,18 +12,20 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="shadow tabSwitch ">
-                    <ul class="subTabs mb-0">
-                        <li (click)="currentTab='PERSON_DETAILS'"
-                            [ngClass]="currentTab == 'PERSON_DETAILS'?'Active':'Inactive'">
-                            <a (click)="currentTab='PERSON_DETAILS'">Person Details </a>
-                        </li>
-                        <li (click)="currentTab='TRAINING_DETAILS'"
-                            [ngClass]="currentTab == 'TRAINING_DETAILS'?'Active':'Inactive'">
-                            <a (click)="currentTab='TRAINING_DETAILS'">Training</a>
-                        </li>
-                    </ul>
-                </div>
+                <nav class="border-nav bg-white border br-bottom rounded-0 d-flex fs-15 fw-bold ml-15 shadow-sm user-dashboard-nav">
+                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex" (click)="currentTab='PERSON_DETAILS'">
+                        <span title="Click to view History" class="r-title px-3 py-3 fw-500"
+                            [class.active]="currentTab == 'PERSON_DETAILS'">
+                            Person Details 
+                        </span>
+                    </div>
+                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex">
+                        <span title="Click to view History" class="r-title px-3 py-3 fw-500" (click)="currentTab='TRAINING_DETAILS'"
+                            [class.active]="currentTab == 'TRAINING_DETAILS'">
+                            Training
+                        </span>
+                    </div>
+                </nav>
                 <app-person-details [personValues]="personValues" [user]="id"
                     *ngIf="currentTab =='PERSON_DETAILS'"></app-person-details>
                 <app-Training-details [userdetails]="userdetails"
