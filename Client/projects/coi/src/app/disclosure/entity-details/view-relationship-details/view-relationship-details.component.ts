@@ -207,6 +207,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     closeActivateInactivateSfiModal(event) {
         if (event) {
+            this.entityId = new Number(event.personEntityId);
             this.previousUrlBeforeActivate = '';
             this.relationshipsDetails.isRelationshipActive = event.isRelationshipActive;
             if (event.versionStatus) {
@@ -338,6 +339,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     modifySfi() {
         this.$subscriptions.push(this.entityDetailsServices.modifyPersonEntity({ personEntityId: this.getEntityId() }).subscribe((res: any) => {
+            this.entityId = new Number(res.personEntityId);
             this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: res.personEntityId, mode: 'edit' } });
         }));
     }

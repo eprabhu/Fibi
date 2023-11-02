@@ -1,118 +1,118 @@
 <div class="row mx-0 mt-2">
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle">First Name</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.firstName">
+            <app-no-data-label [valueToShow]="personValues?.person?.firstName" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.firstName}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle   ">Middle Name </label>
-            <app-no-data-label [valueToShow]="personValues?.person?.middleName">
+            <app-no-data-label [valueToShow]="personValues?.person?.middleName" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.middleName}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Last Name</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.lastName">
+            <app-no-data-label [valueToShow]="personValues?.person?.lastName" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.lastName}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Full Name</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.fullName">
+            <app-no-data-label [valueToShow]="personValues?.person?.fullName" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.fullName}}</span>
             </app-no-data-label>
     </div>
     <div *ngIf="personValues?.person?.rolodexId" class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Organization</label>
-        <app-no-data-label *ngIf="personValues?.person?.organizationName !== null" [valueToShow]="personValues?.person?.organizationName">
+        <app-no-data-label *ngIf="personValues?.person?.organizationName !== null" [valueToShow]="personValues?.person?.organizationName" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.organizationName}}</span>
         </app-no-data-label>
-        <app-no-data-label *ngIf="personValues?.person?.organizationName == null" [valueToShow]="personValues?.person?.organizationName">
+        <app-no-data-label *ngIf="personValues?.person?.organizationName == null" [valueToShow]="personValues?.person?.organizationName" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.organizationName}}</span>
         </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Designation</label>
-        <app-no-data-label *ngIf="personValues?.person?.personId" [valueToShow]="personValues?.person?.primaryTitle">
+        <app-no-data-label *ngIf="personValues?.person?.personId" [valueToShow]="personValues?.person?.primaryTitle" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.primaryTitle}}</span>
         </app-no-data-label>
-        <app-no-data-label *ngIf="personValues?.person?.rolodexId" [valueToShow]="personValues?.person?.designation">
+        <app-no-data-label *ngIf="personValues?.person?.rolodexId" [valueToShow]="personValues?.person?.designation" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.designation}}</span>
         </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Address Line 1</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.addressLine1">
+            <app-no-data-label [valueToShow]="personValues?.person?.addressLine1" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.addressLine1}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle   ">Address Line 2</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.addressLine2">
+            <app-no-data-label [valueToShow]="personValues?.person?.addressLine2" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.addressLine2}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Address Line 3</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.addressLine3">
+            <app-no-data-label [valueToShow]="personValues?.person?.addressLine3" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.addressLine3}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">City</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.city">
+            <app-no-data-label [valueToShow]="personValues?.person?.city" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.city}}</span>
             </app-no-data-label>   
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">PostalCode</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.postalCode">
+            <app-no-data-label [valueToShow]="personValues?.person?.postalCode" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.postalCode}}</span>
             </app-no-data-label>   
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">State</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.state">
+            <app-no-data-label [valueToShow]="personValues?.person?.state" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.state}}</span>
             </app-no-data-label>           
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Country</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.countryDetails?.countryCode" [classesToApply]="'noDataExists fw-500'">
+            <app-no-data-label [valueToShow]="personValues?.person?.countryDetails?.countryCode" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.countryDetails?.countryCode}}</span>
             </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Email Address</label>
-        <app-no-data-label [valueToShow]="personValues?.person?.emailAddress">
+        <app-no-data-label [valueToShow]="personValues?.person?.emailAddress" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.emailAddress}}</span>
         </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Phone Number</label>
-        <app-no-data-label *ngIf="personValues?.person?.rolodexId == null" [valueToShow]="personValues?.person?.mobileNumber">
+        <app-no-data-label *ngIf="personValues?.person?.rolodexId == null" [valueToShow]="personValues?.person?.mobileNumber" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.mobileNumber}}</span>
         </app-no-data-label>
-        <app-no-data-label *ngIf="personValues?.person?.rolodexId != null" [valueToShow]="personValues?.person?.phoneNumber">
+        <app-no-data-label *ngIf="personValues?.person?.rolodexId != null" [valueToShow]="personValues?.person?.phoneNumber" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.phoneNumber}}</span>
         </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Fax</label>
-            <app-no-data-label [valueToShow]="personValues?.person?.faxNumber">
+            <app-no-data-label [valueToShow]="personValues?.person?.faxNumber" [classesToApply]="'fs-14'">
                 <span class="fs-14"> {{personValues?.person?.faxNumber}}</span>
             </app-no-data-label> 
     </div>
     <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Home Unit</label>
-        <app-no-data-label [valueToShow]="personValues?.person?.unit?.unitName">
+        <app-no-data-label [valueToShow]="personValues?.person?.unit?.unitName" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.unit?.unitName}}</span>
         </app-no-data-label> 
     </div>
     <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Directory Title</label>
-        <app-no-data-label [valueToShow]="personValues?.person?.directoryTitle">
+        <app-no-data-label [valueToShow]="personValues?.person?.directoryTitle" [classesToApply]="'fs-14'">
             <span class="fs-14"> {{personValues?.person?.directoryTitle}}</span>
         </app-no-data-label> 
     </div>
