@@ -45,7 +45,7 @@ public class OPACommonDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional
+	@Transactional(value = TxType.SUPPORTS)
 	public Map<Integer, OPAPersonEntityInfoDTO> getOPAPersonEntityInfo(Integer opaDisclosureId) {
 		try {
 			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("GET_OPA_PERSON_ENTITY_DETAILS")
@@ -99,7 +99,7 @@ public class OPACommonDAO {
 
 	
 	@SuppressWarnings("unchecked")
-	@Transactional
+	@Transactional(value =  TxType.SUPPORTS)
 	public Map<Integer, OPAPersonEntityInfoDTO> getPersonEntityInfo(Integer personEntityId) {
 		try {
 			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("GET_PERSON_ENTITY_INFO")

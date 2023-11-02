@@ -29,6 +29,7 @@ public class FormResponseDTO {
 	
 	private List<FormBuilderSectionsDTO> formSections;
 	
+	private List<Integer> disabledSections;
 	
 	
 }
