@@ -1,11 +1,14 @@
-<div class="relationship-sfi-global-save mt-3 d-flex save-btn align-items-center justify-content-between">
-<ng-container *ngIf="entityProjectDetails.length && isEditMode">
+<div *ngIf="entityProjectDetails.length"
+  class="relationship-sfi-global-save mt-3 d-flex save-btn align-items-center justify-content-between">
+  <ng-container *ngIf="isEditMode">
     <div class="ms-3 fs-14">
-        Click 'Apply to All' to update the Conflict of Interest (COI) status and description simultaneously for all Project SFI relationships.
-        </div>
-        <button type="button" class="btn btn-primary btn-sm fs-14 my-2 px-3 mr-10" id="apply common coi status and description and save" title="Click to apply for all SFIs  and save" 
-        (click)="openSaveAllConfirmationModal()">Apply to All</button>
-</ng-container>
+      Click 'Apply to All' to update the Conflict of Interest (COI) status and description simultaneously for all
+      Project SFI relationships.
+    </div>
+    <button type="button" class="btn btn-primary btn-sm fs-14 my-2 px-3 mr-10"
+      id="apply common coi status and description and save" title="Click to apply for all SFIs  and save"
+      (click)="openSaveAllConfirmationModal()">Apply to All</button>
+  </ng-container>
 </div>
   <div *ngIf="entityProjectDetails.length" class="relationship-sfi-header card mt-3">
     <div class="row m-0 p-3"> 

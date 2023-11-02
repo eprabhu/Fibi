@@ -394,7 +394,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
             personEntityRelation.setValidPersonEntityRelTypeCode(code);
             personEntityRelation.setValidPersonEntityRelType(validPersonEntityRelTypeMap.get(code));
             conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelation);
-			relationshipNames.add(validPersonEntityRelTypeMap.get(code).getPersonEntityRelType().getDescription());
+			relationshipNames.add(validPersonEntityRelTypeMap.get(code).getDescription());
             personEntityRelationshipList.add(conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityRelId(personEntityRelation.getPersonEntityRelId()));
         });
 		conflictOfInterestDao.updatePersonEntityUpdateDetails(personEntityRelationship.getPersonEntityId());
@@ -2338,7 +2338,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		PersonEntityDto personEntityDto = new PersonEntityDto();
 		personEntityDto.setPersonEntityId(relationship.getPersonEntityId());
 		personEntityDto.setPersonEntityNumber(relationship.getPersonEntity().getPersonEntityNumber());
-		personEntityDto.setRelationshipName(relationship.getValidPersonEntityRelType().getPersonEntityRelType().getDescription());
+		personEntityDto.setRelationshipName(relationship.getValidPersonEntityRelType().getDescription());
 		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_REL_REMOVED);
 		actionLogService.savePersonEntityActionLog(personEntityDto);
 		return new ResponseEntity<>(commonDao.getCurrentTimestamp(), HttpStatus.OK);
