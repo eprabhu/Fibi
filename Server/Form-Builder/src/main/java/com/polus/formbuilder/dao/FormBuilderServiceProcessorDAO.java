@@ -143,4 +143,35 @@ public class FormBuilderServiceProcessorDAO {
 	    return null;
 	}
 	
+	public List<Integer> getDisabledSectionIds(Integer formBuilderId, String moduleCode, String subModuleCode,
+			String documentOwnerPersonId) {
+		List<Integer> disabledSectionId = new ArrayList<>();
+		try {
+				String sql = "select  t1.FORM_BUILDER_SECTION_ID "
+					+ "from FORM_BUILDER_SECTION t1 "
+					+ "where t1.FORM_BUILDER_ID  = :formBuilderId "
+					+ "and t1.BUSINESS_RULE_ID is NOT NULL "
+					+ "and t1.IS_ACTIVE = 'Y' "
+					+ "and FN_EVALUATE_RULE(:moduleCode,:subModuleCode,NULL,t1.BUSINESS_RULE_ID,:documentOwnerPersonId,NULL,NULL) = 0 ";
+					
+	
+			Query query = entityManager.createNativeQuery(sql);
+			query.setParameter("formBuilderId", formBuilderId);
+			query.setParameter("moduleCode", moduleCode);
+			query.setParameter("subModuleCode", subModuleCode);
+			query.setParameter("documentOwnerPersonId", documentOwnerPersonId);
+			List<?> resultRows = query.getResultList();
+			
+			for (Object row : resultRows) {
+				if (row instanceof Integer) {					
+					disabledSectionId.add((Integer) row);
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return disabledSectionId;
+	}
+	
 }
