@@ -8,7 +8,7 @@
             <div class="modal-header headerStyle">
                 <h5 class="modal-title userDetail " id="exampleModalLabel"><i class="mr-2 fa fa-user-o"
                         aria-hidden="true"></i>{{userdetails?.fullName}}</h5>
-                <button type="button" (click)="addnewvalue(false)" class="btn-close" data-bs-dismiss="modal"
+                <button type="button" (click)="addnewvalue(false)" class="btn-close fs-12" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -34,7 +34,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary fs-15" (click)="addnewvalue(false)"
                     data-bs-dismiss="modal">Close</button>
-                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" (click)="viewPersoDetails(userdetails?.personId)" class="btn btn-primary fs-15" >View Person Details</button>
+                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" (click)="viewPersoDetails(userdetails?.personId)" class="btn btn-primary fs-14" >View Person Details</button>
             </div>
         </div>
     </div>
