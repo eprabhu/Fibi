@@ -1,5 +1,7 @@
 package com.polus.formbuilder.model;
 
+import java.util.List;
+
 import com.polus.formbuilder.dto.FormBuilderSectionsComponentDTO;
 
 import lombok.Data;
@@ -16,5 +18,7 @@ public class FormComponentSaveResponse extends FormBuilderSectionsComponentDTO{
 	private String moduleItemKey;
 	
 	private String moduleSubItemKey;
+	
+	private List<Integer> disabledSections;
 	
 }
