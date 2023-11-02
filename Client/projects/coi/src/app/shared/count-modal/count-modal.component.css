@@ -96,3 +96,50 @@
 .action-width{
     width: 1%;
 }
+
+.border-nav {
+    width: max-content;
+    position: relative;
+    top: 0px;
+    right: 15px;
+  }
+  
+  .navigation-title {
+    .active {
+      color: #007DEC;
+      margin-bottom: -0.2rem !important;
+      font-weight: bold;
+      position: relative;
+      bottom: 5px;
+    }
+  }
+  
+  .navigation-icons {
+    .active {
+      border-bottom: 3px solid #007DEC;
+      color: #007DEC;
+      background-color: #e6f3ff !important;
+      box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
+    }
+  }
+  
+  .nav-options:hover {
+    background-color: #e6f3ff !important;
+    box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
+  }
+  
+  .user-dashboard-nav {
+    min-height: 40px;
+  }
+  
+  .btn-position {
+    position: relative;
+    bottom: 5px;
+  }
+  
+  .border-nav {
+    width: max-content;
+    position: relative;
+    top: 0px;
+    right: 15px;
+  }

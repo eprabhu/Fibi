@@ -290,3 +290,20 @@
   border: 2px solid #54BF5B !important;
   background: #f5fef5 !important;
 }
+
+.statusPillPosition {
+  border-radius: 12px;
+  padding: 3px 9px 3px 9px;
+}
+
+.status-active {
+  background-color: #4CB57D !important;
+  color: #fff;
+  @extend .statusPillPosition;
+}
+
+.status-inactive {
+  background-color: #949494;
+  color: #fff;
+  @extend .statusPillPosition;
+}

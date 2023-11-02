@@ -1,5 +1,5 @@
 <div class="pt-3 margin-card-top row">
-	<div class="card shadow-medium col-10 ml-09">
+	<div class="card shadow-medium col ml-09">
 		<div class="card-body">
 			<div class="row">
 				<span class="fs-18 fw-500">
@@ -30,10 +30,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="card col shadow-medium">
+	<div class="card col-auto shadow-medium">
 		<div class="card-body">
 			<button
-				class=" align-items-center justify-content-center d-flex btn btn-primary mt-0 py-1 w-100 mr-10 h-41 fs-16 pt-1"
+				class=" align-items-center justify-content-center d-flex btn btn-primary mt-0 py-1 w-100 mr-10 h-41 fs-14 pt-1"
 				[title]="btnTitle" (click)="submitEntity();" [disabled]="mandatoryList?.has('entityAlreadyAdded')">
 				<mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
 				{{buttonName}}
@@ -407,20 +407,24 @@
 						</div>
 					</div>
 					<div class="px-4 row" *ngIf="!isEntityManagement">
-						<div class="col">
+						<div class="col-8">
 							<label class="fs-14 fw-500 pb-1 label-text">
 								Relationship with Entity
 							</label>
 							<div *ngFor="let subsection of relationLookup | keyvalue;" class="mb-3 d-flex align-items-baseline">
-								<label class="fs-14 fw-500 label-text pb-1 pt-2" [class.mr-30]="subsection.key === 'OPA'" [class.mr-20]="subsection.key === 'Travel'">{{subsection.key}} : </label>
-								<div class="relation select-margin ml-09">
-									<div *ngFor="let relation of subsection.value;" class="form-check form-check-inline">
-										<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-											[value]="relation?.validPersonEntityRelTypeCode" [(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
-											title="Click to select {{relation?.description}} relation">
-										<label class="r-title fs-14">
-											{{relation?.personEntityRelType?.description}}
-										</label>
+								<div class="col-3">
+									<label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}} : </label>
+								</div>
+								<div class="col-9">
+									<div class="relation select-margin ml-09">
+										<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;" class="form-check d-inline-block" [ngClass]="!isFirst && !isLast ? 'mx-4' : ''">
+											<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+												[value]="relation?.validPersonEntityRelTypeCode" [(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
+												title="Click to select {{relation?.description}} relation">
+											<label class="r-title fs-14">
+												{{relation?.personEntityRelType?.description}}
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
