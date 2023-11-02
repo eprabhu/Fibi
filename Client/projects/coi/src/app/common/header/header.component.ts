@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     refreshActiveDisclosures() {
         this.$subscriptions.push(this.router.events.subscribe((event: any) => {
-            if (event instanceof NavigationEnd && event.url.includes('coi/user-dashboard/disclosures')) {
+            if (event instanceof NavigationEnd && event.url.includes('/coi/user-dashboard')) {
                 this.getActiveDisclosure();
             }
         }));
@@ -145,7 +145,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     closePersonDetailsModal(event) {
         this.ispersondetailsmodal = event;
-
     }
 
     private passwordAtleast7Characters() {
