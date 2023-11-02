@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -439,6 +439,11 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Please fill mandatory fields to proceed with Add Relation');
             }
         }
+    }
+
+    isSaveAndActive() {
+        return this.isEditMode && (this.entityDetailsServices.canMangeSfi && this.isQuestionnaireCompleted &&  
+            (this.sfiStatus ==='Inactive' || this.sfiStatus == 'Draft'));
     }
 
 }

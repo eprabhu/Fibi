@@ -352,3 +352,19 @@ small {
   background-color: #e6f3ff;
   box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
 }
+
+.nav-sticky {
+  background-color: whitesmoke;
+  position: sticky;
+  top: 144px;
+  z-index: 10;
+}
+
+.top-187 {
+  top: 188px;
+}
+
+.top-131 {
+  top: 132px;
+  background-color: rgb(255, 255, 255);
+}

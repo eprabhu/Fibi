@@ -131,7 +131,7 @@
                          area-describedby="Click to view the disclosure screening form">Form
                     </div>
                 </div>
-                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1' && checkForReviewerTab()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1' && checkForOPAAdmin()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                      role="button">
                     <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                          area-describedby="Click to view the reviews">Reviews
@@ -168,7 +168,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                     </div>
-                    <div *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
                          title="Click to save your progress" (click)="triggerSave()"
                          class="d-flex justify-content-around px-3 pb-3 fit-height">
                         <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -186,7 +186,7 @@
                         </button>
                     </div>
                     <div class="d-flex justify-content-around px-3"
-                         *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()">
+                         *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && checkForOPAAdmin()">
                         <button title="Click to Assign Administrator/Admin Group"
                                 aria-describedby="Click to assign administrator"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
@@ -195,7 +195,7 @@
                             <span class="mt-1 ms-2"> Assign Admin </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode)">
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode) && checkForOPAAdmin()">
                         <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                             <mat-icon class="me-2">done</mat-icon>
@@ -238,7 +238,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                         <button
-                            *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()"
+                            *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && checkForOPAAdmin()"
                             title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             class="ms-2 fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
@@ -281,7 +281,7 @@
                 </ng-container>
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
                     <ng-container
-                        *ngIf="opa?.opaDisclosure?.adminPersonId && ['2','3', '7', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode) && getManageDisclosureRight()">
+                        *ngIf="opa?.opaDisclosure?.adminPersonId && ['2','3', '7', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode) && checkForOPAAdmin()">
                         <button mat-menu-item title="Click to Reassign Administrator/Admin Group"
                                 area-describedby="Click to assign administrator"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"

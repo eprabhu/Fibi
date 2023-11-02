@@ -72,10 +72,6 @@ export class OpaComponent implements OnInit {
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
-    getManageDisclosureRight(): boolean {
-        return this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE') || true;
-    }
-
     openAddAssignModal(): void {
         this.isAddAssignModalOpen = true;
         this.setAssignAdminModalDetails();
@@ -181,6 +177,7 @@ export class OpaComponent implements OnInit {
             .completeOPAReview(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
                 this.opa.opaDisclosure.opaDisclosureStatusType = res.opaDisclosureStatusType;
+                this.opa.opaDisclosure.dispositionStatusType = res.dispositionStatusType;
                 this.opa.opaDisclosure.opaDisclosureStatusCode = res.opaDisclosureStatusCode;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
@@ -203,7 +200,7 @@ export class OpaComponent implements OnInit {
         }
     }
 
-    checkForReviewerTab() {
+    checkForOPAAdmin() {
         return this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE']);
     }
 

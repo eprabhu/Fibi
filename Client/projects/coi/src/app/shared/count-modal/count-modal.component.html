@@ -67,26 +67,25 @@
                 </div>
             </div>
             <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
-                <div class="shadow tabSwitch">
-                    <div class="listMargin">
-                        <ul class="sub-Tabs mb-0">
-                            <li [ngClass]="currentModalTab == 'Proposal'?'Active':'InActive'"
-                                (click)='currentModalTab = "Proposal"; switchTableData()'>
-                                <span class="pl-2 beforeline">{{inputType === 'SFI_TAB' ? 'Proposals related to this
+                <nav class="border-nav bg-white border br-bottom rounded-0 d-flex fs-15 fw-bold ml-15 shadow-sm user-dashboard-nav">
+                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex">
+                        <span title="Click to view Proposals" class="r-title px-3 py-3 fw-500" (click)='currentModalTab="Proposal";switchTableData()'
+                            [class.active]="currentModalTab == 'Proposal'">
+                            {{inputType === 'SFI_TAB' ? 'Proposals related to this
                                     SFI' :
-                                    'Proposals'}}</span>
-                            </li>
-                            <li class="separator"></li>
-                            <li [ngClass]="currentModalTab == 'Award'?'Active':'InActive'"
-                                (click)='currentModalTab = "Award"; switchTableData()'>
-                                <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
-                                    'Awards'}}</span>
-                            </li>
-                        </ul>
+                                    'Proposals'}}
+                        </span>
                     </div>
-                </div>
+                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex" (click)='currentModalTab = "Award"; switchTableData()'>
+                        <span title="Click to view Awards" class="r-title px-3 py-3 fw-500"
+                            [class.active]="currentModalTab == 'Award'">
+                            {{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
+                            'Awards'}}                        
+                        </span>
+                    </div>
+                </nav>
                 <div class="p-0 w-100 widget-container">
-                    <table class=" mt-3 tableSkin" *ngIf="tableArray.length>0">
+                    <table class="tableSkin" *ngIf="tableArray.length>0">
                         <caption class="sr-only">List of Awards/Proposal</caption>
                         <thead class="sticky-top">
                             <tr class="header-border">
