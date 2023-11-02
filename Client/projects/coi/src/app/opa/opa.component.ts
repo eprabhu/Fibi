@@ -12,7 +12,7 @@ import {DefaultAssignAdminDetails, PersonProjectOrEntity} from '../shared-compon
 import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {ModalType} from "../disclosure/coi-interface";
+import {ModalType} from '../disclosure/coi-interface';
 
 @Component({
     selector: 'app-opa',
@@ -69,6 +69,7 @@ export class OpaComponent implements OnInit {
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA submitted successfully.`);
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
@@ -132,6 +133,7 @@ export class OpaComponent implements OnInit {
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA withdrawn successfully.`);
             }, _err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
             }));

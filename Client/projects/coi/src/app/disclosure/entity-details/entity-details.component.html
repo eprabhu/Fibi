@@ -104,7 +104,7 @@
                     <label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}} : </label>
                   </div>
                   <div class="col-7">
-                    <div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;" class="form-check form-check-inline" [ngClass]="!isFirst && !isLast ? 'mx-4' : ''">
+                    <div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;" class="form-check d-inline-block" [class.ml-last]="!isLast">
                       <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
                         [value]="relation?.validPersonEntityRelTypeCode"
                         [(ngModel)]="entityDetailService.isChecked[relation?.validPersonEntityRelTypeCode]">
