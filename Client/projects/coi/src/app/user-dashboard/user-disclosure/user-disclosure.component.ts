@@ -117,11 +117,22 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
         const OPA_DETAILS = this.result.opaDashboardDto || [];
         const MERGED_LIST = [...DISCLOSURE_VIEWS, ...TRAVEL_DASHBOARD_VIEWS, ...OPA_DETAILS];
-        return MERGED_LIST.sort((a, b) => b.updateTimeStamp - a.updateTimeStamp);
+        return this.getSortedListForParam(MERGED_LIST, 'updateTimeStamp');
     }
 
     private loadingComplete() {
         this.isLoading = false;
+    }
+
+    /**
+     * Description
+     * @param {any} arrayList:any
+     * @param {any} sortByParam:any
+     * @returns {any}
+     * The method takes an input array and returns the corresponding sorted array for the param passed
+     */
+    private getSortedListForParam(arrayList: any, sortByParam: any): any {
+        return arrayList.sort((a, b) => b[sortByParam] - a[sortByParam]);
     }
 
     getDashboardBasedOnTab() {
@@ -133,7 +144,11 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    /** The function will trigger for the close button in the search field */
+    /**
+     * Description
+     * @returns {any}
+     * The function will trigger for the close button in the search field
+     */
     resetAndFetchDisclosure() {
         this.searchText = '';
         this.completeDisclosureList = [];
@@ -378,7 +393,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     getAllDisclosureHistories(data: any): any {
         const DISCLOSURE_HISTORY = data.disclosureHistoryDtos || [];
         const OPA_HISTORY = data.opaDashboardDtos || [];
-        return [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
+        const MERGED_LIST = [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
+        return this.getSortedListForParam(MERGED_LIST, 'updateTimeStamp');
     }
 
     openFCOIModal(type) {

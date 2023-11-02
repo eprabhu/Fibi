@@ -180,7 +180,7 @@
         </div>
     </div>
 
-    <!-- OPA Histories -->
+    <!-- OPA Histories Card-->
 
     <div class="bg-white position-relative card-left col hovering-card border mt-2 m-06 d-flex align-items-center shadow-sm light-dark-text-color"
         *ngIf="disclosure?.opaDisclosureId">
@@ -202,8 +202,8 @@
                 </ng-container>
             </div>
         </div>
-        <!-- <div class="row mb-3 mt-4 ml-2">
-            <div class="col-3">
+        <div class="row mb-3 p-013 mt-2">
+            <div class="col-6">
                 <span class="label-text">Department:</span> <span class="grey-text">
                     #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
             </div>
@@ -214,12 +214,6 @@
                 </app-no-data-label>
             </div>
             <div class="col-3">
-                <label for="certify-date" class="label-text">Reporting Cycle :</label>
-                <app-no-data-label [valueToShow]="">
-                    <span class="grey-text">{{disclosure?.periodStartDate |dateFormatter}} - {{disclosure?.periodEndDate |dateFormatter}}</span>
-                </app-no-data-label>
-            </div>
-            <div class="col-3">
                 <span class="label-text me-2">Disposition Status :</span> <span
                     class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
                     <span class="badgeFont">
@@ -227,15 +221,8 @@
                 </span>
             </div>
         </div>
-        <div class="row mb-3 mt-4 ml-2">
-            <div class="col-3">
-                <span class="label-text me-2">Staff / Faculty :</span>
-                <span class=" "></span>
-                    <span class="badgeFont">
-                        {{disclosure?.isFaculty ? 'Faculty' : 'Staff'}}
-                </span>
-            </div>
-            <div class="col-3">
+        <div class="row mb-3 p-013 mt-2">
+            <div class="col-6">
                 <label for="id" class="label-text">Administrator :</label>
                 <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
                     <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
@@ -248,50 +235,6 @@
                 </app-no-data-label>
             </div>
             <div class="col-3">
-                <label for="review-status" class="label-text mr-21">Review Status :</label>
-                <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
-                    <span
-                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
-                        class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
-                        <span class="badgeFont">
-                            {{disclosure?.disclosureStatus}}
-                    </span>
-                </app-no-data-label>
-            </div>
-        </div> -->
-        <div class="row mb-3 p-013 mt-2">
-            <div class="col-4">
-                <span class="label-text">Department:</span> <span class="grey-text">
-                    #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
-            </div>
-            <div class="col-4">
-                <label for="certify-date" class="label-text">Certification Date :</label>
-                <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
-                    <span class="grey-text">{{disclosure?.submissionTimestamp | dateFormatter}}</span>
-                </app-no-data-label>
-            </div>
-            <div class="col-4">
-                <span class="label-text me-2">Disposition Status :</span> <span
-                    class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
-                    <span class="badgeFont">
-                        {{disclosure?.dispositionStatus}}
-                </span>
-            </div>
-        </div>
-        <div class="row mb-3 p-013 mt-2">
-            <div class="col-4">
-                <label for="id" class="label-text">Administrator :</label>
-                <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
-                    <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
-                </app-no-data-label>
-            </div>
-            <div class="col-4">
-                <label for="id" class="label-text">Admin Group :</label>
-                <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
-                    <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
-                </app-no-data-label>
-            </div>
-            <div class="col-4">
                 <label for="review-status" class="label-text mr-21">Review Status :</label>
                 <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
                     <span
