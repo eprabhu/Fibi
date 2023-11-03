@@ -82,21 +82,21 @@
   data-mdb-backdrop="true" data-bs-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header custom-height">
+      <!--<div class="modal-header custom-height">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relationship</h3>
         <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
           id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
-      </div>
+      </div>-->
       <div class="modal-body p-0">
         <div class="row m-0 add-relation-header">
-          <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
+          <p class="fs-13 m-0">Relationship Details section, use this section to disclose financial information related to the entity for your Self, Spouse/Domestic Partner, and Dependents (children who are unemancipated and under 18 years of age or who receive more than one-­‐half support from you).</p>
         </div>
         <div  *ngIf="entityDetailService.availableRelationships?.length; else noData" class="relation d-flex justify-content-center mt-5 mb-5">
           <div class="card custom-padding position-relative w-65"
           [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
               <div class="color-black mb-2">
-                <label class="form-check-label colour-black relation-header px-2"><b>Select Relation
-                  </b></label>
+                <label class="form-check-label colour-black relation-header px-2"><b>Realtionship Details </b>[Disclose financial details for the SFI]
+                  </label>
               </div>
               <div class="col pl-20 mt-4">
                 <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="mb-3 d-flex align-items-baseline row">

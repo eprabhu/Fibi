@@ -128,28 +128,41 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   deleteRelationship() {
     let removeRelId = this.currentRelationshipDetails.personEntityRelId;
+    let VALID_REL_TYPE_CODE = this.currentRelationshipDetails.validPersonEntityRelTypeCode;
     this.$subscriptions.push(this.entityDetailsServices.deletePersonEntityRelationship
       (this.currentRelationshipDetails.personEntityRelId, this.currentRelationshipDetails.personEntityId).subscribe(async (updatedTimestamp) => {
-        this.entityDetailsServices.availableRelationships = await this.getRelationshipLookUp();        
-        let delIndex = this.entityDetailsServices.definedRelationships.findIndex(ele => ele.personEntityRelId === this.currentRelationshipDetails.personEntityRelId);
-        if(delIndex > -1) {
-          this.entityDetailsServices.definedRelationships.splice(delIndex, 1);
-        }
-        if(!this.entityDetailsServices.definedRelationships.length) {
-          this.entityDetailsServices.selectedTab = 'RELATIONSHIP_DETAILS';
+        this.updateDefinedRelationships();
+        if(VALID_REL_TYPE_CODE in this.entityDetailsServices.relationshipCompletedObject) {
+          delete this.entityDetailsServices.relationshipCompletedObject[VALID_REL_TYPE_CODE];
         }
         this.deleteRelationshipEvent.emit({'updatedTimestamp': updatedTimestamp,'removeRelId': removeRelId, 'isDeleted': true}); 
-        if(this.entityDetailsServices.definedRelationships.length) {
-          this.getQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
-        }
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
       }, _err => {
         if (_err.status === 405) {
           this.entityDetailsServices.concurrentUpdateAction = 'Delete Relationship'
       } else {
-    this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting relationship.`);
+          this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting relationship.`);
       }
       }));
+  }
+
+  async updateDefinedRelationships() {
+    this.entityDetailsServices.availableRelationships = await this.getRelationshipLookUp();
+    let delIndex = this.entityDetailsServices.definedRelationships.findIndex(ele => ele.personEntityRelId === this.currentRelationshipDetails.personEntityRelId);
+    if(delIndex > -1) {
+      this.entityDetailsServices.definedRelationships.splice(delIndex, 1);
+    }
+    if(!this.entityDetailsServices.definedRelationships.length) {
+      this.entityDetailsServices.selectedTab = 'RELATIONSHIP_DETAILS';
+    }
+    if(this.entityDetailsServices.definedRelationships.length) {
+      this.getQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
+    }
+    let index = this.entityDetailsServices.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
+    if (index >= 0) {
+        this.entityDetailsServices.unSavedSections.splice(index, 1);
+    }
+    this.entityDetailsServices.isRelationshipQuestionnaireChanged = false;
   }
 
 }
