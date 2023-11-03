@@ -423,6 +423,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     fcoiDatesRemaining() {
+        this.hasPendingFCOI = false;
+        this.hasActiveFCOI = false;
+        this.hasActiveOPA = false;
+        this.hasPendingOPA = false;
         this.headerService.activeDisclosures.forEach(disclosure => {
             if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
                 this.hasPendingFCOI = true;

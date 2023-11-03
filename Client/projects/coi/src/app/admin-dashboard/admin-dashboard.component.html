@@ -372,7 +372,7 @@
                                 <div class="border-bottom">
                                     <ng-container *ngIf="!coi?.travelDisclosureId">
                                         <div class="row mb-3 p-013 mt-2">
-                                            <div class="col-5">
+                                            <div class="col-4">
                                                 <label for="id" class="label-text">Department :</label>
                                                 <span id="id" class="grey-text">#{{coi?.unit?.unitDetail}}</span>
                                             </div>
@@ -404,11 +404,11 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3 p-013">
-                                            <div *ngIf="coi?.fcoiTypeCode== 1" class="col-5">
+                                            <div *ngIf="coi?.fcoiTypeCode== 1" class="col-4">
                                                 <label for="id" class="label-text">Description</label>
                                                 <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
                                             </div>
-                                            <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-5">
+                                            <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-4">
                                                 <label for="id" class="label-text">Description :</label>
                                                 <app-no-data-label [valueToShow]="coi?.reviseComment">
                                                     <span *ngIf="coi?.reviseComment" class="fs-14">
