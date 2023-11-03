@@ -28,7 +28,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <span class="label-text">Department:</span> <span class="grey-text">
-                                                    #{{disclosure?.unit?.unitDetail}}</span>
+                                                    {{disclosure?.unit?.unitDetail}}</span>
                                             </div>
                                             <div class="col-12">
                                                 <span class="label-text">Certification Date :</span>
@@ -86,7 +86,7 @@
                                     >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year</span><span *ngIf="differenceInDays?.durInMonths">, {{differenceInDays?.durInMonths}} months</span><span *ngIf="differenceInDays?.durInDays">, {{differenceInDays?.durInDays}} days.</span></h5>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button *ngIf="!hasPendingFCOI" (click)="triggerClickForId('create-fcoi-modal')"
+                                <button *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')"
                                         class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
                                         title="Click to Renew FCOI Disclosure"
                                         aria-describedby="Click to Renew FCOI Disclosure">
@@ -124,7 +124,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <span class="label-text">Department:</span> <span class="grey-text">
-                                                    #{{disclosure?.unit?.unitDetail}}</span>
+                                                    {{disclosure?.unit?.unitDetail}}</span>
                                             </div>
                                             <div class="col-12">
                                                 <span class="label-text">Certification Date :</span>
@@ -295,7 +295,7 @@
                                             <span class="label-text">Department:</span>
                                             <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                 <span class="grey-text">
-                                                    #{{opaDisclosure?.homeUnitName}}</span>
+                                                    {{opaDisclosure?.homeUnit}} - {{opaDisclosure?.homeUnitName}}</span>
                                             </app-no-data-label>
 
                                         </div>
@@ -330,7 +330,7 @@
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-12">
-                                        <span class="label-text me-2 p-0">Review Status :</span>
+                                        <span class="label-text me-2 p-26">Review Status :</span>
                                         <app-no-data-label
                                             [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
                                             <span
@@ -381,7 +381,7 @@
                                             <span class="label-text">Department:</span>
                                             <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                 <span class="grey-text">
-                                                    #{{opaDisclosure?.homeUnitName}}</span>
+                                                    {{opaDisclosure?.homeUnit}} - {{opaDisclosure?.homeUnitName}}</span>
                                             </app-no-data-label>
                                         </div>
                                         <div class="col-12">
@@ -415,7 +415,7 @@
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-12">
-                                        <span class="label-text me-2 p-0">Review Status :</span>
+                                        <span class="label-text me-2 p-26">Review Status :</span>
                                         <app-no-data-label
                                             [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
                                             <span
@@ -584,7 +584,7 @@
                         <div class="row mb-3 p-013 mt-2">
                             <div class="col-4">
                                 <span class="label-text">Department:</span> <span class="grey-text">
-                                    #{{disclosure?.unit?.unitDetail}} </span>
+                                    {{disclosure?.unit?.unitDetail}} </span>
                             </div>
                             <div class="col">
                                 <span class="label-text me-2">Certification Date :</span>
@@ -764,7 +764,7 @@
                         <div class="row mb-3 p-013 mt-2">
                             <div class="col-4">
                                 <span class="label-text">Department:</span> <span class="grey-text">
-                                    #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                    {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
                             </div>
                             <div class="col-5">
                                 <label for="certify-date" class="label-text">Certification Date :</label>
@@ -948,4 +948,3 @@
         </ng-container>
     </app-coi-slider>
 </ng-container>
-
