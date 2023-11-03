@@ -25,7 +25,7 @@ export class ReviewService {
     }
 
     reviewHistory(disclosureId: any) {
-        return this._http.get(`${this._commonService.baseUrl}/reviewHistory/${disclosureId}`);
+        return this._http.get(`${this._commonService.opaUrl}/review/history/${disclosureId}`);
     }
 
 }
