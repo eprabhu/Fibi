@@ -191,13 +191,13 @@ small {
 
 .sticky-0 {
   top: 0;
-  z-index: 2;
+  z-index: 11;
   position: sticky;
 }
 
 .sticky-top-50 {
   top: 50px;
-  z-index: 2;
+  z-index: 11;
   position: sticky;
 }
 
@@ -356,8 +356,9 @@ small {
 .nav-sticky {
   background-color: whitesmoke;
   position: sticky;
-  top: 144px;
+  top: 145px;
   z-index: 10;
+  padding-top: 12.5px;
 }
 
 .top-187 {

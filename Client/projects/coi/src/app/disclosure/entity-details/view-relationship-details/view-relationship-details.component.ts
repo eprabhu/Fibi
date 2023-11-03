@@ -267,7 +267,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     checkQuestionnaireCompleted(questionList) {
-        this.entityDetailsServices.relationshipCompletedObject = {};
         this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
             this.allRelationQuestionnaires = [];
             data.forEach((d: any) =>{

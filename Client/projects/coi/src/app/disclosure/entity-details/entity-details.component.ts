@@ -36,16 +36,21 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     isEditMode = false;
     entityDetails = {};
 
-    ngOnInit() {
+    async ngOnInit() {
         this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
         this.isTriggeredFromSlider = this.checkForUrl();
         this.getQueryParams();
-        this.getDefinedRelationships();
-        this.showQuestionnaireLeaveConfirmationModal();
         this.resetServiceValues();
+        await this.getDefinedRelationships();
+        this.getAvailableRelationship();
         this.openAddRelationModal();
+        this.showQuestionnaireLeaveConfirmationModal();
     }
 
+    async getAvailableRelationship() {
+        this.entityDetailService.availableRelationships = await this.getRelationshipLookUp();
+        this.removeExistingRelation();
+    }
 
     getDefinedRelationships() {
         const REQ_BODY = {
@@ -59,8 +64,10 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 } else {
                     this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
                 }
+                resolve(true);
             }, error => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                resolve(false);
             }));
         });
     }
@@ -152,7 +159,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
 
     openAddRelationModal() {
         this.$subscriptions.push(this.entityDetailService.$triggerAddRelationModal.subscribe(async (data: any) => {
-            this.entityDetailService.availableRelationships = await this.getRelationshipLookUp();
             this.removeExistingRelation();
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
                 this.entityDetailService.globalSave$.next();
@@ -278,6 +284,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.activeRelationship = {};
         this.entityDetailService.definedRelationships = [];
         this.entityDetailService.availableRelationships = [];
+        this.entityDetailService.relationshipCompletedObject = {};
     }
 
 }
