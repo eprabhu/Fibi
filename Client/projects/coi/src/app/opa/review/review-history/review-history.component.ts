@@ -64,7 +64,7 @@ export class ReviewHistoryComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData();
         this.opaDisclosure = DATA.opaDisclosure;
-        // this.getReviewHistory();
+        this.getReviewHistory();
     }
 
     private listenDataChangeFromStore() {
