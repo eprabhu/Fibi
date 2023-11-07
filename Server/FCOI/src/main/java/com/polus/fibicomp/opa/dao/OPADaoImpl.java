@@ -321,8 +321,9 @@ public class OPADaoImpl implements OPADao {
         List<String> disclosureStatusCodes = requestDto.getOpaDisclosureStatusCodes();
         List<String> dispositionStatusCodes = requestDto.getDispositionStatusCodes();
 		List<String> designationStatusCodes = requestDto.getDesignationStatusCodes();
-		designationStatusCodes = designationStatusCodes.contains("1") && designationStatusCodes.contains("2") ? null
-				: designationStatusCodes;
+		designationStatusCodes = designationStatusCodes != null && !designationStatusCodes.isEmpty()
+				&& designationStatusCodes.contains("1") && designationStatusCodes.contains("2") ? null
+						: designationStatusCodes;
 		if (designationStatusCodes != null && !designationStatusCodes.isEmpty()) {
 			designationStatusCodes = designationStatusCodes.stream()
 					.map(code -> DESIGNATION_STATUS_CODE_FACULTY.equals(code) ? DESIGNATION_STATUS_FACULTY
