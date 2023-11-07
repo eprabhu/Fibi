@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
     selector: 'app-coi-slider',
@@ -14,6 +15,8 @@ export class CoiSliderComponent implements OnInit {
     @Output() closeSlider: EventEmitter<undefined> = new EventEmitter<undefined>();
     @Input() isHeaderNeeded = true;
 
+    constructor(private elementRef: ElementRef, private _commonService: CommonService) {}
+
     emitCloseSlider() {
         this.closeSlider.emit();
     }
@@ -23,6 +26,11 @@ export class CoiSliderComponent implements OnInit {
             document.getElementById(`${this.sliderName}-overlay`).style.zIndex = this.overlay_z_index;
             document.getElementById(this.sliderName).style.zIndex = this.slider_z_index;
         });
+    }
+
+    onWindowScroll(event) {
+        const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
+        this._commonService.$sliderScrollAction.next({event, pageYOffset});
     }
 
 }
