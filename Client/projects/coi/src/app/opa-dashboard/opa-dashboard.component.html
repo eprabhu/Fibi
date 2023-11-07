@@ -105,7 +105,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6 col-12">
                         <div>
                             <label class="d-block">Reporting Cycle</label>
-                            <div class="row mx-0">
+                            <div class="row mx-0 align-items-center d-flex">
                                 <span class="col dateField p-0">
                                     <input matInput [matDatepicker]="periodFromDate" (keypress)="periodFromDate.open()"
                                         id="adv-disclosure-expiration-date" (click)="periodFromDate.open()"
@@ -129,19 +129,17 @@
                         </div>
                     </div>
                     <!-- sTAFF/FACULTY -->
-                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6 col-12 d-flex align-items-end">
-                        <div>
-                            <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary mt-1"
-                                [value]="'S'" [(ngModel)]="isCheckBoxSelected['S']">
-                            <label class="ms-3 mt-1 r-title fs-14">
-                                Staff
-                            </label>
-                            <input type="checkbox" name="relation" class="form-check-input mt-1 ms-3 text-secondary border border-secondary"
-                                [value]="'F'" [(ngModel)]="isCheckBoxSelected['F']">
-                            <label class="r-title ms-3 mt-1 fs-14">
-                                Faculty
-                            </label>
-                        </div>
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6 col-12">
+                        <label class="d-block" for="adv-disclosure-status">
+                           Employee Type
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'designationStatusCodes')"
+                            [selectedLookUpList]="lookupValues['designationStatusCodes']"
+                            [options]="opaEmployeeRoleTypeOption"
+                            [uniqueId]="'opa-adv-person-role-status'"
+                            [externalArray]="_opaDashboardService.rolesList"
+                            [isExternalArray]="true">
+                        </app-look-up>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4">
