@@ -67,6 +67,8 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         this.getQueryParamChange();
         await this.getEntityDetails(this.getEntityId());
         this.getQuestionnaire();
+        this.subscribeScrollAction();
+        this.subscribeSliderScrollAction();
         this.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
     }
 
@@ -445,6 +447,46 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     isSaveAndActive() {
         return this.isEditMode && (this.entityDetailsServices.canMangeSfi && this.isQuestionnaireCompleted &&  
             (this.sfiStatus ==='Inactive' || this.sfiStatus == 'Draft'));
+    }
+
+    subscribeScrollAction() {
+        this.commonService.$ScrollAction.subscribe((data: any) => {
+           if(data.pageYOffset > 0) {
+               this.setStickyNavigation();
+            } else {
+                this.resetStickyNavigation();
+            }
+        })
+    }
+
+    subscribeSliderScrollAction() {
+        if(this.isTriggeredFromSlider) {
+            this.commonService.$sliderScrollAction.subscribe((data: any) => {
+                if(data.pageYOffset > 0) {
+                    this.setStickyNavigation();
+                } else {
+                     this.resetStickyNavigation();
+                 }
+             })
+        }
+    }
+
+    setStickyNavigation() {
+        let SFI_TOP_CARD = document.getElementById('sfi-top-card');
+        let SFI_NAV_BAR = document.getElementById('sfi-nav-bar');
+        if (SFI_NAV_BAR && SFI_TOP_CARD) {
+            let SFI_TOP_CARD_HEIGHT =  SFI_TOP_CARD.offsetHeight;
+            SFI_NAV_BAR.style.top = (this.isTriggeredFromSlider ? (SFI_TOP_CARD_HEIGHT - 1) : SFI_TOP_CARD_HEIGHT) + 'px';
+            SFI_NAV_BAR.style.paddingTop = '0px';
+        }
+    }
+
+    resetStickyNavigation() {
+        let SFI_NAV_BAR = document.getElementById('sfi-nav-bar');
+        if (SFI_NAV_BAR) {
+            SFI_NAV_BAR.style.paddingTop = '12.5px';
+            SFI_NAV_BAR.style.top = '0px';
+        }
     }
 
 }

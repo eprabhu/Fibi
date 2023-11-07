@@ -61,6 +61,7 @@ export class CommonService {
     previousURL = null;
     fibiApplicationUrl = '';
     $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
+    $sliderScrollAction = new Subject<{event: Event,pageYOffset: number}>();
     $commentConfigurationDetails =  new BehaviorSubject<any>({});
     enableGraph = false;
     $updateLatestNote = new Subject();
