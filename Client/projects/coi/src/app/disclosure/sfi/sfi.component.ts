@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, interval } from 'rxjs';
 
 import { SfiService } from './sfi.service';
@@ -55,7 +55,8 @@ export class SfiComponent implements OnInit, OnDestroy {
         private _dataStore: DataStoreService,
         public _coiService: CoiService,
         private _router: Router,
-        private _commonService: CommonService) {
+        private _commonService: CommonService,
+        private elementRef: ElementRef) {
     }
 
     ngOnInit() {
@@ -226,5 +227,10 @@ export class SfiComponent implements OnInit, OnDestroy {
       clearSearchText() {
         this.searchText = '';
         this.$fetchSFIList.next(); 
+      }
+
+      onWindowScroll(event) {
+          const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
+          this._commonService.$sliderScrollAction.next({event, pageYOffset});
       }
 }

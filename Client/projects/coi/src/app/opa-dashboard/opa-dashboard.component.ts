@@ -49,10 +49,6 @@ export class OpaDashboardComponent implements OnInit {
     assignAdminPath = 'OPA_DISCLOSURES';
     personElasticOptions: any = {};
     map = new Map();
-    isCheckBoxSelected = {
-        'F': false,
-        'S': false
-    };
     sortSectionsList = [
         { variableName: 'person', fieldName: 'Person' },
         { variableName: 'homeUnitName', fieldName: 'Department' },
@@ -64,6 +60,7 @@ export class OpaDashboardComponent implements OnInit {
     ];
     opaDisclosureStatusOptions = 'OPA_DISCLOSURE_STATUS_TYPE#OPA_DISCLOSURE_STATUS_CODE#true#true';
     opaDispositionStatusOption = 'OPA_DISPOSITION_STATUS_TYPE#DISPOSITION_STATUS_CODE#true#true';
+    opaEmployeeRoleTypeOption = 'EMPTY#EMPTY#true#true';
 
     constructor(public _opaDashboardService: OpaDashboardService, 
         private _elasticConfigService: ElasticConfigService,
@@ -113,6 +110,9 @@ export class OpaDashboardComponent implements OnInit {
         if (this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes.length) {
             this.generateLookupArray(this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes, 'opaDisclosureStatusCodes');
         }
+        if (this._opaDashboardService.opaRequestObject.designationStatusCodes.length) {
+            this.generateLookupArray(this._opaDashboardService.opaRequestObject.designationStatusCodes, 'designationStatusCodes');
+        }
     }
 
     personSelect(event: any): void {
@@ -141,6 +141,8 @@ export class OpaDashboardComponent implements OnInit {
             this._opaDashboardService.opaRequestObject.dispositionStatusCodes : [];
         this.localOPARequestObject.opaDisclosureStatusCodes = this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes ?
             this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes : [];
+        this.localOPARequestObject.designationStatusCodes = this._opaDashboardService.opaRequestObject.designationStatusCodes ?
+            this._opaDashboardService.opaRequestObject.designationStatusCodes : [];
         this.advanceSearchDates.submissionDate = this.localOPARequestObject.submissionTimestamp =
             this._opaDashboardService.opaRequestObject.submissionTimestamp ?
                 getDateObjectFromTimeStamp(this._opaDashboardService.opaRequestObject.submissionTimestamp) : null;
@@ -151,7 +153,6 @@ export class OpaDashboardComponent implements OnInit {
             this._opaDashboardService.opaRequestObject.periodEndDate ?
                     getDateObjectFromTimeStamp(this._opaDashboardService.opaRequestObject.periodEndDate) : null;
         this.localSearchDefaultValues = this._opaDashboardService.searchDefaultValues;
-        this.isCheckBoxSelected = deepCloneObject(this._opaDashboardService.isCheckBoxSelected);
     }
 
     isAdvancedSearchMade() {
@@ -255,8 +256,6 @@ export class OpaDashboardComponent implements OnInit {
     private resetAdvanceSearchFields() {
         this.resetSortObjects();
         this._opaDashboardService.opaRequestObject.tabType = sessionStorage.getItem('currentOPATab');
-        this.isCheckBoxSelected = {'F': false, 'S': false};
-        this._opaDashboardService.isCheckBoxSelected = {'F': false, 'S': false};
         this.localOPARequestObject = new OPADashboardRequest(this._opaDashboardService.opaRequestObject.tabType);
         this.localSearchDefaultValues = new NameObject();
         this._opaDashboardService.searchDefaultValues = new NameObject();
@@ -284,6 +283,7 @@ export class OpaDashboardComponent implements OnInit {
     setAdvanceSearchToServiceObject() {
         this._opaDashboardService.opaRequestObject.dispositionStatusCodes = this.localOPARequestObject.dispositionStatusCodes || [];
         this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes = this.localOPARequestObject.opaDisclosureStatusCodes || [];
+        this._opaDashboardService.opaRequestObject.designationStatusCodes = this.localOPARequestObject.designationStatusCodes || [];
         this._opaDashboardService.opaRequestObject.unitNumber = this.localOPARequestObject.unitNumber || null;
         this._opaDashboardService.opaRequestObject.personId = this.localOPARequestObject.personId || null;
         this._opaDashboardService.opaRequestObject.submissionTimestamp = parseDateWithoutTimestamp(
@@ -295,7 +295,6 @@ export class OpaDashboardComponent implements OnInit {
         this._opaDashboardService.opaRequestObject.currentPage = this.localOPARequestObject.currentPage;
         this._opaDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
         this._opaDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
-        this._opaDashboardService.isCheckBoxSelected = deepCloneObject(this.isCheckBoxSelected);
     }
 
     onLookupSelect(data: any, property: string) {
@@ -309,17 +308,11 @@ export class OpaDashboardComponent implements OnInit {
     }
 
     getRequestObject() {
-        this.localOPARequestObject.isFaculty = this.getFacultyStaff();
         this.localOPARequestObject.submissionTimestamp = parseDateWithoutTimestamp(this.advanceSearchDates.submissionDate);
         this.localOPARequestObject.periodStartDate = parseDateWithoutTimestamp(this.advanceSearchDates.periodStartDate);
         this.localOPARequestObject.periodEndDate = parseDateWithoutTimestamp(this.advanceSearchDates.periodEndDate);
         this.localOPARequestObject.tabType = sessionStorage.getItem('currentOPATab');
         return this.localOPARequestObject;
-    }
-
-    getFacultyStaff() {
-        return (this.isCheckBoxSelected['F'] && !this.isCheckBoxSelected['S']) ? true 
-               : (!this.isCheckBoxSelected['F'] && this.isCheckBoxSelected['S']) ? false : null
     }
 
     leadUnitChangeFunction(unit: any) {

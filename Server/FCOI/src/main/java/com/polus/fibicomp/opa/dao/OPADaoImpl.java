@@ -60,6 +60,9 @@ public class OPADaoImpl implements OPADao {
 	private PersonDao personDao;
 
   	protected static Logger logger = LogManager.getLogger(OPADaoImpl.class.getName());
+  	private static final String DESIGNATION_STATUS_CODE_FACULTY = "1";
+  	private static final String DESIGNATION_STATUS_FACULTY = "\"Y\"";
+  	private static final String DESIGNATION_STATUS_STAFF = "\"N\"";
 
     @Override
     public boolean canCreateOpaDisclosure(String personId) {
@@ -317,6 +320,16 @@ public class OPADaoImpl implements OPADao {
         Integer pageNumber = requestDto.getPageNumber();
         List<String> disclosureStatusCodes = requestDto.getOpaDisclosureStatusCodes();
         List<String> dispositionStatusCodes = requestDto.getDispositionStatusCodes();
+		List<String> designationStatusCodes = requestDto.getDesignationStatusCodes();
+		designationStatusCodes = designationStatusCodes != null && !designationStatusCodes.isEmpty()
+				&& designationStatusCodes.contains("1") && designationStatusCodes.contains("2") ? null
+						: designationStatusCodes;
+		if (designationStatusCodes != null && !designationStatusCodes.isEmpty()) {
+			designationStatusCodes = designationStatusCodes.stream()
+					.map(code -> DESIGNATION_STATUS_CODE_FACULTY.equals(code) ? DESIGNATION_STATUS_FACULTY
+							: DESIGNATION_STATUS_STAFF)
+					.collect(Collectors.toList());
+		}
         String submissionTimestamp = requestDto.getSubmissionTimestamp();
         String unitNumber = requestDto.getUnitNumber();
 		Boolean fetchAllRecords = requestDto.getFetchAllRecords();
@@ -337,7 +350,8 @@ public class OPADaoImpl implements OPADao {
 		statement.setBoolean(12, fetchAllRecords != null && fetchAllRecords);
         statement.setString(13, requestDto.getPersonId());
         statement.setString(14, requestDto.getEntityId() != null ? requestDto.getEntityId().toString() : null);
-        statement.setString(15, requestDto.getIsFaculty() != null ? requestDto.getIsFaculty().equals(Boolean.TRUE) ? "Y" : "N" : null);
+        statement.setString(15, designationStatusCodes != null &&
+                !designationStatusCodes.isEmpty() ? String.join(",", designationStatusCodes) : null);
         statement.setString(16, requestDto.getPeriodStartDate());
         statement.setString(17, requestDto.getPeriodEndDate());
         statement.execute();

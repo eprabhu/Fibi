@@ -61,7 +61,7 @@
 <div #viewMyEntitiesOverlay [class.overlay]="showSlider">
     <div class="slider-base" *ngIf="showSlider">
       <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-      <div class="slider-container">
+      <div class="slider-container" (scroll)="onWindowScroll($event)">
            <app-entity-details [entityId]="entityId"></app-entity-details>
         </div>
     </div>

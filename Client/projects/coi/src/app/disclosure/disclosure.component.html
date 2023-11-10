@@ -325,7 +325,6 @@
 
                     <button
                         title="Click here to add new review comment"
-                        *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         [ngClass]="isCardExpanded ? 'mb-3' : ''"
                         (click)="openReviewComment()"
                         class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 mb-10">

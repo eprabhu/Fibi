@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { environment } from '../../../../../environments/environment';
@@ -33,7 +33,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
-        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
+        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService, private elementRef: ElementRef,
         private _router: Router,private _commonService :CommonService,private _coiService: CoiService,private _dataStore: DataStoreService
     ) { }
 
@@ -131,5 +131,10 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         }
         this._commonService.$commentConfigurationDetails.next(REQ_BODY);
         this._coiService.isShowCommentNavBar = true;
+    }
+
+    onWindowScroll(event) {
+        const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
+        this._commonService.$sliderScrollAction.next({event, pageYOffset});
     }
 }

@@ -24,7 +24,7 @@
       <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
         <span *ngIf="reqObject.validPersonEntityRelTypes?.length"tabindex="0">
           <ng-container>
-            <em *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue">
+            <em *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue;let isFirst = first" [class.pill-spacing]="!isFirst">
               <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
                 <span class="fw-medium" aria-label = "Financial :"> {{relationship.key}} : </span>
                 <ng-container *ngFor="let relation of relationship.value;let last = last">
