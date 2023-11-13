@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { RO } from "../../disclosure/coi-interface";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
@@ -41,7 +41,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   isConcurrency = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
-    private _sfiService: SfiService, private _commonService: CommonService) {
+    private _sfiService: SfiService, private _commonService: CommonService, private elementRef: ElementRef) {
   }
 
   ngOnInit(): void {
@@ -206,6 +206,11 @@ clearSearchText() {
 
 addSFI(type) {
   this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+}
+
+onWindowScroll(event) {
+    const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
+    this._commonService.$sliderScrollAction.next({event, pageYOffset});
 }
 
 }
