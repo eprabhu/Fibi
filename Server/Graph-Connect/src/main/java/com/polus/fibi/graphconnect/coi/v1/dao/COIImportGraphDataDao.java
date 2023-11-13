@@ -18,13 +18,13 @@ import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.polus.fibi.graphconnect.entity.COIEntity;
-import com.polus.fibi.graphconnect.entity.Country;
-import com.polus.fibi.graphconnect.entity.Person;
+import com.polus.fibi.graphconnect.coi.entity.COIEntity;
+import com.polus.fibi.graphconnect.coi.entity.Country;
+import com.polus.fibi.graphconnect.coi.entity.Person;
 import com.polus.fibi.graphconnect.exceptions.CustomGraphException;
-import com.polus.fibi.graphconnect.repository.CountryRepository;
-import com.polus.fibi.graphconnect.repository.EntityRepository;
-import com.polus.fibi.graphconnect.repository.PersonRepository;
+import com.polus.fibi.graphconnect.coi.repository.CountryRepository;
+import com.polus.fibi.graphconnect.coi.repository.EntityRepository;
+import com.polus.fibi.graphconnect.coi.repository.PersonRepository;
 
 @Repository
 public class COIImportGraphDataDao {
