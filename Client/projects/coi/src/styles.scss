@@ -554,4 +554,61 @@ nav ul li.active {
   background-image: linear-gradient(to right, #dad3d3 1px, transparent 1px), linear-gradient(to bottom, #cdc4c4 1px, transparent 1px);
 }
 
+@media (max-width : 2000px) {
+    .form-row label,
+    .adjust-margin-top {
+        margin-top: 1rem !important;
+    }
+}
 
+@media (max-width : 991px) {
+  .dashboard-card-margin {
+    margin-left: 0!important;
+  }
+}
+
+/* This class will remove the colon symbol from the label and value till the resolution = Medium(991px).
+    i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
+*/
+@media (max-width : 991px) {
+  div label span  {
+    display: none !important;
+  }
+}
+
+/* This class will add the colon symbol to the label and value from resolution = Medium(991px) */
+@media (min-width : 992px) {
+  div label span  {
+    display: inline-block !important;
+  }
+}
+
+/* Added this class as common for all the disclosure dashboard cards like Coi reporter dashboard card,
+   travel disclosure card and OPA dashboard card
+*/
+.disclosure-card {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity))!important;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+  color: #6a7980;
+  margin-top: 0.5rem!important;
+  border-radius: var(--bs-border-radius-sm)!important;
+  box-shadow: 0 0.125rem 0.25rem rgba(var(--bs-body-color-rgb),.075)!important;
+}
+
+/* This class is specifically for Entity Dashboard in the Manage Entity Page */
+.disclosure-entity-card {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity))!important;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+  color: #6a7980;
+  margin-top: 0.5rem!important;
+  border-radius: var(--bs-border-radius-sm)!important;
+  box-shadow: 0 0.125rem 0.25rem rgba(var(--bs-body-color-rgb),.075)!important;
+  padding: 5px;
+}
+
+/* This class applies box shadow to all the dashboard cards while on hover */
+.disclosure-card:hover, .disclosure-entity-card:hover {
+  box-shadow: 0px 2px 8px -4px black !important;
+}

@@ -23,7 +23,7 @@
             </button>
 
             <button *ngIf="isOPAAdministrator" role="listitem" aria-label="Go to View Appointments"
-                [attr.title]="_router.url.includes('/coi/opa-dashboard') ? 'OPA Disclosure Dashboard' : 'Go to OPA Disclosure Dashboard'"
+                [attr.title]="_router.url.includes('/coi/opa-dashboard') ? 'OPA Disclosure Dashboard' : 'Go to OPA Disclosures'"
                 class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                 routerLinkActive="active-list" [routerLink]="['/coi/opa-dashboard']">
                 <span class="icon-btn">
@@ -46,7 +46,7 @@
                 <span class="icon-btn"><mat-icon>preview</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Review Disclosures</span></span>
             </button>-->
 
-            <button *ngIf="isManageEntity" role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
+            <button *ngIf="isManageEntity" role="listitem" aria-label="Go to View Appointments" title="Go to Entity Management"
                     [attr.title]="_router.url.includes('/coi/entity-management') ? 'Manage Entity' : 'Go to Manage Entity'"
                     class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                     routerLinkActive="active-list" [routerLink]="['/coi/entity-management']">
