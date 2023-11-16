@@ -33,6 +33,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         filterType: 'ALL',
+        pageNumber: 20,
         currentPage: 1
     };
     completeDisclosureList: UserDisclosure[] = [];
