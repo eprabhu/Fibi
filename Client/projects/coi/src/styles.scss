@@ -413,21 +413,20 @@ nav ul li.active {
   justify-content: flex-start;
 }
 
-.hovering-card:hover  {
-  .btn-outline-secondary:not(.no-hover){
+.hovering-card:hover {
+  .btn-outline-secondary:not(.no-hover) {
     color: #fff;
     background-color: #007dec;
     border-color: #007dec;
-}
+  }
+
+  .btn-outline-primary {
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+  }
 }
 
-.hovering-card:hover  {
-  .btn-outline-primary{
-    color: #fff;
-    background-color: #007dec;
-    border-color: #007dec;
-}
-}
 .success-banner {
   color: #151313;
   background-color: #F3F3F3;
@@ -567,18 +566,18 @@ nav ul li.active {
   }
 }
 
-/* This class will remove the colon symbol from the label and value till the resolution = Medium(991px).
+/* This class will remove the colon symbol from the label and value till the resolution = XL(1200px).
     i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
 */
-@media (max-width : 991px) {
-  div label span  {
+@media (max-width : 1200px) {
+ .disclosure-card div label span  {
     display: none !important;
   }
 }
 
-/* This class will add the colon symbol to the label and value from resolution = Medium(991px) */
-@media (min-width : 992px) {
-  div label span  {
+/* This class will add the colon symbol to the label and value from resolution = XL(1200px) */
+@media (min-width : 1200px) {
+  .disclosure-card div label span  {
     display: inline-block !important;
   }
 }
@@ -612,3 +611,47 @@ nav ul li.active {
 .disclosure-card:hover, .disclosure-entity-card:hover {
   box-shadow: 0px 2px 8px -4px black !important;
 }
+
+/** Responsive page: For breaking labels and values at (1200 and < 1200) breakpoint in dashboard cards during page responsiveness */
+@media (max-width: 1200px) {
+  .break-point-1200 {
+      padding: 0 !important;
+      margin: 0 !important;
+      display: block !important;
+  }
+}
+
+/* color changes for the 'View' button within all dashboard cards */
+.btn-primary-outline {
+  color: #007dec;
+  border-color: #007dec;
+}
+
+.btn-primary-outline:hover {
+  color: #fff;
+  background-color: #007dec;
+  border-color: #007dec;
+}
+
+/* color code for SFI and Project count within the dashboard cards */
+.project-sfi-count {
+  color: #007dec;
+}
+
+/* color code for Active Filter By Type within the dashboard cards */
+.filter-type-active {
+  border: 2px solid #54BF5B !important;
+  background: #f5fef5 !important;
+}
+
+/* Alignment for the breakpoints(767px - 930px) in SFI & Project count in dashboard cards */
+.link-heading {
+  display: inline-flex !important;
+}
+
+@media (min-width: 767px) and (max-width: 930px) {
+  .link-heading {
+    display: block !important;
+  }
+}
+
