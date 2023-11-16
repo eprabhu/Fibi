@@ -48,11 +48,6 @@
   }
 }
 
-.filter-active {
-  border: 2px solid #54BF5B !important;
-  background: #f5fef5 !important;
-}
-
 .chin {
   min-height: 46px;
   margin-left: 20px;
@@ -91,10 +86,6 @@ h4 {
   color: #151515;
   font-size: 1.5rem;
   font-weight: 700;
-}
-
-.text-blue-color {
-  color: #007dec;
 }
 
 .cursor {
@@ -365,26 +356,19 @@ padding-right: 17px;
   color: red;
 }
 
-.card{
-  margin: 5px;
-}
-
 .min-card-height{
-    min-height: 96px;
-    max-height: 96px;
+    min-height: 94px;
 }
 
 @media (max-width: 1500px) {
   .min-card-height {
     min-height: 135px;
-    max-height: 155px;  
   }
 }
 
 @media (max-width: 1025px) {
   .min-card-height {
     min-height: 170px;
-    max-height: 170px;  
   }
 }
 
@@ -392,3 +376,67 @@ padding-right: 17px;
   margin-left: 25px!important;
 }
 
+.grey-text{
+  margin-left: 0px !important;
+}
+
+/* Adjusting the height for FCOI, OPA disclosures creation card.
+ - My COI Dashboard green, yellow cards */
+.card {
+  display: flex;
+  height: 100%;
+  margin: 0 5px;
+  .card-content {
+    flex-grow: 1;
+  }
+}
+
+@media (max-width: 1025px) {
+  .min-card-height {
+    min-height: 170px;
+  }
+}
+
+/* For showing the word disclosure as (discl). for page responsive time*/
+.disclosure-text {
+  padding-left: 2px;
+}
+
+.disclosure-text:after {
+  content: "Disclosures";
+}
+
+@media (max-width: 1201px) {
+  .disclosure-text:after {
+    content: "Discl.";
+  }
+}  
+
+/* Adjust the height of view button (only for this dashboard)*/
+.height-fit-content {
+  height: fit-content !important;
+}
+
+/* Responsive page: For breaking labels and values at breakpoint(1600) in FCOI and OPA creation cards */
+@media (max-width: 1600px) {
+  .break-point-1600 {
+      padding: 0 !important;
+      margin: 0 !important;
+      display: block !important;
+  }
+}
+
+/* This class will remove the colon symbol from the label and value till the resolution = Medium(1600px).
+    i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
+*/
+@media (max-width : 1600px) {
+  .create-disclosure div label span  {
+    display: none !important;
+  }
+}
+/* This class will add the colon symbol to the label and value from resolution = Medium(1600px) */
+@media (min-width : 1600px) {
+  .create-disclosure div label span  {
+    display: inline-block !important;
+  }
+}

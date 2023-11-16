@@ -34,6 +34,7 @@ export class CountModalComponent implements OnInit {
     currentModalTab = 'Award';
     projectDatas: any;
     coiFinancialEntityDetails: any[] = [];
+    isEntityNameRead = false;
 
     constructor(private _countModalService: CountModalService, private _commonService: CommonService) {
     }
@@ -94,14 +95,14 @@ export class CountModalComponent implements OnInit {
     modalHeader() {
         if (this.fcoiTypeCode == 1) {
             if (this.moduleCode == 8) {
-                return `SFIs Attached to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `SFIs Attached to : FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
             } else if (this.moduleCode == 1 || this.moduleCode == 3) {
-                return `Projects Related to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `Projects Related to : FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
             }
         } else {
             if (this.fcoiTypeCode == 2 || this.fcoiTypeCode == 3) {
                 if (this.moduleCode == 8) {
-                    return `SFIs Attached to #${this.disclosureNumber}: ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
+                    return `SFIs Attached to : ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
                 } else if (this.moduleCode == 1 || this.moduleCode == 3) {
                     return `Projects Related to ${this.gettitle()} `;
                 }
