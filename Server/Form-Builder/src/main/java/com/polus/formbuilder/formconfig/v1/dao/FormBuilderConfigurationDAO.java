@@ -1,5 +1,6 @@
 package com.polus.formbuilder.formconfig.v1.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.polus.appcorelib.authentication.AuthenticatedUser;
 import com.polus.formbuilder.entity.FormBuilderComponentTypeEntity;
 import com.polus.formbuilder.entity.FormBuilderHeaderEntity;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionComponentEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionEntity;
 import com.polus.formbuilder.entity.FormBuilderUsageEntity;
+import com.polus.formbuilder.formconfig.v1.model.FormComponentRequestModel;
 import com.polus.formbuilder.formconfig.v1.model.FormDashboardResponseModel;
 import com.polus.formbuilder.formconfig.v1.model.FormDataResponseModel;
 import com.polus.formbuilder.formconfig.v1.model.FormHeaderCreateModel;
@@ -27,7 +28,9 @@ import com.polus.formbuilder.formconfig.v1.model.FormHeaderModel;
 import com.polus.formbuilder.formconfig.v1.model.FormHeaderUpdateModel;
 import com.polus.formbuilder.formconfig.v1.model.FormSectionComponentModel;
 import com.polus.formbuilder.formconfig.v1.model.FormSectionModel;
+import com.polus.formbuilder.formconfig.v1.model.FormSectionRequestModel;
 import com.polus.formbuilder.formconfig.v1.model.FormUsageModel;
+import com.polus.formbuilder.formconfig.v1.model.FormUsageRequestModel;
 import com.polus.formbuilder.repository.FormBuilderComponentTypeEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderHeaderEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderProgElementEntityRepository;
@@ -40,6 +43,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @Repository
+@Transactional
 public class FormBuilderConfigurationDAO {
 
 	@Autowired
@@ -412,20 +416,7 @@ public FormHeaderModel createFormHeader(FormHeaderCreateModel request) {
 		
 		hibernateTemplate.saveOrUpdate(entity);
 		
-		
-		return FormHeaderModel.builder()
-				 .formBuilderId(entity.getFormBuilderId())
-				 .formBuilderNumber(entity.getFormBuilderNumber())
-				 .versionNumber(entity.getVersionNumber())
-				 .versionStatus(entity.getVersionStatus())									 
-				 .title(entity.getTitle())
-		         .description(entity.getDescription())
-		         .isActive(entity.getIsActive())
-		         .createTimestamp(entity.getCreateTimestamp())
-		         .createUser(entity.getCreateUser())
-		         .updateUser(entity.getUpdateUser())
-		         .updateTimestamp(entity.getUpdateTimestamp())
-				 .build();
+		return mapEntityToModel(entity);
 		
 		
 	}catch(Exception e) {
@@ -457,28 +448,15 @@ public FormHeaderModel updateFormHeader(FormHeaderUpdateModel request) {
 		entity.setIsActive(request.isActive());
 		
 		hibernateTemplate.saveOrUpdate(entity);
-		
-		
-		return FormHeaderModel.builder()
-				 .formBuilderId(entity.getFormBuilderId())
-				 .formBuilderNumber(entity.getFormBuilderNumber())
-				 .versionNumber(entity.getVersionNumber())
-				 .versionStatus(entity.getVersionStatus())									 
-				 .title(entity.getTitle())
-		         .description(entity.getDescription())
-		         .isActive(entity.getIsActive())
-		         .createTimestamp(entity.getCreateTimestamp())
-		         .createUser(entity.getCreateUser())
-		         .updateUser(entity.getUpdateUser())
-		         .updateTimestamp(entity.getUpdateTimestamp())
-				 .build();
+				
+		return mapEntityToModel(entity);
 		
 		
 	}catch(Exception e) {
 		e.printStackTrace();
+		return new FormHeaderModel();
 	}
 	
-	return null;
 }
 
 
@@ -486,7 +464,7 @@ public String deleteHeader(Integer formBuilderId) {
 	Optional<FormBuilderHeaderEntity> entityOptional = headerRespository.findById(formBuilderId);
 
 	if (entityOptional.isEmpty()) {
-		return "Requested FormHeaderId not present!!";
+		return "Requested Header Id not present!!";
 	}
 
 	try {		
@@ -500,5 +478,468 @@ public String deleteHeader(Integer formBuilderId) {
 	
 	return SUCCESS;
 }
+
+
+public FormHeaderModel fetchFormHeader(Integer formBuilderId) {
+	try {
+
+		Optional<FormBuilderHeaderEntity> entityOptional = headerRespository.findById(formBuilderId);
+
+		if (entityOptional.isEmpty()) {
+			return new FormHeaderModel();
+		}
+
+		FormBuilderHeaderEntity entity = entityOptional.get();
+
+		return mapEntityToModel(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormHeaderModel();
+	}
+
+}
+
+public FormUsageModel createFormUsage(FormUsageRequestModel request) {
+	try {
+		String loginUser = getLoggedInUser();
+		FormBuilderUsageEntity newEntity = new FormBuilderUsageEntity();		
+		newEntity.setFormBuilderId(request.getFormBuilderId());
+		newEntity.setFormOrderNumber(request.getFormOrderNumber());
+		newEntity.setModuleCode(request.getModuleCode());
+		newEntity.setSubModuleCode(request.getSubModuleCode());
+		newEntity.setBusinessRuleId(request.getBusinessRuleId());
+		newEntity.setDescription(request.getDescription());
+		newEntity.setUpdateTimestamp(new Date());
+		newEntity.setCreateTimestamp(new Date());
+		newEntity.setCreateUser(loginUser);
+		newEntity.setUpdateUser(loginUser);
+		newEntity.setIsActive(request.getIsActive());
+		hibernateTemplate.saveOrUpdate(newEntity);
+
+		return mapEntityToModel(newEntity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormUsageModel();
+	}
+
+}
+
+
+public FormUsageModel updateFormUsage(FormUsageRequestModel request) {
+	try {
+
+		String loginUser = getLoggedInUser();
+
+		Optional<FormBuilderUsageEntity> entityOptional = usageRepository.findById(request.getFormUsageId());
+
+		if (entityOptional.isEmpty()) {
+			return new FormUsageModel();
+		}
+
+		FormBuilderUsageEntity entity = entityOptional.get();
+
+		entity.setFormOrderNumber(request.getFormOrderNumber());
+		entity.setModuleCode(request.getModuleCode());
+		entity.setSubModuleCode(request.getSubModuleCode());
+		entity.setBusinessRuleId(request.getBusinessRuleId());
+		entity.setDescription(request.getDescription());
+		entity.setUpdateTimestamp(new Date());
+		entity.setUpdateUser(loginUser);
+		entity.setIsActive(request.getIsActive());
+
+		hibernateTemplate.saveOrUpdate(entity);
+
+		return mapEntityToModel(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormUsageModel();
+	}
+}
+
+
+public String deleteFormUsage(Integer formUsageId) {
+	Optional<FormBuilderUsageEntity> entityOptional = usageRepository.findById(formUsageId);
+
+	if (entityOptional.isEmpty()) {
+		return "Requested Usage Id not present!!";
+	}
+
+	try {
+		FormBuilderUsageEntity entity = entityOptional.get();
+		hibernateTemplate.delete(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return e.getMessage();
+	}
+
+	return SUCCESS;
+}
+
+
+public List<FormUsageModel> fetchFormUsage(Integer formBuilderId) {
+	List<FormBuilderUsageEntity> usageEntityList = usageRepository.fetchByFormId(formBuilderId);
+	List<FormUsageModel> usageList = usageEntityList
+												.stream()
+												.map(this::mapEntityToModel)
+												.collect(Collectors.toList());
+	return usageList;
+
+}
+
+
+@SuppressWarnings("deprecation")
+public String updateUsageOrder(List<FormUsageRequestModel> request) {
+	try {
+			 //intentionally commented to update timestamp and updateuser
+			 // Also, used native SQL for performance
+			//String loginUser = getLoggedInUser();
 	
+			for(FormUsageRequestModel req: request) {
+				
+				hibernateTemplate.execute(session -> {
+		            try {
+		                String usage = " UPDATE FORM_BUILDER_USAGE  SET FORM_ORDER_NUMBER = :orderNumber  "
+		                				 + " WHERE FORM_USAGE_ID = :usageId "
+		                				 + " AND FORM_ORDER_NUMBER <> :orderNumber";
+		                session.createNativeQuery(usage)
+		                		.setParameter("usageId", req.getFormUsageId())
+		                		.setParameter("orderNumber", req.getFormOrderNumber())
+		                		.executeUpdate();
+	
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		                return e.getMessage();
+		            }
+		            return SUCCESS; // the return value is required for the execute method
+		        });				
+				
+			}		
+		
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	 return SUCCESS; 
+	 
+}
+
+
+public List<FormSectionModel> fetchAllFormSection(Integer formBuilderId) {
+	List<FormBuilderSectionEntity> sectionEntity = sectionRepository.getSectionDetailsByFormId(formBuilderId);
+	List<FormSectionModel> sectionList = sectionEntity.stream()
+													  .map(this::mapEntityToModel)
+													  .collect(Collectors.toList());
+	return sectionList;
+}
+
+
+public FormSectionModel createFormSection(FormSectionRequestModel request) {
+	try {
+		String loginUser = getLoggedInUser();
+		
+		FormBuilderSectionEntity newEntity = new FormBuilderSectionEntity();	
+		
+		newEntity.setFormHeaderId(request.getFormBuilderId());								 
+		newEntity.setSectionName(request.getSectionName());
+		newEntity.setSectionOrderNumber(request.getSectionOrderNumber());									 
+		newEntity.setBusinessRuleId(request.getBusinessRuleId());
+		newEntity.setDescription(request.getDescription());
+		newEntity.setHelpText(request.getHelpText());
+		newEntity.setHeaderInstruction(request.getHeaderInstruction());									 
+		newEntity.setFooterInstruction(request.getFooterInstruction());
+		newEntity.setIsActive(request.getIsActive());
+		newEntity.setUpdateUser(loginUser);
+		newEntity.setUpdateTimestamp(new Date());
+		
+		hibernateTemplate.saveOrUpdate(newEntity);
+
+		return mapEntityToModel(newEntity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormSectionModel();
+	}
+
+}
+
+
+public FormSectionModel updateFormSection(FormSectionRequestModel request) {
+	try {
+
+		String loginUser = getLoggedInUser();
+
+		Optional<FormBuilderSectionEntity> entityOptional = sectionRepository.findById(request.getFormBuilderSectionId());
+
+		if (entityOptional.isEmpty()) {
+			return new FormSectionModel();
+		}
+
+		FormBuilderSectionEntity entity = entityOptional.get();
+
+		entity.setFormHeaderId(request.getFormBuilderId());								 
+		entity.setSectionName(request.getSectionName());
+		entity.setSectionOrderNumber(request.getSectionOrderNumber());									 
+		entity.setBusinessRuleId(request.getBusinessRuleId());
+		entity.setDescription(request.getDescription());
+		entity.setHelpText(request.getHelpText());
+		entity.setHeaderInstruction(request.getHeaderInstruction());									 
+		entity.setFooterInstruction(request.getFooterInstruction());
+		entity.setIsActive(request.getIsActive());
+		entity.setUpdateUser(loginUser);
+		entity.setUpdateTimestamp(new Date());
+		
+		hibernateTemplate.saveOrUpdate(entity);
+
+		return mapEntityToModel(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormSectionModel();
+	}
+}
+
+
+public String updateSectionOrder(List<FormSectionRequestModel> request) {
+	try {
+		 //intentionally commented to update timestamp and updateuser
+		 // Also, used native SQL for performance
+		//String loginUser = getLoggedInUser();
+
+		for(FormSectionRequestModel req: request) {
+			
+			hibernateTemplate.execute(session -> {
+	            try {
+	                String section = " UPDATE FORM_BUILDER_SECTION  SET SECTION_ORDER_NUMBER = :orderNumber  "
+	                				 + " WHERE FORM_BUILDER_SECTION_ID = :sectionId "
+	                				 + " AND SECTION_ORDER_NUMBER <> :orderNumber";
+	                session.createNativeQuery(section)
+	                		.setParameter("sectionId", req.getFormBuilderSectionId())
+	                		.setParameter("orderNumber", req.getSectionOrderNumber())
+	                		.executeUpdate();
+
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                return e.getMessage();
+	            }
+	            return SUCCESS; // the return value is required for the execute method
+	        });				
+			
+		}		
+	
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return e.getMessage();
+	}
+return SUCCESS; 
+
+}
+
+
+public String deleteFormSection(int formBuilderSectionId) {
+	Optional<FormBuilderSectionEntity> entityOptional = sectionRepository.findById(formBuilderSectionId);
+
+	if (entityOptional.isEmpty()) {
+		return "Requested Section Id not present!!";
+	}
+
+	try {
+		FormBuilderSectionEntity entity = entityOptional.get();
+		hibernateTemplate.delete(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return e.getMessage();
+	}
+
+	return SUCCESS;
+}
+
+
+public FormSectionModel fetchFormSection(Integer formBuilderSectionId) {
+	try {
+
+		Optional<FormBuilderSectionEntity> entityOptional = sectionRepository.findById(formBuilderSectionId);
+
+		if (entityOptional.isEmpty()) {
+			return new FormSectionModel();
+		}
+
+		FormBuilderSectionEntity entity = entityOptional.get();
+		return mapEntityToModel(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormSectionModel();
+	}
+}
+
+
+public List<FormSectionComponentModel> fetchAllFormComponent(Integer formBuilderSectionId) {
+	
+	try {
+
+		Optional<FormBuilderSectionEntity> entityOptional = sectionRepository.findById(formBuilderSectionId);
+
+		if (entityOptional.isEmpty()) {
+			return new ArrayList<FormSectionComponentModel>();
+		}
+
+		FormBuilderSectionEntity section = entityOptional.get();
+		
+		List<FormBuilderSectionComponentEntity> compList =  componentRepository.getAllComponentBySection(formBuilderSectionId);
+		List<FormSectionComponentModel> componentList
+												= compList.stream()
+				  										  .map((entity -> mapEntityToModel(entity,section.getFormHeaderId())))	
+			  											  .collect(Collectors.toList());
+		return componentList;
+	
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new ArrayList<FormSectionComponentModel>();
+	}
+}
+
+
+public FormSectionComponentModel fetchFormComponent(Integer formBuilderSectCompId) {
+	Optional<FormBuilderSectionComponentEntity> compOptional =  componentRepository.findById(formBuilderSectCompId);
+	
+	if (compOptional.isEmpty()) {
+		return new FormSectionComponentModel();
+	}
+	FormBuilderSectionComponentEntity compEntity = compOptional.get();
+	
+	return mapEntityToModel(compEntity,null);
+}
+
+
+public FormSectionComponentModel createFormComponent(FormComponentRequestModel request) {
+	try {
+		String loginUser = getLoggedInUser();
+		
+		FormBuilderSectionComponentEntity newEntity = new FormBuilderSectionComponentEntity();	
+		
+		newEntity.setSectionId(request.getFormBuilderSectionId());
+		newEntity.setComponentTypeCode(request.getComponentTypeCode());
+		newEntity.setComponentOrderNumber(request.getComponentOrderNumber());									 
+		newEntity.setComponentData(request.getComponentData());
+		newEntity.setComponentRefId(request.getComponentRefId());
+		newEntity.setDescription(request.getDescription());
+		newEntity.setHeaderInstruction(request.getHeaderInstruction());								 
+		newEntity.setFooterInstruction(request.getFooterInstruction());
+		newEntity.setIsActive(request.getIsActive());
+		newEntity.setUpdateUser(loginUser);
+		newEntity.setUpdateTimestamp(new Date());
+						
+		hibernateTemplate.saveOrUpdate(newEntity);
+
+		return mapEntityToModel(newEntity,null);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormSectionComponentModel();
+	}
+	
+}
+
+
+public String deleteFormComponent(int formBuilderSectCompId) {
+	Optional<FormBuilderSectionComponentEntity> entityOptional = componentRepository.findById(formBuilderSectCompId);
+
+	if (entityOptional.isEmpty()) {
+		return "Requested Component Id not present!!";
+	}
+
+	try {
+		FormBuilderSectionComponentEntity entity = entityOptional.get();
+		hibernateTemplate.delete(entity);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return e.getMessage();
+	}
+
+	return SUCCESS;
+}
+
+
+public FormSectionComponentModel updateFormComponent(FormComponentRequestModel request) {
+	try {
+
+		String loginUser = getLoggedInUser();
+
+		Optional<FormBuilderSectionComponentEntity> entityOptional = componentRepository.findById(request.getFormBuilderSectCompId());
+
+		if (entityOptional.isEmpty()) {
+			return new FormSectionComponentModel();
+		}
+
+		FormBuilderSectionComponentEntity entity = entityOptional.get();
+
+		entity.setComponentTypeCode(request.getComponentTypeCode());
+		entity.setComponentOrderNumber(request.getComponentOrderNumber());									 
+		entity.setComponentData(request.getComponentData());
+		entity.setComponentRefId(request.getComponentRefId());
+		entity.setDescription(request.getDescription());
+		entity.setHeaderInstruction(request.getHeaderInstruction());								 
+		entity.setFooterInstruction(request.getFooterInstruction());
+		entity.setIsActive(request.getIsActive());
+		entity.setUpdateUser(loginUser);
+		entity.setUpdateTimestamp(new Date());
+		
+		hibernateTemplate.saveOrUpdate(entity);
+
+		return mapEntityToModel(entity,null);
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new FormSectionComponentModel();
+	}
+}
+
+
+@SuppressWarnings("deprecation")
+public String updateComponentOrder(List<FormComponentRequestModel> request) {
+	try {
+		 //intentionally commented to update timestamp and updateuser
+		 // Also, used native SQL for performance
+		//String loginUser = getLoggedInUser();
+
+		for(FormComponentRequestModel req: request) {
+			
+			hibernateTemplate.execute(session -> {
+	            try {
+	                String component = " UPDATE FORM_BUILDER_SECTION_COMPONENT SET COMPONENT_ORDER_NUMBER = :orderNumber  "
+	                				 + " WHERE FORM_BUILDER_SECT_COMP_ID = :componentId "
+	                				 + " AND COMPONENT_ORDER_NUMBER <> :orderNumber";
+	                session.createNativeQuery(component)
+	                		.setParameter("componentId", req.getFormBuilderSectCompId())
+	                		.setParameter("orderNumber", req.getComponentOrderNumber())
+	                		.executeUpdate();
+
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                return e.getMessage();
+	            }
+	            return SUCCESS; // the return value is required for the execute method
+	        });				
+			
+		}		
+	
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		return e.getMessage();
+	}
+return SUCCESS; 
+}
+
+
+
+
 }

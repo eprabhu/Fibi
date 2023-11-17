@@ -15,7 +15,7 @@ public class FormSectionComponentModel {
 		
 		private int formBuilderSectCompId;
 	    private int formBuilderSectionId;
-	    private int formBuilderId;
+	    private Integer formBuilderId;
 	    private String componentTypeCode;
 	    private Integer componentOrderNumber;
 	    private String componentData;
