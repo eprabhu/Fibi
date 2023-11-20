@@ -169,7 +169,7 @@ public class OPACommonDAO {
 		personEntity.setUpdateTimestamp(new Date());
 		personEntity.setUpdateUser(updateUser);
 
-		String sql = "SELECT PERSON_ENTITY_ID,ENTITY_ID,ENTITY_NUMBER FROM PERSON_ENTITY WHERE PERSON_ENTITY_ID = :personEntityId";
+		String sql = "SELECT PERSON_ENTITY_ID,ENTITY_ID,ENTITY_NUMBER,PERSON_ENTITY_NUMBER FROM PERSON_ENTITY WHERE PERSON_ENTITY_ID = :personEntityId";
 		Query query = entityManager.createNativeQuery(sql);
 		query.setParameter("personEntityId", personEntityId);
 		List<?> resultRows = query.getResultList();
@@ -180,6 +180,7 @@ public class OPACommonDAO {
 				personEntity.setPersonEntityId((Integer) rowData[0]);
 				personEntity.setEntityId((Integer) rowData[1]);
 				personEntity.setEntityNumber((Integer) rowData[2]);
+				personEntity.setPersonEntityNumber((Integer) rowData[3]);
 			}
 		}
 

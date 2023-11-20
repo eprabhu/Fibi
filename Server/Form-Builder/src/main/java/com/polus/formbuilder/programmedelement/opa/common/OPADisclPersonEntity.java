@@ -26,6 +26,9 @@ public class OPADisclPersonEntity {
 
     @Column(name = "PERSON_ENTITY_ID")
     private Integer personEntityId;
+    
+    @Column(name = "PERSON_ENTITY_NUMBER")
+    private Integer personEntityNumber;
 
     @Column(name = "ENTITY_ID")
     private Integer entityId;

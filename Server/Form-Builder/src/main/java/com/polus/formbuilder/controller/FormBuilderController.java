@@ -30,7 +30,6 @@ import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.service.FormBuilderServiceCoordinator;
 
 @RestController
-@RequestMapping("/")
 public class FormBuilderController {
 	
 	@Autowired

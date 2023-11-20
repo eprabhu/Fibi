@@ -40,15 +40,12 @@ public class FormBuilderHeaderEntity implements Serializable {
 	    @Column(name = "VERSION_STATUS", nullable = false)
 	    private String versionStatus;
 
-	    @Column(name = "MODULE_CODE", nullable = false)
-	    private String moduleCode;
-
-	    @Column(name = "SUB_MODULE_CODE", nullable = false)
-	    private String subModuleCode;
-
-	    @Column(name = "BUSINESS_RULE_ID")
-	    private Integer businessRuleId;
-
+	    @Column(name = "TITLE", nullable = false)
+	    private String title;
+	    
+	    @Column(name = "IS_ACTIVE", nullable = false)
+	    private String isActive;
+	    
 	    @Column(name = "DESCRIPTION", nullable = false)
 	    private String description;
 

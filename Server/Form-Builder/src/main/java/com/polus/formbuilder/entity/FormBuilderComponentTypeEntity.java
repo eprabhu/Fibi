@@ -19,41 +19,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "FORM_BUILDER_SECTION")
-public class FormBuilderSectionEntity implements Serializable{
+@Table(name = "FORM_SECTION_COMPONENT_TYPE")
+public class FormBuilderComponentTypeEntity implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FORM_BUILDER_SECTION_ID")
-    private Integer formBuilderSectionId;
-
-    @Column(name = "FORM_BUILDER_ID")
-    private Integer formHeaderId;
-
-    @Column(name = "SECTION_NAME", nullable = false)
-    private String sectionName;
-
-    @Column(name = "SECTION_ORDER_NUMBER", nullable = false)
-    private Integer sectionOrderNumber;
-
-    @Column(name = "BUSINESS_RULE_ID")
-    private Integer businessRuleId;
+    @Column(name = "COMPONENT_TYPE_CODE", nullable = false)
+    private String componentTypeCode;
 
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
-
-    @Column(name = "HELP_TEXT")
-    private String helpText;
-
-    @Column(name = "HEADER_INSTRUCTION")
-    private String headerInstruction;
-
-    @Column(name = "FOOTER_INSTRUCTION")
-    private String footerInstruction;
 
     @Column(name = "IS_ACTIVE", nullable = false)
     private String isActive;
@@ -63,6 +41,6 @@ public class FormBuilderSectionEntity implements Serializable{
     private Date updateTimestamp;
 
     @Column(name = "UPDATE_USER", nullable = false)
-    private String updateUser;    
- 
+    private String updateUser;
+    
 }
