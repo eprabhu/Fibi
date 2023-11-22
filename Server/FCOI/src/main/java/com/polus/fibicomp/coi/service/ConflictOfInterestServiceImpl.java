@@ -296,6 +296,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setPersonPrimaryTitle(person.getPrimaryTitle());
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
+		conflictOfInterestVO.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder()
+				.personId(coiDisclosure.getPersonId()).build()));
+		conflictOfInterestVO.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(coiDisclosure.getPersonId()));
+		conflictOfInterestVO.setPersonNotesCount(conflictOfInterestDao.personNotesCount(coiDisclosure.getPersonId()));
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
