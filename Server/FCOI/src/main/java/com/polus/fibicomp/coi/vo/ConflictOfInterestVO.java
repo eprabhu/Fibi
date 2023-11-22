@@ -304,4 +304,10 @@ public class ConflictOfInterestVO {
 
 	private List<OPADisclosure> opaDisclosure;
 
+	private Integer personEntitiesCount;
+
+	private Long personNotesCount;
+
+	private Long personAttachmentsCount;
+
 }
