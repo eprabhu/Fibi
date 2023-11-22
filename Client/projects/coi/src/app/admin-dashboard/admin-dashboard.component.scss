@@ -138,6 +138,12 @@ nav ul li {
   margin-bottom: 7px;
 }
 
+@media (max-width: 1201px) {
+  .sort-div button {
+    padding-top: 3px;
+  }
+}
+
 .filter-active {
   border: 2px solid #54BF5B !important;
   background: #F5FEF5 !important;
@@ -345,3 +351,32 @@ small {
 .p0{
   padding-right:0 ;
 }
+
+.row {
+  div {
+    padding-top: .5rem;
+  }
+}
+
+.margin-top-3px{
+  margin-top: 3px;
+}
+
+.height-fit-content {
+  height: fit-content;
+}
+
+.end-date {
+  margin-right: 81px;
+}
+
+.last-updated {
+  margin-top: 7px;
+}
+
+/* Adjust the height of view button (only for this dashboard)*/
+.height-fit-content {
+  height: fit-content !important;
+}
+
+/* Navbar responsive  hamburger menu */

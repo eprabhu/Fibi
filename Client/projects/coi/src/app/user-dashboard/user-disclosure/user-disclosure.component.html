@@ -25,12 +25,12 @@
                                     <div class="col-xl-7 col-md-6 col-12">
                                         <div class="row">
                                             <div class="col-12" tabindex="0">
-                                                <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1600" [attr.aria-label]="disclosure?.unit?.unitDetail">
+                                                <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1560" [attr.aria-label]="disclosure?.unit?.unitDetail">
                                                     {{disclosure?.unit?.unitDetail}}</span>
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Certification Date <span>:</span></label>
-                                                <span class="break-point-1600" [attr.aria-label]="disclosure?.certifiedAt |dateFormatter">
+                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.certifiedAt |dateFormatter">
                                                     <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                                         <span class="grey-text">{{disclosure?.certifiedAt |dateFormatter}}</span>
                                                     </app-no-data-label>
@@ -38,7 +38,7 @@
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Expiration Date <span>:</span></label>
-                                                <span class="break-point-1600" [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
+                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
                                                     <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                                         <span class="grey-text">{{disclosure?.expirationDate |
                                                             dateFormatter}}</span>
@@ -50,7 +50,7 @@
                                     <div class="col-xl-5 col-md-6 col-12">
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text me-2 p-0">Disclosure Status <span>:</span></label>
-                                            <span class="px-2 break-point-1600" [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
+                                            <span class="px-2 break-point-1560" [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                 <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
                                                     <span class="py-2">
                                                         <span
@@ -64,7 +64,7 @@
                                         </div>
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text me-2 p-0">Disposition Status <span>:</span></label>
-                                            <span class="break-point-1600" [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
+                                            <span class="break-point-1560" [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                 <span
                                                     class="{{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                                 </span>
@@ -75,7 +75,7 @@
                                         </div>
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text me-2 p-26 ">Review Status <span>:</span></label>
-                                            <span class="break-point-1600" [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
+                                            <span class="break-point-1560" [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                 <span
                                                     class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
                                                 <span class="badgeFont">
@@ -113,7 +113,7 @@
                                         <strong class="fs-15">FCOI
                                             Disclosure</strong>
                                     </div>
-                                    <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center break-point-1600" [queryParams]={disclosureId:disclosure.disclosureId}
+                                    <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center break-point-1560" [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         aria-label="Click to view FCOI Disclosure details"
                                         [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
@@ -129,12 +129,12 @@
                                     <div class="col-xl-7 col-md-5 col-12">
                                         <div class="row">
                                             <div class="col-12" tabindex="0">
-                                                <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1600" [attr.aria-label]="disclosure?.unit?.unitDetail">
+                                                <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1560" [attr.aria-label]="disclosure?.unit?.unitDetail">
                                                     {{disclosure?.unit?.unitDetail}}</span>
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Certification Date <span>:</span></label>
-                                                <span class="break-point-1600" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                                     <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                                         <span class="grey-text">{{disclosure?.certifiedAt | dateFormatter}}</span>
                                                     </app-no-data-label>
@@ -142,7 +142,7 @@
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Expiration Date <span>:</span></label>
-                                                <span class="break-point-1600" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
                                                      <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                                         <span class="grey-text">{{disclosure?.expirationDate |
                                                             dateFormatter}}</span>
@@ -154,7 +154,7 @@
                                     <div class="col-xl-5 col-md-7 col-12">
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text me-2 p-0">Disclosure Status <span>:</span></label>
-                                            <span class="px-2 break-point-1600" [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
+                                            <span class="px-2 break-point-1560" [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                 <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
                                                     <span class="py-2">
                                                         <span
@@ -168,7 +168,7 @@
                                         </div>
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text me-2 p-0">Disposition Status <span>:</span></label>
-                                            <span class="break-point-1600" [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
+                                            <span class="break-point-1560" [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                 <span
                                                     class="{{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                                 </span>
@@ -179,7 +179,7 @@
                                         </div>
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text me-2  p-26 ">Review Status <span>:</span></label>
-                                            <span class="break-point-1600" [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
+                                            <span class="break-point-1560" [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                 <span
                                                     class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
                                                 <span class=" badgeFont">
@@ -216,9 +216,9 @@
                         <div class="col" tabindex="0" aria-label="A conflict of interest occurs when your personal, financial, or other interests could
                         influence or appear to influence your judgment and decision-making in the workplace. Please
                         disclose any existing or potential conflicts of interest you may have with our organization.">
-                            A conflict of interest occurs when your personal, financial, or other interests could
-                            influence or appear to influence your judgment and decision-making in the workplace. Please
-                            disclose any existing or potential conflicts of interest you may have with our organization.
+                        A conflict of interest occurs when your personal, financial, or other interests could influence or appear to influence
+                        your judgment and decision-making in the workplace. Please disclose any existing or potential conflicts of interest you
+                        may have with our organization. Click on the button below to start your FCOI disclosure creation.
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
             <div class="card-footer disclosure-master-footer-bg py-3 justify-content-end">
                 <div class="col-auto d-flex justify-content-end mr-7">
                     <button (click)="openFCOIModal('FCOI')" type="button" role="button" tabindex="0" aria-label="Create FCOI Disclosure"
-                            class="btn btn-primary fs-14 d-flex align-items-center">
+                            class="btn btn-primary fs-14 d-flex align-items-center" title="Click to create new FCOI disclosure">
                         <mat-icon role="img"
                                   class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
                                   aria-hidden="true" data-mat-icon-type="font">add
@@ -260,13 +260,10 @@
                                 engage in. Include details such as the name of the organization, your role, and the
                                 time
                                 commitment involved.">
-                                    OPA activities could include consulting, teaching, public speaking, or serving on
-                                    boards.
-                                    Please disclose any outside professional activities you are currently engaged in or
-                                    plan to
-                                    engage in. Include details such as the name of the organization, your role, and the
-                                    time
-                                    commitment involved.
+                                OPA activities could include consulting, teaching, public speaking, or serving on boards. Please disclose any outside
+                                professional activities you are currently engaged in or plan to engage in. Include details such as the name of the
+                                organization, your role, and the time commitment involved. Click on the button below to start your disclosure OPA
+                                creation.
                                 </div>
                             </div>
                         </div>
@@ -274,7 +271,7 @@
                     <div class="card-footer disclosure-master-footer-bg py-3 justify-content-end">
                         <div class="col-auto d-flex justify-content-end mr-7">
                             <button (click)="createOPA()" type="button" class="btn btn-primary fs-14 d-flex align-items-center"
-                            role="button" tabindex="0" aria-label="Create OPA Disclosure">
+                            role="button" tabindex="0" aria-label="Create OPA Disclosure" title="Click to create new OPA disclosure">
                                 <mat-icon role="img"
                                           class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
                                           aria-hidden="true" data-mat-icon-type="font">add
@@ -317,7 +314,7 @@
                                     <div class="row">
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text">Department <span>:</span></label>
-                                            <span class="break-point-1600" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
+                                            <span class="break-point-1560" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                     <span class="grey-text">
                                                         {{opaDisclosure?.homeUnit}} - {{opaDisclosure?.homeUnitName}}</span>
@@ -327,7 +324,7 @@
                                         </div>
                                         <div class="col-12"  tabindex="0">
                                             <label class="label-text me-2">Period <span>:</span></label>
-                                            <span class="break-point-1600">
+                                            <span class="break-point-1560">
                                                 <app-no-data-label
                                                     [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
                                                 <span
@@ -339,7 +336,7 @@
                                         </div>
                                         <div class="col-12"  tabindex="0">
                                             <label class="label-text me-2">Create Date <span>:</span></label>
-                                            <span class="break-point-1600">
+                                            <span class="break-point-1560">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
                                                     <span
                                                         class="grey-text">{{opaDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
@@ -351,7 +348,7 @@
                                 <div class="col-xl-5 col-md-6 col-12">
                                     <div class="col-12" tabindex="0">
                                         <label class="label-text me-2 p-0 ">Disposition Status <span>:</span></label>
-                                        <span class="break-point-1600">
+                                        <span class="break-point-1560">
                                             <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
                                                 <span
@@ -363,7 +360,7 @@
                                     </div>
                                     <div class="col-12" tabindex="0">
                                         <label class="label-text me-2 p-26">Review Status <span>:</span></label>
-                                        <span class="break-point-1600">
+                                        <span class="break-point-1560">
                                             <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
                                                 <span
@@ -413,7 +410,7 @@
                                     <div class="row">
                                         <div class="col-12" tabindex="0">
                                             <label class="label-text">Department <span>:</span></label>
-                                            <span class="break-point-1600" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
+                                            <span class="break-point-1560" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                     <span class="grey-text">
                                                         {{opaDisclosure?.homeUnit}} - {{opaDisclosure?.homeUnitName}}</span>
@@ -422,7 +419,7 @@
                                         </div>
                                         <div class="col-12">
                                             <label class="label-text">Period <span>:</span></label>
-                                            <span class="break-point-1600">
+                                            <span class="break-point-1560">
                                                  <app-no-data-label
                                                     [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
                                                 <span
@@ -434,7 +431,7 @@
                                         </div>
                                         <div class="col-12">
                                             <label class="label-text me-2">Create Date <span>:</span></label>
-                                            <span class="break-point-1600">
+                                            <span class="break-point-1560">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
                                                     <span
                                                         class="grey-text">{{opaDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
@@ -446,7 +443,7 @@
                                 <div class="col-xl-5 col-md-6 col-12">
                                     <div class="col-12">
                                         <label class="label-text me-2 p-0 ">Disposition Status <span>:</span></label>
-                                        <span class="break-point-1600">
+                                        <span class="break-point-1560">
                                             <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
                                                 <span
@@ -458,7 +455,7 @@
                                     </div>
                                     <div class="col-12">
                                         <label class="label-text me-2 p-26">Review Status <span>:</span></label>
-                                        <span class="break-point-1600"> 
+                                        <span class="break-point-1560"> 
                                             <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
                                                 <span
@@ -566,7 +563,7 @@
                             </span>
 <!-- For Travel Disclosure -->
                             <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-sm-2 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2" tabindex="0" aria-label="Traveler {{disclosure.travellerName}}">{{disclosure.travellerName}}</strong>
                                 <ng-container>
                                 <span class="pipe me-1 mt-1"></span>
@@ -582,7 +579,7 @@
                             </h4>
 <!-- For Coi Disclosure -->
                            <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-sm-2 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2" tabindex="0" [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
                                     {{disclosure.disclosurePersonFullName}}</strong>
                                 <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1">
@@ -600,7 +597,7 @@
                             </h4>
 <!-- For OPA Disclosure -->
                             <h4 *ngIf="disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-sm-2 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2" tabindex="0" [attr.aria-label]="'Disclosure person ' + disclosure.personName">{{disclosure.personName}}</strong>
                                 <ng-container class="ms-1">
                                     <div class="col mt-2">
@@ -912,13 +909,12 @@
                                 [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                                 area-describedby="Click to view SFI list">
                                 <strong class="fs-18 me-2 project-sfi-count"
+                                    [class.cursor-pointer]="disclosure?.noOfSfi"
                                     [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                                     area-describedby="Click to view SFI list"
                                     (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
-                                    <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}}
-                                    </label>
+                                    {{disclosure?.noOfSfi || 0}}
                                 </strong>
-                                <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
                                 <div class="mt-1 me-2">
                                     <label class="label-text margin-top-3px">
                                         <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
@@ -929,7 +925,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="text-secondary col-md-6 col-sm-6 col-12 fs-14 d-flex" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
+                            <div class="text-secondary col-md-6 col-sm-6 col-12 fs-14 d-flex px-3" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
                                     <div class="col-6 link-heading fs-14"
                                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -125,13 +125,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     ];
     readMoreOrLess = [];
     isReadMore = false;
+    isFcoiReadMore = false;
+    isPurposeRead = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
                 private _elasticConfig: ElasticConfigService,
                 public commonService: CommonService,
                 private _navigationService: NavigationService
-    ) { }
 
     async ngOnInit() {
         await this.getPermissions();
