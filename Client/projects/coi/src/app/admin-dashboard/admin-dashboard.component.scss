@@ -380,3 +380,53 @@ small {
 }
 
 /* Navbar responsive  hamburger menu */
+@media (min-width: 1092.9px) {
+  .navbar-toggler {
+    display: none;
+  }
+}
+
+@media (max-width: 1092.9px) {
+  #navbarResponsive {
+    position: absolute;
+    z-index: 99;
+    display: none;
+    top: 141px;
+    left: unset;
+  }
+
+  // .show {
+  //   display: block !important;
+  // }
+
+  .menu-responsive {
+    position: relative;
+    background-color: #2b3244;
+    opacity: .95;
+    box-shadow: 0px 2px 5px -1px rgba(15,15,15,.5803921569);
+    padding: 16px 10px 16px 10px;
+    border-radius: 4px;
+    max-height: 320px;
+    overflow: auto;
+  }
+
+  .menu-responsive li {
+    color: #fff !important;
+  }
+
+  .separator {
+    margin: 0 !important;
+    border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+  }
+
+  .active {
+    background-color: #545a68;
+    border-bottom: none !important;
+  }
+
+  .coi-admin-dash li.active {
+    color: #fff !important;
+    border-bottom: none !important;
+  }
+}
+

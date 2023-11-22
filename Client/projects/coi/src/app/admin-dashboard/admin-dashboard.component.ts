@@ -35,6 +35,8 @@ import { openSlider, closeSlider } from '../common/utilities/custom-utilities';
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
 
+    @ViewChild('mainHeaders', { static: true }) mainHeaders: ElementRef;
+
     setFocusToElement = setFocusToElement;
     DEFAULT_DATE_FORMAT = DATE_PLACEHOLDER;
     isShowDisclosureList = false;
@@ -133,6 +135,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 private _elasticConfig: ElasticConfigService,
                 public commonService: CommonService,
                 private _navigationService: NavigationService
+    ) { document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
         await this.getPermissions();
@@ -836,5 +839,21 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.showSlider = false;
 		}, 500);
 	}
+
+    // The function is used for closing nav dropdown at mobile screen
+    offClickMainHeaderHandler(event: any) {
+        if (window.innerWidth < 1093) {
+            const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
+            console.log(ELEMENT.classList);
+            if (!this.mainHeaders.nativeElement.contains(event.target)) {
+                if (document.getElementById('navbarResponsive').classList.contains('show')) {
+                    document.getElementById('navbarResponsive').classList.remove('show');
+                } else {
+                    document.getElementById('navbarResponsive').classList.add('show');
+                }
+            }
+        }
+    }
+
 }
 

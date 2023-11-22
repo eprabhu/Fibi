@@ -2,6 +2,15 @@
     <section class="section-advanced-search">
         <div class="fs-18 fw-bold mt-3 d-inline-block" tabindex="0" title="COI Disclosures Dashboard" aria-label="COI Disclosures Dashboard">COI Disclosures</div>
         <hr class="mt-1">
+        <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm">
+            <div class="d-flex align-items-center bg-white justify-content-between list navbar-toggleable-xs">
+                <button #mainHeaders id="responsiveColapse"
+                                    class="navbar-toggler hidden-sm-up px-0 mt-1 px-sm-3"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i class="fa fa-bars f-14 text-muted mx-colr" aria-hidden="true"
+                                        title="Click for more pages"></i>
+                </button>
                 <ul class="m-0 p-0 menu-responsive fit-content tabs-collapsed collapse" id="navbarResponsive" aria-label="" tabindex="0">
                     <li *ngIf="isShowAdminDashboard" (click)="changeTab('ALL_DISCLOSURES')" 
                         (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
