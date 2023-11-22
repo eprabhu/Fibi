@@ -1817,6 +1817,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					detail.setAccountNumber(rset.getString("ACCOUNT_NUMBER"));
 					detail.setSponsorAwardNumber(rset.getString("SPONSOR_AWARD_NUMBER"));
+					detail.setConflictStatus(rset.getString("CONFLICT_DESCRIPTION"));
+					detail.setConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
 					if (disclosureId != null) {
 						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
@@ -1837,7 +1839,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
 					detail.setReporterName(rset.getString("KEY_PERSON"));
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
-					if (disclosureId != null) {
+					detail.setConflictStatus(rset.getString("CONFLICT_DESCRIPTION"));
+					detail.setConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
+				if (disclosureId != null) {
 						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 					}
@@ -4488,5 +4492,27 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
 		}
 		return relationshipDtos;
+	}
+
+	@Override
+	public Long personAttachmentsCount(String personId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT count(a.attachmentId) ");
+		hqlQuery.append("FROM Attachments a WHERE a.personId = :personId ");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personId", personId);
+		return (Long) query.getSingleResult();
+	}
+
+	@Override
+	public Long personNotesCount(String personId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT count(n.noteId) ");
+		hqlQuery.append("FROM Notes n WHERE n.personId = :personId ");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personId", personId);
+		return (Long) query.getSingleResult();
 	}
 }
