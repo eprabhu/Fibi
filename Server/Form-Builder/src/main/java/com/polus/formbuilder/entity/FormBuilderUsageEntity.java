@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "FORM_BUILDER_HEADER")
+@Table(name = "FORM_BUILDER_USAGE")
 public class FormBuilderUsageEntity implements Serializable{
 	/**
 	 * 
@@ -28,13 +28,10 @@ public class FormBuilderUsageEntity implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FORM_USAGE_ID")
-    private int formUsageId;
+    private Integer formUsageId;
 
     @Column(name = "FORM_BUILDER_ID", nullable = false)
     private int formBuilderId;
-
-    @Column(name = "FORM_BUILDER_NUMBER", nullable = false)
-    private String formBuilderNumber;
 
     @Column(name = "FORM_ORDER_NUMBER", nullable = false)
     private int formOrderNumber;

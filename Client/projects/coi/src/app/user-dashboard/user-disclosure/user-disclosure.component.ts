@@ -2,8 +2,10 @@ import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChi
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
-import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL,
-         CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL } from '../../app-constants';
+import {
+    CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL,
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL
+} from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
@@ -12,7 +14,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
 import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
-import {HeaderService} from '../../common/header/header.service';
+import { HeaderService } from '../../common/header/header.service';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -96,7 +98,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             })).subscribe((res: any) => {
                 this.result = res;
                 if (this.result) {
-                    this.completeDisclosureList =  this.getDashboardList();
+                    this.completeDisclosureList = this.getDashboardList();
                     this.completeDisclosureListCopy = this.paginationArray = JSON.parse(JSON.stringify(this.completeDisclosureList));
                     this.getArrayListForPagination();
                     this.loadingComplete();
@@ -137,7 +139,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     getDashboardBasedOnTab() {
-        if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
+        if (this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
             this.getDisclosureHistory();
         } else {
             this.completeDisclosureList = [];
@@ -171,8 +173,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             this.getArrayListForPagination();
         }
     }
-   
-    
+
+
     /**
      * Description
      * @returns {any}
@@ -227,7 +229,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     resetDashboardAfterSearch(): void {
         this.searchText = '';
-        this.completeDisclosureList =  this.getDashboardList();
+        this.completeDisclosureList = this.getDashboardList();
         this.resetDisclosureCopy();
         this.getArrayListForPagination();
     }
@@ -254,7 +256,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
             !this.completeDisclosureList.length &&
             this.dashboardRequestObject.currentPage == 1 && this.dashboardRequestObject.filterType == 'ALL') {
-                this.isShowCreate = true;
+            this.isShowCreate = true;
         }
     }
 
@@ -336,7 +338,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             redirectUrl = isDisclosureEditPage ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         this._router.navigate([redirectUrl],
-            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId} });
+            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId } });
     }
 
     getColorBadges(disclosure: UserDisclosure) {
@@ -376,17 +378,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getSearchPlaceHolder() {
         if (this.currentSelected.tab !== 'TRAVEL_DISCLOSURES') {
-            return 'Search by Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
+            return 'Search by Project Title, Department, Disclosure Status, Disposition Status, Review Status';
         } else {
-            return 'Search by Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
+            return 'Search by Entity Name, Department, Traveller Type, Destination, Review Status, Document Status, Purpose';
         }
     }
 
     getDisclosureHistory() {
         this.isLoading = true;
-        this.completeDisclosureList =  [];
-        this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
-            this.completeDisclosureList =  this.getAllDisclosureHistories(data);;
+        this.completeDisclosureList = [];
+        this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({ 'filterType': this.currentSelected.filter }).subscribe((data: any) => {
+            this.completeDisclosureList = this.getAllDisclosureHistories(data);;
             this.loadingComplete();
         }));
     }
@@ -414,13 +416,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         closeSlider('disclosure-entity-view-2-slider');
         setTimeout(() => {
             this.showSlider = false;
-		}, 500);
-	}
+        }, 500);
+    }
 
     getActiveFCOI() {
         this.fcoiDatesRemaining();
         return this.headerService.activeDisclosures.filter(disclosure =>
-            disclosure?.fcoiTypeCode === '1' );
+            disclosure?.fcoiTypeCode === '1');
     }
 
     fcoiDatesRemaining() {
@@ -464,8 +466,24 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
             }));
+    }
+
+    selectedTabLabel(): string {
+        //Need correct label from ba
+        switch (this.currentSelected.tab) {
+            case 'IN_PROGRESS_DISCLOSURES':
+                return 'Results for In Progress Disclosures';
+            case 'APPROVED_DISCLOSURES':
+                return 'Results for Approved Disclosures';
+            case 'TRAVEL_DISCLOSURES':
+                return 'Results for Travel Disclosures';
+            case 'DISCLOSURE_HISTORY':
+                return 'Results for Disclosure History';
+            default:
+                return '';
+        }
     }
 
 }

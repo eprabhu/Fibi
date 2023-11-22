@@ -31,7 +31,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
   graphEvent: Subject<GraphDetail> = new Subject<GraphDetail>();
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = false;
-  coiElastic = null;
   $coiList = new Subject();
   coiList = [];
   isCoiEditEntity = false;
@@ -50,7 +49,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
   $subscriptions: Subscription[] = [];
   resultCount = 0;
   isShowEntityList = false;
-  showEntityList = false;
   isShowAllProposalList = false;
   rightList: string;
   isManageEntity: boolean;
@@ -71,13 +69,11 @@ isEntityFound = false;
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
-    private _elasticConfig: ElasticConfigService,
     private _navigationService: NavigationService,
     private _commonService: CommonService, public sfiService: SfiService) { }
 
   ngOnInit() {
     this.checkForSort();
-    this.coiElastic = this._elasticConfig.getElasticForCoi();
     this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.isViewAdvanceSearch = false;
@@ -99,11 +95,6 @@ isEntityFound = false;
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
     this.entityManagementService.isShowEntityNavBar = false;
-  }
-
-  selectedEntity() {
-    this.isCoiEditEntity = true;
-    this.entityManagementService.isShowEntityNavBar = true;
   }
 
   entityTabName(tabName: string) {
@@ -207,9 +198,6 @@ isEntityFound = false;
     this.entityList = [];
     this.$entityList.next();
   }
-  navigateNextPage(event) {
-    this.$entityList.next();
-  }
 
   advancedSearch() {
     this.entityList = [];
@@ -240,10 +228,6 @@ isEntityFound = false;
     property.forEach(element => {
       this.lookupValues[propertyNumber].push({ code: element });
     });
-  }
-
-  addEntityList(event) {
-    this.showEntityList = event;
   }
 
   viewDetails(entityListData) {
