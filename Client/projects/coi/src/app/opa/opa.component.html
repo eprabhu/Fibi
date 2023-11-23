@@ -168,7 +168,8 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                     </div>
-                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)
+                                && isLoggedInUser(opa?.opaDisclosure?.personId)"
                          title="Click to save your progress" (click)="triggerSave()"
                          class="d-flex justify-content-around px-3 pb-3 fit-height">
                         <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -176,7 +177,8 @@
                             Save
                         </span>
                     </div>
-                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)
+                                && isLoggedInUser(opa?.opaDisclosure?.personId)"
                          class="d-flex justify-content-around px-3 mt-3">
                         <button (click)="submitOPA()"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center fit-height"
@@ -195,7 +197,8 @@
                             <span class="mt-1 ms-2"> Assign Admin </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode) && checkForOPAAdmin()">
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode)
+                        && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)">
                         <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                             <mat-icon class="me-2">done</mat-icon>
