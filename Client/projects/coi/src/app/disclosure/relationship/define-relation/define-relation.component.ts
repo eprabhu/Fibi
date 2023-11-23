@@ -9,6 +9,8 @@ import { RelationshipService } from '../relationship.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subject, Subscription, interval } from 'rxjs';
 import { debounce } from 'rxjs/operators';
+import { CoiService } from '../../services/coi.service';
+import { scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-define-relation',
@@ -59,7 +61,7 @@ export class DefineRelationComponent implements OnInit {
   isOpenSlider: boolean;
   isDataModified = false;
 
-  constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
+  constructor(private _relationShipService: RelationshipService, private _coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
     this.getDataFromStore();
@@ -92,6 +94,14 @@ export class DefineRelationComponent implements OnInit {
         this.selectedProject = this.module;
         this.calculateSize();
         this.showTaskNavBar();
+        setTimeout(() => {
+          if(this._coiService.focusSFIRelationId) {
+              scrollIntoView(this._coiService.focusSFIRelationId);
+              const ELEMENT = document.getElementById(this._coiService.focusSFIRelationId);
+              ELEMENT.classList.add('error-highlight-card');
+              this._coiService.focusSFIRelationId = null;
+          }
+        });
       }, err => {
         this.calculateSize();
         this.showTaskNavBar();
