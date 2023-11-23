@@ -18,6 +18,7 @@ import { SharedComponentModule } from '../shared-components/shared-component.mod
 import {DataStoreService} from "./services/data-store.service";
 import { SharedDisclosureModule } from './shared-disclosure/shared-disclosure.module';
 import { EntityRiskSliderModule } from './entity-risk-slider/entity-risk-slider.module';
+import { HeaderSlidersModule } from './header-sliders/header-sliders.module';
 
 
 const routes: Routes = [
@@ -81,7 +82,8 @@ const routes: Routes = [
         FormsModule,
         SharedComponentModule,
         SharedDisclosureModule,
-        EntityRiskSliderModule
+        EntityRiskSliderModule,
+        HeaderSlidersModule
     ]
 })
 export class DisclosureModule {

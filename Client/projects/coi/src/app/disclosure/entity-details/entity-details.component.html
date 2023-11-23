@@ -95,7 +95,7 @@
           <div class="card custom-padding position-relative w-65"
           [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
               <div class="color-black mb-2">
-                <label class="form-check-label colour-black relation-header px-2"><b>Realtionship Details </b>[Disclose financial details for the SFI]
+                <label class="form-check-label colour-black relation-header px-2"><b>Relationship Details </b>[Disclose financial details for the SFI]
                   </label>
               </div>
               <div class="col pl-20 mt-4">
@@ -106,9 +106,9 @@
                   <div class="col-7">
                     <div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;" class="form-check d-inline-block" [class.ml-last]="!isLast">
                       <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                        [value]="relation?.validPersonEntityRelTypeCode"
+                        [value]="relation?.validPersonEntityRelTypeCode" [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
                         [(ngModel)]="entityDetailService.isChecked[relation?.validPersonEntityRelTypeCode]">
-                      <label class="text-secondary r-title fs-14">
+                      <label class="text-secondary r-title fs-14" [for]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode">
                         {{relation?.personEntityRelType?.description}}
                       </label>
                     </div>

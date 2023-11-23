@@ -370,7 +370,7 @@
                                     class="d-inline-block form-control w-100"
                                     [(ngModel)]="involvementDate.involvementStartDate"
                                     (keypress)="commonService._keyPress($event, 'date')"
-                                    (ngModelChange)="addUnSavedChanges()"
+                                    (ngModelChange)="addUnSavedChanges();endDateValidation()"
                                     [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
                                 <i (click)="startDate.open()" [class.date-field-error]="mandatoryList?.has('date')"
                                     class="fa fa-calendar fa-large insidePicker hand-cursor"
@@ -394,6 +394,7 @@
                                     (ngModelChange)="addUnSavedChanges()" class="d-inline-block form-control w-100"
                                     [(ngModel)]="involvementDate.involvementEndDate"
                                     (ngModelChange)="endDateValidation()"
+                                    [ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"
                                     (keypress)="commonService._keyPress($event, 'date')" />
                                 <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"
                                     title="Click to select end date"></i>

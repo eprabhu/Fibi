@@ -6,17 +6,19 @@ import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { SfiObject } from '../shared-interface';
+import { CoiService } from '../../disclosure/services/coi.service';
 
 @Component({
   selector: 'app-shared-sfi-card',
   templateUrl: './shared-sfi-card.component.html',
   styleUrls: ['./shared-sfi-card.component.scss'],
-  providers: [SharedSfiService]
+  providers: [SharedSfiService, CoiService]
 })
 
 export class SharedSfiCardComponent implements OnInit, OnDestroy {
 
   @Input() reqObject: any;
+  @Input() isTriggeredFromSlider: any;
   @Input() referredFrom: 'SFI_SUMMARY' | 'SFI_EDIT_AND_DASHBOARD' | 'TRAVEL_DISCLOSURE';
   @Output() viewSlider = new EventEmitter<any>();
   @Output() deleteEvent =  new EventEmitter<any>();
@@ -26,7 +28,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   SFIObject = new SfiObject();
   $subscriptions: Subscription[] = [];
 
-  constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService) { }
+  constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService, private _coiService: CoiService) { }
 
     ngOnInit() {
       this.updateSFIObject();
@@ -74,7 +76,8 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   }
 
   openSfiDetails(entityId: number, mode: string): any {
-    this.viewSlider.emit({flag: true, entityId: entityId});
+    this.isTriggeredFromSlider ? this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entityId, mode: 'view' } })
+                               : this.viewSlider.emit({flag: true, entityId: entityId});
   }
 
     modifySfiDetails(entityId: number, mode: string): void {
