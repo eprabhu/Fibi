@@ -98,6 +98,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     returnErrorMsg = 'Describe the reason for returning the disclosure';
     helpTexts = [];
     isHomePageClicked = false;
+    showSlider = false;
+    selectedType: '';
     withdrawHelpTexts = [
         `Withdraw any disclosure in 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
@@ -729,7 +731,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     openReviewComment() {
         const COMMENT_META_DATA: coiReviewComment = {
             disclosureId: this.coiData.coiDisclosure.disclosureId,
-            coiSectionsTypeCode: '3',
+            coiSectionsTypeCode: null,
             documentOwnerPersonId: this.coiData.coiDisclosure.person.personId,
             coiSubSectionsId: null,
             headerName: '',
@@ -746,6 +748,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     cancelConcurrency() {
         this.coiService.concurrentUpdateAction = '';
+    }
+
+    openSlider(type) {
+        this.showSlider = true;
+        this.selectedType = type;
+    }
+
+    closeHeaderSlider() {
+        this.showSlider = false;
+        this.selectedType = '';
     }
 
 }

@@ -22,6 +22,8 @@ const routes: Routes = [{path: '', component: SfiComponent}];
         SharedComponentModule,
         MatIconModule,
         EntityDetailsModule
+    ], exports : [
+        SfiComponent
     ]
 })
 export class SfiModule  {

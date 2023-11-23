@@ -44,6 +44,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   @Input() isSwitchCurrentTab = false;
   @Output() deleteRelationshipEvent: EventEmitter<any> = new EventEmitter<any>();
   isConcurrency = false;
+  hasPermissionToView = true;
 
   constructor(private _commonService: CommonService, private _router: Router,
     public entityDetailsServices: EntityDetailsService,
@@ -89,26 +90,43 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         (this.isEditMode && this.entityDetailsServices.definedRelationships.length > 0) ? this.positionsToView.emit(true) : this.positionsToView.emit(false);
   }
 
-  getQuestionnaire(data: any) {
-    if(data) {
-      this.currentRelationshipDetails = data;
-      this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
-      this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
-      this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
-      this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
-      this.configuration = Object.assign({}, this.configuration);
+    getQuestionnaire(data: any) {
+        if (data) {
+            this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
+            this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
+            this.currentRelationshipDetails = data;
+            if (this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
+                this.hasPermissionToView = true;
+                this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
+                this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
+                this.configuration = Object.assign({}, this.configuration);
+            } else {
+                this.hasPermissionToView = false;
+            }
+        }
     }
-  }
+
+    hasRightToView(disclosureTypeCode) {
+        switch (disclosureTypeCode) {
+            case '1':
+                return this._commonService.getAvailableRight(['VIEW_FCOI_DISCLOSURE', 'MANAGE_FCOI_DISCLOSURE',
+                    'VIEW_PROJECT_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
+            case '2':
+                return this._commonService.getAvailableRight(['VIEW_OPA_DISCLOSURE', 'MANAGE_OPA_DISCLOSURE']);
+            case '3':
+                return this._commonService.getAvailableRight(['VIEW_TRAVEL_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE']);
+        }
+    }
 
   openRelationshipQuestionnaire() {
       this.$subscriptions.push(this.entityDetailsServices.$openQuestionnaire.subscribe((data: any) => {
         if (data) {
           this.entityDetailsServices.isRelationshipQuestionnaireChanged ? this.leaveCurrentRelationship(data) : this.getQuestionnaire(data);
-        } 
+        }
     }));
   }
 
-  leaveCurrentRelationship(data: any) {
+    leaveCurrentRelationship(data: any) {
     this.entityDetailsServices.$emitUnsavedChangesModal.next({ details : data, isLeaveFromRelationTab : true });
   }
 
@@ -135,7 +153,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         if(VALID_REL_TYPE_CODE in this.entityDetailsServices.relationshipCompletedObject) {
           delete this.entityDetailsServices.relationshipCompletedObject[VALID_REL_TYPE_CODE];
         }
-        this.deleteRelationshipEvent.emit({'updatedTimestamp': updatedTimestamp,'removeRelId': removeRelId, 'isDeleted': true}); 
+        this.deleteRelationshipEvent.emit({'updatedTimestamp': updatedTimestamp,'removeRelId': removeRelId, 'isDeleted': true});
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
       }, _err => {
         if (_err.status === 405) {
