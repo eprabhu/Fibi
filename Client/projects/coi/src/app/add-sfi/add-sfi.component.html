@@ -25,7 +25,7 @@
 				</div>
 				<div class="col-4">
 					<div class="fw-bold me-2 fs-14 label-text">Sponsors Research </div>
-					<span class="text-color fs-14">{{additionalDetails.sponsorsResearch ? 'Yes' : 'No'}}</span>
+					<span class="text-color fs-14">{{additionalDetails?.sponsorsResearch ? 'Yes' : 'No'}}</span>
 				</div>
 			</div>
 		</div>
@@ -346,6 +346,7 @@
 										(click)="startDate.open()" autocomplete="off"
 										class="d-inline-block form-control"
 										[(ngModel)]="involvementDate.involvementStartDate"
+										(ngModelChange)="endDateValidation()"
 										(keypress)="_commonService._keyPress($event, 'date')"
 										[ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
 									<i title="Click to select Start date" (click)="startDate.open()"
@@ -371,7 +372,8 @@
 										(click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
 										[(ngModel)]="involvementDate.involvementEndDate"
 										(ngModelChange)="endDateValidation()"
-										(keypress)="_commonService._keyPress($event, 'date')" />
+										(keypress)="_commonService._keyPress($event, 'date')" 
+										[ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"/>
 									<i title="Click to select End date" (click)="endDate.open()"
 										class="fa fa-calendar fa-large insidePicker hand-cursor"
 										title="Click to select end date"></i>
@@ -407,9 +409,10 @@
 						</div>
 					</div>
 					<div class="px-4 mb-3 row" *ngIf="!isEntityManagement">
-							<div class="card custom-padding position-relative col-5 mt-3 mx-2 px-0">
+							<div class="card custom-padding position-relative col-5 mt-3 mx-2 px-0" [class.invalid-border]="mandatoryList.has('relationRadio')">
 							<div class="color-black mb-2">
-								<label class="form-check-label colour-black relation-header px-2 fs-14 label-text">Realtionship Details [Disclose financial details for the SFI]
+								<label class="form-check-label colour-black relation-header px-2 fs-14 label-text">
+									<span class="mandatory">*</span>Relationship Details [Disclose financial details for the SFI]
 								  </label>
 							</div>
 							<div class="mt-3 mx-4 px-1">
@@ -420,10 +423,10 @@
 								<div class="col-7">
 									<div class="relation select-margin ml-09">
 										<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;" class="form-check d-inline-block" [ngClass]="!isFirst && !isLast ? 'mx-4' : ''">
-											<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+											<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary" [id]="'sfi-relation'+relation.validPersonEntityRelTypeCode"
 												[value]="relation?.validPersonEntityRelTypeCode" [(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
 												title="Click to select {{relation?.description}} relation">
-											<label class="r-title fs-14">
+											<label class="r-title fs-14" [for]="'sfi-relation'+relation.validPersonEntityRelTypeCode">
 												{{relation?.personEntityRelType?.description}}
 											</label>
 										</div>
@@ -436,6 +439,10 @@
 							</div>
 							</div>
 
+					</div>
+					<div *ngIf="mandatoryList.has('relationRadio')"
+						class="invalid-feedback d-block fs-13 px-4">
+						{{mandatoryList.get('relationRadio')}}
 					</div>
 					<div class="row px-4 mb-3">
 						<span>
