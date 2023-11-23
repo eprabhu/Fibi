@@ -11,8 +11,17 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "FILE_DATA")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class FileData implements Serializable {
 
 	private static final long serialVersionUID = 1L;

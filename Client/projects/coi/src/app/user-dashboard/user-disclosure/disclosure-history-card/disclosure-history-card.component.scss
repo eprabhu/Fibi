@@ -1,5 +1,5 @@
 .entity-status-history {
-    left: -14px;
+    left: -21px;
     top: 0;
     color: #fff;
     width: max-content;
@@ -90,4 +90,46 @@
 
 .mt-64 {
     margin-top: 62px;
+}
+
+@media (max-width: 992px) {
+    .mt-64 {
+        margin-top: 0;
+    }
+}
+
+.label-flex {
+    display: flex !important;
+}
+
+.mr-21 {
+    margin-right: 21.5px;
+}
+
+.mr-22 {
+    margin-right: 22px;
+}
+
+@media (min-width: 1400px) {
+    .mr-22 {
+        margin-right: 0px;
+    }
+
+    .mr-21 {
+        margin-right: 0px;
+    }
+}
+
+@media (max-width: 1201px) {
+    .label-flex {
+        display: block !important;
+    }
+}
+
+.left-custom-travel {
+    left: -12px !important;
+}
+
+.travel-view-btn {
+    padding-right: 1.9rem !important;
 }
