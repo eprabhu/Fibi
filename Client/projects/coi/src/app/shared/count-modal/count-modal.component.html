@@ -94,6 +94,7 @@
                                 <th class="leadunit-width">Lead Unit</th>
                                 <th class="sponsor-width">Sponsor</th>
                                 <th class="primesponsor-width">Prime Sponsor</th>
+                                <th class="conflictStatus-width">Conflict Status</th>
                                 <th class="action-width">Actions</th>
                             </tr>
                         </thead>
@@ -104,6 +105,13 @@
                                 <td>{{name?.unitName}} - {{name?.unitNumber}}</td>
                                 <td>{{name.sponsor}}</td>
                                 <td>{{name.primeSponsor}}</td>
+                                <td>
+                                        <span class="px-2 py-2" *ngIf="name.conflictStatus">
+                                            <span
+                                            class="{{getDisclosureConflictBadge(name.conflictStatusCode)}}"></span>
+                                        <span class="badgeFont"> {{name.conflictStatus}} </span>
+                                        </span>
+                                </td>
                                 <td *ngIf="currentModalTab == 'Proposal'">
                                     <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
                                         (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId)">

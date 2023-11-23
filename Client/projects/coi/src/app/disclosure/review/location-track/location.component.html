@@ -12,7 +12,7 @@
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                                     title="Add Review Location" data-bs-target="#add-coi-reviewer-modal">
                                     <mat-icon class="me-2">person_add</mat-icon>
-                                    Add Location
+                                    Add Reviewer
                                 </button>
                             </div>    
                             <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
@@ -195,7 +195,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review Location' : 'Assign Review Location' }}
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Reviewers' : 'Assign Reviewers' }}
                 </h5>
                 <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">

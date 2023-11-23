@@ -210,5 +210,22 @@ export class CountModalComponent implements OnInit {
         this.viewSlider.emit({'flag': flag, 'entityId': entityId})
     }
 
+    getDisclosureConflictBadge(statusCode: string) {
+        switch (String(statusCode)) {
+            case '100':
+                return 'green-badge';
+            case '200':
+            case '500':
+                return 'brown-badge';
+            case '300':
+            case '600':
+                return 'red-badge';
+            case '400':
+                return 'green-badge';
+            default:
+                return 'yellow-badge';
+        }
+    }
+
 
 }
