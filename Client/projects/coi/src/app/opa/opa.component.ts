@@ -206,4 +206,8 @@ export class OpaComponent implements OnInit {
         return this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE']);
     }
 
+    isLoggedInUser(personId: string) {
+        return this.commonService?.getCurrentUserDetail('personId') === personId;
+    }
+
 }
