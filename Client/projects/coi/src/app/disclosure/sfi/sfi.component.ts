@@ -1,16 +1,17 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, interval } from 'rxjs';
 
 import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { debounce, switchMap } from 'rxjs/operators';
 import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
+import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-sfi',
@@ -21,6 +22,7 @@ import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/uti
 export class SfiComponent implements OnInit, OnDestroy {
 
     @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
+    @Input() isTriggeredFromSlider = false;
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
@@ -95,6 +97,14 @@ export class SfiComponent implements OnInit, OnDestroy {
                 this.count = data.count;
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.isLoading = false;
+                setTimeout(() => {
+                    if(this._coiService.focusSFIId) {
+                        scrollIntoView(this._coiService.focusSFIId);
+                        const ELEMENT = document.getElementById(this._coiService.focusSFIId);
+                        ELEMENT.classList.add('error-highlight-card');
+                        this._coiService.focusSFIId = null;
+                    }
+            });
             }
         }));
     }
@@ -102,7 +112,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     getRequestObject() {
         let requestObj: RO = new RO();
         requestObj.currentPage = this.currentPage;
-        requestObj.disclosureId = this.disclosureId;
+        requestObj.disclosureId = !this.isTriggeredFromSlider ? this.disclosureId : null;
         requestObj.filterType = this.filterType;
         requestObj.pageNumber = '10';
         requestObj.personId = this.personId;

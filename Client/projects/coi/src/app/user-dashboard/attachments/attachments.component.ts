@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AttachmentsService } from './attachments.service';
 import { CommonService } from '../../common/services/common.service';
@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AttachmentsComponent implements OnInit {
 
+    @Input() coiPersonId: any = null;
     attachmentLists = [];
     isFirstTimeLoad = false;
     $subscriptions: Subscription[] = [];
@@ -36,10 +37,14 @@ export class AttachmentsComponent implements OnInit {
         }))
     }
 
+    getPersonId() {
+        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personId');
+    }
+
     getAllAttachments() {
         this.isFirstTimeLoad = true;
         this.isShowCreate = false;
-        this.$subscriptions.push(this._attachmentService.fetchAllAttachmentsForPerson(this._commonService.getCurrentUserDetail('personId')).subscribe((data: any) => {
+        this.$subscriptions.push(this._attachmentService.fetchAllAttachmentsForPerson(this.getPersonId()).subscribe((data: any) => {
             if (data) {
                 this.attachmentLists = data;
                 this.isFirstTimeLoad = false;
