@@ -548,6 +548,19 @@ nav ul li.active {
   color:#848484;
 }
 
+.error-highlight-card {
+  border: 1px solid red !important;
+  box-shadow:4px 4px 4px #efa6a6;
+  animation-name: blinking;
+  animation-duration: 1s;
+  animation-iteration-count: 100;
+}
+@keyframes blinking {
+  50% {
+    box-shadow:4px 4px 4px #fff;
+  }
+}
+
 .grid-back {
   background-size: 90px 90px;
   background-image: linear-gradient(to right, #dad3d3 1px, transparent 1px), linear-gradient(to bottom, #cdc4c4 1px, transparent 1px);
@@ -663,3 +676,4 @@ nav ul li.active {
   color: #333;
   font-weight: 600;
 }
+
