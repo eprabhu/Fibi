@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NotesAttachmentsService } from './notes-attachments.service';
 import { Subscription } from 'rxjs';
 import { listAnimation } from '../../common/utilities/animations';
@@ -26,6 +26,7 @@ class Notes {
 
 export class NotesAttachmentsComponent implements OnInit {
 
+    @Input() coiPersonId: any = null;
     $subscriptions: Subscription[] = [];
     notesList: Array<Notes> = [];
     isFirstTimeLoad = false;
@@ -44,19 +45,15 @@ export class NotesAttachmentsComponent implements OnInit {
         this.getNotesViaSubject();
         this.getNotesList();
     }
-
-    private addGridBackground(isAdd): void {
-        let body = document.getElementById('app-main-router');
-        isAdd ? body.classList.add('grid-back') : body.classList.remove('grid-back');
+ 
+    getPersonId() {
+        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personId');
     }
 
     private getNotesViaSubject(): void {
         this.$subscriptions.push(this._commonService.$updateLatestNote.subscribe((data: any) => {
             if (data) {
                 this.notesList.unshift(data);
-                if (this.notesList.length) {
-                    this.addGridBackground(true);
-                }
             }
         }));
     }
@@ -64,11 +61,9 @@ export class NotesAttachmentsComponent implements OnInit {
     private getNotesList(): void {
         this.isFirstTimeLoad = true;
         this.isShowCreate = false;
-        this.$subscriptions.push(this._noteAndAttachmentService.fetchAllNotesForPerson(this._commonService.getCurrentUserDetail('personId')).subscribe((data: any) => {
+        this.$subscriptions.push(this._noteAndAttachmentService.fetchAllNotesForPerson(this.getPersonId()).subscribe((data: any) => {
             this.notesList = data;
-            if (this.notesList.length) {
-                this.addGridBackground(true);
-            } else {
+            if (!this.notesList.length) {
                 this.isShowCreate = true;
             }
             this.isFirstTimeLoad = false;
@@ -83,19 +78,21 @@ export class NotesAttachmentsComponent implements OnInit {
     }
 
     openNote(note): void {
-        this.$subscriptions.push(this._noteAndAttachmentService.getNoteBaseOnId(note.noteId).subscribe((data: any) => {
-            if (data) {
-                this.currentSelectedNote = data;
-                this.showSlider = true;
-                this.isEditMode = this.currentSelectedNote.personId == this._commonService.getCurrentUserDetail('personId');
-                this.isOpenMoreMenu = [];
-                setTimeout(() => {
-                    openSlider('edit-note-slider');
-                });
-            }
-        }, error => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, "Error in fetching note details, please try again.");
-        }));
+        if(!this.coiPersonId) {
+            this.$subscriptions.push(this._noteAndAttachmentService.getNoteBaseOnId(note.noteId).subscribe((data: any) => {
+                if (data) {
+                    this.currentSelectedNote = data;
+                    this.showSlider = true;
+                    this.isEditMode = this.currentSelectedNote.personId == this._commonService.getCurrentUserDetail('personId');
+                    this.isOpenMoreMenu = [];
+                    setTimeout(() => {
+                        openSlider('edit-note-slider');
+                    });
+                }
+            }, error => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, "Error in fetching note details, please try again.");
+            }));
+        }
     }
 
     closeEditNoteSlider(): void {
@@ -141,7 +138,6 @@ export class NotesAttachmentsComponent implements OnInit {
     }
 
     ngOnDestroy(): void {
-        this.addGridBackground(false);
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -149,7 +145,7 @@ export class NotesAttachmentsComponent implements OnInit {
         const SAMPLE_ELEMENT = document.createElement("div");
         SAMPLE_ELEMENT.innerHTML = content;
         const MIN_CONTENT = SAMPLE_ELEMENT.textContent || SAMPLE_ELEMENT.innerText;
-        let FINAL_CONTENT = MIN_CONTENT.length > 300 ? MIN_CONTENT.slice(0, 300) + '...' : MIN_CONTENT;
+        let FINAL_CONTENT = MIN_CONTENT.length > 500 ? MIN_CONTENT.slice(0, 500) + '...' : MIN_CONTENT;
         return FINAL_CONTENT.replace(/\s+/g, ' ').trim();
     }
 

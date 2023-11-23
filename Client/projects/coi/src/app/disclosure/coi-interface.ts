@@ -12,6 +12,9 @@ export class COI {
     projectDetail: any;
     coiReviewerList: ReviewerList[];
     documentOwnerPersonId: string;
+    personAttachmentsCount: Number;
+    personEntitiesCount: Number;
+    personNotesCount: Number;
 }
 
 export interface CoiConflictStatusType {

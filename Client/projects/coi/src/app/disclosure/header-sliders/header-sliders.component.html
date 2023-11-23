@@ -1,0 +1,14 @@
+<app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index]="1057" [overlay_z_index]="1056"
+    [isStickyNeeded]="false" [isHeaderNeeded]="false" [sliderName]="'disclosure-entity-slider-2'">
+    <ng-container content>
+        <ng-container *ngIf="sliderType === 'ENTITY'">
+            <app-sfi [isTriggeredFromSlider]="true"></app-sfi>
+        </ng-container>
+        <ng-container *ngIf="sliderType === 'NOTES'">
+            <app-notes-attachments [coiPersonId]="coiPersonId"></app-notes-attachments>
+        </ng-container>
+        <ng-container *ngIf="sliderType === 'ATTACHMENTS'">
+            <app-attachments [coiPersonId]="coiPersonId"></app-attachments>
+        </ng-container>
+    </ng-container>
+</app-coi-slider>

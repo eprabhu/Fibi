@@ -22,6 +22,7 @@ const routes: Routes = [{ path: '', component: AttachmentsComponent }];
         SharedComponentModule
     ],
     declarations: [AttachmentsComponent],
+    exports: [AttachmentsComponent],
     providers: [AttachmentsService]
 })
 export class AttachmentsModule { }

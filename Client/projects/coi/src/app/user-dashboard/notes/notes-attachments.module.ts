@@ -22,6 +22,7 @@ const routes: Routes = [{ path: '', component: NotesAttachmentsComponent }];
         MatButtonModule
     ],
     declarations: [NotesAttachmentsComponent],
+    exports: [NotesAttachmentsComponent],
     providers: [NotesAttachmentsService]
 })
 export class NotesAttachmentsModule { }
