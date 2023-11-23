@@ -349,3 +349,19 @@ small {
 .person {
   margin-left: -10px;
 }
+
+/* This class will remove the colon symbol from the label and value till the resolution = Medium(991px).
+    i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
+*/
+@media (max-width : 991px) {
+  .disclosure-card div label span  {
+    display: none !important;
+  }
+}
+
+/* This class will add the colon symbol to the label and value from resolution = Medium(991px) */
+@media (min-width : 992px) {
+  .disclosure-card div label span  {
+    display: inline-block !important;
+  }
+}
