@@ -113,7 +113,7 @@
                                         <strong class="fs-15">FCOI
                                             Disclosure</strong>
                                     </div>
-                                    <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center break-point-1560" [queryParams]={disclosureId:disclosure.disclosureId}
+                                    <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center" [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         aria-label="Click to view FCOI Disclosure details"
                                         [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
@@ -538,12 +538,12 @@
             [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1 hand-cursor">OPA</span>
     </div>
-    <div class="d-flex flex-fill  position-relative" *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
+    <div class="d-flex flex-fill position-relative" *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
         [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
         (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
         <input class="advance-search-input border-0 px-4 fs-14 pe-5" id="searchText"
-        [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
+        [placeholder]="getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
         type="text" [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
     </div>

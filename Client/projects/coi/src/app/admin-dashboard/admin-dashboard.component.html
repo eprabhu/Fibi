@@ -19,7 +19,7 @@
                         area-describedby="Click to view All Disclosures"
                         [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'All Disclosures' : 'Click to view All Disclosures'" 
                          [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'All Disclosures'" >
-                    All Disclosures
+                        All Disclosures
                     </li>
                     <li class="separator" *ngIf="isShowAdminDashboard" ></li>
                     <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS')"
@@ -119,7 +119,7 @@
                         </div>
                         <!-- Expiration Date -->
                         <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Expiration Date" tabindex="0"
-                        aria-label="date">
+                        aria-label="Expiration Date">
                             <label class="d-block" for="adv-disclosure-expiration-date">
                                 Expiration Date
                             </label>
@@ -143,19 +143,21 @@
                                 placeholder="Search by Disclosure Number" type="text" />
                         </div> -->
                         <!-- Disclosure Status -->
-                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Disclosure Status" tabindex="0"
-                        aria-label="Disclosure Status dropdown" role="listbox">
+                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" role="listbox"
+                            aria-label="Disclosure Status dropdown"
+                            title="Click to search by Disclosure Status">
                             <label class="d-block" for="adv-disclosure-status">
                                 Disclosure Status
                             </label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
-                                [options]="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' ? disclosureStatusOptions : travelDisclosureStatusOptions" 
+                                [options]="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' ? disclosureStatusOptions : travelDisclosureStatusOptions"
                                 [selectedLookUpList]="lookupValues['property4']"
                                 [uniqueId]="'adv-disclosure-status'">
                             </app-look-up>
                         </div>
                         <!-- Disposition Status -->
-                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" aria-label="Disposition Status dropdown" role="listbox"
+                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" role="listbox"
+                            aria-label="Disposition Status dropdown"
                             *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'"
                             title="Click to search by Disposition Status">
                             <label class="d-block" for="adv-disposition-status">
@@ -167,29 +169,32 @@
                             </app-look-up>
                         </div>
                         <!-- Travel Document Status -->
-                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" aria-label="Document Status dropdown" role="listbox"
+                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" role="listbox"
+                            aria-label="Document Status dropdown"
                             *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'TRAVEL_DISCLOSURES'"
                             title="Click to search by Document Status">
-                            <label class="d-block" for="adv-disclosure-type">
+                            <label class="d-block" for="adv-document-status">
                                 Document Status
                             </label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
                                 [options]="travelDocumentStatusOptions" [selectedLookUpList]="lookupValues['property5']"
-                                [uniqueId]="'adv-disposition-status'">
+                                [uniqueId]="'adv-document-status'">
                             </app-look-up>
                         </div>
                         <!-- Review Status -->
-                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Review Status" tabindex="0" aria-label="Review dropdown" role="listbox">
-                            <label class="d-block">
+                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Review Status" tabindex="0" role="listbox"
+                            aria-label="Review dropdown" >
+                            <label class="d-block" for="adv-review-status">
                                 <ng-container>Review Status</ng-container>
                             </label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'property21')"
                                 [options]="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' ? coiReviewStatusOptions : travelReviewStatusOptions" 
-                                [selectedLookUpList]="lookupValues['property21']">
+                                [selectedLookUpList]="lookupValues['property21']"
+                                [uniqueId]="'adv-review-status'">
                             </app-look-up>
                         </div>
                         <!-- Certification Date -->
-                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" aria-label="date"
+                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" aria-label="Certification Date"
                             title="Click to search by Certification Date">
                             <label class="d-block" for="adv-disclosure-certification-date">
                                 Certification Date
@@ -221,7 +226,7 @@
                             </span>
                         </div> -->
                         <!-- Disclosure Type -->
-                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Disclosure Type" tabindex="0" aria-label="Disclosure Type" role="listbox"
+                        <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Disclosure Type" tabindex="0" aria-label="Disclosure Type dropdown" role="listbox"
                             *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'">
                             <label class="d-block" for="adv-disclosure-type">
                                 Disclosure Type
