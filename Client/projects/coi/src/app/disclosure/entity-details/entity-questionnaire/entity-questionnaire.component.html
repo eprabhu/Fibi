@@ -15,10 +15,11 @@
             <span class="fs-14 delete-content-position">Delete</span>
           </button>
         </div>
-      <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
-          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" 
+      <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length && hasPermissionToView" [configuration]="configuration" [questionnaireHeader]="''"
+          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)"
           (QuestionnaireEditEvent)="questionnaireEdit($event)">
         </app-view-questionnaire-list>
+      <app-no-information *ngIf="!hasPermissionToView" [isBorderNeeded]="true"><span>You don't have permission to view this resource</span></app-no-information>
 </div>
 <!-- Modal -->
 <button id="open-relationship-modal" data-bs-target="#addRelationshipModal" data-bs-toggle="modal"
