@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 import { RO } from '../coi-interface';
 import { listAnimation } from '../../common/utilities/animations';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { CoiService } from '../services/coi.service';
+import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-relationship',
@@ -56,6 +58,7 @@ export class RelationshipComponent implements OnInit {
               private _dataStore: DataStoreService,
               public _router: Router,
               private _commonService: CommonService,
+              private _coiService: CoiService,
               private _sfiService: SfiService) {
                 setTimeout(() => {
                   this.isAnimationPaused = false;
@@ -137,6 +140,16 @@ getDisclosureCount(typeCode, disclosureStatus) {
           this.isShowCollapsedConflictRelationship = true;
           this.getEntityList();
           this.isAnimationPaused = false;
+        }
+        if(!this.isShowCollapsedConflictRelationship) {
+          setTimeout(() => {
+            if(this._coiService.focusModuleId) {
+                scrollIntoView(this._coiService.focusModuleId);
+                const ELEMENT = document.getElementById(this._coiService.focusModuleId);
+                ELEMENT.classList.add('error-highlight-card');
+                this._coiService.focusModuleId = null;
+            }
+          },100);
         }
       }
     }));

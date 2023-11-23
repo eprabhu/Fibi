@@ -40,7 +40,7 @@
       <ng-container *ngIf="isShowNoDataCard">
         <div *ngIf="searchResult.length" [@listAnimation]="searchResult.length" [@.disabled]="isAnimationPaused">
             <ng-container *ngFor="let relation of searchResult;let i = index">
-                <div class="card outer-card">
+                <div class="card outer-card shadow-medium" [id]="relation.moduleItemId">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8 col-12">

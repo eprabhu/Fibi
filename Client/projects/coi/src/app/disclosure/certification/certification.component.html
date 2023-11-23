@@ -17,10 +17,42 @@
 </div>
 <div class="card mt-1" [@fadeInOutHeight]>
     <div class="errorMessage">
-        <div class="text-danger" *ngFor="let error of _coiService.certificationResponseErrors">
+        <div class="text-danger" *ngFor="let error of _coiService.certificationResponseErrors; let errorIndex = index">
             <p *ngIf="this._coiService.certificationResponseErrors.length > 0" role="alert"
-                class="error-tab fa fa-exclamation-circle icon alert alert-danger  ps-4" role="alert"><span
-                    class="ms-2 fw-400 me-3 fs-14"> {{error}} </span></p>
+                class="error-tab fa fa-exclamation-circle icon alert alert-danger  ps-4" role="alert">
+                <span class="ms-2 fw-400 fs-14"> 
+                    {{error.validationMessage}}
+                </span>
+                    <ng-container *ngIf="error.sfiList && error.sfiList.length>0">
+                        <span *ngIf="!collapseViewMore[errorIndex]" class="clickable-content fs-14" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
+                            <u>View affected SFIs</u>
+                            <i class="fa fa-angle-double-down ms-2"></i>
+                        </span>
+                        <ng-container *ngIf="collapseViewMore[errorIndex]">
+                            <ul class=" ms-4 mt-3">
+                                <ng-container *ngFor="let sfiName of error.sfiList; let sfiIndex = index;">
+                                    <li *ngIf="sfiIndex<5" class="cursor-pointer clickable-content mt-2 fs-14 fw-500" (click)="openSFI(sfiName)">
+                                        <u>{{getSFIName(sfiName)}}</u></li>
+                                </ng-container>
+                                <li class="mt-2 fs-14 fw-500 list-unstyled" *ngIf="error.sfiList.length > 5">...and {{error.sfiList.length-5}} more SFIs</li>
+                            </ul>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="error.projectSfiList && error.projectSfiList.length>0">
+                        <span *ngIf="!collapseViewMore[errorIndex]" class="clickable-content fs-14" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
+                            <u>View affected Projects</u><i class="fa fa-angle-double-down ms-2"></i>
+                        </span>
+                        <ng-container *ngIf="collapseViewMore[errorIndex]">
+                            <ul class= "ms-4 mt-3">
+                            <ng-container *ngFor="let projectList of error.projectSfiList; let projectIndex = index;">
+                                <li *ngIf="projectIndex<5" class="cursor-pointer clickable-content mt-2 fs-14 fw-500" (click)="openRelationship(projectList)">
+                                    <u>{{getProjectName(projectList)}}</u></li>
+                            </ng-container>
+                            <li class="mt-2 fs-14 fw-500 list-unstyled" *ngIf="error.projectSfiList.length > 5">...and {{error.projectSfiList.length-5}} more projects</li>
+                            </ul>
+                        </ng-container>
+                    </ng-container>
+                </p>
         </div>
 
     <div class="card-body d-flex justify-content-center custom-margin ">
