@@ -6,7 +6,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { CoiService } from '../../services/coi.service';
 import { debounce } from 'rxjs/operators';
-import { deepCloneObject, hideModal, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, hideModal, openModal, scrollIntoView } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-SFI-conflict-relationship',
@@ -43,6 +43,16 @@ export class SFIConflictRelationshipComponent implements OnInit {
 
   ngOnInit() {
     this._relationShipService.isSliderDataUpdated = false;
+    setTimeout(() => {
+      if(this._coiService.focusSFIRelationId && this.entityProjectDetails.length) {
+          scrollIntoView(this._coiService.focusSFIRelationId);
+          const ELEMENT = document.getElementById(this._coiService.focusSFIRelationId);
+          ELEMENT.classList.remove('border-bottom');
+          ELEMENT.classList.remove('border-top');
+          ELEMENT.classList.add('error-highlight-card');
+          this._coiService.focusSFIRelationId = null;
+      }
+  });
     this.triggerSingleSave();
   }
 

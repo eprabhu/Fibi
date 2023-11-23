@@ -30,6 +30,9 @@ export class CoiService {
     certificationResponseErrors = [];
     submitResponseErrors = [];
     concurrentUpdateAction = '';
+    focusSFIId: any;
+    focusModuleId: any;
+    focusSFIRelationId: any;
 
     constructor(
         private _http: HttpClient,

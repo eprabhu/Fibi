@@ -27,7 +27,7 @@
   <!-- List of SFI's -->
   <div class="mb-10">
   <ng-container *ngFor="let test of entityProjectDetails; let i = index">
-    <div class="relationship-sfi-data row m-0"  [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
+    <div class="relationship-sfi-data row m-0" [id]="test?.disclosureDetailsId"  [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
         <div class="col-4 fs-14 border-end"tabindex='0'>
          <div class="table-text my-4" [attr.aria-label]="test?.coiEntity?.entityName">
           {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
