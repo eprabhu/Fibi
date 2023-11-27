@@ -351,8 +351,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<CoiDisclEntProjDetails> getProjectRelationshipByParam(Integer moduleCode, Integer moduleItemId, String loginPersonId, Integer disclosureId) {
+		//TODO change the filtering logic to person entity sync
 		return hibernateTemplate.execute(session -> {
-		    StringBuilder hqlBuilder = new StringBuilder("SELECT cdep FROM CoiDisclEntProjDetails cdep ");
+		    StringBuilder hqlBuilder = new StringBuilder("SELECT DISTINCT cdep FROM CoiDisclEntProjDetails cdep ");
 		    hqlBuilder.append("INNER JOIN PersonEntityRelationship perRel ");
 		    hqlBuilder.append("ON cdep.personEntityId = perRel.personEntityId ");
 		    hqlBuilder.append("WHERE cdep.coiDisclosure.personId = :loginPersonId ");
@@ -3486,11 +3487,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			if (!projectSfiList.isEmpty()) {
 				COIValidateDto coiValidateDto = new COIValidateDto();
 				coiValidateDto.setValidationMessage(PROJECT_SFI_REL_MSG);
-				List<Map<String, String>> projectSfiListMaps = projectSfiList.stream()
-						.map(item -> Arrays.stream(item.split("\\|\\|")).map(
-								part -> Arrays.stream(part.trim().split(":")).map(String::trim).toArray(String[]::new))
-								.collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])))
-						.collect(Collectors.toList());
+				List<List<Map<String, String>>> projectSfiListMaps = projectSfiList.stream()
+		                .map(item -> Arrays.stream(item.split("\\|\\|"))
+		                        .map(part -> Arrays.stream(part.trim().split("::")).map(String::trim).toArray(String[]::new))
+		                        .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])))
+		                .collect(Collectors.groupingBy(map -> map.get("ModuleItemKey")))
+		                .values()
+		                .stream()
+		                .collect(Collectors.toList());
 				coiValidateDto.setProjectSfiList(projectSfiListMaps);
 				coiValidateDto.setSfiList(new ArrayList<>());
 				coiValidateDtoList.add(coiValidateDto);
