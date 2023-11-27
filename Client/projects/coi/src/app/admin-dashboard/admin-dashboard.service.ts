@@ -44,6 +44,10 @@ export class AdminDashboardService {
       return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
   }
 
+    completeDisclosureReviews(disclosureNumberMap) {
+      return this._http.patch(this._commonService.baseUrl + '/completeDisclosureReviews', disclosureNumberMap);
+    }
+
 }
 
 export class CoiDashboardRequest {

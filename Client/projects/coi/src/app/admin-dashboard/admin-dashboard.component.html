@@ -332,12 +332,25 @@
                 </div>
             </button>
         </div>
+
         <ng-container *ngIf="isShowDisclosureList && !isLoading;">
             <div *ngIf="coiList.length > 0;else noData" [@listAnimation]="coiList.length">
+
+                <section class="d-flex justify-content-between align-items-center select-all-section p-2">
+                    <div class="d-flex align-items-center ms-3">
+                        <input type="checkbox" id="select-all" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()">
+                        <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer">Select all</label>
+                    </div>
+                    <div>
+                        <button class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()" (click)="confirmCompleteReview()">
+                            <mat-icon class="me-2">rate_review</mat-icon> Complete Review</button>
+                    </div>
+                </section>
+
                 <ng-container *ngFor="let coi of coiList;let index=index;">
                     <section class="mt-3 shadow-sm coi-card" (mouseover)="isHover[index] = true"
                         (mouseout)="isHover[index] = false">
-                        <div class="disclosure-card f-14">
+                        <div class="disclosure-card f-14" [class.selected-active-background]="selectedDisclosures[index]">
                             <div class="row">
                                 <div class="col">
                                     <span class="d-flex">
@@ -365,7 +378,6 @@
                                                 </span>
                                             </ng-container>
                                         </h4>
-        
                                         <h4 *ngIf="!coi.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
                                             <i class="fa fa-user mt-2 mt-sm-2" aria-hidden="true"></i>
                                             <strong class="me-2 ms-2 text-nowrap mt-2" tabindex="0" [attr.aria-label]="'Disclosure person ' + coi.disclosurePersonFullName">{{coi.disclosurePersonFullName}}</strong>
@@ -416,49 +428,55 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="border-bottom pb-3">
-                                <ng-container *ngIf="!coi?.travelDisclosureId">
-                                    <div class="row p-013">
-                                        <div class="col-3" tabindex="0">
-                                            <label for="id" class="label-text">Department <span>:</span></label>
-                                          <span class="break-point-1200" [attr.aria-label]="coi?.unit?.unitDetail">
-                                            <span id="id"
-                                                class="grey-text break-point-1200">{{coi?.unit?.unitDetail}}</span>
+                                <div class="border-bottom  pb-3">
+                                    <ng-container *ngIf="!coi?.travelDisclosureId">
+                                        <div class="row mb-3 p-013">
+                                             <div class="col-3" tabindex="0">
+                                                <div class="select-all-checkboxes">
+                                                    <input type="checkbox" [checked]="selectedDisclosures[index]"
+                                                           (change)="selectedDisclosures[index] = !selectedDisclosures[index]; checkIfAllDisclosuresSelected()">
+                                                </div>
+                                                <div [class.margin-left-16px]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'">
+                                                    <label for="id" class="label-text">Department :</label>
+                                                      <span class="break-point-1200" [attr.aria-label]="coi?.unit?.unitDetail">
+                                                      <span id="id"
+                                                            class="grey-text break-point-1200">{{coi?.unit?.unitDetail}}</span>
+                                                      </span>
+                                                </div>
+                                            </div>
+                                            <div class="col" tabindex="0">
+                                                <label for="event-type" class="label-text">Certification Date :</label>
+                                                 <span class="break-point-1200" >
+                                                    <app-no-data-label [valueToShow]="coi?.certifiedAt">
+                                                        <span id="event-type" class="grey-text break-point-1200">{{coi?.certifiedAt
+                                                            |
+                                                            dateFormatter}}</span>
+                                                    </app-no-data-label>
                                             </span>
-                                        </div>
-                                        <div class="col" tabindex="0">
-                                            <label class="label-text">Certification Date <span>:</span></label>
-                                         <span class="break-point-1200" >
-                                            <app-no-data-label [valueToShow]="coi?.certifiedAt">
-                                                <span id="event-type" class="grey-text break-point-1200">{{coi?.certifiedAt
-                                                    |
-                                                    dateFormatter}}</span>
-                                            </app-no-data-label>
-                                        </span>
-                                        </div>
-                                        <div class="col" tabindex="0">
-                                            <label class="label-text">Expiration Date <span>:</span></label>
-                                        <span class="break-point-1200">
-                                            <app-no-data-label [valueToShow]="coi?.expirationDate">
-                                                <span id="event-type"
-                                                    class="grey-text break-point-1200">{{coi?.expirationDate |
-                                                    dateFormatter}}</span>
-                                            </app-no-data-label>
-                                        </span>
-                                        </div>
-                                        <div class="col-3" tabindex="0">
-                                            <label class="label-text">Disposition Status <span>:</span></label>
-                                            <span class="break-point-1200">
-                                                <app-no-data-label [valueToShow]="coi?.dispositionStatus">
-                                                    <span
-                                                        class="ms-3 ms-md-0 ms-xl-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
-                                                        [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
-                                                        id="disp-status"></span>
-                                                    <span class="badgeFont">
-                                                        {{coi?.dispositionStatus}}
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
+                                            </div>
+                                            <div class="col"  tabindex="0">
+                                                <label for="event-type" class="label-text">Expiration Date :</label>
+                                                 <span class="break-point-1200">
+                                                    <app-no-data-label [valueToShow]="coi?.expirationDate">
+                                                        <span id="event-type"
+                                                            class="grey-text break-point-1200">{{coi?.expirationDate |
+                                                            dateFormatter}}</span>
+                                                    </app-no-data-label>
+                                                 </span>
+                                            </div>
+                                            <div class="col-3" tabindex="0">
+                                                <label for="disp-status" class="label-text">Disposition Status :</label>
+                                                <span class="break-point-1200">
+                                                  <app-no-data-label [valueToShow]="coi?.dispositionStatus">
+                                                      <span
+                                                          class="ms-3 ms-md-0 ms-xl-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                                                          [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
+                                                          id="disp-status"></span>
+                                                      <span class="badgeFont">
+                                                          {{coi?.dispositionStatus}}
+                                                      </span>
+                                                  </app-no-data-label>
+                                              </span>
                                         </div>
                                     </div>
                                     <div class="row p-013">
@@ -491,8 +509,13 @@
                                                 </app-no-data-label>
                                             </span>
                                         </div>
-                                        <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-3" tabindex="0">
-                                            <label for="id" class="label-text">Description <span>:</span></label>
+                                        <div class="row mb-3 p-013">
+                                            <div *ngIf="coi?.fcoiTypeCode== 1" class="col-3" tabindex="0"  [class.padding-left-39px]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'">
+                                                <label for="id" class="label-text">Description</label>
+                                                <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
+                                            </div>
+                                            <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-3" tabindex="0"  [class.padding-left-39px]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'">
+                                                <label for="id" class="label-text">Description :</label>
                                             <span class="break-point-1200">
                                                 <app-no-data-label [valueToShow]="coi?.reviseComment">
                                                     <span *ngIf="coi?.reviseComment" class="fs-14">
@@ -812,7 +835,7 @@
          <!-- Pagination -->
          <div [hidden]="isLoading" *ngIf="coiList.length > 0 && isShowDisclosureList" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
-                <app-pagination  (pageChangeEvent)="actionsOnPageChange($event)" 
+                <app-pagination  (pageChangeEvent)="actionsOnPageChange($event)"
                     [totalCount]="result.travelDisclosureCount ? result.travelDisclosureCount : result.disclosureCount"
                     [defaultCurrentPage]="coiAdminDashboardService.coiRequestObject.currentPage">
                 </app-pagination>
@@ -865,3 +888,15 @@
         </div>
     </div>
 </div>
+
+<app-confirmation-modal [modalName] = "'complete-review-confirmation-modal'" (primaryBtnAction)="performCompleteReview()"
+                        [primaryBtnName]="'Complete Review'" >
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirm Complete Review</span>
+    </ng-container>
+    <!-- modal content -->
+    <ng-container content>
+        <span class="fs-14">Do you want to complete selected review(s)?</span>
+    </ng-container>
+</app-confirmation-modal>
