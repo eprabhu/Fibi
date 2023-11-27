@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
+import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
-    deepCloneObject,
-    isEmptyObject,
+    deepCloneObject, hideModal,
+    isEmptyObject, openModal,
     setFocusToElement
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
@@ -21,13 +21,13 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
-import { openSlider, closeSlider } from '../common/utilities/custom-utilities';
+import {openSlider, closeSlider, closeCommonModal} from '../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss'],
-    animations: [fadeInOutHeight, listAnimation, topSlideInOut, 
+    animations: [fadeInOutHeight, listAnimation, topSlideInOut,
         slideInAnimation('0','12px', 400, 'slideUp'),
         slideInAnimation('0','-12px', 400, 'slideDown'),
         scaleOutAnimation('-2px','0', 200, 'scaleOut'),
@@ -125,6 +125,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     ];
     readMoreOrLess = [];
     isReadMore = false;
+    selectedDisclosures = [];
+    isAllDisclosuresSelected = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -399,7 +401,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
         this.coiList = [];
-        this.$coiList.next(); 
+        this.$coiList.next();
     }
 
     selectEntityCountry(country: any) {
@@ -811,7 +813,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
         this.isAssignAdminModalOpen = false;
     }
-    
+
     getReviewerStatus(statusCode) {
         switch (statusCode) {
             case '1': return 'info';
@@ -835,5 +837,44 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.showSlider = false;
 		}, 500);
 	}
+
+    checkIfAllDisclosuresSelected() {
+        this.isAllDisclosuresSelected = this.selectedDisclosures.filter(index => index).length == this.coiList.length;
+    }
+
+    selectAllDisclosures() {
+        this.isAllDisclosuresSelected = !this.isAllDisclosuresSelected;
+        this.coiList.forEach((_, index) => this.selectedDisclosures[index] = this.isAllDisclosuresSelected);
+    }
+
+    atLeastOneIsSelected() {
+        return this.selectedDisclosures.filter(index => index).length > 0;
+    }
+
+    confirmCompleteReview() {
+        openModal('complete-review-confirmation-modal');
+    }
+
+    performCompleteReview() {
+        this.$subscriptions.push(this.coiAdminDashboardService
+            .completeDisclosureReviews({disclosureIdNumberMap: this.generateNumberMap()})
+            .subscribe((res) => {
+                hideModal('complete-review-confirmation-modal');
+                this.$coiList.next();
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review Completed successfully.');
+        }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+    }
+
+    generateNumberMap() {
+        const RO = {};
+        this.selectedDisclosures.forEach((selected, index) => {
+            if (selected) {
+                RO[this.coiList[index].coiDisclosureId.toString()] = this.coiList[index].coiDisclosureNumber;
+            }
+        });
+        return RO;
+    }
+
+
 }
 
