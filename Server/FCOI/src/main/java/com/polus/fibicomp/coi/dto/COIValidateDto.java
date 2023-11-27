@@ -18,6 +18,6 @@ public class COIValidateDto {
 
 	private List<String> sfiList;
 
-	private List<Map<String,String>> projectSfiList;
+	private List<List<Map<String, String>>> projectSfiList;
 
 }

@@ -32,6 +32,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.CompleteReivewRequestDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
@@ -45,8 +46,8 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.service.GeneralService;
@@ -249,6 +250,12 @@ public class ConflictOfInterestController {
 														   @PathVariable("disclosureNumber") Integer disclosureNumber) {
 		logger.info("Request for completeDisclosureReview");
 		return conflictOfInterestService.completeDisclosureReview(disclosureId, disclosureNumber);
+	}
+
+	@PatchMapping("/completeDisclosureReviews")
+	public ResponseEntity<Object> completeDisclosureReviews(@RequestBody CompleteReivewRequestDto requestDto) {
+		logger.info("Request for completeDisclosureReviews");
+		return conflictOfInterestService.completeDisclosureReviews(requestDto.getDisclosureIdNumberMap());
 	}
 
 	@PostMapping("/updateProjectConflictStatus")

@@ -10,7 +10,7 @@ public class DatabaseFileStorageService implements FileStorageService {
 	private String isArchiveFileEnabled;
 
 	@Autowired
-	private FileDataDetailsSaveService fileDataDetailsSaveService;
+	private FileDataService fileDataService;
 
 	@Override
 	public FileManagementOutputDto saveFile(FileManagmentInputDto fileManagmentInputDto) {
@@ -30,7 +30,7 @@ public class DatabaseFileStorageService implements FileStorageService {
 																		.moduleCode(fileManagmentInputDto.getModuleCode())
 																		.updateUser(fileManagmentInputDto.getUpdateUser())
 																		.build();
-			fileDataDetailsSaveService.saveFileDetails(fileManagementOutputDto);
+			fileDataService.saveFileDetails(fileManagementOutputDto);
 			return fileManagementOutputDto;
 		} catch (Exception ex) {
 			throw new FileStorageException("Failed to store file in DatabaseFileStorageService " + file.getName(), ex);
@@ -40,7 +40,7 @@ public class DatabaseFileStorageService implements FileStorageService {
 	@Override
 	public FileManagementOutputDto downloadFile(String moduleCode, String fileDataId) {
 		try {
-			return fileDataDetailsSaveService.getFileDataDetails(moduleCode, fileDataId);
+			return fileDataService.getFileDataDetails(moduleCode, fileDataId);
 		} catch (Exception e) {
 			throw new FileStorageException("An error occurred while downloading the file in DatabaseFileStorageService : " + e.getMessage());
 		}
@@ -50,9 +50,9 @@ public class DatabaseFileStorageService implements FileStorageService {
 	public void deleteFile(String moduleCode, String fileDataId) {
 		try {
 			if ("Y".equalsIgnoreCase(isArchiveFileEnabled)) {
-				fileDataDetailsSaveService.updateArchiveFlag(moduleCode, fileDataId, "Y");
+				fileDataService.updateArchiveFlag(moduleCode, fileDataId, "Y");
 			} else {
-				fileDataDetailsSaveService.deleteFileDataDetails(moduleCode, fileDataId);
+				fileDataService.deleteFileDataDetails(moduleCode, fileDataId);
 			}
 		} catch (Exception e) {
 			throw new FileStorageException("Failed to delete the file in FileSystemFileStorageService, fileDataId = " + fileDataId, e);

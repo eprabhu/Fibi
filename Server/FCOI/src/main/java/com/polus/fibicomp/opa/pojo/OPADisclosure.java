@@ -170,4 +170,13 @@ public class OPADisclosure {
 	@Transient
 	private List<OPAFormBuilderDetails> opaFormBuilderDetails;
 
+	@Transient
+	private Long personNotesCount;
+
+	@Transient
+	private Long personAttachmentsCount;
+
+	@Transient
+	private Integer personEntitiesCount;
+
 }

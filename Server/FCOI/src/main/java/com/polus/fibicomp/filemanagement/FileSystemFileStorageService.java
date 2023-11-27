@@ -42,7 +42,7 @@ public class FileSystemFileStorageService implements FileStorageService {
     private String sftpPassword;
 
 	@Autowired
-	private FileDataDetailsSaveService fileDataDetailsSaveService;
+	private FileDataService fileDataService;
 	
 	private static Lock lock = new ReentrantLock();
 
@@ -92,7 +92,7 @@ public class FileSystemFileStorageService implements FileStorageService {
 																.moduleCode(fileManagmentInputDto.getModuleCode())
 																.updateUser(fileManagmentInputDto.getUpdateUser())
 																.build();
-			fileDataDetailsSaveService.saveFileDetails(fileManagementOutputDto);
+			fileDataService.saveFileDetails(fileManagementOutputDto);
 			return fileManagementOutputDto;
 		} catch (Exception ex) {
 			removeFileOnException(fileDirectoryPath, fileName);
@@ -140,7 +140,7 @@ public class FileSystemFileStorageService implements FileStorageService {
 		Session session = null;
 		ChannelSftp channelSftp = null;
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		FileManagementOutputDto fileData = fileDataDetailsSaveService.getFileDataDetails(moduleCode, fileDataId);
+		FileManagementOutputDto fileData = fileDataService.getFileDataDetails(moduleCode, fileDataId);
 		try {
 			session = jsch.getSession(sftpUsername, sftpHost, sftpPort);
 			session.setPassword(sftpPassword);
@@ -180,7 +180,7 @@ public class FileSystemFileStorageService implements FileStorageService {
 			session.connect();
 			channelSftp = (ChannelSftp) session.openChannel("sftp");
 			channelSftp.connect();
-			FileManagementOutputDto fileData = fileDataDetailsSaveService.getFileDataDetails(moduleCode, fileDataId);
+			FileManagementOutputDto fileData = fileDataService.getFileDataDetails(moduleCode, fileDataId);
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append(fileData.getFilePath())
 					        .append("/")
@@ -197,7 +197,7 @@ public class FileSystemFileStorageService implements FileStorageService {
 					createDirectories(channelSftp, archiveDirectoryPath);
 				}
 				channelSftp.rename(sourceFilePath, destinationPath);
-				fileDataDetailsSaveService.updateArchiveFlag(moduleCode, fileDataId, "Y");
+				fileDataService.updateArchiveFlag(moduleCode, fileDataId, "Y");
 			} else {
 				channelSftp.rm(sourceFilePath);
 			}

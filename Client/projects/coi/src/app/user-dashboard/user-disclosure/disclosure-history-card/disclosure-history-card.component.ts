@@ -14,6 +14,7 @@ export class DisclosureHistoryCardComponent implements OnInit {
     @Input() disclosure: any;
     @Input() isLastElement: any;
     readMoreOrLess = false;
+    isPurposeReadMore = false;
 
     constructor(public commonService: CommonService, private _router: Router) { }
 
