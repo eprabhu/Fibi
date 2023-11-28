@@ -750,9 +750,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.concurrentUpdateAction = '';
     }
 
-    openSlider(type) {
-        this.showSlider = true;
-        this.selectedType = type;
+    openSlider(type, count) {
+        if(count) {
+            this.showSlider = true;
+            this.selectedType = type;
+        }
     }
 
     closeHeaderSlider() {
