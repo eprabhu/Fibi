@@ -1,5 +1,5 @@
 <div class="overlay" #dropdownOverlay (click)="hideLookUpList()"></div>
-<div class="elastic-outer position-relative">
+<div class="elastic-outer position-relative" id="lookup-{{uniqueId}}">
   <input id="searchBox" #searchField class="app-elastic-search form-control pr-25" (focus)="showLookUpList()"
     (keydown.arrowdown)="downArrowEvent($event);" (keydown.esc)="hideLookUpList();" [disabled]="isDisabled"
     (keydown.arrowup)="upArrowEvent($event);" (keydown.enter)="enterKeyEvent();"
@@ -18,7 +18,7 @@
             <label for="selectAllLookup" class="ml-2">Select All</label>
         </li>
         <li class="search-result-item" *ngFor="let lookup of lookUpList | lookupFilter : searchText">
-          <input type="checkbox" id="selected{{lookup.code}}" [(ngModel)]="lookup.isChecked"
+          <input type="checkbox" id="selected{{lookup.code}}" [(ngModel)]="lookup.isChecked" [attr.aria-label]="lookup.description"
             (ngModelChange)="selectOrUnSelectLookupItem(lookup)">
           <label for="selected{{lookup.code}}" [innerHTML]="lookup.description" class="ml-2"></label>
         </li>
