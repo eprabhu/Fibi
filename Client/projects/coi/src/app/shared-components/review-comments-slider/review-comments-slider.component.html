@@ -19,93 +19,96 @@
     <!-- slider content -->
     <ng-container content>
     <section>
-        <div class="mt-2 ml-15">
-                Comments against <strong>{{coiSectionType}} {{coiSubSectionsTitle ? ': '+ coiSubSectionsTitle : ''}}</strong>
-                <span *ngIf="componentSubRefTitle"> and <strong> {{componentSubRefTitle}}</strong></span>
-                <span class="cursor-pointer"
-                    title="Click to view details of {{reviewTypeList?.coiSectionsTypeList?.description}}">
+        <div class="mt-2 ml-15 person-details-card d-flex align-items-center me-3 ms-4 fs-14">
+                <mat-icon class="fs-2">person</mat-icon> {{disclosureDetails?.person?.fullName}} -
+                <span class="fst-italic">{{disclosureDetails?.person?.primaryTitle}}</span>
+                <span class="d-inline-block mx-2 fst-italic">|</span> 
+                <mat-icon class="fs-2">mail</mat-icon>
+                <span class="fst-italic">{{disclosureDetails?.person?.emailAddress}}</span> 
+                <span class="d-inline-block mx-2 fst-italic">|</span>
+                <mat-icon class="fs-2">home</mat-icon>
+                <span class="fst-italic">{{disclosureDetails?.person?.unit?.unitNumber}} -  {{disclosureDetails?.person?.unit?.unitName}}</span>
+                
+            <div class="col d-flex align-items-center justify-content-end">
+                <label>Disclosure Status: </label>
+                <span class="ml-2 fw-normal">
+                    <app-no-data-label
+                        [valueToShow]="disclosureDetails?.coiConflictStatusType?.description">
+                        <span
+                            class="{{commonService.getDisclosureConflictBadge(disclosureDetails?.conflictStatusCode)}}"></span>
+                            <span class="badgeFont">
+                                {{disclosureDetails?.coiConflictStatusType?.description}}
+                            </span>
+                    </app-no-data-label>
                 </span>
+            </div>
         </div>
-        <div class="info-card-border card-scroll mt-2 rounded-2 shadow-medium bg-light mx-3 ms-4 mt-3">
+        <div class="info-card-border card-scroll rounded-2 shadow-medium bg-light mx-3 ms-4" *ngIf="reviewCommentDetails?.coiReviewCommentDto?.coiSectionsTypeCode">
             <div class="row ml-15 mt-2">
-                <div class="position-relative p-3 fs-14 pl-5 fw-500">
-                    <div class="row">
+                <div class="position-relative fs-14 pl-5 fw-500">
+                    <div class="row" [class.down-line]="isReviewComment('6') && reviewCommentDetails?.coiReviewCommentDto?.componentSubRefId">
                         <div class="col">
                             <span class="d-flex">
                                 <span
-                                    class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails)}}">
-                                    <span>{{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
+                                    class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails?.coiDisclosureFcoiType)}}">
+                                    <span>
+                                        {{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
                                 </span>
-                                <h4 class="mb-0 d-flex margin-project-title label-text">
+                                <h4 class="d-flex margin-project-title label-text" *ngIf="isReviewComment('6')">
                                     <ng-container
-                                        *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'"
                                         class="ms-1">
-                                        <span class="title-text ml-2 mt-2 word-break-all new-line-property">
-                                            {{(readMoreOrLess ? modalHeader(projectDetails) :
-                                            modalHeader(projectDetails) | slice:0:180)}}
-                                            <span
-                                                *ngIf="!readMoreOrLess && modalHeader(projectDetails)?.length>180">...
-                                                <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                                                    <span class="readMore fw-500">Read More
-                                                    </span>
+                                        <span class="d-flex align-items-center">
+                                            <img *ngIf="moduleCode == '3'" class="proposal-icon mt-1 ml-15" src="{{deployMap}}assets/images/proposal.png">
+                                            <img *ngIf="moduleCode == '1'" class="award-icon mt-1 ml-15" src="{{deployMap}}assets/images/award.png">
+                                            <span class="title-text mt-2 word-break-all new-line-property">
+                                                {{(readMoreOrLess ? coiSubSectionsTitle :
+                                                coiSubSectionsTitle | slice:0:40)}}
+                                                <span
+                                                    *ngIf="!readMoreOrLess && coiSubSectionsTitle?.length>40">...
+                                                    <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
+                                                        <span class="readMore fw-500">Read More
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false">
+                                                    <span class="readMore ms-1 fw-500">Read Less</span>
                                                 </a>
                                             </span>
-                                            <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false">
-                                                <span class="readMore ms-1 fw-500">Read Less</span>
-                                            </a>
                                         </span>
                                     </ng-container>
                                 </h4>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col d-flex">
-                            <label class="grey-text left-margin me-2">Person associated with the Disclosure:
-                            </label>
-                            <app-no-data-label [valueToShow]="disclosureDetails?.person?.fullName">
-                                <span class="grey-text fw-normal">{{disclosureDetails?.person?.fullName}}</span>
-                            </app-no-data-label>
-                        </div>
-                        <div class="col d-flex">
-                            <label class="grey-text">Department: </label>
-                            <span class="ml-2 grey-text fw-normal">
-                                <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
-                                    <span>{{disclosureDetails?.unit?.unitDetail}}</span>
-                                </app-no-data-label>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col d-flex align-items-center">
-                            <label class="grey-text">Risk: </label>
-                            <span class="ml-2 grey-text fw-normal">
-                                <div class="text-color fs-14 d-flex align-items-center">
-                                    <span class="text-secondary fs-14">
-                                        <mat-icon class="{{getWarningClass(disclosureDetails?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                                    </span>
-                                    <app-no-data-label
-                                        [valueToShow]="disclosureDetails?.coiRiskCategory?.description">
-                                        <span
-                                            class="ml-2 mt-1 fw-normal">{{disclosureDetails?.coiRiskCategory?.description}}</span>
-                                    </app-no-data-label>
+                                <div class="d-flex margin-left-negative" *ngIf="isReviewComment('4')">
+                                    <img class="proposal-icon mb-2 mr-8" src="{{deployMap}}assets/images/qstnr.png">
+                                   {{coiSubSectionsTitle}}
+                                </div>
+                                <div class="d-flex margin-left-negative" *ngIf="isReviewComment('5')">
+                                    <mat-icon class="fs-2 grey-text">domain</mat-icon>
+                                    {{coiSubSectionsTitle}}
                                 </div>
                             </span>
                         </div>
-                        <div class="col d-flex align-items-center">
-                            <label class="grey-text">Disclosure : </label>
-                            <span class="ml-2 grey-text fw-normal">
+                        <div class="col d-flex align-items-center justify-content-end" *ngIf="sfiStatus">
+                            <label>Conflict Status : </label>
+                            <span class="ml-2 fw-normal">
                                 <app-no-data-label
                                     [valueToShow]="disclosureDetails?.coiConflictStatusType?.description">
                                     <span
-                                        class="{{commonService.getDisclosureConflictBadge(disclosureDetails?.conflictStatusCode)}}"></span>
+                                        class="{{commonService.getProjectDisclosureConflictStatusBadge(sfiStatus?.projectConflictStatusCode)}}"></span>
                                         <span class="badgeFont">
-                                            {{disclosureDetails?.coiConflictStatusType?.description}}
+                                            {{sfiStatus?.description}}
                                         </span>
                                 </app-no-data-label>
                             </span>
                         </div>
+                        <div class="col-12 left-spacing d-flex" *ngIf="isReviewComment('6') && reviewCommentDetails?.coiReviewCommentDto?.componentSubRefId">
+                            <mat-icon class="fs-2 grey-text">domain</mat-icon>
+                            {{componentSubRefTitle}}
+                        </div>
                     </div>
+                    <!-- <div class="row left-spacing d-flex">
+                        <mat-icon class="fs-2 me-2">domain</mat-icon>
+                        Johnson & Johnson
+                    </div> -->
                 </div>
             </div>
         </div>
