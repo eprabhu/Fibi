@@ -7,7 +7,7 @@
 
     <ng-container content>
         <ng-container *ngIf="sliderType === 'ENTITY'">
-            <app-sfi [isTriggeredFromSlider]="true"></app-sfi>
+            <app-sfi [isTriggeredFromSlider]="true" [reviewStatus]="reviewStatus" [isEditMode]="false" [personId]="coiPersonId"></app-sfi>
         </ng-container>
         <ng-container *ngIf="sliderType === 'NOTES'">
             <app-notes-attachments [coiPersonId]="coiPersonId"></app-notes-attachments>
