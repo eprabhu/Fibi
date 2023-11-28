@@ -18,8 +18,14 @@
                         </p>
                     </div>
                     <div class="align-items-center d-flex f-14 label-color">
-                        <strong class="clickable-content me-2"><u>Notes(0)</u></strong> | <strong
-                        class="clickable-content ms-2 me-3"><u>Attachments(0)</u></strong>
+                        <strong class="me-2" (click)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)" [class.clickable-content]="opa?.opaDisclosure?.personEntitiesCount">
+                            Entities({{opa?.opaDisclosure?.personEntitiesCount}})</strong> 
+                        | 
+                        <strong class="ms-2 me-2" (click)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)" [class.clickable-content]="opa?.opaDisclosure?.personNotesCount">
+                            Notes({{opa?.opaDisclosure?.personNotesCount}})</strong> 
+                        | 
+                        <strong class="ms-2 me-2" (click)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)" [class.clickable-content]="opa?.opaDisclosure?.personAttachmentsCount">
+                            Attachments({{opa?.opaDisclosure?.personAttachmentsCount}})</strong> 
                     </div>
 
                 </div>
@@ -197,7 +203,7 @@
                             <span class="mt-1 ms-2"> Assign Admin </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode)
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)
                         && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)">
                         <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
@@ -334,6 +340,12 @@
         </div>
     </div>
 </div>
+
+<ng-container *ngIf="showSlider">
+    <app-header-sliders (closePage)="closeHeaderSlider($event)" 
+    [coiPersonId] = "opa?.opaDisclosure?.personId" [sliderType]="selectedType"
+    [personName]="opa?.opaDisclosure?.personName"></app-header-sliders>
+</ng-container>
 
 <div class="mx-3">
     <router-outlet></router-outlet>
