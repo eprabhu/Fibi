@@ -396,7 +396,8 @@
                                     (ngModelChange)="endDateValidation()"
                                     [ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"
                                     (keypress)="commonService._keyPress($event, 'date')" />
-                                <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"
+                                <i (click)="endDate.open()" [class.date-field-error]="mandatoryList?.has('endDate')"
+                                class="fa fa-calendar fa-large insidePicker hand-cursor"
                                     title="Click to select end date"></i>
                                 <mat-datepicker #endDate>
                                 </mat-datepicker>
