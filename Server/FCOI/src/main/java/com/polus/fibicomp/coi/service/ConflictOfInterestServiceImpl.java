@@ -492,7 +492,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			}
 			coiDisclEntProjDetails.setDisclComment(conflictOfInterestDao.getDisclEntProjRelationComment(disclosureDetail.getDisclosureDetailsId()));
 			coiDisclEntProjDetails.setPersonEntityRelationshipDto(personEntityRelationshipDto.stream()
-					.filter(dto -> coiDisclEntProjDetails.getPersonEntityId().equals(dto.getPersonEntityId()))
+					.filter(dto -> coiDisclEntProjDetails.getEntityId().equals(dto.getEntityId()))
 					.findFirst().orElse(null));
 			disclosureDetails.add(coiDisclEntProjDetails);
 		});
