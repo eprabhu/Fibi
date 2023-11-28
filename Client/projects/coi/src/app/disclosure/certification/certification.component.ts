@@ -6,6 +6,7 @@ import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/
 import { CommonService } from '../../common/services/common.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     dependencies = ['coiDisclosure'];
     isEditMode = true;
     isSaving = false;
+    deployMap = environment.deployUrl;
     coiDisclosure: any;
     isReadMore = false;
     collapseViewMore = {};
