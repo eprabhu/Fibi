@@ -1295,4 +1295,11 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	Long personNotesCount(String personId);
+
+	/**
+	 * This method fetches a person against in a review
+	 * @param coiReview
+	 * @return
+	 */
+	public boolean isReviewStatusChanged(CoiReview coiReview);
 }

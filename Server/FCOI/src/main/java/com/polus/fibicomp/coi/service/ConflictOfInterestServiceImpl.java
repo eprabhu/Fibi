@@ -57,6 +57,7 @@ import com.polus.fibicomp.coi.dto.DisclosureHistoryResponse;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
@@ -479,6 +480,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getDisclosureProjectRelations(ConflictOfInterestVO vo) {
 		List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
+		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getSFIRelationshipDetails(vo.getPersonId());
 		conflictOfInterestDao.getProjectRelationshipByParam(vo.getModuleCode(), vo.getModuleItemId(), vo.getPersonId(),
 				vo.getDisclosureId()).forEach(disclosureDetail -> {
 			CoiDisclEntProjDetailsDto coiDisclEntProjDetails = new CoiDisclEntProjDetailsDto();
@@ -489,6 +491,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				coiDisclEntProjDetails.setCoiEntity(coiEntityDto);
 			}
 			coiDisclEntProjDetails.setDisclComment(conflictOfInterestDao.getDisclEntProjRelationComment(disclosureDetail.getDisclosureDetailsId()));
+			coiDisclEntProjDetails.setPersonEntityRelationshipDto(personEntityRelationshipDto.stream()
+					.filter(dto -> coiDisclEntProjDetails.getPersonEntityId().equals(dto.getPersonEntityId()))
+					.findFirst().orElse(null));
 			disclosureDetails.add(coiDisclEntProjDetails);
 		});
 		return new ResponseEntity<>(disclosureDetails, HttpStatus.OK);
