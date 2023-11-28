@@ -14,7 +14,7 @@
  * Last Updated by Jobin Sebastian
  */
 
-import { Component, Input, OnChanges, ViewChild, ElementRef, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, ElementRef, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { LookUpService } from './look-up.service';
 import { Subscription } from 'rxjs';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
@@ -32,7 +32,7 @@ interface LookUp {
   providers: [LookUpService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LookUpComponent implements OnChanges, OnDestroy {
+export class LookUpComponent implements OnChanges, OnDestroy, OnInit {
   debounceTimer: any;
   counter: number;
   results: any[];
@@ -61,8 +61,13 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Output() selectedResult: EventEmitter<Array<LookUp>> = new EventEmitter<Array<LookUp>>();
   @ViewChild('dropdownOverlay', { static: true }) dropdownOverlay: ElementRef;
   @ViewChild('searchField', { static: true }) searchField: ElementRef;
+  bindOnkeyup: any;
 
   constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef) { }
+
+  ngOnInit(): void {
+    this.bindOnkeyup = this.onDocumentKeyup.bind(this);;
+  }
 
   ngOnChanges() {
     this.selectedLookUpList = this.selectedLookUpList || [];
@@ -189,6 +194,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   }
 
   hideLookUpList() {
+    this.removeListener();
     this.setLookUpListStatus(false);
     this.updateOverlayState(false);
     this.counter = -1;
@@ -205,6 +211,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   }
 
   showLookUpList() {
+    this.addListener();
     this.setLookUpListStatus(true);
     this.updateOverlayState(true);
     return !this.lookUpList.length ? this.getLookUpValues() : null;
@@ -273,4 +280,21 @@ export class LookUpComponent implements OnChanges, OnDestroy {
       el.classList.add('highlight');
     }
   }
+  
+  private onDocumentKeyup(event: KeyboardEvent): void {
+    if (event.key === 'Tab') {
+      if (!(document.getElementById('lookup-' + this.uniqueId)?.contains(document.activeElement))) {
+        this.hideLookUpList();
+      }
+    }
+  }
+
+  private addListener(): void {
+    document.addEventListener('keyup', this.bindOnkeyup);
+  }
+
+  private removeListener(): void {
+    document.removeEventListener('keyup', this.bindOnkeyup);
+  }
+
 }
