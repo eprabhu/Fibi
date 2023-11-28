@@ -44,11 +44,11 @@
 <div class="card-body mt-2">
   <div class="success-banner p-2 mb-2 d-flex justify-content-between" *ngIf="isEditMode">
     <span><i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
-      <em>Use the feature below to apply COI Status and Comments for all SFIs w.r.t the selected {{selectedProject?.moduleCode === 1 ? 'Award' : 'Proposal'}}</em></span>
+      <em>Use the feature below to apply Conflict Status and Comments for all SFIs w.r.t the selected {{selectedProject?.moduleCode === 1 ? 'Award' : 'Proposal'}}</em></span>
   </div>
   <div class="row" *ngIf="isEditMode">
     <div class="col-2">
-      <label class="fw-500">COI Status</label>
+      <label class="fw-500">Conflict Status</label>
       <div>
         <select [(ngModel)]="coiStatusCode"
         class="form-control">
@@ -76,7 +76,7 @@
       <thead>
           <tr class="header-border">
             <th style="width: 30%;">Significant Financial Interest</th>
-            <th style="width: 25%;">COI Status</th>
+            <th style="width: 25%;">Conflict Status</th>
             <th>Define relationship between SFIs and Projects</th>
           </tr>
       </thead>
