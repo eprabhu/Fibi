@@ -44,6 +44,8 @@ export class OpaComponent implements OnInit {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     description: any;
+    showSlider = false;
+    selectedType: string;
     showPersonDetailsModal = false;
     personDetailsModalVO = {personId: '', fullName: ''};
     $subscriptions = [];
@@ -208,6 +210,18 @@ export class OpaComponent implements OnInit {
 
     isLoggedInUser(personId: string) {
         return this.commonService?.getCurrentUserDetail('personId') === personId;
+    }
+
+    openSlider(type, count) {
+        if(count) {
+            this.showSlider = true;
+            this.selectedType = type;
+        }
+    }
+
+    closeHeaderSlider() {
+        this.showSlider = false;
+        this.selectedType = '';
     }
 
 }
