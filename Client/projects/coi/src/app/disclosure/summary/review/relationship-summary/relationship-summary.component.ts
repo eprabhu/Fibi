@@ -150,7 +150,9 @@ getEntityProjectRelations() {
                 headerName: section === 'PROJECT' ? details.title : details.coiEntity?.entityName,
                 coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
                 componentSubRefId: childSubSection?.personEntityId,
-                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`
+                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`,
+                moduleCode: details.moduleCode,
+                sfiStatus: childSubSection?.coiProjConflictStatusType
             }
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
             this._coiService.isShowCommentNavBar = true;
