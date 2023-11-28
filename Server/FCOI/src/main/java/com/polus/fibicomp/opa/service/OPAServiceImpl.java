@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.clients.FormBuilderClient;
@@ -43,6 +45,9 @@ public class OPAServiceImpl implements OPAService {
 
 	@Autowired
 	private CommonDao commonDao;
+
+	@Autowired
+	private ConflictOfInterestDao conflictOfInterestDao;
 
 	@Override
 	public Boolean canCreateOpaDisclosure(String personId) {
@@ -189,6 +194,9 @@ public class OPAServiceImpl implements OPAService {
 		opaDisclosure.setPersonPrimaryTitle(person.getPrimaryTitle());
 		opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
 		opaDisclosure.setOpaFormBuilderDetails(opaDao.getOpaFormBuilderDetailsByOpaDisclosureId(opaDisclosureId));
+		opaDisclosure.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(opaDisclosure.getPersonId()));
+		opaDisclosure.setPersonNotesCount(conflictOfInterestDao.personNotesCount(opaDisclosure.getPersonId()));
+		opaDisclosure.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(opaDisclosure.getPersonId()).build()));
 		return new ResponseEntity<>(opaDisclosure, HttpStatus.OK);
 	}
 
