@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
@@ -6,7 +6,7 @@ import { CommonService } from '../../../../common/services/common.service';
 import { CommentConfiguration, RO } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../../coi-summary.service';
-import { HTTP_ERROR_STATUS } from "../../../../../../../fibi/src/app/app-constants";
+import { HTTP_ERROR_STATUS } from '../../../../../../../fibi/src/app/app-constants';
 import { DataStoreService } from '../../../services/data-store.service';
 import { CoiService } from '../../../services/coi.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
@@ -16,7 +16,7 @@ declare var $: any;
 @Component({
     selector: 'app-relationship-summary',
     templateUrl: './relationship-summary.component.html',
-    styleUrls: ['./relationship-summary.component.css']
+    styleUrls: ['./relationship-summary.component.scss']
 })
 export class RelationshipSummaryComponent implements OnInit {
 
@@ -43,13 +43,16 @@ export class RelationshipSummaryComponent implements OnInit {
     resultObject = [];
     showSlider = false;
     entityId: any;
+    isDesc = true;
+    worstCaseStatus = null;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         public _commonService: CommonService,
         private _dataStore: DataStoreService,
-        private _coiService: CoiService
+        private _coiService: CoiService,
+        private elementRef: ElementRef
     ) { }
 
     ngOnInit() {
@@ -94,6 +97,8 @@ getEntityProjectRelations() {
                 .subscribe((data: any) => {
                 if (data && data.length > 0) {
                     this.projectRelations = data;
+                    this.sortConflictStatus(false);
+                    this.setWorstCaseStatus();
                     this.conflictStatusCountUpdation();
                     this.selectedProject.disclosureStatusCount = this.resultObject;
                     }
@@ -145,7 +150,9 @@ getEntityProjectRelations() {
                 headerName: section === 'PROJECT' ? details.title : details.coiEntity?.entityName,
                 coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
                 componentSubRefId: childSubSection?.personEntityId,
-                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`
+                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`,
+                moduleCode: details.moduleCode,
+                sfiStatus: childSubSection?.coiProjConflictStatusType
             }
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
             this._coiService.isShowCommentNavBar = true;
@@ -214,4 +221,16 @@ getEntityProjectRelations() {
         this.openModuleDetails.emit(this.selectedProject);
     }
 
+    sortConflictStatus(isAsc: boolean) {
+        this.isDesc = !isAsc;
+        this.projectRelations.sort((a, b) => isAsc ?
+            a.coiProjConflictStatusType.projectConflictStatusCode - b.coiProjConflictStatusType.projectConflictStatusCode :
+            b.coiProjConflictStatusType.projectConflictStatusCode - a.coiProjConflictStatusType.projectConflictStatusCode);
+    }
+
+    setWorstCaseStatus() {
+        if (this.projectRelations.length) {
+            this.worstCaseStatus = this.projectRelations[0].coiProjConflictStatusType;
+        }
+    }
 }
