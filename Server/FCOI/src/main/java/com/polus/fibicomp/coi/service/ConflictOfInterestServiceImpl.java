@@ -375,6 +375,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			personEntityRelation.setUpdateUser(loginUserName);
 			conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelation);
 		});
+		PersonEntityDto personEntityDto = new PersonEntityDto();
+		personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
+		personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
+		personEntityDto.setEntityName(conflictOfInterestDao.getCoiEntityDetailsById(personEntity.getEntityId()).getEntityName());
+		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_CREATED);
+		actionLogService.savePersonEntityActionLog(personEntityDto);
 		return new ResponseEntity<>(personEntity, HttpStatus.OK);
 	}
 
