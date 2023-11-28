@@ -160,6 +160,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
       if (data) {
         const LINKED_MODULE = data?.awards[0] || data?.proposals[0];
         this.awardList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
+        this.awardList[0].sfiCompleted = LINKED_MODULE.sfiCompleted;
       }
     }));
   }

@@ -352,6 +352,36 @@ small {
   padding-right:0 ;
 }
 
+.select-all-section {
+    min-height: 45px;
+    background-color: #e4ebf2;
+}
+
+.select-all-checkboxes {
+    position: relative;
+    top: 14px;
+}
+
+.margin-left-16px {
+    margin-left: 16px;
+}
+
+.padding-left-39px {
+    padding-left: 39px;
+}
+
+input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 3px;
+    border: 1px solid #555;
+}
+
+.selected-active-background {
+    border-color: #007dec !important;
+}
+
 .row {
   div {
     padding-top: .5rem;
