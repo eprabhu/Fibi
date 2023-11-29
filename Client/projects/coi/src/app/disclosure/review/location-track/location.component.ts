@@ -341,7 +341,6 @@ export class LocationComponent implements OnInit, OnDestroy {
     getDaysAtLocation(startDate, endDate) {
         if (startDate) {
             let currentDate = new Date();
-            // currentDate.setHours(0, 0, 0, 0);
             return getDuration(getDateObjectFromTimeStamp(startDate), endDate? getDateObjectFromTimeStamp(endDate) : getDateObjectFromTimeStamp(currentDate)).durInDays;
         } else {
             return null;
