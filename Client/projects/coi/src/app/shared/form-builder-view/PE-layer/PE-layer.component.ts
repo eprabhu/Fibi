@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { HostContainerDirective } from '../../directives/host-container.directive';
 import { CustomElementVO, FBConfiguration, FormBuilderSaveRO, QuestionnaireVO, SectionComponent } from '../form-builder-interface';
 import { OPACompUncompComponent } from '../PE-components/OPA-comp-uncomp/OPA-comp-uncomp.component';
@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
     template: '<ng-template appHostContainer></ng-template>',
     styleUrls: ['./PE-layer.component.scss']
 })
-export class PELayerComponent implements OnInit {
+export class PELayerComponent implements OnInit, OnChanges {
 
     @ViewChild(HostContainerDirective, { static: true }) adHost!: HostContainerDirective;
     @Input() component: SectionComponent;
@@ -23,6 +23,9 @@ export class PELayerComponent implements OnInit {
     constructor(private _formBuilder: FormBuilderService) { }
 
     ngOnInit() {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
         this.loadComponent();
     }
 

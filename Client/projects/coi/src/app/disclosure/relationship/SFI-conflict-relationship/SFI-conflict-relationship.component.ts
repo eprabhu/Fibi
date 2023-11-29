@@ -132,6 +132,9 @@ export class SFIConflictRelationshipComponent implements OnInit {
   saveSingleEntity(index, test) {
     this.coiTableValidation.delete('save-status' + index );
     this.coiTableValidation.delete('save-description' + index );
+    if(this.entityProjectDetails[index].disclComment.comment) {
+      this.entityProjectDetails[index].disclComment.comment  = this.entityProjectDetails[index].disclComment.comment.trim();
+    }
     if ([null, 'null'].includes(this.entityProjectDetails[index].projectConflictStatusCode)) {
       this.coiTableValidation.set('save-status' + index , 'Please select Conflict Status');
     }

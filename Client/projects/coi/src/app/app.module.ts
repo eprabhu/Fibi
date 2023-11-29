@@ -25,7 +25,6 @@ import { FormsModule } from '@angular/forms';
 import { DragDirective } from './common/header/drag.directive';
 import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
 import {HeaderService} from "./common/header/header.service";
-import { CoiService } from './disclosure/services/coi.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -55,7 +54,6 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
     providers: [CommonService,
         HeaderService,
         DashboardGuardService,
-        CoiService,
         ElasticConfigService,
         EntityManagementGuardService,
         {
