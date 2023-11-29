@@ -1,18 +1,18 @@
 <ng-container *ngIf="!isFirstTimeLoad">
     <div [@listAnimation]="notesList.length" class="row px-3">
         <ng-container *ngFor="let note of notesList ; let index = index;">
-            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="hovering-card pb-3 pt-2 px-3 mt-2 light-dark-text-color rounded-4">
                     <div class="row mr-2 mt-2">
-                        <div class="col-11 fs-13 cursor-pointer" title="Click to open note" (click)="openNote(note)">
+                        <div class="col-11 fs-13" [class.cursor-pointer]="!coiPersonId" title="Click to open note" (click)="openNote(note)">
                             {{note?.updateTimestamp |
                             dateFormatterWithTimeZone:'long'}}
                         </div>
-                        <div *ngIf="!isOpenMoreMenu[index]" class="cursor-pointer col-1 position-relative"
+                        <div *ngIf="!isOpenMoreMenu[index] && !coiPersonId"  class="cursor-pointer col-1 position-relative"
                             (click)="clearOtherIndex(index, true);" title="Click to open more options">
                             <mat-icon>more_horiz</mat-icon>
                         </div>
-                        <div *ngIf="isOpenMoreMenu[index]" class="cursor-pointer col-1 position-relative"
+                        <div *ngIf="isOpenMoreMenu[index] && !coiPersonId" class="cursor-pointer col-1 position-relative"
                             (click)="clearOtherIndex(index, false)" title="Click to open more options">
                             <mat-icon>more_horiz</mat-icon>
                         </div>
@@ -31,8 +31,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-3 mt-1 p-013 cursor-pointer overflow-hidden" (click)="openNote(note)">
-                        <div class="col-12 notes-content" title="Click to open note">
+                    <div class="row mb-3 mt-1 p-013 overflow-hidden" [class.cursor-pointer]="!coiPersonId" (click)="openNote(note)">
+                        <div class="col-12 notes-content" [title]="coiPersonId ? '' : 'Click to open note'">
                             <span class="note-text">
                                 {{getUnformattedContent(note.content)}}
                             </span>

@@ -48,3 +48,7 @@
 h5 {
     font-size: 2rem;
 }
+
+.default-content:not(:only-child) {
+    display: none;
+}

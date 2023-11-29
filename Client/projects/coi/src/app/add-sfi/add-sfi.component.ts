@@ -206,6 +206,12 @@ export class AddSfiComponent implements OnInit {
             }));
     }
 
+    validateRelationship() {
+        if (!this.getSelectedRelationTypeCodes().length) {
+            this.mandatoryList.set('relationRadio', 'Please select a relation to continue.');
+        }
+    }
+
     selectNewEntity(event): void {
         this.clearSFIFields();
         this.EntitySearchOptions.defaultValue = event.searchString;
@@ -266,6 +272,7 @@ export class AddSfiComponent implements OnInit {
                 this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
             }
             this.endDateValidation();
+            this.validateRelationship();
         }
         return this.mandatoryList.size !== 0 ? false : true;
     }
@@ -324,9 +331,9 @@ export class AddSfiComponent implements OnInit {
 
     endDateValidation(): void {
         this.mandatoryList.delete('endDate');
-        if (this.additionalDetails.involvementStartDate && this.additionalDetails.involvementEndDate &&
-            (compareDates(this.additionalDetails.involvementStartDate, this.additionalDetails.involvementEndDate) === 1)) {
-            this.mandatoryList.set('endDate', 'Please provide a valid date.');
+        if (this.involvementDate.involvementStartDate && this.involvementDate.involvementEndDate &&
+            (compareDates(this.involvementDate.involvementStartDate, this.involvementDate.involvementEndDate) === 1)) {
+            this.mandatoryList.set('endDate', 'Please provide a valid end date.');
         }
     }
 
@@ -364,7 +371,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     submitEntity(): void {
-        if (this.mandatoryList.has('entityAlreadyAdded') || (!this.checkMandatoryFilled() && !this.isSaving)) {
+        if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled()) && !this.isSaving )) {
             return;
         }
         this.modifyType ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();

@@ -43,8 +43,12 @@
                     </div>
                     <div class="d-flex ms-auto">
                         <div class="align-items-center d-flex f-14 label-color">
-                            <strong class="clickable-content me-2"><u>Notes(0)</u></strong> | <strong
-                                class="clickable-content ms-2 me-3"><u>Attachments(0)</u></strong>
+                            <strong class="me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)" [class.clickable-content]="coiData.personEntitiesCount">
+                                Entities({{coiData.personEntitiesCount}})</strong> | 
+                            <strong class="ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" [class.clickable-content]="coiData.personNotesCount">
+                                Notes({{coiData.personNotesCount}})</strong> | 
+                            <strong class="ms-2 me-3" (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" [class.clickable-content]="coiData.personAttachmentsCount">
+                            Attachments({{coiData.personAttachmentsCount}})</strong>
                         </div>
                     </div>
                     <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode" class="d-flex mr-15">
@@ -473,10 +477,10 @@
                         queryParamsHandling='merge' title="Go to Certification section">
                         <span class="align-self-center">Certification</span>
                     </div>
-                    <span
+                    <!-- <span
                         class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor nav-border-right border-r-0">
                         Notes & Attachments
-                    </span>
+                    </span> -->
                     <span
                         *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null"
                         [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
@@ -491,6 +495,12 @@
 <div *ngIf="sfiService.isShowSfiNavBar">
     <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
 </div>
+
+<ng-container *ngIf="showSlider">
+    <app-header-sliders (closePage)="closeHeaderSlider($event)" 
+    [coiPersonId] = "coiData.coiDisclosure.personId" [sliderType]="selectedType"
+    [reviewStatus]="coiData.coiDisclosure.reviewStatusCode" [personName]="coiData.coiDisclosure.person.fullName"></app-header-sliders>
+</ng-container>
 
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">

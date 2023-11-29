@@ -6,22 +6,22 @@
         </a>
         <ul *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
             <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures page' : 'Go to My Disclosures'"
-                aria-description="Goto my home page">My Disclosures
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures' : 'Go to My Disclosures'"
+                aria-description="Goto my home">My Disclosures
                 <span *ngIf="router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/entities') ? 'My Entities page' : 'Go to My Entities'"
-                aria-description="Goto my Disclosures page">My Entities
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/entities') ? 'My Entities' : 'Go to My Entities'"
+                aria-description="Goto my Disclosures">My Entities
                 <span *ngIf="router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/notes') ? 'My Notes page' : 'Go to My Notes page'"
-                aria-description="Goto my Notes page">My Notes
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/notes') ? 'My Notes' : 'Go to My Notes'"
+                aria-description="Goto my Notes">My Notes
             </li>
             <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']"
-                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/attachments') ? 'My Attachments page' : 'Go to My Attachments page'"
-                aria-description="Goto my Attachments page">My Attachments
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/attachments') ? 'My Attachments' : 'Go to My Attachments'"
+                aria-description="Goto my Attachments">My Attachments
             </li>
         </ul>
     </div>

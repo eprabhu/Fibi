@@ -34,6 +34,7 @@ export class CountModalComponent implements OnInit {
     currentModalTab = 'Award';
     projectDatas: any;
     coiFinancialEntityDetails: any[] = [];
+    isEntityNameRead = false;
 
     constructor(private _countModalService: CountModalService, private _commonService: CommonService) {
     }
@@ -94,14 +95,14 @@ export class CountModalComponent implements OnInit {
     modalHeader() {
         if (this.fcoiTypeCode == 1) {
             if (this.moduleCode == 8) {
-                return `SFIs Attached to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `SFIs Attached to : FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
             } else if (this.moduleCode == 1 || this.moduleCode == 3) {
-                return `Projects Related to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `Projects Related to : FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
             }
         } else {
             if (this.fcoiTypeCode == 2 || this.fcoiTypeCode == 3) {
                 if (this.moduleCode == 8) {
-                    return `SFIs Attached to #${this.disclosureNumber}: ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
+                    return `SFIs Attached to : ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
                 } else if (this.moduleCode == 1 || this.moduleCode == 3) {
                     return `Projects Related to ${this.gettitle()} `;
                 }
@@ -208,6 +209,23 @@ export class CountModalComponent implements OnInit {
 
     viewSliderEmit(flag: boolean, entityId) {
         this.viewSlider.emit({'flag': flag, 'entityId': entityId})
+    }
+
+    getDisclosureConflictBadge(statusCode: string) {
+        switch (String(statusCode)) {
+            case '100':
+                return 'green-badge';
+            case '200':
+            case '500':
+                return 'brown-badge';
+            case '300':
+            case '600':
+                return 'red-badge';
+            case '400':
+                return 'green-badge';
+            default:
+                return 'yellow-badge';
+        }
     }
 
 

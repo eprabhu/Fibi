@@ -1,16 +1,17 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, interval } from 'rxjs';
 
 import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { debounce, switchMap } from 'rxjs/operators';
 import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
+import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-sfi',
@@ -21,17 +22,16 @@ import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/uti
 export class SfiComponent implements OnInit, OnDestroy {
 
     @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
+    @Input()  isTriggeredFromSlider = false;
+    @Input()  reviewStatus: any;
+    @Input()  isEditMode: any;
+    @Input()  personId: any;
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
     searchResult = [];
-    dependencies = ['coiDisclosure', 'numberOfSFI'];
-    isEditMode = false;
-    conflictStatusCode: any;
     disclosureId: any;
-    personId: any;
-    isSFINotAvailable = false;
-    reviewStatus: any;
+    dependencies = ['coiDisclosure', 'numberOfSFI'];
     filterType = 'ALL';
     currentPage = 1;
     count: any;
@@ -52,37 +52,23 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     constructor(
         private _sfiService: SfiService,
-        private _dataStore: DataStoreService,
         public _coiService: CoiService,
         private _router: Router,
+        private _activatedRoute: ActivatedRoute,
         private _commonService: CommonService,
         private elementRef: ElementRef) {
     }
 
     ngOnInit() {
-        this._coiService.isShowSFIInfo = true;
-        this.getEditMode();
         this.getSfiDetails();
         this.$fetchSFIList.next();
         this.getSearchList();
-        this.listenDataChangeFromStore();
         this.listenForAdd();
     }
 
     ngOnDestroy() {
         this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
-    }
-
-    getEditMode() {
-        const DATA = this._dataStore.getData(this.dependencies);
-        this.conflictStatusCode = 0;
-        this.conflictStatusCode = DATA.coiDisclosure.conflictStatusCode;
-        this.reviewStatus = DATA.coiDisclosure.reviewStatusCode;
-        this.disclosureId =  DATA.coiDisclosure.disclosureId;
-        this.isEditMode = this._dataStore.getEditModeForCOI();
-        this.personId = DATA.coiDisclosure.personId;
-        this.isSFINotAvailable = DATA.numberOfSFI === 0 && DATA.coiDisclosure.disclosureCategoryTypeCode == 3;
     }
 
     getSfiDetails() {
@@ -95,6 +81,14 @@ export class SfiComponent implements OnInit, OnDestroy {
                 this.count = data.count;
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.isLoading = false;
+                setTimeout(() => {
+                    if(this._coiService.focusSFIId) {
+                        scrollIntoView(this._coiService.focusSFIId);
+                        const ELEMENT = document.getElementById(this._coiService.focusSFIId);
+                        ELEMENT.classList.add('error-highlight-card');
+                        this._coiService.focusSFIId = null;
+                    }
+            });
             }
         }));
     }
@@ -102,23 +96,13 @@ export class SfiComponent implements OnInit, OnDestroy {
     getRequestObject() {
         let requestObj: RO = new RO();
         requestObj.currentPage = this.currentPage;
-        requestObj.disclosureId = this.disclosureId;
+        requestObj.disclosureId = !this.isTriggeredFromSlider ? this._activatedRoute.snapshot.queryParamMap.get('disclosureId') : null;
         requestObj.filterType = this.filterType;
         requestObj.pageNumber = '10';
         requestObj.personId = this.personId;
         requestObj.reviewStatusCode = this.reviewStatus;
         requestObj.searchWord = this.searchText;
         return requestObj;
-    }
-
-    listenDataChangeFromStore() {
-        this.$subscriptions.push(
-            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                if (dependencies.some((dep) => this.dependencies.includes(dep))) {
-                    this.getEditMode();
-                }
-            })
-        );
     }
 
     listenForAdd() {
@@ -155,10 +139,6 @@ export class SfiComponent implements OnInit, OnDestroy {
           queryParamsHandling: 'merge'
         })
       }
-
-    closeSFIInfo() {
-        this._coiService.isShowSFIInfo = false;
-    }
 
     actionsOnPageChange(event) {
         if (this.currentPage != event) {

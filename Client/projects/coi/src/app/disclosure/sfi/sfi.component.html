@@ -1,4 +1,4 @@
-<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
+<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode && !isTriggeredFromSlider">
     <span data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top" class="d-inline-block">
       <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
     </span>
@@ -41,7 +41,7 @@
             title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Inactive</span>
     </div>
-    <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
+    <div class="d-flex flex-fill position-relative search-background" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
       <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
       <input class="advance-search-input border-0 px-4" type="text" id="searchText"
@@ -53,7 +53,7 @@
 <ng-container *ngIf="!isLoading">
   <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
     <div *ngFor="let item of coiFinancialEntityDetails ; let i =index">
-      <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
+      <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" [isTriggeredFromSlider]="isTriggeredFromSlider"></app-shared-sfi-card>
     </div>
   <!-- no data card -->
     <div *ngIf="!coiFinancialEntityDetails?.length">

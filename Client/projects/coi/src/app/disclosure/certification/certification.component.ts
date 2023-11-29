@@ -5,6 +5,8 @@ import {CoiService} from '../../disclosure/services/coi.service';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -20,8 +22,10 @@ export class CertificationComponent implements OnInit, OnDestroy {
     dependencies = ['coiDisclosure'];
     isEditMode = true;
     isSaving = false;
+    deployMap = environment.deployUrl;
     coiDisclosure: any;
     isReadMore = false;
+    collapseViewMore = {};
     headerInfoText = `University policy requires that university officers, faculty, and staff and others acting on its
     behalf avoid ethical, legal, financial, and other conflicts of interest and ensure that their activities and
     interests do not conflict with their obligations to the University. Disclosure of financial interests enables
@@ -34,7 +38,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
-    constructor(public _dataStore: DataStoreService, public _coiService: CoiService, public commonService: CommonService) { 
+    constructor(public _dataStore: DataStoreService, public router: Router, public _coiService: CoiService, public commonService: CommonService) { 
         document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
@@ -91,5 +95,30 @@ export class CertificationComponent implements OnInit, OnDestroy {
 
     closeCertifyInfo() {
         this._coiService.isShowCertifyInfo = false;
+    }
+
+    getSFIName(sfiName) {
+        return sfiName.split("||")[1];
+    }
+
+    openSFI(sfiName) {
+       let sfiId = sfiName.split("||")[0];
+       this.router.navigate(['/coi/create-disclosure/sfi']);
+       this._coiService.focusSFIId = sfiId;
+    }
+
+    openRelationship(projectName) {
+        let sfiId = projectName.DisclDetailId;
+        this.router.navigate(['/coi/create-disclosure/relationship']);
+        this._coiService.focusSFIRelationId = sfiId;
+        this._coiService.focusModuleId = projectName.ModuleItemKey;
+     }
+
+    collapseViewMoreOption(id: number, flag: boolean): void {
+        this.collapseViewMore[id] = !flag;
+    }
+
+    getProjectName(projectName) {
+        return projectName.Title + ' | ' + projectName.Entity;
     }
 }

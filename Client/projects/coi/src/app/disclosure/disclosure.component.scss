@@ -195,7 +195,7 @@ table {
 }
 
 .min-height-189 {
-  min-height: 169px;
+  min-height: 170px;
   max-height: 160px;
 }
 
@@ -369,4 +369,8 @@ table {
 
 .keyboard-backspace {
   transform: rotateY(180deg);
+}
+
+.clickable-content {
+  text-decoration: underline;
 }

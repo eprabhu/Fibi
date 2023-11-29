@@ -19,13 +19,13 @@
 
     <div class="table-responsive" *ngIf="attachmentLists.length">
         <table class="table">
-            <thead class="fs-14 grey-text">
+            <thead class="fs-14 grey-text table-head">
                 <tr>
                     <th scope="col" style="width: 20%" class="pt-3 ps-3">Attachment Type</th>
                     <th scope="col" style="width: 30%">Description</th>
                     <th scope="col" style="width: 25%">File name</th>
                     <th scope="col" style="width: 15%">Last Updated</th>
-                    <th scope="col" style="width: 5%">Action</th>
+                    <th scope="col" style="width: 5%" *ngIf="!coiPersonId">Action</th>
                 </tr>
             </thead>
             <tbody class="bg-white">
@@ -35,7 +35,7 @@
                     <td class="pt-3">{{attachment.fileName}}</td>
                     <td class="pt-3">{{attachment.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</td>
-                    <td class="d-flex pt-3">
+                    <td class="d-flex pt-3" *ngIf="!coiPersonId">
                         <span class="mr-2 cursor-pointer" title="Click to edit attachment">
                             <mat-icon class="fs-20">edit</mat-icon>
                         </span>

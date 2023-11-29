@@ -138,6 +138,12 @@ nav ul li {
   margin-bottom: 7px;
 }
 
+@media (max-width: 1201px) {
+  .sort-div button {
+    padding-top: 3px;
+  }
+}
+
 .filter-active {
   border: 2px solid #54BF5B !important;
   background: #F5FEF5 !important;
@@ -345,3 +351,112 @@ small {
 .p0{
   padding-right:0 ;
 }
+
+.select-all-section {
+    min-height: 45px;
+    background-color: #e4ebf2;
+}
+
+.select-all-checkboxes {
+    position: relative;
+    top: 14px;
+}
+
+.margin-left-16px {
+    margin-left: 16px;
+}
+
+.padding-left-39px {
+    padding-left: 39px;
+}
+
+input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 3px;
+    border: 1px solid #555;
+}
+
+.selected-active-background {
+    border-color: #007dec !important;
+}
+
+.row {
+  div {
+    padding-top: .5rem;
+  }
+}
+
+.margin-top-3px{
+  margin-top: 3px;
+}
+
+.height-fit-content {
+  height: fit-content;
+}
+
+.end-date {
+  margin-right: 81px;
+}
+
+.last-updated {
+  margin-top: 7px;
+}
+
+/* Adjust the height of view button (only for this dashboard)*/
+.height-fit-content {
+  height: fit-content !important;
+}
+
+/* Navbar responsive  hamburger menu */
+@media (min-width: 1092.9px) {
+  .navbar-toggler {
+    display: none;
+  }
+}
+
+@media (max-width: 1092.9px) {
+  #navbarResponsive {
+    position: absolute;
+    z-index: 99;
+    display: none;
+    top: 141px;
+    left: unset;
+  }
+
+  // .show {
+  //   display: block !important;
+  // }
+
+  .menu-responsive {
+    position: relative;
+    background-color: #2b3244;
+    opacity: .95;
+    box-shadow: 0px 2px 5px -1px rgba(15,15,15,.5803921569);
+    padding: 16px 10px 16px 10px;
+    border-radius: 4px;
+    max-height: 320px;
+    overflow: auto;
+  }
+
+  .menu-responsive li {
+    color: #fff !important;
+  }
+
+  .separator {
+    margin: 0 !important;
+    border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+  }
+
+  .active {
+    background-color: #545a68;
+    border-bottom: none !important;
+  }
+
+  .coi-admin-dash li.active {
+    color: #fff !important;
+    border-bottom: none !important;
+  }
+}
+

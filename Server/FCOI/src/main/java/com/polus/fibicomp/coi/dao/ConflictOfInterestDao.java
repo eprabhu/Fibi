@@ -1281,4 +1281,25 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId);
+
+	/**
+	 * This method used to get the counts of a person's attachments
+	 * @param personId
+	 * @return
+	 */
+	Long personAttachmentsCount(String personId);
+
+	/**
+	 * This method used to get the counts of a person's notes
+	 * @param personId
+	 * @return
+	 */
+	Long personNotesCount(String personId);
+
+	/**
+	 * This method fetches a person against in a review
+	 * @param coiReview
+	 * @return
+	 */
+	public boolean isReviewStatusChanged(CoiReview coiReview);
 }

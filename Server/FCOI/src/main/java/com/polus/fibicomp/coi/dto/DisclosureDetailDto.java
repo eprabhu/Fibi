@@ -55,4 +55,8 @@ public class DisclosureDetailDto {
 
 	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
 
+	private String conflictStatus;
+
+	private String conflictStatusCode;
+
 }

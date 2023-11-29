@@ -34,20 +34,11 @@ public class FormBuilderSectionEntity implements Serializable{
     @Column(name = "FORM_BUILDER_ID")
     private Integer formHeaderId;
 
-    @Column(name = "FORM_BUILDER_NUMBER", nullable = false)
-    private String formBuilderNumber;
-
     @Column(name = "SECTION_NAME", nullable = false)
     private String sectionName;
 
     @Column(name = "SECTION_ORDER_NUMBER", nullable = false)
     private Integer sectionOrderNumber;
-
-//    @Column(name = "MODULE_CODE", nullable = false)
-//    private String moduleCode;
-//
-//    @Column(name = "SUB_MODULE_CODE", nullable = false)
-//    private String subModuleCode;
 
     @Column(name = "BUSINESS_RULE_ID")
     private Integer businessRuleId;
