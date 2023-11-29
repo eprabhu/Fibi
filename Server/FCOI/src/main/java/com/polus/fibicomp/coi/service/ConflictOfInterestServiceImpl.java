@@ -417,6 +417,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		personEntityDto.setRelationshipName(String.join(",", relationshipNames));
 		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_REL_ADDED);
 		actionLogService.savePersonEntityActionLog(personEntityDto);
+		personEntityRelationshipList.stream().forEach(relationship -> relationship.setPersonEntity(personEntity));
         return new ResponseEntity<>(personEntityRelationshipList, HttpStatus.OK);
     }
 
