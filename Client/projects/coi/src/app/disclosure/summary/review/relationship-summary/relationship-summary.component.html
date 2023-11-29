@@ -105,7 +105,7 @@
                     <td class="table-data border-end border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">
                         <div class="m-0 mb-2 row py-1">
                             <span class="align-items-center d-flex">
-                                <span class="entity-title mr-2 cursor-pointer clickable-content">
+                                <span class="entity-title mr-2 cursor-pointer clickable-content" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)">
                                     <strong tabindex="0" [attr.aria-label]="'entity name'">
                                         <u>{{relation?.coiEntity?.entityName.length > 100 ?
                                             (relation?.coiEntity?.entityName | slice:0:100)+'...' : relation?.coiEntity?.entityName}}
@@ -139,7 +139,7 @@
                         </ng-template>
                       </div>
                     </td>
-                    <td class="border-end border-top-0 px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
+                    <td class="border-end border-top-0 px-3 text-center text-nowrap" [class.border-0]="i != projectRelations?.length-1">
                       <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}"></span>
                       <span class="badgeFont">
                         {{relation?.coiProjConflictStatusType?.description}}
