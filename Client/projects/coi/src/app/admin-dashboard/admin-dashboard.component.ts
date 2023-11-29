@@ -318,6 +318,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     changeTab(tabName) {
+        this.clearSelectAllDisclosure();
         this.coiList = [];
         this.isShowDisclosureList = false;
         this.coiAdminDashboardService.isAdvanceSearch = false;
@@ -403,6 +404,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     resetAndPerformAdvanceSearch() {
+        this.clearSelectAllDisclosure();
         this.resetAdvanceSearchFields();
         this.coiList = [];
         this.$coiList.next();
@@ -443,6 +445,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     performAdvanceSearch() {
+        this.clearSelectAllDisclosure();
         this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
@@ -613,6 +616,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     sortResult(sortFieldBy) {
+        this.clearSelectAllDisclosure();
         this.sortCountObj[sortFieldBy]++;
         if (this.sortCountObj[sortFieldBy] < 3) {
             this.localCOIRequestObject.sort[sortFieldBy] = !this.localCOIRequestObject.sort[sortFieldBy] ? 'asc' : 'desc';
@@ -892,6 +896,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    clearSelectAllDisclosure() {
+        this.isAllDisclosuresSelected = false;
+        this.selectedDisclosures = [];
     }
 
 }
