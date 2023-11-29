@@ -310,7 +310,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         if (startDate) {
             const currentDate = new Date();
             currentDate.setHours(0, 0, 0, 0);
-            return getDuration(startDate, endDate ? endDate : currentDate).durInDays;
+            return getDuration(getDateObjectFromTimeStamp(startDate), endDate? getDateObjectFromTimeStamp(endDate) : getDateObjectFromTimeStamp(currentDate)).durInDays;
         } else {
             return null;
         }

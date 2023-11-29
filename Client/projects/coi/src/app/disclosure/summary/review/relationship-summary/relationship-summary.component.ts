@@ -152,7 +152,7 @@ getEntityProjectRelations() {
                 coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
                 componentSubRefId: childSubSection?.personEntityId,
                 coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`,
-                moduleCode: details.moduleCode,
+                selectedProject: details,
                 sfiStatus: childSubSection?.coiProjConflictStatusType
             }
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
