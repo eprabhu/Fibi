@@ -55,7 +55,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
       this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
       this.configuration.enableViewMode = !this.isEditMode;
-      this.getQuestionnaire(this.entityDetailsServices.currentRelationshipQuestionnaire);
+      this.getQuestionnaire(this.entityDetailsServices.currentRelationshipQuestionnaire ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
       this.getDefinedRelationships();
     }));
     this.openRelationshipQuestionnaire();
@@ -95,14 +95,14 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
             this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
             this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
             this.currentRelationshipDetails = data;
-            if (this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
+              if (data.personEntity.personId === this._commonService.getCurrentUserDetail('personId') || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
                 this.hasPermissionToView = true;
                 this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
                 this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
                 this.configuration = Object.assign({}, this.configuration);
-            } else {
-                this.hasPermissionToView = false;
-            }
+              } else {
+                  this.hasPermissionToView = false;
+              }
         }
     }
 
