@@ -9,9 +9,11 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { topSlideInOut } from '../../common/utilities/animations';
 import {EDITOR_CONFIURATION} from '../../../../../fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { DataStoreService } from '../../disclosure/services/data-store.service';
 import { CoiService } from '../../disclosure/services/coi.service';
+import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -34,6 +36,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     isReadMore = false;
     reviewCommentDetails: ReviewComments = new ReviewComments();
     reviewTypeList: any;
+    selectedProjectDetails:any = {};
     adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
     clearAdminGroupField: any;
     assignAdminMap = new Map();
@@ -75,6 +78,8 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     coiSubSectionsTitle = '';
     personnelAttachTypes: any = [];
     attachmentWarningMsg = null;
+    deployMap = environment.deployUrl;
+    sfiStatus: any;
     reviewCommentType: any = [
         { code: 1, description: 'Public', isShowForAdmin: true, isShowForReviewer: true, isShowForReporter: true },
         { code: 2, description: 'Reviewer only', isShowForAdmin: true, isShowForReviewer: false, isShowForReporter: false },
@@ -90,7 +95,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
 
     constructor(
         public commonService: CommonService, private _reviewCommentsService: ReviewCommentsService, 
-        public _dataStore: DataStoreService, public coiService: CoiService
+        public _dataStore: DataStoreService, public coiService: CoiService, private _router: Router
     ) { }
 
     ngOnInit() {
@@ -322,16 +327,22 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
 
     getReviewerActionDetails() {
         this.$subscriptions.push(this.commonService.$commentConfigurationDetails.subscribe((res: any) => {
-            this.reviewCommentDetails.documentOwnerPersonId = res.documentOwnerPersonId;
-            this.reviewCommentDetails.coiReviewCommentDto.disclosureId = res.disclosureId;
-            this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode = res.coiSectionsTypeCode;
-            if (['4', '5', '6'].includes(this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode)) {
-                this.headerName = res.headerName;
-                this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId = res.coiSubSectionsId;
-                this.coiSubSectionsTitle = res.coiSubSectionsTitle;
-                this.reviewCommentDetails.coiReviewCommentDto.componentSubRefId = res.componentSubRefId;
+            if(res) {
+                this.reviewCommentDetails.documentOwnerPersonId = res.documentOwnerPersonId;
+                this.reviewCommentDetails.coiReviewCommentDto.disclosureId = res.disclosureId;
+                this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode = res.coiSectionsTypeCode;
+                if (['4', '5', '6'].includes(this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode)) {
+                    this.headerName = res.headerName;
+                    this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId = res.coiSubSectionsId;
+                    this.coiSubSectionsTitle = res.coiSubSectionsTitle;
+                    this.selectedProjectDetails = res.selectedProject;
+                    this.reviewCommentDetails.coiReviewCommentDto.componentSubRefId = res.componentSubRefId;
+                    if(res.sfiStatus) {
+                        this.sfiStatus = res.sfiStatus;
+                    }
+                }
+                this.getCoiReviewComments(this.loadReviewerCommentBody(res));
             }
-            this.getCoiReviewComments(this.loadReviewerCommentBody(res));
         }));
     }
 
@@ -455,31 +466,17 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
 		switch (fcoiTypeCode) {
 			case '1':
 				return 'FCOI';
-			case '2':
-				return 'Proposal';
-			case '3':
-				return 'Award';
-			case '4':
-				return 'FCOI';
             default:
-                    return '';
+                    return 'Project';
 		}
 	}
 
 	getColorBadges(disclosure): string {
-		if (disclosure?.travelDisclosureId) {
-			return 'bg-travel-clip';
-		}
-		switch (disclosure.fcoiTypeCode) {
-			case '1':
-				return 'bg-fcoi-clip';
-			case '2':
-				return 'bg-proposal-clip';
-			case '3':
-				return 'bg-award-clip';
-			default:
-				return '';
-		}
+        if(disclosure.fcoiTypeCode == 1) {
+            return 'bg-fcoi-clip'
+        } else {
+            return 'project-background'
+        }
 	}
     
     modalHeader(projectDetails): string {
@@ -617,5 +614,30 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         return !this.attachmentWarningMsg;
     }
 
+    isReviewComment(code) {
+        return this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode == code
+        && this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId;
+    }
+ 
+    openSFI(personEntityId) {
+        this.validateSliderClose();
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'view' } })
+    }
+
+    openProjectDetails() {
+        if (this.selectedProjectDetails) {
+            openModal('projectDetailsViewModal');
+        }
+    }
+
+    openProjectMoreDetails(moduleId) {
+        let redirectUrl = '';
+        if (this.selectedProjectDetails.moduleCode == 3) {
+            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
+        } else {
+            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
+        }
+        window.open(redirectUrl);
+    }
 
 }

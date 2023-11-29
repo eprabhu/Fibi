@@ -45,6 +45,9 @@ export class OpaDisclosure {
     personPrimaryTitle: string;
     homeUnitName: string;
     opaFormBuilderDetails: any[];
+    personAttachmentsCount: number;
+    personNotesCount: number;
+    personEntitiesCount: number;
 }
 
 export interface DispositionStatusType {

@@ -375,6 +375,7 @@
 										(keypress)="_commonService._keyPress($event, 'date')" 
 										[ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"/>
 									<i title="Click to select End date" (click)="endDate.open()"
+									[class.date-field-error]="mandatoryList?.has('endDate')"
 										class="fa fa-calendar fa-large insidePicker hand-cursor"
 										title="Click to select end date"></i>
 									<mat-datepicker #endDate [pickerType]="'calendar'">
@@ -423,7 +424,8 @@
 								<div class="col-7">
 									<div class="relation select-margin ml-09">
 										<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;" class="form-check d-inline-block" [ngClass]="!isFirst && !isLast ? 'mx-4' : ''">
-											<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary" [id]="'sfi-relation'+relation.validPersonEntityRelTypeCode"
+											<input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary" 
+												[id]="'sfi-relation'+relation.validPersonEntityRelTypeCode"
 												[value]="relation?.validPersonEntityRelTypeCode" [(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
 												title="Click to select {{relation?.description}} relation">
 											<label class="r-title fs-14" [for]="'sfi-relation'+relation.validPersonEntityRelTypeCode">
@@ -497,7 +499,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.instituteResourceInvolvement"
-								(ngModelChange)="additionalDetails.instituteResourceInvolvement = additionalDetails.instituteResourceInvolvement.trim()"
+								(ngModelChange)="additionalDetails.instituteResourceInvolvement = additionalDetails.instituteResourceInvolvement.trim();"
 								[ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000 [position]="'ABOVE'"
 								[styleList]="'mt-2 float-end word-count'">

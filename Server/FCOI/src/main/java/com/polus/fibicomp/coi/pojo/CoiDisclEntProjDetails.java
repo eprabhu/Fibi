@@ -19,6 +19,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
+
 @Entity
 @Table(name = "COI_DISCL_ENT_PROJ_DETAILS")
 @EntityListeners(AuditingEntityListener.class)
@@ -81,6 +83,9 @@ public class CoiDisclEntProjDetails implements Serializable {
 	
 	@Transient
 	private DisclComment disclComment;
+
+	@Transient
+	private PersonEntityRelationshipDto personEntityRelationshipDto;
 
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
@@ -208,6 +213,14 @@ public class CoiDisclEntProjDetails implements Serializable {
 
 	public void setDisclComment(DisclComment disclComment) {
 		this.disclComment = disclComment;
+	}
+
+	public PersonEntityRelationshipDto getPersonEntityRelationshipDto() {
+		return personEntityRelationshipDto;
+	}
+
+	public void setPersonEntityRelationshipDto(PersonEntityRelationshipDto personEntityRelationshipDto) {
+		this.personEntityRelationshipDto = personEntityRelationshipDto;
 	}
 	
 }

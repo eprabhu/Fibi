@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HeaderSlidersComponent } from './header-sliders.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
-import { DisclosureModule } from '../disclosure.module';
-import { Header } from '../../shared/view-questionnaire-v2/questionnaire-interface';
 import { SfiModule } from '../sfi/sfi.module';
 import { NotesAttachmentsModule } from '../../user-dashboard/notes/notes-attachments.module';
 import { AttachmentsModule } from '../../user-dashboard/attachments/attachments.module';

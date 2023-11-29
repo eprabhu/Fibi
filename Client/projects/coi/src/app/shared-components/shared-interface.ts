@@ -73,4 +73,6 @@ export interface coiReviewComment {
     coiSubSectionsId:any;
     coiSubSectionsTitle:any;
     componentSubRefId:number;
+    sfiStatus?:any;
+    selectedProject?:any;
 }

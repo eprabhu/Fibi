@@ -10,6 +10,8 @@ export class HeaderSlidersComponent implements OnInit {
 
     @Input() sliderType: string;
     @Input() coiPersonId: any;
+    @Input() personName: any;
+    @Input() reviewStatus: any = null;
     @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
 
     constructor() { }

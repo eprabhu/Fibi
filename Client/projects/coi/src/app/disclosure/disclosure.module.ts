@@ -9,7 +9,6 @@ import {SfiService} from './sfi/sfi.service';
 import {SearchFieldComponent} from './sfi/search-field/search-field.component';
 
 import {ResolveServiceService} from './services/resolve-service.service';
-import {CoiService} from './services/coi.service';
 import {RouterGuardService} from './services/router-guard.service';
 import {SharedModule} from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +18,8 @@ import {DataStoreService} from "./services/data-store.service";
 import { SharedDisclosureModule } from './shared-disclosure/shared-disclosure.module';
 import { EntityRiskSliderModule } from './entity-risk-slider/entity-risk-slider.module';
 import { HeaderSlidersModule } from './header-sliders/header-sliders.module';
+import { SfiListComponent } from './sfi-list/sfi-list.component';
+import { CoiService } from './services/coi.service';
 
 
 const routes: Routes = [
@@ -30,7 +31,7 @@ const routes: Routes = [
                 loadChildren: () => import('./screening-questionnaire/screening-questionnaire.module').then(m => m.ScreeningQuestionnaireModule)
             },
             {
-                path: 'sfi', canDeactivate: [RouterGuardService], loadChildren: () => import('./sfi/sfi.module').then(m => m.SfiModule)
+                path: 'sfi', canDeactivate: [RouterGuardService], component: SfiListComponent
             },
             {
                 path: 'relationship', canDeactivate: [RouterGuardService],
@@ -62,14 +63,15 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         DisclosureComponent,
-        SearchFieldComponent
+        SearchFieldComponent,
+        SfiListComponent
     ],
     providers: [
         SfiService,
         DataStoreService,
         ResolveServiceService,
-        CoiService,
         RouterGuardService,
+        CoiService
     ],
     exports: [],
     imports: [
