@@ -10,6 +10,7 @@ import { HTTP_ERROR_STATUS } from '../../../../../../../fibi/src/app/app-constan
 import { DataStoreService } from '../../../services/data-store.service';
 import { CoiService } from '../../../services/coi.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
+import {openInNewTab} from "../../../../common/utilities/custom-utilities";
 
 declare var $: any;
 
@@ -232,5 +233,9 @@ getEntityProjectRelations() {
         if (this.projectRelations.length) {
             this.worstCaseStatus = this.projectRelations[0].coiProjConflictStatusType;
         }
+    }
+
+    openEntityDetails(personEntityId) {
+        openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
     }
 }
