@@ -101,3 +101,12 @@
   display: inline-block;
   margin-top: 7px;
 }
+
+.entity-name {
+  color: black;
+}
+
+.pill-container em:nth-child(1) {
+  margin-top: 0.5rem!important;
+  display: inline-block;
+}
