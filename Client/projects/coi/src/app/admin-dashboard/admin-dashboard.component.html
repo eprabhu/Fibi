@@ -4,9 +4,15 @@
         <hr class="mt-1">
         <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm">
             <div class="d-flex align-items-center bg-white justify-content-between list navbar-toggleable-xs">
-                <button #mainHeaders id="responsiveColapse"
-                                    class="navbar-toggler hidden-sm-up px-0 mt-1 px-sm-3"
+                <button #mainHeaders id="responsiveColapse" [ngClass]="isShowOptions ? 'd-none' : 'hamburger-display'"
+                                    class="navbar-toggler hidden-sm-up px-0 mt-1 px-sm-3" (click)="isShowOptions = true"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i class="fa fa-bars f-14 text-muted mx-colr" aria-hidden="true"
+                                        title="Click for more pages"></i>
+                </button>
+                <button class="navbar-toggler hidden-sm-up px-0 mt-1 px-sm-3" [@topSlideInOut]="isShowOptions"
+                                    type="button" [ngClass]="!isShowOptions ? 'd-none' : 'hamburger-display'"  (click)="isShowOptions = false"
                                     aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                                     <i class="fa fa-bars f-14 text-muted mx-colr" aria-hidden="true"
                                         title="Click for more pages"></i>
@@ -74,7 +80,7 @@
                         Travel Disclosures
                     </li>
                 </ul>
-                <div class="mx-1" tabindex="0">
+                <div class="mx-1 py-2" tabindex="0">
                     <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0"
                         id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
                         (click)="toggleAdvanceSearch();" aria-label="Toggle Advanced Search"
