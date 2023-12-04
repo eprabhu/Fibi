@@ -131,6 +131,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isAllDisclosuresSelected = false;
     isFcoiReadMore = false;
     isPurposeRead = false;
+    isShowOptions = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -306,6 +307,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        document.removeEventListener('mouseup', null);
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -887,14 +889,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     offClickMainHeaderHandler(event: any) {
         if (window.innerWidth < 1093) {
             const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
-            console.log(ELEMENT.classList);
-            if (!this.mainHeaders.nativeElement.contains(event.target)) {
-                if (document.getElementById('navbarResponsive').classList.contains('show')) {
-                    document.getElementById('navbarResponsive').classList.remove('show');
-                } else {
-                    document.getElementById('navbarResponsive').classList.add('show');
-                }
+            if (document.getElementById('navbarResponsive').classList.contains('show')) {
+                document.getElementById('navbarResponsive').classList.remove('show');
             }
+        } else {
+            this.isShowOptions = false;
         }
     }
 

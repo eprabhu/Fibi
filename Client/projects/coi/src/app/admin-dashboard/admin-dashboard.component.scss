@@ -416,18 +416,27 @@ input[type='checkbox'] {
   }
 }
 
+.navbar-toggleable-xs {
+  position: relative;
+}
+
+.hamburger-display {
+  display: none;
+}
+
 @media (max-width: 1092.9px) {
   #navbarResponsive {
     position: absolute;
     z-index: 99;
     display: none;
-    top: 141px;
-    left: unset;
+    top: 30px;
+    left: 9px;
+    transition: all 300ms;
   }
 
-  // .show {
-  //   display: block !important;
-  // }
+  .show {
+    display: block !important;
+  }
 
   .menu-responsive {
     position: relative;
@@ -442,11 +451,14 @@ input[type='checkbox'] {
 
   .menu-responsive li {
     color: #fff !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
   }
 
   .separator {
     margin: 0 !important;
-    border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+    border-top: none !important;
+    border-color: #f7f7f71f !important;
   }
 
   .active {
@@ -458,5 +470,11 @@ input[type='checkbox'] {
     color: #fff !important;
     border-bottom: none !important;
   }
+
+  .hamburger-display {
+    display: block;
+  }
 }
 
+
+ 
