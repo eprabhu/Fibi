@@ -94,4 +94,10 @@ public class OPAReview implements Serializable {
 	@Transient
 	private String assigneePersonName;
 
+	@Transient
+	private String currentReviewStatusTypeCode;
+
+	@Transient
+	private String currentLocationTypeCode;
+
 }
