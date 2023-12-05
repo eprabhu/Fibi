@@ -131,6 +131,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isAllDisclosuresSelected = false;
     isFcoiReadMore = false;
     isPurposeRead = false;
+    isShowOptions = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -272,6 +273,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     getDashboardDetails() {
         this.$subscriptions.push(this.$coiList.pipe(
             switchMap(() => {
+                this.clearSelectAllDisclosure();
                 this.isLoading = true;
                 return this.coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())
             }))
@@ -306,6 +308,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        document.removeEventListener('mouseup', null);
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -318,7 +321,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     changeTab(tabName) {
-        this.clearSelectAllDisclosure();
         this.coiList = [];
         this.isShowDisclosureList = false;
         this.coiAdminDashboardService.isAdvanceSearch = false;
@@ -404,7 +406,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     resetAndPerformAdvanceSearch() {
-        this.clearSelectAllDisclosure();
         this.resetAdvanceSearchFields();
         this.coiList = [];
         this.$coiList.next();
@@ -445,7 +446,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     performAdvanceSearch() {
-        this.clearSelectAllDisclosure();
         this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
@@ -616,7 +616,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     sortResult(sortFieldBy) {
-        this.clearSelectAllDisclosure();
         this.sortCountObj[sortFieldBy]++;
         if (this.sortCountObj[sortFieldBy] < 3) {
             this.localCOIRequestObject.sort[sortFieldBy] = !this.localCOIRequestObject.sort[sortFieldBy] ? 'asc' : 'desc';
@@ -887,14 +886,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     offClickMainHeaderHandler(event: any) {
         if (window.innerWidth < 1093) {
             const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
-            console.log(ELEMENT.classList);
-            if (!this.mainHeaders.nativeElement.contains(event.target)) {
-                if (document.getElementById('navbarResponsive').classList.contains('show')) {
-                    document.getElementById('navbarResponsive').classList.remove('show');
-                } else {
-                    document.getElementById('navbarResponsive').classList.add('show');
-                }
+            if (document.getElementById('navbarResponsive').classList.contains('show')) {
+                document.getElementById('navbarResponsive').classList.remove('show');
             }
+        } else {
+            this.isShowOptions = false;
         }
     }
 

@@ -52,20 +52,14 @@ public class OPAReviewServiceImpl implements OPAReviewService {
     @Autowired
     private ActionLogDao actionLogRepository;
 
-    @Autowired
-    private ConflictOfInterestDao coiDao;
-
-    @Autowired
-    private ConflictOfInterestService coiService;
-
     @Override
     public ResponseEntity<Object> saveOrUpdateOPAReview(OPAReview opaReview) {
         Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
-        String actionTypeCode;
+        String actionTypeCode = null;
         String reviewerName = null;
         if (opaReview.getOpaReviewId() == null) {
             if (reviewDao.isOPAReviewAdded(opaReview)) {
-                return new ResponseEntity<>("Review already added", HttpStatus.METHOD_NOT_ALLOWED);
+                return new ResponseEntity<>(commonDao.convertObjectToJSON("Review already added"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             opaReview.setCreateUser(AuthenticatedUser.getLoginUserName());
             opaReview.setUpdateTimestamp(updateTimestamp);
@@ -78,7 +72,13 @@ public class OPAReviewServiceImpl implements OPAReviewService {
             } else {
                 actionTypeCode = Constants.OPA_DIS_ACTION_LOG_CREATED_REVIEW_WITHOUT_REVIEWER;
             }
-        } else {
+        } else if (opaReview.getOpaReviewId()!= null) {
+			if (reviewDao.isReviewStatusChanged(opaReview)) {
+				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review status changed"), HttpStatus.METHOD_NOT_ALLOWED);
+			}
+			if (reviewDao.isReviewPresent(opaReview)) {
+				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review already added"), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
             updateTimestamp = reviewDao.updateOPAReview(opaReview);
             if (opaReview.getAssigneePersonId() != null) {
                 actionTypeCode = Constants.OPA_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER;

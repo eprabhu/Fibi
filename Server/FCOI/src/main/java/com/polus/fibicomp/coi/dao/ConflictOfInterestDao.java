@@ -1276,13 +1276,6 @@ public interface ConflictOfInterestDao {
 	boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
 
 	/**
-	 * This method is used to fetch SFI relationship details
-	 * @param loginPersonId
-	 * @return
-	 */
-	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId);
-
-	/**
 	 * This method used to get the counts of a person's attachments
 	 * @param personId
 	 * @return
@@ -1302,4 +1295,21 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public boolean isReviewStatusChanged(CoiReview coiReview);
+
+	/**
+	 * This method checks if the edit action is allowed
+	 * @param coiReview
+	 * @return
+	 */
+	public boolean isReviewPresent(CoiReview coiReview);
+
+	/**
+	 * This method is used to fetch person entity relationship based on all or any of the parameters
+	 * @param disclosureId
+	 * @param personId
+	 * @param fetchNonArchive
+	 * @return list of SFI relations
+	 */
+	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive);
+
 }
