@@ -27,7 +27,30 @@
                         </thead>
                         <tbody>
                             <tr class="row-hover" *ngFor="let item of coiFinancialEntityDetails">
-                                <td>{{ item?.coiEntity?.entityName }}</td>
+                                <td>
+                                    <span *ngIf="item?.coiEntity?.entityName" class="fs-14">
+                                        <span class="word-break-all new-line-property mx-2"
+                                            *ngIf="!isEntityNameRead && item?.coiEntity?.entityName?.length > 50; else showFullInfo">
+                                            <span class="grey-text mt-2">{{(item?.coiEntity?.entityName |
+                                                slice:0:50)}}</span>
+                                            <span (click)="isEntityNameRead = !isEntityNameRead"
+                                                class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                        More</u>
+                                                    <i aria-hidden="true"></i></span>
+                                            </span>
+                                        </span>
+                                        <ng-template #showFullInfo>
+                                            <span
+                                                class="word-break-all new-line-property grey-text">{{item?.coiEntity?.entityName}}</span>
+                                            <span class="hand-cursor mt-2 fw-medium"
+                                                *ngIf="item?.coiEntity?.entityName?.length > 50"
+                                                (click)="isEntityNameRead = !isEntityNameRead" aria-hidden="true">
+                                                <span class="fw-medium"><u> Read Less</u>
+                                                    <i aria-hidden="true"></i></span>
+                                            </span>
+                                        </ng-template>
+                                    </span>
+                                </td>
                                 <td>
                                     <app-no-data-label
                                         [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label>

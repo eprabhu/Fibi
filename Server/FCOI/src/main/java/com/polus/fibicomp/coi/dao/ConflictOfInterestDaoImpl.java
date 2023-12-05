@@ -12,11 +12,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.Iterator;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -46,12 +47,13 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -99,7 +101,6 @@ import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
@@ -109,7 +110,6 @@ import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import com.polus.fibicomp.view.DisclosureView;
-import com.polus.fibicomp.coi.pojo.Attachments;
 
 import oracle.jdbc.OracleTypes;
 
@@ -351,8 +351,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<CoiDisclEntProjDetails> getProjectRelationshipByParam(Integer moduleCode, Integer moduleItemId, String loginPersonId, Integer disclosureId) {
+		//TODO change the filtering logic to person entity sync
 		return hibernateTemplate.execute(session -> {
-		    StringBuilder hqlBuilder = new StringBuilder("SELECT cdep FROM CoiDisclEntProjDetails cdep ");
+		    StringBuilder hqlBuilder = new StringBuilder("SELECT DISTINCT cdep FROM CoiDisclEntProjDetails cdep ");
 		    hqlBuilder.append("INNER JOIN PersonEntityRelationship perRel ");
 		    hqlBuilder.append("ON cdep.personEntityId = perRel.personEntityId ");
 		    hqlBuilder.append("WHERE cdep.coiDisclosure.personId = :loginPersonId ");
@@ -3486,11 +3487,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			if (!projectSfiList.isEmpty()) {
 				COIValidateDto coiValidateDto = new COIValidateDto();
 				coiValidateDto.setValidationMessage(PROJECT_SFI_REL_MSG);
-				List<Map<String, String>> projectSfiListMaps = projectSfiList.stream()
-						.map(item -> Arrays.stream(item.split("\\|\\|")).map(
-								part -> Arrays.stream(part.trim().split(":")).map(String::trim).toArray(String[]::new))
-								.collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])))
-						.collect(Collectors.toList());
+				List<List<Map<String, String>>> projectSfiListMaps = projectSfiList.stream()
+		                .map(item -> Arrays.stream(item.split("\\|\\|"))
+		                        .map(part -> Arrays.stream(part.trim().split("::")).map(String::trim).toArray(String[]::new))
+		                        .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])))
+		                .collect(Collectors.groupingBy(map -> map.get("ModuleItemKey")))
+		                .values()
+		                .stream()
+		                .collect(Collectors.toList());
 				coiValidateDto.setProjectSfiList(projectSfiListMaps);
 				coiValidateDto.setSfiList(new ArrayList<>());
 				coiValidateDtoList.add(coiValidateDto);
@@ -4490,42 +4494,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		CallableStatement statement = null;
-		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
-		try {
-			statement = connection.prepareCall("{call GET_COI_PERSON_ENTITY_REL_DETAILS(?)}");
-			statement.setString(1, loginPersonId);
-			statement.execute();
-			ResultSet	rset = statement.getResultSet();
-			while (rset.next()) {
-				relationshipDtos.add(PersonEntityRelationshipDto.builder()
-						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
-						.entityId(rset.getInt("ENTITY_ID"))
-						.entityNumber(rset.getInt("ENTITY_NUMBER"))
-						.entityName(rset.getString("ENTITY_NAME"))
-						.countryName(rset.getString("COUNTRY_NAME"))
-						.validPersonEntityRelType(rset.getString("RELATIONSHIPS"))
-						.entityType(rset.getString("ENTITY_TYPE"))
-						.entityRiskCategory(rset.getString("RISK"))
-						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
-						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
-						.involvementStartDate(rset.getDate("INVOLVEMENT_START_DATE"))
-						.involvementEndDate(rset.getDate("INVOLVEMENT_END_DATE"))
-						.build());
-			}
-
-		} catch (Exception e) {
-			logger.error("Exception on getSFIRelationshipDetails {}", e.getMessage());
-			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
-		}
-		return relationshipDtos;
-	}
-
-	@Override
 	public Long personAttachmentsCount(String personId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -4546,4 +4514,94 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("personId", personId);
 		return (Long) query.getSingleResult();
 	}
+
+	@Override
+	public boolean isReviewStatusChanged(CoiReview coiReview) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE ");
+		hqlQuery.append("r.coiReviewId = :reviewId");
+		hqlQuery.append(" AND r.reviewStatusTypeCode = :currentReviewStatusTypeCode AND r.locationTypeCode = :locationTypeCode");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("reviewId", coiReview.getCoiReviewId());
+		query.setParameter("locationTypeCode", coiReview.getCurrentLocationTypeCode());
+		query.setParameter("currentReviewStatusTypeCode", coiReview.getCurrentReviewStatusTypeCode());
+		try {
+			Integer result = (Integer) query.getSingleResult();
+			return result == null;
+		}catch (NoResultException e) {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean isReviewPresent(CoiReview coiReview) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE ");
+		hqlQuery.append(" r.disclosureId = :disclosureId AND r.coiReviewId != :reviewId ");
+		hqlQuery.append("AND (r.reviewStatusTypeCode = :newReviewStatusTypeCode OR r.reviewStatusTypeCode != :reviewStatusTypeCode) ");
+		hqlQuery.append(" AND r.locationTypeCode = :newLocationTypeCode");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("newLocationTypeCode", coiReview.getLocationTypeCode());
+		query.setParameter("newReviewStatusTypeCode", coiReview.getReviewStatusTypeCode());
+		query.setParameter("disclosureId", coiReview.getDisclosureId());
+		query.setParameter("reviewId", coiReview.getCoiReviewId());
+		query.setParameter("reviewStatusTypeCode", Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED);
+		try {
+			Integer result = (Integer) query.getSingleResult();
+			return result != null;
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
+
+	@Override
+	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
+		try {
+			statement = connection.prepareCall("{call GET_COI_PERSON_ENTITY_DETAILS(?,?,?)}");
+			if (disclosureId == null) {
+				statement.setNull(1, Types.INTEGER);
+			} else {
+				statement.setInt(1, disclosureId);
+			}
+			if(personId == null) {
+				statement.setNull(2, Types.VARCHAR);
+			} else {
+				statement.setString(2, personId);
+			}
+			if(fetchNonArchive == null) {
+				statement.setNull(3, Types.BOOLEAN);
+			} else {
+				statement.setBoolean(3, fetchNonArchive);
+			}
+			statement.execute();
+			ResultSet	rset = statement.getResultSet();
+			while (rset.next()) {
+				relationshipDtos.add(PersonEntityRelationshipDto.builder()
+						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
+						.entityId(rset.getInt("ENTITY_ID"))
+						.entityNumber(rset.getInt("ENTITY_NUMBER"))
+						.entityName(rset.getString("ENTITY_NAME"))
+						.countryName(rset.getString("COUNTRY_NAME"))
+						.validPersonEntityRelType(rset.getString("REL"))
+						.entityType(rset.getString("ENTITY_TYPE"))
+						.entityRiskCategory(rset.getString("RISK_CATEGORY"))
+						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
+						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
+						.build());
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getEntityWithRelationShipInfo {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
+		}
+		return relationshipDtos;
+	}
+
 }

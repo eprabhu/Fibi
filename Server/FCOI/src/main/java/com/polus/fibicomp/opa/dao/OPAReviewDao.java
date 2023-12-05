@@ -66,4 +66,19 @@ public interface OPAReviewDao {
      * @param opaReviewId
      */
     void deleteOPAReview(Integer opaReviewId);
+
+    /**
+	 * This method fetches a person against in a review
+	 * @param opaReview
+	 * @return
+	 */
+	boolean isReviewStatusChanged(OPAReview opaReview);
+
+	/**
+	 * This method checks if the edit action is allowed
+	 * @param opaReview
+	 * @return
+	 */
+	boolean isReviewPresent(OPAReview opaReview);
+
 }

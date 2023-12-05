@@ -1,86 +1,96 @@
-<div class="border bg-white rounded-3 p-2 mt-2" [id]="SFIObject.entityId" >
+<div class="disclosure-card rounded-3 p-2 mt-2 entity-name" [id]="SFIObject.entityId">
   <div class="m-0 mb-2 row">
     <span class="align-items-center d-flex">
-      <span class="shadow-sm align-items-center d-flex"tabindex="0" [attr.aria-label] = "SFIObject?.isActive === 'ACTIVE' ?
+      <span class="shadow-sm align-items-center d-flex" tabindex="0" [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
       'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
         [ngClass]="SFIObject.isActive === 'ACTIVE'? 'active-ribbon' : SFIObject?.isActive === 'DRAFT' ? 'draft-ribbon'  : 'inactive-ribbon'">{{SFIObject?.isActive === 'ACTIVE' ?
         'Active' : SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'}}</span>
       <p class="entity-title mt-3">
-        <strong class="fs-16"tabindex="0" [attr.aria-label] = "'entity name' + SFIObject?.entityName">{{SFIObject?.entityName }}</strong>
+        <strong class="fs-16"tabindex="0" [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName }}</strong>
       </p>
       <div class="info-text fs-14 ms-auto italian px-3 py-0" data-bs-toggle="tooltip" [title]="getHelpText()" data-bs-placement="top" *ngIf="checkForEntityWarning()">
         <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
         {{getMessage()}}
       </div>
       <div tabindex="0" class="info-text fs-14 ms-auto italian px-3 py-0" *ngIf="referredFrom == 'SFI_SUMMARY' && this.reqObject.versionStatus == 'ARCHIVE'">
-        <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true" aria-label = "SFI modified"></i>
+        <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true" aria-label="SFI modified"></i>
         SFI modified
       </div>
     </span>
     </div>
-  <div class="m-0 mb-2 row">
-    <div class="text-secondary fs-14" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-8' : 'col-7'">
-      <span class="fw-bold me-3"tabindex="0" aria-label = "Relationship">Relationship :</span>
-      <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
-        <span *ngIf="reqObject.validPersonEntityRelTypes?.length"tabindex="0">
-          <ng-container>
-            <em *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue;let isFirst = first" [class.pill-spacing]="!isFirst">
-              <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
-                <span class="fw-medium" aria-label = "Financial :"> {{relationship.key}} : </span>
-                <ng-container *ngFor="let relation of relationship.value;let last = last">
-                <span class="r-title" *ngIf="!last"[attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description +'/'}}
-                </span>
-                <span class="r-title" *ngIf="last"[attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description}}
-                </span>      
-                </ng-container>  
-              </span>    
-            </em>
-          </ng-container>
-        </span>
-      </app-no-data-label>
-    </div>
-    <div tabindex="0"  class="text-secondary" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-4' : 'col-5'">
-      <span  class="fw-bold me-2 fs-14">Entity Type :</span>
-      <app-no-data-label [valueToShow]="SFIObject?.entityType">
-        <span class="fs-14" [attr.aria-label]="SFIObject?.entityType"> {{SFIObject?.entityType}}</span>
-      </app-no-data-label>
-    </div>
-  </div>
-  <div class="fs-14 mx-0 row" [class.pb-2]="referredFrom === 'SFI_SUMMARY'"
-    [class.mt-3]="referredFrom === 'SFI_SUMMARY'">
-    <div class="align-items-center col-4 d-flex justify-content-between text-secondary">
-      <div tabindex="0">
-        <span class="fw-bold me-2" [attr.aria-label] ="'Start Date Of Involvement' + SFIObject?.involvementStartDate
-        | dateFormatter"> Start Date Of Involvement : </span>
-        <app-no-data-label [valueToShow]="SFIObject?.involvementStartDate">
-          <span> {{SFIObject?.involvementStartDate
-            |dateFormatter }} </span>
-        </app-no-data-label>
-      </div>
-    </div>
-    <div class="align-items-center d-flex justify-content-between text-secondary" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-4' : 'col-3'">
-      <div tabindex="0">
-        <span class="fw-bold me-2" [attr.aria-label] ="'End Date Of Involvement' + SFIObject?.involvementEndDate
-        | dateFormatter"> End Date Of Involvement :</span>
-        <app-no-data-label [valueToShow]="SFIObject?.involvementEndDate">
-          <span>
-            {{ SFIObject?.involvementEndDate
-            |dateFormatter }}
+  <div class="mb-3 row mx-0">
+    <div class="text-secondary fs-14" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-8' : 'col-lg-7 col-md-8 col-12'">
+      <label class="fw-bold me-3" tabindex="0" aria-label="Relationship">Relationship <span>:</span></label>
+      <span class="break-point-1200">
+        <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
+          <span *ngIf="reqObject.validPersonEntityRelTypes?.length" tabindex="0">
+            <ng-container>
+              <span class="pill-container">
+              <em *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue;let isFirst = first" [class.pill-spacing]="!isFirst">
+                <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
+                  <span class="fw-medium" [attr.aria-label]="relation?.personEntityRelType?.description"> {{relationship.key}} : </span>
+                  <ng-container *ngFor="let relation of relationship.value;let last = last">
+                  <span class="r-title" *ngIf="!last" [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description +'/'}}
+                  </span>
+                  <span class="r-title" *ngIf="last" [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description}}
+                  </span>      
+                  </ng-container>  
+                </span>    
+              </em>
+            </span>
+            </ng-container>
           </span>
         </app-no-data-label>
+      </span>
+    </div>
+    <div tabindex="0"  class="text-secondary" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-4' : 'col-lg-5 col-md-4 col-12'">
+      <label class="fw-bold me-2 fs-14">Entity Type <span>:</span></label>
+      <span class="break-point-1200">
+        <app-no-data-label [valueToShow]="SFIObject?.entityType">
+          <span class="fs-14" [attr.aria-label]="SFIObject?.entityType"> {{SFIObject?.entityType}}</span>
+        </app-no-data-label>
+      </span>
+    </div>
+  </div>
+  <div class="fs-14 mx-0 row mt-md-2" [class.pb-2]="referredFrom === 'SFI_SUMMARY'"
+    [class.mt-3]="referredFrom === 'SFI_SUMMARY'">
+    <div class="align-items-center col-lg-4 col-md col-12 d-flex justify-content-between text-secondary">
+      <div tabindex="0">
+        <label class="fw-bold me-2" [attr.aria-label]="'Start Date Of Involvement' + SFIObject?.involvementStartDate
+        | dateFormatter"> Start Date Of Involvement <span>:</span> </label>
+        <span class="break-point-1200">
+          <app-no-data-label [valueToShow]="SFIObject?.involvementStartDate">
+            <span> {{SFIObject?.involvementStartDate
+              |dateFormatter }} </span>
+          </app-no-data-label>
+        </span>
       </div>
     </div>
-    <div  class="align-items-center d-flex col fs-14 text-secondary"tabindex="0">
-        <span for="Country" class="fw-bold me-2 text-nowrap"> Country : </span>
-        <span class="col">
-            <app-no-data-label [valueToShow]="SFIObject?.countryName" id="Country">
-                <span [attr.aria-label] = " SFIObject?.countryName " class="grey-text text-slice" [title]="SFIObject?.countryName">{{SFIObject?.countryName}}</span>
+    <div class="align-items-center d-flex justify-content-between text-secondary" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-4' : 'col-lg-3 col-md col-12'">
+      <div tabindex="0">
+        <label class="fw-bold me-2" [attr.aria-label]="'End Date Of Involvement' + SFIObject?.involvementEndDate
+        | dateFormatter"> End Date Of Involvement <span>:</span></label>
+        <span class="break-point-1200">
+          <app-no-data-label [valueToShow]="SFIObject?.involvementEndDate">
+            <span>
+              {{ SFIObject?.involvementEndDate
+              |dateFormatter }}
+            </span>
+          </app-no-data-label>
+        </span>
+      </div>
+    </div>
+    <div class="align-items-center d-xl-flex col-lg col-md-4 col-12 fs-14 text-secondary" tabindex="0">
+        <label class="fw-bold me-2 text-nowrap"> Country <span>:</span> </label>
+        <span class="col break-point-1200">
+            <app-no-data-label [valueToShow]="SFIObject?.countryName">
+                <span [attr.aria-label]="SFIObject?.countryName" class="grey-text text-slice" title="{{SFIObject?.countryName}}">{{SFIObject?.countryName}}</span>
               </app-no-data-label>
         </span>
     </div>
     <div class="align-items-center col-1 d-flex text-secondary justify-content-end"
       *ngIf="referredFrom === 'SFI_SUMMARY'">
-      <span tabindex="0" class="align-items-center btn btn-primary-icon d-flex px-2 py-1 me-2" id="view-sfi"aria-label=" view sfi details"
+      <span tabindex="0" class="align-items-center btn btn-primary-icon d-flex px-2 py-1 me-2" id="view-sfi" aria-label="view sfi details"
         (click)="openSfiDetails(SFIObject?.entityId, 'view')">
         <mat-icon>remove_red_eye</mat-icon>
       </span>
@@ -88,29 +98,29 @@
         <mat-icon>rate_review</mat-icon>
       </span>
     </div>
-    <div class="align-items-center col mb-2 d-flex text-secondary justify-content-end" *ngIf="referredFrom !== 'SFI_SUMMARY'">
+    <div class="align-items-center col-lg col-12 mt-2 d-flex text-secondary justify-content-end" *ngIf="referredFrom !== 'SFI_SUMMARY'">
         <button (click)="openSfiDetails(SFIObject?.entityId, 'view')" *ngIf="SFIObject?.isActive !== 'DRAFT' || isTriggeredFromSlider"
-          class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15">
+          class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15" title="Click to view SFI">
           <mat-icon class="me-1">visibility</mat-icon>
           View
         </button>
         <button *ngIf="SFIObject?.isActive !== 'INACTIVE' && !isTriggeredFromSlider" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')"
-          class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15">
+          class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15" title="Click to modify SFI">
           <mat-icon class="me-1">edit</mat-icon>
           Modify
         </button>
         <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject?.isActive === 'DRAFT' && !isTriggeredFromSlider"
-          class="align-items-center btn btn-outline-secondary d-flex fs-14">
+          class="align-items-center btn btn-outline-secondary d-flex fs-14" title="Click to delete SFI ">
           <mat-icon class="me-1">delete</mat-icon>
           Delete 
         </button>
-        <button (click)="activateDeactivate(SFIObject)" *ngIf="SFIObject?.isActive === 'INACTIVE'  && !isTriggeredFromSlider"
-          class="align-items-center btn btn-outline-secondary btn-lg d-flex fs-14">
+        <button (click)="activateDeactivate(SFIObject)" *ngIf="SFIObject?.isActive === 'INACTIVE' && !isTriggeredFromSlider"
+          class="align-items-center btn btn-outline-secondary btn-lg d-flex fs-14" title="Click to activate SFI ">
           <i class="fa fa-bolt fs-18 fw-700 mr-2" aria-hidden="true"></i>
           Activate
         </button>
           <button (click)="activateDeactivate(SFIObject)" *ngIf="SFIObject?.isActive === 'ACTIVE' && !isTriggeredFromSlider"
-          class="align-items-center btn btn-outline-secondary d-flex fs-14">
+          class="align-items-center btn btn-outline-secondary d-flex fs-14" title="Click to inactivate SFI">
           <mat-icon class="me-1">schedule</mat-icon>
           Inactivate
         </button>

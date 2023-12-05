@@ -19,6 +19,7 @@ import { SharedDisclosureModule } from './shared-disclosure/shared-disclosure.mo
 import { EntityRiskSliderModule } from './entity-risk-slider/entity-risk-slider.module';
 import { HeaderSlidersModule } from './header-sliders/header-sliders.module';
 import { SfiListComponent } from './sfi-list/sfi-list.component';
+import { CoiService } from './services/coi.service';
 
 
 const routes: Routes = [
@@ -70,6 +71,7 @@ const routes: Routes = [
         DataStoreService,
         ResolveServiceService,
         RouterGuardService,
+        CoiService
     ],
     exports: [],
     imports: [

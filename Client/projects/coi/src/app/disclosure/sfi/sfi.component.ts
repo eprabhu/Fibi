@@ -2,8 +2,6 @@ import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChil
 import { Subject, Subscription, interval } from 'rxjs';
 
 import { SfiService } from './sfi.service';
-import { DataStoreService } from '../services/data-store.service';
-import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
@@ -26,6 +24,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     @Input()  reviewStatus: any;
     @Input()  isEditMode: any;
     @Input()  personId: any;
+    @Input()  focusSFIId: any;
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
@@ -52,7 +51,6 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     constructor(
         private _sfiService: SfiService,
-        public _coiService: CoiService,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _commonService: CommonService,
@@ -82,11 +80,11 @@ export class SfiComponent implements OnInit, OnDestroy {
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.isLoading = false;
                 setTimeout(() => {
-                    if(this._coiService.focusSFIId) {
-                        scrollIntoView(this._coiService.focusSFIId);
-                        const ELEMENT = document.getElementById(this._coiService.focusSFIId);
+                    if(this.focusSFIId) {
+                        scrollIntoView(this.focusSFIId);
+                        const ELEMENT = document.getElementById(this.focusSFIId);
                         ELEMENT.classList.add('error-highlight-card');
-                        this._coiService.focusSFIId = null;
+                        this.focusSFIId = null;
                     }
             });
             }

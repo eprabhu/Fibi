@@ -2,6 +2,7 @@ package com.polus.fibicomp.coi.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -591,4 +592,12 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> getSFIRelationshipDetails();
+
+	/**
+	 * This method used to complete disclosure reviews
+	 * @param map
+	 * @return
+	 */
+	ResponseEntity<Object> completeDisclosureReviews(Map<Integer, Integer> disclosureIdNumberMap);
+
 }

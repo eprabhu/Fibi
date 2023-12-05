@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,9 +24,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "COI_REVIEW")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class CoiReview implements Serializable {
 
@@ -95,147 +105,10 @@ public class CoiReview implements Serializable {
 	@Transient
 	private String assigneePersonName;
 
-	public Integer getCoiReviewId() {
-		return coiReviewId;
-	}
+	@Transient
+	private String currentReviewStatusTypeCode;
 
-	public void setCoiReviewId(Integer coiReviewId) {
-		this.coiReviewId = coiReviewId;
-	}
+	@Transient
+	private String currentLocationTypeCode;
 
-	public String getAssigneePersonId() {
-		return assigneePersonId;
-	}
-
-	public void setAssigneePersonId(String assigneePersonId) {
-		this.assigneePersonId = assigneePersonId;
-	}
-
-	public Integer getDisclosureId() {
-		return disclosureId;
-	}
-
-	public void setDisclosureId(Integer disclosureId) {
-		this.disclosureId = disclosureId;
-	}
-
-	public Integer getAdminGroupId() {
-		return adminGroupId;
-	}
-
-	public void setAdminGroupId(Integer adminGroupId) {
-		this.adminGroupId = adminGroupId;
-	}
-
-	public AdminGroup getAdminGroup() {
-		return adminGroup;
-	}
-
-	public void setAdminGroup(AdminGroup adminGroup) {
-		this.adminGroup = adminGroup;
-	}
-
-	public String getReviewStatusTypeCode() {
-		return reviewStatusTypeCode;
-	}
-
-	public void setReviewStatusTypeCode(String reviewStatusTypeCode) {
-		this.reviewStatusTypeCode = reviewStatusTypeCode;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public String getAssigneePersonName() {
-		return assigneePersonName;
-	}
-
-	public void setAssigneePersonName(String assigneePersonName) {
-		this.assigneePersonName = assigneePersonName;
-	}
-
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public CoiDisclosure getCoiDisclosure() {
-		return coiDisclosure;
-	}
-
-	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
-		this.coiDisclosure = coiDisclosure;
-	}
-
-	public CoiReviewerStatusType getReviewerStatusType() {
-		return reviewerStatusType;
-	}
-
-	public void setReviewerStatusType(CoiReviewerStatusType reviewerStatusType) {
-		this.reviewerStatusType = reviewerStatusType;
-	}
-
-	public String getLocationTypeCode() {
-		return locationTypeCode;
-	}
-
-	public void setLocationTypeCode(String locationTypeCode) {
-		this.locationTypeCode = locationTypeCode;
-	}
-
-	public CoiReviewLocationType getReviewLocationType() {
-		return reviewLocationType;
-	}
-
-	public void setReviewLocationType(CoiReviewLocationType reviewLocationType) {
-		this.reviewLocationType = reviewLocationType;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 }

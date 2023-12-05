@@ -65,6 +65,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     currentTab: 'MY_ENTITIES'| 'ADD_ENTITY' = 'MY_ENTITIES';
     currentFilter: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
+    relationshipTypeCache = {};
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService) { }
 
@@ -264,6 +265,18 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         if (INDEX > -1) {
             this.myEntities.splice(INDEX, 1);
         }
+    }
+
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+        const entityRelTypes = validPersonEntityRelType.split(':;:');
+        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+            const relationshipType = entity.split(':');
+            return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
+        });
+        return this.relationshipTypeCache[validPersonEntityRelType];
     }
 
 }

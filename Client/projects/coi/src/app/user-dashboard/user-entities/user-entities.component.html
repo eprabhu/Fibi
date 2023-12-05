@@ -1,15 +1,23 @@
 <div class="advance-search-area border d-flex rounded-1 mt-3"
   *ngIf="!isHideFilterSearchAndShowCreate">
-    <div class="border-end fs-14 p-3" [@leftSlideInOut]>
-        <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
-        <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" title="Sort by All Status"
+    <div class="border-end fs-14 p-3 d-inline-block" [@leftSlideInOut]>
+        <span class="fs-14 fw-medium me-2 text-secondary" tabindex="0" aria-label="Filter By Status">Filter By Status :</span>
+        <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0" 
+              [attr.aria-label]="sfiDashboardRequestObject.filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
+              title="Click to filter by type: All"
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white"
               role="button">All</span>
-        <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" title="Sort by DRAFT Status"
+        <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" tabindex="0"
+              [attr.aria-label]="sfiDashboardRequestObject.filterType=='DRAFT' ? 'Selected filter type is Draft ' : 'Draft'"
+              title="Click to filter by type: Draft" 
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Draft</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
+        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" tabindex="0"
+              [attr.aria-label]="sfiDashboardRequestObject.filterType=='ACTIVE' ? 'Selected filter type is Active ' : 'Active'"
+              title="Click to filter by type: Active" 
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
-        <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" title="Sort by Inactive Status"
+        <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0"
+              [attr.aria-label]="sfiDashboardRequestObject.filterType=='INACTIVE' ? 'Selected filter type is Inactive ' : 'Inactive'"
+              title="Click to filter by type: Inactive"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>
     </div>
     <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"

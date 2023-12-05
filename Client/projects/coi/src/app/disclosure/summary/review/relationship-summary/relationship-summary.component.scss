@@ -327,3 +327,13 @@ label {
   color: #48647f;
   font-weight: 500;
 }
+
+.sortable-icon {
+    border: none !important;
+    mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 16px;
+        margin-left: 4px;
+    }
+}
