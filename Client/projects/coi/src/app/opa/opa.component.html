@@ -167,6 +167,7 @@
                             Back
                         </button>
                         <button
+                            *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode != '1'"
                             [matMenuTriggerFor]="beforeMenu"
                             class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 px-3 fit-height"
                             role="button" title="Click for More Actions">
@@ -240,6 +241,7 @@
                             <mat-icon>reply</mat-icon>
                         </button>
                         <button
+                            *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode != '1'"
                             [matMenuTriggerFor]="beforeMenu"
                             class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col px-3 fit-height"
                             role="button" title="Click for More Actions">
@@ -267,7 +269,8 @@
                             <mat-icon>done</mat-icon>
                         </button>
                         <button
-                            *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)
+                                   && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)"
                             title="Click to complete review"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2"
                             data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
