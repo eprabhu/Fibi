@@ -4494,42 +4494,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		CallableStatement statement = null;
-		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
-		try {
-			statement = connection.prepareCall("{call GET_COI_PERSON_ENTITY_REL_DETAILS(?)}");
-			statement.setString(1, loginPersonId);
-			statement.execute();
-			ResultSet	rset = statement.getResultSet();
-			while (rset.next()) {
-				relationshipDtos.add(PersonEntityRelationshipDto.builder()
-						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
-						.entityId(rset.getInt("ENTITY_ID"))
-						.entityNumber(rset.getInt("ENTITY_NUMBER"))
-						.entityName(rset.getString("ENTITY_NAME"))
-						.countryName(rset.getString("COUNTRY_NAME"))
-						.validPersonEntityRelType(rset.getString("RELATIONSHIPS"))
-						.entityType(rset.getString("ENTITY_TYPE"))
-						.entityRiskCategory(rset.getString("RISK"))
-						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
-						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
-						.involvementStartDate(rset.getDate("INVOLVEMENT_START_DATE"))
-						.involvementEndDate(rset.getDate("INVOLVEMENT_END_DATE"))
-						.build());
-			}
-
-		} catch (Exception e) {
-			logger.error("Exception on getSFIRelationshipDetails {}", e.getMessage());
-			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
-		}
-		return relationshipDtos;
-	}
-
-	@Override
 	public Long personAttachmentsCount(String personId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -4555,19 +4519,89 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public boolean isReviewStatusChanged(CoiReview coiReview) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT COUNT(r.coiReviewId) FROM CoiReview r WHERE ");
+		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE ");
 		hqlQuery.append("r.coiReviewId = :reviewId");
-		hqlQuery.append(" AND (r.reviewStatusTypeCode != :currentReviewStatusTypeCode or r.locationTypeCode != :locationTypeCode)");
+		hqlQuery.append(" AND r.reviewStatusTypeCode = :currentReviewStatusTypeCode AND r.locationTypeCode = :locationTypeCode");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("reviewId", coiReview.getCoiReviewId());
 		query.setParameter("locationTypeCode", coiReview.getCurrentLocationTypeCode());
 		query.setParameter("currentReviewStatusTypeCode", coiReview.getCurrentReviewStatusTypeCode());
 		try {
-			Long result = (Long) query.getSingleResult();
-			return result >= 0;
+			Integer result = (Integer) query.getSingleResult();
+			return result == null;
 		}catch (NoResultException e) {
 			return true;
 		}
+	}
+
+	@Override
+	public boolean isReviewPresent(CoiReview coiReview) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE ");
+		hqlQuery.append(" r.disclosureId = :disclosureId AND r.coiReviewId != :reviewId ");
+		hqlQuery.append("AND (r.reviewStatusTypeCode = :newReviewStatusTypeCode OR r.reviewStatusTypeCode != :reviewStatusTypeCode) ");
+		hqlQuery.append(" AND r.locationTypeCode = :newLocationTypeCode");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("newLocationTypeCode", coiReview.getLocationTypeCode());
+		query.setParameter("newReviewStatusTypeCode", coiReview.getReviewStatusTypeCode());
+		query.setParameter("disclosureId", coiReview.getDisclosureId());
+		query.setParameter("reviewId", coiReview.getCoiReviewId());
+		query.setParameter("reviewStatusTypeCode", Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED);
+		try {
+			Integer result = (Integer) query.getSingleResult();
+			return result != null;
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
+
+	@Override
+	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
+		try {
+			statement = connection.prepareCall("{call GET_COI_PERSON_ENTITY_DETAILS(?,?,?)}");
+			if (disclosureId == null) {
+				statement.setNull(1, Types.INTEGER);
+			} else {
+				statement.setInt(1, disclosureId);
+			}
+			if(personId == null) {
+				statement.setNull(2, Types.VARCHAR);
+			} else {
+				statement.setString(2, personId);
+			}
+			if(fetchNonArchive == null) {
+				statement.setNull(3, Types.BOOLEAN);
+			} else {
+				statement.setBoolean(3, fetchNonArchive);
+			}
+			statement.execute();
+			ResultSet	rset = statement.getResultSet();
+			while (rset.next()) {
+				relationshipDtos.add(PersonEntityRelationshipDto.builder()
+						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
+						.entityId(rset.getInt("ENTITY_ID"))
+						.entityNumber(rset.getInt("ENTITY_NUMBER"))
+						.entityName(rset.getString("ENTITY_NAME"))
+						.countryName(rset.getString("COUNTRY_NAME"))
+						.validPersonEntityRelType(rset.getString("REL"))
+						.entityType(rset.getString("ENTITY_TYPE"))
+						.entityRiskCategory(rset.getString("RISK_CATEGORY"))
+						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
+						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
+						.build());
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getEntityWithRelationShipInfo {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
+		}
+		return relationshipDtos;
 	}
 
 }

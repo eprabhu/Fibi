@@ -322,8 +322,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> getSFIOfDisclosure(ConflictOfInterestVO vo) {
 		Map<String, Object> responseData = new HashMap<>();
 		List<PersonEntity> personEntities  = conflictOfInterestDao.getSFIOfDisclosure(vo);
+		Integer disclosureId = vo.getDisclosureId() != null ? vo.getDisclosureId() : null;
+		String personId = disclosureId == null ? vo.getPersonId() : null;
+		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getRelatedEntityInfo(disclosureId, personId, null);
 		personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao
 					.getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
+		personEntities.forEach(personEntity -> personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
+				.stream().filter(dto -> personEntity.getPersonEntityId().equals(dto.getPersonEntityId())).findFirst()
+				.orElse(null)));
 		responseData.put("personEntities", personEntities);
 		responseData.put("count", conflictOfInterestDao.getSFIOfDisclosureCount(vo));
 		return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -481,7 +487,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getDisclosureProjectRelations(ConflictOfInterestVO vo) {
 		List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
-		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getSFIRelationshipDetails(vo.getPersonId());
+		List<PersonEntityRelationshipDto> personEntityRelationshipDto =  conflictOfInterestDao.getRelatedEntityInfo(vo.getDisclosureId(), null, null);
 		conflictOfInterestDao.getProjectRelationshipByParam(vo.getModuleCode(), vo.getModuleItemId(), vo.getPersonId(),
 				vo.getDisclosureId()).forEach(disclosureDetail -> {
 			CoiDisclEntProjDetailsDto coiDisclEntProjDetails = new CoiDisclEntProjDetailsDto();
@@ -636,7 +642,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		String actionTypeCode = null;
 		CoiReview coiReview = vo.getCoiReview();
 		if (coiReview.getCoiReviewId() == null && conflictOfInterestDao.isReviewAdded(coiReview)) {
-			return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+			return new ResponseEntity<>(commonDao.convertObjectToJSON("Review already added"), HttpStatus.INTERNAL_SERVER_ERROR);
+		} else if (coiReview.getCoiReviewId() != null) {
+			if (conflictOfInterestDao.isReviewStatusChanged(coiReview)) {
+				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review status changed"), HttpStatus.METHOD_NOT_ALLOWED);
+			}
+			if (conflictOfInterestDao.isReviewPresent(coiReview)) {
+				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review already added"), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		boolean isCreate = true;
@@ -2804,7 +2817,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> getSFIRelationshipDetails() {
-		return new ResponseEntity<>(conflictOfInterestDao.getSFIRelationshipDetails(AuthenticatedUser.getLoginPersonId()), HttpStatus.OK);
+		return new ResponseEntity<>(conflictOfInterestDao.getRelatedEntityInfo(null, AuthenticatedUser.getLoginPersonId(), true), HttpStatus.OK);
 	}
 
 	@Override

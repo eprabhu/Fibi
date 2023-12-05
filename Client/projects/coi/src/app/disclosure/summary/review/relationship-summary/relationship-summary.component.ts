@@ -46,6 +46,7 @@ export class RelationshipSummaryComponent implements OnInit {
     entityId: any;
     isDesc = true;
     worstCaseStatus = null;
+    relationshipTypeCache = {};
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -237,5 +238,17 @@ getEntityProjectRelations() {
 
     openEntityDetails(personEntityId) {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
+    }
+
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+        const entityRelTypes = validPersonEntityRelType.split(':;:');
+        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+            const relationshipType = entity.split(':');
+            return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
+        });
+        return this.relationshipTypeCache[validPersonEntityRelType];
     }
 }
