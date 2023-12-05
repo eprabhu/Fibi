@@ -224,9 +224,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
 
     clearModal() {
         this.relationValidationMap.clear();
-        if (!this.entityDetailService.definedRelationships.length) {
-            this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
-        }
         this.entityDetailService.isChecked = {};
     }
 
