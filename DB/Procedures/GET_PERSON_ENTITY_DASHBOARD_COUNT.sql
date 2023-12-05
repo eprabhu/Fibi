@@ -25,7 +25,7 @@ SET TAB_QUERY = '';
 
 IF AV_TYPE IS NOT NULL AND AV_TYPE <> '' AND  AV_TYPE = 'PERSON' THEN 
 
-    SET TAB_QUERY = CONCAT(TAB_QUERY,' WHERE T1.ENTITY_ID =',AV_ENTITY_ID, ' AND T1.IS_RELATIONSHIP_ACTIVE = ''Y'' ');
+    SET TAB_QUERY = CONCAT(TAB_QUERY,' WHERE T1.ENTITY_ID =',AV_ENTITY_ID, ' AND T1.IS_RELATIONSHIP_ACTIVE = ''Y'' AND T1.VERSION_STATUS = ''ACTIVE'' ');
 
 END IF;
 
@@ -88,7 +88,7 @@ END IF;
 															 T5.ACTIVE_FLAG,
 															 T5.ACRONYM,
 															 T5.IS_FUNDING_UNIT,
-                                                             T8.RELATIONSHIP_TYPES,
+															 GROUP_CONCAT(DISTINCT CONCAT(t3.DESCRIPTION, \':\', grouped_descriptions) ORDER BY t3.DESCRIPTION SEPARATOR \':;:\') AS RELATIONSHIP_TYPES,
                                                              T1.ENTITY_ID, 
                                                              T1.ENTITY_NUMBER, 
                                                              T1.IS_RELATIONSHIP_ACTIVE, 
@@ -104,11 +104,19 @@ END IF;
                                                              LEFT JOIN PERSON T2 ON T2.PERSON_ID = T1.PERSON_ID
                                                              LEFT JOIN UNIT T5 ON T5.UNIT_NUMBER = T2.HOME_UNIT
                                                              LEFT JOIN COI_DISCLOSURE T6 ON T6.PERSON_ID = T2.PERSON_ID
-                                                             LEFT JOIN (SELECT T.PERSON_ENTITY_ID, GROUP_CONCAT(T3.DESCRIPTION ORDER BY T3.RELATIONSHIP_TYPE_CODE ASC) AS RELATIONSHIP_TYPES FROM PERSON_ENTITY T 
-										LEFT JOIN PERSON_ENTITY_RELATIONSHIP T1 ON T1.PERSON_ENTITY_ID = T.PERSON_ENTITY_ID
-										LEFT JOIN VALID_PERSON_ENTITY_REL_TYPE T2 ON T2.VALID_PERS_ENTITY_REL_TYP_CODE = T1.VALID_PERS_ENTITY_REL_TYP_CODE 
-										LEFT JOIN PERSON_ENTITY_REL_TYPE T3 ON T3.RELATIONSHIP_TYPE_CODE = T2.RELATIONSHIP_TYPE_CODE 
-										GROUP BY T.PERSON_ENTITY_ID)T8 ON T8.PERSON_ENTITY_ID = T1.PERSON_ENTITY_ID',
+                                                             LEFT JOIN person_entity_relationship t4 ON t4.PERSON_ENTITY_ID = T1.PERSON_ENTITY_ID
+                                                             LEFT JOIN VALID_PERSON_ENTITY_REL_TYPE t7 ON t4.VALID_PERS_ENTITY_REL_TYP_CODE = t7.VALID_PERS_ENTITY_REL_TYP_CODE
+															 LEFT JOIN coi_disclosure_type t3 ON t7.DISCLOSURE_TYPE_CODE = t3.DISCLOSURE_TYPE_CODE
+                                                             LEFT JOIN (
+        SELECT t0.PERSON_ENTITY_ID, t3.DESCRIPTION, GROUP_CONCAT(DISTINCT t4.DESCRIPTION ORDER BY t4.DESCRIPTION SEPARATOR \'/\') AS grouped_descriptions
+        FROM person_entity t0
+        INNER JOIN person_entity_relationship t1 ON t1.PERSON_ENTITY_ID = t0.PERSON_ENTITY_ID
+        INNER JOIN VALID_PERSON_ENTITY_REL_TYPE t2 ON t1.VALID_PERS_ENTITY_REL_TYP_CODE = t2.VALID_PERS_ENTITY_REL_TYP_CODE
+        INNER JOIN coi_disclosure_type t3 ON t2.DISCLOSURE_TYPE_CODE = t3.DISCLOSURE_TYPE_CODE
+        INNER JOIN person_entity_rel_type t4 ON t4.RELATIONSHIP_TYPE_CODE = t2.RELATIONSHIP_TYPE_CODE
+        GROUP BY t0.PERSON_ENTITY_ID, t3.DESCRIPTION
+    ) AS T8 ON T1.PERSON_ENTITY_ID = T8.PERSON_ENTITY_ID AND t3.DESCRIPTION = T8.DESCRIPTION
+                                                             ',
                                                              JOIN_CONDITION,'', TAB_QUERY,') T', 
                                                              LS_FILTER_CONDITION);
     END IF;                                                      
