@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
+import { compareDates, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
@@ -350,7 +350,7 @@ export class AddSfiComponent implements OnInit {
             }
         } else {
             this.heading = 'Significant Financial Interest';
-            this.buttonName = 'Create SFI';
+            this.buttonName = 'Save SFI';
             this.btnTitle = 'Click to Create SFI';
         }
     }
@@ -455,6 +455,14 @@ export class AddSfiComponent implements OnInit {
     navigateToSFI(personEntityId) {
         this.sfiService.isShowSfiNavBar = false;
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+    }
+
+    goToHome() {
+        this._router.navigate(['/coi/user-dashboard']);
+    }
+
+    navigateBack() {
+        this._router.navigateByUrl(this._navigationService.previousURL);
     }
 
 } 
