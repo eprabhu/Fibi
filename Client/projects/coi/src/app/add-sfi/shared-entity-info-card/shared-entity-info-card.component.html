@@ -1,19 +1,19 @@
 <div class="bg-light info-card-border rounded-3 mt-2">
     <div class="mx-1 my-3 row d-flex">
-        <div class="col-9  d-flex justify-content-between  align-items-center">
+        <div class="col-9  d-flex justify-content-between  align-items-center" tabindex="0" [attr.aria-label]="'Entity Name' + (entityDetails?.entityName)">
             <span class="fw-bold fs-16 me-3">{{entityDetails?.entityName}}</span>
         </div>
     </div>
     <div class="mx-1 row pt-1 d-flex align-items-center mb-3">
-        <div class="col-3 text-secondary fs-14">
+        <div class="col-3 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Country' + (entityDetails?.country?.countryName)">
             <span class="fw-bold me-2"> Country :</span>
             <span class="fs-14 fw-400">{{entityDetails?.country?.countryName}}</span>
         </div>
-        <div class="col-6 text-secondary fs-14">
+        <div class="col-6 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Entity Type' + (entityDetails?.entityType?.description)">
           <span class="fw-bold me-2">Entity Type :</span>
           <span class="fs-14 fw-400">{{entityDetails?.entityType?.description}}</span>
       </div>
-      <div class="col text-secondary fs-14 d-flex align-items-center">
+      <div class="col text-secondary fs-14 d-flex align-items-center" tabindex="0" [attr.aria-label]="'Entity Status' + (entityDetails?.isActive ?'Active':'Inactive')">
         <span class="fw-bold me-2">Entity Status :</span>
         <span class="fs-14 fw-400"[ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive ?'Active':'Inactive'}}</span>
     </div>
@@ -21,7 +21,7 @@
             <span class="fw-bold me-2"> Email Address :</span>
             <span class="fs-14 fw-400">{{entityDetails?.emailAddress}}</span>
         </div> -->
-        <div class="col-9 text-secondary fs-14">
+        <div class="col-9 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Address' + (entityDetails?.address)">
           <span class="fw-bold me-2"> Address :</span>
           <span *ngIf="!isReadMore && entityDetails?.address?.length > 110; else showFullInfo">
             <span> {{(entityDetails?.address |
@@ -40,7 +40,7 @@
             </span>
           </ng-template>
         </div>
-      <div *ngIf="isShowRisk" class="col text-secondary fs-14 d-flex align-items-center">
+      <div *ngIf="isShowRisk" class="col text-secondary fs-14 d-flex align-items-center" tabindex="0" [attr.aria-label]="'Risk' + (entityDetails?.entityRiskCategory?.description)">
         <span class="fw-bold me-2">Risk : </span>
         <span class="ml-2 grey-text fw-normal">
           <div class="text-color fs-14 d-flex align-items-center">
@@ -56,7 +56,7 @@
       </div>
           <div *ngIf="viewMore && commonServices.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')"
             class="col-1 align-items-center d-flex justify-content-end text-secondary" title="Click to view entity details">
-            <button (click)="viewEntityDetails(entityDetails?.entityId)"
+            <button (click)="viewEntityDetails(entityDetails?.entityId)" tabindex="0" aria-label="View" role="button"
               class="align-items-center btn btn-outline-primary d-flex fs-14">
               <mat-icon class="me-1">visibility</mat-icon>
               View
