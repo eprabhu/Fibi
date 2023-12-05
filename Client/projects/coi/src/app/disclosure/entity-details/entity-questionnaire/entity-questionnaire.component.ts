@@ -42,7 +42,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   currentRelationshipDetails: any = {};
   isHoverAddRelationship = false;
   @Input() isSwitchCurrentTab = false;
-  @Output() deleteRelationshipEvent: EventEmitter<any> = new EventEmitter<any>();
   isConcurrency = false;
   hasPermissionToView = true;
 
@@ -142,26 +141,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.entityDetailsServices.unSavedSections.push( nameOfQuestionnaire.validPersonEntityRelType.description +' Relationship Questionnaire');
       }
     }
-  }
-
-  deleteRelationship() {
-    let removeRelId = this.currentRelationshipDetails.personEntityRelId;
-    let VALID_REL_TYPE_CODE = this.currentRelationshipDetails.validPersonEntityRelTypeCode;
-    this.$subscriptions.push(this.entityDetailsServices.deletePersonEntityRelationship
-      (this.currentRelationshipDetails.personEntityRelId, this.currentRelationshipDetails.personEntityId).subscribe(async (updatedTimestamp) => {
-        this.updateDefinedRelationships();
-        if(VALID_REL_TYPE_CODE in this.entityDetailsServices.relationshipCompletedObject) {
-          delete this.entityDetailsServices.relationshipCompletedObject[VALID_REL_TYPE_CODE];
-        }
-        this.deleteRelationshipEvent.emit({'updatedTimestamp': updatedTimestamp,'removeRelId': removeRelId, 'isDeleted': true});
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
-      }, _err => {
-        if (_err.status === 405) {
-          this.entityDetailsServices.concurrentUpdateAction = 'Delete Relationship'
-      } else {
-          this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting relationship.`);
-      }
-      }));
   }
 
   async updateDefinedRelationships() {
