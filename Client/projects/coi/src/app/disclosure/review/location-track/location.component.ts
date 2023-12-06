@@ -166,6 +166,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     editReview(review: any, index: number): void {
         this.clearReviewModal();
         this.reviewDetails = deepCloneObject(review);
+        this.reviewDetails.currentReviewStatusTypeCode = this.reviewDetails.reviewerStatusType.reviewStatusCode;
+        this.reviewDetails.currentLocationTypeCode = this.reviewDetails.reviewLocationType.locationTypeCode;
         this.reviewStartDate = getDateObjectFromTimeStamp(this.reviewDetails.startDate);
         if(this.reviewDetails.endDate) {
             this.reviewEndDate = getDateObjectFromTimeStamp(this.reviewDetails.endDate);
@@ -199,7 +201,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 hideModal('add-coi-reviewer-modal');
                 this.coiService.concurrentUpdateAction = 'Create Review';
               } else {
-                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                this._commonService.showToast(HTTP_ERROR_STATUS, typeof(_err.error) == 'string' ? _err.error : `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
               }
             }));
         }
