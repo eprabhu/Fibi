@@ -50,7 +50,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     projectDetail: any = {};
     isMangeReviewAction = false;
     disReviewLocation = 'OPA_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
-    disReviewStatus = 'OPA_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
+    disReviewStatus = 'OPA_REVIEW_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
     locationType: any = [];
     reviewStatusType: any = [];
     reviewStartDate: any;
@@ -197,8 +197,8 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private setReviewAndOPAData(review: any) {
         const {opaDisclosure, ...reviewer} = review;
-        this.opaDisclosure.opaDisclosureStatusType = opaDisclosure.opaDisclosureStatusType;
-        this.opaDisclosure.opaDisclosureStatusCode = opaDisclosure.opaDisclosureStatusCode;
+        this.opaDisclosure.reviewStatusType = opaDisclosure.reviewStatusType;
+        this.opaDisclosure.reviewStatusCode = opaDisclosure.reviewStatusCode;
         return reviewer;
     }
 
@@ -291,9 +291,9 @@ export class LocationComponent implements OnInit, OnDestroy {
             case '1':
                 return 'warning';
             case '3':
-                return 'info';
-            case '2':
                 return 'success';
+            case '2':
+                return 'info';
             default:
                 return 'danger';
         }

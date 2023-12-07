@@ -94,7 +94,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     isUserReporter = false;
 
     constructor(
-        public commonService: CommonService, private _reviewCommentsService: ReviewCommentsService, 
+        public commonService: CommonService, private _reviewCommentsService: ReviewCommentsService,
         public _dataStore: DataStoreService, public coiService: CoiService, private _router: Router
     ) { }
 
@@ -192,7 +192,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
             this.selectedAttachmentType.push(null);
             this.isChangesInField = true;
         }
-                    
+
     }
 
     updateAddAttachmentDetails(files, index) {
@@ -451,11 +451,11 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
 
     getWarningClass(typeCode): string {
         switch (typeCode) {
-            case '1':
+            case '3':
                 return 'invalid';
             case '2':
                 return 'medium-risk';
-            case '3':
+            case '1':
                 return 'low-risk';
             default:
                 return '';
@@ -478,7 +478,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
             return 'project-background'
         }
 	}
-    
+
     modalHeader(projectDetails): string {
 		return `# ${projectDetails.moduleCode == '3' ? projectDetails.moduleItemId : projectDetails.moduleItemKey} - ${projectDetails?.title}`;
 	}
@@ -496,7 +496,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         });
     }
         this.dismissAttachmentModal();
-    
+
     }
 
     dismissAttachmentModal() {
@@ -531,7 +531,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         this.selectedAttachmentStatus.splice(index, 1);
         this.uploadedFile.splice(index, 1);
     }
-    
+
     private setCompleterOptions(array, field) {
         return {
             arrayList: array,
@@ -576,7 +576,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId = event ? this.getSubSectionId(event) : null;
         this.childSubSectionSelectOptions = event?.coiDisclEntProjDetails ? this.setOptionsForEntity(event?.coiDisclEntProjDetails) : new CompleterOptions();
     }
-    
+
     setComponentSubRefId(event): void {
         this.reviewCommentDetails.coiReviewCommentDto.componentSubRefId = event ? event.personEntityId : null;
     }
@@ -618,7 +618,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         return this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode == code
         && this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId;
     }
- 
+
     openSFI(personEntityId) {
         this.validateSliderClose();
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'view' } })

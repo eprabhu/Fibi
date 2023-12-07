@@ -153,8 +153,8 @@
                     </td>
                     <td class="border-0  border-top-0 pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
                       <div class="d-flex">
-                        <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned review completed, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
-                        <button *ngIf="(['3', '7', '8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
+                        <!-- reviewStatusCode-(3-Review In Progress, 4-Review Assigned, 5-Assigned review completed, 6-completed),  dispositionStatusCode(1-pending, 2-Approved)-->
+                        <button *ngIf="(['3', '4', '5'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 6 && coiDetails?.dispositionStatusCode == 2)
                         && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
                         class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
@@ -174,5 +174,5 @@
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+  [entityDetails]="entityDetails" [isEditMode]="['3','4','5'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
 

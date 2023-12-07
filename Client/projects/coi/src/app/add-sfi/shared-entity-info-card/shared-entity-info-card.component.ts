@@ -24,11 +24,11 @@ export class SharedEntityInfoCardComponent implements OnInit {
 
   getWarningClass(typeCode): string {
     switch (typeCode) {
-        case '1':
+        case '3':
             return 'invalid';
         case '2':
             return 'medium-risk';
-        case '3':
+        case '1':
             return 'low-risk';
         default:
             return;

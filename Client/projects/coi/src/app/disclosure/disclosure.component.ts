@@ -617,12 +617,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     /**
      * 2 - Submitted
      * 3 - Review In Progress
-     * 7 - Review Assigned
-     * 8 - Assigned review completed
+     * 4 - Review Assigned
+     * 5 - Assigned review completed
      * To be done - Admin group id check needs to be added.
      */
     checkForModifyRisk() {
-        return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) &&
+        return ['2', '3', '4', '5'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) &&
         (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
     }
 
@@ -704,11 +704,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     getWarningClass(typeCode) {
         switch (typeCode) {
-            case '1':
+            case '3':
                 return 'invalid';
             case '2':
                 return 'medium-risk';
-            case '3':
+            case '1':
                 return 'low-risk';
             default:
                 return;

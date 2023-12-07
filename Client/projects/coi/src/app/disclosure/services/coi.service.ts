@@ -107,7 +107,7 @@ export class CoiService {
     }
 
      isAllReviewsCompleted (reviewerList): boolean {
-        return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
+        return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '3');
      }
 
 }

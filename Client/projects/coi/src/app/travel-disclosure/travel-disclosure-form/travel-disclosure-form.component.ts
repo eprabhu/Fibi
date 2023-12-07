@@ -198,7 +198,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             this.clearEntity();
         }
         this.addEntityConfirmation = event ? event : null;
-        this.setUnSavedChangesTrue();  
+        this.setUnSavedChangesTrue();
     }
 
     clearEntity() {
@@ -328,11 +328,11 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     getWarningClass(typeCode): string {
         switch (typeCode) {
-            case '1':
+            case '3':
                 return 'invalid';
             case '2':
                 return 'medium-risk';
-            case '3':
+            case '1':
                 return 'low-risk';
             default:
                 return;

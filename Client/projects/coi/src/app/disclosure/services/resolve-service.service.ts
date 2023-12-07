@@ -36,7 +36,7 @@ export class ResolveServiceService {
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
                     this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
-                    if (['3', '4', '7', '8'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
+                    if (['3', '4', '5', '6'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
                         this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
                     } else {
                         observer.next(true);
@@ -53,9 +53,9 @@ export class ResolveServiceService {
 
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
-        if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId ) {
+        if (['1', '7', '8'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId ) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
-        } else if (!['1','5','6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
+        } else if (!['1', '7', '8'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {
@@ -110,7 +110,7 @@ export class ResolveServiceService {
                 const reviewerDetail = this.getLoggedInReviewerInfo(res);
                 if (reviewerDetail) {
                     this._coiService.isStartReview = reviewerDetail.reviewStatusTypeCode === '1' ? true : false;
-                    this._coiService.isCompleteReview = reviewerDetail.reviewStatusTypeCode === '3' ? true : false;
+                    this._coiService.isCompleteReview = reviewerDetail.reviewStatusTypeCode === '2' ? true : false;
                     this._coiService.isDisclosureReviewer = true;
                     this._coiService.$SelectedReviewerDetails.next(reviewerDetail);
                 }
