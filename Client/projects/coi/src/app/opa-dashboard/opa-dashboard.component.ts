@@ -58,11 +58,11 @@ export class OpaDashboardComponent implements OnInit {
         { variableName: 'disclosureStatus', fieldName: 'Review Status' },
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' }
     ];
-    opaDisclosureStatusOptions = 'OPA_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#true#true';
+    opaDisclosureStatusOptions = 'OPA_DISCLOSURE_STATUS_TYPE#OPA_DISCLOSURE_STATUS_CODE#true#true';
     opaDispositionStatusOption = 'OPA_DISPOSITION_STATUS_TYPE#DISPOSITION_STATUS_CODE#true#true';
     opaEmployeeRoleTypeOption = 'EMPTY#EMPTY#true#true';
 
-    constructor(public _opaDashboardService: OpaDashboardService,
+    constructor(public _opaDashboardService: OpaDashboardService, 
         private _elasticConfigService: ElasticConfigService,
         private _router: Router, public commonService: CommonService, private _navigationService: NavigationService
     ) { }
@@ -107,8 +107,8 @@ export class OpaDashboardComponent implements OnInit {
         if (this._opaDashboardService.opaRequestObject.dispositionStatusCodes.length) {
             this.generateLookupArray(this._opaDashboardService.opaRequestObject.dispositionStatusCodes, 'dispositionStatusCodes');
         }
-        if (this._opaDashboardService.opaRequestObject.reviewStatusCodes.length) {
-            this.generateLookupArray(this._opaDashboardService.opaRequestObject.reviewStatusCodes, 'reviewStatusCodes');
+        if (this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes.length) {
+            this.generateLookupArray(this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes, 'opaDisclosureStatusCodes');
         }
         if (this._opaDashboardService.opaRequestObject.designationStatusCodes.length) {
             this.generateLookupArray(this._opaDashboardService.opaRequestObject.designationStatusCodes, 'designationStatusCodes');
@@ -139,8 +139,8 @@ export class OpaDashboardComponent implements OnInit {
             this._opaDashboardService.opaRequestObject.personId : null;
         this.localOPARequestObject.dispositionStatusCodes = this._opaDashboardService.opaRequestObject.dispositionStatusCodes ?
             this._opaDashboardService.opaRequestObject.dispositionStatusCodes : [];
-        this.localOPARequestObject.reviewStatusCodes = this._opaDashboardService.opaRequestObject.reviewStatusCodes ?
-            this._opaDashboardService.opaRequestObject.reviewStatusCodes : [];
+        this.localOPARequestObject.opaDisclosureStatusCodes = this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes ?
+            this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes : [];
         this.localOPARequestObject.designationStatusCodes = this._opaDashboardService.opaRequestObject.designationStatusCodes ?
             this._opaDashboardService.opaRequestObject.designationStatusCodes : [];
         this.advanceSearchDates.submissionDate = this.localOPARequestObject.submissionTimestamp =
@@ -282,7 +282,7 @@ export class OpaDashboardComponent implements OnInit {
 
     setAdvanceSearchToServiceObject() {
         this._opaDashboardService.opaRequestObject.dispositionStatusCodes = this.localOPARequestObject.dispositionStatusCodes || [];
-        this._opaDashboardService.opaRequestObject.reviewStatusCodes = this.localOPARequestObject.reviewStatusCodes || [];
+        this._opaDashboardService.opaRequestObject.opaDisclosureStatusCodes = this.localOPARequestObject.opaDisclosureStatusCodes || [];
         this._opaDashboardService.opaRequestObject.designationStatusCodes = this.localOPARequestObject.designationStatusCodes || [];
         this._opaDashboardService.opaRequestObject.unitNumber = this.localOPARequestObject.unitNumber || null;
         this._opaDashboardService.opaRequestObject.personId = this.localOPARequestObject.personId || null;

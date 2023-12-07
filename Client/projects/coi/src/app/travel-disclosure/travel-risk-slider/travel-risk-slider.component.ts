@@ -31,8 +31,8 @@ export class TravelRiskSliderComponent implements OnInit {
   disclosureHistoryLogs: any = {};
   isReadMore: boolean[] = [];
   isStatusEdited = false;
-
-  constructor( public commonService: CommonService,
+  
+  constructor( public commonService: CommonService, 
 			   public travelRiskSliderService: TravelRiskSliderService,
 			   public dataFormatPipe: DateFormatPipeWithTimeZone,
 			   private _dataStore: TravelDataStoreService ) { }
@@ -99,7 +99,7 @@ export class TravelRiskSliderComponent implements OnInit {
 	clearValidationOnValueChange(TYPE): void {
 		TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode'), this.isStatusEdited = true;
 	}
-
+  
 	private getRiskLookup(): void {
 		this.$subscriptions.push(this.travelRiskSliderService.getTravelRiskLookup().subscribe((data: any) => {
 			this.riskLookup = data;
@@ -147,7 +147,7 @@ export class TravelRiskSliderComponent implements OnInit {
 				this.isReadMore = [];
 				setTimeout(() => {
 					openSlider('travel-risk-slider');
-				});
+				});			
 			}));
 	}
 
@@ -166,14 +166,14 @@ export class TravelRiskSliderComponent implements OnInit {
 		return isEmptyObject(this.disclosureHistoryLogs);
 	}
 
-
+	
 	getWarningClass(typeCode): string {
         switch (typeCode) {
-            case '3':
+            case '1':
                 return 'invalid';
             case '2':
                 return 'medium-risk';
-            case '1':
+            case '3':
                 return 'low-risk';
             default:
                 return;

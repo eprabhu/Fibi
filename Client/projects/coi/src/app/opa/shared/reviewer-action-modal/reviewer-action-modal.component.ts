@@ -77,8 +77,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         const reviewerList = DATA.opaReviewerList || [];
         const index = reviewerList.findIndex(ele => ele.opaReviewId === reviewer.opaReviewId);
         reviewerList[index] = reviewer;
-        DATA.opaDisclosure.reviewStatusCode = opaDisclosure.reviewStatusCode;
-        DATA.opaDisclosure.reviewStatusType = opaDisclosure.reviewStatusType;
+        DATA.opaDisclosure.opaDisclosureStatusCode = opaDisclosure.opaDisclosureStatusCode;
+        DATA.opaDisclosure.opaDisclosureStatusType = opaDisclosure.opaDisclosureStatusType;
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'],
             { opaReviewerList: reviewerList, opaDisclosure: DATA.opaDisclosure });
         this._opaService.isReviewActionCompleted = this._opaService.isAllReviewsCompleted(reviewerList);

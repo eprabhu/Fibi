@@ -40,7 +40,7 @@ export class EntityRiskSliderComponent implements OnInit {
 
 	constructor(private _entityRiskSliderService: EntityRiskSliderService,
 		public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-		public commonService: CommonService,
+		public commonService: CommonService, 
 		public _dataFormatPipe: DateFormatPipeWithTimeZone,
         public coiService: CoiService) { }
 
@@ -125,7 +125,7 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.isReadMore = [];
 				setTimeout(() => {
 					openSlider('disclosure-entity-risk-slider');
-				});
+				});			
 			}));
 	}
 
@@ -183,11 +183,11 @@ export class EntityRiskSliderComponent implements OnInit {
 
 	getWarningClass(typeCode): string {
         switch (typeCode) {
-            case '3':
+            case '1':
                 return 'invalid';
             case '2':
                 return 'medium-risk';
-            case '1':
+            case '3':
                 return 'low-risk';
             default:
                 return;
@@ -199,14 +199,14 @@ export class EntityRiskSliderComponent implements OnInit {
 	validateSliderClose() {
 		(this.isStatusEdited || this.riskComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
 	}
-
+	
 	closeConflictSlider() {
 		closeSlider('disclosure-entity-risk-slider');
 		setTimeout(() => {
 			this.closePage.emit();
 		}, 500);
 	}
-
+	
 	leavePageClicked() {
 		setTimeout(() => {
 			this.closeConflictSlider();

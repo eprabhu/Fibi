@@ -180,9 +180,9 @@ export class OpaComponent implements OnInit {
         this.$subscriptions.push(this.opaService
             .completeOPAReview(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
-                this.opa.opaDisclosure.reviewStatusType = res.reviewStatusType;
+                this.opa.opaDisclosure.opaDisclosureStatusType = res.opaDisclosureStatusType;
                 this.opa.opaDisclosure.dispositionStatusType = res.dispositionStatusType;
-                this.opa.opaDisclosure.reviewStatusCode = res.reviewStatusCode;
+                this.opa.opaDisclosure.opaDisclosureStatusCode = res.opaDisclosureStatusCode;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {

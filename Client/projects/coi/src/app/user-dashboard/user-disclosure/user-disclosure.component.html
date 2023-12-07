@@ -362,11 +362,11 @@
                                         <label class="label-text me-2 p-26">Review Status <span>:</span></label>
                                         <span class="break-point-1560">
                                             <app-no-data-label
-                                                [valueToShow]="opaDisclosure?.reviewStatusType?.description">
+                                                [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
                                                 <span
-                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
+                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
                                                 <span
-                                                    class="badgeFont">{{opaDisclosure?.reviewStatusType?.description}}
+                                                    class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
                                                 </span>
                                             </app-no-data-label>
                                         </span>
@@ -383,7 +383,7 @@
 
             <ng-container *ngIf="hasActiveOPA">
                 <div class="card d-flex"
-                     *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '2'">
+                     *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '3'">
                     <div class="card-header disclosure-master-header-bg">
                         <h4 class="card-title">
                             <div class="row">
@@ -455,13 +455,13 @@
                                     </div>
                                     <div class="col-12">
                                         <label class="label-text me-2 p-26">Review Status <span>:</span></label>
-                                        <span class="break-point-1560">
+                                        <span class="break-point-1560"> 
                                             <app-no-data-label
-                                                [valueToShow]="opaDisclosure?.reviewStatusType?.description">
+                                                [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
                                                 <span
-                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
+                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
                                                 <span
-                                                    class="badgeFont">{{opaDisclosure?.reviewStatusType?.description}}
+                                                    class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
                                                 </span>
                                             </app-no-data-label>
                                         </span>
@@ -486,7 +486,7 @@
         tabindex="0">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active"
         [attr.aria-label]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'Selected tab is In Progress Disclosures with ' + (dashboardCount?.inProgressDisclosureCount || 0) + ' disclosures' : 'In Progress Disclosures with ' + (dashboardCount?.inProgressDisclosureCount || 0) + ' disclosures'">
-            In Progress <span class="disclosures-text"></span> ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
+            In Progress <span class="disclosure-text"></span> ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('APPROVED_DISCLOSURES', dashboardCount?.approvedDisclosureCount)" class="border-end navigation-icons px-3 py-1 hand-cursor" role="tab"
          aria-describedby="Click to view Approved Disclosures"
@@ -494,14 +494,14 @@
          [attr.title]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Approved Disclosures' : 'Click to view Approved Disclosures'">
         <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3"
         [attr.aria-label]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Selected tab is Approved Disclosures with ' + (dashboardCount?.approvedDisclosureCount || 0) + ' disclosures' : 'Approved Disclosures with ' + (dashboardCount?.approvedDisclosureCount || 0) + ' disclosures'">
-         Approved <span class="disclosures-text"></span> ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
+         Approved <span class="disclosure-text"></span> ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)" class="border-end navigation-icons px-3 py-1 hand-cursor" role="tab"
         [attr.title]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
         aria-describedby="Click to view Travel Disclosures" tabindex="0">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3"
         [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures' : 'Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures'">
-        Travel <span class="disclosures-text"></span> ({{dashboardCount?.travelDisclosureCount || 0}})</span>
+        Travel <span class="disclosure-text"></span> ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 py-1 hand-cursor" role="tab"
         [attr.title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click to view Disclosure History'"
@@ -511,6 +511,7 @@
         <span class="disclosure-text"></span> History</span>
     </div>
 </nav>
+
 <!-- Search and filter -->
 <div class="advance-search-area border d-flex mt-2 rounded-1" *ngIf="isShowFilterAndSearch">
     <div class="fs-14 p-3 d-inline-block" [class.border-end] = "currentSelected.tab != 'DISCLOSURE_HISTORY'" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
@@ -533,7 +534,7 @@
             title="Click to filter by type: Travel" area-describedby="Click to filter by type: Travel"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white hand-cursor">Travel</span>
         <span (click)="setFilter('OPA')" [class.filter-type-active]="currentSelected.filter=='OPA'" tabindex="0"
-            title="Click to filter by type: OPA"
+            title="Click to filter by type: OPA" 
             [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1 hand-cursor">OPA</span>
     </div>
@@ -556,7 +557,7 @@
                     <div class="col">
                         <span class="d-flex">
                             <span
-                                class="entity-status shadow-sm d-flex align-items-center mt-2 {{getColorBadges(disclosure)}}" tabindex="0"
+                                class="entity-status shadow-sm d-flex align-items-center mt-2 {{getColorBadges(disclosure)}}" tabindex="0" 
                                 [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                 <span>{{disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType}}</span>
                             </span>
@@ -662,7 +663,7 @@
                                 </span>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" tabindex="0">
-                                    <label class="label-text me-2">Disposition Status <span>:</span></label>
+                                    <label class="label-text me-2">Disposition Status <span>:</span></label> 
                                     <span class="break-point-1200">
                                     <span class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
                                         <span class="badgeFont">
@@ -670,7 +671,7 @@
                                     </span>
                                 </span>
                             </div>
-                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" tabindex="0">
+                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12" tabindex="0"> 
                                 <label for="id" class="label-text">Description <span>: </span></label>
                                 <span class="break-point-1200">
                                     <app-no-data-label [valueToShow]="disclosure?.reviseComment">
@@ -756,7 +757,7 @@
                         <div class="row mb-3 p-013 mt-2">
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 d-flex" tabindex="0">
                                 <label for="department-id" class="label-text col-custom-travel">Department <span>:</span></label>
-                                <span class="col break-point-1200" [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
+                                <span class="col break-point-1200" [attr.aria-label]="disclosure?.unitDetails?.unitDetail"> 
                                     <app-no-data-label id="department-id" class=""
                                         [valueToShow]="disclosure?.travelEntityName">
                                         <span class="grey-text text-slice"
@@ -846,7 +847,7 @@
                     <ng-container *ngIf="disclosure?.opaDisclosureId">
                         <div class="row mb-3 p-013 mt-2">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-12" tabindex="0">
-                                <label class="label-text">Department <span>:</span></label>
+                                <label class="label-text">Department <span>:</span></label> 
                                 <span class="grey-text break-point-1200" [attr.aria-label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
                                     {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
                             </div>
@@ -887,12 +888,12 @@
                             <div class="col-lg-3 col-md-3 col-sm-3 col-12" tabindex="0">
                                 <label for="review-status" class="label-text mr-21">Review Status <span>:</span></label>
                                 <span class="ms-3 break-point-1200">
-                                <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewStatus">
+                                <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
                                     <span
-                                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
-                                        class="{{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
+                                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                                        class="{{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
                                         <span class="badgeFont">
-                                            {{disclosure?.reviewStatus}}
+                                            {{disclosure?.disclosureStatus}}
                                     </span>
                                 </app-no-data-label>
                             </span>
@@ -964,7 +965,7 @@
                         </div>
                         <div class="col-lg col-md-4 col-12" tabindex="0">
                             <label class="label-text" for="id">Last Updated By <span>: </span></label>
-                            <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
+                            <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="disclosure?.updateUserFullName + ' on ' + 
                             (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
                             {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                         </div>

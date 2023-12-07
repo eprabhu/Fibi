@@ -144,11 +144,11 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
 
     getWarningClass(typeCode): string {
         switch (typeCode) {
-            case '3':
+            case '1':
                 return 'invalid';
             case '2':
                 return 'medium-risk';
-            case '1':
+            case '3':
                 return 'low-risk';
             default:
                 return;

@@ -393,29 +393,14 @@ padding-right: 17px;
 }
 
 .disclosure-text:after {
-  content: "Disclosure";
+  content: "Disclosures";
 }
 
 @media (max-width: 1201px) {
   .disclosure-text:after {
     content: "Discl.";
   }
-}
-
-/* For showing the word disclosure as (discl). for page responsive time*/
-.disclosures-text {
-    padding-left: 2px;
-}
-
-.disclosures-text:after {
-    content: "Disclosures";
-}
-
-@media (max-width: 1201px) {
-    .disclosures-text:after {
-        content: "Discl.";
-    }
-}
+}  
 
 /* Adjust the height of view button (only for this dashboard)*/
 .height-fit-content {
@@ -447,3 +432,4 @@ padding-right: 17px;
 }
 
 
+  

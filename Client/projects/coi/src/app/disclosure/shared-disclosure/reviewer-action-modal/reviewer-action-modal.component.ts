@@ -19,7 +19,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     currentReviewer: any = {};
     $subscriptions: Subscription[] = [];
 
-    constructor( private _coiService: CoiService,
+    constructor( private _coiService: CoiService, 
                  private _dataStore: DataStoreService,
                  private _commonService: CommonService ) { }
 
@@ -100,10 +100,10 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
 
     updateReviewActions(reviewer) {
         this._coiService.isDisclosureReviewer = reviewer.assigneePersonId === this._commonService.currentUserDetails.personId;
-        if (reviewer.reviewStatusTypeCode === '2' && this._coiService.isDisclosureReviewer) {
+        if (reviewer.reviewStatusTypeCode === '3' && this._coiService.isDisclosureReviewer) {
             this._coiService.isStartReview = false;
             this._coiService.isCompleteReview = true;
-        } else if (reviewer.reviewStatusTypeCode === '3' && this._coiService.isDisclosureReviewer) {
+        } else if (reviewer.reviewStatusTypeCode === '2' && this._coiService.isDisclosureReviewer) {
             this._coiService.isStartReview = false;
             this._coiService.isCompleteReview = false;
         }

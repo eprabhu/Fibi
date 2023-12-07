@@ -36,7 +36,7 @@ export class OPADashboardRequest {
   unitNumber= null;
   submissionTimestamp = null;
   dispositionStatusCodes = [];
-  reviewStatusCodes = [];
+  opaDisclosureStatusCodes = [];
   designationStatusCodes = [];
   personId = null;
   isFaculty = null;

@@ -24,8 +24,8 @@ export class OpaDisclosure {
     isCompensated?: any;
     hasPotentialConflict?: any;
     conflictDescription?: any;
-    reviewStatusCode: string;
-    reviewStatusType: reviewStatusType;
+    opaDisclosureStatusCode: string;
+    opaDisclosureStatusType: OpaDisclosureStatusType;
     dispositionStatusCode: string;
     dispositionStatusType: DispositionStatusType;
     certificationText: string;
@@ -58,8 +58,8 @@ export interface DispositionStatusType {
     isActive: boolean;
 }
 
-export interface reviewStatusType {
-    reviewStatusCode: string;
+export interface OpaDisclosureStatusType {
+    opaDisclosureStatusCode: string;
     description: string;
     updateTimestamp: number;
     updateUser: string;

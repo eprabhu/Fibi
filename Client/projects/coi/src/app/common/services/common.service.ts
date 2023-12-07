@@ -294,15 +294,15 @@ export class CommonService {
             case '3':
                 return 'yellow-badge';
             case '4':
-                return 'blue-badge';
+                return 'green-badge';
             case '5':
-                return 'green-badge';
+                return 'red-badge';
             case '6':
-                return 'green-badge';
+                return 'red-badge';
             case '7':
-                return 'red-badge';
+                return 'blue-badge';
             case '8':
-                return 'red-badge';
+                return 'green-badge';
             default:
                 return 'red-badge';
         }
@@ -313,9 +313,14 @@ export class CommonService {
             case '1':
                 return 'yellow-badge';
             case '2':
+            case '4':
+            case '5':
+                return 'blue-badge';
+            case '3':
+            case '6':
                 return 'green-badge';
             default:
-                return 'blue-badge';
+                return 'yellow-badge';
         }
     }
 

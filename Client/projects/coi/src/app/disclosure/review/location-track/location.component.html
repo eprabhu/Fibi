@@ -4,27 +4,27 @@
 					<h4 class="card-title review-title">
                         <div class="justify-content-between row d-flex align-items-center">
                             <div class="col">Reviewers</div>
-                            <!-- reviewStatusCode - (3 - Review In Progress , 4 - Review Assigned , 5 - Assigned review completed )-->
-                            <div
-                            *ngIf="coiService.isCOIAdministrator &&
-                            ['3', '4', '5'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                            <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
+                            <div 
+                            *ngIf="coiService.isCOIAdministrator && 
+                            ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" 
                             class="col-auto me-2">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                                     title="Add Reviewer" data-bs-target="#add-coi-reviewer-modal">
                                     <mat-icon class="me-2">person_add</mat-icon>
                                     Add Reviewer
                                 </button>
-                            </div>
+                            </div>    
                             <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
                                 class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
                                 <mat-icon>{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
                             </button>
-
+                               
                             <!-- <button class=" updown-arrow mt-1" (click)="isExpanded = !isExpanded">
                                 <i [ngClass]="!isExpanded?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                                     class="fa-large" aria-hidden="true"></i>
                             </button> -->
-
+                            
                         </div>
                     </h4>
     </div>
@@ -95,12 +95,12 @@
                     <td class="align-items-center justify-content-end">
                         <div class="d-flex align-items-center justify-content-end">
                             <ng-container *ngIf="isMangeReviewAction">
-                                <button *ngIf="reviewer.reviewStatusTypeCode == '1'"
+                                <button *ngIf="reviewer.reviewStatusTypeCode == '1'" 
                                     class="btn-primary-icon d-flex align-items-center me-3 my-1" title="Start review">
                                     <mat-icon id="start-review-btn" title="Start review" class="material-icons-outlined"
                                         (click)="updateCoiReviewStage(index,reviewer,'START')">play_circle_filled</mat-icon>
                                 </button>
-                                <button *ngIf="reviewer.reviewStatusTypeCode == '2'"
+                                <button *ngIf="reviewer.reviewStatusTypeCode == '3'"
                                     class="btn-primary-icon d-flex align-items-center me-3 my-1" title="Start review">
                                     <mat-icon id="complete-review-btn" title="Complete Review" class="material-icons-outlined"
                                         (click)="updateCoiReviewStage(index,reviewer,'COMPLETE')">stop_circle</mat-icon>
@@ -111,9 +111,9 @@
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
-
+                                
                                 <ng-container *ngIf="isMangeReviewAction">
-                                    <button  *ngIf="reviewer.reviewStatusTypeCode !== '3'" [matMenuTriggerFor]="beforeMenu"
+                                    <button  *ngIf="reviewer.reviewStatusTypeCode !== '2'" [matMenuTriggerFor]="beforeMenu"
                                         class="btn-primary-icon d-flex align-items-center my-1"
                                         role = "button"
                                         type="button"
@@ -157,7 +157,7 @@
                                         <mat-icon class="me-2 more-options-icon">delete</mat-icon>
                                         <span>Delete Review</span>
                                     </button>
-                                </mat-menu>
+                                </mat-menu> 
                         </div>
                     </td>
                 </tr>
@@ -210,7 +210,7 @@
                         <label class="block-display">
                             <span class="mandatory">*</span>Location</label>
                         <app-look-up (selectedResult)="onLocationSelect($event)"
-                        [options]="disReviewLocation"
+                        [options]="disReviewLocation" 
                         [selectedLookUpList]="locationType"
                         [isError]="validationMap.has('location')"
                         [defaultValue]="reviewDetails.reviewLocationType ? reviewDetails.reviewLocationType.description : ''"

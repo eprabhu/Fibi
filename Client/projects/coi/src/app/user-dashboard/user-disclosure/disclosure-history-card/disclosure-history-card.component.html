@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-xxl-3 col-sm-6 col-12 order-xxl-1 order-xl-2 order-lg-2 order-md-2 order-sm-4" tabindex="0">
                     <label class="label-text me-2">Certification Date <span>:</span></label>
-                    <span class="break-point-1200">
+                    <span class="break-point-1200"> 
                         <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                             <span class="grey-text break-point-1200" aria.label="{{disclosure?.certifiedAt | dateFormatter}}">{{disclosure?.certifiedAt | dateFormatter}}</span>
                         </app-no-data-label>
@@ -52,7 +52,7 @@
                         </app-no-data-label>
                     </span>
                 </div>
-
+           
                 <div class="col-md-6 col-sm-6 col-12 order-xxl-3 order-xl-1 order-lg-1 order-md-1 order-sm-3" tabindex="0">
                     <label class="label-text">Disclosure Status <span>:</span></label>
                     <span class="break-point-1200 ps-xl-2 ps-0">
@@ -66,7 +66,7 @@
                     </span>
                 </div>
                 <div class="col-xxl-3 col-sm-6 col-12 order-xxl-4 order-xl-3 order-lg-3 order-md-3 order-sm-1" tabindex="0">
-                    <label class="label-text">Disposition Status <span>:</span></label>
+                    <label class="label-text">Disposition Status <span>:</span></label> 
                     <span class="break-point-1200 ">
                          <span class="ms-xl-3 {{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}}"></span>
                             <span class="badgeFont" aria.label="disclosure?.dispositionStatus">
@@ -151,7 +151,7 @@
                     <label class="label-text d-inline-flex me-2">Purpose <span class="ms-1">:</span></label>
                     <span class="break-point-1200">
                         <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="disclosure?.purposeOfTheTrip">
-                            <span class="d-flex grey-text ms-0" [attr.aria-label]="disclosure?.purposeOfTheTrip"
+                            <span class="d-flex grey-text ms-0" [attr.aria-label]="disclosure?.purposeOfTheTrip" 
                             *ngIf="!isPurposeReadMore && disclosure?.purposeOfTheTrip?.length > 55; else showFullInfo">
                                 <span> {{(disclosure?.purposeOfTheTrip |
                                   slice:0:55)}}
@@ -164,7 +164,7 @@
                                 <span *ngIf="disclosure?.purposeOfTheTrip?.length > 55" (click)="isPurposeReadMore = !isPurposeReadMore" aria-hidden="true"
                                   class="d-flex hand-cursor"><span class="fw-medium fs-14 grey-text"><u>Read Less</u></span>
                                 </span>
-                              </ng-template>
+                              </ng-template>			
                             </app-no-data-label>
                     </span>
                 </div>
@@ -230,7 +230,7 @@
                     </span>
                 </div>
             </ng-container>
-
+           
             <div class="col-xxl-3 col-sm-6 col-12 order-xxl-1 order-xl-2 order-lg-2 order-md-2" tabindex="0">
                 <label class="label-text">Certification Date <span>:</span></label>
                 <span class="break-point-1200">
@@ -244,7 +244,7 @@
                     {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
             </div>
             <div class="col-xxl-3 col-sm-6 col-12 order-xxl-3 order-xl-1 order-lg-1 order-md-1" tabindex="0">
-                <label class="label-text me-2">Disposition Status <span>:</span></label>
+                <label class="label-text me-2">Disposition Status <span>:</span></label> 
                 <span class="break-point-1200">
                     <span
                         class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
@@ -258,8 +258,8 @@
                 <span class="break-point-1200 ps-xl-3 ps-0">
                     <app-no-data-label [valueToShow]="disclosure?.disclosureStatus">
                         <span
-                            [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
-                            class="{{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
+                            [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                            class="{{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
                             <span class="badgeFont" [attr.aria-label]="disclosure?.disclosureStatus">
                                 {{disclosure?.disclosureStatus}}
                         </span>
