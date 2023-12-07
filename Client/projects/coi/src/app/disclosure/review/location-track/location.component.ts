@@ -46,7 +46,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     projectDetail: any = {};
     isMangeReviewAction = false;
     disReviewLocation = 'COI_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
-    disReviewStatus = 'COI_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
+    disReviewStatus = 'COI_REVIEW_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
     locationType: any = [];
     reviewerStatusType: any = [];
     reviewStartDate: any;
@@ -78,10 +78,10 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.locationTypeCode = event[0].code;
             this.reviewDetails.reviewLocationType = {};
             this.reviewDetails.reviewLocationType['description'] = event[0].description;
-            this.reviewDetails.reviewLocationType['locationTypeCode'] = event[0].code; 
+            this.reviewDetails.reviewLocationType['locationTypeCode'] = event[0].code;
         } else {
-            this.reviewDetails.locationTypeCode = null; 
-            this.reviewDetails.reviewLocationType = {};  
+            this.reviewDetails.locationTypeCode = null;
+            this.reviewDetails.reviewLocationType = {};
         }
     }
 
@@ -93,14 +93,14 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.reviewStatusTypeCode = event[0].code;
             this.reviewDetails.reviewerStatusType = {};
             this.reviewDetails.reviewerStatusType['description'] = event[0].description;
-            this.reviewDetails.reviewerStatusType['reviewStatusCode'] = event[0].code; 
+            this.reviewDetails.reviewerStatusType['reviewStatusCode'] = event[0].code;
             if(this.reviewDetails.reviewStatusTypeCode === '2') {
                 this.reviewEndDate = new Date();
                 this.reviewEndDate.setHours(0, 0, 0, 0);
             }
         } else {
-            this.reviewDetails.reviewStatusTypeCode = null;  
-            this.reviewDetails.reviewerStatusType = {}; 
+            this.reviewDetails.reviewStatusTypeCode = null;
+            this.reviewDetails.reviewerStatusType = {};
         }
     }
 
@@ -108,7 +108,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     //     this.reviewDetails[typeCode] = event[0].code;
     //     this.reviewDetails[type] = {};
     //     this.reviewDetails[type]['description'] = event[0].description;
-    //     this.reviewDetails[type][typeCode] = event[0].code; 
+    //     this.reviewDetails[type][typeCode] = event[0].code;
     // }
 
     private listenDataChangeFromStore() {
@@ -174,7 +174,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
         if (this.reviewDetails.reviewLocationType) {
             this.locationType.push({'code': this.reviewDetails.reviewLocationType.locationTypeCode, 'description': this.reviewDetails.reviewLocationType.description});
-        } 
+        }
         if (this.reviewDetails.reviewerStatusType) {
             this.reviewerStatusType.push({'code': this.reviewDetails.reviewerStatusType.reviewStatusCode, 'description': this.reviewDetails.reviewerStatusType.description});
         }
@@ -215,7 +215,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     addReviewToList(review: any) {
         this.reviewerList.push(review);
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });        
+        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
         this._dataStore.updateTimestampEvent.next();
         this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
         this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
@@ -257,7 +257,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     modifyReviewComment(coiReviewId) {
         this.commentConfiguration.coiReviewId = coiReviewId;
-        this.coiService.isShowCommentNavBar = true;	
+        this.coiService.isShowCommentNavBar = true;
     }
 
     validateReview() {
@@ -285,7 +285,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         if (this.reviewStartDate && this.reviewEndDate &&
             (compareDates(this.reviewStartDate, this.reviewEndDate) === 1)) {
             this.validationMap.set('endDate', 'Please provide a valid review end date.');
-        } 
+        }
     }
 
     compareDates(type: any) {
@@ -305,13 +305,13 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
     }
 
-   
+
     // Assigned - 1, Completed - 2, In Progress - 3.
     getReviewStatusBadge(statusCode: any) {
         switch (statusCode) {
             case '1': return 'warning';
-            case '3': return 'info';
-            case '2': return 'success';
+            case '3': return 'success';
+            case '2': return 'info';
             default: return 'danger';
         }
     }

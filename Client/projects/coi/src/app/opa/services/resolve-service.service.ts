@@ -37,7 +37,7 @@ export class ResolveServiceService {
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
                     // this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
-                    if (['3', '4', '7', '8'].includes(res[0]?.opaDisclosureStatusType?.opaDisclosureStatusCode)) {
+                    if (['3', '4', '5', '6', '7', '8'].includes(res[0]?.reviewStatusType?.reviewStatusCode)) {
                         this.getCoiReview(res[0].opaDisclosureId, observer);
                     } else {
                         observer.next(true);
@@ -54,10 +54,10 @@ export class ResolveServiceService {
 
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
-        if (['1', '5', '6'].includes(reviewStatusCode) && !currentPath
+        if (['1', '8', '7'].includes(reviewStatusCode) && !currentPath
             .includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
-        } else if (!['1', '5', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
+        } else if (!['1', '8', '7'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {

@@ -439,7 +439,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             }
         });
         this.headerService.activeOPAs.forEach(disclosure => {
-            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '3') {
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '2') {
                 this.hasActiveOPA = true;
             }
             if (disclosure?.dispositionStatusType?.dispositionStatusCode === '1') {
