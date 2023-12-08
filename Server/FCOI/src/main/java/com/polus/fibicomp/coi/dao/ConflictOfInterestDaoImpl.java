@@ -70,8 +70,7 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
@@ -85,7 +84,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
-import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
@@ -537,12 +536,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public CoiReviewComments saveOrUpdateCoiReviewComments(CoiReviewComments coiReviewComments) {
-		hibernateTemplate.saveOrUpdate(coiReviewComments);
-		return coiReviewComments;
-	}
-
-	@Override
 	public CoiReviewCommentAttachment saveOrUpdateAttachment(CoiReviewCommentAttachment coiReviewCommentAttachment) {
 		hibernateTemplate.saveOrUpdate(coiReviewCommentAttachment);
 		return coiReviewCommentAttachment;
@@ -706,6 +699,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
+	@Deprecated
 	public CoiReviewCommentAttachment deleteAttachment(Integer coiReviewCommentAttId) {
 		CoiReviewCommentAttachment coiReviewCommentAttachment = hibernateTemplate.get(CoiReviewCommentAttachment.class, coiReviewCommentAttId);
 		CoiFileData filedata = hibernateTemplate.get(CoiFileData.class, coiReviewCommentAttachment.getFileDataId());
@@ -1764,7 +1758,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString) {
+	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId,
+															  String searchString, Integer moduleItemKey) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		List<DisclosureDetailDto> awardDetails = new ArrayList<>();
 		SessionImpl sessionImpl = (SessionImpl) session;
@@ -1773,7 +1768,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		ResultSet rset = null;
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_DISCLOSURE_RELATIONS(?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_DISCLOSURE_RELATIONS(?,?,?,?,?)}");
 				statement.setInt(1, moduleCode);
 				statement.setString(2, personId);
 				if (disclosureId == null) {
@@ -1786,11 +1781,16 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				} else {
 					statement.setString(4, searchString);
 				}
+				if (moduleItemKey == null) {
+					statement.setNull(5, Types.INTEGER);
+				} else {
+					statement.setInt(5, moduleItemKey);
+				}
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_DISCLOSURE_RELATIONS";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setInt(2, moduleCode);
@@ -1804,6 +1804,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					statement.setNull(5, Types.VARCHAR);
 				} else {
 					statement.setString(5, searchString);
+				}
+				if (moduleItemKey == null) {
+					statement.setNull(6, Types.INTEGER);
+				} else {
+					statement.setInt(6, moduleItemKey);
 				}
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
@@ -2856,27 +2861,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
             return 1;
         }
 	}
-	
-	@Override
-	public void saveOrUpdateDisclComment(DisclComment disclComment) {
-		hibernateTemplate.saveOrUpdate(disclComment);
-	}
-
-	@Override
-	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId) {
-		DisclComment disclComment = new DisclComment(); 
-		try {
-			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<DisclComment> query = builder.createQuery(DisclComment.class);
-			Root<DisclComment> rootDisclComment = query.from(DisclComment.class);
-			query.where(builder.equal(rootDisclComment.get("componentReferenceId"), disclosureDetailsId));
-			disclComment = session.createQuery(query).getSingleResult();
-			return disclComment;
-		} catch (Exception ex) {
-			return disclComment;
-		}
-	}
 
 	@Override
 	public Map<String, Object> validateProjectDisclosure(String personId, Integer moduleCode, String moduleItemKey) {
@@ -3808,26 +3792,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType() {
 		return hibernateTemplate.loadAll(CoiTravelDisclosureStatusType.class);
-	}
-
-	@Override
-	public DisclComment getTravelConflictComment(Integer travelDisclosureId) {
-		DisclComment disclComment = new DisclComment();
-		try {
-			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<DisclComment> query = builder.createQuery(DisclComment.class);
-			Root<DisclComment> rootDisclComment = query.from(DisclComment.class);
-			Predicate Condition1 = builder.equal(rootDisclComment.get("componentReferenceId"), travelDisclosureId);
-			Predicate condition2 = builder.equal(rootDisclComment.get("componentTypeCode"), "2");
-			Predicate condition3 = builder.equal(rootDisclComment.get("commentType"), "2");
-			Predicate combinedConditions = builder.and(Condition1, condition2, condition3);
-			query.where(combinedConditions);
-			disclComment = session.createQuery(query).getSingleResult();
-			return disclComment;
-		} catch (Exception ex) {
-			return disclComment;
-		}
 	}
 
 	@Override

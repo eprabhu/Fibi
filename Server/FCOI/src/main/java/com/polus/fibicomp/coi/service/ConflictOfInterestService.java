@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -170,21 +171,6 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> startReview(ConflictOfInterestVO vo);
 
 	/**
-	 * This method is used for add comments
-	 * @param files
-	 * @param formDataJSON
-	 * @return success message
-	 */
-	ResponseEntity<Object> saveOrUpdateCoiReviewComments(MultipartFile[] files, String formDataJSON);
-
-	/**
-	 * This method is used for get review comment details
-	 * @param vo
-	 * @return comment details
-	 */
-	ResponseEntity<Object> loadCoiReviewComments(ConflictOfInterestVO vo);
-
-	/**
 	 * This method is used for complete review
 	 * @param vo
 	 * @return CoiReview
@@ -197,27 +183,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> deleteReview(Integer coiReviewId);
-
-	/**
-	 * This method is used for delete comment
-	 * @param coiReviewCommentId
-	 * @return String
-	 */
-	String deleteReviewComment(Integer coiReviewCommentId);
-
-	/**
-	 * This method is used for download Attachment
-	 * @param attachmentId
-	 * @return
-	 */
-	ResponseEntity<byte[]> downloadCoiReviewAttachment(Integer attachmentId);
-
-	/**
-	 * This method is used for delete Attachment
-	 * @param coiReviewCommentAttId
-	 * @return String
-	 */
-	String deleteReviewAttachment(Integer coiReviewCommentAttId);
 
 	/**
 	 * This method is used for complete Disclosure
