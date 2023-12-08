@@ -17,11 +17,11 @@ export class ReviewCommentsService {
     }
 
     getCoiReviewComments(params) {
-        return this._http.post(this._commonService.baseUrl + '/coi/reviewComments/fetch', params);
+        return this._http.post(this._commonService.baseUrl + '/reviewComments/fetch', params);
     }
 
     getOPAReviewComments(params) {
-        return this._http.post(this._commonService.baseUrl + '/formbuilder/reviewComments/fetch', params);
+        return this._http.post(this._commonService.formUrl + '/formbuilder/reviewComments/fetch', params);
     }
 
     downloadAttachment(params) {
@@ -40,19 +40,19 @@ export class ReviewCommentsService {
     }
 
     deleteReviewComments(coiReviewCommentId, moduleCode) {
-        return this._http.delete(`${this._commonService.baseUrl}/coi/reviewComments/${coiReviewCommentId}/${moduleCode}`);
+        return this._http.delete(`${this._commonService.baseUrl}/reviewComments/${coiReviewCommentId}/${moduleCode}`);
     }
 
     addCOIReviewComment(params: any) {
         const formData = new FormData();
         formData.append('formDataJson', JSON.stringify(params));
-        return this._http.post(this._commonService.baseUrl + '/coi/reviewComments', formData);
+        return this._http.post(this._commonService.baseUrl + '/reviewComments', formData);
     }
 
     addOPAReviewComment(params: any) {
         const formData = new FormData();
         formData.append('formDataJson', JSON.stringify(params));
-        return this._http.post(this._commonService.baseUrl + '/formbuilder/reviewComments', formData);
+        return this._http.post(this._commonService.formUrl + '/formbuilder/reviewComments', formData);
     }
 
     getSfiDetails(params: any) {
