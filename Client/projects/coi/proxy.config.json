@@ -547,5 +547,29 @@
     "/coi/getSFIRelationshipDetails": {
         "target": "http://10.199.100.34:9090/",
         "secure": false
+    },
+    "/coi/reviewComments/fetch": {
+        "target": "http://10.199.100.62:8070/",
+        "secure": false
+    },
+    "/coi/reviewComments": {
+        "target": "http://10.199.100.62:8070/",
+        "secure": false
+    },
+    "/coi/reviewComments/*/*": {
+        "target": "http://10.199.100.62:8070/",
+        "secure": false
+    },
+    "/formbuilder/reviewComments/fetch": {
+        "target": "http://10.199.100.62:9090/",
+        "secure": false
+    },
+    "/formbuilder/reviewComments": {
+        "target": "http://10.199.100.62:9090/",
+        "secure": false
+    },
+    "/formbuilder/reviewComments/*/*": {
+        "target": "http://10.199.100.62:9090/",
+        "secure": false
     }
 }

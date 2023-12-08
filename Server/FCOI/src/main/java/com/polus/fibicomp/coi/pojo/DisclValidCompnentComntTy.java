@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.polus.fibicomp.reviewcomments.pojos.DisclCommentType;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComponentType;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,11 +42,11 @@ public class DisclValidCompnentComntTy implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "DISCL_VALID_CMPNENT_COMNT_TY_FK1"), name = "COMPONENT_TYPE_CODE", referencedColumnName = "COMPONENT_TYPE_CODE", insertable = false, updatable = false)
 	private DisclComponentType disclComponentType;
 	
-	@Column(name = "COMMENT_TYPE")
+	@Column(name = "COMMENT_TYPE_CODE")
 	private String commentType;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "DISCL_VALID_CMPNENT_COMNT_TY_FK2"), name = "COMMENT_TYPE", referencedColumnName = "COMMENT_TYPE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "DISCL_VALID_CMPNENT_COMNT_TY_FK2"), name = "COMMENT_TYPE_CODE", referencedColumnName = "COMMENT_TYPE_CODE", insertable = false, updatable = false)
 	private DisclCommentType disclCommentType;
 	
 	@Column(name = "DESCRIPTION")

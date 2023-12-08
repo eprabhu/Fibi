@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.reviewcomments.pojos;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -10,9 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "DISCL_COMPONENT_TYPE")
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DisclComponentType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -33,45 +43,5 @@ public class DisclComponentType implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
-
-	public String getComponentTypeCode() {
-		return componentTypeCode;
-	}
-
-	public void setComponentTypeCode(String componentTypeCode) {
-		this.componentTypeCode = componentTypeCode;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
 
 }

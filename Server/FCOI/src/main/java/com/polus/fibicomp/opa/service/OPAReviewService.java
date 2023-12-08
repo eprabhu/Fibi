@@ -43,7 +43,7 @@ public interface OPAReviewService {
      */
     ResponseEntity<Object> getAllReviewActionLogs(Integer opaDisclosureId);
     /**
-     *
+     * This method deletes a OPA review
      * @param opaReviewId
      * @return
      */
