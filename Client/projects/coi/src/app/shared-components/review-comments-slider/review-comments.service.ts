@@ -16,13 +16,12 @@ export class ReviewCommentsService {
         return this._http.post(this._commonService.baseUrl + '/getCoiSectionsTypeCode', params);
     }
 
-    getAdminDetails() {
-        return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
+    getCoiReviewComments(params) {
+        return this._http.post(this._commonService.baseUrl + '/coi/reviewComments/fetch', params);
     }
 
-    getCoiReviewComments(params) {
-        return this._http.post(this._commonService.baseUrl + '/loadCoiReviewComments', params);
-
+    getOPAReviewComments(params) {
+        return this._http.post(this._commonService.baseUrl + '/formbuilder/reviewComments/fetch', params);
     }
 
     downloadAttachment(params) {
@@ -40,19 +39,20 @@ export class ReviewCommentsService {
         return this._http.post(this._commonService.baseUrl + ' /attachment/deleteDisclAttachment', params);
     }
 
-    deleteReviewComments(coiReviewCommentId) {
-        return this._http.delete(`${this._commonService.baseUrl}/deleteCOIReviewComment/${coiReviewCommentId}`);
+    deleteReviewComments(coiReviewCommentId, moduleCode) {
+        return this._http.delete(`${this._commonService.baseUrl}/coi/reviewComments/${coiReviewCommentId}/${moduleCode}`);
     }
 
-    addCOIReviewComment(params: any, uploadedFiles) {
+    addCOIReviewComment(params: any) {
         const formData = new FormData();
-        if (uploadedFiles) {
-            uploadedFiles.forEach(file => {
-                formData.append('files', file, file.name);
-            });
-        }
         formData.append('formDataJson', JSON.stringify(params));
-        return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
+        return this._http.post(this._commonService.baseUrl + '/coi/reviewComments', formData);
+    }
+
+    addOPAReviewComment(params: any) {
+        const formData = new FormData();
+        formData.append('formDataJson', JSON.stringify(params));
+        return this._http.post(this._commonService.baseUrl + '/formbuilder/reviewComments', formData);
     }
 
     getSfiDetails(params: any) {

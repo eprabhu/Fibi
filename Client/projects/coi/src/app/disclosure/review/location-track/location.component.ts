@@ -12,7 +12,7 @@ import {deepCloneObject, hideModal} from '../../../../../../fibi/src/app/common/
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
-import { PersonProjectOrEntity } from '../../../shared-components/shared-interface';
+import { PersonProjectOrEntity, coiReviewComment } from '../../../shared-components/shared-interface';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -255,8 +255,15 @@ export class LocationComponent implements OnInit, OnDestroy {
         }));
     }
 
-    modifyReviewComment(coiReviewId) {
-        this.commentConfiguration.coiReviewId = coiReviewId;
+    modifyReviewComment(reviewDetails) {
+        let coiData = this._dataStore.getData();
+        const disclosureDetails:coiReviewComment = {
+            documentOwnerPersonId: coiData.coiDisclosure.person.personId,
+            componentTypeCode: '8',
+            subModuleItemKey: reviewDetails.coiReviewId,
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
+        }
+        this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.coiService.isShowCommentNavBar = true;	
     }
 

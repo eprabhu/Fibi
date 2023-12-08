@@ -8,7 +8,7 @@ import {CommonService} from '../common/services/common.service';
 import {environment} from '../../environments/environment';
 import {REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
 import {OPA, OpaDisclosure} from './opa-interface';
-import {DefaultAssignAdminDetails, PersonProjectOrEntity} from '../shared-components/shared-interface';
+import {DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment} from '../shared-components/shared-interface';
 import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
@@ -222,6 +222,21 @@ export class OpaComponent implements OnInit {
     closeHeaderSlider() {
         this.showSlider = false;
         this.selectedType = '';
+    }
+
+    openReviewComment() {
+        const COMMENT_META_DATA: coiReviewComment = {
+            documentOwnerPersonId: this.opa.opaDisclosure.personId,
+            componentTypeCode: '9',
+            subModuleItemKey: null,
+            subModuleItemNumber : null
+        }
+        this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
+        this.opaService.isShowCommentNavBar = true;
+    }
+
+    closeReviewComment(event) {
+        this.opaService.isShowCommentNavBar = event;
     }
 
 }
