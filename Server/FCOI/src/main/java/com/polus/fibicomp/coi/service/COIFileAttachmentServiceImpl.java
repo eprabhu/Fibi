@@ -8,6 +8,8 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.fibicomp.constants.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -228,4 +230,14 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 		return coiFileAttachmentDao.getDisclAttachByCommentId(commentId);
 	}
 
+	@Override
+	public Integer deleteDisclAttachmentById(Integer attachmentId) {
+		DisclAttachment attachment = coiFileAttachmentDao.getDisclAttachByAttachId(attachmentId);
+		if (attachment == null) {
+			throw new ApplicationException("Attachment not fount with id : " + attachmentId, Constants.JAVA_ERROR);
+		}
+		fileManagementService.deleteFile(COI_MODULE_CODE,attachment.getFileDataId());
+		coiFileAttachmentDao.deleteDisclAttachment(attachmentId);
+		return attachment.getCommentId();
+	}
 }

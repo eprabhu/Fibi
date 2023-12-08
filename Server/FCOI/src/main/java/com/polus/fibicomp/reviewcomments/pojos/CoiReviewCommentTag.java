@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.reviewcomments.pojos;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -6,12 +6,18 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -35,10 +41,16 @@ public class CoiReviewCommentTag implements Serializable {
 	@Id
 	@Column(name = "COI_REVIEW_COMMENT_TAGS_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer coiReviewCommentTagsId;
+	private Integer reviewCommentTagId;
 
 	@Column(name = "COI_REVIEW_COMMENT_ID")
-	private Integer coiReviewCommentId;
+	private Integer commentId;
+
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "DISCL_COMMENT_FK1"), name = "COI_REVIEW_COMMENT_ID",
+			referencedColumnName = "COMMENT_ID", insertable = false, updatable = false)
+	private DisclComment disclComment;
 
 	@Column(name = "TAG_REF")
 	private String tagRef;
@@ -48,9 +60,6 @@ public class CoiReviewCommentTag implements Serializable {
 
 	@Column(name = "TAGGED_GROUP_ID")
 	private Integer tagGroupId;
-	
-	@Column(name = "COI_REVIEW_ID")
-	private Integer coiReviewId;
 
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")

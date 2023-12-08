@@ -195,19 +195,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.startReview(vo);
 	}
 
-	@PostMapping(value = "/addCOIReviewComment")
-	public ResponseEntity<Object> addExtReviewerAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files,
-			@RequestParam("formDataJson") String formDataJson) {
-		logger.info("Requesting for addCOIReviewComment");
-		return conflictOfInterestService.saveOrUpdateCoiReviewComments(files, formDataJson);
-	}
-
-	@PostMapping("/loadCoiReviewComments")
-	public ResponseEntity<Object> loadCoiReviewComments(@RequestBody ConflictOfInterestVO vo) {
-		logger.info("Request for loadCoiReviewComments");
-		return conflictOfInterestService.loadCoiReviewComments(vo);
-	}
-	
 	@PostMapping("/completeCOIReview")
 	public ResponseEntity<Object> completeReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for CompleteReview");
@@ -220,29 +207,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.deleteReview(coiReviewId);
 	}
 
-	@DeleteMapping(value = "/deleteCOIReviewComment/{coiReviewCommentId}")
-	public String deleteReviewComment(@PathVariable(value = "coiReviewCommentId", required = true) final Integer coiReviewCommentId) {
-		logger.info("Requesting for deleteReviewComment");
-		return conflictOfInterestService.deleteReviewComment(coiReviewCommentId);
-	}
-
 	@DeleteMapping(value = "/deleteCOIReviewCommentTags/{coiReviewCommentTagId}")
 	public String deleteReviewCommentTag(@PathVariable(value = "coiReviewCommentTagId", required = true) final Integer coiReviewCommentTagId) {
 		logger.info("Requesting for deleteReviewCommentTag");
 		return conflictOfInterestService.deleteReviewCommentTag(coiReviewCommentTagId);
-	}
-	
-	@DeleteMapping(value = "/deleteReviewAttachment/{coiReviewCommentAttId}")
-	public String deleteReviewAttachment(@PathVariable(value = "coiReviewCommentAttId", required = true) final Integer coiReviewCommentAttId) {
-		logger.info("Requesting for deleteReviewAttachment");
-		return conflictOfInterestService.deleteReviewAttachment(coiReviewCommentAttId);
-	}
-
-	@GetMapping(value = "/downloadCoiReviewAttachment")
-	public ResponseEntity<byte[]> downloadCoiReviewAttachment(HttpServletResponse response, @RequestHeader("attachmentId") Integer attachmentId) {
-		logger.info("Requesting for downloadCoiReviewAttachment");
-		logger.info("downloadCoiReviewAttachmentId : {}", attachmentId);
-		return conflictOfInterestService.downloadCoiReviewAttachment(attachmentId);
 	}
 
 	@PostMapping("/completeDisclosureReview/{disclosureId}/{disclosureNumber}")
