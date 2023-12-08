@@ -67,12 +67,13 @@ export class SfiObject {
 
 export interface coiReviewComment {
     documentOwnerPersonId:string;
-    disclosureId:number;
-    coiSectionsTypeCode:string;
-    headerName:string;
-    coiSubSectionsId:any;
-    coiSubSectionsTitle:any;
-    componentSubRefId:number;
+    componentTypeCode : any;
+    subModuleItemKey?: any;
+    subModuleItemNumber?:any;
     sfiStatus?:any;
     selectedProject?:any;
+    coiSubSectionsTitle?:any;
+    headerName?:any;
+    subSectionTitle?:any;
+    subSectionId?:any;
 }

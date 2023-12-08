@@ -730,13 +730,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     openReviewComment() {
         const COMMENT_META_DATA: coiReviewComment = {
-            disclosureId: this.coiData.coiDisclosure.disclosureId,
-            coiSectionsTypeCode: null,
             documentOwnerPersonId: this.coiData.coiDisclosure.person.personId,
-            coiSubSectionsId: null,
-            headerName: '',
-            componentSubRefId: null,
-            coiSubSectionsTitle: null
+            componentTypeCode: '3',
+            subModuleItemKey: null,
+            subModuleItemNumber : null
         }
         this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
         this.coiService.isShowCommentNavBar = true;

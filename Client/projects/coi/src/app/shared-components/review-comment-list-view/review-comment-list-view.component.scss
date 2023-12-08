@@ -48,18 +48,12 @@ select option {
     color: #5a5a5a !important;
 }
 
-.person-icon-position {
-    position: relative;
-    top: 4px;
-}
-
 .material-symbols-outlined {
     color: #98989e;
 }
 
 .comment-card-position-child {
-    position: relative;
-    left: 5px;
+    padding-left: 47px;
 }
 
 .comment-card-position-parent {
@@ -113,7 +107,33 @@ select option {
   }
 
   .cmnt-background {
-    background: #f6f6f6;
-    border-radius: 10px;
+    border: 2px solid #dedede;
+    border-radius: 4px;
     }
-    
+
+    .person-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #027dec;
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+        background-color: #E1E6EB;
+      }
+
+      .reply-comments {
+        border: 1px solid #DCDCDC;
+        border-radius: 5px;
+        background: #F1F1F1;
+      }
+
+.section-margin {
+    margin-bottom: 20px;
+}
+
+.sub-label{
+    border-radius: 50px;
+    color: #027dec;
+    background-color: #E1E6EB;
+}

@@ -144,17 +144,18 @@ getEntityProjectRelations() {
     }
 
     openReviewerComment(details,section, childSubSection) {
+        console.log(details);
             let coiData = this._dataStore.getData();
             const disclosureDetails:coiReviewComment = {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
-                disclosureId: coiData.coiDisclosure.disclosureId,
-                coiSectionsTypeCode: '6',
-                headerName: section === 'PROJECT' ? details.title : details.coiEntity?.entityName,
-                coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
-                componentSubRefId: childSubSection?.personEntityId,
+                componentTypeCode: '6',
+                subModuleItemKey: section === 'SFI' ? childSubSection.disclosureDetailsId : details.moduleItemId,
+                subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null, 
                 coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`,
                 selectedProject: details,
-                sfiStatus: childSubSection?.coiProjConflictStatusType
+                sfiStatus: childSubSection?.coiProjConflictStatusType,
+                subSectionTitle: childSubSection?.personEntityRelationshipDto.entityName,
+                subSectionId: childSubSection?.personEntityRelationshipDto.personEntityId,
             }
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
             this._coiService.isShowCommentNavBar = true;

@@ -48,3 +48,11 @@
   color: grey;
   height: 17px;
 }
+
+.clickable {
+  color:#007DEC;
+  cursor: pointer;
+  &:hover {
+    font-weight: 800;
+  }
+}

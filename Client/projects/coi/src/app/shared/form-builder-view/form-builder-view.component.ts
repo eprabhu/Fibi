@@ -15,6 +15,7 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() externalEvents: Observable<FormBuilderEvent>;
     @Output() builderStatus = new EventEmitter<string>();
+    @Output() commentSlider = new EventEmitter<string>();
     formBuilderData = new FormBuilder();
     isSubscribed = false;
     saveEventForChildComponent = new Subject();
@@ -58,6 +59,10 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
         this._formBuilderService.getFormBuilderData(this.fbConfiguration).subscribe((data: any) => {
             this.formBuilderData = data;
         });
+    }
+
+    emitCommentDetails(event) {
+        this.commentSlider.emit(event);
     }
 
 
