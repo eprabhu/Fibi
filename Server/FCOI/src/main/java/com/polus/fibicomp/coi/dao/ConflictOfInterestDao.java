@@ -1019,8 +1019,6 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType();
 
-	public DisclComment getTravelConflictComment(Integer travelDisclosureId);
-
 	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory);
 
 	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);

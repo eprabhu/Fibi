@@ -75,7 +75,6 @@ import com.polus.fibicomp.coi.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
@@ -288,11 +287,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		String coiTypeCode = coiDisclosure.getFcoiTypeCode();
 		if (Constants.PROPOSAL_DISCLOSURE.equals(coiTypeCode)) {
 			List<DisclosureDetailDto> projDetailObjs = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE,
-					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null);
+					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null, null);
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		} else if (Constants.AWARD_DISCLOSURE.equals(coiTypeCode)) {
 			List<DisclosureDetailDto> projDetailObjs = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
-					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null);
+					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null, null);
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		}
 		coiDisclosure.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
