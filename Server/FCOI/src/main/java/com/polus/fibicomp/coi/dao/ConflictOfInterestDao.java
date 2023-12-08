@@ -36,8 +36,7 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
@@ -51,7 +50,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
-import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
@@ -306,13 +305,6 @@ public interface ConflictOfInterestDao {
 	public CoiReview loadCoiReview(Integer coiReviewId);
 
 	/**
-	 * This method is used for save Comments
-	 * @param coiReviewComment
-	 * @return
-	 */
-	public CoiReviewComments saveOrUpdateCoiReviewComments(CoiReviewComments coiReviewComment);
-
-	/**
 	 * 
 	 * @return
 	 */
@@ -412,6 +404,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentAttId
 	 * @return
 	 */
+	@Deprecated
 	public CoiReviewCommentAttachment fetchAttachmentById(Integer coiReviewCommentAttId);
 
 	/**
@@ -425,6 +418,7 @@ public interface ConflictOfInterestDao {
 	 * @param fileDataId
 	 * @return CoiFileData
 	 */
+	@Deprecated
 	public CoiFileData getFileDataById(String fileDataId);
 
 	/**
@@ -438,6 +432,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewId
 	 * @return
 	 */
+	@Deprecated
 	public List<CoiReviewCommentAttachment> fetchReviewAttachmentByReviewId(Integer coiReviewId);
 
 	/**
@@ -445,6 +440,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentId
 	 * @return
 	 */
+	@Deprecated
 	public List<CoiReviewCommentAttachment> fetchReviewAttachmentByCommentId(Integer coiReviewCommentId);
 
 	/**
@@ -452,6 +448,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentAttId
 	 * @return CoiReviewCommentAttachment
 	 */
+	@Deprecated
 	public CoiReviewCommentAttachment deleteAttachment(Integer coiReviewCommentAttId);
 
 	/**
@@ -614,7 +611,7 @@ public interface ConflictOfInterestDao {
 	 * @param searchString 
 	 * @return
 	 */
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString);
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString, Integer moduleItemKey);
 
 	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
@@ -735,10 +732,6 @@ public interface ConflictOfInterestDao {
 	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
 	
 	public Integer generateMaxPersonEntityId();
-
-	public void saveOrUpdateDisclComment(DisclComment disclComment);
-
-	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
 
 	/**
 	 * This method is used to validate

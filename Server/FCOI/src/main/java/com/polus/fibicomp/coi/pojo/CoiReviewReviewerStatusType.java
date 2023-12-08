@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-	@Table(name = "COI_REVIEWER_STATUS_TYPE")
-public class CoiReviewerStatusType implements Serializable {
+	@Table(name = "COI_REVIEW_REVIEWER_STATUS_TYPE")
+public class CoiReviewReviewerStatusType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

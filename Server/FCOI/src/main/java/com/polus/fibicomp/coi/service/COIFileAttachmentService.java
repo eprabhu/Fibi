@@ -34,4 +34,12 @@ public interface COIFileAttachmentService {
 	
 	Attachments saveAttachment(AttachmentsDto request, String personId);
 
+	/**
+	 * This method deletes an Attachment by attachment if
+	 * if attachment not founds throws ApplicationException exception
+	 * @param attachmentId
+	 * @return
+	 */
+	Integer deleteDisclAttachmentById(Integer attachmentId);
+
 }

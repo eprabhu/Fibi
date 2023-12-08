@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
-import com.polus.fibicomp.coi.dto.CoiReviewCommentsDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -19,13 +18,12 @@ import com.polus.fibicomp.coi.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
-import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
@@ -121,13 +119,7 @@ public class ConflictOfInterestVO {
 	private List<AdminGroup> adminGroup;
 	
 	private List<CoiReviewActivity> coiReviewActivitys;
-	
-	private List<CoiReviewComments> coiReviewComments;
 
-	private CoiReviewComments coiReviewComment;
-
-	private CoiReviewCommentsDto coiReviewCommentDto;
-	
 	private List<CoiReviewCommentAttachment> coiReviewCommentAttachment;
 
 	private String disclosureStatusCode;
