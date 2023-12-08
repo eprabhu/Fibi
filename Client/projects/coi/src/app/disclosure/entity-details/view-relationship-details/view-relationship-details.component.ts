@@ -9,7 +9,7 @@ import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
-import { scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, hideModal, scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-view-relationship-details',
@@ -53,7 +53,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
       sponsorsResearch: false
     };
     mandatoryList = new Map();
-    deleteRelationshipEvent: any;
+    deleteRelationshipDetails: any;
 
     constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
                  private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService ) {
@@ -411,15 +411,19 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }
     }
 
-    emittedDeletedRelationship(event) {
-        this.deleteRelationshipEvent = event;
-        if (this.deleteRelationshipEvent && this.deleteRelationshipEvent.isDeleted) {
-            this.relationshipsDetails.updateTimestamp = this.deleteRelationshipEvent.updatedTimestamp;
-            let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipEvent.removeRelId);
+    emittedDeletedRelationship() {
+        if (this.deleteRelationshipDetails) {
+            let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipDetails.personEntityRelId);
             if (delIndex >= 0) {
                 this.personEntityRelationships.splice(delIndex, 1);
+                this.entityDetailsServices.definedRelationships.splice(delIndex, 1);
+                this.addToAvailableRelation(this.deleteRelationshipDetails.validPersonEntityRelType);
+                if (this.entityDetailsServices.definedRelationships.length) {
+                    this.entityDetailsServices.definedRelationships.length > delIndex ?
+                        this.openRelationshipQuestionnaire(this.entityDetailsServices.definedRelationships[delIndex]) :
+                        this.openRelationshipQuestionnaire(this.entityDetailsServices.definedRelationships[this.entityDetailsServices.definedRelationships.length - 1]);
+                }
             }
-            this.deleteRelationshipEvent.isDeleted = false;
         }
         if (this.isEditMode) {
             this.getQuestionnaire();
@@ -487,6 +491,42 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             SFI_NAV_BAR.style.paddingTop = '12.5px';
             SFI_NAV_BAR.style.top = '0px';
         }
+    }
+
+    deleteRelationship() {
+        let VALID_REL_TYPE_CODE = this.deleteRelationshipDetails.validPersonEntityRelTypeCode;
+        this.$subscriptions.push(this.entityDetailsServices.deletePersonEntityRelationship
+            (this.deleteRelationshipDetails.personEntityRelId, this.deleteRelationshipDetails.personEntityId).subscribe(async (updatedTimestamp) => {
+                if (VALID_REL_TYPE_CODE in this.entityDetailsServices.relationshipCompletedObject) {
+                    delete this.entityDetailsServices.relationshipCompletedObject[VALID_REL_TYPE_CODE];
+                }
+                this.emittedDeletedRelationship();
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
+                this.deleteRelationshipDetails = null;
+                hideModal('deleteRelationModal');
+            }, _err => {
+                if (_err.status === 405) {
+                    hideModal('deleteRelationModal');
+                    this.entityDetailsServices.concurrentUpdateAction = 'Delete Relationship'
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting relationship.`);
+                }
+            }));
+    }
+    
+    private addToAvailableRelation(relation: any) {
+        this.entityDetailsServices.groupedRelations = {};
+        this.entityDetailsServices.availableRelationships.push(relation);
+        if (this.entityDetailsServices.availableRelationships.length) {
+            this.entityDetailsServices.groupedRelations = this.groupBy(deepCloneObject(this.entityDetailsServices.availableRelationships), "coiDisclosureType", "description");
+        }
+    }
+
+    groupBy(jsonData, key, innerKey) {
+        return jsonData.reduce((relationsTypeGroup, item) => {
+            (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
+            return relationsTypeGroup;
+        }, {});
     }
 
 }

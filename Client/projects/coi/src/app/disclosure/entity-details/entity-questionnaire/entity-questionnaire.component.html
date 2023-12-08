@@ -1,20 +1,5 @@
 
-<div class="ml-15 mr-10 questionnaire-position" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
-  <div class="card no-data-card" *ngIf="!entityDetailsServices.definedRelationships?.length">
-    <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
-      <p class="fs-14 m-0">
-        <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
-          You currently do not have any relationships associated with the entity.
-        </span>
-      </p>
-    </div>
-  </div>
-        <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
-          <button (click)="deleteRelationship()" class="btn-delete-position btn btn-tertiary">
-            <mat-icon class="pt-1">delete_outline</mat-icon>
-            <span class="fs-14 delete-content-position">Delete</span>
-          </button>
-        </div>
+<div class="mr-10 questionnaire-position" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
       <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length && hasPermissionToView" [configuration]="configuration" [questionnaireHeader]="''"
           [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)"
           (QuestionnaireEditEvent)="questionnaireEdit($event)">

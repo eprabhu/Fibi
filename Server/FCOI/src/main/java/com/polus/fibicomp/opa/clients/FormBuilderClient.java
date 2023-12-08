@@ -8,11 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * We can customize here if need
- * @doc : https://polussoftware0-my.sharepoint.com/:w:/g/personal/ajin_vs_polussolutions_com/EbsVHRTRLuZDv7iLDbM9Nc0BHYb5tc-juKji954sbX7JJQ?e=2Ivthl
+ * <a href="https://polussoftware0-my.sharepoint.com/:w:/g/personal/ajin_vs_polussolutions_com/EbsVHRTRLuZDv7iLDbM9Nc0BHYb5tc-juKji954sbX7JJQ?e=2Ivthl"> documentation</a>
  */
 @FeignClient("FIBI-FORM-BUILDER")
 public interface FormBuilderClient {
 
     @PostMapping("/formbuilder/getApplicableForms")
     ResponseEntity<ApplicableFormResponse> getApplicableForms(@RequestBody ApplicableFormRequest request);
+
+    @PostMapping("/formbuilder/getForm")
+    ResponseEntity<FormResponse> getForm(@RequestBody FormRequest request);
+
+    @PostMapping("/formbuilder/getBlankForm")
+    ResponseEntity<BlankFormResponse> getBlankForm(@RequestBody BlankFormRequest request);
+
+
 }

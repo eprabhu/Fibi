@@ -1,24 +1,29 @@
 export class ReviewComments {
     coiReviewCommentDto: CoiReviewComment = new CoiReviewComment();
-    documentOwnerPersonId: number;
+    // documentOwnerPersonId: number;
 }
 
 
 export class CoiReviewComment {
-    coiReviewCommentId: any;
-    coiSectionsTypeCode: string;
-    disclosureId: number;
-    comment: string = '';
-    coiParentCommentId: number = null;
-    isPrivate: boolean = false;
-    coiSubSectionsId: number = null;
-    coiReviewCommentTag: any = [];
-    coiReviewCommentAttachment: any = [];
-    componentSubRefId: number = null;
-    commentId: number = null;
-    // isAdmin = false;
-    // isReviewer = false;
-    // isReporter = false;
+    "documentOwnerPersonId": any = null;
+    "commentPersonId": any = null;
+    "commentTypeCode": any = null;
+    "commentType": any = null;
+    "componentTypeCode": any = null;
+    "parentCommentId": any = null;
+    "commentTags": any = null;
+    "isPrivate":boolean = false;
+    "comment": any = null;
+    "moduleItemKey": any = null;
+    "moduleItemNumber": any = null;
+    "subModuleItemKey": any = null;
+    "subModuleItemNumber": any = null;
+    "moduleCode": number;
+    "subModuleCode": any = null;
+    "formBuilderId": any = null;
+    "formBuilderSectionId": any = null;
+    "formBuilderComponentId": any = null;
+    "commentId": any = null;
 }
 
 export class RO {
@@ -53,4 +58,19 @@ export class CompleterOptions {
     filterFields: string;
     formatString: string;
     defaultValue = '';
+}
+
+export class CommentFetch {
+        "moduleItemKey": any = null;
+        "moduleItemNumber": any = null;
+        "subModuleItemKey": any = null;
+        "subModuleItemNumber": any = null;
+        "moduleCode" = 8;
+        "subModuleCode": any = null;
+        "formBuilderId": any = null;
+        "formBuilderSectionId": any = null;
+        "formBuilderComponentId": any = null;
+        "componentTypeCode": any = null;
+        "parentCommentId": any = null;
+        "isSectionDetailsNeeded": boolean = false;
 }

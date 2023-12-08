@@ -122,11 +122,8 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         let coiData = this._dataStore.getData();
         const REQ_BODY:coiReviewComment = {
             documentOwnerPersonId: coiData.coiDisclosure.disclosureId,
-            disclosureId: coiData.coiDisclosure.disclosureId,
-            coiSectionsTypeCode: '5',
-            headerName: event.personEntityHeader,
-            coiSubSectionsId: event.personEntityId,
-            componentSubRefId: null,
+            subModuleItemKey: event.personEntityId,
+            componentTypeCode: '5',
             coiSubSectionsTitle: event.personEntityHeader
         }
         this._commonService.$commentConfigurationDetails.next(REQ_BODY);

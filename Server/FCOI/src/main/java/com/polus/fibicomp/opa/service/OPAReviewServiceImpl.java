@@ -14,6 +14,9 @@ import com.polus.fibicomp.opa.dto.OPAReviewDto;
 import com.polus.fibicomp.opa.pojo.OPAReview;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
+import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
+import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +54,18 @@ public class OPAReviewServiceImpl implements OPAReviewService {
 
     @Autowired
     private ActionLogDao actionLogRepository;
+
+    @Autowired
+    private ConflictOfInterestDao coiDao;
+
+    @Autowired
+    private ConflictOfInterestService coiService;
+
+    @Autowired
+    private ReviewCommentDao reviewCommentDao;
+
+    @Autowired
+    private ReviewCommentService reviewCommentService;
 
     @Override
     public ResponseEntity<Object> saveOrUpdateOPAReview(OPAReview opaReview) {
@@ -209,7 +224,13 @@ public class OPAReviewServiceImpl implements OPAReviewService {
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         OPAReviewDto reviewDto = new OPAReviewDto();
         BeanUtils.copyProperties(opaReview, reviewDto, "reviewStatusType", "reviewLocationType");
-        //TODO need to delete other review related tables
+        reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder()
+                .componentTypeCode(Constants.COI_DISCL_REVIEW_COMPONENT_TYPE)
+                .moduleCode(Constants.COI_MODULE_CODE)
+                .subModuleItemKey(opaReviewId)
+                .moduleItemKey(opaReview.getOpaDisclosureId()).build()).forEach(reviewComment -> {
+            reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
+        });
         reviewDao.deleteOPAReview(opaReviewId);
         reviewDto.setOpaDisclosure(opaDao.getOPADisclosure(opaReview.getOpaDisclosureId()));
 

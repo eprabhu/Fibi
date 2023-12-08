@@ -775,7 +775,7 @@
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
 <div *ngIf="coiService.isShowCommentNavBar">
-    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="coiData.coiDisclosure" 
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="coiData.coiDisclosure" [disclosureType]="'COI'"
     [projectDetails]="coiData.projectDetail" [reviewList]="reviewList"></app-review-comments-slider>
 </div>
 
