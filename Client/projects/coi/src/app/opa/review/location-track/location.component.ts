@@ -130,6 +130,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     editReview(review: any, index: number): void {
         this.clearReviewModal();
         this.reviewDetails = deepCloneObject(review);
+        this.reviewDetails.currentReviewStatusTypeCode = this.reviewDetails.reviewStatusType.reviewStatusCode;
+        this.reviewDetails.currentLocationTypeCode = this.reviewDetails.reviewLocationType.locationTypeCode;
         this.reviewStartDate = getDateObjectFromTimeStamp(this.reviewDetails.startDate);
         if (this.reviewDetails.endDate) {
             this.reviewEndDate = getDateObjectFromTimeStamp(this.reviewDetails.endDate);
@@ -166,7 +168,12 @@ export class LocationComponent implements OnInit, OnDestroy {
                 this.isExpanded = true;
                 // this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
-                // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                if (_err.status === 405) {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
+                  } else {
+                    this.clearActionData();
+                    this._commonService.showToast(HTTP_ERROR_STATUS, typeof(_err.error) == 'string' ? _err.error : `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                }
             }));
         }
     }
@@ -219,8 +226,12 @@ export class LocationComponent implements OnInit, OnDestroy {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
-            this.clearActionData();
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
+            if (_err.status === 405) {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
+            } else {
+                this.clearActionData();
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);            
+            }
         }));
     }
 

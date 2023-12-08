@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
-import { CommentConfiguration, RO, ReviewComments, CompleterOptions } from './review-comments-interface';
+import { CommentConfiguration, RO, ReviewComments, CompleterOptions, CommentFetch, CoiReviewComment } from './review-comments-interface';
 import { ReviewCommentsService } from './review-comments.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { topSlideInOut } from '../../common/utilities/animations';
@@ -23,18 +23,19 @@ import { Router } from '@angular/router';
     providers: [ReviewCommentsService],
     animations: [topSlideInOut]
 })
-export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChanges {
+export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     headerName = ''
     @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
     @Input() disclosureDetails: any;
-    @Input() projectDetails: any;
+    @Input() disclosureType: any = "";
+    @Input() projectDetails: any = null;
     @Input() selectedProject: any;
-    @Input() reviewList: any;
+    @Input() reviewList: any = null;
     isSaving = false;
     $subscriptions: Subscription[] = [];
     isReadMore = false;
-    reviewCommentDetails: ReviewComments = new ReviewComments();
+    reviewCommentDetails: CoiReviewComment = new CoiReviewComment();
     reviewTypeList: any;
     selectedProjectDetails:any = {};
     adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
@@ -92,33 +93,31 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     isUserAdmin = false;
     isUserReviewer = false;
     isUserReporter = false;
+    subSectionTitle: string;
+    subSectionId: any;
+    showAddComment = false;
+    imgUrl = this.deployMap + 'assets/images/close-black.svg';
+    @ViewChild('reviewCommentsOverlay', { static: true }) reviewCommentsOverlay: ElementRef;
 
     constructor(
         public commonService: CommonService, private _reviewCommentsService: ReviewCommentsService, 
-        public _dataStore: DataStoreService, public coiService: CoiService, private _router: Router
+        private _router: Router
     ) { }
 
     ngOnInit() {
-        this.getPermission();
+        // this.getPermission();
         this.getReviewerActionDetails();
         this.loadSectionsTypeCode();
-        this.getAdminDetails();
         setTimeout(() => {
-            openSlider('review-comments-slider');
-        });
+            this.showTaskNavBar();
+        })
     }
 
-    getPermission() {
-        this.isUserAdmin = this.coiService.isCOIAdministrator;
-        this.isUserReviewer = this.reviewList.find(e => e.assigneePersonId === this.commonService?.getCurrentUserDetail('personId')) ? true : false;
-        this.isUserReporter = this.disclosureDetails.personId === this.commonService?.getCurrentUserDetail('personId');
-    }
-
-    ngOnChanges() {
-        // if(this.requestLoadCommentDetails) {
-        //     this.getCoiReviewComments(this.requestLoadCommentDetails);
-        // }
-    }
+    // getPermission() {
+    //     this.isUserAdmin = this.coiService.isCOIAdministrator;
+    //     this.isUserReviewer = this.reviewList.find(e => e.assigneePersonId === this.commonService?.getCurrentUserDetail('personId')) ? true : false;
+    //     this.isUserReporter = this.disclosureDetails.personId === this.commonService?.getCurrentUserDetail('personId');
+    // }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
@@ -134,7 +133,9 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     }
 
     closeReviewSlider() {
-        closeSlider('review-comments-slider');
+        const slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');   
+        this.addBodyScroll();
         setTimeout(() => {
             this.cancelOrClearCommentsDetails();
             this.closePage.emit(false);
@@ -150,39 +151,14 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     }
 
     loadSectionsTypeCode() {
-        this.$subscriptions.push(this._reviewCommentsService.getSectionsTypeCode({
-            personId: this.disclosureDetails.personId,
-            disclosureId: this.disclosureDetails.disclosureId
-        }).subscribe((res: any) => {
-            this.reviewTypeList = res;
-            this.sectionSearchOptions = this.setCompleterOptions(this.reviewTypeList.coiSectionsTypeList, 'description');
-            this.setDefaultOptions();
-        }));
-    }
-
-    getCoiSectionType() {
-        if (this.reviewCommentDetails?.coiReviewCommentDto.componentSubRefId) {
-            return 'Relationship between project';
-        } else if (this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode == '6') {
-            return 'Project';
-        } else {
-            return this.reviewTypeList.coiSectionsTypeList.find(e=> e.coiSectionsTypeCode == this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode)?.description;
-        }
-    }
-
-    setDefaultOptions() {
-        this.coiSectionType = this.getCoiSectionType();
-        this.sectionSearchOptions.defaultValue = this.coiSectionType ? this.coiSectionType : '';
-        this.setSubSectionOptions(this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode);
-        this.subSectionSearchOptions.defaultValue = this.coiSubSectionsTitle;
-        let COI_CHILD_SECTION_OPTIONS;
-        if (this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode == '6' && this.reviewCommentDetails?.coiReviewCommentDto.coiSubSectionsId) {
-            COI_CHILD_SECTION_OPTIONS = this.reviewTypeList.projectList.find(e=> e.moduleItemId == this.reviewCommentDetails?.coiReviewCommentDto.coiSubSectionsId);
-            this.childSubSectionSelectOptions = this.setOptionsForEntity(COI_CHILD_SECTION_OPTIONS?.coiDisclEntProjDetails || []);
-        }
-        if (this.reviewCommentDetails?.coiReviewCommentDto.componentSubRefId) {
-            this.componentSubRefTitle = COI_CHILD_SECTION_OPTIONS?.coiDisclEntProjDetails.find(e=> e.personEntityId === this.reviewCommentDetails?.coiReviewCommentDto.componentSubRefId)?.coiEntity?.entityName;
-            this.childSubSectionSelectOptions.defaultValue = this.componentSubRefTitle;
+        if(this.disclosureType=='COI') {
+            this.$subscriptions.push(this._reviewCommentsService.getSectionsTypeCode({
+                personId: this.disclosureDetails.personId,
+                disclosureId: this.disclosureDetails.disclosureId
+            }).subscribe((res: any) => {
+                this.reviewTypeList = res;
+                this.sectionSearchOptions = this.setCompleterOptions(this.reviewTypeList.coiSectionsTypeList, 'description');
+            }));
         }
     }
 
@@ -210,7 +186,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
                     tagGroupId: null,
                     tagGroupName: '',
                 }
-                this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentTag.push(adminPersonDetails);
                 this.assignAdminMap.clear();
                 this.clearAdministratorField = new String('true');
                 this.isChangesInField = true;
@@ -228,7 +203,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
                     tagGroupId: event.adminGroupId,
                     tagGroupName: event.adminGroupName,
                 }
-                this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentTag.push(adminGroupDetails);
                 this.assignAdminMap.clear();
                 this.clearAdminGroupField = new String('true');
                 this.isChangesInField = true;
@@ -236,68 +210,50 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         }
     }
 
-    private getAdminDetails() {
-        this.$subscriptions.push(this._reviewCommentsService.getAdminDetails().subscribe((data: any) => {
-            this.setAdminGroupOptions(data);
-            this.setPersonCompleterOptions(data.persons, 'fullName', this.adminSearchOptions);
-        }));
-    }
-
-    private setAdminGroupOptions(data): void {
-        this.adminGroupsCompleterOptions = {
-            arrayList: this.getActiveAdminGroups(data),
-            contextField: 'adminGroupName',
-            filterFields: 'adminGroupName',
-            formatString: 'adminGroupName',
-            defaultValue: ''
-        };
-    }
-
-
-    private getActiveAdminGroups(data) {
-        return data.adminGroups.filter(element => element.isActive === 'Y');
-    }
-
-    private setPersonCompleterOptions(arrayList: any, searchShowField: string, searchOption: any = null) {
-        searchOption.defaultValue = '';
-        searchOption.arrayList = arrayList || [];
-        searchOption.contextField = searchShowField;
-        searchOption.filterFields = searchShowField;
-        searchOption.formatString = searchShowField;
-    }
-
 
     deleteCoiCommentAssignee(tagDetails, index) {
         if (this.isEditComment && tagDetails.coiReviewCommentTagsId) {
             this.$subscriptions.push(this._reviewCommentsService.deleteCOIAssignee(tagDetails.coiReviewCommentTagsId).subscribe(res => {
-                this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentTag.splice(index, 1);
+                this.reviewCommentDetails.commentTags.splice(index, 1);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Assignee removed successfully.')
             }, err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
             }));
         } else {
-            this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentTag.splice(index, 1);
+            this.reviewCommentDetails.commentTags.splice(index, 1);
         }
     }
 
     addCommentsDetails() {
         if (!this.validateComment()) {
-            // this.reviewCommentDetails.coiReviewCommentDto.isAdmin = this.selectedCommentType.isShowForAdmin;
-            // this.reviewCommentDetails.coiReviewCommentDto.isReviewer = this.selectedCommentType.isShowForReviewer;
-            // this.reviewCommentDetails.coiReviewCommentDto.isReporter = this.selectedCommentType.isShowForReporter;
             this.addOrUpdateComment(this.reviewCommentDetails, this.uploadedFile);
         }
     }
 
 
     private addOrUpdateComment(details, file) {
-        this.$subscriptions.push(this._reviewCommentsService.addCOIReviewComment(details, file).subscribe((res: any) => {
-            this.getCoiReviewComments(this.loadReviewerCommentBody(res));
-            this.cancelOrClearCommentsDetails();
-            this.commonService.showToast(HTTP_SUCCESS_STATUS, 'General review comment added Successfully');
-        }, error => {
-            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-        }));
+        details.moduleCode = this.disclosureType == 'OPA' ? 23 : 8;
+        if(this.disclosureType == 'COI') {
+            this.$subscriptions.push(this._reviewCommentsService.addCOIReviewComment(details).subscribe((res: any) => {
+                this.cancelOrClearCommentsDetails();
+                if (details.parentCommentId) {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply comment added Successfully');
+                } else {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added Successfully');
+                }
+                this.showAddComment = false;
+            }, error => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }));
+        }
+        if(this.disclosureType == 'OPA') {
+            this.$subscriptions.push(this._reviewCommentsService.addOPAReviewComment(details).subscribe((res: any) => {
+                this.cancelOrClearCommentsDetails();
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added Successfully');
+            }, error => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }));
+        }
     }
 
     private validateAdmin(event, type): boolean {
@@ -312,11 +268,12 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     }
 
     checkAlreadyAdd(event, type) {
-        return this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentTag.some((element) =>
+        return this.reviewCommentDetails.commentTags.some((element) =>
             type === 'ADMINISTRATOR' ? element.tagPersonId === event.personId : element.tagGroupId === event.adminGroupId);
     }
 
     getCoiReviewComments(REQ_BODY) {
+    if(REQ_BODY.componentTypeCode != '10') {
         this.$subscriptions.push(this._reviewCommentsService.getCoiReviewComments(REQ_BODY).subscribe((res: any) => {
             this.commentList = res;
             if (this._reviewCommentsService.editParentCommentId) {
@@ -324,51 +281,74 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
             }
         }));
     }
+    if(REQ_BODY.componentTypeCode == '10') {
+        this.$subscriptions.push(this._reviewCommentsService.getOPAReviewComments(REQ_BODY).subscribe((res: any) => {
+            this.commentList = res;
+            if (this._reviewCommentsService.editParentCommentId) {
+                this._reviewCommentsService.editParentCommentId = null;
+            }
+        }));
+    }
+    }
 
     getReviewerActionDetails() {
         this.$subscriptions.push(this.commonService.$commentConfigurationDetails.subscribe((res: any) => {
             if(res) {
                 this.reviewCommentDetails.documentOwnerPersonId = res.documentOwnerPersonId;
-                this.reviewCommentDetails.coiReviewCommentDto.disclosureId = res.disclosureId;
-                this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode = res.coiSectionsTypeCode;
-                if (['4', '5', '6'].includes(this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode)) {
+                this.reviewCommentDetails.moduleItemKey = this.disclosureType === 'COI' ? this.disclosureDetails.disclosureId : this.disclosureDetails.opaDisclosureId;
+                this.reviewCommentDetails.componentTypeCode = res.componentTypeCode;
+                if (['4', '5', '6', '8'].includes(this.reviewCommentDetails.componentTypeCode)) {
                     this.headerName = res.headerName;
-                    this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId = res.coiSubSectionsId;
+                    this.reviewCommentDetails.subModuleItemKey = res.subModuleItemKey;
+                    this.reviewCommentDetails.subModuleItemNumber = res.subModuleItemNumber || null;
                     this.coiSubSectionsTitle = res.coiSubSectionsTitle;
                     this.selectedProjectDetails = res.selectedProject;
-                    this.reviewCommentDetails.coiReviewCommentDto.componentSubRefId = res.componentSubRefId;
-                    if(res.sfiStatus) {
-                        this.sfiStatus = res.sfiStatus;
-                    }
+                    this.setLocalVariableValue(res)
+                }
+                if (this.reviewCommentDetails.componentTypeCode == 10) {
+                    this.reviewCommentDetails.formBuilderComponentId = res.formBuilderComponentId;
+                    this.reviewCommentDetails.formBuilderId = res.formBuilderId;
+                    this.reviewCommentDetails.formBuilderSectionId = res.formBuilderSectionId;
+                    this.coiSubSectionsTitle = res.headerName;
                 }
                 this.getCoiReviewComments(this.loadReviewerCommentBody(res));
             }
         }));
     }
 
-    deleteCoiCommentAttachments(item, index) {
+    setLocalVariableValue(type) {
+        if(type.sfiStatus) {
+            this.sfiStatus = type.sfiStatus;
+        } 
+        if (type.subSectionTitle) {
+            this.subSectionTitle = type.subSectionTitle;
+        }
+        if(type.subSectionId) {
+            this.subSectionId = type.subSectionId;
+        } 
+    }
+
+    deleteCoiCommentAttachments(item) {
         if (this.isEditComment) {
             this.$subscriptions.push(this._reviewCommentsService.deleteCOICommentAttachment({ attachmentId: item.attachmentId, fileDataId: item.fileDataId }).subscribe(res => {
-                this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentAttachment.splice(index, 1);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully');
             }, error => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }));
         } else {
-            this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentAttachment.splice(index, 1);
         }
     }
 
     validateComment() {
         this.mandatoryMap.clear();
-        if (this.reviewCommentDetails.coiReviewCommentDto.comment === '') {
+        if (!this.reviewCommentDetails.comment) {
             this.mandatoryMap.set('comment', 'Please add comment');
         }
         return this.mandatoryMap.size === 0 ? false : true;
     }
 
     cancelOrClearCommentsDetails() {
-        this.reviewCommentDetails = new ReviewComments();
+        this.reviewCommentDetails = new CoiReviewComment();
         this.uploadedFile = [];
         if (this.isEditComment) {
             this.isEditComment = false;
@@ -386,44 +366,51 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     }
 
     deleteReviewComment(event) {
-        this.commentList.splice(event, 1);
+        // this.commentList.splice(event, 1);
+        if (!this.isCloseSlider) {
+            this.getReviewerActionDetails();
+        }    
     }
 
     editReviewerParentComment(event) {
         this.isEditComment = true;
         this.reviewCommentDetails.documentOwnerPersonId = event.documentOwnerPersonId;
-        this.reviewCommentDetails.coiReviewCommentDto.commentId = event.commentId;
-        this.reviewCommentDetails.coiReviewCommentDto.isPrivate = event.isPrivate;
-        this.reviewCommentDetails.coiReviewCommentDto.comment = event.comment;
-        this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode = event.disclCommentType.commentType;
-        this.reviewCommentDetails.coiReviewCommentDto.disclosureId = this.reviewCommentDetails.coiReviewCommentDto.disclosureId;
+        this.reviewCommentDetails.commentId = event.commentId;
+        this.reviewCommentDetails.isPrivate = event.isPrivate;
+        this.reviewCommentDetails.comment = event.comment;
+        this.reviewCommentDetails.subModuleItemKey = event.subModuleItemKey;
+        this.reviewCommentDetails.componentTypeCode = event.componentTypeCode;
+        this.reviewCommentDetails.moduleItemKey = this.reviewCommentDetails.moduleItemKey;
         this.updateAttachmentDetails(event.disclAttachments);
         this.updateAssigneeDetails(event.coiReviewCommentTag);
-
+        this.addCommentsDetails();
     }
 
     private updateAssigneeDetails(assigneeDetails: any) {
-        assigneeDetails.forEach(ele => {
-            const reviewerList: any = {};
-            reviewerList.tagPersonId = ele.tagPersonId;
-            reviewerList.tagPersonFullName = ele.tagPersonFullName;
-            reviewerList.tagGroupId = ele.tagGroupId;
-            reviewerList.tagGroupName = ele.tagGroupName;
-            reviewerList.coiReviewCommentTagsId = ele.coiReviewCommentTagsId;
-            this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentTag.push(reviewerList);
-        });
+        if(assigneeDetails && assigneeDetails.length) {
+            assigneeDetails.forEach(ele => {
+                const reviewerList: any = {};
+                reviewerList.tagPersonId = ele.tagPersonId;
+                reviewerList.tagPersonFullName = ele.tagPersonFullName;
+                reviewerList.tagGroupId = ele.tagGroupId;
+                reviewerList.tagGroupName = ele.tagGroupName;
+                reviewerList.coiReviewCommentTagsId = ele.coiReviewCommentTagsId;
+                this.reviewCommentDetails.commentTags.push(reviewerList);
+            });
+        }
     }
 
     private updateAttachmentDetails(attachmentsDetails: any) {
-        attachmentsDetails.forEach(ele => {
-            const fileList: any = {};
-            fileList.fileName = ele.fileName;
-            fileList.commentId = ele.commentId;
-            fileList.attachmentId = ele.attachmentId;
-            fileList.mimeType = ele.mimeType;
-            fileList.fileDataId = ele.fileDataId;
-            this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentAttachment.push(fileList);
-        });
+        if(attachmentsDetails && attachmentsDetails.length) {
+            attachmentsDetails.forEach(ele => {
+                const fileList: any = {};
+                fileList.fileName = ele.fileName;
+                fileList.commentId = ele.commentId;
+                fileList.attachmentId = ele.attachmentId;
+                fileList.mimeType = ele.mimeType;
+                fileList.fileDataId = ele.fileDataId;
+            });
+        }
     }
 
     addReplayComment(event) {
@@ -431,21 +418,27 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     }
 
     removeChidReviewComment(event) {
-        const RELATION_INDEX = this.commentList[event.index].reply.findIndex(ele => ele.commentId === event.commentId);
-        if (RELATION_INDEX !== -1) {
-            this.commentList[event.index].reply.splice(RELATION_INDEX, 1);
-        }
+        // const RELATION_INDEX = this.commentList[event.index].childComments.findIndex(ele => ele.commentId === event.commentId);
+        // if (RELATION_INDEX !== -1) {
+        //     this.commentList[event.index].childComments.splice(RELATION_INDEX, 1);
+        // }
+        this.getReviewerActionDetails();
     }
 
     loadReviewerCommentBody(details) {
-        const REQ_BODY = {
-            personId: null,
-            disclosureId: details.disclosureId,
-            coiSubSectionsId: details.coiSubSectionsId,
-            coiSectionsTypeCode: details.coiSectionsTypeCode || null,
-            componentSubRefId: details.componentSubRefId || null,
-            sort: "desc"
-        }
+        const REQ_BODY = new CommentFetch();
+        REQ_BODY.componentTypeCode = ['3', '9'].includes(details.componentTypeCode) ? null : details.componentTypeCode;
+        REQ_BODY.moduleItemKey = this.disclosureType === 'COI' ? this.disclosureDetails.disclosureId : this.disclosureDetails.opaDisclosureId;
+        REQ_BODY.moduleItemNumber = this.disclosureDetails.disclosureNumber; 
+        REQ_BODY.parentCommentId = this.disclosureDetails.parentCommentId || null;
+        REQ_BODY.subModuleCode = details.subModuleCode || null;
+        REQ_BODY.subModuleItemKey = details.subModuleItemKey || null;
+        REQ_BODY.subModuleItemNumber = details.subModuleItemNumber || null;
+        REQ_BODY.formBuilderComponentId = details.formBuilderComponentId || null;
+        REQ_BODY.formBuilderId = details.formBuilderId || null;
+        REQ_BODY.formBuilderSectionId = details.formBuilderSectionId || null;
+        REQ_BODY.moduleCode = this.disclosureType === 'COI' ? 8 : 23;
+        REQ_BODY.isSectionDetailsNeeded = ['3', '9'].includes(details.componentTypeCode);
         return REQ_BODY;
     }
 
@@ -472,7 +465,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
 	}
 
 	getColorBadges(disclosure): string {
-        if(disclosure.fcoiTypeCode == 1) {
+        if(disclosure && disclosure.fcoiTypeCode == 1) {
             return 'bg-fcoi-clip'
         } else {
             return 'project-background'
@@ -492,7 +485,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
                 attachmentId: null,
                 mimeType: element.type,
             }
-            this.reviewCommentDetails.coiReviewCommentDto.coiReviewCommentAttachment.push(attachment);
         });
     }
         this.dismissAttachmentModal();
@@ -542,16 +534,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         };
     }
 
-    sectionSelect(event): void {
-        if(event) {
-            this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode = event.coiSectionsTypeCode;
-            this.setSubSectionOptions(this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode);
-        } else {
-            this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode = null;
-            this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId = null;
-        }
-    }
-
     setSubSectionOptions(typeCode) {
         if (typeCode === '4') {
             this.searchPlaceHolder = 'Search for Questionnaire';
@@ -572,23 +554,14 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
         return this.setCompleterOptions(entity, 'entityName');
     }
 
-    subSectionSelect(event): void {
-        this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId = event ? this.getSubSectionId(event) : null;
-        this.childSubSectionSelectOptions = event?.coiDisclEntProjDetails ? this.setOptionsForEntity(event?.coiDisclEntProjDetails) : new CompleterOptions();
-    }
-    
-    setComponentSubRefId(event): void {
-        this.reviewCommentDetails.coiReviewCommentDto.componentSubRefId = event ? event.personEntityId : null;
-    }
-
     getSubSectionId(event) {
-        if (this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode === '4') {
+        if (this.reviewCommentDetails?.componentTypeCode === '4') {
             return event?.QUESTIONNAIRE_ID;
         }
-        if (this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode === '5') {
+        if (this.reviewCommentDetails?.componentTypeCode === '5') {
             return event.personEntityId;
         }
-        if (this.reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode === '6') {
+        if (this.reviewCommentDetails?.componentTypeCode === '6') {
             return event.moduleItemId;
         }
     }
@@ -615,8 +588,8 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     }
 
     isReviewComment(code) {
-        return this.reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode == code
-        && this.reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId;
+        return this.reviewCommentDetails.componentTypeCode == code
+        && ((this.disclosureType == 'COI' && this.reviewCommentDetails.subModuleItemKey) || (this.disclosureType == 'OPA' && (this.reviewCommentDetails.formBuilderSectionId && !this.reviewCommentDetails.formBuilderComponentId)));
     }
  
     openSFI(personEntityId) {
@@ -638,6 +611,17 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
             redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
         }
         window.open(redirectUrl);
+    }
+
+    showTaskNavBar() {
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
+        const slider = document.querySelector('.slider-base');
+        slider.classList.add('slider-opened');
+    }
+
+    addBodyScroll() {
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }
 
 }

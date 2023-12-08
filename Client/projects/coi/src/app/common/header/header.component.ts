@@ -56,24 +56,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             personId: this.commonService.getCurrentUserDetail('personId'),
             fullName: this.commonService.getCurrentUserDetail('fullName')
         };
-        this.getActiveDisclosure();
         this.openModalTriggeredFromChild();
-        this.refreshActiveDisclosures();
-    }
-
-    refreshActiveDisclosures() {
-        this.$subscriptions.push(this.router.events.subscribe((event: any) => {
-            if (event instanceof NavigationEnd && event.url.includes('/coi/user-dashboard')) {
-                this.getActiveDisclosure();
-            }
-        }));
-    }
-
-    getActiveDisclosure() {
-        this.$subscriptions.push(this.headerService.getActiveDisclosure().subscribe((res: any) => {
-            this.headerService.activeDisclosures = res.coiDisclosures || [];
-            this.headerService.activeOPAs = res.opaDisclosure || [];
-        }));
     }
 
     redirectToOpa() {
@@ -201,12 +184,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openTravelDisclosure(): void {
         this.triggeredFrom = 'TRAVEL_DISCLOSURE';
-        this.isShowCreateOrReviseModal = true;
+        this.getActiveDisclosureAndOpenModal();
+    }
+
+    getActiveDisclosureAndOpenModal() {
+        this.$subscriptions.push(this.headerService.getActiveDisclosure().subscribe((res: any) => {
+            this.headerService.activeDisclosures = res.coiDisclosures || [];
+            this.headerService.activeOPAs = res.opaDisclosure || [];
+            this.isShowCreateOrReviseModal = true;
+        }));
     }
 
     openProjectDisclosure() {
         this.triggeredFrom = 'PROJECT_DISCLOSURE';
-        this.isShowCreateOrReviseModal = true;
+        this.getActiveDisclosureAndOpenModal();
     }
 
     openReviseModal() {

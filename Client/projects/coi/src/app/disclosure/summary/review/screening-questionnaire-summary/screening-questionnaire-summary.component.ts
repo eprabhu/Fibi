@@ -61,12 +61,9 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
     modifyReviewComment() {
         let coiData = this._dataStore.getData();
         const disclosureDetails:coiReviewComment = {
-            disclosureId: coiData.coiDisclosure.disclosureId,
-            coiSectionsTypeCode: '4',
+            componentTypeCode: '4',
             documentOwnerPersonId: coiData.coiDisclosure.person.personId,
-            coiSubSectionsId: this.activeQuestionnaire?.QUESTIONNAIRE_ID,
-            headerName: '',
-            componentSubRefId: null,
+            subModuleItemKey: this.activeQuestionnaire?.QUESTIONNAIRE_ID,
             coiSubSectionsTitle: this.activeQuestionnaire?.QUESTIONNAIRE
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
