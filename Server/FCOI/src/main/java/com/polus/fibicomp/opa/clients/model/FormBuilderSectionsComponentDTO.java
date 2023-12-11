@@ -28,4 +28,11 @@ public class FormBuilderSectionsComponentDTO {
 	private String componentHeader;
 	
 	private String componentFooter;
+
+	//TODO need to bind Real object than Object class
+	private Object programmedElement;
+
+	private Object customElement;
+
+	private Object questionnaire;
 }

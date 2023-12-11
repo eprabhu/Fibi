@@ -70,6 +70,9 @@ public class ReviewCommentDaoImpl implements ReviewCommentDao {
         }
         if (reviewCommentsDto.getFormBuilderSectionId() != null) {
             hqlQuery.append("AND rc.formBuilderSectionId = :formBuilderSectionId ");
+            if (reviewCommentsDto.getFormBuilderComponentId() == null) {
+                hqlQuery.append("AND rc.formBuilderComponentId IS NULL ");
+            }
         }
         if (reviewCommentsDto.getFormBuilderComponentId() != null) {
             hqlQuery.append("AND rc.formBuilderComponentId = :formBuilderComponentId ");
