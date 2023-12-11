@@ -43,6 +43,10 @@ export class ReviewCommentsService {
         return this._http.delete(`${this._commonService.baseUrl}/reviewComments/${coiReviewCommentId}/${moduleCode}`);
     }
 
+    deleteFormBuilderReviewComments(coiReviewCommentId, moduleCode) {
+        return this._http.delete(`${this._commonService.formUrl}/formbuilder/reviewComments/${coiReviewCommentId}/${moduleCode}`);
+    }
+
     addCOIReviewComment(params: any) {
         const formData = new FormData();
         formData.append('formDataJson', JSON.stringify(params));

@@ -107,7 +107,7 @@
                                 </button>
                             </ng-container>
                                 <button class="btn-primary-icon d-flex align-items-center me-3 my-1"
-                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer.coiReviewId)">
+                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer)">
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
@@ -308,3 +308,4 @@
 </div>
 <span (click)="clearReviewModal()" id="add-review-modal-trigger" data-bs-target="#add-coi-reviewer-modal"
     data-bs-toggle="modal" class="d-none"></span>
+
