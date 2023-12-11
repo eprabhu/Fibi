@@ -6,6 +6,7 @@ import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.service.COIFileAttachmentService;
@@ -19,6 +20,8 @@ import com.polus.fibicomp.opa.clients.model.FormBuilderSectionsDTO;
 import com.polus.fibicomp.opa.clients.model.FormRequest;
 import com.polus.fibicomp.opa.clients.model.FormResponse;
 import com.polus.fibicomp.opa.dao.OPADao;
+import com.polus.fibicomp.opa.dao.OPAReviewDao;
+import com.polus.fibicomp.opa.pojo.OPAReview;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
@@ -71,6 +74,9 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
 
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+    private OPAReviewDao opaReviewDao;
 
     @Override
     public ResponseEntity<Object> saveOrUpdateReviewComment(MultipartFile[] files, DisclComment disclComment) {
@@ -168,16 +174,28 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
                         tagObj.setTagPersonFullName(personDao.getPersonFullNameByPersonId(tagObj.getTagPersonId())));
             }if (isSectionDetailsNeeded != null && isSectionDetailsNeeded) {
                 if (commentObj.getModuleCode() == Constants.COI_MODULE_CODE) {
-                    getModuleSectionName(commentObj, proposalTitles, awardTitles, personEntityNames);
+                    getModuleSectionDetails(commentObj, proposalTitles, awardTitles, personEntityNames);
                 } else if (commentObj.getModuleCode() == Constants.OPA_MODULE_CODE) {
                     getCommentsFormDetails(commentObj, formResponse, builderSectionsDTOMap);
+                    if (commentObj.getComponentTypeCode().equals("11") && commentObj.getSubModuleItemKey() != null) {
+                        OPAReview opaReview = opaReviewDao.getOPAReview(commentObj.getSubModuleItemKey());
+                        ModuleSectionDetailsDto sectionDetails = new ModuleSectionDetailsDto();
+                        Map<String, String> otherDetails = new HashMap<>();
+                        otherDetails.put("location", opaReview.getReviewLocationType().getDescription());
+                        otherDetails.put("reviewerStatus", opaReview.getReviewStatusType().getDescription());
+                        if (opaReview.getAssigneePersonId() != null) {
+                            otherDetails.put("assigneeName", personDao.getPersonFullNameByPersonId(opaReview.getAssigneePersonId()));
+                        }
+                        sectionDetails.setOtherDetails(otherDetails);
+                        commentObj.setModuleSectionDetails(sectionDetails);
+                    }
                 }
             }
 
         });
     }
 
-    private void getModuleSectionName(DisclComment reviewComments, HashMap<String, String> proposalTitles, HashMap<String, String> awardTitles, HashMap<String, String> personEntityNames) {
+    private void getModuleSectionDetails(DisclComment reviewComments, HashMap<String, String> proposalTitles, HashMap<String, String> awardTitles, HashMap<String, String> personEntityNames) {
         if (reviewComments.getComponentTypeCode().equals("5") && reviewComments.getParentCommentId() == null && reviewComments.getSubModuleItemKey() != null) {
             PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(Integer.valueOf(reviewComments.getSubModuleItemKey()));
             if (personEntity != null) {
@@ -212,6 +230,19 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
             if (relationDetail != null && relationDetail.getPersonEntityId() != null) {
                 getPersonEntityDetail(reviewComments, personEntityNames, relationDetail);
             }
+        }
+
+        if (reviewComments.getComponentTypeCode().equals("8") && reviewComments.getSubModuleItemKey() != null) {
+            CoiReview coiReview = conflictOfInterestDao.loadCoiReview(reviewComments.getSubModuleItemKey());
+            ModuleSectionDetailsDto sectionDetails = new ModuleSectionDetailsDto();
+            Map<String, String> otherDetails = new HashMap<>();
+            otherDetails.put("location", coiReview.getReviewLocationType().getDescription());
+            otherDetails.put("reviewerStatus", coiReview.getReviewerStatusType().getDescription());
+            if (coiReview.getAssigneePersonId() != null) {
+                otherDetails.put("assigneeName", personDao.getPersonFullNameByPersonId(coiReview.getAssigneePersonId()));
+            }
+            sectionDetails.setOtherDetails(otherDetails);
+            reviewComments.setModuleSectionDetails(sectionDetails);
         }
     }
 
@@ -303,7 +334,8 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
                 FormBuilderSectionsComponentDTO component = builderSectionsDTOMap.get(reviewComments.getFormBuilderSectionId()).getSectionComponent().stream().filter(formBuilderSectionsComponentDTO ->
                         formBuilderSectionsComponentDTO.getComponentId().equals(reviewComments.getFormBuilderComponentId())).collect(Collectors.toList()).get(0);
                 reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
-                        .subsectionName(component.getComponentHeader()).build());
+                        .subsectionName(component.getComponentHeader())
+                        .sectionName(builderSectionsDTOMap.get(reviewComments.getFormBuilderSectionId()).getSectionName()).build());
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -15,7 +15,7 @@ import {
     getDuration,
     parseDateWithoutTimestamp
 } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
-import {PersonProjectOrEntity} from '../../../shared-components/shared-interface';
+import {PersonProjectOrEntity, coiReviewComment} from '../../../shared-components/shared-interface';
 import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
 import {OPA, OpaDisclosure} from "../../opa-interface";
@@ -235,8 +235,14 @@ export class LocationComponent implements OnInit, OnDestroy {
         }));
     }
 
-    modifyReviewComment(coiReviewId) {
-        this.commentConfiguration.coiReviewId = coiReviewId;
+    modifyReviewComment(reviewDetails) {
+        const disclosureDetails:coiReviewComment = {
+            documentOwnerPersonId: this.opaDisclosure.personId,
+            componentTypeCode: '11',
+            subModuleItemKey: reviewDetails.opaReviewId,
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
+        }
+        this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.opaService.isShowCommentNavBar = true;
     }
 

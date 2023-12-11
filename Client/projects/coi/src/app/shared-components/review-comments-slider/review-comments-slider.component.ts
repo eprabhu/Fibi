@@ -105,19 +105,12 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        // this.getPermission();
         this.getReviewerActionDetails();
         this.loadSectionsTypeCode();
         setTimeout(() => {
             this.showTaskNavBar();
         })
     }
-
-    // getPermission() {
-    //     this.isUserAdmin = this.coiService.isCOIAdministrator;
-    //     this.isUserReviewer = this.reviewList.find(e => e.assigneePersonId === this.commonService?.getCurrentUserDetail('personId')) ? true : false;
-    //     this.isUserReporter = this.disclosureDetails.personId === this.commonService?.getCurrentUserDetail('personId');
-    // }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
@@ -233,7 +226,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     private addOrUpdateComment(details, file) {
         details.moduleCode = this.disclosureType == 'OPA' ? 23 : 8;
-        if(this.disclosureType == 'COI') {
+        if(this.reviewCommentDetails.componentTypeCode != '10') {
             this.$subscriptions.push(this._reviewCommentsService.addCOIReviewComment(details).subscribe((res: any) => {
                 this.cancelOrClearCommentsDetails();
                 if (details.parentCommentId) {
@@ -246,7 +239,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }));
         }
-        if(this.disclosureType == 'OPA') {
+        if(this.reviewCommentDetails.componentTypeCode == '10') {
             this.$subscriptions.push(this._reviewCommentsService.addOPAReviewComment(details).subscribe((res: any) => {
                 this.cancelOrClearCommentsDetails();
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added Successfully');
@@ -297,7 +290,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
                 this.reviewCommentDetails.documentOwnerPersonId = res.documentOwnerPersonId;
                 this.reviewCommentDetails.moduleItemKey = this.disclosureType === 'COI' ? this.disclosureDetails.disclosureId : this.disclosureDetails.opaDisclosureId;
                 this.reviewCommentDetails.componentTypeCode = res.componentTypeCode;
-                if (['4', '5', '6', '8'].includes(this.reviewCommentDetails.componentTypeCode)) {
+                if (['4', '5', '6', '8', '11'].includes(this.reviewCommentDetails.componentTypeCode)) {
                     this.headerName = res.headerName;
                     this.reviewCommentDetails.subModuleItemKey = res.subModuleItemKey;
                     this.reviewCommentDetails.subModuleItemNumber = res.subModuleItemNumber || null;
@@ -589,7 +582,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     isReviewComment(code) {
         return this.reviewCommentDetails.componentTypeCode == code
-        && ((this.disclosureType == 'COI' && this.reviewCommentDetails.subModuleItemKey) || (this.disclosureType == 'OPA' && (this.reviewCommentDetails.formBuilderSectionId && !this.reviewCommentDetails.formBuilderComponentId)));
+        && ((this.reviewCommentDetails.subModuleItemKey || (this.reviewCommentDetails.formBuilderSectionId && !this.reviewCommentDetails.formBuilderComponentId)));
     }
  
     openSFI(personEntityId) {

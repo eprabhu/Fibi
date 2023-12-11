@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { ReviewCommentsService } from '../review-comments-slider/review-comments.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
-import { deepCloneObject, fileDownloader } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, fileDownloader, isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { EDITOR_CONFIURATION } from '../../../../../fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
@@ -20,6 +20,8 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 	@Input() reviewTypeList: any = [];
 	@Input() disclosureDetails: any;
 	@Input() selectedReviewType:any;
+	@Input() disclosureType:any;
+	@Input() reviewCommentDetails:any;
 	@Input() isHeaderNeeded:any = false;
 	@Output() deleteReviewComment: EventEmitter<any> = new EventEmitter<any>();
 	@Output() editReviewParentComment: EventEmitter<any> = new EventEmitter<any>();
@@ -46,9 +48,9 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 	ngOnChanges() {
 		setTimeout(() => {
 		if(this.commentReviewerList && this.commentReviewerList.length) {
-			this.groupedCommentsList = this.commentReviewerList[0].moduleCode == '8' ?
+			this.groupedCommentsList = this.disclosureType === 'COI' ?
 			this.groupBy(deepCloneObject(this.commentReviewerList), 'subModuleItemKey' ) :
-			this.groupBy(deepCloneObject(this.commentReviewerList), 'formBuilderSectionId' );
+			this.opaGroupBy(deepCloneObject(this.commentReviewerList), 'formBuilderSectionId' , 'subModuleItemKey');
 		}
 	}, 300);
 	}
@@ -64,15 +66,35 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
         }, {});
     }
 
+	opaGroupBy(jsonData, formKey, subsectionKey) {
+        return jsonData.reduce((relationsTypeGroup, item) => {
+			let key = item[formKey] != null ? formKey : item[subsectionKey] != null ? subsectionKey : formKey;
+			(relationsTypeGroup[item[key]] = relationsTypeGroup[item[key]] || []).push(item);
+            return relationsTypeGroup;
+        }, {});
+    }
+
 	deleteComment(details, index) {
-		this.$subscriptions.push(this.reviewCommentsService.deleteReviewComments(details.commentId, details.moduleCode).subscribe
-		((res: any) => {
-			details.parentCommentId ? this.deleteReplyComment(details,index) : this.deleteReviewComment.emit(index);
-			this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment deleted successfully');
-			this.isShowReplyComment = false;
-		}, error => {
-			this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
-		}));
+		if (this.reviewCommentDetails.componentTypeCode != '10') {
+			this.$subscriptions.push(this.reviewCommentsService.deleteReviewComments(details.commentId, details.moduleCode).subscribe
+			((res: any) => {
+				details.parentCommentId ? this.deleteReplyComment(details,index) : this.deleteReviewComment.emit(index);
+				this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment deleted successfully');
+				this.isShowReplyComment = false;
+			}, error => {
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+			}));
+		}
+		if (this.reviewCommentDetails.componentTypeCode == '10') {
+			this.$subscriptions.push(this.reviewCommentsService.deleteFormBuilderReviewComments(details.commentId, details.moduleCode).subscribe
+			((res: any) => {
+				details.parentCommentId ? this.deleteReplyComment(details,index) : this.deleteReviewComment.emit(index);
+				this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment deleted successfully');
+				this.isShowReplyComment = false;
+			}, error => {
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+			}));
+		}	
 	}
 
 	editParentComment(details, index) {
@@ -195,6 +217,18 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 				const INDEX = this.readMoreCommentIdList.findIndex(ele => ele === details.commentId);
 				this.readMoreCommentIdList.splice(INDEX,1);
 			}
+	}
+
+	getSectionName(valueArray) {
+		let valueArrayRes = valueArray.find(ele => (ele.moduleSectionDetails && (ele.moduleSectionDetails.sectionName != null || ele.moduleSectionDetails.otherDetails !=null)));
+		if (valueArrayRes && valueArrayRes.moduleSectionDetails?.sectionName) {
+			return valueArrayRes.moduleSectionDetails?.sectionName;
+		} else if (valueArrayRes && valueArrayRes.moduleSectionDetails?.otherDetails) {
+			return valueArrayRes.moduleSectionDetails?.otherDetails?.location;
+		} else {
+			return 'General Comments';
+		}
+		// subsection.value[0]?.moduleSectionDetails ? subsection.value[0]?.moduleSectionDetails?.sectionName : 
 	}
 
 }

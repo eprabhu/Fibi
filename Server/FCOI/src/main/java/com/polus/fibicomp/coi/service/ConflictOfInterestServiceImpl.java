@@ -844,9 +844,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.moduleItemKey(coiReview.getDisclosureId()).build()).forEach(reviewComment -> {
 				reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
 			});
-			conflictOfInterestDao.deleteReviewTagByReviewId(coiReviewId);
-			conflictOfInterestDao.deleteReviewCommentAttachment(coiReviewId);
-			conflictOfInterestDao.deleteReviewComment(coiReview.getAssigneePersonId(),coiReview.getDisclosureId());
 			conflictOfInterestDao.deleteReview(coiReviewId);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 			CoiDisclosure coiDisclosure = new CoiDisclosure();
@@ -977,7 +974,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private void saveDisclProjRelationComment(CoiDisclEntProjDetails entityProjectRelation) {
 		DisclComment disclComment = entityProjectRelation.getDisclComment();
 		disclComment.setComponentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE);		//Disclosure detail comment
-		disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//Disclosure detail comment
+//		disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//TODO Disclosure detail comment
 		disclComment.setCommentPersonId(AuthenticatedUser.getLoginPersonId());
 		disclComment.setDocumentOwnerPersonId(AuthenticatedUser.getLoginPersonId());
 		disclComment.setIsPrivate(false);
@@ -1301,6 +1298,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		updateTravelDisclConflictComment(null, null, coiTravelDisclosure.getTravelDisclosureId());
 		coiTravelDisclosure.setCoiEntity(entityDetails);
 		addEntryToTraveller(coiTravelDisclosure, vo);
 		List<CoiTravelDisclosureTraveler> entries = conflictOfInterestDao.getEntriesFromTravellerTable(coiTravelDisclosure.getTravelDisclosureId());
@@ -1618,7 +1616,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
-			logger.error("SubmitDisclosure : {}", e.getMessage());
+			logger.error("submitTravelDisclosure : {}", e.getMessage());
 		}
 		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);
 	}
@@ -2391,7 +2389,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				.componentTypeCode(Constants.COI_TRAVEL_DISCL_CONFLICT_RELATION_COMPONENT_TYPE)
 				.moduleCode(Constants.TRAVEL_MODULE_CODE)
 				.moduleItemKey(travelDisclosureId).build());
-		return resultData != null || !resultData.isEmpty() ? resultData.get(0) : null;
+		return resultData != null && !resultData.isEmpty() ? resultData.get(0) : null;
 	}
 
 	private void updateTravelDisclConflictStatus(CoiTravelDisclosure coiTravelDisclosure, String disclosureStatusCode) {
@@ -2400,12 +2398,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	private void updateTravelDisclConflictComment(DisclComment disclComment, String description, Integer travelDisclosureId) {
-		if (disclComment.getComment() == null) {
-			disclComment = DisclComment.builder().comment(description).componentTypeCode(TRAVEL_DISCLOSURE_CONFLICT_COMMENT)
-					.commentTypeCode(TRAVEL_DISCLOSURE_CONFLICT_COMMENT)
+		if (disclComment == null) {
+			disclComment = DisclComment.builder().comment(description)
+					.componentTypeCode(TRAVEL_DISCLOSURE_CONFLICT_COMMENT)
+//					.commentTypeCode(TRAVEL_DISCLOSURE_CONFLICT_COMMENT) //TODO need recheck on
 					.commentPersonId(AuthenticatedUser.getLoginPersonId())
 					.documentOwnerPersonId(AuthenticatedUser.getLoginPersonId()).isPrivate(false)
-					//.moduleItemKey(travelDisclosureId).moduleCode(Constants.MODULE_CODE)
+					.moduleItemKey(travelDisclosureId).moduleCode(Constants.TRAVEL_MODULE_CODE)
 					.build();
 		} else {
 			disclComment.setComment(description);
@@ -2416,11 +2415,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	private void saveTravelConflictHistory(CoiTravelDisclosure coiTravelDisclosure, DisclComment disclComment) {
 		CoiTravelConflictHistory coiTravelConflictHistory = new CoiTravelConflictHistory();
-		coiTravelConflictHistory.setComment(disclComment.getComment());
-		coiTravelConflictHistory.setConflictStatusCode(coiTravelDisclosure.getDisclosureStatusCode());
-		coiTravelConflictHistory.setTravelDisclosureId(coiTravelDisclosure.getTravelDisclosureId());
+		if (disclComment != null && disclComment.getComment() != null) {
+			coiTravelConflictHistory.setComment(disclComment.getComment());
+		}
 		coiTravelConflictHistory.setUpdateTimestamp(disclComment.getUpdateTimestamp());
 		coiTravelConflictHistory.setUpdateUser(disclComment.getUpdateUser());
+		coiTravelConflictHistory.setConflictStatusCode(coiTravelDisclosure.getDisclosureStatusCode());
+		coiTravelConflictHistory.setTravelDisclosureId(coiTravelDisclosure.getTravelDisclosureId());
 		conflictOfInterestDao.saveOrUpdateCoiTravelConflictHistory(coiTravelConflictHistory);
 	}
 
@@ -2447,18 +2448,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		CoiTravelConflictHistory coiTravelConflictHistory = new CoiTravelConflictHistory();
 		List<CoiTravelConflictHistory> coiTravelConflictHistoryList = conflictOfInterestDao.getCoiTravelConflictHistory(travelDisclosureId);
 		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureId);
+		DisclComment disclComment = getTravelConflictComment(travelDisclosureId);
 		if(coiTravelDisclosure.getDisclosureStatusCode()!=null) {
-			DisclComment disclComment = getTravelConflictComment(travelDisclosureId);
-			coiTravelConflictHistory.setTravelDisclosureId(travelDisclosureId);
-			coiTravelConflictHistory.setComment(disclComment.getComment());
-			coiTravelConflictHistory.setConflictStatusCode(coiTravelDisclosure.getDisclosureStatusCode());
-			coiTravelConflictHistory.setUpdateTimestamp(disclComment.getUpdateTimestamp());
-			coiTravelConflictHistory.setUpdateUser(disclComment.getUpdateUser());
+			if (disclComment != null) {
+				coiTravelConflictHistory.setTravelDisclosureId(travelDisclosureId);
+				coiTravelConflictHistory.setComment(disclComment.getComment());
+				coiTravelConflictHistory.setConflictStatusCode(coiTravelDisclosure.getDisclosureStatusCode());
+				coiTravelConflictHistory.setUpdateTimestamp(disclComment.getUpdateTimestamp());
+				coiTravelConflictHistory.setUpdateUser(disclComment.getUpdateUser());
+			}
 			coiTravelConflictHistoryList.add(0, coiTravelConflictHistory);
 		}
-		if (!coiTravelConflictHistoryList.isEmpty()) {
-		    coiTravelConflictHistoryList.remove(coiTravelConflictHistoryList.size() - 1);
-		}
+
 		coiTravelConflictHistoryList.forEach(conflictHistory -> {
 			conflictHistory.setUpdateUserFullName(personDao.getUserFullNameByUserName(conflictHistory.getUpdateUser()));
 			conflictHistory.setConflictStatusDescription(conflictOfInterestDao.getCoiTravelConflictStatusByStatusCode(conflictHistory.getConflictStatusCode()));
