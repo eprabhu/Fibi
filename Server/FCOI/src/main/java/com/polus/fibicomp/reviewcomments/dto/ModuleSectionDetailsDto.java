@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,4 +19,5 @@ public class ModuleSectionDetailsDto {
     private String sectionName;
     private String subsectionId;
     private String subsectionName;
+    private Map<String, String> otherDetails;
 }
