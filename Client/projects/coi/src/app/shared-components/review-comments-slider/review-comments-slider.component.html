@@ -69,8 +69,8 @@
                     </div>
                 </div>
             </div>
-            <div class="info-card-border card-scroll rounded-2 shadow-medium bg-light me-4 ms-4"
-                *ngIf="!['3', '9'].includes(reviewCommentDetails?.componentTypeCode) && (reviewCommentDetails?.componentTypeCode == 10 && !reviewCommentDetails?.formBuilderComponentId)">
+            <div class="info-card-border card-scroll rounded-2 shadow-medium bg-light mx-3"
+            *ngIf="!['3', '9'].includes(reviewCommentDetails?.componentTypeCode) && !(reviewCommentDetails?.formBuilderSectionId && reviewCommentDetails?.formBuilderComponentId)">
                 <div class="row ml-15 mt-2">
                     <div class="position-relative fs-14 pl-5 fw-500">
                         <div class="row" [class.down-line]="isReviewComment('6') && subSectionId">
@@ -114,6 +114,9 @@
                                             <span class="clickable-content">{{coiSubSectionsTitle}}</span>
                                     </div>
                                     <div class="d-flex margin-left-negative" *ngIf="isReviewComment('8')">
+                                        {{coiSubSectionsTitle}}
+                                    </div>
+                                    <div class="d-flex margin-left-negative" *ngIf="isReviewComment('11')">
                                         {{coiSubSectionsTitle}}
                                     </div>
                                     <div class="d-flex margin-left-negative" *ngIf="isReviewComment('10')">
@@ -181,7 +184,9 @@
                 (editReviewParentComment)="editReviewerParentComment($event)"
                 (emitReplayCommentDetails)="addReplayComment($event)" [disclosureDetails]="disclosureDetails"
                 (deleteChidReviewComment)="removeChidReviewComment($event)"
-                [isHeaderNeeded]="['3'].includes(reviewCommentDetails.componentTypeCode)"></app-review-comment-list-view>
+                [disclosureType]="disclosureType"
+                [reviewCommentDetails]="reviewCommentDetails"
+                [isHeaderNeeded]="['3', '9'].includes(reviewCommentDetails.componentTypeCode)"></app-review-comment-list-view>
         </section> 
       </div>
     </div>

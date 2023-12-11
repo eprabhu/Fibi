@@ -1,6 +1,6 @@
 
 <div *ngFor="let subsection of groupedCommentsList | keyvalue;" class="section-margin">
-    <label class="fs-16 fw-bold label-text px-4" *ngIf="isHeaderNeeded">{{subsection.value[0]?.moduleSectionDetails ? subsection.value[0]?.moduleSectionDetails?.sectionName : 'General Comments'}} : </label>
+    <label class="fs-16 fw-bold label-text px-4" *ngIf="isHeaderNeeded">{{getSectionName(subsection.value)}}</label>
 <ng-container *ngFor="let list of subsection.value;let i=index;let last = last">
     <div class="row mx-4 cmnt-background mt-2">
         <div class="d-flex form-row p-3">
@@ -13,7 +13,7 @@
                 <div class="d-flex justify-content-between">
                     <span>
                         <span class="fs-14 font-bold">
-                            {{list?.updateUserFullName}}:
+                            {{list?.updateUserFullName}}
                         </span>
                         <span *ngIf="subsection.value[0]?.moduleSectionDetails?.subsectionName" class="fs-14 ms-2 sub-label px-3 py-2">
                             {{subsection.value[0]?.moduleSectionDetails?.subsectionName}}
@@ -21,7 +21,7 @@
                     </span>
                 </div>
                 <div class="mt-1">
-                    <span class="fs-13">
+                    <span class="fs-14">
                     <div *ngIf="reviewCommentsService.editParentCommentId == list?.commentId && reviewCommentsService.isEditParentComment"
                         class="d-flex justify-content-end me-4 my-4 row">
                         <div class="row mr-3">
@@ -64,7 +64,7 @@
                 </div>
                 <div class="row">
                     <div class="align-items-center col-12 d-flex justify-content-between">
-                        <span class="custom-font-color fs-14 text-secondary">{{list?.updateTimestamp| dateFormatterWithTimeZone:
+                        <span class="custom-font-color fs-13 text-secondary">{{list?.updateTimestamp| dateFormatterWithTimeZone:
                             'long'}}
                         </span>
                         <div class="f-13 justify-content-end mt-1 text-secondary me-2">
@@ -134,7 +134,7 @@
                         </div>
                         <div *ngIf="(commentDetails?.commentId ? commentDetails?.commentId !== replayComment?.commentId : !commentDetails?.commentId ) ">
                                 <div class="mb-0 comment-card-position-child">
-                                    <span class="fs-13">
+                                    <span class="fs-14">
                                         <span *ngIf="!readMoreCommentIdList.includes(replayComment?.commentId)" class="word-break-all">
                                             <span [innerHTML]="(replayComment?.comment.length>280 ? (replayComment?.comment |
                                                             slice:0:280 ) : replayComment?.comment)"></span>
@@ -155,7 +155,7 @@
                         </div>
                         <div class="row comment-card-position-child">
                             <div class="col d-flex justify-content-between">
-                                <span class="custom-font-color fs-14">{{replayComment?.updateTimestamp|
+                                <span class="custom-font-color fs-13">{{replayComment?.updateTimestamp|
                                     dateFormatterWithTimeZone:
                                     'long'}}
                                 </span>
