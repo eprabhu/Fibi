@@ -47,6 +47,7 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 
 	ngOnChanges() {
 		setTimeout(() => {
+		this.groupedCommentsList = [];
 		if(this.commentReviewerList && this.commentReviewerList.length) {
 			this.groupedCommentsList = this.disclosureType === 'COI' ?
 			this.groupBy(deepCloneObject(this.commentReviewerList), 'subModuleItemKey' ) :
