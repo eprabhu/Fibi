@@ -106,33 +106,35 @@ public class OPAServiceImpl implements OPAService {
 
 
 	@Override
-	public ResponseEntity<Object> withdrawOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, null, opaDisclosureId)) {
+	public ResponseEntity<Object> withdrawOPADisclosure(OPACommonDto opaCommonDto) {
+		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaDisclosureId);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
+		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaCommonDto.getOpaDisclosureId());
+		OPACommonDto  dto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
-				.opaDisclosureId(opaDisclosureId)
-				.opaDisclosureNumber(opaDisclosureNumber)
+				.comment(opaCommonDto.getComment())
+				.opaDisclosureId(opaCommonDto.getOpaDisclosureId())
+				.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
 				.build();
-		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_WITHDRAWN, opaCommonDto);
-		return getOPADisclosure(opaDisclosureId);
+		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_WITHDRAWN, dto);
+		return getOPADisclosure(opaCommonDto.getOpaDisclosureId());
 	}
 
 	@Override
-	public ResponseEntity<Object> returnOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, null, opaDisclosureId)) {
+	public ResponseEntity<Object> returnOPADisclosure(OPACommonDto opaCommonDto) {
+		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN, opaDisclosureId);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
+		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN, opaCommonDto.getOpaDisclosureId());
+		OPACommonDto  dto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
-				.opaDisclosureId(opaDisclosureId)
-				.opaDisclosureNumber(opaDisclosureNumber)
+				.comment(opaCommonDto.getComment())
+				.opaDisclosureId(opaCommonDto.getOpaDisclosureId())
+				.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
 				.build();
-		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_RETURNED, opaCommonDto);
-		return getOPADisclosure(opaDisclosureId);
+		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_RETURNED, dto);
+		return getOPADisclosure(opaCommonDto.getOpaDisclosureId());
 	}
 
 	@Override
