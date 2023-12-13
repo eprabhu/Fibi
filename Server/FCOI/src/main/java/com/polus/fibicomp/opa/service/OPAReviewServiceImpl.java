@@ -91,7 +91,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
 			if (reviewDao.isReviewStatusChanged(opaReview)) {
 				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review status changed"), HttpStatus.METHOD_NOT_ALLOWED);
 			}
-			if (reviewDao.isReviewPresent(opaReview)) {
+			if (!opaReview.getReviewStatusTypeCode().equalsIgnoreCase("3") && reviewDao.isReviewPresent(opaReview)) {
 				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review already added"), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
             updateTimestamp = reviewDao.updateOPAReview(opaReview);

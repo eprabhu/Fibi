@@ -47,11 +47,11 @@ export class OpaService {
     submitOPA(opaDisclosureId, opaDisclosureNumber) {
         return this._http.patch(`${this._commonService.opaUrl}/submit`, {opaDisclosureId, opaDisclosureNumber});
     }
-    returnOPA(OPADisclosureID, OPADisclosureNumber) {
-        return this._http.patch(`${this._commonService.opaUrl}/return/${OPADisclosureID}/${OPADisclosureNumber}`, {});
+    returnOPA(params) {
+        return this._http.patch(this._commonService.opaUrl + '/return', params);
     }
-    withdrawOPA(OPADisclosureID, OPADisclosureNumber) {
-        return this._http.patch(`${this._commonService.opaUrl}/withdraw/${OPADisclosureID}/${OPADisclosureNumber}`, {});
+    withdrawOPA(params) {
+        return this._http.patch(this._commonService.opaUrl + '/withdraw', params);
     }
 
     completeOPAReview(OPADisclosureID, OPADisclosureNumber) {

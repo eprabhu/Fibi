@@ -4182,8 +4182,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE r.locationTypeCode = :locationTypeCode");
 		hqlQuery.append(" AND r.disclosureId = :disclosureId AND r.reviewStatusTypeCode != :reviewStatusTypeCode ");
-		if (coiReview.getAssigneePersonId() != null)
-			hqlQuery.append("AND r.assigneePersonId = :assigneePersonId ");
+		if (coiReview.getAssigneePersonId() != null) {
+			hqlQuery.append(" AND r.assigneePersonId = :assigneePersonId ");
+		} else {
+			hqlQuery.append(" AND r.assigneePersonId IS NULL ");
+		}
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("locationTypeCode", coiReview.getLocationTypeCode());
 		query.setParameter("disclosureId", coiReview.getDisclosureId());
@@ -4505,13 +4508,20 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE ");
 		hqlQuery.append(" r.disclosureId = :disclosureId AND r.coiReviewId != :reviewId ");
 		hqlQuery.append("AND (r.reviewStatusTypeCode = :newReviewStatusTypeCode OR r.reviewStatusTypeCode != :reviewStatusTypeCode) ");
-		hqlQuery.append(" AND r.locationTypeCode = :newLocationTypeCode");
+		hqlQuery.append(" AND r.locationTypeCode = :newLocationTypeCode ");
+		if (coiReview.getAssigneePersonId() != null) {
+			hqlQuery.append(" AND r.assigneePersonId = :assigneePersonId ");
+		} else {
+			hqlQuery.append(" AND r.assigneePersonId IS NULL ");
+		}
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("newLocationTypeCode", coiReview.getLocationTypeCode());
 		query.setParameter("newReviewStatusTypeCode", coiReview.getReviewStatusTypeCode());
 		query.setParameter("disclosureId", coiReview.getDisclosureId());
 		query.setParameter("reviewId", coiReview.getCoiReviewId());
 		query.setParameter("reviewStatusTypeCode", Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED);
+		if (coiReview.getAssigneePersonId() != null)
+			query.setParameter("assigneePersonId", coiReview.getAssigneePersonId());
 		try {
 			Integer result = (Integer) query.getSingleResult();
 			return result != null;
