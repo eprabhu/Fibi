@@ -161,7 +161,6 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
-                this.modifyIndex = -1;
                 this.reviewDetails = {};
                 this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
@@ -171,7 +170,6 @@ export class LocationComponent implements OnInit, OnDestroy {
                 if (_err.status === 405) {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
                   } else {
-                    this.clearActionData();
                     this._commonService.showToast(HTTP_ERROR_STATUS, typeof(_err.error) == 'string' ? _err.error : `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
                 }
             }));
@@ -282,11 +280,11 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     isDuplicateReviewerValidation() {
         const isEditMode = this.modifyIndex != -1;
-
         if (this.reviewerList.find((reviewer, index) => {
-            const isSelectedReviewer = reviewer.assigneePersonId == this.reviewDetails.assigneePersonId;
+            const isSelectedReviewer = (reviewer.assigneePersonId == this.reviewDetails.assigneePersonId && reviewer.reviewStatusTypeCode != '3' && this.reviewDetails.locationTypeCode == reviewer.locationTypeCode);
             return isEditMode ? (isSelectedReviewer && index != this.modifyIndex) : isSelectedReviewer;
         })) {
+            this.assigneeClearField = new String('true');
             this.validationMap.set('reviewer', 'Reviewer already added.');
         }
     }

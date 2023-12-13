@@ -102,17 +102,17 @@ export class OpaComponent implements OnInit {
         this.description = event;
         switch (this.primaryBtnName) {
             case 'Return':
-                return this.returnDisclosure();
+                return this.returnDisclosure(event);
             case 'Withdraw':
-                return this.withdrawDisclosure();
+                return this.withdrawDisclosure(event);
             default:
                 return;
         }
     }
 
-    returnDisclosure() {
+    returnDisclosure(event) {
         this.$subscriptions.push(this.opaService
-            .returnOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
+            .returnOPA(this.getRequestObj(event))
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
@@ -129,9 +129,9 @@ export class OpaComponent implements OnInit {
         this._router.navigate([reRouteUrl]);
     }
 
-    withdrawDisclosure() {
+    withdrawDisclosure(event) {
         this.$subscriptions.push(this.opaService
-            .withdrawOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
+            .withdrawOPA(this.getRequestObj(event))
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
@@ -139,6 +139,14 @@ export class OpaComponent implements OnInit {
             }, _err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
             }));
+    }
+
+    getRequestObj(description) {
+        return {
+            'opaDisclosureId' : this.opa.opaDisclosure.opaDisclosureId, 
+            'opaDisclosureNumber' : this.opa.opaDisclosure.opaDisclosureNumber,
+            'comment': description
+        }
     }
 
     closePersonDetailsModal(event) {
