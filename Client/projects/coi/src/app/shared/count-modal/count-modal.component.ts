@@ -35,6 +35,7 @@ export class CountModalComponent implements OnInit {
     projectDatas: any;
     coiFinancialEntityDetails: any[] = [];
     isEntityNameRead = false;
+    isReadMore = [];
 
     constructor(private _countModalService: CountModalService, private _commonService: CommonService) {
     }
@@ -194,6 +195,7 @@ export class CountModalComponent implements OnInit {
 
     switchTableData() {
         this.tableArray = this.currentModalTab === 'Proposal' ? this.projectDatas.proposals : this.projectDatas.awards;
+        this.isReadMore = [];
     }
 
 

@@ -303,11 +303,11 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     isDuplicateReviewerValidation() {
         const isEditMode = this.modifyIndex != -1;
-
         if (this.reviewerList.find((reviewer, index) => {
-            const isSelectedReviewer = reviewer.assigneePersonId == this.reviewDetails.assigneePersonId
+            const isSelectedReviewer = (reviewer.assigneePersonId == this.reviewDetails.assigneePersonId && reviewer.reviewStatusTypeCode != '2' && this.reviewDetails.locationTypeCode == reviewer.locationTypeCode);
             return isEditMode ? (isSelectedReviewer && index != this.modifyIndex) : isSelectedReviewer;
         })) {
+            this.assigneeClearField = new String('true');
             this.validationMap.set('reviewer', 'Reviewer already added.');
         }
     }
