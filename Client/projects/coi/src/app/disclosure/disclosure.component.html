@@ -93,7 +93,7 @@
             <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
                 <div class="col mr-15">
                     <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
-                        <!-- <span class="status-pill">Relationship with</span> -->
+                         <span class="status-pill">Details</span>
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Department : </label>
@@ -130,7 +130,7 @@
                 </div>
                 <div class="col-3 mr-15">
                     <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill">Date</span>
+                        <span class="status-pill">Dates</span>
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text">Create : </label>
@@ -422,8 +422,8 @@
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
-                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='8' || 
-                  coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'
+                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted
+                  && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
                   && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                         [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
