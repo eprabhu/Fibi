@@ -443,7 +443,7 @@
                                                 <input type="checkbox" [checked]="selectedDisclosures[index]"
                                                        (change)="selectedDisclosures[index] = !selectedDisclosures[index]; checkIfAllDisclosuresSelected()">
                                             </div>
-                                            <div [class.margin-left-16px]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'">
+                                            <div [class.margin-left-16px]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'" class="pt-0">
                                                 <label for="id" class="label-text">Department <span>:</span></label>
                                                 <span class="break-point-1200"
                                                       [attr.aria-label]="coi?.unit?.unitDetail">
