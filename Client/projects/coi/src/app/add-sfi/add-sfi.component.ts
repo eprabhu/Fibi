@@ -371,7 +371,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     submitEntity(): void {
-        if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled()) && !this.isSaving )) {
+        if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled() || this.emailWarningMsg) && !this.isSaving)) {
             return;
         }
         this.modifyType ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();

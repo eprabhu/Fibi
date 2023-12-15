@@ -1,7 +1,6 @@
 package com.polus.fibi.graphconnect.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +20,7 @@ public class RequestDTO {
 	private String value;
 	
 	ArrayList<String> relationship;
-	
+
+	private String findBy;
 	
 }
