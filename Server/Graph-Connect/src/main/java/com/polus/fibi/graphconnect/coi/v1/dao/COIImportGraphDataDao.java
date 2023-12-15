@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,7 @@ import com.polus.fibi.graphconnect.entity.COIEntity;
 import com.polus.fibi.graphconnect.entity.Country;
 import com.polus.fibi.graphconnect.entity.Person;
 import com.polus.fibi.graphconnect.exceptions.CustomGraphException;
+import com.polus.fibi.graphconnect.medusa.v1.dao.MedusaImportGraphDataDao;
 import com.polus.fibi.graphconnect.repository.CountryRepository;
 import com.polus.fibi.graphconnect.repository.EntityRepository;
 import com.polus.fibi.graphconnect.repository.PersonRepository;
@@ -37,6 +39,10 @@ public class COIImportGraphDataDao {
 
 	@Autowired
 	private PersonRepository personRepository;
+
+	@Autowired
+	@Lazy
+	private MedusaImportGraphDataDao medusaImportGraphDataDao;
 
 	@Autowired
 	private Neo4jClient neo4jClient;
@@ -65,6 +71,7 @@ public class COIImportGraphDataDao {
 			linkPersontoEntityRelationship();
 			linkEntityToEntityRelationship();
 
+//			medusaImportGraphDataDao.refreshDataFromRDBMS();
 		} catch (RuntimeException e) {
 			throw new CustomGraphException("Runtime Exception in refreshDataFromRDBMS, error is " + e.getMessage());
 
@@ -318,8 +325,20 @@ public class COIImportGraphDataDao {
 	}
 
 	private void deleteEverything() {
-		String cypherQuery = "MATCH (n) DETACH DELETE n";
-		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+		deleteCOINodes();
+		deleteCOIRelationships();
+//		String cypherQuery = "MATCH (n) DETACH DELETE n";
+//		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
+	}
+
+	private void deleteCOIRelationships() {
+		String cypherQuery = "MATCH ()-[r:BELONGS_TO | CITIZEN_OF | ASSOCIATED_ENTITIES | AFFILIATED_ENTITIES]->() DELETE r";
+		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+	}
+
+	private void deleteCOINodes() {
+		String cypherQuery = "MATCH (n:Country:Person:COIEntity) DETACH DELETE n";
+		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 	}
 }
