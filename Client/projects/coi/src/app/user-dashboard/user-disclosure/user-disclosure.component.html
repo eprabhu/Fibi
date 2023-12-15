@@ -2,7 +2,7 @@
       <div  *ngIf="getActiveFCOI().length" class="col-6">
         <ng-container *ngFor="let disclosure of headerService.activeDisclosures">
                 <ng-container *ngIf="hasActiveFCOI">
-                    <div class="card d-flex" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus != 'PENDING'">
+                    <div class="card d-flex m-0" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus != 'PENDING'">
                         <div class="card-header disclosure-master-header-bg">
                             <h4 class="card-title">
                                 <div class="row">
@@ -105,7 +105,7 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!hasActiveFCOI && hasPendingFCOI">
-                    <div class="card d-flex" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING'">
+                    <div class="card d-flex m-0" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING'">
                         <div class="card-header disclosure-master-header-bg" tabindex="0">
                             <h4 class="card-title">
                                 <div class="row">
@@ -199,7 +199,7 @@
         </ng-container>
       </div>
     <div class="col-6" *ngIf="!getActiveFCOI().length">
-        <div class="card d-flex">
+        <div class="card d-flex m-0">
             <div class="card-header disclosure-master-header-bg">
                 <h4 class="card-title">
                     <div class="row">
@@ -239,7 +239,7 @@
     <div class="col-6">
         <ng-container *ngIf="!headerService.activeOPAs.length">
             <ng-container *ngIf="!hasPendingOPA && !hasActiveOPA">
-                <div class="card d-flex">
+                <div class="card d-flex m-0">
                     <div class="card-header disclosure-master-header-bg">
                         <h4 class="card-title">
                             <div class="row">
@@ -285,7 +285,7 @@
 
         <ng-container *ngFor="let opaDisclosure of headerService.activeOPAs">
             <ng-container *ngIf="hasPendingOPA && !hasActiveOPA">
-                <div class="card d-flex"
+                <div class="card d-flex m-0"
                      *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '1'">
                     <div class="card-header disclosure-master-header-bg">
                         <h4 class="card-title">
@@ -382,7 +382,7 @@
             </ng-container>
 
             <ng-container *ngIf="hasActiveOPA">
-                <div class="card d-flex"
+                <div class="card d-flex m-0"
                      *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '3'">
                     <div class="card-header disclosure-master-header-bg">
                         <h4 class="card-title">
