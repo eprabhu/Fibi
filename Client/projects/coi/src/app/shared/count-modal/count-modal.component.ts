@@ -103,7 +103,7 @@ export class CountModalComponent implements OnInit {
         } else {
             if (this.fcoiTypeCode == 2 || this.fcoiTypeCode == 3) {
                 if (this.moduleCode == 8) {
-                    return `SFIs Attached to : ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
+                    return `SFIs Attached to : ${this.getType()} Disclosure - [ ${this.gettitle()} ] By ${this.getFullName()}`;
                 } else if (this.moduleCode == 1 || this.moduleCode == 3) {
                     return `Projects Related to ${this.gettitle()} `;
                 }
