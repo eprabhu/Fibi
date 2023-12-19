@@ -177,3 +177,30 @@ th{
 .pr-10{
   padding-right: 10px;
 }
+
+/* For showing the word disclosure as (discl). for page responsive time*/
+.disclosure-text {
+  padding-left: 2px;
+}
+
+.disclosure-text:after {
+  content: "Disclosures";
+}
+
+@media (max-width: 768px) {
+  .disclosure-text:after {
+    content: "Discl.";
+  }
+}
+
+.person-name {
+  font-size: 16px;
+  color:black;
+  font-weight: 600;
+}
+
+.row label {
+  font-weight: 600;
+  color: #697a80;
+  font-size: 14px;
+}
