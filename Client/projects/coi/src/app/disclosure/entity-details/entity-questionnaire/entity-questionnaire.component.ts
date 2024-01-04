@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
@@ -37,6 +37,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   $subscriptions: Subscription[] = [];
   @Output() updateRelationship: EventEmitter<any> = new EventEmitter<any>();
   @Input() isEditMode = false;
+  @Input() relationshipDetails;
   @Output() positionsToView: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() entityId: any;
   currentRelationshipDetails: any = {};
@@ -51,17 +52,13 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   ) { }
 
   ngOnInit() {
-    this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
-      this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
-      this.configuration.enableViewMode = !this.isEditMode;
-      this.getQuestionnaire(this.entityDetailsServices.currentRelationshipQuestionnaire ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
-      this.getDefinedRelationships();
-    }));
     this.openRelationshipQuestionnaire();
   }
 
   ngOnChanges() {
     this.configuration.enableViewMode = !this.isEditMode;
+    // this.getQuestionnaire(!isEmptyObject(this.entityDetailsServices.currentRelationshipQuestionnaire) ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
+    this.getDefinedRelationships();
   }
 
   ngOnDestroy() {
@@ -94,9 +91,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
             this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
             this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
             this.currentRelationshipDetails = data;
-              if (data.personEntity.personId === this._commonService.getCurrentUserDetail('personId') || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
+              if (this.relationshipDetails && this.relationshipDetails.personId === this._commonService.getCurrentUserDetail('personId') || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
                 this.hasPermissionToView = true;
-                this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
+                this.configuration.moduleItemKey = (this._activatedRoute.snapshot.queryParamMap.get('personEntityId') && this._activatedRoute.snapshot.queryParamMap.get('personEntityId') == data.personEntityId) ? this._activatedRoute.snapshot.queryParamMap.get('personEntityId') : this.entityId;
                 this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
                 this.configuration = Object.assign({}, this.configuration);
               } else {
@@ -141,25 +138,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.entityDetailsServices.unSavedSections.push( nameOfQuestionnaire.validPersonEntityRelType.description +' Relationship Questionnaire');
       }
     }
-  }
-
-  async updateDefinedRelationships() {
-    this.entityDetailsServices.availableRelationships = await this.getRelationshipLookUp();
-    let delIndex = this.entityDetailsServices.definedRelationships.findIndex(ele => ele.personEntityRelId === this.currentRelationshipDetails.personEntityRelId);
-    if(delIndex > -1) {
-      this.entityDetailsServices.definedRelationships.splice(delIndex, 1);
-    }
-    if(!this.entityDetailsServices.definedRelationships.length) {
-      this.entityDetailsServices.selectedTab = 'RELATIONSHIP_DETAILS';
-    }
-    if(this.entityDetailsServices.definedRelationships.length) {
-      this.getQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
-    }
-    let index = this.entityDetailsServices.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
-    if (index >= 0) {
-        this.entityDetailsServices.unSavedSections.splice(index, 1);
-    }
-    this.entityDetailsServices.isRelationshipQuestionnaireChanged = false;
   }
 
 }

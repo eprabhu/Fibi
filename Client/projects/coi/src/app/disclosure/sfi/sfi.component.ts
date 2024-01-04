@@ -39,7 +39,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     entityId: any;
     personEntityId: any;
     entityName: any;
-    isRelationshipActive: false;
+    updatedRelationshipStatus: string;
     entityDetails: any;
     expandInfo = false;
     isEnableActivateInactivateSfiModal: boolean;
@@ -179,7 +179,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.isEnableActivateInactivateSfiModal = true;
         this.personEntityId = event.personEntityId;
         this.entityName = event.coiEntity.entityName;
-        this.isRelationshipActive = event.isRelationshipActive;
+        this.updatedRelationshipStatus = event.versionStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
         this.personEntityNumber = event.personEntityNumber;
       }
 

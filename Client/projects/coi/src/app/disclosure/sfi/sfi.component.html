@@ -5,21 +5,20 @@
     <div class="info-text fs-14">
       <div class="mt-2">
         <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-        The current list of all your Active, Inactive  and Draft SFI(s) are displayed below. You may filter the SFI list according to your need.
-        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
+        The current list of all your Completed,  In-completed and Inactive SFI(s) are displayed below. You may filter the SFI list according to your need.        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
       </div>
       <ng-container *ngIf= "expandInfo">
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          Draft SFI should either be activated or deleted prior to establishing the Project-SFI relationship(s).
+          In-completed SFI should either be Completed or Inactivated prior to establishing the Project-SFI relationship(s).        
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections / inactivating / activating an existing Active / Inactive SFI,navigate to the SFI page and amend the details.
+          For making any corrections to an  SFI, navigate to the SFI page and amend the details.        
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          Only “Active SFI(s)“ are listed in the Relationships page. Please ensure that you have the updated list of Active SFI(s) before you proceed to the next step.
+          Please ensure that you have the updated list of Completed SFI(s) before you proceed to the next step.           
           <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Read Less</u></span>
         </div>
       </ng-container>
@@ -31,12 +30,12 @@
         <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
             class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active" role="button">All</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="filterType=='ACTIVE'"
-            title="Click to filter by type: Active" area-describedby="Click to filter by type: Active"
-            class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
-        <span (click)="setFilter('DRAFT')" [class.filter-active]="filterType=='DRAFT'"
-            title="Click to filter by type: Draft" area-describedby="Click to filter by type: Draft"
-            class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white" role="button">Draft</span>
+        <span (click)="setFilter('COMPLETE')" [class.filter-active]="filterType=='COMPLETE'"
+            title="Click to filter by type: Complete" area-describedby="Click to filter by type: Complete"
+            class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Complete</span>
+        <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="filterType=='INCOMPLETE'"
+            title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
+            class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white" role="button">Incomplete</span>
         <span (click)="setFilter('INACTIVE')" [class.filter-active]="filterType=='INACTIVE'"
             title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Inactive</span>
@@ -80,7 +79,7 @@
 </div>
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
-  [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)"
+  [personEntityId]="personEntityId" [updatedRelationshipStatus]="updatedRelationshipStatus" (closeModal)="closeActivateInactivateSfiModal($event)"
   [personEntityNumber]="personEntityNumber">
 </app-activate-inactivate-sfi-modal>
 

@@ -396,11 +396,11 @@ export class AddSfiComponent implements OnInit {
     }
 
     viewSfiDetails() {
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId,personEntityNumber: this.existingEntityDetails.entityNumber } });
     }
 
     editSfiDetails(personEntityId) {
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit', personEntityNumber: this.existingEntityDetails.entityNumber } });
       }
 
     viewEntityDetails(event) {
@@ -454,7 +454,7 @@ export class AddSfiComponent implements OnInit {
 
     navigateToSFI(personEntityId) {
         this.sfiService.isShowSfiNavBar = false;
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, personEntityNumber: this.existingEntityDetails.entityNumber } });
     }
 
     goToHome() {
