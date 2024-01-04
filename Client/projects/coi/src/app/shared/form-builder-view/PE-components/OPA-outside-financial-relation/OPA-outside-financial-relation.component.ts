@@ -194,32 +194,44 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         return this.componentData.data.findIndex(E => E.personEntityId === personEntityId);
     }
 
-    getClassForStatus(versionStatus, isRelationshipActive) {
-        if (typeof (isRelationshipActive) === 'boolean') {
-            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        }
-        return versionStatus === 'PENDING' ? 't-draft-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 't-active-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 't-inactive-ribbon' : '';
+    getClassForStatus(versionStatus, isFormCompleted) {
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
     }
 
-    getClassForStatusInModal(versionStatus, isRelationshipActive) {
-        if (typeof (isRelationshipActive) === 'boolean') {
-            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        }
-        return versionStatus === 'PENDING' ? 'draft-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
+    getClassForStatusInModal(versionStatus, isFormCompleted) {
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
     }
 
-    getDescriptionForStatus(versionStatus, isRelationshipActive) {
-        if (typeof (isRelationshipActive) === 'boolean') {
-            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        }
-        return versionStatus === 'PENDING' ? 'Draft' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive' : '';
+    getDescriptionForStatus(versionStatus, isFormCompleted) { 
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 'Complete' : 'Incomplete' : 'Inactive';
     }
+
+    // getClassForStatus(versionStatus, isRelationshipActive) {
+    //     if (typeof (isRelationshipActive) === 'boolean') {
+    //         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
+    //     }
+    //     return versionStatus === 'PENDING' ? 't-draft-ribbon' :
+    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 't-active-ribbon' :
+    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 't-inactive-ribbon' : '';
+    // }
+
+    // getClassForStatusInModal(versionStatus, isRelationshipActive) {
+    //     if (typeof (isRelationshipActive) === 'boolean') {
+    //         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
+    //     }
+    //     return versionStatus === 'PENDING' ? 'draft-ribbon' :
+    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
+    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
+    // }
+
+    // getDescriptionForStatus(versionStatus, isRelationshipActive) {
+    //     if (typeof (isRelationshipActive) === 'boolean') {
+    //         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
+    //     }
+    //     return versionStatus === 'PENDING' ? 'Draft' :
+    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
+    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive' : '';
+    // }
 
     viewSlider(personEntityId) {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);

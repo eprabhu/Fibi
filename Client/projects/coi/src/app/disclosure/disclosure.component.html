@@ -691,7 +691,7 @@
                     <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
                         <p *ngIf="this.coiService.submitResponseErrors.length > 0" role="alert"
                             class="fa validation-Message-box fa-exclamation-circle icon alert alert-danger text-danger ps-4"
-                            role="alert"><span class="ms-2 fw-400 me-3 fs-14"> {{error}} </span></p>
+                            role="alert"><span class="ms-2 fw-400 me-3 fs-14"> {{error.validationMessage}} </span></p>
                     </div>
                 </div>
             </div>
@@ -737,6 +737,13 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
+                        <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
+                            <div *ngIf="this.coiService.submitResponseErrors.length > 0 && error.validationType == 'VW'"
+                                class="validation-Message-box alert alert-warning ps-4 fs-14"
+                                role="alert">
+                                <i class="fa fa-exclamation-circle icon mr-2"></i>{{error.validationMessage}}
+                            </div>
+                        </div>
                     <ng-container *ngIf="count > 0">
                         <div>
                            <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>

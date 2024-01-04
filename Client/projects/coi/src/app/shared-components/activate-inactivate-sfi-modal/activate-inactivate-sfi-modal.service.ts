@@ -9,7 +9,7 @@ constructor(private _commonService: CommonService, private _http: HttpClient) { 
 
 
 activateAndInactivateSfi(prams) {
-  return this._http.put(this._commonService.baseUrl + '/personEntity/activateInactivate', prams);
+  return this._http.put(this._commonService.baseUrl + '/coi/personEntity/activateInactivate', prams);
 }
 
   finalizeSfi(params) {

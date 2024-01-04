@@ -11,7 +11,8 @@ export class CountModalService {
     }
 
     getSFICount(params: RO) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        // return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
     }
 
     getProjectsCount(id, disclosureSequenceStatusCode, personId) {

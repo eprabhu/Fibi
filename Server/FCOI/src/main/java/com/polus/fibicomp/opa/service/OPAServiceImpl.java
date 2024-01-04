@@ -206,4 +206,9 @@ public class OPAServiceImpl implements OPAService {
 	public ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto) {
 		return new ResponseEntity<>(opaDao.getOPADashboard(requestDto), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Object> getOpaPersonType() {
+		return new ResponseEntity<>(opaDao.getOpaPersonType(), HttpStatus.OK);
+	}
 }

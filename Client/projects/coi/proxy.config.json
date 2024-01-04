@@ -571,5 +571,37 @@
     "/formbuilder/reviewComments/*/*": {
         "target": "http://10.199.100.62:9090/",
         "secure": false
+    },
+    "/personEntity/fetch": {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
+    },
+    "/coi/personEntity/addRelationship/": {
+        "target": "http://10.199.100.62:9090/",
+        "secure": false
+    },
+    "/personEntity/dashboard/": {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
+    },
+    "/personEntity/getRelationship": {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
+    }, 
+    "/personEntity/checkFormCompleted/*" : {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
+    },
+    "/personEntity/modify" : {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
+    },
+    "/personEntity/versions" : {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
+    },
+    "/getSFIRelationshipDetails" : {
+        "target": "http://10.199.100.62:9090/coi/",
+        "secure": false
     }
 }
