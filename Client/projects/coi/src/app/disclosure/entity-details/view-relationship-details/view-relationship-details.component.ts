@@ -253,6 +253,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.relationshipsDetails.updateTimestamp = event.updateTimestamp;
             this.updatedRelationshipStatus = event.versionStatus === 'ACTIVE' ?  'INACTIVE' : 'ACTIVE';
             this.isEditMode = event.versionStatus === 'INACTIVE' ? false : this.isEditMode;
+            this.entityDetailsServices.$openQuestionnaire.next(!isEmptyObject(this.entityDetailsServices.currentRelationshipQuestionnaire) ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
             this.isEnableActivateInactivateSfiModal = false;
             if (this.isFinalizeApi) {
                 this.isFinalizeApi = false;
@@ -381,6 +382,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         this.$subscriptions.push(this.entityDetailsServices.modifyPersonEntity({ personEntityId: this.getEntityId(), personEntityNumber: this.getEntityNumber() }).subscribe((res: any) => {
             this.entityId = new Number(res.personEntityId);
             this.isEditMode = true;
+            this.entityDetailsServices.$openQuestionnaire.next(!isEmptyObject(this.entityDetailsServices.currentRelationshipQuestionnaire) ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
         }));
     }
 
