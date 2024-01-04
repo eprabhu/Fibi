@@ -21,7 +21,7 @@ public class PersonEntityDto {
 	private String personId;
 	private Integer entityId;
 	private Integer entityNumber;
-	private Boolean isRelationshipActive;
+	private Boolean isFormCompleted;
 	private Integer versionNumber;
 	private String versionStatus;
 	private Boolean sponsorsResearch;

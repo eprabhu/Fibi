@@ -25,7 +25,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
     @Input() entityDetails: any;
     @Input() personEntityId: number = null;
-    @Input() isRelationshipActive = false;
+    @Input() updatedRelationshipStatus: string;
     @Input() isFinalizeApi = false;
     @Input() personEntityNumber: any;
     concurrentActionName = '';
@@ -38,7 +38,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
         if (this.validForActivateAndInactivate()) {
             const REQ_BODY = {
                 personEntityId: this.personEntityId,
-                isRelationshipActive: !this.isRelationshipActive,
+                versionStatus: this.updatedRelationshipStatus,
                 revisionReason: this.activateInactivateReason,
                 personEntityNumber: this.personEntityNumber
             };
@@ -49,11 +49,11 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     setActivateInactivate(REQ_BODY) {
         this.$subscriptions.push(this._activateInactivateSfiService.activateAndInactivateSfi(REQ_BODY).subscribe((res: any) => {
             this.activateOrInactivateSuccess(res);
-            this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI ${this.isRelationshipActive ? 'inactivated' : 'activated '} successfully`);
+            this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI ${this.updatedRelationshipStatus == 'INACTIVE' ? 'inactivated' : 'activated '} successfully`);
         }, err => {
             if (err.status === 405) {
                 document.getElementById('activate-inactivate-show-btn').click();
-                this.concurrentActionName = this.isRelationshipActive ? 'Inactivate SFI' : 'Activate SFI';
+                this.concurrentActionName = this.updatedRelationshipStatus == 'INACTIVE' ? 'Inactivate SFI' : 'Activate SFI';
                 openModal('sfiConcurrentActionModalCOI');
             } else {
                 this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -69,7 +69,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
 
     validForActivateAndInactivate(): boolean {
         this.reasonValidateMapSfi.clear();
-        if (!this.activateInactivateReason && this.isRelationshipActive) {
+        if (!this.activateInactivateReason && this.updatedRelationshipStatus == 'INACTIVE') {
             this.reasonValidateMapSfi.set('reason', `* Please provide a reason for inactivation.`);
         }
         return this.reasonValidateMapSfi.size === 0 ? true : false;
@@ -97,18 +97,18 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
 
     activateOrInactivateSuccess(response) {
         this.closeSfiActivateAndInactivateModal(response);
-        this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI successfully ${this.isRelationshipActive ? 'inactivated' : 'activated '}`);
+        this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI successfully ${this.updatedRelationshipStatus == 'INACTIVE' ? 'inactivated' : 'activated '}`);
         hideModal('activateInactivateSfiModal');
     }
 
     activateOrInactivateFailed() {
         this.closeSfiActivateAndInactivateModal();
-        this._commonServices.showToast(HTTP_ERROR_STATUS, `Error in ${this.isRelationshipActive ? 'inactivating' : 'activating'} SFI`);
+        this._commonServices.showToast(HTTP_ERROR_STATUS, `Error in ${this.updatedRelationshipStatus == 'INACTIVE' ? 'inactivating' : 'activating'} SFI`);
         hideModal('activateInactivateSfiModal');
     }
 
     navigateConcurrency() {
-        if (!this._router.url.includes('entity-details/entity') || this.isRelationshipActive) {
+        if (!this._router.url.includes('entity-details/entity') || this.updatedRelationshipStatus == 'INACTIVE') {
                 window.location.reload();
         }
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'view' } });

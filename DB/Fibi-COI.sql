@@ -1668,6 +1668,55 @@ ADD CONSTRAINT `COI_REVIEW_CMT_TAGS_FK2`
 
 INSERT INTO `DISCL_COMMENT_TYPE` (`COMMENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'Application Comment', 'Y', now(), 'quickstart');
 
+ALTER TABLE `person_entity` CHANGE COLUMN `IS_RELATIONSHIP_ACTIVE` `IS_FORM_COMPLETED` VARCHAR(1) NULL DEFAULT NULL ;
+
+ALTER TABLE `coi_discl_ent_proj_details` ADD COLUMN `PERSON_ENTITY_NUMBER` INT NULL;
+
+ALTER TABLE `coi_discl_ent_proj_details`
+ADD COLUMN `PREVIOUS_PERSON_ENTITY_ID` INT NULL ,
+ADD INDEX `COI_DISCL_ENT_PROJ_DETAILS_FK5_idx` (`PREVIOUS_PERSON_ENTITY_ID` ASC) VISIBLE;
+
+ALTER TABLE `coi_discl_ent_proj_details`
+ADD CONSTRAINT `COI_DISCL_ENT_PROJ_DETAILS_FK5`
+  FOREIGN KEY (`PREVIOUS_PERSON_ENTITY_ID`)
+  REFERENCES `person_entity` (`PERSON_ENTITY_ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  
+INSERT INTO `form_builder_header` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `VERSION_NUMBER`, `VERSION_STATUS`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `CREATE_TIMESTAMP`, `CREATE_USER`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `IS_ACTIVE`, `TITLE`) 
+VALUES ('3', '1003', '1', 'ACTIVE', '23', '0', 'Faculty OPA Form', now(), 'admin', now(), 'admin', ' ', 'Faculty OPA Form');
+
+INSERT INTO `form_builder_section` (`FORM_BUILDER_SECTION_ID`, `FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('128', '2', '1002', 'OTHER ACTIVITIES', '5', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('128', 'QN', '1', '1336', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'FACULTY OUTSIDE PROFESSIONAL ACTIVITIES', '1', '  ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'FACULTY DATA RECORDS', '2', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'COMPENSATED & UNCOMPENSATED ACTIVITIES', '3', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'OUTSIDE FINANCIAL INTERESTS & RELATIONSHIPS', '4', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'INVOLVEMENT OF STUDENTS OR SUBORDINATE EMPLOYEES', '5', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'USE OF INSTITUTE RESOURCES', '6', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'POTENTIAL CONFLICT OF INTEREST OR COMMITMENT', '7', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+INSERT INTO `form_builder_section` (`FORM_BUILDER_ID`, `FORM_BUILDER_NUMBER`, `SECTION_NAME`, `SECTION_ORDER_NUMBER`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '1003', 'CERTIFICATION', '8', ' ', ' ', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_DATA`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('129', 'RT', '1', '<p>MIT\'s Policy on faculty outside professional activities includes the following general guidelines:<br>Full-time members of the faculty may devote an average of about one day per week to outside professional activities during teh academic year (which comprises 36 weeks) and when receiving compensation during the summer<br> </p>', ' ', 'Y', now(), 'quickstart');
+
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('130', 'QN', '1', '1337', ' ', 'Y', now(), 'quickstart');
+
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_DATA`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('131', 'PE', '1', 'OPACompUncompComponent', '1', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_DATA`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('132', 'PE', '1', 'OPAOutsideFinancialRelationComponent', '2', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_DATA`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('133', 'PE', '1', 'OPAStudentSubordinateInvolvementComponent', '3', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_DATA`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('134', 'PE', '1', 'OPAInstituteResourceUseComponent', '4', ' ', 'Y', now(), 'quickstart');
+
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_REF_ID`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('135', 'QN', '1', '1338', ' ', 'Y', now(), 'quickstart');
+
+INSERT INTO `form_builder_section_component` (`FORM_BUILDER_SECTION_ID`, `COMPONENT_TYPE_CODE`, `COMPONENT_ORDER_NUMBER`, `COMPONENT_DATA`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('136', 'RT', '1', '<p><span style=\\\"color:hsl(0,0%,0%);\\\">I agree to abide by MIT\'s policies on Full-time Service, Conflict of Interest and Outside Professional Activities (as stated in MIT Policies and Procedures section 4.4).</span></p><p><a target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\" href=\\\"http://web.mit.edu/policies/4/4.3.html\\\"><span style=\\\"color:hsl(150, 75%, 60%);\\\">Faculty Rights and Responsibilities: Full Time Service</span></a></p><p><a target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\" href=\\\"http://web.mit.edu/policies/4/4.4.html\\\"><span style=\\\"color:hsl(150, 75%, 60%);\\\">Faculty Rights and Responsibilities: Conflict of Interest</span></a></p><p><span style=\\\"color:hsl(0, 0%, 0%);\\\">I supply this information for confidential review by my department head and other officials designated by MIT\'s administration.</span></p><p><span style=\\\"color:hsl(0, 0%, 0%);\\\">I understand that this information may not be released by MIT except for limited purposes required by law, regulation or contract.</span', ' ', 'Y', now(), 'quickstart');
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;

@@ -4,13 +4,13 @@
       Click 'Apply to All' to update the Conflict of Interest (COI) status and description simultaneously for all
       Project SFI relationships.
     </div>
-    <button type="button" class="btn btn-primary btn-sm fs-14 my-2 px-3 mr-10"
+    <button type="button" class="btn btn-primary btn-sm fs-14 my-2 px-3 mr-10 col-auto"
       id="apply common conflict status and description and save" title="Click to apply for all SFIs  and save"
       (click)="openSaveAllConfirmationModal()">Apply to All</button>
   </ng-container>
 </div>
   <div *ngIf="entityProjectDetails.length" class="relationship-sfi-header card mt-3">
-    <div class="row m-0 p-3"> 
+    <div class="row m-0 p-3">
       <div title="List of SFIs" class="col-4 fs-14 border-end" [class.p-10]="!isEditMode">
           <div class="fw-600" tabindex="0" aria-label="Significant Financial Interest">Significant Financial Interest</div>
       </div>
@@ -31,6 +31,7 @@
         <div class="col-4 fs-14 border-end"tabindex='0'>
          <div class="table-text my-4" [attr.aria-label]="test?.coiEntity?.entityName">
           {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
+          <span *ngIf="isShowStar(test)" class="text-danger">*</span>
          </div>
         </div>
         <div class="col-2 fs-14 border-end" tabindex='0'>

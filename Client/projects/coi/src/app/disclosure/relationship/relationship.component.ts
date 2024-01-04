@@ -53,6 +53,7 @@ export class RelationshipComponent implements OnInit {
   coiStatusCode: any = null;
   isAnimationPaused = false;
   currentRelation: number;
+  switchRelationView = false;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -83,7 +84,7 @@ export class RelationshipComponent implements OnInit {
     this.getDataFromStore();
     this.loadProjectRelations(true);
     this.getDependencyDetails();
-    this.getSfiDetails();
+    // this.getSfiDetails();
       }
 
 getDisclosureCount(typeCode, disclosureStatus) {
@@ -154,7 +155,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
       }
     }));
   }
-  
+
   updateRelationStatus() {
     this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
@@ -244,5 +245,12 @@ getDependencyDetails() {
   ngOnDestroy(): void {
     subscriptionHandler(this.$subscriptions);
 }
+
+    switchRelationViewMode(newValue) {
+      if (this.switchRelationView !== newValue && !newValue) {
+          this.ngOnInit();
+      }
+      this.switchRelationView = newValue;
+    }
 
 }

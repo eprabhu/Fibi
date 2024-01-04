@@ -302,4 +302,6 @@ public class ConflictOfInterestVO {
 
 	private Long personAttachmentsCount;
 
+	private Boolean isSfiProjectMapping;
+
 }

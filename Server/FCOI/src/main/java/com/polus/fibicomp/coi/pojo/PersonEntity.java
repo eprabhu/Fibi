@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -71,9 +72,9 @@ public class PersonEntity implements Serializable {
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
 	
-	@Column(name = "IS_RELATIONSHIP_ACTIVE")
+	@Column(name = "IS_FORM_COMPLETED")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isRelationshipActive;
+	private Boolean isFormCompleted;
 	
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
@@ -145,5 +146,16 @@ public class PersonEntity implements Serializable {
 
 	@Transient
 	private PersonEntityRelationshipDto personEntityRelationshipDto;
+	@Transient
+	private Integer disclosureId;
+
+	@Transient
+	private Boolean canDelete;
+
+	@Transient
+	private Boolean sfiCompleted;
+
+	@Transient
+	private List<Map<Object, Object>> disclosureStatusCount;
 
 }

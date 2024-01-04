@@ -14,12 +14,8 @@ import java.util.stream.Collectors;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 
-import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -40,7 +36,9 @@ import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
+import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
+import com.polus.fibicomp.opa.pojo.OPAPersonType;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
@@ -505,4 +503,9 @@ public class OPADaoImpl implements OPADao {
         }
         return null;
     }
+
+	@Override
+	public List<OPAPersonType> getOpaPersonType() {
+		return hibernateTemplate.loadAll(OPAPersonType.class);
+	}
 }

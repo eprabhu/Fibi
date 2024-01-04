@@ -1,0 +1,159 @@
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {deepCloneObject, hideModal, openModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import {interval, Subject} from 'rxjs';
+import {listAnimation} from '../../../common/utilities/animations';
+import {debounce} from 'rxjs/operators';
+import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../app-constants';
+import {CommonService} from '../../../common/services/common.service';
+import {RelationshipService} from '../relationship.service';
+
+@Component({
+    selector: 'app-sfi-project-relation-shared',
+    templateUrl: './sfi-project-relation-shared.component.html',
+    styleUrls: ['./sfi-project-relation-shared.component.scss'],
+    animations: [listAnimation]
+})
+export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
+
+    @Input() projectSFIDetails = [];
+    @Input() coiStatusList = [];
+    @Input() projectIdTitleMap = {};
+    @Output() relationshipChanged = new EventEmitter();
+
+    coiValidationMap: Map<string, string> = new Map();
+    coiTableValidation: Map<string, string> = new Map();
+    coiStatusCode = null;
+    coiDescription = '';
+    conflictStatusMap = {};
+    isEditMode = true;
+    $debounceEvent = new Subject<any>();
+    $subscriptions = [];
+
+    constructor(private _commonService: CommonService, private _relationShipService: RelationshipService) {
+    }
+
+    ngOnInit() {
+        this.triggerSingleSave();
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    openSaveAllConfirmationModal() {
+        this.coiValidationMap.clear();
+        this.coiStatusCode = null;
+        this.coiDescription = '';
+        openModal('applyToAllConfirmationModal');
+    }
+
+    getStatusDescriptionByCode(code: string): string {
+        if (this.conflictStatusMap[code]) {
+            return this.conflictStatusMap[code].description || '';
+        }
+        const STATUS = this.coiStatusList.find(S => S.projectConflictStatusCode === code);
+        this.conflictStatusMap[code] = STATUS;
+        return STATUS ? STATUS.description : '';
+    }
+
+    sfiSingleSave(index, sfi) {
+        this.$debounceEvent.next({index: index, SFI: sfi});
+    }
+
+    triggerSingleSave() {
+        this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(1000))).subscribe((data: any) => {
+                if (data) {
+                    this.saveSingleEntity(data.index, data.SFI);
+                }
+            }
+        ));
+    }
+
+    // Function for saving the single entity
+    saveSingleEntity(index, test) {
+        this.coiTableValidation.delete('save-status' + index);
+        this.coiTableValidation.delete('save-description' + index);
+        if (this.projectSFIDetails[index].disclComment.comment) {
+            this.projectSFIDetails[index].disclComment.comment = this.projectSFIDetails[index].disclComment.comment.trim();
+        }
+        if ([null, 'null'].includes(this.projectSFIDetails[index].projectConflictStatusCode)) {
+            this.coiTableValidation.set('save-status' + index, 'Please select Conflict Status');
+        }
+        if (!this.projectSFIDetails[index].disclComment.comment) {
+            this.coiTableValidation.set('save-description' + index, 'Please enter description');
+        }
+        if (!this.coiTableValidation.has('save-status' + index) && !this.coiTableValidation.has('save-description' + index)) {
+            test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
+            this.singleSaveClick(test, index);
+        }
+    }
+
+    getStatusObject(code) {
+        return this.coiStatusList.find(ele => ele.projectConflictStatusCode === code);
+    }
+
+
+    singleSaveClick(element, index) {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....', 1250);
+        this.$subscriptions.push(this._relationShipService.singleEntityProjectRelationSFI(element, element.personEntityId,
+            element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
+            this._relationShipService.projectSFIDetails[index] = data.coiDisclEntProjDetail;
+            this.coiValidationMap.clear();
+            setTimeout(() => {
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
+            }, 1500);
+            this.relationshipChanged.emit(true);
+        }, err => {
+            setTimeout(() => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+            }, 1500);
+        }));
+    }
+
+    clearValues() {
+        this.coiDescription = '';
+        this.coiStatusCode = null;
+    }
+
+    applyToAll() {
+        this.coiValidationMap.clear();
+        this.coiTableValidation.clear();
+        if (!this.coiStatusCode || (this.coiStatusCode == 'null')) {
+            this.coiValidationMap.set('coiStatus', 'Please select Conflict Status');
+        }
+        if (!this.coiDescription) {
+            this.coiValidationMap.set('coiDescription', 'Please enter description');
+        }
+        if (this.coiValidationMap.size === 0) {
+            this.saveClick();
+        }
+    }
+
+    saveClick() {
+        this.$subscriptions.push(this._relationShipService.saveEntityProjectRelationSFI(
+            this.prepareSaveObject(), this.projectSFIDetails[0].personEntityId, this.projectSFIDetails[0].disclosureId,
+            this._commonService.currentUserDetails.personId)
+            .subscribe((data: any) => {
+                this._relationShipService.projectSFIDetails[this.projectSFIDetails[0].personEntityId] = data.coiDisclEntProjDetails;
+                hideModal('applyToAllConfirmationModal');
+                this.coiDescription = '';
+                this.coiStatusCode = null;
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
+                this.relationshipChanged.emit(true);
+            }, err => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+            }));
+    }
+
+    prepareSaveObject() {
+        const REQ_ARRAY = deepCloneObject(this.projectSFIDetails);
+        return REQ_ARRAY.map((ele: any) => {
+            ele.projectConflictStatusCode = this.coiStatusCode;
+            ele.disclComment.comment = this.coiDescription;
+            ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
+            return ele;
+        });
+    }
+
+}

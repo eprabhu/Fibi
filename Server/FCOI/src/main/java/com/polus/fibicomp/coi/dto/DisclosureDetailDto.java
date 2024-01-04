@@ -59,4 +59,6 @@ public class DisclosureDetailDto {
 
 	private String conflictStatusCode;
 
+	private Boolean isRelationShipExists;
+
 }

@@ -14,11 +14,11 @@ constructor( private _fbService: FormBuilderService, private _http: HttpClient) 
   }
 
   saveEntity(RO: EntitySaveRO| RelationShipSaveRO ): Promise<any> {
-    return this._http.post(this._fbService.baseURL + '/coi/createSFI', RO).toPromise();
+    return this._http.post(this._fbService.baseURL + '/coi/personEntity', RO).toPromise();
   }
 
   saveEntityRelationOnly(RO: EntitySaveRO| RelationShipSaveRO ): Promise<any> {
-    return this._http.post(this._fbService.baseURL + '/coi/saveOrUpdateCoiFinancialEntityDetails', RO).toPromise();
+    return this._http.post(this._fbService.baseURL + '/coi/personEntity/addRelationship', RO).toPromise();
   }
 
   getEntities(): Observable<any> {
