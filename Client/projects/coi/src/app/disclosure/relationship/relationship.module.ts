@@ -13,6 +13,9 @@ import { SearchFilterPipe } from './directives/search-filter.pipe';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SFIConflictRelationshipComponent } from './SFI-conflict-relationship/SFI-conflict-relationship.component';
+import { DefineSfiProjectComponent } from './define-sfi-project/define-sfi-project.component';
+import { DefineSwitchViewComponentSlider } from './define-switch-view-slider/define-switch-view.component-slider';
+import { SfiProjectRelationSharedComponent } from './sfi-project-relation-shared/sfi-project-relation-shared.component';
 
 
 const routes: Routes = [{path: '', component: RelationshipComponent}];
@@ -22,7 +25,10 @@ const routes: Routes = [{path: '', component: RelationshipComponent}];
         RelationshipComponent,
         DefineRelationComponent,
         SearchFilterPipe,
-        SFIConflictRelationshipComponent
+        SFIConflictRelationshipComponent,
+        DefineSfiProjectComponent,
+        DefineSwitchViewComponentSlider,
+        SfiProjectRelationSharedComponent
     ],
     imports: [
         CommonModule,
