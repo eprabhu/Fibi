@@ -1,9 +1,9 @@
 {
-  "baseUrl": "https://coi.polussolutions.com/coi",
-  "fibiUrl": "https://coi.polussolutions.com/fibii",
-  "authUrl": "https://coi.polussolutions.com/auth",
-  "opaUrl": "https://coi.polussolutions.com/opa",
-  "formUrl":"https://coi.polussolutions.com/",
+  "baseUrl": "https://fibicoi.fibiweb.com/coi",
+  "fibiUrl": "https://fibicoi.fibiweb.com/fibii",
+  "authUrl": "https://fibicoi.fibiweb.com/auth",
+  "opaUrl": "https://fibicoi.fibiweb.com/opa",
+  "formUrl":"https://fibicoi.fibiweb.com/",
   "enableSSO": false,
   "enableGraph": true,
   "isElasticAuthentiaction": false,
@@ -11,6 +11,6 @@
   "elasticDelimiter": ":",
   "elasticPassword": "changeme",
   "elasticAuthScheme": "Basic",
-  "elasticIndexUrl": "https://coi.polussolutions.com/elastic/",
+  "elasticIndexUrl": "https://fibicoi.fibiweb.com/elastic/",
   "fibiApplicationUrl":"https://dev.fibiweb.com/fibi"
 }
