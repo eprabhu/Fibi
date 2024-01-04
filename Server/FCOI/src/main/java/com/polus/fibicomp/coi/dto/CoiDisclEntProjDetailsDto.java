@@ -26,5 +26,7 @@ public class CoiDisclEntProjDetailsDto {
 	private Timestamp updateTimestamp;
 	private DisclComment disclComment;
 	private PersonEntityRelationshipDto personEntityRelationshipDto;
+	private Integer prePersonEntityId;
+	private Integer personEntityNumber;
 
 }

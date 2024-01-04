@@ -451,19 +451,6 @@ public interface ConflictOfInterestDao {
 	@Deprecated
 	public CoiReviewCommentAttachment deleteAttachment(Integer coiReviewCommentAttId);
 
-	/**
-	 * This method is used for load ReviewComments
-	 * @param vo
-	 * @return ConflictOfInterestVO
-	 */
-	public ConflictOfInterestVO loadCoiReviewComments(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used for save Tag details of a comment
-	 * @param coiReviewCommentTag
-	 * @return CoiReviewCommentTag
-	 */
-	public CoiReviewCommentTag saveOrUpdateCoiReviewCommentTag(CoiReviewCommentTag coiReviewCommentTag);
 
 	/**
 	 * This method is used for get ProjectRelationship/disclosureDetails
@@ -486,11 +473,6 @@ public interface ConflictOfInterestDao {
 	 */
 	public String fetchadminGroupName(Integer tagGroupId);
 
-	/**
-	 * This method is used for delete tag based on coiReviewCommentId
-	 * @param coiReviewCommentId
-	 */
-	public void deleteReviewTagByCommentId(Integer coiReviewCommentId);
 
 	/**
 	 * This method is used for complete CoiDisclosure
@@ -627,7 +609,7 @@ public interface ConflictOfInterestDao {
 
 	public Integer generateMaxCoiEntityNumber();
 
-	public PersonEntity saveOrUpdateSFI(PersonEntity personEntity);
+	public PersonEntity saveOrUpdatePersonEntity(PersonEntity personEntity);
 
 	public Integer generateMaxDisclosureNumber();
 	
@@ -673,7 +655,9 @@ public interface ConflictOfInterestDao {
 
 	public PersonEntityRelationship getPersonEntityRelationshipByPersonEntityRelId(Integer personEntityRelId);
 
-	public ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode);
+	ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode);
+
+	List<ValidPersonEntityRelType> getValidPersonEntityRelTypeByTypeCodes(List<Integer> validPersonEntityRelTypeCodes);
 	
 	public Integer generateMaxTravelNumber();
 	
@@ -874,11 +858,12 @@ public interface ConflictOfInterestDao {
 	Integer getSFIOfDisclosureCount(ConflictOfInterestVO vo);
 
 	/**
-	 * This method is used to activate/inactive  person entity
-	 * @param personEntityDto
+	 * This method is used to update  person entity version status
+	 * @param personEntityId
+	 * @param versionStatus
 	 * @return Timestamp
 	 */
-	Timestamp activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+	Timestamp updatePersonEntityVersionStatus(Integer personEntityId, String versionStatus);
 
 	/**
 	 * This method is used to change version status of person entity
@@ -919,17 +904,11 @@ public interface ConflictOfInterestDao {
 	void updateDisclosureUpdateDetails(Integer disclosureId);
 
 	/**
-	 * This method is to load CoiReviewComment By Id
-	 * @param coiReviewCommentId
-	 * @return
-	 */
-	DisclComment loadCoiReviewCommentById(Integer coiReviewCommentId);
-
-	/**
 	 * This method is used to update PersonEntity header update details
 	 * @param personEntityId
+	 * @return update Timestamp
 	 */
-	void updatePersonEntityUpdateDetails(Integer personEntityId);
+	Timestamp updatePersonEntityUpdateDetails(Integer personEntityId);
 
 	/**
 	 * This method is used to fetch all entity relationship types
@@ -1063,8 +1042,6 @@ public interface ConflictOfInterestDao {
 	public void deleteReviewTagByCommentTagId(Integer coiReviewCommentTagId);
 
 	public List<DisclAttachment> loadDisclAttachmentByCommentId(Integer coiReviewCommentId);
-
-	public List<Integer> loadCoiReviewCommentsByParentId(Integer coiReviewCommentId);
 
 	/**
 	 * This method is used to get review assignee person name
@@ -1203,11 +1180,10 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method checks a person entity is activated or not
 	 * @param personEntityNumber
-	 * @param isRelationshipActive
 	 * @param versionStatus
 	 * @return
 	 */
-	boolean isPersonEntityActiveOrNot(Integer personEntityId, Integer personEntityNumber, boolean isRelationshipActive, String versionStatus);
+	boolean isPersonEntityActiveOrNot(Integer personEntityId, Integer personEntityNumber, String versionStatus);
 
 	/**
 	 * This method checks a entity is approved or not
@@ -1303,4 +1279,18 @@ public interface ConflictOfInterestDao {
 	 */
 	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive);
 
+
+	/**
+	 *
+	 * @param personEntityId
+	 * @param isFormExists
+	 */
+	void updatePersonEntityCompleteFag(Integer personEntityId, boolean isFormExists);
+
+	/**
+	 * This method is used to get the non Archive version of a person entity if by number
+	 * @param personEntityNumber
+	 * @return
+	 */
+	Integer getPersonEntityIdOfNonArchiveVersion(Integer personEntityNumber);
 }
