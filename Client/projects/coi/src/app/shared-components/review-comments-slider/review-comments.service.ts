@@ -60,7 +60,7 @@ export class ReviewCommentsService {
     }
 
     getSfiDetails(params: any) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
     }
 
     getProjectRelationships(params: any) {
