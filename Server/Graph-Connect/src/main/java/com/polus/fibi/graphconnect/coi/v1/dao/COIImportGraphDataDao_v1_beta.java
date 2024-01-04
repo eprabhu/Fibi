@@ -18,25 +18,25 @@ import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.polus.fibi.graphconnect.coi.entity.Award;
-import com.polus.fibi.graphconnect.coi.entity.COIEntity;
-import com.polus.fibi.graphconnect.coi.entity.Country;
-import com.polus.fibi.graphconnect.coi.entity.Disclosure;
-import com.polus.fibi.graphconnect.coi.entity.Person;
-import com.polus.fibi.graphconnect.coi.entity.Proposal;
-import com.polus.fibi.graphconnect.coi.entity.Sponsor;
-import com.polus.fibi.graphconnect.coi.entity.TravelDisclosure;
-import com.polus.fibi.graphconnect.coi.entity.Unit;
-import com.polus.fibi.graphconnect.coi.repository.AwardRepository;
-import com.polus.fibi.graphconnect.coi.repository.COIDisclosureRepository;
-import com.polus.fibi.graphconnect.coi.repository.CountryRepository;
-import com.polus.fibi.graphconnect.coi.repository.EntityRepository;
-import com.polus.fibi.graphconnect.coi.repository.PersonRepository;
-import com.polus.fibi.graphconnect.coi.repository.ProposalRepository;
-import com.polus.fibi.graphconnect.coi.repository.SponsorRepository;
-import com.polus.fibi.graphconnect.coi.repository.TravelDisclosureRepository;
-import com.polus.fibi.graphconnect.coi.repository.UnitRepository;
+import com.polus.fibi.graphconnect.entity.Award;
+import com.polus.fibi.graphconnect.entity.COIEntity;
+import com.polus.fibi.graphconnect.entity.Country;
+import com.polus.fibi.graphconnect.entity.Disclosure;
+import com.polus.fibi.graphconnect.entity.Person;
+import com.polus.fibi.graphconnect.entity.Proposal;
+import com.polus.fibi.graphconnect.entity.Sponsor;
+import com.polus.fibi.graphconnect.entity.TravelDisclosure;
+import com.polus.fibi.graphconnect.entity.Unit;
 import com.polus.fibi.graphconnect.exceptions.CustomGraphException;
+import com.polus.fibi.graphconnect.repository.AwardRepository;
+import com.polus.fibi.graphconnect.repository.COIDisclosureRepository;
+import com.polus.fibi.graphconnect.repository.CountryRepository;
+import com.polus.fibi.graphconnect.repository.EntityRepository;
+import com.polus.fibi.graphconnect.repository.PersonRepository;
+import com.polus.fibi.graphconnect.repository.ProposalRepository;
+import com.polus.fibi.graphconnect.repository.SponsorRepository;
+import com.polus.fibi.graphconnect.repository.TravelDisclosureRepository;
+import com.polus.fibi.graphconnect.repository.UnitRepository;
 
 @Repository
 public class COIImportGraphDataDao_v1_beta {
@@ -168,8 +168,8 @@ public class COIImportGraphDataDao_v1_beta {
 			importEntity();
 			//importPerson();
 			importPersonParallel();
-//			importProposal();
-//			importAward();
+			importProposal();
+			importAward();
 //			importSponsor();
 //			importUnit();
 //			importCOIDisclosure();

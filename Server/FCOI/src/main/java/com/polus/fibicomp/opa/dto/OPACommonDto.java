@@ -1,11 +1,13 @@
 package com.polus.fibicomp.opa.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class OPACommonDto {
 

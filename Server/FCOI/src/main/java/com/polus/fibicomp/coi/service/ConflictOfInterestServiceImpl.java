@@ -649,7 +649,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (conflictOfInterestDao.isReviewStatusChanged(coiReview)) {
 				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review status changed"), HttpStatus.METHOD_NOT_ALLOWED);
 			}
-			if (conflictOfInterestDao.isReviewPresent(coiReview)) {
+			if (!coiReview.getReviewStatusTypeCode().equalsIgnoreCase("2") && conflictOfInterestDao.isReviewPresent(coiReview)) {
 				return new ResponseEntity<>(commonDao.convertObjectToJSON("Review already added"), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
@@ -747,9 +747,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					coiReview.getAssigneePersonId().equalsIgnoreCase(AuthenticatedUser.getLoginPersonId())) {
 				actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW;
 				reviewerName = personDao.getPersonFullNameByPersonId(coiReview.getAssigneePersonId());
+				coiReview.setAssigneePersonName(reviewerName);
 			} else if (coiReview.getAssigneePersonId() != null) {
 				actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITH_REVIEWER;
 				reviewerName = personDao.getPersonFullNameByPersonId(coiReview.getAssigneePersonId());
+				coiReview.setAssigneePersonName(reviewerName);
 			} else {
 				actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER;
 			}

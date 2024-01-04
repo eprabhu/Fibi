@@ -93,7 +93,7 @@
             <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
                 <div class="col mr-15">
                     <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
-                        <!-- <span class="status-pill">Relationship with</span> -->
+                         <span class="status-pill">Details</span>
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Department : </label>
@@ -130,7 +130,7 @@
                 </div>
                 <div class="col-3 mr-15">
                     <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill">Date</span>
+                        <span class="status-pill">Dates</span>
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text">Create : </label>
@@ -311,7 +311,7 @@
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
-                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 {{isCardExpanded ? 'py-3' : 'pt-2'}}">
+                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 py-3">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10">
@@ -422,8 +422,8 @@
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
-                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='8' || 
-                  coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'
+                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted
+                  && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
                   && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                         [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
@@ -711,7 +711,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <strong title="{{coiData?.projectDetail?.title}}">
-                    <div class="d-flex">
+                    <div class="new-line-property word-break-all">
                         {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
                         Disclosure
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">

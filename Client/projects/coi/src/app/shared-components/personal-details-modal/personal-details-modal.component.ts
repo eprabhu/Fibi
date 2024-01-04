@@ -12,7 +12,7 @@ import { CommonService } from '../../common/services/common.service';
 })
 export class PersonalDetailsModalComponent implements OnInit {
 
-    constructor(private _personservice: PersonDetailsModalService, private _commonservice: CommonService) { }
+    constructor(private _personService: PersonDetailsModalService, private _commonService: CommonService) { }
 
     @Input() userdetails: any;
     @Output() closeModalPersonDetails: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -23,30 +23,30 @@ export class PersonalDetailsModalComponent implements OnInit {
     canShowPersonDetails = false;
 
     ngOnInit() {
-        document.getElementById('entitypersondetailsTrigger').click();
-        this.persondetails(this.userdetails);
+        document.getElementById('entityPersonDetailsTrigger').click();
+        this.personDetails(this.userdetails);
         this.setPersonBtnRights();
     }
 
-    addnewvalue(value): void {
+    addNewValue(value): void {
         this.closeModalPersonDetails.emit(value);
     }
 
-    persondetails(userDetails): void {
-        this.$subscriptions.push(this._personservice.getPersonData(userDetails.personId).subscribe((data: any) => {
+    personDetails(userDetails): void {
+        this.$subscriptions.push(this._personService.getPersonData(userDetails.personId).subscribe((data: any) => {
             this.personValues = data;
         },
-        error => this._commonservice.showToast(HTTP_ERROR_STATUS, 'Fetching person details failed. Please try again.')));
+        error => this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching person details failed. Please try again.')));
     }
 
-    viewPersoDetails(personTrainingId: string): void {
-        const url = this._commonservice.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personTrainingId}`;
+    viewPersonDetails(personTrainingId: string): void {
+        const url = this._commonService.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personTrainingId}`;
         window.open(url);
     }
 
     setPersonBtnRights() {
-        const isLoggedInPerson = this.userdetails.personId == this._commonservice.currentUserDetails.personId;
-        this.canShowPersonDetails = (isLoggedInPerson || this._commonservice.getAvailableRight('MAINTAIN_PERSON'));
+        const isLoggedInPerson = this.userdetails.personId == this._commonService.currentUserDetails.personId;
+        this.canShowPersonDetails = (isLoggedInPerson || this._commonService.getAvailableRight('MAINTAIN_PERSON'));
     }
 
 }

@@ -117,6 +117,7 @@ export class CommonService {
         this.authUrl = configurationData.authUrl;
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
+        this.formUrl = configurationData.formUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;

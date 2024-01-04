@@ -1,4 +1,4 @@
-<button class="d-none" data-bs-toggle="modal" data-bs-target="#entitypersondetails" id="entitypersondetailsTrigger">
+<button class="d-none" data-bs-toggle="modal" data-bs-target="#entitypersondetails" id="entityPersonDetailsTrigger">
 </button>
 
 <div class="modal modal-xl fade" id="entitypersondetails" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -8,33 +8,36 @@
             <div class="modal-header headerStyle">
                 <h5 class="modal-title userDetail " id="exampleModalLabel"><i class="mr-2 fa fa-user-o"
                         aria-hidden="true"></i>{{userdetails?.fullName}}</h5>
-                <button type="button" (click)="addnewvalue(false)" class="btn-close fs-12" data-bs-dismiss="modal"
+                <button type="button" (click)="addNewValue(false)" class="btn-close fs-12" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <nav class="border-nav bg-white border br-bottom rounded-0 d-flex fs-15 fw-bold ml-15 shadow-sm user-dashboard-nav">
-                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex" (click)="currentTab='PERSON_DETAILS'">
-                        <span title="Click to view History" class="r-title px-3 py-3 fw-500"
-                            [class.active]="currentTab == 'PERSON_DETAILS'">
-                            Person Details 
-                        </span>
-                    </div>
-                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex">
-                        <span title="Click to view History" class="r-title px-3 py-3 fw-500" (click)="currentTab='TRAINING_DETAILS'"
-                            [class.active]="currentTab == 'TRAINING_DETAILS'">
-                            Training
-                        </span>
-                    </div>
-                </nav>
+                <div class="d-flex nav-sticky ms-4 mb-3" id="person-modal">
+                    <nav class="border-nav bg-white border br-bottom d-flex fs-14 fw-bold shadow-sm user-dashboard-nav
+                        d-flex align-items-center d-inline-block w-100">
+                        <div class="text-secondary header-icons cursor-pointer px-0" (click)="currentTab='PERSON_DETAILS'"
+                        [class.active]="currentTab == 'PERSON_DETAILS'">
+                            <span title="Click to view History" class="r-title px-3 border-end fw-500">
+                                Person Details 
+                            </span>
+                        </div>
+                        <div class="text-secondary header-icons cursor-pointer" (click)="currentTab='TRAINING_DETAILS'"
+                        [class.active]="currentTab == 'TRAINING_DETAILS'">
+                            <span title="Click to view History" class="r-title px-3  fw-500">
+                                Training
+                            </span>
+                        </div>
+                    </nav>
+                </div>
                 <app-person-details [personValues]="personValues" [user]="id"
                     *ngIf="currentTab =='PERSON_DETAILS'"></app-person-details>
                 <app-Training-details [userdetails]="userdetails"
                     *ngIf="currentTab == 'TRAINING_DETAILS'"></app-Training-details>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary fs-15" (click)="addnewvalue(false)"
+                <button type="button" class="btn btn-outline-secondary fs-15" (click)="addNewValue(false)"
                     data-bs-dismiss="modal">Close</button>
-                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" (click)="viewPersoDetails(userdetails?.personId)" class="btn btn-primary fs-14" >View Person Details</button>
+                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" (click)="viewPersonDetails(userdetails?.personId)" class="btn btn-primary fs-14" >View Person Details</button>
             </div>
         </div>
     </div>
