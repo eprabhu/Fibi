@@ -94,7 +94,7 @@ export class RelationshipService {
     }
 
     getSFIOfDisclosure(disclosureId: number) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', {
+        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', {
             'disclosureId': disclosureId,
             'reviewStatusCode': '',
             'filterType': 'FINANCIAL',
