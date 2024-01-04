@@ -4545,4 +4545,102 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return (Integer) query.getSingleResult();
 
 	}
+
+	@Override
+	public List<PersonEntity> getFinancialSFIOfDisclosure(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		StringBuilder hqlQuery = new StringBuilder();
+		hqlQuery.append("SELECT DISTINCT C3 FROM CoiDisclEntProjDetails C2  ");
+		hqlQuery.append("ON C2.personEntityId = perRel.personEntityId ");
+		hqlQuery.append("INNER JOIN PersonEntity C3 ON C3.personEntityId=C2.personEntityId ");
+		hqlQuery.append("WHERE C2.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		return query.getResultList();
+	}
+
+	@Override
+	public Boolean isProjectPresent(ConflictOfInterestVO vo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		StringBuilder hqlQuery = new StringBuilder();
+		hqlQuery.append("SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.DISCLOSURE_ID = :disclosureId ");
+		hqlQuery.append("AND C2.MODULE_CODE is not null ");
+		hqlQuery.append("AND C2.MODULE_ITEM_KEY is not null ");
+		Query query = session.createNativeQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", vo.getDisclosureId());
+		Object countData = query.getSingleResult();
+		if (countData != null) {
+			BigInteger count = (BigInteger) countData;
+			return  count.intValue() != 0 ? Boolean.TRUE : Boolean.FALSE;
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean isSFICompletedForDisclosure(Integer personEntityId, Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		StringBuilder hqlQuery = new StringBuilder();
+		hqlQuery.append("SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NULL ");
+		hqlQuery.append("AND C2.DISCLOSURE_ID = :disclosureId ");
+		hqlQuery.append("AND C2.PERSON_ENTITY_ID = :personEntityId ");
+		Query query = session.createNativeQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("personEntityId", personEntityId);
+		Object countData = query.getSingleResult();
+		if (countData != null) {
+			BigInteger count = (BigInteger) countData;
+			return  count.intValue() != 0 ? Boolean.FALSE : Boolean.TRUE;
+		}
+		return null;
+	}
+
+	@Override
+	public List<Map<Object, Object>> disclosureStatusCountBySFI(Integer personEntityId, Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		StringBuilder hqlQuery = new StringBuilder();
+		hqlQuery.append("SELECT  CASE ");
+		hqlQuery.append("  WHEN C2.PROJECT_CONFLICT_STATUS_CODE BETWEEN 100 AND 199 THEN 1 ");
+		hqlQuery.append("  WHEN C2.PROJECT_CONFLICT_STATUS_CODE BETWEEN 200 AND 299 THEN 2 ");
+		hqlQuery.append("  WHEN C2.PROJECT_CONFLICT_STATUS_CODE BETWEEN 300 AND 399 THEN 3 ");
+		hqlQuery.append("END AS StatusGroup, ");
+		hqlQuery.append("COUNT(*) ");
+		hqlQuery.append("FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL ");
+		hqlQuery.append("AND C2.DISCLOSURE_ID = :disclosureId ");
+		hqlQuery.append("AND C2.PERSON_ENTITY_ID = :personEntityId ");
+		hqlQuery.append("GROUP BY StatusGroup ");
+		hqlQuery.append("ORDER BY StatusGroup ASC");
+		Query query = session.createNativeQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("personEntityId", personEntityId);
+		List<Object[]> countData = query.getResultList();
+		if (countData != null && !countData.isEmpty()) {
+			List<Map<Object, Object>> countList = new ArrayList<>();
+			for (Object[] obj : countData) {
+				Map<Object, Object> countObj = new HashMap<>();
+				countObj.put(obj[0], obj[1]);
+				countList.add(countObj);
+			}
+			return countList;
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<CoiDisclEntProjDetails> getProjectRelationshipBySFI(Integer personEntityId, Integer disclosureId) {
+		return hibernateTemplate.execute(session -> {
+		    StringBuilder hqlBuilder = new StringBuilder("SELECT DISTINCT cdep FROM CoiDisclEntProjDetails cdep ");
+		    hqlBuilder.append("WHERE cdep.personEntityId = :personEntityId ");
+		    hqlBuilder.append("AND cdep.disclosureId = :disclosureId ");
+		    hqlBuilder.append("ORDER BY cdep.updateTimestamp DESC");
+		    String hql = hqlBuilder.toString();
+		    org.hibernate.query.Query<CoiDisclEntProjDetails> query = session.createQuery(hql, CoiDisclEntProjDetails.class)
+		            .setParameter("personEntityId", personEntityId)
+		            .setParameter("disclosureId", disclosureId);
+		    return query.getResultList();
+		});
+	}
+
 }

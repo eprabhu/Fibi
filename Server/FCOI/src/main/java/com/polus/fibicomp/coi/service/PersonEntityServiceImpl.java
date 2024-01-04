@@ -331,19 +331,25 @@ public class PersonEntityServiceImpl implements PersonEntityService {
 
     @Override
     public ResponseEntity<Object> getSFIOfDisclosure(ConflictOfInterestVO vo) {
-        Map<String, Object> responseData = new HashMap<>();
-        List<PersonEntity> personEntities = conflictOfInterestDao.getSFIOfDisclosure(vo);
-        Integer disclosureId = vo.getDisclosureId() != null ? vo.getDisclosureId() : null;
-        String personId = disclosureId == null ? vo.getPersonId() : null;
-        List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getRelatedEntityInfo(disclosureId, personId, null);
-        personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao
-                .getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
-        personEntities.forEach(personEntity -> personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
-                .stream().filter(dto -> personEntity.getPersonEntityId().equals(dto.getPersonEntityId())).findFirst()
-                .orElse(null)));
-        responseData.put("personEntities", personEntities);
-        responseData.put("count", conflictOfInterestDao.getSFIOfDisclosureCount(vo));
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    	Map<String, Object> responseData = new HashMap<>();
+		List<PersonEntity> personEntities  = conflictOfInterestDao.getSFIOfDisclosure(vo);
+		Integer disclosureId = vo.getDisclosureId() != null ? vo.getDisclosureId() : null;
+		String personId = disclosureId == null ? vo.getPersonId() : null;
+		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getRelatedEntityInfo(disclosureId, personId, null);
+		personEntities.forEach(personEntity -> {personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao.getValidPersonEntityRelTypes(personEntity.getPersonEntityId()));
+												personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
+														.stream()
+											            .filter(dto -> personEntity.getPersonEntityId().equals(dto.getPersonEntityId()))
+											            .findFirst()
+											            .orElse(null));});
+		if(vo.getFilterType().equalsIgnoreCase("Financial")) {
+			responseData.put("isProjectPresent", conflictOfInterestDao.isProjectPresent(vo));
+			personEntities.forEach(personEntity -> personEntity.setSfiCompleted(conflictOfInterestDao.isSFICompletedForDisclosure(personEntity.getPersonEntityId(), vo.getDisclosureId())));
+			personEntities.forEach(personEntity -> personEntity.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCountBySFI(personEntity.getPersonEntityId(), vo.getDisclosureId())));
+		}
+		responseData.put("personEntities", personEntities);
+		responseData.put("count", conflictOfInterestDao.getSFIOfDisclosureCount(vo));
+		return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
     @Override
