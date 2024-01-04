@@ -84,7 +84,7 @@ export class RelationshipComponent implements OnInit {
     this.getDataFromStore();
     this.loadProjectRelations(true);
     this.getDependencyDetails();
-    this.getSfiDetails();
+    // this.getSfiDetails();
       }
 
 getDisclosureCount(typeCode, disclosureStatus) {

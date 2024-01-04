@@ -38,7 +38,8 @@ export class CoiSummaryService {
     }
 
     getSfiDetails(params: RO) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        // return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
     }
 
     updateProjectConflictStatus(params: any) {

@@ -89,55 +89,57 @@
                                                     *ngIf="relation?.title?.length > 75" class="collapse-text fs-13">
                                             {{collapseViewMore[relation?.moduleItemId] ? "Read Less" : "Read More"}}
                                         </span>
-                                            </p>
-                                        </div>
-                                        <div class="col-12 d-flex" *ngIf="relation.moduleCode == 1">
-                                            <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex" tabindex='0' aria-label="Award">Award</span>
-                                            <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=relation" data-bs-toggle="modal"
-                                               data-bs-target="#moduleViewModal"tabindex='0' >
-                                                <strong class="fs-16"[attr.aria-label]="relation?.moduleItemKey + ' - ' + relation?.title">#{{relation?.moduleItemKey}} - {{relation?.title}} </strong>
-                                            </p>
-                                        </div>
-                                        <div class="row m-2">
-                                            <div class="col-6"tabindex="0">
-                                                <label class="label-text">Principal Investigator :</label>
-                                                <span class="ml-2 grey-text"[attr.aria-label]="relation?.principalInvestigator">{{relation?.principalInvestigator}}</span>
-                                            </div>
-                                            <div class="col-3"tabindex="0">
-                                                <label class="label-text">Project Role : </label>
-                                                <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
-                                            </div>
-                                            <div class="col-3"tabindex="0">
-                                                <label class="label-text">Period :</label>
-                                                <span class="ml-2 grey-text" [attr.aria-label]="relation?.startDate + ' - ' + relation?.endDate">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
-                                                    dateFormatter}}</span>
-                                            </div>
-                                            <div class="col-6"tabindex="0">
-                                                <label class="label-text">Sponsor :</label>
-                                                <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
-                                            </div>
-                                            <div class="col-6"tabindex="0">
-                                                <label class="label-text">Lead Unit :</label>
-                                                <span class="ml-2 grey-text" *ngIf="relation?.unitName"[attr.aria-label]="relation?.unitName">{{relation?.unitNumber}} -
-                                                    {{relation?.unitName}}</span>
-                                                <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
-                                            </div>
-                                        </div>
+                                    </p>
+                                </div>
+                                <div class="col-12 d-flex" *ngIf="relation.moduleCode == 1">
+                                    <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex" tabindex='0' aria-label="Award">Award</span>
+                                    <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=relation" data-bs-toggle="modal"
+                                        data-bs-target="#moduleViewModal"tabindex='0' >
+                                        <strong class="fs-16"[attr.aria-label]="relation?.moduleItemKey + ' - ' + relation?.title">#{{relation?.moduleItemKey}} - {{relation?.title}} </strong>
+                                    </p>
+                                </div>
+                                <div class="row m-2">
+                                    <div class="col-6"tabindex="0">
+                                        <label class="label-text">Principal Investigator :</label>
+                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.principalInvestigator">{{relation?.principalInvestigator}}</span>
                                     </div>
-                                    <div class="col-4 p-10">
-                                        <div>
-                                            <div class="border h-100 rounded-1 table-bg-color position-relative">
-                                                <span class="status-pill">Project/SFI Relationship</span>
-                                                <div class="emptySfi mt-5 pt-3" *ngIf="!count">
-                                                    <p class="fw-600">No SFI(s) Attached</p>
-                                                </div>
-                                                <div class="row fs-14 m-2" style="text-align: right;" *ngIf="count">
-                                                    <div class="col-6 mt-4">
-                                                        <div class="row" tabindex="0"[attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, relation.disclosureStatusCount)" >
-                                                            <div class="col-6">
-                                                                <label class="count-label">No Conflict : </label>
-                                                            </div>
-                                                            <div class="col-6" style="text-align: center;">
+                                    <div class="col-3"tabindex="0">
+                                        <label class="label-text">Project Role : </label>
+                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
+                                    </div>
+                                    <div class="col-3"tabindex="0">
+                                        <label class="label-text">Period :</label>
+                                        <span class="ml-2 grey-text" [attr.aria-label]="relation?.startDate + ' - ' + relation?.endDate">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
+                                            dateFormatter}}</span>
+                                    </div>
+                                    <div class="col-6"tabindex="0">
+                                        <label class="label-text">Sponsor :</label>
+                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
+                                    </div>
+                                    <div class="col-6"tabindex="0">
+                                        <label class="label-text">Lead Unit :</label>
+                                        <span class="ml-2 grey-text" *ngIf="relation?.unitName"[attr.aria-label]="relation?.unitName">{{relation?.unitNumber}} -
+                                            {{relation?.unitName}}</span>
+                                        <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 p-10">
+                                <div>
+                                    <div class="border h-100 rounded-1 table-bg-color position-relative">
+                                        <span class="status-pill">Project/SFI Relationship</span>
+                                        <!-- !count && -->
+                                        <!-- count &&  -->
+                                        <div class="emptySfi mt-5 pt-3" *ngIf=" !relation.isRelationShipExists">
+                                            <p class="fw-600">No SFI(s) Attached</p>
+                                        </div>
+                                        <div class="row fs-14 m-2" style="text-align: right;" *ngIf="relation.isRelationShipExists">
+                                            <div class="col-6 mt-4">
+                                                <div class="row" tabindex="0"[attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, relation.disclosureStatusCount)" >
+                                                    <div class="col-6">
+                                                        <label class="count-label">No Conflict : </label>
+                                                    </div>
+                                                    <div class="col-6" style="text-align: center;">
                                                         <span *ngIf="relation.sfiCompleted !== null"
                                                               class="fs-12 badge badge-pill badge-primary noConflict-badge">
                                                             <span>{{getDisclosureCount(1, relation.disclosureStatusCount)}}</span>

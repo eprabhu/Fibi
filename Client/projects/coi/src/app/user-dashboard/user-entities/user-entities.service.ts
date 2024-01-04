@@ -19,4 +19,11 @@ export class UserEntitiesService {
         return of();
     }));
   }
+
+  getSFIDashboardNew(param: RO) {
+    return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', param).pipe(catchError((err) => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching entities list failed. Please try again.');
+        return of();
+    }));
+  }
 }
