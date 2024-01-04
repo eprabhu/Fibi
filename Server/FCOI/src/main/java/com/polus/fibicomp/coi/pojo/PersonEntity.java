@@ -71,9 +71,9 @@ public class PersonEntity implements Serializable {
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
 	
-	@Column(name = "IS_RELATIONSHIP_ACTIVE")
+	@Column(name = "IS_FORM_COMPLETED")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isRelationshipActive;
+	private Boolean isFormCompleted;
 	
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
@@ -145,5 +145,10 @@ public class PersonEntity implements Serializable {
 
 	@Transient
 	private PersonEntityRelationshipDto personEntityRelationshipDto;
+	@Transient
+	private Integer disclosureId;
+
+	@Transient
+	private Boolean canDelete;
 
 }

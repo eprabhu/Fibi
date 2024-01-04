@@ -85,7 +85,7 @@ public class OPACommonDAO {
 			opaPersonEntityInfoDTO.setInvolvementStartDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setInvolvementEndDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setEntityStatus((String) data[i++]);
-			opaPersonEntityInfoDTO.setIsRelationshipActive((Character) data[i++]);
+			opaPersonEntityInfoDTO.setIsFormCompleted((Character) data[i++]);
 			opaPersonEntityInfoDTO.setSfiVersionStatus((String) data[i++]);
 			opaPersonEntityInfoDTO.setEntityRiskCategory((String) data[i++]);
 
@@ -139,7 +139,7 @@ public class OPACommonDAO {
 			opaPersonEntityInfoDTO.setInvolvementStartDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setInvolvementEndDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setEntityStatus((String) data[i++]);
-			opaPersonEntityInfoDTO.setIsRelationshipActive((Character) data[i++]);
+			opaPersonEntityInfoDTO.setIsFormCompleted((Character) data[i++]);
 			opaPersonEntityInfoDTO.setSfiVersionStatus((String) data[i++]);
 			opaPersonEntityInfoDTO.setEntityRiskCategory((String) data[i++]);
 			

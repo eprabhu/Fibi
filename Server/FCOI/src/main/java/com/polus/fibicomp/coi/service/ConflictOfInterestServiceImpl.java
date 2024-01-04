@@ -262,10 +262,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		if(coiDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
 			conflictOfInterestDao.syncProjectWithDisclosure(coiDisclosure.getDisclosureId(),
-					coiDisclosure.getDisclosureNumber(), null, null, null, Constants.TYPE_FCOI);
+					coiDisclosure.getDisclosureNumber(), null, null, null, Constants.TYPE_SYNC_FCOI_ON_CREATE);
 		} else {
 			conflictOfInterestDao.syncProjectWithDisclosure(coiDisclosure.getDisclosureId(),
-					coiDisclosure.getDisclosureNumber(), null, coiDisclosure.getModuleCode(), coiDisclosure.getModuleItemKey(), Constants.TYPE_PROJECT_DISCLOSURE);
+					coiDisclosure.getDisclosureNumber(), null, coiDisclosure.getModuleCode(), coiDisclosure.getModuleItemKey(), Constants.TYPE_SYNC_PROJECT_DISCLOSURE_ON_CREATE);
 		}
 		try {
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_CREATED)
@@ -308,6 +308,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				.personId(coiDisclosure.getPersonId()).build()));
 		conflictOfInterestVO.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(coiDisclosure.getPersonId()));
 		conflictOfInterestVO.setPersonNotesCount(conflictOfInterestDao.personNotesCount(coiDisclosure.getPersonId()));
+		conflictOfInterestDao.syncProjectWithDisclosure(coiDisclosure.getDisclosureId(),
+				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
@@ -316,6 +318,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setCoiConflictStatusTypes(conflictOfInterestDao.getCoiConflictStatusTypes());
 		vo.setCoiProjConflictStatusTypes(conflictOfInterestDao.getProjConflictStatusTypes());
 		vo.setPersonId(conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(vo.getDisclosureId()));
+		conflictOfInterestDao.syncProjectWithDisclosure(vo.getDisclosureId(),
+				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
 		List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
 				vo.getPersonId(), vo.getDisclosureId(), null, null);
 		List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(),
@@ -553,10 +557,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setCoiDisclosure(copyDisclosure);
 		vo.setDisclosureId(copyDisclosure.getDisclosureId());
 		copyDisclosureDetails(disclosure, copyDisclosure);
-		if(copyDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
-			conflictOfInterestDao.syncProjectWithDisclosure(copyDisclosure.getDisclosureId(),
-					copyDisclosure.getDisclosureNumber(), null, null, null, Constants.TYPE_REVISE_FCOI);
-		}
 		copyDisclosureQuestionnaireData(disclosure, copyDisclosure);
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
@@ -962,6 +962,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo) {
 		try {
 			CoiDisclEntProjDetails entityProjectRelation = vo.getCoiDisclEntProjDetail();
+			entityProjectRelation.setPrePersonEntityId(entityProjectRelation.getPersonEntityId());
 			conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(entityProjectRelation);
 			saveDisclProjRelationComment(entityProjectRelation);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(entityProjectRelation.getDisclosureId());
@@ -1328,6 +1329,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
 	}
 
+	//TODO logic need to be rechecked and fixed
 	private void addEntryToPersonEntity(CoiTravelDisclosure coiTravelDisclosure, ConflictOfInterestVO vo) {
 			Integer personEntityId;
 			personEntityId = conflictOfInterestDao.fetchMaxPersonEntityId(vo.getPersonId(), vo.getEntityId());
@@ -1874,6 +1876,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> evaluateValidation(Integer disclosureId) {
+		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
+				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
 		List <COIValidateDto>coiValidateDtoList = new ArrayList<>();
 		String personId = conflictOfInterestDao.loadDisclosure(disclosureId).getPersonId();
 		coiValidateDtoList = conflictOfInterestDao.evaluateValidation(disclosureId, personId);
@@ -2293,8 +2297,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclosure.setReviewStatusCode(REVIEW_STATUS_WITHDRAWN);
         disclosure = conflictOfInterestDao.saveOrUpdateCoiDisclosure(disclosure);
-		conflictOfInterestDao.syncProjectWithDisclosure(disclosure.getDisclosureId(),
-				disclosure.getDisclosureNumber(),null, null, null, Constants.TYPE_RESYNC_SFI);
         WithdrawDisclosureDto withdrawDisclosureDto = WithdrawDisclosureDto.builder()
                 .certifiedAt(null)
                 .expirationDate(null)
@@ -2328,8 +2330,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclosure.setReviewStatusCode(REVIEW_STATUS_RETURNED);
         disclosure = conflictOfInterestDao.saveOrUpdateCoiDisclosure(disclosure);
-		conflictOfInterestDao.syncProjectWithDisclosure(disclosure.getDisclosureId(),
-				disclosure.getDisclosureNumber(),null, null, null, Constants.TYPE_RESYNC_SFI);
 		try {
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_RETURNED)
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
@@ -2738,4 +2738,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>("REVIEW_STATUS_NOT_COMPLETE", HttpStatus.OK);
 	}
 
+
+	@Override
+	public void syncProjectPersonEntity(Integer disclosureId) {
+		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
+				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
+	}
 }

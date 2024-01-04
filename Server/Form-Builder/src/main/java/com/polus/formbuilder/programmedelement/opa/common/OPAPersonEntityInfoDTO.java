@@ -23,7 +23,7 @@ public class OPAPersonEntityInfoDTO {
     private String entityRiskCategory;
     private String countryName;
     private String relationship;
-    private Character isRelationshipActive;
+    private Character isFormCompleted;
     private String sfiVersionStatus;    
     private Date involvementStartDate;
     private Date involvementEndDate;
