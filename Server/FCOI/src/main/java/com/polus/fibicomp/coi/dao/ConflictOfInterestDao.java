@@ -1293,4 +1293,39 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	Integer getPersonEntityIdOfNonArchiveVersion(Integer personEntityNumber);
+
+	/**
+	 * This method is used to fetch financial SFI's based on disclosure id
+	 * @param disclosureId
+	 * @return list of SFI 
+	 */
+	public List<PersonEntity> getFinancialSFIOfDisclosure(Integer disclosureId);
+
+	/**
+	 * This method is used to check if project is present for a disclosure 
+	 * @param ConflictOfInterestVO
+	 */
+	public Boolean isProjectPresent(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to check if SFI is completed for a disclosure 
+	 * @param personEntityId
+	 * @param disclosureId
+	 */
+	public Boolean isSFICompletedForDisclosure(Integer personEntityId, Integer disclosureId);
+
+	/**
+	 * This method is used to get the count of conflicts marked by personEntityId
+	 * @param personEntityId
+	 * @param disclosureId
+	 */
+	public List<Map<Object, Object>> disclosureStatusCountBySFI(Integer personEntityId, Integer disclosureId);
+
+	/**
+	 * This method is used to get the projects related based on personEntityId and disclosureId
+	 * @param personEntityId
+	 * @param disclosureId
+	 */
+	public List<CoiDisclEntProjDetails> getProjectRelationshipBySFI(Integer personEntityId, Integer disclosureId);
+	
 }

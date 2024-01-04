@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -150,5 +151,11 @@ public class PersonEntity implements Serializable {
 
 	@Transient
 	private Boolean canDelete;
+
+	@Transient
+	private Boolean sfiCompleted;
+
+	@Transient
+	private List<Map<Object, Object>> disclosureStatusCount;
 
 }

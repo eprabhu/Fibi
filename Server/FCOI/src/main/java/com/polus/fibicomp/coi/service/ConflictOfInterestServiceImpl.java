@@ -498,9 +498,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getDisclosureProjectRelations(ConflictOfInterestVO vo) {
 		List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
+		List<CoiDisclEntProjDetails> entProjDetails;
 		List<PersonEntityRelationshipDto> personEntityRelationshipDto =  conflictOfInterestDao.getRelatedEntityInfo(vo.getDisclosureId(), null, null);
-		conflictOfInterestDao.getProjectRelationshipByParam(vo.getModuleCode(), vo.getModuleItemId(), vo.getPersonId(),
-				vo.getDisclosureId()).forEach(disclosureDetail -> {
+		if(vo.getPersonEntityId()!=null) {
+			entProjDetails = conflictOfInterestDao.getProjectRelationshipBySFI(vo.getPersonEntityId(), vo.getDisclosureId());
+		}
+		else {
+			entProjDetails = conflictOfInterestDao.getProjectRelationshipByParam(vo.getModuleCode(), vo.getModuleItemId(), vo.getPersonId(), vo.getDisclosureId());
+		}
+		entProjDetails.forEach(disclosureDetail -> {
 			CoiDisclEntProjDetailsDto coiDisclEntProjDetails = new CoiDisclEntProjDetailsDto();
 			BeanUtils.copyProperties(disclosureDetail, coiDisclEntProjDetails, "coiDisclosure", "coiEntity", "personEntity");
 			if (disclosureDetail.getCoiEntity() != null) {
@@ -530,9 +536,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public String checkSFICompleted(ConflictOfInterestVO vo) {
-		if (Constants.DEV_PROPOSAL_MODULE_CODE.equals(vo.getModuleCode())) {
+		if (Boolean.TRUE.equals(vo.getIsSfiProjectMapping())){
+			vo.setSfiCompleted(conflictOfInterestDao.isSFICompletedForDisclosure(vo.getPersonEntityId(), vo.getDisclosureId()));
+		}		
+		else if (Constants.DEV_PROPOSAL_MODULE_CODE.equals(vo.getModuleCode())) {
 			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId()));
-		} else if (Constants.AWARD_MODULE_CODE.equals(vo.getModuleCode())) {
+		} else {
 			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId()));
 		}
 		return commonDao.convertObjectToJSON(vo);

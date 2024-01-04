@@ -98,4 +98,9 @@ public class OPAController {
 		return actionLogService.getOpaDisclosureHistoryById(opaDisclosureId);
 	}
 
+	@GetMapping("/getOpaPersonType")
+	public ResponseEntity<Object> getOpaPersonType() {
+		return opaService.getOpaPersonType();
+	}
+
 }
