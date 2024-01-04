@@ -5,6 +5,7 @@ import { OPACompUncompComponent } from '../PE-components/OPA-comp-uncomp/OPA-com
 import { OPAOutsideFinancialRelationComponent } from '../PE-components/OPA-outside-financial-relation/OPA-outside-financial-relation.component';
 import { FormBuilderService } from '../form-builder.service';
 import { Subject } from 'rxjs';
+import { OPAInstituteResourceUseComponent } from '../PE-components/OPA-institute-resources/OPA-institute-resources.component';
 
 @Component({
     selector: 'app-PE-layer',
@@ -35,6 +36,7 @@ export class PELayerComponent implements OnInit, OnChanges {
         switch (this.component.componentData) {
             case 'OPACompUncompComponent': this.loadOPACompUncompComponent(viewContainerRef); break;
             case 'OPAOutsideFinancialRelationComponent': this.loadOPAOutsideFinancialRelationComponent(viewContainerRef); break;
+            case 'OPAInstituteResourceUseComponent': this.loadOPAInstituteResourceUseComponent(viewContainerRef); break;
         }
     }
 
@@ -49,6 +51,15 @@ export class PELayerComponent implements OnInit, OnChanges {
 
     loadOPAOutsideFinancialRelationComponent(viewContainerRef) {
         const componentRef = viewContainerRef.createComponent(OPAOutsideFinancialRelationComponent);
+        componentRef.instance.componentData = this.component.programmedElement;
+        componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
+        componentRef.instance.isFormEditable = this.isFormEditable;
+        componentRef.instance.externalEvents = this.saveEventForChildComponent;
+        componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
+    }
+
+    loadOPAInstituteResourceUseComponent(viewContainerRef) {
+        const componentRef = viewContainerRef.createComponent(OPAInstituteResourceUseComponent);
         componentRef.instance.componentData = this.component.programmedElement;
         componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
         componentRef.instance.isFormEditable = this.isFormEditable;
