@@ -68,4 +68,10 @@ public interface OPAService {
 	 * @return
 	 */
     ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto);
+
+    /**
+	 * This method is used to fetch OPA Person Types
+	 * @return
+	 */
+	ResponseEntity<Object> getOpaPersonType();
 }

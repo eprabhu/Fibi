@@ -1,12 +1,13 @@
 <div class="disclosure-card rounded-3 p-2 mt-2 entity-name" [id]="SFIObject.entityId">
   <div class="m-0 mb-2 row">
     <span class="align-items-center d-flex">
-      <span class="shadow-sm align-items-center d-flex" tabindex="0" [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
-      'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
-        [ngClass]="SFIObject.isActive === 'ACTIVE'? 'active-ribbon' : SFIObject?.isActive === 'DRAFT' ? 'draft-ribbon'  : 'inactive-ribbon'">{{SFIObject?.isActive === 'ACTIVE' ?
-        'Active' : SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'}}</span>
+      <span class="shadow-sm align-items-center d-flex" tabindex="0" [attr.aria-label]="SFIObject?.isActive ?
+      'Active': 'Inactive'"
+        [ngClass]="SFIObject.isActive ?  SFIObject.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'">{{SFIObject?.isActive ?
+          SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
       <p class="entity-title mt-3">
-        <strong class="fs-16"tabindex="0" [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName }}</strong>
+        <strong class="fs-16"tabindex="0" [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName }}
+        </strong>
       </p>
       <div class="info-text fs-14 ms-auto italian px-3 py-0" data-bs-toggle="tooltip" [title]="getHelpText()" data-bs-placement="top" *ngIf="checkForEntityWarning()">
         <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
@@ -99,27 +100,27 @@
       </span>
     </div>
     <div class="align-items-center col-lg col-12 mt-2 d-flex text-secondary justify-content-end" *ngIf="referredFrom !== 'SFI_SUMMARY'">
-        <button (click)="openSfiDetails(SFIObject?.entityId, 'view')" *ngIf="SFIObject?.isActive !== 'DRAFT' || isTriggeredFromSlider"
+      <button *ngIf="!isTriggeredFromSlider && SFIObject.isActive" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')"
+        class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15" title="Click to modify SFI">
+        <mat-icon class="me-1">edit</mat-icon>
+        Modify
+      </button>
+        <button (click)="openSfiDetails(SFIObject?.entityId, 'view')"
           class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15" title="Click to view SFI">
           <mat-icon class="me-1">visibility</mat-icon>
           View
         </button>
-        <button *ngIf="SFIObject?.isActive !== 'INACTIVE' && !isTriggeredFromSlider" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')"
-          class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15" title="Click to modify SFI">
-          <mat-icon class="me-1">edit</mat-icon>
-          Modify
-        </button>
-        <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject?.isActive === 'DRAFT' && !isTriggeredFromSlider"
-          class="align-items-center btn btn-outline-secondary d-flex fs-14" title="Click to delete SFI ">
+        <!-- <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject.canDelete"
+          class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15" title="Click to delete SFI ">
           <mat-icon class="me-1">delete</mat-icon>
           Delete 
-        </button>
-        <button (click)="activateDeactivate(SFIObject)" *ngIf="SFIObject?.isActive === 'INACTIVE' && !isTriggeredFromSlider"
+        </button> -->
+        <button (click)="activateDeactivate(SFIObject)" *ngIf="!SFIObject?.isActive && !isTriggeredFromSlider"
           class="align-items-center btn btn-outline-secondary btn-lg d-flex fs-14" title="Click to activate SFI ">
           <i class="fa fa-bolt fs-18 fw-700 mr-2" aria-hidden="true"></i>
           Activate
         </button>
-          <button (click)="activateDeactivate(SFIObject)" *ngIf="SFIObject?.isActive === 'ACTIVE' && !isTriggeredFromSlider"
+          <button (click)="activateDeactivate(SFIObject)" *ngIf="SFIObject?.isActive && !isTriggeredFromSlider"
           class="align-items-center btn btn-outline-secondary d-flex fs-14" title="Click to inactivate SFI">
           <mat-icon class="me-1">schedule</mat-icon>
           Inactivate

@@ -58,6 +58,7 @@ import { HostContainerDirective } from './directives/host-container.directive';
 import { PELayerComponent } from './form-builder-view/PE-layer/PE-layer.component';
 import { OPACompUncompComponent } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.component';
 import { OPAOutsideFinancialRelationComponent } from './form-builder-view/PE-components/OPA-outside-financial-relation/OPA-outside-financial-relation.component';
+import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-components/OPA-institute-resources/OPA-institute-resources.component';
 
 @NgModule({
     imports: [
@@ -84,7 +85,7 @@ import { OPAOutsideFinancialRelationComponent } from './form-builder-view/PE-com
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
-        OPACompUncompComponent, OPAOutsideFinancialRelationComponent],
+        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent ],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -134,7 +135,8 @@ import { OPAOutsideFinancialRelationComponent } from './form-builder-view/PE-com
         HostContainerDirective,
         PELayerComponent,
         OPACompUncompComponent,
-        OPAOutsideFinancialRelationComponent
+        OPAOutsideFinancialRelationComponent,
+        OPAInstituteResourceUseComponent
     ],
 
     providers: [

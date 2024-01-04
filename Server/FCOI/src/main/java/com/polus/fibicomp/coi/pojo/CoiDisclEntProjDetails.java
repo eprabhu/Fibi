@@ -50,6 +50,12 @@ public class CoiDisclEntProjDetails implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCL_ENT_PROJ_DETAILS_FK2"), name = "PERSON_ENTITY_ID", referencedColumnName = "PERSON_ENTITY_ID", insertable = false, updatable = false)
 	private PersonEntity personEntity;
+
+	@Column(name = "PERSON_ENTITY_NUMBER")
+	private Integer personEntityNumber;
+
+	@Column(name = "PREVIOUS_PERSON_ENTITY_ID")
+	private Integer prePersonEntityId;
 	
 	@Column(name = "ENTITY_ID")
 	private Integer entityId;
@@ -223,5 +229,20 @@ public class CoiDisclEntProjDetails implements Serializable {
 	public void setPersonEntityRelationshipDto(PersonEntityRelationshipDto personEntityRelationshipDto) {
 		this.personEntityRelationshipDto = personEntityRelationshipDto;
 	}
-	
+
+	public Integer getPersonEntityNumber() {
+		return personEntityNumber;
+	}
+
+	public void setPersonEntityNumber(Integer personEntityNumber) {
+		this.personEntityNumber = personEntityNumber;
+	}
+
+	public Integer getPrePersonEntityId() {
+		return prePersonEntityId;
+	}
+
+	public void setPrePersonEntityId(Integer prePersonEntityId) {
+		this.prePersonEntityId = prePersonEntityId;
+	}
 }

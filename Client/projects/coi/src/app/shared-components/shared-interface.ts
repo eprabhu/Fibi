@@ -55,14 +55,17 @@ export class RevisionObject {
 }
 
 export class SfiObject {
-    isActive = 'INACTIVE';
+    isActive = false;
     validPersonEntityRelTypes = [];
     entityType = '';
     involvementStartDate = '';
     involvementEndDate = '';
     countryName = '';
     entityId = '';
+    entityNumber = '';
     entityName = '';
+    canDelete: boolean;
+    isFormCompleted: false;
   }
 
 export interface coiReviewComment {

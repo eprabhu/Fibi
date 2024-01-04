@@ -14,10 +14,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class COIValidateDto {
 
+	private String validationType;
 	private String validationMessage;
-
 	private List<String> sfiList;
-
 	private List<List<Map<String, String>>> projectSfiList;
 
 }
