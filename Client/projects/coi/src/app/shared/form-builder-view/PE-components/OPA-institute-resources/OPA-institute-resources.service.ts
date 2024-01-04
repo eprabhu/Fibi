@@ -18,7 +18,7 @@ constructor( private _fbService: FormBuilderService, private _http: HttpClient )
   }
 
   saveEntityRelationOnly(RO): Promise<any> {
-    return this._http.post(this._fbService.baseURL + '/coi/saveOrUpdateCoiFinancialEntityDetails', RO).toPromise();
+    return this._http.post(this._fbService.baseURL + '/coi/addRelationship', RO).toPromise();
   }
 
   getEntities(): Observable<any> {
