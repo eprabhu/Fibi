@@ -80,8 +80,11 @@
     data-bs-backdrop="static" id="OUTSIDE_FIN_REL_ADD{{id}}" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
+            </div>
             <div class="modal-body">
-                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav"
+                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
                     <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' ">
                         <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
@@ -100,7 +103,7 @@
                             <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
                             <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
                                 title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active"
+                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active me-1"
                                 role="button">All</span>
                             <span (click)="setFilter('COMPLETE')" [class.filter-active]="currentFilter=='COMPLETE'"
                                 title="Click to filter by type: Complete"
@@ -201,10 +204,10 @@
                     </div>
                 </ng-container>
                     <div *ngIf="!filteredEntities.length">
-                        <div class="no-data-container w-100 shadow-sm">
+                        <div class="no-data-container w-100 shadow-sm text-secondary">
                             <span class="no-data-icon-outer">
                                 <div class="no-data-icon">
-                                    <mat-icon class="no-file">folder_off</mat-icon>
+                                    <mat-icon class="no-file info-icon">folder_off</mat-icon>
                                 </div>
                             </span>
                             <h5 class="fs-16 mt-3">There is no information in this section.</h5>
@@ -215,7 +218,7 @@
                     <div class="row mb-2">
                         <div class="col-12 mb-2" *ngIf="editIndex == -1">
                             <label for="entity" class="label-text fs-16">Company/Entity</label>
-                            <span *ngIf="isDuplicate" class="text-danger ml-2">*Entity already linked </span>
+                            <span *ngIf="isDuplicate" class="text-danger ml-2">*The Entity is already linked. </span>
                             <app-endpoint-search [httpOptions]="entitySearchOptions" [searchOnFocus]="true" class="p-0"
                                 (onSelect)="entitySelected($event)"></app-endpoint-search>
                             <div class="help-text">
@@ -294,15 +297,15 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
-                    id="OUTSIDE_FIN_REL_ADD-BTN{{id}}" (click)="clearData()" type="button">Cancel
+                    id="OUTSIDE_FIN_REL_ADD_BTN{{id}}" (click)="clearData()" type="button">Cancel
                 </button>
-                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button"
-                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="addRowItem()"
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate"
+                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
                     area-describedby="Click here to add">
                     Add
                 </button>
                 <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure"
-                    (click)="updateEntity(); currentTab='ADD_ENTITY'" area-describedby="Click here to add">
+                    (click)="eventType='NEW'; updateEntity(); currentTab='ADD_ENTITY'" area-describedby="Click here to add">
                     Update
                 </button>
             </div>
@@ -322,7 +325,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
-                    id="OUTSIDE_FIN_REL_DELETE-BTN{{id}}" (click)="clearData()" type="button">Cancel
+                    id="OUTSIDE_FIN_REL_DELETE_BTN{{id}}" (click)="clearData()" type="button">Cancel
                 </button>
                 <button ype="button" class="btn btn-primary fs-15" title="View Disclosure" (click)="deleteEntity()"
                     area-describedby="Click here to add">

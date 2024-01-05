@@ -28,7 +28,7 @@ export class OPAInstituteResources {
     entityRiskCategory: string;
     countryName: string;
     relationship: string;
-    isRelationshipActive: string | boolean;
+    isFormCompleted: string | boolean;
     sfiVersionStatus: string;
     involvementStartDate: string;
     involvementEndDate: any;
@@ -48,4 +48,19 @@ export class OPAInstituteResources {
 export class RelationShipSaveRO {
     personEntityId: string;
     validPersonEntityRelTypeCodes: number[];
+}
+
+export interface EntityDetails {
+  personEntityId: number
+  entityId: number
+  entityName: string
+  entityNumber: number
+  countryName: string
+  validPersonEntityRelType: string
+  entityType: string
+  entityRiskCategory: string
+  personEntityVersionStatus: string
+  isFormCompleted: boolean
+  involvementStartDate: any
+  involvementEndDate: any
 }

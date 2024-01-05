@@ -19,6 +19,7 @@ export class PELayerComponent implements OnInit, OnChanges {
     @Input() fbConfiguration: FBConfiguration;
     @Input() isFormEditable: boolean;
     @Input() formBuilderId: number;
+    @Input() sectionName = '';
     saveEventForChildComponent = new Subject<any>();
 
     constructor(private _formBuilder: FormBuilderService) { }
@@ -46,6 +47,7 @@ export class PELayerComponent implements OnInit, OnChanges {
         componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
         componentRef.instance.externalEvents = this.saveEventForChildComponent;
         componentRef.instance.isFormEditable = this.isFormEditable;
+        componentRef.instance.sectionHeading = this.sectionName;
         componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
     }
 
@@ -55,6 +57,7 @@ export class PELayerComponent implements OnInit, OnChanges {
         componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
         componentRef.instance.isFormEditable = this.isFormEditable;
         componentRef.instance.externalEvents = this.saveEventForChildComponent;
+        componentRef.instance.sectionHeading = this.sectionName;
         componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
     }
 
@@ -64,6 +67,7 @@ export class PELayerComponent implements OnInit, OnChanges {
         componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
         componentRef.instance.isFormEditable = this.isFormEditable;
         componentRef.instance.externalEvents = this.saveEventForChildComponent;
+        componentRef.instance.sectionHeading = this.sectionName;
         componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
     }
 
