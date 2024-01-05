@@ -57,7 +57,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   ngOnChanges() {
     this.configuration.enableViewMode = !this.isEditMode;
-    // this.getQuestionnaire(!isEmptyObject(this.entityDetailsServices.currentRelationshipQuestionnaire) ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
     this.getDefinedRelationships();
   }
 
@@ -93,8 +92,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
             this.currentRelationshipDetails = data;
               if (this.relationshipDetails && this.relationshipDetails.personId === this._commonService.getCurrentUserDetail('personId') || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
                 this.hasPermissionToView = true;
-                this.configuration.moduleItemKey = (this._activatedRoute.snapshot.queryParamMap.get('personEntityId') && this._activatedRoute.snapshot.queryParamMap.get('personEntityId') == data.personEntityId) ? this._activatedRoute.snapshot.queryParamMap.get('personEntityId') : this.entityId;
-                this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
+                this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;                this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
                 this.configuration = Object.assign({}, this.configuration);
               } else {
                   this.hasPermissionToView = false;

@@ -31,7 +31,7 @@
         <div class="col-4 fs-14 border-end"tabindex='0'>
          <div class="table-text my-4" [attr.aria-label]="test?.coiEntity?.entityName">
           {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
-          <span *ngIf="isShowStar(test)" class="text-danger">*</span>
+          <span *ngIf="isShowWarning(test)" class="text-danger">*</span>
          </div>
         </div>
         <div class="col-2 fs-14 border-end" tabindex='0'>

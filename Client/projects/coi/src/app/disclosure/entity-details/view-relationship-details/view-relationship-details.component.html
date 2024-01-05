@@ -25,7 +25,7 @@
                     </label>
                     <div *ngIf="entityVersionList.length > 0">
                       <select class="form-control form-select mt-1 me-2"
-                      [(ngModel)]="coiEntityVersionStatus"
+                      [(ngModel)]="entityId"
                       (ngModelChange)="versionChange()">
                         <option [value]="version.personEntityId" *ngFor="let version of entityVersionList">
                           {{'V' +version.versionNumber}}</option>
@@ -336,25 +336,32 @@
             </app-entity-questionnaire>
         </div>
     </div>
-    <ng-container *ngIf="!entityDetailsServices.definedRelationships?.length">
-        <div class="card mx-4" *ngIf="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length">
-          <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
-            <p class="fs-14 m-0">
-              <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
-                You currently do not have any relationship questionnaires associated with this SFI. Click on the <strong>Add Relationship</strong>
-                button for adding questionnaires.
-              </span>
-            </p>
-          </div>
-          <span *ngIf="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length" class="create-button">
-            <button class="btn btn-primary btn-sm d-flex align-items-center mt-4 fs-15 mb-3 hand-cursor" (click)="saveOrAddRelationshipModal()"
-            title="Add Relationship">
-                <mat-icon class="material-icons-outlined mr-2">add</mat-icon>
-                <span class="mr-2 fs-15">Add Relationship</span>
-            </button>
-        </span>
+    <ng-container *ngIf=" this.entityDetailsServices.definedRelationships?.length == 0 && canAddRelationship()">
+        <div class="card mx-4">
+            <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
+                <p class="fs-14 m-0">
+                    <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
+                        You currently do not have any relationship associated. Click on the
+                        <strong>Add Relationship</strong>
+                        button for adding relationship.
+                    </span>
+                </p>
+            </div>
+            <span class="create-button">
+                <button class="btn btn-primary btn-sm d-flex align-items-center mt-4 fs-15 mb-3 hand-cursor"
+                    (click)="saveOrAddRelationshipModal()" title="Add Relationship">
+                    <mat-icon class="material-icons-outlined mr-2">add</mat-icon>
+                    <span class="mr-2 fs-15">Add Relationship</span>
+                </button>
+            </span>
         </div>
-      </ng-container>
+    </ng-container>
+    <div class="mx-4" *ngIf=" this.entityDetailsServices.definedRelationships?.length == 0 && !canAddRelationship()">
+        <app-no-information [isBorderNeeded]="true">
+            <span>No relationship added.
+            <span *ngIf="relationshipsDetails?.versionStatus === 'INACTIVE' && !isTriggeredFromSlider">Activate SFI to add relationship</span>
+        </span></app-no-information>
+    </div>
 </div>
 
 <div class="d-flex mx-0 px-4" *ngIf="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'">

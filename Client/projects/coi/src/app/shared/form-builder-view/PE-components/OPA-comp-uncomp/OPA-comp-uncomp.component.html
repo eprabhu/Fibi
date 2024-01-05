@@ -150,7 +150,7 @@
                                                 <span class="shadow-sm align-items-center d-flex" tabindex="0"
                                                     [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
                     'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
-                                                    [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isRelationshipActive)}}</span>
+                                                    [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isFormCompleted)}}</span>
                                                 <p class="entity-title mt-3 clickable-content">
                                                     <strong class="fs-14" tabindex="0" (click)="viewSlider(item.personEntityId)"
                                                         [attr.aria-label]="'entity name' + item?.entityName">

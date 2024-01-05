@@ -294,9 +294,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
             if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
                 
-                let questionnaire_error = {validationMessage: ''};
-                questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
-                this.coiService.submitResponseErrors.push(this.error);
+                const questionnaire_error = {validationMessage: 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.'};
+                this.coiService.submitResponseErrors.push(questionnaire_error);
             }
             this.validateRelationship();
         }
@@ -575,7 +574,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             openModal('ValidatedModal');
         } else {
-            this.isSaving = false;
             openModal('confirmModal');
         }
     }
