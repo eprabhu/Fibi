@@ -7,6 +7,7 @@ import { EntitySaveRO, OutsideFinRelation, OutsideFinRelationPE, RelationShipSav
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
+import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 
 export const leftSlideInOut = trigger('leftSlideInOut', [
@@ -70,7 +71,6 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService) { }
 
-
     ngOnInit() {
         this.generateId();
         this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
@@ -87,7 +87,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
                 this.editIndex === -1 ? this.componentData.data.push(res.data.data[0]) :
                     this.componentData.data[this.editIndex] = res.data.data[0];
                 if (this.eventType === 'NEW') {
-                    document.getElementById('OUTSIDE_FIN_REL_ADD-BTN' + this.id).click();
+                    document.getElementById('OUTSIDE_FIN_REL_ADD_BTN' + this.id).click();
                 }
                 if (this.eventType === 'LINK') {
                     this.removeFromMyEntities();
@@ -95,7 +95,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
 
             } else if (this.outsideFinRelationData.actionType === 'DELETE' && this.deleteIndex > -1) {
                 this.componentData.data.splice(this.deleteIndex, 1);
-                document.getElementById('OUTSIDE_FIN_REL_DELETE-BTN' + this.id).click();
+                document.getElementById('OUTSIDE_FIN_REL_DELETE_BTN' + this.id).click();
             }
             this.clearData();
         }));
@@ -108,9 +108,13 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.editIndex = -1;
         this.deleteIndex = -1;
         this.currentTab = 'MY_ENTITIES';
+        this.isDuplicate = false;
     }
 
     async addRowItem() {
+        if (this.isDuplicate) {
+            return null;
+        }
         const RO: RelationShipSaveRO | EntitySaveRO = this.setEntityROForSave(this.entityDetails);
         try {
             const response = await this._api.saveEntityOrRelation(RO);
@@ -166,7 +170,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
 
     editEntityItem(outsideFinRelation: OutsideFinRelation  , index): void {
         this.currentTab = 'ADD_ENTITY';
-        this.outsideFinRelationData = outsideFinRelation;
+        this.outsideFinRelationData = deepCloneObject(outsideFinRelation);
         this.editIndex = index;
         this.entityDetails = outsideFinRelation.entityInfo;
     }

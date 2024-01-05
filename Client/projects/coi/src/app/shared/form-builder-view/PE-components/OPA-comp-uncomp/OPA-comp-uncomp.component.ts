@@ -53,6 +53,7 @@ export class OPACompUncompComponent implements OnInit {
     @Input() externalEvents: Subject<any> = new Subject<any>();
     @Output() childEvents: EventEmitter<any> = new EventEmitter<any>();
     @Input() isFormEditable = true;
+    @Input() sectionHeading = '';
     id: number;
     entitySearchOptions: any = {};
     entityDetails: any = {};
