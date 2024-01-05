@@ -82,6 +82,12 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             conflictOfInterestDao.syncProjectWithDisclosure(personEntity.getDisclosureId(),
                     null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
         }
+        PersonEntityDto personEntityDto = new PersonEntityDto();
+        personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
+        personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
+        personEntityDto.setEntityName(conflictOfInterestDao.getEntityDetails(personEntity.getEntityId()).getEntityName());
+        personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_CREATED);
+        actionLogService.savePersonEntityActionLog(personEntityDto);
         return new ResponseEntity<>(personEntity, HttpStatus.OK);
     }
 
@@ -319,9 +325,13 @@ public class PersonEntityServiceImpl implements PersonEntityService {
     public ResponseEntity<Map<String, Object>> updatePersonEntityCompleteFlag(Integer personEntityId) {
         boolean isFormCompleted = true;
         List<PersonEntityRelationship> personEntityRelationships = conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityId(personEntityId);
+        if (personEntityRelationships == null || personEntityRelationships.isEmpty()) {
+            isFormCompleted = false;
+        }
         for (PersonEntityRelationship personEntityRelationship : personEntityRelationships) {
             if (isFormCompleted)
                 isFormCompleted = checkFormCompleted(personEntityRelationship.getValidPersonEntityRelTypeCode(), personEntityId, isFormCompleted);
+            else break;
         }
         conflictOfInterestDao.updatePersonEntityCompleteFag(personEntityId, isFormCompleted);
         Map<String, Object> response = new HashMap<>();
