@@ -2,12 +2,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilderService } from '../../form-builder.service';
 import { getEndPointForEntity } from '../../search-configurations';
-import { CompUnComp, CompUnCompPE, EntityListRO, EntitySaveRO, RelationShipSaveRO } from './interface';
+import { CompUnComp, CompUnCompPE, EntitySaveRO, RelationShipSaveRO } from './interface';
 import { OPACompUncompService } from './OPA-comp-uncomp.service';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { Subject } from 'rxjs';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
+import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 export const leftSlideInOut = trigger('leftSlideInOut', [
   transition(':enter', [
@@ -71,7 +72,6 @@ export class OPACompUncompComponent implements OnInit {
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
 
-
     ngOnInit() {
         this.generateId();
         this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
@@ -105,6 +105,9 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     async addRowItem() {
+        if (this.isDuplicate) {
+            return null;
+        }
         const RO: RelationShipSaveRO | EntitySaveRO = this.setEntityROForSave(this.entityDetails);
         try {
             const response = await this._api.saveEntityOrRelation(RO);
@@ -120,7 +123,7 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     editEntityItem(compUncomp:  CompUnComp , index): void {
-        this.compUnCompData = compUncomp;
+        this.compUnCompData = deepCloneObject(compUncomp);
         this.editIndex = index;
         this.entityDetails = compUncomp.entityInfo;
         this.currentTab = 'ADD_ENTITY';
@@ -209,6 +212,7 @@ export class OPACompUncompComponent implements OnInit {
         this.editIndex = -1;
         this.deleteIndex = -1;
         this.currentTab = 'MY_ENTITIES';
+        this.isDuplicate = false;
     }
 
     getClassForStatus(versionStatus, isFormCompleted) {
