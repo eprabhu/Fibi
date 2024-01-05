@@ -24,7 +24,7 @@ export class EntityInfo {
     entityRiskCategory: string;
     countryName: string;
     relationship: string;
-    isRelationshipActive: string;
+    isFormCompleted: string | boolean;
     sfiVersionStatus: string;
     involvementStartDate: string;
     involvementEndDate: any;

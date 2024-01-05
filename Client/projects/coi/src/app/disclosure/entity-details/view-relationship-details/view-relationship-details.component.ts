@@ -54,7 +54,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     };
     mandatoryList = new Map();
     deleteRelationshipDetails: any;
-    coiEntityVersionStatus: any;
     entityVersionList: any = {};
 
     constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
@@ -81,7 +80,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         if(!isEmptyObject(this.relationshipsDetails)) {
             this.$subscriptions.push(this.entityDetailsServices.getSfiVersion(this.relationshipsDetails.personEntityNumber).subscribe((data: any) => {
                 this.entityVersionList = data;
-                this.coiEntityVersionStatus = this.getEntityId();
             }, err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in opening selected version, please try again');
             }));
@@ -89,11 +87,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
       }
 
       async versionChange() {
-        this.entityId = this.coiEntityVersionStatus;
-        await this.getEntityDetails(this.coiEntityVersionStatus);
-        await this.getDefinedRelationships(this.coiEntityVersionStatus);
+        await this.getEntityDetails(this.entityId);
+        await this.getDefinedRelationships(this.entityId);
         this.entityDetailsServices.$openQuestionnaire.next(this.entityDetailsServices.definedRelationships[0]);
-        const CURRENT_VERSION = this.entityVersionList.find(e => e.personEntityId == this.coiEntityVersionStatus);
+        const CURRENT_VERSION = this.entityVersionList.find(e => e.personEntityId == this.entityId);
         this.isEditMode = CURRENT_VERSION.versionStatus == 'ACTIVE' && !this.isTriggeredFromSlider ? true : false;
         this.getQuestionnaire();
       }
@@ -218,14 +215,14 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }
     }
 
-    updateURL() {
+    updateURL(event) {
         this.previousUrlBeforeActivate = '';
         if (this.relationshipsDetails.isFormCompleted) {
             if(this._navigationService.previousURL.includes('coi/create-disclosure/')) {
                 this.previousUrlBeforeActivate = this._navigationService.previousURL;
             }
             this._router.navigate(['/coi/entity-details/entity'],
-                { queryParams: { personEntityId: this.relationshipsDetails.personEntityId, personEntityNumber: this.relationshipsDetails.personEntityNumber } });
+                { queryParams: { personEntityId: event.personEntityId, personEntityNumber: event.personEntityNumber } });
         }
     }
 
@@ -237,18 +234,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     closeActivateInactivateSfiModal(event) {
         if (event) {
             this.entityId = new Number(event.personEntityId);
-            this.previousUrlBeforeActivate = '';
             this.relationshipsDetails.isRelationshipActive = event.isRelationshipActive;
             if (event.versionStatus) {
                 this.relationshipsDetails.versionStatus = event.versionStatus;
-                if (this.relationshipsDetails.isFormCompleted) {
-                    if(this._navigationService.previousURL.includes('coi/create-disclosure/')) {
-                        this.previousUrlBeforeActivate = this._navigationService.previousURL;
-                    }
-                    this._router.navigate(['/coi/entity-details/entity'],
-                        { queryParams: { personEntityId: event.personEntityId, personEntityNumber: event.personEntityNumber } });
-                        this.getEntityDetails(this.getEntityId());
-                }
+                this.updateURL(event);
             }
             this.relationshipsDetails.updateTimestamp = event.updateTimestamp;
             this.updatedRelationshipStatus = event.versionStatus === 'ACTIVE' ?  'INACTIVE' : 'ACTIVE';
@@ -303,7 +292,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.allRelationQuestionnaires = [];
             data.forEach((d: any) =>{
                 if(d.applicableQuestionnaire.length) {
-                    this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
+                    this.entityDetailsServices.relationshipCompletedObject[d.moduleSubItemKey] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
                     this.combineQuestionnaireList(d.applicableQuestionnaire);
                 } else {
                     this.entityDetailsServices.relationshipCompletedObject[d.moduleSubItemKey] = true;
@@ -313,7 +302,8 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
                 this.$subscriptions.push(this.entityDetailsServices.checkFormCompleted(this.getEntityId()).subscribe((data: any) => {
                     this.relationshipsDetails.isFormCompleted = data.isFormCompleted;
                     this.isEditMode = !this.relationshipsDetails.isFormCompleted;
-                    this.updateURL();
+                    this.updateURL(this.relationshipsDetails);
+                    this.entityDetailsServices.$openQuestionnaire.next(!isEmptyObject(this.entityDetailsServices.currentRelationshipQuestionnaire) ? this.entityDetailsServices.currentRelationshipQuestionnaire : this.entityDetailsServices.definedRelationships[0]);
                 }));
             }   
             this.entityDetailsServices.isRelationshipQuestionnaireChanged = false;         
@@ -348,7 +338,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             if (index >= 0) {
                 this.entityDetailsServices.unSavedSections.splice(index, 1);
             }
-            this.updateURL();
+            this.updateURL(this.relationshipsDetails);
         }, error => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
@@ -559,7 +549,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
                 }
                 this.emittedDeletedRelationship();
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
-                this.updateURL();
+                this.updateURL(this.relationshipsDetails);
                 this.deleteRelationshipDetails = null;
                 hideModal('deleteRelationModal');
             }, _err => {
@@ -571,12 +561,19 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
                 }
             }));
     }
+
+    canAddRelationship() {
+       return (this.isEditMode && this.entityDetailsServices.canMangeSfi && this.entityDetailsServices.availableRelationships?.length);
+    }
     
     
     private async addToAvailableRelation(relation: any) {
        let availableRelationships = await this.getRelationshipLookUp();
        let relationIndex = availableRelationships.findIndex(ele => ele.validPersonEntityRelTypeCode == relation.validPersonEntityRelTypeCode);
-        this.entityDetailsServices.groupedRelations = {};
+       this.entityDetailsServices.groupedRelations = {};
+       if(this.entityDetailsServices.availableRelationships.length && this.entityDetailsServices.availableRelationships[relationIndex] && this.entityDetailsServices.availableRelationships[relationIndex].validPersonEntityRelTypeCode == relation.validPersonEntityRelTypeCode) {
+            this.entityDetailsServices.availableRelationships.splice(relationIndex, 1);
+       }
         this.entityDetailsServices.availableRelationships.splice(relationIndex, 0 ,relation);
         if (this.entityDetailsServices.availableRelationships.length) {
             this.entityDetailsServices.groupedRelations = this.groupBy(deepCloneObject(this.entityDetailsServices.availableRelationships), "coiDisclosureType", "description");

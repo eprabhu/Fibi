@@ -16,7 +16,6 @@ export class SfiService {
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
     getSfiDetails(params: RO) {
-        // return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
         return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
     }
 
@@ -45,7 +44,6 @@ export class SfiService {
     }
 
     saveOrUpdateCoiFinancialEntityDetails(params) {
-        // return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
         return this._http.post(this._commonService.baseUrl + '/personEntity/addRelationship', params);
     }
     getEntityDetails(entityId) {

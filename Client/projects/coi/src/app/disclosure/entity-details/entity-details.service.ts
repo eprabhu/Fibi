@@ -17,11 +17,9 @@ export class EntityDetailsService {
   $updateFormCompleted = new Subject()
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
-  isExpanded = false;
   isHoverEntityCard = false;
   canMangeSfi = false;
   isSwitchCurrentTab = false;
-  isShowHistoryInfo = true;
   unSavedSections = [];
   relationshipCompletedObject: any = {};
   concurrentUpdateAction = '';
@@ -49,7 +47,6 @@ export class EntityDetailsService {
   }
 
   saveOrUpdateCoiFinancialEntityDetails(params) {
-    // return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
     return this._http.post(this._commonService.baseUrl + '/personEntity/addRelationship', params);
   }
 
@@ -62,12 +59,10 @@ export class EntityDetailsService {
   }
 
   getRelationshipEntityDetails(personEntityId) {
-    // return this._http.get(`${this._commonService.baseUrl}/getPersonEntityDetails/${personEntityId}`);
     return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityId}`);
   }
 
   getPersonEntityRelationship(params) {
-    // return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
     return this._http.post(this._commonService.baseUrl + '/personEntity/getRelationship', params);
   }
 
