@@ -58,7 +58,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
     this.$subscriptions.push(this.$fetchSFI.pipe(
       switchMap(() => {
         this.isLoading = true;
-        return this._userEntityService.getSFIDashboardNew(this.sfiDashboardRequestObject)
+        return this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject)
       })).subscribe((data: any) => {
       this.result = data;
       if (this.result) {
@@ -79,7 +79,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
 }
 
   viewEntityDetails(entities) {
-    console.log(entities);
+
     this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, personEntityNumber: entities.personEntityNumber } })
   }
 
