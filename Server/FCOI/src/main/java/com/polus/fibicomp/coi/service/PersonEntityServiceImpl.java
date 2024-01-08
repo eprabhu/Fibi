@@ -99,13 +99,13 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         }
         PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(personEntityRelationship.getPersonEntityId());
         Integer personEntityId = personEntity.getPersonEntityId();
-//        Integer versionId = conflictOfInterestDao.getPersonEntityIdOfNonArchiveVersion(personEntity.getPersonEntityNumber());
-//        if (versionId != personEntityId) {
-//            personEntityId = versionId;
-//        }
-//        if (conflictOfInterestDao.checkPersonEntityAdded(personEntityId)) {
-//            personEntityId = copyPersonEntity(personEntity, personEntity.getVersionStatus()).getPersonEntityId();
-//        }
+        Integer versionId = conflictOfInterestDao.getPersonEntityIdOfNonArchiveVersion(personEntity.getPersonEntityNumber());
+        if (versionId != personEntityId) {
+            personEntityId = versionId;
+        }
+        if (conflictOfInterestDao.checkPersonEntityAdded(personEntityId)) {
+            personEntityId = copyPersonEntity(personEntity, personEntity.getVersionStatus()).getPersonEntityId();
+        }
         List<PersonEntityRelationship> personEntityRelationshipList = new ArrayList<>();
         List<String> relationshipNames = new ArrayList<>();
         List<ValidPersonEntityRelType> validRelTypes = conflictOfInterestDao.getValidPersonEntityRelTypeByTypeCodes(personEntityRelationship.getValidPersonEntityRelTypeCodes());
