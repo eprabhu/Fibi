@@ -30,7 +30,7 @@ export class EntityInfo {
     involvementEndDate: any;
     sfiVersionStatus: string;
     entityRiskCategory: string;
-    isRelationshipActive: string | boolean;
+    isFormCompleted: string | boolean;
 }
 
 export class CompUnCompPE {
@@ -63,3 +63,17 @@ export class EntityListRO {
     personId: string;
     fetchAllRecords = true;
 }
+export interface EntityDetails {
+    personEntityId: number
+    entityId: number
+    entityName: string
+    entityNumber: number
+    countryName: string
+    validPersonEntityRelType: string
+    entityType: string
+    entityRiskCategory: string
+    personEntityVersionStatus: string
+    isFormCompleted: boolean
+    involvementStartDate: any
+    involvementEndDate: any
+  }

@@ -43,11 +43,6 @@ getProjectRelationships(id, disclosureStatusCode, personId) {
     'personId': personId});
 }
 
-getSfiDetails(params: RO) {
-  // return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure'/, params);
-  return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
-}
-
 saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {
   return this._http.post(this._commonService.baseUrl + '/saveEntityProjectRelation',
   {'coiDisclosureDetails': params,
