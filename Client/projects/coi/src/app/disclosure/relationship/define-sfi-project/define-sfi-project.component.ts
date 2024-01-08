@@ -72,7 +72,6 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
             this.$subscriptions.push(this.relationshipService
                 .getProjectsForEntity(this.disclosureId, sfi.personEntityId).subscribe((res: any) => {
                     this.relationshipService.projectSFIDetails[sfi.personEntityId] = res;
-                    console.log({res});
                 }));
         });
     }
