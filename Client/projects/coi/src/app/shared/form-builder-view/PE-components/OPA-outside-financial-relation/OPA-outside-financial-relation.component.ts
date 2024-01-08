@@ -65,7 +65,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     myEntities = [];
     filteredEntities = [];
     currentTab: 'MY_ENTITIES'| 'ADD_ENTITY' = 'MY_ENTITIES';
-    currentFilter: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE' = 'ALL';
+    currentFilter: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
     relationshipTypeCache = {};
 
@@ -158,7 +158,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.outsideFinRelationData.entityInfo.entityType = this.entityDetails.entityType;
         this.outsideFinRelationData.entityInfo.relationship = this.entityDetails.validPersonEntityRelType;
         this.outsideFinRelationData.entityInfo.entityRiskCategory = this.entityDetails.entityRiskCategory;
-        this.outsideFinRelationData.entityInfo.isRelationshipActive = this.entityDetails.isRelationshipActive ? 'Y' : 'N';
+        this.outsideFinRelationData.entityInfo.isFormCompleted = this.entityDetails.isFormCompleted ? 'Y' : 'N';
         this.outsideFinRelationData.entityInfo.sfiVersionStatus = this.entityDetails.personEntityVersionStatus;
         this.outsideFinRelationData.entityInfo.involvementStartDate = parseDateWithoutTimestamp(new Date());
 
@@ -200,43 +200,17 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     }
 
     getClassForStatus(versionStatus, isFormCompleted) {
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
     }
 
     getClassForStatusInModal(versionStatus, isFormCompleted) {
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
     }
 
     getDescriptionForStatus(versionStatus, isFormCompleted) { 
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 'Complete' : 'Incomplete' : 'Inactive';
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
 
-    // getClassForStatus(versionStatus, isRelationshipActive) {
-    //     if (typeof (isRelationshipActive) === 'boolean') {
-    //         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-    //     }
-    //     return versionStatus === 'PENDING' ? 't-draft-ribbon' :
-    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 't-active-ribbon' :
-    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 't-inactive-ribbon' : '';
-    // }
-
-    // getClassForStatusInModal(versionStatus, isRelationshipActive) {
-    //     if (typeof (isRelationshipActive) === 'boolean') {
-    //         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-    //     }
-    //     return versionStatus === 'PENDING' ? 'draft-ribbon' :
-    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
-    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
-    // }
-
-    // getDescriptionForStatus(versionStatus, isRelationshipActive) {
-    //     if (typeof (isRelationshipActive) === 'boolean') {
-    //         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-    //     }
-    //     return versionStatus === 'PENDING' ? 'Draft' :
-    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
-    //               versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive' : '';
-    // }
 
     viewSlider(personEntityId) {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
@@ -260,16 +234,16 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.addRowItem();
     }
 
-    setFilter(filterType: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE') {
+    setFilter(filterType: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE') {
         this.currentFilter = filterType;
         switch (this.currentFilter) {
             case 'ALL' : this.filteredEntities = this.myEntities; break;
-            case 'ACTIVE' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && E.isRelationshipActive); break;
+            case 'COMPLETE' : this.filteredEntities =
+                this.myEntities.filter(E => (E.personEntityVersionStatus === 'ACTIVE' || E.personEntityVersionStatus === 'ARCHIVE') && E.isFormCompleted); break;
             case 'INACTIVE' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && !E.isRelationshipActive); break;
-            case 'DRAFT' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'PENDING'); break;
+                this.myEntities.filter(E => E.personEntityVersionStatus === 'INACTIVE'); break;
+            case 'INCOMPLETE' : this.filteredEntities =
+                this.myEntities.filter(E => (E.personEntityVersionStatus === 'ACTIVE' || E.personEntityVersionStatus === 'ARCHIVE') && !E.isFormCompleted); break;
         }
     }
 
