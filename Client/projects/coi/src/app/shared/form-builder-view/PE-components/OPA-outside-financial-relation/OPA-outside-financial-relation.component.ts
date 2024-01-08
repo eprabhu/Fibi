@@ -158,7 +158,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.outsideFinRelationData.entityInfo.entityType = this.entityDetails.entityType;
         this.outsideFinRelationData.entityInfo.relationship = this.entityDetails.validPersonEntityRelType;
         this.outsideFinRelationData.entityInfo.entityRiskCategory = this.entityDetails.entityRiskCategory;
-        this.outsideFinRelationData.entityInfo.isFormCompleted = this.entityDetails.isFormCompleted;
+        this.outsideFinRelationData.entityInfo.isFormCompleted = this.entityDetails.isFormCompleted ? 'Y' : 'N';
         this.outsideFinRelationData.entityInfo.sfiVersionStatus = this.entityDetails.personEntityVersionStatus;
         this.outsideFinRelationData.entityInfo.involvementStartDate = parseDateWithoutTimestamp(new Date());
 
