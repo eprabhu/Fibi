@@ -1,11 +1,16 @@
 <ng-container *ngFor="let sfi of disclosureSfi.personEntities; let i = index">
-    <div class="mt-2 card outer-card shadow-medium">
+    <div class="mt-2 ml-2 card outer-card shadow-medium">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-8 col-12">
                     <div class="col-12 d-flex">
-                    <span class="active-ribbon shadow-sm align-items-center d-flex" tabindex='0'
-                          aria-label="proposal">Active</span>
+                    <span class="shadow-sm align-items-center d-flex" 
+                    [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE' 
+                    || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                    sfi?.personEntityRelationshipDto?.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'" tabindex='0'
+                          aria-label="proposal">{{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE' 
+                          || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                          sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
                         <p class="entity-title mt-1">
                             <strong title="Click to view project details" tabindex="0" class="fs-16"
                                     [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName?.length >
