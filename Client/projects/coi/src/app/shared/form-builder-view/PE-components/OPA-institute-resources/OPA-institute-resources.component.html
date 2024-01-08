@@ -21,9 +21,9 @@
                         <div class="m-0 mb-2 row">
                             <span class="align-items-center d-flex">
                                 <span class="shadow-sm align-items-center d-flex t-ribbon"
-                                    [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)"
+                                    [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isFormCompleted)"
                                     tabindex="0">{{getDescriptionForStatus(data.entityInfo?.sfiVersionStatus,
-                                    data.entityInfo?.isRelationshipActive)}}</span>
+                                    data.entityInfo?.isFormCompleted)}}</span>
                                 <span class="entity-title mr-2 cursor-pointer clickable-content">
                                     <strong tabindex="0" [attr.aria-label]="'entity name'"
                                         (click)="viewSlider(data.entityInfo?.personEntityId)">
@@ -76,8 +76,11 @@
     data-bs-backdrop="static" id="OPA_INST_RES_ADD{{id}}" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
+            </div>
             <div class="modal-body">
-                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav"
+                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
                     <div class="border-end navigation-icons px-3 py-1 hand-cursor" (click)="currentTab= 'MY_ENTITIES' ">
                         <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
@@ -97,16 +100,16 @@
                                 <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
                                 <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
                                     title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-                                    class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active"
+                                    class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active me-1"
                                     role="button">All</span>
-                                <span (click)="setFilter('ACTIVE')" [class.filter-active]="currentFilter=='ACTIVE'"
-                                    title="Click to filter by type: Active"
-                                    area-describedby="Click to filter by type: Active"
+                                    <span (click)="setFilter('COMPLETE')" [class.filter-active]="currentFilter=='COMPLETE'"
+                                    title="Click to filter by type: Complete"
+                                    area-describedby="Click to filter by type: Complete"
                                     class="shadow-sm fw-medium mr-025 border rounded-5 bg-white"
-                                    role="button">Active</span>
-                                <span (click)="setFilter('DRAFT')" [class.filter-active]="currentFilter=='DRAFT'"
-                                    title="Click to filter by type: Draft"
-                                    area-describedby="Click to filter by type: Draft"
+                                    role="button">Complete</span>
+                                    <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="currentFilter=='INCOMPLETE'"
+                                    title="Click to filter by type: Incomplete"
+                                    area-describedby="Click to filter by type: Incomplete"
                                     class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white"
                                     role="button">Incomplete</span>
                                 <span (click)="setFilter('INACTIVE')" [class.filter-active]="currentFilter=='INACTIVE'"
@@ -125,7 +128,7 @@
                                                 <span class="shadow-sm align-items-center d-flex" tabindex="0"
                                                     [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
                                                     'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
-                                                    [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isRelationshipActive)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isRelationshipActive)}}</span>
+                                                    [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">{{getDescriptionForStatus(item.personEntityVersionStatus, item.isFormCompleted)}}</span>
                                                 <p class="entity-title mt-3 clickable-content">
                                                     <strong class="fs-14" tabindex="0"
                                                         (click)="viewSlider(item.personEntityId)"

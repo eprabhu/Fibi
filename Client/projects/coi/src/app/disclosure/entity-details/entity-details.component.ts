@@ -56,6 +56,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         const REQ_BODY = {
             'personEntityId': this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId
         };
+        return new Promise<boolean>((resolve) => {
             this.$subscriptions.push(this.entityDetailService.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
                 if (res.length) {
                     this.entityDetailService.definedRelationships = res || [];
@@ -63,9 +64,12 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 } else {
                     this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
                 }
+                resolve(true);
             }, error => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                resolve(false);
             }));
+        });
     }
 
     getQueryParams() {
@@ -280,6 +284,11 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.availableRelationships = [];
         this.entityDetailService.relationshipCompletedObject = {};
         this.entityDetailService.currentRelationshipQuestionnaire = {};
+        this.entityDetailService.isHoverEntityCard = false;
+        this.entityDetailService.canMangeSfi = false;
+        this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+        this.entityDetailService.currentVersionDetails = {};
+        this.entityDetailService.groupedRelations = {};
     }
 
 }

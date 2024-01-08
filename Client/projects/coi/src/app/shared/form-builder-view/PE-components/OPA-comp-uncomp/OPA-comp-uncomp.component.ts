@@ -2,12 +2,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilderService } from '../../form-builder.service';
 import { getEndPointForEntity } from '../../search-configurations';
-import { CompUnComp, CompUnCompPE, EntityListRO, EntitySaveRO, RelationShipSaveRO } from './interface';
+import { CompUnComp, CompUnCompPE, EntityDetails, EntitySaveRO, RelationShipSaveRO } from './interface';
 import { OPACompUncompService } from './OPA-comp-uncomp.service';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { Subject } from 'rxjs';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
+import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 export const leftSlideInOut = trigger('leftSlideInOut', [
   transition(':enter', [
@@ -52,6 +53,7 @@ export class OPACompUncompComponent implements OnInit {
     @Input() externalEvents: Subject<any> = new Subject<any>();
     @Output() childEvents: EventEmitter<any> = new EventEmitter<any>();
     @Input() isFormEditable = true;
+    @Input() sectionHeading = '';
     id: number;
     entitySearchOptions: any = {};
     entityDetails: any = {};
@@ -62,15 +64,14 @@ export class OPACompUncompComponent implements OnInit {
     isDuplicate = false;
     summerTotal = 0;
     academicTotal = 0;
-    myEntities = [];
-    filteredEntities = [];
+    myEntities: EntityDetails[] = [];
+    filteredEntities: EntityDetails[] = [];
     currentTab: 'MY_ENTITIES'| 'ADD_ENTITY' = 'MY_ENTITIES';
-    currentFilter: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE' = 'ALL';
+    currentFilter: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
     relationshipTypeCache = {};
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
-
 
     ngOnInit() {
         this.generateId();
@@ -105,6 +106,9 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     async addRowItem() {
+        if (this.isDuplicate) {
+            return null;
+        }
         const RO: RelationShipSaveRO | EntitySaveRO = this.setEntityROForSave(this.entityDetails);
         try {
             const response = await this._api.saveEntityOrRelation(RO);
@@ -120,7 +124,7 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     editEntityItem(compUncomp:  CompUnComp , index): void {
-        this.compUnCompData = compUncomp;
+        this.compUnCompData = deepCloneObject(compUncomp);
         this.editIndex = index;
         this.entityDetails = compUncomp.entityInfo;
         this.currentTab = 'ADD_ENTITY';
@@ -175,7 +179,7 @@ export class OPACompUncompComponent implements OnInit {
         this.compUnCompData.entityInfo.entityType = this.entityDetails.entityType;
         this.compUnCompData.entityInfo.relationship = this.entityDetails.validPersonEntityRelType;
         this.compUnCompData.entityInfo.entityRiskCategory = this.entityDetails.entityRiskCategory;
-        this.compUnCompData.entityInfo.isRelationshipActive = this.entityDetails.isRelationshipActive ? 'Y' : 'N';
+        this.compUnCompData.entityInfo.isFormCompleted = this.entityDetails.isFormCompleted ? 'Y' : 'N';
         this.compUnCompData.entityInfo.sfiVersionStatus = this.entityDetails.personEntityVersionStatus;
         this.compUnCompData.entityInfo.involvementStartDate = parseDateWithoutTimestamp(new Date());
 
@@ -209,38 +213,19 @@ export class OPACompUncompComponent implements OnInit {
         this.editIndex = -1;
         this.deleteIndex = -1;
         this.currentTab = 'MY_ENTITIES';
+        this.isDuplicate = false;
     }
 
     getClassForStatus(versionStatus, isFormCompleted) {
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
-
-        // if (typeof (isRelationshipActive) === 'boolean') {
-        //     isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        // }
-        // return versionStatus === 'PENDING' ? 't-draft-ribbon' :
-        //           versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 't-active-ribbon' :
-        //           versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 't-inactive-ribbon' : '';
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';         
     }
 
     getClassForStatusInModal(versionStatus, isFormCompleted) {
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
-
-        // if (typeof (isRelationshipActive) === 'boolean') {
-        //     isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        // }
-        // return versionStatus === 'PENDING' ? 'draft-ribbon' :
-        //           versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
-        //           versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
     }
 
     getDescriptionForStatus(versionStatus, isFormCompleted) { 
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? isFormCompleted == 'Y' ? 'Complete' : 'Incomplete' : 'Inactive';
-        // if (typeof (isRelationshipActive) === 'boolean') {
-        //  isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        // }
-        // return versionStatus === 'PENDING' ? 'Incomplete' :
-        //           versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
-        //           versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'Inactive' : '';
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
 
     checkDuplicate(personEntityId) {
@@ -278,16 +263,16 @@ export class OPACompUncompComponent implements OnInit {
         this.addRowItem();
     }
 
-    setFilter(filterType: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE') {
+    setFilter(filterType: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE') {
         this.currentFilter = filterType;
         switch (this.currentFilter) {
             case 'ALL' : this.filteredEntities = this.myEntities; break;
-            case 'ACTIVE' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && E.isRelationshipActive); break;
+            case 'COMPLETE' : this.filteredEntities =
+                this.myEntities.filter(E => (E.personEntityVersionStatus === 'ACTIVE' || E.personEntityVersionStatus === 'ARCHIVE') && E.isFormCompleted); break;
             case 'INACTIVE' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && !E.isRelationshipActive); break;
-            case 'DRAFT' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'PENDING'); break;
+                this.myEntities.filter(E => E.personEntityVersionStatus === 'INACTIVE'); break;
+            case 'INCOMPLETE' : this.filteredEntities =
+                this.myEntities.filter(E => (E.personEntityVersionStatus === 'ACTIVE' || E.personEntityVersionStatus === 'ARCHIVE') && !E.isFormCompleted); break;
         }
     }
 

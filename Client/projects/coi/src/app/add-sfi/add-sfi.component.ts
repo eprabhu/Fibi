@@ -400,7 +400,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     editSfiDetails(personEntityId) {
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit', personEntityNumber: this.existingEntityDetails.entityNumber } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'E', personEntityNumber: this.existingEntityDetails.entityNumber } });
       }
 
     viewEntityDetails(event) {

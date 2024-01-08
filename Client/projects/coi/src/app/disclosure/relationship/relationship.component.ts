@@ -84,8 +84,7 @@ export class RelationshipComponent implements OnInit {
     this.getDataFromStore();
     this.loadProjectRelations(true);
     this.getDependencyDetails();
-    // this.getSfiDetails();
-      }
+  }
 
 getDisclosureCount(typeCode, disclosureStatus) {
     if (disclosureStatus) {
@@ -204,14 +203,6 @@ getDisclosureCount(typeCode, disclosureStatus) {
       // this._router.navigate([test2,{ queryParams: { awardId:  moduleId}}]);
     }
   }
-
-  getSfiDetails() {
-    this.$subscriptions.push(this._sfiService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
-        if (data) {
-            this.count = data.count;
-        }
-    }));
-}
 
 getRequestObject() {
   const REQ_OBJ = new RO();

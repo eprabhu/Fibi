@@ -80,7 +80,7 @@ public class OPADaoImpl implements OPADao {
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ApplicationException(e.getMessage(),e, Constants.DB_PROC_ERROR);
         }
         return false;
     }

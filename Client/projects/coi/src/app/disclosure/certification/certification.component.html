@@ -54,7 +54,8 @@
                                     <span class = "d-flex align-items-center">
                                         <img *ngIf="projectList[0]?.ModuleCode==1 && error.validationType == 'VE'" class="proposal-icon mb-2" src="{{deployMap}}assets/images/error-proposal.png">
                                         <img *ngIf="projectList[0]?.ModuleCode==1 && error.validationType == 'VW'" class="proposal-icon mb-2" src="{{deployMap}}assets/images/warning-proposal.png">
-                                        <img *ngIf="projectList[0]?.ModuleCode==3" class="award-icon mb-1" src="{{deployMap}}assets/images/error-award.png">
+                                        <img *ngIf="projectList[0]?.ModuleCode==3 && error.validationType == 'VE'" class="award-icon mb-1" src="{{deployMap}}assets/images/error-award.png">
+                                        <img *ngIf="projectList[0]?.ModuleCode==3 && error.validationType == 'VW'" class="award-icon mb-1" src="{{deployMap}}assets/images/warning-award.png">
                                         <strong>{{projectList[0].Title}}</strong>
                                     </span>
                                         <div *ngFor="let sfiList of projectList;let SFIIndex = index" class="mt-3 ps-3">
