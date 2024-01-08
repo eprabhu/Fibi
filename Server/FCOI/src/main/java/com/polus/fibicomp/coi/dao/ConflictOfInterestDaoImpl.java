@@ -3373,11 +3373,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		hqlQuery.append("select (CASE WHEN count(PERSON_ENTITY_ID) > 0 THEN true ELSE false END) from (SELECT pe.PERSON_ENTITY_ID FROM ");
 		hqlQuery.append("COI_DISCL_ENT_PROJ_DETAILS pe INNER JOIN COI_DISCLOSURE cd ON cd.DISCLOSURE_ID = pe.DISCLOSURE_ID");
 		hqlQuery.append(" WHERE pe.PERSON_ENTITY_ID = :personEntityId AND cd.REVIEW_STATUS_CODE NOT IN :reviewStatusCodes ");
-		hqlQuery.append("UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t WHERE t.PERSON_ENTITY_ID = :personEntityId ) T1");
+		hqlQuery.append("UNION SELECT t2.PERSON_ENTITY_ID FROM opa_discl_person_entity t2 INNER JOIN OPA_DISCLOSURE t3 ON  t3.OPA_DISCLOSURE_ID = t2.OPA_DISCLOSURE_ID ");
+		hqlQuery.append("WHERE t3.REVIEW_STATUS_CODE NOT IN :opaReviewStatusCodes AND t2.PERSON_ENTITY_ID = :personEntityId " );
+		hqlQuery.append("UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t WHERE t.REVIEW_STATUS_CODE NOT IN :reviewStatusCodes AND t.PERSON_ENTITY_ID = :personEntityId ) T1");
 		org.hibernate.query.Query<BigInteger> value = session.createSQLQuery(hqlQuery.toString());
 		value.setParameter("personEntityId", personEntityId);
 		value.setParameter("reviewStatusCodes", Arrays.asList(Constants.COI_DISCLOSURE_REVIEW_STATUS_PENDING,
 				Constants.COI_DISCLOSURE_STATUS_RETURN, Constants.COI_DISCLOSURE_STATUS_WITHDRAW));
+		value.setParameter("opaReviewStatusCodes", Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN,
+				Constants.OPA_DISPOSITION_STATUS_PENDING, Constants.OPA_DISCLOSURE_STATUS_WITHDRAW));
 		if (value.getSingleResult().intValue() > 0) {
 			return true;
 		} else {
