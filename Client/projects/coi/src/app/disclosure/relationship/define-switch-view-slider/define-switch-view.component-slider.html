@@ -6,8 +6,13 @@
                 <div class="row mx-0 w-100">
                     <div class="col-xxl col-12 border-right py-3">
                         <div class="col-12 d-flex">
-                            <span class="active-ribbon shadow-sm align-items-center d-flex" tabindex='0'
-                                  aria-label="proposal">Active</span>
+                            <span class="shadow-sm align-items-center d-flex"
+                                [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE' 
+                                                || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                                                sfi?.personEntityRelationshipDto?.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'" tabindex='0'
+                                aria-label="proposal">{{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
+                                || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                                sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
                             <p class="entity-title">
                                 <strong title="Click to view project details" tabindex="0" class="fs-16"
                                         [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName?.length >
