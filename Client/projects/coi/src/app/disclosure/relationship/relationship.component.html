@@ -1,3 +1,14 @@
+<div class="row fs-14 m-0 py-2 switch-view-card">
+    <div class="col align-self-center">
+        <ng-container *ngIf="!switchRelationView">For defining SFI against project use 'SFI - Project Relationship'</ng-container>
+        <ng-container *ngIf="switchRelationView">For defining project against SFI use 'Project - SFI Relationship'</ng-container>.
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary fs-14" (click)="switchRelationViewMode(!switchRelationView)">{{switchRelationView?
+            'Project - SFI Relationship':'SFI - Project Relationship'}}</button>
+    </div>
+</div>
+
 <div class="row align-items-end">
     <div class="col">
         <div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
@@ -49,16 +60,10 @@
             </div>
         </div>
     </div>
-    <div class="col-auto">
-        <button class="align-items-center btn btn-tertiary d-flex mt-0" (click)="switchRelationViewMode(!switchRelationView)">
-            <mat-icon>{{switchRelationView ? 'switch_left' : 'switch_right'}}</mat-icon>
-            Switch View
-        </button>
-    </div>
 </div>
 
 
-  <div class="form-control col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1">
+  <div class="form-control col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1 && !switchRelationView">
     <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
     <input type="text" placeholder="Search by Project Id, Project Name, PI, Project Status, Sponsor, Prime Sponsor  "
     class="searchField  mt-2 ms-2 pb-2" [(ngModel)]="searchText">
