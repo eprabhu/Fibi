@@ -1,9 +1,8 @@
 package com.polus.fibicomp.opa.dto;
 
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
-import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import com.polus.fibicomp.opa.pojo.OPAReviewLocationType;
-import com.polus.fibicomp.opa.pojo.OPAReviewStatusType;
+import com.polus.fibicomp.opa.pojo.OPAReviewReviewerStatusType;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -21,7 +20,7 @@ public class OPAReviewDto {
 	private Integer opaDisclosureId;
 	private Integer adminGroupId;
 	private String reviewStatusTypeCode;
-	private OPAReviewStatusType reviewStatusType;
+	private OPAReviewReviewerStatusType reviewStatusType;
 	private String locationTypeCode;
 	private OPAReviewLocationType reviewLocationType;
 	private String description ;

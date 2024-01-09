@@ -42,8 +42,9 @@ public class OPAController {
 		logger.info("Request for createOPADisclosure");
 		if(Boolean.TRUE.equals(opaService.canCreateOpaDisclosure(dto.getPersonId()))) {
 			return opaService.createOpaDisclosure(dto.getPersonId(), dto.getHomeUnit());
+		} else {
+			return new ResponseEntity<>("Person has no right/entry to create OPA", HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	@PatchMapping("/submit")

@@ -36,5 +36,8 @@ public class OPAReviewReviewerStatusType implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
+
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
 	
 }

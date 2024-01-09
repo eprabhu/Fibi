@@ -29,6 +29,9 @@ public class CoiReviewerStatusType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
+
 	public String getReviewStatusCode() {
 		return reviewStatusCode;
 	}
@@ -68,5 +71,13 @@ public class CoiReviewerStatusType implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	
+
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 }
