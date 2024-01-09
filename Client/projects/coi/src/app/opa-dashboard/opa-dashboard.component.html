@@ -26,7 +26,7 @@
                         [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
                         title="Click to view My Reviews"
                         area-describedby="Click to view the list of all the OPA disclosures under My Reviews tab">My Reviews
-                    </li>                    
+                    </li>
                     <li class="separator"></li>
                     <li tabindex="0" aria-label="All Reviews" role="tab" (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
                         (keyup.space)="changeTab('ALL_REVIEWS')" class="p-3 position-relative text-center"
@@ -69,9 +69,9 @@
                         <label class="d-block" for="adv-disclosure-status">
                             Review Status
                         </label>
-                        <app-look-up (selectedResult)="onLookupSelect($event, 'opaDisclosureStatusCodes')"
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'reviewStatusCodes')"
                             [options]="opaDisclosureStatusOptions"
-                            [selectedLookUpList]="lookupValues['opaDisclosureStatusCodes']"
+                            [selectedLookUpList]="lookupValues['reviewStatusCodes']"
                             [uniqueId]="'adv-disclosure-status'">
                         </app-look-up>
                     </div>
@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <!-- sorting for all disclosures --> 
+        <!-- sorting for all disclosures -->
         <div class="sort-div border mt-2 pb-0" *ngIf="isShowOPAList && opaList.length">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
             <button tabindex="0" *ngFor="let sortSection of sortSectionsList; let index = index"
@@ -194,7 +194,7 @@
                                                 <span>OPA</span></span>
                                             <h4 class="mb-0 mt-2 d-flex label-text align-items-baseline person">
                                                 <i class="fa fa-user mt-65" aria-hidden="true"></i>
-                                                <strong class="me-2 ml-2 text-nowrap mt-2">{{coi?.personName}} | 
+                                                <strong class="me-2 ml-2 text-nowrap mt-2">{{coi?.personName}} |
                                                 <label *ngIf="coi?.isFaculty != null">
                                                 {{coi?.isFaculty ? 'Faculty' : 'Staff'}} |
                                                 </label>
@@ -257,15 +257,15 @@
                                     </div>
                                     <!-- Review Status -->
                                     <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-5 order-xl-3 order-lg-3 order-md-3 mt-3" tabindex="0"
-                                        [attr.aria-label]="'Review Status ' + coi?.disclosureStatus">
+                                        [attr.aria-label]="'Review Status ' + coi?.reviewStatus">
                                         <label for="disp-status" class="label-text d-lg-inline-block d-block pr-25">Review Status <span>:</span></label>
-                                        <app-no-data-label [valueToShow]="coi?.disclosureStatus">
+                                        <app-no-data-label [valueToShow]="coi?.reviewStatus">
                                             <span
-                                                class="ms-3 {{commonService.getReviewStatusBadge(coi?.opaDisclosureStatusCode)}} dashboard-card-margin"
-                                                [class.text-dark]="commonService.getReviewStatusBadge(coi?.opaDisclosureStatusCode) === 'warning'"
+                                                class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}} dashboard-card-margin"
+                                                [class.text-dark]="commonService.getReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
                                                 id="disp-status"></span>
                                             <span class="badgeFont">
-                                                {{coi?.disclosureStatus}}
+                                                {{coi?.reviewStatus}}
                                             </span>
                                         </app-no-data-label>
                                     </div>

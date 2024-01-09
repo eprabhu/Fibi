@@ -32,7 +32,7 @@ public class OPADashboardDto {
     private BigDecimal summerCompMonths;
     private Boolean receivedSummerComp;
     private String dispositionStatusCode;
-    private String opaDisclosureStatusCode;
+    private String reviewStatusCode;
     private Timestamp submissionTimestamp;
     private String certifiedBy;
     private String certificationText;
@@ -48,6 +48,6 @@ public class OPADashboardDto {
     private Timestamp updateTimeStamp;
     private String updateUserFullName;
     private String dispositionStatus;
-    private String disclosureStatus;
+    private String reviewStatus;
     private List<List<String>> reviewers;
 }
