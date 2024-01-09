@@ -8,7 +8,7 @@ import {ElasticConfigService} from '../../../../../../fibi/src/app/common/servic
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../../../../fibi/src/app/app-constants';
-import {DATE_PLACEHOLDER} from '../../../../../src/app/app-constants';
+import {DATE_PLACEHOLDER} from '../../../app-constants';
 import {
     compareDates,
     getDateObjectFromTimeStamp,
@@ -18,7 +18,7 @@ import {
 import {PersonProjectOrEntity, coiReviewComment} from '../../../shared-components/shared-interface';
 import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
-import {OPA, OpaDisclosure} from "../../opa-interface";
+import {OPA, OpaDisclosure} from '../../opa-interface';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -50,7 +50,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     projectDetail: any = {};
     isMangeReviewAction = false;
     disReviewLocation = 'OPA_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
-    disReviewStatus = 'OPA_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
+    disReviewStatus = 'OPA_REVIEW_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
     locationType: any = [];
     reviewStatusType: any = [];
     reviewStartDate: any;
@@ -195,8 +195,8 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private setReviewAndOPAData(review: any) {
         const {opaDisclosure, ...reviewer} = review;
-        this.opaDisclosure.opaDisclosureStatusType = opaDisclosure.opaDisclosureStatusType;
-        this.opaDisclosure.opaDisclosureStatusCode = opaDisclosure.opaDisclosureStatusCode;
+        this.opaDisclosure.reviewStatusType  = opaDisclosure.reviewStatusType;
+        this.opaDisclosure.reviewStatusCode  = opaDisclosure.reviewStatusCode;
         return reviewer;
     }
 
@@ -228,7 +228,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
             } else {
                 this.clearActionData();
-                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);            
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
             }
         }));
     }

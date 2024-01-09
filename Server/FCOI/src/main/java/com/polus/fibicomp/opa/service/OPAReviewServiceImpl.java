@@ -166,7 +166,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
         if (reviewDao.numberOfReviewOfStatuesIn(opaReview.getOpaDisclosureId(), Arrays.asList(Constants.OPA_REVIEW_ASSIGNED,
                 Constants.OPA_REVIEW_IN_PROGRESS)) == 0) {
             opaDao.updateOPADisclosureStatuses(opaReview.getOpaDisclosureId(), timestamp, Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED, null);
-            opaReview.getOpaDisclosure().setOpaDisclosureStatusType(opaDao.getOPADisclosureStatusType(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
+            opaReview.getOpaDisclosure().setReviewStatusType(opaDao.getOPADisclosureStatusType(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
         }
         String actionTypeCode;
         String reviewerName = "";
@@ -237,7 +237,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
         if (reviewDao.numberOfReviewOfStatuesIn(opaReview.getOpaDisclosureId(), Arrays.asList(Constants.OPA_REVIEW_ASSIGNED,
                 Constants.OPA_REVIEW_IN_PROGRESS)) == 0) {
             opaDao.updateOPADisclosureStatuses(opaReview.getOpaDisclosureId(), commonDao.getCurrentTimestamp() , Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED, null);
-            reviewDto.getOpaDisclosure().setOpaDisclosureStatusType(opaDao.getOPADisclosureStatusType(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
+            reviewDto.getOpaDisclosure().setReviewStatusType(opaDao.getOPADisclosureStatusType(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
         }
         String actionTypeCode;
         String reviewerName = "";

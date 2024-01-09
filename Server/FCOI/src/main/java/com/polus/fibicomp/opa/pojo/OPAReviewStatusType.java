@@ -1,21 +1,27 @@
 package com.polus.fibicomp.opa.pojo;
 
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.polus.fibicomp.util.JpaCharBooleanConversion;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "OPA_REVIEW_STATUS_TYPE")
-@Setter
-@Getter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OPAReviewStatusType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -36,5 +42,8 @@ public class OPAReviewStatusType implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
+
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
 	
 }
