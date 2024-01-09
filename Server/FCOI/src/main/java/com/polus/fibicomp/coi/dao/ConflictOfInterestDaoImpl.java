@@ -282,7 +282,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<CoiConflictStatusType> getCoiConflictStatusTypes() {
-		return hibernateTemplate.loadAll(CoiConflictStatusType.class);
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery("SELECT t FROM CoiConflictStatusType t ORDER BY t.sortOrder ASC");
+		return query.getResultList();
 	}
 
 	@Override
@@ -3033,7 +3035,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<EntityRiskCategory> fetchEntityRiskCategory() {
-		return hibernateTemplate.loadAll(EntityRiskCategory.class);
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery("SELECT t FROM EntityRiskCategory t ORDER BY t.sortOrder ASC");
+		return query.getResultList();
 	}
 
 	@Override
@@ -3751,7 +3755,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType() {
-		return hibernateTemplate.loadAll(CoiTravelDisclosureStatusType.class);
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery("SELECT t FROM CoiTravelDisclosureStatusType t ORDER BY t.sortOrder ASC");
+		return query.getResultList();
 	}
 
 	@Override
@@ -3832,7 +3838,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<CoiRiskCategory> fetchDisclosureRiskCategory() {
-		return hibernateTemplate.loadAll(CoiRiskCategory.class);
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery("SELECT t FROM CoiRiskCategory t ORDER BY t.sortOrder ASC");
+		return query.getResultList();
 	}
 
 	public Integer getDisclosureHistoryCount(CoiDashboardVO dashboardVO) {

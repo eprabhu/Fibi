@@ -103,13 +103,13 @@ public class OPADisclosure {
 	@Column(name = "CONFLICT_DESCRIPTION")
 	private String conflictDescription;
 
-	@Column(name = "OPA_DISCLOSURE_STATUS_CODE")
-	private String opaDisclosureStatusCode;
+	@Column(name = "REVIEW_STATUS_CODE")
+	private String reviewStatusCode;
 
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "OPA_DISCLOSURE_FK2"), name = "OPA_DISCLOSURE_STATUS_CODE",
-			referencedColumnName = "OPA_DISCLOSURE_STATUS_CODE", insertable = false, updatable = false)
-	private OPADisclosureStatusType opaDisclosureStatusType;
+	@JoinColumn(foreignKey = @ForeignKey(name = "OPA_DISCLOSURE_FK2"), name = "REVIEW_STATUS_CODE",
+			referencedColumnName = "REVIEW_STATUS_CODE", insertable = false, updatable = false)
+	private OPAReviewStatusType reviewStatusType;
 
 	@Column(name = "DISPOSITION_STATUS_CODE")
 	private String dispositionStatusCode;
