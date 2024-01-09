@@ -56,9 +56,7 @@ export class DataStoreService {
 
     getEditModeForOPA(): boolean {
         if (this.storeData.opaDisclosure.opaDisclosureId) {
-            if (this.storeData.opaDisclosure.opaDisclosureStatusType) {
-                return ['1', '5', '6'].includes(this.storeData.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode);
-            }
+          return ['1', '5', '6'].includes(this.storeData.opaDisclosure.reviewStatusType.reviewStatusCode);
         } else {
             return false;
         }
