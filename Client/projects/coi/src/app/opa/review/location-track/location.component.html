@@ -7,7 +7,7 @@
                             <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
                             <div
                             *ngIf="isCOIAdministrator &&
-                            ['3', '8', '7'].includes(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode)"
                             class="col-auto me-2">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                                     title="Add Reviewers" data-bs-target="#add-coi-reviewer-modal">

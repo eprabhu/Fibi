@@ -362,11 +362,11 @@
                                         <label class="label-text me-2 p-26">Review Status <span>:</span></label>
                                         <span class="break-point-1560">
                                             <app-no-data-label
-                                                [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
+                                                [valueToShow]="opaDisclosure?.reviewStatusType?.description">
                                                 <span
-                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
                                                 <span
-                                                    class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
+                                                    class="badgeFont">{{opaDisclosure?.reviewStatusType?.description}}
                                                 </span>
                                             </app-no-data-label>
                                         </span>
@@ -457,11 +457,11 @@
                                         <label class="label-text me-2 p-26">Review Status <span>:</span></label>
                                         <span class="break-point-1560">
                                             <app-no-data-label
-                                                [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
+                                                [valueToShow]="opaDisclosure?.reviewStatusType?.description">
                                                 <span
-                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
                                                 <span
-                                                    class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
+                                                    class="badgeFont">{{opaDisclosure?.reviewStatusType?.description}}
                                                 </span>
                                             </app-no-data-label>
                                         </span>
@@ -1002,15 +1002,15 @@
                                     </span>
                                 </div>
                                 <!-- OPA Card Review Status -->
-                                <div class="mb-3" tabindex="0" [attr.aria-label]="'Review Status' + (disclosure?.disclosureStatus)">
+                                <div class="mb-3" tabindex="0" [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
                                     <label for="review-status" class="label-text mr-21">Review Status <span>:</span></label>
                                     <span class="ms-3 break-point-1200">
-                                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
+                                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewStatus">
                                             <span
-                                                [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
-                                                class="{{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                                                [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
+                                                class="{{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
                                             <span class="badgeFont">
-                                                {{disclosure?.disclosureStatus}}
+                                                {{disclosure?.reviewStatus}}
                                             </span>
                                         </app-no-data-label>
                                     </span>
@@ -1027,7 +1027,7 @@
                             <div class="link-heading fs-14"  *ngIf="!disclosure?.opaDisclosureId"
                                 [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                                 [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
-                                area-describedby="Click to view SFI list"> 
+                                area-describedby="Click to view SFI list">
                                 <strong class="fs-18 me-2 project-sfi-count"
                                     [class.cursor-pointer]="disclosure?.noOfSfi"
                                     [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
