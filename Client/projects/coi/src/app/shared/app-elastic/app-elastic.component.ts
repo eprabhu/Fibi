@@ -67,7 +67,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
 				this.isResultSelected = false;
 				const temporaryText = this.searchText.trim();
 				this.queryBuilder(temporaryText);
-				const url = this.options.url + this.options.index + '/' + this.options.type + '/' + '_search?size=' + (this.options.size || 20);
+				const url = this.options.url + this.options.index + '/' + '_search?size=' + (this.options.size || 20);
 				this._appElasticService.search(url, this.query).then((rst: any) => {
 					this._ref.markForCheck();
 					this.results = [];
