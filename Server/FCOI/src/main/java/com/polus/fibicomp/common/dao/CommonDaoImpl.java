@@ -459,6 +459,10 @@ public class CommonDaoImpl implements CommonDao {
 				 return lookUpView;
 			} else if (lookUpTableName.equals("AGREEMENT_ADMIN_GROUPS")) {
 				sql = "SELECT  " + lookUpTableColumnName +"," +"ADMIN_GROUP_NAME" +" FROM  "+ lookUpTableName;
+			} else if (Arrays.asList("COI_RISK_CATEGORY","ENTITY_RISK_CATEGORY", "COI_REVIEWER_STATUS_TYPE","COI_REVIEW_STATUS_TYPE", "COI_DISPOSITION_STATUS_TYPE",
+					"COI_CONFLICT_STATUS_TYPE", "COI_TRAVEL_DISCLOSURE_STATUS", "OPA_DISPOSITION_STATUS_TYPE", "OPA_REVIEW_REVIEWER_STATUS_TYPE",
+					"OPA_REVIEW_STATUS_TYPE").contains(lookUpTableName)) {
+				sql = "SELECT  " + lookUpTableColumnName +"," +"DESCRIPTION" +" FROM  "+ lookUpTableName + " ORDER BY SORT_ORDER ASC";
 			} else {
 				sql = "SELECT  " + lookUpTableColumnName +"," +"DESCRIPTION" +" FROM  "+ lookUpTableName + " ORDER BY DESCRIPTION";
 			}
