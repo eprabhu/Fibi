@@ -59,6 +59,9 @@ import { PELayerComponent } from './form-builder-view/PE-layer/PE-layer.componen
 import { OPACompUncompComponent } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.component';
 import { OPAOutsideFinancialRelationComponent } from './form-builder-view/PE-components/OPA-outside-financial-relation/OPA-outside-financial-relation.component';
 import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-components/OPA-institute-resources/OPA-institute-resources.component';
+import { OPAStudentSubordinateEmployeeComponent } from './form-builder-view/PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
+import { OPACompUncompService } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.service';
+import { FormBuilderService } from './form-builder-view/form-builder.service';
 
 @NgModule({
     imports: [
@@ -85,7 +88,7 @@ import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-compone
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
-        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent ],
+        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent ],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -136,7 +139,8 @@ import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-compone
         PELayerComponent,
         OPACompUncompComponent,
         OPAOutsideFinancialRelationComponent,
-        OPAInstituteResourceUseComponent
+        OPAInstituteResourceUseComponent,
+        OPAStudentSubordinateEmployeeComponent
     ],
 
     providers: [
@@ -156,7 +160,7 @@ import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-compone
         SafeHtmlPipe,
         DecimalPipe,
         CustomNumberPipe,
-        CustomTagRemoverPipe, SfiService,
+        CustomTagRemoverPipe, SfiService, OPACompUncompService, FormBuilderService
     ],
 
 })

@@ -16,3 +16,13 @@ export function getEndPointForEntity(baseUrl: string): Endpoint {
     return endPointOptions;
 }
 
+export function getEndPointOptionsForCountry(baseUrl: string): Endpoint {
+    const endPointOptions = new Endpoint();
+    endPointOptions.contextField = 'countryName';
+    endPointOptions.formatString = 'countryName';
+    endPointOptions.path = baseUrl + '/' + 'findCountry';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
+
