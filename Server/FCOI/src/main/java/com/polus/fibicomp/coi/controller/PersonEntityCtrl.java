@@ -1,15 +1,19 @@
 package com.polus.fibicomp.coi.controller;
 
+import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.PersonEntityService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.security.AuthenticatedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +39,9 @@ public class PersonEntityCtrl {
     @Autowired
     private PersonEntityService personEntityService;
 
+    @Autowired
+    private UserDocumentAuthorization documentAuthorization;
+
     @PostMapping
     public ResponseEntity<Object> createSFI(@RequestBody PersonEntity personEntity) {
         logger.info("Requesting for createSFI");
@@ -50,6 +57,10 @@ public class PersonEntityCtrl {
     @GetMapping("/{personEntityId}")
     public ResponseEntity<Object> getPersonEntityDetails(@PathVariable("personEntityId") Integer personEntityId) {
         logger.info("Requesting for getPersonEntityDetails");
+        if (!documentAuthorization.isAuthorized(Constants.COI_MODULE_CODE, String.valueOf(personEntityId), AuthenticatedUser.getLoginPersonId(),
+                Constants.COI_SFI_SUBMODULE_CODE, null)) {
+            return new ResponseEntity<>("Not Authorized to view this Disclosure", HttpStatus.FORBIDDEN);
+        }
         return personEntityService.getPersonEntityDetails(personEntityId);
     }
 

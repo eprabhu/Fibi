@@ -1,7 +1,7 @@
 package com.polus.formbuilder.service;
 
-import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +27,7 @@ import com.polus.formbuilder.entity.FormBuilderHeaderEntity;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionComponentEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionEntity;
+import com.polus.formbuilder.entity.FormBuilderUsageEntity;
 import com.polus.formbuilder.model.ApplicableFormRequest;
 import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
@@ -44,6 +45,7 @@ import com.polus.formbuilder.repository.FormBuilderHeaderEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderProgElementEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderSectionComponentEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderSectionEntityRepository;
+import com.polus.formbuilder.repository.FormBuilderUsageEntityRepository;
 
 @Service
 public class FormBuilderServiceProcessor {
@@ -72,11 +74,29 @@ public class FormBuilderServiceProcessor {
 	@Autowired
 	private FormBuilderServiceProcessorDAO formDAO;
 
+	@Autowired
+	private FormBuilderUsageEntityRepository usageRepository;
+
 	public ApplicableFormResponse PerformGetApplicableForms(ApplicableFormRequest request) {
 
-		List<Integer> applicableFormId = formDAO.getApplicableFormIds(request.getModuleItemCode(),
-				request.getModuleSubItemCode(), request.getDocumentOwnerPersonId());
+//		List<Integer> applicableFormId = formDAO.getApplicableFormIds(request.getModuleItemCode(),
+//				request.getModuleSubItemCode(), request.getDocumentOwnerPersonId());
+//
+//		Integer primaryFormID = getPrimaryFormId(applicableFormId);
+//		
+//		var response = ApplicableFormResponse.builder()
+//										.applicableFormsBuilderIds(applicableFormId)
+//										.formsBuilderId(primaryFormID)
+//										.build();
+//
+//		return response;
+		
+		List<FormBuilderUsageEntity> allApplicableForms = usageRepository.fetchByModuleAndSubModule(request.getModuleItemCode(), request.getModuleSubItemCode());
 
+		List<FormBuilderUsageEntity> filteredApplicableForms = formDAO.evaluateFormRule(allApplicableForms,null, request.getModuleItemCode(), request.getModuleSubItemCode(),request.getDocumentOwnerPersonId(),  null, null);
+
+		List<Integer> applicableFormId = new ArrayList<>();
+		filteredApplicableForms.forEach(form -> applicableFormId.add(form.getFormBuilderId()));
 		Integer primaryFormID = getPrimaryFormId(applicableFormId);
 		
 		var response = ApplicableFormResponse.builder()
