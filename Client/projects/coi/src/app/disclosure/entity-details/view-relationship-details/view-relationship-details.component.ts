@@ -139,7 +139,9 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
                 this.updatedRelationshipStatus = this.relationshipsDetails.versionStatus === 'ACTIVE' ?  'INACTIVE' : 'ACTIVE';
                 resolve(true);
             }, _error => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                if (_error.status != 403) {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                }
                 resolve(false);
 
             }));
