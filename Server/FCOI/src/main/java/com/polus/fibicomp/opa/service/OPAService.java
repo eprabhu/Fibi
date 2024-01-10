@@ -74,4 +74,5 @@ public interface OPAService {
 	 * @return
 	 */
 	ResponseEntity<Object> getOpaPersonType();
+
 }
