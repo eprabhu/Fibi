@@ -1,0 +1,113 @@
+<!--   -->
+<div>
+    <p *ngIf="isFormEditable" class="text-end mb-1">
+        <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
+            [attr.data-bs-target]="'#OPA_STUD_SUBORDINATE'+id" area-describedby="Click here to add" (click)="getMyEntities()">
+            Add Entry
+        </button>
+    </p>
+</div>
+<div *ngIf="componentData.data.length">
+    <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
+        <thead class="text-middle table-background">
+            <tr>
+                <th scope="col" width="20%" rowspan="2"> Name</th>
+                <th scope="col" width="20%" rowspan="2"> Type of Work</th>
+                <th scope="col" width="20%" rowspan="2"> Company</th>
+                <th scope="col" width="20%" rowspan="2"> Relationship with student/subordinate</th>
+                <th scope="col" width="20%" rowspan="2"> # of days</th>
+                <th scope="col" width="20%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of componentData.data; let index=index">
+                <td>{{data?.personName}}</td>
+                <td>{{data?.natureOfWork}}</td>
+                <td>{{data?.entityName}}</td>
+                <td>{{data?.relationWithPerson}}</td>
+                <td>{{data?.numOfDays}}</td>
+                <td class="text-middle" *ngIf="isFormEditable">
+                    <mat-icon class="mr-2 small-icon" title="Edit" data-bs-toggle="modal"
+                        [attr.data-bs-target]="'#OPA_STUD_SUBORDINATE_EDIT'+id">edit</mat-icon>
+                    <mat-icon class="small-icon" (click)="compUnCompData = data; deleteIndex = index"
+                        data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_STUD_SUBORDINATE_DELETE'+id"
+                        title="Delete">delete</mat-icon>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Entry Modal -->
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
+    data-bs-backdrop="static" id="OPA_STUD_SUBORDINATE{{id}}" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{editIndex > -1 ? 'Update Entry' : 'Add Entry'}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label for="stud-sub-name" class="form-label">Person Type </label>
+                            <select class="form-control form-select" id="person-type" name='person-type-select'
+                                [(ngModel)]="studentSubordinateData.opaPersonTypeCode">
+                                <option [value]='null'>--Select Type--</option>
+                                <option *ngFor="let type of opaPersonTypeList" [value]="type?.OPA_PERSON_TYPE_CODE">
+                                    {{type?.DESCRIPTION}}</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="stud-sub-name" class="form-label">Name </label>
+                            <app-elastic (selectedResult)="setPersonData($event)" [clearField]="clearNameField"
+                                [options]="elasticPersonSearchOptions" [placeHolder]="'Search by student/subordinate'">
+                            </app-elastic>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label for="stud-sub-country" class="form-label">Company/Entity</label>
+                            <app-endpoint-search
+                                (onSelect)="onSelectEntity($event)" [clearField]="clearEntityField"
+                                [httpOptions]="entitySearchOptions" [addSearchText]="true"
+                                [placeHolder]="'Type here to search / add an Entity Name'">
+                            </app-endpoint-search>
+                        </div>
+                        <div class="col-6">
+                            <label for="stud-sub-days" class="form-label"># of Days </label>
+                            <input type="text" class="form-control"
+                                [(ngModel)]="studentSubordinateData.numOfDays">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="stud-sub-description" class="form-label">Describe the type of work </label>{{studentSubordinateData.natureOfWork}}
+                            <textarea appAutoGrow class="form-control" rows="1"
+                                [(ngModel)]="studentSubordinateData.natureOfWork" appLengthValidator
+                                [limit]=4000>
+                            </textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="stud-sub-description" class="form-label">Relationship with student/subordinate</label>{{studentSubordinateData.relationWithPerson}}
+                            <textarea appAutoGrow class="form-control" rows="1"
+                                [(ngModel)]="studentSubordinateData.relationWithPerson" appLengthValidator
+                                [limit]=4000>
+                            </textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_add"
+                    (click)="clearData()" type="button">Cancel
+                </button>
+                <button type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure"
+                    area-describedby="Click here to add" (click)="saveOrUpdateEntry()">
+                    {{editIndex > -1 ? 'Update Entry' : 'Add Entry'}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
