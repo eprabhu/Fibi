@@ -34,8 +34,8 @@ public class Authorization implements UserDocumentAuthorization{
 			statement.setInt(2, moduleCode);
 			statement.setString(3, moduleItemKey);
 			statement.setString(4, loggedInPerson);
-			statement.setInt(5, subModuleCode);
-			statement.setString(6, subModuleItemKey);
+			statement.setInt(5, subModuleCode != null ? subModuleCode : 0  );
+			statement.setString(6, subModuleItemKey != null ? subModuleItemKey : "" );
 			statement.execute();
 			int result = statement.getInt(1);
 			if (result == 1) {
