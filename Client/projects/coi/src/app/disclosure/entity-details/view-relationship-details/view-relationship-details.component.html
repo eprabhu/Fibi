@@ -202,7 +202,7 @@
                         class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                         title="Click to Modify SFI" (click)="modifySfi()">
                         <mat-icon class="pencil-sfi">mode</mat-icon>
-                        <span class="btn-sfi-position">Modify SFI</span>
+                        <span class="btn-sfi-position fs-14 fw-medium">Modify SFI</span>
                         </button>
                     <!-- </ng-container> -->
                     <ng-container *ngIf="entityDetailsServices.canMangeSfi && relationshipsDetails?.versionStatus === 'ACTIVE'"
@@ -211,7 +211,7 @@
                         class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                         title="Click to Inactivate Sfi'" (click)="activateInactivateSfi()">
                         <mat-icon class="=icon-schedule-position">schedule</mat-icon>
-                        <span class="btn-inactivate-content">
+                        <span class="btn-inactivate-content fs-14 fw-medium ms-2">
                             Inactivate
                         </span>
                     </button>
@@ -221,7 +221,7 @@
                         class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                         title="Click to activate Sfi" (click)="activateInactivateSfi()">
                         <mat-icon>flash_on</mat-icon>                        
-                        <span [ngClass]="isEditMode ?'btn-activate-edit-content':'btn-activate-content'">
+                        <span [ngClass]="isEditMode ?'btn-activate-edit-content':'btn-activate-content fs-14 fw-medium'">
                             Activate
                         </span>
                     </button>

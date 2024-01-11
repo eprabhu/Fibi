@@ -1,6 +1,6 @@
 .left-div{
     width: 75%;
-    margin-top: 26px;
+    /* margin-top: 26px; */
     display: inline-block;
     transition: width 1.2s ease-in-out;
 }
