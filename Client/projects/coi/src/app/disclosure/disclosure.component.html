@@ -311,7 +311,7 @@
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
-                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 py-3">
+                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 py-2">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10">

@@ -591,14 +591,16 @@ ARG_CURSOR_LOOP : LOOP
                                         END
                                 INTO LS_ARGUMENT_VALUE
                                 FROM DUAL;
-				ELSEIF AV_MODULE_CODE = 24 AND AV_SUBMODULE_CODE = 0 THEN
-                                SELECT CASE WHEN LOWER(LS_ARGUMENT_NAME) = LOWER('OPA_DISCLOSURE_ID') THEN
+                ELSEIF AV_MODULE_CODE = 23 AND AV_SUBMODULE_CODE = 0 THEN
+								 SELECT CASE WHEN LOWER(LS_ARGUMENT_NAME) = LOWER('AV_PERSON_ID') THEN
+										COALESCE(AV_LOGGIN_PERSON_ID,LS_DEFAULT_VALUE)
+										WHEN LOWER(LS_ARGUMENT_NAME) = LOWER('OPA_DISCLOSURE_ID') THEN
                                         COALESCE(AV_MODULE_ITEM_KEY,LS_DEFAULT_VALUE)
                                         WHEN  LOWER(LS_ARGUMENT_NAME) = LOWER('OPA_DISCLOSURE_NUMBER') THEN
                                         COALESCE(LS_OPA_DISCLOSURE_NUMBER,LS_DEFAULT_VALUE)
-                                        END
-                                INTO LS_ARGUMENT_VALUE
-                                FROM DUAL;
+										END
+								 INTO LS_ARGUMENT_VALUE
+								 FROM DUAL;
 				END IF;
 			END IF;
 

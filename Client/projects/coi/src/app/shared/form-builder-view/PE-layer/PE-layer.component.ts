@@ -6,6 +6,7 @@ import { OPAOutsideFinancialRelationComponent } from '../PE-components/OPA-outsi
 import { FormBuilderService } from '../form-builder.service';
 import { Subject } from 'rxjs';
 import { OPAInstituteResourceUseComponent } from '../PE-components/OPA-institute-resources/OPA-institute-resources.component';
+import { OPAStudentSubordinateEmployeeComponent } from '../PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
 
 @Component({
     selector: 'app-PE-layer',
@@ -38,6 +39,7 @@ export class PELayerComponent implements OnInit, OnChanges {
             case 'OPACompUncompComponent': this.loadOPACompUncompComponent(viewContainerRef); break;
             case 'OPAOutsideFinancialRelationComponent': this.loadOPAOutsideFinancialRelationComponent(viewContainerRef); break;
             case 'OPAInstituteResourceUseComponent': this.loadOPAInstituteResourceUseComponent(viewContainerRef); break;
+            case 'OPAStudentSubordinateInvolvementComponent': this.loadOPAStudentSubordinateEmployeeComponent(viewContainerRef); break;
         }
     }
 
@@ -69,6 +71,15 @@ export class PELayerComponent implements OnInit, OnChanges {
         componentRef.instance.externalEvents = this.saveEventForChildComponent;
         componentRef.instance.sectionHeading = this.sectionName;
         componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
+    }
+
+    loadOPAStudentSubordinateEmployeeComponent(viewContainerRef) {
+        const COMPONENT_REF = viewContainerRef.createComponent(OPAStudentSubordinateEmployeeComponent);
+        COMPONENT_REF.instance.componentData = this.component.programmedElement;
+        COMPONENT_REF.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
+        COMPONENT_REF.instance.isFormEditable = this.isFormEditable;
+        COMPONENT_REF.instance.externalEvents = this.saveEventForChildComponent;
+        COMPONENT_REF.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
     }
 
     saveEventsFromChild(data: CustomElementVO | QuestionnaireVO | any) {
