@@ -17,6 +17,10 @@ export class FormBuilderService {
         return this._http.post(this.baseURL + '/formbuilder/getForm', configuration);
     }
 
+    getOpaPersonType(): any {
+        return this._http.get(this.baseURL + '/opa' + '/getOpaPersonType');
+    }
+
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {
         const formData = new FormData();
         formData.append('formBuilderId', data.formBuilderId.toString());

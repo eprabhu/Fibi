@@ -8,7 +8,6 @@ import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 import { Subscription } from 'rxjs';
 import { RO } from '../coi-interface';
-import { listAnimation } from '../../common/utilities/animations';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { CoiService } from '../services/coi.service';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
