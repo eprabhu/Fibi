@@ -135,25 +135,26 @@
             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col-lg col-md-12 col ms-lg-2 ms-md-0 ms-sm-2 text-nowrap mt-md-3 mt-sm mt-lg-0">
             <mat-icon class="more-options-icon">more_vert</mat-icon>
             <span class="ms-2" *ngIf="isCardExpanded">More Actions</span>
-          </button>	
+          </button>
+
           <mat-menu #beforeMenu="matMenu" xPosition="before" tabindex="0" role="button">
-            <button *ngIf="hasManageEntity" (click)="openConfirmationModal()"
-              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5">
+            <button mat-menu-item  id="btn-modify-entity" *ngIf="hasManageEntity" (click)="openConfirmationModal()"
+              class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5 more-action">
               <mat-icon class="me-2 actions-icon">edit</mat-icon>
-              <span class="pt-2">Modify Entity</span>
+              <span class="pt-2 fw-medium fs-14">Modify Entity</span>
             </button>
-            <button (click)="toggleSlider()"
-              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5"
+            <button mat-menu-item id="btn-manage-risk" (click)="toggleSlider()"
+              class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5 more-action"
               id="edit-location-btn">
               <mat-icon class="actions-icon me-2">warning</mat-icon>
-              <span class="pt-2">Manage Risk</span>
+              <span class="fw-medium pt-2 fs-14">Manage Risk</span>
             </button>
           </mat-menu>
 
           <!-- Back -->
           <button title="Click to go back to Entity list" *ngIf="hasManageEntity" tabindex="0" role="button"
               (click)="navigateBack()" id="btn-modify"
-             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 px-xl-0 col-xl col-md-12 col-sm ms-xl-2 ms-md-0 ms-sm-2 text-nowrap mt-sm-0 mt-md-3 mt-xl-0">
+             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 px-xl-0 col-xl col-md-12 col-sm ms-xl-2 ms-md-0 ms-sm-2 text-nowrap mt-sm-0 mt-md-3 mt-xl-0 me-2">
               <mat-icon>reply</mat-icon>
               <span class="ms-2" *ngIf="isCardExpanded">Back</span>
           </button>
@@ -163,7 +164,7 @@
             <ng-container *ngIf="entityDetails.isActive">
               <button title="Click to Inactivate Entity" id="btn-inactivate" tabindex="0" role="button"
                   [ngClass]="isCardExpanded? 'col-md-12 col-sm my-md-3 my-sm-0' : 'col ms-2'"
-                  class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center ms-md-0 ms-sm-2"
+                  class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center ms-md-0 ms-sm-2 me-2"
                   (click)="activateInactivateEntity()">
                   <mat-icon>schedule</mat-icon>
                   <span class="ms-2" *ngIf="isCardExpanded">Inactivate</span>
