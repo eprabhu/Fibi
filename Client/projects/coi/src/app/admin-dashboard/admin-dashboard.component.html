@@ -347,6 +347,11 @@
                     <div class="d-flex align-items-center ms-3">
                         <input type="checkbox" id="select-all" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()">
                         <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer">Select all</label>
+                        <span *ngIf="selectedItemCount()"
+                            class="fs-14 py-2 ms-3 fw-medium"
+                            title="{{selectedItemCount()}}">
+                            {{selectedItemCount()}} Selected
+                        </span>
                     </div>
                     <div>
                         <button class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()" (click)="confirmCompleteReview()">
