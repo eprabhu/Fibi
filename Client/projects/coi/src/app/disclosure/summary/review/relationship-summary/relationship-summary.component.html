@@ -80,7 +80,7 @@
                     <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
 				</div>
 			</div>
-              <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0">
+              <table class="table table-bordered fs-14 fw-medium" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light">
@@ -100,7 +100,7 @@
                       <th style="width: 8%;" class="border-end px-3">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="white-bg" >
+                <tbody class="white-bg">
                   <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
                     <td class="table-data border-end border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">
                         <div class="m-0 mb-2 row py-1">
