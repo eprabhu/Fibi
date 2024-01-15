@@ -96,16 +96,16 @@ export class CountModalComponent implements OnInit {
     modalHeader() {
         if (this.fcoiTypeCode == 1) {
             if (this.moduleCode == 8) {
-                return `SFIs Attached to : FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `SFIs Attached to : FCOI Disclosure By ${this.getFcoiFullName()} [ ${this.getFcoiUnitName()} ]`;
             } else if (this.moduleCode == 1 || this.moduleCode == 3) {
-                return `Projects Related to : FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `Projects Related to : FCOI Disclosure By ${this.getFcoiFullName()} [ ${this.getFcoiUnitName()} ]`;
             }
         } else {
             if (this.fcoiTypeCode == 2 || this.fcoiTypeCode == 3) {
                 if (this.moduleCode == 8) {
-                    return `SFIs Attached to : ${this.getType()} Disclosure - [ ${this.gettitle()} ] By ${this.getFullName()}`;
+                    return `SFIs Attached to : ${this.getType()} Disclosure - [ ${this.getTitle()} ] By ${this.getFullName()}`;
                 } else if (this.moduleCode == 1 || this.moduleCode == 3) {
-                    return `Projects Related to ${this.gettitle()} `;
+                    return `Projects Related to ${this.getTitle()} `;
                 }
             }
         }
@@ -125,7 +125,7 @@ export class CountModalComponent implements OnInit {
     }
 
     // title
-    gettitle(): string {
+    getTitle(): string {
         if (this.disclosures?.fcoiType) {
             if (this.disclosures?.fcoiType === 'Proposal') {
                 return this.reduceTitleLength(this.disclosures?.proposalTitle);
@@ -230,5 +230,28 @@ export class CountModalComponent implements OnInit {
         }
     }
 
+    showFullTitle(): string {
+        if (this.disclosures?.fcoiType) {
+            if (this.disclosures?.fcoiType === 'Proposal') {
+                return this.disclosures?.proposalTitle;
+            } else {
+                return this.disclosures?.awardTitle;
+            }
+        } else if (this.disfullData?.projectDetail?.title) {
+            return this.disfullData?.projectDetail?.title;
+        } else if (this.adminData?.fcoiType) {
+            if (this.adminData?.fcoiType === 'Award') {
+                return this.adminData.awardTitle;
+            } else {
+                return this.adminData.proposalTitle;
+            }
+        } else if (this.reviewerData?.fcoiType) {
+            if (this.reviewerData?.fcoiType === 'Award') {
+                return this.reviewerData.awardTitle;
+            } else {
+                return this.reviewerData?.proposalTitle;
+            }
+        }
+    }
 
 }
