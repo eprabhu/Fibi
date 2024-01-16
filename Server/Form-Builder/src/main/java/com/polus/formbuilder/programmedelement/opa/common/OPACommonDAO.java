@@ -41,7 +41,7 @@ public class OPACommonDAO {
 		query.setParameter(1, opaDisclosureId);
 		query.setParameter(2, updateUser);
 		query.execute();
-
+		Long result = (Long) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
