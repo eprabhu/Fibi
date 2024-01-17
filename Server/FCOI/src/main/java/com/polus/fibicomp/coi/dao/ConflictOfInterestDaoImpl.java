@@ -4213,10 +4213,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<PersonEntityDto> fetchAllPersonEntityVersions(Integer personEntityNumber) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT e.personEntityId, e.versionNumber, e.versionStatus FROM PersonEntity e WHERE e.personEntityNumber = :personEntityNumber AND e.personId = :personId");
+		hqlQuery.append("SELECT e.personEntityId, e.versionNumber, e.versionStatus FROM PersonEntity e WHERE e.personEntityNumber = :personEntityNumber ");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("personEntityNumber", personEntityNumber);
-		query.setParameter("personId", AuthenticatedUser.getLoginPersonId());
 		Iterator resultList = query.getResultList().iterator();
 		List<PersonEntityDto> personEntityDtos = new ArrayList<>();
 		while(resultList.hasNext()) {
