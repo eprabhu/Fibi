@@ -144,7 +144,6 @@ getEntityProjectRelations() {
     }
 
     openReviewerComment(details,section, childSubSection) {
-        console.log(details);
             let coiData = this._dataStore.getData();
             const disclosureDetails:coiReviewComment = {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
