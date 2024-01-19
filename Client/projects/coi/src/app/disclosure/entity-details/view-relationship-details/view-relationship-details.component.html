@@ -10,23 +10,15 @@
                 [ngClass]="{'text-primary':entityDetailsServices.isHoverEntityCard}"
                 (mouseover)="entityDetailsServices.isHoverEntityCard = true">
                 <span>{{entityDetails?.entityName}}</span>
-                <mat-icon class="cursor-pointer hyper-link py-1 entity-down-arrow">arrow_drop_down</mat-icon>
-                <span class="badge rounded-pill bg-success" *ngIf="relationshipsDetails?.versionStatus == 'ACTIVE'">Active</span>
-                <span class="badge rounded-pill bg-warning" *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
+                <span class="badge rounded-pill bg-warning ms-2" *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
             </div>
-            <!-- <div class="info-text fs-14 ms-auto italian px-3 py-0 mt-4 mb-2 cursor-pointer" tabindex="0"
-                title="Click to view latest version" *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'"
-                (click)="openRelationDetails()">
-                <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
-                SFI modified
-            </div> -->
             <div class="ms-auto d-flex align-items-center">
                     <label class="fs-14 fw-500 mt-3 me-3" for="risk-level">SFI Version :
                     </label>
                     <div *ngIf="entityVersionList.length > 0">
-                      <select class="form-control form-select mt-1 me-2"
-                      [(ngModel)]="entityId"
-                      (ngModelChange)="versionChange()">
+                      <select class="form-control form-select mt-3 me-2"
+                      [ngModel]="testId"
+                      (change)="versionChange($event)">
                         <option [value]="version.personEntityId" *ngFor="let version of entityVersionList">
                           {{'V' +version.versionNumber}}</option>
                       </select>
@@ -37,24 +29,25 @@
         <hr>
         <div class="row my-3 px-4" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
             <div class="col-4" tabindex="0">
-                <label class="d-block fw-500 fs-14 pb-1 label-text" aria-label="Start Date of Involvement">Start Date Of Involvement</label>
-                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementStartDate">
-                    <span class="text-color fs-14" aria-label="relationshipsDetails?.involvementStartDate | dateFormatterWithTimeZone">{{relationshipsDetails?.involvementStartDate |
-                        dateFormatterWithTimeZone}}</span>
+                <label class="d-block fw-500 fs-14 pb-1 label-text" aria-label="Start Date of Involvement">Country</label>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.country?.countryName">
+                    <span class="text-color fs-14" aria-label="entityDetails?.country?.countryName">{{entityDetails?.country?.countryName}}</span>
+                </app-no-data-label>
+            </div>
+
+            <div class="col-4" tabindex="0">
+                <label class="d-block fw-500 fs-14 pb-1 label-text">City</label>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.city">
+                    <span class="text-color fs-14">{{entityDetails?.city}}</span>
                 </app-no-data-label>
             </div>
             <div class="col-4" tabindex="0">
-                <label class="d-block fw-500 fs-14 pb-1 label-text">End Date Of Involvement</label>
-                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementEndDate">
-                    <span class="text-color fs-14">{{relationshipsDetails?.involvementEndDate |
-                        dateFormatterWithTimeZone}}</span>
+                <label class="d-block fw-500 fs-14 pb-1 label-text">Phone</label>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.phone">
+                    <span class="text-color fs-14">{{entityDetails?.phone}}</span>
                 </app-no-data-label>
             </div>
-            <div class="col-4" tabindex="0">
-                <label class="d-block fw-500 fs-14 pb-1 label-text">Sponsors Research</label>
-                <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
-            </div>
-            <div class="col-12" tabindex="0">
+            <div class="col" tabindex="0">
                 <label class="d-block fw-500 fs-14 pb-1 label-text mt-3">Relationship</label>
                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                     <span class="pill-container">
@@ -76,62 +69,17 @@
                     </span>
                 </app-no-data-label>
             </div>
+            <div *ngIf="commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'])"
+            class="col-auto ms-auto flex-end" tabindex="0">
+            <button
+            title = "Click to view Disclosure"
+            area-describedby="Click to view Disclosure" (click)="viewEntityDetails()"
+            class="d-flex align-items-center btn btn-primary-outline fs-14 height-fit-content"
+            aria-label="Click to view Disclosure">
+            <mat-icon class="me-1">visibility</mat-icon>
+            View
+            </button>
         </div>
-        <div *ngIf="entityDetailsServices.isHoverEntityCard" class="row entity-box shadow-lg  fs-13 rounded m-0">
-            <div class="py-1">
-                <span class="d-flex px-3 pb-2" tabindex="0">
-                    <span class="fw-500 col-custom-width">Entity</span>:
-                    <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.entityName">
-                        <span class="px-3 d-flex">{{entityDetails?.entityName}}</span>
-                    </app-no-data-label>
-                </span>
-                <span class="d-flex px-3 pb-2" tabindex="0">
-                    <span class="fw-500 col-custom-width">Country</span>:
-                    <app-no-data-label [classesToApply]="'fs-13 px-3'"
-                        [valueToShow]="entityDetails?.country?.countryName">
-                        <span class="px-3 d-flex">{{entityDetails?.country?.countryName}}</span>
-                    </app-no-data-label>
-                </span>
-                <span class="d-flex px-3 pb-2" tabindex="0">
-                    <span class="fw-500 col-custom-width">City</span>:
-                    <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.city">
-                        <span class="px-3 d-flex">
-                            {{entityDetails?.city}}
-                        </span>
-                    </app-no-data-label>
-                </span>
-                <span class="d-flex px-3 pb-2" tabindex="0">
-                    <span class="fw-500 col-custom-width">Website</span>:
-                    <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.webURL">
-                        <a class="px-3 anchor-link d-flex"
-                            (click)="redirectUrl(entityDetails?.webURL)">{{entityDetails?.webURL}}</a>
-                    </app-no-data-label>
-                </span>
-                <span class="d-flex px-3 pb-2" tabindex="0">
-                    <span class="fw-500 col-custom-width">Email</span>:
-                    <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.emailAddress">
-                        <span class="px-3 d-flex">
-                            {{entityDetails?.emailAddress}}
-                        </span>
-                    </app-no-data-label>
-                </span>
-                <span class="d-flex px-3" tabindex="0">
-                    <span class="fw-500 col-custom-width">Phone</span>:
-                    <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.phone">
-                        <span class="px-3 d-flex">
-                            {{entityDetails?.phone}}
-                        </span>
-                    </app-no-data-label>
-                </span>
-            </div>
-            <div *ngIf="commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')"
-                class="d-flex justify-content-end align-items-end ml-15" tabindex="0">
-                <span class="d-flex" [class.text-primary]="isHoverCardViewMore" (mouseover)="isHoverCardViewMore = true"
-                    (mouseout)="isHoverCardViewMore = false" (click)="viewEntityDetails()">
-                    <span class="anchor-link">View</span>
-                    <mat-icon class="fs-13 pt-2 hand-cursor">arrow_forward_ios</mat-icon>
-                </span>
-            </div>
         </div>
     </div>
     <div class="col-3 card px-0 shadow-sm" *ngIf="!isTriggeredFromSlider"
@@ -185,7 +133,7 @@
                             <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
                             <span class="fs-14 mx-2 btn-content-back">Back</span>
                         </button>
-                        <button *ngIf="relationshipsDetails?.versionStatus != 'ARCHIVE'"
+                        <button *ngIf=""
                         [matMenuTriggerFor]="beforeMenu"
                             class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10 px-3"
                             role="button" title="Click for More Actions">
@@ -227,7 +175,7 @@
                     </button>
                 </ng-container>
                 </mat-menu>
-                <div *ngIf="isEditMode" class="d-flex justify-content-around mt-3 mx-3">
+                <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi" class="d-flex justify-content-around mt-3 mx-3">
                     <button (click)="saveRelationship()" tabindex="0"
                         class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
                         title="Click to save">
@@ -235,10 +183,6 @@
                         <span>Save</span>
                     </button>
                 </div>
-                <!-- <ng-container *ngIf="relationshipsDetails.versionStatus === 'ACTIVE'" tabindex="0"> -->
-                    <!-- && !isEditMode -->
-                   
-                <!-- </ng-container> -->
                 <div class="my-2 ml-2 fs-14 ash-text wrapping-text px-2" tabindex="0">
                     <div><span class="fw-medium me-1">Last Updated By :</span></div>
                     <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.updateTimestamp">
@@ -251,56 +195,46 @@
     </div>
 </div>
 
-<div class="d-flex nav-sticky pl-15 ml-15 mb-3 pt-0" id="sfi-nav-bar" [class.slider-background]="isTriggeredFromSlider">
-    <nav class="border-nav bg-white border br-bottom d-flex fs-14 fw-bold shadow-sm user-dashboard-nav
-        d-flex align-items-center mt-3 py-1 d-inline-block w-100">
-        <div class="text-secondary header-icons border-end cursor-pointer" (click)="openRelationShipSection()"
-            tabindex="0">
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 w-auto shadow-sm user-dashboard-nav text-nowrap">
+        <div class="align-items-center d-flex justify-content-between nav-options border-end cursor-pointer" 
+        [class.relation-active]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'"
+        (click)="openRelationShipSection()" tabindex="0">
+        <div class="text-secondary w-100 mx-0 nav-options-bottom">
             <span title="Click to view SFI Details" class="px-4 fw-500"
-                [class.active]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'"
                 [attr.aria-label]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 SFI Details
             </span>
+            </div>
         </div>
-        <div class="text-secondary header-icons border-end cursor-pointer"
-            (click)="openQuestionnaireTab()" tabindex="0">
-            <span title="Click to view Relationship Details" class="px-4 fw-500"
-                [class.active]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE'"
-                [attr.aria-label]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE' ? 'Selected tab is Relationship Details' : 'Click to view Relationship Details'">
+        <div class="align-items-center d-flex justify-content-between nav-options border-end cursor-pointer" 
+        [class.relation-active]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE'"
+        (click)="openRelationshipQuestionnaire(entityDetailsServices.definedRelationships[0])" tabindex="0">
+        <div class="text-secondary w-100 mx-0 nav-options-bottom">
+            <span title="Click to view SFI Details" class="px-4 fw-500"
+                [attr.aria-label]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 Relationship Details
             </span>
+            </div>
         </div>
-        <div class="text-secondary header-icons border-end cursor-pointer" tabindex="0">
-            <span title="Click to view History" class="px-4 fw-500" (click)="openHistorySection();"
-                [class.active]="entityDetailsServices.selectedTab === 'HISTORY'"
+        <div class="align-items-center d-flex justify-content-between nav-options cursor-pointer"
+        [class.relation-active]="entityDetailsServices.selectedTab === 'HISTORY'" tabindex="0" (click)="openHistorySection();">
+        <div class="text-secondary w-100 mx-0 nav-options-bottom">
+            <span title="Click to view History" class="px-4 fw-500"
                 [attr.aria-label]="entityDetailsServices.selectedTab === 'HISTORY' ? 'Selected tab is SFI History' : 'Click to view SFI History'">
                 History
             </span>
+            </div>
         </div>
     </nav>
-</div>
-
-<div *ngIf="entityDetailsServices.selectedTab === 'QUESTIONNAIRE'">
-    <div class="row" *ngIf="entityDetailsServices.definedRelationships?.length">
-        <div class="col-3 pe-0 ps-4">
-            <div class="card side-panel-margin">
-                <div class="card-body p-0">
-                        <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length" 
-                            class="py-3 border-bottom" tabindex="0" [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"
-                            role="button">
-                            <span class="px-2 d-flex align-items-center active fw-500 justify-content-end"
-                                (mouseover)="isHoverAddRelationship = true" (mouseout)="isHoverAddRelationship = false"
-                                (click)="saveOrAddRelationshipModal()">
-                                <mat-icon class="material-icons-outlined mr-2">add</mat-icon>
-                                <span class="mr-2 fs-15">Add Relationship</span>
-                            </span>
-                        </div>
-                    <ng-container
-                    *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let isLast = last">
-                    <div class="align-items-center d-flex justify-content-between nav-options" role="button" [class.border-end]="!isLast"
+<div class="d-flex" *ngIf="entityDetailsServices.selectedTab === 'QUESTIONNAIRE' && entityDetailsServices.definedRelationships.length">
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav text-nowrap overflow-auto"
+    [ngClass]="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length ? 'nav-width' : 'w-100'">
+        <ng-container *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let isLast = last">
+                <div class="align-items-center d-flex justify-content-between nav-options border-end" role="button"
                     [ngClass]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE' && entityDetailsServices.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode?'navigation-icons relation-active fw-500':''">
-                        <div (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);" class="text-secondary w-100 mx-0 border-bottom" >
-                        <span 
+                    <div (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);"
+                        class="text-secondary w-100 mx-0 nav-options-bottom">
+                        <span
                             title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}} Questionnaire"
                             class="relation-border-left r-title px-3 py-3">
                             <span class="fs-14" tabindex="0">
@@ -316,27 +250,36 @@
                             </span>
                         </span>
                     </div>
-                    <span *ngIf="isEditMode && entityDetailsServices.canMangeSfi" 
-                        class="delete_outline justify-content-center d-inline-flex align-items-center mr-8"
-                        tabindex="0" aria-label="delete" role="button">
-                        <mat-icon data-bs-toggle="modal" data-bs-target="#deleteRelationModal" 
-                        (click)="deleteRelationshipDetails = coiFinancialEntityDetail">delete_outline</mat-icon>
-                        </span>
-                    </div>
-                </ng-container>
-                <app-no-information *ngIf="!entityDetailsServices.definedRelationships.length"></app-no-information>
                 </div>
-            </div>
+        </ng-container>
+    </nav>
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 w-auto shadow-sm user-dashboard-nav w-100 text-nowrap" 
+    *ngIf="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length">
+        <div
+        class="pt-3 pe-4 ps-3 border-end relation-border-left btn-color"
+        role="button"
+        (click)="saveOrAddRelationshipModal()">
+        <span class="d-flex align-items-center">
+            <mat-icon class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
+            <span>Add Relationship</span>
+        </span>
         </div>
-        <div class="col-9">
+    </nav>
+</div>
+
+<div *ngIf="entityDetailsServices.selectedTab === 'QUESTIONNAIRE'">
+    <div class="row" *ngIf="entityDetailsServices.definedRelationships?.length">
+        <div class="col-12">
             <app-entity-questionnaire *ngIf="isRelationshipDetailsFetched()" (mouseout)="entityDetailsServices.isHoverEntityCard = false" 
                 [entityId]="entityId" [relationshipDetails] = "relationshipsDetails"
-                id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" [isEditMode]="isEditMode"
-                (positionsToView)="scrollPosition($event)" [isSwitchCurrentTab]="isSwitchCurrentTab">
+                id="focusQuestionnaire" [isEditMode]="isEditMode"
+                (positionsToView)="scrollPosition($event)">
             </app-entity-questionnaire>
+            <app-no-information *ngIf="!entityDetailsServices.definedRelationships.length"></app-no-information>
         </div>
+        
     </div>
-    <ng-container *ngIf=" this.entityDetailsServices.definedRelationships?.length == 0 && canAddRelationship()">
+    <ng-container *ngIf="this.entityDetailsServices.definedRelationships?.length == 0 && canAddRelationship()">
         <div class="card mx-4">
             <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
                 <p class="fs-14 m-0">
@@ -356,7 +299,7 @@
             </span>
         </div>
     </ng-container>
-    <div class="mx-4" *ngIf=" this.entityDetailsServices.definedRelationships?.length == 0 && !canAddRelationship()">
+    <div class="mx-4" *ngIf="this.entityDetailsServices.definedRelationships?.length == 0 && !canAddRelationship()">
         <app-no-information [isBorderNeeded]="true">
             <span>No relationship added.
             <span *ngIf="relationshipsDetails?.versionStatus === 'INACTIVE' && !isTriggeredFromSlider">Activate SFI to add relationship</span>
@@ -616,26 +559,3 @@
     [personEntityNumber]="relationshipsDetails?.personEntityNumber">
 </app-activate-inactivate-sfi-modal>
 
-<!-- DELETE RELATIONSHIP MODAL -->
-<div class="modal modal-coi modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteRelationModal"
-    tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Relationship</h5>
-                <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
-                    type="button" (click)="deleteRelationshipDetails = null">
-                </button>
-            </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete <strong>{{deleteRelationshipDetails?.validPersonEntityRelType?.description}}</strong></p>
-                </div>
-            <div class="modal-footer">
-                <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                    data-bs-toggle="modal" (click)="deleteRelationshipDetails = null">Cancel</button>
-                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary fs-14"
-                    (click)="deleteRelationship()">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>

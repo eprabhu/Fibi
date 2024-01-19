@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from './entity-details.service';
-import { deepCloneObject, hideModal, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, hideModal, isEmptyObject, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../common/services/navigation.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../app-constants';
+import { ViewRelationshipDetailsComponent } from './view-relationship-details/view-relationship-details.component';
 
 @Component({
     selector: 'app-entity-details',
@@ -15,14 +16,13 @@ import { HTTP_ERROR_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../ap
 })
 
 export class EntityDetailsComponent implements OnInit, OnDestroy {
+    @ViewChild(ViewRelationshipDetailsComponent) viewRelationComponent!: ViewRelationshipDetailsComponent;
     @Input() entityId: any;
     @Input() entityNumber: any;
     isTriggeredFromSlider = false;
     $subscriptions: Subscription[] = [];
-    isSwitchCurrentTab = false;
     @Output() closeAction: EventEmitter<boolean> = new EventEmitter<boolean>();
     questionnaireSection: any = '';
-    isHoverAddRelationship = false;
     definedRelationships = [];
     selectedQuestionnaire: any;
     relationValidationMap = new Map();
@@ -33,7 +33,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.clearSfiNavBarStyle();
     }
 
-    updateRelationshipDetails: any;
     entityDetails = {};
 
     async ngOnInit() {
@@ -135,9 +134,11 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         } else if (this.entityDetailService.clickedTab === 'HISTORY') {
             this.entityDetailService.selectedTab = 'HISTORY';
         } else {
-            this.openQuestionnaire(this.entityDetailService.currentRelationshipQuestionnaire);
+            this.viewRelationComponent.loadCurrentVersion();
+            if (this.entityDetailService.currentRelationshipQuestionnaire && !isEmptyObject(this.entityDetailService.currentRelationshipQuestionnaire)) {
+                this.openQuestionnaire(this.entityDetailService.currentRelationshipQuestionnaire);
+            }
             this.entityDetailService.clickedTab === 'QUESTIONNAIRE';
-            this.isSwitchCurrentTab = true;
         }
         hideModal('questionnaireUnsavedChanges');
     }
@@ -146,7 +147,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
         setTimeout(() => {
             this.entityDetailService.$openQuestionnaire.next(entityDetails);
-        },200);
+        },500);
     }
 
     closeSlider(event) {
@@ -240,7 +241,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 'validPersonEntityRelTypeCodes': this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
             };
             this.$subscriptions.push(this.entityDetailService.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-                this.entityDetailService.$updateFormCompleted.next(res);
                 res.personEntityRelationships.forEach(ele => {
                     this.entityDetailService.definedRelationships.push(ele);
                     this.findRelation(ele.validPersonEntityRelTypeCode);
@@ -248,8 +248,8 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 this.openQuestionnaire(res.personEntityRelationships[0]);
                 this.clearRelationModal();
                 this.isSaving = false;
-                this.updateRelationshipDetails = res.personEntityRelationships;
                 hideModal('addRelationshipModal');
+                this.entityDetailService.$addOrDeleteRelation.next({'action': 'INSERT', 'element': res.personEntityRelationships, 'isFormCompleted': res.isFormCompleted});
             }, error => {
                 this.isSaving = false;
                 if (error.status === 405) {

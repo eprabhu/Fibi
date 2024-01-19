@@ -7,19 +7,16 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class EntityDetailsService {
 
   previousURL = '';
-  lookups: any;
-  $entityDetailsTest = new BehaviorSubject<object>({});
   globalSave$: Subject<any> = new Subject<any>();
   isRelationshipQuestionnaireChanged = false;
   isAdditionalDetailsChanged = false;
 
   $openQuestionnaire = new Subject();
-  $updateFormCompleted = new Subject()
   $saveQuestionnaireAction = new Subject();
+  $addOrDeleteRelation = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
   isHoverEntityCard = false;
   canMangeSfi = false;
-  isSwitchCurrentTab = false;
   unSavedSections = [];
   relationshipCompletedObject: any = {};
   concurrentUpdateAction = '';
@@ -35,7 +32,7 @@ export class EntityDetailsService {
   isChecked = {};
   groupedRelations = {};
   $triggerAddRelation = new Subject();
-
+  
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getSFIDetails(coiFinancialEntityId) {

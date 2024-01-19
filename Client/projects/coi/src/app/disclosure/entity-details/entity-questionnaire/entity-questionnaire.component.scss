@@ -6,6 +6,12 @@
   }
 }
 
+::ng-deep .custom-qustnr{
+  .nav-tabs {
+    padding-right: 80px;
+  }
+}
+
 .user-dashboard-nav {
   min-height: 42px;
 }

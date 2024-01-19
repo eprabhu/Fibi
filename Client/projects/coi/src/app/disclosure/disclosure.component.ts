@@ -332,10 +332,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Submitted Successfully.');
+            this.coiService.submitResponseErrors = [];
         }, err => {
             this.isSaving = false;
             if (err.status === 405) {
             hideModal('confirmModal');
+            this.coiService.submitResponseErrors = [];
             this.coiService.concurrentUpdateAction = 'Submit Disclosure';
           } else {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error In Certifying Disclosure.');
