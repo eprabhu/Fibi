@@ -1,0 +1,105 @@
+:root {
+    --coi-sidebar-width: 55px;
+    --coi-topbar-height: 51px;
+    --coi-base-fontsize: 16px;
+    --coi-separator-border: 1px solid #DBDFE9;
+    --coi-box-shadow: 0px 0px 80px 50px rgba(206, 213, 225, 0.12);
+    --coi-text-gray-100: #F9F9F9;
+    --coi-text-gray-200: #F1F1F2;
+    --coi-text-gray-300: #DBDFE9;
+    --coi-text-gray-400: #B5B5C3;
+    --coi-text-gray-500: #99A1B7;
+    --coi-text-gray-600: #78829D;
+    --coi-text-gray-700: #4B5675;
+    --coi-text-gray-800: #252F4A;
+    --coi-text-gray-900: #071437;  
+}
+
+$--theme-body-color: --coi-theme-body-color;
+$--theme-body-color-bg: --coi-theme-body-color-bg;
+$--theme-text-color: --coi-theme-text-color;
+
+$--theme-primary-color: --coi-theme-primary-color;
+$--theme-primary-color-inverse: --coi-theme-primary-color-inverse;
+$--theme-secondary-color: --coi-theme-secondary-color;
+$--theme-secondary-color-inverse: --coi-theme-secondary-color-inverse;
+
+$--theme-box-shadow: --coi-box-shadow;
+$--theme-text-dark-color: --coi-text-dark-color;
+$--theme-text-darker-color: --coi-text-darker-color;
+
+$--card-overview-color-bg: --coi-card-overview-color-bg;
+$--card-overview-color-border: --coi-card-overview-color-border;
+$--card-overview-color-icon: --coi-card-overview-color-icon;
+$--card-overview-color-icon-bg: --coi-card-overview-color-icon-bg;
+$--card-overview-color-btn: --coi-card-overview-color-btn;
+$--card-overview-color-btn-bg: --coi-card-overview-color-btn-bg;
+$--card-overview-color-dark-text: --coi-card-overview-color-dark-text;
+$--card-overview-color-darker-text: --coi-card-overview-color-darker-text;
+$--card-overview-color-bg-secondary: --coi-card-overview-color-bg-secondary;
+$--card-overview-color-border-secondary: --coi-card-overview-color-border-secondary;
+
+
+
+$theme-map-light: (
+    $--theme-body-color: #fff,
+    $--theme-body-color-bg: #FCFCFD,
+    $--theme-text-color: --coi-text-gray-900,
+    $--theme-primary-color: #007DEC,
+    $--theme-primary-color-inverse: #fff,
+    $--theme-box-shadow: 0px 0px 80px 50px rgba(206, 213, 225, 0.12),
+    $--theme-text-darker-color: #071437,
+    $--theme-text-dark-color: #B5B5C3,
+    $--card-overview-color-bg: #fff,
+    $--card-overview-color-border: #fff,
+    $--card-overview-color-icon: #252F4A,
+    $--card-overview-color-icon-bg: #F9F9F9,
+    $--card-overview-color-btn: #007dec,
+    $--card-overview-color-btn-bg: #d4ebff,
+    $--card-overview-color-dark-text: #48647f,
+    $--card-overview-color-darker-text: #212529,
+    $--card-overview-color-bg-secondary:#fff,
+    $--card-overview-color-border-secondary: #fff
+);
+
+$theme-map-dark: (
+    $--theme-body-color: #1e1e2d,
+    $--theme-body-color-bg: #151521,
+    $--theme-text-color: #fff,
+    $--theme-primary-color: #007DEC,
+    $--theme-primary-color-inverse: #fff,
+    $--theme-box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05),
+    $--theme-text-darker-color: #fff,
+    $--theme-text-dark-color: #B5B5C3,
+    $--card-overview-color-bg: #1e1e2d,
+    $--card-overview-color-border: #1e1e2d,
+    $--card-overview-color-icon: #6D6D80,
+    $--card-overview-color-icon-bg: #1b1b29,
+    $--card-overview-color-btn: #78829D,
+    $--card-overview-color-btn-bg: #2B2B40,
+    $--card-overview-color-dark-text: #CDCDDE,
+    $--card-overview-color-darker-text: #474761,
+    $--card-overview-color-bg-secondary:#1e1e2d,
+    $--card-overview-color-border-secondary: #1e1e2d
+);
+
+$theme-map-modern: (
+    $--theme-body-color: #fff,
+    $--theme-body-color-bg: #FCFCFD,
+    $--theme-text-color: --coi-text-gray-900,
+    $--theme-primary-color: #007DEC,
+    $--theme-primary-color-inverse: #fff,
+    $--theme-box-shadow: 0px 0px 80px 50px rgba(206, 213, 225, 0.12),
+    $--theme-text-darker-color: #071437,
+    $--theme-text-dark-color: #B5B5C3,
+    $--card-overview-color-bg: #fff,
+    $--card-overview-color-border: #cfdff5,
+    $--card-overview-color-icon: #42a3ff,
+    $--card-overview-color-icon-bg: #fff,
+    $--card-overview-color-btn: #fff,
+    $--card-overview-color-btn-bg: #42a3ff,
+    $--card-overview-color-dark-text: #48647f,
+    $--card-overview-color-darker-text: #212529,
+    $--card-overview-color-bg-secondary:#ffefe7,
+    $--card-overview-color-border-secondary: #f1d4c6
+);
