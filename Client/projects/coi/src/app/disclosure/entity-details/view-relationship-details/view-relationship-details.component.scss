@@ -361,6 +361,8 @@ small {
 }
 
 .nav-sticky {
+  justify-content: flex-end;
+  display: flex!important;
   background-color: whitesmoke;
   position: sticky;
   z-index: 10;
@@ -406,7 +408,7 @@ small {
 }
 
 .relation-active {
-  border-left: 3px solid #007DEC;
+  border-bottom: 3px solid #007DEC;
   color: #007DEC;
   background-color: #e6f3ff;
   .delete_outline {
@@ -528,7 +530,18 @@ small {
   }
 }
 
+.user-dashboard-nav::-webkit-scrollbar:horizontal{
+  height: 5px;
+}
 
+.nav-width {
+  width: 87%;
+}
 
+.btn-color {
+  color: #2C77f4;
+}
 
-
+.btn-color:hover{
+  color: #043E9E;
+}

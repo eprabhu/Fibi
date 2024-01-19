@@ -734,7 +734,7 @@
                     </div>
                 </strong>
                 <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
-                    aria-label="Close" (click)="isSaving = false">
+                    aria-label="Close" (click)="isSaving = false; coiService.submitResponseErrors = [];">
                 </button>
             </div>
             <div class="modal-body">
@@ -763,7 +763,7 @@
             <div class="modal-footer">
                 <ng-container>
                     <button class=" btn btn-outline-secondary" data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn"
-                        (click)="isSaving = false">Cancel</button>
+                        (click)="isSaving = false;coiService.submitResponseErrors = [];">Cancel</button>
                     <button (click)="certifyDisclosure()" class=" btn btn-primary btn-sm fs-14" data-bs-dismiss="modal"
                         id="prop-saveExit-dismiss-btn">Submit</button>
                 </ng-container>
