@@ -109,14 +109,14 @@ import com.polus.fibicomp.security.AuthenticatedUser;
 public class ConflictOfInterestServiceImpl implements ConflictOfInterestService {
 
 	protected static Logger logger = LogManager.getLogger(ConflictOfInterestServiceImpl.class.getName());
-	
+
 	@Autowired
 	@Qualifier(value = "conflictOfInterestDao")
 	private ConflictOfInterestDao conflictOfInterestDao;
-	
+
 	@Autowired
 	private PersonDao personDao;
-	
+
 	@Autowired
 	private CommonDao commonDao;
 
@@ -140,6 +140,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Autowired
 	private ReviewCommentService reviewCommentService;
+
+	@Autowired
+	private PersonEntityService personEntityService;
 
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
@@ -182,7 +185,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String TAB_TYPE_MY_DASHBOARD = "MY_DASHBOARD";
 	private static final String TAB_TYPE_IN_PROGRESS_DISCLOSURES = "IN_PROGRESS_DISCLOSURES";
 	private static final String TAB_TYPE_APPROVED_DISCLOSURES = "APPROVED_DISCLOSURES";
-	
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -326,7 +328,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public List<CoiEntity> searchEntity(ConflictOfInterestVO vo) {
 		return conflictOfInterestDao.searchEntity(vo);
 	}
-	
+
 	@Override
 	public ResponseEntity<Object> loadAddSFILookups() {
 		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
@@ -377,7 +379,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
 	}
-	
+
 	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure, CoiDisclosure coiDisclosureObj) {
 		String reviewStatusCode = coiDisclosureObj.getReviewStatusCode();
 		if (reviewStatusCode.equals(REVIEW_STATUS_RETURNED)) {
@@ -438,7 +440,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public String checkSFICompleted(ConflictOfInterestVO vo) {
 		if (Boolean.TRUE.equals(vo.getIsSfiProjectMapping())){
 			vo.setSfiCompleted(conflictOfInterestDao.isSFICompletedForDisclosure(vo.getPersonEntityId(), vo.getDisclosureId()));
-		}		
+		}
 		else if (Constants.DEV_PROPOSAL_MODULE_CODE.equals(vo.getModuleCode())) {
 			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId()));
 		} else {
@@ -813,7 +815,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
 		conflictOfInterestDao.updateDisclosureUpdateDetails(disclEntProjDetails.getDisclosureId());
 		return conflictOfInterestDao.getProjectRelationship(disclEntProjDetails.getDisclosureDetailsId());
-	} 
+	}
 
 	@Override
 	public List<CoiConflictHistory> getCoiConflictHistory(Integer disclosureDetailsId){
@@ -989,7 +991,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 		return commonDao.convertObjectToJSON(dashBoardProfile);
 	}
-	
+
 	@Override
 	public String getCOIDashboardCount(CoiDashboardVO vo) {
 		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
@@ -1020,7 +1022,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			}
 		} catch (SQLException e) {
 			logger.error("Exception on getOPADashboard {}", e.getMessage());
-            throw new ApplicationException("Unable to fetch opa dashboard details", e, Constants.DB_PROC_ERROR);	
+            throw new ApplicationException("Unable to fetch opa dashboard details", e, Constants.DB_PROC_ERROR);
 		}
 		conflictOfInterestVO.setInProgressDisclosureCount(inProgressDisclosureCount);
 		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
@@ -1079,7 +1081,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 
 	}
-	
+
 	@Override
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId) {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
@@ -1163,7 +1165,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		setAllTravelDisclosureStatus(coiTravelDisclosure, vo.getEntityId());
 		coiTravelDisclosure.setPersonFullName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getPersonId()));
 		setUnitDetails(coiTravelDisclosure, vo);
-		if (vo.getPersonId() != null && vo.getEntityId() != null) {
+		if (vo.getEntityId() != null) {
 			addEntryToPersonEntity(coiTravelDisclosure, vo);
 		}
 		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
@@ -1198,25 +1200,31 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
 	}
 
-	//TODO logic need to be rechecked and fixed
 	private void addEntryToPersonEntity(CoiTravelDisclosure coiTravelDisclosure, ConflictOfInterestVO vo) {
 			Integer personEntityId;
 			personEntityId = conflictOfInterestDao.fetchMaxPersonEntityId(vo.getPersonId(), vo.getEntityId());
 			if (personEntityId != null) {
 				coiTravelDisclosure.setPersonEntityId(personEntityId);
+				try {
+					PersonEntityRelationship personEntityRelationship = new PersonEntityRelationship();
+					personEntityRelationship.setPersonEntityId(personEntityId);
+					personEntityRelationship.setValidPersonEntityRelTypeCodes(Arrays.asList(Constants.TRAVEL_SELF_RELATIONSHIP));
+					personEntityService.saveOrUpdatePersonEntityRelationship(personEntityRelationship);
+				} catch (Exception e) {
+					logger.error("Exception on saveOrUpdatePersonEntityRelationship from create travel", e.getMessage());
+				}
 			} else {
-				personEntityId = conflictOfInterestDao.generateMaxPersonEntityId();
 				PersonEntity personEntity = new PersonEntity();
-				personEntity.setPersonId(vo.getPersonId());
 				personEntity.setEntityId(vo.getEntityId());
 				personEntity.setEntityNumber(vo.getEntityNumber());
-				personEntity.setPersonEntityId(personEntityId);
-				personEntity.setVersionNumber(vo.getVersionNumber());
-				personEntity.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
-				personEntity.setUpdateTimestamp(commonDao.getCurrentTimestamp());
-				personEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
-				personEntity.setCreateTimestamp(commonDao.getCurrentTimestamp());
-				personEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
+				personEntity.setInvolvementStartDate(coiTravelDisclosure.getTravelStartDate());
+				personEntity.setInstituteResourceInvolvement("Relationship with Entity");
+				personEntity.setStudentInvolvement("Relationship with Entity");
+				personEntity.setStaffInvolvement("Relationship with Entity");
+				personEntity.setValidPersonEntityRelTypeCodes(Arrays.asList(Constants.TRAVEL_SELF_RELATIONSHIP));
+				ResponseEntity<Object> response = personEntityService.createPersonEntity(personEntity);
+				personEntity = (PersonEntity)response.getBody();
+				coiTravelDisclosure.setPersonEntityId(personEntity.getPersonEntityId());
 			}
 	}
 
@@ -1232,7 +1240,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiTravelDisclosure.setTravellerUnitDetails(conflictOfInterestDao.getUnitFromUnitNumber("000001"));
 		}
 	}
-	
+
 	private void setAllStatusForAfterAssignAdminAction(CoiTravelDisclosure coiTravelDisclosure, CoiAssignTravelDisclosureAdminDto dto) {
 		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_INPROGRESS);
 		CoiTravelReviewStatusType coiTravelReviewStatusType =
@@ -1313,7 +1321,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		}
 	}
-	
+
 	private Map<String, String> getTravellerTypeWithDescription(List<CoiTravelDisclosureTraveler> entries) {
 		if (entries != null && !entries.isEmpty()) {
 			List<String> travelerTypeCode = new ArrayList<>();
@@ -1325,7 +1333,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		return null;
 	}
-	
+
 	private void setAdminDetailsToDtoOnLoad(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure, Integer travelDisclosureId) {
 		if (coiTravelDisclosure.getAdminGroupId() != null) {
 			coiTravelDisclosure.setAdminGroupName(commonDao.getAdminGroupByGroupId(coiTravelDisclosure.getAdminGroupId()).getAdminGroupName());
@@ -1340,7 +1348,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setTravelDisclosureId(travelDisclosureId);
 		dto.setTravelNumber(coiTravelDisclosure.getTravelNumber());
 	}
-	
+
 	private void setAllStatusToDtoOnLoad(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure) {
 		CoiTravelReviewStatusType coiTravelReviewStatusType =
 				conflictOfInterestDao.getTravelReviewStatusDetails(coiTravelDisclosure.getReviewStatusCode());
@@ -1358,7 +1366,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			dto.setDisclosureStatus(coiTravelDisclosureStatusType.getDescription());
 		}
 	}
-	
+
 	private Date getExpirationDate() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.YEAR, 1);
@@ -1437,7 +1445,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.certifyTravelDisclosure(coiTravelDisclosure);
 		return new ResponseEntity<>(travelCertifyDto, HttpStatus.OK);
 	}
-	
+
 	/** If any travel disclosure is returned and it is having any admins or admin groups are assigned,
 	 * then the review status should be changed to 'Review in Progress'. Otherwise it should be 'Submitted' */
 	private void setTravelReviewStatusWhileSubmit(CoiTravelDisclosure coiTravelDisclosure) {
@@ -1597,7 +1605,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(setDtoForAdminActions("RETURN", coiTravelDisclosure, Constants.TRAVEL_VERSION_STATUS_PENDING,
 				coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
 	}
-	
+
 	private CoiTravelDisclosureActionsDto setDtoForAdminActions(String actionType, CoiTravelDisclosure coiTravelDisclosure,
 																String versionStatusCode, CoiTravelDocumentStatusType coiTravelDocumentStatusType,
 																CoiTravelReviewStatusType coiTravelReviewStatusType, Timestamp currentTimestamp) {
@@ -1620,12 +1628,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		actionDto.setUpdateTimestamp(currentTimestamp);
 		return actionDto;
 	}
-   	
+
 	@Override
 	public ResponseEntity<Object> loadTravellerTypesLookup() {
 		return new ResponseEntity<>(conflictOfInterestDao.loadTravellerTypesLookup(),  HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<Object> loadTravelStatusTypesLookup() {
 		return new ResponseEntity<>(conflictOfInterestDao.loadTravelStatusTypesLookup(),  HttpStatus.OK);
@@ -1998,7 +2006,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> getTravelConflictStatusType() {
 		return new ResponseEntity<>(conflictOfInterestDao.getTravelConflictStatusType(),HttpStatus.OK);
 	}
-	
+
 	private void setTravelActionLogWhileDisclosureStatusChange(ConflictOfInterestVO vo, CoiTravelDisclosure coiTravelDisclosure) {
 		String oldDisclosureStatus = coiTravelDisclosure.getDisclosureStatusCode() != null ?
 				conflictOfInterestDao.getTravelDisclosureStatusDetails(coiTravelDisclosure.getDisclosureStatusCode()).getDescription() : null;
@@ -2240,7 +2248,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> loadDisclAttachTypes() {
 		return new ResponseEntity<>(conflictOfInterestDao.loadDisclAttachTypes(), HttpStatus.OK);
 	}
-	
+
 	@Override
 	public List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto) {
 		return conflictOfInterestDao.fetchAllActiolListEntriesForBanners(notifyBannerDto);
@@ -2267,7 +2275,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public Notes getNoteDetailsForNoteId(Integer noteId) {
 		return conflictOfInterestDao.loadCoiNotesForNoteId(noteId);
 	}
-	
+
 	@Override
 	public ResponseEntity<Object> saveOrUpdateAttachments(MultipartFile[] files, String formDataJSON) {
 		List<Attachments> attachmentsList = new ArrayList<>();
@@ -2345,7 +2353,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		        notAllowedDisclosureIds.add(disclosureId);
 		    }
 		});
-		return !notAllowedDisclosureIds.isEmpty() ? new ResponseEntity<>(commonDao.convertObjectToJSON(notAllowedDisclosureIds), HttpStatus.OK) 
+		return !notAllowedDisclosureIds.isEmpty() ? new ResponseEntity<>(commonDao.convertObjectToJSON(notAllowedDisclosureIds), HttpStatus.OK)
 				: new ResponseEntity<>(commonDao.convertObjectToJSON("Approved successfully") , HttpStatus.OK);
 	}
 

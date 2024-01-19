@@ -278,6 +278,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             PersonEntity personEntity = copyPersonEntity(personEntityObj, personEntityDto.getVersionStatus());
             personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
         }
+        personEntityDto.setIsFormCompleted(personEntityObj.getIsFormCompleted());
         personEntityDto.setUpdateTimestamp(conflictOfInterestDao.updatePersonEntityVersionStatus(personEntityDto.getPersonEntityId(), personEntityDto.getVersionStatus()));
         personEntityDto.setEntityName(personEntityObj.getCoiEntity().getEntityName());
         personEntityDto.setPersonEntityNumber(personEntityObj.getPersonEntityNumber());
@@ -334,6 +335,14 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             else break;
         }
         conflictOfInterestDao.updatePersonEntityCompleteFag(personEntityId, isFormCompleted);
+        if (isFormCompleted) {
+            PersonEntity personEntityObj = conflictOfInterestDao.getPersonEntityDetailsById(personEntityId);
+            PersonEntityDto personEntityDto = new PersonEntityDto();
+            personEntityDto.setPersonEntityId(personEntityId);
+            personEntityDto.setPersonEntityNumber(personEntityObj.getPersonEntityNumber());
+            personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_FORM_COMPLETED);
+            actionLogService.savePersonEntityActionLog(personEntityDto);
+        }
         Map<String, Object> response = new HashMap<>();
         response.put("isFormCompleted", isFormCompleted);
         return new ResponseEntity<>(response, HttpStatus.OK);
