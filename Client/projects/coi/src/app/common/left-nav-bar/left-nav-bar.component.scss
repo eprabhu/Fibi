@@ -24,23 +24,6 @@ ul {
     }
 }
 
-.side-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: white;
-    z-index: 51;
-    transition: width ease-out 150ms;
-}
-
-.side-bar-open {
-    width: 205px;
-}
-
-.side-bar-closed {
-    width: 55px;
-}
-
 .menu-icon {
     color: $grey-text-color;
     padding-bottom: 20px;

@@ -372,14 +372,14 @@ padding-right: 17px;
 
 /* Adjusting the height for FCOI, OPA disclosures creation card.
  - My COI Dashboard green, yellow cards */
-.card {
-  display: flex;
-  height: 100%;
-  margin: 0 5px;
-  .card-content {
-    flex-grow: 1;
-  }
-}
+// .card {
+//   display: flex;
+//   height: 100%;
+//   margin: 0 5px;
+//   .card-content {
+//     flex-grow: 1;
+//   }
+// }
 
 @media (max-width: 1025px) {
   .min-card-height {
@@ -430,16 +430,16 @@ padding-right: 17px;
 /* This class will remove the colon symbol from the label and value till the resolution = Medium(1560px).
     i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
 */
-@media (max-width : 1560px) {
-  .create-disclosure div label span  {
-    display: none !important;
-  }
-}
+// @media (max-width : 1560px) {
+//   .create-disclosure div label span  {
+//     display: none !important;
+//   }
+// }
 /* This class will add the colon symbol to the label and value from resolution = Medium(1560px) */
-@media (min-width : 1560px) {
-  .create-disclosure div label span  {
-    display: inline-block !important;
-  }
-}
+// @media (min-width : 1560px) {
+//   .create-disclosure div label span  {
+//     display: inline-block !important;
+//   }
+// }
 
 
