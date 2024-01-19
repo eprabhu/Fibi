@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
+import com.polus.fibicomp.opa.pojo.OPAReviewStatusType;
 import org.springframework.stereotype.Service;
 
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
@@ -14,7 +14,9 @@ import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
+import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
+import com.polus.fibicomp.opa.pojo.OPAPersonType;
 
 @Service
 public interface OPADao {
@@ -135,6 +137,12 @@ public interface OPADao {
 	 * @param statusTypeCode
 	 * @return
 	 */
-	OPADisclosureStatusType getOPADisclosureStatusType(String statusTypeCode);
+	OPAReviewStatusType getOPADisclosureStatusType(String statusTypeCode);
+
+	/**
+	 * This method is used to fetch OPA person type lookup
+	 * @return
+	 */
+	List<OPAPersonType> getOpaPersonType();
 
 }

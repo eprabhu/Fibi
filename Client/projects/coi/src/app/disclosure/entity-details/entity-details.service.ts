@@ -14,13 +14,12 @@ export class EntityDetailsService {
   isAdditionalDetailsChanged = false;
 
   $openQuestionnaire = new Subject();
+  $updateFormCompleted = new Subject()
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
-  isExpanded = false;
   isHoverEntityCard = false;
   canMangeSfi = false;
   isSwitchCurrentTab = false;
-  isShowHistoryInfo = true;
   unSavedSections = [];
   relationshipCompletedObject: any = {};
   concurrentUpdateAction = '';
@@ -43,8 +42,12 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/getSFIDetails/${coiFinancialEntityId}`);
   }
 
+  checkFormCompleted(personEntityId) {
+    return this._http.patch(`${this._commonService.baseUrl}/personEntity/checkFormCompleted/${personEntityId}`, {});
+  }
+
   saveOrUpdateCoiFinancialEntityDetails(params) {
-    return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
+    return this._http.post(this._commonService.baseUrl + '/personEntity/addRelationship', params);
   }
 
   async addSFILookUp(): Promise<any> {
@@ -56,11 +59,11 @@ export class EntityDetailsService {
   }
 
   getRelationshipEntityDetails(personEntityId) {
-    return this._http.get(`${this._commonService.baseUrl}/getPersonEntityDetails/${personEntityId}`);
+    return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityId}`);
   }
 
   getPersonEntityRelationship(params) {
-    return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
+    return this._http.post(this._commonService.baseUrl + '/personEntity/getRelationship', params);
   }
 
   loadSFILookups() {
@@ -97,6 +100,10 @@ export class EntityDetailsService {
 
   sfiHistory(params) {
     return this._http.post(this._commonService.baseUrl + '/personEntity/history', params);
+  }
+
+  getSfiVersion(personEntityNumber) {
+    return this._http.get(`${this._commonService.baseUrl}/personEntity/versions/${personEntityNumber}`);
   }
 
 }

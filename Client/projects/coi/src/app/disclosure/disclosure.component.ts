@@ -293,8 +293,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
             if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                this.error = 'Please complete the following mandatory Questionnaire(s) in the Screening Questionniare section.';
-                this.coiService.submitResponseErrors.push(this.error);
+                
+                const questionnaire_error = {validationMessage: 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.'};
+                this.coiService.submitResponseErrors.push(questionnaire_error);
             }
             this.validateRelationship();
         }
@@ -344,9 +345,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     validateRelationship() {
         this.$subscriptions.push(this.coiService.givecoiID(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
             res.map((error) => {
-                this.coiService.submitResponseErrors.push( error.validationMessage) ;
+                this.coiService.submitResponseErrors.push( error) ;
             });
-           this.getSfiDetails();
+           this.getSfiDetails(); 
         }, err => {
             this.isSaving = false;
         }));
@@ -569,7 +570,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     errorCheck() {
-        if (this.coiService.submitResponseErrors.length) {
+        if (this.coiService.submitResponseErrors.length && this.coiService.submitResponseErrors.find(data => data.validationType == "VE")) {
             this.isSaving = false;
             openModal('ValidatedModal');
         } else {

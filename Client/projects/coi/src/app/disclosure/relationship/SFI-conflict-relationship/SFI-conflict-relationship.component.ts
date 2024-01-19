@@ -196,4 +196,8 @@ getStatusDescriptionByCode(code: string): string {
   return STATUS ? STATUS.description : '';
 }
 
+isShowWarning(data) {
+  return data.prePersonEntityId && data.prePersonEntityId != data.personEntityId;
+}
+
 }

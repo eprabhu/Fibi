@@ -71,6 +71,9 @@ export class CertificationComponent implements OnInit, OnDestroy {
         );
     }
 
+checkForDisable() {
+    return this._coiService.certificationResponseErrors.length > 0 && this._coiService.certificationResponseErrors.find(data => data.validationType == "VE")
+}
   toggleCertification() {
     this._coiService.isCertified = !this._coiService.isCertified;
     this._dataStore.dataChanged = true;

@@ -16,6 +16,7 @@ import { HTTP_ERROR_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../ap
 
 export class EntityDetailsComponent implements OnInit, OnDestroy {
     @Input() entityId: any;
+    @Input() entityNumber: any;
     isTriggeredFromSlider = false;
     $subscriptions: Subscription[] = [];
     isSwitchCurrentTab = false;
@@ -33,7 +34,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateRelationshipDetails: any;
-    isEditMode = false;
     entityDetails = {};
 
     async ngOnInit() {
@@ -60,7 +60,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this.entityDetailService.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
                 if (res.length) {
                     this.entityDetailService.definedRelationships = res || [];
-                    this.entityDetailService.$openQuestionnaire.next(this.entityDetailService.definedRelationships[0]);
+                    this.openQuestionnaire(this.entityDetailService.definedRelationships[0]);
                 } else {
                     this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
                 }
@@ -73,9 +73,9 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     getQueryParams() {
-        this.$subscriptions.push(this._route.queryParams.subscribe(params => {
-            this.isEditMode = params['mode'] === 'edit';
+        this.$subscriptions.push(this._route.queryParams.subscribe(params => { 
             this.entityId = params['personEntityId'] || this.entityId;
+            this.entityNumber = params['personEntityNumber'] || null;
             this.getSfiEntityDetails();
         }));
     }
@@ -146,7 +146,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
         setTimeout(() => {
             this.entityDetailService.$openQuestionnaire.next(entityDetails);
-        });
+        },200);
     }
 
     closeSlider(event) {
@@ -240,14 +240,15 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 'validPersonEntityRelTypeCodes': this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
             };
             this.$subscriptions.push(this.entityDetailService.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-                res.forEach(ele => {
+                this.entityDetailService.$updateFormCompleted.next(res);
+                res.personEntityRelationships.forEach(ele => {
                     this.entityDetailService.definedRelationships.push(ele);
                     this.findRelation(ele.validPersonEntityRelTypeCode);
                 });
-                this.openQuestionnaire(res[0]);
+                this.openQuestionnaire(res.personEntityRelationships[0]);
                 this.clearRelationModal();
                 this.isSaving = false;
-                this.updateRelationshipDetails = res;
+                this.updateRelationshipDetails = res.personEntityRelationships;
                 hideModal('addRelationshipModal');
             }, error => {
                 this.isSaving = false;
@@ -282,6 +283,12 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.definedRelationships = [];
         this.entityDetailService.availableRelationships = [];
         this.entityDetailService.relationshipCompletedObject = {};
+        this.entityDetailService.currentRelationshipQuestionnaire = {};
+        this.entityDetailService.isHoverEntityCard = false;
+        this.entityDetailService.canMangeSfi = false;
+        this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+        this.entityDetailService.currentVersionDetails = {};
+        this.entityDetailService.groupedRelations = {};
     }
 
 }

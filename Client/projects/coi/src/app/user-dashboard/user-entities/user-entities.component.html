@@ -7,14 +7,14 @@
               title="Click to filter by type: All"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white"
               role="button">All</span>
-        <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" tabindex="0"
-              [attr.aria-label]="sfiDashboardRequestObject.filterType=='DRAFT' ? 'Selected filter type is Draft ' : 'Draft'"
-              title="Click to filter by type: Draft" 
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Draft</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" tabindex="0"
-              [attr.aria-label]="sfiDashboardRequestObject.filterType=='ACTIVE' ? 'Selected filter type is Active ' : 'Active'"
-              title="Click to filter by type: Active" 
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
+        <span (click)="setFilter('COMPLETE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='COMPLETE'" tabindex="0"
+              [attr.aria-label]="sfiDashboardRequestObject.filterType=='COMPLETE' ? 'Selected filter type is Complete ' : 'Complete'"
+              title="Click to filter by type: Complete" 
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Complete</span>
+        <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INCOMPLETE'" tabindex="0"
+              [attr.aria-label]="sfiDashboardRequestObject.filterType=='INCOMPLETE' ? 'Selected filter type is Incomplete' : 'Incomplete'"
+              title="Click to filter by type: Incomplete" 
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Incomplete</span>
         <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INACTIVE' ? 'Selected filter type is Inactive ' : 'Inactive'"
               title="Click to filter by type: Inactive"
@@ -51,7 +51,8 @@
 <ng-container *ngIf="isHideFilterSearchAndShowCreate">
   <div class="card">
     <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
-      <p class="fs-14 m-0">
+      <p class="fs-14 
+      -0">
         <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
           You do not have any added entities. To add any personal entities, click on the <strong>Create Entity</strong>
           button or the quick link provided.
@@ -76,7 +77,7 @@
     </div>
 
     <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
-      [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)"
+      [personEntityId]="personEntityId" [updatedRelationshipStatus]="updatedRelationshipStatus" (closeModal)="closeActivateInactivateSfiModal($event)"
       [personEntityNumber]="personEntityNumber">
     </app-activate-inactivate-sfi-modal>
 

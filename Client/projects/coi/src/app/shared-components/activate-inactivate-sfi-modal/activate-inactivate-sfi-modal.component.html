@@ -5,21 +5,21 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header ct-footer-padding">
-        <h4 class="modal-title">{{isRelationshipActive?'Inactivate':'Activate'}} {{entityName}}</h4>
+        <h4 class="modal-title">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} {{entityName}}</h4>
         <button type="button" class="btn-close fs-12 " title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
       </div>
       <div class="modal-body ct-modal-padding">
         <div class="help-text">
-          <div class="col-12 py-2 grey-info font px-3">
-            <span class="fs-13 text-secondary d-flex">
-              <mat-icon role="img" class="mat-icon me-2 info-icon material-icons mat-icon-no-color mt-2" aria-hidden="true"
+          <div class="col-12 grey-info font px-3">
+            <span class="fs-13 text-secondary d-flex mt-1 pt-1">
+              <mat-icon role="img" class="mat-icon me-2 info-icon material-icons mat-icon-no-color mt-1" aria-hidden="true"
                 data-mat-icon-type="font">info</mat-icon>
-              <p *ngIf="isRelationshipActive" class="fs-14 pb-0 pt-1">
+              <p *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="fs-14 pb-0 mb-0">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                 Please provide a reason for inactivation in the field provided.
                 <br>
               </p>
-              <p *ngIf="!isRelationshipActive" class="fs-14 pb-0 pt-1">
+              <p *ngIf="updatedRelationshipStatus == 'ACTIVE'" class="fs-14 pb-0 mb-0">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                 Provide the reason for Activation in the field provided.
                 <br>
@@ -32,7 +32,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <span class="block-display fw-bold fs-14"><span *ngIf="isRelationshipActive" class="mandatory px-1">*</span>Reason for {{isRelationshipActive?'Inactivation' :'Activation'}} :</span>
+            <span class="block-display fw-bold fs-14"><span *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="mandatory px-1">*</span>Reason for {{updatedRelationshipStatus == 'INACTIVE' ?'Inactivation' :'Activation'}} :</span>
             <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
               appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
             <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
@@ -45,8 +45,8 @@
         <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
          type="button" title="Cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
         </button>
-        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" [attr.title]="isRelationshipActive?'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
-          {{isRelationshipActive?'Inactivate' : 'Activate'}}
+        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" [attr.title]="updatedRelationshipStatus == 'INACTIVE' ?'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
+          {{updatedRelationshipStatus == 'INACTIVE' ?'Inactivate' : 'Activate'}}
         </button>
       </div>
     </div>

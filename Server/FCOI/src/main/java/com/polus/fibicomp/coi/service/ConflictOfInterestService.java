@@ -64,13 +64,6 @@ public interface ConflictOfInterestService {
 	String getDisclosureRelations(ConflictOfInterestVO vo);
 
 	/**
-	 * This method is used for get list of sfi of a person
-	 * @param vo
-	 * @return A list of sfi
-	 */
-	ResponseEntity<Object> getSFIOfDisclosure(ConflictOfInterestVO vo);
-
-	/**
 	 * This method is used for get list of entity table values(enpoint for entity)
 	 * @param vo
 	 * @return A list of entity
@@ -83,26 +76,6 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> loadAddSFILookups();
 
-	/**
-	 * This method is used to get list of sfi details based on coiFinancialEntityId
-	 * @param coiFinancialEntityId
-	 * @return A list of sfi details
-	 */
-	ResponseEntity<Object> getSFIDetails(Integer coiFinancialEntityId);
-
-	/**
-	 * This method is used to create CoiFinancialEntityDetails
-	 * @param personEntityRelationship
-	 * @return COIFinancialEntityDetails
-	 */
-	ResponseEntity<Object> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
-
-	/**
-	 * This method is used to create SFI
-	 * @param personEntity
-	 * @return vo
-	 */
-	ResponseEntity<Object> createSFI(PersonEntity personEntity);
 
 	/**
 	 * This method is used to certifyDisclosure
@@ -282,9 +255,6 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> getCoiProjectTypes();
 
-	ResponseEntity<Object> getPersonEntityDashboard(CoiDashboardVO vo);
-
-
 	/**
 	 *
 	 * @param vo
@@ -294,12 +264,8 @@ public interface ConflictOfInterestService {
 	
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId);
 
-	public ResponseEntity<Object> getPersonEntityDetails(Integer personEntityId);
-
 	ResponseEntity<Object> getValidPersonRelationshipLookUp();
 
-	ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo);
-	
 	ResponseEntity<Object> loadTravellerTypesLookup();
 	
 	ResponseEntity<Object> loadTravelStatusTypesLookup();
@@ -386,21 +352,7 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> activateOrInactivateEntity(CoiEntityDto coiEntityDto);
 
-	/**
-	 *This method is used to activate/inactive  person entity
-	 * @param personEntityDto
-	 * @return
-	 */
-	ResponseEntity<Object> activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
-
 	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to delete Person entity
-	 * @param personEntityId
-	 * @return
-	 */
-	ResponseEntity<Object> deletePersonEntity(Integer personEntityId);
 
 	/**
 	 * This method is used to fetch all entity relationship types
@@ -443,37 +395,6 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto);
 
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
-
-	/**
-	 * This method is used to update person entity
-	 * @param personEntityDto
-	 * @return
-	 */
-	ResponseEntity<Object> updatePersonEntity(PersonEntityDto personEntityDto);
-
-	/**
-	 * This method is used to delete Person Entity Relationship
-	 * @param personEntityRelId
-	 * @param personEntityId
-	 * @return
-	 */
-	ResponseEntity<Object> deletePersonEntityRelationship(Integer personEntityRelId, Integer personEntityId);
-
-	/**
-	 * This method is used to validate and modify a person entity based on following condition
-	 * 1) if the current version of person entity is not used anywhere, makes this version to draft
-	 * 2) if the current version of person entity is used anywhere, creates a new version in draft status
-	 * @param personEntityId
-	 * @return person entity
-	 */
-	ResponseEntity<Object> modifyPersonEntity(Integer personEntityId);
-
-	/**
-	 * This method is used to finalize Person Entity
-	 * @param personEntityDto
-	 * @return
-	 */
-	ResponseEntity<Object> finalizePersonEntity(PersonEntityDto personEntityDto);
 
 	ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description);
 
@@ -518,13 +439,6 @@ public interface ConflictOfInterestService {
 
 	String deleteReviewCommentTag(Integer coiReviewCommentTagId);
 
-	/**
-	 * This service is used to fetch the latest active person entity
-	 * @param personEntityNumber
-	 * @return
-	 */
-    ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber);
-
     /**
 	 * This method is used to fetch disclosure attachment types
 	 * @return
@@ -564,5 +478,12 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> completeDisclosureReviews(Map<Integer, Integer> disclosureIdNumberMap);
+
+
+	/**
+	 * This method syncs the projects with all ACTIVE person entities(SFIs)
+	 * @param disclosureId
+	 */
+	void syncProjectPersonEntity(Integer disclosureId);
 
 }

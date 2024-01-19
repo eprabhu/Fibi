@@ -11,8 +11,7 @@ import com.polus.formbuilder.entity.FormBuilderSectionEntity;
 @Repository
 public interface FormBuilderSectionEntityRepository extends JpaRepository<FormBuilderSectionEntity, Integer> {
 
-	@Query(value = "SELECT * FROM FORM_BUILDER_SECTION WHERE FORM_BUILDER_ID = ?1 ORDER BY SECTION_ORDER_NUMBER", nativeQuery = true)
+	@Query(value = "SELECT * FROM FORM_BUILDER_SECTION WHERE FORM_BUILDER_ID = ?1 AND IS_ACTIVE = 'Y' ORDER BY SECTION_ORDER_NUMBER", nativeQuery = true)
 	List<FormBuilderSectionEntity> getSectionDetailsByFormId(Integer formId);
-
 	
 }

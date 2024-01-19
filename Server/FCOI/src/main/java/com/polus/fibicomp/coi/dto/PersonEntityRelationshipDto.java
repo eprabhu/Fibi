@@ -24,7 +24,7 @@ public class PersonEntityRelationshipDto {
     private String entityType;
     private String entityRiskCategory;
     private String personEntityVersionStatus;
-    private Boolean isRelationshipActive;
+    private Boolean isFormCompleted;
 	private Date involvementStartDate;
 	private Date involvementEndDate;
 

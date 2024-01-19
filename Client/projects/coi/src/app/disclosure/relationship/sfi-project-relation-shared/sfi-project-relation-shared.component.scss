@@ -1,0 +1,30 @@
+.relationship-sfi-header {
+    width: 100%;
+    color: #333;
+    background-color: #f0f2f3;
+    border: 1px solid #d7dbdf;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-top: 10px;
+}
+
+.relationship-sfi-data {
+    width: 100%;
+    display: flex;
+    margin-bottom: 8px;
+    background-color: #f5f5f5;
+    border-left: 1px solid #d7dbdf;
+    border-right: 1px solid #d7dbdf;
+}
+
+.save-btn {
+    background: rgb(228 241 255);
+    color: #202c2e;
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid #caced2;
+}
+
+.modal {
+    z-index: 1501;
+}

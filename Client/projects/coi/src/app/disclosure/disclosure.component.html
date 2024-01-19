@@ -311,7 +311,7 @@
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
-                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 py-3">
+                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 py-2">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10">
@@ -688,11 +688,14 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
-                        <p *ngIf="this.coiService.submitResponseErrors.length > 0" role="alert"
-                            class="fa validation-Message-box fa-exclamation-circle icon alert alert-danger text-danger ps-4"
-                            role="alert"><span class="ms-2 fw-400 me-3 fs-14"> {{error}} </span></p>
-                    </div>
+                    <ng-container *ngIf="this.coiService.submitResponseErrors.length > 0">
+                        <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
+                            <p role="alert"
+                                class="fa validation-Message-box fa-exclamation-circle icon alert ps-4"
+                                [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'"
+                                role="alert"><span class="ms-2 fw-400 me-3 fs-14"> {{error.validationMessage}}</span></p>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
             <div class="modal-footer">
@@ -737,6 +740,15 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
+                        <ng-container *ngIf= "this.coiService.submitResponseErrors.length > 0">
+                            <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
+                                <div *ngIf="error.validationType == 'VW'"
+                                    class="validation-Message-box alert alert-warning ps-4 fs-14"
+                                    role="alert">
+                                    <i class="fa fa-exclamation-circle icon mr-2"></i>{{error.validationMessage}}
+                                </div>
+                            </div>
+                        </ng-container>
                     <ng-container *ngIf="count > 0">
                         <div>
                            <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>

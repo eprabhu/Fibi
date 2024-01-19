@@ -6,10 +6,8 @@ import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
-import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
 import { RO } from '../coi-interface';
-import { listAnimation } from '../../common/utilities/animations';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { CoiService } from '../services/coi.service';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -18,7 +16,7 @@ import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/cus
   selector: 'app-relationship',
   templateUrl: './relationship.component.html',
   styleUrls: ['./relationship.component.scss'],
-  animations: [slideHorizontal, listAnimation],
+  animations: [slideHorizontal],
 })
 export class RelationshipComponent implements OnInit {
   isShowRelation = false;
@@ -51,19 +49,15 @@ export class RelationshipComponent implements OnInit {
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
   coiStatusCode: any = null;
-  isAnimationPaused = false;
   currentRelation: number;
+  switchRelationView = false;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
               public _router: Router,
               private _commonService: CommonService,
-              private _coiService: CoiService,
-              private _sfiService: SfiService) {
-                setTimeout(() => {
-                  this.isAnimationPaused = false;
-                }, 1000);
-               }
+              private _coiService: CoiService
+              ) { }
 
   closePage(event: any) {
     this.isShowRelation = false;
@@ -83,8 +77,7 @@ export class RelationshipComponent implements OnInit {
     this.getDataFromStore();
     this.loadProjectRelations(true);
     this.getDependencyDetails();
-    this.getSfiDetails();
-      }
+  }
 
 getDisclosureCount(typeCode, disclosureStatus) {
     if (disclosureStatus) {
@@ -139,7 +132,6 @@ getDisclosureCount(typeCode, disclosureStatus) {
         if (this.awardList.length === 1) {
           this.isShowCollapsedConflictRelationship = true;
           this.getEntityList();
-          this.isAnimationPaused = false;
         }
         if(!this.isShowCollapsedConflictRelationship) {
           setTimeout(() => {
@@ -154,7 +146,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
       }
     }));
   }
-  
+
   updateRelationStatus() {
     this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
@@ -204,14 +196,6 @@ getDisclosureCount(typeCode, disclosureStatus) {
     }
   }
 
-  getSfiDetails() {
-    this.$subscriptions.push(this._sfiService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
-        if (data) {
-            this.count = data.count;
-        }
-    }));
-}
-
 getRequestObject() {
   const REQ_OBJ = new RO();
   REQ_OBJ.currentPage = 0;
@@ -244,5 +228,12 @@ getDependencyDetails() {
   ngOnDestroy(): void {
     subscriptionHandler(this.$subscriptions);
 }
+
+    switchRelationViewMode(newValue) {
+      if (this.switchRelationView !== newValue && !newValue) {
+          this.ngOnInit();
+      }
+      this.switchRelationView = newValue;
+    }
 
 }

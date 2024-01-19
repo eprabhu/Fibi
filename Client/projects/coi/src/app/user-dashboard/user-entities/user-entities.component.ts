@@ -32,7 +32,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   entityName: any;
   personEntityId: any;
   personEntityNumber: any;
-  isRelationshipActive: false;
+  updatedRelationshipStatus: String;
   $debounceEventForEntities = new Subject();
   $fetchSFI = new Subject();
   isSearchTextHover = false;
@@ -79,7 +79,8 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
 }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, mode: 'view' } })
+
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, personEntityNumber: entities.personEntityNumber } })
   }
 
   setFilter(type = 'ALL') {
@@ -128,7 +129,7 @@ removeEntityId() {
     this.isEnableActivateInactivateSfiModal = true;
     this.personEntityId = event.personEntityId;
     this.entityName = event.coiEntity.entityName;
-    this.isRelationshipActive = event.isRelationshipActive;
+    this.updatedRelationshipStatus = event.versionStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
     this.personEntityNumber = event.personEntityNumber;
   }
 

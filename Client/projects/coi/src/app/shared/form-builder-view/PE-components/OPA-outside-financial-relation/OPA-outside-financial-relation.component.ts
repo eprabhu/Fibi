@@ -7,6 +7,7 @@ import { EntitySaveRO, OutsideFinRelation, OutsideFinRelationPE, RelationShipSav
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
+import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 
 export const leftSlideInOut = trigger('leftSlideInOut', [
@@ -52,6 +53,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     @Input() externalEvents: Subject<any> = new Subject<any>();
     @Output() childEvents: EventEmitter<any> = new EventEmitter<any>();
     @Input() isFormEditable = true;
+    @Input() sectionHeading = '';
     id: number;
     entitySearchOptions: any = {};
     entityDetails: any = {};
@@ -63,12 +65,11 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     myEntities = [];
     filteredEntities = [];
     currentTab: 'MY_ENTITIES'| 'ADD_ENTITY' = 'MY_ENTITIES';
-    currentFilter: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE' = 'ALL';
+    currentFilter: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
     relationshipTypeCache = {};
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService) { }
-
 
     ngOnInit() {
         this.generateId();
@@ -86,7 +87,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
                 this.editIndex === -1 ? this.componentData.data.push(res.data.data[0]) :
                     this.componentData.data[this.editIndex] = res.data.data[0];
                 if (this.eventType === 'NEW') {
-                    document.getElementById('OUTSIDE_FIN_REL_ADD-BTN' + this.id).click();
+                    document.getElementById('OUTSIDE_FIN_REL_ADD_BTN' + this.id).click();
                 }
                 if (this.eventType === 'LINK') {
                     this.removeFromMyEntities();
@@ -94,7 +95,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
 
             } else if (this.outsideFinRelationData.actionType === 'DELETE' && this.deleteIndex > -1) {
                 this.componentData.data.splice(this.deleteIndex, 1);
-                document.getElementById('OUTSIDE_FIN_REL_DELETE-BTN' + this.id).click();
+                document.getElementById('OUTSIDE_FIN_REL_DELETE_BTN' + this.id).click();
             }
             this.clearData();
         }));
@@ -107,9 +108,13 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.editIndex = -1;
         this.deleteIndex = -1;
         this.currentTab = 'MY_ENTITIES';
+        this.isDuplicate = false;
     }
 
     async addRowItem() {
+        if (this.isDuplicate) {
+            return null;
+        }
         const RO: RelationShipSaveRO | EntitySaveRO = this.setEntityROForSave(this.entityDetails);
         try {
             const response = await this._api.saveEntityOrRelation(RO);
@@ -153,7 +158,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.outsideFinRelationData.entityInfo.entityType = this.entityDetails.entityType;
         this.outsideFinRelationData.entityInfo.relationship = this.entityDetails.validPersonEntityRelType;
         this.outsideFinRelationData.entityInfo.entityRiskCategory = this.entityDetails.entityRiskCategory;
-        this.outsideFinRelationData.entityInfo.isRelationshipActive = this.entityDetails.isRelationshipActive ? 'Y' : 'N';
+        this.outsideFinRelationData.entityInfo.isFormCompleted = this.entityDetails.isFormCompleted ? 'Y' : 'N';
         this.outsideFinRelationData.entityInfo.sfiVersionStatus = this.entityDetails.personEntityVersionStatus;
         this.outsideFinRelationData.entityInfo.involvementStartDate = parseDateWithoutTimestamp(new Date());
 
@@ -165,7 +170,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
 
     editEntityItem(outsideFinRelation: OutsideFinRelation  , index): void {
         this.currentTab = 'ADD_ENTITY';
-        this.outsideFinRelationData = outsideFinRelation;
+        this.outsideFinRelationData = deepCloneObject(outsideFinRelation);
         this.editIndex = index;
         this.entityDetails = outsideFinRelation.entityInfo;
     }
@@ -194,32 +199,18 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         return this.componentData.data.findIndex(E => E.personEntityId === personEntityId);
     }
 
-    getClassForStatus(versionStatus, isRelationshipActive) {
-        if (typeof (isRelationshipActive) === 'boolean') {
-            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        }
-        return versionStatus === 'PENDING' ? 't-draft-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 't-active-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 't-inactive-ribbon' : '';
+    getClassForStatus(versionStatus, isFormCompleted) {
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
     }
 
-    getClassForStatusInModal(versionStatus, isRelationshipActive) {
-        if (typeof (isRelationshipActive) === 'boolean') {
-            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        }
-        return versionStatus === 'PENDING' ? 'draft-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
+    getClassForStatusInModal(versionStatus, isFormCompleted) {
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
     }
 
-    getDescriptionForStatus(versionStatus, isRelationshipActive) {
-        if (typeof (isRelationshipActive) === 'boolean') {
-            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
-        }
-        return versionStatus === 'PENDING' ? 'Draft' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive' : '';
+    getDescriptionForStatus(versionStatus, isFormCompleted) { 
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
+
 
     viewSlider(personEntityId) {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
@@ -243,16 +234,16 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         this.addRowItem();
     }
 
-    setFilter(filterType: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE') {
+    setFilter(filterType: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE') {
         this.currentFilter = filterType;
         switch (this.currentFilter) {
             case 'ALL' : this.filteredEntities = this.myEntities; break;
-            case 'ACTIVE' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && E.isRelationshipActive); break;
+            case 'COMPLETE' : this.filteredEntities =
+                this.myEntities.filter(E => (E.personEntityVersionStatus === 'ACTIVE' || E.personEntityVersionStatus === 'ARCHIVE') && E.isFormCompleted); break;
             case 'INACTIVE' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && !E.isRelationshipActive); break;
-            case 'DRAFT' : this.filteredEntities =
-                this.myEntities.filter(E => E.personEntityVersionStatus === 'PENDING'); break;
+                this.myEntities.filter(E => E.personEntityVersionStatus === 'INACTIVE'); break;
+            case 'INCOMPLETE' : this.filteredEntities =
+                this.myEntities.filter(E => (E.personEntityVersionStatus === 'ACTIVE' || E.personEntityVersionStatus === 'ARCHIVE') && !E.isFormCompleted); break;
         }
     }
 
