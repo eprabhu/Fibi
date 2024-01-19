@@ -325,7 +325,7 @@
   padding: 3px 9px 3px 9px;
 }
 
-.status-active {
+.status-complete {
   background-color: #4CB57D !important;
   color: #fff;
   @extend .statusPillPosition;
@@ -333,6 +333,12 @@
 
 .status-inactive {
   background-color: #949494;
+  color: #fff;
+  @extend .statusPillPosition;
+}
+
+.status-incomplete {
+  background-color: #ffc107 !important;
   color: #fff;
   @extend .statusPillPosition;
 }

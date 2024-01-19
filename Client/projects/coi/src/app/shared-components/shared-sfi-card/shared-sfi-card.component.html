@@ -96,8 +96,8 @@
                         <mat-icon class="me-1">edit</mat-icon>Modify</button>
                     <button class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" (click)="openSfiDetails(SFIObject?.entityId, 'view')" title="Click to view SFI">
                         <mat-icon class="me-1">visibility</mat-icon>View</button>
-                    <!-- <button *ngIf="SFIObject.canDelete" class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" title="Click to delete SFI" 
-                        (click)="deleteConfirmation(SFIObject.personEntityId)"> <mat-icon class="me-1">delete</mat-icon>Delete</button> -->
+                    <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject.canDelete && !isTriggeredFromSlider" class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" title="Click to delete SFI">
+                      <mat-icon class="me-1">delete</mat-icon>Delete</button>
                     <button *ngIf="!SFIObject?.isActive && !isTriggeredFromSlider" title="Click to activate SFI" class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" (click)="activateDeactivate(SFIObject)">
                         <mat-icon class="me-1">offline_bolt</mat-icon>Activate</button>
                     <button *ngIf="SFIObject?.isActive && !isTriggeredFromSlider" title="Click to inactivate SFI" class="align-items-center btn btn-outline-secondary d-flex fs-14" (click)="activateDeactivate(SFIObject)" >
