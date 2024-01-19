@@ -564,7 +564,7 @@ public class QuestionnaireDAO {
 	}
 
 	public List<HashMap<String, Object>> getApplicableQuestionnaireData(String moduleItemKey,String moduleSubItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String logginPersonId, String updateUser, String questionaireMode) throws Exception {	
-		List<HashMap<String, Object>> allApplicableQNR = getAllApplicableQuestionnaire(moduleItemKey, moduleSubItemKey, moduleItemCode, moduleSubItemCode);
+		List<HashMap<String, Object>> allApplicableQNR = getAllApplicableQuestionnaire(moduleItemKey, moduleSubItemKey, moduleItemCode, moduleSubItemCode, questionaireMode);
 		List<HashMap<String, Object>> ruleFilterQNR = evalueQuestionnaireRule(allApplicableQNR,moduleItemKey, moduleItemCode, moduleSubItemCode,logginPersonId,  updateUser, moduleSubItemKey);
 		List<HashMap<String, Object>> answeredQNR = getAnsweredQuestionnaire(moduleItemCode, moduleSubItemCode, moduleItemKey, moduleSubItemKey);
 		return consolidatedApplicableQuestionnaire(ruleFilterQNR,answeredQNR);
@@ -637,15 +637,26 @@ public class QuestionnaireDAO {
 	}
 
 	private ArrayList<HashMap<String, Object>> getAllApplicableQuestionnaire(String moduleItemKey,String moduleSubItemKey,
-			Integer moduleItemCode, Integer moduleSubItemCode) throws Exception {
+			Integer moduleItemCode, Integer moduleSubItemCode, String questionAnswerMode) throws Exception {
 		ArrayList<HashMap<String, Object>> output = new ArrayList<HashMap<String, Object>>();
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter("<<MODULE_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleItemKey));
-	        inParam.add(new Parameter("<<MODULE_SUB_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleSubItemKey));
-			inParam.add(new Parameter(MODULE_ITEM_CODE_PARAM, DBEngineConstants.TYPE_INTEGER, moduleItemCode));
+			inParam.add(new Parameter("<<MODULE_SUB_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleSubItemKey));
 			inParam.add(new Parameter(MODULE_SUB_ITEM_CODE_PARAM, DBEngineConstants.TYPE_INTEGER, moduleSubItemCode));
-			output = dbEngine.executeQuery(inParam, "GET_APPLICABLE_QUESTIONNAIRE");		
+			if("ACTIVE".equals(questionAnswerMode)) {
+				inParam.add(new Parameter(MODULE_ITEM_CODE_PARAM, DBEngineConstants.TYPE_INTEGER, moduleItemCode));
+				output = dbEngine.executeQuery(inParam, "GET_APPLICABLE_QUESTIONNAIRE");
+			} else if("ANSWERED".equals(questionAnswerMode)) {
+				inParam.add(new Parameter("<<MODULE_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleItemKey));
+				inParam.add(new Parameter("<<MODULE_SUB_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleSubItemKey));
+				output = dbEngine.executeQuery(inParam, "GET_ANSWERED_QUESTIONNAIRES");
+			} else {
+				inParam.add(new Parameter(MODULE_ITEM_CODE_PARAM, DBEngineConstants.TYPE_INTEGER, moduleItemCode));
+				inParam.add(new Parameter("<<MODULE_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleItemKey));
+				inParam.add(new Parameter("<<MODULE_SUB_ITEM_KEY>>", DBEngineConstants.TYPE_STRING, moduleSubItemKey));
+				output = dbEngine.executeQuery(inParam, "GET_ACTIVE_ANSWERED_QUESTIONNAIRE");
+			}
 		} catch (Exception e) {
 			logger.error("Exception in getAllApplicableQuestionnaire : {} ", e.getMessage());
 
