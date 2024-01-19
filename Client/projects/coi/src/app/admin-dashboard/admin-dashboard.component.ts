@@ -899,4 +899,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.selectedDisclosures = [];
     }
 
+    selectedItemCount() {
+       return this.selectedDisclosures.filter(e => e).length;
+    }
+    
 }

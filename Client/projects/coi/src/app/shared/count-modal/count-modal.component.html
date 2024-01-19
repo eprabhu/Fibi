@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>{{modalHeader()}}</h4>
+                <h4 title="{{ showFullTitle() }}">{{modalHeader()}}</h4>
                 <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="req-doc-popup-dismiss-btn"
                     aria-label="Close" (click)="closeCountModal()">
                 </button>
