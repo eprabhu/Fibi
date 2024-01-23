@@ -27,7 +27,7 @@ public class Authorization implements UserDocumentAuthorization{
 		Connection connection = sessionImpl.connection();
 		CallableStatement statement = null;
 		try {
-			String functionName = "FN_PERSON_HAS_AUTHORIZATION";
+			String functionName = "FN_COI_PERSON_HAS_AUTHORIZATION";
 			String functionCall = "{ ? = call " + functionName + "(?,?,?,?,?) }";
 			statement = connection.prepareCall(functionCall);
 			statement.registerOutParameter(1, OracleTypes.INTEGER);
