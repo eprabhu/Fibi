@@ -100,7 +100,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(personEntityRelationship.getPersonEntityId());
         Integer personEntityId = personEntity.getPersonEntityId();
         Integer versionId = conflictOfInterestDao.getPersonEntityIdOfNonArchiveVersion(personEntity.getPersonEntityNumber());
-        if (versionId != personEntityId) {
+        if (!versionId.equals(personEntityId)) {
             personEntityId = versionId;
         }
         if (conflictOfInterestDao.checkPersonEntityAdded(personEntityId)) {
@@ -388,7 +388,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
         }
         Integer latestPerEntVersionId = conflictOfInterestDao.getPersonEntityIdOfNonArchiveVersion(personEntityObj.getPersonEntityNumber());
-        if (latestPerEntVersionId != personEntityId) {
+        if (!latestPerEntVersionId.equals(personEntityId)) {
             personEntityDto.setPersonEntityId(latestPerEntVersionId);
             return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
         }
