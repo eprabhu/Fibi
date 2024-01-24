@@ -1,0 +1,68 @@
+//Cards
+
+.card {
+    background-color: var(--theme-card-bg-color);
+    border: var(--theme-card-border);
+    box-shadow: var(--theme-card-box-shadow);
+}
+.coi-card-overview {
+    font-weight: bold;
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        flex-wrap: wrap;
+        height: 49px;
+        background-color: transparent !important;
+        border: 0;
+
+        .card-toolbar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+    }
+
+    .card-content {
+        background-color: transparent !important;        
+    }
+
+    .card-footer {
+        background-color: transparent !important;
+        border: 0;
+    }
+
+    .list-group {
+
+        // &.border-dashed {
+        //     border: 1px dashed #DBDFE9;
+        //     border-radius: 10px;
+        // }
+        &.border-dashed {
+            border-width: 1px;
+            border-style: dashed !important;
+            border-color: var(--theme-border-color);
+            border-radius: 10px;
+        }
+
+        .list-group-item {
+            border: none;
+            background-color: transparent;
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+}
+
+.coi-bg-complete {
+    background-color: #E7F9E8;
+    border: 1px solid #c1d9c2;
+}
+
+.coi-card-normal {
+    background-color: var(--theme-card-bg-color) !important;
+}
+
+.coi-card-compact {
+    background-color: var(--theme-card-bg-color) !important;
+}
