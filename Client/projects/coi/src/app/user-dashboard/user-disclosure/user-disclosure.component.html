@@ -107,6 +107,21 @@
                                 <!-- new main card design for FCOI Disclosure ends-->
                             </div>
                         </div>
+                        <div class="d-flex align-items-center">
+                            <div class="data-warning px-2" tabindex= "{{dateWarning ? 0 : -1}}">
+                                <h5 *ngIf="dateWarning" class="mb-3 fs-15" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'"><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
+                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year</span><span *ngIf="differenceInDays?.durInMonths">, {{differenceInDays?.durInMonths}} months</span><span *ngIf="differenceInDays?.durInDays"> {{differenceInDays?.durInDays}} days.</span></h5>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" role="button"
+                                        class="no-hover d-flex align-items-center btn btn-primary-outline fs-14"
+                                        title="Click to Renew FCOI Disclosure"
+                                        aria-describedby="Click to Renew FCOI Disclosure">
+                                    <mat-icon class="me-1">restart_alt</mat-icon>
+                                    Revise
+                                </button>
+                            </div>
+                        </div>
                         <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg"></div>
                     </div>
                 </div>
@@ -218,7 +233,9 @@
                                 <!-- new card body ends -->
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg"></div>
+                        <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg">
+                            <!-- <h4 [ngClass]="dateWarningColor ? 'dateWarningColor':''" class="mt-1 "><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year,</span><span *ngIf="differenceInDays?.durInMonths">{{differenceInDays?.durInMonths}} months,</span><span *ngIf="differenceInDays?.durInDays">{{differenceInDays?.durInDays}} days</span> </h4> -->
+                        </div>
                     </div>
                 </div>
             </ng-container>
