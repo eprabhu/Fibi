@@ -91,6 +91,7 @@ export class CoiDisclosure {
     numberOfSFI: any;
     riskCategoryCode: any;
     coiRiskCategory: any;
+    updateUserFullName: string;
 }
 export interface UnitAdministratorType {
     code: string;
