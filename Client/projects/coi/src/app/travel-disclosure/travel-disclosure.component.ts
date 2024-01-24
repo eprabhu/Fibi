@@ -17,6 +17,7 @@ import {
 import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { closeCommonModal, openCommonModal } from '../common/utilities/custom-utilities';
+import {TravelReviewStatus} from '../shared/coi-enum';
 
 type Method = 'SOME' | 'EVERY';
 
@@ -73,6 +74,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
+    TravelReviewStatus = TravelReviewStatus;
 
     constructor(
         public router: Router,
@@ -231,7 +233,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showReturnOrApproveButton(): boolean {
-        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3']);
+        return this.checkAdministratorRight() && this.checkReviewStatusCode([TravelReviewStatus.REVIEW_IN_PROGRESS]);
     }
 
     showHomeButton(): boolean {

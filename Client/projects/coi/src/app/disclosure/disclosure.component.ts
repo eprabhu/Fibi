@@ -25,8 +25,9 @@ import {
 import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
-import { ModalType} from '../disclosure/coi-interface';
+import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { CoiConflictStatusType, CoiReviewStatusType } from '../shared/coi-enum';
 
 @Component({
     selector: 'app-disclosure',
@@ -112,6 +113,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     ];
     isOpenRiskSlider = false;
     reviewList: any = [];
+    CoiConflictStatusType = CoiConflictStatusType;
+    CoiReviewStatusType = CoiReviewStatusType;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -293,7 +296,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
             if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                
+
                 const questionnaire_error = {validationMessage: 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.'};
                 this.coiService.submitResponseErrors.push(questionnaire_error);
             }
@@ -349,7 +352,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             res.map((error) => {
                 this.coiService.submitResponseErrors.push( error) ;
             });
-           this.getSfiDetails(); 
+           this.getSfiDetails();
         }, err => {
             this.isSaving = false;
         }));
@@ -761,5 +764,4 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.showSlider = false;
         this.selectedType = '';
     }
-
 }
