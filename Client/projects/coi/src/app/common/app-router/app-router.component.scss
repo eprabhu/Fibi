@@ -14,17 +14,17 @@
   background: linear-gradient(0deg, rgba(2,0,36,0.7987570028011204) 0%, rgba(9,121,65,1) 0%, rgba(0,255,149,1) 100%);
 }
 
-.canvas {
-  height: calc(100% - 60px);
-  margin-top: 60px;
-  background-color: #F5F5F5;
-}
+// .canvas {
+//   height: calc(100% - 60px);
+//   margin-top: 60px;
+//   background-color: #F5F5F5;
+// }
 
-#COI_SCROLL {
-  overflow-y: scroll;
-  overflow-x: auto;
-    margin-left: 55px;
-}
+// #COI_SCROLL {
+//   overflow-y: scroll;
+//   overflow-x: auto;
+//     margin-left: 55px;
+// }
 
 #COI_SCROLL::-webkit-scrollbar-track {
   margin-bottom: 30px;
