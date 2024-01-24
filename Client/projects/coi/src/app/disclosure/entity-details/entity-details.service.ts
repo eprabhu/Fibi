@@ -31,6 +31,7 @@ export class EntityDetailsService {
   currentRelationshipQuestionnaire: any;
   isChecked = {};
   groupedRelations = {};
+  isVersionChange = false;
   $triggerAddRelation = new Subject();
   
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
@@ -89,10 +90,6 @@ export class EntityDetailsService {
 
   modifyPersonEntity(params) {
     return this._http.post(this._commonService.baseUrl + '/personEntity/modify', params);
-  }
-
-  getCurrentId(personEntityNumber) {
-    return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
   }
 
   sfiHistory(params) {

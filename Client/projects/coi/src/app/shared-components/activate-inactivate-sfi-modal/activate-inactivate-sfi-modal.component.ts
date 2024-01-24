@@ -26,7 +26,6 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     @Input() entityDetails: any;
     @Input() personEntityId: number = null;
     @Input() updatedRelationshipStatus: string;
-    @Input() isFinalizeApi = false;
     @Input() personEntityNumber: any;
     concurrentActionName = '';
 
@@ -42,7 +41,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
                 revisionReason: this.activateInactivateReason,
                 personEntityNumber: this.personEntityNumber
             };
-            this.isFinalizeApi ? this.finalizeSfi(REQ_BODY) : this.setActivateInactivate(REQ_BODY);
+            this.setActivateInactivate(REQ_BODY);
         }
     }
 
@@ -77,22 +76,6 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
-    }
-
-    finalizeSfi(REQ_BODY) {
-        this.$subscriptions.push(this._activateInactivateSfiService.finalizeSfi(REQ_BODY).subscribe((res: any) => {
-            this.activateOrInactivateSuccess(res);
-            this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI Finalized successfully.`);
-        }, err => {
-            if (err.status === 405) {
-                document.getElementById('activate-inactivate-show-btn').click();
-                this.concurrentActionName = 'Finalize Action';
-                openModal('sfiConcurrentActionModalCOI');
-            } else {
-                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-                this.activateOrInactivateFailed();
-            }
-        }));
     }
 
     activateOrInactivateSuccess(response) {
