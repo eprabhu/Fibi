@@ -25,44 +25,49 @@
                         </div>
                         <div class="card-content content-green-bg">
                             <div class="card-body">
-                                <!-- new card body -->
-                                <div class="row mb-7">
-                                    <div class="col-md-7">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">
-                                                <label class="fs-14 text-gray-900 me-1">Department <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                    [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                    {{disclosure?.unit?.unitDetail}}</span>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <label class="fs-14 text-gray-900 me-1">Certification Date <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                    [attr.aria-label]="disclosure?.certifiedAt |dateFormatter">
-                                                    <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                        <span class="grey-text">{{disclosure?.certifiedAt
-                                                            |dateFormatter}}</span>
-                                                    </app-no-data-label></span>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <label class="fs-14 text-gray-900 me-1">Expiration Date <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                    [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
-                                                    <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                        <span class="grey-text">{{disclosure?.expirationDate |
-                                                            dateFormatter}}</span>
-                                                    </app-no-data-label></span>
-                                            </li>
-                                        </ul>
+                                <!-- new card body(updated) -->
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-900">Department<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span class="fw-bold fs-14 text-gray-700"
+                                                            [attr.aria-label]="disclosure?.unit?.unitDetail">
+                                                            {{disclosure?.unit?.unitDetail}}</span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-900">Certification Date<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span class="fw-bold fs-14 text-gray-700"
+                                                            [attr.aria-label]="disclosure?.certifiedAt |dateFormatter">
+                                                            <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
+                                                                <span class="grey-text">{{disclosure?.certifiedAt
+                                                                    |dateFormatter}}</span>
+                                                            </app-no-data-label></span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-900">Expiration Date<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span class="fw-bold fs-14 text-gray-700"
+                                                            [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
+                                                            <app-no-data-label [valueToShow]="disclosure?.expirationDate">
+                                                                <span class="grey-text">{{disclosure?.expirationDate |
+                                                                    dateFormatter}}</span>
+                                                            </app-no-data-label></span>               
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-5 d-flex align-items-center">
-                                        <ul class="list-group list-group-flush border-dashed rounded-3 p-3">
-                                            <li class="list-group-item py-0">
-                                                <label class="fs-14 text-gray-700 me-2">Disclosure Status <span
-                                                        class="d-none d-md-inline">:</span></label>
+
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-700">Disclosure Status<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
                                                 <span
                                                     [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                     <app-no-data-label
@@ -75,11 +80,13 @@
                                                             </span>
                                                         </span>
                                                     </app-no-data-label>
-                                                </span>
-                                            </li>
-                                            <li class="list-group-item py-0">
-                                                <label class="fs-14 text-gray-700 me-2">Disposition Status <span
-                                                        class="d-none d-md-inline">:</span></label>
+                                                </span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-700">Disposition Status<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
                                                 <span
                                                     [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                     <span
@@ -88,23 +95,26 @@
                                                     <span class="badgeFont">
                                                         {{disclosure?.coiDispositionStatusType?.description}}
                                                     </span>
-                                                </span>
-                                            </li>
-                                            <li class="list-group-item py-0">
-                                                <label class="fs-14 text-gray-700 me-2">Review Status <span
-                                                        class="d-none d-md-inline">:</span></label>
+                                                </span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-700">Review Status<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
                                                 <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                     <span
                                                         class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
                                                     <span class="badgeFont">
                                                         {{disclosure?.coiReviewStatusType?.description}}
                                                     </span>
-                                                </span>
-                                            </li>
-                                        </ul>
+                                                </span>              
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- new main card design for FCOI Disclosure ends-->
+                                                                
+                                <!-- new main card design for FCOI Disclosure(updated) ends-->
                             </div>
                         </div>
                         <div class="d-flex align-items-center">

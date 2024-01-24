@@ -4,9 +4,44 @@
     background-color: var(--theme-card-bg-color);
     border: var(--theme-card-border);
     box-shadow: var(--theme-card-box-shadow);
+
+    .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            flex-wrap: wrap;
+            min-height: 70px;
+            padding: 0 2.25rem;
+            color: var(--bs-card-cap-color);
+            background-color: var(--bs-card-cap-bg);
+            border-bottom: 1px solid var(--bs-card-border-color);
+        .card-title {
+            display: flex;
+            align-items: center;
+            margin: .5rem;
+            margin-left: 0;
+            .card-label {
+                margin: 0 .75rem 0 0;
+                flex-wrap: wrap;
+            }
+        }
+        .card-title.flex-column {
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .card-toolbar {
+            display: flex;
+            align-items: center;
+            margin: .5rem 0;
+            flex-wrap: wrap;
+        }
+    }
 }
+
 .coi-card-overview {
     font-weight: bold;
+    box-shadow: -1px 3px 50px -17px rgb(0 0 0 / 22%);
+    border-radius: 1.250rem;
     .card-header {
         display: flex;
         justify-content: space-between;
@@ -14,13 +49,18 @@
         flex-wrap: wrap;
         height: 49px;
         background-color: transparent !important;
-        border: 0;
-
+        border: 0;        
+            padding: 1rem 1.875rem !important;
+        
         .card-toolbar {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
         }
+    }
+
+    .card-body {
+        padding: 1rem 1.875rem !important;
     }
 
     .card-content {
@@ -30,6 +70,7 @@
     .card-footer {
         background-color: transparent !important;
         border: 0;
+        padding: 0 1.875rem !important;
     }
 
     .list-group {
