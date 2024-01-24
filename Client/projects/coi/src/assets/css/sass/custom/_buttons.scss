@@ -48,19 +48,6 @@
     background-color: #E2F1FF;
   }
   
-  .btn-secondary-svg {
-    display: inline-block;
-    background: url(assets/images/history-icon-with-dark-shade.svg);
-    width: 23px;
-    height: 23px;
-    background-repeat: no-repeat;
-  }
-  
-  .btn-primary-icon-svg:hover .btn-secondary-svg {
-    background: url(assets/images/history-icon-with-blue-shade.svg);
-    background-repeat: no-repeat;
-  }
-  
   .btn-outline-secondary {
     &:hover {
       color: #fff;
