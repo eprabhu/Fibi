@@ -1006,6 +1006,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
              this.questionnaireDetails.QUESTIONNAIRE_ANS_HEADER_ID = this.result.questionnaireAnswerHeaderId;
              this.questionnaireDetails.QUESTIONNAIRE_COMPLETED_FLAG = this.result.questionnaireCompleteFlag;
              this.questionnaireDetails.TRIGGER_POST_EVALUATION = this.result.header.TRIGGER_POST_EVALUATION;
+             this.questionnaireDetails.ANS_UPDATE_TIMESTAMP = this.result.header.ANS_UPDATE_TIMESTAMP;
              this.questionnaireSaveEvent.emit({ status: 'SUCCESS', data: this.questionnaireDetails });
          }
      }
