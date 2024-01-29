@@ -6,33 +6,30 @@ import { BehaviorSubject, Subject } from 'rxjs';
 @Injectable()
 export class EntityDetailsService {
 
-  previousURL = '';
-  globalSave$: Subject<any> = new Subject<any>();
-  isRelationshipQuestionnaireChanged = false;
-  isAdditionalDetailsChanged = false;
+  globalSave$: Subject<any> = new Subject<any>(); // to save questionnaire
+  isRelationshipQuestionnaireChanged = false; //to track changes in questionnaire details.
+  isAdditionalDetailsChanged = false; //to track changes in SFI details
 
-  $openQuestionnaire = new Subject();
-  $saveQuestionnaireAction = new Subject();
-  $addOrDeleteRelation = new Subject();
-  $relationshipsDetails = new BehaviorSubject<object>({});
-  isHoverEntityCard = false;
-  canMangeSfi = false;
-  unSavedSections = [];
-  relationshipCompletedObject: any = {};
-  concurrentUpdateAction = '';
-  activeRelationship : any;
-  definedRelationships = [];
-  availableRelationships = [];
-  $triggerAddRelationModal = new Subject();
-  $emitUnsavedChangesModal = new Subject()
-  selectedTab = 'QUESTIONNAIRE';
-  clickedTab: 'QUESTIONNAIRE' | 'RELATION_DETAILS' | 'HISTORY';
-  currentVersionDetails: any = {};
-  currentRelationshipQuestionnaire: any;
-  isChecked = {};
-  groupedRelations = {};
-  isVersionChange = false;
-  $triggerAddRelation = new Subject();
+  $openQuestionnaire = new Subject(); //to open questionnaire
+  $saveQuestionnaireAction = new Subject(); //to trigger save action in questionnaire.
+  $addOrDeleteRelation = new Subject(); //to trigger add or delete action in SFI details.
+  canMangeSfi = false; //to check SFI edit permission.
+  unSavedSections = []; //to store unsaved section details/
+  relationshipCompletedObject: any = {}; // to store relationship code for complete and incomplete questionnaire.
+  concurrentUpdateAction = ''; //store concurrent action
+  activeRelationship : any; // active relationship type code.
+  definedRelationships = []; //currently added relationships details.
+  allAvailableRelationships = []; //relationship lookup
+  remainingRelationships = []; //remaining relationship lookup
+  $triggerAddRelationModal = new Subject(); //to open add relationship modal.
+  $emitUnsavedChangesModal = new Subject() // to open unsaved changes modal
+  activeTab: 'QUESTIONNAIRE' | 'RELATION_DETAILS' | 'HISTORY' = 'QUESTIONNAIRE'; //currently active Tab
+  toBeActiveTab: 'QUESTIONNAIRE' | 'RELATION_DETAILS' | 'HISTORY'; //currently selected tab to set as active.
+  currentVersionDetails: any = {}; //store current version details
+  currentRelationshipQuestionnaire: any; // currently selected questionnaire
+  groupedRelations = {}; //grouped available relations
+  isVersionChange = false; //to track version change
+  $triggerAddRelation = new Subject(); //to open add relation.
   
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -102,3 +99,9 @@ export class EntityDetailsService {
 
 }
 
+export function groupBy(jsonData, key, innerKey) {
+    return jsonData.reduce((relationsTypeGroup, item) => {
+        (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
+        return relationsTypeGroup;
+    }, {});
+}
