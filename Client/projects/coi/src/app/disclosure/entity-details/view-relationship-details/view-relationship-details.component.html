@@ -1,5 +1,5 @@
 <!-- SFI header card -->
-<div class="row mx-0 sticky-0 px-4" id="sfi-top-card">
+<div class="row mx-0 sticky-0" id="sfi-top-card">
 
     <!-- SFI heading -->
     <div class="card shadow-sm" [ngClass]="!isTriggeredFromSlider ? 'col-9' : 'col-12'">
@@ -202,24 +202,24 @@
         </div>
     </div>
 </div>
-
+<div class="card mt-3">
 <!-- SFI main navigation tabs -->
-<nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 w-auto shadow-sm user-dashboard-nav text-nowrap">
-    <div class="align-items-center d-flex justify-content-between nav-options border-end cursor-pointer"
+<nav class="bg-white d-flex fw-bold w-auto  user-dashboard-nav card-nav border-bottom">
+    <div class="align-items-center d-flex justify-content-between nav-options cursor-pointer"
         [class.relation-active]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'"
         (click)="openRelationShipSection()" tabindex="0">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
-            <span title="Click to view SFI Details" class="px-4 fw-500"
+            <span title="Click to view SFI Details" class="fw-500"
                 [attr.aria-label]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 SFI Details
             </span>
         </div>
     </div>
-    <div class="align-items-center d-flex justify-content-between nav-options border-end cursor-pointer"
+    <div class="align-items-center d-flex justify-content-between nav-options cursor-pointer"
         [class.relation-active]="entityDetailsServices.selectedTab === 'QUESTIONNAIRE'"
         (click)="openRelationshipQuestionnaire(entityDetailsServices.definedRelationships[0])" tabindex="0">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
-            <span title="Click to view SFI Details" class="px-4 fw-500"
+            <span title="Click to view SFI Details" class="fw-500"
                 [attr.aria-label]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 Relationship Details
             </span>
@@ -229,7 +229,7 @@
         [class.relation-active]="entityDetailsServices.selectedTab === 'HISTORY'" tabindex="0"
         (click)="openHistorySection();">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
-            <span title="Click to view History" class="px-4 fw-500"
+            <span title="Click to view History" class="fw-500"
                 [attr.aria-label]="entityDetailsServices.selectedTab === 'HISTORY' ? 'Selected tab is SFI History' : 'Click to view SFI History'">
                 History
             </span>
@@ -238,9 +238,9 @@
 </nav>
 
 <!-- Relationship questionnaire tabs and relationship button-->
-<div class="d-flex"
+<div class="d-flex border-bottom sub-nav-outer"
     *ngIf="entityDetailsServices.selectedTab === 'QUESTIONNAIRE' && entityDetailsServices.definedRelationships.length">
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav text-nowrap overflow-auto"
+    <nav class="d-flex fs-15 fw-bold user-dashboard-nav text-nowrap overflow-auto flex-grow-1"
         [ngClass]="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length ? 'nav-width' : 'w-100'">
         <ng-container
             *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let isLast = last">
@@ -267,9 +267,9 @@
             </div>
         </ng-container>
     </nav>
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 w-auto shadow-sm user-dashboard-nav w-100 text-nowrap"
+    <nav class="d-flex fs-15 fw-bold w-auto border-start user-dashboard-nav w-100 text-nowrap"
         *ngIf="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.availableRelationships?.length">
-        <div class="pt-3 pe-4 ps-3 border-end relation-border-left btn-color" role="button"
+        <div class="pt-3 px-3 btn-color" role="button"
             (click)="saveOrAddRelationshipModal()">
             <span class="d-flex align-items-center">
                 <mat-icon class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
@@ -284,7 +284,7 @@
 
     <!-- Questionnaire Section -->
     <div class="row" *ngIf="entityDetailsServices.definedRelationships?.length">
-        <div class="col-12">
+        <div class="col-12 custom-quest-relationship my-3">
             <app-entity-questionnaire *ngIf="isRelationshipDetailsFetched()"
                 (mouseout)="entityDetailsServices.isHoverEntityCard = false" [entityId]="entityId"
                 [relationshipDetails]="relationshipsDetails" id="focusQuestionnaire" [isEditMode]="isEditMode"
@@ -327,9 +327,8 @@
 </div>
 
 <!-- SFI Details section if SFI Details tab is clicked -->
-<div class="d-flex mx-0 px-4" *ngIf="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'">
-    <div class="col">
-        <div *ngIf="!isEditMode" class="card mb-3 shadow-medium"
+<div *ngIf="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS'">
+        <div *ngIf="!isEditMode" class="card mb-3"
             (mouseout)="entityDetailsServices.isHoverEntityCard = false">
             <div class="row d-flex px-4 mb-3 mt-4">
                 <div class="col-3" tabindex="0">
@@ -419,7 +418,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isEditMode" class="card mb-3 shadow-medium" tabindex="-1"
+        <div *ngIf="isEditMode" class="mb-3" tabindex="-1"
             (mouseout)="entityDetailsServices.isHoverEntityCard = false">
             <div class="card-body px-0 pt-2">
                 <div class="row d-flex px-4 mb-3 mt-4">
@@ -566,7 +565,7 @@
                 </div>
             </div>
         </div>
-    </div>
+ 
 
 </div>
 
@@ -578,3 +577,4 @@
     (closeModal)="closeActivateInactivateSfiModal($event)"
     [personEntityNumber]="relationshipsDetails?.personEntityNumber">
 </app-activate-inactivate-sfi-modal>
+</div>
