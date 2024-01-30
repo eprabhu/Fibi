@@ -119,16 +119,17 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             relationshipNames.add(relType.getDescription());
             personEntityRelationshipList.add(personEntityRelation);
         }
-        ResponseEntity<Map<String, Object>> response = updatePersonEntityCompleteFlag(personEntityId);
         PersonEntityDto personEntityDto = new PersonEntityDto();
         personEntityDto.setPersonEntityId(personEntityId);
-        personEntityDto.setIsFormCompleted((Boolean) response.getBody().get(IS_FORM_COMPLETED));
         personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
         personEntityDto.setEntityName(personEntity.getCoiEntity().getEntityName());
         personEntityDto.setRelationshipName(String.join(",", relationshipNames));
         personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_REL_ADDED);
         actionLogService.savePersonEntityActionLog(personEntityDto);
+        ResponseEntity<Map<String, Object>> response = updatePersonEntityCompleteFlag(personEntityId);
+        personEntityDto.setIsFormCompleted((Boolean) response.getBody().get(IS_FORM_COMPLETED));
         personEntityDto.setPersonEntityRelationships(personEntityRelationshipList);
+        personEntityDto.setUpdateTimestamp(conflictOfInterestDao.updatePersonEntityUpdateDetails(personEntityId));
         return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
     }
 

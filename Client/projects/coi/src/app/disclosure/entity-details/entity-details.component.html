@@ -1,4 +1,3 @@
-
 <app-view-relationship-details
         [entityId]="entityId" [entityNumber]="entityNumber"
         [entityDetails]="entityDetails"
@@ -106,7 +105,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="entityDetailService.availableRelationships?.length; else noData" class="relation d-flex justify-content-center mt-4">
+        <div *ngIf="entityDetailService.remainingRelationships && entityDetailService.remainingRelationships?.length; else noData"  class="relation d-flex justify-content-center mt-4">
           <div class="card custom-padding position-relative w-65" [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
             <div class="color-black mb-2" tabindex="0">
               <label class="form-check-label colour-black relation-header px-2"><b>Relationship Details </b>[Disclose financial details for the SFI]</label>
@@ -120,7 +119,7 @@
                       class="form-check-input text-secondary border border-secondary"
                       [value]="relation?.validPersonEntityRelTypeCode"
                       [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
-                      [(ngModel)]="entityDetailService.isChecked[relation?.validPersonEntityRelTypeCode]">
+                      [(ngModel)]="checkedRelationships[relation?.validPersonEntityRelTypeCode]"
                     <label class="text-secondary r-title fs-14" [for]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode">
                       {{relation?.personEntityRelType?.description}} </label>
                   </div>
@@ -138,7 +137,7 @@
       <div class="modal-footer">
         <button class="btn btn-outline-secondary" id="add-relationship-btn" data-bs-dismiss="modal" type="button"
           title="Cancel" (click)="clearModal()">Cancel</button>
-        <button class="btn btn-primary me-0" id="add-relationship-btn" type="button" (click)="triggerAddRelation()">Add
+        <button class="btn btn-primary me-0" id="add-relationship-btn" type="button" (click)="addRelation()">Add
           Relationship</button>
       </div>
     </div>
