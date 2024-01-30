@@ -65,6 +65,10 @@
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
+                <mat-icon data-bs-target="#theme-selector-modal" data-bs-toggle="modal" [attr.title]="'Click to view accessibility'" [attr.aria-labelledby]="'Click to view accessibility'"
+                          class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
+                    accessibility
+                </mat-icon>
                 <mat-icon [attr.title]="'Click to view COI Notifications'"
                           [routerLink]="['/coi/expanded-widgets']"
                           [attr.aria-labelledby]="'Click to view all the notifications'"
@@ -138,3 +142,48 @@
 <app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
                              [activeDisclosures]="headerService.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
 </app-disclosure-create-modal>
+
+<!-- theme selector -->
+<div class="modal modal-coi fade mySkinDialog" id="theme-selector-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pe-0">
+                <h4 class="modal-title">Choose a theme</h4>
+                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                    type="button">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3">
+                    <div class="col-3">
+                        <div class="form-check">
+                          <input type="radio" class="btn-check" name="options-theme" id="btn-check-default" checked autocomplete="off" (click)="changeTheme('default')">
+                        <label class="btn btn-outline-secondary" for="btn-check-default">Default</label>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="options-theme" id="btn-check-dark" autocomplete="off" (click)="changeTheme('dark')">
+                <label class="btn btn-outline-dark" for="btn-check-dark">Dark</label>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="options-theme" id="btn-check-blue" autocomplete="off" (click)="changeTheme('blue')">
+                <label class="btn btn-outline-primary" for="btn-check-blue">Blue</label>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="options-theme" id="btn-check-red" autocomplete="off" (click)="changeTheme('red')">
+                <label class="btn btn-outline-danger" for="btn-check-red">Red</label>
+                        </div>
+                      </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- theme selector ends -->
