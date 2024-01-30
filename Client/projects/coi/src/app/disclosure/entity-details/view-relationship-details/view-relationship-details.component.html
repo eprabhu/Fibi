@@ -206,7 +206,7 @@
         (click)="openRelationShipSection()" tabindex="0">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
             <span title="Click to view SFI Details" class="fw-500"
-                [attr.aria-label]="entityDetailsServices.selectedTab === 'RELATIONSHIP_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
+                [attr.aria-label]="entityDetailsServices.activeTab === 'RELATION_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 SFI Details
             </span>
         </div>
@@ -281,7 +281,7 @@
     <!-- Questionnaire Section -->
     <div class="row" *ngIf="entityDetailsServices.definedRelationships?.length">
         <div class="col-12 custom-quest-relationship my-3">
-           <app-entity-questionnaire *ngIf="isRelationshipDetailsFetched()" [entityId]="entityId
+           <app-entity-questionnaire *ngIf="isRelationshipDetailsFetched()" [entityId]="entityId"
                 [relationshipDetails]="relationshipsDetails" id="focusQuestionnaire" [isEditMode]="isEditMode"
                 (positionsToView)="scrollPosition($event)">
             </app-entity-questionnaire>
