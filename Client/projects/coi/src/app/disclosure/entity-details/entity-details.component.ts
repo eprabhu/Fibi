@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EntityDetailsService } from './entity-details.service';
-import { deepCloneObject, hideModal, isEmptyObject, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { EntityDetailsService, groupBy } from './entity-details.service';
+import { deepCloneObject, hideModal, isEmptyObject, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../common/services/navigation.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -16,52 +16,78 @@ import { ViewRelationshipDetailsComponent } from './view-relationship-details/vi
 })
 
 export class EntityDetailsComponent implements OnInit, OnDestroy {
-    @ViewChild(ViewRelationshipDetailsComponent) viewRelationComponent!: ViewRelationshipDetailsComponent;
     @Input() entityId: any;
-    @Input() entityNumber: any;
+    @Output() closeAction: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    @ViewChild(ViewRelationshipDetailsComponent) viewRelationComponent: ViewRelationshipDetailsComponent;
+
     isTriggeredFromSlider = false;
     $subscriptions: Subscription[] = [];
-    @Output() closeAction: EventEmitter<boolean> = new EventEmitter<boolean>();
     questionnaireSection: any = '';
-    definedRelationships = [];
-    selectedQuestionnaire: any;
     relationValidationMap = new Map();
+    entityDetails = {};
+    entityNumber: any;
     isSaving = false;
+    checkedRelationships = {};
 
     constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
-        private _commonService: CommonService, private _navigationService: NavigationService) {
-        this.clearSfiNavBarStyle();
-    }
-
-    entityDetails = {};
+        private _commonService: CommonService, private _navigationService: NavigationService) {}
 
     async ngOnInit() {
-        this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
-        this.isTriggeredFromSlider = this.checkForUrl();
-        this.getQueryParams();
         this.resetServiceValues();
+        this.entityDetailService.activeTab = 'QUESTIONNAIRE';
+        this.isTriggeredFromSlider = this.checkForSFIOpenedFromSlider();
+        this.getQueryParams();
+        this.getSfiEntityDetails();
         await this.getDefinedRelationships();
-        this.getAvailableRelationship();
-        this.openAddRelationModal();
-        this.showQuestionnaireLeaveConfirmationModal();
+        this.getAvailableRelationship(); 
+        this.listenToAddRelationModal();
+        this.listenToLeaveConfirmationModal();
+    }
+
+    getQueryParams() {
+        this.$subscriptions.push(this._route.queryParams.subscribe(params => { 
+            this.entityId = params['personEntityId'] || this.entityId;
+            this.entityNumber = params['personEntityNumber'] || null;
+        }));
+    }
+
+    checkForSFIOpenedFromSlider() {
+        return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary', 'entity-management/entity-details', 'user-dashboard/disclosures', 'coi/admin-dashboard'].some(ele => this._router.url.includes(ele))
     }
 
     async getAvailableRelationship() {
-        this.entityDetailService.availableRelationships = await this.getRelationshipLookUp();
+        this.entityDetailService.allAvailableRelationships = await this.getRelationshipLookUp();
+        this.entityDetailService.remainingRelationships = deepCloneObject(this.entityDetailService.allAvailableRelationships);
         this.removeExistingRelation();
+    }
+
+    /*
+    remove already added relationships from available relationship and grouping remaining relations.
+    */
+    private removeExistingRelation() {
+        this.entityDetailService.groupedRelations = {};
+        if (this.entityDetailService.definedRelationships.length) {
+            this.entityDetailService.definedRelationships.forEach(element => {
+                this.findRelationAndRemove(element.validPersonEntityRelType.validPersonEntityRelTypeCode);
+            });
+        } else {
+            if (this.entityDetailService.remainingRelationships.length) {
+                this.entityDetailService.groupedRelations = groupBy(deepCloneObject(this.entityDetailService.remainingRelationships), "coiDisclosureType", "description");
+            }
+        }
     }
 
     getDefinedRelationships() {
         const REQ_BODY = {
-            'personEntityId': this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId
+            'personEntityId': this.entityId
         };
         return new Promise<boolean>((resolve) => {
             this.$subscriptions.push(this.entityDetailService.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
                 if (res.length) {
                     this.entityDetailService.definedRelationships = res || [];
-                    this.openQuestionnaire(this.entityDetailService.definedRelationships[0]);
                 } else {
-                    this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
+                    this.entityDetailService.activeTab = 'RELATION_DETAILS';
                 }
                 resolve(true);
             }, error => {
@@ -71,24 +97,8 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         });
     }
 
-    getQueryParams() {
-        this.$subscriptions.push(this._route.queryParams.subscribe(params => { 
-            this.entityId = params['personEntityId'] || this.entityId;
-            this.entityNumber = params['personEntityNumber'] || null;
-            this.getSfiEntityDetails();
-        }));
-    }
-
-    checkForUrl() {
-        return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary', 'entity-management/entity-details', 'user-dashboard/disclosures', 'coi/admin-dashboard'].some(ele => this._router.url.includes(ele))
-    }
-
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
-    }
-
-    clearSfiNavBarStyle() {
-        document.getElementById('COI_SCROLL').style.removeProperty('overflow');
     }
 
     fullPageNavigationLeavePage() {
@@ -111,8 +121,8 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         }));
     }
 
-    showQuestionnaireLeaveConfirmationModal() {
-        this.$subscriptions.push(this.entityDetailService.$emitUnsavedChangesModal.subscribe((data: any) => { //change subscription name
+    listenToLeaveConfirmationModal() {
+        this.$subscriptions.push(this.entityDetailService.$emitUnsavedChangesModal.subscribe((data: any) => {
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
                 this.questionnaireSection = this.entityDetailService.unSavedSections.find(ele => ele.includes('Relationship Questionnaire'));
                 openModal('questionnaireUnsavedChanges');
@@ -123,28 +133,8 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         }));
     }
 
-    questionnaireChangeModalLeaveTab() {
-        this.entityDetailService.isRelationshipQuestionnaireChanged = false;
-        let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
-        if (index >= 0) {
-            this.entityDetailService.unSavedSections.splice(index, 1);
-        }
-        if (this.entityDetailService.clickedTab === 'RELATION_DETAILS') {
-            this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
-        } else if (this.entityDetailService.clickedTab === 'HISTORY') {
-            this.entityDetailService.selectedTab = 'HISTORY';
-        } else {
-            this.viewRelationComponent.loadCurrentVersion();
-            if (this.entityDetailService.currentRelationshipQuestionnaire && !isEmptyObject(this.entityDetailService.currentRelationshipQuestionnaire)) {
-                this.openQuestionnaire(this.entityDetailService.currentRelationshipQuestionnaire);
-            }
-            this.entityDetailService.clickedTab === 'QUESTIONNAIRE';
-        }
-        hideModal('questionnaireUnsavedChanges');
-    }
-
     openQuestionnaire(entityDetails) {
-        this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+        this.entityDetailService.activeTab = 'QUESTIONNAIRE';
         setTimeout(() => {
             this.entityDetailService.$openQuestionnaire.next(entityDetails);
         },500);
@@ -158,7 +148,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.concurrentUpdateAction = '';
     }
 
-    openAddRelationModal() {
+    listenToAddRelationModal() {
         this.$subscriptions.push(this.entityDetailService.$triggerAddRelationModal.subscribe(async (data: any) => {
             this.removeExistingRelation();
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
@@ -168,42 +158,21 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         }))
     }
 
-    private removeExistingRelation() {
+    private findRelationAndRemove(financialEntityRelTypeCode: string) {
         this.entityDetailService.groupedRelations = {};
-        if (this.entityDetailService.definedRelationships.length) {
-            this.entityDetailService.definedRelationships.forEach(element => {
-                this.findRelation(element.validPersonEntityRelType.validPersonEntityRelTypeCode);
-            });
-        } else {
-            if (this.entityDetailService.availableRelationships.length) {
-                this.entityDetailService.groupedRelations = this.groupBy(deepCloneObject(this.entityDetailService.availableRelationships), "coiDisclosureType", "description");
-            }
-        }
-    }
-
-    private findRelation(financialEntityRelTypeCode: string) {
-        this.entityDetailService.groupedRelations = {};
-        const RELATION_INDEX = this.entityDetailService.availableRelationships.findIndex(element =>
+        const RELATION_INDEX = this.entityDetailService.remainingRelationships.findIndex(element =>
             element.validPersonEntityRelTypeCode === financialEntityRelTypeCode);
         if (RELATION_INDEX !== -1) {
-            this.entityDetailService.availableRelationships.splice(RELATION_INDEX, 1);
+            this.entityDetailService.remainingRelationships.splice(RELATION_INDEX, 1);
         }
-        if (this.entityDetailService.availableRelationships.length) {
-            this.entityDetailService.groupedRelations = this.groupBy(deepCloneObject(this.entityDetailService.availableRelationships), "coiDisclosureType", "description");
+        if (this.entityDetailService.remainingRelationships.length) {
+            this.entityDetailService.groupedRelations = groupBy(deepCloneObject(this.entityDetailService.remainingRelationships), "coiDisclosureType", "description");
         }
-    }
-
-    groupBy(jsonData, key, innerKey) {
-        return jsonData.reduce((relationsTypeGroup, item) => {
-            (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
-            return relationsTypeGroup;
-        }, {});
     }
 
     async getRelationshipLookUp(): Promise<any> {
         try {
-            const response = await this.entityDetailService.addSFILookUp();
-            return response;
+            return await this.entityDetailService.addSFILookUp();
         } catch (error) {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }
@@ -216,20 +185,37 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
             this.entityDetailService.unSavedSections.splice(index, 1);
         }
         hideModal('relationDetailsUnSavedChanges');
-        if (this.entityDetailService.clickedTab === 'HISTORY') {
-            this.entityDetailService.selectedTab = 'HISTORY';
-        } else if (this.entityDetailService.clickedTab === 'QUESTIONNAIRE') {
-            this.openQuestionnaire(this.entityDetailService.currentRelationshipQuestionnaire);
-        } 
+        if (this.entityDetailService.toBeActiveTab === 'HISTORY') {
+            this.entityDetailService.activeTab = 'HISTORY';
+        } else if (this.entityDetailService.toBeActiveTab === 'QUESTIONNAIRE') {
+            this.openQuestionnaire(!isEmptyObject(this.entityDetailService.currentRelationshipQuestionnaire) ? this.entityDetailService.currentRelationshipQuestionnaire : this.entityDetailService.definedRelationships[0]);
+        } else if (this.entityDetailService.isVersionChange) {
+            this.viewRelationComponent.loadCurrentVersion();        
+        }
+        this.entityDetailService.isVersionChange = false;
+    }
+    
+    questionnaireChangeModalLeaveTab() {
+        this.entityDetailService.isRelationshipQuestionnaireChanged = false;
+        let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
+        if (index >= 0) {
+            this.entityDetailService.unSavedSections.splice(index, 1);
+        }
+        if (this.entityDetailService.toBeActiveTab === 'RELATION_DETAILS') {
+            this.entityDetailService.activeTab = 'RELATION_DETAILS';
+        } else if (this.entityDetailService.toBeActiveTab === 'HISTORY') {
+            this.entityDetailService.activeTab = 'HISTORY';
+        } else {
+           this.entityDetailService.isVersionChange ? this.viewRelationComponent.loadCurrentVersion() : this.openQuestionnaire(this.entityDetailService.currentRelationshipQuestionnaire);
+            this.entityDetailService.toBeActiveTab === 'QUESTIONNAIRE';
+        }
+        this.entityDetailService.isVersionChange = false;
+        hideModal('questionnaireUnsavedChanges');
     }
 
     clearModal() {
         this.relationValidationMap.clear();
-        this.entityDetailService.isChecked = {};
-    }
-
-    triggerAddRelation() {
-        this.addRelation();
+        this.checkedRelationships = {};
     }
 
     addRelation() {
@@ -241,15 +227,10 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 'validPersonEntityRelTypeCodes': this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
             };
             this.$subscriptions.push(this.entityDetailService.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-                res.personEntityRelationships.forEach(ele => {
-                    this.entityDetailService.definedRelationships.push(ele);
-                    this.findRelation(ele.validPersonEntityRelTypeCode);
-                });
-                this.openQuestionnaire(res.personEntityRelationships[0]);
-                this.clearRelationModal();
+                this.updateNewRelationships(res);
                 this.isSaving = false;
+                this.checkedRelationships = {};
                 hideModal('addRelationshipModal');
-                this.entityDetailService.$addOrDeleteRelation.next({'action': 'INSERT', 'element': res.personEntityRelationships, 'isFormCompleted': res.isFormCompleted});
             }, error => {
                 this.isSaving = false;
                 if (error.status === 405) {
@@ -262,8 +243,21 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
-    clearRelationModal() {
-        this.entityDetailService.isChecked = {};
+    async updateNewRelationships(res) {
+        this.entityDetailService.currentRelationshipQuestionnaire = res.personEntityRelationships[0];
+        if (this.entityId != res.personEntityId) {
+            await this.viewRelationComponent.updateModifiedVersion(res, false);
+            this.entityDetailService.definedRelationships.forEach(ele => {
+                this.findRelationAndRemove(ele.validPersonEntityRelTypeCode);
+            });
+        } else {
+            res.personEntityRelationships.forEach(ele => {
+                this.entityDetailService.definedRelationships.push(ele);
+                this.findRelationAndRemove(ele.validPersonEntityRelTypeCode);
+            });
+            this.openQuestionnaire(res.personEntityRelationships[0]);
+            this.entityDetailService.$addOrDeleteRelation.next({'element': res.personEntityRelationships, 'isFormCompleted': res.isFormCompleted, 'updateTimestamp': res.updateTimestamp});
+        }
     }
 
     validateRelationship() {
@@ -275,18 +269,18 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     getSelectedRelationTypeCodes() {
-        return Object.keys(this.entityDetailService.isChecked).filter(key => this.entityDetailService.isChecked[key]);
+        return Object.keys(this.checkedRelationships).filter(key => this.checkedRelationships[key]);
     }
 
     resetServiceValues() {
         this.entityDetailService.activeRelationship = {};
         this.entityDetailService.definedRelationships = [];
-        this.entityDetailService.availableRelationships = [];
+        this.entityDetailService.allAvailableRelationships = [];
+        this.entityDetailService.remainingRelationships = [];
         this.entityDetailService.relationshipCompletedObject = {};
         this.entityDetailService.currentRelationshipQuestionnaire = {};
-        this.entityDetailService.isHoverEntityCard = false;
         this.entityDetailService.canMangeSfi = false;
-        this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+        this.entityDetailService.activeTab = 'QUESTIONNAIRE';
         this.entityDetailService.currentVersionDetails = {};
         this.entityDetailService.groupedRelations = {};
     }

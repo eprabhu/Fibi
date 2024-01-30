@@ -203,6 +203,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
             this.questionnaireList[this.selectedIndex].TRIGGER_POST_EVALUATION = event.data.TRIGGER_POST_EVALUATION;
             this.questionnaireList[this.selectedIndex].NEW_QUESTIONNAIRE_ID = event.data.NEW_QUESTIONNAIRE_ID;
             this.questionnaireList[this.selectedIndex].QUESTIONNAIRE_ID = event.data.QUESTIONNAIRE_ID;
+            this.questionnaireList[this.selectedIndex].ANS_UPDATE_TIMESTAMP = event.data.ANS_UPDATE_TIMESTAMP;
             const QUESTIONNAIRE = {...this.questionnaireList[this.selectedIndex]};
             QUESTIONNAIRE.IS_ALL_QUESTIONNAIRES_COMPLETE = this.isAllQuestionnairesCompleted();
             this.QuestionnaireSaveEvent.emit(QUESTIONNAIRE);

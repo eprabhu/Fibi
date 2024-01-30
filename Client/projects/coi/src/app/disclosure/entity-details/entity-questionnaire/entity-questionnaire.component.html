@@ -1,24 +1,23 @@
-
-<div class="ms-4 questionnaire-position me-3" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
-    <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
-      <button class="btn-delete-position btn btn-tertiary mr-2" data-bs-toggle="modal" data-bs-target="#deleteRelationModal">
-        <mat-icon class="pt-1">delete_outline</mat-icon>
-        <span class="fs-14 delete-content-position">Delete</span>
-      </button>
+<div class="ms-4 questionnaire-position me-3">
+    <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi"
+        class="justify-content-end d-flex">
+        <button class="btn-delete-position btn btn-tertiary mr-2" data-bs-toggle="modal"
+            data-bs-target="#deleteRelationModal">
+            <mat-icon class="pt-1">delete_outline</mat-icon>
+            <span class="fs-14 delete-content-position">Delete</span>
+        </button>
     </div>
     <div class="custom-qustnr">
-      <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length && hasPermissionToView" [configuration]="configuration" [questionnaireHeader]="''"
-      [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)"
-      (QuestionnaireEditEvent)="questionnaireEdit($event)">
-    </app-view-questionnaire-list>
-  <app-no-information *ngIf="!hasPermissionToView" [isBorderNeeded]="true"><span>You don't have permission to view this resource</span></app-no-information>
+        <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length && hasPermissionToView"
+            [configuration]="configuration" [questionnaireHeader]="''"
+            [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false"
+            (QuestionnaireSaveEvent)="questionnaireSaveAction($event)"
+            (QuestionnaireEditEvent)="questionnaireEdit($event)">
+        </app-view-questionnaire-list>
+        <app-no-information *ngIf="!hasPermissionToView" [isBorderNeeded]="true"><span>You don't have permission to view
+                this resource</span></app-no-information>
     </div>
 </div>
-<!-- Modal -->
-<button id="open-relationship-modal" data-bs-target="#addRelationshipModal" data-bs-toggle="modal"
-  class="d-none"></button>
-<button type="button" hidden=true id="hide-relationship-modal" data-bs-dismiss="modal"
-  data-bs-target="#addRelationshipModal"></button>
 
 <!-- DELETE RELATIONSHIP MODAL -->
 <div class="modal modal-coi modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteRelationModal"
@@ -31,13 +30,15 @@
                     type="button">
                 </button>
             </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete <strong>{{currentRelationshipDetails?.validPersonEntityRelType?.description}}</strong>?</p>
-                </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete
+                    <strong>{{currentRelationshipDetails?.validPersonEntityRelType?.description}}</strong>?</p>
+            </div>
             <div class="modal-footer">
-                <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal"
-                    (click)="deleteRelationship()">Delete</button>
+                <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
+                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary fs-14"
+                    data-bs-dismiss="modal" (click)="deleteRelationship()">Delete</button>
             </div>
         </div>
     </div>
