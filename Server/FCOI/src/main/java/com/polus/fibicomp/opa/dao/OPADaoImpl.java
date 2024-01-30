@@ -14,12 +14,9 @@ import java.util.stream.Collectors;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 
-import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
+import com.polus.fibicomp.opa.pojo.OPAReviewStatusType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -40,7 +37,9 @@ import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
+import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
+import com.polus.fibicomp.opa.pojo.OPAPersonType;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
@@ -60,6 +59,9 @@ public class OPADaoImpl implements OPADao {
 	private PersonDao personDao;
 
   	protected static Logger logger = LogManager.getLogger(OPADaoImpl.class.getName());
+  	private static final String DESIGNATION_STATUS_CODE_FACULTY = "1";
+  	private static final String DESIGNATION_STATUS_FACULTY = "\"Y\"";
+  	private static final String DESIGNATION_STATUS_STAFF = "\"N\"";
 
     @Override
     public boolean canCreateOpaDisclosure(String personId) {
@@ -79,7 +81,7 @@ public class OPADaoImpl implements OPADao {
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ApplicationException(e.getMessage(),e, Constants.DB_PROC_ERROR);
         }
         return false;
     }
@@ -91,7 +93,7 @@ public class OPADaoImpl implements OPADao {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("UPDATE OPADisclosure d SET d.certificationText = :certificationText, ");
         hqlQuery.append("d.certifiedBy = :certifiedBy, d.submissionTimestamp = :submissionTimestamp, ");
-        hqlQuery.append("d.opaDisclosureStatusCode = :opaDisclosureStatusCode, d.updateTimestamp = :updateTimestamp,");
+        hqlQuery.append("d.reviewStatusCode = :reviewStatusCode, d.updateTimestamp = :updateTimestamp,");
         hqlQuery.append("d.updateUser = :updateUser, d.dispositionStatusCode = :dispositionStatusCode ");
         hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
         Query query = session.createQuery(hqlQuery.toString());
@@ -100,9 +102,9 @@ public class OPADaoImpl implements OPADao {
         query.setParameter("certifiedBy", AuthenticatedUser.getLoginPersonId());
         query.setParameter("submissionTimestamp", timesStamp);
 		if (opaSubmitDto.getOpaDisclosureStatus() != null) {
-			query.setParameter("opaDisclosureStatusCode", opaSubmitDto.getOpaDisclosureStatus());
+			query.setParameter("reviewStatusCode", opaSubmitDto.getOpaDisclosureStatus());
 		} else {
-			query.setParameter("opaDisclosureStatusCode", Constants.OPA_DISCLOSURE_STATUS_SUBMIT);
+			query.setParameter("reviewStatusCode", Constants.OPA_DISCLOSURE_STATUS_SUBMIT);
 		}
         query.setParameter("dispositionStatusCode", Constants.OPA_DISPOSITION_STATUS_PENDING);
         query.setParameter("updateTimestamp", timesStamp);
@@ -118,7 +120,7 @@ public class OPADaoImpl implements OPADao {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("UPDATE OPADisclosure d SET d.certificationText = :certificationText, ");
         hqlQuery.append("d.certifiedBy = :certifiedBy, d.submissionTimestamp = :submissionTimestamp, ");
-        hqlQuery.append("d.opaDisclosureStatusCode = :opaDisclosureStatusCode, d.updateTimestamp = :updateTimestamp, ");
+        hqlQuery.append("d.reviewStatusCode = :reviewStatusCode, d.updateTimestamp = :updateTimestamp, ");
         hqlQuery.append("d.updateUser = :updateUser ");
         hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
         Query query = session.createQuery(hqlQuery.toString());
@@ -126,7 +128,7 @@ public class OPADaoImpl implements OPADao {
         query.setParameter("certificationText", null);
         query.setParameter("certifiedBy", null);
         query.setParameter("submissionTimestamp", null);
-        query.setParameter("opaDisclosureStatusCode", opaStatusCode);
+        query.setParameter("reviewStatusCode", opaStatusCode);
         query.setParameter("updateTimestamp", timesStamp);
         query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
         query.executeUpdate();
@@ -140,7 +142,7 @@ public class OPADaoImpl implements OPADao {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("UPDATE OPADisclosure d SET d.adminGroupId = :adminGroupId, ");
         hqlQuery.append("d.adminPersonId = :adminPersonId, d.updateTimestamp = :updateTimestamp, ");
-		hqlQuery.append(assignAdminDto.getOpaDisclosureStatus() != null ? "d.opaDisclosureStatusCode = :opaDisclosureStatusCode, " : "");
+		hqlQuery.append(assignAdminDto.getOpaDisclosureStatus() != null ? "d.reviewStatusCode = :reviewStatusCode, " : "");
         hqlQuery.append("d.updateUser = :updateUser ");
         hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
         Query query = session.createQuery(hqlQuery.toString());
@@ -148,7 +150,7 @@ public class OPADaoImpl implements OPADao {
         query.setParameter("adminGroupId", assignAdminDto.getAdminGroupId());
         query.setParameter("adminPersonId", assignAdminDto.getAdminPersonId());
         if(assignAdminDto.getOpaDisclosureStatus() != null ) {
-        	query.setParameter("opaDisclosureStatusCode", assignAdminDto.getOpaDisclosureStatus());
+        	query.setParameter("reviewStatusCode", assignAdminDto.getOpaDisclosureStatus());
         }
         query.setParameter("updateTimestamp", timesStamp);
         query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
@@ -162,12 +164,12 @@ public class OPADaoImpl implements OPADao {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("UPDATE OPADisclosure d SET ");
-        hqlQuery.append("d.opaDisclosureStatusCode = :opaDisclosureStatusCode, d.updateTimestamp = :updateTimestamp, ");
+        hqlQuery.append("d.reviewStatusCode = :reviewStatusCode, d.updateTimestamp = :updateTimestamp, ");
         hqlQuery.append("d.updateUser = :updateUser, d.dispositionStatusCode = :dispositionStatusCode ");
         hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("opaDisclosureId",opaDisclosureId);
-        query.setParameter("opaDisclosureStatusCode", Constants.OPA_DISCLOSURE_STATUS_COMPLETED);
+        query.setParameter("reviewStatusCode", Constants.OPA_DISCLOSURE_STATUS_COMPLETED);
         query.setParameter("dispositionStatusCode", Constants.OPA_DISPOSITION_STATUS_COMPLETED);
         query.setParameter("updateTimestamp", timesStamp);
         query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
@@ -181,14 +183,14 @@ public class OPADaoImpl implements OPADao {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("SELECT case when (count(d.opaDisclosureId) > 0) then true else false end FROM OPADisclosure d WHERE ");
         if (opaDisclosureStatus != null)
-            hqlQuery.append(" d.opaDisclosureStatusCode = :opaDisclosureStatusCode AND  ");
+            hqlQuery.append(" d.reviewStatusCode = :reviewStatusCode AND  ");
         if (dispositionStatus != null)
             hqlQuery.append("d.dispositionStatusCode = :dispositionStatusCode AND ");
         hqlQuery.append("d.opaDisclosureId = :opaDisclosureId ");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("opaDisclosureId",opaDisclosureId);
         if (opaDisclosureStatus != null)
-            query.setParameter("opaDisclosureStatusCode", opaDisclosureStatus);
+            query.setParameter("reviewStatusCode", opaDisclosureStatus);
         if (dispositionStatus != null)
             query.setParameter("dispositionStatusCode", dispositionStatus);
         return (boolean) query.getSingleResult();
@@ -217,6 +219,7 @@ public class OPADaoImpl implements OPADao {
 			}
 		} catch (Exception e) {
 			logger.error("Exception in createOpaDisclosure {}", e.getMessage());
+            throw new ApplicationException("Unable to create disclosure", e, Constants.DB_PROC_ERROR);
 		} finally {
 			session.close();
 		}
@@ -282,10 +285,10 @@ public class OPADaoImpl implements OPADao {
                         .createTimestamp(rset.getTimestamp("CREATE_TIMESTAMP"))
                         .createUser(rset.getString("CREATE_USER"))
                         .submissionTimestamp(rset.getTimestamp("SUBMISSION_TIMESTAMP"))
-                        .opaDisclosureStatusCode(rset.getString("OPA_DISCLOSURE_STATUS_CODE"))
+                        .reviewStatusCode(rset.getString("REVIEW_STATUS_CODE"))
                         .dispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"))
                         .dispositionStatus(rset.getString("DISPOSITION_STATUS"))
-                        .disclosureStatus(rset.getString("OPA_DISCLOSURE_STATUS"))
+                        .reviewStatus(rset.getString("OPA_DISCLOSURE_STATUS"))
                         .updateTimeStamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
                         .updateUser(rset.getString("UPDATE_USER"))
                         .updateUserFullName(rset.getString("UPDATE_USER_FULL_NAME"))
@@ -315,8 +318,18 @@ public class OPADaoImpl implements OPADao {
         Connection connection = sessionImpl.connection();
         Integer currentPage = requestDto.getCurrentPage();
         Integer pageNumber = requestDto.getPageNumber();
-        List<String> disclosureStatusCodes = requestDto.getOpaDisclosureStatusCodes();
+        List<String> disclosureStatusCodes = requestDto.getReviewStatusCodes();
         List<String> dispositionStatusCodes = requestDto.getDispositionStatusCodes();
+		List<String> designationStatusCodes = requestDto.getDesignationStatusCodes();
+		designationStatusCodes = designationStatusCodes != null && !designationStatusCodes.isEmpty()
+				&& designationStatusCodes.contains("1") && designationStatusCodes.contains("2") ? null
+						: designationStatusCodes;
+		if (designationStatusCodes != null && !designationStatusCodes.isEmpty()) {
+			designationStatusCodes = designationStatusCodes.stream()
+					.map(code -> DESIGNATION_STATUS_CODE_FACULTY.equals(code) ? DESIGNATION_STATUS_FACULTY
+							: DESIGNATION_STATUS_STAFF)
+					.collect(Collectors.toList());
+		}
         String submissionTimestamp = requestDto.getSubmissionTimestamp();
         String unitNumber = requestDto.getUnitNumber();
 		Boolean fetchAllRecords = requestDto.getFetchAllRecords();
@@ -337,7 +350,8 @@ public class OPADaoImpl implements OPADao {
 		statement.setBoolean(12, fetchAllRecords != null && fetchAllRecords);
         statement.setString(13, requestDto.getPersonId());
         statement.setString(14, requestDto.getEntityId() != null ? requestDto.getEntityId().toString() : null);
-        statement.setString(15, requestDto.getIsFaculty() != null ? requestDto.getIsFaculty().equals(Boolean.TRUE) ? "Y" : "N" : null);
+        statement.setString(15, designationStatusCodes != null &&
+                !designationStatusCodes.isEmpty() ? String.join(",", designationStatusCodes) : null);
         statement.setString(16, requestDto.getPeriodStartDate());
         statement.setString(17, requestDto.getPeriodEndDate());
         statement.execute();
@@ -455,21 +469,21 @@ public class OPADaoImpl implements OPADao {
     }
 
     @Override
-    public void updateOPADisclosureStatuses(Integer opaDisclosureId, Timestamp updateTimesStamp, String opaDisclosureStatusCode, String dispositionStatusCode) {
+    public void updateOPADisclosureStatuses(Integer opaDisclosureId, Timestamp updateTimesStamp, String reviewStatusCode, String dispositionStatusCode) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("UPDATE OPADisclosure d SET ");
         hqlQuery.append("d.updateTimestamp = :updateTimestamp, ");
         hqlQuery.append("d.updateUser = :updateUser ");
-        if (opaDisclosureStatusCode != null)
-            hqlQuery.append(", d.opaDisclosureStatusCode = :opaDisclosureStatusCode ");
+        if (reviewStatusCode != null)
+            hqlQuery.append(", d.reviewStatusCode = :reviewStatusCode ");
         if (dispositionStatusCode != null)
             hqlQuery.append(", d.dispositionStatusCode = :dispositionStatusCode ");
         hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("opaDisclosureId",opaDisclosureId);
-        if (opaDisclosureStatusCode != null)
-            query.setParameter("opaDisclosureStatusCode", opaDisclosureStatusCode);
+        if (reviewStatusCode != null)
+            query.setParameter("reviewStatusCode", reviewStatusCode);
         if (dispositionStatusCode != null)
             query.setParameter("dispositionStatusCode", dispositionStatusCode);
         query.setParameter("updateTimestamp", updateTimesStamp);
@@ -478,17 +492,22 @@ public class OPADaoImpl implements OPADao {
     }
 
     @Override
-    public OPADisclosureStatusType getOPADisclosureStatusType(String statusTypeCode) {
+    public OPAReviewStatusType getOPADisclosureStatusType(String statusTypeCode) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("SELECT s FROM  OPADisclosureStatusType s ");
-        hqlQuery.append("WHERE s.opaDisclosureStatusCode = :opaDisclosureStatusCode");
+        hqlQuery.append("SELECT s FROM  OPAReviewStatusType s ");
+        hqlQuery.append("WHERE s.reviewStatusCode = :reviewStatusCode");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("opaDisclosureStatusCode", statusTypeCode);
-        List<OPADisclosureStatusType> resultData = query.getResultList();
+        query.setParameter("reviewStatusCode", statusTypeCode);
+        List<OPAReviewStatusType> resultData = query.getResultList();
         if(resultData != null  && !resultData.isEmpty()) {
             return resultData.get(0);
         }
         return null;
     }
+
+	@Override
+	public List<OPAPersonType> getOpaPersonType() {
+		return hibernateTemplate.loadAll(OPAPersonType.class);
+	}
 }

@@ -1,5 +1,5 @@
 <div class="" *ngIf="componentData.data.length">
-    <p class="text-end mb-1">
+    <p class="text-end mb-1" *ngIf="isFormEditable">
         <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
             [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id" area-describedby="Click here to add"
             (click)="getMyEntities()">
@@ -22,9 +22,9 @@
                         <div class="m-0 mb-2 row">
                             <span class="align-items-center d-flex">
                                 <span class="shadow-sm align-items-center d-flex t-ribbon"
-                                    [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)"
+                                    [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isFormCompleted)"
                                     tabindex="0">{{getDescriptionForStatus(data.entityInfo?.sfiVersionStatus,
-                                    data.entityInfo?.isRelationshipActive)}}</span>
+                                    data.entityInfo?.isFormCompleted)}}</span>
                                 <span class="entity-title mr-2 cursor-pointer clickable-content">
                                     <strong tabindex="0" [attr.aria-label]="'entity name'"
                                         (click)="viewSlider(data.entityInfo?.personEntityId)">
@@ -32,12 +32,18 @@
                                 </span>
                             </span>
                         </div>
+                        <div class="d-flex flex-wrap fw-medium fs-13 text-secondary">
+                            <em class="mt-3" *ngFor="let relation of getEntityRelationTypePills(data.entityInfo?.relationship)">
+                                <span class="border px-3 py-1 rounded-4 me-2">
+                                    <span class="fw-medium">{{relation?.relationshipType}} :</span>
+                                    <span class="fw-normal">{{relation?.description}}</span>
+                                </span>
+                            </em>
+                        </div>
                         <div class="row mt-3">
                             <span class="d-flex align-items-center">
                                 <span class="fs-14 mx-3">
                                     <span>Country:</span>&nbsp;{{data.entityInfo?.countryName}}</span>
-                                <span class="relationship-pill border px-3 py-1 rounded-4  mx-3 pill-color">
-                                    &nbsp;{{data.entityInfo?.relationship}} </span>
                                 <span class="fs-14 mx-3"> <span>Type:</span> &nbsp;{{data.entityInfo?.entityType}}
                                 </span>
                             </span>
@@ -74,8 +80,11 @@
     data-bs-backdrop="static" id="OUTSIDE_FIN_REL_ADD{{id}}" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
+            </div>
             <div class="modal-body">
-                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav"
+                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
                     <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' ">
                         <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
@@ -94,14 +103,14 @@
                             <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
                             <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
                                 title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active"
+                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active me-1"
                                 role="button">All</span>
-                            <span (click)="setFilter('ACTIVE')" [class.filter-active]="currentFilter=='ACTIVE'"
-                                title="Click to filter by type: Active"
-                                area-describedby="Click to filter by type: Active"
-                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
-                            <span (click)="setFilter('DRAFT')" [class.filter-active]="currentFilter=='DRAFT'"
-                                title="Click to filter by type: Draft" area-describedby="Click to filter by type: Draft"
+                            <span (click)="setFilter('COMPLETE')" [class.filter-active]="currentFilter=='COMPLETE'"
+                                title="Click to filter by type: Complete"
+                                area-describedby="Click to filter by type: Complete"
+                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Complete</span>
+                            <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="currentFilter=='INCOMPLETE'"
+                                title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
                                 class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white"
                                 role="button">Incomplete</span>
                             <span (click)="setFilter('INACTIVE')" [class.filter-active]="currentFilter=='INACTIVE'"
@@ -120,12 +129,13 @@
                                             <span class="shadow-sm align-items-center d-flex" tabindex="0"
                                                 [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
                       'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
-                                                [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isRelationshipActive)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isRelationshipActive)}}</span>
-                                            <p class="entity-title mt-3">
-                                                <strong class="fs-14" tabindex="0"
-                                                    [attr.aria-label]="'entity name' + item?.entityName">{{item?.entityName
+                                                [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isFormCompleted)}}</span>
+                                            <p class="entity-title mt-3 clickable-content">
+                                                <strong class="fs-14" tabindex="0" (click)="viewSlider(item.personEntityId)"
+                                                    [attr.aria-label]="'entity name' + item?.entityName">
+                                                    <u>{{item?.entityName
                                                     }} -
-                                                    ({{item?.countryName}})</strong>
+                                                    ({{item?.countryName}})</u></strong>
                                             </p>
                                         </span>
                                     </div>
@@ -139,19 +149,36 @@
                                 </div>
                                 <div class="mb-2 row">
                                     <div class="text-secondary fs-12 col-6">
-                                        <span class="fw-bold me-3" tabindex="0" aria-label="Relationship">Relationship
-                                            :</span>
-                                        <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
-                                            <span tabindex="0">
-                                                <ng-container>
-                                                    <span
-                                                        class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
-                                                        <span class="fw-medium" aria-label="Financial :">
-                                                            {{item.validPersonEntityRelType}} </span>
+                                        <ng-container *ngIf="item.validPersonEntityRelType">
+                                            <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
+                                                    <span class="d-flex align-items-baseline flex-wrap">
+                                                        <span class="fw-bold me-3" tabindex="0"
+                                                              aria-label="Relationship">Relationship :</span>
+                                                        <em class="mt-3"
+                                                            *ngFor="let relation of getEntityRelationTypePills(item.validPersonEntityRelType)">
+                                                            <span class="border px-3 py-1 rounded-4 me-2">
+                                                                <span class="fw-medium">{{relation?.relationshipType}} :</span>
+                                                                <span class="fw-normal">{{relation?.description}}</span>
+                                                            </span>
+                                                        </em>
                                                     </span>
-                                                </ng-container>
-                                            </span>
-                                        </app-no-data-label>
+                                            </app-no-data-label>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!item.validPersonEntityRelType">
+                                                <span class="fw-bold me-3" tabindex="0"
+                                                      aria-label="Relationship">Relationship :</span>
+                                            <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
+                                                <em class="mt-3"
+                                                    *ngFor="let relation of getEntityRelationTypePills(item.validPersonEntityRelType)">
+                                                            <span class="border px-3 py-1 rounded-4 me-2">
+                                                                <span class="fw-medium">{{relation?.relationshipType}}
+                                                                    :</span>
+                                                                <span class="fw-normal">{{relation?.description}}</span>
+                                                            </span>
+                                                </em>
+                                            </app-no-data-label>
+                                        </ng-container>
                                     </div>
                                     <div tabindex="0" class="text-secondary col-2 fs-12">
                                         <span class="fw-bold me-2">Type :</span>
@@ -177,10 +204,10 @@
                     </div>
                 </ng-container>
                     <div *ngIf="!filteredEntities.length">
-                        <div class="no-data-container w-100 shadow-sm">
+                        <div class="no-data-container w-100 shadow-sm text-secondary">
                             <span class="no-data-icon-outer">
                                 <div class="no-data-icon">
-                                    <mat-icon class="no-file">folder_off</mat-icon>
+                                    <mat-icon class="no-file form-builder-no-info-card-icon">folder_off</mat-icon>
                                 </div>
                             </span>
                             <h5 class="fs-16 mt-3">There is no information in this section.</h5>
@@ -191,7 +218,7 @@
                     <div class="row mb-2">
                         <div class="col-12 mb-2" *ngIf="editIndex == -1">
                             <label for="entity" class="label-text fs-16">Company/Entity</label>
-                            <span *ngIf="isDuplicate" class="text-danger ml-2">*Entity already linked </span>
+                            <span *ngIf="isDuplicate" class="text-danger ml-2">*The Entity is already linked. </span>
                             <app-endpoint-search [httpOptions]="entitySearchOptions" [searchOnFocus]="true" class="p-0"
                                 (onSelect)="entitySelected($event)"></app-endpoint-search>
                             <div class="help-text">
@@ -206,9 +233,8 @@
                                 <div class="mx-2 my-1 d-flex justify-content-between align-items-center">
                                     <span class="fw-bold fs-16 me-3">
                                         {{entityDetails?.entityName}}
-                                        <span class="fs-6 ml-2"
-                                            [ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive
-                                            ?'Active':'Inactive'}}</span>
+                                        <span class="fs-12 ml-2" tabindex="0"
+                                        [ngClass]="getClassForStatusInModalCard(entityDetails.personEntityVersionStatus,entityDetails.isFormCompleted)">{{getDescriptionForStatus(entityDetails.personEntityVersionStatus,entityDetails.isFormCompleted)}}</span>
                                     </span>
                                 </div>
                                 <div class="mx-1 row pt-1 d-flex align-items-center">
@@ -270,15 +296,15 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
-                    id="OUTSIDE_FIN_REL_ADD-BTN{{id}}" (click)="clearData()" type="button">Cancel
+                    id="OUTSIDE_FIN_REL_ADD_BTN{{id}}" (click)="clearData()" type="button">Cancel
                 </button>
-                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button"
-                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="addRowItem()"
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate"
+                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
                     area-describedby="Click here to add">
                     Add
                 </button>
                 <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure"
-                    (click)="updateEntity(); currentTab='ADD_ENTITY'" area-describedby="Click here to add">
+                    (click)="eventType='NEW'; updateEntity(); currentTab='ADD_ENTITY'" area-describedby="Click here to add">
                     Update
                 </button>
             </div>
@@ -298,7 +324,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
-                    id="OUTSIDE_FIN_REL_DELETE-BTN{{id}}" (click)="clearData()" type="button">Cancel
+                    id="OUTSIDE_FIN_REL_DELETE_BTN{{id}}" (click)="clearData()" type="button">Cancel
                 </button>
                 <button ype="button" class="btn btn-primary fs-15" title="View Disclosure" (click)="deleteEntity()"
                     area-describedby="Click here to add">

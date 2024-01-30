@@ -21,7 +21,7 @@ export class RouterGuardService {
 
     canDeactivate(): boolean {
         if (this._dataStore.dataChanged) {
-            openCommonModal('disclsoure-unsaved-changes-modal');
+            openCommonModal('disclosure-unsaved-changes-modal');
             return false;
         } else {
             return true;

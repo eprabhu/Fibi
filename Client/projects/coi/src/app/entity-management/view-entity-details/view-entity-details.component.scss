@@ -49,7 +49,7 @@ h1 {
 }
 
 .body-heading {
-  height: 44px;
+  height: auto;
   background-color: #f3f7fb;
 }
 
@@ -88,7 +88,6 @@ h1 {
 }
 
 .spaced-table {
-  margin-top: 19px;
   border-collapse: separate;
   border-spacing: 0 2px;
   color: #6A7980;
@@ -343,4 +342,20 @@ table {
 
 .actions-icon {
   transform: scale(.8);
+}
+
+.more-action {
+  color: #6a7980 !important;
+  span,
+  mat-icon {
+    color: #6a7980 !important;
+  }
+  &:hover {
+    background-color: #E2F1FF !important;
+    color: #007DEC !important;
+    span,
+    mat-icon {
+      color: #007DEC !important;
+    }
+  }
 }

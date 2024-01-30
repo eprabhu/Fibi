@@ -6,16 +6,17 @@ import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
-import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
 import { RO } from '../coi-interface';
-import { listAnimation } from '../../common/utilities/animations';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { CoiService } from '../services/coi.service';
+import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-relationship',
   templateUrl: './relationship.component.html',
   styleUrls: ['./relationship.component.scss'],
-  animations: [slideHorizontal, listAnimation],
+  animations: [slideHorizontal],
 })
 export class RelationshipComponent implements OnInit {
   isShowRelation = false;
@@ -48,18 +49,15 @@ export class RelationshipComponent implements OnInit {
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
   coiStatusCode: any = null;
-  isAnimationPaused = false;
   currentRelation: number;
+  switchRelationView = false;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
               public _router: Router,
               private _commonService: CommonService,
-              private _sfiService: SfiService) {
-                setTimeout(() => {
-                  this.isAnimationPaused = false;
-                }, 1000);
-               }
+              private _coiService: CoiService
+              ) { }
 
   closePage(event: any) {
     this.isShowRelation = false;
@@ -68,15 +66,18 @@ export class RelationshipComponent implements OnInit {
     if (this._relationShipService.isSliderDataUpdated) {
       this.updateConflictStatus();
     }
-    this.loadProjectRelations();
+    if (this.isShowCollapsedConflictRelationship) {
+      this.updateRelationStatus();
+    } else {
+      this.loadProjectRelations();
+    }
   }
 
   ngOnInit() {
     this.getDataFromStore();
     this.loadProjectRelations(true);
     this.getDependencyDetails();
-    this.getSfiDetails();
-      }
+  }
 
 getDisclosureCount(typeCode, disclosureStatus) {
     if (disclosureStatus) {
@@ -86,7 +87,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
   }
 
   private updateConflictStatus(): void {
-    this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+    this.$subscriptions.push( this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
       if (data) {
         this.coiData.coiDisclosure.coiConflictStatusType = data;
         this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
@@ -95,7 +96,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
       }
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
-    });
+    }));
   }
 
   private getDataFromStore() {
@@ -108,7 +109,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
     if (isFristTimeLoad) {
       this.isShowNoDataCard = false;
     }
-    this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
+    this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
         if (isFristTimeLoad) {
           this.isShowNoDataCard = true;
@@ -131,10 +132,29 @@ getDisclosureCount(typeCode, disclosureStatus) {
         if (this.awardList.length === 1) {
           this.isShowCollapsedConflictRelationship = true;
           this.getEntityList();
-          this.isAnimationPaused = false;
+        }
+        if(!this.isShowCollapsedConflictRelationship) {
+          setTimeout(() => {
+            if(this._coiService.focusModuleId) {
+                scrollIntoView(this._coiService.focusModuleId);
+                const ELEMENT = document.getElementById(this._coiService.focusModuleId);
+                ELEMENT.classList.add('error-highlight-card');
+                this._coiService.focusModuleId = null;
+            }
+          },100);
         }
       }
-    });
+    }));
+  }
+
+  updateRelationStatus() {
+    this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
+      if (data) {
+        const LINKED_MODULE = data?.awards[0] || data?.proposals[0];
+        this.awardList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
+        this.awardList[0].sfiCompleted = LINKED_MODULE.sfiCompleted;
+      }
+    }));
   }
 
   /**
@@ -176,14 +196,6 @@ getDisclosureCount(typeCode, disclosureStatus) {
     }
   }
 
-  getSfiDetails() {
-    this.$subscriptions.push(this._sfiService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
-        if (data) {
-            this.count = data.count;
-        }
-    }));
-}
-
 getRequestObject() {
   const REQ_OBJ = new RO();
   REQ_OBJ.currentPage = 0;
@@ -204,7 +216,7 @@ getDependencyDetails() {
   }
 
   getEntityList() {
-    this.$subscriptions.push(  this._relationShipService.getEntityList(
+    this.$subscriptions.push(this._relationShipService.getEntityList(
       this.moduleCode, this.moduleId, this.coiData.coiDisclosure.disclosureId,
       this.coiData.coiDisclosure.disclosureStatusCode, this.coiData.coiDisclosure.personId).subscribe((data: any) => {
       this.entityProjectDetails = data;
@@ -212,4 +224,16 @@ getDependencyDetails() {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong!');
     }));
   }
+
+  ngOnDestroy(): void {
+    subscriptionHandler(this.$subscriptions);
+}
+
+    switchRelationViewMode(newValue) {
+      if (this.switchRelationView !== newValue && !newValue) {
+          this.ngOnInit();
+      }
+      this.switchRelationView = newValue;
+    }
+
 }

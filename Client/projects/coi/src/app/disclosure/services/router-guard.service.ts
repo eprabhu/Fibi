@@ -37,14 +37,14 @@ export class RouterGuardService  {
                         observer.next(true);
                     }
                     res[1].map((error) => {
-                        this._coiService.certificationResponseErrors.push( error.validationMessage);
+                        this._coiService.certificationResponseErrors.push( error);
                     });
                 });
             });
         }
     canDeactivate(): boolean {
         if (this._dataStore.dataChanged) {
-            openCommonModal('disclsoure-unsaved-changes-modal');
+            openCommonModal('disclosure-unsaved-changes-modal');
             return false;
         } else {
             return true;
@@ -65,8 +65,9 @@ export class RouterGuardService  {
             if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
                 if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
                 } else {
-                    this.error = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionniare” section.';
-                    this._coiService.certificationResponseErrors.push(this.error);
+                    let questionnaire_error = {validationMessage: ''};
+                    questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
+                    this._coiService.certificationResponseErrors.push(questionnaire_error);
                     return false;
                 }
             }

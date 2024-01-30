@@ -12,6 +12,9 @@ export class COI {
     projectDetail: any;
     coiReviewerList: ReviewerList[];
     documentOwnerPersonId: string;
+    personAttachmentsCount: Number;
+    personEntitiesCount: Number;
+    personNotesCount: Number;
 }
 
 export interface CoiConflictStatusType {
@@ -88,6 +91,7 @@ export class CoiDisclosure {
     numberOfSFI: any;
     riskCategoryCode: any;
     coiRiskCategory: any;
+    updateUserFullName: string;
 }
 export interface UnitAdministratorType {
     code: string;

@@ -55,22 +55,28 @@ export class RevisionObject {
 }
 
 export class SfiObject {
-    isActive = 'INACTIVE';
+    isActive = false;
     validPersonEntityRelTypes = [];
     entityType = '';
     involvementStartDate = '';
     involvementEndDate = '';
     countryName = '';
     entityId = '';
+    entityNumber = '';
     entityName = '';
+    canDelete: boolean;
+    isFormCompleted: false;
   }
 
 export interface coiReviewComment {
     documentOwnerPersonId:string;
-    disclosureId:number;
-    coiSectionsTypeCode:string;
-    headerName:string;
-    coiSubSectionsId:any;
-    coiSubSectionsTitle:any;
-    componentSubRefId:number;
+    componentTypeCode : any;
+    subModuleItemKey?: any;
+    subModuleItemNumber?:any;
+    sfiStatus?:any;
+    selectedProject?:any;
+    coiSubSectionsTitle?:any;
+    headerName?:any;
+    subSectionTitle?:any;
+    subSectionId?:any;
 }

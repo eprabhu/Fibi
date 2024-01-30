@@ -6,17 +6,19 @@ import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { SfiObject } from '../shared-interface';
+import { CoiService } from '../../disclosure/services/coi.service';
 
 @Component({
   selector: 'app-shared-sfi-card',
   templateUrl: './shared-sfi-card.component.html',
   styleUrls: ['./shared-sfi-card.component.scss'],
-  providers: [SharedSfiService]
+  providers: [SharedSfiService, CoiService]
 })
 
 export class SharedSfiCardComponent implements OnInit, OnDestroy {
 
   @Input() reqObject: any;
+  @Input() isTriggeredFromSlider: any;
   @Input() referredFrom: 'SFI_SUMMARY' | 'SFI_EDIT_AND_DASHBOARD' | 'TRAVEL_DISCLOSURE';
   @Output() viewSlider = new EventEmitter<any>();
   @Output() deleteEvent =  new EventEmitter<any>();
@@ -26,7 +28,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   SFIObject = new SfiObject();
   $subscriptions: Subscription[] = [];
 
-  constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService) { }
+  constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService, private _coiService: CoiService) { }
 
     ngOnInit() {
       this.updateSFIObject();
@@ -38,27 +40,18 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
 
   private updateSFIObject(): void {
     if (this.reqObject) {
-      this.SFIObject.isActive = this.referredFrom =='SFI_EDIT_AND_DASHBOARD' ? this.setActiveInEditMode() : this.setActiveInViewMode();
+      this.SFIObject.isActive = this.reqObject.versionStatus === 'ACTIVE' || this.reqObject.versionStatus === 'ARCHIVE';
       this.SFIObject.entityId =  this.reqObject.personEntityId;
+      this.SFIObject.entityNumber = this.reqObject.personEntityNumber;
       this.SFIObject.entityType = this.getEntityDescription();
       this.SFIObject.countryName = this.getCountryName();
       this.SFIObject.involvementEndDate = this.reqObject.involvementEndDate;
       this.SFIObject.involvementStartDate = this.reqObject.involvementStartDate;
       this.SFIObject.validPersonEntityRelTypes = this.groupBy(this.reqObject.validPersonEntityRelTypes, "coiDisclosureType", "description");
       this.SFIObject.entityName = this.getValuesFormCOIEntityObj('entityName');
+      this.SFIObject.canDelete = this.reqObject.canDelete;
+      this.SFIObject.isFormCompleted = this.reqObject.isFormCompleted;
     }
-  }
-
-  setActiveInEditMode() {
-    return   this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' :
-              this.reqObject.versionStatus === 'ACTIVE' && this.reqObject.isRelationshipActive ? 'ACTIVE' :
-              this.reqObject.versionStatus === 'ACTIVE' && !this.reqObject.isRelationshipActive ? 'INACTIVE' : '';
-  }
-
-  setActiveInViewMode() {
-    return  this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' :
-    (this.reqObject.versionStatus === 'ACTIVE' || this.reqObject.versionStatus === 'ARCHIVE') && this.reqObject.isRelationshipActive ? 'ACTIVE' :
-    this.reqObject.versionStatus === 'ACTIVE' && !this.reqObject.isRelationshipActive ? 'INACTIVE' : '';
   }
 
   private getEntityDescription(): string|null {
@@ -74,13 +67,14 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   }
 
   openSfiDetails(entityId: number, mode: string): any {
-    this.viewSlider.emit({flag: true, entityId: entityId});
+    this.isTriggeredFromSlider ? this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entityId, personEntityNumber: this.SFIObject.entityNumber } })
+                               : this.viewSlider.emit({flag: true, entityId: entityId});
   }
 
     modifySfiDetails(entityId: number, mode: string): void {
-        this.$subscriptions.push(this._sharedSFIService.modifySfi({ personEntityId: entityId }).subscribe((res: any) => {
-            this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: res.personEntityId, mode: mode } });
-        }));
+      this.$subscriptions.push(this._sharedSFIService.modifySfi({ personEntityId: entityId, personEntityNumber: this.SFIObject.entityNumber }).subscribe((res: any) => {
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: res.personEntityId, personEntityNumber: res.personEntityNumber, mode: 'E'} });
+      }));
     }
 
   deleteConfirmation() {

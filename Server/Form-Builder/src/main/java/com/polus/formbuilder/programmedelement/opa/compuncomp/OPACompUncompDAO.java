@@ -18,6 +18,7 @@ import com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest.OPAO
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 
 @Transactional
 @Component
@@ -35,6 +36,7 @@ public class OPACompUncompDAO {
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
 
+	@Transactional(value = TxType.SUPPORTS)
 	public List<OPACompUncompResponseDTO> getPEComponentDetails(
 			OPACompUncompRequestModel opaRequest) {
 		List<OPADiscActivityEntity> lsDiscActivity = repository

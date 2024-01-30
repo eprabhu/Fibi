@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-	@Table(name = "COI_REVIEWER_STATUS_TYPE")
+@Table(name = "COI_REVIEWER_STATUS_TYPE")
 public class CoiReviewerStatusType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -28,6 +28,9 @@ public class CoiReviewerStatusType implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
+
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
 
 	public String getReviewStatusCode() {
 		return reviewStatusCode;
@@ -68,5 +71,13 @@ public class CoiReviewerStatusType implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	
+
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 }

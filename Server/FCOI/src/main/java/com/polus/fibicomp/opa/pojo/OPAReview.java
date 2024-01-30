@@ -54,7 +54,7 @@ public class OPAReview implements Serializable {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "OPA_REVIEW_FK3"), name = "REVIEW_STATUS_TYPE_CODE", referencedColumnName = "REVIEW_STATUS_CODE", insertable = false, updatable = false)
-	private OPAReviewStatusType reviewStatusType;
+	private OPAReviewReviewerStatusType reviewStatusType;
 
 	@Column(name = "LOCATION_TYPE_CODE")
 	private String locationTypeCode;
@@ -93,5 +93,11 @@ public class OPAReview implements Serializable {
 
 	@Transient
 	private String assigneePersonName;
+
+	@Transient
+	private String currentReviewStatusTypeCode;
+
+	@Transient
+	private String currentLocationTypeCode;
 
 }

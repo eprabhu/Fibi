@@ -1,10 +1,12 @@
 package com.polus.fibicomp.opa.service;
 
-import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
 
 @Service
 public interface OPAService {
@@ -24,21 +26,19 @@ public interface OPAService {
 	 */
     ResponseEntity<Object> submitOPADisclosure(OPASubmitDto opaSubmitDto);
 
-	/**
+    /**
 	 * This method is used to withdraw OPA disclosure
-	 * @param opaDisclosureId
-	 * @param opaDisclosureNumber
+	 * @param opaCommonDto
 	 * @return
 	 */
-	ResponseEntity<Object> withdrawOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber);
+	ResponseEntity<Object> withdrawOPADisclosure(OPACommonDto opaCommonDto);
 
 	/**
 	 * This method used to return OPA disclosure
-	 * @param opaDisclosureId
-	 * @param opaDisclosureNumber
+	 * @param opaCommonDto
 	 * @return
 	 */
-	ResponseEntity<Object> returnOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber);
+	ResponseEntity<Object> returnOPADisclosure(OPACommonDto opaCommonDto);
 
 	/**
 	 * This method is used to assign OPA Disclosure admin
@@ -68,4 +68,11 @@ public interface OPAService {
 	 * @return
 	 */
     ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto);
+
+    /**
+	 * This method is used to fetch OPA Person Types
+	 * @return
+	 */
+	ResponseEntity<Object> getOpaPersonType();
+
 }

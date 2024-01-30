@@ -16,13 +16,12 @@ export class ReviewCommentsService {
         return this._http.post(this._commonService.baseUrl + '/getCoiSectionsTypeCode', params);
     }
 
-    getAdminDetails() {
-        return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
+    getCoiReviewComments(params) {
+        return this._http.post(this._commonService.baseUrl + '/reviewComments/fetch', params);
     }
 
-    getCoiReviewComments(params) {
-        return this._http.post(this._commonService.baseUrl + '/loadCoiReviewComments', params);
-
+    getOPAReviewComments(params) {
+        return this._http.post(this._commonService.formUrl + '/formbuilder/reviewComments/fetch', params);
     }
 
     downloadAttachment(params) {
@@ -40,23 +39,28 @@ export class ReviewCommentsService {
         return this._http.post(this._commonService.baseUrl + ' /attachment/deleteDisclAttachment', params);
     }
 
-    deleteReviewComments(coiReviewCommentId) {
-        return this._http.delete(`${this._commonService.baseUrl}/deleteCOIReviewComment/${coiReviewCommentId}`);
+    deleteReviewComments(coiReviewCommentId, moduleCode) {
+        return this._http.delete(`${this._commonService.baseUrl}/reviewComments/${coiReviewCommentId}/${moduleCode}`);
     }
 
-    addCOIReviewComment(params: any, uploadedFiles) {
+    deleteFormBuilderReviewComments(coiReviewCommentId, moduleCode) {
+        return this._http.delete(`${this._commonService.formUrl}/formbuilder/reviewComments/${coiReviewCommentId}/${moduleCode}`);
+    }
+
+    addCOIReviewComment(params: any) {
         const formData = new FormData();
-        if (uploadedFiles) {
-            uploadedFiles.forEach(file => {
-                formData.append('files', file, file.name);
-            });
-        }
         formData.append('formDataJson', JSON.stringify(params));
-        return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
+        return this._http.post(this._commonService.baseUrl + '/reviewComments', formData);
+    }
+
+    addOPAReviewComment(params: any) {
+        const formData = new FormData();
+        formData.append('formDataJson', JSON.stringify(params));
+        return this._http.post(this._commonService.formUrl + '/formbuilder/reviewComments', formData);
     }
 
     getSfiDetails(params: any) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
     }
 
     getProjectRelationships(params: any) {

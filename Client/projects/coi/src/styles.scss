@@ -413,21 +413,20 @@ nav ul li.active {
   justify-content: flex-start;
 }
 
-.hovering-card:hover  {
-  .btn-outline-secondary:not(.no-hover){
+.hovering-card:hover {
+  .btn-outline-secondary:not(.no-hover) {
     color: #fff;
     background-color: #007dec;
     border-color: #007dec;
-}
+  }
+
+  .btn-outline-primary {
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+  }
 }
 
-.hovering-card:hover  {
-  .btn-outline-primary{
-    color: #fff;
-    background-color: #007dec;
-    border-color: #007dec;
-}
-}
 .success-banner {
   color: #151313;
   background-color: #F3F3F3;
@@ -549,9 +548,167 @@ nav ul li.active {
   color:#848484;
 }
 
+.error-highlight-card {
+  border: 1px solid red !important;
+  box-shadow:4px 4px 4px #efa6a6;
+  animation-name: blinking;
+  animation-duration: 1s;
+  animation-iteration-count: 100;
+}
+@keyframes blinking {
+  50% {
+    box-shadow:4px 4px 4px #fff;
+  }
+}
+
 .grid-back {
   background-size: 90px 90px;
   background-image: linear-gradient(to right, #dad3d3 1px, transparent 1px), linear-gradient(to bottom, #cdc4c4 1px, transparent 1px);
 }
 
+@media (max-width : 2000px) {
+    .form-row label,
+    .adjust-margin-top {
+        margin-top: 1rem !important;
+    }
+}
+
+@media (max-width : 991px) {
+  .dashboard-card-margin {
+    margin-left: 0!important;
+  }
+}
+
+/* This class will remove the colon symbol from the label and value till the resolution = XL(1200px).
+    i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
+*/
+@media (max-width : 1200px) {
+ .disclosure-card div label span  {
+    display: none !important;
+  }
+}
+
+/* This class will add the colon symbol to the label and value from resolution = XL(1200px) */
+@media (min-width : 1200px) {
+  .disclosure-card div label span  {
+    display: inline-block !important;
+  }
+}
+
+/* Added this class as common for all the disclosure dashboard cards like Coi reporter dashboard card,
+   travel disclosure card and OPA dashboard card
+*/
+.disclosure-card {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity))!important;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+  color: #6a7980;
+  margin-top: 0.5rem!important;
+  border-radius: var(--bs-border-radius-sm)!important;
+  box-shadow: 0 0.125rem 0.25rem rgba(var(--bs-body-color-rgb),.075)!important;
+}
+
+/* This class is specifically for Entity Dashboard in the Manage Entity Page */
+.disclosure-entity-card {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity))!important;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+  color: #6a7980;
+  margin-top: 0.5rem!important;
+  border-radius: var(--bs-border-radius-sm)!important;
+  box-shadow: 0 0.125rem 0.25rem rgba(var(--bs-body-color-rgb),.075)!important;
+  padding: 5px;
+}
+
+/* This class applies box shadow to all the dashboard cards while on hover */
+.disclosure-card:hover, .disclosure-entity-card:hover {
+  box-shadow: 0px 2px 8px -4px black !important;
+}
+
+/** Responsive page: For breaking labels and values at (1200 and < 1200) breakpoint in dashboard cards during page responsiveness */
+@media (max-width: 1200px) {
+  .break-point-1200 {
+      padding: 0 !important;
+      margin: 0 !important;
+      display: block !important;
+  }
+}
+
+/* color changes for the 'View' button within all dashboard cards */
+.btn-primary-outline {
+  color: #007dec;
+  border-color: #007dec;
+}
+
+.btn-primary-outline:hover {
+  color: #fff;
+  background-color: #007dec;
+  border-color: #007dec;
+}
+
+/* color code for SFI and Project count within the dashboard cards */
+.project-sfi-count {
+  color: #007dec;
+}
+
+/* color code for Active Filter By Type within the dashboard cards */
+.filter-type-active {
+  border: 2px solid #54BF5B !important;
+  background: #f5fef5 !important;
+}
+
+/* Alignment for the breakpoints(767px - 930px) in SFI & Project count in dashboard cards */
+.link-heading {
+  display: inline-flex !important;
+}
+
+@media (min-width: 767px) and (max-width: 930px) {
+  .link-heading {
+    display: block !important;
+  }
+}
+
+/* Applying form-row styles to row */
+.form-row label,
+.row label {
+  font-size: 14px;
+  margin-bottom: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.form-builder-no-info-card-icon {
+  margin-top: 12px;
+}
+
+/* Mat select styles for lookup component start */
+
+.mat-option.mat-selected:not(.mat-option-disabled) {
+    color: unset;
+}
+
+.mat-option-pseudo-checkbox.mat-pseudo-checkbox-checked {
+    background-color: #005cc8;
+}
+
+.mat-select {
+    padding-top: 0.6rem !important;
+}
+
+/* Mat select styles for lookup component end */
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+    position: absolute !important;
+    right: 5px;
+    top:7px
+}
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-below) div.mat-mdc-select-panel {
+    position: relative;
+    right: 7px;
+}
+
+.mat-mdc-select-trigger {
+    font-size: 14px;
+}
 

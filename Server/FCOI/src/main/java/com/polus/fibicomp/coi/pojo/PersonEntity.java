@@ -4,8 +4,21 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,13 +26,23 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "PERSON_ENTITY")
 @EntityListeners(AuditingEntityListener.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PersonEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -49,9 +72,9 @@ public class PersonEntity implements Serializable {
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
 	
-	@Column(name = "IS_RELATIONSHIP_ACTIVE")
+	@Column(name = "IS_FORM_COMPLETED")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isRelationshipActive;
+	private Boolean isFormCompleted;
 	
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
@@ -121,235 +144,18 @@ public class PersonEntity implements Serializable {
 	@Transient
 	private String updateUserFullName;
 
-	public Integer getPersonEntityId() {
-		return personEntityId;
-	}
+	@Transient
+	private PersonEntityRelationshipDto personEntityRelationshipDto;
+	@Transient
+	private Integer disclosureId;
 
-	public void setPersonEntityId(Integer personEntityId) {
-		this.personEntityId = personEntityId;
-	}
+	@Transient
+	private Boolean canDelete;
 
-	public String getPersonId() {
-		return personId;
-	}
+	@Transient
+	private Boolean sfiCompleted;
 
-	public void setPersonId(String personId) {
-		this.personId = personId;
-	}
+	@Transient
+	private List<Map<Object, Object>> disclosureStatusCount;
 
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-
-	public Integer getEntityId() {
-		return entityId;
-	}
-
-	public void setEntityId(Integer entityId) {
-		this.entityId = entityId;
-	}
-
-	public CoiEntity getCoiEntity() {
-		return coiEntity;
-	}
-
-	public void setCoiEntity(CoiEntity coiEntity) {
-		this.coiEntity = coiEntity;
-	}
-
-	public Integer getEntityNumber() {
-		return entityNumber;
-	}
-
-	public void setEntityNumber(Integer entityNumber) {
-		this.entityNumber = entityNumber;
-	}
-
-	public Boolean getIsRelationshipActive() {
-		return isRelationshipActive;
-	}
-
-	public void setIsRelationshipActive(Boolean isRelationshipActive) {
-		this.isRelationshipActive = isRelationshipActive;
-	}
-
-	public Integer getVersionNumber() {
-		return versionNumber;
-	}
-
-	public void setVersionNumber(Integer versionNumber) {
-		this.versionNumber = versionNumber;
-	}
-
-	public String getVersionStatus() {
-		return versionStatus;
-	}
-
-	public void setVersionStatus(String versionStatus) {
-		this.versionStatus = versionStatus;
-	}
-
-	public Date getInvolvementStartDate() {
-		return involvementStartDate;
-	}
-
-	public void setInvolvementStartDate(Date involvementStartDate) {
-		this.involvementStartDate = involvementStartDate;
-	}
-
-	public Date getInvolvementEndDate() {
-		return involvementEndDate;
-	}
-
-	public void setInvolvementEndDate(Date involvementEndDate) {
-		this.involvementEndDate = involvementEndDate;
-	}
-
-	public String getStudentInvolvement() {
-		return studentInvolvement;
-	}
-
-	public void setStudentInvolvement(String studentInvolvement) {
-		this.studentInvolvement = studentInvolvement;
-	}
-
-	public String getStaffInvolvement() {
-		return staffInvolvement;
-	}
-
-	public void setStaffInvolvement(String staffInvolvement) {
-		this.staffInvolvement = staffInvolvement;
-	}
-
-	public String getInstituteResourceInvolvement() {
-		return instituteResourceInvolvement;
-	}
-
-	public void setInstituteResourceInvolvement(String instituteResourceInvolvement) {
-		this.instituteResourceInvolvement = instituteResourceInvolvement;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
-	}
-
-	public Boolean getSponsorsResearch() {
-		return sponsorsResearch;
-	}
-
-	public void setSponsorsResearch(Boolean sponsorsResearch) {
-		this.sponsorsResearch = sponsorsResearch;
-	}
-
-	public List<PersonEntityRelationship> getPersonEntityRelationships() {
-		return personEntityRelationships;
-	}
-
-	public void setPersonEntityRelationships(List<PersonEntityRelationship> personEntityRelationships) {
-		this.personEntityRelationships = personEntityRelationships;
-	}
-
-	public String getPersonFullName() {
-		return personFullName;
-	}
-
-	public void setPersonFullName(String personFullName) {
-		this.personFullName = personFullName;
-	}
-
-	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes() {
-		return validPersonEntityRelTypes;
-	}
-
-	public void setValidPersonEntityRelTypes(List<ValidPersonEntityRelType> validPersonEntityRelTypes) {
-		this.validPersonEntityRelTypes = validPersonEntityRelTypes;
-	}
-
-	public Unit getUnit() {
-		return unit;
-	}
-
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-
-	public String getRelationshipTypes() {
-		return relationshipTypes;
-	}
-
-	public void setRelationshipTypes(String relationshipTypes) {
-		this.relationshipTypes = relationshipTypes;
-	}
-
-	public String getDesignation() {
-		return designation;
-	}
-
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
-
-	public Integer getPersonEntityNumber() {
-		return personEntityNumber;
-	}
-
-	public void setPersonEntityNumber(Integer personEntityNumber) {
-		this.personEntityNumber = personEntityNumber;
-	}
-
-	public String getRevisionReason() {
-		return revisionReason;
-	}
-
-	public void setRevisionReason(String revisionReason) {
-		this.revisionReason = revisionReason;
-	}
-
-	public String getUpdateUserFullName() {
-		return updateUserFullName;
-	}
-
-	public void setUpdateUserFullName(String updateUserFullName) {
-		this.updateUserFullName = updateUserFullName;
-	}
-
-	public List<Integer> getValidPersonEntityRelTypeCodes() {
-		return validPersonEntityRelTypeCodes;
-	}
-
-	public void setValidPersonEntityRelTypeCodes(List<Integer> validPersonEntityRelTypeCodes) {
-		this.validPersonEntityRelTypeCodes = validPersonEntityRelTypeCodes;
-	}
 }

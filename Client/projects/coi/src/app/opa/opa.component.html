@@ -18,8 +18,14 @@
                         </p>
                     </div>
                     <div class="align-items-center d-flex f-14 label-color">
-                        <strong class="clickable-content me-2"><u>Notes(0)</u></strong> | <strong
-                        class="clickable-content ms-2 me-3"><u>Attachments(0)</u></strong>
+                        <strong class="me-2" (click)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)" [class.clickable-content]="opa?.opaDisclosure?.personEntitiesCount">
+                            Entities({{opa?.opaDisclosure?.personEntitiesCount}})</strong>
+                        |
+                        <strong class="ms-2 me-2" (click)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)" [class.clickable-content]="opa?.opaDisclosure?.personNotesCount">
+                            Notes({{opa?.opaDisclosure?.personNotesCount}})</strong>
+                        |
+                        <strong class="ms-2 me-2" (click)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)" [class.clickable-content]="opa?.opaDisclosure?.personAttachmentsCount">
+                            Attachments({{opa?.opaDisclosure?.personAttachmentsCount}})</strong>
                     </div>
 
                 </div>
@@ -110,10 +116,10 @@
                                     <td class="fw-600">Review :</td>
                                     <td class="ps-4">
                                         <app-no-data-label
-                                            [valueToShow]="opa?.opaDisclosure?.opaDisclosureStatusType?.description">
+                                            [valueToShow]="opa?.opaDisclosure?.reviewStatusType?.description">
                                             <span
-                                                class="{{commonService.getReviewStatusBadge(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
-                                            <span class="badgeFont">{{opa?.opaDisclosure?.opaDisclosureStatusType?.description}}
+                                                class="{{commonService.getReviewStatusBadge(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
+                                            <span class="badgeFont">{{opa?.opaDisclosure?.reviewStatusType?.description}}
                                             </span>
                                         </app-no-data-label>
                                     </td>
@@ -128,16 +134,16 @@
                      role="button">
                     <div class="navigation-box-content" routerLinkActive="active"
                          title="Click to view the disclosure screening form"
-                         area-describedby="Click to view the disclosure screening form">Form
+                         area-describedby="Click to view the disclosure screening form">OPA Report
                     </div>
                 </div>
-                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1' && checkForReviewerTab()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode !== '1' && checkForOPAAdmin()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                      role="button">
                     <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                          area-describedby="Click to view the reviews">Reviews
                     </div>
                 </div>
-                <div *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode !== '1'" [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
+                <div *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode !== '1'" [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
                      title="click to view history" role="button">
                     <div class="navigation-box-content" routerLinkActive="active">History</div>
                 </div>
@@ -161,6 +167,7 @@
                             Back
                         </button>
                         <button
+                            *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode != '1'"
                             [matMenuTriggerFor]="beforeMenu"
                             class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 px-3 fit-height"
                             role="button" title="Click for More Actions">
@@ -168,7 +175,8 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                     </div>
-                    <div *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
+                                && isLoggedInUser(opa?.opaDisclosure?.personId)"
                          title="Click to save your progress" (click)="triggerSave()"
                          class="d-flex justify-content-around px-3 pb-3 fit-height">
                         <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -176,17 +184,18 @@
                             Save
                         </span>
                     </div>
-                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
+                                && isLoggedInUser(opa?.opaDisclosure?.personId)"
                          class="d-flex justify-content-around px-3 mt-3">
                         <button (click)="submitOPA()"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center fit-height"
                                 title="Click to submit your disclosure">
                             <mat-icon class="me-2">done</mat-icon>
-                            Submit
+                            Certify and Submit
                         </button>
                     </div>
                     <div class="d-flex justify-content-around px-3"
-                         *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()">
+                         *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode  =='2' && checkForOPAAdmin()">
                         <button title="Click to Assign Administrator/Admin Group"
                                 aria-describedby="Click to assign administrator"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
@@ -195,14 +204,25 @@
                             <span class="mt-1 ms-2"> Assign Admin </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode)">
+                    <div class="d-flex justify-content-around px-3 mt-3"
+                    *ngIf="!['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)">
+                         <button
+                         title="Click here to add new review comment"
+                         (click)="openReviewComment()"
+                         class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col">
+                         <mat-icon class="me-2">rate_review</mat-icon>
+                         <span>Comments</span>
+                     </button>
+                    </div>
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
+                        && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)">
                         <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                             <mat-icon class="me-2">done</mat-icon>
                             <span class="mt-1 ms-2"> Complete Review </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="opaService.isStartReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'">
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'">
                         <button title="Click to start review" aria-describedby="Click to start review"
                                 (click)="updateOpaReview('START')"
                                 id="start-review-btn"
@@ -211,7 +231,7 @@
                             <span class="mt-1 ms-2"> Start Review </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'">
+                    <div class="d-flex justify-content-around px-3 mt-3" *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'">
                         <button title="Click to complete review" aria-describedby="Click to complete review" (click)="updateOpaReview('COMPLETE')"
                                 id="complete-review-btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -231,6 +251,7 @@
                             <mat-icon>reply</mat-icon>
                         </button>
                         <button
+                            *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode != '1'"
                             [matMenuTriggerFor]="beforeMenu"
                             class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col px-3 fit-height"
                             role="button" title="Click for More Actions">
@@ -238,7 +259,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                         <button
-                            *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode =='2' && getManageDisclosureRight()"
+                            *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode =='2' && checkForOPAAdmin()"
                             title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             class="ms-2 fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
@@ -246,32 +267,40 @@
                             <mat-icon class="me-1">group_add</mat-icon>
                         </button>
                         <button
-                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                        title="Click here to add new review comment"
+                        *ngIf="!['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)"
+                        (click)="openReviewComment()"
+                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col ms-2">
+                        <mat-icon class="me-2">rate_review</mat-icon>
+                        </button>
+                        <button
+                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)"
                             title="Click to save your disclosure"
                             class="btn btn-primary pb-0 fs-14 col mx-2 fit-height">
                             <mat-icon>save</mat-icon>
                         </button>
                         <button
-                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)"
                             title="Click to submit your disclosure"
                             class="btn btn-primary pb-0 fs-14 col me-2 fit-height">
                             <mat-icon>done</mat-icon>
                         </button>
                         <button
-                            *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
+                                   && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)"
                             title="Click to complete review"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2"
                             data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                             <mat-icon class="me-2">done</mat-icon>
                         </button>
-                        <button *ngIf="opaService.isStartReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'"
+                        <button *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 title="Click to start review" aria-describedby="Click to start review"
                                 (click)="updateOpaReview('START')"
                                 id="start-review-btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2">
                             <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                         </button>
-                        <button *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode === '7'"
+                        <button *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 title="Click to complete review" aria-describedby="Click to complete review" (click)="updateOpaReview('COMPLETE')"
                                 id="complete-review-btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col ms-2">
@@ -281,7 +310,7 @@
                 </ng-container>
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
                     <ng-container
-                        *ngIf="opa?.opaDisclosure?.adminPersonId && ['2','3', '7', '8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode) && getManageDisclosureRight()">
+                        *ngIf="opa?.opaDisclosure?.adminPersonId && ['2','3', '7', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode) && checkForOPAAdmin()">
                         <button mat-menu-item title="Click to Reassign Administrator/Admin Group"
                                 area-describedby="Click to assign administrator"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
@@ -294,7 +323,7 @@
 
                     <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                     <!-- check logged person & disclosure created person is same -->
-                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode == '2' && !(opa?.opaDisclosure.adminPersonId) &&
+                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(opa?.opaDisclosure.adminPersonId) &&
                         (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.personId)"
                             title="Click to Withdraw"
                             area-describedby="Click to Withdraw"
@@ -307,7 +336,7 @@
                     <!-- return to pi -->
                     <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                     <!-- Check logged person and administrator are same -->
-                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.adminPersonId && ['3','7','8'].includes(opa?.opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode) &&
+                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.adminPersonId && ['3','7','8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode) &&
                                 (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.adminPersonId)"
                             title="Click to Return Disclosure"
                             (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
@@ -331,6 +360,12 @@
         </div>
     </div>
 </div>
+
+<ng-container *ngIf="showSlider">
+    <app-header-sliders (closePage)="closeHeaderSlider($event)"
+    [coiPersonId] = "opa?.opaDisclosure?.personId" [sliderType]="selectedType"
+    [personName]="opa?.opaDisclosure?.personName"></app-header-sliders>
+</ng-container>
 
 <div class="mx-3">
     <router-outlet></router-outlet>
@@ -395,3 +430,8 @@
     </div>
 </div>
 <app-reviewer-action-modal *ngIf="opaService.isEnableReviewActionModal"></app-reviewer-action-modal>
+
+<div *ngIf="opaService.isShowCommentNavBar">
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="opa.opaDisclosure" [disclosureType]="'OPA'"></app-review-comments-slider>
+</div>
+

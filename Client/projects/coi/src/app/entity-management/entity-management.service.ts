@@ -43,7 +43,7 @@ export class EntityManagementService {
   }
 
   getPersonEntityDashboard(params) {
-    return this._http.post(this._commonService.baseUrl + '/getPersonEntityDashboard', params);
+    return this._http.post(this._commonService.baseUrl + '/personEntity/dashboard', params);
   }
 
   activateInactivate(params) {

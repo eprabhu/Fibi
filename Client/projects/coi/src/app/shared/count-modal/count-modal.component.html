@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>{{modalHeader()}}</h4>
+                <h4 title="{{ showFullTitle() }}">{{modalHeader()}}</h4>
                 <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="req-doc-popup-dismiss-btn"
                     aria-label="Close" (click)="closeCountModal()">
                 </button>
@@ -27,7 +27,30 @@
                         </thead>
                         <tbody>
                             <tr class="row-hover" *ngFor="let item of coiFinancialEntityDetails">
-                                <td>{{ item?.coiEntity?.entityName }}</td>
+                                <td>
+                                    <span *ngIf="item?.coiEntity?.entityName" class="fs-14">
+                                        <span class="word-break-all new-line-property mx-2"
+                                            *ngIf="!isEntityNameRead && item?.coiEntity?.entityName?.length > 50; else showFullInfo">
+                                            <span class="grey-text mt-2">{{(item?.coiEntity?.entityName |
+                                                slice:0:50)}}</span>
+                                            <span (click)="isEntityNameRead = !isEntityNameRead"
+                                                class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                        More</u>
+                                                    <i aria-hidden="true"></i></span>
+                                            </span>
+                                        </span>
+                                        <ng-template #showFullInfo>
+                                            <span
+                                                class="word-break-all new-line-property grey-text">{{item?.coiEntity?.entityName}}</span>
+                                            <span class="hand-cursor mt-2 fw-medium"
+                                                *ngIf="item?.coiEntity?.entityName?.length > 50"
+                                                (click)="isEntityNameRead = !isEntityNameRead" aria-hidden="true">
+                                                <span class="fw-medium"><u> Read Less</u>
+                                                    <i aria-hidden="true"></i></span>
+                                            </span>
+                                        </ng-template>
+                                    </span>
+                                </td>
                                 <td>
                                     <app-no-data-label
                                         [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label>
@@ -67,26 +90,23 @@
                 </div>
             </div>
             <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
-                <div class="shadow tabSwitch">
-                    <div class="listMargin">
-                        <ul class="sub-Tabs mb-0">
-                            <li [ngClass]="currentModalTab == 'Proposal'?'Active':'InActive'"
-                                (click)='currentModalTab = "Proposal"; switchTableData()'>
-                                <span class="pl-2 beforeline">{{inputType === 'SFI_TAB' ? 'Proposals related to this
-                                    SFI' :
-                                    'Proposals'}}</span>
-                            </li>
-                            <li class="separator"></li>
-                            <li [ngClass]="currentModalTab == 'Award'?'Active':'InActive'"
-                                (click)='currentModalTab = "Award"; switchTableData()'>
-                                <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
-                                    'Awards'}}</span>
-                            </li>
-                        </ul>
+                <nav class="border-nav bg-white border br-bottom rounded-0 d-flex fs-15 fw-bold ml-15 shadow-sm user-dashboard-nav">
+                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex">
+                        <span title="Click to view Proposals" class="r-title px-3 py-3 fw-500" (click)='currentModalTab="Proposal";switchTableData()'
+                            [class.active]="currentModalTab == 'Proposal'">
+                            {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}
+                        </span>
                     </div>
-                </div>
+                    <div class="text-secondary navigation-icons border-end cursor-pointer nav-options d-flex" (click)='currentModalTab = "Award"; switchTableData()'>
+                        <span title="Click to view Awards" class="r-title px-3 py-3 fw-500"
+                            [class.active]="currentModalTab == 'Award'">
+                            {{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
+                            'Awards'}}
+                        </span>
+                    </div>
+                </nav>
                 <div class="p-0 w-100 widget-container">
-                    <table class=" mt-3 tableSkin" *ngIf="tableArray.length>0">
+                    <table class="tableSkin" *ngIf="tableArray.length>0">
                         <caption class="sr-only">List of Awards/Proposal</caption>
                         <thead class="sticky-top">
                             <tr class="header-border">
@@ -95,16 +115,39 @@
                                 <th class="leadunit-width">Lead Unit</th>
                                 <th class="sponsor-width">Sponsor</th>
                                 <th class="primesponsor-width">Prime Sponsor</th>
+                                <th class="conflictStatus-width">Conflict Status</th>
                                 <th class="action-width">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="row-hover" *ngFor="let name of tableArray">
-                                <td>#{{name?.moduleItemId}}: {{name?.title}}</td>
+                            <tr class="row-hover" *ngFor="let name of tableArray;let index = index">
+                                <td>#{{name?.moduleItemId}}:
+                                    <span
+                                        *ngIf="!isReadMore[index] && name?.title?.length > 50; else showFullInfo">
+                                        <span class="word-break-all new-line-property">{{(name?.title | slice:0:50)}}</span>
+                                        <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium hand-cursor">... <u>Read more</u></span>
+                                    </span>
+                                    <ng-template #showFullInfo>
+                                        <span class="word-break-all new-line-property">{{name?.title}}</span>
+                                        <span *ngIf="name?.title?.length > 50"
+                                              (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true"
+                                              class="hand-cursor fw-medium ms-1"><u>Read Less</u>
+                                        </span>
+                                    </ng-template>
+                                </td>
                                 <td>{{name?.principalInvestigator}}</td>
-                                <td>{{name?.unitName}} - {{name?.unitNumber}}</td>
+                                <td>{{name?.unitNumber}} - {{name?.unitName}}</td>
                                 <td>{{name.sponsor}}</td>
-                                <td>{{name.primeSponsor}}</td>
+                                <td><app-no-data-label [valueToShow]="name.primeSponsor"></app-no-data-label></td>
+                                <td>
+                                    <app-no-data-label [valueToShow]="name.conflictStatus">
+                                         <span class="px-2 py-2" *ngIf="name.conflictStatus">
+                                            <span
+                                                class="{{getDisclosureConflictBadge(name.conflictStatusCode)}}"></span>
+                                            <span class="badgeFont"> {{name.conflictStatus}} </span>
+                                        </span>
+                                    </app-no-data-label>
+                                </td>
                                 <td *ngIf="currentModalTab == 'Proposal'">
                                     <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
                                         (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId)">

@@ -1,10 +1,11 @@
 package com.polus.fibicomp.opa.dao;
 
-import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.opa.pojo.OPAReview;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -13,9 +14,11 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
-import java.sql.Timestamp;
-import java.util.List;
+import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.pojo.OPAReview;
+import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.security.AuthenticatedUser;
 
 @Repository
 @Transactional
@@ -45,6 +48,8 @@ public class OPAReviewDaoImpl implements OPAReviewDao {
         hqlQuery.append("UPDATE OPAReview r SET r.assigneePersonId = :assigneePersonId, ");
         hqlQuery.append("r.adminGroupId = :adminGroupId, r.reviewStatusTypeCode = :reviewStatusTypeCode, ");
         hqlQuery.append("r.locationTypeCode = :locationTypeCode, ");
+        if (opaReview.getDescription() != null)
+            hqlQuery.append(" r.description = :description, ");
         hqlQuery.append("r.startDate = :startDate, r.endDate = :endDate, ");
         hqlQuery.append("r.updateTimestamp = :updateTimestamp, r.updateUser = :updateUser ");
         hqlQuery.append("WHERE r.opaReviewId = :opaReviewId");
@@ -58,6 +63,8 @@ public class OPAReviewDaoImpl implements OPAReviewDao {
         query.setParameter("updateTimestamp", timesStamp);
         query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
         query.setParameter("opaReviewId", opaReview.getOpaReviewId());
+        if (opaReview.getDescription() != null)
+            query.setParameter("description", opaReview.getDescription());
         query.executeUpdate();
         return timesStamp;
     }
@@ -124,8 +131,11 @@ public class OPAReviewDaoImpl implements OPAReviewDao {
         hqlQuery.append("SELECT case when (count(r.opaReviewId) > 0) then true else false end ");
         hqlQuery.append("FROM OPAReview r WHERE r.locationTypeCode = :locationTypeCode ");
         hqlQuery.append("AND r.opaDisclosureId = :opaDisclosureId AND r.reviewStatusTypeCode != :reviewStatusTypeCode ");
-        if (opaReview.getAssigneePersonId() != null)
-            hqlQuery.append("AND r.assigneePersonId = :assigneePersonId ");
+        if (opaReview.getAssigneePersonId() != null) {
+			hqlQuery.append(" AND r.assigneePersonId = :assigneePersonId ");
+		} else {
+			hqlQuery.append(" AND r.assigneePersonId IS NULL ");
+		}
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("locationTypeCode", opaReview.getLocationTypeCode());
         query.setParameter("opaDisclosureId", opaReview.getOpaDisclosureId());
@@ -160,4 +170,53 @@ public class OPAReviewDaoImpl implements OPAReviewDao {
         query.setParameter("opaReviewId", opaReviewId);
         query.executeUpdate();
     }
+
+	@Override
+	public boolean isReviewStatusChanged(OPAReview opaReview) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.opaReviewId FROM OPAReview r WHERE ");
+		hqlQuery.append("r.opaReviewId = :reviewId");
+		hqlQuery.append(" AND r.reviewStatusTypeCode = :currentReviewStatusTypeCode AND r.locationTypeCode = :currentLocationTypeCode");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("reviewId", opaReview.getOpaReviewId());
+		query.setParameter("currentLocationTypeCode", opaReview.getCurrentLocationTypeCode());
+		query.setParameter("currentReviewStatusTypeCode", opaReview.getCurrentReviewStatusTypeCode());
+		try {
+			Integer result = (Integer) query.getSingleResult();
+			return result == null;
+		}catch (NoResultException e) {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean isReviewPresent(OPAReview opaReview) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.opaReviewId FROM OPAReview r WHERE ");
+		hqlQuery.append(" r.opaDisclosureId = :disclosureId AND r.opaReviewId != :reviewId ");
+		hqlQuery.append("AND (r.reviewStatusTypeCode = :newReviewStatusTypeCode OR r.reviewStatusTypeCode != :reviewStatusTypeCode) ");
+		hqlQuery.append(" AND r.locationTypeCode = :newLocationTypeCode ");
+		if (opaReview.getAssigneePersonId() != null) {
+			hqlQuery.append(" AND r.assigneePersonId = :assigneePersonId ");
+		} else {
+			hqlQuery.append(" AND r.assigneePersonId IS NULL ");
+		}
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("newLocationTypeCode", opaReview.getLocationTypeCode());
+		query.setParameter("newReviewStatusTypeCode", opaReview.getReviewStatusTypeCode());
+		query.setParameter("disclosureId", opaReview.getOpaDisclosureId());
+		query.setParameter("reviewId", opaReview.getOpaReviewId());
+		query.setParameter("reviewStatusTypeCode", Constants.OPA_REVIEW_COMPLETED);
+		if (opaReview.getAssigneePersonId() != null)
+			query.setParameter("assigneePersonId", opaReview.getAssigneePersonId());
+		try {
+			Integer result = (Integer) query.getSingleResult();
+			return result != null;
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
+
 }

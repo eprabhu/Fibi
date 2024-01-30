@@ -1,7 +1,7 @@
 <div [@fadeInOutHeight] class="mx-4">
-    <h5 class="mb-4 pt-3 px-2 fs-15">COI Configurations</h5>
+    <h5 class="mb-4 pt-3 px-2 fs-15" tabindex="0" aria-label="COI Configurations">COI Configurations</h5>
     <section class="row">
-        <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" *ngIf="isMaintainQuestionnaire">
+        <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" *ngIf="isMaintainQuestionnaire" tabindex="0" aria-label="Questionnaire">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/questionnaire')">
                 <div class="media">
                     <div class="media-left cards-icon1">
@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Unit Hierarchy">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/unitHierarchy')">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isMaintainUserRoles || isMaintainRole" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isMaintainUserRoles || isMaintainRole" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Role Maintenance">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/role-maintainance')">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Business Rule Maintenance">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/businessRule')">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Map Maintenance">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/mapMaintainance')">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Notification Maintenance">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/notification')">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">
@@ -80,7 +80,8 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isApplicationAdministrator || isMaintainPerson || isMaintainOrcidWorks ||isMaintainDelegation || isMaintainTimeSheet || isViewTimeSheet || isMaintainTraining" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isApplicationAdministrator || isMaintainPerson || isMaintainOrcidWorks ||isMaintainDelegation || isMaintainTimeSheet || isViewTimeSheet || isMaintainTraining" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3"
+        tabindex="0" aria-label="Person">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/person')">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">
@@ -93,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isMaintainTraining" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div *ngIf="isMaintainTraining" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Training Maintenance">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="openInNewTab('/fibi/training-maintenance')">
                 <div class="media">
                     <div class="media-left cards-icon1">
@@ -107,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3">
+        <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" tabindex="0" aria-label="Sync Entities">
             <div class="border-light-subtle card col-12 h-100 pull-up " (click)="syncEntityToGraphDB()">
                 <div class="media">
                     <div class="media-left cards-icon1 circle3">

@@ -1,10 +1,11 @@
 package com.polus.fibicomp.coi.dto;
 
+import java.sql.Timestamp;
+
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
-import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import lombok.Getter;
 import lombok.Setter;
-import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -24,5 +25,8 @@ public class CoiDisclEntProjDetailsDto {
 	private String updateUser;
 	private Timestamp updateTimestamp;
 	private DisclComment disclComment;
-	
+	private PersonEntityRelationshipDto personEntityRelationshipDto;
+	private Integer prePersonEntityId;
+	private Integer personEntityNumber;
+
 }

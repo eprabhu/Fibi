@@ -11,6 +11,7 @@ import {DataStoreService} from './services/data-store.service';
 import {OpaService} from './services/opa.service';
 import {OPASharedModule} from './shared/shared.module';
 import {SharedModule} from '../shared/shared.module';
+import { HeaderSlidersModule } from '../disclosure/header-sliders/header-sliders.module';
 
 const routes: Routes = [{
     path: '', component: OpaComponent, canActivate: [ResolveServiceService], children: [
@@ -34,6 +35,7 @@ const routes: Routes = [{
         FormsModule,
         SharedModule,
         OPASharedModule,
+        HeaderSlidersModule
     ],
     providers: [
         OpaService,

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
+import { compareDates, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
@@ -206,6 +206,12 @@ export class AddSfiComponent implements OnInit {
             }));
     }
 
+    validateRelationship() {
+        if (!this.getSelectedRelationTypeCodes().length) {
+            this.mandatoryList.set('relationRadio', 'Please select a relation to continue.');
+        }
+    }
+
     selectNewEntity(event): void {
         this.clearSFIFields();
         this.EntitySearchOptions.defaultValue = event.searchString;
@@ -266,6 +272,7 @@ export class AddSfiComponent implements OnInit {
                 this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
             }
             this.endDateValidation();
+            this.validateRelationship();
         }
         return this.mandatoryList.size !== 0 ? false : true;
     }
@@ -324,9 +331,9 @@ export class AddSfiComponent implements OnInit {
 
     endDateValidation(): void {
         this.mandatoryList.delete('endDate');
-        if (this.additionalDetails.involvementStartDate && this.additionalDetails.involvementEndDate &&
-            (compareDates(this.additionalDetails.involvementStartDate, this.additionalDetails.involvementEndDate) === 1)) {
-            this.mandatoryList.set('endDate', 'Please provide a valid date.');
+        if (this.involvementDate.involvementStartDate && this.involvementDate.involvementEndDate &&
+            (compareDates(this.involvementDate.involvementStartDate, this.involvementDate.involvementEndDate) === 1)) {
+            this.mandatoryList.set('endDate', 'Please provide a valid end date.');
         }
     }
 
@@ -343,7 +350,7 @@ export class AddSfiComponent implements OnInit {
             }
         } else {
             this.heading = 'Significant Financial Interest';
-            this.buttonName = 'Create SFI';
+            this.buttonName = 'Save SFI';
             this.btnTitle = 'Click to Create SFI';
         }
     }
@@ -364,7 +371,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     submitEntity(): void {
-        if (this.mandatoryList.has('entityAlreadyAdded') || (!this.checkMandatoryFilled() && !this.isSaving)) {
+        if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled() || this.emailWarningMsg) && !this.isSaving)) {
             return;
         }
         this.modifyType ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();
@@ -389,11 +396,11 @@ export class AddSfiComponent implements OnInit {
     }
 
     viewSfiDetails() {
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId,personEntityNumber: this.existingEntityDetails.entityNumber } });
     }
 
     editSfiDetails(personEntityId) {
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'E', personEntityNumber: this.existingEntityDetails.entityNumber } });
       }
 
     viewEntityDetails(event) {
@@ -447,7 +454,15 @@ export class AddSfiComponent implements OnInit {
 
     navigateToSFI(personEntityId) {
         this.sfiService.isShowSfiNavBar = false;
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, personEntityNumber: this.existingEntityDetails.entityNumber } });
+    }
+
+    goToHome() {
+        this._router.navigate(['/coi/user-dashboard']);
+    }
+
+    navigateBack() {
+        this._router.navigateByUrl(this._navigationService.previousURL);
     }
 
 } 

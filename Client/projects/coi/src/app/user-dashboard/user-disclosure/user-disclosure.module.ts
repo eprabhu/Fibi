@@ -9,15 +9,16 @@ import {SharedModule} from '../../shared/shared.module';
 import {UserDisclosureComponent} from './user-disclosure.component';
 import {DisclosureHistoryCardComponent} from './disclosure-history-card/disclosure-history-card.component';
 import {EntityDetailsModule} from '../../disclosure/entity-details/entity-details.module';
+import {ResolverGuardService} from './resolver-guard.service';
 
-const routes: Routes = [{path: '', component: UserDisclosureComponent}];
+const routes: Routes = [{path: '', component: UserDisclosureComponent, canActivate: [ResolverGuardService]}];
 
 @NgModule({
     declarations: [
         UserDisclosureComponent,
         DisclosureHistoryCardComponent
     ],
-    providers: [UserDisclosureService],
+    providers: [UserDisclosureService, ResolverGuardService],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),

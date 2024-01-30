@@ -34,6 +34,9 @@ public class EntityRiskCategory implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
+
 	public String getRiskCategoryCode() {
 		return riskCategoryCode;
 	}
@@ -74,4 +77,11 @@ public class EntityRiskCategory implements Serializable {
 		this.isActive = isActive;
 	}
 
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 }

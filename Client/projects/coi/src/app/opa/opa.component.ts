@@ -8,11 +8,11 @@ import {CommonService} from '../common/services/common.service';
 import {environment} from '../../environments/environment';
 import {REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
 import {OPA, OpaDisclosure} from './opa-interface';
-import {DefaultAssignAdminDetails, PersonProjectOrEntity} from '../shared-components/shared-interface';
+import {DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment} from '../shared-components/shared-interface';
 import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {ModalType} from "../disclosure/coi-interface";
+import {ModalType} from '../disclosure/coi-interface';
 
 @Component({
     selector: 'app-opa',
@@ -44,6 +44,8 @@ export class OpaComponent implements OnInit {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     description: any;
+    showSlider = false;
+    selectedType: string;
     showPersonDetailsModal = false;
     personDetailsModalVO = {personId: '', fullName: ''};
     $subscriptions = [];
@@ -69,11 +71,8 @@ export class OpaComponent implements OnInit {
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA submitted successfully.`);
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
-    }
-
-    getManageDisclosureRight(): boolean {
-        return this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE') || true;
     }
 
     openAddAssignModal(): void {
@@ -103,17 +102,17 @@ export class OpaComponent implements OnInit {
         this.description = event;
         switch (this.primaryBtnName) {
             case 'Return':
-                return this.returnDisclosure();
+                return this.returnDisclosure(event);
             case 'Withdraw':
-                return this.withdrawDisclosure();
+                return this.withdrawDisclosure(event);
             default:
                 return;
         }
     }
 
-    returnDisclosure() {
+    returnDisclosure(event) {
         this.$subscriptions.push(this.opaService
-            .returnOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
+            .returnOPA(this.getRequestObj(event))
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
@@ -130,15 +129,24 @@ export class OpaComponent implements OnInit {
         this._router.navigate([reRouteUrl]);
     }
 
-    withdrawDisclosure() {
+    withdrawDisclosure(event) {
         this.$subscriptions.push(this.opaService
-            .withdrawOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
+            .withdrawOPA(this.getRequestObj(event))
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA withdrawn successfully.`);
             }, _err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
             }));
+    }
+
+    getRequestObj(description) {
+        return {
+            'opaDisclosureId' : this.opa.opaDisclosure.opaDisclosureId,
+            'opaDisclosureNumber' : this.opa.opaDisclosure.opaDisclosureNumber,
+            'comment': description
+        }
     }
 
     closePersonDetailsModal(event) {
@@ -180,8 +188,9 @@ export class OpaComponent implements OnInit {
         this.$subscriptions.push(this.opaService
             .completeOPAReview(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
-                this.opa.opaDisclosure.opaDisclosureStatusType = res.opaDisclosureStatusType;
-                this.opa.opaDisclosure.opaDisclosureStatusCode = res.opaDisclosureStatusCode;
+                this.opa.opaDisclosure.reviewStatusType = res.reviewStatusType;
+                this.opa.opaDisclosure.dispositionStatusType = res.dispositionStatusType;
+                this.opa.opaDisclosure.reviewStatusCode = res.reviewStatusCode;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
@@ -203,8 +212,39 @@ export class OpaComponent implements OnInit {
         }
     }
 
-    checkForReviewerTab() {
+    checkForOPAAdmin() {
         return this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE']);
+    }
+
+    isLoggedInUser(personId: string) {
+        return this.commonService?.getCurrentUserDetail('personId') === personId;
+    }
+
+    openSlider(type, count) {
+        if(count) {
+            this.showSlider = true;
+            this.selectedType = type;
+        }
+    }
+
+    closeHeaderSlider() {
+        this.showSlider = false;
+        this.selectedType = '';
+    }
+
+    openReviewComment() {
+        const COMMENT_META_DATA: coiReviewComment = {
+            documentOwnerPersonId: this.opa.opaDisclosure.personId,
+            componentTypeCode: '9',
+            subModuleItemKey: null,
+            subModuleItemNumber : null
+        }
+        this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
+        this.opaService.isShowCommentNavBar = true;
+    }
+
+    closeReviewComment(event) {
+        this.opaService.isShowCommentNavBar = event;
     }
 
 }

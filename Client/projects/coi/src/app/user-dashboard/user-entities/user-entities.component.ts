@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { RO } from "../../disclosure/coi-interface";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
@@ -32,7 +32,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   entityName: any;
   personEntityId: any;
   personEntityNumber: any;
-  isRelationshipActive: false;
+  updatedRelationshipStatus: String;
   $debounceEventForEntities = new Subject();
   $fetchSFI = new Subject();
   isSearchTextHover = false;
@@ -41,7 +41,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   isConcurrency = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
-    private _sfiService: SfiService, private _commonService: CommonService) {
+    private _sfiService: SfiService, private _commonService: CommonService, private elementRef: ElementRef) {
   }
 
   ngOnInit(): void {
@@ -79,7 +79,8 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
 }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, mode: 'view' } })
+
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, personEntityNumber: entities.personEntityNumber } })
   }
 
   setFilter(type = 'ALL') {
@@ -128,7 +129,7 @@ removeEntityId() {
     this.isEnableActivateInactivateSfiModal = true;
     this.personEntityId = event.personEntityId;
     this.entityName = event.coiEntity.entityName;
-    this.isRelationshipActive = event.isRelationshipActive;
+    this.updatedRelationshipStatus = event.versionStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
     this.personEntityNumber = event.personEntityNumber;
   }
 
@@ -206,6 +207,11 @@ clearSearchText() {
 
 addSFI(type) {
   this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+}
+
+onWindowScroll(event) {
+    const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
+    this._commonService.$sliderScrollAction.next({event, pageYOffset});
 }
 
 }

@@ -6,7 +6,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.formbuilder.programmedelement.opa.compuncomp.OPACompUncompRequestModel;
+import com.polus.formbuilder.programmedelement.opa.instituteresourceuse.OPAInstituteResourceUseRequestModel;
 import com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest.OPAOutsideFinancialInterestRequestModel;
+import com.polus.formbuilder.programmedelement.opa.studentsubordinateinvolvement.OPAStudentSubordinateInvolvementRequestModel;
 
 @Component
 public class ProgrammedElementJSONObjectMapper {
@@ -18,19 +20,18 @@ public class ProgrammedElementJSONObjectMapper {
 		ObjectMapper objectMapper = new ObjectMapper(); 
 		ProgrammedElementModel programmedElement = null;
 		try {
-			
-			if("OPACompUncompComponent".equals(programElementName)) {
-				programmedElement = (ProgrammedElementModel) objectMapper.readValue(programmedElementJson, OPACompUncompRequestModel.class);
-			
-			}else if("OPAOutsideFinancialRelationComponent".equals(programElementName)) {
-				programmedElement = (ProgrammedElementModel) objectMapper.readValue(programmedElementJson, OPAOutsideFinancialInterestRequestModel.class);
+			if ("OPACompUncompComponent".equals(programElementName)) {
+				programmedElement = objectMapper.readValue(programmedElementJson, OPACompUncompRequestModel.class);
+			} else if ("OPAOutsideFinancialRelationComponent".equals(programElementName)) {
+				programmedElement = objectMapper.readValue(programmedElementJson, OPAOutsideFinancialInterestRequestModel.class);
+			} else if ("OPAStudentSubordinateInvolvementComponent".equals(programElementName)) {
+				programmedElement = objectMapper.readValue(programmedElementJson, OPAStudentSubordinateInvolvementRequestModel.class);
+			} else if ("OPAInstituteResourceUseComponent".equals(programElementName)) {
+				programmedElement = objectMapper.readValue(programmedElementJson, OPAInstituteResourceUseRequestModel.class);
 			}
-			
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return programmedElement;

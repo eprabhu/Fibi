@@ -34,6 +34,9 @@ public class CoiDispositionStatusType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
+
 	public String getDispositionStatusCode() {
 		return dispositionStatusCode;
 	}
@@ -74,4 +77,11 @@ public class CoiDispositionStatusType implements Serializable {
 		this.isActive = isActive;
 	}
 
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 }

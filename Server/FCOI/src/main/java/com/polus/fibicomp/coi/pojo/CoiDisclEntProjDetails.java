@@ -15,9 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 
 @Entity
 @Table(name = "COI_DISCL_ENT_PROJ_DETAILS")
@@ -47,6 +50,12 @@ public class CoiDisclEntProjDetails implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCL_ENT_PROJ_DETAILS_FK2"), name = "PERSON_ENTITY_ID", referencedColumnName = "PERSON_ENTITY_ID", insertable = false, updatable = false)
 	private PersonEntity personEntity;
+
+	@Column(name = "PERSON_ENTITY_NUMBER")
+	private Integer personEntityNumber;
+
+	@Column(name = "PREVIOUS_PERSON_ENTITY_ID")
+	private Integer prePersonEntityId;
 	
 	@Column(name = "ENTITY_ID")
 	private Integer entityId;
@@ -81,6 +90,9 @@ public class CoiDisclEntProjDetails implements Serializable {
 	
 	@Transient
 	private DisclComment disclComment;
+
+	@Transient
+	private PersonEntityRelationshipDto personEntityRelationshipDto;
 
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
@@ -209,5 +221,28 @@ public class CoiDisclEntProjDetails implements Serializable {
 	public void setDisclComment(DisclComment disclComment) {
 		this.disclComment = disclComment;
 	}
-	
+
+	public PersonEntityRelationshipDto getPersonEntityRelationshipDto() {
+		return personEntityRelationshipDto;
+	}
+
+	public void setPersonEntityRelationshipDto(PersonEntityRelationshipDto personEntityRelationshipDto) {
+		this.personEntityRelationshipDto = personEntityRelationshipDto;
+	}
+
+	public Integer getPersonEntityNumber() {
+		return personEntityNumber;
+	}
+
+	public void setPersonEntityNumber(Integer personEntityNumber) {
+		this.personEntityNumber = personEntityNumber;
+	}
+
+	public Integer getPrePersonEntityId() {
+		return prePersonEntityId;
+	}
+
+	public void setPrePersonEntityId(Integer prePersonEntityId) {
+		this.prePersonEntityId = prePersonEntityId;
+	}
 }

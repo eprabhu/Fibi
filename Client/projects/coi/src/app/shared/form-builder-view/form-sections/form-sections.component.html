@@ -1,6 +1,10 @@
 <div class="section">
   <div class="section-header">
     <span>{{sectionDetails.sectionName}}</span>
+    <button class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex" 
+    *ngIf="!isFormEditable" id="add-opa-review-comments" (click)="setCommentDetails(sectionDetails.sectionName, sectionDetails.sectionId, null)" title="Comments" type="button">
+      <mat-icon>rate_review</mat-icon>
+    </button>
     <span class="float-end"><mat-icon class="small-icon">info</mat-icon>
     </span>
   </div>
@@ -10,6 +14,12 @@
     <ng-container *ngFor="let component of sectionDetails.sectionComponent">
       <div class="side-info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
       </div>
+      <button *ngIf="!isFormEditable && component.componentId && canShowComments(component)" class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex pt-2" id="add-opa-review-comments" 
+      (click)="setCommentDetails(null, sectionDetails.sectionId, component.componentId)" title="Comments" type="button">
+        <mat-icon>rate_review</mat-icon>
+      </button>
+
+<!-- Questionnaire, CE , already existing libreries -->
       <div *ngIf="component.componentType === 'QN' || component.componentType === 'CE'">
         <app-data-layer 
           [component]="component" 
@@ -19,21 +29,31 @@
           [saveEventForChildComponent]="saveEventForChildComponent"
         ></app-data-layer>
       </div>
+
+      <!-- Rich Text Editor -->
       <div *ngIf="component.componentType === 'RT'">
         <div [innerHTML] = "component.componentData"></div>
       </div>
+
+
+<!-- All new Forms -->
       <div *ngIf="component.componentType === 'PE'">
         <app-PE-layer 
           [component]="component" 
           [fbConfiguration]="fbConfiguration" 
           [formBuilderId]="formBuilderId"
           [isFormEditable]="isFormEditable"
-          [saveEventForChildComponent]="saveEventForChildComponent">
+          [saveEventForChildComponent]="saveEventForChildComponent"
+          [sectionName]="sectionDetails.sectionName">
         </app-PE-layer>
       </div>
+
+      <!-- Horizontal line component -->
       <div *ngIf="component.componentType === 'HL'">
          <div class="line" [style]="component.componentData"></div>
       </div>
+      
+      <!-- Break Line -->
       <div *ngIf="component.componentType === 'BR'">
          <!-- to be developed -->
       </div>

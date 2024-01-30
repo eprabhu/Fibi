@@ -12,7 +12,7 @@ import {deepCloneObject, hideModal} from '../../../../../../fibi/src/app/common/
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
-import { PersonProjectOrEntity } from '../../../shared-components/shared-interface';
+import { PersonProjectOrEntity, coiReviewComment } from '../../../shared-components/shared-interface';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -166,6 +166,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     editReview(review: any, index: number): void {
         this.clearReviewModal();
         this.reviewDetails = deepCloneObject(review);
+        this.reviewDetails.currentReviewStatusTypeCode = this.reviewDetails.reviewerStatusType.reviewStatusCode;
+        this.reviewDetails.currentLocationTypeCode = this.reviewDetails.reviewLocationType.locationTypeCode;
         this.reviewStartDate = getDateObjectFromTimeStamp(this.reviewDetails.startDate);
         if(this.reviewDetails.endDate) {
             this.reviewEndDate = getDateObjectFromTimeStamp(this.reviewDetails.endDate);
@@ -199,7 +201,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 hideModal('add-coi-reviewer-modal');
                 this.coiService.concurrentUpdateAction = 'Create Review';
               } else {
-                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                this._commonService.showToast(HTTP_ERROR_STATUS, typeof(_err.error) == 'string' ? _err.error : `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
               }
             }));
         }
@@ -253,8 +255,15 @@ export class LocationComponent implements OnInit, OnDestroy {
         }));
     }
 
-    modifyReviewComment(coiReviewId) {
-        this.commentConfiguration.coiReviewId = coiReviewId;
+    modifyReviewComment(reviewDetails) {
+        let coiData = this._dataStore.getData();
+        const disclosureDetails:coiReviewComment = {
+            documentOwnerPersonId: coiData.coiDisclosure.person.personId,
+            componentTypeCode: '8',
+            subModuleItemKey: reviewDetails.coiReviewId,
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
+        }
+        this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.coiService.isShowCommentNavBar = true;	
     }
 
@@ -294,11 +303,11 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     isDuplicateReviewerValidation() {
         const isEditMode = this.modifyIndex != -1;
-
         if (this.reviewerList.find((reviewer, index) => {
-            const isSelectedReviewer = reviewer.assigneePersonId == this.reviewDetails.assigneePersonId
+            const isSelectedReviewer = (reviewer.assigneePersonId == this.reviewDetails.assigneePersonId && reviewer.reviewStatusTypeCode != '2' && this.reviewDetails.locationTypeCode == reviewer.locationTypeCode);
             return isEditMode ? (isSelectedReviewer && index != this.modifyIndex) : isSelectedReviewer;
         })) {
+            this.assigneeClearField = new String('true');
             this.validationMap.set('reviewer', 'Reviewer already added.');
         }
     }
@@ -341,8 +350,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     getDaysAtLocation(startDate, endDate) {
         if (startDate) {
             let currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0);
-            return getDuration(startDate, endDate? endDate : currentDate).durInDays;
+            return getDuration(getDateObjectFromTimeStamp(startDate), endDate? getDateObjectFromTimeStamp(endDate) : getDateObjectFromTimeStamp(currentDate)).durInDays;
         } else {
             return null;
         }

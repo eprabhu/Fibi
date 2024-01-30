@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.polus.fibi.graphconnect.coi.entity.COIEntity;
-import com.polus.fibi.graphconnect.coi.repository.EntityRepository;
 import com.polus.fibi.graphconnect.coi.v1.dao.COIEntityGraphDao;
 import com.polus.fibi.graphconnect.coi.v1.dao.COIImportGraphDataDao;
+import com.polus.fibi.graphconnect.entity.COIEntity;
 import com.polus.fibi.graphconnect.model.RequestDTO;
 import com.polus.fibi.graphconnect.model.ResponseDTO;
+import com.polus.fibi.graphconnect.repository.EntityRepository;
 
 @Service
 public class COIGraphService {

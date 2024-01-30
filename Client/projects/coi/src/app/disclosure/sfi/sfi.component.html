@@ -1,25 +1,24 @@
-<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
+<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode && !isTriggeredFromSlider">
     <span data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top" class="d-inline-block">
       <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
     </span>
     <div class="info-text fs-14">
       <div class="mt-2">
         <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-        The current list of all your Active, Inactive  and Draft SFI(s) are displayed below. You may filter the SFI list according to your need.
-        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
+        The current list of all your Completed,  In-completed and Inactive SFI(s) are displayed below. You may filter the SFI list according to your need.        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
       </div>
       <ng-container *ngIf= "expandInfo">
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          Draft SFI should either be activated or deleted prior to establishing the Project-SFI relationship(s).
+          In-completed SFI should either be Completed or Inactivated prior to establishing the Project-SFI relationship(s).        
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections / inactivating / activating an existing Active / Inactive SFI,navigate to the SFI page and amend the details.
+          For making any corrections to an  SFI, navigate to the SFI page and amend the details.        
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          Only “Active SFI(s)“ are listed in the Relationships page. Please ensure that you have the updated list of Active SFI(s) before you proceed to the next step.
+          Please ensure that you have the updated list of Completed SFI(s) before you proceed to the next step.           
           <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Read Less</u></span>
         </div>
       </ng-container>
@@ -31,17 +30,17 @@
         <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
             class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active" role="button">All</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="filterType=='ACTIVE'"
-            title="Click to filter by type: Active" area-describedby="Click to filter by type: Active"
-            class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
-        <span (click)="setFilter('DRAFT')" [class.filter-active]="filterType=='DRAFT'"
-            title="Click to filter by type: Draft" area-describedby="Click to filter by type: Draft"
-            class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white" role="button">Draft</span>
+        <span (click)="setFilter('COMPLETE')" [class.filter-active]="filterType=='COMPLETE'"
+            title="Click to filter by type: Complete" area-describedby="Click to filter by type: Complete"
+            class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Complete</span>
+        <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="filterType=='INCOMPLETE'"
+            title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
+            class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white" role="button">Incomplete</span>
         <span (click)="setFilter('INACTIVE')" [class.filter-active]="filterType=='INACTIVE'"
             title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Inactive</span>
     </div>
-    <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
+    <div class="d-flex flex-fill position-relative search-background" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
       <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
       <input class="advance-search-input border-0 px-4" type="text" id="searchText"
@@ -53,7 +52,7 @@
 <ng-container *ngIf="!isLoading">
   <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
     <div *ngFor="let item of coiFinancialEntityDetails ; let i =index">
-      <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
+      <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" [isTriggeredFromSlider]="isTriggeredFromSlider"></app-shared-sfi-card>
     </div>
   <!-- no data card -->
     <div *ngIf="!coiFinancialEntityDetails?.length">
@@ -73,14 +72,14 @@
 <div #viewSFIDetailsOverlay [class.overlay]="showSlider">
 <div class="slider-base" *ngIf="showSlider">
   <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-  <div class="slider-container">
+  <div class="slider-container" (scroll)="onWindowScroll($event)">
        <app-entity-details [entityId]="entityId"></app-entity-details>
     </div>
 </div>
 </div>
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
-  [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)"
+  [personEntityId]="personEntityId" [updatedRelationshipStatus]="updatedRelationshipStatus" (closeModal)="closeActivateInactivateSfiModal($event)"
   [personEntityNumber]="personEntityNumber">
 </app-activate-inactivate-sfi-modal>
 

@@ -3,16 +3,16 @@
     <div class="card-header px-4 py-2 ">
 					<h4 class="card-title review-title">
                         <div class="justify-content-between row d-flex align-items-center">
-                            <div class="col">Location</div>
+                            <div class="col">Reviewers</div>
                             <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
                             <div
                             *ngIf="isCOIAdministrator &&
-                            ['3', '8', '7'].includes(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)"
+                            ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode)"
                             class="col-auto me-2">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
-                                    title="Add Review Location" data-bs-target="#add-coi-reviewer-modal">
+                                    title="Add Reviewers" data-bs-target="#add-coi-reviewer-modal">
                                     <mat-icon class="me-2">person_add</mat-icon>
-                                    Add Location
+                                    Add Reviewers
                                 </button>
                             </div>
                             <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
@@ -107,7 +107,7 @@
                                 </button>
                             </ng-container>
                                 <button class="btn-primary-icon d-flex align-items-center me-3 my-1"
-                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer.coiReviewId)">
+                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer)">
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
@@ -195,7 +195,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review Location' : 'Assign Review Location' }}
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }}
                 </h5>
                 <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
@@ -272,7 +272,7 @@
                                 style="width: 100% !important" (click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
                                 [(ngModel)]="reviewEndDate" (keypress)="_commonService._keyPress($event, 'date')" (ngModelChange)="compareDates('END')"
                                 [ngClass]="(validationMap?.has('reviewEndDate') || validationMap.get('endDate')) ? 'is-invalid d-block' : ''" />
-                              <i title="Click to select Start date" (click)="endDate.open()" [class.date-field-error]="validationMap?.has('reviewEndDate')"
+                              <i title="Click to select End date" (click)="endDate.open()" [class.date-field-error]="validationMap?.has('reviewEndDate') || validationMap?.has('endDate')"
                                 class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
                               <mat-datepicker #endDate>
                               </mat-datepicker>
@@ -308,3 +308,4 @@
 </div>
 <span (click)="clearReviewModal()" id="add-review-modal-trigger" data-bs-target="#add-coi-reviewer-modal"
     data-bs-toggle="modal" class="d-none"></span>
+

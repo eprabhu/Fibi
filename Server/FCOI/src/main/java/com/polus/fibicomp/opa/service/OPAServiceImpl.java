@@ -1,5 +1,8 @@
 package com.polus.fibicomp.opa.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.clients.FormBuilderClient;
@@ -44,6 +49,9 @@ public class OPAServiceImpl implements OPAService {
 	@Autowired
 	private CommonDao commonDao;
 
+	@Autowired
+	private ConflictOfInterestDao conflictOfInterestDao;
+
 	@Override
 	public Boolean canCreateOpaDisclosure(String personId) {
 		return opaDao.canCreateOpaDisclosure(personId);
@@ -62,20 +70,27 @@ public class OPAServiceImpl implements OPAService {
 		ApplicableFormRequest requestObject = ApplicableFormRequest.builder()
 				.moduleItemCode(Constants.OPA_MODULE_ITEM_CODE)
 				.moduleSubItemCode(Constants.OPA_MODULE_SUB_ITEM_CODE)
+				.documentOwnerPersonId(AuthenticatedUser.getLoginPersonId())
 				.build();
 		ResponseEntity<ApplicableFormResponse> response = formBuilderClient.getApplicableForms(requestObject);
 		ApplicableFormResponse formResponse = response.getBody();
-		OPAFormBuilderDetails opaFormBuilderDetails = OPAFormBuilderDetails.builder()
-				.opaDisclosureId(opaDisclosure.getOpaDisclosureId())
-				.opaDisclosureNumber(opaDisclosure.getOpaDisclosureNumber())
-				.personId(AuthenticatedUser.getLoginPersonId())
-				.formBuilderId(formResponse != null ? formResponse.getFormsBuilderId() : null)
-				.isPrimaryForm(true)
-				.updateTimestamp(commonDao.getCurrentTimestamp())
-				.updateUser(AuthenticatedUser.getLoginUserName())
-				.build();
-		opaDao.saveOrUpdateOpaFormBuilderDetails(opaFormBuilderDetails);
-		formResponse.setOpaDisclosureId(opaDisclosure.getOpaDisclosureId());
+		List<Integer> formBuilderIds = formResponse != null ?formResponse.getApplicableFormsBuilderIds(): new ArrayList<>();
+		if (formBuilderIds != null && !formBuilderIds.isEmpty()) {
+			boolean isPrimaryForm = true;
+			for (Integer formBuilderId : formBuilderIds) {
+				OPAFormBuilderDetails opaFormBuilderDetails = OPAFormBuilderDetails.builder()
+						.opaDisclosureId(opaDisclosure.getOpaDisclosureId())
+						.opaDisclosureNumber(opaDisclosure.getOpaDisclosureNumber())
+						.personId(AuthenticatedUser.getLoginPersonId()).formBuilderId(formBuilderId)
+						.isPrimaryForm(isPrimaryForm).updateTimestamp(commonDao.getCurrentTimestamp())
+						.updateUser(AuthenticatedUser.getLoginUserName()).build();
+				opaDao.saveOrUpdateOpaFormBuilderDetails(opaFormBuilderDetails);
+				isPrimaryForm = false;
+			}
+		}
+		if (formResponse != null) {
+		    formResponse.setOpaDisclosureId(opaDisclosure.getOpaDisclosureId());
+		}		
 		return new ResponseEntity<>(formResponse, HttpStatus.OK);
 	}
 
@@ -101,33 +116,35 @@ public class OPAServiceImpl implements OPAService {
 
 
 	@Override
-	public ResponseEntity<Object> withdrawOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, null, opaDisclosureId)) {
+	public ResponseEntity<Object> withdrawOPADisclosure(OPACommonDto opaCommonDto) {
+		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaDisclosureId);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
+		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaCommonDto.getOpaDisclosureId());
+		OPACommonDto  dto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
-				.opaDisclosureId(opaDisclosureId)
-				.opaDisclosureNumber(opaDisclosureNumber)
+				.comment(opaCommonDto.getComment())
+				.opaDisclosureId(opaCommonDto.getOpaDisclosureId())
+				.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
 				.build();
-		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_WITHDRAWN, opaCommonDto);
-		return getOPADisclosure(opaDisclosureId);
+		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_WITHDRAWN, dto);
+		return getOPADisclosure(opaCommonDto.getOpaDisclosureId());
 	}
 
 	@Override
-	public ResponseEntity<Object> returnOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, null, opaDisclosureId)) {
+	public ResponseEntity<Object> returnOPADisclosure(OPACommonDto opaCommonDto) {
+		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN, opaDisclosureId);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
+		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN, opaCommonDto.getOpaDisclosureId());
+		OPACommonDto  dto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
-				.opaDisclosureId(opaDisclosureId)
-				.opaDisclosureNumber(opaDisclosureNumber)
+				.comment(opaCommonDto.getComment())
+				.opaDisclosureId(opaCommonDto.getOpaDisclosureId())
+				.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
 				.build();
-		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_RETURNED, opaCommonDto);
-		return getOPADisclosure(opaDisclosureId);
+		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_RETURNED, dto);
+		return getOPADisclosure(opaCommonDto.getOpaDisclosureId());
 	}
 
 	@Override
@@ -188,7 +205,46 @@ public class OPAServiceImpl implements OPAService {
 		opaDisclosure.setPersonEmail(person.getEmailAddress());
 		opaDisclosure.setPersonPrimaryTitle(person.getPrimaryTitle());
 		opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
-		opaDisclosure.setOpaFormBuilderDetails(opaDao.getOpaFormBuilderDetailsByOpaDisclosureId(opaDisclosureId));
+		List<OPAFormBuilderDetails> opaFormBuilderDetail = opaDao.getOpaFormBuilderDetailsByOpaDisclosureId(opaDisclosureId);
+		opaDisclosure.setOpaFormBuilderDetails(opaFormBuilderDetail);
+		opaDisclosure.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(opaDisclosure.getPersonId()));
+		opaDisclosure.setPersonNotesCount(conflictOfInterestDao.personNotesCount(opaDisclosure.getPersonId()));
+		opaDisclosure.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(opaDisclosure.getPersonId()).build()));
+
+		/**
+		 * Intentionally commented. Logic to check for new form when the document is in edit mode
+
+		List<String> editModeOPADisclosureStatusCodes = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_PENDING, Constants.OPA_DISCLOSURE_STATUS_RETURN, Constants.OPA_DISCLOSURE_STATUS_WITHDRAW);
+		if (editModeOPADisclosureStatusCodes.contains(opaDisclosure.getReviewStatusCode())) {
+			ApplicableFormRequest requestObject = ApplicableFormRequest.builder()
+					.moduleItemCode(Constants.OPA_MODULE_ITEM_CODE)
+					.moduleSubItemCode(Constants.OPA_MODULE_SUB_ITEM_CODE)
+					.documentOwnerPersonId(AuthenticatedUser.getLoginPersonId())
+					.build();
+			ResponseEntity<ApplicableFormResponse> response = formBuilderClient.getApplicableForms(requestObject);
+			ApplicableFormResponse formResponse = response.getBody();
+			List<Integer> formBuilderIds = formResponse != null ?formResponse.getApplicableFormsBuilderIds(): new ArrayList<>();
+			List<OPAFormBuilderDetails> opaFormBuilderDetails = opaDao.getOpaFormBuilderDetailsByOpaDisclosureId(opaDisclosureId);
+			formBuilderIds.stream()
+	        .filter(formBuilderId -> opaFormBuilderDetails.stream()
+	                .map(OPAFormBuilderDetails::getFormBuilderId)
+	                .noneMatch(id -> id.equals(formBuilderId)))
+	        .forEach(formBuilderId -> {
+	            OPAFormBuilderDetails opaFormBuilderDetailEntity = OPAFormBuilderDetails.builder()
+	                    .opaDisclosureId(opaDisclosure.getOpaDisclosureId())
+	                    .opaDisclosureNumber(opaDisclosure.getOpaDisclosureNumber())
+	                    .personId(AuthenticatedUser.getLoginPersonId())
+	                    .formBuilderId(formBuilderId)
+	                    .isPrimaryForm(Boolean.FALSE)
+	                    .updateTimestamp(commonDao.getCurrentTimestamp())
+	                    .updateUser(AuthenticatedUser.getLoginUserName())
+	                    .build();
+	            opaDao.saveOrUpdateOpaFormBuilderDetails(opaFormBuilderDetailEntity);
+	            opaFormBuilderDetail.add(opaFormBuilderDetailEntity);
+	        });
+		}
+
+		*/
 		return new ResponseEntity<>(opaDisclosure, HttpStatus.OK);
 	}
 
@@ -196,4 +252,10 @@ public class OPAServiceImpl implements OPAService {
 	public ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto) {
 		return new ResponseEntity<>(opaDao.getOPADashboard(requestDto), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Object> getOpaPersonType() {
+		return new ResponseEntity<>(opaDao.getOpaPersonType(), HttpStatus.OK);
+	}
+
 }

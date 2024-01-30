@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
 import { FBConfiguration, FormBuilderSaveRO } from './form-builder-interface';
@@ -7,7 +7,7 @@ import { FBConfiguration, FormBuilderSaveRO } from './form-builder-interface';
 @Injectable()
 
 export class FormBuilderService {
-
+    
     baseURL = '';
     constructor(private _http: HttpClient, private _commonService: CommonService) {
         this.baseURL = this._commonService.formUrl;
@@ -15,6 +15,10 @@ export class FormBuilderService {
 
     getFormBuilderData(configuration: FBConfiguration) {
         return this._http.post(this.baseURL + '/formbuilder/getForm', configuration);
+    }
+
+    getOpaPersonType(): any {
+        return this._http.get(this.baseURL + '/opa' + '/getOpaPersonType');
     }
 
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {
@@ -43,4 +47,17 @@ export class FormBuilderService {
     }
 
 }
+
+export function setCommentInput(formBuilderId, formBuilderSectionId, formBuilderComponentId, headerName): any{
+    const COMMENT_META_DATA: any = {
+        "componentTypeCode": '10',
+        "formBuilderId": formBuilderId,
+        "formBuilderSectionId": formBuilderSectionId,
+        "formBuilderComponentId": formBuilderComponentId,
+        "headerName": headerName
+    }
+    return COMMENT_META_DATA;
+}
+
+
 

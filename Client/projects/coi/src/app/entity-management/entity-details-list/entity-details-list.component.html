@@ -1,23 +1,23 @@
 <div [@fadeInOutHeight]>
   <app-view-entity-sfi-details [entityDetails]="entityDetails" (modifiedEntityId)="getUpdatedEntityId($event)"
   (approveEntityDetails)="updateApprovedEntityDetails($event)"></app-view-entity-sfi-details>
-  <div class="fw-bold ml-15 mt-4 mb-2 px-1 fs-16">Relationships</div>
-  <div class="ml-15 mr-15 shadow-sm">
+  <div class="fw-bold ms-4 mt-4 mb-2 px-1 fs-16" tabindex="0" aria-label="Relationships">Relationships</div>
+  <div class="ms-4 me-4 shadow-sm" >
     <nav
-      class="align-items-center bg-white border d-flex fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
-      <div (click)="currentTab('PERSON')" class="border-end navigation-icons text-secondary py-1" role="button"
+      class="d-flex align-items-center create-disclosure fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
+      <div (click)="currentTab('PERSON')" class="border-end navigation-icons text-secondary py-1"
         id="btn-person" title="Click to view Person details" (keyup.enter)="currentTab('PERSON')" (keyup.space)="currentTab('PERSON')">
         <span tabindex="0" [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'PERSON'"
-          class="px-5 ">Person</span>
+          class="px-md-5 px-3" aria-label="Click to view Person details">Person</span>
       </div>
-      <!-- <div (click)="currentTab('DEPARTMENT')" class="border-end navigation-icons text-secondary py-1" role="button"
+      <!-- <div (click)="currentTab('DEPARTMENT')" class="border-end navigation-icons text-secondary py-1"
         id="btn-department" title="Department" (keyup.enter)="currentTab('DEPARTMENT')"
         (keyup.space)="currentTab('DEPARTMENT')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'DEPARTMENT'"
           class="px-5">Department</span>
       </div>
-      <div (click)="currentTab('OTHER_ENTITIES')" class="border-end navigation-icons text-secondary py-1" role="button"
+      <div (click)="currentTab('OTHER_ENTITIES')" class="border-end navigation-icons text-secondary py-1"
         id="btn-other-entities" title="Other Entities" (keyup.enter)="currentTab('OTHER_ENTITIES')"
         (keyup.space)="currentTab('OTHER_ENTITIES')">
         <span tabindex="0"
@@ -25,24 +25,24 @@
           class="px-5">Other Entities</span>
       </div>-->
       <div (click)="currentTab('FINANCIAL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1"
-        role="button" id="btn-disclosure" title="Click to view Financial relations"
+       id="btn-disclosure" title="Click to view Financial Disclosures"
         (keyup.enter)="currentTab('FINANCIAL_DISCLOSURES')" (keyup.space)="currentTab('FINANCIAL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'FINANCIAL_DISCLOSURES'"
-          class="px-5">Financial Disclosures</span>
+          class="px-md-5 px-3" aria-label="Click to view Financial disclosures">Financial <span class="disclosure-text"></span></span>
       </div>
-      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1" role="button"
-        id="btn-travel-disclosure" title="Click to view Travel relations" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
+      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1"
+        id="btn-travel-disclosure" title="Click to view Travel Disclosures" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
         (keyup.space)="currentTab('TRAVEL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'TRAVEL_DISCLOSURES'"
-          class="px-5">Travel Disclosures</span>
+          class="px-md-5 px-3" aria-label="Click to view Travel disclosures">Travel <span class="disclosure-text"></span></span>
       </div>
-      <div (click)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'" class="navigation-icons text-secondary py-1" role="button"
+      <div (click)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'" class="navigation-icons text-secondary py-1"
         id="btn-history" title="Click to view History">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'"
-          class="px-5">History</span>
+          class="px-md-5 px-3" aria-label="Click to view History">History</span>
       </div>
 
     </nav>
@@ -286,20 +286,20 @@
   <!-- Advanced Search end -->
 
   <ng-container *ngIf="!isLoading && entityManagementService.relationshipDashboardRequest.filterType != 'HISTORY'">
-    <div class="mt-2 ml-15 mr-15 border-1" [@listAnimation]="entityRelations.length">
+    <div class="mt-2 ms-4 me-4 border-1" [@listAnimation]="entityRelations.length">
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
         entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'">
         <div *ngFor="let entityListData of entityRelations;let i=index"
-          class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+          class="mt-2 rounded-1 disclosure-card"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
-            <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'" class="d-flex my-2">
+            <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'" class="row my-2">
               <!-- <div class="col-1">
                   <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
                     [ngClass]="entityListData?.isRelationshipActive ?'':'inactive'">
                     <span class="px-2">{{!entityListData?.isRelationshipActive?'Inactive':'Active'}}</span></span>
                 </div> -->
-              <div class="col-4 fs-16 fw-bold">
+              <div class="col-4 person-name" tabindex="0">
                 <app-no-data-label [valueToShow]="entityListData?.personFullName" [classesToApply]="'fs-14'">
                   <!-- class="title-custom-position" -->
                   <span>
@@ -307,26 +307,30 @@
                   </span>
                 </app-no-data-label>
               </div>
-              <div class="col-4 text-secondary fs-14">
-                <span class="fw-bold">Department : </span>
-                <app-no-data-label [valueToShow]="entityListData?.unit?.unitName">
-                  <span>{{entityListData?.unit?.unitNumber}}</span> -
-                  <span>
-                    {{entityListData?.unit?.unitName}}
-                  </span>
-                </app-no-data-label>
+              <div class="col-4 text-secondary fs-14" tabindex="0">
+                <label>Department <span class="me-1">:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="entityListData?.unit?.unitName">
+                    <span>{{entityListData?.unit?.unitNumber}}</span> -
+                    <span>
+                      {{entityListData?.unit?.unitName}}
+                    </span>
+                  </app-no-data-label>
+                </span>
               </div>
-              <div class="col-3 fs-14 text-secondary">
-                <span class="fw-bold">Designation : </span>
-                <app-no-data-label [valueToShow]="entityListData?.designation">
-                  <span>
-                    {{entityListData?.designation}}
-                  </span>
-                </app-no-data-label>
+              <div class="col-3 fs-14 text-secondary" tabindex="0">
+                <label>Designation <span>:</span> </label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="entityListData?.designation">
+                    <span>
+                      {{entityListData?.designation}}
+                    </span>
+                  </app-no-data-label>
+                </span>
               </div>
             </div>
             <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'"
-              class="d-flex my-2">
+              class="row my-2">
               <div class="col-1 col-height">
                 <span class="status-pill shadow-sm align-items-center d-flex ps-2 mt-4"
                   [ngClass]="entityListData?.isRelationshipActive ?'':'inactive'">
@@ -346,38 +350,44 @@
                 </app-no-data-label>
               </div>
             </div>
-            <div class="d-flex align-items-center">
+            <div class="row">
               <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'">
                 <div class="col-7 text-secondary fs-14">
                   <span class="fw-bold ">Country :</span>
                 </div>
               </ng-container>
-              <div class="text-secondary fs-14"
+              <div class="text-secondary fs-14" tabindex="0"
                 [ngClass]="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'?'col':'col-4'">
-                <span class="fw-bold ">Relationship :</span>
-                <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
-                  <span class="px-2">{{entityListData?.relationshipTypes}}</span>
-                </app-no-data-label>
+                <label>Relationship <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
+                    <span class="px-xl-2">{{entityListData?.relationshipTypes}}</span>
+                  </app-no-data-label>
+                </span>
               </div>
               <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'">
-                <div class="col-4 text-secondary fs-14">
-                  <span class="fw-bold ">Start Date of Involvement :</span>
-                  <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
-                    <span>
-                      {{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}
-                    </span>
-                  </app-no-data-label>
+                <div class="col-4 text-secondary fs-14" tabindex="0">
+                  <label class="label-text ">Start Date of Involvement <span>:</span></label>
+                  <span class="break-point-1200">
+                    <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
+                      <span>
+                        {{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}
+                      </span>
+                    </app-no-data-label>
+                  </span>
                 </div>
-                <div class="col-3 text-secondary fs-14">
-                  <span class="fw-bold">End Date of Involvement :</span>
-                  <app-no-data-label [valueToShow]="entityListData?.involvementEndDate">
-                    <span>{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
-                  </app-no-data-label>
+                <div class="col-3 text-secondary fs-14" tabindex="0">
+                  <label>End Date of Involvement <span>:</span></label>
+                  <span class="break-point-1200 ms-1">
+                    <app-no-data-label [valueToShow]="entityListData?.involvementEndDate">
+                      <span>{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
+                    </app-no-data-label>
+                  </span>
                 </div>
               </ng-container>
-              <div *ngIf="isViewPersonalEntities" class="col-auto ms-auto d-flex justify-content-end">
+              <div *ngIf="isViewPersonalEntities" class="col-12 ms-auto d-flex justify-content-end" tabindex="0" aria-label="Click to view details" role="button">
                 <button (click)="viewDetails(entityListData)" aria-describedby="Click to view details"
-                  class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
+                  class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click to view details">
                   <mat-icon class="me-1">visibility</mat-icon>
                   View
                 </button>
@@ -389,110 +399,123 @@
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'FINANCIAL_DISCLOSURES' ||
     entityManagementService.relationshipDashboardRequest.filterType == 'DEPARTMENT'">
         <div *ngFor="let disclosureList of entityRelations;let i=index"
-          class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+          class="disclosure-card mt-2 rounded-1"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
-            <div class="d-flex mb-3">
+            <div class="row">
               <div class="col text-secondary fs-14 d-flex">
-                <div class="col-height">
-                  <span class="shadow-sm align-items-center d-flex ps-2 mt-4 status-pill"
+                <div class="col-height" tabindex="0">
+                  <span class="shadow-sm d-flex align-items-center ps-2 mt-4 status-pill"
                     [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'bg-fcoi-clip': (disclosureList?.fcoiTypeCode === '2'?'bg-proposal-clip':'bg-award-clip')">
                     <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
                 </div>
-                <div class="col">
+                <div class="col" tabindex="0">
                   <span class="fw-bold">#{{disclosureList?.coiDisclosureNumber}} : {{disclosureList?.fcoiTypeCode === '1'
                     ?'FCOI' : 'Project'}} Disclosure By
                     {{disclosureList?.disclosurePersonFullName}}</span>
                 </div>
               </div>
-              <div class="col-3 text-secondary fs-14">
-                <span class="fw-bold  me-2 pr-10">
-                  Disclosure Status :</span>
-                <app-no-data-label [valueToShow]="disclosureList?.conflictStatusCode">
-                  <span
-                    class="{{commonService.getDisclosureConflictBadge(disclosureList?.conflictStatusCode)}}"></span>
-                    <span class="badgeFont">
-                      {{disclosureList?.conflictStatus}}
+              <div class="col-3 text-secondary fs-14" tabindex="0">
+                <label class="fw-bold  me-2 pr-10">
+                  Disclosure Status <span>:</span></label>
+                  <span class="break-point-1200">
+                    <app-no-data-label [valueToShow]="disclosureList?.conflictStatusCode">
+                      <span
+                        class="{{commonService.getDisclosureConflictBadge(disclosureList?.conflictStatusCode)}}"></span>
+                        <span class="badgeFont">
+                          {{disclosureList?.conflictStatus}}
+                      </span>
+                    </app-no-data-label>
                   </span>
-                </app-no-data-label>
               </div>
             </div>
-            <div class="d-flex my-2">
-              <div class="col text-secondary fs-14">
-                <div class="d-flex">
-                  <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05 me-2">
-                      Department :</span>
-                      <app-no-data-label [valueToShow]="disclosureList?.unit?.unitNumber">
-                        <span *ngIf="disclosureList?.unit?.unitNumber" [title]="disclosureList?.unit?.unitDetail?.length>30?disclosureList?.unit?.unitDetail:''"
-                        [ngClass]="{'hand-cursor':disclosureList?.unit?.unitDetail.length>30}">{{(disclosureList?.unit?.unitDetail.length>30) ?
-                          (disclosureList?.unit?.unitDetail|slice:0:27)+'...':disclosureList?.unit?.unitDetail}}</span>
+            <div class="row my-2">
+                  <div class="col-3 text-secondary fs-14" tabindex="0">
+                    <label class="fw-bold pr-05">
+                      Department <span>:</span></label>
+                      <span class="break-point-1200">
+                        <app-no-data-label [valueToShow]="disclosureList?.unit?.unitNumber">
+                          <span *ngIf="disclosureList?.unit?.unitNumber" [title]="disclosureList?.unit?.unitDetail?.length>30?disclosureList?.unit?.unitDetail:''"
+                          [ngClass]="{'hand-cursor':disclosureList?.unit?.unitDetail.length>30}">{{(disclosureList?.unit?.unitDetail.length>30) ?
+                            (disclosureList?.unit?.unitDetail|slice:0:27)+'...':disclosureList?.unit?.unitDetail}}</span>
+                        </app-no-data-label>
+                      </span>
+                  </div>
+                  <div class="col-3 text-secondary fs-14" tabindex="0">
+                    <label class="fw-bold me-2">Certification Date <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="disclosureList?.certifiedAt">
+                        <span>{{disclosureList?.certifiedAt | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
-                  </div>
-                  <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold me-2">Certification Date :</span>
-                    <app-no-data-label [valueToShow]="disclosureList?.certifiedAt">
-                      <span>{{disclosureList?.certifiedAt | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
-                  </div>
-                  <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold me-2">Expiration Date :</span>
-                    <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
-                      <span>{{disclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
-                  </div>
-                  <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05 me-2">
-                      Disposition Status :</span>
-                    <span *ngIf="disclosureList?.dispositionStatusCode"
-                      class="{{commonService.getDispositionStatusBadge(disclosureList?.dispositionStatusCode)}}"></span>
-                      <span class="badgeFont">
-                        {{disclosureList?.dispositionStatus}}
                     </span>
                   </div>
-                </div>
-              </div>
+                  <div class="col-3 text-secondary fs-14" tabindex="0">
+                    <label class="fw-bold me-2">Expiration Date <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
+                        <span>{{disclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
+                      </app-no-data-label>
+                    </span>
+                  </div>
+                  <div class="col-3 text-secondary fs-14" tabindex="0">
+                    <label class="fw-bold pr-05 me-2">
+                      Disposition Status <span>:</span></label>
+                      <span class="break-point-1200">
+                        <span *ngIf="disclosureList?.dispositionStatusCode"
+                          class="{{commonService.getDispositionStatusBadge(disclosureList?.dispositionStatusCode)}}"></span>
+                          <span class="badgeFont">
+                            {{disclosureList?.dispositionStatus}}
+                        </span>
+                      </span>
+                  </div>
             </div>
-            <div class="d-flex my-2 align-items-center">
-              <div *ngIf="disclosureList?.fcoiTypeCode === '1'" class="col-3 text-secondary fs-14">
-                <span class="fw-bold ">
-                  Description :</span>
-                <app-no-data-label [valueToShow]="disclosureList?.description">
-                  <span [title]="disclosureList?.description.length>30? disclosureList?.description:''"
-                    [ngClass]="{'hand-cursor':disclosureList?.description.length>30}">
-                    {{(disclosureList?.description.length>30)?(disclosureList?.description|slice:0:27)+'...':disclosureList?.description}}
+            <div class="row my-2">
+              <div *ngIf="disclosureList?.fcoiTypeCode === '1'" class="col-3 text-secondary fs-14" tabindex="0">
+                <label class="fw-bold">
+                  Description <span>:</span></label>
+                  <span class="break-point-1200">
+                    <app-no-data-label [valueToShow]="disclosureList?.description">
+                      <span [title]="disclosureList?.description.length>30? disclosureList?.description:''"
+                        [ngClass]="{'hand-cursor':disclosureList?.description.length>30}">
+                        {{(disclosureList?.description.length>30)?(disclosureList?.description|slice:0:27)+'...':disclosureList?.description}}
+                      </span>
+                    </app-no-data-label>
                   </span>
-                </app-no-data-label>
               </div>
-              <div *ngIf="disclosureList?.fcoiTypeCode === '2' || disclosureList?.fcoiTypeCode === '3'"  class="col-3 text-secondary fs-14">
-                <span class="fw-bold ">
-                  Project :</span>
-                <app-no-data-label [valueToShow]="disclosureList?.fcoiTypeCode === '2'? disclosureList?.proposalId : disclosureList?.awardId">
-                  <span *ngIf="disclosureList?.fcoiTypeCode === '2'" [title]="disclosureList?.proposalTitle.length>30? disclosureList?.proposalTitle:''"
-                    [ngClass]="{'hand-cursor':disclosureList?.proposalTitle.length>30}">
-                   #{{disclosureList?.proposalId}} - {{(disclosureList?.proposalTitle.length>30) ? (disclosureList?.proposalTitle|slice:0:27)+'...':disclosureList?.proposalTitle}}
-                  </span>
-                  <span *ngIf="disclosureList?.fcoiTypeCode === '3'" [title]="disclosureList?.awardTitle.length>30? disclosureList?.awardTitle:''"
-                    [ngClass]="{'hand-cursor':disclosureList?.awardTitle.length>30}">
-                    #{{disclosureList?.awardId}} - {{(disclosureList?.awardTitle.length>30)?(disclosureList?.awardTitle|slice:0:27)+'...':disclosureList?.awardTitle}}
-                  </span>
-                </app-no-data-label>
+              <div *ngIf="disclosureList?.fcoiTypeCode === '2' || disclosureList?.fcoiTypeCode === '3'"  class="col-3 text-secondary fs-14" tabindex="0">
+                <label class="fw-bold">Project <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="disclosureList?.fcoiTypeCode === '2'? disclosureList?.proposalId : disclosureList?.awardId">
+                    <span *ngIf="disclosureList?.fcoiTypeCode === '2'" [title]="disclosureList?.proposalTitle.length>30? disclosureList?.proposalTitle:''"
+                      [ngClass]="{'hand-cursor':disclosureList?.proposalTitle.length>30}">
+                     #{{disclosureList?.proposalId}} - {{(disclosureList?.proposalTitle.length>30) ? (disclosureList?.proposalTitle|slice:0:27)+'...':disclosureList?.proposalTitle}}
+                    </span>
+                    <span *ngIf="disclosureList?.fcoiTypeCode === '3'" [title]="disclosureList?.awardTitle.length>30? disclosureList?.awardTitle:''"
+                      [ngClass]="{'hand-cursor':disclosureList?.awardTitle.length>30}">
+                      #{{disclosureList?.awardId}} - {{(disclosureList?.awardTitle.length>30)?(disclosureList?.awardTitle|slice:0:27)+'...':disclosureList?.awardTitle}}
+                    </span>
+                  </app-no-data-label>
+                </span>
               </div>
-              <div class="col-3 text-secondary fs-14">
-                <span class="fw-bold me-2">Administrator :</span>
-                <app-no-data-label [valueToShow]="disclosureList?.administrator">
-                  <span>{{disclosureList?.administrator}}</span>
-                </app-no-data-label>
+              <div class="col-3 text-secondary fs-14" tabindex="0">
+                <label class="fw-bold me-2">Administrator <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="disclosureList?.administrator">
+                    <span>{{disclosureList?.administrator}}</span>
+                  </app-no-data-label>
+                </span>
               </div>
-              <div class="col-3 text-secondary fs-14">
-                <span class="fw-bold me-2">Admin Group :</span>
-                <app-no-data-label [valueToShow]="disclosureList?.adminGroupName">
-                  <span>{{disclosureList?.adminGroupName}}</span>
-                </app-no-data-label>
+              <div class="col-3 text-secondary fs-14" tabindex="0">
+                <label class="fw-bold me-2">Admin Group <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="disclosureList?.adminGroupName">
+                    <span>{{disclosureList?.adminGroupName}}</span>
+                  </app-no-data-label>
+                </span>
               </div>
-              <div class="col text-secondary fs-14">
-                <span class="fw-bold pr-05 me-2 pr-31">
-                  Review Status :</span>
+              <div class="col-3 text-secondary fs-14" tabindex="0">
+                <label class="fw-bold pr-05 me-2 pr-31">Review Status <span>:</span></label>
+                <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="disclosureList?.reviewStatusCode">
                     <span
                       class="{{commonService.getReviewStatusBadge(disclosureList?.reviewStatusCode)}}"></span>
@@ -500,11 +523,12 @@
                         {{disclosureList?.reviewStatus}}
                     </span>
                   </app-no-data-label>
+                </span>
               </div>
-              <div *ngIf="isViewProjectDisclosure || isViewFcoiDisclosure "
-                class="col-auto ms-auto d-flex justify-content-end">
-                <button (click)="redirectToDisclosure(disclosureList)" aria-describedby="Click to view details"
-                  class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
+              <div *ngIf="isViewProjectDisclosure || isViewFcoiDisclosure"
+                class="col-12 ms-auto d-flex justify-content-end">
+                <button (click)="redirectToDisclosure(disclosureList)" aria-describedby="Click to view details" tabindex="0" aria-label="Click to view details" role="button"
+                  class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click to view details">
                   <mat-icon class="me-1">visibility</mat-icon>
                   View
                 </button>
@@ -515,12 +539,12 @@
       </ng-container>
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'TRAVEL_DISCLOSURES'">
         <div *ngFor="let travelDisclosureList of entityRelations;let i=index"
-          class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+          class="disclosure-card mt-2 rounded-1 light-dark-text-color"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
             <div class="d-flex">
               <div class="col-height">
-                <span class="status-pill bg-travel-clip shadow-sm align-items-center d-flex ps-2 mt-4">
+                <span class="status-pill bg-travel-clip shadow-sm d-flex align-items-center ps-2 mt-4">
                   <span class="px-2">Travel</span></span>
               </div>
               <div class="col text-secondary fs-14">
@@ -528,105 +552,120 @@
                   {{travelDisclosureList?.travellerName}}</span>
               </div>
               <div class="col-3 text-secondary fs-14">
-                <span class="fw-bold pr-05 me-2">
-                  Disclosure Status :</span>
-                <app-no-data-label [valueToShow]="travelDisclosureList?.travelDisclosurestatus">
-                  <span
-                    class="{{commonService.getDisclosureConflictBadge('1')}}">{{convertDisclosureStatus(travelDisclosureList?.travelDisclosurestatus)}}</span>
-                </app-no-data-label>
+                <label class="fw-bold pr-05 me-2">Disclosure Status <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.travelDisclosurestatus">
+                    <span
+                      class="{{commonService.getDisclosureConflictBadge('1')}}">{{convertDisclosureStatus(travelDisclosureList?.travelDisclosurestatus)}}</span>
+                  </app-no-data-label>
+                </span>
               </div>
             </div>
-            <div class="d-flex my-2">
+            <div class="row my-2">
               <div class="col text-secondary fs-14">
                 <div class="d-flex">
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Department :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.unit">
-                      <span>{{travelDisclosureList?.unit?.unitDetail}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05"> Department <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.unit">
+                        <span>{{travelDisclosureList?.unit?.unitDetail}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Entity :</span><app-no-data-label [valueToShow]="travelDisclosureList?.travelEntityName">
-                      <span>{{travelDisclosureList?.travelEntityName}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05">Entity <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.travelEntityName">
+                        <span>{{travelDisclosureList?.travelEntityName}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Traveller :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.travellerName">
-                      <span>{{travelDisclosureList?.travellerName}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05">Traveller <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.travellerName">
+                        <span>{{travelDisclosureList?.travellerName}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05 me-2">
-                      Review Status :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.reviewerStatus">
-                      <span
-                        class="{{commonService.getReviewStatusBadge(travelDisclosureList?.reviewerStatusCode)}}">{{travelDisclosureList?.reviewerStatus}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05 me-2">Review Status <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.reviewerStatus">
+                        <span
+                          class="{{commonService.getReviewStatusBadge(travelDisclosureList?.reviewerStatusCode)}}">{{travelDisclosureList?.reviewerStatus}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="d-flex pt-2">
+            <div class="row">
               <div class="col text-secondary fs-14">
                 <div class="d-flex">
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Destination :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.destination">
-                      <span>{{travelDisclosureList?.destination}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05">Destination <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.destination">
+                        <span>{{travelDisclosureList?.destination}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Certification Date :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.certificationDate">
-                      <span>{{travelDisclosureList?.certificationDate | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05">Certification Date <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.certificationDate">
+                        <span>{{travelDisclosureList?.certificationDate | dateFormatterWithTimeZone}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Acknowledge Date :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.acknowledgeDate">
-                      <span>{{travelDisclosureList?.acknowledgeDate | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05"> Acknowledge Date <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.acknowledgeDate">
+                        <span>{{travelDisclosureList?.acknowledgeDate | dateFormatterWithTimeZone}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <span class="fw-bold pr-05">
-                      Expiration Date :</span>
-                    <app-no-data-label [valueToShow]="travelDisclosureList?.expirationDate">
-                      <span>{{travelDisclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
+                    <label class="fw-bold pr-05">Expiration Date <span>:</span></label>
+                    <span class="break-point-1200">
+                      <app-no-data-label [valueToShow]="travelDisclosureList?.expirationDate">
+                        <span>{{travelDisclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
+                      </app-no-data-label>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="d-flex my-2 align-items-center">
-              <div class="col-6 text-secondary fs-14">
-                <span class="fw-bold pr-05">
-                  Purpose :</span>
-                <app-no-data-label [valueToShow]="travelDisclosureList?.purpose">
-                  <span>{{travelDisclosureList?.purpose}}</span>
-                </app-no-data-label>
-              </div>
+            <div class="row my-2">
               <div class="col-3 text-secondary fs-14">
-                <span class="fw-bold pr-05">Start Date :</span>
-                <app-no-data-label [valueToShow]="travelDisclosureList?.travelStartDate">
-                  <span>{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
-                </app-no-data-label>
+                <label class="fw-bold pr-05"> Purpose <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.purpose">
+                    <span>{{travelDisclosureList?.purpose}}</span>
+                  </app-no-data-label>
+                </span>
               </div>
-              <div class="col text-secondary fs-14">
-                <span class="fw-bold pr-05">End Date :</span>
-                <app-no-data-label [valueToShow]="travelDisclosureList?.travelEndDate">
-                  <span>{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
-                </app-no-data-label>
+              <div class="col-3 text-secondary fs-14 px-0 ms-1">
+                <label class="fw-bold pr-05">Start Date <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.travelStartDate">
+                    <span>{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
+                  </app-no-data-label>
+                </span>
               </div>
-              <div *ngIf="isViewTravelDisclosure" class="col-auto ms-auto d-flex justify-content-end">
+              <div class="col-3 text-secondary fs-14 px-0">
+                <label class="fw-bold pr-05">End Date <span>:</span></label>
+                <span class="break-point-1200">
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.travelEndDate">
+                    <span>{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
+                  </app-no-data-label>
+                </span>
+              </div>
+              <div *ngIf="isViewTravelDisclosure" class="col-12 ms-auto d-flex justify-content-end">
                 <button (click)="redirectToDisclosure(travelDisclosureList)" aria-describedby="Click to view details"
-                  class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
+                  class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click to view details">
                   <mat-icon class="me-1">visibility</mat-icon>
                   View
                 </button>
@@ -641,7 +680,7 @@
       <app-no-information></app-no-information>
     </div>
   
-    <div *ngIf="entityRelations.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <div *ngIf="entityRelations.length>0" class="col-sm-12 col-12 mt-3">
       <nav aria-label="pagination section" class="pagination justify-content-end m-3">
         <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount"
           [defaultCurrentPage]="entityManagementService.relationshipDashboardRequest.currentPage">

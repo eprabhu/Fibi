@@ -125,12 +125,16 @@ small {
     font-style: italic;
 }
 
+.text-color {
+    color: #6A7980;
+}
+
 .border-nav {
     width: max-content;
     position: relative;
     top: 15px;
     left: 9px;
-    background-color: #EEF0FC !important;
+    background-color: #e6f3ff !important;
     border-bottom: 3px solid #007DEC !important;
     color: #007DEC !important;
 }
@@ -193,12 +197,83 @@ small {
 }
 
 .position-person-inpur-box {
-	top: 5px;
-	position: absolute;
-	width: 93% !important;
+    top: 5px;
+    position: absolute;
+    width: 93% !important;
 }
 
 .warning {
     top: 54px;
     position: absolute;
+}
+
+.invalid {
+    color: #ff0000;
+}
+
+.medium-risk {
+    color: #ff8c00;
+}
+
+.low-risk {
+    color: rgb(26, 172, 62);
+}
+
+.status-pill-position {
+    border-radius: 20px;
+    padding: 3px 9px 3px 9px;
+}
+
+.active {
+    background-color: #4CB57D !important;
+    color: #fff;
+    @extend .status-pill-position;
+}
+
+.inactive {
+    background-color: #949494;
+    color: #fff;
+    @extend .status-pill-position;
+}
+
+.entity-risk-badge {
+    width: max-content !important;
+}
+
+.relation-header {
+    position: absolute;
+    top: -11px;
+    background-color: white;
+    left: 15px;
+}
+
+.btn-content-home {
+    position: relative;
+    bottom: 7px;
+}
+
+.side-action-bar {
+    padding-bottom: 1px
+}
+
+.btn-content-back {
+    position: relative;
+    left: 0.2rem;
+}
+
+.btn-outline-grey {
+    color: #48647F;
+    border: 1px solid #48647F;
+    background-color: white;
+
+    &:hover {
+        background-color: #007DEC;
+        color: white;
+        border: 1px solid #007DEC;
+    }
+}
+
+.add-sfi-header-button-panel {
+    box-shadow: none;
+    border-left: solid 1px #ccc !important;
 }

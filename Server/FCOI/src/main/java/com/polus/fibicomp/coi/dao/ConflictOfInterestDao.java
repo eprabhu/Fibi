@@ -36,8 +36,7 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
@@ -51,7 +50,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
-import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
@@ -306,13 +305,6 @@ public interface ConflictOfInterestDao {
 	public CoiReview loadCoiReview(Integer coiReviewId);
 
 	/**
-	 * This method is used for save Comments
-	 * @param coiReviewComment
-	 * @return
-	 */
-	public CoiReviewComments saveOrUpdateCoiReviewComments(CoiReviewComments coiReviewComment);
-
-	/**
 	 * 
 	 * @return
 	 */
@@ -412,6 +404,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentAttId
 	 * @return
 	 */
+	@Deprecated
 	public CoiReviewCommentAttachment fetchAttachmentById(Integer coiReviewCommentAttId);
 
 	/**
@@ -425,6 +418,7 @@ public interface ConflictOfInterestDao {
 	 * @param fileDataId
 	 * @return CoiFileData
 	 */
+	@Deprecated
 	public CoiFileData getFileDataById(String fileDataId);
 
 	/**
@@ -438,6 +432,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewId
 	 * @return
 	 */
+	@Deprecated
 	public List<CoiReviewCommentAttachment> fetchReviewAttachmentByReviewId(Integer coiReviewId);
 
 	/**
@@ -445,6 +440,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentId
 	 * @return
 	 */
+	@Deprecated
 	public List<CoiReviewCommentAttachment> fetchReviewAttachmentByCommentId(Integer coiReviewCommentId);
 
 	/**
@@ -452,21 +448,9 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentAttId
 	 * @return CoiReviewCommentAttachment
 	 */
+	@Deprecated
 	public CoiReviewCommentAttachment deleteAttachment(Integer coiReviewCommentAttId);
 
-	/**
-	 * This method is used for load ReviewComments
-	 * @param vo
-	 * @return ConflictOfInterestVO
-	 */
-	public ConflictOfInterestVO loadCoiReviewComments(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used for save Tag details of a comment
-	 * @param coiReviewCommentTag
-	 * @return CoiReviewCommentTag
-	 */
-	public CoiReviewCommentTag saveOrUpdateCoiReviewCommentTag(CoiReviewCommentTag coiReviewCommentTag);
 
 	/**
 	 * This method is used for get ProjectRelationship/disclosureDetails
@@ -489,11 +473,6 @@ public interface ConflictOfInterestDao {
 	 */
 	public String fetchadminGroupName(Integer tagGroupId);
 
-	/**
-	 * This method is used for delete tag based on coiReviewCommentId
-	 * @param coiReviewCommentId
-	 */
-	public void deleteReviewTagByCommentId(Integer coiReviewCommentId);
 
 	/**
 	 * This method is used for complete CoiDisclosure
@@ -614,7 +593,7 @@ public interface ConflictOfInterestDao {
 	 * @param searchString 
 	 * @return
 	 */
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString);
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString, Integer moduleItemKey);
 
 	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
@@ -630,7 +609,7 @@ public interface ConflictOfInterestDao {
 
 	public Integer generateMaxCoiEntityNumber();
 
-	public PersonEntity saveOrUpdateSFI(PersonEntity personEntity);
+	public PersonEntity saveOrUpdatePersonEntity(PersonEntity personEntity);
 
 	public Integer generateMaxDisclosureNumber();
 	
@@ -676,7 +655,9 @@ public interface ConflictOfInterestDao {
 
 	public PersonEntityRelationship getPersonEntityRelationshipByPersonEntityRelId(Integer personEntityRelId);
 
-	public ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode);
+	ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode);
+
+	List<ValidPersonEntityRelType> getValidPersonEntityRelTypeByTypeCodes(List<Integer> validPersonEntityRelTypeCodes);
 	
 	public Integer generateMaxTravelNumber();
 	
@@ -735,10 +716,6 @@ public interface ConflictOfInterestDao {
 	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
 	
 	public Integer generateMaxPersonEntityId();
-
-	public void saveOrUpdateDisclComment(DisclComment disclComment);
-
-	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
 
 	/**
 	 * This method is used to validate
@@ -881,11 +858,12 @@ public interface ConflictOfInterestDao {
 	Integer getSFIOfDisclosureCount(ConflictOfInterestVO vo);
 
 	/**
-	 * This method is used to activate/inactive  person entity
-	 * @param personEntityDto
+	 * This method is used to update  person entity version status
+	 * @param personEntityId
+	 * @param versionStatus
 	 * @return Timestamp
 	 */
-	Timestamp activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+	Timestamp updatePersonEntityVersionStatus(Integer personEntityId, String versionStatus);
 
 	/**
 	 * This method is used to change version status of person entity
@@ -926,17 +904,11 @@ public interface ConflictOfInterestDao {
 	void updateDisclosureUpdateDetails(Integer disclosureId);
 
 	/**
-	 * This method is to load CoiReviewComment By Id
-	 * @param coiReviewCommentId
-	 * @return
-	 */
-	DisclComment loadCoiReviewCommentById(Integer coiReviewCommentId);
-
-	/**
 	 * This method is used to update PersonEntity header update details
 	 * @param personEntityId
+	 * @return update Timestamp
 	 */
-	void updatePersonEntityUpdateDetails(Integer personEntityId);
+	Timestamp updatePersonEntityUpdateDetails(Integer personEntityId);
 
 	/**
 	 * This method is used to fetch all entity relationship types
@@ -1026,8 +998,6 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType();
 
-	public DisclComment getTravelConflictComment(Integer travelDisclosureId);
-
 	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory);
 
 	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
@@ -1072,8 +1042,6 @@ public interface ConflictOfInterestDao {
 	public void deleteReviewTagByCommentTagId(Integer coiReviewCommentTagId);
 
 	public List<DisclAttachment> loadDisclAttachmentByCommentId(Integer coiReviewCommentId);
-
-	public List<Integer> loadCoiReviewCommentsByParentId(Integer coiReviewCommentId);
 
 	/**
 	 * This method is used to get review assignee person name
@@ -1212,11 +1180,10 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method checks a person entity is activated or not
 	 * @param personEntityNumber
-	 * @param isRelationshipActive
 	 * @param versionStatus
 	 * @return
 	 */
-	boolean isPersonEntityActiveOrNot(Integer personEntityId, Integer personEntityNumber, boolean isRelationshipActive, String versionStatus);
+	boolean isPersonEntityActiveOrNot(Integer personEntityId, Integer personEntityNumber, String versionStatus);
 
 	/**
 	 * This method checks a entity is approved or not
@@ -1276,9 +1243,89 @@ public interface ConflictOfInterestDao {
 	boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
 
 	/**
-	 * This method is used to fetch SFI relationship details
-	 * @param loginPersonId
+	 * This method used to get the counts of a person's attachments
+	 * @param personId
 	 * @return
 	 */
-	public List<PersonEntityRelationshipDto> getSFIRelationshipDetails(String loginPersonId);
+	Long personAttachmentsCount(String personId);
+
+	/**
+	 * This method used to get the counts of a person's notes
+	 * @param personId
+	 * @return
+	 */
+	Long personNotesCount(String personId);
+
+	/**
+	 * This method fetches a person against in a review
+	 * @param coiReview
+	 * @return
+	 */
+	public boolean isReviewStatusChanged(CoiReview coiReview);
+
+	/**
+	 * This method checks if the edit action is allowed
+	 * @param coiReview
+	 * @return
+	 */
+	public boolean isReviewPresent(CoiReview coiReview);
+
+	/**
+	 * This method is used to fetch person entity relationship based on all or any of the parameters
+	 * @param disclosureId
+	 * @param personId
+	 * @param fetchNonArchive
+	 * @return list of SFI relations
+	 */
+	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive);
+
+
+	/**
+	 *
+	 * @param personEntityId
+	 * @param isFormExists
+	 */
+	void updatePersonEntityCompleteFag(Integer personEntityId, boolean isFormExists);
+
+	/**
+	 * This method is used to get the non Archive version of a person entity if by number
+	 * @param personEntityNumber
+	 * @return
+	 */
+	Integer getPersonEntityIdOfNonArchiveVersion(Integer personEntityNumber);
+
+	/**
+	 * This method is used to fetch financial SFI's based on disclosure id
+	 * @param disclosureId
+	 * @return list of SFI 
+	 */
+	public List<PersonEntity> getFinancialSFIOfDisclosure(Integer disclosureId);
+
+	/**
+	 * This method is used to check if project is present for a disclosure 
+	 * @param ConflictOfInterestVO
+	 */
+	public Boolean isProjectPresent(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to check if SFI is completed for a disclosure 
+	 * @param personEntityId
+	 * @param disclosureId
+	 */
+	public Boolean isSFICompletedForDisclosure(Integer personEntityId, Integer disclosureId);
+
+	/**
+	 * This method is used to get the count of conflicts marked by personEntityId
+	 * @param personEntityId
+	 * @param disclosureId
+	 */
+	public List<Map<Object, Object>> disclosureStatusCountBySFI(Integer personEntityId, Integer disclosureId);
+
+	/**
+	 * This method is used to get the projects related based on personEntityId and disclosureId
+	 * @param personEntityId
+	 * @param disclosureId
+	 */
+	public List<CoiDisclEntProjDetails> getProjectRelationshipBySFI(Integer personEntityId, Integer disclosureId);
+	
 }

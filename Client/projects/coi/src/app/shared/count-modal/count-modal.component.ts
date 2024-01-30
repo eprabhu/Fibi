@@ -34,6 +34,8 @@ export class CountModalComponent implements OnInit {
     currentModalTab = 'Award';
     projectDatas: any;
     coiFinancialEntityDetails: any[] = [];
+    isEntityNameRead = false;
+    isReadMore = [];
 
     constructor(private _countModalService: CountModalService, private _commonService: CommonService) {
     }
@@ -94,16 +96,16 @@ export class CountModalComponent implements OnInit {
     modalHeader() {
         if (this.fcoiTypeCode == 1) {
             if (this.moduleCode == 8) {
-                return `SFIs Attached to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `SFIs Attached to : FCOI Disclosure By ${this.getFcoiFullName()} [ ${this.getFcoiUnitName()} ]`;
             } else if (this.moduleCode == 1 || this.moduleCode == 3) {
-                return `Projects Related to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
+                return `Projects Related to : FCOI Disclosure By ${this.getFcoiFullName()} [ ${this.getFcoiUnitName()} ]`;
             }
         } else {
             if (this.fcoiTypeCode == 2 || this.fcoiTypeCode == 3) {
                 if (this.moduleCode == 8) {
-                    return `SFIs Attached to #${this.disclosureNumber}: ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
+                    return `SFIs Attached to : ${this.getType()} Disclosure - [ ${this.getTitle()} ] By ${this.getFullName()}`;
                 } else if (this.moduleCode == 1 || this.moduleCode == 3) {
-                    return `Projects Related to ${this.gettitle()} `;
+                    return `Projects Related to ${this.getTitle()} `;
                 }
             }
         }
@@ -123,7 +125,7 @@ export class CountModalComponent implements OnInit {
     }
 
     // title
-    gettitle(): string {
+    getTitle(): string {
         if (this.disclosures?.fcoiType) {
             if (this.disclosures?.fcoiType === 'Proposal') {
                 return this.reduceTitleLength(this.disclosures?.proposalTitle);
@@ -193,6 +195,7 @@ export class CountModalComponent implements OnInit {
 
     switchTableData() {
         this.tableArray = this.currentModalTab === 'Proposal' ? this.projectDatas.proposals : this.projectDatas.awards;
+        this.isReadMore = [];
     }
 
 
@@ -210,5 +213,45 @@ export class CountModalComponent implements OnInit {
         this.viewSlider.emit({'flag': flag, 'entityId': entityId})
     }
 
+    getDisclosureConflictBadge(statusCode: string) {
+        switch (String(statusCode)) {
+            case '100':
+                return 'green-badge';
+            case '200':
+            case '500':
+                return 'brown-badge';
+            case '300':
+            case '600':
+                return 'red-badge';
+            case '400':
+                return 'green-badge';
+            default:
+                return 'yellow-badge';
+        }
+    }
+
+    showFullTitle(): string {
+        if (this.disclosures?.fcoiType) {
+            if (this.disclosures?.fcoiType === 'Proposal') {
+                return this.disclosures?.proposalTitle;
+            } else {
+                return this.disclosures?.awardTitle;
+            }
+        } else if (this.disfullData?.projectDetail?.title) {
+            return this.disfullData?.projectDetail?.title;
+        } else if (this.adminData?.fcoiType) {
+            if (this.adminData?.fcoiType === 'Award') {
+                return this.adminData.awardTitle;
+            } else {
+                return this.adminData.proposalTitle;
+            }
+        } else if (this.reviewerData?.fcoiType) {
+            if (this.reviewerData?.fcoiType === 'Award') {
+                return this.reviewerData.awardTitle;
+            } else {
+                return this.reviewerData?.proposalTitle;
+            }
+        }
+    }
 
 }

@@ -25,8 +25,9 @@ import {
 import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
-import { ModalType} from '../disclosure/coi-interface';
+import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { CoiConflictStatusType, CoiReviewStatusType } from '../shared/coi-enum';
 
 @Component({
     selector: 'app-disclosure',
@@ -98,6 +99,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     returnErrorMsg = 'Describe the reason for returning the disclosure';
     helpTexts = [];
     isHomePageClicked = false;
+    showSlider = false;
+    selectedType: '';
     withdrawHelpTexts = [
         `Withdraw any disclosure in 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
@@ -110,6 +113,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     ];
     isOpenRiskSlider = false;
     reviewList: any = [];
+    CoiConflictStatusType = CoiConflictStatusType;
+    CoiReviewStatusType = CoiReviewStatusType;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -291,8 +296,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
             if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                this.error = 'Please complete the following mandatory Questionnaire(s) in the Screening Questionniare section.';
-                this.coiService.submitResponseErrors.push(this.error);
+
+                const questionnaire_error = {validationMessage: 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.'};
+                this.coiService.submitResponseErrors.push(questionnaire_error);
             }
             this.validateRelationship();
         }
@@ -329,10 +335,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Submitted Successfully.');
+            this.coiService.submitResponseErrors = [];
         }, err => {
             this.isSaving = false;
             if (err.status === 405) {
             hideModal('confirmModal');
+            this.coiService.submitResponseErrors = [];
             this.coiService.concurrentUpdateAction = 'Submit Disclosure';
           } else {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error In Certifying Disclosure.');
@@ -342,7 +350,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     validateRelationship() {
         this.$subscriptions.push(this.coiService.givecoiID(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
             res.map((error) => {
-                this.coiService.submitResponseErrors.push( error.validationMessage) ;
+                this.coiService.submitResponseErrors.push( error) ;
             });
            this.getSfiDetails();
         }, err => {
@@ -567,7 +575,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     errorCheck() {
-        if (this.coiService.submitResponseErrors.length) {
+        if (this.coiService.submitResponseErrors.length && this.coiService.submitResponseErrors.find(data => data.validationType == "VE")) {
             this.isSaving = false;
             openModal('ValidatedModal');
         } else {
@@ -728,13 +736,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     openReviewComment() {
         const COMMENT_META_DATA: coiReviewComment = {
-            disclosureId: this.coiData.coiDisclosure.disclosureId,
-            coiSectionsTypeCode: '3',
             documentOwnerPersonId: this.coiData.coiDisclosure.person.personId,
-            coiSubSectionsId: null,
-            headerName: '',
-            componentSubRefId: null,
-            coiSubSectionsTitle: null
+            componentTypeCode: '3',
+            subModuleItemKey: null,
+            subModuleItemNumber : null
         }
         this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
         this.coiService.isShowCommentNavBar = true;
@@ -748,4 +753,15 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.concurrentUpdateAction = '';
     }
 
+    openSlider(type, count) {
+        if(count) {
+            this.showSlider = true;
+            this.selectedType = type;
+        }
+    }
+
+    closeHeaderSlider() {
+        this.showSlider = false;
+        this.selectedType = '';
+    }
 }

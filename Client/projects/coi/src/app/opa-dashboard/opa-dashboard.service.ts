@@ -13,10 +13,7 @@ sort: any;
 opaRequestObject: OPADashboardRequest = new OPADashboardRequest();
 sortCountObject: SortCountObj = new SortCountObj();
 searchDefaultValues: NameObject = new NameObject();
-isCheckBoxSelected = {
-  'F': false,
-  'S': false
-};
+rolesList = [{code: "1", description: "Faculty", dataType: null}, {code: "2", description: "Staff", dataType: null}];
 
 constructor(private _http: HttpClient,
   private _commonService: CommonService) { }
@@ -39,7 +36,8 @@ export class OPADashboardRequest {
   unitNumber= null;
   submissionTimestamp = null;
   dispositionStatusCodes = [];
-  opaDisclosureStatusCodes = [];
+  reviewStatusCodes = [];
+  designationStatusCodes = [];
   personId = null;
   isFaculty = null;
   periodStartDate = null;

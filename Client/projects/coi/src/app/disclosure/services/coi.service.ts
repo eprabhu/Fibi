@@ -30,6 +30,9 @@ export class CoiService {
     certificationResponseErrors = [];
     submitResponseErrors = [];
     concurrentUpdateAction = '';
+    focusSFIId: any;
+    focusModuleId: any;
+    focusSFIRelationId: any;
 
     constructor(
         private _http: HttpClient,
@@ -89,7 +92,8 @@ export class CoiService {
     }
 
     getSfiDetails(params: RO) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
+
     }
     withdrawDisclosure(params: any) {
         return this._http.post(`${this._commonService.baseUrl}/withdrawDisclosure`, params);

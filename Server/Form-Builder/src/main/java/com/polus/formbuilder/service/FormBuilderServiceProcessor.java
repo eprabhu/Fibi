@@ -1,7 +1,7 @@
 package com.polus.formbuilder.service;
 
-import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.polus.appcorelib.authentication.AuthenticatedUser;
-import com.polus.appcorelib.customdataelement.controller.CustomDataElementController;
 import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
 import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.customdataelement.vo.CustomDataResponse;
@@ -28,6 +27,7 @@ import com.polus.formbuilder.entity.FormBuilderHeaderEntity;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionComponentEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionEntity;
+import com.polus.formbuilder.entity.FormBuilderUsageEntity;
 import com.polus.formbuilder.model.ApplicableFormRequest;
 import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
@@ -45,6 +45,7 @@ import com.polus.formbuilder.repository.FormBuilderHeaderEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderProgElementEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderSectionComponentEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderSectionEntityRepository;
+import com.polus.formbuilder.repository.FormBuilderUsageEntityRepository;
 
 @Service
 public class FormBuilderServiceProcessor {
@@ -73,11 +74,29 @@ public class FormBuilderServiceProcessor {
 	@Autowired
 	private FormBuilderServiceProcessorDAO formDAO;
 
+	@Autowired
+	private FormBuilderUsageEntityRepository usageRepository;
+
 	public ApplicableFormResponse PerformGetApplicableForms(ApplicableFormRequest request) {
 
-		List<Integer> applicableFormId = formDAO.getApplicableFormIds(request.getModuleItemCode(),
-				request.getModuleSubItemCode(), request.getDocumentOwnerPersonId());
+//		List<Integer> applicableFormId = formDAO.getApplicableFormIds(request.getModuleItemCode(),
+//				request.getModuleSubItemCode(), request.getDocumentOwnerPersonId());
+//
+//		Integer primaryFormID = getPrimaryFormId(applicableFormId);
+//		
+//		var response = ApplicableFormResponse.builder()
+//										.applicableFormsBuilderIds(applicableFormId)
+//										.formsBuilderId(primaryFormID)
+//										.build();
+//
+//		return response;
+		
+		List<FormBuilderUsageEntity> allApplicableForms = usageRepository.fetchByModuleAndSubModule(request.getModuleItemCode(), request.getModuleSubItemCode());
 
+		List<FormBuilderUsageEntity> filteredApplicableForms = formDAO.evaluateFormRule(allApplicableForms,null, request.getModuleItemCode(), request.getModuleSubItemCode(),request.getDocumentOwnerPersonId(),  null, null);
+
+		List<Integer> applicableFormId = new ArrayList<>();
+		filteredApplicableForms.forEach(form -> applicableFormId.add(form.getFormBuilderId()));
 		Integer primaryFormID = getPrimaryFormId(applicableFormId);
 		
 		var response = ApplicableFormResponse.builder()
@@ -97,11 +116,13 @@ public class FormBuilderServiceProcessor {
 		
 		Integer primaryFormID = getPrimaryFormId(applicableFormId);
 		
+		
 		FormResponseDTO formResponseDTO = getFormData(primaryFormID,
 													  request.getModuleItemCode(),
 													  request.getModuleSubItemCode(),
 													  request.getModuleItemKey(),
-													  request.getModuleSubItemKey());	
+													  request.getModuleSubItemKey(),
+													  request.getDocumentOwnerPersonId());	
 		
 		var response = BlankFormResponse.builder()
 										.form(formResponseDTO)
@@ -119,7 +140,8 @@ public class FormBuilderServiceProcessor {
 													  request.getModuleItemCode(),
 													  request.getModuleSubItemCode(),
 													  request.getModuleItemKey(),
-													  request.getModuleSubItemKey());	
+													  request.getModuleSubItemKey(),
+													  request.getDocumentOwnerPersonId());	
 		
 		var response = BlankFormResponse.builder()
 										.form(formResponseDTO)
@@ -134,7 +156,8 @@ public class FormBuilderServiceProcessor {
 													  	request.getModuleItemCode(),
 													  	request.getModuleSubItemCode(),
 													  	request.getModuleItemKey(),
-													  	request.getModuleSubItemKey()
+													  	request.getModuleSubItemKey(),
+													  	request.getDocumentOwnerPersonId()
 													  	);
 		var response =  FormResponse.builder()
 									.form(formResponseDTO)
@@ -238,9 +261,8 @@ public class FormBuilderServiceProcessor {
 
 
 	public FormComponentSaveResponse PerformSaveCustomElementComponent(FormComponentSaveRequest request) {
-		CustomDataElementController c;
-		CustomDataElementVO customElement = request.getCustomElement();	
 		
+		CustomDataElementVO customElement = request.getCustomElement();			
 		// component Id is saved as moduleSubItemKey in the Form Builder module
 		// for Questionnaire Engine and Custom Element Engine
 		customElement.setModuleCode(Integer.parseInt(request.getModuleItemCode()));
@@ -291,11 +313,11 @@ public class FormBuilderServiceProcessor {
 										String moduleItemCode,
 										String moduleSubItemCode,
 										String moduleItemKey,
-										String moduleSubItemKey) {
+										String moduleSubItemKey,
+										String documentOwnerPersonId) {
 		Instant start = Instant.now();
 		
-		//Prepare task to run parallel
-		
+		//Prepare task to run parallel		
 		CompletableFuture<List<FormBuilderSectionsComponentDTO>> componentListFuture = CompletableFuture
 				.supplyAsync(() -> formDAO.getComponentsForFormId(formID));
 
@@ -344,13 +366,21 @@ public class FormBuilderServiceProcessor {
 		formResponseDTO.setModuleSubItemCode(moduleSubItemCode);
 		formResponseDTO.setModuleItemKey(moduleItemKey);
 		formResponseDTO.setModuleSubItemKey(moduleSubItemKey);
-		formResponseDTO.setFormName(formHeaderDetails.getDescription() + " <--> ACTION TIME :  "
-									+ Duration.between(start, Instant.now()).toMillis());
+		formResponseDTO.setFormName(formHeaderDetails.getDescription());
 		formResponseDTO.setFormSections(sectionDTOList);
+		
+		formResponseDTO.setDisabledSections(
+							fetchDisabledSection(formHeaderDetails.getFormBuilderId(),
+												 moduleItemCode,
+												 moduleSubItemCode,
+												 moduleItemKey,
+												 moduleSubItemKey,
+												 documentOwnerPersonId));
 		
 		
 		return formResponseDTO;
 	}
+
 
 	private FormResponseDTO getSectionData( Integer sectionId,
 											String moduleItemCode,
@@ -406,9 +436,7 @@ public class FormBuilderServiceProcessor {
 		// Create FormResponseDTO
 		FormResponseDTO formResponseDTO = new FormResponseDTO();
 		
-		formResponseDTO.setFormName( " <--> ACTION TIME :  "
-									+ Duration.between(start, Instant.now()).toMillis());
-		formResponseDTO.setFormSections(sectionDTOList);		
+		formResponseDTO.setFormSections(sectionDTOList);	
 		
 		return formResponseDTO;
 	}
@@ -621,6 +649,12 @@ public class FormBuilderServiceProcessor {
 		response.setModuleSubItemCode(request.getModuleSubItemCode());
 		response.setModuleItemKey(request.getModuleItemKey());
 		response.setModuleSubItemKey(request.getModuleSubItemKey());
+		response.setDisabledSections(fetchDisabledSection(request.getFormBuilderId(),
+														  request.getModuleItemCode(),
+														  request.getModuleSubItemCode(),
+														  request.getModuleItemKey(),
+														  request.getModuleSubItemKey(),
+														  request.getDocumentOwnerPersonId()));
 		
 		return response;
 	}
@@ -636,10 +670,23 @@ public class FormBuilderServiceProcessor {
 		return programmedElementEntity;
 	}
 
+	private List<Integer> fetchDisabledSection(Integer formBuilderId,
+												String moduleItemCode,
+												String moduleSubItemCode,
+												String moduleItemKey,
+												String moduleSubItemKey,
+												String documentOwnerPersonId) {
+		
+		return formDAO.getDisabledSectionIds(formBuilderId,
+											 moduleItemCode,
+											 moduleItemKey,
+											 documentOwnerPersonId);
+	}
+	
 	private String getLoggedInUser() {		
 		try {
-			//commenting this code just for testing the application without auth header
-			return "admin";//AuthenticatedUser.getLoginUserName();
+			return AuthenticatedUser.getLoginUserName();
+			
 		}catch(Exception e) {
 			return "nouser";
 		}

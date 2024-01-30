@@ -8,7 +8,7 @@
                         <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong [attr.aria-label]="'Travel Disclosure By ' + userDetails?.fullName">Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0" 
+                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0"
                                         (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
                                         [attr.aria-label]="'click to show the details of' + userDetails?.fullName"
                                         title="click to show the details of {{userDetails?.fullName}}">
@@ -21,7 +21,7 @@
                             <strong [attr.aria-label]="'hash' + travelDisclosure?.travelDisclosureId + ' : Travel Disclosure By ' + userDetails?.fullName">
                                 #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0" 
+                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0"
                                         (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
                                         [attr.aria-label]="'click to show the details of ' + userDetails?.fullName"
                                         title="click to show the details of {{userDetails?.fullName}}">
@@ -40,7 +40,7 @@
                         <span class="text-secondary fs-14">
                             <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
                         </span>
-                        <span class="ml-2 mt-1"> 
+                        <span class="ml-2 mt-1">
                             {{travelDisclosure?.riskLevel}}
                         </span>
                         </div>
@@ -197,12 +197,12 @@
                     </div>
                 </div>
             </div>
-       
+
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center" tabindex="0"  role="navigation" aria-label="travel disclosure">
                      <!-- Disclosure -->
                     <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'" 
+                        [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'"
                         [attr.aria-label]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'" role="link">
                         <div class="navigation-box-content" routerLinkActive="active">
                             Disclosure
@@ -230,7 +230,7 @@
     </div>
     <!-- right side options -->
     <div class="col-3 px-0">
-        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm" 
+        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm"
             [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : 'min-height-189' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
             <div class="row m-0 py-3 px-3">
                 <!-- home -->
@@ -243,7 +243,7 @@
 
                 <!-- Comments -->
                 <button title="Click to add new review comments" aria-label="Click to add new review comments"
-                    *ngIf="checkReviewStatusCode(['2', '3'], 'SOME')"
+                    *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME')"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                     <mat-icon>rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
@@ -262,7 +262,7 @@
                     <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
                     <ng-container *ngIf="isTravelAdministrator">
                         <!-- reassigned admin -->
-                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode(['3'])" aria-label="Click to Reassign administrator"
+                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TravelReviewStatus.REVIEW_IN_PROGRESS])" aria-label="Click to Reassign administrator"
                             title="Click to Reassign Administrator/Admin Group" role="menuitems"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openAddAssignModal()">
@@ -270,25 +270,25 @@
                             <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                         </button>
                     </ng-container>
-                    <ng-container *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME') && checkAdministratorRight()">               
+                    <ng-container *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS, TravelReviewStatus.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
                         <!-- manage /view disclosure status -->
                         <button mat-menu-item (click)="openConflictSlider()" role="menuitems"
-                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
-                            title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
+                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
+                            title="Click to {{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon>{{checkReviewStatusCode(['2','3'], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure
+                            <mat-icon>{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
+                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure
                                 Status</span>
                         </button>
-                        
+
                         <!-- manage /view travel risk status -->
                         <button mat-menu-item (click)="openRiskSlider()" role="menuitems"
-                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View') + ' Risk'"
-                            title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk"
+                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
+                            title="Click to {{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon class="material-icons-round">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'warning' :
+                            <mat-icon class="material-icons-round">{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
                                 'visibility'}}</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk</span>
+                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk</span>
                         </button>
                     </ng-container>
 
@@ -296,7 +296,7 @@
                     <button mat-menu-item title="Click to Withdraw Travel Disclosure" aria-label="Click to Withdraw Travel Disclosure"
                         (click)="openConfirmationModal('Withdraw', true, withdrawHelpTexts, true, withdrawErrorMsg);"
                         class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action" role="menuitems"
-                        *ngIf="checkReviewStatusCode(['2']) && travelDisclosure?.personId == currentPersonId">
+                        *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED]) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Withdraw</span>
                     </button>
@@ -316,33 +316,35 @@
                             aria-label="Click to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
-                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])"
+                            *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED])"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
                         </button>
                     </ng-container>
 
-                    <ng-container *ngIf="showReturnOrApproveButton()">
-                        <!-- return to pi -->
-                        <button title="Click to Return Travel Disclosure" aria-label="Click to Return Travel Disclosure"
-                            (click)="openConfirmationModal('Return', true, returnHelpTexts, true, returnErrorMsg);"
-                            [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
-                            class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
-                            <mat-icon class="returnIcon">refresh</mat-icon>
-                            <span class="ms-1" *ngIf="isCardExpanded">Return</span>
-                        </button>
 
-                        <!-- approve disclosure -->
-                        <button title="Click to Approve Travel Disclosure"
-                            aria-label="Click to Approve Travel Disclosure"
-                            (click)="openConfirmationModal('Approve', true);"
-                            [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
-                            class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
-                            <mat-icon>check_circle_outline</mat-icon>
-                            <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
-                        </button>
-                    </ng-container>
+                    <!-- return to pi -->
+                    <button *ngIf="showReturnOrApproveButton()"
+                            title="Click to Return Travel Disclosure" aria-label="Click to Return Travel Disclosure"
+                        (click)="openConfirmationModal('Return', true, returnHelpTexts, true, returnErrorMsg);"
+                        [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                        class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
+                        <mat-icon class="returnIcon">refresh</mat-icon>
+                        <span class="ms-1" *ngIf="isCardExpanded">Return</span>
+                    </button>
+
+                    <!-- approve disclosure -->
+                    <button *ngIf="(isTravelAdministrator && checkReviewStatusCode([travelReviewStatus.SUBMITTED]))
+                                   || (showReturnOrApproveButton())"
+                        title="Click to Approve Travel Disclosure"
+                        aria-label="Click to Approve Travel Disclosure"
+                        (click)="openConfirmationModal('Approve', true);"
+                        [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
+                        class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
+                        <mat-icon>check_circle_outline</mat-icon>
+                        <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
+                    </button>
                 </ng-container>
 
                 <ng-container *ngIf="isCreateMode">
@@ -379,7 +381,7 @@
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
     <div class="mx-0 p-0 row">
         <ng-container *ngIf="isCreateMode">
@@ -409,10 +411,10 @@
                         role="link">
                         Certification
                     </div>
-                    <span
+                    <!-- <span
                         class="notes btn nav-btn-grey fs-14 fw-medium align-items-center border-r-0 d-flex justify-content-center col hand-cursor nav-border-right">
                         Notes & Attachments
-                    </span>
+                    </span> -->
                     <span *ngIf="travelDisclosure?.reviewStatusCode != 1 && travelDisclosure?.reviewStatusCode != null"
                         [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
                         class="notes btn nav-btn-grey fs-14 fw-medium align-items-center border-r-0 d-flex justify-content-center col hand-cursor">
@@ -487,11 +489,11 @@
 <!-- disclosure status slider -->
 <app-travel-add-conflict-slider *ngIf="isOpenSlider"
     [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
-    [isEditMode]="checkReviewStatusCode(['2','3'], 'SOME')" (closePage)="closeConflictSlider()" >
+    [isEditMode]="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME')" (closePage)="closeConflictSlider()" >
 </app-travel-add-conflict-slider>
 
 <div *ngIf="isOpenRiskSlider">
-    <app-travel-risk-slider (closePage)="closeSlider($event)" [travelDisclosure]="travelDisclosure" (riskChange)= "changeDataStoreRisk($event)" [isEditMode]="checkReviewStatusCode(['2','3'], 'SOME')"></app-travel-risk-slider>
+    <app-travel-risk-slider (closePage)="closeSlider($event)" [travelDisclosure]="travelDisclosure" (riskChange)= "changeDataStoreRisk($event)" [isEditMode]="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME')"></app-travel-risk-slider>
 </div>
 
 <app-concurrency-warning-modal *ngIf="service.concurrentUpdateAction" [sectionName]="service.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

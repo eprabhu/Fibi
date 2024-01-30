@@ -6,10 +6,15 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.polus.formbuilder.dto.FormBuilderSectionsComponentDTO;
+import com.polus.formbuilder.entity.FormBuilderUsageEntity;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.StoredProcedureQuery;
+import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 
 @Component
 public class FormBuilderServiceProcessorDAO {
@@ -141,6 +146,87 @@ public class FormBuilderServiceProcessorDAO {
 	        return resultRows.get(0);
 	    }
 	    return null;
+	}
+	
+	public List<Integer> getDisabledSectionIds(Integer formBuilderId, String moduleCode, String subModuleCode,
+			String documentOwnerPersonId) {
+		List<Integer> disabledSectionId = new ArrayList<>();
+		try {
+				String sql = "select  t1.FORM_BUILDER_SECTION_ID "
+					+ "from FORM_BUILDER_SECTION t1 "
+					+ "where t1.FORM_BUILDER_ID  = :formBuilderId "
+					+ "and t1.BUSINESS_RULE_ID is NOT NULL "
+					+ "and t1.IS_ACTIVE = 'Y' "
+					+ "and FN_EVALUATE_RULE(:moduleCode,:subModuleCode,NULL,t1.BUSINESS_RULE_ID,:documentOwnerPersonId,NULL,NULL) = 0 ";
+					
+	
+			Query query = entityManager.createNativeQuery(sql);
+			query.setParameter("formBuilderId", formBuilderId);
+			query.setParameter("moduleCode", moduleCode);
+			query.setParameter("subModuleCode", subModuleCode);
+			query.setParameter("documentOwnerPersonId", documentOwnerPersonId);
+			List<?> resultRows = query.getResultList();
+			
+			for (Object row : resultRows) {
+				if (row instanceof Integer) {					
+					disabledSectionId.add((Integer) row);
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return disabledSectionId;
+	}
+
+	@Transactional
+	public List<FormBuilderUsageEntity> evaluateFormRule(List<FormBuilderUsageEntity> allApplicableForms, Integer moduleItemKey,
+			String moduleItemCode, String moduleSubItemCode, String logginPersonId, String updateUser, String moduleSubItemKey) {
+		List<FormBuilderUsageEntity> applicableForm = new ArrayList<>();
+		if (allApplicableForms != null && !allApplicableForms.isEmpty()) {
+			for (FormBuilderUsageEntity formUsage : allApplicableForms) {
+				Integer ruleId = (formUsage.getBusinessRuleId() == null ? 0 : formUsage.getBusinessRuleId());
+				if (ruleId == 0) {
+					applicableForm.add(formUsage);
+				} else {
+					boolean isrulePassed = evaluateRule(moduleItemCode, moduleSubItemCode, moduleItemKey, ruleId, logginPersonId, updateUser, moduleSubItemKey);
+					if (isrulePassed) {
+						applicableForm.add(formUsage);
+					}
+				}
+			}
+		}		
+		return applicableForm;
+	}
+
+	@Transactional(value = TxType.SUPPORTS)
+	private Boolean evaluateRule(String moduleItemCode, String moduleSubItemCode, Integer moduleItemKey, Integer ruleId,
+			String logginPersonId, String updateUser, String moduleSubItemKey) {
+		try {
+			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("rule_evaluation")
+					.registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(3, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(4, Integer.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(5, Integer.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(6, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(7, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(8, String.class, ParameterMode.IN);
+			query.setParameter(1, moduleItemCode);
+			query.setParameter(2, moduleItemCode);
+			query.setParameter(3, moduleSubItemCode);
+			query.setParameter(4, moduleItemKey);
+			query.setParameter(5, ruleId);
+			query.setParameter(6, logginPersonId);
+			query.setParameter(7, updateUser);
+			query.setParameter(8, moduleSubItemKey);
+			query.execute();
+			Long result = (Long) query.getSingleResult();
+			return (result != null && result.equals(1L)) ? Boolean.TRUE : Boolean.FALSE;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 }

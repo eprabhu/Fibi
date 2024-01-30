@@ -4,6 +4,8 @@ import {FBConfiguration, FormBuilderEvent} from '../../shared/form-builder-view/
 import { OpaService } from '../services/opa.service';
 import {DataStoreService} from '../services/data-store.service';
 import {OPA} from "../opa-interface";
+import { coiReviewComment } from '../../shared-components/shared-interface';
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
     selector: 'app-form',
@@ -18,7 +20,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     opa: OPA = new OPA();
     $subscriptions: Subscription[] = [];
 
-    constructor(public _opa: OpaService, private dataStore: DataStoreService) {
+    constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService) {
     }
 
     ngOnInit() {
@@ -57,6 +59,19 @@ export class FormComponent implements OnInit, AfterViewInit {
 
     getDataFromStore() {
         this.opa = this.dataStore.getData();
+    }
+
+    commentSliderEvent(event) {
+        const COMMENT_META_DATA: any = {
+            documentOwnerPersonId: this.opa.opaDisclosure.personId,
+            componentTypeCode: event.componentTypeCode,
+            formBuilderComponentId: event.formBuilderComponentId,
+            formBuilderId : event.formBuilderId,
+            formBuilderSectionId : event.formBuilderSectionId,
+            headerName: event.headerName
+        }
+        this._commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
+        this._opa.isShowCommentNavBar = true;
     }
 
 }

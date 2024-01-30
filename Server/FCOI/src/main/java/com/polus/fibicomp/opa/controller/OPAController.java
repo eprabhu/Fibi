@@ -17,8 +17,9 @@ import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.opa.dto.CreateOpaDto;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
 import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.service.OPAService;
 
 @RestController
@@ -41,8 +42,9 @@ public class OPAController {
 		logger.info("Request for createOPADisclosure");
 		if(Boolean.TRUE.equals(opaService.canCreateOpaDisclosure(dto.getPersonId()))) {
 			return opaService.createOpaDisclosure(dto.getPersonId(), dto.getHomeUnit());
+		} else {
+			return new ResponseEntity<>("Person has no right/entry to create OPA", HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	@PatchMapping("/submit")
@@ -51,18 +53,16 @@ public class OPAController {
 		return opaService.submitOPADisclosure(opaSubmitDto);
 	}
 
-	@PatchMapping("/withdraw/{opaDisclosureId}/{opaDisclosureNumber}")
-	public ResponseEntity<Object> withdrawOPADisclosure(@PathVariable("opaDisclosureId") Integer opaDisclosureId,
-														@PathVariable("opaDisclosureNumber") String opaDisclosureNumber) {
+	@PatchMapping("/withdraw")
+	public ResponseEntity<Object> withdrawOPADisclosure(@RequestBody OPACommonDto opaCommonDto) {
 		logger.info("Request for withdrawOPADisclosure");
-		return opaService.withdrawOPADisclosure(opaDisclosureId, opaDisclosureNumber);
+		return opaService.withdrawOPADisclosure(opaCommonDto);
 	}
 
-	@PatchMapping("/return/{opaDisclosureId}/{opaDisclosureNumber}")
-	public ResponseEntity<Object> returnOPADisclosure(@PathVariable("opaDisclosureId") Integer opaDisclosureId,
-													  @PathVariable("opaDisclosureNumber") String opaDisclosureNumber) {
+	@PatchMapping("/return")
+	public ResponseEntity<Object> returnOPADisclosure(@RequestBody OPACommonDto opaCommonDto) {
 		logger.info("Request for returnOPADisclosure");
-		return opaService.returnOPADisclosure(opaDisclosureId, opaDisclosureNumber);
+		return opaService.returnOPADisclosure(opaCommonDto);
 	}
 
 	@PatchMapping("/assignAdmin")
@@ -97,6 +97,11 @@ public class OPAController {
 	@GetMapping("/opaDisclosureHistory/{opaDisclosureId}")
 	public ResponseEntity<Object> geOpatDisclosureHistoryById(@PathVariable("opaDisclosureId") Integer opaDisclosureId) {
 		return actionLogService.getOpaDisclosureHistoryById(opaDisclosureId);
+	}
+
+	@GetMapping("/getOpaPersonType")
+	public ResponseEntity<Object> getOpaPersonType() {
+		return opaService.getOpaPersonType();
 	}
 
 }

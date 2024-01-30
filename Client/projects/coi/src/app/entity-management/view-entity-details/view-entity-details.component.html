@@ -1,64 +1,66 @@
 <div class="sticky-0 page-header-color" [@fadeInOutHeight]>
   <div class="mx-4 row">
-    <div class="col-9 p-0">
+    <div class="col-md-9 col-12 p-0">
       <div class="border shadow-sm">
         <div class="body-heading  px-3 d-flex" [class.border-bottom]="isCardExpanded">
-          <div class="col d-flex">
+          <div class="col d-flex" tabindex="0">
             <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
               [ngClass]="entityDetails?.isActive ?'':'inactive-pill'">
               <span class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</span></span>
-            <h1 class="fw-bold fs-18 mt-3 px-3">{{entityDetails?.entityName}}</h1>
+            <h1 class="fw-bold mt-3 px-3 fs-18" tabindex="0" [attr.aria-label]="entityDetails?.entityName">{{entityDetails?.entityName}}</h1>
           </div>
-          <div *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" class="align-items-center d-flex">
+          <div *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" class="align-items-center d-flex" tabindex="0">
             <span class="pill d-flex">
               <span class="cross-wrapper">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </span>
-              <span class="unverified-label">{{entityDetails?.entityStatus?.description}}</span>
+              <span class="unverified-label" aria-label="entityDetails?.entityStatus?.description">{{entityDetails?.entityStatus?.description}}</span>
             </span>
           </div>
-          <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-5 fs-14">
-            <div class="align-items-center d-flex ml-15">
-              <label class="fw-500 mr-2">Risk :</label>
+          <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-5 fs-14" tabindex="0">
+            <div class="align-items-center d-flex ml-15 col-12">
+              <label class="fw-500 mr-2" aria-label="Risk">Risk :</label>
               <div class="text-color d-flex">
                 <mat-icon [ngClass]="entityRiskLevel(entityDetails?.entityRiskCategory?.description)"
                   class="material-icons-round icon-alignment">warning</mat-icon>
-                <span *ngIf="entityDetails?.entityRiskCategory" class="mt-1">
+                <span *ngIf="entityDetails?.entityRiskCategory" class="mt-1" [attr.aria-label]="entityDetails?.entityRiskCategory?.description">
                   {{entityDetails?.entityRiskCategory?.description}}
                 </span>
               </div>
             </div>
           </div>
-          <div class="align-items-center d-flex" >
-            <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded" class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+          <div class="align-items-center d-flex" tabindex="-1">
+            <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded" 
+            class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
+            aria-label="Click here to expand / collapse">
               <mat-icon class="mb-2 icon-height">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
             </button>
           </div>
         </div>
       <ng-container *ngIf="isCardExpanded">
-        <div class="d-flex bg-white p-3">
-            <div class="col mr-10">
-            <div class="border triple-card rounded-1 position-relative">
-              <div class="ps-4 table-negative-margin">
+        <div class="row bg-white p-3 mx-0">
+            <div class="col-lg-6 col-12">
+            <div class="border triple-card rounded-1 position-relative mb-lg-0 mb-3">
+              <div class="p-3">
                 <table class="fs-14 fw-medium spaced-table">
-                  <tr>
-                    <td class="fw-500 fs-14 col-3">Entity Type :</td>
+                  <tr tabindex="0">
+                    <td class="fw-500 fs-14 col-3 col-sm-4">Entity Type :</td>
                     <td class="text-color fs-14">
                       <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.entityType?.description">
                         <span class="py-1 rounded-5">{{entityDetails?.entityType?.description}}</span>
                       </app-no-data-label>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="fw-500 fs-14 col-3">Country :</td>
+                  <tr tabindex="0">
+                    <td class="fw-500 fs-14 col-3 col-sm-4">Country :</td>
                     <td class="text-color fs-14">
                       <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.country?.countryName">
                         <span class="py-1 rounded-5">{{entityDetails?.country?.countryName}}</span>
                       </app-no-data-label>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="fw-500 fs-14 col-3">City :</td>
+                  <tr tabindex="0">
+                    <td class="fw-500 fs-14 col-3 col-sm-4">City :</td>
                     <td class="text-color fs-14">
                       <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.city">
                         <span class="py-1 rounded-5 ">{{entityDetails?.city}}</span>
@@ -69,12 +71,12 @@
               </div>
             </div>
           </div>
-            <div class="col">
+            <div class="col-lg-6 col-12">
             <div class="border triple-card rounded-1 position-relative">
-              <div class="ps-4 table-negative-margin">
+              <div class="p-3">
                 <table class="fs-14 fw-medium spaced-table">
-                  <tr>
-                    <td class="fw-500 fs-14 col-3">Website :</td>
+                  <tr tabindex="0">
+                    <td class="fw-500 fs-14 col-3 col-sm-4">Website :</td>
                     <td class="text-color fs-14">
                       <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.webURL">
                         <span class="py-1 rounded-5">
@@ -85,16 +87,16 @@
   
                     </td>
                   </tr>
-                  <tr>
-                    <td class="fw-500 fs-14 col-3">Email :</td>
+                  <tr tabindex="0">
+                    <td class="fw-500 fs-14 col-3 col-sm-4">Email :</td>
                     <td class="text-color fs-14">
                       <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.emailAddress">
                         <span class="py-1 rounded-5">{{entityDetails?.emailAddress}}</span>
                       </app-no-data-label>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="fw-500 fs-14 col-3">Phone :</td>
+                  <tr tabindex="0">
+                    <td class="fw-500 fs-14 col-3 col-sm-4">Phone :</td>
                     <td class="text-color fs-14">
                       <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.phone">
                         <span class="  py-1 rounded-5 ">{{entityDetails?.phone}}</span>
@@ -107,7 +109,7 @@
           </div>
         </div>
         </ng-container>
-        <div class="footer-body px-3 d-flex">
+        <div class="footer-body px-3 d-flex" tabindex="0">
           <div class="align-self-center flex-fill">
             <label class="fw-500 fs-14 mx-3">Address :</label>
             <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.address">
@@ -118,52 +120,51 @@
         </div>
       </div>
     </div>
-    <div class="col-3 bg-white px-0">
+    <div class="col-md-3 col-12 bg-white px-0">
       <div class="d-flex position-relative flex-column p-0 bg-white">
-        <div  class="row m-0 pt-2 px-3">
+        <div class="row m-0 pt-2 px-3">
           <!-- home -->
-          <button (click)="goToHome()" *ngIf="hasManageEntity" title="Go to COI home page"
-              class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col text-nowrap">
+          <button (click)="goToHome()" *ngIf="hasManageEntity" title="Go to COI home page" tabindex="0"
+              class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col-xl-auto col-md col-sm-auto text-nowrap" aria-label="home" role="button">
               <mat-icon>home</mat-icon>
               <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
           </button>
 
           <!-- Modify Entity -->
-          <button title="Click to Modify Entity" *ngIf="hasManageEntity"  id="btn-modify" [matMenuTriggerFor]="beforeMenu"
-            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+          <button title="Click to Modify Entity" *ngIf="hasManageEntity"  id="btn-modify" [matMenuTriggerFor]="beforeMenu" tabindex="0" role="button"
+            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col-lg col-md-12 col ms-lg-2 ms-md-0 ms-sm-2 text-nowrap mt-md-3 mt-sm mt-lg-0">
             <mat-icon class="more-options-icon">more_vert</mat-icon>
             <span class="ms-2" *ngIf="isCardExpanded">More Actions</span>
-          </button>	
-          <mat-menu #beforeMenu="matMenu" xPosition="before">
-            <button *ngIf="hasManageEntity" (click)="openConfirmationModal()"
-              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5">
+          </button>
+
+          <mat-menu #beforeMenu="matMenu" xPosition="before" tabindex="0" role="button">
+            <button mat-menu-item  id="btn-modify-entity" *ngIf="hasManageEntity" (click)="openConfirmationModal()"
+              class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5 more-action">
               <mat-icon class="me-2 actions-icon">edit</mat-icon>
-              <span class="pt-2">Modify Entity</span>
+              <span class="pt-2 fw-medium fs-14">Modify Entity</span>
             </button>
-            <button (click)="toggleSlider()"
-              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5"
+            <button mat-menu-item id="btn-manage-risk" (click)="toggleSlider()"
+              class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5 more-action"
               id="edit-location-btn">
               <mat-icon class="actions-icon me-2">warning</mat-icon>
-              <span class="pt-2">Manage Risk</span>
+              <span class="fw-medium pt-2 fs-14">Manage Risk</span>
             </button>
           </mat-menu>
 
           <!-- Back -->
-          <button title="Click to go back to Entity list" *ngIf="hasManageEntity" 
+          <button title="Click to go back to Entity list" *ngIf="hasManageEntity" tabindex="0" role="button"
               (click)="navigateBack()" id="btn-modify"
-             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 px-xl-0 col-xl col-md-12 col-sm ms-xl-2 ms-md-0 ms-sm-2 text-nowrap mt-sm-0 mt-md-3 mt-xl-0 me-2">
               <mat-icon>reply</mat-icon>
               <span class="ms-2" *ngIf="isCardExpanded">Back</span>
           </button>
 
-         
-
           <ng-container *ngIf="hasManageEntity">
             <!-- inactivate -->
             <ng-container *ngIf="entityDetails.isActive">
-              <button title="Click to Inactivate Entity" id="btn-inactivate"
-                  [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
-                  class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center"
+              <button title="Click to Inactivate Entity" id="btn-inactivate" tabindex="0" role="button"
+                  [ngClass]="isCardExpanded? 'col-md-12 col-sm my-md-3 my-sm-0' : 'col ms-2'"
+                  class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center ms-md-0 ms-sm-2 me-2"
                   (click)="activateInactivateEntity()">
                   <mat-icon>schedule</mat-icon>
                   <span class="ms-2" *ngIf="isCardExpanded">Inactivate</span>
@@ -171,9 +172,9 @@
             </ng-container>
             <!-- Activate -->
             <ng-container *ngIf="!entityDetails.isActive">
-              <button title="Click to activate Entity" id="btn-activate"
-                [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
-                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center"
+              <button title="Click to activate Entity" id="btn-activate" tabindex="0" role="button"
+                [ngClass]="isCardExpanded? 'col-md-12 col-sm mt-3 mb-lg-3' : 'col ms-2'"
+                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center ms-md-0 ms-sm-2"
                 (click)="activateInactivateEntity()">
                 <mat-icon>flash_on</mat-icon>
                 <span class="ms-2" *ngIf="isCardExpanded">Activate</span>
@@ -181,9 +182,9 @@
             </ng-container>
           <!-- Approve Entity -->
           <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
-            <button id="btn-approve-entity"
-            [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
-              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+            <button id="btn-approve-entity" tabindex="0" role="button"
+            [ngClass]="isCardExpanded? 'col-md-12 col-sm mb-lg-3' : 'col ms-2'"
+              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center ms-md-0 ms-sm-2"
               title="Click to access entity verification" data-bs-toggle="modal" data-bs-target="#approve-entity-modal">
               <mat-icon class="mx-1 icon-approve-position">check_circle_outline</mat-icon>
               <span *ngIf="isCardExpanded" class="btn-approve-position">Approve Entity</span>
@@ -192,7 +193,7 @@
         </ng-container>
 
         <!-- last update date -->
-        <div class="fs-14 ash-text ps-0" [class.mt-3]="!isCardExpanded">
+        <div class="fs-14 ash-text ps-0 d-sm-flex d-md-block  mt-md-0 mt-sm-2" [class.mt-3]="!isCardExpanded" tabindex="0">
           <div class="fw-medium me-3">Last Updated By :</div>
           <div>{{entityDetails?.updatedUserFullName}} On 
             {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}</div>

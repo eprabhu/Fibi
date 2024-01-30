@@ -1,6 +1,6 @@
-
-<app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
-        [isEditMode]="isEditMode" [entityDetails]="entityDetails"
+<app-view-relationship-details
+        [entityId]="entityId" [entityNumber]="entityNumber"
+        [entityDetails]="entityDetails"
         [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
 
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
@@ -78,38 +78,41 @@
     </div>
 </div>
 
-<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+<div class="modal fade" id="addRelationshipModal" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-mdb-backdrop="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg max-width-break-992">
     <div class="modal-content">
-      <div class="modal-header custom-height">
+      <div class="modal-header custom-height" hidden>
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relationship</h3>
         <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
           id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
       </div>
       <div class="modal-body p-0">
-        <div class="row m-0 add-relation-header">
-          <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
+        <div class="row m-0 add-relation-header" tabindex="0">
+          <p class="fs-13 m-0">Relationship Details section, use this section to disclose financial information related to the entity for your Self, Spouse/Domestic Partner, and Dependents (children who are unemancipated and under 18 years of age or who receive more than one-­‐half support from you).</p>
         </div>
-        <div  *ngIf="entityDetailService.availableRelationships?.length; else noData" class="relation d-flex justify-content-center mt-5 mb-5">
-          <div class="card custom-padding position-relative"
+        <div *ngIf="entityDetailService.remainingRelationships && entityDetailService.remainingRelationships?.length; else noData" class="relation d-flex justify-content-center mt-5 mb-5">
+          <div class="card custom-padding position-relative w-65"
           [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-              <div class="color-black mb-2">
-                <label class="form-check-label colour-black relation-header px-2"><b>Select Relation
-                  </b></label>
+              <div class="color-black mb-2" tabindex="0">
+                <label class="form-check-label colour-black relation-header px-2"><b>Relationship Details </b>[Disclose financial details for the SFI]
+                  </label>
               </div>
               <div class="col pl-20 mt-4">
-                <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="mb-3 d-flex align-items-baseline">
-                  <label class="fs-14 fw-500 label-text pb-1 pt-2"
-                  [ngClass] = "subsection.key === 'OPA' ? 'mr-30' : subsection.key === 'Travel' ? 'mr-20' : ''">{{subsection.key}} : </label>
-                <div *ngFor="let relation of subsection.value;" class="form-check form-check-inline" [class.ms-3]="subsection.key === 'Financial'">
-                  <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                    [value]="relation?.personEntityRelType?.relationshipTypeCode"
-                    [(ngModel)]="entityDetailService.isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
-                  <label class="text-secondary r-title fs-14">
-                    {{relation?.personEntityRelType?.description}}
-                  </label>
-                </div>
+                <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="mb-3 d-flex align-items-baseline row">
+                  <div class="col-5" tabindex="0">
+                    <label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}} : </label>
+                  </div>
+                  <div class="col-7">
+                    <div *ngFor="let relation of subsection.value; let isFirst = first; let isLast = last;" class="form-check d-inline-block" [class.ml-last]="!isLast">
+                      <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+                        [value]="relation?.validPersonEntityRelTypeCode" [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
+                        [(ngModel)]="checkedRelationships[relation?.validPersonEntityRelTypeCode]">
+                      <label class="text-secondary r-title fs-14" [for]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode">
+                        {{relation?.personEntityRelType?.description}}
+                      </label>
+                    </div>
+                  </div>
               </div>
           </div>
         </div>
@@ -127,7 +130,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
           (click)="clearModal()">Cancel</button>
-        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="triggerAddRelation()">Add Relationship</button>
+        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="addRelation()">Add Relationship</button>
       </div>
     </div>
   </div>

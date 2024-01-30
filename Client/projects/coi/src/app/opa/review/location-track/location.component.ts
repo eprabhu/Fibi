@@ -8,17 +8,17 @@ import {ElasticConfigService} from '../../../../../../fibi/src/app/common/servic
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../../../../fibi/src/app/app-constants';
-import {DATE_PLACEHOLDER} from '../../../../../src/app/app-constants';
+import {DATE_PLACEHOLDER} from '../../../app-constants';
 import {
     compareDates,
     getDateObjectFromTimeStamp,
     getDuration,
     parseDateWithoutTimestamp
 } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
-import {PersonProjectOrEntity} from '../../../shared-components/shared-interface';
+import {PersonProjectOrEntity, coiReviewComment} from '../../../shared-components/shared-interface';
 import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
-import {OPA, OpaDisclosure} from "../../opa-interface";
+import {OPA, OpaDisclosure} from '../../opa-interface';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -50,7 +50,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     projectDetail: any = {};
     isMangeReviewAction = false;
     disReviewLocation = 'OPA_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
-    disReviewStatus = 'OPA_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
+    disReviewStatus = 'OPA_REVIEW_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
     locationType: any = [];
     reviewStatusType: any = [];
     reviewStartDate: any;
@@ -130,6 +130,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     editReview(review: any, index: number): void {
         this.clearReviewModal();
         this.reviewDetails = deepCloneObject(review);
+        this.reviewDetails.currentReviewStatusTypeCode = this.reviewDetails.reviewStatusType.reviewStatusCode;
+        this.reviewDetails.currentLocationTypeCode = this.reviewDetails.reviewLocationType.locationTypeCode;
         this.reviewStartDate = getDateObjectFromTimeStamp(this.reviewDetails.startDate);
         if (this.reviewDetails.endDate) {
             this.reviewEndDate = getDateObjectFromTimeStamp(this.reviewDetails.endDate);
@@ -159,14 +161,17 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
-                this.modifyIndex = -1;
                 this.reviewDetails = {};
                 this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
                 this.isExpanded = true;
                 // this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
-                // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                if (_err.status === 405) {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
+                  } else {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, typeof(_err.error) == 'string' ? _err.error : `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                }
             }));
         }
     }
@@ -190,8 +195,8 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private setReviewAndOPAData(review: any) {
         const {opaDisclosure, ...reviewer} = review;
-        this.opaDisclosure.opaDisclosureStatusType = opaDisclosure.opaDisclosureStatusType;
-        this.opaDisclosure.opaDisclosureStatusCode = opaDisclosure.opaDisclosureStatusCode;
+        this.opaDisclosure.reviewStatusType  = opaDisclosure.reviewStatusType;
+        this.opaDisclosure.reviewStatusCode  = opaDisclosure.reviewStatusCode;
         return reviewer;
     }
 
@@ -219,13 +224,23 @@ export class LocationComponent implements OnInit, OnDestroy {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
-            this.clearActionData();
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
+            if (_err.status === 405) {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
+            } else {
+                this.clearActionData();
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
+            }
         }));
     }
 
-    modifyReviewComment(coiReviewId) {
-        this.commentConfiguration.coiReviewId = coiReviewId;
+    modifyReviewComment(reviewDetails) {
+        const disclosureDetails:coiReviewComment = {
+            documentOwnerPersonId: this.opaDisclosure.personId,
+            componentTypeCode: '11',
+            subModuleItemKey: reviewDetails.opaReviewId,
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
+        }
+        this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.opaService.isShowCommentNavBar = true;
     }
 
@@ -265,11 +280,11 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     isDuplicateReviewerValidation() {
         const isEditMode = this.modifyIndex != -1;
-
         if (this.reviewerList.find((reviewer, index) => {
-            const isSelectedReviewer = reviewer.assigneePersonId == this.reviewDetails.assigneePersonId;
+            const isSelectedReviewer = (reviewer.assigneePersonId == this.reviewDetails.assigneePersonId && reviewer.reviewStatusTypeCode != '3' && this.reviewDetails.locationTypeCode == reviewer.locationTypeCode);
             return isEditMode ? (isSelectedReviewer && index != this.modifyIndex) : isSelectedReviewer;
         })) {
+            this.assigneeClearField = new String('true');
             this.validationMap.set('reviewer', 'Reviewer already added.');
         }
     }
@@ -309,8 +324,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     getDaysAtLocation(startDate, endDate) {
         if (startDate) {
             const currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0);
-            return getDuration(startDate, endDate ? endDate : currentDate).durInDays;
+            return getDuration(getDateObjectFromTimeStamp(startDate), endDate? getDateObjectFromTimeStamp(endDate) : getDateObjectFromTimeStamp(currentDate)).durInDays;
         } else {
             return null;
         }

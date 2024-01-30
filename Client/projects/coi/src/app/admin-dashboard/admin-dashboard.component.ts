@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
+import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
-    deepCloneObject,
-    isEmptyObject,
+    deepCloneObject, hideModal,
+    isEmptyObject, openModal,
     setFocusToElement
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
@@ -21,19 +21,21 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
-import { openSlider, closeSlider } from '../common/utilities/custom-utilities';
+import {openSlider, closeSlider, closeCommonModal} from '../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss'],
-    animations: [fadeInOutHeight, listAnimation, topSlideInOut, 
+    animations: [fadeInOutHeight, listAnimation, topSlideInOut,
         slideInAnimation('0','12px', 400, 'slideUp'),
         slideInAnimation('0','-12px', 400, 'slideDown'),
         scaleOutAnimation('-2px','0', 200, 'scaleOut'),
     ]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
+
+    @ViewChild('mainHeaders', { static: true }) mainHeaders: ElementRef;
 
     setFocusToElement = setFocusToElement;
     DEFAULT_DATE_FORMAT = DATE_PLACEHOLDER;
@@ -125,13 +127,18 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     ];
     readMoreOrLess = [];
     isReadMore = false;
+    selectedDisclosures = [];
+    isAllDisclosuresSelected = false;
+    isFcoiReadMore = false;
+    isPurposeRead = false;
+    isShowOptions = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
                 private _elasticConfig: ElasticConfigService,
                 public commonService: CommonService,
                 private _navigationService: NavigationService
-    ) { }
+    ) { document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
         await this.getPermissions();
@@ -266,6 +273,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     getDashboardDetails() {
         this.$subscriptions.push(this.$coiList.pipe(
             switchMap(() => {
+                this.clearSelectAllDisclosure();
                 this.isLoading = true;
                 return this.coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())
             }))
@@ -300,6 +308,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        document.removeEventListener('mouseup', null);
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -399,7 +408,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
         this.coiList = [];
-        this.$coiList.next(); 
+        this.$coiList.next();
     }
 
     selectEntityCountry(country: any) {
@@ -811,7 +820,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
         this.isAssignAdminModalOpen = false;
     }
-    
+
     getReviewerStatus(statusCode) {
         switch (statusCode) {
             case '1': return 'info';
@@ -834,6 +843,64 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.showSlider = false;
 		}, 500);
-	}
-}
+	  }
 
+    checkIfAllDisclosuresSelected() {
+        this.isAllDisclosuresSelected = this.selectedDisclosures.filter(index => index).length == this.coiList.length;
+    }
+
+    selectAllDisclosures() {
+        this.isAllDisclosuresSelected = !this.isAllDisclosuresSelected;
+        this.coiList.forEach((_, index) => this.selectedDisclosures[index] = this.isAllDisclosuresSelected);
+    }
+
+    atLeastOneIsSelected() {
+        return this.selectedDisclosures.filter(index => index).length > 0;
+    }
+
+    confirmCompleteReview() {
+        openModal('complete-review-confirmation-modal');
+    }
+
+    performCompleteReview() {
+        this.$subscriptions.push(this.coiAdminDashboardService
+            .completeDisclosureReviews({disclosureIdNumberMap: this.generateNumberMap()})
+            .subscribe((res) => {
+                hideModal('complete-review-confirmation-modal');
+                this.$coiList.next();
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review Completed successfully.');
+        }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+    }
+
+    generateNumberMap() {
+        const RO = {};
+        this.selectedDisclosures.forEach((selected, index) => {
+            if (selected) {
+                RO[this.coiList[index].coiDisclosureId.toString()] = this.coiList[index].coiDisclosureNumber;
+            }
+        });
+        return RO;
+    }
+
+    // The function is used for closing nav dropdown at mobile screen
+    offClickMainHeaderHandler(event: any) {
+        if (window.innerWidth < 1093) {
+            const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
+            if (document.getElementById('navbarResponsive').classList.contains('show')) {
+                document.getElementById('navbarResponsive').classList.remove('show');
+            }
+        } else {
+            this.isShowOptions = false;
+        }
+    }
+
+    clearSelectAllDisclosure() {
+        this.isAllDisclosuresSelected = false;
+        this.selectedDisclosures = [];
+    }
+
+    selectedItemCount() {
+       return this.selectedDisclosures.filter(e => e).length;
+    }
+    
+}

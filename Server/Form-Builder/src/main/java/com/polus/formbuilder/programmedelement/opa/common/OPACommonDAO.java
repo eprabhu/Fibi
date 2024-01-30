@@ -41,11 +41,11 @@ public class OPACommonDAO {
 		query.setParameter(1, opaDisclosureId);
 		query.setParameter(2, updateUser);
 		query.execute();
-
+		Long result = (Long) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional
+	@Transactional(value = TxType.SUPPORTS)
 	public Map<Integer, OPAPersonEntityInfoDTO> getOPAPersonEntityInfo(Integer opaDisclosureId) {
 		try {
 			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("GET_OPA_PERSON_ENTITY_DETAILS")
@@ -85,7 +85,7 @@ public class OPACommonDAO {
 			opaPersonEntityInfoDTO.setInvolvementStartDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setInvolvementEndDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setEntityStatus((String) data[i++]);
-			opaPersonEntityInfoDTO.setIsRelationshipActive((Character) data[i++]);
+			opaPersonEntityInfoDTO.setIsFormCompleted((Character) data[i++]);
 			opaPersonEntityInfoDTO.setSfiVersionStatus((String) data[i++]);
 			opaPersonEntityInfoDTO.setEntityRiskCategory((String) data[i++]);
 
@@ -99,7 +99,7 @@ public class OPACommonDAO {
 
 	
 	@SuppressWarnings("unchecked")
-	@Transactional
+	@Transactional(value =  TxType.SUPPORTS)
 	public Map<Integer, OPAPersonEntityInfoDTO> getPersonEntityInfo(Integer personEntityId) {
 		try {
 			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("GET_PERSON_ENTITY_INFO")
@@ -139,7 +139,7 @@ public class OPACommonDAO {
 			opaPersonEntityInfoDTO.setInvolvementStartDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setInvolvementEndDate((Date) data[i++]);
 			opaPersonEntityInfoDTO.setEntityStatus((String) data[i++]);
-			opaPersonEntityInfoDTO.setIsRelationshipActive((Character) data[i++]);
+			opaPersonEntityInfoDTO.setIsFormCompleted((Character) data[i++]);
 			opaPersonEntityInfoDTO.setSfiVersionStatus((String) data[i++]);
 			opaPersonEntityInfoDTO.setEntityRiskCategory((String) data[i++]);
 			
@@ -169,7 +169,7 @@ public class OPACommonDAO {
 		personEntity.setUpdateTimestamp(new Date());
 		personEntity.setUpdateUser(updateUser);
 
-		String sql = "SELECT PERSON_ENTITY_ID,ENTITY_ID,ENTITY_NUMBER FROM PERSON_ENTITY WHERE PERSON_ENTITY_ID = :personEntityId";
+		String sql = "SELECT PERSON_ENTITY_ID,ENTITY_ID,ENTITY_NUMBER,PERSON_ENTITY_NUMBER FROM PERSON_ENTITY WHERE PERSON_ENTITY_ID = :personEntityId";
 		Query query = entityManager.createNativeQuery(sql);
 		query.setParameter("personEntityId", personEntityId);
 		List<?> resultRows = query.getResultList();
@@ -180,6 +180,7 @@ public class OPACommonDAO {
 				personEntity.setPersonEntityId((Integer) rowData[0]);
 				personEntity.setEntityId((Integer) rowData[1]);
 				personEntity.setEntityNumber((Integer) rowData[2]);
+				personEntity.setPersonEntityNumber((Integer) rowData[3]);
 			}
 		}
 

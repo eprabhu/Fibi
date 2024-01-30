@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
@@ -6,17 +6,18 @@ import { CommonService } from '../../../../common/services/common.service';
 import { CommentConfiguration, RO } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../../coi-summary.service';
-import { HTTP_ERROR_STATUS } from "../../../../../../../fibi/src/app/app-constants";
+import { HTTP_ERROR_STATUS } from '../../../../../../../fibi/src/app/app-constants';
 import { DataStoreService } from '../../../services/data-store.service';
 import { CoiService } from '../../../services/coi.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
+import {openInNewTab} from "../../../../common/utilities/custom-utilities";
 
 declare var $: any;
 
 @Component({
     selector: 'app-relationship-summary',
     templateUrl: './relationship-summary.component.html',
-    styleUrls: ['./relationship-summary.component.css']
+    styleUrls: ['./relationship-summary.component.scss']
 })
 export class RelationshipSummaryComponent implements OnInit {
 
@@ -39,18 +40,21 @@ export class RelationshipSummaryComponent implements OnInit {
     entityDetails: any = null;
     isReadMore: boolean[] = [];
     projectConflictValidationMap = new Map();
-    isShowNoDataCard = false;
     readMoreOrLess = false;
     resultObject = [];
     showSlider = false;
     entityId: any;
+    isDesc = true;
+    worstCaseStatus = null;
+    relationshipTypeCache = {};
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         public _commonService: CommonService,
         private _dataStore: DataStoreService,
-        private _coiService: CoiService
+        private _coiService: CoiService,
+        private elementRef: ElementRef
     ) { }
 
     ngOnInit() {
@@ -89,14 +93,14 @@ export class RelationshipSummaryComponent implements OnInit {
     }
 
 getEntityProjectRelations() {
-        this.isShowNoDataCard = false;
         this.$subscriptions.push(
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
                Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
                 .subscribe((data: any) => {
                 if (data && data.length > 0) {
-                    this.isShowNoDataCard = true;
                     this.projectRelations = data;
+                    this.sortConflictStatus(false);
+                    this.setWorstCaseStatus();
                     this.conflictStatusCountUpdation();
                     this.selectedProject.disclosureStatusCount = this.resultObject;
                     }
@@ -143,12 +147,14 @@ getEntityProjectRelations() {
             let coiData = this._dataStore.getData();
             const disclosureDetails:coiReviewComment = {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
-                disclosureId: coiData.coiDisclosure.disclosureId,
-                coiSectionsTypeCode: '6',
-                headerName: section === 'PROJECT' ? details.title : details.coiEntity?.entityName,
-                coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
-                componentSubRefId: childSubSection?.personEntityId,
-                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`
+                componentTypeCode: '6',
+                subModuleItemKey: section === 'SFI' ? childSubSection.disclosureDetailsId : details.moduleItemId,
+                subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null, 
+                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`,
+                selectedProject: details,
+                sfiStatus: childSubSection?.coiProjConflictStatusType,
+                subSectionTitle: childSubSection?.personEntityRelationshipDto.entityName,
+                subSectionId: childSubSection?.personEntityRelationshipDto.personEntityId,
             }
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
             this._coiService.isShowCommentNavBar = true;
@@ -217,4 +223,32 @@ getEntityProjectRelations() {
         this.openModuleDetails.emit(this.selectedProject);
     }
 
+    sortConflictStatus(isAsc: boolean) {
+        this.isDesc = !isAsc;
+        this.projectRelations.sort((a, b) => isAsc ?
+            a.coiProjConflictStatusType.projectConflictStatusCode - b.coiProjConflictStatusType.projectConflictStatusCode :
+            b.coiProjConflictStatusType.projectConflictStatusCode - a.coiProjConflictStatusType.projectConflictStatusCode);
+    }
+
+    setWorstCaseStatus() {
+        if (this.projectRelations.length) {
+            this.worstCaseStatus = this.projectRelations[0].coiProjConflictStatusType;
+        }
+    }
+
+    openEntityDetails(personEntityId) {
+        openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
+    }
+
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+        const entityRelTypes = validPersonEntityRelType.split(':;:');
+        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+            const relationshipType = entity.split(':');
+            return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
+        });
+        return this.relationshipTypeCache[validPersonEntityRelType];
+    }
 }
