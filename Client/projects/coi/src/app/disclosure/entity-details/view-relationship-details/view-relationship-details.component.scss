@@ -538,3 +538,40 @@ small {
 .btn-color:hover{
   color: #043E9E;
 }
+.card-nav{
+  .nav-options{
+    padding: 0.8rem 1rem;
+    &.relation-active{
+      background-color: #fff;
+      span{
+        color: #000;
+      }
+    }
+  }
+}
+.sub-nav-outer{
+  background-color: #f5f4fb;
+}
+::ng-deep .custom-quest-relationship{
+  .txt-medium{
+    font-size: 1rem !important;
+  }
+  .success-banner{
+    font-size: 1rem !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .card:nth-child(1)
+  {
+    border: 0;
+    box-shadow: none !important;
+  }
+  .questionnaire-card{
+    border: var(--theme-card-border) !important;
+    box-shadow: var(--theme-card-box-shadow) !important;
+    &:hover {
+      margin-left: 1px !important;
+      border-left: solid 3px #007DEC !important;
+    }
+  }
+}
