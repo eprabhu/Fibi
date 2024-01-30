@@ -1,8 +1,8 @@
 //Cards
 
 .card {
-    background-color: var(--theme-card-bg-color);
-    border: var(--theme-card-border);
+    background-color: var(--theme-card-bg-color) !important;
+    border: var(--theme-card-border) !important;
     box-shadow: var(--theme-card-box-shadow);
 
     .card-header {
@@ -13,8 +13,8 @@
             min-height: 70px;
             padding: 0 2.25rem;
             color: var(--bs-card-cap-color);
-            background-color: var(--bs-card-cap-bg);
-            border-bottom: 1px solid var(--bs-card-border-color);
+            background-color: var(--theme-card-bg-color);
+            border-bottom: 1px solid var(--theme-card-border-color);
         .card-title {
             display: flex;
             align-items: center;
@@ -36,10 +36,12 @@
             flex-wrap: wrap;
         }
     }
+    .card-footer {
+        background-color: var(--theme-card-bg-color) !important;
+    }
 }
 
 .coi-card-overview {
-    font-weight: bold;
     box-shadow: -1px 3px 50px -17px rgb(0 0 0 / 22%);
     border-radius: 1.250rem;
     .card-header {
@@ -70,7 +72,7 @@
     .card-footer {
         background-color: transparent !important;
         border: 0;
-        padding: 0 1.875rem !important;
+        padding: 1.875rem 1.875rem !important;
     }
 
     .list-group {

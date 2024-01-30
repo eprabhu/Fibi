@@ -5,7 +5,7 @@
             <ng-container *ngIf="hasActiveFCOI">
                 <div class="col-lg-6 mb-10 mb-lg-0"
                     *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus != 'PENDING'">
-                    <div class="card d-flex m-0 coi-card-overview mb-3">
+                    <div class="card d-flex m-0 coi-card-overview mb-3 h-100">
                         <div class="card-header align-items-center">
                             <h5 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bold text-gray-800 fs-16" tabindex="0"
@@ -32,7 +32,7 @@
                                             <label class="col-lg-6 fs-14 text-gray-900">Department<span
                                                 class="d-none d-md-inline">:</span></label>
                                             <div class="col-lg-6">                    
-                                                <span class="fw-bold fs-14 text-gray-700"
+                                                <span class="fs-14 text-gray-700"
                                                             [attr.aria-label]="disclosure?.unit?.unitDetail">
                                                             {{disclosure?.unit?.unitDetail}}</span>               
                                             </div>
@@ -44,7 +44,7 @@
                                                 <span class="fw-bold fs-14 text-gray-700"
                                                             [attr.aria-label]="disclosure?.certifiedAt |dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                                <span class="grey-text">{{disclosure?.certifiedAt
+                                                                <span class="text-gray-700">{{disclosure?.certifiedAt
                                                                     |dateFormatter}}</span>
                                                             </app-no-data-label></span>               
                                             </div>
@@ -56,7 +56,7 @@
                                                 <span class="fw-bold fs-14 text-gray-700"
                                                             [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                                <span class="grey-text">{{disclosure?.expirationDate |
+                                                                <span class="text-gray-700">{{disclosure?.expirationDate |
                                                                     dateFormatter}}</span>
                                                             </app-no-data-label></span>               
                                             </div>
@@ -75,7 +75,7 @@
                                                         <span class="py-2">
                                                             <span
                                                                 class="{{commonService.getDisclosureConflictBadge(disclosure?.coiConflictStatusType?.conflictStatusCode)}}"></span>
-                                                            <span class="badgeFont">
+                                                            <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                                 {{disclosure?.coiConflictStatusType?.description}}
                                                             </span>
                                                         </span>
@@ -92,7 +92,7 @@
                                                     <span
                                                         class="{{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                                     </span>
-                                                    <span class="badgeFont">
+                                                    <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiDispositionStatusType?.description}}
                                                     </span>
                                                 </span>               
@@ -105,7 +105,7 @@
                                                 <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                     <span
                                                         class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
-                                                    <span class="badgeFont">
+                                                    <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiReviewStatusType?.description}}
                                                     </span>
                                                 </span>              
@@ -117,22 +117,23 @@
                                 <!-- new main card design for FCOI Disclosure(updated) ends-->
                             </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <div class="data-warning px-2" tabindex= "{{dateWarning ? 0 : -1}}">
-                                <h5 *ngIf="dateWarning" class="mb-3 fs-15" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'"><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
-                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year</span><span *ngIf="differenceInDays?.durInMonths">, {{differenceInDays?.durInMonths}} months</span><span *ngIf="differenceInDays?.durInDays"> {{differenceInDays?.durInDays}} days.</span></h5>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" role="button"
-                                        class="no-hover d-flex align-items-center btn btn-primary-outline fs-14"
-                                        title="Click to Renew FCOI Disclosure"
-                                        aria-describedby="Click to Renew FCOI Disclosure">
-                                    <mat-icon class="me-1">restart_alt</mat-icon>
-                                    Revise
-                                </button>
+                        <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg">
+                            <div class="d-flex align-items-center">
+                                <div class="data-warning" tabindex= "{{dateWarning ? 0 : -1}}">
+                                    <h5 *ngIf="dateWarning" class="mb-3 fs-15" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'"><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
+                                        >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year</span><span *ngIf="differenceInDays?.durInMonths">, {{differenceInDays?.durInMonths}} months</span><span *ngIf="differenceInDays?.durInDays">, {{differenceInDays?.durInDays}} days.</span></h5>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" role="button"
+                                            class="no-hover d-flex align-items-center btn btn-primary-outline fs-14"
+                                            title="Click to Renew FCOI Disclosure"
+                                            aria-describedby="Click to Renew FCOI Disclosure">
+                                        <mat-icon class="me-1">restart_alt</mat-icon>
+                                        Revise
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg"></div>
                     </div>
                 </div>
             </ng-container>
@@ -140,7 +141,7 @@
             <!-- card design for (pending) FCOI Disclosure-->
             <ng-container *ngIf="!hasActiveFCOI && hasPendingFCOI">
                 <div class="col-lg-6 mb-10 mb-lg-0">
-                    <div class="card d-flex m-0 coi-card-overview mb-3"
+                    <div class="card d-flex m-0 coi-card-overview mb-3 h-100"
                         *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING'">
                         <div class="card-header align-items-center">
                             <h5 class="card-title align-items-start flex-column">
@@ -162,82 +163,91 @@
                         <div class="card-content content-green-bg">
                             <div class="card-body">
                                 <!-- new card body -->
-                                <div class="row mb-7">
-                                    <div class="col-md-7">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">
-                                                <label class="fs-14 text-gray-900 me-1">Department <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                    [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                    {{disclosure?.unit?.unitDetail}}</span>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <label class="fs-14 text-gray-900 me-1">Certification Date <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                    [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
-                                                    <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                        <span class="grey-text">{{disclosure?.certifiedAt |
-                                                            dateFormatter}}</span>
-                                                    </app-no-data-label></span>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <label class="fs-14 text-gray-900 me-1">Expiration Date <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                    [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
-                                                    <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                        <span class="grey-text">{{disclosure?.expirationDate |
-                                                            dateFormatter}}</span>
-                                                    </app-no-data-label></span>
-                                            </li>
-                                        </ul>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-900">Department<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span class="fs-14 text-gray-700"
+                                                [attr.aria-label]="disclosure?.unit?.unitDetail">
+                                                {{disclosure?.unit?.unitDetail}}</span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-900">Certification Date<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span class="fw-bold fs-14 text-gray-700"
+                                                [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
+                                                    <span class="text-gray-700">{{disclosure?.certifiedAt |
+                                                        dateFormatter}}</span>
+                                                </app-no-data-label></span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-900">Expiration Date<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span class="fw-bold fs-14 text-gray-700"
+                                                [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                                <app-no-data-label [valueToShow]="disclosure?.expirationDate">
+                                                    <span class="text-gray-700">{{disclosure?.expirationDate |
+                                                        dateFormatter}}</span>
+                                                </app-no-data-label></span>               
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-5 d-flex align-items-center">
-                                        <ul class="list-group list-group-flush border-dashed rounded-3 p-3">
-                                            <li class="list-group-item py-0">
-                                                <label class="fs-14 text-gray-700 me-2">Disclosure Status <span
-                                                        class="d-none d-md-inline">:</span></label>
+
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-700">Disclosure Status<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
                                                 <span
-                                                    [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
-                                                    <app-no-data-label
-                                                        [valueToShow]="disclosure?.coiConflictStatusType?.description">
-                                                        <span class="py-2">
-                                                            <span
-                                                                class="{{commonService.getDisclosureConflictBadge(disclosure?.coiConflictStatusType?.conflictStatusCode)}}"></span>
-                                                            <span class="badgeFont">
-                                                                {{disclosure?.coiConflictStatusType?.description}}
-                                                            </span>
-                                                        </span>
-                                                    </app-no-data-label>
-                                                </span>
-                                            </li>
-                                            <li class="list-group-item py-0">
-                                                <label class="fs-14 text-gray-700 me-2">Disposition Status <span
-                                                        class="d-none d-md-inline">:</span></label>
-                                                <span
-                                                    [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
+                                                [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
+                                                <app-no-data-label
+                                                [valueToShow]="disclosure?.coiConflictStatusType?.description">
+                                                <span class="py-2">
                                                     <span
-                                                        class="{{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
+                                                        class="{{commonService.getDisclosureConflictBadge(disclosure?.coiConflictStatusType?.conflictStatusCode)}}"></span>
+                                                    <span class="fs-14 fw-bold ps-1 text-gray-900">
+                                                        {{disclosure?.coiConflictStatusType?.description}}
                                                     </span>
-                                                    <span class="badgeFont">
+                                                </span>
+                                            </app-no-data-label>
+                                                </span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-700">Disposition Status<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
+                                                <span
+                                                [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
+                                                    <span
+                                                    class="{{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
+                                                    </span>
+                                                    <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiDispositionStatusType?.description}}
                                                     </span>
-                                                </span>
-                                            </li>
-                                            <li class="list-group-item py-0">
-                                                <label class="fs-14 text-gray-700 me-2">Review Status <span
-                                                        class="d-none d-md-inline">:</span></label>
+                                                </span>               
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label class="col-lg-6 fs-14 text-gray-700">Review Status<span
+                                                class="d-none d-md-inline">:</span></label>
+                                            <div class="col-lg-6">                    
                                                 <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                     <span
                                                         class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
-                                                    <span class=" badgeFont">
+                                                    <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiReviewStatusType?.description}}
                                                     </span>
-                                                </span>
-                                            </li>
-                                        </ul>
+                                                </span>              
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- new card body ends -->
@@ -266,7 +276,7 @@
                 <div class="card-content content-green-bg">
                     <div class="card-body">
                         <!-- new card body -->
-                        <div class="row mb-7">
+                        <div class="row">
                             <div class="col-12">
                                 <p class="col fs-14 fw-normal word-break-all new-line-property" tabindex="0" aria-label="A conflict of interest occurs when your personal, financial, or other interests could
                         influence or appear to influence your judgment and decision-making in the workplace. Please
@@ -369,7 +379,7 @@
          <!-- card design for (pending) OPA Disclosure-->
         <ng-container *ngIf="hasPendingOPA && !hasActiveOPA">
             <div class="col-lg-6 mb-10 mb-lg-0">
-                <div class="card d-flex m-0 coi-card-overview mb-3"
+                <div class="card d-flex m-0 coi-card-overview mb-3 h-100"
                     *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '1'">
                     <div class="card-header align-items-center">
                         <h5 class="card-title align-items-start flex-column">
@@ -392,77 +402,83 @@
                     <div class="card-content content-green-bg">
                         <div class="card-body">
                             <!-- new card body -->
-                            <div class="row mb-7">
-                                <div class="col-md-7">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            <label class="fs-14 text-gray-900">Department <span
-                                                    class="d-none d-md-inline">:</span></label>
-                                            <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
-                                                <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                    <span class="grey-text">
-                                                        {{opaDisclosure?.homeUnit}} -
-                                                        {{opaDisclosure?.homeUnitName}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label class="fs-14 text-gray-900 me-1">Period <span
-                                                    class="d-none d-md-inline">:</span></label>
-                                            <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
-                                                <app-no-data-label
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-900">Department<span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
+                                            <span class="fs-14 text-gray-700"
+                                            [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
+                                                <span class="text-gray-700">
+                                                    {{opaDisclosure?.homeUnit}} -
+                                                    {{opaDisclosure?.homeUnitName}}</span>
+                                            </app-no-data-label></span>               
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-900">Period <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
+                                            <span class="fw-bold fs-14 text-gray-700"
+                                            [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                            <app-no-data-label
                                                     [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
-                                                    <span class="grey-text">{{opaDisclosure?.opaCycles?.periodStartDate
+                                                    <span class="text-gray-700">{{opaDisclosure?.opaCycles?.periodStartDate
                                                         | dateFormatterWithTimeZone}}
                                                         -
                                                         {{opaDisclosure?.opaCycles?.periodEndDate |
                                                         dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label class="fs-14 text-gray-900 me-1">Create Date <span
-                                                    class="d-none d-md-inline">:</span></label>
-                                            <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
-                                                <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
-                                                    <span class="grey-text">{{opaDisclosure?.createTimestamp |
-                                                        dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>
-                                        </li>
-                                    </ul>
+                                                </app-no-data-label></span>               
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-900">Create Date <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
+                                            <span class="fw-bold fs-14 text-gray-700"
+                                            [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
+                                                <span class="text-gray-700">{{opaDisclosure?.createTimestamp |
+                                                    dateFormatterWithTimeZone}}</span>
+                                            </app-no-data-label></span>               
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-5 d-flex align-items-center">
-                                    <ul class="list-group list-group-flush border-dashed rounded-3 p-3">
-                                        <li class="list-group-item py-0">
-                                            <label class="fs-14 text-gray-700 me-2">Disposition Status <span
-                                                    class="d-none d-md-inline">:</span></label>
+
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-700">Disposition Status <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
                                             <span>
                                                 <app-no-data-label
-                                                    [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
-                                                    <span
-                                                        class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
-                                                    <span
-                                                        class="badgeFont">{{opaDisclosure?.dispositionStatusType?.description}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </li>
-                                        <li class="list-group-item py-0">
-                                            <label class="fs-14 text-gray-700 me-2">Review Status <span
-                                                    class="d-none d-md-inline">:</span></label>
+                                                [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
+                                                <span
+                                                    class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                                <span
+                                                    class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.dispositionStatusType?.description}}</span>
+                                            </app-no-data-label>
+                                            </span>               
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-700">Review Status <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
                                             <span>
                                                 <app-no-data-label
-                                                    [valueToShow]="opaDisclosure?.reviewStatusType?.description">
-                                                    <span
-                                                        class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
-                                                    <span
-                                                        class="badgeFont">{{opaDisclosure?.reviewStatusType?.description}}
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </li>
-                                    </ul>
+                                                [valueToShow]="opaDisclosure?.reviewStatusType?.description">
+                                                <span
+                                                    class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
+                                                <span
+                                                    class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.reviewStatusType?.description}}
+                                                </span>
+                                            </app-no-data-label>
+                                            </span>               
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- new card body ends -->
@@ -476,7 +492,7 @@
         <!-- card design for (approved) OPA Disclosure-->
         <ng-container *ngIf="hasActiveOPA">
             <div class="col-lg-6 mb-10 mb-lg-0">
-                <div class="card d-flex m-0 coi-card-overview mb-3"
+                <div class="card d-flex m-0 coi-card-overview mb-3 h-100"
                     *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '3'">
                     <div class="card-header align-items-center">
                         <h5 class="card-title align-items-start flex-column">
@@ -496,76 +512,82 @@
                     <div class="card-content content-green-bg">
                         <div class="card-body">
                             <!-- new card body -->
-                            <div class="row mb-7">
-                                <div class="col-md-7">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            <label class="fs-14 text-gray-900">Department <span
-                                                    class="d-none d-md-inline">:</span></label>
-                                            <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
-                                                <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                    <span class="grey-text">
-                                                        {{opaDisclosure?.homeUnit}} -
-                                                        {{opaDisclosure?.homeUnitName}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label class="fs-14 text-gray-900">Period <span
-                                                    class="d-none d-md-inline">:</span></label>
-                                            <span class="fs-14 text-gray-700 d-block d-md-inline"
-                                                [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
-                                                <app-no-data-label
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-900">Department<span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
+                                            <span class="fs-14 text-gray-700"
+                                            [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
+                                            <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
+                                                <span class="text-gray-700">
+                                                    {{opaDisclosure?.homeUnit}} -
+                                                    {{opaDisclosure?.homeUnitName}}</span>
+                                            </app-no-data-label></span>               
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-900">Period <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
+                                            <span class="fw-bold fs-14 text-gray-700"
+                                            [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                            <app-no-data-label
                                                     [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
-                                                    <span class="grey-text">{{opaDisclosure?.opaCycles?.periodStartDate
+                                                    <span class="text-gray-700">{{opaDisclosure?.opaCycles?.periodStartDate
                                                         | dateFormatterWithTimeZone}}
                                                         -
                                                         {{opaDisclosure?.opaCycles?.periodEndDate |
                                                         dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label class="fs-14 text-gray-900">Create Date <span
-                                                    class="d-none d-md-inline">:</span></label>
-                                            <span class="fs-14 text-gray-700 d-block d-md-inline">
+                                                </app-no-data-label></span>               
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-900">Create Date <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
+                                            <span class="fw-bold fs-14 text-gray-700">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
-                                                    <span class="grey-text">{{opaDisclosure?.createTimestamp |
+                                                    <span class="text-gray-700">{{opaDisclosure?.createTimestamp |
                                                         dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>
-                                        </li>
-                                    </ul>
+                                                </app-no-data-label></span>               
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-5 d-flex align-items-center">
-                                    <ul class="list-group list-group-flush border-dashed rounded-3 p-3">
-                                        <li class="list-group-item py-0">
-                                            <label class="fs-14 text-gray-700 me-2">Disposition Status <span
-                                                    class="d-none d-md-inline">:</span></label>
+
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-700">Disposition Status <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
                                             <span>
                                                 <app-no-data-label
-                                                    [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
-                                                    <span
-                                                        class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
-                                                    <span
-                                                        class="badgeFont">{{opaDisclosure?.dispositionStatusType?.description}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </li>
-                                        <li class="list-group-item py-0">
-                                            <label class="fs-14 text-gray-700 me-2">Review Status <span
-                                                    class="d-none d-md-inline">:</span></label>
+                                                [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
+                                                <span
+                                                    class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                                <span
+                                                    class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.dispositionStatusType?.description}}</span>
+                                            </app-no-data-label>
+                                            </span>               
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-lg-6 fs-14 text-gray-700">Review Status <span
+                                            class="d-none d-md-inline">:</span></label>
+                                        <div class="col-lg-6">                    
                                             <span>
                                                 <app-no-data-label
                                                     [valueToShow]="opaDisclosure?.reviewStatusType?.description">
                                                     <span
                                                         class="{{commonService.getReviewStatusBadge(opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
                                                     <span
-                                                        class="badgeFont">{{opaDisclosure?.reviewStatusType?.description}}
+                                                        class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.reviewStatusType?.description}}
                                                     </span>
                                                 </app-no-data-label>
-                                            </span>
-                                        </li>
-                                    </ul>
+                                            </span>               
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- new card body ends -->
@@ -659,7 +681,7 @@
                         <div class="row">
                             <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
-                                    <div class="col-12 d-inline-flex align-items-center">
+                                    <div class="col-12 d-inline-flex align-items-center mb-2">
                                         <!-- Coi card badge -->
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
@@ -701,9 +723,9 @@
                                     </div>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <!-- Coi card Department -->
-                                        <div tabindex="0" class=" mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
                                             <label class="fw-medium">Department <span
                                                     class="d-inline d-md-none d-lg-inline">:</span></label> <span
@@ -770,9 +792,9 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <!-- Coi card Certification Date -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Certification Date' + (disclosure?.certifiedAt | dateFormatter)">
                                             <label class="fw-medium me-2">Certification Date <span
                                                     class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -794,9 +816,9 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <!-- Coi card Expiration Date -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0">
+                                        <div tabindex="0" class="mb-3 mb-xl-0">
                                             <label class="fw-medium me-2">Expiration Date <span
                                                     class="d-inline d-md-none d-lg-inline">:</span></label>
                                             <span class="break-point-1200">
@@ -823,7 +845,7 @@
                             <div class="col-lg-3 d-block d-flex d-lg-block mt-2">
                                 <!-- Coi card Disclosure Status -->
                                 <div tabindex="0" *ngIf="!disclosure?.opaDisclosureId"
-                                    class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                    class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Disclosure Status' + (disclosure?.conflictStatus)">
                                     <label for="status" class="fw-medium">Disclosure Status <span
                                             class="d-none d-lg-inline">:</span></label>
@@ -851,7 +873,7 @@
                                     </span>
                                 </div>
                                 <!-- Coi card Disposition Status -->
-                                <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                <div tabindex="0" class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Disposition Status' + (disclosure?.dispositionStatus)">
                                     <label class="fw-medium me-2">Disposition Status <span
                                             class="d-none d-lg-inline">:</span></label>
@@ -863,7 +885,7 @@
                                     </span>
                                 </div>
                                 <!-- Coi card Review Status -->
-                                <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                <div tabindex="0" class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
                                     <label for="id" class="fw-medium mr-21">Review Status <span
                                             class="d-none d-lg-inline">:</span></label>
@@ -926,9 +948,9 @@
                                     </div>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <!-- Travel Card Department -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Department Name' + (disclosure?.unitDetails?.unitDetail)">
                                             <label for="department-id" class="fw-medium">Department
                                                 <span class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -956,7 +978,7 @@
                                         </div>
                                     </div>
                                     <!-- Travel Card Destination -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <div *ngIf="disclosure?.fcoiTypeCode!= 1" tabindex="0"
                                             [attr.aria-label]="'Destination' + (disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState)">
                                             <label for="destination" class="fw-medium">Destination
@@ -975,7 +997,7 @@
                                         </div>
 
                                         <!-- Travel Card Certification Date -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Certification Date' + (disclosure?.travelSubmissionDate)">
                                             <label for="certify-date" class="fw-medium">Certification Date
                                                 <span class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -988,7 +1010,7 @@
                                         </div>
                                     </div>
                                     <!-- Travel Card Actual Amount -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <div tabindex="0"
                                             [attr.aria-label]="'Actual Amount' + (disclosure.travelAmount)">
                                             <label for="travel-amount" class="fw-medium">Actual Amount
@@ -1002,7 +1024,7 @@
                                         </div>
 
                                         <!-- Travel Card Expiration Date -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Expiration Date' + (disclosure.expirationDate)">
                                             <label for="expiration-date" class="fw-medium">Expiration Date
                                                 <span class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -1020,7 +1042,7 @@
                             <div class="col-lg-3 d-block d-flex d-lg-block mt-2">
                                 <!-- Travel Card Disclosure Status -->
                                 <div tabindex="0" *ngIf="!disclosure?.opaDisclosureId"
-                                    class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                    class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Disclosure Status' + (disclosure.conflictStatus)">
                                     <label for="status" class="fw-medium">Disclosure Status <span
                                             class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -1048,7 +1070,7 @@
                                     </span>
                                 </div>
                                 <!-- Travel Card Document Status -->
-                                <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                <div tabindex="0" class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Document Status' + (disclosure.documentStatusDescription)">
                                     <label for="review-status" class="fw-medium">Document Status <span
                                             class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -1065,7 +1087,7 @@
                                     </span>
                                 </div>
                                 <!-- Travel Card Review Status -->
-                                <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                <div tabindex="0" class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
                                     <label for="id" class="fw-medium mr-21">Review Status <span
                                             class="d-none d-lg-inline">:</span></label>
@@ -1123,9 +1145,9 @@
                                     </div>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <!-- OPA Card Department -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                             <label class="fw-medium">Department <span
                                                     class="d-inline d-md-none d-lg-inline">:</span></label> <span
@@ -1146,7 +1168,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-6">
                                         <!-- OPA Card Certification Date -->
                                         <div [attr.aria-label]="'Certification Date' + (disclosure?.submissionTimestamp | dateFormatter)">
                                             <label for="certify-date" class="fw-medium">Certification Date
@@ -1159,7 +1181,7 @@
                                             </span>
                                         </div>
                                         <!-- OPA Card Admin Group -->
-                                        <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0"
+                                        <div tabindex="0" class="mb-3 mb-xl-0"
                                             [attr.aria-label]="'Admin Group' + (disclosure?.adminGroupName)">
                                             <label for="id" class="fw-medium">Admin Group <span
                                                     class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -1175,7 +1197,7 @@
                             </div>
                             <div class="col-lg-3 d-block d-flex d-lg-block mt-2">
                                 <!-- OPA Card Disposition Status -->
-                                <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                <div tabindex="0" class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Disposition Status' + (disclosure?.dispositionStatus)">
                                     <label class="fw-medium me-2">Disposition Status <span
                                             class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -1188,7 +1210,7 @@
                                     </span>
                                 </div>
                                 <!-- OPA Card Review Status -->
-                                <div tabindex="0" class="mb-md-3 mb-lg-3 mb-xl-0 flex-grow-1"
+                                <div tabindex="0" class="mb-3 mb-xl-0 flex-grow-1"
                                     [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
                                     <label for="review-status" class="fw-medium mr-21">Review Status
                                         <span class="d-inline d-md-none d-lg-inline">:</span></label>
@@ -1209,7 +1231,7 @@
                 </div>
                 
                 <!-- Footer section -->
-                <div class="card-footer d-flex justify-content-between align-items-center bg-white"
+                <div class="card-footer d-flex justify-content-between align-items-center"
                     [ngClass]="disclosure?.opaDisclosureId ? 'ps-md-0 ps-lg-0' : ''">
                     <ng-container *ngIf="!disclosure?.travelDisclosureId">
                         <div class="d-flex" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">

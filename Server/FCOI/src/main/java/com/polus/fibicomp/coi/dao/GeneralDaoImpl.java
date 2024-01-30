@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import com.polus.fibicomp.security.AuthenticatedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -70,7 +71,7 @@ public class GeneralDaoImpl implements GeneralDao {
                 statement = connection.prepareCall("{call GET_ALL_RIGHTS_FOR_A_MODULE(?,?,?,?)}");
                 statement.setInt(1, moduleCode);
                 statement.setString(2, loginPersonId);
-                statement.setNull(3, Types.VARCHAR);
+                statement.setString(3, AuthenticatedUser.getLoginPersonUnit());
                 statement.setNull(4, Types.DECIMAL);
                 statement.execute();
                 rset = statement.getResultSet();
@@ -80,7 +81,7 @@ public class GeneralDaoImpl implements GeneralDao {
                 statement.registerOutParameter(1, OracleTypes.CURSOR);
                 statement.setInt(2, moduleCode);
                 statement.setString(3, loginPersonId);
-                statement.setNull(4, Types.VARCHAR);
+                statement.setString(4, AuthenticatedUser.getLoginPersonUnit());
                 statement.setNull(5, Types.DECIMAL);
                 statement.execute();
                 rset = (ResultSet) statement.getObject(1);

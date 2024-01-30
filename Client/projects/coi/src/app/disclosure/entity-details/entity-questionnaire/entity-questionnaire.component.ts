@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
-import { EntityDetailsService } from '../entity-details.service';
+import { EntityDetailsService, groupBy } from '../entity-details.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
@@ -20,8 +20,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     @Output() deleteRelationshipEvent: EventEmitter<any> = new EventEmitter<any>();
     @Output() positionsToView: EventEmitter<boolean> = new EventEmitter<boolean>();
     configuration: any = {
-        moduleItemCode: 8,
-        moduleSubitemCodes: [801],
+        moduleItemCode: 8, //8 - COI disclosure module code
+        moduleSubitemCodes: [801], //801 - COI sfi code
         moduleItemKey: '',
         moduleSubItemKey: '',
         actionUserId: this._commonService.getCurrentUserDetail('personId'),
@@ -42,23 +42,14 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
     ngOnChanges() {
         this.configuration.enableViewMode = !this.isEditMode;
-        this.getDefinedRelationships();
+        this.canScrollToPosition();
     }
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
     }
 
-    async getRelationshipLookUp(): Promise<any> {
-        try {
-            const response = await this.entityDetailsServices.addSFILookUp();
-            return response;
-        } catch (error) {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-        }
-    }
-
-    getDefinedRelationships() {
+    canScrollToPosition() {
         (this.isEditMode && this.entityDetailsServices.definedRelationships.length > 0) ? this.positionsToView.emit(true) : this.positionsToView.emit(false);
     }
 
@@ -66,9 +57,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         this.currentRelationshipDetails = {};
         if (data) {
             this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
-            this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
+            this.entityDetailsServices.toBeActiveTab = 'QUESTIONNAIRE';
             this.currentRelationshipDetails = data;
-            if (this.relationshipDetails && this.relationshipDetails.personId === this._commonService.getCurrentUserDetail('personId') || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
+            if ((this.relationshipDetails && this.relationshipDetails.personId === this._commonService.getCurrentUserDetail('personId')) || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
                 this.hasPermissionToView = true;
                 this.configuration.moduleItemKey = this.entityId;
                 this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
@@ -133,6 +124,15 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
     async updateDefinedRelationships(res) {
         await this.addToAvailableRelation();
+        this.removeUnsavedDetailsChanges();       
+        if (this.currentRelationshipDetails.validPersonEntityRelTypeCode in this.entityDetailsServices.relationshipCompletedObject) {
+            delete this.entityDetailsServices.relationshipCompletedObject[this.currentRelationshipDetails.validPersonEntityRelTypeCode];
+        }
+        this.entityDetailsServices.$addOrDeleteRelation.next({ 'deletedId': this.currentRelationshipDetails.personEntityRelId, 'isFormCompleted': res.isFormCompleted ,'updateTimestamp' : res.updateTimestamp });
+        this.entityDetailsServices.isRelationshipQuestionnaireChanged = false;
+    }
+
+    removeUnsavedDetailsChanges() {
         let delIndex = this.entityDetailsServices.definedRelationships.findIndex(ele => ele.personEntityRelId === this.currentRelationshipDetails.personEntityRelId);
         if (delIndex > -1) {
             this.entityDetailsServices.definedRelationships.splice(delIndex, 1);
@@ -147,31 +147,18 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         if (index >= 0) {
             this.entityDetailsServices.unSavedSections.splice(index, 1);
         }
-        if (this.currentRelationshipDetails.validPersonEntityRelTypeCode in this.entityDetailsServices.relationshipCompletedObject) {
-            delete this.entityDetailsServices.relationshipCompletedObject[this.currentRelationshipDetails.validPersonEntityRelTypeCode];
-        }
-        this.entityDetailsServices.$addOrDeleteRelation.next({ 'deletedId': this.currentRelationshipDetails.personEntityRelId, 'isFormCompleted': res.isFormCompleted });
-        this.entityDetailsServices.isRelationshipQuestionnaireChanged = false;
     }
 
     async addToAvailableRelation() {
-        let availableRelationships = await this.getRelationshipLookUp();
-        let relationIndex = availableRelationships.findIndex(ele => ele.validPersonEntityRelTypeCode == this.currentRelationshipDetails.validPersonEntityRelTypeCode);
+        let relationIndex = this.entityDetailsServices.allAvailableRelationships.findIndex(ele => ele.validPersonEntityRelTypeCode == this.currentRelationshipDetails.validPersonEntityRelTypeCode);
         this.entityDetailsServices.groupedRelations = {};
-        if (this.entityDetailsServices.availableRelationships.length && this.entityDetailsServices.availableRelationships[relationIndex] && this.entityDetailsServices.availableRelationships[relationIndex].validPersonEntityRelTypeCode == this.currentRelationshipDetails.validPersonEntityRelTypeCode) {
-            this.entityDetailsServices.availableRelationships.splice(relationIndex, 1);
+        if (this.entityDetailsServices.remainingRelationships.length && this.entityDetailsServices.remainingRelationships[relationIndex] && this.entityDetailsServices.remainingRelationships[relationIndex].validPersonEntityRelTypeCode == this.currentRelationshipDetails.validPersonEntityRelTypeCode) {
+            this.entityDetailsServices.remainingRelationships.splice(relationIndex, 1);
         }
-        this.entityDetailsServices.availableRelationships.splice(relationIndex, 0, this.currentRelationshipDetails.validPersonEntityRelType);
-        if (this.entityDetailsServices.availableRelationships.length) {
-            this.entityDetailsServices.groupedRelations = this.groupBy(deepCloneObject(this.entityDetailsServices.availableRelationships), "coiDisclosureType", "description");
+        this.entityDetailsServices.remainingRelationships.splice(relationIndex, 0, this.currentRelationshipDetails.validPersonEntityRelType);
+        if (this.entityDetailsServices.remainingRelationships.length) {
+            this.entityDetailsServices.groupedRelations = groupBy(deepCloneObject(this.entityDetailsServices.remainingRelationships), "coiDisclosureType", "description");
         }
-    }
-
-    groupBy(jsonData, key, innerKey) {
-        return jsonData.reduce((relationsTypeGroup, item) => {
-            (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
-            return relationsTypeGroup;
-        }, {});
     }
 
 }

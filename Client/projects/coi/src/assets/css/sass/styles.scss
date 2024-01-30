@@ -372,8 +372,8 @@ body {
   */
   .disclosure-card {
     --bs-bg-opacity: 1;
-    background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity))!important;
-    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
+    background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity));
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
     color: #6a7980;
     margin-top: 0.5rem!important;
     border-radius: var(--bs-border-radius-sm)!important;

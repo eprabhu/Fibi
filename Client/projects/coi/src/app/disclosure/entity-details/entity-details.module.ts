@@ -22,7 +22,6 @@ const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent, canD
     SharedModule,
     FormsModule,
     SharedComponentModule,
-    // SfiModule
   ],
   declarations: [
     EntityDetailsComponent,
