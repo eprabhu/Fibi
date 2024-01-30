@@ -119,9 +119,9 @@ $theme-map-red: (
     $--theme-primary-color: #007DEC,
     $--theme-primary-color-inverse: #fff,
     
-    $--theme-header-bg-color: #750014,
-    $--theme-header-text-color: #fff,
-    $--theme-header-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
+    $--theme-header-bg-color: #fff,
+    $--theme-header-text-color: #7c7c7c,
+    $--theme-header-box-shadow: none,
     $--theme-header-border: 1px solid #DBDFE9,
 
     $--theme-sidebar-bg-color: #750014,
@@ -150,10 +150,10 @@ $theme-map-blue: (
     $--theme-primary-color: #007DEC,
     $--theme-primary-color-inverse: #fff,
     
-    $--theme-header-bg-color: #0948b3,
-    $--theme-header-text-color: #fff,
+    $--theme-header-bg-color: #fff,
+    $--theme-header-text-color: #7c7c7c,
     $--theme-header-box-shadow: none,
-    $--theme-header-border: .0625rem solid #1657c5,
+    $--theme-header-border: 1px solid #DBDFE9,
 
     $--theme-sidebar-bg-color: #0948b3,
     $--theme-sidebar-text-color: #fff,
