@@ -64,6 +64,15 @@ header {
     border-bottom: var(--theme-header-border);
     box-shadow: var(--theme-header-box-shadow);
     padding: 0;
+    ul {
+        li {
+            color: var(--theme-header-text-color);
+            &.active, &:hover, &:focus{
+                color: var(--theme-primary-color);
+                border-bottom: 3px solid var(--theme-primary-color);
+            }
+        }
+    }
 }
 
 .side-bar {
@@ -80,7 +89,7 @@ header {
 
     ul {
         .menu-icon {
-            color: #7c7c7c;
+            color: var(--theme-sidebar-text-color);
             padding-left: 15px !important;
             padding-right: 15px !important;
             padding-top: 5px !important;
@@ -91,6 +100,10 @@ header {
             padding: 5px !important;
             margin-left: 10px !important;
             margin-right: 10px !important;
+            color: var(--theme-sidebar-text-color);
+            &.active-list {
+                color: var(--theme-primary-color);
+            }
         }
     }
 }
@@ -101,4 +114,10 @@ header {
 
 .side-bar-closed {
     width: 55px;
+}
+
+.header-sticky {
+    position: sticky;
+    top: var(--theme-topbar-height);
+    z-index: 50;
 }

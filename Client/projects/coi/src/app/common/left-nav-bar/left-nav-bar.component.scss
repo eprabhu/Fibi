@@ -2,8 +2,7 @@ $grey-text-color: #7c7c7c;
 
 ul {
     padding-right: 20px;
-    button {
-        color: $grey-text-color !important;
+    button {        
         border: none;
         font-size: 1.4rem;
         width: 100%;
@@ -19,8 +18,7 @@ ul {
         }
     }
     button.active-list {
-        background-color: #d4ebff !important;
-        color: #007dec !important;
+        background-color: #d4ebff !important;        
     }
 }
 
