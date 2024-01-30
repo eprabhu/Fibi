@@ -114,13 +114,10 @@
     </div>
 </header>
 
-<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
+<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" data-bs-backdrop="static" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
-        <span class="btn-primary-icon btn-sm ms-auto mt-0 px-2" id="close-edit-home-unit" title="Return to main menu"
-            (click)="closeAddNote()" type="button">
-            <mat-icon class="pt-1">close</mat-icon>
-        </span>
+        <button type="button" class="btn-close ms-auto" title="Close" data-bs-dismiss="modal" aria-label="Close" (click)="closeAddNote()"></button>
     </div>
     <hr class="hr">
     <div>
@@ -128,9 +125,7 @@
             placeholder="Take a note..." [(ngModel)]="noteComment"></textarea>
     </div>
     <div>
-        <button type="button" aria-label="Close"
-            class="btn btn-primary float-end fs-14 h-41 mb-3 mr-15 mt-3"
-            (click)="saveOrUpdateNote()">Add Note</button>
+        <button type="button" aria-label="Close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" (click)="saveOrUpdateNote()">Add</button>
     </div>
 </div>
 
