@@ -70,7 +70,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-12">
-            <p class="fs-14">You have unsaved changes in <strong>Relationship Details</strong>.
+            <p class="fs-14">You have unsaved changes in <strong>SFI Details</strong>.
             </p>
             <span class="fs-14"><p>Do you want to leave the page?</p></span>
         </div>
@@ -119,7 +119,7 @@
                       class="form-check-input text-secondary border border-secondary"
                       [value]="relation?.validPersonEntityRelTypeCode"
                       [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
-                      [(ngModel)]="checkedRelationships[relation?.validPersonEntityRelTypeCode]"
+                      [(ngModel)]="checkedRelationships[relation?.validPersonEntityRelTypeCode]">
                     <label class="text-secondary r-title fs-14" [for]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode">
                       {{relation?.personEntityRelType?.description}} </label>
                   </div>

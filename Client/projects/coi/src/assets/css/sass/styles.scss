@@ -4,6 +4,7 @@
 @import 'custom/buttons';
 @import 'custom/badges';
 @import 'custom/navbars';
+@import 'custom/forms';
 @import 'custom/cards';
 @import 'custom/modals';
 
@@ -17,6 +18,10 @@
 
 :root.red {
     @include spread-map($theme-map-red)
+}
+
+:root.blue {
+  @include spread-map($theme-map-blue)
 }
 
 * {
@@ -41,7 +46,11 @@ body {
     padding-top: var(--theme-topbar-height);
     padding-left: var(--theme-sidebar-width);
     outline: 0;
-    // height: calc(100% - var(--theme-topbar-height));
+    
+    .container-fluid {
+      min-height: calc(100vh - (var(--theme-topbar-height) + 2.5rem));
+
+    }
 }
 
 .coi-body {
@@ -114,17 +123,17 @@ body {
     font-weight: 100 !important;
   }
   
-  header ul li,
-  nav ul li {
-    font-size: 1.5rem !important;
-    color: #7c7c7c !important;
-    font-weight: 600 !important;
-  }
+  // header ul li,
+  // nav ul li {
+  //   font-size: 1.5rem !important;
+  //   color: #7c7c7c !important;
+  //   font-weight: 600 !important;
+  // }
   
-  header ul li.active,
-  nav ul li.active {
-    color: #007DEC !important
-  }
+  // header ul li.active,
+  // nav ul li.active {
+  //   color: #007DEC !important
+  // }
   
   @media (min-width: 576px) {
   
@@ -272,10 +281,11 @@ body {
   }
   
   .info-card-border {
-    margin:0;
-    padding:5px;
-    background:#e6f4ff!important;
-  }
+    margin: 0;
+    padding: 5px;
+    background: #e6f4ff !important;
+    border: solid 1px #b8d1e5 !important;
+}
   
   .mr-8 {
     margin-right: 8px;
@@ -492,3 +502,4 @@ body {
     color: gray;
     height: 18px;
 }
+

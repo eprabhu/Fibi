@@ -7,6 +7,7 @@ import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/
 import { HeaderService } from './header.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
+declare const $: any;
 class ChangePassword {
     password = '';
     reEnterPassword = '';
@@ -217,5 +218,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 this.openReviseModal();
             }
         }))
+    }
+
+    changeTheme(themename: string) {
+        document.querySelector("html").className = '';
+        document.querySelector("html").classList.add(themename);
+        $('#dissmiss-btn').click();
     }
 }
