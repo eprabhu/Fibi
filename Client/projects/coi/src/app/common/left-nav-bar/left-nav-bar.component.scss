@@ -2,8 +2,7 @@ $grey-text-color: #7c7c7c;
 
 ul {
     padding-right: 20px;
-    button {
-        color: $grey-text-color !important;
+    button {        
         border: none;
         font-size: 1.4rem;
         width: 100%;
@@ -19,26 +18,8 @@ ul {
         }
     }
     button.active-list {
-        background-color: #d4ebff !important;
-        color: #007dec !important;
+        background-color: #d4ebff !important;        
     }
-}
-
-.side-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: white;
-    z-index: 51;
-    transition: width ease-out 150ms;
-}
-
-.side-bar-open {
-    width: 205px;
-}
-
-.side-bar-closed {
-    width: 55px;
 }
 
 .menu-icon {

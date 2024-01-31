@@ -1,11 +1,9 @@
-<div class="ms-4 questionnaire-position me-3">
-    <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi"
-        class="justify-content-end d-flex">
-        <button class="btn-delete-position btn btn-tertiary mr-2" data-bs-toggle="modal"
-            data-bs-target="#deleteRelationModal">
-            <mat-icon class="pt-1">delete_outline</mat-icon>
-            <span class="fs-14 delete-content-position">Delete</span>
-        </button>
+<div class="ms-2 questionnaire-position me-2">
+    <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
+      <button class="btn-delete-position btn btn-tertiary mr-2 mt-1" data-bs-toggle="modal" data-bs-target="#deleteRelationModal">
+        <mat-icon class="pt-1">delete_outline</mat-icon>
+        <span class="fs-14 delete-content-position">Delete</span>
+      </button>
     </div>
     <div class="custom-qustnr">
         <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length && hasPermissionToView"
