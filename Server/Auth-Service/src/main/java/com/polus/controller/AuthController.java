@@ -2,8 +2,6 @@ package com.polus.controller;
 
 import java.util.Optional;
 
-import com.polus.entity.Unit;
-import com.polus.service.UnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polus.dto.AuthRequest;
 import com.polus.dto.AuthResponse;
 import com.polus.entity.Person;
+import com.polus.entity.Unit;
 import com.polus.service.AuthService;
 import com.polus.service.PersonService;
+import com.polus.service.UnitService;
 
 @RestController
 @RequestMapping("/auth")
@@ -76,7 +76,7 @@ public class AuthController {
         }
         HttpHeaders headers = new HttpHeaders();
 	    headers.setBearerAuth(token);
-	    
+	    headers.add(HttpHeaders.SET_COOKIE, "Cookie_Token="+token+"; Path=/; Max-Age=43200");
 	    return ResponseEntity.ok()
 	            .headers(headers)
 	            .body((response));

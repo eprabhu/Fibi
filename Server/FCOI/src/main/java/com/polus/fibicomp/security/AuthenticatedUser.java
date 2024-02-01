@@ -9,6 +9,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.polus.fibicomp.constants.Constants;
+import javax.servlet.http.Cookie;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -28,8 +29,25 @@ public final class AuthenticatedUser {
 	/*
 	 * used for fetch Claims Object*/
 	public static Claims getLoginPersonDetailFromJWT() {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+		String cookieToken = getTokenFromCookie(request);
+		if(cookieToken!=null) {
+			return Jwts.parser().setSigningKey(Constants.SECRET).parseClaimsJws(cookieToken).getBody();
+		}
 		SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(Constants.SECRET)); 
 		return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(getJwtFromRequest()).getBody();
+	}
+
+	private static String getTokenFromCookie(HttpServletRequest req) {
+		Cookie[] cookies = req.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("Cookie_Token")) {
+					return cookie.getValue();
+				}
+			}
+		}
+		return null;
 	}
 
 	private static String getJwtFromRequest() {
