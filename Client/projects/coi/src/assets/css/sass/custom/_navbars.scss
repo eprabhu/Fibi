@@ -121,3 +121,13 @@ header {
     top: var(--theme-topbar-height);
     z-index: 50;
 }
+
+//dashboard nav
+.user-dashboard-nav  {
+    color: #7c7c7c;
+}
+
+.navigation-icons .active {
+    border-bottom: 2px solid #007DEC;
+    color: #007dec;
+}
