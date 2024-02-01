@@ -47,7 +47,7 @@ public interface Constants {
 	String TABLE = "Table";
 
     // Security constants
-    String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    String SECRET = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJt6Aa8aOs06KyiBZ3pwiKdfgmdbosVuNPpxO9hUd6gsKk3lxTx+pBpkaONP/WHWkv5g/GvgOt9R+aItSxf3LEcCAwEAAQ==";
     long EXPIRATION_TIME = 43_200_000; // 12 hour
     String TOKEN_PREFIX = "Bearer ";
     String HEADER_STRING = "Authorization";
