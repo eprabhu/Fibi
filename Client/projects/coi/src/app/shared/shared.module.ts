@@ -62,6 +62,8 @@ import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-compone
 import { OPAStudentSubordinateEmployeeComponent } from './form-builder-view/PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
 import { OPACompUncompService } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.service';
 import { FormBuilderService } from './form-builder-view/form-builder.service';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
     imports: [
@@ -73,7 +75,9 @@ import { FormBuilderService } from './form-builder-view/form-builder.service';
         MatNativeDateModule,
         MatIconModule,
         CdkMenuModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSelectModule,
+        MatInputModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,
