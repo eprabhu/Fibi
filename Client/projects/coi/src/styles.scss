@@ -681,3 +681,34 @@ nav ul li.active {
   margin-top: 12px;
 }
 
+/* Mat select styles for lookup component start */
+
+.mat-option.mat-selected:not(.mat-option-disabled) {
+    color: unset;
+}
+
+.mat-option-pseudo-checkbox.mat-pseudo-checkbox-checked {
+    background-color: #005cc8;
+}
+
+.mat-select {
+    padding-top: 0.6rem !important;
+}
+
+/* Mat select styles for lookup component end */
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+    position: absolute !important;
+    right: 5px;
+    top:7px
+}
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-below) div.mat-mdc-select-panel {
+    position: relative;
+    right: 7px;
+}
+
+.mat-mdc-select-trigger {
+    font-size: 14px;
+}
+

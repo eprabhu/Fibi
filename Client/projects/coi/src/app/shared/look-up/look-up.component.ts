@@ -3,7 +3,7 @@
  * Author :- Mahesh Sreenath V M
  * @INPUT() -selectedLookUpList - this is used for passing already saved values
  * @INPUT() - options -TABLE_NAME#COLUM_NAME#MULTILPLE#search
- * @OUTPUT() - seletedlist[] - if the selection is not multiple then will send an ARRAY- select from ARRAY[0];
+ * @OUTPUT() - selectedResult[] - if the selection is not multiple then will send an ARRAY- select from ARRAY[0];
  * if user selects nothing or null(--select--) will emit an empty ARRAY[]
  * @INPUT() - isExternalArray -boolean value which decides to take the data service from service call or list manually passed
  * @INPUT() - externalArray -List which is displayed in the lookup value. The Input for options should be passed with dummy values
@@ -14,13 +14,15 @@
  * Last Updated by Jobin Sebastian
  */
 
-import { Component, Input, OnChanges, ViewChild, ElementRef, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { LookUpService } from './look-up.service';
 import { Subscription } from 'rxjs';
-import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import { MatOption } from '@angular/material/core';
+import { LookupFilterPipe } from './lookup-filter.pipe';
+import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 interface LookUp {
-  code: number;
+  code: number | string;
   description: string;
   isChecked?: boolean;
 }
@@ -29,26 +31,21 @@ interface LookUp {
   selector: 'app-look-up',
   templateUrl: './look-up.component.html',
   styleUrls: ['./look-up.component.css'],
-  providers: [LookUpService],
+  providers: [LookUpService, LookupFilterPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LookUpComponent implements OnChanges, OnDestroy, OnInit {
-  debounceTimer: any;
-  counter: number;
-  results: any[];
-  tempSearchText: string;
-  selection = 'none';
+export class LookUpComponent implements OnChanges, OnDestroy {
+
+  selection: any = [];
   lookUpList: Array<LookUp> = [];
-  isActive = false;
-  lookUpType = '';
   isMultiple = false;
   isEnableSearch = false;
   searchText = '';
-  isSelectAll = false;
   lookUpRequestObject = {
     lookUpTableName: '',
     lookUpTableColumnName: ''
   };
+  lookupTitle = '';
   $subscriptions: Subscription[] = [];
   @Input() selectedLookUpList: Array<LookUp> = [];
   @Input() defaultValue: any;
@@ -58,29 +55,21 @@ export class LookUpComponent implements OnChanges, OnDestroy, OnInit {
   @Input() externalArray: any = [];
   @Input() isDisabled;
   @Input() uniqueId = null;
+  @Input() customClass = '';
   @Output() selectedResult: EventEmitter<Array<LookUp>> = new EventEmitter<Array<LookUp>>();
-  @ViewChild('dropdownOverlay', { static: true }) dropdownOverlay: ElementRef;
-  @ViewChild('searchField', { static: true }) searchField: ElementRef;
-  bindOnkeyup: any;
+  @ViewChild('lookupSelectAll') lookupSelectAll: MatOption;
 
-  constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef) { }
-
-  ngOnInit(): void {
-    this.bindOnkeyup = this.onDocumentKeyup.bind(this);;
-  }
+  constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef, private lookupFilterPipe: LookupFilterPipe) { }
 
   ngOnChanges() {
-    this.selectedLookUpList = this.selectedLookUpList || [];
-    this.lookUpList = this.lookUpList.length ? this.mapLookUpData(this.lookUpList) : [];
-    this.isSelectAll = this.lookUpList.length && this.lookUpList.length === this.selectedLookUpList.length ? true : false;
+    this.searchText = '';
     this.updateLookUpSettings();
-    this.setSelectedValue();
-    this.setUnquieIdForSearchText();
-    if (!this.isMultiple) {
-      this.selection = this.defaultValue || '--select--';
+    if (this.selectedLookUpList?.length || this.defaultValue) {
+      this.getLookUpValues();
+    } else {
+      this.lookupTitle = '';
+      this.selection = [];
     }
-    this.isError ? this.searchField.nativeElement.classList.add('is-invalid')
-      : this.searchField.nativeElement.classList.remove('is-invalid');
   }
 
   ngOnDestroy() {
@@ -89,9 +78,9 @@ export class LookUpComponent implements OnChanges, OnDestroy, OnInit {
   /**
    * update the settings of the component. # value is used as a delimiter since it allows us to
    * modify the components consuming this library to change settings through by just passing one variable.
-   * which is mostly driven from JSON files(reports,codetable etc) which in result reduce the total file size
+   * which is mostly driven from JSON files(reports,code-table etc) which in result reduce the total file size
    */
-  updateLookUpSettings() {
+  private updateLookUpSettings() {
     const OPTIONS = this.options.split('#');
     this.lookUpRequestObject.lookUpTableName = OPTIONS[0];
     this.lookUpRequestObject.lookUpTableColumnName = OPTIONS[1];
@@ -99,202 +88,102 @@ export class LookUpComponent implements OnChanges, OnDestroy, OnInit {
     this.isEnableSearch = (OPTIONS[3] === 'true') || (OPTIONS[3] === 'TRUE') ? true : false;
   }
   /**
-   * returns look up values from the DB its only triggred once since  the lookup values will not be changed :P
-   * this function is triggred on focus if list is empty ( 0 == false !0 = true)
+   * returns look up values from the DB its only triggered once since  the lookup values will not be changed :P
+   * this function is triggered on focus if list is empty ( 0 == false !0 = true)
    */
-  getLookUpValues() {
+  private getLookUpValues() {
     if (!this.lookUpList.length) {
       if (this.isExternalArray) {
-        this.lookUpList = this.mapLookUpData(this.externalArray);
+        this.lookUpList = this.externalArray;
+        this.setSelections();
       } else {
         this.$subscriptions.push(this._dropDownService.getLookupData(this.lookUpRequestObject)
           .subscribe((data: Array<LookUp>) => {
-            this.lookUpList = this.mapLookUpData(data);
+            this.lookUpList = data;
+            this.setSelections();
             this._changeRef.markForCheck();
           }));
       }
     }
   }
-  setSelectedValue() {
-    this.selection = this.isMultiple ? this.selectedLookUpList.length + ' selected' :
-      this.selectedLookUpList[0] ? this.selectedLookUpList[0].description : '--select--';
-  }
 
-  selectOrUnselectLookUpwithSpace() {
-    const lookup: LookUp = this.lookUpList[this.counter];
-    if (lookup) {
-      lookup.isChecked = !lookup.isChecked;
-      this.selectOrUnSelectLookupItem(lookup);
+    private setSelections() {
+        if (!this.selectedLookUpList?.length && !this.defaultValue) return;
+        if (!this.isMultiple) {
+            if (this.defaultValue) {
+                this.selectedLookUpList = this.lookUpList.filter(e => e.code === this.defaultValue || e.description === this.defaultValue);
+            }
+            const select = this.selectedLookUpList.find(e => e.code || e.description);
+            if (select) {
+                this.selection = select.code || select.description;
+            }
+        } else {
+            this.selection = this.selectedLookUpList.map(e => e.code || e.description) || [];
+        }
+        this.setSelectedLookUpList();
+        this.checkIfAllOptionsSelected();
     }
-  }
-  /**
-   * @param  {LookUp} lookUp
-   * neagative condition chcking is used so that even if lookup doesn't come we can handle that in add rather that remove.
-   * which is becoz on isMultiple = false conditions a null value will be emitted I have handled that scenario in addToSelectedLookupList
-   */
-  selectOrUnSelectLookupItem(lookUp: LookUp) {
-    lookUp && !lookUp.isChecked ? this.removeFromSelectedLookupList(lookUp) : this.addToSelectedLookupList(lookUp);
-  }
 
-  selectOrUnSelectAllLookUp(status: boolean) {
-    this.selectedLookUpList = [];
-    this.lookUpList.forEach((L: LookUp) => {
-      L.isChecked = status;
-      this.selectOrUnSelectLookupItem(L);
-    });
-    this.setSelectedValue();
-  }
-  /**
-   * @param  {Array<LookUp>} lookUpList
-   * moves the selected items to the top of the list it helps user to see what they have selected
-   */
-  setSelectedItemsToTop(lookUpList: Array<LookUp>) {
-    return lookUpList.sort(a => a.isChecked === true ? -1 : a.isChecked === false ? 1 : 0);
-  }
-
-  /**
-   * @param  {LookUp} lookUp
-   * if mulfiple is not enabled it will always add to the 0th element.the lookuplist is emptied becoz I handled
-   * the empty selection here if user selects null the list is cleared only in the case of isMultiple = false
-   */
-  addToSelectedLookupList(lookUp: LookUp) {
-    if (this.isMultiple) {
-      this.selectedLookUpList.push(Object.assign({}, lookUp));
-    } else {
-      lookUp ? this.selectedLookUpList[0] = Object.assign({}, lookUp) : this.selectedLookUpList = [];
-      this.hideLookUpList();
-    }
-    this.setSelectedValue();
-  }
-
-  removeFromSelectedLookupList(lookUp: LookUp) {
-    this.selectedLookUpList.splice(this.findLookupIndex(lookUp), 1);
-    this.setSelectedValue();
-  }
-
-  findLookupIndex(lookUp: LookUp) {
-    return this.selectedLookUpList.findIndex((L: LookUp) => L.code === lookUp.code || L.description === lookUp.description);
-  }
-  /**
-   * @param  {Array<LookUp>} lookUpList
-   * this function updates the data with isChecked value which is used for selection in UI
-   */
-  mapLookUpData(lookUpList: Array<LookUp>) {
-    return lookUpList.map((d: LookUp) => { d['isChecked'] = this.checkInSelectedLookupList(d); return d; });
-  }
-  /**
-   * @param  {LookUp} lookUp
-   * here either decription or code is checked bcoz at times the developer using this library may not be able to give
-   * both code and description all values should be true on the case of isMultiple = false which helps us to use
-   * same function for both single and multiple
-   */
-  checkInSelectedLookupList(lookUp: LookUp) {
-    return !!this.selectedLookUpList
-      .find((L: LookUp) => L.code === lookUp.code || L.description === lookUp.description) || !this.isMultiple;
-  }
-
-  hideLookUpList() {
-    this.removeListener();
-    this.setLookUpListStatus(false);
-    this.updateOverlayState(false);
-    this.counter = -1;
-    this.searchText = '';
-    this.setSelectedValue();
-    if (this.isMultiple) {
-      this.lookUpList = this.setSelectedItemsToTop(this.lookUpList);
-    }
-    this.emitDatatoParentComponent();
-  }
-
-  emitDatatoParentComponent() {
-    this.selectedResult.emit(this.selectedLookUpList);
-  }
-
-  showLookUpList() {
-    this.addListener();
-    this.setLookUpListStatus(true);
-    this.updateOverlayState(true);
-    return !this.lookUpList.length ? this.getLookUpValues() : null;
-  }
-
-  updateOverlayState(condition: boolean) {
-    this.dropdownOverlay.nativeElement.style.display = condition ? 'block' : 'none';
-  }
-
-  setLookUpListStatus(status: boolean) {
-    this.isActive = status;
-  }
-
-  setUnquieIdForSearchText() {
-    this.searchField.nativeElement.id = this.uniqueId ?  this.uniqueId : Math.random() + '';
-  }
-
-  /**
-   * @param  {} event used to update counter value for keyboard event listner
-   */
-  upArrowEvent(event) {
-    event.preventDefault();
-    this.removeHighlight();
-    this.counter >= 0 ? this.counter-- : this.counter = document.getElementsByClassName('search-result-item').length - 1;
-    this.addHighlight();
-    this.updateSearchFeild();
-  }
-  updateSearchFeild() {
-
-  }
-  /**
-   * @param  {} event  used to update counter value for keyboard event listner and adds a highlight class
-   */
-  downArrowEvent(event) {
-    event.preventDefault();
-    this.removeHighlight();
-    this.counter < document.getElementsByClassName('search-result-item').length - 1 ? this.counter++ : this.counter = -1;
-    this.addHighlight();
-    this.updateSearchFeild();
-  }
-
-  /** listens for enter key event . triggers the click on selected li
-   */
-  enterKeyEvent() {
-    (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement).click();
-    (document.activeElement as HTMLInputElement).blur();
-    this.hideLookUpList();
-  }
-  /**
-   * removes the highlight from the previous li node if true
-   * updates the tempsearch value with user tped value for future refernce
-   */
-  removeHighlight() {
-    const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-    if (el) {
-      el.classList.remove('highlight');
-    }
-  }
-  /**
-   * updates the li with 'highlight' class
-   */
-  addHighlight() {
-    const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-    if (el) {
-      el.scrollIntoView({ block: 'nearest' });
-      el.classList.add('highlight');
-    }
-  }
-  
-  private onDocumentKeyup(event: KeyboardEvent): void {
-    if (event.key === 'Tab') {
-      if (!(document.getElementById('lookup-' + this.uniqueId)?.contains(document.activeElement))) {
-        this.hideLookUpList();
+  private setSelectedLookUpList() {
+    if (!this.selectedLookUpList?.length) return;
+    this.selectedLookUpList.forEach(element => {
+      const foundValue = this.lookUpList.find(e => e.code === element.code || e.description === element.description);
+      if (foundValue) {
+        element.code = foundValue.code;
+        element.description = foundValue.description;
       }
+    });
+  }
+
+  private selectOrUnSelectAllLookUp(isSelectAll: boolean) {
+    this.selection = [];
+    if (isSelectAll) {
+      this.selection.push('SELECT_ALL');
+      this.getLookupListForSelectAll().forEach((L: LookUp) => {
+        this.selection.push(L.code || L.description);
+      });
     }
   }
 
-  private addListener(): void {
-    document.addEventListener('keyup', this.bindOnkeyup);
+  getLookupListForSelectAll() {
+    return this.isEnableSearch ? this.lookupFilterPipe.transform(this.lookUpList, this.searchText) : this.lookUpList;
   }
 
-  private removeListener(): void {
-    document.removeEventListener('keyup', this.bindOnkeyup);
+    emitDataToParentComponent() {
+        const EMIT_DATA = this.selectedDescription();
+        this.selectedLookUpList = EMIT_DATA;
+        this.setLookupTitle();
+        this.selectedResult.emit(EMIT_DATA);
+    }
+
+    private selectedDescription() {
+        const EMIT_DATA = this.lookUpList.filter((ele: any) => {
+            if (this.selection.includes(ele.code || ele.description)) return ele;
+        });
+        return EMIT_DATA;
+    }
+
+    showLookUpList() {
+        return !this.lookUpList.length ? this.getLookUpValues() : null;
+    }
+
+    checkIfAllOptionsSelected(): void {
+        if (!this.isMultiple) return;
+        const selectedArray = this.selection.filter((ele: any) => ele != 'SELECT_ALL');
+        if (selectedArray?.length != this.lookUpList?.length) {
+            this.selection = selectedArray;
+        }
+        if (selectedArray?.length == this.lookUpList?.length) {
+            this.selectOrUnSelectAllLookUp(true);
+        }
+        if (this.lookupSelectAll?.active) {
+            this.selectOrUnSelectAllLookUp(this.lookupSelectAll.selected);
+        }
+        this.selectedLookUpList = this.selectedDescription();
+    }
+
+  setLookupTitle() {
+    this.lookupTitle = this.selectedLookUpList?.map(e => e.description || e.code).toString() || '';
   }
 
 }
