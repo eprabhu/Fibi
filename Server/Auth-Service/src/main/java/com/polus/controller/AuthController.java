@@ -76,7 +76,7 @@ public class AuthController {
         }
         HttpHeaders headers = new HttpHeaders();
 	    headers.setBearerAuth(token);
-	    headers.add(HttpHeaders.SET_COOKIE, "Cookie_Token="+token+"; Path=/; Max-Age=43200; HttpOnly");
+	    headers.add(HttpHeaders.SET_COOKIE, "Cookie_Token=" + token + "; Path=/.fibiweb.com; Max-Age=43200; HttpOnly");
 	    return ResponseEntity.ok()
 	            .headers(headers)
 	            .body((response));
