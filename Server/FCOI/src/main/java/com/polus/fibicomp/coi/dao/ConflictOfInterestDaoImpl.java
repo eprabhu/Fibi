@@ -53,6 +53,7 @@ import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
@@ -4037,12 +4038,16 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<Notes> fetchAllNotesForPerson(String personId) {
+	public List<Notes> fetchAllNotesForPerson(NotesDto dto) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Notes> query = builder.createQuery(Notes.class);
 		Root<Notes> rootCOINoteEntity = query.from(Notes.class);
-		query.where(builder.equal(rootCOINoteEntity.get("personId"), personId));
+		Predicate personIdPredicate = builder.equal(rootCOINoteEntity.get("personId"), dto.getPersonId());
+		Predicate isPrivatePredicate = (!dto.getPersonId().equalsIgnoreCase(AuthenticatedUser.getLoginPersonId()) && (dto.getIsPrivate() != null))
+		        ? builder.equal(rootCOINoteEntity.get("isPrivate"), dto.getIsPrivate())
+		        : null;
+		query.where(isPrivatePredicate != null ? builder.and(personIdPredicate, isPrivatePredicate) : personIdPredicate);
 		query.orderBy(builder.desc(rootCOINoteEntity.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}

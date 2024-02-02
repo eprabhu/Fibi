@@ -3,6 +3,7 @@ package com.polus.fibicomp.coi.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+
+import com.polus.fibicomp.util.JpaCharBooleanConversion;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,8 +37,15 @@ public class Notes implements Serializable {
 	@Column(name = "PERSON_ID")
 	private String personId;
 
+	@Column(name = "TITLE")
+	private String title;
+
 	@Column(name = "CONTENT")
 	private String content;
+
+	@Column(name = "IS_PRIVATE")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isPrivate;
 
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
