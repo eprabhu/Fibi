@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
 import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
-import { CoiService } from './services/coi.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
 import {
