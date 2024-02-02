@@ -600,19 +600,21 @@
 	</div>
 </div>
 
+<!-- Update confirmation -->
 <div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header ct-footer-padding">
+			<div class="modal-header">
 				<h4 class="modal-title">Confirmation</h4>
-				<button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" title="Close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
 			</div>
-			<div class="modal-body ct-modal-padding">
-				<div class="row ">
-					<div class="col-lg-12">
-						<div class="my-2 mx-0 row">
-							<div class="col-12 py-2 grey-info font">
-								<span class="fs-14 text-secondary">Would you like to make changes to the existing entity
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12">
+						<div class="row">
+							<div class="col-12 grey-info font">
+								<span class="fs-14">Would you like to make changes to the existing entity
 									details?
 									Please note that any modifications made will impact the existing SFIs.
 								</span>
@@ -621,12 +623,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer ct-footer-padding">
-				<button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
-					type="button">Cancel
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button"
+					title="Cancel">Cancel
 				</button>
-				<button (click)="updateEntityDetails()" data-bs-dismiss="modal"
-					class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button">Submit</button>
+				<button class="btn btn-primary me-0" id="claim-sumbit-no-btn" type="button"
+					(click)="updateEntityDetails()" data-bs-dismiss="modal">Submit
+				</button>
 			</div>
 		</div>
 	</div>

@@ -600,72 +600,87 @@
     </ng-container>
 </div>
 <!-- Dashboard tabs and counts -->
-<nav class="d-flex align-items-center bg-white border fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav d-inline-block" *ngIf="!isShowCreate">
-    <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 py-1 hand-cursor" role="tab"
+<nav class="d-flex align-items-center bg-white border fs-14 fw-bold mt-3 shadow-sm user-dashboard-nav d-inline-block" *ngIf="!isShowCreate">
+    <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
         aria-describedby="Click to view In Progress Disclosures"
         [attr.title]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'In Progress Disclosures' : 'Click to view In Progress Disclosures'"
         tabindex="0">
-        <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active"
+        <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="py-2 active"
         [attr.aria-label]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'Selected tab is In Progress Disclosures with ' + (dashboardCount?.inProgressDisclosureCount || 0) + ' disclosures' : 'In Progress Disclosures with ' + (dashboardCount?.inProgressDisclosureCount || 0) + ' disclosures'">
             In Progress <span class="disclosures-text"></span> ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('APPROVED_DISCLOSURES', dashboardCount?.approvedDisclosureCount)" class="border-end navigation-icons px-3 py-1 hand-cursor" role="tab"
+    <div (click)="setTab('APPROVED_DISCLOSURES', dashboardCount?.approvedDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
          aria-describedby="Click to view Approved Disclosures"
          tabindex="0"
          [attr.title]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Approved Disclosures' : 'Click to view Approved Disclosures'">
-        <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3"
+        <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="py-2"
         [attr.aria-label]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Selected tab is Approved Disclosures with ' + (dashboardCount?.approvedDisclosureCount || 0) + ' disclosures' : 'Approved Disclosures with ' + (dashboardCount?.approvedDisclosureCount || 0) + ' disclosures'">
          Approved <span class="disclosures-text"></span> ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)" class="border-end navigation-icons px-3 py-1 hand-cursor" role="tab"
+    <div (click)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
         [attr.title]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
         aria-describedby="Click to view Travel Disclosures" tabindex="0">
-        <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3"
+        <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="py-2"
         [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures' : 'Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures'">
         Travel <span class="disclosures-text"></span> ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 py-1 hand-cursor" role="tab"
+    <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 hand-cursor" role="tab"
         [attr.title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click to view Disclosure History'"
         aria-describedby="Click to view Disclosure History" tabindex="0">
-        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3"
+        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="py-2"
         [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Selected tab is Disclosure History with ' + (dashboardCount?.disclosureHistoryCount || 0) + ' disclosures' : 'Disclosure History with ' + (dashboardCount?.disclosureHistoryCount || 0) + ' disclosures'">
         <span class="disclosure-text"></span> History</span>
     </div>
 </nav>
 <!-- Search and filter -->
-<div class="advance-search-area border d-flex mt-2 rounded-1" *ngIf="isShowFilterAndSearch">
-    <div class="fs-14 p-3 d-inline-block" [class.border-end] = "currentSelected.tab != 'DISCLOSURE_HISTORY'" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
-        <span class="fs-14 fw-medium me-2 text-secondary" tabindex="0">Filter By Type :</span>
-        <span (click)="setFilter('ALL')" [class.filter-type-active]="currentSelected.filter=='ALL'" tabindex="0"
-        [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
-            title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-type-active mx-1 hand-cursor">All</span>
-        <span (click)="setFilter('FCOI')" [class.filter-type-active]="currentSelected.filter=='FCOI'" tabindex="0"
-        [attr.aria-label]="currentSelected.filter=='FCOI' ? 'Selected filter type is fcoi ' : 'Fcoi'"
-            title="Click to filter by type: FCOI" area-describedby="Click to filter by type: FCOI"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1 hand-cursor">FCOI</span>
-        <span (click)="setFilter('PROJECT')" [class.filter-type-active]="currentSelected.filter=='PROJECT'"
-        [attr.aria-label]="currentSelected.filter=='PROJECT' ? 'Selected filter type is Project ' : 'Project'" tabindex="0"
-            title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1 hand-cursor">Project</span>
-        <span *ngIf="currentSelected.tab == 'TRAVEL'"  (click)="setFilter('TRAVEL')"
-        [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'" tabindex="0"
-            [class.filter-type-active]="currentSelected.filter=='TRAVEL'"
-            title="Click to filter by type: Travel" area-describedby="Click to filter by type: Travel"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white hand-cursor">Travel</span>
-        <span (click)="setFilter('OPA')" [class.filter-type-active]="currentSelected.filter=='OPA'" tabindex="0"
-            title="Click to filter by type: OPA"
-            [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1 hand-cursor">OPA</span>
-    </div>
-    <div class="d-flex flex-fill position-relative" *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
-        [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
-        (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
-        <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4 fs-14 pe-5" id="searchText"
-        [placeholder]="getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
-        type="text" [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
+<div class="advance-search mt-2" *ngIf="isShowFilterAndSearch">
+    <div class="row m-0">
+        <div class="col-lg-5 py-2">
+            <div class="fs-14 d-inline-block" 
+                *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
+                <label>Filter By Type :</label>
+                <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
+                    tabindex="0"
+                    [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
+                    title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+                    class="filter-pills" role="button">All</span>
+
+                <span (click)="setFilter('FCOI')" [class.active-filter-pills]="currentSelected.filter=='FCOI'"
+                    tabindex="0"
+                    [attr.aria-label]="currentSelected.filter=='FCOI' ? 'Selected filter type is fcoi ' : 'Fcoi'"
+                    title="Click to filter by type: FCOI" area-describedby="Click to filter by type: FCOI"
+                    class="filter-pills" role="button">FCOI</span>
+
+                    <span (click)="setFilter('PROJECT')"
+                    [class.active-filter-pills]="currentSelected.filter=='PROJECT'" tabindex="0"
+                    [attr.aria-label]="currentSelected.filter=='PROJECT' ? 'Selected filter type is Project ' : 'Project'" tabindex="0"
+                    title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
+                     class="filter-pills" role="button">Project</span>
+
+                <span *ngIf="currentSelected.tab == 'TRAVEL'" (click)="setFilter('TRAVEL')"
+                    [class.active-filter-pills]="currentSelected.filter=='TRAVEL'" tabindex="0"
+                    [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'"
+                    tabindex="0" title="Click to filter by type: Travel"
+                    area-describedby="Click to filter by type: Travel" class="filter-pills" role="button">Travel</span>
+
+                <span (click)="setFilter('OPA')" [class.active-filter-pills]="currentSelected.filter=='OPA'"
+                    tabindex="0" title="Click to filter by type: OPA"
+                    [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
+                    class="filter-pills" role="button">OPA</span>
+            </div>
+        </div>
+        <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
+            class="col-lg-7 border-start d-flex align-items-center filter-s-outer"
+            [class.search-area]="isSearchTextHover" (mouseover)="isSearchTextHover = true"
+            (mouseout)="isSearchTextHover = false">
+            <span class="filter-search">
+                <mat-icon class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
+                <input class="form-control" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()"
+                    [class.search-area]="isSearchTextHover" type="text" [(ngModel)]="searchText"
+                    (ngModelChange)="getFilteredDisclosureListForSearchWord()">
+            </span>
+            <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
+        </div>
     </div>
 </div>
 <!-- Dashboard Cards -->
@@ -705,8 +720,7 @@
                                                         src="{{deployMap}}assets/images/proposal.png">
                                                     <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon"
                                                         src="{{deployMap}}assets/images/award.png">
-                                                    <span class="text-nowrap mt-2">Project :</span>
-                                                    <span class="ml-2 mt-2 hyper-link fs-14">
+                                                    <span class="mt-2 hyper-link fs-14">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">...
                                                             <a *ngIf="!readMoreOrLess[index]"
@@ -1126,7 +1140,7 @@
                                             </span>
                                         </span>
                                         <!-- OPA Card Reporting Cycle -->
-                                        <h4 *ngIf="disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex fs-14">
+                                        <h4 *ngIf="disclosure.opaDisclosureId" class="mb-0 d-flex fs-14">
                                             <i class="fa fa-user mt-sm-2 mt-2 label-text" aria-hidden="true"></i>
                                             <strong class="me-2 ml-2 text-nowrap mt-2" tabindex="0"
                                                 [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</strong>
@@ -1230,105 +1244,107 @@
                     </ng-container>
                 </div>
                 
-                <!-- Footer section -->
-                <div class="card-footer d-flex justify-content-between align-items-center"
-                    [ngClass]="disclosure?.opaDisclosureId ? 'ps-md-0 ps-lg-0' : ''">
-                    <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                        <div class="d-flex" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
-                            <div class="me-5">
-                                <div class="link-heading align-items-center fs-14 cursor-pointer"
-                                    *ngIf="!disclosure?.opaDisclosureId"
-                                    [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                    [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
-                                    area-describedby="Click to view SFI list">
-                                    <strong class="fs-18 me-2 project-sfi-count cursor-pointer"
-                                        [class.cursor-pointer]="disclosure?.noOfSfi"
-                                        [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
-                                        area-describedby="Click to view SFI list"
-                                        (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
-                                        {{disclosure?.noOfSfi || 0}}
-                                    </strong>
-                                    <div class="mt-1">
-                                        <label class="label-text margin-top-3px fs-14 fw-medium text-gray-900">
-                                            <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                                [class.text-decoration-underline]="isHover[index]&& disclosure?.noOfSfi > 0"
-                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
-                                                Significant Financial Interest
-                                            </strong>
-                                        </label>
+            <!-- Footer section -->
+                <div class="card-footer" [ngClass]="disclosure?.opaDisclosureId ? 'ps-md-0 ps-lg-0' : ''">
+                    <div class="row">
+                        <ng-container *ngIf="!disclosure?.travelDisclosureId">
+                            <div class="col-lg-9 p-0">
+                                <div class="mx-0 row">
+                                    <div class="col-lg-8">
+                                        <div class="d-flex" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
+                                            <div class="me-5">
+                                                <div class="link-heading align-items-center fs-14 cursor-pointer"
+                                                    *ngIf="!disclosure?.opaDisclosureId"
+                                                    [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                                    [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                                                    area-describedby="Click to view SFI list">
+                                                    <strong class="fs-18 me-2 project-sfi-count cursor-pointer"
+                                                        [class.cursor-pointer]="disclosure?.noOfSfi"
+                                                        [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                                                        area-describedby="Click to view SFI list"
+                                                        (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
+                                                        {{disclosure?.noOfSfi || 0}}
+                                                    </strong>
+                                                    <div>
+                                                        <label class="label-text margin-top-3px fs-14 fw-medium text-gray-900">
+                                                            <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                                                [class.text-decoration-underline]="isHover[index]&& disclosure?.noOfSfi > 0"
+                                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
+                                                                Significant Financial Interest
+                                                            </strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="me-5">
+                                                <div class="link-heading align-items-center fs-14 cursor-pointer"
+                                                    *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
+                                                    [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                                    [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                    area-describedby="Click to view Proposal list">
+                                                    <strong class="fs-18 me-2 project-sfi-count cursor-pointer"
+                                                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                        area-describedby="Click to view Proposal list"
+                                                        (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}
+                                                    </strong>
+                                                    <div>
+                                                        <label class="label-text margin-top-3px fs-14 fw-medium text-gray-900">
+                                                            <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfProposal > 0"
+                                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">
+                                                                Proposals
+                                                            </strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="me-5">
+                                                <div class="link-heading align-items-center fs-14 cursor-pointer"
+                                                    *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
+                                                    [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                                    [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
+                                                    area-describedby="Click to view Award list">
+                                                    <strong class="fs-18 me-2 project-sfi-count cursor-pointer"
+                                                        (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}
+                                                    </strong>
+                                                    <div>
+                                                        <label class="label-text margin-top-3px fs-14 fw-medium text-gray-900">
+                                                            <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
+                                                                (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">
+                                                                Awards
+                                                            </strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4" tabindex="0">
+                                        <div class="d-flex">
+                                            <label class="fs-14 fw-medium text-gray-900" for="id">Last Updated By <span>:
+                                                </span></label>
+                                            <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
+                                                            (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
+                                                {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp |
+                                                dateFormatterWithTimeZone:
+                                                'long'}}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="me-5">
-                                <div class="link-heading align-items-center fs-14 cursor-pointer"
-                                    *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
-                                    [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                    [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                    area-describedby="Click to view Proposal list">
-                                    <strong class="fs-18 me-2 project-sfi-count cursor-pointer"
-                                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                        area-describedby="Click to view Proposal list"
-                                        (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}
-                                    </strong>
-                                    <div class="mt-1">
-                                        <label class="label-text margin-top-3px fs-14 fw-medium text-gray-900">
-                                            <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfProposal > 0"
-                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">
-                                                Proposals
-                                            </strong>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="me-5">
-                                <div class="link-heading align-items-center fs-14 cursor-pointer"
-                                    *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
-                                    [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                    [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
-                                    area-describedby="Click to view Award list">
-                                    <strong class="fs-18 me-2 project-sfi-count cursor-pointer"
-                                        (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}
-                                    </strong>
-                                    <div class="mt-1">
-                                        <label class="label-text margin-top-3px fs-14 fw-medium text-gray-900">
-                                            <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
-                                                (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">
-                                                Awards
-                                            </strong>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                            <div tabindex="0">
-                                <label class="fs-14 fw-medium text-gray-900" for="id">Last Updated By <span>:
-                                    </span></label>
-                                <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
-                                            (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
-                                    {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp |
-                                    dateFormatterWithTimeZone:
-                                    'long'}}</span>
-                            </div>
-                    </ng-container>
-                    <ng-container *ngIf="disclosure?.travelDisclosureId">
+                        </ng-container>
+                        <ng-container *ngIf="disclosure?.travelDisclosureId">
                             <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
                                 <label for="purpose" class="fw-medium col-custom-travel fs-14">Purpose <span
                                         class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="col break-point-1200">
                                     <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                                        <span class="grey-text"
-                                            [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
+                                        <span class="grey-text" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
-                        
-        
-                            <div
-                                [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
+                            <div [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
                                 <label for="start-date" class="fw-medium fs-14">Start Date <span
                                         class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="break-point-1200">
@@ -1338,10 +1354,7 @@
                                     </app-no-data-label>
                                 </span>
                             </div>
-                        
-                        
-                            <div
-                                [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
+                            <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
                                 <label for="end-date" class="fw-medium fs-14">End Date <span
                                         class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="break-point-1200">
@@ -1351,24 +1364,25 @@
                                     </app-no-data-label>
                                 </span>
                             </div>
-                    
-                    </ng-container>
-                    
-                        <div class="d-flex mr-2 justify-content-end px-0 d-inline-block">
-                            <button (click)="redirectToDisclosure(disclosure)" role="button"
-                                aria-describedby="Click to view Disclosure"
-                                class="d-flex align-items-center btn btn-primary-outline fs-14 height-fit-content"
-                                [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
-                                            disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'"
-                                [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
-                                            disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'">
-                                <mat-icon class="me-1">visibility</mat-icon>View
-                            </button>
+                        </ng-container>
+                        <div class="col-lg-3">
+                            <div class="d-flex mr-2 justify-content-end px-0 d-inline-block">
+                                <button (click)="redirectToDisclosure(disclosure)" role="button"
+                                    aria-describedby="Click to view Disclosure"
+                                    class="d-flex align-items-center btn btn-primary-outline fs-14 height-fit-content"
+                                    [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
+                                                            disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'"
+                                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
+                                                            disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'">
+                                    <mat-icon class="me-1">visibility</mat-icon>View
+                                </button>
+                            </div>
                         </div>
-                    
+                    </div>
                 </div>
             </div>
             <!-- New card design ends-->
+
             <div *ngIf="currentSelected.tab=='DISCLOSURE_HISTORY'">
                 <app-disclosure-history-card [disclosure]="disclosure"
                     [isLastElement]="isLast"></app-disclosure-history-card>

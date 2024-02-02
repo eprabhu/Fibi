@@ -59,7 +59,7 @@
                                     <span class="text-color fs-14">{{entityDetails?.phone}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div tabindex="0" class="col-12">
+                            <div tabindex="0" class="col-lg-8">
                                 <label class="d-block fw-500 fs-14 label-text mt-3">Relationship</label>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
@@ -82,7 +82,7 @@
                                     </span>
                                 </app-no-data-label>
                             </div>
-                            <div *ngIf="showViewButton()" class="col-auto ms-auto flex-end" tabindex="0">
+                            <div *ngIf="showViewButton()" class="align-items-end col-lg-4 d-flex justify-content-end" tabindex="0">
                                 <button title="Click to view Disclosure" area-describedby="Click to view Disclosure"
                                     (click)="viewEntityDetails()"
                                     class="d-flex align-items-center btn btn-primary-outline fs-14 height-fit-content"
@@ -139,7 +139,7 @@
                                 <button *ngIf="canShowMoreActions()" [matMenuTriggerFor]="beforeMenu"
                                     class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                     type="button" title="Click for More Actions">
-                                    <mat-icon class="moreActionIcon">more_vert</mat-icon><span class="fs-14">More Actions</span>
+                                    <mat-icon class="moreActionIcon">more_vert</mat-icon>
                                     <span *ngIf="isCardExpanded">More Actions</span>
                                 </button>
                                 <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi"
@@ -442,7 +442,7 @@
                     <div class="col" tabindex="0">
                         <div class="d-flex">
                             <label class="d-block fw-500 fs-14 row pb-1 label-text" title="Click to select date"
-                                for="Start date of involvement"><span class="mandatory">*</span>Start Date of
+                                for="Start date of involvement"><span class="text-danger">*</span>Start Date of
                                 Involvement
                             </label>
                         </div>
@@ -518,7 +518,7 @@
                 <div class="row px-4 mb-3">
                     <span tabindex="0">
                         <label class="fs-14 fw-500 py-2 position-relative label-text">
-                            <span class="mandatory">*</span>
+                            <span class="text-danger">*</span>
                             Relationship with Entity
                         </label>
                         <textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
@@ -541,7 +541,7 @@
                 <div class="row px-4 mb-3">
                     <span tabindex="0">
                         <label class="fs-14 fw-500 py-2 position-relative label-text">
-                            <span class="mandatory">*</span>
+                            <span class="text-danger">*</span>
                             Principle Business Area of Entity
                         </label>
                         <textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
@@ -561,7 +561,7 @@
                 <div class="row px-4 mb-3">
                     <span tabindex="0">
                         <label class="fs-14 fw-500 py-2 position-relative label-text">
-                            <span class="mandatory">*</span>
+                            <span class="text-danger">*</span>
                             Relationship of Entity to your
                             University responsibilities
                         </label>
