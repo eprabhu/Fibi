@@ -528,6 +528,10 @@ body {
       font-weight: 500;
       border-color: #cbcbcb;
     }
+    &:hover{
+      background: #dfdfdf;
+      border-color: #cbcbcb;
+    }
   }
 
   .filter-search {
@@ -560,4 +564,3 @@ body {
     border-top: solid 1px #dbdfe9;
   }
 }
-
