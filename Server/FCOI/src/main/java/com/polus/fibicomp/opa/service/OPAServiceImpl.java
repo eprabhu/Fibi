@@ -3,6 +3,9 @@ package com.polus.fibicomp.opa.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.person.pojo.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.clients.FormBuilderClient;
 import com.polus.fibicomp.opa.clients.model.ApplicableFormRequest;
@@ -26,8 +28,6 @@ import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @Transactional

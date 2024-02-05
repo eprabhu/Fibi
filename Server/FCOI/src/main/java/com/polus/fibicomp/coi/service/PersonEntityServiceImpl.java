@@ -1,5 +1,9 @@
 package com.polus.fibicomp.coi.service;
 
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.core.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
@@ -7,13 +11,9 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.repository.ActionLogDao;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
-import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,7 +190,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         questionnaireDataBus.getModuleSubItemCodes().addAll(submoduleCodes);
         questionnaireDataBus.setModuleSubItemKey("0");
         questionnaireDataBus.setCopyModuleItemKey(personEntity.getPersonEntityId().toString());
-        questionnaireService.copyQuestionnaireForVersion(questionnaireDataBus);
+        questionnaireService.copyQuestionnaireForVersion(questionnaireDataBus, false);
     }
 
     @Override

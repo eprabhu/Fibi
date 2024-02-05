@@ -61,6 +61,7 @@ public class OPACommonDAO {
 			return resultMap;
 
 		} catch (Exception e) {
+
 			System.out.println(e.getMessage());
 			return new HashMap<>();
 		}
