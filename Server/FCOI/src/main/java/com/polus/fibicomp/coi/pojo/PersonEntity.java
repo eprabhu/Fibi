@@ -20,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.polus.core.person.pojo.Person;
+import com.polus.core.pojo.Unit;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,9 +29,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
-import com.polus.fibicomp.person.pojo.Person;
-import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import com.polus.core.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -133,7 +133,7 @@ public class PersonEntity implements Serializable {
 	private  String personFullName;
 	
 	@Transient
-	private  Unit unit;
+	private Unit unit;
 	
 	@Transient
 	private  String relationshipTypes;

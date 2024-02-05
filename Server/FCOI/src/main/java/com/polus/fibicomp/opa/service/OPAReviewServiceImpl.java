@@ -1,19 +1,18 @@
 package com.polus.fibicomp.opa.service;
 
-import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
 import com.polus.fibicomp.coi.repository.ActionLogDao;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.dto.OPAActionLogDto;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
-import com.polus.fibicomp.opa.dto.OPAReviewRequestDto;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dao.OPAReviewDao;
 import com.polus.fibicomp.opa.dto.OPAReviewDto;
 import com.polus.fibicomp.opa.pojo.OPAReview;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
-import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;

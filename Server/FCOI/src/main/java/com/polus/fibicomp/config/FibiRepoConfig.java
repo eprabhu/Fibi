@@ -1,6 +1,7 @@
 package com.polus.fibicomp.config;
 
 import java.util.Properties;
+import java.util.Set;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
@@ -9,10 +10,17 @@ import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -25,7 +33,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.polus.fibicomp.*", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackages = "com.polus.*", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 @PropertySource(value = "classpath:${spring.profiles.active}.properties", ignoreResourceNotFound=true)
 @PropertySource(value="file:${spring.profiles.active}.properties", ignoreResourceNotFound=true)
@@ -178,7 +186,7 @@ public class FibiRepoConfig {
 	public SessionFactory sessionFactory() {
 		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 		sessionFactoryBean.setDataSource(getDataSource());
-		sessionFactoryBean.setPackagesToScan("com.polus.fibicomp.*");
+		sessionFactoryBean.setPackagesToScan("com.polus.*");
 		sessionFactoryBean.setHibernateProperties(hibernateProperties());
 		try {
 			sessionFactoryBean.afterPropertiesSet();
@@ -208,7 +216,7 @@ public class FibiRepoConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setDataSource(getDataSource());
-		factory.setPackagesToScan("com.polus.fibicomp.*");
+		factory.setPackagesToScan("com.polus.*");
 		factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		factory.setJpaProperties(hibernateProperties());
 		factory.afterPropertiesSet();
