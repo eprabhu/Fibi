@@ -50,17 +50,12 @@ export class AppHttpInterceptor implements HttpInterceptor {
                     this._commonService.isShowOverlay = false;
                 }
 
-                if (error.status === 401 || this.isUnAuthorized(error)) {
-                    this._commonService.enableSSO ? localStorage.clear() :
-                    this._commonService.removeUserDetailsFromLocalStorage();
-                    this._commonService.currentUserDetails = {};
-                    this._commonService.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
-                }
-
-                if (error.status === 403) {
-                    this._router.navigate(['/coi/error-handler/403']);
-                }
-
+                // if (error.status === 401 || this.isUnAuthorized(error)) {
+                //     this._commonService.enableSSO ? localStorage.clear() :
+                //     this._commonService.removeUserDetailsFromLocalStorage();
+                //     this._commonService.currentUserDetails = {};
+                //     this._commonService.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
+                // }
                 if (error.status === SSO_TIMEOUT_ERROR_CODE && this._commonService.enableSSO) {
                     document.getElementById('timeoutModalButton').click();
                 }
