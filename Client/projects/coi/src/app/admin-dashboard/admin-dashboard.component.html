@@ -322,10 +322,9 @@
                 (click)="sortResult(sortSection?.variableName)"
                 (keydown.enter)="sortResult(sortSection?.variableName)"
                 area-describedby="Click to sort by {{sortSection?.fieldName}}"
-                [ngClass]="index == 0 ? 'ms-3' : 'mx-1'"
                 [class.px-8]="!coiAdminDashboardService.coiRequestObject.sort[sortSection?.variableName]"
                 [class.filter-active]="coiAdminDashboardService.coiRequestObject.sort[sortSection?.variableName]"
-                class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white mt-sm-2" role="button">
+                class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white mt-sm-2 mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label class="offscreen">Click to Sort by {{sortSection?.fieldName}} in
                         {{coiAdminDashboardService.coiRequestObject.sort[sortSection?.variableName]=== 'asc' ?
