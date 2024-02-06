@@ -79,7 +79,6 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
-import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
@@ -2256,21 +2255,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public List<Notes> fetchAllNotesForPerson(NotesDto dto) {
-		return conflictOfInterestDao.fetchAllNotesForPerson(dto);
+	public List<Notes> fetchAllNotesForPerson(String personId) {
+		return conflictOfInterestDao.fetchAllNotesForPerson(personId);
 	}
 
 	@Override
 	public ResponseEntity<Object> saveOrUpdatePersonNote(NotesDto coiNotesdto) {
-		Notes notes = Notes.builder()
-				.noteId(coiNotesdto.getNoteId())
-				.personId(coiNotesdto.getPersonId())
-				.title(coiNotesdto.getTitle())
-				.content(coiNotesdto.getContent())
-				.isPrivate(coiNotesdto.getIsPrivate())
-				.updateUser(AuthenticatedUser.getLoginUserName())
-				.updateTimestamp(commonDao.getCurrentTimestamp())
-				.build();
+		Notes notes = coiNotesdto.getNoteId() == null ? new Notes() :
+						 conflictOfInterestDao.loadCoiNotesForNoteId(coiNotesdto.getNoteId());
+		notes.setPersonId(coiNotesdto.getPersonId());
+		notes.setContent(coiNotesdto.getContent());
+		notes.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		notes.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdatePersonNote(notes);
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}

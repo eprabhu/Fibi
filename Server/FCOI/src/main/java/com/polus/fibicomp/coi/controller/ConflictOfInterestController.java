@@ -544,10 +544,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.saveOrUpdatePersonNote(dto);
 	}
 
-	@PostMapping("/fetchAllNotesForPerson")
-   	public List<Notes> fetchAllNotesForPerson(@RequestBody NotesDto dto) {
+    @GetMapping("/fetchAllNotesForPerson/{personId}")
+   	public List<Notes> fetchAllNotesForPerson(@PathVariable("personId") String personId) {
     	logger.info("Request for fetchAllNotesForPerson");
-   		return conflictOfInterestService.fetchAllNotesForPerson(dto);
+   		return conflictOfInterestService.fetchAllNotesForPerson(personId);
    	}
 
     @GetMapping("/getNoteDetailsForNoteId/{noteId}")

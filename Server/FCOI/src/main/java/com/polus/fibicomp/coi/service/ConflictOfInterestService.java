@@ -446,12 +446,8 @@ public interface ConflictOfInterestService {
     ResponseEntity<Object> loadDisclAttachTypes();
     
     List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
-
-    /**
-	 * This method is used to fetch all notes of a person
-	 * @return
-	 */
-    List<Notes> fetchAllNotesForPerson(NotesDto dto);
+    
+    List<Notes> fetchAllNotesForPerson(String personId);
     
     ResponseEntity<Object> saveOrUpdatePersonNote(NotesDto dto);
     

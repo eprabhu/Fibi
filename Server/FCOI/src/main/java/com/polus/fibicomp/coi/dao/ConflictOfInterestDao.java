@@ -15,7 +15,6 @@ import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
-import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
@@ -1093,12 +1092,8 @@ public interface ConflictOfInterestDao {
 	public Boolean isReviewerAssigned(Integer disclosureId);
 	
 	List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
-
-	/**
-	 * This method is used to fetch all notes of a person
-	 * @return
-	 */
-    List<Notes> fetchAllNotesForPerson(NotesDto dto);
+    
+    List<Notes> fetchAllNotesForPerson(String personId);
     
     Notes saveOrUpdatePersonNote(Notes dto);
     
