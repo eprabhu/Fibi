@@ -1,34 +1,36 @@
-<div class="advance-search-area border row mx-0 rounded-1 mt-3"
-  *ngIf="!isHideFilterSearchAndShowCreate">
-    <div class="border-end fs-14 d-flex align-items-center col-lg-auto col-md-12 py-lg-3 py-sm-2" [@leftSlideInOut]>
-      <div class="me-2">
-        <span class="fs-14 fw-medium me-2 text-secondary ms-3" tabindex="0" aria-label="Filter By Status">Filter By Status :</span>
-        <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0" 
+<div class="advance-search shadow-sm" *ngIf="!isHideFilterSearchAndShowCreate">
+  <div class="row m-0">
+    <div class="col-lg-5 py-2">
+      <div>
+        <label>Filter By Status :</label>
+        <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0" 
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
               title="Click to filter by type: All"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white d-inline-block"
+              class="filter-pills"
               role="button">All</span>
-        <span (click)="setFilter('COMPLETE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='COMPLETE'" tabindex="0"
+        <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='COMPLETE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='COMPLETE' ? 'Selected filter type is Complete ' : 'Complete'"
               title="Click to filter by type: Complete" 
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white d-inline-block" role="button">Complete</span>
-        <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INCOMPLETE'" tabindex="0"
+              class="filter-pills" role="button">Complete</span>
+        <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INCOMPLETE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INCOMPLETE' ? 'Selected filter type is Incomplete' : 'Incomplete'"
               title="Click to filter by type: Incomplete" 
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white d-inline-block" role="button">Incomplete</span>
-        <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0"
+              class="filter-pills" role="button">Incomplete</span>
+        <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INACTIVE' ? 'Selected filter type is Inactive ' : 'Inactive'"
               title="Click to filter by type: Inactive"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white d-inline-block" role="button">Inactive</span>
+              class="filter-pills" role="button">Inactive</span>
     </div>
   </div>
-    <div class="d-flex flex-fill position-relative col-lg-auto col-md-12" [class.pl-28]="!searchText"
+    <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer" [class.pl-28]="!searchText"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
+    <span class="filter-search">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4" type="text" id="searchText"
-        placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+        <input class="form-control" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+      </span>
         <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
     </div>
+</div>
 </div>
 <ng-container *ngIf="!isLoading">
   <div *ngIf="filteredEntityArray.length > 0" [@listAnimation]="filteredEntityArray.length">
