@@ -13,11 +13,11 @@ import {
     TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
     REPORTER_HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
-    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, TRAVEL_REVIEW_STATUS
+} from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { closeCommonModal, openCommonModal } from '../common/utilities/custom-utilities';
-import {TravelReviewStatus} from '../shared/coi-enum';
 
 type Method = 'SOME' | 'EVERY';
 
@@ -74,7 +74,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
-    TravelReviewStatus = TravelReviewStatus;
+    TRAVEL_REVIEW_STATUS = TRAVEL_REVIEW_STATUS;
 
     constructor(
         public router: Router,
@@ -233,7 +233,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showReturnOrApproveButton(): boolean {
-        return this.checkAdministratorRight() && this.checkReviewStatusCode([TravelReviewStatus.REVIEW_IN_PROGRESS]);
+        return this.checkAdministratorRight() && this.checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]);
     }
 
     showHomeButton(): boolean {
