@@ -427,8 +427,8 @@
                                  && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
                                  && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId))
                                  ||
-                                 (coiData?.coiDisclosure?.conflictStatusCode == CoiConflictStatusType.NO_CONFLICT_WITHOUT_SFI
-                                 && coiData?.coiDisclosure?.reviewStatusCode == CoiReviewStatusType.SUBMITTED))"
+                                 (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
+                                 && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                             [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                             data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
