@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
 import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
-import { CoiService } from './services/coi.service';
+import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
 import {
     deepCloneObject,
@@ -285,7 +285,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = true;
             this.coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO())
                 .subscribe((res: getApplicableQuestionnaireData) => {
-                    this.certifyIfQuestionnaireCompleted(res);
+                    this.checkQuestionnaireCompleted(res);
                 }, _err => {
                     this.isSaving = false;
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -293,21 +293,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
-        if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
-            if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-
-                const questionnaire_error = {validationMessage: 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.'};
-                this.coiService.submitResponseErrors.push(questionnaire_error);
-            }
-            this.validateRelationship();
+    checkQuestionnaireCompleted(res) {
+        let errorArray = certifyIfQuestionnaireCompleted(res);
+        if(errorArray.length) {
+            errorArray.forEach(ele => this.coiService.submitResponseErrors.push(ele));
         }
+        this.validateRelationship();
     }
-
-    isAllQuestionnaireCompleted(questionnaires: ApplicableQuestionnaire[]) {
-        return questionnaires.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
-    }
-
+    
     getApplicationQuestionnaireRO() {
         return {
             'moduleItemCode': 8,

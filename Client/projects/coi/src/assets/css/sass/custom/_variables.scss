@@ -36,6 +36,8 @@ $--theme-sidebar-border: --theme-sidebar-border;
 $--theme-card-bg-color: --theme-card-bg-color;
 $--theme-card-border: --theme-card-border;
 $--theme-card-box-shadow: --theme-card-box-shadow;
+$--theme-card-body-bg-color: --theme-card-body-bg-color;
+$--theme-card-body-border: --theme-card-body-border;
 
 //color
 $--theme-text-gray-100: --theme-text-gray-100;
@@ -69,6 +71,8 @@ $theme-map-default: (
     $--theme-card-bg-color: #fff,
     $--theme-card-border: 1px solid #F1F1F4,
     $--theme-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
+    $--theme-card-body-bg-color: transarent,
+    $--theme-card-body-border: 0,
 
     $--theme-text-gray-100: #F9F9F9,
     $--theme-text-gray-200: #F1F1F2,
@@ -101,6 +105,8 @@ $theme-map-dark: (
     $--theme-card-bg-color: #1e1e2d,
     $--theme-card-border: 0,
     $--theme-card-box-shadow: none,
+    $--theme-card-body-bg-color: #26272F,
+    $--theme-card-body-border: 1px solid #1E2027,
 
     $--theme-text-gray-100: #F9F9F9,
     $--theme-text-gray-200: #F1F1F2,
@@ -132,6 +138,8 @@ $theme-map-red: (
     $--theme-card-bg-color: #fff,
     $--theme-card-border: 1px solid #F1F1F4,
     $--theme-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
+    $--theme-card-body-bg-color: #f5f6fb,
+    $--theme-card-body-border: 1px solid #e5e8f5,
 
     $--theme-text-gray-100: #F9F9F9,
     $--theme-text-gray-200: #F1F1F2,
@@ -163,6 +171,8 @@ $theme-map-blue: (
     $--theme-card-bg-color: #fff,
     $--theme-card-border: 1px solid #F1F1F4,
     $--theme-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
+    $--theme-card-body-bg-color: #f0fff1,
+    $--theme-card-body-border: 1px solid #e5e8f5,
 
     $--theme-text-gray-100: #F9F9F9,
     $--theme-text-gray-200: #F1F1F2,

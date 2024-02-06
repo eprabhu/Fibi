@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { CommonService } from '../../common/services/common.service';
-import { CoiDisclosure } from '../coi-interface';
+import { CoiDisclosure, getApplicableQuestionnaireData } from '../coi-interface';
 import { CoiService } from '../services/coi.service';
 import { DataStoreService } from '../services/data-store.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
@@ -85,9 +85,9 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     getSaveEvent(_event: any) {
         this._dataStore.dataChanged = false;
         this.coiService.unSavedModules = '';
-        if (_event.QUESTIONNAIRE_COMPLETED_FLAG === 'Y') {
-            this.evaluateDisclosureQuestionnaire();
-        }
+        // if (_event.QUESTIONNAIRE_COMPLETED_FLAG === 'Y') {
+        //     this.evaluateDisclosureQuestionnaire();
+        // }
     }
 
     private evaluateDisclosureQuestionnaire() {
@@ -100,7 +100,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
                 this.coiDisclosure.isDisclosureQuestionnaire = data;
                 this._sfiService.isSFIRequired = data;
                 // document.getElementById('questionnaireEvaluationMessageModalTrigger').click();
-                this._dataStore.updateStore(['coiDisclosure'], this);
+                // this._dataStore.updateStore(['coiDisclosure'], this);
                 const NEXT_STEP = data ? '/coi/create-disclosure/sfi' : '/coi/create-disclosure/certification';
                 this._router.navigate([NEXT_STEP], { queryParamsHandling: 'preserve' });
                 this.coiService.stepTabName = data ? 'sfi' : 'certify';
