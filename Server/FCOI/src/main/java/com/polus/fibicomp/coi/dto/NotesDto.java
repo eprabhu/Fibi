@@ -16,6 +16,8 @@ public class NotesDto {
 	private Integer noteId;
 	private String personId;
 	private String content;
+	private String title;
+	private Boolean isPrivate;
 	private String updateUser;
 	private Timestamp updateTimestamp;
 }
