@@ -38,3 +38,23 @@ export const EDITOR_CONFIGURATION = {
 
 export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
+
+export const COI_REVIEW_STATUS_TYPE = {
+    SUBMITTED: '2'
+};
+
+export const COI_CONFLICT_STATUS_TYPE = {
+    NO_CONFLICT_WITHOUT_SFI: '4'
+};
+
+export const TRAVEL_REVIEW_STATUS = {
+    SUBMITTED: '2',
+    REVIEW_IN_PROGRESS: '3',
+    APPROVED_ACKNOWLEDGED: '7'
+};
+
+export const OPA_REVIEW_STATUS = {
+    PENDING: '1',
+    RETURNED: '5',
+    WITHDRAWN: '6'
+};

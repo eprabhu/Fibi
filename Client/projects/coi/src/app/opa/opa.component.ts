@@ -54,7 +54,7 @@ export class OpaComponent implements OnInit {
                 private _router: Router,
                 public location: Location,
                 public commonService: CommonService,
-                private dataStore: DataStoreService) {
+                public dataStore: DataStoreService) {
     }
 
     ngOnInit(): void {
