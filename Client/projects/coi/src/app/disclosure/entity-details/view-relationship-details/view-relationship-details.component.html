@@ -98,7 +98,7 @@
                 <!-- SFI Actions buttons -->
                 <div *ngIf="!isTriggeredFromSlider" [ngClass]="isEditMode?'':'side-action-bar'"
                     [class.custom-margin]="relationshipDetails?.isFormCompleted"
-                    [ngClass]="isEditMode ? 'col-lg-3 border-left border-start' : ''">
+                    class="col-lg-3 border-left border-start">
                     <div class="h-100">
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 mb-2">
                             <ng-container *ngIf="canShowMoreActions() ;else noMangeRights"

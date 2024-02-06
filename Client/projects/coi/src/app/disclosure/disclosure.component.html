@@ -6,17 +6,23 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header">
+                          <!-- Coi card badge -->
+                          <span class="d-flex" tabindex="0"
+                          [attr.aria-label]="(coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId? 'OPA' :  coiData?.coiDisclosure?.coiDisclosureFcoiType?.description) + ' disclosure'">
+                          <span class="entity-status shadow-sm d-flex align-items-center mt-2 {{getColorBadges()}}">
+                              <span>{{ coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId ? 'OPA' : coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
+                          </span>
+                        </span>
                         <h3 class="card-title align-items-start flex-column fs-16 mb-0">
                                 <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                                    <strong>FCOI Disclosure By
+                                    <strong>
                                         <span class="clickable-content"><u class="cursor-pointer" (click)="openDetailModal(coiData)"
                                                 title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
                                     </strong>
                                 </ng-container>
                                 <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
                                     <strong title="{{ coiData?.projectDetail?.title }}">
-                                        {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
-                                        Disclosure - [
+                                        {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }} [
                                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
                                              {{ coiData?.projectDetail?.moduleItemId }} :
                                         </ng-container>
@@ -55,9 +61,9 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="align-items-center d-flex f-14 label-color">
+                            <div class="align-items-center d-flex f-14 label-color me-4">
                                 <strong class="me-2" [class.clickable-content]="4">
-                                    Trainings({{4}})</strong> |
+                                    Trainings({{1}})</strong> |
                                 <strong class="ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)" [class.clickable-content]="coiData.personEntitiesCount">
                                     Entities({{coiData.personEntitiesCount}})</strong> |
                                 <strong class="ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" [class.clickable-content]="coiData.personNotesCount">
@@ -66,7 +72,7 @@
                                 Attachments({{coiData.personAttachmentsCount}})</strong>
                             </div>
                         </div>
-                        <ng-container *ngIf="!isCreateMode">
+                        <!-- collapse / expand arrow -->
                         <div class="align-items-center d-flex position-absolute top-0 end-0 mt-3 me-3"
                             title="Click here to collapse / expand">
                             <button (click)="isCardExpanded=!isCardExpanded"
@@ -74,7 +80,6 @@
                                 <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
                             </button>
                         </div>
-                        </ng-container>
                     </div>
                     <div *ngIf="isCardExpanded" class="card-body">
                         <div class="row">
@@ -215,40 +220,38 @@
     <div class="col-lg-3 ps-0">
         <div *ngIf="isCreateMode" class="card p-3 h-100">
             <div class="d-grid gap-2 d-md-flex flex-md-wrap">
-                <div class="d-flex justify-content-between p-3">
-                    <span title="Go to COI home page" (click)="goBackInEditMode()" class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center col">
+                    <button class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center col" title="Go to COI home page" (click)="goBackInEditMode()">
                         <mat-icon>home</mat-icon>
-                    </span>
+                    </button>
                     <button (click)="goBackStep(); clickedOption = 'previous'" [disabled]="currentStepNumber==1"
-                    class="mx-2 fs-14 align-items-center btn btn-outline-grey d-inline-flex pb-0 pt-0 col justify-content-center col">
+                    class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
                     <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
                         Previous
                     </button>
                     <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
-                        class="fs-14 align-items-center btn btn-outline-grey d-inline-flex pb-0 pt-0 col justify-content-center col">
+                        class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
                         <mat-icon class="me-2 keyboard-backspace">keyboard_backspace</mat-icon>
                         Next
                     </button>
-                </div>
-                <div *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')" class="d-flex justify-content-around px-3 pb-3" title="Click to add new SFI">
-                    <span (click)="sfiService.isShowSfiNavBar = true"
-                        class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col">
+                <div *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')" class="fs-14 d-flex justify-content-center w-100 align-items-center col-12" title="Click to add new SFI">
+                    <button (click)="sfiService.isShowSfiNavBar = true"
+                        class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14">
                         <mat-icon class="me-2">add</mat-icon>
                         Add Significant Financial Interest
-                    </span>
+                    </button>
                 </div>
                 <div title="Click to save your progress" *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                    class="d-flex justify-content-around px-3 pb-3">
-                    <span (click)="triggerSave()"
-                        class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center col">
+                    class="fs-14 d-flex justify-content-center w-100 align-items-center col-12">
+                    <button (click)="triggerSave()"
+                        class="btn btn-primary d-inline-flex align-items-center justify-content-center col fs-14">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
-                    </span>
+                    </button>
                 </div>
                 <div *ngIf="router.url.includes('create-disclosure/certification')"
-                    class="d-flex justify-content-around px-3">
+                    class="fs-14 d-flex justify-content-center w-100 align-items-center col-12">
                     <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
-                        class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center col" title="Click to submit your disclosure">
+                        class="btn btn-primary d-inline-flex align-items-center justify-content-center col" title="Click to submit your disclosure">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
                     </button>
@@ -256,11 +259,10 @@
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="card p-3 h-100">
-            <div class="d-grid gap-2 d-md-flex flex-md-wrap" [class.side-height]="isCardExpanded">
-                <div class="justify-content-between">
+            <div class="d-grid gap-2 d-md-flex flex-md-wrap">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                    class="d-inline-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10 col">
+                    class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
                     <mat-icon>home</mat-icon>
                     <span class="fs-14 mt-1 ml-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
                     </button>
@@ -268,7 +270,7 @@
                     <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                     (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
                     [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col'"
-                    class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-inline-flex pb-0 pt-0 justify-content-center col">
+                    class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center col">
                     <mat-icon class="me-2" title="Go to previous page">undo</mat-icon>
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded">Previous</span>
                     </button>
@@ -276,18 +278,18 @@
                     <button
                         title="Click here to add new review comment"
                         (click)="openReviewComment()"
-                        class="d-inline-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 mb-10 col">
+                        class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
                         <mat-icon class="me-2">rate_review</mat-icon>
-                        <span *ngIf="isCardExpanded">Comments</span>
+                        <span class="fs-14" *ngIf="isCardExpanded">Comments</span>
                     </button>
                     <!-- more option button for expanded & collapsed card -->
                     <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
                     <button
                     [matMenuTriggerFor]="beforeMenu"
-                        class="text-nowrap d-inline-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col ms-2 mb-10 px-3 col"
+                        class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                         role="button" title="Click for More Actions">
                         <mat-icon class="moreActionIcon">more_vert</mat-icon>
-                        <span *ngIf="isCardExpanded">More Actions</span>
+                        <span *ngIf="isCardExpanded" class="fs-14">More Actions</span>
                     </button>
 
                     <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
@@ -342,7 +344,7 @@
                         <span class="ms-1 fw-medium fs-14">Return</span>
                     </button>
 
-                    <button mat-menu-item title="Click to Return Disclosure"
+                    <button mat-menu-item title="Click to Notify"
                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">notifications</mat-icon>
                         <span class="ms-1 fw-medium fs-14">Notify</span>
@@ -375,17 +377,16 @@
                                  (coiData?.coiDisclosure?.conflictStatusCode == CoiConflictStatusType.NO_CONFLICT_WITHOUT_SFI
                                  && coiData?.coiDisclosure?.reviewStatusCode == CoiReviewStatusType.SUBMITTED))"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                            [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
+                            [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click to complete review"
                             data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                     </button>
 
-                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? 'mt-3' : 'mt-0'}}">
-                        <div><label class="fw-medium me-3">Last Updated By : </label></div>
+                    <div class="fs-14 ash-text p-0 d-flex {{isCardExpanded ? 'mt-3' : 'mt-0'}}">
+                        <div><label class="fw-medium me-1">Last Updated By : </label></div>
                         <span>{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
                     </div>
-                </div>
             </div>
         </div>
     </div>

@@ -941,7 +941,7 @@
                                             </strong>
                                             <ng-container>
                                                 <span class="pipe me-1 mt-1"></span>
-                                                <mat-icon class="fs-2 label-text">apartment</mat-icon>
+                                                <mat-icon class="fs-18 label-text mt-1">apartment</mat-icon>
                                                 <span class="text-nowrap mt-2 fs-14" tabindex="0"
                                                     [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity
                                                     :</span>
@@ -1245,7 +1245,7 @@
                 </div>
                 
             <!-- Footer section -->
-                <div class="card-footer" [ngClass]="disclosure?.opaDisclosureId ? 'ps-md-0 ps-lg-0' : ''">
+                <div class="card-footer">
                     <div class="row">
                         <ng-container *ngIf="!disclosure?.travelDisclosureId">
                             <div class="col-lg-9 p-0">
@@ -1320,49 +1320,63 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4" tabindex="0">
-                                        <div class="d-flex">
-                                            <label class="fs-14 fw-medium text-gray-900" for="id">Last Updated By <span>:
+                                    <div class="col-lg-4 d-flex align-items-end" tabindex="0">
+                                            <label class="fs-14 fw-medium text-gray-900 me-1" for="id">Last Updated By <span>:
                                                 </span></label>
                                             <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
                                                             (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
-                                                {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp |
-                                                dateFormatterWithTimeZone:
-                                                'long'}}</span>
-                                        </div>
+                                                {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                                     </div>
                                 </div>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="disclosure?.travelDisclosureId">
-                            <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
-                                <label for="purpose" class="fw-medium col-custom-travel fs-14">Purpose <span
-                                        class="d-inline d-md-none d-lg-inline">:</span></label>
-                                <span class="col break-point-1200">
-                                    <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                                        <span class="grey-text" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                            <div [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
-                                <label for="start-date" class="fw-medium fs-14">Start Date <span
-                                        class="d-inline d-md-none d-lg-inline">:</span></label>
-                                <span class="break-point-1200">
-                                    <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
-                                        <span class="grey-text break-point-1200">{{disclosure?.travelStartDate |
-                                            dateFormatterWithTimeZone}}</span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                            <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
-                                <label for="end-date" class="fw-medium fs-14">End Date <span
-                                        class="d-inline d-md-none d-lg-inline">:</span></label>
-                                <span class="break-point-1200">
-                                    <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
-                                        <span class="grey-text break-point-1200">{{disclosure?.travelEndDate |
-                                            dateFormatterWithTimeZone}}</span>
-                                    </app-no-data-label>
-                                </span>
+                            <div class="col-lg-9">
+                                    <div class="d-flex row">
+                                        <div class="col-lg-4">
+                                            <div class="link-heading align-items-center fs-14 cursor-pointer">
+                                                <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
+                                                    <label for="purpose" class="fw-medium col-custom-travel fs-14">Purpose <span
+                                                            class="d-inline d-md-none d-lg-inline me-1">:</span></label>
+                                                    <span class="col break-point-1200">
+                                                        <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
+                                                            <span class="grey-text"
+                                                                [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
+                                                        </app-no-data-label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="link-heading align-items-center fs-14 cursor-pointer">
+                                                <div
+                                                    [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
+                                                    <label for="start-date" class="fw-medium fs-14">Start Date <span
+                                                            class="d-inline d-md-none d-lg-inline me-1">:</span></label>
+                                                    <span class="break-point-1200">
+                                                        <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
+                                                            <span class="grey-text break-point-1200">{{disclosure?.travelStartDate |
+                                                                dateFormatterWithTimeZone}}</span>
+                                                        </app-no-data-label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="link-heading align-items-center fs-14 cursor-pointer">
+                                                <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
+                                                    <label for="end-date" class="fw-medium fs-14">End Date <span
+                                                            class="d-inline d-md-none d-lg-inline me-1">:</span></label>
+                                                    <span class="break-point-1200">
+                                                        <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
+                                                            <span class="grey-text break-point-1200">{{disclosure?.travelEndDate |
+                                                                dateFormatterWithTimeZone}}</span>
+                                                        </app-no-data-label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
                         </ng-container>
                         <div class="col-lg-3">
