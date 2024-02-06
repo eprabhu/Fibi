@@ -4,7 +4,7 @@ import { NextObserver, Observable, Subscriber, Subscription, forkJoin } from 'rx
 import { ApplicableQuestionnaire, getApplicableQuestionnaireData } from '../coi-interface';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
-import { CoiService } from './coi.service';
+import { CoiService, certifyIfQuestionnaireCompleted } from './coi.service';
 import { map } from 'rxjs/operators';
 import { openCommonModal } from '../../common/utilities/custom-utilities';
 
@@ -31,7 +31,7 @@ export class RouterGuardService  {
             this._coiService.givecoiID(disclosureId))
                 .subscribe((res: any) => {
                     if (res) {
-                        this.certifyIfQuestionnaireCompleted(res[0]);
+                        this.checkQuestionnaireCompleted(res[0]);
                         observer.next(true);
                     } else {
                         observer.next(true);
@@ -61,19 +61,12 @@ export class RouterGuardService  {
                 'questionnaireMode': 'ACTIVE_ANSWERED_UNANSWERED'
             };
         }
-        certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
-            if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
-                if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                } else {
-                    let questionnaire_error = {validationMessage: ''};
-                    questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
-                    this._coiService.certificationResponseErrors.push(questionnaire_error);
-                    return false;
-                }
+
+        checkQuestionnaireCompleted(res) {
+            let errorArray = certifyIfQuestionnaireCompleted(res);
+            if(errorArray.length) {
+                errorArray.forEach(ele => this._coiService.certificationResponseErrors.push(ele));
             }
-        }
-        isAllQuestionnaireCompleted(questionnaires: ApplicableQuestionnaire[]) {
-            return questionnaires.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
         }
     }
 
