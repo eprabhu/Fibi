@@ -6,7 +6,7 @@
       (keydown.arrowup)="upArrowEvent($event);" (keydown.enter)="enterKeyEvent();" [(ngModel)]="searchText"
       (ngModelChange)="getAutoCompleterResult(completerOptions.arrayList ,searchText)" class="form-control pr-25"
       autocomplete="off" (paste)="getAutoCompleterResult(completerOptions.arrayList ,searchText)"/>
-    <a class="searchButton" *ngIf="!isDisabled">
+    <a class="searchButton" *ngIf="!isDisabled" [class.search-icon-invalid]="isError">
       <i aria-hidden="true" *ngIf="searchText == ''" class="fa fa-search fa-med pt-2"></i>
       <i aria-hidden="true" *ngIf="searchText != '' && !isDisabled" class="fa fa-times pt-2" (click)="emitSelectedObject(null);"></i>
     </a>

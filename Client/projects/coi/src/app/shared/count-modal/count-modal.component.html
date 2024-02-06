@@ -51,8 +51,8 @@
                                 <td> <app-no-data-label [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label></td>
                                 <td> <app-no-data-label [valueToShow]="item?.coiEntity?.entityType?.description"></app-no-data-label></td>
                                 <td> <app-no-data-label [valueToShow]="item?.involvementStartDate"><span>{{ item?.involvementStartDate |dateFormatter }}</span></app-no-data-label></td>
-                                <td> <app-no-data-label [valueToShow]="item?.involvementEndDate"><span>{{ item?.involvementEndDate |dateFormatter }}</span></app-no-data-label><td>
-                                    <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 py-1 px-3"
+                                <td> <app-no-data-label [valueToShow]="item?.involvementEndDate"><span>{{ item?.involvementEndDate |dateFormatter }}</span></app-no-data-label>
+                                    <td><button class="align-items-center btn-primary-icon d-flex fs-16 m-0 py-1 px-3"
                                         title="View SFI" aria-label="Edit Organization"
                                         (click)="viewSliderEmit(true, item?.personEntityId)">
                                         <mat-icon>visibility</mat-icon>

@@ -20,14 +20,13 @@ import {
     NO_DATA_FOUND_MESSAGE,
     REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
-    CREATE_DISCLOSURE_ROUTE_URL
+    CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
-import { CoiConflictStatusType, CoiReviewStatusType } from '../shared/coi-enum';
 
 @Component({
     selector: 'app-disclosure',
@@ -113,8 +112,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     ];
     isOpenRiskSlider = false;
     reviewList: any = [];
-    CoiConflictStatusType = CoiConflictStatusType;
-    CoiReviewStatusType = CoiReviewStatusType;
+    COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
+    COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -757,4 +756,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.showSlider = false;
         this.selectedType = '';
     }
+
+    getColorBadges() {
+        switch (this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
+    }
+    
 }

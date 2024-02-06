@@ -16,7 +16,7 @@
                     <div class="card shadow p-2" *ngFor="let item of uploadedFiles; let i=index">
                         <div class="row mb-2 mt-3">
                             <div class="col-lg-3 col-12">
-                                <label class="d-block"><span class="mandatory">*</span>Attachment Type</label>
+                                <label class="d-block"><span class="text-danger me-1">*</span>Attachment Type</label>
                                 <select id="external-review-doc-popup-type" class="form-control dateBox doc-type"
                                     [ngClass]=" attachmentErrorMsg && !selectedAttachmentTypeCodes[i] ? 'is-invalid d-block' : ''"
                                     [(ngModel)]="selectedAttachmentTypeCodes[i]"
@@ -37,13 +37,13 @@
                                 </textarea>
                             </div>
                             <div class="col-lg-4 col-12">
-                                <label><span class="mandatory">*</span>File</label>
+                                <label><span class="text-danger me-1">*</span>File</label>
                                 <span class="d-block fs-14">{{item?.name}}</span>
                             </div>
                             <div class="col-lg-1 col text-right">
-                                <ul class="actionButtonGroup mt-5">
+                                <ul class="btn btn-primary-icon d-inline-flex fs-18 align-items-center justify-content-between mt-3 list-item">
                                     <li>
-                                        <a id="external-review-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor"
+                                        <a id="dlt-btn" class="fa fa-trash-o hand-cursor"
                                             title="Remove File" (click)="deleteFromUploadedFileList(i)"></a>
                                     </li>
                                 </ul>

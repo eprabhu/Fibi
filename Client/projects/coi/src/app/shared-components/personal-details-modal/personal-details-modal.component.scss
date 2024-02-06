@@ -36,14 +36,6 @@
 .tabSwitch {
     display: inline-block;
 }
-
-
-.border-nav {
-    width: max-content;
-    position: relative;
-    top: 0px;
-    right: 15px;
-  }
   
   .navigation-title {
     .active {
@@ -66,9 +58,21 @@
   
   .nav-options:hover {
     background-color: #e6f3ff !important;
-    box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
+    // box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
   }
   
+  .card-nav{
+    .nav-options{
+      padding: 0.8rem 1rem;
+      &.relation-active{
+        background-color: #fff;
+        span{
+          color: #000;
+        }
+      }
+    }
+  }
+
   .user-dashboard-nav {
     min-height: 40px;
   }
@@ -86,3 +90,7 @@
       box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
     }
   }
+
+  .border-bottom {
+    border-bottom: 2px solid #d7dbdf;
+}
