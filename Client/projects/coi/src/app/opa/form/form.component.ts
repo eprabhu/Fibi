@@ -16,7 +16,7 @@ export class FormComponent implements OnInit, AfterViewInit {
 
     formBuilderEvents = new Subject<FormBuilderEvent>();
     fbConfiguration = new FBConfiguration();
-    isFormEditMode = this.dataStore.getEditModeForOPA();
+    isFormEditMode = this.dataStore.isFormEditable();
     opa: OPA = new OPA();
     $subscriptions: Subscription[] = [];
 
@@ -52,7 +52,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     }
 
     updateFormEditMode() {
-        const latestIsFormEditMode = this.dataStore.getEditModeForOPA();
+        const latestIsFormEditMode = this.dataStore.isFormEditable();
         this._opa.formBuilderEvents.next({eventType: 'IS_EDIT_MODE', data: latestIsFormEditMode});
         this.isFormEditMode = latestIsFormEditMode;
     }
