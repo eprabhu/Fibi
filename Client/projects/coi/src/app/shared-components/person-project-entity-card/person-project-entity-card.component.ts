@@ -10,6 +10,7 @@ import { PersonProjectOrEntity } from '../shared-interface';
 export class PersonProjectEntityCardComponent {
 
     @Input() personProjectOrEntity: PersonProjectOrEntity = new PersonProjectOrEntity();
+    @Input() disclosureHeaderDetails;
 
     isReadMore = false;
 

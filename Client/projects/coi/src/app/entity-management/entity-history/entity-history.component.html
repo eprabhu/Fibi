@@ -1,21 +1,20 @@
 <div [@fadeInOutHeight]>
-    <div class="card mt-3 mx-4" id="entity-history">
+    <div class="card border-0" id="entity-history">
         <div class="card-content">
             <div class="card-body">
-                <div class="form-row">
                     <div class="table-responsive">
                         <table class="table mb-0" tabindex="0">
                             <thead class="sr-none"></thead>
                             <tbody>
                                 <tr *ngFor="let entity of entityHistoryLogs | keyvalue: sortNull">
-                                    <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3 mb-0" tabindex="0">{{entity.key}}</h4>
+                                    <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3 mb-0 fs-16" tabindex="0">{{entity.key}}</h4>
                                     <ul class="pl-4 pr-3 mb-0">
                                         <li *ngFor="let historyEntry of entity.value;" class="p-3" tabindex="0">
-                                            <div class="form-row">
+                                            <div class="row">
                                                 <div class="col">
                                                     <p class="fs-14 mb-0">
                                                         <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                        <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
+                                                        <label class="fw-700 mx-3 mt-0">{{historyEntry?.updateTimestamp|
                                                             dateFormatterWithTimeZone:'time'}}</label>
                                                         <span [innerHTML]="historyEntry?.description"></span>
                                                         <span class="pl-2"
@@ -53,7 +52,6 @@
                     <div *ngIf="isEmptyObject(entityHistoryLogs)">
                         <app-no-information [isBorderNeeded]="false"> </app-no-information>
                     </div>
-                </div>
             </div>
         </div>
     </div>

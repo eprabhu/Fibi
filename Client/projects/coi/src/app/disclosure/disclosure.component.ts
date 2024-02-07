@@ -756,4 +756,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.showSlider = false;
         this.selectedType = '';
     }
+
+    getColorBadges() {
+        switch (this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
+    }
+    
 }
