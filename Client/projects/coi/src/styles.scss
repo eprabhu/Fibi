@@ -104,3 +104,16 @@
 .info-mt-1 {
   margin-top: 1px;
 }
+
+.action-icons {
+  border-radius: 50%;
+  height: 38px !important;
+  width: 39px !important;
+  font-size: 25px !important;
+  color: rgb(87 87 87 / 77%);
+  cursor: pointer;
+  &:hover {
+    background-color: #e2f1ff;
+    color: #007dec !important;
+  }
+}
