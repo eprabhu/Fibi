@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-5 mt-3">
+                <div class="col-5">
                     <span class="mt-4 py-3 ml-4">
                         <input type="checkbox" class="form-check-input" name="assignToMe" id="assignCheck"
                             (change)="assignToMe($event);" [checked]="isAssignToMe">
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="row mt-3">
-                <label class="d-block ml-4 mt-3"><span class="mandatory">*</span>Administrator</label>
+                <label class="d-block ml-4"><span class="text-danger me-1">*</span>Administrator</label>
                 <div class="col-md-12 col-sm-4 col-12">
                     <app-autocompleter [completerOptions]="adminSearchOptions"
                     [isError]="assignAdminMap.has('adminName')"
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="row mt-3">
-                <label class="d-block ml-4 mt-3">Admin Group</label>
+                <label class="d-block ml-4">Admin Group</label>
                 <div class="col-md-12 col-sm-4 col-12">
                     <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
                         [clearField]="clearAdminGroupField" [placeHolder]="'Search for admin group'"
