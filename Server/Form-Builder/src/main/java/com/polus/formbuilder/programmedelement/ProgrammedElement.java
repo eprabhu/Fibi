@@ -9,7 +9,7 @@ public interface ProgrammedElement {
 	
 	abstract ProgrammedElementModel getResponse(
 												ProgrammedElementModuleDetails moduleDetails,
-												ProgrammedElementModel request);
+												ProgrammedElementModel request) throws InterruptedException;
 	
 	abstract ProgrammedElementModel save(
 											ProgrammedElementModuleDetails moduleDetails,
