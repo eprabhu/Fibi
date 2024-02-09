@@ -40,7 +40,12 @@ public class OPAOutsideFinancialInterest implements ProgrammedElement {
 			System.out.println(e.getMessage());
 
 		}
-		Thread.sleep(2000);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<OPAOutsideFinancialInterestResponseDTO> disclosureActivity = dao.getPEComponentDetails(opaRequest);
 
 		return OPAOutsideFinancialInterestResponseModel.builder().data(disclosureActivity).build();
