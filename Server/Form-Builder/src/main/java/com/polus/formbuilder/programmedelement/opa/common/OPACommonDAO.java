@@ -42,6 +42,7 @@ public class OPACommonDAO {
 		query.setParameter(2, updateUser);
 		query.execute();
 		Long result = (Long) query.getSingleResult();
+		Thread.sleep(2000);
 	}
 
 	@SuppressWarnings("unchecked")
