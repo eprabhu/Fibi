@@ -43,9 +43,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
     reviseObject: any = { revisionComment: null, disclosureId: null };
+    isShowNavBarOverlay = false;
 
-    constructor(public router: Router, public commonService: CommonService, public headerService: HeaderService) {
+    constructor(public router: Router,
+                public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
+        // document.addEventListener('click', this.offClickSideBarHandler.bind(this));
+    }
+
+    // offClickSideBarHandler(event) {
+        
+    // }
+
+    onClickMenuBar() {
+        if (document.getElementById('responsive-nav').classList.contains('show-menu')) {
+            document.getElementById('responsive-nav').classList.remove('show-menu');
+            this.isShowNavBarOverlay = false;
+        } else {
+            this.isShowNavBarOverlay = true;
+            document.getElementById('responsive-nav').classList.add('show-menu');
+        }
     }
 
     ngOnInit() {
@@ -225,4 +242,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.querySelector("html").classList.add(themename);
         $('#dissmiss-btn').click();
     }
+
+    
 }
