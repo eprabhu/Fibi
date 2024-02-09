@@ -26,7 +26,7 @@ public class OPAOutsideFinancialInterest implements ProgrammedElement {
 
 	@Override
 	public ProgrammedElementModel getResponse(ProgrammedElementModuleDetails moduleDetails,
-			ProgrammedElementModel request) {
+			ProgrammedElementModel request) throws InterruptedException {
 		OPAOutsideFinancialInterestRequestModel opaRequest = (OPAOutsideFinancialInterestRequestModel) request;
 		if (opaRequest == null || opaRequest.getOpaDisclosureId() == null) {
 			opaRequest = prepareOPARequest(moduleDetails);
@@ -40,7 +40,7 @@ public class OPAOutsideFinancialInterest implements ProgrammedElement {
 			System.out.println(e.getMessage());
 
 		}
-
+		Thread.sleep(2000);
 		List<OPAOutsideFinancialInterestResponseDTO> disclosureActivity = dao.getPEComponentDetails(opaRequest);
 
 		return OPAOutsideFinancialInterestResponseModel.builder().data(disclosureActivity).build();
