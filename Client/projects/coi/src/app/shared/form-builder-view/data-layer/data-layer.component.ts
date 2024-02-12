@@ -22,7 +22,7 @@ export class DataLayerComponent {
         const RO: FormBuilderSaveRO = this.prepareROForSave(data);
         this._formBuilderService.saveFormComponent(RO).subscribe((res: SectionComponent) => {
             if (this.component.componentType === 'QN') {
-                this.component.questionnaire.questionnaire = res.questionnaire.questionnaire;
+                this.component.questionnaire = res.questionnaire;
             } else if (this.component.componentType === 'CE') {
                 this.component.customElement.customDataElements = res.customElement.customDataElements;
             }
