@@ -33,7 +33,7 @@ public class OPACommonDAO {
 
 	
 	@Transactional
-	public void personSyncOPAPersonEntityAction(Integer opaDisclosureId, String updateUser) throws InterruptedException {
+	public void personSyncOPAPersonEntityAction(Integer opaDisclosureId, String updateUser) {
 		StoredProcedureQuery query = entityManager.createStoredProcedureQuery("PROC_SYNC_OPA_PER_ENTITY")
 				.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
 				.registerStoredProcedureParameter(2, String.class, ParameterMode.IN);
@@ -42,7 +42,7 @@ public class OPACommonDAO {
 		query.setParameter(2, updateUser);
 		query.execute();
 		Long result = (Long) query.getSingleResult();
-		Thread.sleep(2000);
+		entityManager.flush();
 	}
 
 	@SuppressWarnings("unchecked")
