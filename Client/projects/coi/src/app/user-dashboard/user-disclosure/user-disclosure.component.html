@@ -1320,7 +1320,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 d-flex align-items-end" tabindex="0">
+                                    <div class="col-lg-4 align-items-end" tabindex="0">
                                             <label class="fs-14 fw-medium text-gray-900 me-1" for="id">Last Updated By <span>:
                                                 </span></label>
                                             <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
@@ -1415,19 +1415,16 @@
     </div>
 </ng-container>
 
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType" 
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
     (closeModal)="closeModalEvent($event)" (viewSlider)="viewSlider($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures">
 </app-count-modal>
 
 <ng-container *ngIf="showSlider">
-    <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index] = "1057"
-    [overlay_z_index] = "1056" [isStickyNeeded] = "false" [isHeaderNeeded] = "false"
-    [sliderName]="'disclosure-entity-view-2-slider'">
-        <!-- modal content -->
-        <ng-container content>
-            <app-entity-details [entityId]="entityId"></app-entity-details>
-        </ng-container>
-    </app-coi-slider>
+	<app-coi-slider (closeSlider)="validateSliderClose()" [elementId]="sliderElementId" [overlay_z_index]="1056" [slider_z_index]="1057">
+		<ng-container content>
+			<app-entity-details [entityId]="entityId"></app-entity-details>
+		</ng-container>
+	</app-coi-slider>
 </ng-container>

@@ -10,6 +10,7 @@ import { debounce, switchMap } from 'rxjs/operators';
 import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { openCoiSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-sfi',
@@ -48,6 +49,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     isSearchTextHover = false;
     isLoading = false;
     personEntityNumber: any;
+    sliderElementId = '';
 
     constructor(
         private _sfiService: SfiService,
@@ -65,7 +67,6 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -116,11 +117,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
-        setTimeout(() => {
-            const slider = document.querySelector('.slider-base');
-            slider.classList.add('slider-opened');
-        });
+        this.sliderElementId = `disclosure-sfi-slider-${this.entityId}`;
+        openCoiSlider(this.sliderElementId);
     }
 
     setFilter(filterType) {
@@ -146,17 +144,11 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     hideSfiNavBar() {
-        this.addBodyScroll();
-        let slider = document.querySelector('.slider-base');
-        slider.classList.remove('slider-opened');        
         setTimeout(() => {
             this.showSlider = false;
-        },500);
-    }
-
-    addBodyScroll() {
-        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+            this.entityId = null;
+            this.sliderElementId = '';
+        }, 500);
     }
 
     deleteSFIConfirmation(event, i) {
@@ -205,10 +197,5 @@ export class SfiComponent implements OnInit, OnDestroy {
       clearSearchText() {
         this.searchText = '';
         this.$fetchSFIList.next(); 
-      }
-
-      onWindowScroll(event) {
-          const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
-          this._commonService.$sliderScrollAction.next({event, pageYOffset});
       }
 }

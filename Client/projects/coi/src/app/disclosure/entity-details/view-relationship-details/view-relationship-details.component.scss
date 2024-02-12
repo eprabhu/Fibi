@@ -458,11 +458,11 @@ small {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
-  .card:nth-child(1)
-  {
-    border: 0;
-    box-shadow: none !important;
-  }
+  // .card:nth-child(1)
+  // {
+  //   border: 0;
+  //   box-shadow: none !important;
+  // }
   .questionnaire-card{
     border: var(--theme-card-border) !important;
     box-shadow: var(--theme-card-box-shadow) !important;
@@ -481,5 +481,15 @@ small {
   .btn-delete-position {
     top: 20px !important;
     right: 14px !important;
+  }
+}
+.nav-underline{
+  .nav-link{
+    color: var(--bs-secondary-rgb);
+    border-bottom-width: 3px;
+    cursor: pointer;
+  }
+  .nav-link.active, .nav-underline .show>.nav-link {
+    color: var(--theme-primary-color);
   }
 }
