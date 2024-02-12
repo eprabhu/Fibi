@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCoiSlider, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-header-sliders',
@@ -18,12 +18,11 @@ export class HeaderSlidersComponent implements OnInit {
 
     ngOnInit() {
         setTimeout(() => {
-            openSlider('disclosure-entity-slider-2');
+            openCoiSlider('disclosure-entity-slider-2');
         });
     }
 
     validateSliderClose() {
-        closeSlider('disclosure-entity-slider-2');
         setTimeout(() => {
             this.closePage.emit();
         }, 500);
