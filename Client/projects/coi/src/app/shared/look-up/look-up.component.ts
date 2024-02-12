@@ -104,6 +104,8 @@ export class LookUpComponent implements OnChanges, OnDestroy {
             this._changeRef.markForCheck();
           }));
       }
+    } else {
+      this.setSelections();
     }
   }
 
