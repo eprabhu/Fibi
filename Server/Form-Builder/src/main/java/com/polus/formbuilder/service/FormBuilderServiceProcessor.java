@@ -452,7 +452,7 @@ public class FormBuilderServiceProcessor {
 		// component Id is saved as moduleSubItemKey in the Form Builder module
 		// for Questionnaire Engine and Custom Element Engine
 		
-		componentList.parallelStream()
+		componentList.stream()
 					.forEach(component -> {
 						
 							if (component.getComponentType().equals(FormBuilderConstants.QUESTIONNAIR_COMPONENT)) {
