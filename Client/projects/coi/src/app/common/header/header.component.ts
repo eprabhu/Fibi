@@ -11,7 +11,6 @@ class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -213,9 +212,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openModalTriggeredFromChild() {
         this.$subscriptions.push(this.headerService.$openModal.subscribe((event: string) => {
-            if(event == 'FCOI') {
+            if (event == 'FCOI') {
                 this.openReviseModal();
             }
-        }))
+        }));
+    }
+
+    createOPA() {
+        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 }
