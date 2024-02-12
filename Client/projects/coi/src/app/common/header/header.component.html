@@ -59,6 +59,10 @@
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                             <span class="ms-2 fw-medium fs-14">Travel Disclosure</span>
                         </button>
+                        <button (click)="createOPA()" mat-menu-item title="Click to Create OPA Disclosure" area-describedby="Click to Create OPA Disclosure"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">OPA Disclosure</span>
+                        </button>
                     </mat-menu>
                 </ng-container>
                 <mat-icon [attr.title]="'Click to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
