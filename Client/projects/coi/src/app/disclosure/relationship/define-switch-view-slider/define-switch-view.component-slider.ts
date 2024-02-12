@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {slideHorizontal} from '../../../../../../fibi/src/app/common/utilities/animations';
+import { openCoiSlider } from '../../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-define-switch-view',
@@ -69,17 +70,11 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
     }
 
     hideSlider() {
-        const slider = document.querySelector('.slider-base');
-        slider.classList.remove('slider-opened');
-        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
         setTimeout(() => this.closePage.next(this.isDataChanged), 500);
     }
 
     showTaskNavBar() {
-        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
-        const slider = document.querySelector('.slider-base');
-        slider.classList.add('slider-opened');
+        openCoiSlider('relationship-details-box');
     }
 
 }

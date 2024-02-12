@@ -858,9 +858,8 @@
         [adminData]="adminData" [fcoiTypeCode]="fcoiTypeCode" (viewSlider)="viewSlider($event)"></app-count-modal>
 
     <ng-container *ngIf="showSlider">
-        <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index] = "1057"
-        [overlay_z_index] = "1056" [isStickyNeeded] = "false" [isHeaderNeeded] = "false"
-        [sliderName]="'admin-dashboard-entity-slider'">
+        <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index]="1057"
+        [overlay_z_index]="1056" [elementId]="sliderElementId" [isHeaderNeeded]="true">
             <!-- modal content -->
             <ng-container content>
                 <app-entity-details [entityId]="entityId"></app-entity-details>
