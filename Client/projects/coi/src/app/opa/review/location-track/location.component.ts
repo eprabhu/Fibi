@@ -312,6 +312,8 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.reviewStartDate = new Date();
         this.reviewStartDate.setHours(0, 0, 0, 0);
         this.reviewEndDate = '';
+        this.locationType = [];
+        this.reviewStatusType = [];
     }
 
     updateCoiReviewStage(index, reviewer, modalType: ModalType) {

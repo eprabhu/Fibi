@@ -756,9 +756,9 @@
                                     </div>
                                     <div class="col-lg col-md-4 col-12 last-updated" tabindex="0">
                                         <label class="label-text" for="id">Last Updated By <span>:</span> </label>
-                                        <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="coi?.updateUserFullName + ' on ' + 
+                                        <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="coi?.updateUser + ' on ' + 
                                                         (coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
-                                            {{coi?.updateUserFullName}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone:
+                                            {{coi?.updateUser}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone:
                                             'long'}}</span>
                                     </div>
                                 </ng-container>
