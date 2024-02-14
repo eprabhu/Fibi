@@ -240,7 +240,6 @@
                     <div class="row mb-2">
                         <div class="col-12 mb-2" *ngIf="editIndex == -1">
                             <label for="entity" class="label-text fs-16">Company/Entity</label>
-                            <span *ngIf="isDuplicate" class="text-danger ml-2">*The Entity is already linked. </span>
                             <app-endpoint-search [httpOptions]="entitySearchOptions" [searchOnFocus]="true" class="p-0"
                                 (onSelect)="entitySelected($event)"></app-endpoint-search>
                             <div class="help-text">
@@ -248,6 +247,7 @@
                                 to
                                 report include foreign, domestic, public or private entities, but not federal agencies.
                             </div>
+                            <span *ngIf="isDuplicate" class="text-danger ml-2">*The Entity is already linked. </span>
                         </div>
                         <div class="col-12 mb-2">
                             <div class="bg-light info-card-border rounded-3 mt-2 p-3"

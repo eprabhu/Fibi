@@ -122,7 +122,7 @@ getEntityProjectRelations() {
     setEntityDetails(entity, index) {
         this.entityDetails = {
             disclosureDetailsId: entity.disclosureDetailsId,
-            entityName: entity.personEntity?.coiEntity?.entityName,
+            entityName: entity?.coiEntity?.entityName,
             index: index,
             personId: this.coiDetails.personId,
             moduleItemKey: this.selectedProject.moduleItemKey,

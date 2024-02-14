@@ -13,7 +13,7 @@
                 <h5 class="modal-title" *ngIf="isShowExistingDisclosure">Navigate to Disclosure :
                     #{{disclosureNumber}}
                 </h5>
-                <button (click)="clearModal();" aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                <button (click)="clearModal();" aria-label="Close" class="btn-close" data-bs-dismiss="modal" title="Cancel"
                     id="req-doc-popup-dismiss-btn" type="button">
                 </button>
             </div>
@@ -371,7 +371,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button (click)="clearModal();" class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
+                <button (click)="clearModal();" class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" title="Cancel"
                     id="req-attachment-close-btn" type="button">Cancel
                 </button>
                 <button (click)="createOrReviseDisclosure();"
@@ -383,7 +383,7 @@
                 <button type="button" class="btn btn-primary fs-15"
                     *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning"
                     (click)="createProjectDisclosureAPI();"
-                    title="Click here to continue with creating the project disclosure"
+                    title="Click to Create Project Disclosure"
                     area-describedby="Click here to continue with creating the project disclosure">
                     Create Project Disclosure
                 </button>
