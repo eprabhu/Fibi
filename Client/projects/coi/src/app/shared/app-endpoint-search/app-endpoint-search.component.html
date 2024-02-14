@@ -1,33 +1,30 @@
+
 <div class="search-outer">
-  <!-- <label for="" class="d-none">hidden label to mislead chrome autocomplete</label> -->
+  <label for="" class="d-none">hidden label to mislead chrome autocomplete</label>
   <input #searchField type="text" placeholder="{{placeHolder}}" [disabled]="isDisabled"
-    (keydown.arrowdown)="downArrowEvent($event);" (keydown.esc)="hideSearchResults();"
-    (keydown.arrowup)="upArrowEvent($event);" (keydown.enter)="enterKeyEvent();"
-    (focus)="getEndpointSearchResultOnfocus()" (focusout)="getEndPointSearchValueOnFocusOut($event)"
-    (keypress)="getEndpointSearchResult()" (keydown.backspace)="backSpaceEvent()" [(ngModel)]="searchText"
-    class="app-endpoint-search form-control pr-25 pt-2 pe-5" autocomplete="off" (paste)="getEndpointSearchResult()" />
-  <a class="searchButton" *ngIf="!isDisabled" [class.search-icon-invalid]="isError" title="Click to search by entity">
-    <i aria-hidden="true" *ngIf="searchText == ''" class="fa fa-search fa-med pt-2"></i>
-    <i aria-hidden="true" *ngIf="searchText != '' && !isDisabled" class="fa fa-times pt-2"
+    (focus)="getEndpointSearchResultOnfocus()" [(ngModel)]="searchText"
+    (keypress)="getEndpointSearchResult()" (keydown.backspace)="backSpaceEvent()"
+    class="app-endpoint-search form-control pr-25 pt-2" autocomplete="off"
+    (paste)="getEndpointSearchResult()" [matAutocomplete]="endpoint"/>
+  <a class="searchButton" *ngIf="!isDisabled">
+    <i aria-hidden="true" *ngIf="searchText == ''" class="fa fa-search fa-med pt-2" title="Click to search"></i>
+    <i aria-hidden="true" *ngIf="searchText != '' && !isDisabled" class="fa fa-times pt-2" title="Click to clear search"
       (click)="emitSelectedObject(null);"></i>
   </a>
-  <div class="sb-seachresults" *ngIf="isActive">
-    <ul id="searchList" class="sb-results-dropdown-menu"
-      [ngStyle]="{
-      'color': httpOptions.theme,'width': httpOptions.width,'border-left-color': httpOptions.theme,'border-right-color': httpOptions.theme}">
-      <li *ngIf="addSearchText && newSearchText" id="add-field" class="search-result-item text-left"
-        (click)="emitSearchText(searchText)" (mousedown)="isResultSelected = true; emitSearchText(searchText)"
-        [ngStyle]="{'color': httpOptions.theme,'font-size': httpOptions.fontSize}">
-        <span class="fw-500 text-primary">Add </span>
-        "<span class="fw-700" [innerHTML]="newSearchText"></span>"
-      </li>
-      <li class="search-result-item text-left" *ngFor="let result of results" (click)="emitSelectedObject(result.value)"
-        (mousedown)="isResultSelected = true; emitSelectedObject(result.value)"
-        [ngStyle]="{'color': httpOptions.theme,'font-size': httpOptions.fontSize}">
-        <span [innerHTML]="result.label"></span>
-      </li>
-      <li style="font-size: 1px; color:white; height: 1px">  <p style="font-size: 1px; color:white; height: 1px" *ngIf="isShowresultValue"  role="status" aria-live="polite">{{content}}</p></li>
-    </ul>
-  </div>
+
+  <mat-autocomplete #endpoint="matAutocomplete" (closed)="getEndPointSearchValueOnFocusOut()"
+    (optionSelected)="controlSearchEmit($event)">
+    <mat-option *ngIf="addSearchText && newSearchText"  id ='ADD_NEW_SEARCH_TEXT'>
+      <span class="fw-500 text-primary">Add </span>
+      "<span class="fw-700" [innerHTML]="newSearchText"></span>"
+    </mat-option>
+    <mat-option *ngIf="addSearchText && enableCommaSeparator && pipeSeparatedText"  id="PIPE_SELECTED_VALUE">
+      <span class="fw-500 text-primary">Add </span>
+      "<span class="fw-700" [innerHTML]="pipeSeparatedText"></span>"
+    </mat-option>
+    <mat-option *ngFor="let result of results" [value]="result">
+      <span [innerHTML]="result.label"></span>
+    </mat-option>
+  </mat-autocomplete>
 </div>
 <div class="invalid-feedback d-block" *ngIf="isError">{{httpOptions.errorMessage}}</div>

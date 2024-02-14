@@ -64,6 +64,7 @@ import { OPACompUncompService } from './form-builder-view/PE-components/OPA-comp
 import { FormBuilderService } from './form-builder-view/form-builder.service';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
     imports: [
@@ -77,7 +78,8 @@ import {MatInputModule} from '@angular/material/input';
         CdkMenuModule,
         MatMenuModule,
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        MatAutocompleteModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,
@@ -144,7 +146,8 @@ import {MatInputModule} from '@angular/material/input';
         OPACompUncompComponent,
         OPAOutsideFinancialRelationComponent,
         OPAInstituteResourceUseComponent,
-        OPAStudentSubordinateEmployeeComponent
+        OPAStudentSubordinateEmployeeComponent,
+        MatAutocompleteModule
     ],
 
     providers: [
