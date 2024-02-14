@@ -31,15 +31,14 @@
               "projects/fibi/src/assets"
             ],
             "styles": [
-              "projects/coi/src/assets/css/bootstrap.min.css",
-              "projects/coi/src/assets/css/sass/styles.scss",
-              "projects/coi/src/styles.scss",
-              "node_modules/material-icons/iconfont/material-icons.scss",
+              "projects/fibi/src/styles.scss",
+              "projects/fibi/src/assets/css/bootstrap.min.css",
               "projects/fibi/src/assets/css/font-awesome.min.css",
+              "projects/fibi/src/assets/css/style.css",
+              "projects/fibi/src/assets/css/search.css",
               "projects/fibi/src/assets/css/fibi-questionnaire-style.css",
               "projects/fibi/src/assets/css/fibi-codetable-style.css",
-              "projects/fibi/src/assets/css/workflow-style.css",
-              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              "projects/fibi/src/assets/css/workflow-style.css"
             ],
             "scripts": [
               "projects/fibi/src/assets/js/jquery-3.2.1.slim.min.js",
@@ -164,8 +163,8 @@
               "projects/coi/src/assets"
             ],
             "styles": [
-              "projects/fibi/src/assets/css/style.css",
               "projects/coi/src/assets/css/bootstrap.min.css",
+              "projects/coi/src/assets/css/sass/styles.scss",
               "projects/coi/src/styles.scss",
               "node_modules/material-icons/iconfont/material-icons.scss",
               "projects/fibi/src/assets/css/font-awesome.min.css",
