@@ -1,3 +1,4 @@
+
 .searchBox>input[type="text"] {
 	/* border-radius: 20px; */
 	border: 1px #DEDEDE solid;
@@ -7,6 +8,7 @@
 	height: 30px;
 	padding-left: 10px;
 }
+
 .searchButton {
 	position: absolute;
 	right: 10px;
@@ -36,9 +38,11 @@ ul.sb-results-dropdown-menu > li {
     cursor: pointer;
     list-style: none;
 }
+
 ul.sb-results-dropdown-menu > li:hover, ul.sb-results-dropdown-menu > li:focus, ul.sb-results-dropdown-menu > li:focus-within {
 	 background: #e0eaff;
 }
+
 .highlight{
     background: #e0eaff;
 }
@@ -61,10 +65,12 @@ ul.sb-results-dropdown-menu > li:last-child {
     border-radius: 3px;
     box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.18);
 }
+
 .search-outer{ position: relative;}
 .z-index {
     z-index: 1200;
 }
+
 .search-icon-invalid {
     right: 28px;
 }
