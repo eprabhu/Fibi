@@ -58,12 +58,12 @@
                   </span>
                 </span>
               </span>
-              <button (click)="goBackStep()" [disabled]="currentRelation == 0"  
+              <button (click)="goBackStep()" [disabled]="currentRelation == 0"
               class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
               <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
                   Previous
               </button>
-              <button (click)="goToStep()" [disabled]="currentRelation == (relationList?.length - 1)" 
+              <button (click)="goToStep()" [disabled]="currentRelation == (relationList?.length - 1)"
                   class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-3">
                   Next
                   <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
@@ -72,8 +72,9 @@
         </div>
         </div>
       </div>
+      {{isSaving | json}}
       <app-SFI-conflict-relationship [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
-      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
+      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription" [(isSavingRelation)]="isSaving"
       [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
   </div>
 </div>

@@ -60,6 +60,7 @@ export class DefineRelationComponent implements OnInit {
   $triggerEvent = new Subject();
   isOpenSlider: boolean;
   isDataModified = false;
+  isSaving = false;
 
   constructor(private _relationShipService: RelationshipService, private _coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
@@ -202,7 +203,7 @@ export class DefineRelationComponent implements OnInit {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
       }));
     }
-    
+
   /**
    * calculating the height of project details card, info card and table header card.
    * and making them sticky while scrolling.
@@ -318,6 +319,7 @@ validateProjectSfiSliderOnClose() {
 }
 
   goBackStep() {
+    if (this.isSaving) { return; }
     this.currentRelation--;
     this.navigateToStep(this.relationList[this.currentRelation]);
   }
@@ -330,6 +332,7 @@ validateProjectSfiSliderOnClose() {
   }
 
   goToStep(stepPosition?: any) {
+    if (this.isSaving) { return; }
     this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
     this.navigateToStep(this.relationList[this.currentRelation]);
   }
