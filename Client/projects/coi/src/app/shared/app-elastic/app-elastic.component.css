@@ -67,4 +67,26 @@ ul.sb-results-dropdown-menu > li:last-child {
       right: 28px;
   }
 
-  
+
+.mat-mdc-select-trigger {
+    font-size: 14px;
+}
+
+.mat-mdc-option:hover {
+    background: rgba(44,119,244,.1) !important;
+    color: #333 !important;
+}
+
+.mat-mdc-option {
+    white-space: normal !important;
+    text-overflow: inherit !important;
+    line-height: normal !important;
+    height: auto !important;
+    padding: 11px 16px !important;
+    border-bottom: 1px dotted #ccc !important;
+    font-size: 1.28rem !important;
+}
+
+.mdc-menu-surface.mat-mdc-autocomplete-panel {
+    padding: 0 !important;
+}
