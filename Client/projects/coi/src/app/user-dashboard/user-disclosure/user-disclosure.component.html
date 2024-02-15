@@ -30,9 +30,9 @@
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Certification Date <span>:</span></label>
-                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.certifiedAt |dateFormatter">
+                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.certifiedAt |dateFormatterWithTimeZone">
                                                     <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                        <span class="grey-text">{{disclosure?.certifiedAt |dateFormatter}}</span>
+                                                        <span class="grey-text">{{disclosure?.certifiedAt |dateFormatterWithTimeZone}}</span>
                                                     </app-no-data-label>
                                                 </span>
                                             </div>
@@ -134,9 +134,9 @@
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Certification Date <span>:</span></label>
-                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                <span class="break-point-1560" [attr.aria-label]="disclosure?.certifiedAt | dateFormatterWithTimeZone">
                                                     <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                        <span class="grey-text">{{disclosure?.certifiedAt | dateFormatter}}</span>
+                                                        <span class="grey-text">{{disclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                                     </app-no-data-label>
                                                 </span>
                                             </div>
@@ -655,11 +655,11 @@
                                 </div>
                                 <div class="col-4 col-lg-4 col-md-4 col-xl-4">
                                     <!-- Coi card Certification Date -->
-                                    <div tabindex="0" class=" mb-md-3 mb-lg-3 mb-xl-0" [attr.aria-label]="'Certification Date' + (disclosure?.certifiedAt |dateFormatter)">
+                                    <div tabindex="0" class=" mb-md-3 mb-lg-3 mb-xl-0" [attr.aria-label]="'Certification Date' + (disclosure?.certifiedAt |dateFormatterWithTimeZone)">
                                         <label class="label-text me-2">Certification Date <span>:</span></label>
                                         <span  class="break-point-1200">
                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                <span class="grey-text">{{disclosure?.certifiedAt |dateFormatter}}</span>
+                                                <span class="grey-text">{{disclosure?.certifiedAt |dateFormatterWithTimeZone}}</span>
                                             </app-no-data-label>
                                         </span>
                                     </div>
@@ -1101,20 +1101,20 @@
                                 </app-no-data-label>
                             </span>
                         </div>
-                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-12 ps-md-5 ps-lg-4" [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-12 ps-md-5 ps-lg-4" [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatter)">
                             <label for="start-date" class="label-text">Start Date <span>:</span></label>
                             <span class="break-point-1200">
                                 <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
                                     <span class="grey-text break-point-1200">{{disclosure?.travelStartDate |
-                                        dateFormatterWithTimeZone}}</span>
+                                        dateFormatter}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
-                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-12 ps-md-5 ps-lg-4" [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-12 ps-md-5 ps-lg-4" [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatter)">
                             <label for="end-date" class="label-text">End Date <span>:</span></label>
                             <span class="break-point-1200">
                                 <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
-                                    <span class="grey-text break-point-1200">{{disclosure?.travelEndDate | dateFormatterWithTimeZone}}</span>
+                                    <span class="grey-text break-point-1200">{{disclosure?.travelEndDate | dateFormatter}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
