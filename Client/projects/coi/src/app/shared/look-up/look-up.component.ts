@@ -58,6 +58,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Input() customClass = '';
   @Output() selectedResult: EventEmitter<Array<LookUp>> = new EventEmitter<Array<LookUp>>();
   @ViewChild('lookupSelectAll') lookupSelectAll: MatOption;
+  @ViewChild('mySelect') mySelect;
 
   constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef, private lookupFilterPipe: LookupFilterPipe) { }
 
@@ -101,6 +102,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
           .subscribe((data: Array<LookUp>) => {
             this.lookUpList = data;
             this.setSelections();
+            this.mySelect.open();
             this._changeRef.markForCheck();
           }));
       }

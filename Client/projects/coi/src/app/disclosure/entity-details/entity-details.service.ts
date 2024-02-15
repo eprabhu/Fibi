@@ -30,6 +30,7 @@ export class EntityDetailsService {
   groupedRelations = {}; //grouped available relations
   isVersionChange = false; //to track version change
   $triggerAddRelation = new Subject(); //to open add relation.
+  $updateHistory = new Subject(); //to update history.
   
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
