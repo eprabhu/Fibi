@@ -47,7 +47,7 @@
                             <label class="d-block fs-14 fw-500 px-1" for="risk-level">Describe the reason for Risk level change :
                             </label>
                             <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all"
-                                placeholder="Description" [(ngModel)]="revisionComment" appAutoGrow appLengthValidator
+                                placeholder="Enter the reason for risk level change" [(ngModel)]="revisionComment" appAutoGrow appLengthValidator
                                 rows="1" [limit]="2000" [isShowLimiter]="true"
                                 (ngModelChange)="removeValidationMap('COMMENT'); revisionComment = revisionComment.trim()"
                                 [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>

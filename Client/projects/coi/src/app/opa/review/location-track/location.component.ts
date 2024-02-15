@@ -189,7 +189,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
-        this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.startOrCompleteReview();
         this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
     }
 
@@ -208,7 +208,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
-        this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.startOrCompleteReview();
     }
 
     deleteReview() {
@@ -220,7 +220,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 opaDisclosure: this.opaDisclosure
             });
             this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
-            this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+            this.startOrCompleteReview();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -238,7 +238,8 @@ export class LocationComponent implements OnInit, OnDestroy {
             documentOwnerPersonId: this.opaDisclosure.personId,
             componentTypeCode: '11',
             subModuleItemKey: reviewDetails.opaReviewId,
-            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description,
+            sectionName: reviewDetails.reviewLocationType.description
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.opaService.isShowCommentNavBar = true;
@@ -294,9 +295,9 @@ export class LocationComponent implements OnInit, OnDestroy {
         switch (statusCode) {
             case '1':
                 return 'warning';
-            case '3':
-                return 'info';
             case '2':
+                return 'info';
+            case '3':
                 return 'success';
             default:
                 return 'danger';
@@ -378,6 +379,26 @@ export class LocationComponent implements OnInit, OnDestroy {
         return this.reviewerList.find(ele =>
             ele.assigneePersonId === this._commonService.currentUserDetails.personId
             && ele.reviewStatusTypeCode === '1');
+    }
+
+    startOrCompleteReview() {
+        this.opaService.isStartReview = false;
+        this.opaService.isCompleteReview = false;
+        let nextAssignedReview = this.getNextAssignedReview();
+        if (nextAssignedReview) {
+            this.opaService.currentOPAReviewForAction = nextAssignedReview;
+            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+                this.opaService.isStartReview = true;
+            else if (nextAssignedReview.reviewStatusTypeCode == 2)
+                this.opaService.isCompleteReview = true;
+        }
+       
+    }
+
+    private getNextAssignedReview(): any {
+        return this.reviewerList.find(ele =>
+            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            && ele.reviewStatusTypeCode !== '3');
     }
 
     // private setPersonProjectDetails(): void {

@@ -217,7 +217,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });        
         this._dataStore.updateTimestampEvent.next();
-        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.startOrCompleteReview();
         this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
     }
 
@@ -226,9 +226,22 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
         this._dataStore.updateTimestampEvent.next();
-        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+       this.startOrCompleteReview();
     }
 
+    startOrCompleteReview() {
+        this.coiService.isStartReview = false;
+        this.coiService.isCompleteReview = false;
+        let nextAssignedReview = this.getNextAssignedReview();
+        if (nextAssignedReview) {
+            this.coiService.currentReviewForAction = nextAssignedReview;
+            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+                this.coiService.isStartReview = true;
+            else if (nextAssignedReview.reviewStatusTypeCode == 3)
+                this.coiService.isCompleteReview = true;
+        }
+       
+    }
 
     private clearActionData() {
         this.reviewActionConfirmation = {};
@@ -241,7 +254,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.coiDisclosure.coiReviewStatusType = _res.coiReviewStatusType;
             this._dataStore.updateStore(['coiReviewerList' , 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
              this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
-             this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+             this.startOrCompleteReview();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -261,7 +274,8 @@ export class LocationComponent implements OnInit, OnDestroy {
             documentOwnerPersonId: coiData.coiDisclosure.person.personId,
             componentTypeCode: '8',
             subModuleItemKey: reviewDetails.coiReviewId,
-            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description,
+            sectionName: reviewDetails.reviewLocationType.description
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.coiService.isShowCommentNavBar = true;	
@@ -343,10 +357,10 @@ export class LocationComponent implements OnInit, OnDestroy {
     this.coiService.isEnableReviewActionModal = true;
   }
 
-    private startReviewIfLoggingPerson(): any {
+    private getNextAssignedReview(): any {
         return this.reviewerList.find(ele =>
             ele.assigneePersonId === this._commonService.currentUserDetails.personId
-            && ele.reviewStatusTypeCode === '1');
+            && ele.reviewStatusTypeCode !== '2');
     }
 
     getDaysAtLocation(startDate, endDate) {

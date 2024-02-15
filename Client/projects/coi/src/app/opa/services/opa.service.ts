@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
 import {BehaviorSubject, of, Subject} from 'rxjs';
 import { FormBuilderEvent } from '../../shared/form-builder-view/form-builder-interface';
+import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 
 @Injectable()
 export class OpaService {
@@ -16,6 +17,7 @@ export class OpaService {
     isEnableReviewActionModal = false;
     formBuilderEvents = new Subject<FormBuilderEvent>();
     actionButtonId = null;
+    currentOPAReviewForAction: any;
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) {
@@ -62,7 +64,9 @@ export class OpaService {
         return this._http.patch(`${this._commonService.opaUrl}/review/start/${OPAReviewId}`, {});
     }
     completeReviewerReview(OPAReviewId) {
-        return this._http.patch(`${this._commonService.opaUrl}/review/complete/${OPAReviewId}`, {});
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        return this._http.patch(`${this._commonService.opaUrl}/review/complete/${OPAReviewId}/${parseDateWithoutTimestamp(currentDate).toString()}`, {});
     }
 
 }

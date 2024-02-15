@@ -128,26 +128,29 @@
 					<div class="bg-light info-card-border p-2 rounded-2 shadow-medium">
 						<div class="m-0 mb-2 pt-2 row">
 							<!-- Relationship -->
-							<div class="col-4 text-secondary fs-14" tabindex="0" aria-label="Relationship">
-								<span class="fw-bold me-3 label-text">Relationship :</span>
-								<app-no-data-label [classesToApply]="'fs-14'"
-									[valueToShow]="existingEntityDetails.personEntityRelationships?.length">
-									<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
-										<span class="fw-medium label-text">Financial : </span>
+							<div class="col-7 text-secondary fs-14" tabindex="0" aria-label="Relationship">
+								<span class="fw-bold me-3 label-text">Relationship :</span> 
+									<span *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships);else noRelation">
 										<ng-container>
 											<em
-												*ngFor="let relationship of existingEntityDetails.personEntityRelationships;let last = last">
-												<span
-													*ngIf="!last">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description
-													+','}}
-												</span>
-												<span
-													*ngIf="last">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description}}
+												*ngFor="let subsection of existingEntityDetails.personEntityRelationships | keyvalue ;let isKeyFirst = first">
+												<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span> 
+												<ng-container *ngFor="let relationship of subsection.value;let isFirst = first; let isLast = last;">
+													<span
+													*ngIf="!isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description
+													+'/'}}
+													</span>
+													<span
+														*ngIf="isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description}}
+													</span>
+												</ng-container>
 												</span>
 											</em>
 										</ng-container>
 									</span>
-								</app-no-data-label>
+									<ng-template #noRelation>
+										<span>--</span>
+									</ng-template>
 							</div>
 							<!-- Entity Type -->
 							<div class="col text-secondary" tabindex="0" [attr.aria-label]="'Entity Type' + (existingEntityDetails?.entityType?.description)">
@@ -490,7 +493,7 @@
 									<div class="col-7">
 										<div class="relation select-margin ml-09">
 											<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
-												class="form-check d-inline-block" [ngClass]="!isFirst && !isLast ? 'mx-4' : ''" tabindex="0"
+												class="form-check d-inline-block" [ngClass]="!isFirst ? 'ms-4' : ''" tabindex="0"
 												[attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
 												<input type="checkbox" name="relation"
 													class="form-check-input text-secondary border border-secondary"

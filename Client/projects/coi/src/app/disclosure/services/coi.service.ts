@@ -20,6 +20,7 @@ export class CoiService {
     isCertified = false;
     isReviewActionCompleted = false;
     $SelectedReviewerDetails = new BehaviorSubject<any>({});
+    currentReviewForAction: any;
     isShowCommentNavBar = false;
     isCOIAdministrator = false;
     isStartReview = false;

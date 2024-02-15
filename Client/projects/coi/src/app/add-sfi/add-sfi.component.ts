@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
-import { deepCloneObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, isEmptyObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { compareDates, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
@@ -147,6 +147,11 @@ export class AddSfiComponent implements OnInit {
         this.$subscriptions.push(this.sfiService.isEntityAdded(entityId).subscribe((res: any) => {
             if (res) {
                 this.existingEntityDetails = res;
+                if (this.existingEntityDetails.personEntityRelationships.length) {
+                    this.existingEntityDetails.personEntityRelationships = this.groupByDisclosureType(deepCloneObject( this.existingEntityDetails.personEntityRelationships), "coiDisclosureType", "description", "validPersonEntityRelType");
+                } else {
+                    this.existingEntityDetails.personEntityRelationships = {};
+                }
                 this.mandatoryList.set('entityAlreadyAdded', 'An SFI has already been created against the entity you are trying to add. To view the SFI, please click on the View button on the SFI card.');
             } else {
                 openModal('entity-details');
@@ -208,8 +213,12 @@ export class AddSfiComponent implements OnInit {
 
     validateRelationship() {
         if (!this.getSelectedRelationTypeCodes().length) {
-            this.mandatoryList.set('relationRadio', 'Please select a relation to continue.');
+            this.mandatoryList.set('relationRadio', 'Please select atleast one relationship.');
         }
+    }
+
+    checkForNotEmpty(val) {
+       return !isEmptyObject(val);
     }
 
     selectNewEntity(event): void {
@@ -351,7 +360,7 @@ export class AddSfiComponent implements OnInit {
         } else {
             this.heading = 'Significant Financial Interest';
             this.buttonName = 'Save SFI';
-            this.btnTitle = 'Click to Create SFI';
+            this.btnTitle = 'Click to Save SFI';
         }
     }
 
@@ -448,6 +457,13 @@ export class AddSfiComponent implements OnInit {
     groupBy(jsonData, key, innerKey) {
         return jsonData.reduce((relationsTypeGroup, item) => {
             (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
+            return relationsTypeGroup;
+        }, {});
+    }
+
+    groupByDisclosureType(jsonData: any, coiDisclosureType: any, description: any, validPersonEntityRelType: any): {} {
+        return jsonData.reduce((relationsTypeGroup, item) => {
+            (relationsTypeGroup[item[validPersonEntityRelType][coiDisclosureType][description]] = relationsTypeGroup[item[validPersonEntityRelType][coiDisclosureType][description]] || []).push(item);
             return relationsTypeGroup;
         }, {});
     }
