@@ -57,9 +57,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     onClickMenuBar() {
         if (document.getElementById('responsive-nav').classList.contains('show-menu')) {
             document.getElementById('responsive-nav').classList.remove('show-menu');
-            this.isShowNavBarOverlay = false;
+            if (window.screen.width <= 1300) {
+                this.isShowNavBarOverlay = false;
+            }
         } else {
-            this.isShowNavBarOverlay = true;
+            if (window.screen.width <= 1300) {
+                this.isShowNavBarOverlay = true;
+            }
             document.getElementById('responsive-nav').classList.add('show-menu');
         }
     }
