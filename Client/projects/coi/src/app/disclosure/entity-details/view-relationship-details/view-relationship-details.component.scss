@@ -493,3 +493,7 @@ small {
     color: var(--theme-primary-color);
   }
 }
+
+.clickable-content:hover {
+   font-weight: 600 !important; 
+}

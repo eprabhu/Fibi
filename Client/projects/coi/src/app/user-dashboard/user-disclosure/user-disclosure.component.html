@@ -670,13 +670,11 @@
             </div>
         </div>
         <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
-            class="col-lg-7 border-start d-flex align-items-center filter-s-outer"
-            [class.search-area]="isSearchTextHover" (mouseover)="isSearchTextHover = true"
-            (mouseout)="isSearchTextHover = false">
+            class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative">
             <span class="filter-search">
-                <mat-icon class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
-                <input class="form-control" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()"
-                    [class.search-area]="isSearchTextHover" type="text" [(ngModel)]="searchText"
+                <mat-icon class="fs-25px searchButton">search</mat-icon>
+                <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()"
+                    type="text" [(ngModel)]="searchText"
                     (ngModelChange)="getFilteredDisclosureListForSearchWord()">
             </span>
             <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
