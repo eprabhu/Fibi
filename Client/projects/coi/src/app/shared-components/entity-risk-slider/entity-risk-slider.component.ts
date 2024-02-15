@@ -109,7 +109,7 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.entityDetails.entityRiskCategory.riskCategoryCode = this.currentRiskCategorycode;
                         this.clearConflictModal();
                         this.riskHistory();
-                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk updated successfully.');
                     }, _err => {
                         if (_err.status === 405) {
                           this.isConcurrency = true;
@@ -156,10 +156,10 @@ export class EntityRiskSliderComponent implements OnInit {
             this.riskValidationMap.set('riskLevelCode', 'Please select a risk level');
         }
         if (!this.revisionComment) {
-            this.riskValidationMap.set('comment', 'Please add a reason.');
+            this.riskValidationMap.set('comment', 'Please add a description.');
         }
         if (this.currentRiskCategorycode  === this.entityDetails.riskCategoryCode) {
-            this.riskValidationMap.set('duplicateRisk', 'You are trying to update the risk with the current risk level of the disclosure.');
+            this.riskValidationMap.set('duplicateRisk', 'You are trying to update the risk with the current risk level of the entity.');
             this.riskValidationMap.delete('riskLevelCode');
         }
         return this.riskValidationMap.size === 0 ? true : false;

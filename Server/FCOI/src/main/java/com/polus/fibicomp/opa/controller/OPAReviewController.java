@@ -43,10 +43,10 @@ public class OPAReviewController {
         return reviewService.startOPAReview(opaReviewId);
     }
 
-    @PatchMapping("/complete/{opaReviewId}")
-    ResponseEntity<Object> completeOPAReview(@PathVariable("opaReviewId") Integer opaReviewId) {
+    @PatchMapping("/complete/{opaReviewId}/{opaReviewEndDate}")
+    ResponseEntity<Object> completeOPAReview(@PathVariable("opaReviewId") Integer opaReviewId, @PathVariable("opaReviewEndDate") String opaReviewEndDate) {
         logger.info("Request for completeOPAReview");
-        return reviewService.completeOPAReview(opaReviewId);
+        return reviewService.completeOPAReview(opaReviewId, opaReviewEndDate);
     }
 
     @GetMapping("/history/{opaDisclosureId}")

@@ -80,6 +80,7 @@ export class ResolveServiceService {
                     this._opaService.isCompleteReview = reviewerDetail.reviewStatusTypeCode === '2' ? true : false;
                     this._opaService.isDisclosureReviewer = true;
                     this._opaService.$SelectedReviewerDetails.next(reviewerDetail);
+                    this._opaService.currentOPAReviewForAction = reviewerDetail;
                 }
                 observer.next(true);
                 observer.complete();
@@ -93,7 +94,7 @@ export class ResolveServiceService {
 
     getLoggedInReviewerInfo(coiReviewerList): any {
         const getReviewerDetail = coiReviewerList.find(item => item.assigneePersonId ===
-            this._commonService.currentUserDetails.personId);
+            this._commonService.currentUserDetails.personId && item.reviewStatusTypeCode != '3');
         return getReviewerDetail;
     }
 

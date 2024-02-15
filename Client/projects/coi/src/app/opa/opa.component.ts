@@ -49,6 +49,10 @@ export class OpaComponent implements OnInit {
     showPersonDetailsModal = false;
     personDetailsModalVO = {personId: '', fullName: ''};
     $subscriptions = [];
+    commentsRight: {
+        canViewPrivateComments: boolean;
+        canMaintainPrivateComments: boolean;
+    }
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -60,6 +64,8 @@ export class OpaComponent implements OnInit {
     ngOnInit(): void {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
+        // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
 
     triggerSave() {
@@ -204,7 +210,7 @@ export class OpaComponent implements OnInit {
 
     updateOpaReview(modalType: ModalType) {
         const reviewerInfo = this.opa.opaReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId);
+            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '3');
         if (reviewerInfo) {
             this.opaService.$SelectedReviewerDetails.next(reviewerInfo);
             this.opaService.triggerStartOrCompleteCoiReview(modalType);

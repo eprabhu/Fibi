@@ -205,7 +205,7 @@
         [class.relation-active]="entityDetailsServices.activeTab === 'RELATION_DETAILS'"
         (click)="openRelationShipSection()" tabindex="0">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
-            <span title="Click to view SFI Details" class="px-4 fw-500"
+            <span [title]="entityDetailsServices.activeTab === 'RELATION_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'" class="px-4 fw-500"
                 [attr.aria-label]="entityDetailsServices.activeTab === 'RELATION_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 SFI Details
             </span>
@@ -215,8 +215,8 @@
         [class.relation-active]="entityDetailsServices.activeTab === 'QUESTIONNAIRE'"
         (click)="openRelationshipQuestionnaire(entityDetailsServices.definedRelationships[0])" tabindex="0">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
-            <span title="Click to view SFI Details" class="px-4 fw-500"
-                [attr.aria-label]="entityDetailsServices.activeTab === 'QUESTIONNAIRE' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
+            <span [title]="entityDetailsServices.activeTab === 'QUESTIONNAIRE' ? 'Selected tab is Relationship details' : 'Click to view Relationship Details'" class="px-4 fw-500"
+                [attr.aria-label]="entityDetailsServices.activeTab === 'QUESTIONNAIRE' ? 'Selected tab is Relationship details' : 'Click to view Relationship Details'">
                 Relationship Details
             </span>
         </div>
@@ -225,7 +225,7 @@
         [class.relation-active]="entityDetailsServices.activeTab === 'HISTORY'" tabindex="0"
         (click)="openHistorySection();">
         <div class="text-secondary w-100 mx-0 nav-options-bottom">
-            <span title="Click to view History" class="px-4 fw-500"
+            <span [title]="entityDetailsServices.activeTab === 'HISTORY' ? 'Selected tab is SFI History' : 'Click to view SFI History'" class="px-4 fw-500"
                 [attr.aria-label]="entityDetailsServices.activeTab === 'HISTORY' ? 'Selected tab is SFI History' : 'Click to view SFI History'">
                 History
             </span>
@@ -236,7 +236,7 @@
 <!-- Relationship questionnaire tabs and relationship button-->
 <div class="d-flex"
     *ngIf="entityDetailsServices.activeTab === 'QUESTIONNAIRE' && entityDetailsServices.definedRelationships.length">
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav text-nowrap overflow-auto"
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav w-100 text-nowrap overflow-auto"
         [ngClass]="isEditMode && entityDetailsServices.canMangeSfi && entityDetailsServices.remainingRelationships?.length ? 'nav-width' : 'w-100'">
         <ng-container
             *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let isLast = last">
@@ -297,7 +297,7 @@
                     <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
                         You currently do not have any relationship associated. Click on the
                         <strong>Add Relationship</strong>
-                        button for adding relationship.
+                        button for adding relationship(s).
                     </span>
                 </p>
             </div>
