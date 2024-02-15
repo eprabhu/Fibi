@@ -126,12 +126,12 @@
                                 </app-no-data-label>
                             </span>
                         </div>
-                                
+
                         <div class="col-4 mb-2">
                             <label class="f-14 pe-2">Create Date : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
                                 <span class="ml-2">{{existingDisclosureDetails?.createTimestamp |
-                                    dateFormatter}}</span>
+                                    dateFormatterWithTimeZone}}</span>
                             </app-no-data-label>
                         </div>
                         <div class="col-4 mb-2">
@@ -145,10 +145,10 @@
                             <label class="f-14 pe-2">Certification Date : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt">
                                 <span class="ml-2">{{existingDisclosureDetails?.certifiedAt |
-                                    dateFormatter}}</span>
+                                    dateFormatterWithTimeZone}}</span>
                             </app-no-data-label>
                         </div>
-                        
+
                         <div class="col-4">
                             <label class="f-14 pe-2">Review Status : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
@@ -156,7 +156,7 @@
                                     class="ml-2 badge {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
                             </app-no-data-label>
                         </div>
-                       
+
                         <div class="col-4">
                             <label class="f-14 pe-2">Disclosure Status : </label>
                             <app-no-data-label
@@ -165,7 +165,7 @@
                                     class="ml-2 {{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}">{{existingDisclosureDetails?.conflictStatus}}</span>
                             </app-no-data-label>
                         </div>
-                      
+
                         <div class="col-4">
                             <label class="f-14 pe-2">Disposition Status : </label>
                             <app-no-data-label
@@ -249,7 +249,7 @@
                                         </span>
                                     </app-no-data-label>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div *ngIf="isShowResultCard && isShowExistingDisclosure"
@@ -274,7 +274,7 @@
                                     <label class="f-14 pe-2">Create Date : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
                                         <span class="ml-2 grey-text">{{existingDisclosureDetails?.createTimestamp |
-                                            dateFormatter}}</span>
+                                            dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </div>
                                 <div class="col-4 pt-1 py-1">
@@ -288,10 +288,10 @@
                                     <label class="f-14 pe-2">Certification Date : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt">
                                         <span class="ml-2">{{existingDisclosureDetails?.certifiedAt |
-                                            dateFormatter}}</span>
+                                            dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </div>
-                                
+
                                 <div class="col-4 mb-2">
                                     <label class="f-14 pe-2">Review Status : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
@@ -302,7 +302,7 @@
                                     </span>
                                     </app-no-data-label>
                                 </div>
-                               
+
                                 <div class="col-4 mb-2">
                                     <label class="f-14 pe-2">Disclosure Status : </label>
                                     <app-no-data-label
@@ -314,7 +314,7 @@
                                             </span>
                                     </app-no-data-label>
                                 </div>
-                              
+
                                 <div class="col-4 mb-2">
                                     <label class="f-14 pe-2">Disposition Status : </label>
                                     <app-no-data-label
