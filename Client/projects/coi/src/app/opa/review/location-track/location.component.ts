@@ -238,8 +238,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             documentOwnerPersonId: this.opaDisclosure.personId,
             componentTypeCode: '11',
             subModuleItemKey: reviewDetails.opaReviewId,
-            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description,
-            sectionName: reviewDetails.reviewLocationType.description
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.opaService.isShowCommentNavBar = true;

@@ -274,8 +274,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             documentOwnerPersonId: coiData.coiDisclosure.person.personId,
             componentTypeCode: '8',
             subModuleItemKey: reviewDetails.coiReviewId,
-            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description,
-            sectionName: reviewDetails.reviewLocationType.description
+            coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this.coiService.isShowCommentNavBar = true;	
