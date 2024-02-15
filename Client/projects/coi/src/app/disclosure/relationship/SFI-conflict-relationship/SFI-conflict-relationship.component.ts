@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { DataStoreService } from '../../services/data-store.service';
 import { Subject, Subscription, interval } from 'rxjs';
 import { RelationshipService } from '../relationship.service';
@@ -13,7 +13,7 @@ import { deepCloneObject, hideModal, openModal, scrollIntoView } from 'projects/
   templateUrl: './SFI-conflict-relationship.component.html',
   styleUrls: ['./SFI-conflict-relationship.component.scss']
 })
-export class SFIConflictRelationshipComponent implements OnInit {
+export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
 
   @Input() isEditMode: boolean;
   @Input() coiStatusCode: any;
@@ -26,6 +26,8 @@ export class SFIConflictRelationshipComponent implements OnInit {
   @Input() coiData: any;
   @Input() clearIndex: any;
   @Input() moduleCode: any;
+  @Input() isSavingRelation = false;
+  @Output() isSavingRelationChange = new EventEmitter();
   $debounceEvent = new Subject<any>();
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
 
@@ -56,10 +58,17 @@ export class SFIConflictRelationshipComponent implements OnInit {
     this.triggerSingleSave();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.entityProjectDetails && !changes.entityProjectDetails.isFirstChange()) {
+      this.coiValidationMap.clear();
+      this.coiTableValidation.clear();
+    }
+  }
+
   openSaveAllConfirmationModal() {
     this.coiValidationMap.clear();
     this.coiStatusCode = null;
-    this.coiDescription == '';
+    this.coiDescription = '';
     openModal('applyToAllConfirmationModal');
     this.changeCloseBtnZIndex('1000');
   }
@@ -152,6 +161,8 @@ export class SFIConflictRelationshipComponent implements OnInit {
       test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
       this.singleSaveClick(test, index);
       this.sliderDataChanges();
+    } else {
+        this.updateIsSavingRelation(false);
     }
   }
 
@@ -167,9 +178,11 @@ export class SFIConflictRelationshipComponent implements OnInit {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
         }, 1500);
         this.closePage.emit();
+        this.updateIsSavingRelation(false);
     }, err => {
       setTimeout(() => {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+        this.updateIsSavingRelation(false);
       }, 1500);
     }));
 }
@@ -180,6 +193,7 @@ sliderDataChanges() {
 }
 
 sfiSingleSave(index, sfi) {
+  this.updateIsSavingRelation(true);
   this.$debounceEvent.next({index: index, SFI: sfi});
 }
 
@@ -199,5 +213,10 @@ getStatusDescriptionByCode(code: string): string {
 isShowWarning(data) {
   return data.prePersonEntityId && data.prePersonEntityId != data.personEntityId;
 }
+
+    updateIsSavingRelation(value: boolean) {
+        this.isSavingRelation = value;
+        this.isSavingRelationChange.emit(this.isSavingRelation);
+    }
 
 }
