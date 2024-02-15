@@ -1,6 +1,7 @@
 package com.polus.fibicomp.opa.dao;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -93,18 +94,24 @@ public class OPAReviewDaoImpl implements OPAReviewDao {
     }
 
     @Override
-    public Timestamp updateReviewStatus(Integer opaReviewId, String reviewStatus) {
+    public Timestamp updateReviewStatus(Integer opaReviewId, String reviewStatus, Date opaReviewEndDate) {
         Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("UPDATE OPAReview r SET r.reviewStatusTypeCode = :reviewStatusTypeCode, ");
-        hqlQuery.append("r.updateTimestamp = :updateTimestamp, r.updateUser = :updateUser ");
-        hqlQuery.append("WHERE r.opaReviewId = :opaReviewId");
+        hqlQuery.append("r.updateTimestamp = :updateTimestamp, r.updateUser = :updateUser");
+        if (opaReviewEndDate != null) {
+            hqlQuery.append(" ,r.endDate = :opaReviewEndDate ");
+        }
+        hqlQuery.append(" WHERE r.opaReviewId = :opaReviewId");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("reviewStatusTypeCode", reviewStatus);
         query.setParameter("opaReviewId", opaReviewId);
         query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
         query.setParameter("updateTimestamp", updateTimestamp);
+        if (opaReviewEndDate != null) {
+            query.setParameter("opaReviewEndDate", opaReviewEndDate);
+        }
         query.executeUpdate();
         return updateTimestamp;
     }
