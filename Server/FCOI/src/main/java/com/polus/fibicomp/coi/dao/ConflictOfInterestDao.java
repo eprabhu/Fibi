@@ -1327,5 +1327,17 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureId
 	 */
 	public List<CoiDisclEntProjDetails> getProjectRelationshipBySFI(Integer personEntityId, Integer disclosureId);
-	
+
+	/**
+	 * This method is used to Check if the opa disclosure have reviewers assigned
+	 * @return
+	 */
+	public Boolean isOpaReviewerAssigned(Integer opaDisclosureId);
+
+	/**
+	 * This method is used to Check if the reviewers in the opa disclosure have completed their reviews
+	 * @return
+	 */
+	public Boolean isOpaReviewerReviewCompleted(Integer opaDisclosureId);
+
 }
