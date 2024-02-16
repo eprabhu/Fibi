@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {deepCloneObject, hideModal, openModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {interval, Subject} from 'rxjs';
 import {listAnimation} from '../../../common/utilities/animations';
@@ -14,11 +14,13 @@ import {RelationshipService} from '../relationship.service';
     styleUrls: ['./sfi-project-relation-shared.component.scss'],
     animations: [listAnimation]
 })
-export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
+export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() projectSFIDetails = [];
     @Input() coiStatusList = [];
     @Input() projectIdTitleMap = {};
+    @Input() isSaving = false;
+    @Output() isSavingChange = new EventEmitter();
     @Output() relationshipChanged = new EventEmitter();
 
     coiValidationMap: Map<string, string> = new Map();
@@ -27,10 +29,18 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
     coiDescription = '';
     conflictStatusMap = {};
     isEditMode = true;
+    tempProjectSFIDetails = [];
     $debounceEvent = new Subject<any>();
     $subscriptions = [];
 
     constructor(private _commonService: CommonService, private _relationShipService: RelationshipService) {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.projectSFIDetails && !changes.projectSFIDetails.isFirstChange()) {
+            this.coiValidationMap.clear();
+            this.coiTableValidation.clear();
+        }
     }
 
     ngOnInit() {
@@ -58,6 +68,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
     }
 
     sfiSingleSave(index, sfi) {
+        this.updateIsSaving(true);
         this.$debounceEvent.next({index: index, SFI: sfi});
     }
 
@@ -86,6 +97,8 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
         if (!this.coiTableValidation.has('save-status' + index) && !this.coiTableValidation.has('save-description' + index)) {
             test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
             this.singleSaveClick(test, index);
+        } else {
+            this.updateIsSaving(false);
         }
     }
 
@@ -104,10 +117,12 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
             }, 1500);
             this.relationshipChanged.emit(true);
+            this.updateIsSaving(false);
         }, err => {
             setTimeout(() => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
             }, 1500);
+            this.updateIsSaving(false);
         }));
     }
 
@@ -154,6 +169,11 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnDestroy {
             ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
             return ele;
         });
+    }
+
+    updateIsSaving(newValue: boolean): void {
+        this.isSaving = newValue;
+        this.isSavingChange.emit(this.isSaving);
     }
 
 }

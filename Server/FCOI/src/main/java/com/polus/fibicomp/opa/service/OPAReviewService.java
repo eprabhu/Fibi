@@ -1,9 +1,9 @@
 package com.polus.fibicomp.opa.service;
 
-import com.polus.fibicomp.opa.dto.OPAReviewRequestDto;
-import com.polus.fibicomp.opa.pojo.OPAReview;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.polus.fibicomp.opa.pojo.OPAReview;
 
 @Service
 public interface OPAReviewService {
@@ -32,9 +32,10 @@ public interface OPAReviewService {
     /**
      * This method completes a OPA Review
      * @param opaReviewId
+     * @param opaReviewEndDate 
      * @return
      */
-    ResponseEntity<Object> completeOPAReview(Integer opaReviewId);
+    ResponseEntity<Object> completeOPAReview(Integer opaReviewId, String opaReviewEndDate);
 
     /**
      * This method fetches all review action log

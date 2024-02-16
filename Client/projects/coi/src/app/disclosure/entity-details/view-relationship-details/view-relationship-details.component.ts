@@ -263,9 +263,16 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         } else {
             this.isEnableActivateInactivateSfiModal = false;
         }
+        this.updateHistoryTab();
     }
 
-    updateNewStatus(event) {
+    updateHistoryTab() {
+        if (this.entityDetailsServices.activeTab === 'HISTORY') {
+            this.entityDetailsServices.$updateHistory.next(true);
+        }
+    }
+
+    updateNewStatus(event) {        
         if (event.versionStatus) {
             this.relationshipsDetails.versionStatus = event.versionStatus;
             this.updateURL(event);
@@ -278,7 +285,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     updateEditMode() {
-        this.isEditMode = (this.entityDetailsServices.canMangeSfi && !this.relationshipsDetails.isFormCompleted && this.relationshipsDetails.versionStatus != 'INACTIVE');
+        this.isEditMode = !this.isTriggeredFromSlider && this.entityDetailsServices.canMangeSfi && !this.relationshipsDetails.isFormCompleted && !['INACTIVE', 'ARCHIVE'].includes(this.relationshipsDetails.versionStatus);
     }
 
     triggerOpenQuestionnaire(questionnaire) {

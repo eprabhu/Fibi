@@ -18,6 +18,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
 
     currentReviewer: any = {};
     $subscriptions: Subscription[] = [];
+    reviewerList: any = [];
 
     constructor( private _opaService: OpaService,
                  private _dataStore: DataStoreService,
@@ -25,6 +26,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.getReviewerDetails();
+        const DATA = this._dataStore.getData();
+        this.reviewerList = DATA.opaReviewerList || [];
         document.getElementById(this._opaService.actionButtonId).click();
     }
 
@@ -57,6 +60,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._opaService.completeReviewerReview(this.currentReviewer.opaReviewId)
             .subscribe((res: any) => {
             this.updateDataStore(res);
+            this.startOrCompleteReview();
             this.currentReviewer = {};
             this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
@@ -74,20 +78,20 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         const {opaDisclosure, ...review} = reviewer;
         this._opaService.$SelectedReviewerDetails.next(review);
         const DATA: OPA = this._dataStore.getData();
-        const reviewerList = DATA.opaReviewerList || [];
-        const index = reviewerList.findIndex(ele => ele.opaReviewId === reviewer.opaReviewId);
-        reviewerList[index] = reviewer;
+        this.reviewerList = DATA.opaReviewerList || [];
+        const index = this.reviewerList.findIndex(ele => ele.opaReviewId === reviewer.opaReviewId);
+        this.reviewerList[index] = reviewer;
         DATA.opaDisclosure.reviewStatusCode  = opaDisclosure.reviewStatusCode;
         DATA.opaDisclosure.reviewStatusType = opaDisclosure.reviewStatusType;
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'],
-            { opaReviewerList: reviewerList, opaDisclosure: DATA.opaDisclosure });
-        this._opaService.isReviewActionCompleted = this._opaService.isAllReviewsCompleted(reviewerList);
+            { opaReviewerList: this.reviewerList, opaDisclosure: DATA.opaDisclosure });
+        this._opaService.isReviewActionCompleted = this._opaService.isAllReviewsCompleted(this.reviewerList);
         this.updateReviewActions(reviewer);
         this._opaService.isEnableReviewActionModal = false;
     }
 
     updateReviewActions(reviewer) {
-        this._opaService.isDisclosureReviewer = reviewer.assigneePersonId === this._commonService.currentUserDetails.personId;
+        this._opaService.isDisclosureReviewer = (reviewer.assigneePersonId === this._commonService.currentUserDetails.personId && reviewer.opaReviewId == this._opaService.currentOPAReviewForAction.opaReviewId);
         if (reviewer.reviewStatusTypeCode === '2' && this._opaService.isDisclosureReviewer) {
             this._opaService.isStartReview = false;
             this._opaService.isCompleteReview = true;
@@ -97,4 +101,24 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    startOrCompleteReview() {
+        this._opaService.isStartReview = false;
+        this._opaService.isCompleteReview = false;
+        let nextAssignedReview = this.getNextAssignedReview();
+        console.log(nextAssignedReview);
+        if (nextAssignedReview) {
+            this._opaService.currentOPAReviewForAction = nextAssignedReview;
+            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+                this._opaService.isStartReview = true;
+            else if (nextAssignedReview.reviewStatusTypeCode == 2)
+                this._opaService.isCompleteReview = true;
+        }
+       
+    }
+
+    private getNextAssignedReview(): any {
+        return this.reviewerList.find(ele =>
+            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            && ele.reviewStatusTypeCode != 3);
+    }
 }
