@@ -114,7 +114,7 @@ export class EntityRiskSliderComponent implements OnInit {
                         if (_err.status === 405) {
                           this.isConcurrency = true;
                         } else {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating risk. Please try again.');
                         }
                     }));
         }

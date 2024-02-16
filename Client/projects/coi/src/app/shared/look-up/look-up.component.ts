@@ -102,7 +102,9 @@ export class LookUpComponent implements OnChanges, OnDestroy {
           .subscribe((data: Array<LookUp>) => {
             this.lookUpList = data;
             this.setSelections();
-            this.mySelect.open();
+            if (!this.selectedLookUpList?.length && !this.defaultValue) {
+              this.mySelect.open();
+            } 
             this._changeRef.markForCheck();
           }));
       }
@@ -161,10 +163,14 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     }
 
     private selectedDescription() {
-        const EMIT_DATA = this.lookUpList.filter((ele: any) => {
+        if(this.selection) {
+          const EMIT_DATA = this.lookUpList.filter((ele: any) => {
             if (this.selection.includes(ele.code || ele.description)) return ele;
-        });
-        return EMIT_DATA;
+          });
+          return EMIT_DATA;
+        } else {
+          return this.selection;
+        }
     }
 
     showLookUpList() {
