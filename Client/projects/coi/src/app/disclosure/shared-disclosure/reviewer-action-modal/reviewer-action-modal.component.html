@@ -6,7 +6,7 @@
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title">Start Review <span *ngIf="currentReviewer.assigneePersonName"> by </span>{{currentReviewer?.assigneePersonName}}
+              <h4 class="modal-title">Start Review at {{currentReviewer?.reviewLocationType?.description}}
               </h4>
               <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                   type="button" (click)="closeModal()">
@@ -42,7 +42,7 @@
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title">Complete Review <span *ngIf="currentReviewer.assigneePersonName"> by </span>{{currentReviewer?.assigneePersonName}}
+              <h4 class="modal-title">Complete Review at {{currentReviewer?.reviewLocationType?.description}}
               </h4>
               <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                   type="button" (click)="closeModal()">

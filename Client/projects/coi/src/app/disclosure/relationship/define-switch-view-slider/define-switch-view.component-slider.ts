@@ -24,6 +24,7 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
     readMore = [];
     relationshipTypeCache = {};
     isDataChanged = false;
+    isSaving = false;
 
     ngOnInit() {
         setTimeout(() => this.showTaskNavBar());
@@ -38,11 +39,13 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
     }
 
     goBackStep() {
+        if (this.isSaving) { return; }
         this.selectedSfiIndex--;
         this.setCurrentIndexSfi();
     }
 
     goToStep() {
+        if (this.isSaving) { return; }
         this.selectedSfiIndex++;
         this.setCurrentIndexSfi();
     }

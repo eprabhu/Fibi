@@ -469,6 +469,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setDisclosureId(copyDisclosure.getDisclosureId());
 		copyDisclosureDetails(disclosure, copyDisclosure);
 		copyDisclosureQuestionnaireData(disclosure, copyDisclosure);
+		DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVISED)
+				.disclosureId(copyDisclosure.getDisclosureId()).disclosureNumber(copyDisclosure.getDisclosureNumber())
+				.fcoiTypeCode(copyDisclosure.getFcoiTypeCode()).revisionComment(copyDisclosure.getRevisionComment())
+				.reporter(AuthenticatedUser.getLoginUserFullName())
+				.build();
+		actionLogService.saveDisclosureActionLog(actionLogDto);
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 

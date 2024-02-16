@@ -63,6 +63,8 @@ public class OPAServiceImpl implements OPAService {
 	public ResponseEntity<Object> createOpaDisclosure(String personId, String homeUnit) {
 		OPACommonDto opaDisclosure = opaDao.createOpaDisclosure(personId, homeUnit);
 		OPACommonDto opaCommonDto = OPACommonDto.builder()
+				.opaDisclosureId(opaDisclosure.getOpaDisclosureId())
+				.opaDisclosureNumber(opaDisclosure.getOpaDisclosureNumber())
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_CREATED, opaCommonDto);
@@ -96,13 +98,19 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> submitOPADisclosure(OPASubmitDto opaSubmitDto) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_SUBMIT,
-				Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
+		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_SUBMIT, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already Submitted", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN,
-				Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
-			opaSubmitDto.setOpaDisclosureStatus(Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS);
+		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
+			if (Boolean.TRUE.equals(conflictOfInterestDao.isOpaReviewerAssigned(opaSubmitDto.getOpaDisclosureId()))) {
+				if (Boolean.TRUE.equals(conflictOfInterestDao.isOpaReviewerReviewCompleted(opaSubmitDto.getOpaDisclosureId()))) {
+					opaSubmitDto.setOpaDisclosureStatus(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED);
+				} else {
+					opaSubmitDto.setOpaDisclosureStatus(Constants.OPA_DISCLOSURE_STATUS_REVIEW_ASSIGNED);
+				}
+			} else {
+				opaSubmitDto.setOpaDisclosureStatus(Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS);
+			}
 		}
 		opaDao.submitOPADisclosure(opaSubmitDto);
 		OPACommonDto  opaCommonDto = OPACommonDto.builder()

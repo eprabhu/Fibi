@@ -117,7 +117,7 @@
                                     aria-label="Create Date is">Create : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.createTimestamp">
-                                        <span>{{travelDisclosure?.createTimestamp | dateFormatter}}</span>
+                                        <span>{{travelDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -128,7 +128,7 @@
                                     aria-label="Certification Date is">Certification : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.certifiedAt">
-                                        <span>{{travelDisclosure?.certifiedAt | dateFormatter}}</span>
+                                        <span>{{travelDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -139,7 +139,7 @@
                                     aria-label="Approved Date is">Approved : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.acknowledgeAt">
-                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatter}}</span>
+                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>

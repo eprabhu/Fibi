@@ -134,8 +134,8 @@
                                     <div class="row mb-1">
                                         <label class="fw-semibold text-muted"> Certification :
                                             <span class="fw-bold fs-14 text-gray-800">
-                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                                    <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
+                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
+                                                    <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </label>
@@ -144,7 +144,7 @@
                                         <label class="fw-semibold text-muted"> Expiration :
                                             <span class="fw-bold fs-14 text-gray-800">
                                                 <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                                    <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
+                                                    <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </label>

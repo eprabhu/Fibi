@@ -29,6 +29,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     entityNumber: any;
     isSaving = false;
     checkedRelationships = {};
+    SFI_ADDITIONAL_DETAILS_SECTION_NAME = SFI_ADDITIONAL_DETAILS_SECTION_NAME;
 
     constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
         private _commonService: CommonService, private _navigationService: NavigationService) {}

@@ -227,8 +227,12 @@ export class OPAInstituteResourceUseComponent implements OnInit {
     entitySelected(entity: any): void {
         if (entity) {
             const index = this.checkDuplicate(entity.personEntityId);
-            this.isDuplicate = index === -1 || index === this.editIndex ?  false : true;
+            this.isDuplicate = index === -1 || index === this.editIndex ? false : true;
             this.entityDetails = entity;
+        } else {
+            this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
+            this.entityDetails = {};
+            this.isDuplicate = false;
         }
     }
 

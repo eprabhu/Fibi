@@ -20,38 +20,38 @@ export class AppElasticComponent implements OnChanges, OnInit {
 	@Input() clearField: String;
 	@Input() isError: boolean;
 	@Input() isDisabled: boolean;
-  @Input() uniqueId: any;
 	@Output() selectedResult: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
 	@ViewChild('searchField', { static: true }) searchField: ElementRef;
 	searchText = '';
 	isResultSelected = true;
-	tempSearchText = '';
 	timer: any;
 	results = [];
 	counter = -1;
-	isActive = false;
 	query = {
 		query: { bool: { should: [] } },
 		sort: [{ _score: { order: 'desc' } }],
 		highlight: { pre_tags: ['<strong>'], post_tags: ['</strong>'] }
 	};
+	
 	constructor(private _appElasticService: AppElasticService, private _ref: ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.searchText = this.options && this.options.defaultValue || '';
-    this.setUnquieIdForSearchText();
 	}
 
 	ngOnChanges() {
 		if (!this.isError) {
 			this.searchText = this.options && this.options.defaultValue || '';
 		}
-		this.clearField = '' + this.clearField;
-		if (this.clearField === 'true') {
-			this.searchText = '';
-			this.results = [];
-		}
+		setTimeout(() => {
+			this.clearField = '' + this.clearField;
+			if (this.clearField === 'true') {
+				this.searchText = '';
+				this.results = [];
+				this.clearField = new String('false');
+			}
+		});
 		this.isError ? this.searchField.nativeElement.classList.add('is-invalid')
 			: this.searchField.nativeElement.classList.remove('is-invalid');
 	}
@@ -67,11 +67,10 @@ export class AppElasticComponent implements OnChanges, OnInit {
 				this.isResultSelected = false;
 				const temporaryText = this.searchText.trim();
 				this.queryBuilder(temporaryText);
-				const url = this.options.url + this.options.index + '/' + this.options.type + '/' + '_search?size=' + (this.options.size || 20);
+				const url = this.options.url + this.options.index + '/' + '_search?size=' + (this.options.size || 20);
 				this._appElasticService.search(url, this.query).then((rst: any) => {
 					this._ref.markForCheck();
 					this.results = [];
-					this.isActive = true;
 					this.counter = -1;
 					const src = ((rst.hits || {}).hits || []).map((hit) => hit._source);
 					const hgt = ((rst.hits || {}).hits || []).map((hit) => hit.highlight);
@@ -122,10 +121,6 @@ export class AppElasticComponent implements OnChanges, OnInit {
 		 }
 	}
 
-  setUnquieIdForSearchText() {
-    this.searchField.nativeElement.id = this.uniqueId ?  this.uniqueId : Math.random() + '';
-  }
-
 	checkForIcon(k) {
 		return this.options.icons && this.options.icons[k] ? this.options.icons[k] : '';
 	}
@@ -144,21 +139,28 @@ export class AppElasticComponent implements OnChanges, OnInit {
 			this.query.query.bool = {...this.query.query.bool, ...this.options.extraConditions};
 		}
 	}
+	
 	/**
 	 * @param  {} value emit results on key enter mouse click to parent components
 	 */
 	emitSelectedObject(value: any): void {
+		this.isResultSelected = true;
 		this.counter = -1;
 		if (value) {
 			this.selectedResult.emit(value);
-			this.searchText = this.getSearchTextValue(value);
+			setTimeout(() => {
+				this.searchText = this.getSearchTextValue(value);
+			});
 		} else {
-			this.searchText = '';
+			setTimeout(() => {
+                this.searchText = '';
+            });
 			this.selectedResult.emit(null);
 		}
-		this.options.defaultValue = this.searchText;
+		setTimeout(() => {
+			this.options.defaultValue = this.searchText;
+		});
 		this.results = [];
-		this.isActive = false;
 	}
 
 	getSearchTextValue(value): string {
@@ -172,73 +174,12 @@ export class AppElasticComponent implements OnChanges, OnInit {
 		this.getElasticResult();
 	}
 	/**
-	 * @param  {} event used to update counter value for keyboard event listener
-	 */
-	upArrowEvent(event: Event): void {
-		event.preventDefault();
-		this.removeHighlight();
-		this.counter >= 0 ? this.counter-- : this.counter = document.getElementsByClassName('search-result-item').length - 1;
-		this.addHighlight();
-		this.updateSearchField();
-	}
-	/**
-	 * @param  {} event  used to update counter value for keyboard event listener and adds a highlight class
-	 */
-	downArrowEvent(event: Event): void {
-		event.preventDefault();
-		this.removeHighlight();
-		this.counter < document.getElementsByClassName('search-result-item').length - 1 ? this.counter++ : this.counter = -1;
-		this.addHighlight();
-		this.updateSearchField();
-	}
-	/**
 	 * @param  {} event
 	 *  handles the click outside the result box updates counter and clear results
 	 */
 	hideSearchResults(): void {
-		this.isActive = false;
 		this.searchText = this.isResultSelected ? this.searchText : '';
 		this.results = [];
 		this.counter = -1;
-	}
-	/** listens for enter key event . triggers the click on selected li
-	 */
-	enterKeyEvent(): void {
-		if (this.counter > -1) {
-			this.isResultSelected = true;
-			(document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement).click();
-			(document.activeElement as HTMLInputElement).blur();
-			this.hideSearchResults();
-		}
-	}
-	/**
-	 * removes the highlight from the previous li node if true
-	 * updates the temp search value with user typed value for future reference
-	 */
-	removeHighlight(): void {
-		const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-		if (el) {
-			el.classList.remove('highlight');
-		} else {
-			this.tempSearchText = this.searchText;
-		}
-	}
-	/**
-	 * updates the li with 'highlight' class
-	 */
-	addHighlight(): void {
-		const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-		if (el) {
-			el.scrollIntoView({ block: 'nearest' });
-			el.classList.add('highlight');
-		}
-	}
-	/**
-	 * updates the search field with temp value once user reaches the bottom or top of the list
-	 */
-	updateSearchField(): void {
-		this.counter === -1 || this.counter === document.getElementsByClassName('search-result-item').length ?
-			this.searchText = this.tempSearchText :
-			this.searchText = this.results[this.counter].value[this.options.contextField];
 	}
 }
