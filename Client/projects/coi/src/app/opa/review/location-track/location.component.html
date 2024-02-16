@@ -94,7 +94,7 @@
                     </td>
                     <td class="align-items-center justify-content-end">
                         <div class="d-flex align-items-center justify-content-end">
-                            <ng-container *ngIf="isMangeReviewAction">
+                            <ng-container *ngIf="isMangeReviewAction && !isOPAEditMode">
                                 <button *ngIf="reviewer.reviewStatusTypeCode == '1'"
                                     class="btn-primary-icon d-flex align-items-center me-3 my-1" title="Start review">
                                     <mat-icon id="start-review-btn" title="Start review" class="material-icons-outlined"
@@ -107,12 +107,12 @@
                                 </button>
                             </ng-container>
                                 <button class="btn-primary-icon d-flex align-items-center me-3 my-1"
-                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer)">
+                                [ngClass]="{'review-comment-position':(!isMangeReviewAction && isOPAEditMode)}" (click)="modifyReviewComment(reviewer)">
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
 
-                                <ng-container *ngIf="isMangeReviewAction">
+                                <ng-container *ngIf="isMangeReviewAction && !isOPAEditMode">
                                     <button  *ngIf="reviewer.reviewStatusTypeCode !== '3'" [matMenuTriggerFor]="beforeMenu"
                                         class="btn-primary-icon d-flex align-items-center my-1"
                                         role = "button"
