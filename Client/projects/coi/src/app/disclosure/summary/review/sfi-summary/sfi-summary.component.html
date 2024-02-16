@@ -43,11 +43,10 @@
   </ng-container>
 </ng-container>
 
-<div #viewSFISummaryDetailsOverlay [class.overlay]="showSlider">
-  <div class="slider-base" *ngIf="showSlider">
-    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-    <div class="slider-container" (scroll)="onWindowScroll($event)">
-         <app-entity-details [entityId]="entityId"></app-entity-details>
-      </div>
-  </div>
-  </div>
+  <ng-container *ngIf="showSlider">
+    <app-coi-slider (closeSlider)="hideSfiNavBar()" [elementId]="sliderElementId">
+      <ng-container content>
+        <app-entity-details [entityId]="entityId"></app-entity-details>
+      </ng-container>
+    </app-coi-slider>
+  </ng-container>

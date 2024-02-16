@@ -1,4 +1,4 @@
-<app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'risk-conflict-slider'">
+<app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'risk-conflict-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
     <!-- slider header -->
     <ng-container header>
         <span>Manage Risk Status</span>
@@ -47,7 +47,7 @@
                             <label class="d-block fs-14 fw-500 px-1" for="risk-level">Describe the reason for Risk level change :
                             </label>
                             <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all"
-                                placeholder="Enter the reason for risk level change" [(ngModel)]="revisionComment" appAutoGrow appLengthValidator
+                                placeholder="Description" [(ngModel)]="revisionComment" appAutoGrow appLengthValidator
                                 rows="1" [limit]="2000" [isShowLimiter]="true"
                                 (ngModelChange)="removeValidationMap('COMMENT'); revisionComment = revisionComment.trim()"
                                 [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
@@ -133,20 +133,11 @@
             </div>
         </div>
     </ng-container>
+    <ng-container confirmation-content>
+        You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
+    </ng-container>
 
 </app-coi-slider>
 
-<!--risk confirmation Modal-->
-<app-confirmation-modal [modalName]="'risk-conflict-confirmation-modal'" (secondaryBtnAction)="leavePageClicked()"
-    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
-    <!-- modal header -->
-    <ng-container header>
-        <span>Confirmation</span>
-    </ng-container>
-    <!-- modal content -->
-    <p content class="fs-14 ms-2">
-        You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
-    </p>
-</app-confirmation-modal>
 
 <app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Risk Status'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>
