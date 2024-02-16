@@ -119,7 +119,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             this.mandatoryList.set('change', 'Please choose a modification type.');
         }
         if (!this.modifyDescription) {
-            this.mandatoryList.set('description', 'Please provide an reason for modifying the entity.');
+            this.mandatoryList.set('description', 'Please provide a reason for modifying the entity.');
         }
         return this.mandatoryList.size === 0 ? true : false;
     }
