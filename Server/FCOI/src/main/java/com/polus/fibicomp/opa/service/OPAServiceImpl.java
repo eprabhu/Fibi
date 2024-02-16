@@ -63,6 +63,8 @@ public class OPAServiceImpl implements OPAService {
 	public ResponseEntity<Object> createOpaDisclosure(String personId, String homeUnit) {
 		OPACommonDto opaDisclosure = opaDao.createOpaDisclosure(personId, homeUnit);
 		OPACommonDto opaCommonDto = OPACommonDto.builder()
+				.opaDisclosureId(opaDisclosure.getOpaDisclosureId())
+				.opaDisclosureNumber(opaDisclosure.getOpaDisclosureNumber())
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_CREATED, opaCommonDto);
