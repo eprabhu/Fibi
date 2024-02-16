@@ -4,7 +4,7 @@ import {ReviewService} from '../review.service';
 import {CommonService} from '../../../common/services/common.service';
 import {environment} from '../../../../environments/environment';
 import {DataStoreService} from '../../services/data-store.service';
-import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../coi-interface';
+import {CoiDisclosure, CommentConfiguration, ModalType} from '../../coi-interface';
 import {CoiService} from '../../services/coi.service';
 import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -22,9 +22,8 @@ import { PersonProjectOrEntity, coiReviewComment } from '../../../shared-compone
 export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
-    dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail', 'coiReviewerList'];
+    dependencies = ['coiDisclosure', 'person', 'projectDetail', 'coiReviewerList'];
     coiDisclosure: CoiDisclosure = new CoiDisclosure();
-    adminGroups: any = [];
     deployMap = environment.deployUrl;
 
     isExpanded = true;
@@ -36,7 +35,6 @@ export class LocationComponent implements OnInit, OnDestroy {
     reviewDetails: any = {};
     personElasticOptions: any = {};
     assigneeClearField: String;
-    adminGroupsCompleterOptions: any = {};
     categoryClearFiled: String;
     datePlaceHolder = DATE_PLACEHOLDER;
     personProjectDetails = new PersonProjectOrEntity();
@@ -125,38 +123,19 @@ export class LocationComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
-        this.adminGroups = DATA.adminGroup || [];
         this.disclosurePerson = DATA.person;
         this.projectDetail = DATA.projectDetail;
         this.setPersonProjectDetails();
         this.commentConfiguration.disclosureId = this.coiDisclosure.disclosureId;
         this.getCoiReview();
-        this.setAdminGroupOptions();
     }
 
-    private setAdminGroupOptions(): void {
-        this.adminGroupsCompleterOptions = {
-            arrayList: this.getActiveAdminGroups(),
-            contextField: 'adminGroupName',
-            filterFields: 'adminGroupName',
-            formatString: 'adminGroupName',
-            defaultValue: ''
-        };
-    }
-
-    private getActiveAdminGroups(): AdminGroup[] {
-        return this.adminGroups.filter(element => element.isActive === 'Y');
-    }
 
     getCoiReview() {
       const DATA = this._dataStore.getData(['coiReviewerList']);
       this.reviewerList = DATA.coiReviewerList || [];
     }
 
-    adminGroupSelect(event: any): void {
-        this.reviewDetails.adminGroupId = event ? event.adminGroupId : null;
-        this.reviewDetails.adminGroup = event ? event : null;
-    }
 
     assigneeSelect(event: any): void {
         this.reviewDetails.assigneePersonId = event ? event.prncpl_id : null;
@@ -181,7 +160,6 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.modifyIndex = index;
         this.personElasticOptions.defaultValue = review.assigneePersonName;
         this.assigneeClearField = new String(false);
-        this.adminGroupsCompleterOptions.defaultValue = review.adminGroup ? review.adminGroup.adminGroupName : '';
         this.categoryClearFiled = new String(false);
     }
 
@@ -217,7 +195,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });        
         this._dataStore.updateTimestampEvent.next();
-        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.startOrCompleteReview();
         this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
     }
 
@@ -226,9 +204,22 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
         this._dataStore.updateTimestampEvent.next();
-        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+       this.startOrCompleteReview();
     }
 
+    startOrCompleteReview() {
+        this.coiService.isStartReview = false;
+        this.coiService.isCompleteReview = false;
+        let nextAssignedReview = this.getNextAssignedReview();
+        if (nextAssignedReview) {
+            this.coiService.currentReviewForAction = nextAssignedReview;
+            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+                this.coiService.isStartReview = true;
+            else if (nextAssignedReview.reviewStatusTypeCode == 3)
+                this.coiService.isCompleteReview = true;
+        }
+       
+    }
 
     private clearActionData() {
         this.reviewActionConfirmation = {};
@@ -241,7 +232,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.coiDisclosure.coiReviewStatusType = _res.coiReviewStatusType;
             this._dataStore.updateStore(['coiReviewerList' , 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
              this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
-             this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+             this.startOrCompleteReview();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -343,10 +334,10 @@ export class LocationComponent implements OnInit, OnDestroy {
     this.coiService.isEnableReviewActionModal = true;
   }
 
-    private startReviewIfLoggingPerson(): any {
+    private getNextAssignedReview(): any {
         return this.reviewerList.find(ele =>
             ele.assigneePersonId === this._commonService.currentUserDetails.personId
-            && ele.reviewStatusTypeCode === '1');
+            && ele.reviewStatusTypeCode !== '2');
     }
 
     getDaysAtLocation(startDate, endDate) {

@@ -145,8 +145,12 @@ export class OPACompUncompComponent implements OnInit {
     entitySelected(entity: any): void {
         if (entity) {
             const index = this.checkDuplicate(entity.personEntityId);
-        this.isDuplicate = index === -1 || index === this.editIndex ?  false : true;
-        this.entityDetails = entity;
+            this.isDuplicate = index === -1 || index === this.editIndex ? false : true;
+            this.entityDetails = entity;
+        } else {
+            this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
+            this.entityDetails = {};
+            this.isDuplicate = false;
         }
     }
 
@@ -292,15 +296,17 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     getEntityRelationTypePills(validPersonEntityRelType: string) {
-        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+        if(validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
+            });
             return this.relationshipTypeCache[validPersonEntityRelType];
         }
-        const entityRelTypes = validPersonEntityRelType.split(':;:');
-        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
-            const relationshipType = entity.split(':');
-            return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
-        });
-        return this.relationshipTypeCache[validPersonEntityRelType];
     }
 
 }

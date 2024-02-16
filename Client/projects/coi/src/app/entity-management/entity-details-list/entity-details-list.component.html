@@ -453,7 +453,7 @@
                     <label class="fw-bold me-2">Expiration Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
-                        <span>{{disclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
+                        <span>{{disclosureList?.expirationDate | dateFormatter}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
@@ -675,11 +675,11 @@
         </div>
       </ng-container>
     </div>
-  
+
     <div class="m-4" *ngIf="!entityRelations.length">
       <app-no-information></app-no-information>
     </div>
-  
+
     <div *ngIf="entityRelations.length>0" class="col-sm-12 col-12 mt-3">
       <nav aria-label="pagination section" class="pagination justify-content-end m-3">
         <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount"

@@ -3,6 +3,7 @@ package com.polus.fibicomp.opa.dao;
 import com.polus.fibicomp.opa.pojo.OPAReview;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public interface OPAReviewDao {
@@ -34,9 +35,10 @@ public interface OPAReviewDao {
      *
      * @param opaReviewId
      * @param reviewStatus
+     * @param opaReviewEndDate 
      * @return
      */
-    Timestamp updateReviewStatus(Integer opaReviewId, String reviewStatus);
+    Timestamp updateReviewStatus(Integer opaReviewId, String reviewStatus, Date opaReviewEndDate);
 
     /**
      *

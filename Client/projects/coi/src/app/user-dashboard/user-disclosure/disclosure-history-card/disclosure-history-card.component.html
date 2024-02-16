@@ -48,7 +48,7 @@
                                 <label class="label-text me-2">Certification Date<span class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="break-point-1200"> 
                                     <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                        <span class="grey-text break-point-1200" aria.label="{{disclosure?.certifiedAt | dateFormatter}}">{{disclosure?.certifiedAt | dateFormatter}}</span>
+                                        <span class="grey-text break-point-1200" aria.label="{{disclosure?.certifiedAt | dateFormatterWithTimeZone}}">{{disclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>

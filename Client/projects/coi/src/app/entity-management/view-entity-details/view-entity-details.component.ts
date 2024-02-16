@@ -116,10 +116,10 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     validationCheck(): boolean {
         if (!this.valueOfModify) {
-            this.mandatoryList.set('change', '*Please choose an action');
+            this.mandatoryList.set('change', 'Please choose a modification type.');
         }
         if (!this.modifyDescription) {
-            this.mandatoryList.set('description', 'Please enter the description for why you want to modify the entity.');
+            this.mandatoryList.set('description', 'Please provide a reason for modifying the entity.');
         }
         return this.mandatoryList.size === 0 ? true : false;
     }

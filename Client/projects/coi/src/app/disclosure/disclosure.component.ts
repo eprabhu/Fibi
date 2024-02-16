@@ -111,9 +111,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
-    reviewList: any = [];
+   reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
+    // CoiConflictStatusType = CoiConflictStatusType;
+    // CoiReviewStatusType = CoiReviewStatusType;
+    commentsRight: any = {}
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -137,6 +140,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
+        // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_FCOI_PRIVATE_COMMENTS']);
+        // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_FCOI_PRIVATE_COMMENTS']);
         this.getDataFromStore();
         this.getDisclosureTypeMessage();
         this.listenDataChangeFromStore();
@@ -558,7 +563,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     public updateCoiReview(modalType: ModalType) {
         const reviewerInfo = this.coiData.coiReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId);
+            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '2');
         if (reviewerInfo) {
             this.coiService.$SelectedReviewerDetails.next(reviewerInfo);
             this.coiService.triggerStartOrCompleteCoiReview(modalType);
@@ -756,18 +761,4 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.showSlider = false;
         this.selectedType = '';
     }
-
-    getColorBadges() {
-        switch (this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) {
-            case '1':
-                return 'bg-fcoi-clip';
-            case '2':
-                return 'bg-proposal-clip';
-            case '3':
-                return 'bg-award-clip';
-            default:
-                return;
-        }
-    }
-    
 }

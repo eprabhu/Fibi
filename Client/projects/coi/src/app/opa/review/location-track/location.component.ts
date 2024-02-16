@@ -16,7 +16,7 @@ import {
     parseDateWithoutTimestamp
 } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import {PersonProjectOrEntity, coiReviewComment} from '../../../shared-components/shared-interface';
-import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
+import {CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
 import {OPA, OpaDisclosure} from '../../opa-interface';
 
@@ -29,7 +29,6 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
     opaDisclosure: OpaDisclosure = new OpaDisclosure();
-    adminGroups: any = [];
     deployMap = environment.deployUrl;
 
     isExpanded = true;
@@ -40,7 +39,6 @@ export class LocationComponent implements OnInit, OnDestroy {
     reviewDetails: any = {};
     personElasticOptions: any = {};
     assigneeClearField: String;
-    adminGroupsCompleterOptions: any = {};
     categoryClearFiled: String;
     datePlaceHolder = DATE_PLACEHOLDER;
     personProjectDetails = new PersonProjectOrEntity();
@@ -57,6 +55,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     reviewEndDate: any;
     collapseViewMore = {};
     isCOIAdministrator = false;
+    isOPAEditMode = false;
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
@@ -117,11 +116,6 @@ export class LocationComponent implements OnInit, OnDestroy {
         }));
     }
 
-    adminGroupSelect(event: any): void {
-        this.reviewDetails.adminGroupId = event ? event.adminGroupId : null;
-        this.reviewDetails.adminGroup = event ? event : null;
-    }
-
     assigneeSelect(event: any): void {
         this.reviewDetails.assigneePersonId = event ? event.prncpl_id : null;
         this.reviewDetails.assigneePersonName = event ? event.full_name : null;
@@ -151,7 +145,6 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.modifyIndex = index;
         this.personElasticOptions.defaultValue = review.assigneePersonName;
         this.assigneeClearField = new String(false);
-        this.adminGroupsCompleterOptions.defaultValue = review.adminGroup ? review.adminGroup.adminGroupName : '';
         this.categoryClearFiled = new String(false);
     }
 
@@ -189,7 +182,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
-        this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.startOrCompleteReview();
         this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
     }
 
@@ -208,7 +201,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
-        this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.startOrCompleteReview();
     }
 
     deleteReview() {
@@ -220,7 +213,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 opaDisclosure: this.opaDisclosure
             });
             this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
-            this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+            this.startOrCompleteReview();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -294,9 +287,9 @@ export class LocationComponent implements OnInit, OnDestroy {
         switch (statusCode) {
             case '1':
                 return 'warning';
-            case '3':
-                return 'info';
             case '2':
+                return 'info';
+            case '3':
                 return 'success';
             default:
                 return 'danger';
@@ -345,28 +338,14 @@ export class LocationComponent implements OnInit, OnDestroy {
         );
     }
 
+    // Returned - 5, Pending - 1, Withdrwan - 6
     private getDataFromStore() {
         const DATA: OPA = this._dataStore.getData();
         this.opaDisclosure = DATA.opaDisclosure;
-        this.adminGroups = DATA.opaDisclosure.adminGroupId || [];
+        this.isOPAEditMode = ['1', '5', '6'].includes(DATA.opaDisclosure.reviewStatusCode);
         this.commentConfiguration.disclosureId = this.opaDisclosure.opaDisclosureId;
         this.isCOIAdministrator = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
         this.getCoiReview();
-        this.setAdminGroupOptions();
-    }
-
-    private setAdminGroupOptions(): void {
-        this.adminGroupsCompleterOptions = {
-            arrayList: this.getActiveAdminGroups(),
-            contextField: 'adminGroupName',
-            filterFields: 'adminGroupName',
-            formatString: 'adminGroupName',
-            defaultValue: ''
-        };
-    }
-
-    private getActiveAdminGroups(): AdminGroup[] {
-        return this.adminGroups.filter(element => element.isActive === 'Y');
     }
 
     private clearActionData() {
@@ -378,6 +357,26 @@ export class LocationComponent implements OnInit, OnDestroy {
         return this.reviewerList.find(ele =>
             ele.assigneePersonId === this._commonService.currentUserDetails.personId
             && ele.reviewStatusTypeCode === '1');
+    }
+
+    startOrCompleteReview() {
+        this.opaService.isStartReview = false;
+        this.opaService.isCompleteReview = false;
+        let nextAssignedReview = this.getNextAssignedReview();
+        if (nextAssignedReview) {
+            this.opaService.currentOPAReviewForAction = nextAssignedReview;
+            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+                this.opaService.isStartReview = true;
+            else if (nextAssignedReview.reviewStatusTypeCode == 2)
+                this.opaService.isCompleteReview = true;
+        }
+       
+    }
+
+    private getNextAssignedReview(): any {
+        return this.reviewerList.find(ele =>
+            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            && ele.reviewStatusTypeCode !== '3');
     }
 
     // private setPersonProjectDetails(): void {

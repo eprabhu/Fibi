@@ -22,11 +22,10 @@
               class="filter-pills" role="button">Inactive</span>
     </div>
   </div>
-    <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer" [class.pl-28]="!searchText"
-    (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
+    <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative">
     <span class="filter-search">
-        <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="form-control" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+        <mat-icon class="fs-25px searchButton">search</mat-icon>
+        <input class="form-control pe-5" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
       </span>
         <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
     </div>

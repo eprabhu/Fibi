@@ -108,12 +108,12 @@
                                 </span>
                             </span>
                         </span>
-                        <button (click)="goBackStep()" [disabled]="selectedSfiIndex == 0"
+                        <button (click)="goBackStep()" [disabled]="selectedSfiIndex == 0" [title]="isSaving ? 'Please wait for auto save to finish':'Go to previous'"
                             class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
                             <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
                             Previous
                         </button>
-                        <button (click)="goToStep()" [disabled]="sfiList.length === (selectedSfiIndex + 1)"
+                        <button (click)="goToStep()" [disabled]="sfiList.length === (selectedSfiIndex + 1)" [title]="isSaving ? 'Please wait for auto save to finish':'Go to Next'"
                             class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2 mt-xxl-3">
                             Next
                             <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
@@ -123,7 +123,9 @@
             </div>
         </div>
         <section class="mt-3">
-            <app-sfi-project-relation-shared [projectSFIDetails]="projectSFIDetails[sfi.personEntityId]"
+            <app-sfi-project-relation-shared 
+                [(isSaving)]="isSaving"    
+                [projectSFIDetails]="projectSFIDetails[sfi.personEntityId]"
                 [coiStatusList]="coiStatusList" [projectIdTitleMap]="projectIdTitleMap"
                 (relationshipChanged)="isDataChanged=true"></app-sfi-project-relation-shared>
         </section>

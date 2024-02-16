@@ -56,7 +56,8 @@
                               <label class="grey-text fw-600">Disclosure : </label>
                               <span class="grey-text fs-14 ms-3 col fw-normal">
                                 <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                                    <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}">{{travelDisclosure?.disclosureStatus}}</span>
+                                    <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                                    <span class="badgeFont">{{travelDisclosure?.disclosureStatus}}</span>
                                 </app-no-data-label>
                             </span>
                           </div>
