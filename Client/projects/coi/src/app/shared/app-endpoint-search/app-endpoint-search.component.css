@@ -97,3 +97,7 @@ ul.sb-results-dropdown-menu > li:last-child {
 .mdc-menu-surface.mat-mdc-autocomplete-panel {
     padding: 0 !important;
 }
+
+.form-control.is-invalid {
+    background-image: none;
+}
