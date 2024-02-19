@@ -178,19 +178,21 @@ public class OPADaoImpl implements OPADao {
     }
 
     @Override
-    public boolean isOPAWithStatuses(String opaDisclosureStatus, String dispositionStatus, Integer opaDisclosureId) {
+    public boolean isOPAWithStatuses(List<String> opaDisclosureStatuses, String dispositionStatus, Integer opaDisclosureId) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("SELECT case when (count(d.opaDisclosureId) > 0) then true else false end FROM OPADisclosure d WHERE ");
-        if (opaDisclosureStatus != null)
-            hqlQuery.append(" d.reviewStatusCode = :reviewStatusCode AND  ");
+        if (opaDisclosureStatuses != null && !opaDisclosureStatuses.isEmpty()) {
+            hqlQuery.append(" d.reviewStatusCode IN (:reviewStatusCodes) AND ");
+        }
         if (dispositionStatus != null)
             hqlQuery.append("d.dispositionStatusCode = :dispositionStatusCode AND ");
         hqlQuery.append("d.opaDisclosureId = :opaDisclosureId ");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("opaDisclosureId",opaDisclosureId);
-        if (opaDisclosureStatus != null)
-            query.setParameter("reviewStatusCode", opaDisclosureStatus);
+        if (opaDisclosureStatuses != null && !opaDisclosureStatuses.isEmpty()) {
+            query.setParameter("reviewStatusCodes", opaDisclosureStatuses);
+        }
         if (dispositionStatus != null)
             query.setParameter("dispositionStatusCode", dispositionStatus);
         return (boolean) query.getSingleResult();
