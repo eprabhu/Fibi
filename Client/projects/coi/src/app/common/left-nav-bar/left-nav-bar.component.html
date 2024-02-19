@@ -1,16 +1,19 @@
-<div class="side-bar h-100 shadow" #sideBarMenu [ngClass]="isNavExpanded?'side-bar-open':'side-bar-closed'">
+<div class="side-bar h-100" #sideBarMenu [ngClass]="isNavExpanded?'side-bar-open':'side-bar-closed'">
     <div class="d-flex flex-column position-relative top-0 width-max-content h-100">
         <!-- navigation-menu -->
         <ul tabindex="0" role="navigation" id="eri-left-navigation-menu" aria-label="navigation menu"
-            class="list-unstyled d-flex flex-column fs-16 text-secondary text-white bg-red pt-3 navigation-menu position-relative mb-0">
+            class="list-unstyled d-flex flex-column fs-16 text-secondary text-white bg-red pt-5 navigation-menu position-relative mb-0">
 
-            <span class="menu-icon pt-2 px-4" (click)="!isNavExpanded && toggleNavBar(true)">
+            <!-- <span class="menu-icon pt-2 px-4" (click)="!isNavExpanded && toggleNavBar(true)">
                 <mat-icon class="cursor-pointer">{{isNavExpanded ? 'close':'menu'}}</mat-icon>
+            </span> -->
+            <span class="left-menu-icon" (click)="!isNavExpanded && toggleNavBar(true)">
+                <mat-icon role="img" class="mat-icon notranslate  material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">chevron_right</mat-icon>
             </span>
 
             <button role="listitem" aria-label="Go to My Disclosures"
                     [attr.title]="_router.url.includes('/coi/user-dashboard') ? 'My Disclosures' : 'Go to My Disclosures'"
-                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement my-2 mx-3 rounded p-2"
                     routerLinkActive="active-list" [routerLink]="['/coi/user-dashboard']">
                 <span class="icon-btn"><mat-icon>home</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">My Disclosures</span></span>
             </button>
@@ -27,10 +30,11 @@
                 class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                 routerLinkActive="active-list" [routerLink]="['/coi/opa-dashboard']">
                 <span class="icon-btn">
-                    <img class="mr-2 img-container" *ngIf="_router.url.includes('/coi/opa-dashboard')" src="{{deployMap}}assets/images/opa icon-active.svg" alt="OPA Disclosures icon">
-                    <img class="mr-2 img-container" *ngIf="!_router.url.includes('/coi/opa-dashboard')" src="{{deployMap}}assets/images/opa icon.svg" alt="OPA Disclosures icon">
+                    <!-- <img class="mr-2 img-container" *ngIf="_router.url.includes('/coi/opa-dashboard')" src="{{deployMap}}assets/images/opa icon-active.svg" alt="OPA Disclosures icon">
+                    <img class="mr-2 img-container" *ngIf="!_router.url.includes('/coi/opa-dashboard')" src="{{deployMap}}assets/images/opa icon.svg" alt="OPA Disclosures icon"> -->
+                    <mat-icon>pending_actions</mat-icon>
                     <span
-                        class="text-start text-nowrap width-170px text-indent-15px ps-2">OPA Disclosures</span></span>
+                        class="text-start text-nowrap width-170px text-indent-15px ps-3">OPA Disclosures</span></span>
             </button>
 
             <!-- [attr.title]="_router.url.includes('/coi/user-dashboard/disclosures') ? 'Person Search' : 'Go to Person Search'" -->

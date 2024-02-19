@@ -6,6 +6,7 @@ import { CommonService } from '../../../../../common/services/common.service';
 import { isEmptyObject, openModal } from '../../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CoiService } from '../../../../services/coi.service';
+import { openCoiSlider } from '../../../../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-add-conflict-slider',
@@ -36,7 +37,6 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                  private _commonService: CommonService,  public coiService: CoiService ) { }
 
     ngOnInit() {
-        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
@@ -45,24 +45,12 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     showConflictNavBar() {
         if (this.isOpenSlider) {
             setTimeout(() => {
-                const slider = document.querySelector('.slider-base');
-                slider.classList.add('slider-opened');
+               openCoiSlider('add-conflict');
             });
         }
     }
 
-    addBodyScroll() {
-          document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-          document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
-    }    
-
-    validateSliderClose() {
-        (this.conflictStatus || this.comment) ? openModal('conflictConfirmationModal') : this.hideConflictNavBar();
-    }
-
     hideConflictNavBar() {
-        let slider = document.querySelector('.slider-base');
-        slider.classList.remove('slider-opened');
         setTimeout(() => {
             this.isOpenSlider = false;
             this.closePage.emit(this.coiConflictStatusType);
@@ -144,7 +132,10 @@ isEmptyHistory(): boolean {
 }
 
     ngOnDestroy(): void {
-        this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
+    }
+
+    isFieldValueChanges(): boolean {
+       return !!((this.conflictStatus  || this.comment));
     }
 }

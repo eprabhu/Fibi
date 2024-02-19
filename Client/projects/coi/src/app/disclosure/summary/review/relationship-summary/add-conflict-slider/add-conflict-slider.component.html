@@ -1,12 +1,7 @@
-<div #addCommentOverlay [class.overlay]="isOpenSlider">
-    <div class="slider-base" *ngIf="isOpenSlider">
-        <app-slider-close-btn (closeAction)="validateSliderClose()"></app-slider-close-btn>
-        <div class="slider-container p-0">
-            <div class="card card-header bg-white px-4 py-2 pt-3">
-                <div class="justify-content-between d-flex align-items-center">
-                    <h5 class="fs-16">Relationship between SFIs and Projects</h5>
-                </div>
-            </div>
+<ng-container *ngIf="isOpenSlider">
+    <app-coi-slider (closeSlider)="hideConflictNavBar()" [elementId]="'add-conflict'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
+        <ng-container header>Relationship between SFIs and Projects</ng-container>
+        <ng-container content>
             <div class="info-card-border mt-2 rounded-2 shadow-medium bg-light mx-4 ms-4">
                 <div class="row ml-15 mt-2">
                     <div class="position-relative p-3 fs-14 pl-5 fw-500">
@@ -190,34 +185,9 @@
             <ng-template *ngIf="isEmptyHistory()">
                 <app-no-information></app-no-information>
             </ng-template>
-        </div>
-    </div>
-</div>
-
-<!-- Confirmation Modal -->
-<div class="modal fade mySkinDialog" id="conflictConfirmationModal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Confirmation
-                </h5>
-                <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body title-descriptions">
-                <p> You have unsaved changes in the <strong>Project - SFI relations</strong>, do you want to leave?.
-                </p>
-            </div>
-            <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
-                    (click)="hideConflictNavBar()">
-                    Leave Page
-                </button>
-                <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
-                    Stay On Page
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+        </ng-container>
+        <ng-container confirmation-content>
+            You have unsaved changes in the <strong>Project - SFI relations</strong>, do you want to leave?
+        </ng-container>
+    </app-coi-slider>
+</ng-container>
