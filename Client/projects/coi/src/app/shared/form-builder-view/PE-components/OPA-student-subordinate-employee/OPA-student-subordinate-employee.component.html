@@ -1,22 +1,28 @@
-<!--   -->
-<div>
-    <p *ngIf="isFormEditable" class="text-end mb-1">
-        <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
-            [attr.data-bs-target]="'#OPA_STUD_SUBORDINATE'+id" area-describedby="Click here to add" (click)="getMyEntities()">
-            Add Entry
-        </button>
-    </p>
-</div>
-<div *ngIf="componentData.data.length">
-    <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
-        <thead class="text-middle table-background">
+<div class="table-responsive" *ngIf="componentData.data.length">
+    <table class="table table-bordered form-builder-table" aria-describedby="'table showing contents of all user selected entities'">
+        <thead class="text-middle table-background form-builder-table-header">
             <tr>
                 <th scope="col" width="20%" rowspan="2"> Name</th>
                 <th scope="col" width="20%" rowspan="2"> Type of Work</th>
                 <th scope="col" width="20%" rowspan="2"> Company</th>
                 <th scope="col" width="20%" rowspan="2"> Relationship with student/subordinate</th>
                 <th scope="col" width="20%" rowspan="2"> # of days</th>
-                <th scope="col" width="20%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
+                <th scope="col" width="18%" class="text-center">
+                    <div class="form-builder-sticky-button">
+                        <div class="form-builder-sticky-button-color">
+                            <div class="text-end mb-1" *ngIf="isFormEditable">
+                                <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
+                                    (click)="getMyEntities()">
+                                    Add Entity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col" width="20%" colspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +32,7 @@
                 <td>{{data?.entityName}}</td>
                 <td>{{data?.relationWithPerson}}</td>
                 <td>{{data?.numOfDays}}</td>
-                <td class="text-middle" *ngIf="isFormEditable">
+                <td class="text-middle text-center" *ngIf="isFormEditable">
                     <mat-icon class="mr-2 small-icon" title="Edit" data-bs-toggle="modal"
                         [attr.data-bs-target]="'#OPA_STUD_SUBORDINATE_EDIT'+id">edit</mat-icon>
                     <mat-icon class="small-icon" (click)="compUnCompData = data; deleteIndex = index"
@@ -36,6 +42,14 @@
             </tr>
         </tbody>
     </table>
+</div>
+<div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
+    <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#OPA_STUD_SUBORDINATE'+id" area-describedby="Click here to add" (click)="getMyEntities()">
+        Add Entity
+    </button>
+    <p> Please click on 'Add Entity' to link student/subordinate employees
+    <p>
 </div>
 
 <!-- Add Entry Modal -->

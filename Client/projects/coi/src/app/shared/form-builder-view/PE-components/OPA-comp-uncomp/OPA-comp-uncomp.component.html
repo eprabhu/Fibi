@@ -1,25 +1,29 @@
-<div class="" *ngIf="componentData.data.length">
-    <p class="text-end mb-1" *ngIf="isFormEditable">
-        <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
-            [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
-            (click)="getMyEntities()">
-            Add Entity
-        </button>
-    </p>
-
-
-    <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
-        <thead class="text-middle table-background">
+<div class="table-responsive" *ngIf="componentData.data.length">
+    <table class="table table-bordered form-builder-table" aria-describedby="'table showing contents of all user selected entities'">
+        <thead class="text-middle table-background form-builder-table-header">
             <tr>
-                <th scope="col" width="42%" rowspan="2">Company/Entity</th>
-                <th scope="col" width="25%" rowspan="2"> Nature of Relationship</th>
+                <th scope="col" width="35%" rowspan="2">Company/Entity</th>
+                <th scope="col" width="20%" rowspan="2"> Nature of Relationship</th>
                 <th scope="col" width="10%" rowspan="2"> Compensated/ Uncompensated</th>
-                <th scope="col" width="16%" colspan="2" class="text-center"># Number of days per Year</th>
-                <th scope="col" width="20%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
+                <th scope="col" width="10%" colspan="2" class="text-center"># Number of days per Year</th>
+                <th scope="col" width="18%" class="text-center">
+                    <div class="form-builder-sticky-button">
+                        <div class="form-builder-sticky-button-color">
+                            <div class="text-end mb-1" *ngIf="isFormEditable">
+                                <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
+                                    (click)="getMyEntities()">
+                                    Add Entity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </th>
             </tr>
-            <tr>
+            <tr class="test-class">
                 <th scope="col" width="8%" class="text-center">Summer</th>
                 <th scope="col" width="8%" class="text-center">Academic</th>
+                <th scope="col" width="20%" colspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -66,7 +70,7 @@
                 </td>
                 <td class="text-end text-middle">{{data.numOfDaysSummer}}</td>
                 <td class="text-end text-middle">{{data.numOfDaysAcademic}}</td>
-                <td class="text-middle" *ngIf="isFormEditable">
+                <td class="text-middle text-center" *ngIf="isFormEditable">
                     <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit"
                         data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id">edit</mat-icon>
                     <mat-icon class="small-icon" (click)="compUnCompData = data; deleteIndex = index; entityDetails = compUnCompData?.entityInfo;"
