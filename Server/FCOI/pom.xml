@@ -25,7 +25,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<log4j2.version>2.17.1</log4j2.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>	
@@ -423,8 +423,20 @@
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 			<version>4.0.4</version>
 		</dependency>
-		
-   <!-- END dependency for Microservice -->   
+
+		<!--		<dependency>-->
+<!--			<groupId>com.polus</groupId>-->
+<!--			<artifactId>fibi-core</artifactId>-->
+<!--			<version>0.0.1-20240201.070301-39</version>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>com.polus</groupId>
+			<artifactId>fibi-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+   <!-- END dependency 	for Microservice -->
     </dependencies>
     
 	<dependencyManagement>

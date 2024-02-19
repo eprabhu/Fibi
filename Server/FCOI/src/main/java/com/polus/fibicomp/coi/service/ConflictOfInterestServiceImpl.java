@@ -17,7 +17,17 @@ import java.util.stream.Stream;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.person.pojo.Person;
+import com.polus.core.pojo.Country;
+import com.polus.core.pojo.Unit;
+import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.core.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.coi.repository.ActionLogDao;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
+import com.polus.fibicomp.coi.vo.DashBoardProfile;
 import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
@@ -34,7 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.dto.COIValidateDto;
@@ -87,20 +96,11 @@ import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.inbox.pojo.Inbox;
+import com.polus.core.inbox.pojo.Inbox;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.person.pojo.Person;
-import com.polus.fibicomp.pojo.Country;
-import com.polus.fibicomp.pojo.DashBoardProfile;
-import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
-import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 
@@ -502,7 +502,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		questionnaireDataBus.getModuleSubItemCodes().addAll(submoduleCodes);
 		questionnaireDataBus.setModuleSubItemKey("0");
 		questionnaireDataBus.setCopyModuleItemKey(copyDisclosure.getDisclosureId().toString());
-		questionnaireService.copyQuestionnaireForVersion(questionnaireDataBus);
+		questionnaireService.copyQuestionnaireForVersion(questionnaireDataBus, false);
 	}
 
 	private void copyDisclosureDetails(CoiDisclosure disclosure, CoiDisclosure copyDisclosure) {
