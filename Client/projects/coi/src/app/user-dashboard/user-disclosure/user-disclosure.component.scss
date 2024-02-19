@@ -160,7 +160,6 @@ margin-top-3px{
 .closeButton {
     position: absolute;
     right: 10px;
-    top: 10px;
     color: #9E9E9E;
     cursor: pointer;
 }
@@ -173,7 +172,7 @@ margin-top-3px{
   padding-left: 28px;
 }
 
-.search-area {
+.search-area:hover {
   background-color: white !important;
 }
 
@@ -198,7 +197,6 @@ margin-top-3px{
 
 .award-icon {
   width: 18px;
-  margin-right: 3px;
   color: grey;
   height: 18px;
 }
@@ -217,7 +215,6 @@ margin-top-3px{
 
 .proposal-icon {
   width: 16px;
-  margin-right: 3px;
   color: grey;
   height: 17px;
 }
@@ -442,4 +439,6 @@ padding-right: 17px;
 //   }
 // }
 
-
+.searchButton:hover{
+  color: #0a58ca !important;
+}

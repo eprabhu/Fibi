@@ -19,7 +19,7 @@ export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_F
 
 export const OPA_DASHBOARD_RIGHTS = new Set(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
 
-export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'Relationship Details';
+export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'SFI Details';
 
 export const DATE_PLACEHOLDER = 'DD/MM/YYYY';
 
@@ -38,3 +38,23 @@ export const EDITOR_CONFIGURATION = {
 
 export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
+
+export const COI_REVIEW_STATUS_TYPE = {
+    SUBMITTED: '2'
+};
+
+export const COI_CONFLICT_STATUS_TYPE = {
+    NO_CONFLICT_WITHOUT_SFI: '4'
+};
+
+export const TRAVEL_REVIEW_STATUS = {
+    SUBMITTED: '2',
+    REVIEW_IN_PROGRESS: '3',
+    APPROVED_ACKNOWLEDGED: '7'
+};
+
+export const OPA_REVIEW_STATUS = {
+    PENDING: '1',
+    RETURNED: '5',
+    WITHDRAWN: '6'
+};

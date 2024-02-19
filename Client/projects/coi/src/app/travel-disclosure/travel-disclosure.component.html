@@ -117,7 +117,7 @@
                                     aria-label="Create Date is">Create : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.createTimestamp">
-                                        <span>{{travelDisclosure?.createTimestamp | dateFormatter}}</span>
+                                        <span>{{travelDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -128,7 +128,7 @@
                                     aria-label="Certification Date is">Certification : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.certifiedAt">
-                                        <span>{{travelDisclosure?.certifiedAt | dateFormatter}}</span>
+                                        <span>{{travelDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -139,7 +139,7 @@
                                     aria-label="Approved Date is">Approved : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.acknowledgeAt">
-                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatter}}</span>
+                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -243,7 +243,7 @@
 
                 <!-- Comments -->
                 <button title="Click to add new review comments" aria-label="Click to add new review comments"
-                    *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME')"
+                    *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME')"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                     <mat-icon>rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
@@ -262,7 +262,7 @@
                     <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
                     <ng-container *ngIf="isTravelAdministrator">
                         <!-- reassigned admin -->
-                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TravelReviewStatus.REVIEW_IN_PROGRESS])" aria-label="Click to Reassign administrator"
+                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS])" aria-label="Click to Reassign administrator"
                             title="Click to Reassign Administrator/Admin Group" role="menuitems"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openAddAssignModal()">
@@ -270,25 +270,25 @@
                             <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                         </button>
                     </ng-container>
-                    <ng-container *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS, TravelReviewStatus.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
+                    <ng-container *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS, TRAVEL_REVIEW_STATUS.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
                         <!-- manage /view disclosure status -->
                         <button mat-menu-item (click)="openConflictSlider()" role="menuitems"
-                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
-                            title="Click to {{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
+                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
+                            title="Click to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon>{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure
+                            <mat-icon>{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
+                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure
                                 Status</span>
                         </button>
 
                         <!-- manage /view travel risk status -->
                         <button mat-menu-item (click)="openRiskSlider()" role="menuitems"
-                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
-                            title="Click to {{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
+                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
+                            title="Click to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon class="material-icons-round">{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
+                            <mat-icon class="material-icons-round">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
                                 'visibility'}}</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk</span>
+                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk</span>
                         </button>
                     </ng-container>
 
@@ -296,7 +296,7 @@
                     <button mat-menu-item title="Click to Withdraw Travel Disclosure" aria-label="Click to Withdraw Travel Disclosure"
                         (click)="openConfirmationModal('Withdraw', true, withdrawHelpTexts, true, withdrawErrorMsg);"
                         class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action" role="menuitems"
-                        *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED]) && travelDisclosure?.personId == currentPersonId">
+                        *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Withdraw</span>
                     </button>
@@ -316,7 +316,7 @@
                             aria-label="Click to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
-                            *ngIf="checkReviewStatusCode([TravelReviewStatus.SUBMITTED])"
+                            *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED])"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
@@ -335,7 +335,7 @@
                     </button>
 
                     <!-- approve disclosure -->
-                    <button *ngIf="(isTravelAdministrator && checkReviewStatusCode([travelReviewStatus.SUBMITTED]))
+                    <button *ngIf="(isTravelAdministrator && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]))
                                    || (showReturnOrApproveButton())"
                         title="Click to Approve Travel Disclosure"
                         aria-label="Click to Approve Travel Disclosure"
@@ -489,11 +489,11 @@
 <!-- disclosure status slider -->
 <app-travel-add-conflict-slider *ngIf="isOpenSlider"
     [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
-    [isEditMode]="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME')" (closePage)="closeConflictSlider()" >
+    [isEditMode]="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME')" (closePage)="closeConflictSlider()" >
 </app-travel-add-conflict-slider>
 
 <div *ngIf="isOpenRiskSlider">
-    <app-travel-risk-slider (closePage)="closeSlider($event)" [travelDisclosure]="travelDisclosure" (riskChange)= "changeDataStoreRisk($event)" [isEditMode]="checkReviewStatusCode([TravelReviewStatus.SUBMITTED, TravelReviewStatus.REVIEW_IN_PROGRESS], 'SOME')"></app-travel-risk-slider>
+    <app-travel-risk-slider (closePage)="closeSlider($event)" [travelDisclosure]="travelDisclosure" (riskChange)= "changeDataStoreRisk($event)" [isEditMode]="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME')"></app-travel-risk-slider>
 </div>
 
 <app-concurrency-warning-modal *ngIf="service.concurrentUpdateAction" [sectionName]="service.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

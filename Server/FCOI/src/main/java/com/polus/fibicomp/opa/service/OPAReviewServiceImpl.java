@@ -1,5 +1,13 @@
 package com.polus.fibicomp.opa.service;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import com.polus.core.common.dao.CommonDao;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.fibicomp.coi.repository.ActionLogDao;
@@ -22,15 +30,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
+import com.polus.fibicomp.coi.repository.ActionLogDao;
+import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.coi.service.ConflictOfInterestService;
+import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.dao.OPADao;
+import com.polus.fibicomp.opa.dao.OPAReviewDao;
+import com.polus.fibicomp.opa.dto.OPAActionLogDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.dto.OPAReviewDto;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
+import com.polus.fibicomp.opa.pojo.OPAReview;
+import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
+import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
+import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
+import com.polus.fibicomp.security.AuthenticatedUser;
 
 @Service
 @Transactional
@@ -135,7 +154,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
                 Constants.OPA_REVIEW_COMPLETED))) {
             return new ResponseEntity<>("Review already started/completed", HttpStatus.METHOD_NOT_ALLOWED);
         }
-        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_IN_PROGRESS);
+        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_IN_PROGRESS, null);
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         opaDao.updateOPADisclosureUpDetails(opaReview.getOpaDisclosureId(), timestamp);
         OPAReview opaReviewObj = reviewDao.getOPAReview(opaReview.getOpaReviewId());
@@ -156,11 +175,18 @@ public class OPAReviewServiceImpl implements OPAReviewService {
     }
 
     @Override
-    public ResponseEntity<Object> completeOPAReview(Integer opaReviewId) {
+    public ResponseEntity<Object> completeOPAReview(Integer opaReviewId, String opaReviewEndDate) {
         if (reviewDao.isOPAReviewExistsOfStatus(opaReviewId, Arrays.asList(Constants.OPA_REVIEW_COMPLETED))) {
             return new ResponseEntity<>("Review already completed", HttpStatus.METHOD_NOT_ALLOWED);
         }
-        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_COMPLETED);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date endDate = null;
+		try {
+			endDate = formatter.parse(opaReviewEndDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_COMPLETED, endDate);
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         if (reviewDao.numberOfReviewOfStatuesIn(opaReview.getOpaDisclosureId(), Arrays.asList(Constants.OPA_REVIEW_ASSIGNED,
                 Constants.OPA_REVIEW_IN_PROGRESS)) == 0) {

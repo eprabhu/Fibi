@@ -6,7 +6,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { EntityDetails, TravelConflictRO, TravelDisclosure } from '../travel-disclosure-interface';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCoiSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-travel-add-conflict-slider',
@@ -44,7 +44,7 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
         this.getTravelConflictStatusType();
         this.loadTravelConflictHistory();
         setTimeout(() => {
-            openSlider('travel-conflict-slider');
+            openCoiSlider('travel-conflict-slider');
         });
     }
 
@@ -65,8 +65,7 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
             }));
     }
 
-    private closeConflictSlider(): void {
-        closeSlider('travel-conflict-slider');
+    closeConflictSlider(): void {
         setTimeout(() => {
             this.closePage.emit();
         }, 500);
@@ -95,10 +94,6 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._service.getTravelConflictStatusType().subscribe((res: any) => {
             this.disclosureStatusLookUpList = res;
         }));
-    }
-
-    validateSliderClose(): void {
-        (this.disclosureStatusCode || this.comment) ? openCommonModal('travel-conflict-confirmation-modal') : this.closeConflictSlider();
     }
 
     setCoiTravelConflictStatusType(): void {
@@ -153,5 +148,9 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
             default:
                 return;
         }
+    }
+
+    isFieldValueChanges(): boolean {
+        return !!((this.disclosureStatusCode || this.comment));
     }
 }

@@ -3983,7 +3983,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean isReviewerReviewCompleted(Integer disclosureId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("SELECT COUNT(r.coiReviewId) FROM CoiReview r ");
 		hqlQuery.append("WHERE r.reviewStatusTypeCode <> 2 AND r.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
@@ -3995,7 +3995,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean isReviewerAssigned(Integer disclosureId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("SELECT COUNT(r.coiReviewId) FROM CoiReview r ");
 		hqlQuery.append("WHERE r.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
@@ -4651,6 +4651,30 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		            .setParameter("disclosureId", disclosureId);
 		    return query.getResultList();
 		});
+	}
+
+	@Override
+	public Boolean isOpaReviewerReviewCompleted(Integer opaDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.opaReviewId) FROM OPAReview r ");
+		hqlQuery.append("WHERE r.reviewStatusTypeCode <> 3 AND r.opaDisclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", opaDisclosureId);
+		Long count = (Long) query.getSingleResult();
+		return (count <= 0);
+	}
+
+	@Override
+	public Boolean isOpaReviewerAssigned(Integer opaDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.opaReviewId) FROM OPAReview r ");
+		hqlQuery.append("WHERE r.opaDisclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", opaDisclosureId);
+		Long count = (Long) query.getSingleResult();
+		return count > 0;
 	}
 
 }

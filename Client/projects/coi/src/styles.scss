@@ -100,3 +100,78 @@
 .mat-mdc-select-trigger {
     font-size: 14px;
 }
+
+.mat-mdc-option:hover {
+	background: rgba(44,119,244,.1) !important;
+	color: #333 !important;
+}
+
+.mat-mdc-option {
+	white-space: normal !important;
+	text-overflow: inherit !important;
+	line-height: normal !important;
+	height: auto !important;
+	padding: 11px 16px !important;
+	border-bottom: 1px dotted #ccc !important;
+	font-size: 1.28rem !important;
+}
+
+.mdc-menu-surface.mat-mdc-autocomplete-panel {
+  padding: 0 !important;
+}
+
+.form-builder-sticky-header {
+    position: sticky;
+    top: 200px;
+    z-index: 10;
+}
+
+.form-builder-sticky-button {
+    position: sticky;
+    top: 234px;
+    z-index: 9;
+}
+
+.form-builder-sticky-button-color {
+    padding: 1rem 1rem;
+    border-radius: 5px;
+    color: #0c5e8d;
+}
+
+.form-builder-table-header {
+    position: sticky;
+    top: 241px;
+    z-index: 10;
+}
+
+.form-builder-table-header th {
+  border: solid 1px #dee2e6;
+  background: #eaeef2;
+}
+
+.form-builder-table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+.form-builder-table td {
+    border-style:solid;
+    border-width:1px;
+}
+
+.info-mt-1 {
+  margin-top: 1px;
+}
+
+.action-icons {
+  border-radius: 50%;
+  height: 38px !important;
+  width: 39px !important;
+  font-size: 25px !important;
+  color: rgb(87 87 87 / 77%);
+  cursor: pointer;
+  &:hover {
+    background-color: #e2f1ff;
+    color: #007dec !important;
+  }
+}

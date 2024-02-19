@@ -1,29 +1,33 @@
 <app-left-nav-bar></app-left-nav-bar>
-<header class="coi-header-top align-items-center d-flex justify-content-between px-5">
+<header class="coi-header-top align-items-center d-flex justify-content-between px-3">
     <div class="d-flex align-items-center">
         <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
-        <ul *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
-            <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
+        <div *ngIf="isShowNavBarOverlay" class="nav-bar-custom-overlay d-block" (click)="onClickMenuBar()"></div>
+        <ul id="responsive-nav" *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+            <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures' : 'Go to My Disclosures'"
                 aria-description="Goto my home">My Disclosures
                 <span *ngIf="router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab"
+            <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/entities') ? 'My Entities' : 'Go to My Entities'"
                 aria-description="Goto my Disclosures">My Entities
                 <span *ngIf="router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab"
+            <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/notes') ? 'My Notes' : 'Go to My Notes'"
                 aria-description="Goto my Notes">My Notes
             </li>
-            <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']"
+            <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/attachments') ? 'My Attachments' : 'Go to My Attachments'"
                 aria-description="Goto my Attachments">My Attachments
             </li>
         </ul>
+        <span *ngIf="router.url.includes('/user-dashboard/')" class="menu-icon" (click)="onClickMenuBar()">
+            <mat-icon class="cursor-pointer">menu</mat-icon>
+        </span>
     </div>
     <div>
         <div class="d-flex align-items-center">
@@ -59,6 +63,10 @@
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                             <span class="ms-2 fw-medium fs-14">Travel Disclosure</span>
                         </button>
+                        <button (click)="createOPA()" mat-menu-item title="Click to Create OPA Disclosure" area-describedby="Click to Create OPA Disclosure"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">OPA Disclosure</span>
+                        </button>
                     </mat-menu>
                 </ng-container>
                 <mat-icon [attr.title]="'Click to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
@@ -83,10 +91,10 @@
                 </mat-icon>
             </div>
             <div class="align-items-center d-flex ml-5 profile">
-                <div class="d-flex mx-4 cursor-pointer" (click)="ispersondetailsmodal = true">
+                <div class="d-flex mx-2 cursor-pointer" (click)="ispersondetailsmodal = true">
                     <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
                 </div>
-                <div class="d-flex flex-column clickable-content" (click)="ispersondetailsmodal = true">
+                <div class="d-lg-flex flex-column clickable-content d-none " (click)="ispersondetailsmodal = true">
                     <b class="f-16">{{fullName}}</b>
                     <small class="f-16">{{loginPerson?.reviewerRights?.description}}</small>
                 </div>

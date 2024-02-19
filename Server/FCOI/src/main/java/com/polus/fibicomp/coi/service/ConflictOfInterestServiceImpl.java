@@ -419,7 +419,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			DisclComment commentObj = getDisclProjectConflictComment(vo.getDisclosureId(), disclosureDetail.getDisclosureDetailsId());
 			coiDisclEntProjDetails.setDisclComment(commentObj != null ? commentObj : new DisclComment());
 			coiDisclEntProjDetails.setPersonEntityRelationshipDto(personEntityRelationshipDto.stream()
-					.filter(dto -> coiDisclEntProjDetails.getEntityId().equals(dto.getEntityId()))
+					.filter(dto -> coiDisclEntProjDetails.getEntityNumber().equals(dto.getEntityNumber()))
 					.findFirst().orElse(null));
 			disclosureDetails.add(coiDisclEntProjDetails);
 		});
@@ -469,6 +469,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setDisclosureId(copyDisclosure.getDisclosureId());
 		copyDisclosureDetails(disclosure, copyDisclosure);
 		copyDisclosureQuestionnaireData(disclosure, copyDisclosure);
+		DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVISED)
+				.disclosureId(copyDisclosure.getDisclosureId()).disclosureNumber(copyDisclosure.getDisclosureNumber())
+				.fcoiTypeCode(copyDisclosure.getFcoiTypeCode()).revisionComment(copyDisclosure.getRevisionComment())
+				.reporter(AuthenticatedUser.getLoginUserFullName())
+				.build();
+		actionLogService.saveDisclosureActionLog(actionLogDto);
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 

@@ -6,7 +6,7 @@ public interface Constants {
 
 
     // Security constants
-    String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    String SECRET = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJt6Aa8aOs06KyiBZ3pwiKdfgmdbosVuNPpxO9hUd6gsKk3lxTx+pBpkaONP/WHWkv5g/GvgOt9R+aItSxf3LEcCAwEAAQ==";
     long EXPIRATION_TIME = 43_200_000; // 12 hour
     String TOKEN_PREFIX = "Bearer ";
     String HEADER_STRING = "Authorization";
@@ -81,6 +81,7 @@ public interface Constants {
     String COI_ENTITY_RISK_ADD_ACTION_LOG_CODE = "7";
 
     String COI_DISCLOSURE_ACTION_LOG_CREATED = "1";
+    String COI_DISCLOSURE_ACTION_LOG_REVISED = "28";
     String COI_DISCLOSURE_ACTION_LOG_SUBMITTED = "2";
     String COI_DISCLOSURE_ACTION_LOG_WITHDRAWN = "3";
     String COI_DISCLOSURE_ACTION_LOG_ASSIGN_ADMIN = "4";

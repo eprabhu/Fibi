@@ -124,9 +124,9 @@ $bg-color: #E4F1FF;
   margin-top: -10px;
 }
 
-.side-height {
-  height: 214.5px;
-}
+// .side-height {
+//   height: 214.5px;
+// }
 
 .label-text{
   color: #6A7980;
@@ -230,8 +230,8 @@ table {
 // }
 
 .activity-icon {
-  width: 1.5rem;
-  margin-right: 7px;
+  width: 1rem;
+  margin-right: 5px;
 }
 
 .text-overflow {
@@ -382,4 +382,32 @@ table {
   background-color: var(--bs-menu-dropdown-bg-color);
   box-shadow: var(--bs-menu-dropdown-box-shadow);
   z-index: 107;
+}
+
+.entity-status {
+  color: #fff;
+  width: max-content;
+  height: 27px;
+  position: relative;
+  left: -23px;
+  top: -4px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+  padding: 10px 10px;
+
+  &:before {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 6px solid #151515;
+    border-left: 6px solid transparent;
+    top: -6px;
+    left: 0;
+  }
+}
+
+.fit-height {
+  height: 34px;
 }

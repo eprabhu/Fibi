@@ -40,6 +40,7 @@ import {
     getEndPointOptionsForSponsor
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/utilities/date-utilities";
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
  @Component({
      selector: 'app-view-questionnaire',
@@ -960,6 +961,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
                              this.questionnaire = this.result.questionnaire;
                              this.isSaving = false;
                              this.questionnaireSaveEvent.emit({ status: 'ERROR', data: this.questionnaireDetails });
+                             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving questionnaire.');
                          },
                          () => { }
                      )
@@ -1009,6 +1011,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
              this.questionnaireDetails.ANS_UPDATE_TIMESTAMP = this.result.header.ANS_UPDATE_TIMESTAMP;
              this.questionnaireSaveEvent.emit({ status: 'SUCCESS', data: this.questionnaireDetails });
          }
+         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Questionnaire saved successfully.');
      }
 
      /**checks whether the questionnaire is complete and sets the flag */

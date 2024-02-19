@@ -12,7 +12,6 @@ class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -43,9 +42,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
     reviseObject: any = { revisionComment: null, disclosureId: null };
+    isShowNavBarOverlay = false;
 
-    constructor(public router: Router, public commonService: CommonService, public headerService: HeaderService) {
+    constructor(public router: Router,
+                public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
+        // document.addEventListener('click', this.offClickSideBarHandler.bind(this));
+    }
+
+    // offClickSideBarHandler(event) {
+        
+    // }
+
+    onClickMenuBar() {
+        if (document.getElementById('responsive-nav').classList.contains('show-menu')) {
+            document.getElementById('responsive-nav').classList.remove('show-menu');
+            if (window.screen.width <= 1300) {
+                this.isShowNavBarOverlay = false;
+            }
+        } else {
+            if (window.screen.width <= 1300) {
+                this.isShowNavBarOverlay = true;
+            }
+            document.getElementById('responsive-nav').classList.add('show-menu');
+        }
     }
 
     ngOnInit() {
@@ -214,10 +234,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openModalTriggeredFromChild() {
         this.$subscriptions.push(this.headerService.$openModal.subscribe((event: string) => {
-            if(event == 'FCOI') {
+            if (event == 'FCOI') {
                 this.openReviseModal();
             }
-        }))
+        }));
+    }
+
+    createOPA() {
+        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
     changeTheme(themename: string) {
@@ -225,4 +253,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.querySelector("html").classList.add(themename);
         $('#dissmiss-btn').click();
     }
+
+    
 }

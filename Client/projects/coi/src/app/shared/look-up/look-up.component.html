@@ -1,4 +1,4 @@
-<mat-select class="form-control {{customClass}}" [(ngModel)]="selection" name="lookupFilter" (focus)="showLookUpList()" placeholder="--select--"
+<mat-select class="form-control {{customClass}}" #mySelect [(ngModel)]="selection" name="lookupFilter" (focus)="showLookUpList()" placeholder="--select--"
   [multiple]="isMultiple" [class.is-invalid]="isError" (closed)="emitDataToParentComponent()" (selectionChange)="checkIfAllOptionsSelected()"
   [title]="lookupTitle">
   <mat-select-trigger>
@@ -11,7 +11,7 @@
     <input type="text" class="form-control" [(ngModel)]="searchText" (ngModelChange)="checkIfAllOptionsSelected()" placeholder="Search">
   </div>
   <mat-option *ngIf="isMultiple" #lookupSelectAll [value]="'SELECT_ALL'"> Select All </mat-option>
-  <mat-option *ngIf="!isMultiple" (click)="null"> -- select -- </mat-option>
+  <mat-option *ngIf="!isMultiple" [value]="null"> -- select -- </mat-option>
   <mat-option *ngFor="let lookup of lookUpList | lookupFilter : searchText" [value]="lookup.code || lookup.description">
     <span [innerHTML]="lookup.description"></span>
   </mat-option>

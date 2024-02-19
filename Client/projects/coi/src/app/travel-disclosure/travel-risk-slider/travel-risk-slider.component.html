@@ -1,4 +1,4 @@
-<app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'travel-risk-slider'">
+<app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'travel-risk-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
 
   <!-- slider header -->
   <ng-container header>
@@ -56,7 +56,8 @@
                               <label class="grey-text fw-600">Disclosure : </label>
                               <span class="grey-text fs-14 ms-3 col fw-normal">
                                 <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                                    <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}">{{travelDisclosure?.disclosureStatus}}</span>
+                                    <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                                    <span class="badgeFont">{{travelDisclosure?.disclosureStatus}}</span>
                                 </app-no-data-label>
                             </span>
                           </div>
@@ -186,18 +187,9 @@
           </div>
       </div>
   </ng-container>
+  <ng-container confirmation-content>
+    You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
+</ng-container>
 
 </app-coi-slider>
 
-<!--risk confirmation Modal-->
-<app-confirmation-modal [modalName]="'risk-conflict-confirmation-modal'" (secondaryBtnAction)="leavePageClicked()"
-    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
-    <!-- modal header -->
-    <ng-container header>
-        <span>Confirmation</span>
-    </ng-container>
-    <!-- modal content -->
-    <p content class="fs-14 ms-2">
-        You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
-    </p>
-</app-confirmation-modal>

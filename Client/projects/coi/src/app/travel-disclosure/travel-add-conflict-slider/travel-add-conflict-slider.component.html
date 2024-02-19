@@ -1,4 +1,4 @@
-<app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'travel-conflict-slider'">
+<app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'travel-conflict-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
     <!-- slider header -->
     <ng-container header>
         <span>{{isEditMode ? 'Manage' : 'View'}} Travel Disclosure Status</span>
@@ -55,7 +55,8 @@
                                 <label class="grey-text fw-600">Disclosure : </label>
                                 <span class="grey-text fs-14 ms-3 col fw-normal">
                                   <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                                      <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}">{{travelDisclosure?.disclosureStatus}}</span>
+                                      <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                                      <span class="badgeFont">{{travelDisclosure?.disclosureStatus}}</span>
                                   </app-no-data-label>
                               </span>
                             </div>
@@ -136,7 +137,7 @@
                 <div class="row m-2">
                     <div class="col-1 mr-15 position-relative" [class.time-line]="!last">
                         <span
-                            class="badge rounded-pill badge-width {{commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
+                            class="badge rounded-pill badge-width h-auto {{commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
                     </div>
                     <div class="col pb-4 mx-auto comment-box-height">
                         <span class="d-flex align-items-center text-muted">
@@ -176,18 +177,7 @@
             <app-no-information></app-no-information>
         </ng-template>
     </ng-container>
-
-</app-coi-slider>
-
-<!--conflict confirmation Modal-->
-<app-confirmation-modal [modalName]="'travel-conflict-confirmation-modal'" (secondaryBtnAction)="leavePageClicked()"
-    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
-    <!-- modal header -->
-    <ng-container header>
-        <span>Confirmation</span>
-    </ng-container>
-    <!-- modal content -->
-    <p content class="fs-14 ms-2">
+    <ng-container confirmation-content>
         You have unsaved changes in the <strong>Manage Travel Disclosure Status</strong>, do you want to leave?
-    </p>
-</app-confirmation-modal>
+    </ng-container>
+</app-coi-slider>

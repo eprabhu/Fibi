@@ -58,6 +58,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Input() customClass = '';
   @Output() selectedResult: EventEmitter<Array<LookUp>> = new EventEmitter<Array<LookUp>>();
   @ViewChild('lookupSelectAll') lookupSelectAll: MatOption;
+  @ViewChild('mySelect') mySelect;
 
   constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef, private lookupFilterPipe: LookupFilterPipe) { }
 
@@ -101,9 +102,14 @@ export class LookUpComponent implements OnChanges, OnDestroy {
           .subscribe((data: Array<LookUp>) => {
             this.lookUpList = data;
             this.setSelections();
+            if (!this.selectedLookUpList?.length && !this.defaultValue) {
+              this.mySelect.open();
+            } 
             this._changeRef.markForCheck();
           }));
       }
+    } else {
+      this.setSelections();
     }
   }
 
@@ -157,10 +163,14 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     }
 
     private selectedDescription() {
-        const EMIT_DATA = this.lookUpList.filter((ele: any) => {
+        if(this.selection) {
+          const EMIT_DATA = this.lookUpList.filter((ele: any) => {
             if (this.selection.includes(ele.code || ele.description)) return ele;
-        });
-        return EMIT_DATA;
+          });
+          return EMIT_DATA;
+        } else {
+          return this.selection;
+        }
     }
 
     showLookUpList() {

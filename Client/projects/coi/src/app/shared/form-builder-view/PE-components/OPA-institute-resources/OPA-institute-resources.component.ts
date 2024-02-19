@@ -84,20 +84,26 @@ export class OPAInstituteResourceUseComponent implements OnInit {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
 
+    getClassForStatusInModalCard(versionStatus, isFormCompleted) {
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'status-complete' : 'status-incomplete' : 'status-inactive';
+    }
+
     viewSlider(personEntityId): void {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
     }
 
     getEntityRelationTypePills(validPersonEntityRelType: string) {
-        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+        if (validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return { relationshipType: relationshipType[0] || '', description: relationshipType[1] || '' };
+            });
             return this.relationshipTypeCache[validPersonEntityRelType];
         }
-        const entityRelTypes = validPersonEntityRelType.split(':;:');
-        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
-            const relationshipType = entity.split(':');
-            return { relationshipType: relationshipType[0] || '', description: relationshipType[1] || '' };
-        });
-        return this.relationshipTypeCache[validPersonEntityRelType];
     }
 
     editEntityItem(outsideFinRelationData: any , index): void {
@@ -223,8 +229,12 @@ export class OPAInstituteResourceUseComponent implements OnInit {
     entitySelected(entity: any): void {
         if (entity) {
             const index = this.checkDuplicate(entity.personEntityId);
-            this.isDuplicate = index === -1 || index === this.editIndex ?  false : true;
+            this.isDuplicate = index === -1 || index === this.editIndex ? false : true;
             this.entityDetails = entity;
+        } else {
+            this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
+            this.entityDetails = {};
+            this.isDuplicate = false;
         }
     }
 

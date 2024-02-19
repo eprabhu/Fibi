@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
 import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
-import { CoiService } from './services/coi.service';
+import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
 import {
     deepCloneObject,
@@ -20,14 +20,13 @@ import {
     NO_DATA_FOUND_MESSAGE,
     REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
-    CREATE_DISCLOSURE_ROUTE_URL
+    CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
-import { CoiConflictStatusType, CoiReviewStatusType } from '../shared/coi-enum';
 
 @Component({
     selector: 'app-disclosure',
@@ -112,9 +111,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
-    reviewList: any = [];
-    CoiConflictStatusType = CoiConflictStatusType;
-    CoiReviewStatusType = CoiReviewStatusType;
+   reviewList: any = [];
+    COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
+    COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
+    // CoiConflictStatusType = CoiConflictStatusType;
+    // CoiReviewStatusType = CoiReviewStatusType;
+    commentsRight: any = {}
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -138,6 +140,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
+        // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_FCOI_PRIVATE_COMMENTS']);
+        // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_FCOI_PRIVATE_COMMENTS']);
         this.getDataFromStore();
         this.getDisclosureTypeMessage();
         this.listenDataChangeFromStore();
@@ -285,7 +289,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = true;
             this.coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO())
                 .subscribe((res: getApplicableQuestionnaireData) => {
-                    this.certifyIfQuestionnaireCompleted(res);
+                    this.checkQuestionnaireCompleted(res);
                 }, _err => {
                     this.isSaving = false;
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -293,21 +297,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
-        if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
-            if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-
-                const questionnaire_error = {validationMessage: 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.'};
-                this.coiService.submitResponseErrors.push(questionnaire_error);
-            }
-            this.validateRelationship();
+    checkQuestionnaireCompleted(res) {
+        let errorArray = certifyIfQuestionnaireCompleted(res);
+        if(errorArray.length) {
+            errorArray.forEach(ele => this.coiService.submitResponseErrors.push(ele));
         }
+        this.validateRelationship();
     }
-
-    isAllQuestionnaireCompleted(questionnaires: ApplicableQuestionnaire[]) {
-        return questionnaires.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
-    }
-
+    
     getApplicationQuestionnaireRO() {
         return {
             'moduleItemCode': 8,
@@ -566,7 +563,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     public updateCoiReview(modalType: ModalType) {
         const reviewerInfo = this.coiData.coiReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId);
+            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '2');
         if (reviewerInfo) {
             this.coiService.$SelectedReviewerDetails.next(reviewerInfo);
             this.coiService.triggerStartOrCompleteCoiReview(modalType);

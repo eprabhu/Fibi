@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { RO } from '../coi-interface';
+import { ApplicableQuestionnaire, RO, getApplicableQuestionnaireData } from '../coi-interface';
 
 @Injectable()
 export class CoiService {
@@ -20,6 +20,7 @@ export class CoiService {
     isCertified = false;
     isReviewActionCompleted = false;
     $SelectedReviewerDetails = new BehaviorSubject<any>({});
+    currentReviewForAction: any;
     isShowCommentNavBar = false;
     isCOIAdministrator = false;
     isStartReview = false;
@@ -111,5 +112,30 @@ export class CoiService {
         return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
      }
 
+}
+
+export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData, ) {
+    let errorArray = [];
+    if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
+        if (isAllMandatoryQuestionnaireNotCompleted(res.applicableQuestionnaire)) {
+            let questionnaire_error = {validationMessage: '', validationType : "VE", };
+            questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
+            errorArray.push(questionnaire_error);
+        } 
+        if (!isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
+            let questionnaire_error = {validationMessage: '', validationType : "VW", };
+            questionnaire_error.validationMessage = 'Please complete all the Questionnaire(s) in the “Screening Questionnaire” section.';
+            errorArray.push(questionnaire_error);
+        }
+        return errorArray;
+    }
+}
+
+function isAllMandatoryQuestionnaireNotCompleted(questionnaires: ApplicableQuestionnaire[]) {
+    return questionnaires.some((element) => element.IS_MANDATORY === 'Y' && element.QUESTIONNAIRE_COMPLETED_FLAG !== 'Y');
+}
+
+function isAllQuestionnaireCompleted(questionnaires: ApplicableQuestionnaire[]) {
+    return questionnaires.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
 }
 

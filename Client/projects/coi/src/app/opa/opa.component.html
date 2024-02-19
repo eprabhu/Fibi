@@ -175,8 +175,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                     </div>
-                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
-                                && isLoggedInUser(opa?.opaDisclosure?.personId)"
+                    <div *ngIf="dataStore.isFormEditable()"
                          title="Click to save your progress" (click)="triggerSave()"
                          class="d-flex justify-content-around px-3 pb-3 fit-height">
                         <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -184,8 +183,7 @@
                             Save
                         </span>
                     </div>
-                    <div *ngIf="['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
-                                && isLoggedInUser(opa?.opaDisclosure?.personId)"
+                    <div *ngIf="dataStore.isFormEditable()"
                          class="d-flex justify-content-around px-3 mt-3">
                         <button (click)="submitOPA()"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center fit-height"
@@ -274,13 +272,15 @@
                         <mat-icon class="me-2">rate_review</mat-icon>
                         </button>
                         <button
-                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)"
+                            *ngIf="dataStore.isFormEditable()"
+                            (click)="triggerSave()"
                             title="Click to save your disclosure"
                             class="btn btn-primary pb-0 fs-14 col mx-2 fit-height">
                             <mat-icon>save</mat-icon>
                         </button>
                         <button
-                            *ngIf="['1', '5', '6', '7'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)"
+                            *ngIf="dataStore.isFormEditable()"
+                            (click)="submitOPA()"
                             title="Click to submit your disclosure"
                             class="btn btn-primary pb-0 fs-14 col me-2 fit-height">
                             <mat-icon>done</mat-icon>
@@ -345,7 +345,7 @@
                         <span class="ms-1 fw-medium fs-14">Return</span>
                     </button>
 
-                    <button mat-menu-item title="Click to Return Disclosure"
+                    <button mat-menu-item title="Click to Notify"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">notifications</mat-icon>
                         <span class="ms-1 fw-medium fs-14">Notify</span>
@@ -391,13 +391,13 @@
         <span>{{primaryBtnName}} Disclosure : OPA Disclosure By {{personProjectDetails?.personFullName}}</span>
     </ng-container>
     <!-- modal content -->
-    <ng-container content-sticky>
-        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
+    <ng-container content>
         <!-- help text -->
-        <div class="mx-3 mt-2">
+        <div>
             <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts"
                            [tooltip]="primaryBtnName"></app-help-text>
         </div>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>
 
