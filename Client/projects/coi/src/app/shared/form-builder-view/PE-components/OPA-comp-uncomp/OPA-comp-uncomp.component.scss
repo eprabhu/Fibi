@@ -28,7 +28,6 @@
   background: #9fc5f8;
 }
 
-
 .text-width-edit {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -58,7 +57,7 @@
 }
 
 .text-middle {
-  vertical-align: middle
+  vertical-align: middle;
 }
 
 .action-button {
@@ -154,7 +153,6 @@
   min-height: 42px;
   background-color: white !important
 }
-
 
 .inactive-ribbon {
   color: #fff;
@@ -341,4 +339,8 @@
   background-color: #ffc107 !important;
   color: #fff;
   @extend .statusPillPosition;
+}
+
+.grey-text{
+  color: #6A7980;
 }
