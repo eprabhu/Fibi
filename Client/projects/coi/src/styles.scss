@@ -120,6 +120,45 @@
   padding: 0 !important;
 }
 
+.form-builder-sticky-header {
+    position: sticky;
+    top: 200px;
+    z-index: 10;
+}
+
+.form-builder-sticky-button {
+    position: sticky;
+    top: 234px;
+    z-index: 9;
+}
+
+.form-builder-sticky-button-color {
+    padding: 1rem 1rem;
+    border-radius: 5px;
+    color: #0c5e8d;
+}
+
+.form-builder-table-header {
+    position: sticky;
+    top: 241px;
+    z-index: 10;
+}
+
+.form-builder-table-header th {
+  border: solid 1px #dee2e6;
+  background: #eaeef2;
+}
+
+.form-builder-table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+.form-builder-table td {
+    border-style:solid;
+    border-width:1px;
+}
+
 .info-mt-1 {
   margin-top: 1px;
 }

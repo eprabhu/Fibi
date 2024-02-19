@@ -1,17 +1,25 @@
-<div class="" *ngIf="componentData.data.length">
-    <p class="text-end mb-1" *ngIf="isFormEditable">
-        <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
-            [attr.data-bs-target]="'#OPA_INST_RES_ADD'+id" area-describedby="Click here to add"
-            (click)="getMyEntities()">
-            Add Entity
-        </button>
-    </p>
+<div class="table-responsive" *ngIf="componentData.data.length">
     <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
-        <thead class="text-middle table-background">
+        <thead class="text-middle table-background form-builder-table-header">
             <tr>
                 <th scope="col" width="40%" rowspan="2">Company/Entity</th>
                 <th scope="col" width="26%" rowspan="2"> Please describe the use of University resources</th>
-                <th scope="col" width="8%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
+                <th scope="col" width="18%" class="text-center">
+                    <div class="form-builder-sticky-button">
+                        <div class="form-builder-sticky-button-color">
+                            <div class="text-end mb-1" *ngIf="isFormEditable">
+                                <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
+                                    (click)="getMyEntities()">
+                                    Add Entity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col" width="20%" colspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +59,7 @@
                     </div>
                 </td>
                 <td class="text-middle">{{data.description}}</td>
-                <td class="text-middle" *ngIf="isFormEditable">
+                <td class="text-middle text-center" *ngIf="isFormEditable">
                     <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit"
                         data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_INST_RES_ADD'+id">edit</mat-icon>
                     <mat-icon class="small-icon" (click)="useOfInstituteResourcesData = data; deleteIndex = index; entityDetails = useOfInstituteResourcesData?.entityInfo;"
