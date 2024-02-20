@@ -99,9 +99,9 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> submitOPADisclosure(OPASubmitDto opaSubmitDto) {
-		List<String> opaDisclosureStatuses = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_SUBMIT,
-				Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS, Constants.OPA_DISCLOSURE_STATUS_REVIEW_ASSIGNED,
-				Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED);
+		List<String> opaDisclosureStatuses = new ArrayList<>(Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_SUBMIT,
+			    Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS, Constants.OPA_DISCLOSURE_STATUS_REVIEW_ASSIGNED,
+			    Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
 		if(opaDao.isOPAWithStatuses(opaDisclosureStatuses, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already Submitted", HttpStatus.METHOD_NOT_ALLOWED);
 		}
