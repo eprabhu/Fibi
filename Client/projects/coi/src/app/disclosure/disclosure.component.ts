@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
+import { COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -33,7 +33,6 @@ import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } fr
     templateUrl: './disclosure.component.html',
     styleUrls: ['./disclosure.component.scss'],
 })
-
 
 export class DisclosureComponent implements OnInit, OnDestroy {
 
@@ -101,13 +100,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     showSlider = false;
     selectedType: '';
     withdrawHelpTexts = [
-        `Withdraw any disclosure in 'Submitted' status.`,
-        `Describe the reason for withdrawal in the field provided.`,
+        `Withdraw disclosures currently in the 'Submitted' status.`,
+        `Specify the reason for the withdrawal of the disclosure.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
     returnHelpTexts = [
-        `Return any disclosure in 'Review in progress' status.`,
-        `Describe the reason for returning  in the field provided.`,
+        `Return disclosures currently in the 'Review in progress' status.`,
+        `Specify the reason for the returning of the disclosure.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
@@ -116,7 +115,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
-    commentsRight: any = {}
+    commentsRight: any = {};
 
     constructor(public router: Router,
         public commonService: CommonService,

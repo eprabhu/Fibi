@@ -1,6 +1,7 @@
 package com.polus.fibicomp.opa.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -98,10 +99,15 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> submitOPADisclosure(OPASubmitDto opaSubmitDto) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_SUBMIT, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
+		List<String> opaDisclosureStatuses = new ArrayList<>(Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_SUBMIT,
+			    Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS, Constants.OPA_DISCLOSURE_STATUS_REVIEW_ASSIGNED,
+			    Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
+		if(opaDao.isOPAWithStatuses(opaDisclosureStatuses, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already Submitted", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
+		opaDisclosureStatuses.clear();
+		opaDisclosureStatuses.add(Constants.OPA_DISCLOSURE_STATUS_RETURN);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatuses, Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
 			if (Boolean.TRUE.equals(conflictOfInterestDao.isOpaReviewerAssigned(opaSubmitDto.getOpaDisclosureId()))) {
 				if (Boolean.TRUE.equals(conflictOfInterestDao.isOpaReviewerReviewCompleted(opaSubmitDto.getOpaDisclosureId()))) {
 					opaSubmitDto.setOpaDisclosureStatus(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED);
@@ -125,7 +131,8 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> withdrawOPADisclosure(OPACommonDto opaCommonDto) {
-		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, null, opaCommonDto.getOpaDisclosureId())) {
+		List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaCommonDto.getOpaDisclosureId());
@@ -141,7 +148,8 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> returnOPADisclosure(OPACommonDto opaCommonDto) {
-		if (opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, null, opaCommonDto.getOpaDisclosureId())) {
+		List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN, opaCommonDto.getOpaDisclosureId());
@@ -190,7 +198,8 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> completeOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_COMPLETED, Constants.OPA_DISPOSITION_STATUS_COMPLETED, opaDisclosureId)) {
+		List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_COMPLETED);
+		if(opaDao.isOPAWithStatuses(opaDisclosureStatus, Constants.OPA_DISPOSITION_STATUS_COMPLETED, opaDisclosureId)) {
 			return new ResponseEntity<>("Already approved", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		opaDao.completeOPADisclosure(opaDisclosureId);
