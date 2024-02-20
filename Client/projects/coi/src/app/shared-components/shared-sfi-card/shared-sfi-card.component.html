@@ -9,14 +9,16 @@
         <strong class="fs-16"tabindex="0" [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName }}
         </strong>
       </p>
-      <div class="info-text fs-14 ms-auto italian px-3 py-0" data-bs-toggle="tooltip" [title]="getHelpText()" data-bs-placement="top" *ngIf="checkForEntityWarning()">
-        <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
-        {{getMessage()}}
-      </div>
-      <div tabindex="0" class="info-text fs-14 ms-auto italian px-3 py-0" *ngIf="referredFrom == 'SFI_SUMMARY' && this.reqObject.versionStatus == 'ARCHIVE'">
-        <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true" aria-label="SFI modified"></i>
-        SFI modified
-      </div>
+      <span class="ms-auto d-flex">
+        <div class="info-text fs-14 ms-auto italian px-3 py-0 me-2" data-bs-toggle="tooltip" [title]="getHelpText()" data-bs-placement="top" *ngIf="checkForEntityWarning()">
+          <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+          {{getMessage()}}
+        </div>
+        <div tabindex="0" class="info-text fs-14 ms-auto italian px-3 py-0" *ngIf="referredFrom == 'SFI_SUMMARY' && this.reqObject.versionStatus == 'ARCHIVE'">
+          <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true" aria-label="SFI modified"></i>
+          SFI modified
+        </div>
+      </span>
     </span>
     </div>
   <div class="mb-3 row mx-0">

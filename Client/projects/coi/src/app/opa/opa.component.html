@@ -385,7 +385,8 @@
                         (primaryBtnAction)="performDisclosureAction($event)"
                         [primaryBtnName]="primaryBtnName" [modalSize]="'lg'"
                         [textAreaLabelName]="'Reason for ' + textAreaLabelName"
-                        [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
+                        [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
+                        [primaryBtnTooltip]= "'Click to'+' '+ primaryBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{primaryBtnName}} Disclosure : OPA Disclosure By {{personProjectDetails?.personFullName}}</span>
