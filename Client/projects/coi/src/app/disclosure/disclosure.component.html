@@ -1,6 +1,6 @@
 
 <!-- New card header start-->
-<div class="row header-sticky">
+<div class="row header-sticky" id="COI-DISCLOSURE-HEADER">
     <div class="col-lg-9 pe-0">
         <div class="row">
             <div class="col">
@@ -781,7 +781,8 @@
 <!--Disclosure Withdraw/Return Confirmation Modal-->
 <app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="primaryBtnName" [modalSize]="'lg'" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
-    [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
+    [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
+    [primaryBtnTooltip]= "'Click to'+' '+ primaryBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{primaryBtnName}} {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure</span>
@@ -790,7 +791,7 @@
     <ng-container content>
         <!-- help text -->
         <div>
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" ></app-help-text>
+            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" [rowLimit]="2"></app-help-text>
         </div>
         <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
     </ng-container>
