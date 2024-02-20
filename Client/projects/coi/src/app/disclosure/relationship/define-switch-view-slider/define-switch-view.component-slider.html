@@ -1,186 +1,133 @@
-<div class="overlay">
-    <div class="slider-base">
-        <app-slider-close-btn (closeAction)="validateProjectSfiSliderOnClose()"></app-slider-close-btn>
-        <div class="slider-container">
-            <div class="relationship-details-box card" id="relationship-details-box">
-                <div class="row mx-0 w-100">
-                    <div class="col-xxl col-12 border-right py-3">
-                        <div class="col-12 d-flex">
-                            <span class="shadow-sm align-items-center d-flex"
-                                [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
+<app-coi-slider (closeSlider)="validateProjectSfiSliderOnClose()" [elementId]="'relationship-details-box'">
+    <ng-container content>
+        <div class="relationship-details-box card" id="relationship-details">
+            <div class="row mx-0 w-100">
+                <div class="col-xxl col-12 border-right py-3">
+                    <div class="col-12 d-flex">
+                        <span class="shadow-sm align-items-center d-flex"
+                            [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE' 
                                                 || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
-                                                sfi?.personEntityRelationshipDto?.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'" tabindex='0'
-                                aria-label="proposal">{{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
-                                || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
-                                sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
-                            <p class="entity-title">
-                                <strong title="Click to view project details" tabindex="0" class="fs-16"
-                                        [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName?.length >
-                                75 && !readMore[sfi?.personEntityId] ? (sfi?.personEntityRelationshipDto?.entityName | slice:0:75) + '...' :
-                                    sfi?.personEntityRelationshipDto?.entityName}}
-                                </strong>
-                                <span
-                                    (click)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"
-                                    *ngIf="sfi?.personEntityRelationshipDto?.entityName > 75"
-                                    class="collapse-text fs-13">
+                                                sfi?.personEntityRelationshipDto?.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'"
+                            tabindex='0'
+                            aria-label="proposal">{{sfi?.personEntityRelationshipDto?.personEntityVersionStatus ==
+                            'ACTIVE'
+                            || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                            sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' :
+                            'Inactive'}}</span>
+                        <p class="entity-title">
+                            <strong title="Click to view project details" tabindex="0" class="fs-16"
+                                [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName?.length
+                                >
+                                75 && !readMore[sfi?.personEntityId] ? (sfi?.personEntityRelationshipDto?.entityName
+                                | slice:0:75) + '...' :
+                                sfi?.personEntityRelationshipDto?.entityName}}
+                            </strong>
+                            <span (click)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"
+                                *ngIf="sfi?.personEntityRelationshipDto?.entityName > 75" class="collapse-text fs-13">
                                 {{readMore[sfi?.personEntityId] ? "Read Less" : "Read More"}}
                             </span>
-                            </p>
+                        </p>
+                    </div>
+                    <div class="mb-3 row mx-0">
+                        <div class="text-secondary fs-14 col-md-8 col-12">
+                            <label class="fw-bold me-3" tabindex="0" aria-label="Relationship">Relationship
+                                <span>:</span></label>
+                            <span class="break-point-1200">
+                                <app-no-data-label
+                                    [valueToShow]="sfi?.personEntityRelationshipDto?.validPersonEntityRelType">
+                                    <span class="d-inline-flex flex-wrap row-gap-2">
+                                        <em
+                                            *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                                            <span class="border px-3 py-1 rounded-4 me-2 text-nowrap">
+                                                <span class="fw-medium">{{relation?.relationshipType}} :</span>
+                                                <span class="fw-normal">{{relation?.description}}</span>
+                                            </span>
+                                        </em>
+                                    </span>
+                                </app-no-data-label>
+                            </span>
                         </div>
-                        <div class="mb-3 row mx-0">
-                            <div class="text-secondary fs-14 col-md-8 col-12">
-                                <label class="fw-bold me-3" tabindex="0" aria-label="Relationship">Relationship
-                                    <span>:</span></label>
-                                <span class="break-point-1200">
-                                    <app-no-data-label
-                                        [valueToShow]="sfi?.personEntityRelationshipDto?.validPersonEntityRelType">
-                                      <span class="d-inline-flex flex-wrap row-gap-2">
-                                          <em
-                                              *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                                <span class="border px-3 py-1 rounded-4 me-2 text-nowrap">
-                                                    <span class="fw-medium">{{relation?.relationshipType}} :</span>
-                                                    <span class="fw-normal">{{relation?.description}}</span>
-                                                </span>
-                                          </em>
-                                      </span>
-                                    </app-no-data-label>
-                                  </span>
-                            </div>
-                            <div tabindex="0" class="text-secondary col-md-4 col-12">
-                                <label class="fw-bold me-2 fs-14">Entity Type <span>:</span></label>
-                                <span class="break-point-1200">
+                        <div tabindex="0" class="text-secondary col-md-4 col-12">
+                            <label class="fw-bold me-2 fs-14">Entity Type <span>:</span></label>
+                            <span class="break-point-1200">
                                 <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.entityType">
                                     <span class="fs-14"
-                                          [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityType">
+                                        [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityType">
                                         {{sfi?.personEntityRelationshipDto?.entityType}}</span>
                                 </app-no-data-label>
                             </span>
-                            </div>
-                        </div>
-                        <div class="fs-14 mx-0 row mt-md-2">
-                            <div
-                                class="align-items-center  col-md-4 col-12 d-flex justify-content-between text-secondary">
-                                <div tabindex="0">
-                                    <label class="fw-bold me-2" [attr.aria-label]="'Start Date Of Involvement' + sfi?.involvementStartDate
-                                | dateFormatter"> Start Date Of Involvement <span>:</span> </label>
-                                    <span class="break-point-1200">
-                                      <app-no-data-label [valueToShow]="sfi?.involvementStartDate">
-                                            <span> {{sfi?.involvementStartDate|dateFormatter }} </span>
-                                      </app-no-data-label>
-                                </span>
-                                </div>
-                            </div>
-                            <div
-                                class="align-items-center d-flex justify-content-between text-secondary col-md-4 col-12">
-                                <div tabindex="0">
-                                    <label class="fw-bold me-2" [attr.aria-label]="'End Date Of Involvement' + sfi?.involvementEndDate
-                                    | dateFormatter"> End Date Of Involvement <span>:</span></label>
-                                    <span class="break-point-1200">
-                                      <app-no-data-label [valueToShow]="sfi?.involvementEndDate">
-                                            <span>{{ sfi?.involvementEndDate|dateFormatter }}</span>
-                                      </app-no-data-label>
-                                </span>
-                                </div>
-                            </div>
-                            <div class="align-items-center d-xl-flex col-md-4 col-12 fs-14 text-secondary"
-                                 tabindex="0">
-                                <label class="fw-bold me-2 text-nowrap"> Country <span>:</span> </label>
-                                <span class="col break-point-1200">
-                                <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.countryName">
-                                    <span [attr.aria-label]="sfi?.personEntityRelationshipDto?.countryName"
-                                          class="grey-text text-slice"
-                                          title="{{sfi?.personEntityRelationshipDto?.countryName}}">{{sfi?.personEntityRelationshipDto?.countryName}}</span>
-                                  </app-no-data-label>
-                            </span>
-                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-xxl-auto align-items-center d-flex previous-nxt pb-3">
-                        <div class="d-flex d-xxl-inline pt-1 w-100">
-                              <span
-                                  class="align-self-center align-self-xxl-start f-13 text-muted mr-2 fw-600 ml-2">{{selectedSfiIndex + 1}}
-                                  of {{sfiList?.length}}
-                                  <span class="ml-2">
-                                  <span data-bs-toggle="tooltip" title="Navigate to previous or next projects."
-                                        data-bs-placement="top" class="d-inline-block">
-                                    <mat-icon role="img"
-                                              class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color pt-2 ms-xxl-5"
-                                              aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-                                  </span>
+                    <div class="fs-14 mx-0 row mt-md-2">
+                        <div class="align-items-center  col-md-4 col-12 d-flex justify-content-between text-secondary">
+                            <div tabindex="0">
+                                <label class="fw-bold me-2" [attr.aria-label]="'Start Date Of Involvement' + sfi?.involvementStartDate
+                                | dateFormatter"> Start Date Of Involvement <span>:</span> </label>
+                                <span class="break-point-1200">
+                                    <app-no-data-label [valueToShow]="sfi?.involvementStartDate">
+                                        <span> {{sfi?.involvementStartDate|dateFormatter }} </span>
+                                    </app-no-data-label>
                                 </span>
-                              </span>
-                            <button (click)="goBackStep()" [disabled]="selectedSfiIndex == 0" [title]="isSaving ? 'Please wait for auto save to finish':'Go to previous'"
-                                    class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
-                                <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
-                                Previous
-                            </button>
-                            <button (click)="goToStep()" [disabled]="sfiList.length === (selectedSfiIndex + 1)" [title]="isSaving ? 'Please wait for auto save to finish':'Go to Next'"
-                                    class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2 mt-xxl-3">
-                                Next
-                                <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
-                            </button>
+                            </div>
+                        </div>
+                        <div class="align-items-center d-flex justify-content-between text-secondary col-md-4 col-12">
+                            <div tabindex="0">
+                                <label class="fw-bold me-2" [attr.aria-label]="'End Date Of Involvement' + sfi?.involvementEndDate
+                                    | dateFormatter"> End Date Of Involvement <span>:</span></label>
+                                <span class="break-point-1200">
+                                    <app-no-data-label [valueToShow]="sfi?.involvementEndDate">
+                                        <span>{{ sfi?.involvementEndDate|dateFormatter }}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="align-items-center d-xl-flex col-md-4 col-12 fs-14 text-secondary" tabindex="0">
+                            <label class="fw-bold me-2 text-nowrap"> Country <span>:</span> </label>
+                            <span class="col break-point-1200">
+                                <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.countryName">
+                                    <span [attr.aria-label]="sfi?.personEntityRelationshipDto?.countryName"
+                                        class="grey-text text-slice"
+                                        title="{{sfi?.personEntityRelationshipDto?.countryName}}">{{sfi?.personEntityRelationshipDto?.countryName}}</span>
+                                </app-no-data-label>
+                            </span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <section class="mt-3">
-                <app-sfi-project-relation-shared
-                    [(isSaving)]="isSaving"
-                    [projectSFIDetails]="projectSFIDetails[sfi.personEntityId]"
-                    [coiStatusList]="coiStatusList"
-                    [projectIdTitleMap]="projectIdTitleMap"
-                    (relationshipChanged)="isDataChanged=true"
-                ></app-sfi-project-relation-shared>
-            </section>
-        </div>
-    </div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-clear-all-button" data-bs-toggle="modal"
-        data-bs-target="#clearConfirmationModal"></button>
-<div class="modal fade" id="clearConfirmationModal" tabindex="-1" aria-labelledby="clearConfirmationModal"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        title="Click to close Project -SFI slider"></button>
-            </div>
-            <div class="modal-body fs-14">
-                <p>Do you want to clear all the data entered?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">Yes
-                </button>
+                <div class="col-12 col-xxl-auto align-items-center d-flex previous-nxt pb-3">
+                    <div class="d-flex d-xxl-inline pt-1 w-100">
+                        <span
+                            class="align-self-center align-self-xxl-start f-13 text-muted mr-2 fw-600 ml-2">{{selectedSfiIndex
+                            + 1}}
+                            of {{sfiList?.length}}
+                            <span class="ml-2">
+                                <span data-bs-toggle="tooltip" title="Navigate to previous or next projects."
+                                    data-bs-placement="top" class="d-inline-block">
+                                    <mat-icon role="img"
+                                        class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color pt-2 ms-xxl-5"
+                                        aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                                </span>
+                            </span>
+                        </span>
+                        <button (click)="goBackStep()" [disabled]="selectedSfiIndex == 0" [title]="isSaving ? 'Please wait for auto save to finish':'Go to previous'"
+                            class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
+                            <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
+                            Previous
+                        </button>
+                        <button (click)="goToStep()" [disabled]="sfiList.length === (selectedSfiIndex + 1)" [title]="isSaving ? 'Please wait for auto save to finish':'Go to Next'"
+                            class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2 mt-xxl-3">
+                            Next
+                            <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-single-clear-button" data-bs-toggle="modal"
-        data-bs-target="#singleClearConfirmationModal"></button>
-<div class="modal fade" id="singleClearConfirmationModal" tabindex="-1" aria-labelledby="singleClearConfirmationModal"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body fs-14">
-                <p>Do you want to clear the data of <span
-                    class="fw-600"> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.personEntity?.coiEntity?.entityName}} </span>
-                    values?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary fs-14"
-                        data-bs-dismiss="modal">Yes
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
+        <section class="mt-3">
+            <app-sfi-project-relation-shared 
+                [(isSaving)]="isSaving"    
+                [projectSFIDetails]="projectSFIDetails[sfi.personEntityId]"
+                [coiStatusList]="coiStatusList" [projectIdTitleMap]="projectIdTitleMap"
+                (relationshipChanged)="isDataChanged=true"></app-sfi-project-relation-shared>
+        </section>
+    </ng-container>
+</app-coi-slider>

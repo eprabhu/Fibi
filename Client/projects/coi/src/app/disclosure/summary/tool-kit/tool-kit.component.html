@@ -1,59 +1,62 @@
-<div class="scrollable-section" *ngIf="isToolkitVisible" [@enterAnimation]>
-    <div class="Details of Disclosureborder shadow-sm ">
-        <div class="align-items-center d-flex f-15 fw-bold px-3 side-bar-title">
-            Navigate to
-        </div>
-        <div class="navigate-color">
-            <div class="navigation-to-tabs">
-                <div (click)="jumpToSection('COI801');" title="Go to Screening Questionnaire Section" class="cursor-pointer fs-15 fw-medium px-4 py-1 mt-2 ps-3">Screening
-                    Questionnaire
-                </div>
-                <div (click)="jumpToSection('COI802');" title="Go to SFI's section" class="cursor-pointer fs-15 fw-medium px-4 py-1 ps-3">Significant Financial
-                    Interest
-                </div>
-            </div>
-            <div class="fs-15 py-1 relationship-color "
-            [ngClass]="!isRelationshipCollapse ? 'navigation-to-tabs' : 'sub-navigation-to-tabs'">
-                <div class="fw-medium cursor-pointer d-flex justify-content-between px-4 pt-1 ps-3"
-                    (click)="jumpToSection('COI803'); isRelationshipCollapse = !isRelationshipCollapse"
-                    title="Go to Relationships section">Relationships
-                    <mat-icon class="mat-icon"
-                    *ngIf="isRelationshipCollapse">keyboard_arrow_up</mat-icon>
-                    <mat-icon class="mat-icon"
-                    *ngIf="!isRelationshipCollapse">keyboard_arrow_down</mat-icon>
-                </div>
-                <div class="px-4 mb-3" *ngIf="projectList?.awards?.length && isRelationshipCollapse" [@listAnimation]>
-                  <div class="fw-medium py-1 project-color">Awards</div>
-                  <div class="bg-sub-goto border fw-medium p-3 rounded-1 mb-2 side-scroll-award">
-                      <ng-container *ngFor="let award of projectList?.awards; let i = index">
-                        <div (click)="jumpToProjectSection(award?.moduleItemId); openProjectRelationships(award, i)" title="{{award?.title}}" class="sub-goto mb-1 p-1 px-3">
-                          {{award?.moduleItemKey}} {{award?.title}}
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="!projectList?.awards?.length">
-                          <div class="sub-goto bg-white border p-1">-- No Awards --
-                          </div>
-                      </ng-container>
-                  </div>
-              </div>
-                <div class="px-4" *ngIf="projectList?.proposals?.length && isRelationshipCollapse" [@listAnimation]>
-                    <div class="fw-medium py-1 project-color">Proposals</div>
-                    <div class="bg-sub-goto border fw-medium p-3 rounded-1 mb-2 side-scroll-proposal">
-                        <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
-                            <div (click)="jumpToProjectSection(proposals?.moduleItemId); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto mb-1 p-1 px-3">
-                                {{proposals?.moduleItemId}} {{proposals?.title}}
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="!projectList?.proposals?.length">
-                            <div class="sub-goto bg-white border p-1">-- No Proposals--
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-            <!--<div (click)="jumpToSection('COI805');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Conflict Management
-            </div>-->
-            <div (click)="jumpToSection('COI804');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium "><div class="px-4 py-1">Certification</div></div>
-        </div>
+<div *ngIf="isToolkitVisible" class="card right-navigation-card mb-3">
+    <div class="card-header h-auto d-flex align-items-center border-bottom">
+        Navigate to
+    </div>
+    <div class="card-body p-0">
+        <ul class="nav flex-column">
+            <li class="nav-item" (click)="jumpToSection('COI801')" [ngClass]="{'active':activeNav == 'COI801'}"
+                title="Go to Screening Questionnaire Section" aria-label="Go to Screening Questionnaire Section">
+                <a class="nav-link" aria-current="page">Screening Questionnaire</a>
+            </li>
+            <li class="nav-item" (click)="jumpToSection('COI802')" [ngClass]="{'active':activeNav == 'COI802'}"
+                title="Go to SFI's section" aria-label="Go to SFI's section">
+                <a class="nav-link">Significant Financial Interest</a>
+            </li>
+            <li class="nav-item" [ngClass]="{'active':activeNav == 'COI803'}">
+                <a class="nav-link d-flex align-items-center justify-content-between" title="Go to Relationships section" (click)="jumpToSection('COI803')"
+                aria-label="Go to Relationships section">Relationships
+                    <mat-icon aria-hidden="true"
+                        title="Click here to collapse / expand Relationships section"
+                        aria-label="Click here to collapse / expand Relationships section">{{isRelationshipCollapse ?
+                        'keyboard_arrow_up' :'keyboard_arrow_down'}}</mat-icon></a>
+                <ul *ngIf="isRelationshipCollapse" class="right-sub-nav fs-14">
+                    <li *ngIf="projectList?.awards?.length" class="fw-medium sub-nav-inner-list">
+                        <span [ngClass]="{'active-sub-nav': activeSubNav == 'AWARD'}"
+                            class="ps-active-nav">Awards</span>
+                        <ul class="tree mt-2">
+                            <ng-container *ngFor="let award of projectList?.awards; let i = index">
+                                <li (click)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
+                                    [title]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
+                                    [attr.aria-label]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'">
+                                    <a class="px-2 d-block"
+                                        [ngClass]="{'sub-nav-active': subNavActive == award?.moduleItemId}">{{award?.moduleItemKey}}
+                                        {{award?.title}}</a>
+                                </li>
+                            </ng-container>
+
+                        </ul>
+                    </li>
+                    <li *ngIf="projectList?.proposals?.length" class="fw-medium sub-nav-inner-list">
+                        <span [ngClass]="{'active-sub-nav': activeSubNav == 'PROPOSAL'}"
+                            class="ps-active-nav">Proposals</span>
+                        <ul class="tree mt-2">
+                            <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
+                                <li (click)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
+                                    [title]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
+                                    [attr.aria-label]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'">
+                                    <a class="px-2 d-block"
+                                        [ngClass]="{'sub-nav-active': subNavActive == proposals?.moduleItemId}">{{proposals?.moduleItemId}}
+                                        {{proposals?.title}}</a>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" (click)="jumpToSection('COI804')" [ngClass]="{'active':activeNav == 'COI804'}"
+                title="Go to Certification section" aria-label="Go to Certification section">
+                <a class="nav-link" aria-disabled="true">Certification</a>
+            </li>
+        </ul>
     </div>
 </div>

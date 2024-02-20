@@ -80,7 +80,8 @@
                     <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
 				</div>
 			</div>
-              <table class="table table-bordered fs-14 fw-medium" *ngIf="projectRelations.length > 0">
+      <div class="table-responsive">        
+      <table class="table table-bordered fs-14 fw-medium" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light">
@@ -168,6 +169,7 @@
                   </tr>
                 </tbody>
               </table>
+      </div>
               <div *ngIf="!projectRelations.length">
                 <app-no-information> </app-no-information>
               </div>
