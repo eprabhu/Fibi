@@ -17,10 +17,6 @@ import java.util.stream.Stream;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.repository.ActionLogDao;
-import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
-import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
-import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -79,13 +75,13 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
-import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.repository.ActionLogDao;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
@@ -101,6 +97,10 @@ import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
+import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
+import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
+import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 
@@ -345,7 +345,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setCertifiedBy(AuthenticatedUser.getLoginPersonId());
 		coiDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
 		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
-		if (coiDisclosureObj.getReviewStatusCode().equals(DISCLOSURE_REVIEW_IN_PROGRESS) || coiDisclosureObj.getReviewStatusCode().equals(SUBMITTED_FOR_REVIEW)) {
+		if (coiDisclosureObj.getReviewStatusCode().equals(DISCLOSURE_REVIEW_IN_PROGRESS)
+				|| coiDisclosureObj.getReviewStatusCode().equals(SUBMITTED_FOR_REVIEW)
+				|| coiDisclosureObj.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED)
+				|| coiDisclosureObj.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED)) {
 			return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		setDisclosureReviewStatusCode(coiDisclosure, coiDisclosureObj);

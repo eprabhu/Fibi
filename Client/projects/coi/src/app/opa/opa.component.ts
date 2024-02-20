@@ -34,7 +34,7 @@ export class OpaComponent implements OnInit {
     withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
     returnErrorMsg = 'Describe the reason for returning the disclosure';
     withdrawHelpTexts = [
-        `Withdraw any disclosure in 'Submitted' status.`,
+        `Withdraw disclosures currently in the 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
