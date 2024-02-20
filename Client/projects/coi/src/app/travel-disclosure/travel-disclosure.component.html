@@ -262,7 +262,7 @@
                     <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
                     <ng-container *ngIf="isTravelAdministrator">
                         <!-- reassigned admin -->
-                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS])" aria-label="Click to Reassign administrator"
+                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]) && isTravelAdministrator" aria-label="Click to Reassign administrator"
                             title="Click to Reassign Administrator/Admin Group" role="menuitems"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openAddAssignModal()">
@@ -311,12 +311,11 @@
 
                 <ng-container *ngIf="!isCreateMode">
                     <!-- assign admin -->
-                    <ng-container *ngIf="!(travelDisclosure?.adminPersonId)">
+                    <ng-container *ngIf="!travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && isTravelAdministrator">
                         <button title="Click to Assign Administrator/Admin Group"
                             aria-label="Click to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
-                            *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED])"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
@@ -452,7 +451,8 @@
 <!--Confirmation Modal-->
 <app-confirmation-modal [modalName] = "'travel-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="modalActionBtnName" [modalSize]="modalSize" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
-    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionErrorMsg]="descriptionErrorMsg">
+    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionErrorMsg]="descriptionErrorMsg"
+    [primaryBtnTooltip]= "'Click to'+' '+ modalActionBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{modalActionBtnName}} Travel Disclosure</span>

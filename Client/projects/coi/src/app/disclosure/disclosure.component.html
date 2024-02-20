@@ -798,7 +798,8 @@
 <!--Disclosure Withdraw/Return Confirmation Modal-->
 <app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="primaryBtnName" [modalSize]="'lg'" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
-    [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
+    [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
+    [primaryBtnTooltip]= "'Click to'+' '+ primaryBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{primaryBtnName}} {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure</span>
@@ -808,7 +809,7 @@
         <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
         <!-- help text -->
         <div class="mx-3 mt-2">
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" ></app-help-text>
+            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" [rowLimit]="2"></app-help-text>
         </div>
     </ng-container>
 </app-confirmation-modal>

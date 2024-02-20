@@ -43,11 +43,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction()"
-                    [attr.aria-label]="'click to ' + secondaryBtnName" role="button">
+                    [attr.aria-label]="'click to ' + secondaryBtnName" role="button" title="{{secondaryBtnTooltip}}">
                     {{secondaryBtnName}}
                 </button>
                 <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()"
-                    [attr.aria-label]="'click to ' + primaryBtnName" role="button">
+                    [attr.aria-label]="'click to ' + primaryBtnName" role="button" title= "{{primaryBtnTooltip}}">
                     {{primaryBtnName}}
                 </button>
             </div>
