@@ -961,7 +961,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
                              this.questionnaire = this.result.questionnaire;
                              this.isSaving = false;
                              this.questionnaireSaveEvent.emit({ status: 'ERROR', data: this.questionnaireDetails });
-                             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving questionnaire.');
+                             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving questionnaire. Please try again.');
                          },
                          () => { }
                      )

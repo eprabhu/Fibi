@@ -7,6 +7,8 @@ import { FormBuilderService } from '../form-builder.service';
 import { Subject } from 'rxjs';
 import { OPAInstituteResourceUseComponent } from '../PE-components/OPA-institute-resources/OPA-institute-resources.component';
 import { OPAStudentSubordinateEmployeeComponent } from '../PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
+import { CommonService } from '../../../common/services/common.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 
 @Component({
     selector: 'app-PE-layer',
@@ -23,7 +25,7 @@ export class PELayerComponent implements OnInit, OnChanges {
     @Input() sectionName = '';
     saveEventForChildComponent = new Subject<any>();
 
-    constructor(private _formBuilder: FormBuilderService) { }
+    constructor(private _formBuilder: FormBuilderService, private _commonService: CommonService) { }
 
     ngOnInit() {
     }
@@ -86,8 +88,9 @@ export class PELayerComponent implements OnInit, OnChanges {
         const RO: FormBuilderSaveRO = this.prepareROForSave(data);
         this._formBuilder.saveFormComponent(RO).subscribe((res: SectionComponent) => {
             this.saveEventForChildComponent.next({ eventType: 'SAVE_COMPLETE', data: res.programmedElement });
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure saved successfully.');
         }, err => {
-            // Do something
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving disclosure. Please try again.');
         });
     }
 

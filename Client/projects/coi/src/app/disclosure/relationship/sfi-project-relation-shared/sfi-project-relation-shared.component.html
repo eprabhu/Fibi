@@ -13,22 +13,21 @@
 
 <section>
     <div class="relationship-sfi-header card mt-3">
-        <div class="row m-0 p-3">
-            <div title="List of Projects" class="col-4 fs-14 border-end">
+        <div class="row m-0">
+            <div title="List of Projects" class="col-4 fs-14 border-end p-3">
                 <div class="fw-600" tabindex="0" aria-label="Project(s)">Project(s)</div>
             </div>
-            <div class="col-2 fs-14 border-end">
+            <div class="col-2 fs-14 border-end p-3">
                 <span class="mandatory fw-600">*</span>
                 <span title="List of Conflict status" tabindex="0" aria-label="conflict status" class="fw-600">Conflict Status</span>
             </div>
-            <div class="fs-14 col">
+            <div class="fs-14 col p-3">
                 <span class="mandatory fw-600" id="description">*</span>
                 <span class="fw-600" tabindex="0" aria-label="Define Project - SFI Relation" role="field"
                       aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
             </div>
         </div>
     </div>
-
 
     <!-- List of SFI's -->
     <div class="mb-10">
@@ -39,6 +38,10 @@
                  [id]="projectSfi?.disclosureDetailsId" [class.bg-white]="i%2==0" [class.border-top]="i==0"
                  [class.border-bottom]="i==projectSFIDetails.length-1">
                 <div class="col-4 fs-14 border-end border-start d-flex align-items-center" tabindex='0'>
+                    <div class="entity-status shadow-sm d-flex align-items-center mt-2"
+                        [ngClass]="projectSfi?.moduleCode == 1 ? 'bg-award-clip' : 'bg-proposal-clip'">
+                        {{ projectSfi?.moduleCode == 1 ? 'Award' : 'Proposal' }}
+                    </div>
                     <div class="table-text my-4" [attr.aria-label]="projectIdTitleMap[projectSfi?.moduleItemKey]"
                          [title]="projectIdTitleMap[projectSfi?.moduleItemKey]">
                         {{projectIdTitleMap[projectSfi?.moduleItemKey] && projectIdTitleMap[projectSfi?.moduleItemKey].length > 100 ?
@@ -52,8 +55,7 @@
                             [attr.aria-label]="getStatusDescriptionByCode(projectSfi.projectConflictStatusCode)"
                             (ngModelChange)="sfiSingleSave(i, projectSfi)"
                             [ngClass]="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''"
-                            [disabled]="!isEditMode"
-                    >
+                            [disabled]="!isEditMode">
                         <option value=null>--Select--</option>
                         <option aria-label="" [value]="status.projectConflictStatusCode"
                                 *ngFor="let status of coiStatusList; let i = index">
