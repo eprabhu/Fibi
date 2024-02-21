@@ -390,7 +390,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
                 this.relationshipsDetails.updateTimestamp = params.ANS_UPDATE_TIMESTAMP;
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Relationship saved successfully `);
             } else {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in saving relationship`);
+                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in saving relationship. Please try again.`);
             }
         }));
     }

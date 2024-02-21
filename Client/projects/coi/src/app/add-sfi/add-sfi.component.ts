@@ -178,7 +178,7 @@ export class AddSfiComponent implements OnInit {
         if (!this.isSlider) {
             this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.coiEntity.entityId } });
         }
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity ? 'Update ' : 'Created '}Entity Successfully completed.`);
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.isEditEntity ? 'updated ' : 'created '} successfully.`);
     }
 
     setDateValues() {
@@ -200,13 +200,14 @@ export class AddSfiComponent implements OnInit {
                     this.isSaving = false;
                     this.navigateToSFI(data.personEntityId);
                 }
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'SFI saved successfully.');
             }, _err => {
                 this.isSaving = false;
                     if (_err.status === 405) {
                         this.concurrencyPersonEntityId = _err.error.personEntityId;
                         openModal('sfi-concurrency-modal');
                     } else {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving SFI. Please try again.');
                     }
             }));
     }
@@ -383,7 +384,7 @@ export class AddSfiComponent implements OnInit {
         if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled() || this.emailWarningMsg) && !this.isSaving)) {
             return;
         }
-        this.modifyType ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();
+        this.modifyType == '1' ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();
     }
 
     backToPreviousPage(): void {

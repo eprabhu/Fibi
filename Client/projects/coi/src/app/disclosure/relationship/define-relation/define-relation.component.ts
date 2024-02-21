@@ -189,7 +189,7 @@ export class DefineRelationComponent implements OnInit {
       }, err => {
         this.coiDescription = '';
         this.coiStatusCode = null;
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
       }));
     }
 
@@ -200,7 +200,7 @@ export class DefineRelationComponent implements OnInit {
           this.coiValidationMap.clear();
           this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
       }));
     }
 

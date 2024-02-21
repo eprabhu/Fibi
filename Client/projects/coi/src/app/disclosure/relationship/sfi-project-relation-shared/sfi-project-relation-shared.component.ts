@@ -120,7 +120,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             this.updateIsSaving(false);
         }, err => {
             setTimeout(() => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
             }, 1500);
             this.updateIsSaving(false);
         }));
@@ -157,7 +157,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
                 this.relationshipChanged.emit(true);
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
             }));
     }
 
