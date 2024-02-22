@@ -17,7 +17,7 @@ export function replaceFormatStringWithValue(formatString: string, object: any):
  * returns "sponsorCode - sponsorName (acronym)" -> Endpoint format based default value
  * @param sponsor
  */
-export function getSponsorSearchDefaultValue(sponsor: any): string {
+export function getPersonLeadUnitDetails(sponsor: any): string {
     return replaceFormatStringWithValue(DEFAULT_UNIT_FORMAT, sponsor);
 }
 
