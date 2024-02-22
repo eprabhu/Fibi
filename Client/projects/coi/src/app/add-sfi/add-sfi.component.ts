@@ -263,23 +263,23 @@ export class AddSfiComponent implements OnInit {
     private checkMandatoryFilled(): boolean {
         this.mandatoryList.clear();
         if (!this.entityDetails.coiEntity.entityName) {
-            this.mandatoryList.set('entityName', 'Please choose an entity name.');
+            this.mandatoryList.set('entityName', 'Please enter Entity Name.');
         }
         if (!this.isResultFromSearch) {
             this.entityDetailsValidation();
         }
         if (!this.isEntityManagement) {
             if (!this.involvementDate.involvementStartDate) {
-                this.mandatoryList.set('date', 'Please enter a start date.');
+                this.mandatoryList.set('date', 'Please enter Start Date.');
             }
             if (!this.additionalDetails.staffInvolvement) {
-                this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
+                this.mandatoryList.set('staff', 'Please enter Relationship with Entity.');
             }
             if (!this.additionalDetails.studentInvolvement) {
-                this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
+                this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity.');
             }
             if (!this.additionalDetails.instituteResourceInvolvement) {
-                this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
+                this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities.');
             }
             this.endDateValidation();
             this.validateRelationship();
@@ -289,13 +289,13 @@ export class AddSfiComponent implements OnInit {
 
     private entityDetailsValidation(): void {
         if (!this.entityDetails.coiEntity.countryCode) {
-            this.mandatoryList.set('country', 'Please choose a country.');
+            this.mandatoryList.set('country', 'Please enter Country.');
         }
         if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
-            this.mandatoryList.set('entityType', 'Please choose an entity type.');
+            this.mandatoryList.set('entityType', 'Please enter Entity Type.');
         }
         if (!this.entityDetails.coiEntity.address) {
-            this.mandatoryList.set('address', 'Please enter an address.');
+            this.mandatoryList.set('address', 'Please enter Address.');
         }
         this.emailValidation();
     }
