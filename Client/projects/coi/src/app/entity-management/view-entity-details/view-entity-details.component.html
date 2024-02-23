@@ -262,7 +262,7 @@
             <div class="mx-1">
               <span class="fs-14 fw-bold "><span class="text-danger px-1">*</span> Description :</span>
               <textarea [(ngModel)]="modifyDescription" (ngModelChange)="modifyDescription = modifyDescription.trim()"
-                placeholder="Please enter a description" [isShowLimiter]='true' [limit]=2000
+                placeholder="Please enter a description" [isShowLimiter]='true' [limit]=500
                 [ngClass]="mandatoryList.has('description')?'invalid-border':'' " appLengthValidator appAutoGrow
                 class="form-control mt-1" id="description" rows="1"></textarea>
               <span class="invalid-feedback d-block fs-13" *ngIf="mandatoryList.has('description')">
@@ -338,7 +338,7 @@
                     class="text-danger px-1">*</span>Reason for {{entityDetails?.isActive?'Inactivation' :'Activation'}}
                   :</span>
                 <textarea placeholder="Please enter the reason." [(ngModel)]="inactivateReason" [isShowLimiter]="true"
-                  [limit]="2000" rows="1" class="form-control" appAutoGrow appLengthValidator
+                  [limit]="500" rows="1" class="form-control" appAutoGrow appLengthValidator
                   [ngClass]="{'invalid-border':reasonValidateMapEntity.has('reason')}"></textarea>
                 <span *ngIf="reasonValidateMapEntity.has('reason')" class="invalid-feedback d-block fs-13">
                   {{reasonValidateMapEntity.get('reason')}}

@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }, (err: HttpErrorResponse) => {
                 this.isSaving = false;
-                if (err.status == 403) {
+                if (err.status == 401) {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');
                 } else {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');

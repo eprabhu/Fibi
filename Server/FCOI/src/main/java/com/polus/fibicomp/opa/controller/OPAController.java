@@ -1,5 +1,7 @@
 package com.polus.fibicomp.opa.controller;
 
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.security.AuthenticatedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,10 +83,9 @@ public class OPAController {
 	@GetMapping("/getOPADisclosureHeader/{opaDisclosureId}")
 	public ResponseEntity<Object> getOPADisclosure(@PathVariable("opaDisclosureId") Integer opaDisclosureId) {
 		logger.info("Request for getOPADisclosure");
-//		Authorization check to be implemented
-//		if (!documentAuthorization.isAuthorized(Constants.OPA_MODULE_CODE, opaDisclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
-//			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
-//		}
+		if (!documentAuthorization.isAuthorized(Constants.OPA_MODULE_CODE, opaDisclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
+			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
+		}
 		return opaService.getOPADisclosure(opaDisclosureId);
 	}
 

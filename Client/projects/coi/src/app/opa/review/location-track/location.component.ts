@@ -113,6 +113,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     getCoiReview() {
         this.$subscriptions.push(this._reviewService.getCoiReview(this.opaDisclosure.opaDisclosureId).subscribe((res) => {
             this.reviewerList = res || [];
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching review details.');
         }));
     }
 
@@ -153,12 +155,12 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.opaDisclosureId = this.opaDisclosure.opaDisclosureId;
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, `Reviewer ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.reviewDetails = {};
                 this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
                 this.isExpanded = true;
-                // this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
                 if (_err.status === 405) {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');

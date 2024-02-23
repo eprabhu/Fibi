@@ -296,13 +296,12 @@
                     <li class="list-group-item border-0 py-0">
                         <label class="label-text mr-22">Review Status<span class="d-inline d-md-none d-lg-inline">:</span></label>
                         <span class="break-point-1200 ps-0">
-                            <app-no-data-label [valueToShow]="disclosure?.disclosureStatus">
+                            <app-no-data-label [valueToShow]="disclosure?.reviewStatus">
                                 <span
                                     [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
                                     class="{{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
-                                    <span class="badgeFont" [attr.aria-label]="disclosure?.disclosureStatus">
-                                        {{disclosure?.disclosureStatus}}
-                                </span>
+                                    <span class="badgeFont" [attr.aria-label]="disclosure?.reviewStatus">
+                                        {{disclosure?.reviewStatus}}
                             </app-no-data-label>
                         </span>
                     </li>

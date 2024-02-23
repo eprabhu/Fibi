@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
-import { getSponsorSearchDefaultValue } from '../../common/utilities/custom-utilities';
+import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilities';
 import { RO } from '../../disclosure/coi-interface';
 
 @Component({
@@ -180,11 +180,11 @@ export class CountModalComponent implements OnInit {
     // FCOI Unit Name
     getFcoiUnitName() {
         if (this.disfullData?.coiDisclosure?.person?.unit) {
-            return getSponsorSearchDefaultValue(this.disfullData?.coiDisclosure?.person?.unit);
+            return getPersonLeadUnitDetails(this.disfullData?.coiDisclosure?.person?.unit);
         } else if (this.adminData?.unit) {
-            return getSponsorSearchDefaultValue(this.adminData?.unit);
+            return getPersonLeadUnitDetails(this.adminData?.unit);
         } else if (this.disclosures?.unit) {
-            return getSponsorSearchDefaultValue(this.disclosures?.unit);
+            return getPersonLeadUnitDetails(this.disclosures?.unit);
         }
     }
 

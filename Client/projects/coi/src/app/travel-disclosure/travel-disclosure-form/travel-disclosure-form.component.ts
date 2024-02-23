@@ -179,6 +179,9 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         if (!this.travelDisclosureRO.travelAmount) {
             this.mandatoryList.set('amount', 'Please enter the amount.');
         }
+        if (!this.destination) {
+            this.mandatoryList.set('destination', 'Please choose a destination.');
+        }
         if (this.destination === 'Domestic') {
             if (!this.travelDisclosureRO.travelState) {
                 this.mandatoryList.set('state', 'Please enter the state.');

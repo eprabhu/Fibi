@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
 import {Subject} from 'rxjs';
 import {OpaService} from './services/opa.service';
-import {isEmptyObject} from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import {hideModal, isEmptyObject, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import {DataStoreService} from './services/data-store.service';
 import {CommonService} from '../common/services/common.service';
 import {environment} from '../../environments/environment';
@@ -13,6 +13,7 @@ import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {ModalType} from '../disclosure/coi-interface';
+import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-opa',
@@ -53,6 +54,7 @@ export class OpaComponent implements OnInit {
         canViewPrivateComments: boolean;
         canMaintainPrivateComments: boolean;
     }
+    personUnitDetail = '';
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -63,13 +65,23 @@ export class OpaComponent implements OnInit {
 
     ngOnInit(): void {
         this.getDataFromStore();
+        this.setPersonProjectDetails();
+        this.personUnitDetail = this.getPersonLeadUnitDetails();
         this.listenDataChangeFromStore();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
 
+    getPersonLeadUnitDetails() {
+        return getPersonLeadUnitDetails(this.personProjectDetails);
+    }
+
     triggerSave() {
         this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
+    }
+
+    opaSubmissionModal() {
+        openModal('opa-submit-confirm-modal');
     }
 
     submitOPA() {
@@ -78,7 +90,8 @@ export class OpaComponent implements OnInit {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA submitted successfully.`);
-            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+            }, err =>
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
     openAddAssignModal(): void {
@@ -186,8 +199,8 @@ export class OpaComponent implements OnInit {
 
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.opa.opaDisclosure.opaPerson.personName;
-        // this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitDetails = this.opa.opaDisclosure.homeUnitName;
+        this.personProjectDetails.unitNumber = this.opa.opaDisclosure.homeUnit;
+        this.personProjectDetails.unitName = this.opa.opaDisclosure.homeUnitName;
     }
 
     completeDisclosureReview() {
