@@ -1,5 +1,6 @@
 package com.polus.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,9 @@ import com.polus.service.FibiPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class AuthConfig {
+
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	
     @Bean
     public UserDetailsService userDetailsService(){
@@ -29,6 +33,7 @@ public class AuthConfig {
         return http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/login","/auth/validate").permitAll()
+                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()
                 .build();
     }
