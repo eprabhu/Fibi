@@ -22,7 +22,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     @Input() entityId: any;
     @Input() entityNumber: any;
     @Input() isTriggeredFromSlider = false;
-    @Input() entityDetails: any = {};
 
     @Output() closeEntityInfoCard: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -43,6 +42,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     entityVersionList: any = {};
     changedEntityId: any;
     selectedVersionEntityId: any;
+    entityDetails: any = {};
     involvementDate = {
         involvementStartDate: null,
         involvementEndDate: null
@@ -71,7 +71,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     checkForEditMode() {
-        if(this._route.snapshot.queryParamMap.get('mode') == 'E') {
+        if(this._route.snapshot.queryParamMap.get('mode') == 'E' && this.entityDetailsServices.canMangeSfi) {
             return true;
         } else if (this.isTriggeredFromSlider) {
             return false;
@@ -156,6 +156,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
                 if(canLoadFirstRelation) {
                     this.triggerOpenQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
                 }
+                this.getSfiEntityDetails();
                 resolve(true);
             }, _error => {
                 if (_error.status != 403) {
@@ -272,7 +273,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }
     }
 
-    updateNewStatus(event) {        
+    updateNewStatus(event) {
         if (event.versionStatus) {
             this.relationshipsDetails.versionStatus = event.versionStatus;
             this.updateURL(event);
@@ -313,7 +314,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
             actionUserId: this.commonService.getCurrentUserDetail('personId'),
             actionPersonName: this.commonService.getCurrentUserDetail('fullName'),
             questionnaireNumbers: [],
-            questionnaireMode: this.isEditMode ? 'ACTIVE_ANSWERED_UNANSWERED' : 'ANSWERED'
+            questionnaireMode: this.isEditMode ? 'ACTIVE_ANSWERED_UNANSWERED' : this.relationshipsDetails.isFormCompleted ? 'ANSWERED' : 'ACTIVE_ANSWERED_UNANSWERED'
         }));
     }
 
@@ -481,6 +482,14 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
 
     showViewButton() {
         return  this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY']) && !['entity-management/entity-details'].some(ele => this._router.url.includes(ele))
+    }
+
+    private getSfiEntityDetails(): void {
+        this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
+            this.entityDetails = res.coiEntity;
+        }, _error => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }));
     }
 
 }
