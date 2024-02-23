@@ -89,6 +89,12 @@
                         International
                     </label>
                 </div>
+                <span *ngIf="mandatoryList.has('destination')" class="fs-13 invalid-msg d-block destination-margin">
+                    {{mandatoryList.get('destination')}}
+                </span>
+                <span *ngIf="!mandatoryList?.has('destination')" class="fs-13 d-block text-secondary mb-0 destination-margin">
+                    Choose the destination of your trip.
+                </span>
             </div>
 
             <!-- country/state/city -->

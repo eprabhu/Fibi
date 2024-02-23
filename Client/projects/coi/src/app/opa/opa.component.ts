@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
 import {Subject} from 'rxjs';
 import {OpaService} from './services/opa.service';
-import {isEmptyObject} from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import {hideModal, isEmptyObject, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import {DataStoreService} from './services/data-store.service';
 import {CommonService} from '../common/services/common.service';
 import {environment} from '../../environments/environment';
@@ -80,13 +80,18 @@ export class OpaComponent implements OnInit {
         this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
     }
 
+    opaSubmissionModal() {
+        openModal('opa-submit-confirm-modal');
+    }
+
     submitOPA() {
         this.$subscriptions.push(this.opaService.submitOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA submitted successfully.`);
-            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+            }, err =>
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
     openAddAssignModal(): void {
