@@ -243,7 +243,7 @@
 
                 <!-- Comments -->
                 <button title="Click to add new review comments" aria-label="Click to add new review comments"
-                    *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME')"
+                    *ngIf="!isCreateMode"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                     <mat-icon>rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
