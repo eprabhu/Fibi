@@ -37,6 +37,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   coiTableValidation: Map<string, string> = new Map();
   textareaValue: string;
   isSaving = false;
+  focusableId = '';
 
   constructor(private _relationShipService: RelationshipService,
               private _commonService: CommonService,
@@ -141,7 +142,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   saveSingleEntity(index, test) {
     this.coiTableValidation.delete('save-status' + index );
     this.coiTableValidation.delete('save-description' + index );
-    if(this.entityProjectDetails[index].disclComment.comment) {
+    if (this.entityProjectDetails[index].disclComment.comment) {
       this.entityProjectDetails[index].disclComment.comment  = this.entityProjectDetails[index].disclComment.comment.trim();
     }
     if ([null, 'null'].includes(this.entityProjectDetails[index].projectConflictStatusCode)) {
@@ -174,25 +175,34 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
         this.clearIndex = null;
         this.coiValidationMap.clear();
-        setTimeout(() => {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
-        }, 1500);
         this.closePage.emit();
         this.updateIsSavingRelation(false);
+        this.focusLastEditedInput();
     }, err => {
       setTimeout(() => {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
         this.updateIsSavingRelation(false);
+        this.focusLastEditedInput();
       }, 1500);
     }));
 }
+
+    focusLastEditedInput() {
+        setTimeout(() => {
+            if (this.focusableId) {
+                document?.getElementById(this.focusableId)?.focus();
+                this.focusableId = '';
+            }
+        });
+    }
 
 sliderDataChanges() {
   this._dataStore.dataChanged = false;
   this._relationShipService.isSliderInputModified = false;
 }
 
-sfiSingleSave(index, sfi) {
+sfiSingleSave(index, sfi, focusableId: string) {
+  this.focusableId = focusableId;
   this.updateIsSavingRelation(true);
   this.$debounceEvent.next({index: index, SFI: sfi});
 }
