@@ -85,10 +85,10 @@
                     </td>
                     <td>{{reviewer?.startDate | dateFormatter }}
                     </td>
-                    <td *ngIf="reviewer?.endDate">{{reviewer?.endDate | dateFormatter }}</td>
-                    <td *ngIf="!reviewer?.endDate">  </td>
-                    <td>{{getDaysAtLocation(reviewer.startDate, reviewer.endDate)}}</td>
-                    <td>
+                    <td class="text-center" *ngIf="reviewer?.endDate">{{reviewer?.endDate | dateFormatter }}</td>
+                    <td class="text-center" *ngIf="!reviewer?.endDate">  </td>
+                    <td class="text-center">{{getDaysAtLocation(reviewer.startDate, reviewer.endDate)}}</td>
+                    <td class="text-center">
                       <app-no-data-label *ngIf="!reviewer?.reviewStatusTypeCode"[valueToShow]="reviewer?.reviewStatusTypeCode"></app-no-data-label>
                       <span *ngIf="reviewer?.reviewStatusTypeCode" [class.text-black]="reviewer?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(reviewer?.reviewerStatusType?.reviewStatusCode)}} fs-14 rounded-5">
                       {{reviewer?.reviewerStatusType?.description}}

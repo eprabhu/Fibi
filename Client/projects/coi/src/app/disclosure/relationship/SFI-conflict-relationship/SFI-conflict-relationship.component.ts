@@ -100,7 +100,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this._relationShipService.isSliderDataUpdated = true;
         this.closePage.emit();
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
       }));
   }
 
@@ -181,7 +181,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this.updateIsSavingRelation(false);
     }, err => {
       setTimeout(() => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
         this.updateIsSavingRelation(false);
       }, 1500);
     }));

@@ -375,6 +375,9 @@ public class ConflictOfInterestController {
 	@GetMapping(value = "/loadTravelDisclosure/{travelDisclosureId}")
 	public ResponseEntity<Object> loadTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
 		logger.info("Request for loadTravelDisclosureById");
+		if (!documentAuthorization.isAuthorized(Constants.TRAVEL_MODULE_CODE, travelDisclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
+			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
+		}
 		return conflictOfInterestService.loadTravelDisclosure(travelDisclosureId);
 	}
 

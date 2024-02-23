@@ -1,6 +1,5 @@
 <app-view-relationship-details
         [entityId]="entityId" [entityNumber]="entityNumber"
-        [entityDetails]="entityDetails"
         [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
 
 <button type="button" class="btn btn-primary" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
@@ -16,8 +15,8 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-12">
-            <p class="fs-14">You have unsaved changes in 
-              <strong> 
+            <p class="fs-14">You have unsaved changes in
+              <strong>
                   <ng-container *ngFor="let section of entityDetailService.unSavedSections; let isLast = last;">{{section}} <ng-container *ngIf="!isLast">, </ng-container></ng-container>
               </strong>.
               </p>

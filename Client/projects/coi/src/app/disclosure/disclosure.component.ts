@@ -23,7 +23,7 @@ import {
     CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
+import { getPersonLeadUnitDetails, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
@@ -116,6 +116,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
+    personUnitDetail = '';
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -158,6 +159,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         });
         this.updateTimeStampEvent();
         this.routerEventSubscription();
+        this.setPersonProjectDetails();
+        this.personUnitDetail = this.getPersonLeadUnitDetails();
     }
 
     routerEventSubscription() {
@@ -530,8 +533,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.router.navigate(['/coi/user-dashboard']);
         }
     }
-    unitTitle() {
-        return getSponsorSearchDefaultValue(this.coiData.coiDisclosure.person.unit);
+
+    getPersonLeadUnitDetails() {
+        return getPersonLeadUnitDetails(this.coiData.coiDisclosure.person.unit);
     }
 
     closeAssignAdministratorModal(event) {
@@ -681,7 +685,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.coiData?.coiDisclosure?.person?.fullName;
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitDetails = this.coiData?.coiDisclosure?.person.unit?.unitDetail;
+        this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
+        this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
+        
     }
 
     performDisclosureAction(event): void {

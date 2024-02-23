@@ -104,12 +104,12 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.entityDetails.entityRiskCategory.riskCategoryCode = this.currentRiskCategorycode;
                         this.clearConflictModal();
                         this.riskHistory();
-                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict modified successfully.');
                     }, _err => {
                         if (_err.status === 405) {
                           this.isConcurrency = true;
                         } else {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying conflict status. Please try again.');
                         }
                     }));
         }
