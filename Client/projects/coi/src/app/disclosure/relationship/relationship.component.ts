@@ -56,7 +56,7 @@ export class RelationshipComponent implements OnInit {
               private _dataStore: DataStoreService,
               public _router: Router,
               private _commonService: CommonService,
-              private _coiService: CoiService
+              public coiService: CoiService
               ) { }
 
   closePage(event: any) {
@@ -135,11 +135,11 @@ getDisclosureCount(typeCode, disclosureStatus) {
         }
         if(!this.isShowCollapsedConflictRelationship) {
           setTimeout(() => {
-            if(this._coiService.focusModuleId) {
-                scrollIntoView(this._coiService.focusModuleId);
-                const ELEMENT = document.getElementById(this._coiService.focusModuleId);
+            if(this.coiService.focusModuleId) {
+                scrollIntoView(this.coiService.focusModuleId);
+                const ELEMENT = document.getElementById(this.coiService.focusModuleId);
                 ELEMENT.classList.add('error-highlight-card');
-                this._coiService.focusModuleId = null;
+                this.coiService.focusModuleId = null;
             }
           },100);
         }
