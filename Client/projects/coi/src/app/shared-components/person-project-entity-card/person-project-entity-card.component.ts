@@ -12,6 +12,7 @@ import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilitie
 export class PersonProjectEntityCardComponent implements OnChanges {
 
     @Input() personProjectOrEntity: PersonProjectOrEntity = new PersonProjectOrEntity();
+    @Input() disclosureHeaderDetails;
 
     isReadMore = false;
     personUnitDetail = '';

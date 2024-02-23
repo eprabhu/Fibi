@@ -1,8 +1,8 @@
 
 <div [@fadeInOutHeight]>
-  <div class="card mt-3" id="disclosure-history">
-    <div class="card-header px-4">
-      <h4 class="card-title review-title">
+  <div class="card border-0" id="review-history">
+    <div class="card-header">
+      <h4 class="card-title fs-16">
         <div class="justify-content-between row d-flex align-items-center"tabindex="0">
           <div class="col">Review History</div>
         </div>
@@ -10,24 +10,23 @@
     </div>
       <div class="card-content">
           <div class="card-body">
-              <div class="form-row">
                   <div class="table-responsive">
                       <table class="table mb-0">
                           <thead class="sr-none"></thead>
                           <tbody>
                               <tr *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
-                                  <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3 mt-2"tabindex="0"[attr.aria-label]="review.key">{{review.key}}
+                                  <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3 mt-2 fs-16"tabindex="0"[attr.aria-label]="review.key">{{review.key}}
                                   </h4>
                                   <ul class="pl-4 pr-3 mb-0">
                                       <li *ngFor="let historyEntry of review.value;" class="p-3">
-                                          <div class="form-row">
+                                          <div class="row">
                                               <div class="col">
                                                   <p class="fs-14 mb-0" tabindex="0">
                                                       <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                      <label class="fw-700 mx-3"[attr.aria-label]="historyEntry?.updateTimestamp|
+                                                      <label class="fw-700 mx-3 mt-0"[attr.aria-label]="historyEntry?.updateTimestamp|
                                                       dateFormatterWithTimeZone:'time'">{{historyEntry?.updateTimestamp|
                                                           dateFormatterWithTimeZone:'time'}}</label>
-                                                      <span  [innerHTML]="historyEntry?.message" aria-label></span>
+                                                      <span  [innerHTML]="historyEntry?.message"></span>
                                                   </p>
                                                   <span *ngIf="historyEntry?.comment" class="px-4 fs-14">
                                                     <span class="fa fa-quote-left comment-icon grey-text ml-2 fs-13"></span>
@@ -56,7 +55,6 @@
                           </tbody>
                       </table>
                     </div>
-                  </div>
                   <div *ngIf="isEmptyObject(reviewHistoryLogs)">
                     <app-no-information [isBorderNeeded]="false"> </app-no-information>
                 </div>

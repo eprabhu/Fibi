@@ -1,4 +1,4 @@
-<div class="pt-3 margin-card-top row">
+<div class="margin-card-top row">
 	<div class="col-12">
 		<div class="card">
 			<div class="row">
@@ -62,7 +62,7 @@
 								<span class="fs-14 mx-2 btn-content-back d-lg-inline">Back</span>
 							</button>
 						</div>
-						<div class="col-12 pt-10 mb-15">
+						<div class="col-12 pt-10 mt-2">
 							<button tabindex="0" [attr.aria-label]="buttonName" role="button"
 							class="align-items-center btn btn-primary d-flex fs-14 h-41 justify-content-center mt-0 pt-1 py-1 w-100"
 							[title]="btnTitle" (click)="submitEntity();"
@@ -127,27 +127,26 @@
 				<div *ngIf="mandatoryList?.has('entityAlreadyAdded')" class="mx-1 px-4 mb-4">
 					<div class="bg-light info-card-border p-2 rounded-2 shadow-medium">
 						<div class="m-0 mb-2 pt-2 row">
-							<!-- Relationship -->
-							<div class="col-7 text-secondary fs-14" tabindex="0" aria-label="Relationship">
-								<span class="fw-bold me-3 label-text">Relationship :</span> 
-									<span *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships);else noRelation">
-										<ng-container>
-											<em
+								<!-- Relationship -->
+						<div class="col-7 text-secondary fs-14" tabindex="0" aria-label="Relationship">
+							<span class="fw-bold me-3 label-text">Relationship :</span> 
+								<span *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships);else noRelation">
+									<ng-container>
+										<em
 												*ngFor="let subsection of existingEntityDetails.personEntityRelationships | keyvalue ;let isKeyFirst = first">
-												<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span> 
+											<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span> 
 												<ng-container *ngFor="let relationship of subsection.value;let isFirst = first; let isLast = last;">
 													<span
-													*ngIf="!isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description
-													+'/'}}
+														*ngIf="!isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description+'/'}}
 													</span>
 													<span
 														*ngIf="isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description}}
 													</span>
 												</ng-container>
-												</span>
-											</em>
-										</ng-container>
-									</span>
+											</span>
+										</em>
+									</ng-container>
+								</span>
 									<ng-template #noRelation>
 										<span>--</span>
 									</ng-template>
@@ -493,7 +492,7 @@
 									<div class="col-7">
 										<div class="relation select-margin ml-09">
 											<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
-												class="form-check d-inline-block" [ngClass]="!isFirst ? 'ms-4' : ''" tabindex="0"
+												class="form-check d-inline-block" [ngClass]="!isFirst && !isLast ? 'mx-4' : ''" tabindex="0"
 												[attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
 												<input type="checkbox" name="relation"
 													class="form-check-input text-secondary border border-secondary"
@@ -603,19 +602,21 @@
 	</div>
 </div>
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
-	<div class="modal-dialog">
+<!-- Update confirmation -->
+<div class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header ct-footer-padding">
+			<div class="modal-header">
 				<h4 class="modal-title">Confirmation</h4>
-				<button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" title="Close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
 			</div>
-			<div class="modal-body ct-modal-padding">
-				<div class="row ">
-					<div class="col-lg-12">
-						<div class="my-2 mx-0 row">
-							<div class="col-12 py-2 grey-info font">
-								<span class="fs-14 text-secondary">Would you like to make changes to the existing entity
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12">
+						<div class="row">
+							<div class="col-12 grey-info font">
+								<span class="fs-14">Would you like to make changes to the existing entity
 									details?
 									Please note that any modifications made will impact the existing SFIs.
 								</span>
@@ -624,12 +625,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer ct-footer-padding">
-				<button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal" title="Click to cancel"
-					type="button">Cancel
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button"
+				title="Click to cancel">Cancel
 				</button>
-				<button (click)="updateEntityDetails()" data-bs-dismiss="modal" title="Click to submit"
-					class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button">Submit</button>
+				<button class="btn btn-primary me-0" id="claim-sumbit-no-btn" type="button"
+					(click)="updateEntityDetails()" data-bs-dismiss="modal"  title="Click to submit">Submit
+				</button>
 			</div>
 		</div>
 	</div>

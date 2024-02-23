@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCoiSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { TravelRiskSliderService } from './travel-risk-slider.service';
@@ -39,7 +39,7 @@ export class TravelRiskSliderComponent implements OnInit {
 
   ngOnInit() {
     setTimeout(() => {
-      openSlider('travel-risk-slider');
+      openCoiSlider('travel-risk-slider');
     });
 	this.getRiskLookup();
 	this.getTravelDisclosureHistory();
@@ -182,12 +182,7 @@ export class TravelRiskSliderComponent implements OnInit {
 
 	sortNull() {return 0;}
 
-	validateSliderClose() {
-        (this.isStatusEdited || this.riskComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
-    }
-
     closeConflictSlider() {
-        closeSlider('travel-risk-slider');
         setTimeout(() => {
             this.closePage.emit();
         }, 500);
@@ -199,4 +194,7 @@ export class TravelRiskSliderComponent implements OnInit {
         }, 100);
     }
 
+	isFieldValueChanges() : boolean {
+		return !!(this.isStatusEdited || this.riskComment);
+	}
 }
