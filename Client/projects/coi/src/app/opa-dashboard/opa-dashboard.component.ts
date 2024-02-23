@@ -10,7 +10,7 @@ import { deepCloneObject, isEmptyObject } from '../../../../fibi/src/app/common/
 import { NavigationService } from '../common/services/navigation.service';
 import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
-import { DATE_PLACEHOLDER, OPA_DASHBOARD_RIGHTS } from '../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DASHBOARD_RIGHTS } from '../app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 
 @Component({
@@ -213,7 +213,9 @@ export class OpaDashboardComponent implements OnInit {
                     this.opaList = data.data;
                     this.isLoading = false;
                 }
-            }));
+            }, _err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+             }));
     }
 
     async getPermissions() {

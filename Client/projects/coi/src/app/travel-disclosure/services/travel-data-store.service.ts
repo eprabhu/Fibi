@@ -3,6 +3,7 @@ import { CoiTravelDisclosure, EntityDetails, TravelCreateModalDetails, TravelDis
 import { Subject } from 'rxjs';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { getTotalNoOfDays, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { CommonService } from '../../common/services/common.service';
 
 @Injectable()
 export class TravelDataStoreService {
@@ -10,7 +11,7 @@ export class TravelDataStoreService {
     dataEvent = new Subject();
     travelCreateModalDetails: TravelCreateModalDetails;
 
-    constructor() { }
+    constructor(private _commonService: CommonService) { }
 
     getCreateModalDetails(): TravelCreateModalDetails {
         this.travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
@@ -100,7 +101,7 @@ export class TravelDataStoreService {
 
     getEditModeForDisclosure(): boolean {
         if (this.storeData.travelDisclosureId) {
-            return ['1', '4', '5'].includes(this.storeData.reviewStatusCode);
+            return (['1', '4', '5'].includes(this.storeData.reviewStatusCode) && this.storeData.personId === this._commonService.getCurrentUserDetail('personId'));
         } else {
             return true;
         }

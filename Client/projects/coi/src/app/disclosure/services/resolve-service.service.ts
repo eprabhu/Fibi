@@ -51,11 +51,14 @@ export class ResolveServiceService {
 
     }
 
+    // 1 - pending, 5 - withdrawn, 6 - reutrned
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
         if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId ) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
         } else if (!['1','5','6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
+            reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
+        } else if ((['5', '1', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure') && this._commonService.currentUserDetails.personId != personId)) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {

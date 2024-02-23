@@ -12,12 +12,13 @@ import {OpaService} from './services/opa.service';
 import {OPASharedModule} from './shared/shared.module';
 import {SharedModule} from '../shared/shared.module';
 import { HeaderSlidersModule } from '../disclosure/header-sliders/header-sliders.module';
+import { ReviewRouteGuardService } from './services/review-route-guard.service';
 
 const routes: Routes = [{
     path: '', component: OpaComponent, canActivate: [ResolveServiceService], children: [
         {path: '', redirectTo: 'form', pathMatch: 'full'},
         {path: 'form', loadChildren: () => import('./form/form.module').then(m => m.FormModule)},
-        {path: 'review', loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)},
+        {path: 'review', canActivate: [ReviewRouteGuardService], loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)},
         {path: 'history', loadChildren: () => import('./history/history.module').then(m => m.HistoryModule)}
     ]
 }];
@@ -40,7 +41,8 @@ const routes: Routes = [{
     providers: [
         OpaService,
         DataStoreService,
-        ResolveServiceService
+        ResolveServiceService,
+        ReviewRouteGuardService
     ]
 })
 export class OpaModule {

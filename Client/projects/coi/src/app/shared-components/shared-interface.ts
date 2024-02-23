@@ -19,6 +19,8 @@ export class PersonProjectOrEntity {
     projectDetails ?: any = {};
     entityName ? = '';
     unitDetails = '';
+    unitNumber = null;
+    unitName = '';
 }
 
 export class Disclosure {

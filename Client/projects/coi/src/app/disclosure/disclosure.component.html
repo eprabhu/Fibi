@@ -36,7 +36,7 @@
                     <p class="m-0 label-text">
                         <strong>
                             {{coiData?.coiDisclosure?.personPrimaryTitle}} |
-                            <span>{{coiData?.coiDisclosure?.unit?.unitNumber}}-{{coiData?.coiDisclosure?.unit?.unitName}}</span> |
+                            <span>{{personUnitDetail}}</span> |
                             {{coiData?.coiDisclosure?.personEmail}}
                         </strong>
                     </p>
@@ -397,7 +397,7 @@
                         <span class="ms-1 fw-medium fs-14">Return</span>
                     </button>
 
-                    <button mat-menu-item title="Click to Return Disclosure"
+                    <button mat-menu-item title="Click to Notify"
                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">notifications</mat-icon>
                         <span class="ms-1 fw-medium fs-14">Notify</span>
