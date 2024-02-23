@@ -107,7 +107,6 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this._opaService.isStartReview = false;
         this._opaService.isCompleteReview = false;
         let nextAssignedReview = this.getNextAssignedReview();
-        console.log(nextAssignedReview);
         if (nextAssignedReview) {
             this._opaService.currentOPAReviewForAction = nextAssignedReview;
             if(nextAssignedReview.reviewStatusTypeCode == 1) 
