@@ -7,6 +7,7 @@ import {CommonService} from '../../../common/services/common.service';
 import {listAnimation} from '../../../common/utilities/animations';
 import {slideHorizontal} from '../../../../../../fibi/src/app/common/utilities/animations';
 import {environment} from '../../../../environments/environment';
+import {CoiService} from '../../services/coi.service';
 
 @Component({
     selector: 'app-define-sfi-project',
@@ -34,7 +35,7 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
     selectedSfiIndex = -1;
     $subscriptions: Subscription[] = [];
 
-    constructor(public relationshipService: RelationshipService, private _commonService: CommonService) {
+    constructor(public relationshipService: RelationshipService, private _commonService: CommonService, public coiService: CoiService) {
     }
 
     ngOnDestroy() {

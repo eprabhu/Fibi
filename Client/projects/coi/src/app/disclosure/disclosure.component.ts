@@ -198,6 +198,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goToStep(stepPosition?: any) {
+        if (this.coiService.isRelationshipSaving) { return; }
         this.isHomePageClicked = false;
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
@@ -306,7 +307,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
         this.validateRelationship();
     }
-    
+
     getApplicationQuestionnaireRO() {
         return {
             'moduleItemCode': 8,
@@ -687,7 +688,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
         this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
         this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
-        
+
     }
 
     performDisclosureAction(event): void {
