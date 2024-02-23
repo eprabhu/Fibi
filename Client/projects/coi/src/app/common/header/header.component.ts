@@ -7,6 +7,7 @@ import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/
 import { HeaderService } from './header.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
+declare const $: any;
 class ChangePassword {
     password = '';
     reEnterPassword = '';
@@ -41,9 +42,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
     reviseObject: any = { revisionComment: null, disclosureId: null };
+    isShowNavBarOverlay = false;
 
-    constructor(public router: Router, public commonService: CommonService, public headerService: HeaderService) {
+    constructor(public router: Router,
+                public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
+        // document.addEventListener('click', this.offClickSideBarHandler.bind(this));
+    }
+
+    // offClickSideBarHandler(event) {
+        
+    // }
+
+    onClickMenuBar() {
+        if (document.getElementById('responsive-nav').classList.contains('show-menu')) {
+            document.getElementById('responsive-nav').classList.remove('show-menu');
+            if (window.screen.width <= 1300) {
+                this.isShowNavBarOverlay = false;
+            }
+        } else {
+            if (window.screen.width <= 1300) {
+                this.isShowNavBarOverlay = true;
+            }
+            document.getElementById('responsive-nav').classList.add('show-menu');
+        }
     }
 
     ngOnInit() {
@@ -225,4 +247,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
+
+    changeTheme(themename: string) {
+        document.querySelector("html").className = '';
+        document.querySelector("html").classList.add(themename);
+        $('#dissmiss-btn').click();
+    }
+
+    
 }

@@ -21,7 +21,7 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
-import {openSlider, closeSlider, closeCommonModal} from '../common/utilities/custom-utilities';
+import {openSlider, closeSlider, closeCommonModal, openCoiSlider} from '../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -132,6 +132,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isFcoiReadMore = false;
     isPurposeRead = false;
     isShowOptions = false;
+    sliderElementId = '';
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -833,15 +834,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
+        this.sliderElementId = `admin-dashboard-entity-slider-${this.entityId}`;
         setTimeout(() => {
-            openSlider('admin-dashboard-entity-slider');
+            openCoiSlider(this.sliderElementId);
         });
     }
 
     validateSliderClose() {
-        closeSlider('admin-dashboard-entity-slider');
         setTimeout(() => {
             this.showSlider = false;
+            this.entityId = null;
+            this.sliderElementId = '';
 		}, 500);
 	  }
 
