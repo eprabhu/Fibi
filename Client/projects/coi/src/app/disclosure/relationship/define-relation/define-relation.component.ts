@@ -60,9 +60,8 @@ export class DefineRelationComponent implements OnInit {
   $triggerEvent = new Subject();
   isOpenSlider: boolean;
   isDataModified = false;
-  isSaving = false;
 
-  constructor(private _relationShipService: RelationshipService, private _coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
+  constructor(private _relationShipService: RelationshipService, public coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
     this.getDataFromStore();
@@ -96,11 +95,11 @@ export class DefineRelationComponent implements OnInit {
         this.calculateSize();
         this.showTaskNavBar();
         setTimeout(() => {
-          if(this._coiService.focusSFIRelationId) {
-              scrollIntoView(this._coiService.focusSFIRelationId);
-              const ELEMENT = document.getElementById(this._coiService.focusSFIRelationId);
+          if(this.coiService.focusSFIRelationId) {
+              scrollIntoView(this.coiService.focusSFIRelationId);
+              const ELEMENT = document.getElementById(this.coiService.focusSFIRelationId);
               ELEMENT.classList.add('error-highlight-card');
-              this._coiService.focusSFIRelationId = null;
+              this.coiService.focusSFIRelationId = null;
           }
         });
       }, err => {
@@ -319,7 +318,7 @@ validateProjectSfiSliderOnClose() {
 }
 
   goBackStep() {
-    if (this.isSaving) { return; }
+    if (this.coiService.isRelationshipSaving) { return; }
     this.currentRelation--;
     this.navigateToStep(this.relationList[this.currentRelation]);
   }
@@ -332,7 +331,7 @@ validateProjectSfiSliderOnClose() {
   }
 
   goToStep(stepPosition?: any) {
-    if (this.isSaving) { return; }
+    if (this.coiService.isRelationshipSaving) { return; }
     this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
     this.navigateToStep(this.relationList[this.currentRelation]);
   }

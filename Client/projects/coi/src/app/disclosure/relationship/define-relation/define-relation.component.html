@@ -72,8 +72,8 @@
         </div>
         </div>
       </div>
-      <app-SFI-conflict-relationship [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
-      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription" [(isSavingRelation)]="isSaving"
+      <app-SFI-conflict-relationship [(isSavingRelation)]="coiService.isRelationshipSaving" [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
+      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
       [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
   </div>
 </div>

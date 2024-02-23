@@ -34,6 +34,7 @@ export class CoiService {
     focusSFIId: any;
     focusModuleId: any;
     focusSFIRelationId: any;
+    isRelationshipSaving = false;
 
     constructor(
         private _http: HttpClient,
@@ -121,7 +122,7 @@ export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireD
             let questionnaire_error = {validationMessage: '', validationType : "VE", };
             questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
             errorArray.push(questionnaire_error);
-        } 
+        }
         if (!isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
             let questionnaire_error = {validationMessage: '', validationType : "VW", };
             questionnaire_error.validationMessage = 'Please complete all the Questionnaire(s) in the “Screening Questionnaire” section.';
