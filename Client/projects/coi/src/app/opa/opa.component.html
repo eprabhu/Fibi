@@ -185,7 +185,7 @@
                     </div>
                     <div *ngIf="dataStore.isFormEditable()"
                          class="d-flex justify-content-around px-3 mt-3">
-                        <button (click)="submitOPA()"
+                        <button (click)="opaSubmissionModal()"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center fit-height"
                                 title="Click to submit your disclosure">
                             <mat-icon class="me-2">done</mat-icon>
@@ -345,7 +345,7 @@
                         <span class="ms-1 fw-medium fs-14">Return</span>
                     </button>
 
-                    <button mat-menu-item title="Click to Return Disclosure"
+                    <button mat-menu-item title="Click to Notify"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">notifications</mat-icon>
                         <span class="ms-1 fw-medium fs-14">Notify</span>
@@ -436,3 +436,31 @@
     <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="opa.opaDisclosure" [disclosureType]="'OPA'"></app-review-comments-slider>
 </div>
 
+<!--opa submit confirmation modal-->
+<div class="modal fade mySkinDialog" tabindex="-1" id="opa-submit-confirm-modal" tabindex="-1" role="dialog" data-backdrop="static"
+    data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="opa-submit-confirmation-header">
+                <h4 class="fs-16"><strong> OPA Disclosure </strong></h4>
+                <button type="button" id="opa-submit-close-btn" class="btn-close fs-12" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                           <p class="fs-14">Are you sure you want to submit the <strong>OPA</strong> disclosure?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <ng-container>
+                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal" id="opa-submit-dismiss-btn" title="Click to cancel">Cancel</button>
+                    <button (click)="submitOPA()" class=" btn btn-primary btn-sm fs-14" data-bs-dismiss="modal"
+                        id="opa-submit-btn" title="Click to submit">Submit</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

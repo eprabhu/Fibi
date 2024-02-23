@@ -225,6 +225,7 @@ export class AddSfiComponent implements OnInit {
     selectNewEntity(event): void {
         this.clearSFIFields();
         this.EntitySearchOptions.defaultValue = event.searchString;
+        this.clearField = new String('false');
         this.entityDetails.coiEntity.entityName = event.searchString;
         this.canShowEntityFields = true;
     }
