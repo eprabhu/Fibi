@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {slideHorizontal} from '../../../../../../fibi/src/app/common/utilities/animations';
+import {CoiService} from '../../services/coi.service';
 import { openCoiSlider } from '../../../common/utilities/custom-utilities';
 
 @Component({
@@ -24,7 +25,9 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
     readMore = [];
     relationshipTypeCache = {};
     isDataChanged = false;
-    isSaving = false;
+
+    constructor(public coiService: CoiService) {
+    }
 
     ngOnInit() {
         setTimeout(() => this.showTaskNavBar());
@@ -39,13 +42,13 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
     }
 
     goBackStep() {
-        if (this.isSaving) { return; }
+        if (this.coiService.isRelationshipSaving) { return; }
         this.selectedSfiIndex--;
         this.setCurrentIndexSfi();
     }
 
     goToStep() {
-        if (this.isSaving) { return; }
+        if (this.coiService.isRelationshipSaving) { return; }
         this.selectedSfiIndex++;
         this.setCurrentIndexSfi();
     }
