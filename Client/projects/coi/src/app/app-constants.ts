@@ -38,6 +38,7 @@ export const EDITOR_CONFIGURATION = {
 
 export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
+export const TRAVEL_MODULE_CODE = 24;
 
 export const COI_REVIEW_STATUS_TYPE = {
     SUBMITTED: '2'

@@ -40,6 +40,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
             if (!isEmptyObject(res)) {
                 this.currentReviewer = res;
             }
+        }, _err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching reviewer details. Please try again.')
         }));
     }
 
@@ -105,7 +107,6 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this._opaService.isStartReview = false;
         this._opaService.isCompleteReview = false;
         let nextAssignedReview = this.getNextAssignedReview();
-        console.log(nextAssignedReview);
         if (nextAssignedReview) {
             this._opaService.currentOPAReviewForAction = nextAssignedReview;
             if(nextAssignedReview.reviewStatusTypeCode == 1) 
