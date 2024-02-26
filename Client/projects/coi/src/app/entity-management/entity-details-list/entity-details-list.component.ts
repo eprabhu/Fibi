@@ -123,9 +123,21 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
         }));
   }
 
+  entityRelationTypePills(relationshipTypes: string) {
+    if (relationshipTypes) {
+      const entityType = relationshipTypes.split(':;:');
+      this.entityRelations[relationshipTypes] = entityType.map(entity => {
+        const relationshipType = entity.split(':');
+        return { relationshipTypes: relationshipType[0] || '', description: relationshipType[1] || '' };
+      });
+      return this.entityRelations[relationshipTypes];
+    }
+  }
+
   private loadingComplete() {
     this.isLoading = false;
-}
+  }
+  
   currentTab(tab) {
     this.isLoading = true;
     this.resetAdvanceSearchFields();
