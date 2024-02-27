@@ -359,9 +359,16 @@
               <div class="text-secondary fs-14" tabindex="0"
                 [ngClass]="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'?'col':'col-4'">
                 <label>Relationship <span>:</span></label>
-                <span class="break-point-1200">
+                <span class="break-point-1200 ms-2 fs-14">
                   <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
-                    <span class="px-xl-2">{{entityListData?.relationshipTypes}}</span>
+                      <em class="mt-3"
+                          *ngFor="let relation of entityRelationTypePills(entityListData?.relationshipTypes)">
+                              <span class="border px-3 py-1 rounded-4 me-2">
+                                   <span class="fw-medium me-1">{{relation?.relationshipTypes}}
+                                    :</span>
+                                    <span class="fw-normal">{{relation?.description}}</span>
+                              </span>
+                      </em>
                   </app-no-data-label>
                 </span>
               </div>
