@@ -1,16 +1,15 @@
-
-<div #defineRelationOverlay class="overlay" >
-<div class="slider-base">
-  <app-slider-close-btn (closeAction)="validateProjectSfiSliderOnClose()"></app-slider-close-btn>
-  <div class="slider-container">
+<ng-container>
+  <app-coi-slider (closeSlider)="validateProjectSfiSliderOnClose()" [elementId]="'relationship-details'">
+    <ng-container content>
       <div class="relationship-details-box card" id="relationship-details-box">
         <div class="row">
           <div class="col border-right">
             <div class="d-flex">
-              <span class="active-ribbon shadow-sm align-items-center d-flex ps-2 {{getColorBadges(selectedProject?.moduleCode)}}">
+              <span
+                class="active-ribbon shadow-sm align-items-center d-flex ps-2 {{getColorBadges(selectedProject?.moduleCode)}}">
                 <span class="px-2">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}</span></span>
               <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 3">
-                  <span class="fw-600 fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </span>
+                <span class="fw-600 fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </span>
               </p>
               <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 1">
                 <span class=" fw-600 fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </span>
@@ -27,7 +26,8 @@
               </div>
               <div class="col-4">
                 <label class="label-text">Period :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
+                <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+                  | dateFormatter}}</span>
               </div>
               <div class="col-4">
                 <label class="label-text">Sponsor :</label>
@@ -35,7 +35,8 @@
               </div>
               <div class="col-4">
                 <label class="label-text">Lead Unit :</label>
-                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} -
+                  {{selectedProject?.unitName}}</span>
                 <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
               </div>
               <div class="col-3">
@@ -44,8 +45,9 @@
               </div>
               <div class="col-4">
                 <label class="label-text">Prime Sponsor :</label>
-              <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
+                <span *ngIf="selectedProject?.primeSponsor"
+                  class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+                <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
               </div>
             </div>
           </div>
@@ -53,67 +55,31 @@
             <div class="">
               <span class="f-13 text-muted mr-2 fw-600 ml-2">{{currentRelation + 1}} of {{relationList?.length}}
                 <span class="ml-2">
-                  <span data-bs-toggle="tooltip" title="Navigate to previous or next projects." data-bs-placement="top" class="d-inline-block">
-                    <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color mt-1 ms-5" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                  <span data-bs-toggle="tooltip" title="Navigate to previous or next projects." data-bs-placement="top"
+                    class="d-inline-block">
+                    <mat-icon role="img"
+                      class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color mt-1 ms-5"
+                      aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
                   </span>
                 </span>
               </span>
               <button (click)="goBackStep()" [disabled]="currentRelation == 0"
-              class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
-              <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
-                  Previous
+                class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
+                <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
+                Previous
               </button>
               <button (click)="goToStep()" [disabled]="currentRelation == (relationList?.length - 1)"
-                  class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-3">
-                  Next
-                  <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
+                class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-3">
+                Next
+                <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
               </button>
+            </div>
           </div>
-        </div>
         </div>
       </div>
       <app-SFI-conflict-relationship [(isSavingRelation)]="coiService.isRelationshipSaving" [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
       [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
       [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
-  </div>
-</div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-clear-all-button" data-bs-toggle="modal" data-bs-target="#clearConfirmationModal"></button>
-<div class="modal fade" id="clearConfirmationModal" tabindex="-1" aria-labelledby="clearConfirmationModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Click to close Project -SFI slider"></button>
-      </div>
-      <div class="modal-body fs-14">
-        <p>Do you want to clear all the data entered?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-single-clear-button" data-bs-toggle="modal" data-bs-target="#singleClearConfirmationModal"></button>
-<div class="modal fade" id="singleClearConfirmationModal" tabindex="-1" aria-labelledby="singleClearConfirmationModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body fs-14">
-        <p>Do you want to clear the data of <span class="fw-600"> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.personEntity?.coiEntity?.entityName}} </span> values?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+    </ng-container>
+  </app-coi-slider>
+</ng-container>

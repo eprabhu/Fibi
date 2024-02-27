@@ -392,13 +392,13 @@
         <span>{{primaryBtnName}} Disclosure : OPA Disclosure By {{personProjectDetails?.personFullName}}</span>
     </ng-container>
     <!-- modal content -->
-    <ng-container content-sticky>
-        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
+    <ng-container content>
         <!-- help text -->
-        <div class="mx-3 mt-2">
+        <div>
             <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts"
                            [tooltip]="primaryBtnName"></app-help-text>
         </div>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>
 
