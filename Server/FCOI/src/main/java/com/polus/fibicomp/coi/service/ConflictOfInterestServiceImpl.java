@@ -650,6 +650,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				Arrays.asList(Constants.COI_REVIEWER_REVIEW_STATUS_START, Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED))) {
 			return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
 		}
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(vo.getCoiReview().getDisclosureId());
+		if (disclosure.getReviewStatusCode().equalsIgnoreCase(REVIEW_STATUS_RETURNED)) {
+			return new ResponseEntity<>("Disclosure already returned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
 		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_IN_PROGRESS,vo.getCoiReview().getCoiReviewId(), null);
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
 		vo.setCoiReview(coiReview);
@@ -695,6 +699,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> completeReview(ConflictOfInterestVO vo){
 		if (conflictOfInterestDao.isReviewStatus(vo.getCoiReview().getCoiReviewId(), Arrays.asList(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED))) {
 			return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		CoiDisclosure disclObj = conflictOfInterestDao.loadDisclosure(vo.getCoiReview().getDisclosureId());
+		if (disclObj.getReviewStatusCode().equalsIgnoreCase(REVIEW_STATUS_RETURNED)) {
+			return new ResponseEntity<>("Disclosure already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		conflictOfInterestDao.startReview(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED,

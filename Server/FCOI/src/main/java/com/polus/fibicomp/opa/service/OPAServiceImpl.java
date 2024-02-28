@@ -131,8 +131,8 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> withdrawOPADisclosure(OPACommonDto opaCommonDto) {
-		List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW);
-		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaCommonDto.getOpaDisclosureId())) {
+		List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_SUBMIT);
+		if (!opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaCommonDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaCommonDto.getOpaDisclosureId());
