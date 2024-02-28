@@ -1,5 +1,5 @@
 import { Questionnaire } from './../../view-questionnaire-v2/questionnaire-interface';
-import { Component, Input, } from '@angular/core';
+import { Component, EventEmitter, Input, Output, } from '@angular/core';
 import { CustomElementVO, FBConfiguration, FormBuilderSaveRO, FormSection, QuestionnaireVO, SectionComponent } from '../form-builder-interface';
 import { FormBuilderService } from '../form-builder.service';
 import { CommonService } from '../../../common/services/common.service';
@@ -29,6 +29,7 @@ export class DataLayerComponent {
                 this.component.customElement.customDataElements = res.customElement.customDataElements;
             }
             this.saveEventForChildComponent.next({ eventType: 'SAVE_COMPLETE', data: res });
+            this.emitEditOrSaveAction('SAVE_COMPLETE', res);
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure saved successfully.');
         }, err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving disclosure. Please try again.');
@@ -55,5 +56,8 @@ export class DataLayerComponent {
         return RO;
     }
 
+    emitEditOrSaveAction(actionPerformed, event) {
+        this._formBuilderService.$formBuilderActionEvents.next({action: actionPerformed, actionResponse: event, component: this.component});
+    }
 
 }
