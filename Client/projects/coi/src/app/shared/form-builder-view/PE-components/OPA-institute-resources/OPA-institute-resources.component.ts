@@ -73,14 +73,14 @@ export class OPAInstituteResourceUseComponent implements OnInit {
     }
 
     getClassForStatus(versionStatus, isFormCompleted) {
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';         
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
     }
 
     getClassForStatusInModal(versionStatus, isFormCompleted) {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
     }
 
-    getDescriptionForStatus(versionStatus, isFormCompleted) { 
+    getDescriptionForStatus(versionStatus, isFormCompleted) {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
 
@@ -117,6 +117,7 @@ export class OPAInstituteResourceUseComponent implements OnInit {
         delete this.useOfInstituteResourcesData.updateTimestamp;
         this.useOfInstituteResourcesData.actionType = 'SAVE';
         this.childEvents.emit({action: 'UPDATE', data: this.useOfInstituteResourcesData});
+        this.emitEditOrSaveAction('UPDATE', this.useOfInstituteResourcesData);
     }
 
     generateId(): void {
@@ -143,6 +144,7 @@ export class OPAInstituteResourceUseComponent implements OnInit {
             this.setPersonEntityId(response);
             this.setEntityInfoForInstResources();
             this.childEvents.emit({ action: 'ADD', data: this.useOfInstituteResourcesData });
+            this.emitEditOrSaveAction('ADD', this.useOfInstituteResourcesData);
         } catch (err) {
             if ((err.status === 405)) {
                 this.setEntityInfoForInstResources();
@@ -179,11 +181,12 @@ export class OPAInstituteResourceUseComponent implements OnInit {
         this.useOfInstituteResourcesData.actionType = 'SAVE';
         this.useOfInstituteResourcesData.entityInfo.isFormCompleted = this.entityDetails.isFormCompleted ? 'Y' : 'N';
     }
-    
+
     deleteEntity(): void {
         delete this.useOfInstituteResourcesData.updateTimestamp;
         this.useOfInstituteResourcesData.actionType = 'DELETE';
         this.childEvents.emit({ action: 'DELETE', data: this.useOfInstituteResourcesData });
+        this.emitEditOrSaveAction('DELETE', this.useOfInstituteResourcesData);
     }
 
     clearData() {
@@ -240,6 +243,10 @@ export class OPAInstituteResourceUseComponent implements OnInit {
 
     checkDuplicate(personEntityId): number {
         return this.componentData.data.findIndex(E => E.personEntityId === personEntityId);
+    }
+
+    emitEditOrSaveAction(actionPerformed, event) {
+        this._formBuilder.$formBuilderActionEvents.next({action: actionPerformed, actionResponse: event, component: this.componentData});
     }
 
 }
