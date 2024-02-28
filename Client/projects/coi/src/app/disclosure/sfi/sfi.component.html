@@ -25,7 +25,35 @@
       </ng-container>
     </div>
 </div>
-<div class="advance-search-area border d-flex mt-2 rounded-1">
+<div class="advance-search mt-3">
+  <div class="row m-0">
+    <div class="col-lg-5 py-2">
+  <div  [@leftSlideInOut]>
+      <label>Filter By Status :</label>
+      <span (click)="setFilter('ALL')" [class.active-filter-pills]="filterType=='ALL'"
+          title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+          class="filter-pills" role="button">All</span>
+      <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="filterType=='COMPLETE'"
+          title="Click to filter by type: Complete" area-describedby="Click to filter by type: Complete"
+          class="filter-pills" role="button">Complete</span>
+      <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="filterType=='INCOMPLETE'"
+          title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
+          class="filter-pills" role="button">Incomplete</span>
+      <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="filterType=='INACTIVE'"
+          title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
+          class="filter-pills" role="button">Inactive</span>
+  </div>
+  </div>
+  <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative">
+    <span class="filter-search">
+        <mat-icon class="fs-25px searchButton">search</mat-icon>
+        <input class="form-control pe-5" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+      </span>
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<!-- <div class="advance-search-area border d-flex mt-3 rounded-1">
     <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
@@ -49,9 +77,9 @@
       placeholder="Search Entity Name" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
       <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
     </div>
-</div>
+</div> -->
 <ng-container *ngIf="!isLoading">
-  <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
+  <div [@listAnimation]="coiFinancialEntityDetails.length">
     <div *ngFor="let item of coiFinancialEntityDetails ; let i =index">
       <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" [isTriggeredFromSlider]="isTriggeredFromSlider"></app-shared-sfi-card>
     </div>

@@ -1,6 +1,6 @@
 
 <!-- SFI header card -->
-<div class="row mb-3 sticky-0">
+<div class="row mb-3" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="row mx-0">
