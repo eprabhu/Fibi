@@ -99,20 +99,20 @@
             <div class="col-lg-3 d-flex align-items-end justify-content-end mt-lg-0 mt-md-2">
                 <div *ngIf="referredFrom === 'SFI_SUMMARY'"
                     class="align-items-center col-1 d-flex text-secondary justify-content-end">
-                    <button id="view-sfi" aria-label="view sfi details" title="View sfi details"  class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14"
+                    <button id="view-sfi" aria-label="view sfi details" title="View sfi details"  class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14"
                         (click)="openSfiDetails(SFIObject?.entityId, 'view')"><mat-icon>remove_red_eye</mat-icon></button>
-                    <button class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" tabindex="0" (click)="openReviewComment(SFIObject);" id="add-activity" title="Comments" type="button"
+                    <button class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" tabindex="0" (click)="openReviewComment(SFIObject);" id="add-activity" title="Comments" type="button"
                         role="button" aria-label="sfi comments"><mat-icon>rate_review</mat-icon></button></div>
                 <div *ngIf="referredFrom !== 'SFI_SUMMARY'" class="align-items-center col-lg col-12 mt-2 d-flex text-secondary justify-content-end">
-                    <button *ngIf="!isTriggeredFromSlider && SFIObject.isActive" class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')" title="Click to modify SFI">
+                    <button *ngIf="!isTriggeredFromSlider && SFIObject.isActive" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')" title="Click to modify SFI">
                         <mat-icon class="me-1">edit</mat-icon>Modify</button>
-                    <button class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" (click)="openSfiDetails(SFIObject?.entityId, 'view')" title="Click to view SFI">
+                    <button class="align-items-center btn btn-outline-secondary d-flex fs-14" [ngClass]="!isTriggeredFromSlider ? 'ms-2' : 'me-0'" (click)="openSfiDetails(SFIObject?.entityId, 'view')" title="Click to view SFI">
                         <mat-icon class="me-1">visibility</mat-icon>View</button>
-                    <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject.canDelete && !isTriggeredFromSlider" class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" title="Click to delete SFI">
+                    <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject.canDelete && !isTriggeredFromSlider" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" title="Click to delete SFI">
                       <mat-icon class="me-1">delete</mat-icon>Delete</button>
-                    <button *ngIf="!SFIObject?.isActive && !isTriggeredFromSlider" title="Click to activate SFI" class="align-items-center btn btn-outline-secondary d-flex me-2 fs-14" (click)="activateDeactivate(SFIObject)">
+                    <button *ngIf="!SFIObject?.isActive && !isTriggeredFromSlider" title="Click to activate SFI" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="activateDeactivate(SFIObject)">
                         <mat-icon class="me-1">offline_bolt</mat-icon>Activate</button>
-                    <button *ngIf="SFIObject?.isActive && !isTriggeredFromSlider" title="Click to inactivate SFI" class="align-items-center btn btn-outline-secondary d-flex fs-14" (click)="activateDeactivate(SFIObject)" >
+                    <button *ngIf="SFIObject?.isActive && !isTriggeredFromSlider" title="Click to inactivate SFI" class="align-items-center btn btn-outline-secondary d-flex fs-14 ms-2" (click)="activateDeactivate(SFIObject)" >
                         <mat-icon class="me-1">schedule</mat-icon>Inactivate </button>
                 </div>
             </div>

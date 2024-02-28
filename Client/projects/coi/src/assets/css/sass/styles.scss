@@ -558,6 +558,15 @@ body {
       color: #9e9e9e;
     }
   }
+  .search-area:hover{
+    background: #fff;
+  }
+  .closeButton{
+    position: absolute;
+    right: 10px;
+    color: #9E9E9E;
+    cursor: pointer;
+  }
 }
 
 @media (max-width:991px) {
