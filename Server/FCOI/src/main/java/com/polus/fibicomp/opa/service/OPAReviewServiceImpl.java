@@ -132,11 +132,15 @@ public class OPAReviewServiceImpl implements OPAReviewService {
     }
 
     @Override
-    public ResponseEntity<Object> startOPAReview(Integer opaReviewId) {
+    public ResponseEntity<Object> startOPAReview(Integer opaReviewId, Integer opaDisclsoureId) {
         if (reviewDao.isOPAReviewExistsOfStatus(opaReviewId, Arrays.asList(Constants.OPA_REVIEW_IN_PROGRESS,
                 Constants.OPA_REVIEW_COMPLETED))) {
             return new ResponseEntity<>("Review already started/completed", HttpStatus.METHOD_NOT_ALLOWED);
         }
+        List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaDisclsoureId)) {
+			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
         Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_IN_PROGRESS, null);
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         opaDao.updateOPADisclosureUpDetails(opaReview.getOpaDisclosureId(), timestamp);
@@ -158,18 +162,15 @@ public class OPAReviewServiceImpl implements OPAReviewService {
     }
 
     @Override
-    public ResponseEntity<Object> completeOPAReview(Integer opaReviewId, String opaReviewEndDate) {
+    public ResponseEntity<Object> completeOPAReview(Integer opaReviewId, Date opaReviewEndDate, Integer opaDisclosureId) {
         if (reviewDao.isOPAReviewExistsOfStatus(opaReviewId, Arrays.asList(Constants.OPA_REVIEW_COMPLETED))) {
             return new ResponseEntity<>("Review already completed", HttpStatus.METHOD_NOT_ALLOWED);
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date endDate = null;
-		try {
-			endDate = formatter.parse(opaReviewEndDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
+        List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaDisclosureId)) {
+			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_COMPLETED, endDate);
+        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_COMPLETED, opaReviewEndDate);
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         if (reviewDao.numberOfReviewOfStatuesIn(opaReview.getOpaDisclosureId(), Arrays.asList(Constants.OPA_REVIEW_ASSIGNED,
                 Constants.OPA_REVIEW_IN_PROGRESS)) == 0) {
@@ -259,6 +260,5 @@ public class OPAReviewServiceImpl implements OPAReviewService {
 
         return new ResponseEntity<>(reviewDto, HttpStatus.OK);
     }
-
 
 }

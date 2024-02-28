@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.polus.fibicomp.opa.dto.OPAReviewDto;
 import com.polus.fibicomp.opa.pojo.OPAReview;
 import com.polus.fibicomp.opa.service.OPAReviewService;
 
@@ -37,16 +38,16 @@ public class OPAReviewController {
         return reviewService.getOPAReview(opaDisclosureId);
     }
 
-    @PatchMapping("/start/{opaReviewId}")
-    ResponseEntity<Object> startOPAReview(@PathVariable("opaReviewId") Integer opaReviewId) {
+    @PatchMapping("/start")
+    ResponseEntity<Object> startOPAReview(@RequestBody OPAReviewDto opaReviewDto) {
         logger.info("Request for startOPAReview");
-        return reviewService.startOPAReview(opaReviewId);
+        return reviewService.startOPAReview(opaReviewDto.getOpaReviewId(), opaReviewDto.getOpaDisclosureId());
     }
 
-    @PatchMapping("/complete/{opaReviewId}/{opaReviewEndDate}")
-    ResponseEntity<Object> completeOPAReview(@PathVariable("opaReviewId") Integer opaReviewId, @PathVariable("opaReviewEndDate") String opaReviewEndDate) {
+    @PatchMapping("/complete")
+    ResponseEntity<Object> completeOPAReview(@RequestBody OPAReviewDto opaReviewDto) {
         logger.info("Request for completeOPAReview");
-        return reviewService.completeOPAReview(opaReviewId, opaReviewEndDate);
+        return reviewService.completeOPAReview(opaReviewDto.getOpaReviewId(), opaReviewDto.getEndDate(), opaReviewDto.getOpaDisclosureId());
     }
 
     @GetMapping("/history/{opaDisclosureId}")
