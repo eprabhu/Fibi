@@ -13,13 +13,27 @@ import {OPASharedModule} from './shared/shared.module';
 import {SharedModule} from '../shared/shared.module';
 import { HeaderSlidersModule } from '../disclosure/header-sliders/header-sliders.module';
 import { ReviewRouteGuardService } from './services/review-route-guard.service';
+import {RouterGuardService} from './services/router-guard.service';
 
 const routes: Routes = [{
     path: '', component: OpaComponent, canActivate: [ResolveServiceService], children: [
         {path: '', redirectTo: 'form', pathMatch: 'full'},
-        {path: 'form', loadChildren: () => import('./form/form.module').then(m => m.FormModule)},
-        {path: 'review', canActivate: [ReviewRouteGuardService], loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)},
-        {path: 'history', loadChildren: () => import('./history/history.module').then(m => m.HistoryModule)}
+        {
+            path: 'form',
+            canDeactivate: [RouterGuardService],
+            loadChildren: () => import('./form/form.module').then(m => m.FormModule)
+        },
+        {
+            path: 'review',
+            canDeactivate: [RouterGuardService],
+            canActivate: [ReviewRouteGuardService],
+            loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)
+        },
+        {
+            path: 'history',
+            canDeactivate: [RouterGuardService],
+            loadChildren: () => import('./history/history.module').then(m => m.HistoryModule)
+        }
     ]
 }];
 
@@ -42,6 +56,7 @@ const routes: Routes = [{
         OpaService,
         DataStoreService,
         ResolveServiceService,
+        RouterGuardService,
         ReviewRouteGuardService
     ]
 })

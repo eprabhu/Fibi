@@ -19,6 +19,7 @@ export class OpaService {
     actionButtonId = null;
     currentOPAReviewForAction: any;
     concurrentUpdateAction = '';
+    isFormBuilderDataChangePresent = false;
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) {

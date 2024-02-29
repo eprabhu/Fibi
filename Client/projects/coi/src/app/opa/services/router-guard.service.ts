@@ -10,7 +10,7 @@ import {OpaService} from './opa.service';
 export class RouterGuardService {
     $subscriptions: Subscription[] = [];
 
-    constructor(private _dataStore: DataStoreService, private _commonService: CommonService, private _coiService: OpaService) {
+    constructor(private _dataStore: DataStoreService, private _commonService: CommonService, private _opaService: OpaService) {
     }
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
@@ -20,8 +20,8 @@ export class RouterGuardService {
     }
 
     canDeactivate(): boolean {
-        if (this._dataStore.dataChanged) {
-            openCommonModal('disclosure-unsaved-changes-modal');
+        if (this._opaService.isFormBuilderDataChangePresent) {
+            openCommonModal('opa-unsaved-changes-modal');
             return false;
         } else {
             return true;
