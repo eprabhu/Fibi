@@ -1290,15 +1290,23 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	public ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto) {
-		if (conflictOfInterestDao.isAdminPersonOrGroupAddedInTravel(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId())) {
+		if ((dto.getActionType().equals("R") && conflictOfInterestDao.isSameAdminPersonOrGroupAddedInTravel(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId()))
+				|| (dto.getActionType().equals("A") && conflictOfInterestDao.isAdminPersonOrGroupAddedInTravel(dto.getTravelDisclosureId()))) {
 			return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(dto.getTravelDisclosureId());
+		if ((dto.getActionType().equals("R"))
+				&& (coiTravelDisclosure.getReviewStatusCode().equals(Constants.TRAVEL_REVIEW_STATUS_CODE_RETURNED_TO_PI) || coiTravelDisclosure.getReviewStatusCode().equals(Constants.TRAVEL_REVIEW_STATUS_CODE_APPROVED))) {
+			return new ResponseEntity<>("Reassign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		if (dto.getActionType().equals("A") && !coiTravelDisclosure.getReviewStatusCode().equals(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED)) {
+			return new ResponseEntity<>("Assign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		try {
 			saveTravelDisclosureAssignAdminActionLog(dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		} catch (Exception e) {
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
-		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(dto.getTravelDisclosureId());
 		conflictOfInterestDao.assignTravelDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		if (dto.getAdminGroupId() != null) {
 			coiTravelDisclosure.setAdminGroupId(dto.getAdminGroupId());
@@ -1718,8 +1726,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
-		if (conflictOfInterestDao.isAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())) {
+		if ((dto.getActionType().equals("R") && (conflictOfInterestDao.isSameAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())))
+				|| (dto.getActionType().equals("A") && conflictOfInterestDao.isAdminPersonOrGroupAdded(dto.getDisclosureId()))) {
 			return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
+		if ((dto.getActionType().equals("R"))
+				&& (disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_RETURN) || disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_COMPLETED))) {
+			return new ResponseEntity<>("Reassign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		if (dto.getActionType().equals("A") && !disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_SUBMITTED)) {
+			return new ResponseEntity<>("Assign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		try {
 			saveAssignAdminActionLog(dto.getAdminPersonId(), dto.getDisclosureId());
@@ -1727,7 +1744,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
-		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
 		if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
 			conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
 			dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
@@ -2424,4 +2440,29 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
 				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
 	}
+
+	@Override
+	public ResponseEntity<Object> checkDisclosureRiskStatus(CoiDisclosureDto disclosureDto) {
+		if (Boolean.TRUE.equals(conflictOfInterestDao.isDisclosureRiskStatusModified(disclosureDto.getRiskCategoryCode(), disclosureDto.getDisclosureId()))) {
+			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> checkEntityRiskStatus(CoiEntityDto entityDto) {
+		if (Boolean.TRUE.equals(conflictOfInterestDao.isEntityRiskStatusModified(entityDto.getRiskCategoryCode(), entityDto.getEntityId()))) {
+			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> checkTravelDisclosureRiskStatus(CoiTravelDisclosureDto travelDisclosureDto) {
+		if (Boolean.TRUE.equals(conflictOfInterestDao.isTravelDisclosureRiskStatusModified(travelDisclosureDto.getRiskCategoryCode(), travelDisclosureDto.getTravelDisclosureId()))) {
+			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 }

@@ -165,6 +165,22 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> assignAdminOPADisclosure(OPAAssignAdminDto assignAdminDto) {
+		if ((assignAdminDto.getActionType().equals("R") && opaDao.isSameAdminPersonOrGroupAdded(assignAdminDto.getAdminGroupId(), assignAdminDto.getAdminPersonId(), assignAdminDto.getOpaDisclosureId()))
+				|| (assignAdminDto.getActionType().equals("A") && opaDao.isAdminPersonOrGroupAdded(assignAdminDto.getOpaDisclosureId()))) {
+			return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		if (assignAdminDto.getActionType().equals("A")) {
+			List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_SUBMIT);
+			if (!opaDao.isOPAWithStatuses(opaDisclosureStatus, null, assignAdminDto.getOpaDisclosureId())) {
+				return new ResponseEntity<>("Assign admin action cannot be performed", HttpStatus.METHOD_NOT_ALLOWED);
+			}
+		}
+		if (assignAdminDto.getActionType().equals("R")) {
+			List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN, Constants.OPA_DISCLOSURE_STATUS_COMPLETED);
+			if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, assignAdminDto.getOpaDisclosureId())) {
+				return new ResponseEntity<>("Reassign admin action cannot be performed", HttpStatus.METHOD_NOT_ALLOWED);
+			}
+		}
 		try {
 			saveAssignAdminActionLog(assignAdminDto.getAdminPersonId(), assignAdminDto.getOpaDisclosureId(), assignAdminDto.getOpaDisclosureNumber());
 		} catch (Exception e) {
