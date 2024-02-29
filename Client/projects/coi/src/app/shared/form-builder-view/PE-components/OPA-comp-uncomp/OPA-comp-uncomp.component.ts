@@ -70,6 +70,7 @@ export class OPACompUncompComponent implements OnInit {
     currentFilter: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
     relationshipTypeCache = {};
+    isEntitySelected = false;
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
 
@@ -150,10 +151,12 @@ export class OPACompUncompComponent implements OnInit {
             const index = this.checkDuplicate(entity.personEntityId);
             this.isDuplicate = index === -1 || index === this.editIndex ? false : true;
             this.entityDetails = entity;
+            this.isEntitySelected = true;
         } else {
             this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
             this.entityDetails = {};
             this.isDuplicate = false;
+            this.isEntitySelected = false;
         }
     }
 

@@ -139,7 +139,6 @@ getDisclosureCount(typeCode, disclosureStatus) {
                 scrollIntoView(this.coiService.focusModuleId);
                 const ELEMENT = document.getElementById(this.coiService.focusModuleId);
                 ELEMENT.classList.add('error-highlight-card');
-                this.coiService.focusModuleId = null;
             }
           },100);
         }
@@ -226,6 +225,8 @@ getDependencyDetails() {
   }
 
   ngOnDestroy(): void {
+    this.coiService.focusModuleId = null;
+    this.coiService.focusSFIRelationId = null;
     subscriptionHandler(this.$subscriptions);
 }
 

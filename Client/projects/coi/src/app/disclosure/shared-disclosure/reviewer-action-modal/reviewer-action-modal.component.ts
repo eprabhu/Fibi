@@ -20,9 +20,9 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     reviewerList: any = [];
     $subscriptions: Subscription[] = [];
 
-    constructor( private _coiService: CoiService, 
-                 private _dataStore: DataStoreService,
-                 private _commonService: CommonService ) { }
+    constructor(private _coiService: CoiService,
+        private _dataStore: DataStoreService,
+        private _commonService: CommonService) { }
 
     ngOnInit() {
         this.getReviewerDetails();
@@ -44,20 +44,20 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     startCOIReview() {
         this.$subscriptions.push(this._coiService.startCOIReview({
             coiReviewId: this.currentReviewer.coiReviewId,
-            assigneePersonName: this.currentReviewer.assigneePersonName
+            assigneePersonName: this.currentReviewer.assigneePersonName,
+            disclosureId: this.currentReviewer.disclosureId
         }).subscribe((res: any) => {
             this.updateDataStore(res);
             this.currentReviewer = {};
-            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review started successfully.`);
-        }, _err => {
-                if (_err.status === 405) {
-                this.closeModal();
+        }, err => {
+            this.closeModal();
+            if (err.status === 405) {
                 this._coiService.concurrentUpdateAction = 'Start Review';
-              } else {
-            this.currentReviewer = {};
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
-              }
+            } else {
+                this.currentReviewer = {};
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
+            }
         }));
     }
 
@@ -67,21 +67,21 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._coiService.completeReview({
             coiReviewId: this.currentReviewer.coiReviewId,
             assigneePersonName: this.currentReviewer.assigneePersonName,
-            endDate: parseDateWithoutTimestamp(currentDate)
+            endDate: parseDateWithoutTimestamp(currentDate),
+            disclosureId: this.currentReviewer.disclosureId
         }).subscribe((res: any) => {
             this.updateDataStore(res);
             this.startOrCompleteReview();
             this.currentReviewer = {};
-            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
-        }, _err => {
-                if (_err.status === 405) {
-                hideModal('coi-complete-review-modal');
+        }, err => {
+            hideModal('coi-complete-review-modal');
+            if (err.status === 405) {
                 this._coiService.concurrentUpdateAction = 'Complete Review';
-              } else {
-            this.currentReviewer = {};
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
-              }
+            } else {
+                this.currentReviewer = {};
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+            }
         }));
     }
 
@@ -96,6 +96,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         const index = this.reviewerList.findIndex(ele => ele.coiReviewId === reviewer.coiReviewId);
         this.reviewerList[index] = reviewer;
         DATA.coiDisclosure.coiReviewStatusType = reviewer.coiDisclosure.coiReviewStatusType;
+        DATA.coiDisclosure.updateTimestamp = reviewer.updateTimestamp;
+        DATA.coiDisclosure.updateUserFullName = reviewer.updateUserFullName;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: DATA.coiDisclosure });
         this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(this.reviewerList);
         this.updateReviewActions(reviewer);
@@ -119,12 +121,12 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         let nextAssignedReview = this.getNextAssignedReview();
         if (nextAssignedReview) {
             this._coiService.currentReviewForAction = nextAssignedReview;
-            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+            if (nextAssignedReview.reviewStatusTypeCode == 1)
                 this._coiService.isStartReview = true;
             else if (nextAssignedReview.reviewStatusTypeCode == 3)
                 this._coiService.isCompleteReview = true;
         }
-       
+
     }
 
     private getNextAssignedReview(): any {

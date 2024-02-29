@@ -464,3 +464,5 @@
         </div>
     </div>
 </div>
+
+<app-concurrency-warning-modal *ngIf="opaService.concurrentUpdateAction" [sectionName]="opaService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
