@@ -74,4 +74,13 @@ export class FormComponent implements OnInit, AfterViewInit {
         this._opa.isShowCommentNavBar = true;
     }
 
+    formBuilderDataChanged(formEvent: any) {
+        switch (formEvent) {
+            case 'CHANGED':
+                return this._opa.isFormBuilderDataChangePresent = true;
+            case 'SAVE_COMPLETE':
+                return this._opa.isFormBuilderDataChangePresent = false;
+        }
+    }
+
 }

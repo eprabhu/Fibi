@@ -87,15 +87,18 @@ getDisclosureCount(typeCode, disclosureStatus) {
   }
 
   private updateConflictStatus(): void {
+    this.coiService.isRelationshipSaving = true;
     this.$subscriptions.push( this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
       if (data) {
         this.coiData.coiDisclosure.coiConflictStatusType = data;
         this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
         this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
         this._relationShipService.isSliderDataUpdated = false;
+        this.coiService.isRelationshipSaving = false;
       }
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
+      this.coiService.isRelationshipSaving = false;
     }));
   }
 

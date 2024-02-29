@@ -14,6 +14,7 @@ import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {ModalType} from '../disclosure/coi-interface';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
+import {NavigationService} from "../common/services/navigation.service";
 
 @Component({
     selector: 'app-opa',
@@ -53,13 +54,15 @@ export class OpaComponent implements OnInit {
     commentsRight: {
         canViewPrivateComments: boolean;
         canMaintainPrivateComments: boolean;
-    }
+    };
     personUnitDetail = '';
+    isHomeClicked = false;
 
     constructor(public opaService: OpaService,
                 private _router: Router,
                 public location: Location,
                 public commonService: CommonService,
+                private _navigationService: NavigationService,
                 public dataStore: DataStoreService) {
     }
 
@@ -144,6 +147,7 @@ export class OpaComponent implements OnInit {
 
     goToHomeUrl() {
         // TODO admin/reviewer/pi based redirect once rights are implemented.
+        this.isHomeClicked = true;
         const reRouteUrl = this.opaService.previousHomeUrl || REPORTER_HOME_URL;
         this._router.navigate([reRouteUrl]);
     }
@@ -273,6 +277,15 @@ export class OpaComponent implements OnInit {
 
     cancelConcurrency() {
         this.opaService.concurrentUpdateAction = '';
+    }
+
+    leavePageClicked() {
+        this.opaService.isFormBuilderDataChangePresent = false;
+        if (this.isHomeClicked) {
+           this.goToHomeUrl();
+        } else {
+            this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
+        }
     }
 
 }

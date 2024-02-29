@@ -230,6 +230,7 @@
                             [disclosureId]="coiData?.coiDisclosure?.disclosureId"
                             [coiData]="coiData"
                             [disclosureStatusCode]="coiData?.coiDisclosure?.disclosureStatusCode"
+                            (conflictStatusChanged)="updateConflictStatus()"
     ></app-define-sfi-project>
 
   <app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode"

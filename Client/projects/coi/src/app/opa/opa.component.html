@@ -466,3 +466,17 @@
 </div>
 
 <app-concurrency-warning-modal *ngIf="opaService.concurrentUpdateAction" [sectionName]="opaService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
+
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName] = "'opa-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
+                        [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p class="fs-14">Do you want to leave the page without saving</p>
+    </div>
+</app-confirmation-modal>
+<!--Unsaved Changes confirmation Modal end-->
