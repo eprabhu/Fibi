@@ -289,7 +289,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null, null);
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		}
-		coiDisclosure.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
+		coiDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(coiDisclosure.getUpdateUser()));
 		coiDisclosure.setCoiDisclosureFcoiType(conflictOfInterestDao.getCoiDisclosureFcoiTypeByCode(coiTypeCode));
 		coiDisclosure.setPerson(personDao.getPersonDetailById(coiDisclosure.getPersonId()));
 		coiDisclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
@@ -631,6 +631,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewAssigneeHistory.setCoiReviewActivityId(CREATE_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
 		/*Need clarification*/
+		coiReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
+		coiReview.setUpdateTimestamp(disclosure.getUpdateTimestamp());
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
 
@@ -656,14 +658,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_IN_PROGRESS,vo.getCoiReview().getCoiReviewId(), null);
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
-		vo.setCoiReview(coiReview);
 		coiReviewAssigneeHistory.setAdminGroupId(coiReview.getAdminGroupId());
 		coiReviewAssigneeHistory.setAssigneePersonId(coiReview.getAssigneePersonId());
 		coiReviewAssigneeHistory.setAssigneeType(coiReview.getAdminGroupId() != null ? "G" :"P");
 		coiReviewAssigneeHistory.setCoiReviewId(coiReview.getCoiReviewId());
 		coiReviewAssigneeHistory.setCoiReviewActivityId(START_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
-		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		try {
 			String actionTypeCode;
 			String reviewerName = "";
@@ -692,6 +692,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} catch (Exception e) {
 			logger.error("startReview : {}", e.getMessage());
 		}
+		Timestamp updateTimestamp = conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+		coiReview.setUpdateTimestamp(updateTimestamp);
+		coiReview.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
 
@@ -729,6 +733,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiReview.getCoiDisclosure().setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
 			coiReview.getCoiDisclosure().setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED));
 		}
+		Timestamp updateTimestamp = conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+		coiReview.setUpdateTimestamp(updateTimestamp);
+		coiReview.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
 		try {
 			String actionTypeCode;
 			String reviewerName = "";
@@ -754,7 +762,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} catch (Exception e) {
 			logger.error("completeReview : {}", e.getMessage());
 		}
-		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
 
@@ -775,8 +782,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
 			});
 			conflictOfInterestDao.deleteReview(coiReviewId);
-			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+			Timestamp updateTimestamp = conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 			CoiDisclosure coiDisclosure = new CoiDisclosure();
+			coiDisclosure.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
+			coiDisclosure.setUpdateTimestamp(updateTimestamp);
 			if (conflictOfInterestDao.numberOfReviewNotOfStatus(coiReview.getDisclosureId(), Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED).equals(0)) {
 				coiDisclosure.setDisclosureId(coiReview.getDisclosureId());
 				coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
