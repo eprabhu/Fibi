@@ -3475,15 +3475,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 
 	@Override
-	public void updateDisclosureUpdateDetails(Integer disclosureId) {
+	public Timestamp updateDisclosureUpdateDetails(Integer disclosureId) {
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE CoiDisclosure cd SET cd.updateTimestamp = :updateTimestamp, cd.updateUser = :updateUser where cd.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
-		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateTimestamp", updateTimestamp);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
+		return updateTimestamp;
 	}
 
 	@Override

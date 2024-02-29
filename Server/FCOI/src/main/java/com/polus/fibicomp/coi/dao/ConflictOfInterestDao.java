@@ -901,7 +901,7 @@ public interface ConflictOfInterestDao {
 	 * This method is used to update disclosure header update details
 	 * @param disclosureId
 	 */
-	void updateDisclosureUpdateDetails(Integer disclosureId);
+	Timestamp updateDisclosureUpdateDetails(Integer disclosureId);
 
 	/**
 	 * This method is used to update PersonEntity header update details
