@@ -53,7 +53,6 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
           ELEMENT.classList.remove('border-bottom');
           ELEMENT.classList.remove('border-top');
           ELEMENT.classList.add('error-highlight-card');
-          this._coiService.focusSFIRelationId = null;
       }
   });
     this.triggerSingleSave();
@@ -93,6 +92,9 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
       this.prepareSaveObject(), this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.personId)
       .subscribe((data: any) => {
         this.entityProjectDetails = data.coiDisclEntProjDetails;
+        if(this._coiService.focusModuleId && this._coiService.focusModuleId == this.selectedProject.moduleItemId) {
+            this.removeFocusId();
+        }
         hideModal('applyToAllConfirmationModal');
         this.changeCloseBtnZIndex(1500);
         this.coiDescription = '';
@@ -174,6 +176,11 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this.coiData.coiDisclosure.personId).subscribe((data: any) => {
         this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
         this.clearIndex = null;
+        if(this._coiService.focusModuleId && this._coiService.focusSFIRelationId
+            && this._coiService.focusModuleId == this.selectedProject.moduleItemId
+            && this._coiService.focusSFIRelationId == data.coiDisclEntProjDetail.disclosureDetailsId) {
+            this.removeFocusId();
+        }
         this.coiValidationMap.clear();
         this.closePage.emit();
         this.updateIsSavingRelation(false);
@@ -185,6 +192,13 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this.focusLastEditedInput();
       }, 1500);
     }));
+}
+
+removeFocusId() {
+    const ELEMENT = document.getElementById(this._coiService.focusModuleId);
+    ELEMENT.classList.remove('error-highlight-card');
+    this._coiService.focusModuleId = null;
+    this._coiService.focusSFIRelationId = null;
 }
 
     focusLastEditedInput() {

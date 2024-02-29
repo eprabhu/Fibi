@@ -18,7 +18,6 @@ export class DataStoreService {
     dataChanged = false;
 
     dataEvent = new Subject();
-    updateTimestampEvent  = new Subject();
 
     getData(keys?: Array<string>): any {
         if (!keys) {

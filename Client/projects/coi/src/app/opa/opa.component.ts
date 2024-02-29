@@ -155,8 +155,13 @@ export class OpaComponent implements OnInit {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA withdrawn successfully.`);
-            }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+            }, err => {
+                if (err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.opaService.concurrentUpdateAction = 'Withdraw Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                }
             }));
     }
 
@@ -264,6 +269,10 @@ export class OpaComponent implements OnInit {
 
     closeReviewComment(event) {
         this.opaService.isShowCommentNavBar = event;
+    }
+
+    cancelConcurrency() {
+        this.opaService.concurrentUpdateAction = '';
     }
 
 }
