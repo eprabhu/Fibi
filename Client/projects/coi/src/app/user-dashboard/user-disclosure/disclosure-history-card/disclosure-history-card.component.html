@@ -34,7 +34,8 @@
             <div class="row mt-4">
                 <div class="col-md-6 col-sm-6 col-12 order-xxl-0 order-xl-0 order-lg-0 order-md-0 order-sm-0" tabindex="0">
                     <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1200" [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                        {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                        {{getPersonLeadUnitDetails(disclosure)}}
+                    </span>
                 </div>
                 <div class="col-xxl-3 col-sm-6 col-12 order-xxl-1 order-xl-2 order-lg-2 order-md-2 order-sm-4" tabindex="0">
                     <label class="label-text me-2">Certification Date <span>:</span></label>
@@ -241,7 +242,8 @@
             </div>
             <div class="col-md-6 col-sm-6 col-12 order-xxl-2 order-xl-5 order-lg-5 order-md-5" tabindex="0">
                 <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1200" [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                    {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                    {{getPersonLeadUnitDetails(disclosure)}}
+                </span>
             </div>
             <div class="col-xxl-3 col-sm-6 col-12 order-xxl-3 order-xl-1 order-lg-1 order-md-1" tabindex="0">
                 <label class="label-text me-2">Disposition Status <span>:</span></label>

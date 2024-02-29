@@ -3,6 +3,7 @@ import { UserDisclosure } from '../user-disclosure-interface';
 import { CommonService } from '../../../common/services/common.service';
 import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL } from '../../../app-constants';
 import { Router } from '@angular/router';
+import { getPersonLeadUnitDetails } from '../../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-disclosure-history-card',
@@ -51,6 +52,13 @@ export class DisclosureHistoryCardComponent implements OnInit {
             (this.disclosure.reviewStatusCode === '1' ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL);
         this._router.navigate([redirectUrl],
             { queryParams: { disclosureId: this.disclosure.travelDisclosureId || this.disclosure.disclosureId || this.disclosure.opaDisclosureId} });
+    }
+
+    getPersonLeadUnitDetails(disclosure: any): string {
+        const UNIT_DATA = { unitNumber: '', unitName: ''};
+        UNIT_DATA.unitNumber = disclosure.homeUnit ? disclosure.homeUnit : '';
+        UNIT_DATA.unitName = disclosure.homeUnitName ? disclosure.homeUnitName : '';
+        return getPersonLeadUnitDetails(UNIT_DATA);
     }
 
 }
