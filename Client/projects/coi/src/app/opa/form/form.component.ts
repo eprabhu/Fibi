@@ -6,6 +6,7 @@ import {DataStoreService} from '../services/data-store.service';
 import {OPA} from "../opa-interface";
 import { coiReviewComment } from '../../shared-components/shared-interface';
 import { CommonService } from '../../common/services/common.service';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-form',
@@ -78,9 +79,24 @@ export class FormComponent implements OnInit, AfterViewInit {
         switch (formEvent) {
             case 'CHANGED':
                 return this._opa.isFormBuilderDataChangePresent = true;
-            case 'SAVE_COMPLETE':
+            case 'SAVE_COMPLETE': {
+                if(this._opa.isFormBuilderDataChangePresent) {
+                    this._opa.triggerSaveComplete.next(true);
+                }
                 return this._opa.isFormBuilderDataChangePresent = false;
+            }
+            case 'NEW_SFI':
+                this.loadOPA();
         }
     }
 
+    loadOPA() {
+        this.$subscriptions.push(this._opa.loadOPA(this.opa.opaDisclosure.opaDisclosureId).subscribe((data) => {
+            this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: data});
+        }));
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+    }
 }

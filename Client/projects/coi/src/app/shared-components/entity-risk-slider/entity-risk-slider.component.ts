@@ -97,6 +97,21 @@ export class EntityRiskSliderComponent implements OnInit {
         return this.entityRiskRO;
     }
 
+    checkForModification() {
+        this.$subscriptions.push(this.entityDetailsService.riskAlreadyModified({
+            'riskCategoryCode': this.entityDetails.riskCategoryCode,
+            'entityId': this.entityDetails.entityId
+        }).subscribe((data: any) => {
+            this.updateProjectRelationship();
+        }, err => {
+            if (err.status === 405) {
+                this.isConcurrency = true;
+            } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+            }
+        }))
+    }
+
     updateProjectRelationship() {
         if (this.checkForMandatory()) {
             this.$subscriptions.push(
@@ -110,9 +125,9 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.clearConflictModal();
                         this.riskHistory();
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk modified successfully.');
-                    }, _err => {
-                        if (_err.status === 405) {
-                          this.isConcurrency = true;
+                    }, err => {
+                        if (err.status === 405) {
+                        this.isConcurrency = true;
                         } else {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk. Please try again.');
                         }

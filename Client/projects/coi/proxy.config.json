@@ -570,5 +570,17 @@
     "/opa/getOpaPersonType": {
         "target": "http://10.199.100.34:9090/",
         "secure": false
+    },
+    "/disclosure/riskStatus" : {
+        "target": "http://10.199.100.34:9090/coi/",
+        "secure": false
+    },
+    "/entity/riskStatus": {
+        "target": "http://10.199.100.34:9090/coi/",
+        "secure": false
+    },
+    "/travelDisclosure/riskStatus": {
+        "target": "http://10.199.100.34:9090/coi/",
+        "secure": false
     }
 }

@@ -173,6 +173,7 @@ export class OPAInstituteResourceUseComponent implements OnInit {
     private setPersonEntityId(response): void {
         if (!this.entityDetails.personEntityId) {
             this.entityDetails.personEntityId = response.personEntityId;
+            this.emitEditOrSaveAction('NEW_SFI', this.useOfInstituteResourcesData);
         }
     }
 

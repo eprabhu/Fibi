@@ -20,6 +20,7 @@ export class OpaService {
     currentOPAReviewForAction: any;
     concurrentUpdateAction = '';
     isFormBuilderDataChangePresent = false;
+    triggerSaveComplete = new Subject<boolean>()
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) {

@@ -7,6 +7,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
+import { TravelDisclosureService } from '../services/travel-disclosure.service';
 
 @Component({
   selector: 'app-travel-risk-slider',
@@ -31,11 +32,12 @@ export class TravelRiskSliderComponent implements OnInit {
   disclosureHistoryLogs: any = {};
   isReadMore: boolean[] = [];
   isStatusEdited = false;
-  
-  constructor( public commonService: CommonService, 
+
+  constructor( public commonService: CommonService,
 			   public travelRiskSliderService: TravelRiskSliderService,
 			   public dataFormatPipe: DateFormatPipeWithTimeZone,
-			   private _dataStore: TravelDataStoreService ) { }
+			   private _dataStore: TravelDataStoreService,
+               private _travelDisclosureService: TravelDisclosureService) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -99,7 +101,7 @@ export class TravelRiskSliderComponent implements OnInit {
 	clearValidationOnValueChange(TYPE): void {
 		TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode'), this.isStatusEdited = true;
 	}
-  
+
 	private getRiskLookup(): void {
 		this.$subscriptions.push(this.travelRiskSliderService.getTravelRiskLookup().subscribe((data: any) => {
 			this.riskLookup = data;
@@ -118,6 +120,21 @@ export class TravelRiskSliderComponent implements OnInit {
 	private emitRiskChange(data): void {
 		this.riskChange.emit({ 'riskCategoryCode': data.riskCategoryCode, 'riskLevel': data.riskLevel })
 	}
+
+    checkForModification() {
+        this.$subscriptions.push(this.travelRiskSliderService.riskAlreadyModified({
+            'riskCategoryCode': this.travelDisclosure.riskCategoryCode,
+            'travelDisclosureId': this.travelDisclosure.travelDisclosureId
+        }).subscribe((data: any) => {
+            this.saveRisk();
+        }, err => {
+            if (err.status === 405) {
+                this._travelDisclosureService.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+            }
+        }))
+    }
 
 	saveRisk(): void {
 		if (this.checkForMandatory()) {
@@ -147,7 +164,7 @@ export class TravelRiskSliderComponent implements OnInit {
 				this.isReadMore = [];
 				setTimeout(() => {
 					openSlider('travel-risk-slider');
-				});			
+				});
 			}));
 	}
 
@@ -166,7 +183,7 @@ export class TravelRiskSliderComponent implements OnInit {
 		return isEmptyObject(this.disclosureHistoryLogs);
 	}
 
-	
+
 	getWarningClass(typeCode): string {
         switch (typeCode) {
             case '1':
