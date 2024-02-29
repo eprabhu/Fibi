@@ -597,8 +597,8 @@
                                 <div class="col-4 col-lg-4 col-md-4 col-xl-4">
                                      <!-- Coi card Department -->
                                      <div tabindex="0" class=" mb-md-3 mb-lg-3 mb-xl-0" [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
-                                        <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1200">
-                                            {{disclosure?.unit?.unitDetail}} </span>
+                                        <label class="label-text">Department <span>:</span></label>
+                                        <span class="grey-text break-point-1200 ps-2">{{getPersonLeadUnitDetails(disclosure)}}</span>
                                     </div>
                                     <!-- Coi card Description (FCOI)-->
                                     <div class="mb-3" *ngIf="disclosure?.fcoiTypeCode== 1" tabindex="0" [attr.aria-label]="'Description' + disclosure?.reviseComment">
@@ -790,8 +790,8 @@
                                             <span class="col break-point-1200" [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
                                                 <app-no-data-label id="department-id" class=""
                                                     [valueToShow]="disclosure?.travelEntityName">
-                                                    <span class="grey-text text-slice"
-                                                        [title]="disclosure?.unitDetails?.unitDetail">{{disclosure?.unitDetails?.unitDetail}}</span>
+                                                    <span class="grey-text text-slice ps-2"
+                                                        [title]="disclosure?.unitDetails?.unitDetail">{{getPersonLeadUnitDetails(disclosure)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -951,8 +951,7 @@
                                             <!-- OPA Card Department -->
                                             <div tabindex="0" [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                                 <label class="label-text">Department <span>:</span></label>
-                                                <span class="grey-text break-point-1200">
-                                                    {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                                <span class="grey-text break-point-1200 ps-2">{{getPersonLeadUnitDetails(disclosure)}} </span>
                                             </div>
                                             <!-- OPA Card Administrator -->
                                             <div class="mb-3" tabindex="0" [attr.aria-label]="'Administrator' + (disclosure?.adminPersonName)">
