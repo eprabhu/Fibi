@@ -30,7 +30,10 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     proposalIdLinkedInDisclosure: number = null;
 
     $subscriptions: Subscription[] = [];
-    isRelationshipCollapse = true;
+    isRelationshipCollapse = false;
+    activeNav = '';
+    activeSubNav = '';
+    subNavActive = '';
 
     constructor(
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
@@ -42,6 +45,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         this.fetchCOIDetails();
         this.getProjectRelationshipList();
         this.getToolkitVisibility();
+        this.activeNav = 'COI801';
     }
 
     getProjectRelationshipList() {
@@ -114,19 +118,29 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     }
 
     jumpToSection(section) {
-        const sectionHeight = document.getElementById(section).offsetTop - 265;
-        document.getElementById('COI_SCROLL').scrollTo({ top: sectionHeight, behavior: 'smooth' });
+        this.activeNav = section;
+        if (section !== 'COI803') {
+            this.activeSubNav = '';
+            this.subNavActive = '';
+            this.isRelationshipCollapse = false; 
+        } else {
+            this.isRelationshipCollapse = !this.isRelationshipCollapse;
+        }
+        this.windowScroll(section);
     }
 
-    jumpToProjectSection(section) {
-        if(document.getElementById(section)) {
-           this.jumpToSection(section);
-        } else {
-            document.getElementById('relationship_collapse_btn').click();
-            setTimeout(() => {
-                this.jumpToSection(section);
-            });
-        }
+    jumpToProjectSection(parentSection: string, activeSubSection: string, subNavSection: string) {
+        this.activeNav = parentSection;
+        this.activeSubNav = activeSubSection;
+        this.subNavActive = subNavSection;
+        this.windowScroll(subNavSection)
+    }
+
+    windowScroll(scrollTo: string) {
+        const ELEMENT: HTMLElement = document.getElementById(scrollTo);
+        const offsetFromHeader = document.getElementById('COI-DISCLOSURE-HEADER')?.clientHeight + 50;
+        const sectionHeight = ELEMENT.offsetTop - offsetFromHeader;
+        window.scrollTo({ behavior: 'smooth', top: sectionHeight });
     }
 
 }

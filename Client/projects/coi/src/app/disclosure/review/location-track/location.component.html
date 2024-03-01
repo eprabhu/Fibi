@@ -1,60 +1,62 @@
 <!-- Location -->
 <div class="card mb-3">
-    <div class="card-header px-4 py-2 ">
-					<h4 class="card-title review-title">
-                        <div class="justify-content-between row d-flex align-items-center">
-                            <div class="col">Reviewers</div>
+    <div class="card-header px-4 py-2 justify-content-between d-flex align-items-center">
+					<h4 class="card-title ">
+                            <div class="fs-16 fw-bold">Reviewers</div>
                             <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
-                            <div 
-                            *ngIf="coiService.isCOIAdministrator && 
-                            ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" 
-                            class="col-auto me-2">
-                                <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
-                                    title="Add Reviewer" data-bs-target="#add-coi-reviewer-modal">
-                                    <mat-icon class="me-2">person_add</mat-icon>
-                                    Add Reviewer
-                                </button>
-                            </div>    
-                            <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
-                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                <mat-icon>{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
-                            </button>
+                            
                                
                             <!-- <button class=" updown-arrow mt-1" (click)="isExpanded = !isExpanded">
                                 <i [ngClass]="!isExpanded?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                                     class="fa-large" aria-hidden="true"></i>
                             </button> -->
                             
-                        </div>
                     </h4>
+                    <span class="d-flex">
+                        <div *ngIf="coiService.isCOIAdministrator && 
+                                                    ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                            class=" me-2">
+                            <button (click)="clearReviewModal()"
+                                class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center"
+                                data-bs-toggle="modal" title="Add Reviewer" data-bs-target="#add-coi-reviewer-modal">
+                                <mat-icon class="me-2">person_add</mat-icon>
+                                Add Reviewer
+                            </button>
+                        </div>
+                        <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
+                            class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                            <mat-icon>{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
+                        </button>
+                    </span>
     </div>
-    <div class="card-body" *ngIf="isExpanded">
+    <div class="card-body fs-14" *ngIf="isExpanded">
         <div *ngIf="!reviewerList?.length">
             <app-no-information> </app-no-information>
         </div>
-        <table *ngIf="reviewerList?.length" class=" table tableSkin">
+    <div class="table-responsive">
+        <table *ngIf="reviewerList?.length" class="table tableSkin align-middle">
             <caption class="sr-only">Review</caption>
             <thead>
                 <tr>
-                    <th scope="col-2" class="px-3">
+                    <th scope="col-2">
                         Location
                     </th>
-                    <th scope="col-2" class="px-3">
+                    <th scope="col-2">
                         Reviewers
                     </th>
-                    <th scope="col-3" style="width:30%" class="px-3">
+                    <th scope="col-3" style="width:30%">
                         Description
                     </th>
-                    <th scope="col-2" class="px-3">
+                    <th scope="col-2">
                         Assigned On
                     </th>
-                    <th scope="col-2" class="px-3 text-center">
+                    <th scope="col-2">
                         Review End Date
                     </th>
-                    <th scope="col-2" class="text-center px-3">
+                    <th scope="col-2">
                         Days at Location
                     </th>
-                    <th scope="col-3" class="text-center px-3">
+                    <th scope="col-3">
                         Status
                     </th>
                     <th scope="col-2" class="text-end table-actions-margin">Actions</th>
@@ -92,7 +94,7 @@
                       {{reviewer?.reviewerStatusType?.description}}
                       </span>
                     </td>
-                    <td class="align-items-center justify-content-end">
+                    <td>
                         <div class="d-flex align-items-center justify-content-center">
                             <ng-container *ngIf="isMangeReviewAction">
                                 <button *ngIf="reviewer.reviewStatusTypeCode == '1'" 
@@ -122,7 +124,7 @@
                                     </button>
                                 </ng-container>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                    <button class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
+                                    <button class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
                                         id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-coi-reviewer-modal"
                                         (click)="editReview(reviewer, index)">
                                         <mat-icon class="me-2 more-options-icon">edit</mat-icon>
@@ -141,12 +143,13 @@
             </tbody>
         </table>
     </div>
+    </div>
 </div>
 <!-- Review Ends-->
 <!-- DELETE MEMBER WARNING MODAL -->
 <div class="modal modal-coi modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteReviewModal"
     tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Delete Review</h5>
@@ -155,7 +158,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete this review?</p>
+                <p class="fs-14 mb-0">Are you sure you want to delete this review?</p>
             </div>
             <div class="modal-footer">
                 <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
@@ -169,7 +172,7 @@
 
 <div class="modal modal-coi fade mySkinDialog" id="add-coi-reviewer-modal" role="dialog"
     data-bs-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }}
@@ -185,7 +188,7 @@
                 <div class="row">
                     <div class="col-4">
                         <label class="block-display">
-                            <span class="mandatory">*</span>Location</label>
+                            <span class="text-danger me-1">*</span>Location</label>
                         <app-look-up (selectedResult)="onLocationSelect($event)"
                         [options]="disReviewLocation" 
                         [selectedLookUpList]="locationType"
@@ -209,7 +212,7 @@
                     </div>
                     <div class="col-4">
                         <label class="block-display">
-                            <span class="mandatory">*</span>Status</label>
+                            <span class="text-danger me-1">*</span>Status</label>
                             <app-look-up (selectedResult)="onStatusSelect($event)"
                             [options]="disReviewStatus" [isError]="validationMap.has('reviewStatus')"
                             [selectedLookUpList]="reviewerStatusType"
@@ -224,7 +227,7 @@
                 <div class="row mt-2">
                     <div class="col-4">
                         <label class="block-display">
-                            <span class="mandatory">*</span>Assigned On</label>
+                            <span class="text-danger me-1">*</span>Assigned On</label>
                             <div>
                                 <span class="dateField w-100">
                                   <input matInput [matDatepicker]="startDate" id="start-date-involvement" placeholder="{{datePlaceHolder}}"
@@ -242,7 +245,7 @@
                               </div>
                     </div>
                     <div class="col-4" *ngIf="reviewDetails?.reviewStatusTypeCode == '2'">
-                        <label class="d-block"><span class="mandatory">*</span>Review End Date </label>
+                        <label class="d-block"><span class="text-danger me-1">*</span>Review End Date </label>
                         <div>
                             <span class="dateField w-100">
                               <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="{{datePlaceHolder}}"

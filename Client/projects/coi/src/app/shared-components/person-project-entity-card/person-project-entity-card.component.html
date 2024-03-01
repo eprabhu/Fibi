@@ -1,18 +1,47 @@
-<div class="info-card-border mt-2 rounded-2 shadow-medium bg-light mx-3">
-    <div class="py-2 px-4">
-        <!-- person -->
-        <div class="ms-2">
-            <label class="grey-text fs-14 fw-600 text-nowrap">Person : </label>
-            <app-no-data-label [valueToShow]="personProjectOrEntity?.personFullName">
-                <span class="ml-2 grey-text fs-14">{{personProjectOrEntity?.personFullName}}</span>
+<div class="info-card-border rounded-2 shadow-medium bg-light p-3">
+    <div class="py-2">
+        <div class="row">
+            <div class="col-12 d-flex">
+
+                <!-- person name -->
+                <div>
+                    <i class="fa fa-user mt-sm-2 mt-2 grey-text" aria-hidden="true"></i>
+                    <app-no-data-label [valueToShow]="personProjectOrEntity?.personFullName">
+                        <span class="ms-2 grey-text fs-14">{{personProjectOrEntity?.personFullName}}</span>
+                    </app-no-data-label>
+                </div>
+        
+                <!-- Primary title -->
+                <div class="ms-4">
+                    <i class="fa fa-briefcase mt-sm-2 mt-2 grey-text" aria-hidden="true"></i>
+                    <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personPrimaryTitle">
+                        <span class="ms-2 grey-text fs-14">{{disclosureHeaderDetails?.personPrimaryTitle}}</span>
+                    </app-no-data-label>
+                </div>
+        
+                 <!-- Person email -->
+                 <div class="ms-4">
+                    <i class="fa fa-envelope mt-sm-2 mt-2 grey-text" aria-hidden="true"></i>
+                    <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personEmail">
+                        <span class="ms-2 grey-text fs-14">{{disclosureHeaderDetails?.personEmail}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+        </div>
+
+        <!-- department -->
+        <div>
+            <i class="fa fa-home mt-sm-2 mt-2 grey-text" aria-hidden="true"></i>
+            <app-no-data-label [valueToShow]="personUnitDetail">
+                <span class="ml-2 grey-text fs-14">{{personUnitDetail}}</span>
             </app-no-data-label>
         </div>
 
         <!-- project  -->
-        <div class="ms-2 d-flex" *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId">
-            <label class="grey-text fs-14 fw-600 text-nowrap mt-1">Project : </label>
+        <div *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId">
+            <i class="fa fa-file-text mt-sm-2 mt-2 grey-text" aria-hidden="true"></i>
             <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.moduleItemId">
-                <span class="ml-2 grey-text fs-14">#{{setProjectAndNumberForModuleCodes()}} :
+                <span class="ms-2 grey-text fs-14">#{{setProjectAndNumberForModuleCodes()}} :
                     {{(!isReadMore && personProjectOrEntity?.projectDetails?.title?.length > 70)
                     ? (personProjectOrEntity?.projectDetails?.title | slice:0:70) :
                     personProjectOrEntity?.projectDetails?.title }}
@@ -31,10 +60,10 @@
         </div>
 
         <!-- entity -->
-        <div class="ms-2" *ngIf="personProjectOrEntity?.entityName">
-            <label class="grey-text fs-14 fw-600 text-nowrap">Entity : </label>
+        <div *ngIf="personProjectOrEntity?.entityName">
+            <i class="fa fa-building-o mt-sm-2 mt-2 grey-text" aria-hidden="true"></i>
             <app-no-data-label [valueToShow]="personProjectOrEntity?.entityName">
-                <span class="ml-2 grey-text fs-14">{{(!isReadMore && personProjectOrEntity?.entityName?.length > 180)
+                <span class="ms-2 grey-text fs-14">{{(!isReadMore && personProjectOrEntity?.entityName?.length > 180)
                     ? (personProjectOrEntity?.entityName | slice:0:180) :
                     personProjectOrEntity?.entityName }}
 
@@ -48,14 +77,6 @@
                         </span>
                     </ng-container>
                 </span>
-            </app-no-data-label>
-        </div>
-
-        <!-- department -->
-        <div class="ms-2">
-            <label class="grey-text fs-14 fw-600 text-nowrap">Department : </label>
-            <app-no-data-label [valueToShow]="personUnitDetail">
-                <span class="ml-2 grey-text fs-14">{{personUnitDetail}}</span>
             </app-no-data-label>
         </div>
 

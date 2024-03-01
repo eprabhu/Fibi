@@ -8,7 +8,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
+import { openCoiSlider } from '../../common/utilities/custom-utilities';
 import { CoiService } from '../services/coi.service';
 
 @Component({
@@ -139,8 +139,8 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.updateHistoryLogs(data);
 				this.isReadMore = [];
 				setTimeout(() => {
-					openSlider('disclosure-entity-risk-slider');
-				});
+					openCoiSlider('disclosure-entity-risk-slider');
+				});			
 			}));
 	}
 
@@ -216,7 +216,6 @@ export class EntityRiskSliderComponent implements OnInit {
 	}
 
 	closeConflictSlider() {
-		closeSlider('disclosure-entity-risk-slider');
 		setTimeout(() => {
 			this.closePage.emit();
 		}, 500);
@@ -227,4 +226,8 @@ export class EntityRiskSliderComponent implements OnInit {
 			this.closeConflictSlider();
 		}, 100);
 	}
+
+	isFieldValueChanges(): boolean {
+		return !!((this.isStatusEdited || this.riskComment));
+	 }
 }

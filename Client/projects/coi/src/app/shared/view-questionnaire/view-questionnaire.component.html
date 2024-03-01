@@ -7,7 +7,7 @@
 		<span class="d-block" aria-hidden="true">&times;</span>
 	</button>
 </div>
-<div class="d-flex justify-content-end fs-12 p-1"tabindex="0" [attr.aria-label]="'last updated by' + result?.header?.ANS_PERSON_FULL_NAME + 'On' + (result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long')">
+<div class="d-flex justify-content-end fs-12 p-1 mt-3"tabindex="0" [attr.aria-label]="'last updated by' + result?.header?.ANS_PERSON_FULL_NAME + 'On' + (result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long')">
 	<span *ngIf="result?.header?.ANS_PERSON_FULL_NAME"><em> Last Updated By {{result?.header?.ANS_PERSON_FULL_NAME}} On
 		{{result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long'}}</em></span>
 </div>

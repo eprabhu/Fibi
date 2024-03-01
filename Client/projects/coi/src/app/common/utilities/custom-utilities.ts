@@ -98,3 +98,20 @@ export function focusElementyById(element_id: string): void {
     focusElement?.blur();
     focusElement?.focus();
 }
+
+
+export function openCoiSlider(element_id:string): void {
+    setTimeout(() => {
+        if (element_id) {
+            document.getElementById(`${element_id}-trigger-btn`)?.click();
+        }
+    });
+}
+
+export function closeCoiSlider(element_id:string): void {
+    setTimeout(() => {
+        if (element_id) {
+            document.getElementById(`${element_id}-close-btn`)?.click();
+        }
+    });
+}
