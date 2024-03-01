@@ -81,7 +81,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         }, error => {
             this.closeModal();
             if (error.status === 405) {
-                this._opaService.concurrentUpdateAction = 'Start Review';
+                this._opaService.concurrentUpdateAction = 'Complete Review';
             } else {
                 this.currentReviewer = {};
                 this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);

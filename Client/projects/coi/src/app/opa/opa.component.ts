@@ -58,6 +58,7 @@ export class OpaComponent implements OnInit {
     };
     personUnitDetail = '';
     isHomeClicked = false;
+    isSubmitClicked = false;
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -82,6 +83,7 @@ export class OpaComponent implements OnInit {
     }
 
     triggerSave() {
+        this.isSubmitClicked = false;
         this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
     }
 
@@ -91,6 +93,7 @@ export class OpaComponent implements OnInit {
 
     saveAndSubmit() {
         if(this.opaService.isFormBuilderDataChangePresent) {
+            this.isSubmitClicked = true;
             this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
         } else {
             this.submitOPA();
@@ -99,7 +102,7 @@ export class OpaComponent implements OnInit {
 
     subscribeSaveComplete() {
         this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
-            if(data) {
+            if(data && this.isSubmitClicked) {
                 this.submitOPA();
             }
         }))
@@ -109,10 +112,13 @@ export class OpaComponent implements OnInit {
         this.$subscriptions.push(this.opaService.submitOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
+                this.isSubmitClicked = false;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA submitted successfully.`);
-            }, err =>
-            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+            }, err => {
+                this.isSubmitClicked = false;
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+            }));
     }
 
     openAddAssignModal(): void {
