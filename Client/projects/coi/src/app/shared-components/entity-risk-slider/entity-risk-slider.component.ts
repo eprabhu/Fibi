@@ -92,6 +92,21 @@ export class EntityRiskSliderComponent implements OnInit {
         return this.entityRiskRO;
     }
 
+    checkForModification() {
+        this.$subscriptions.push(this.entityDetailsService.riskAlreadyModified({
+            'riskCategoryCode': this.entityDetails.riskCategoryCode,
+            'entityId': this.entityDetails.entityId
+        }).subscribe((data: any) => {
+            this.updateProjectRelationship();
+        }, err => {
+            if (err.status === 405) {
+                this.isConcurrency = true;
+            } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+            }
+        }))
+    }
+    
     updateProjectRelationship() {
         if (this.checkForMandatory()) {
             this.$subscriptions.push(

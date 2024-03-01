@@ -102,7 +102,6 @@ export class DefineRelationComponent implements OnInit {
               scrollIntoView(this.coiService.focusSFIRelationId);
               const ELEMENT = document.getElementById(this.coiService.focusSFIRelationId);
               ELEMENT.classList.add('error-highlight-card');
-              this.coiService.focusSFIRelationId = null;
           }
         });
       }, err => {

@@ -107,11 +107,11 @@
             <div class="modal-body">
                 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
-                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' ">
-                        <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
+                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' " title="My Entities">
+                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
                     </div>
-                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'">
-                        <span class="pb-3" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
+                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'" title="Add New Entity">
+                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
                     </div>
                 </nav>
 
@@ -358,7 +358,7 @@
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_add"
                     (click)="clearData()" type="button">Cancel
                 </button>
-                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate"
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate || !isEntitySelected"
                     class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
                     area-describedby="Click here to add">
                     Add

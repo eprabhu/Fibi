@@ -68,6 +68,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     currentFilter: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
     relationshipTypeCache = {};
+    isEntitySelected = false;
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService) { }
 
@@ -121,6 +122,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
             this.setPersonEntityId(response);
             this.setEntityInfoForOutsideFinRelationData();
             this.childEvents.emit({ action: 'ADD', data: this.outsideFinRelationData });
+            this.emitEditOrSaveAction('ADD', this.outsideFinRelationData);
         } catch (err) {
             if ((err.status === 405)) {
                 this.setEntityInfoForOutsideFinRelationData();
@@ -149,6 +151,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
     private setPersonEntityId(response): void {
         if (!this.entityDetails.personEntityId) {
             this.entityDetails.personEntityId = response.personEntityId;
+            this.emitEditOrSaveAction('NEW_SFI', this.outsideFinRelationData);
         }
     }
 
@@ -179,12 +182,14 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         delete this.outsideFinRelationData.updateTimestamp;
         this.outsideFinRelationData.actionType = 'SAVE';
         this.childEvents.emit({action: 'UPDATE', data: this.outsideFinRelationData});
+        this.emitEditOrSaveAction('UPDATE', this.outsideFinRelationData);
     }
 
     deleteEntity() {
         delete this.outsideFinRelationData.updateTimestamp;
         this.outsideFinRelationData.actionType = 'DELETE';
         this.childEvents.emit({action: 'DELETE', data: this.outsideFinRelationData});
+        this.emitEditOrSaveAction('DELETE', this.outsideFinRelationData);
     }
 
     entitySelected(entity: any): void {
@@ -192,10 +197,12 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
             const index = this.checkDuplicate(entity.personEntityId);
             this.isDuplicate = index === -1 || index === this.editIndex ? false : true;
             this.entityDetails = entity;
+            this.isEntitySelected = true;
         } else {
             this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
             this.entityDetails = {};
             this.isDuplicate = false;
+            this.isEntitySelected = false;
         }
     }
 
@@ -211,7 +218,7 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'active-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon';
     }
 
-    getDescriptionForStatus(versionStatus, isFormCompleted) { 
+    getDescriptionForStatus(versionStatus, isFormCompleted) {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
 
@@ -277,6 +284,10 @@ export class OPAOutsideFinancialRelationComponent implements OnInit {
             });
             return this.relationshipTypeCache[validPersonEntityRelType];
         }
+    }
+
+    emitEditOrSaveAction(actionPerformed, event) {
+        this._formBuilder.$formBuilderActionEvents.next({action: actionPerformed, actionResponse: event, component: this.componentData});
     }
 
 }

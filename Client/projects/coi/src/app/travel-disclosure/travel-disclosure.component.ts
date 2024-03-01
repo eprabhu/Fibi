@@ -408,7 +408,18 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     openRiskSlider() {
-        this.isOpenRiskSlider = true;
+        this.$subscriptions.push(this.service.riskAlreadyModified({
+            'riskCategoryCode': this.travelDisclosure.riskCategoryCode,
+            'travelDisclosureId': this.travelDisclosure.travelDisclosureId
+        }).subscribe((data: any) => {
+            this.isOpenRiskSlider = true;
+        }, err => {
+            if (err.status === 405) {
+                this.service.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk. Please try again.');
+            }
+        }))
     }
 
     closeSlider(event) {

@@ -1,6 +1,6 @@
 
 <!-- SFI header card -->
-<div class="row mb-3 sticky-0">
+<div class="row mb-3" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="row mx-0">
@@ -540,7 +540,7 @@
                             [(ngModel)]="additionalDetails.staffInvolvement"
                             (ngModelChange)="addUnSavedChanges();additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim();"
                             [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
-                            [limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+                            [limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                       </textarea>
                         <div class="help-text">
                             This description is presented in the Relationship section to help you relate this entity
@@ -563,7 +563,7 @@
                             [(ngModel)]="additionalDetails.studentInvolvement"
                             (ngModelChange)="addUnSavedChanges();additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
                             [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
-                            [limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+                            [limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                   </textarea>
                         <div class="help-text">
                             Please enter an adequate description of the entity's principal are of business.
@@ -584,7 +584,7 @@
                             [(ngModel)]="additionalDetails.instituteResourceInvolvement"
                             (ngModelChange)="isChangesInFieldValue = true;addUnSavedChanges()"
                             [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator
-                            [limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+                            [limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
                         <div class="help-text">
                             Please enter an adequate description of the entity's relationship to your University

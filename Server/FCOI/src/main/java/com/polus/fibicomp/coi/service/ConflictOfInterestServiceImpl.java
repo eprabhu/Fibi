@@ -289,7 +289,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null, null);
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		}
-		coiDisclosure.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
+		coiDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(coiDisclosure.getUpdateUser()));
 		coiDisclosure.setCoiDisclosureFcoiType(conflictOfInterestDao.getCoiDisclosureFcoiTypeByCode(coiTypeCode));
 		coiDisclosure.setPerson(personDao.getPersonDetailById(coiDisclosure.getPersonId()));
 		coiDisclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
@@ -631,6 +631,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewAssigneeHistory.setCoiReviewActivityId(CREATE_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
 		/*Need clarification*/
+		coiReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
+		coiReview.setUpdateTimestamp(disclosure.getUpdateTimestamp());
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
 
@@ -650,16 +652,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				Arrays.asList(Constants.COI_REVIEWER_REVIEW_STATUS_START, Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED))) {
 			return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
 		}
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(vo.getCoiReview().getDisclosureId());
+		if (disclosure.getReviewStatusCode().equalsIgnoreCase(REVIEW_STATUS_RETURNED)) {
+			return new ResponseEntity<>("Disclosure already returned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
 		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_IN_PROGRESS,vo.getCoiReview().getCoiReviewId(), null);
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
-		vo.setCoiReview(coiReview);
 		coiReviewAssigneeHistory.setAdminGroupId(coiReview.getAdminGroupId());
 		coiReviewAssigneeHistory.setAssigneePersonId(coiReview.getAssigneePersonId());
 		coiReviewAssigneeHistory.setAssigneeType(coiReview.getAdminGroupId() != null ? "G" :"P");
 		coiReviewAssigneeHistory.setCoiReviewId(coiReview.getCoiReviewId());
 		coiReviewAssigneeHistory.setCoiReviewActivityId(START_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
-		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		try {
 			String actionTypeCode;
 			String reviewerName = "";
@@ -688,6 +692,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} catch (Exception e) {
 			logger.error("startReview : {}", e.getMessage());
 		}
+		Timestamp updateTimestamp = conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+		coiReview.setUpdateTimestamp(updateTimestamp);
+		coiReview.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
 
@@ -695,6 +703,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> completeReview(ConflictOfInterestVO vo){
 		if (conflictOfInterestDao.isReviewStatus(vo.getCoiReview().getCoiReviewId(), Arrays.asList(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED))) {
 			return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		CoiDisclosure disclObj = conflictOfInterestDao.loadDisclosure(vo.getCoiReview().getDisclosureId());
+		if (disclObj.getReviewStatusCode().equalsIgnoreCase(REVIEW_STATUS_RETURNED)) {
+			return new ResponseEntity<>("Disclosure already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		conflictOfInterestDao.startReview(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED,
@@ -721,6 +733,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiReview.getCoiDisclosure().setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
 			coiReview.getCoiDisclosure().setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED));
 		}
+		Timestamp updateTimestamp = conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+		coiReview.setUpdateTimestamp(updateTimestamp);
+		coiReview.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
 		try {
 			String actionTypeCode;
 			String reviewerName = "";
@@ -746,7 +762,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} catch (Exception e) {
 			logger.error("completeReview : {}", e.getMessage());
 		}
-		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
 
@@ -767,8 +782,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
 			});
 			conflictOfInterestDao.deleteReview(coiReviewId);
-			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+			Timestamp updateTimestamp = conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 			CoiDisclosure coiDisclosure = new CoiDisclosure();
+			coiDisclosure.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
+			coiDisclosure.setUpdateTimestamp(updateTimestamp);
 			if (conflictOfInterestDao.numberOfReviewNotOfStatus(coiReview.getDisclosureId(), Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED).equals(0)) {
 				coiDisclosure.setDisclosureId(coiReview.getDisclosureId());
 				coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
@@ -1273,15 +1290,23 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	public ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto) {
-		if (conflictOfInterestDao.isAdminPersonOrGroupAddedInTravel(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId())) {
+		if ((dto.getActionType().equals("R") && conflictOfInterestDao.isSameAdminPersonOrGroupAddedInTravel(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId()))
+				|| (dto.getActionType().equals("A") && conflictOfInterestDao.isAdminPersonOrGroupAddedInTravel(dto.getTravelDisclosureId()))) {
 			return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(dto.getTravelDisclosureId());
+		if ((dto.getActionType().equals("R"))
+				&& (coiTravelDisclosure.getReviewStatusCode().equals(Constants.TRAVEL_REVIEW_STATUS_CODE_RETURNED_TO_PI) || coiTravelDisclosure.getReviewStatusCode().equals(Constants.TRAVEL_REVIEW_STATUS_CODE_APPROVED))) {
+			return new ResponseEntity<>("Reassign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		if (dto.getActionType().equals("A") && !coiTravelDisclosure.getReviewStatusCode().equals(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED)) {
+			return new ResponseEntity<>("Assign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		try {
 			saveTravelDisclosureAssignAdminActionLog(dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		} catch (Exception e) {
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
-		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(dto.getTravelDisclosureId());
 		conflictOfInterestDao.assignTravelDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		if (dto.getAdminGroupId() != null) {
 			coiTravelDisclosure.setAdminGroupId(dto.getAdminGroupId());
@@ -1701,8 +1726,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
-		if (conflictOfInterestDao.isAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())) {
+		if ((dto.getActionType().equals("R") && (conflictOfInterestDao.isSameAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())))
+				|| (dto.getActionType().equals("A") && conflictOfInterestDao.isAdminPersonOrGroupAdded(dto.getDisclosureId()))) {
 			return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
+		if ((dto.getActionType().equals("R"))
+				&& (disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_RETURN) || disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_COMPLETED))) {
+			return new ResponseEntity<>("Reassign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		if (dto.getActionType().equals("A") && !disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_SUBMITTED)) {
+			return new ResponseEntity<>("Assign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		try {
 			saveAssignAdminActionLog(dto.getAdminPersonId(), dto.getDisclosureId());
@@ -1710,7 +1744,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
-		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
 		if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
 			conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
 			dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
@@ -2407,4 +2440,29 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
 				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
 	}
+
+	@Override
+	public ResponseEntity<Object> checkDisclosureRiskStatus(CoiDisclosureDto disclosureDto) {
+		if (Boolean.TRUE.equals(conflictOfInterestDao.isDisclosureRiskStatusModified(disclosureDto.getRiskCategoryCode(), disclosureDto.getDisclosureId()))) {
+			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> checkEntityRiskStatus(CoiEntityDto entityDto) {
+		if (Boolean.TRUE.equals(conflictOfInterestDao.isEntityRiskStatusModified(entityDto.getRiskCategoryCode(), entityDto.getEntityId()))) {
+			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> checkTravelDisclosureRiskStatus(CoiTravelDisclosureDto travelDisclosureDto) {
+		if (Boolean.TRUE.equals(conflictOfInterestDao.isTravelDisclosureRiskStatusModified(travelDisclosureDto.getRiskCategoryCode(), travelDisclosureDto.getTravelDisclosureId()))) {
+			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 }

@@ -142,15 +142,6 @@ small {
 .btn-card {
     height: 100px;
 }
-
-.margin-card-top {
-    margin-left: 1rem;
-    margin-right: 1.8rem;
-    position: sticky;
-    top: -12px;
-    z-index: 10;
-}
-
 .label-text {
     color: #2a2a2a;
     font-size: 14px !important;
@@ -277,3 +268,15 @@ small {
     box-shadow: none;
     border-left: solid 1px #ccc !important;
 }
+.min-height-unset{
+    min-height: unset !important;
+}
+.sticky-top{
+    z-index: 10 !important;
+}
+
+.sticky-top-50 {
+    top: 50px;
+    z-index: 11;
+    position: sticky;
+  }

@@ -157,7 +157,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.updateTimeStampEvent();
         this.routerEventSubscription();
         this.setPersonProjectDetails();
         this.personUnitDetail = this.getPersonLeadUnitDetails();
@@ -584,13 +583,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    updateTimeStampEvent() {
-        this.dataStore.updateTimestampEvent.subscribe((value) => {
-            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
-            this.coiData = JSON.parse(JSON.stringify(this.coiData));
-        });
-    }
-
     getDisclosureTypeMessage(): string {
         const FCOITYPECODE = this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode;
         switch (FCOITYPECODE) {
@@ -704,7 +696,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     openRiskSlider() {
-        this.isOpenRiskSlider = true;
+        this.$subscriptions.push(this.coiService.riskAlreadyModified({
+            'riskCategoryCode': this.coiData.coiDisclosure.riskCategoryCode,
+            'disclosureId': this.coiData.coiDisclosure.disclosureId
+        }).subscribe((data: any) => {
+            this.isOpenRiskSlider = true;
+        }, err => {
+            if (err.status === 405) {
+                this.coiService.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }
+        }))
     }
 
     closeSlider(event) {

@@ -1,3 +1,8 @@
+import { CompUnComp, CompUnCompPE } from "./PE-components/OPA-comp-uncomp/interface";
+import { OPAInstituteResources, OPAInstituteResourcesPE } from "./PE-components/OPA-institute-resources/OPA-institute-resources.interface";
+import { OutsideFinRelation, OutsideFinRelationPE } from "./PE-components/OPA-outside-financial-relation/interface";
+import { StudentSubordinateEmployee, StudentSubordinatePE } from "./PE-components/OPA-student-subordinate-employee/interface";
+
 export class FormBuilder {
     applicableFormsBuilderIds: number[];
     form: Form;
@@ -31,6 +36,7 @@ export class FormSection {
     sectionHeader?: string;
     sectionFooter?: string;
     sectionComponent: SectionComponent[];
+    validationType?: null | 'VE' | 'VW';
 }
 
 export class SectionComponent {
@@ -245,4 +251,10 @@ export class FBConfiguration {
     moduleSubItemKey: string;
     documentOwnerPersonId: string;
     formBuilderId: number;
+}
+
+export class FBActionEvent {
+    action: string;
+    actionResponse: SectionComponent| CompUnComp | OPAInstituteResources | OutsideFinRelation | StudentSubordinateEmployee;
+    component: SectionComponent | CompUnCompPE | OPAInstituteResourcesPE | OutsideFinRelationPE | StudentSubordinatePE;
 }

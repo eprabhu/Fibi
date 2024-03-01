@@ -1,7 +1,7 @@
 import { subscriptionHandler } from './../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormBuilderEvent, FBConfiguration } from './form-builder-interface';
+import { FormBuilder, FormBuilderEvent, FBConfiguration, FBActionEvent } from './form-builder-interface';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilderService } from './form-builder.service';
 
@@ -32,6 +32,7 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
         this.builderStatus.emit('READY');
+        this.listenToFormActions();
     }
 
     ngOnDestroy(): void {
@@ -65,5 +66,10 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
         this.commentSlider.emit(event);
     }
 
+    listenToFormActions() {
+        this.subscription$.push(this._formBuilderService.$formBuilderActionEvents.subscribe((data: FBActionEvent) => {
+            this.builderStatus.emit(data.action);
+        }));
+    }
 
 }

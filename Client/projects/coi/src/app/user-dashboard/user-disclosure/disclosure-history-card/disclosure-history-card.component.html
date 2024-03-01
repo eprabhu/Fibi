@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-12 d-inline-flex align-items-center mb-2">
                             <span tabindex="0" [attr.aria-label]="disclosure?.fcoiType"
-                                class="entity-status-history shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
                                 <span>{{disclosure?.fcoiType}}</span>
                             </span>
                             <h4 class="mb-0 mt-2" *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
@@ -40,7 +40,7 @@
                             <label class="label-text">Department<span class="d-inline d-md-none d-lg-inline">:</span></label>
                             <span class="grey-text break-point-1200"
                                 [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                {{getPersonLeadUnitDetails(disclosure)}}</span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -125,7 +125,7 @@
                 <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
                     <div class="row">
                         <div class="col-12 d-inline-flex align-items-center mb-2">
-                            <span class="entity-status-history left-custom-travel shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
+                            <span class="entity-status left-custom-travel shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
                                 tabindex="0">
                                 <span aria-label="Travel">Travel</span>
                             </span>
@@ -246,7 +246,7 @@
                 <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
                     <div class="row">
                         <div class="col-12 d-inline-flex align-items-center mb-2">
-                            <span class="entity-status-history shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
                                 <span aria-label="OPA">OPA</span>
                             </span>
                         </div>
@@ -275,7 +275,7 @@
                             <div>
                                 <label class="label-text">Department <span class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="grey-text break-point-1200" [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                    {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                    {{getPersonLeadUnitDetails(disclosure)}}</span>
                             </div>
                         </div>
                     </div>

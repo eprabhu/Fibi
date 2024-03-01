@@ -10,7 +10,7 @@
                         <div class="form-builder-sticky-button-color">
                             <div class="text-end mb-1" *ngIf="isFormEditable">
                                 <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
+                                    [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id" area-describedby="Click here to add"
                                     (click)="getMyEntities()">
                                     Add Entity
                                 </button>
@@ -94,11 +94,11 @@
             <div class="modal-body">
                 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
-                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' ">
-                        <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
+                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' " title="My Entities">
+                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
                     </div>
-                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'">
-                        <span class="pb-3" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
+                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'" title="Add New Entity">
+                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
                     </div>
                 </nav>
                 <div *ngIf="currentTab === 'MY_ENTITIES'" class="entity-list-container ">
@@ -334,7 +334,7 @@
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
                     id="OUTSIDE_FIN_REL_ADD_BTN{{id}}" (click)="clearData()" type="button">Cancel
                 </button>
-                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate"
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate || !isEntitySelected"
                     class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
                     area-describedby="Click here to add">
                     Add
