@@ -519,6 +519,11 @@ public class ConflictOfInterestController {
         return conflictOfInterestService.modifyTravelDisclosureRisk(travelDisclosureDto);
     }
 
+    @PostMapping("/travelDisclosure/riskStatus")
+    public ResponseEntity<Object> checkRiskStatus(@RequestBody CoiTravelDisclosureDto travelDisclosureDto) {
+        return conflictOfInterestService.checkTravelDisclosureRiskStatus(travelDisclosureDto);
+    }
+
     @PostMapping("/travelDisclosure/history")
     public ResponseEntity<Object> fetchtravelDisclosureHistory(@RequestBody TravelDisclosureActionLogDto actionLogDto) {
         return conflictOfInterestService.fetchTravelDisclosureHistory(actionLogDto);

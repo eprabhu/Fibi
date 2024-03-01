@@ -1168,7 +1168,7 @@ public interface ConflictOfInterestDao {
 	 * @param adminPersonId
 	 * @param disclosureId
 	 */
-	boolean isAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+	boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId);
 
 	/**
 	 *	This method checks a travel disclosure exists with certain conditions
@@ -1232,15 +1232,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	boolean isEntityRiskAdded(CoiEntityDto entityDto);
-
-	/**
-	 *
-	 * @param adminGroupId
-	 * @param adminPersonId
-	 * @param travelDisclosureId
-	 * @return
-	 */
-	boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
 
 	/**
 	 * This method used to get the counts of a person's attachments
@@ -1339,5 +1330,41 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public Boolean isOpaReviewerReviewCompleted(Integer opaDisclosureId);
+
+	/**
+	 * This method is used to Check if the risk status of the disclosure has been modified
+	 * @return
+	 */
+	public Boolean isDisclosureRiskStatusModified(String riskCategoryCode, Integer disclosureId);
+
+	/**
+	 * This method is used to Check if the risk status of the entity has been modified
+	 * @return
+	 */
+	public Boolean isEntityRiskStatusModified(String riskCategoryCode, Integer disclosureId);
+
+	/**
+	 * This method is used to Check if Admin is assigned
+	 * @return
+	 */
+	public boolean isAdminPersonOrGroupAdded(Integer disclosureId);
+
+	/**
+	 * This method is used to Check if same Admin is assigned in Travel disclsoure
+	 * @return
+	 */
+	public boolean isSameAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
+
+	/**
+	 * This method is used to Check if Admin is assigned in Travel disclsoure
+	 * @return
+	 */
+	public boolean isAdminPersonOrGroupAddedInTravel(Integer travelDisclosureId);
+
+	/**
+	 * This method is used to Check if the risk status of the Travel disclosure has been modified
+	 * @return
+	 */
+	public boolean isTravelDisclosureRiskStatusModified(String riskCategoryCode, Integer travelDisclosureId);
 
 }
