@@ -9,7 +9,7 @@
                         <div class="form-builder-sticky-button-color">
                             <div class="text-end mb-1" *ngIf="isFormEditable">
                                 <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
+                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" aria-label="Click here to add"
                                     (click)="getMyEntities()">
                                     Add Entity
                                 </button>
@@ -72,8 +72,8 @@
 </div>
 
 <div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
-    <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
-        [attr.data-bs-target]="'#OPA_INST_RES_ADD'+id" area-describedby="Click here to add" (click)="getMyEntities()">
+    <button type="button" class="btn btn-primary fs-15 mb-10" title="Add Entity" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#OPA_INST_RES_ADD'+id" aria-label="Click here to add" (click)="getMyEntities()">
         Add Entity
     </button>
     <p> Please click on 'Add Entity' to link Use of Institute Resources.
@@ -107,22 +107,22 @@
                             <div class="border-end fs-14 p-3" [@leftSlideInOut]>
                                 <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
                                 <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
-                                    title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+                                    title="Click to filter by type: All" aria-label="Click to filter by type: All"
                                     class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active me-1"
                                     role="button">All</span>
                                     <span (click)="setFilter('COMPLETE')" [class.filter-active]="currentFilter=='COMPLETE'"
                                     title="Click to filter by type: Complete"
-                                    area-describedby="Click to filter by type: Complete"
+                                    aria-label="Click to filter by type: Complete"
                                     class="shadow-sm fw-medium mr-025 border rounded-5 bg-white"
                                     role="button">Complete</span>
                                     <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="currentFilter=='INCOMPLETE'"
                                     title="Click to filter by type: Incomplete"
-                                    area-describedby="Click to filter by type: Incomplete"
+                                    aria-label="Click to filter by type: Incomplete"
                                     class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white"
                                     role="button">Incomplete</span>
                                 <span (click)="setFilter('INACTIVE')" [class.filter-active]="currentFilter=='INACTIVE'"
                                     title="Click to filter by type: Inactive"
-                                    area-describedby="Click to filter by type: Inactive"
+                                    aria-label="Click to filter by type: Inactive"
                                     class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white"
                                     role="button">Inactive</span>
                             </div>
@@ -323,12 +323,12 @@
                   id="OPA_INST_RES_ADD_BTN{{id}}" (click)="clearData()" type="button">Cancel
               </button>
                 <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate || !isEntitySelected"
-                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
-                    area-describedby="Click here to add">
+                    class="btn btn-primary fs-15 mr-8" title="Add Entity" (click)="eventType='NEW'; addRowItem()"
+                    aria-label="Click here to add">
                     Add
                 </button>
-                <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure"
-                    (click)="eventType='NEW'; updateEntity();" area-describedby="Click here to add">
+                <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="Update Entity"
+                    (click)="eventType='NEW'; updateEntity();" aria-label="Click here to add">
                     Update
                 </button>
             </div>
@@ -372,7 +372,7 @@
                   id="OPA_INST_RES_DELETE_BTN{{id}}" (click)="clearData()" type="button" title="Cancel">Cancel
               </button>
               <button ype="button" class="btn btn-primary fs-15" title="Delete" (click)="deleteEntity()"
-                  area-describedby="Click here to add">
+                  aria-label="Click here to add">
                   Delete
               </button>
           </div>
