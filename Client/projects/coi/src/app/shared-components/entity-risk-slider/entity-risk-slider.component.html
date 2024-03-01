@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="text-muted mb-3 mt-2">
-                    <button type="button" (click)="updateProjectRelationship();checkForMandatory()"
+                    <button type="button" (click)="checkForModification()"
                         class="btn btn-primary float-end fs-14">Save</button>
                     <button type="button" (click)="clearConflictModal()"
                         class="btn btn-outline-secondary float-end mr-10">Clear</button>
@@ -149,4 +149,4 @@
     </p>
 </app-confirmation-modal>
 
-<app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Risk Status'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>
+<app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Entity Risk Status'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>

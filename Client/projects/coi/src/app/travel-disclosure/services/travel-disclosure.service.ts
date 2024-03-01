@@ -86,4 +86,8 @@ export class TravelDisclosureService {
     getTravelDisclosureHistory(travelDisclosureId: number) {
         return this._http.get(`${this._commonService.baseUrl}/travelDisclosureHistory/${travelDisclosureId}`);
     }
+
+    riskAlreadyModified(params: any) {
+        return this._http.post(`${this._commonService.baseUrl}/travelDisclosure/riskStatus`, params);
+    }
 }

@@ -254,7 +254,22 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     toggleSlider() {
-        this.isOpenSlider = !this.isOpenSlider;
+            this.$subscriptions.push(this.entityManagementService.riskAlreadyModified({
+                'riskCategoryCode': this.entityDetails.entityRiskCategory.riskCategoryCode,
+                'entityId': this.entityDetails.entityId
+            }).subscribe((data: any) => {
+                this.isOpenSlider = !this.isOpenSlider;
+            }, err => {
+                if (err.status === 405) {
+                    this.entityManagementService.concurrentUpdateAction = 'Entity Risk Status';
+                } else {
+                    this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                }
+            }))
+    }
+
+    cancelConcurrency() {
+        this.entityManagementService.concurrentUpdateAction = '';
     }
 
     riskSliderClosed(event) {

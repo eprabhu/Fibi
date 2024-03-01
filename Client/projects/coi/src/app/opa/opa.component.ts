@@ -15,6 +15,7 @@ import {Location} from '@angular/common';
 import {ModalType} from '../disclosure/coi-interface';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
 import {NavigationService} from "../common/services/navigation.service";
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-opa',
@@ -71,6 +72,7 @@ export class OpaComponent implements OnInit {
         this.setPersonProjectDetails();
         this.personUnitDetail = this.getPersonLeadUnitDetails();
         this.listenDataChangeFromStore();
+        this.subscribeSaveComplete();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
@@ -85,6 +87,22 @@ export class OpaComponent implements OnInit {
 
     opaSubmissionModal() {
         openModal('opa-submit-confirm-modal');
+    }
+
+    saveAndSubmit() {
+        if(this.opaService.isFormBuilderDataChangePresent) {
+            this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
+        } else {
+            this.submitOPA();
+        }
+    }
+
+    subscribeSaveComplete() {
+        this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
+            if(data) {
+                this.submitOPA();
+            }
+        }))
     }
 
     submitOPA() {
@@ -286,6 +304,10 @@ export class OpaComponent implements OnInit {
         } else {
             this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
         }
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
 }

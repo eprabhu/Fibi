@@ -5,6 +5,7 @@ export class AssignAdminRO {
     opaDisclosureId?: '';
     opaDisclosureNumber?: '';
     disclosureId?: '';
+    actionType?:'R' | 'A' ;
 }
 
 export class DefaultAssignAdminDetails {
