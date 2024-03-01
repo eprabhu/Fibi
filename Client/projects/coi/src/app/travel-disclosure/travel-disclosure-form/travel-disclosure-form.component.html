@@ -115,7 +115,7 @@
                         </span>
                     </div>
                 </div>
-            
+
                 <!-- Country and State list -->
                 <div class="row col-6">
                     <ng-container *ngIf="destination === 'International'">
@@ -135,7 +135,7 @@
                             </span>
                         </div>
                     </ng-container>
-            
+
                     <ng-container *ngIf="destination !== 'International' && destination !== null">
                         <!-- State list -->
                         <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
@@ -300,13 +300,15 @@
               ?'Active':'Inactive'}}</span>
           </div>
           <div class="text-secondary fs-14 col-8 mt-2">
-            <label class="grey-text me-2"> Address</label>
-            <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
-              <span> {{(addEntityConfirmation?.address |
-                slice:0:55)}}
-              <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
-              </span></span>
-            </span>
+            <label class="grey-text me-2 d-flex"> Address</label>
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
+                <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
+                  <span> {{(addEntityConfirmation?.address |
+                    slice:0:55)}}
+                  <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+                  </span></span>
+                </span>
+              </app-no-data-label>
             <ng-template #showFullInfo>
               <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
               <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"

@@ -6,10 +6,10 @@
                 <th scope="col" width="20%" rowspan="2"> Nature of Relationship</th>
                 <th scope="col" width="10%" rowspan="2"> Compensated/ Uncompensated</th>
                 <th scope="col" width="10%" colspan="2" class="text-center"># Number of days per Year</th>
-                <th scope="col" width="18%" class="text-center">
+                <th scope="col" width="18%" class="text-center" *ngIf="isFormEditable">
                     <div class="form-builder-sticky-button">
                         <div class="form-builder-sticky-button-color">
-                            <div class="text-end mb-1" *ngIf="isFormEditable">
+                            <div class="text-end mb-1">
                                 <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
                                     [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
                                     (click)="getMyEntities()">
