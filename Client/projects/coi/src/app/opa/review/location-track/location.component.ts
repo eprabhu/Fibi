@@ -156,7 +156,8 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, `Reviewer ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
-                this.updateTimeAndUser(res);
+                this.opaDisclosure.updateTimestamp = res.opaDisclosure.updateTimestamp;
+                this.opaDisclosure.updateUserFullName = res.updateUserFullName;
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.reviewDetails = {};
                 document.getElementById('add-review-modal-trigger').click();
@@ -204,15 +205,11 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.startOrCompleteReview();
     }
 
-    updateTimeAndUser(review) {
-        this.opaDisclosure.updateTimestamp = review.opaDisclosure.updateTimestamp;
-        this.opaDisclosure.updateUserFullName = review.updateUserFullName;
-    }
-
     deleteReview() {
         this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.updateTimeAndUser(res);
+            this.opaDisclosure.updateTimestamp = res.updateTimestamp;
+            this.opaDisclosure.updateUserFullName = res.updateUserFullName;
             this.setReviewAndOPAData(res);
             this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
                 opaReviewerList: this.reviewerList,
