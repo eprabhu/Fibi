@@ -305,17 +305,6 @@ table {
   margin-right: 23px;
 }
 
-.info-icon {
-  top:11px;
-  height: 22px;
-  width: 22px;
-  font-size: 16px;
-  position: absolute;
-  margin-left: 2px;
-  color: #6f7395;
-  cursor: pointer;
-}
-
 .text-colors {
   color: #505050;
 }
@@ -359,3 +348,10 @@ table {
     }
   }
 }
+
+// Only for Active Inactive SFI Modal
+.alert .info-icon {
+  height: 16px !important;
+  width: 26px !important;
+}
+
