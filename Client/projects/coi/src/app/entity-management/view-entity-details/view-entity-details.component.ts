@@ -215,7 +215,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 this.approveEntityDetails.emit(this.entityDetails);
                 document.getElementById('hide-approve-entity-modal').click();
                 this.clearApproveEntityFiled();
-                this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity verified successfully.`);
+                this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity approved successfully.`);
             }, error => {
                 if (error.status === 405) {
                     hideModal('approve-entity-modal');
