@@ -785,7 +785,7 @@
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
-    [disclosureId]="coiData?.coiDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails">
+    [disclosureId]="coiData?.coiDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails" [actionType]="coiData?.coiDisclosure?.adminPersonId ? 'R' : 'A'">
 </app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>

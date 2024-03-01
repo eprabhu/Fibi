@@ -40,7 +40,7 @@ export class EntityRiskSliderComponent implements OnInit {
 
 	constructor(private _entityRiskSliderService: EntityRiskSliderService,
 		public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-		public commonService: CommonService, 
+		public commonService: CommonService,
 		public _dataFormatPipe: DateFormatPipeWithTimeZone,
         public coiService: CoiService) { }
 
@@ -58,6 +58,21 @@ export class EntityRiskSliderComponent implements OnInit {
 			this.riskLookup = data;
 		}))
 	}
+
+    checkForModification() {
+        this.$subscriptions.push(this.coiService.riskAlreadyModified({
+            'riskCategoryCode': this.disclosureDetails.riskCategoryCode,
+            'disclosureId': this.disclosureDetails.disclosureId
+        }).subscribe((data: any) => {
+            this.saveRisk();
+        }, err => {
+            if (err.status === 405) {
+                this.coiService.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }
+        }))
+    }
 
 	saveRisk(): void {
 		if (this.checkForMandatory()) {
@@ -125,7 +140,7 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.isReadMore = [];
 				setTimeout(() => {
 					openSlider('disclosure-entity-risk-slider');
-				});			
+				});
 			}));
 	}
 
@@ -199,14 +214,14 @@ export class EntityRiskSliderComponent implements OnInit {
 	validateSliderClose() {
 		(this.isStatusEdited || this.riskComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
 	}
-	
+
 	closeConflictSlider() {
 		closeSlider('disclosure-entity-risk-slider');
 		setTimeout(() => {
 			this.closePage.emit();
 		}, 500);
 	}
-	
+
 	leavePageClicked() {
 		setTimeout(() => {
 			this.closeConflictSlider();

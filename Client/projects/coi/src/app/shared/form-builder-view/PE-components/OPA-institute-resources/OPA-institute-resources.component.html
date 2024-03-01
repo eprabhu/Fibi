@@ -322,7 +322,7 @@
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
                   id="OPA_INST_RES_ADD_BTN{{id}}" (click)="clearData()" type="button">Cancel
               </button>
-                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate"
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate || !isEntitySelected"
                     class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
                     area-describedby="Click here to add">
                     Add

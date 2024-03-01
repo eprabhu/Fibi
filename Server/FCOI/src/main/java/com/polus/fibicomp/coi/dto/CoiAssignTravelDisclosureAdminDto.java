@@ -2,6 +2,15 @@ package com.polus.fibicomp.coi.dto;
 
 import java.sql.Timestamp;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CoiAssignTravelDisclosureAdminDto {
 
 	private Integer travelDisclosureId;
@@ -21,141 +30,6 @@ public class CoiAssignTravelDisclosureAdminDto {
 	private String disclosureStatusCode;
 	private String disclosureStatus;
 	private Timestamp updateTimestamp;
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getDocumentStatusCode() {
-		return documentStatusCode;
-	}
-
-	public void setDocumentStatusCode(String documentStatusCode) {
-		this.documentStatusCode = documentStatusCode;
-	}
-
-	public String getDocumentStatus() {
-		return documentStatus;
-	}
-
-	public void setDocumentStatus(String documentStatus) {
-		this.documentStatus = documentStatus;
-	}
-
-	public String getVersionStatus() {
-		return versionStatus;
-	}
-
-	public void setVersionStatus(String versionStatus) {
-		this.versionStatus = versionStatus;
-	}
-
-	public String getDisclosureStatusCode() {
-		return disclosureStatusCode;
-	}
-
-	public void setDisclosureStatusCode(String disclosureStatusCode) {
-		this.disclosureStatusCode = disclosureStatusCode;
-	}
-
-	public String getDisclosureStatus() {
-		return disclosureStatus;
-	}
-
-	public void setDisclosureStatus(String disclosureStatus) {
-		this.disclosureStatus = disclosureStatus;
-	}
-
-	public Integer getTravelDisclosureId() {
-		return travelDisclosureId;
-	}
-
-	public void setTravelDisclosureId(Integer travelDisclosureId) {
-		this.travelDisclosureId = travelDisclosureId;
-	}
-
-	public String getAdminPersonId() {
-		return adminPersonId;
-	}
-
-	public void setAdminPersonId(String adminPersonId) {
-		this.adminPersonId = adminPersonId;
-	}
-
-	public Integer getAdminGroupId() {
-		return adminGroupId;
-	}
-
-	public void setAdminGroupId(Integer adminGroupId) {
-		this.adminGroupId = adminGroupId;
-	}
-
-	public String getAdminPersonName() {
-		return adminPersonName;
-	}
-
-	public void setAdminPersonName(String adminPersonName) {
-		this.adminPersonName = adminPersonName;
-	}
-
-	public String getAdminGroupName() {
-		return adminGroupName;
-	}
-
-	public void setAdminGroupName(String adminGroupName) {
-		this.adminGroupName = adminGroupName;
-	}
-
-	public String getTravelDisclosureStatus() {
-		return travelDisclosureStatus;
-	}
-
-	public void setTravelDisclosureStatus(String travelDisclosureStatus) {
-		this.travelDisclosureStatus = travelDisclosureStatus;
-	}
-
-	public String getTravelDisclosureStatusCode() {
-		return travelDisclosureStatusCode;
-	}
-
-	public void setTravelDisclosureStatusCode(String travelDisclosureStatusCode) {
-		this.travelDisclosureStatusCode = travelDisclosureStatusCode;
-	}
-
-	public String getReviewStatus() {
-		return reviewStatus;
-	}
-
-	public void setReviewStatus(String reviewStatus) {
-		this.reviewStatus = reviewStatus;
-	}
-
-	public String getReviewStatusCode() {
-		return reviewStatusCode;
-	}
-
-	public void setReviewStatusCode(String reviewStatusCode) {
-		this.reviewStatusCode = reviewStatusCode;
-	}
-
-	public String getDispositionStatus() {
-		return dispositionStatus;
-	}
-
-	public void setDispositionStatus(String dispositionStatus) {
-		this.dispositionStatus = dispositionStatus;
-	}
-
-	public String getDispositionStatusCode() {
-		return dispositionStatusCode;
-	}
-
-	public void setDispositionStatusCode(String dispositionStatusCode) {
-		this.dispositionStatusCode = dispositionStatusCode;
-	}
+	private String actionType;
 
 }

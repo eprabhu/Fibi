@@ -31,7 +31,7 @@ export class EntityDetailsService {
   isVersionChange = false; //to track version change
   $triggerAddRelation = new Subject(); //to open add relation.
   $updateHistory = new Subject(); //to update history.
-  
+
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getSFIDetails(coiFinancialEntityId) {
@@ -97,6 +97,10 @@ export class EntityDetailsService {
   getSfiVersion(personEntityNumber) {
     return this._http.get(`${this._commonService.baseUrl}/personEntity/versions/${personEntityNumber}`);
   }
+
+  riskAlreadyModified(params: any) {
+    return this._http.post(`${this._commonService.baseUrl}/entity/riskStatus`, params);
+ }
 
 }
 

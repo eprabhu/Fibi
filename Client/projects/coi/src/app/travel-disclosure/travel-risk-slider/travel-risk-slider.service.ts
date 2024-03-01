@@ -20,5 +20,9 @@ export class TravelRiskSliderService {
         return this._http.post(this._commonService.baseUrl + '/travelDisclosure/history', params);
     }
 
+    riskAlreadyModified(params: any) {
+        return this._http.post(`${this._commonService.baseUrl}/travelDisclosure/riskStatus`, params);
+     }
+
 }
 
