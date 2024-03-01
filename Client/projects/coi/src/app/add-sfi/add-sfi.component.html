@@ -256,7 +256,7 @@
 								[(ngModel)]="entityDetails.coiEntity.address"
 								(ngModelChange)="entityDetails.coiEntity.address = entityDetails.coiEntity.address.trim()"
 								[ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator
-								[limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+								[limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
 							<div class="help-text">
 								Type in the address of the business or organization you want to report.
@@ -534,7 +534,7 @@
 								[(ngModel)]="additionalDetails.staffInvolvement"
 								(ngModelChange)="additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
 								[ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
-								[limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+								[limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
 							<div class="help-text" tabindex="0" aria-label="Relationship with Entity Helptext" aria-describedby="relation-with-entity-helptext">
 								<span id="relation-with-entity-helptext">This description is presented in the Relationship section to help you relate this entity
@@ -559,7 +559,7 @@
 								[(ngModel)]="additionalDetails.studentInvolvement"
 								(ngModelChange)="additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
 								[ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''"
-								appLengthValidator [limit]=2000 [position]="'ABOVE'"
+								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'">
                                 </textarea>
 							<div class="help-text" tabindex="0" aria-label="Principle Business Area of Entity Helptext" aria-describedby="principle-business-area-helptext">
@@ -583,7 +583,7 @@
 								[(ngModel)]="additionalDetails.instituteResourceInvolvement"
 								(ngModelChange)="additionalDetails.instituteResourceInvolvement = additionalDetails.instituteResourceInvolvement.trim();"
 								[ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''"
-								appLengthValidator [limit]=2000 [position]="'ABOVE'"
+								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'">
                                   </textarea>
 							<div class="help-text" tabindex="0" aria-label="Relationship of Entity to your University responsibilities Helptext" aria-describedby="university-responsibility-helptext">
