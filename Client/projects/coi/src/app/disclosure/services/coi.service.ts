@@ -113,6 +113,10 @@ export class CoiService {
         return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
      }
 
+     riskAlreadyModified(params: any) {
+        return this._http.post(`${this._commonService.baseUrl}/disclosure/riskStatus`, params);
+     }
+
 }
 
 export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData, ) {

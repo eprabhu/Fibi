@@ -14,6 +14,8 @@ import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {ModalType} from '../disclosure/coi-interface';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
+import {NavigationService} from "../common/services/navigation.service";
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-opa',
@@ -53,13 +55,15 @@ export class OpaComponent implements OnInit {
     commentsRight: {
         canViewPrivateComments: boolean;
         canMaintainPrivateComments: boolean;
-    }
+    };
     personUnitDetail = '';
+    isHomeClicked = false;
 
     constructor(public opaService: OpaService,
                 private _router: Router,
                 public location: Location,
                 public commonService: CommonService,
+                private _navigationService: NavigationService,
                 public dataStore: DataStoreService) {
     }
 
@@ -68,6 +72,7 @@ export class OpaComponent implements OnInit {
         this.setPersonProjectDetails();
         this.personUnitDetail = this.getPersonLeadUnitDetails();
         this.listenDataChangeFromStore();
+        this.subscribeSaveComplete();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
@@ -82,6 +87,22 @@ export class OpaComponent implements OnInit {
 
     opaSubmissionModal() {
         openModal('opa-submit-confirm-modal');
+    }
+
+    saveAndSubmit() {
+        if(this.opaService.isFormBuilderDataChangePresent) {
+            this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
+        } else {
+            this.submitOPA();
+        }
+    }
+
+    subscribeSaveComplete() {
+        this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
+            if(data) {
+                this.submitOPA();
+            }
+        }))
     }
 
     submitOPA() {
@@ -144,6 +165,7 @@ export class OpaComponent implements OnInit {
 
     goToHomeUrl() {
         // TODO admin/reviewer/pi based redirect once rights are implemented.
+        this.isHomeClicked = true;
         const reRouteUrl = this.opaService.previousHomeUrl || REPORTER_HOME_URL;
         this._router.navigate([reRouteUrl]);
     }
@@ -155,8 +177,13 @@ export class OpaComponent implements OnInit {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA withdrawn successfully.`);
-            }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+            }, err => {
+                if (err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.opaService.concurrentUpdateAction = 'Withdraw Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                }
             }));
     }
 
@@ -264,6 +291,23 @@ export class OpaComponent implements OnInit {
 
     closeReviewComment(event) {
         this.opaService.isShowCommentNavBar = event;
+    }
+
+    cancelConcurrency() {
+        this.opaService.concurrentUpdateAction = '';
+    }
+
+    leavePageClicked() {
+        this.opaService.isFormBuilderDataChangePresent = false;
+        if (this.isHomeClicked) {
+           this.goToHomeUrl();
+        } else {
+            this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
+        }
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
 }

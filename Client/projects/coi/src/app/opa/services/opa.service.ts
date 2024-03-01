@@ -18,6 +18,9 @@ export class OpaService {
     formBuilderEvents = new Subject<FormBuilderEvent>();
     actionButtonId = null;
     currentOPAReviewForAction: any;
+    concurrentUpdateAction = '';
+    isFormBuilderDataChangePresent = false;
+    triggerSaveComplete = new Subject<boolean>()
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) {
@@ -60,13 +63,12 @@ export class OpaService {
         return this._http.patch(`${this._commonService.opaUrl}/complete/${OPADisclosureID}/${OPADisclosureNumber}`, {});
     }
 
-    startReviewerReview(OPAReviewId) {
-        return this._http.patch(`${this._commonService.opaUrl}/review/start/${OPAReviewId}`, {});
+    startReviewerReview(params: any) {
+        return this._http.patch(`${this._commonService.opaUrl}/review/start`, params);
     }
-    completeReviewerReview(OPAReviewId) {
-        let currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-        return this._http.patch(`${this._commonService.opaUrl}/review/complete/${OPAReviewId}/${parseDateWithoutTimestamp(currentDate).toString()}`, {});
+
+    completeReviewerReview(params: any) {
+        return this._http.patch(`${this._commonService.opaUrl}/review/complete`, params);
     }
 
 }

@@ -156,9 +156,9 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, `Reviewer ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
+                this.updateTimeAndUser(res);
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.reviewDetails = {};
-                this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
                 this.isExpanded = true;
             }, _err => {
@@ -176,18 +176,6 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.reviewDetails.endDate = parseDateWithoutTimestamp(this.reviewEndDate);
     }
 
-    addReviewToList(review: any) {
-        const reviewer = this.setReviewAndOPAData(review);
-        this.reviewerList.push(reviewer);
-        this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
-            opaReviewerList: this.reviewerList,
-            opaDisclosure: this.opaDisclosure
-        });
-        this._dataStore.updateTimestampEvent.next();
-        this.startOrCompleteReview();
-        this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
-    }
-
     private setReviewAndOPAData(review: any) {
         const {opaDisclosure, ...reviewer} = review;
         this.opaDisclosure.reviewStatusType  = opaDisclosure.reviewStatusType;
@@ -195,21 +183,37 @@ export class LocationComponent implements OnInit, OnDestroy {
         return reviewer;
     }
 
+    addReviewToList(review: any) {
+        const reviewer = this.setReviewAndOPAData(review);
+        this.reviewerList.push(reviewer);
+        this.updateReviewDetails();
+        this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
+    }
+
     updateReview(review: any) {
         const reviewer = this.setReviewAndOPAData(review);
         this.reviewerList.splice(this.modifyIndex, 1, reviewer);
+        this.updateReviewDetails();
+    }
+
+    updateReviewDetails() {
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
             opaReviewerList: this.reviewerList,
             opaDisclosure: this.opaDisclosure
         });
-        this._dataStore.updateTimestampEvent.next();
         this.startOrCompleteReview();
     }
 
+    updateTimeAndUser(review) {
+        this.opaDisclosure.updateTimestamp = review.opaDisclosure.updateTimestamp;
+        this.opaDisclosure.updateUserFullName = review.updateUserFullName;
+    }
+
     deleteReview() {
-        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((_res: any) => {
+        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.setReviewAndOPAData(_res);
+            this.updateTimeAndUser(res);
+            this.setReviewAndOPAData(res);
             this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
                 opaReviewerList: this.reviewerList,
                 opaDisclosure: this.opaDisclosure
@@ -367,12 +371,12 @@ export class LocationComponent implements OnInit, OnDestroy {
         let nextAssignedReview = this.getNextAssignedReview();
         if (nextAssignedReview) {
             this.opaService.currentOPAReviewForAction = nextAssignedReview;
-            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+            if(nextAssignedReview.reviewStatusTypeCode == 1)
                 this.opaService.isStartReview = true;
             else if (nextAssignedReview.reviewStatusTypeCode == 2)
                 this.opaService.isCompleteReview = true;
         }
-       
+
     }
 
     private getNextAssignedReview(): any {

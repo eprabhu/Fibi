@@ -23,6 +23,7 @@
         </div> -->
         <div class="col-9 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Address' + (entityDetails?.address)">
           <span class="fw-bold me-2"> Address :</span>
+          <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.address">
           <span *ngIf="!isReadMore && entityDetails?.address?.length > 110; else showFullInfo">
             <span> {{(entityDetails?.address |
               slice:0:110)}}</span>
@@ -39,6 +40,7 @@
                 <i aria-hidden="true"></i></span>
             </span>
           </ng-template>
+          </app-no-data-label>
         </div>
       <div *ngIf="isShowRisk" class="col text-secondary fs-14 d-flex align-items-center" tabindex="0" [attr.aria-label]="'Risk' + (entityDetails?.entityRiskCategory?.description)">
         <span class="fw-bold me-2">Risk : </span>

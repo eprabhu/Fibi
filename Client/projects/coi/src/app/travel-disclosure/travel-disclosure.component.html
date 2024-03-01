@@ -483,7 +483,8 @@
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen"
     [defaultAdminDetails]="defaultAdminDetails"
     [path]="'TRAVEL_DISCLOSURES'" (closeModal)="closeAssignAdministratorModal($event)"
-    [disclosureId]="travelDisclosure?.travelDisclosureId">
+    [disclosureId]="travelDisclosure?.travelDisclosureId"
+    [actionType]="travelDisclosure?.adminPersonId ? 'R' : 'A'">
 </app-assign-administrator-modal>
 
 <!-- disclosure status slider -->

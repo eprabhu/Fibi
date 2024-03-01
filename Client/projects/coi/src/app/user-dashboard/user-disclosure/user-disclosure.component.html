@@ -1303,7 +1303,7 @@
                                         <!-- Coi card Department -->
                                         <div tabindex="0" [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
                                             <label class="d-block coi-text-dark">Department</label>
-                                            <span class="coi-text-light">{{disclosure?.unit?.unitDetail}}</span>
+                                            <span class="coi-text-light">{{getPersonLeadUnitDetails(disclosure)}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-6 mb-2">
@@ -1522,7 +1522,7 @@
                                             <span [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
                                                 <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
                                                     <span class="coi-text-light"
-                                                        [title]="disclosure?.unitDetails?.unitDetail">{{disclosure?.unitDetails?.unitDetail}}</span>
+                                                        [title]="disclosure?.unitDetails?.unitDetail">{{getPersonLeadUnitDetails(disclosure)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1700,7 +1700,7 @@
                                             [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                             <label class="d-block coi-text-dark">Department</label>
                                              <span class="coi-text-light">
-                                                {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                                {{getPersonLeadUnitDetails(disclosure)}} </span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-6 mb-2">

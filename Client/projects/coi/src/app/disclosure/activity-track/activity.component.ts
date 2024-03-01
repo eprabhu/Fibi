@@ -129,7 +129,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
                     coiParentCommentId: this.modalConfiguration.coiParentCommentId,
                     modifyIndex: this.modalConfiguration.modifyIndex
                 });
-                this._dataStore.updateTimestampEvent.next();
                 this.clearModal();
                 // this._commonService.showToast(HTTP_SUCCESS_STATUS,
                 //     `Review comment ${ this.modalConfiguration.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);

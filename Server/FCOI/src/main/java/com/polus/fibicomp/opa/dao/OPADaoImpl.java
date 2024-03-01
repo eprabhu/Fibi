@@ -512,4 +512,34 @@ public class OPADaoImpl implements OPADao {
 	public List<OPAPersonType> getOpaPersonType() {
 		return hibernateTemplate.loadAll(OPAPersonType.class);
 	}
+
+	@Override
+	public boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer opaDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.opaDisclosureId) > 0) then true else false end ");
+		hqlQuery.append("FROM OPADisclosure c WHERE  c.adminPersonId = :adminPersonId ");
+		if (adminGroupId != null)
+			hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
+		hqlQuery.append("AND c.opaDisclosureId = : opaDisclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		if (adminGroupId != null)
+			query.setParameter("adminGroupId", adminGroupId);
+		query.setParameter("adminPersonId", adminPersonId);
+		query.setParameter("opaDisclosureId", opaDisclosureId);
+		return (boolean)query.getSingleResult();
+	}
+
+	@Override
+	public boolean isAdminPersonOrGroupAdded(Integer opaDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.opaDisclosureId) > 0) then false else true end ");
+		hqlQuery.append("FROM OPADisclosure c WHERE  c.adminPersonId is null AND c.adminGroupId is null ");
+		hqlQuery.append("AND c.opaDisclosureId = : opaDisclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("opaDisclosureId", opaDisclosureId);
+		return (boolean)query.getSingleResult();
+	}
+
 }

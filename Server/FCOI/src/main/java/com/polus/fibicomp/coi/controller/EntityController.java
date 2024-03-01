@@ -37,4 +37,10 @@ public class EntityController {
     public ResponseEntity<Object> getEntityWithRelationShipInfo(@RequestBody CommonRequestDto requestDto) {
         return conflictOfInterestService.getEntityWithRelationShipInfo(requestDto);
     }
+
+    @PostMapping("/entity/riskStatus")
+    public ResponseEntity<Object> checkEntityRiskStatus(@RequestBody CoiEntityDto entityDto) {
+        return conflictOfInterestService.checkEntityRiskStatus(entityDto);
+    }
+
 }

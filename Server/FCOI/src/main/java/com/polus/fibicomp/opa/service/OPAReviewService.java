@@ -1,5 +1,7 @@
 package com.polus.fibicomp.opa.service;
 
+import java.util.Date;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +27,19 @@ public interface OPAReviewService {
     /**
      * This method Starts a OPA review
      * @param opaReviewId
+     * @param opaDisclsoureId 
      * @return
      */
-    ResponseEntity<Object> startOPAReview(Integer opaReviewId);
+    ResponseEntity<Object> startOPAReview(Integer opaReviewId, Integer opaDisclsoureId);
 
     /**
      * This method completes a OPA Review
      * @param opaReviewId
-     * @param opaReviewEndDate 
+     * @param endDate
+     * @param opaDisclosureId 
      * @return
      */
-    ResponseEntity<Object> completeOPAReview(Integer opaReviewId, String opaReviewEndDate);
+    ResponseEntity<Object> completeOPAReview(Integer opaReviewId, Date endDate, Integer opaDisclosureId);
 
     /**
      * This method fetches all review action log
@@ -49,4 +53,5 @@ public interface OPAReviewService {
      * @return
      */
     ResponseEntity<Object> deleteOPAReview(Integer opaReviewId);
+
 }

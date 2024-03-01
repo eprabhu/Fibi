@@ -145,4 +145,16 @@ public interface OPADao {
 	 */
 	List<OPAPersonType> getOpaPersonType();
 
+	/**
+	 * This method is used to check if same admin is added
+	 * @return
+	 */
+	boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer opaDisclosureId);
+
+	/**
+	 * This method is used to check if admin is added
+	 * @return
+	 */
+	boolean isAdminPersonOrGroupAdded(Integer opaDisclosureId);
+
 }
