@@ -60,7 +60,7 @@
 
 .user-dashboard-nav {
   min-height: 42px;
-  color: #7c7c7c;
+  // color: #7c7c7c;
 }
 
 .mb-4px {
@@ -82,11 +82,11 @@
   background-color: #4cb57d !important;
 }
 
-h4 {
-  color: #151515;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
+// h4 {
+//   color: #151515;
+//   font-size: 1.5rem;
+//   font-weight: 700;
+// }
 
 .cursor {
   cursor: context-menu !important;
@@ -119,7 +119,7 @@ margin-top-3px{
   height: 27px;
   position: relative;
   left: -10px;
-  top: -4px;
+  top: 0;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -441,4 +441,34 @@ padding-right: 17px;
 
 .searchButton:hover{
   color: #0a58ca !important;
+}
+
+// .symbol-circle {
+//   width: 42px;
+//   height: 42px;
+//   border-radius: 50%;
+//   background: #d6ebe0;
+
+//   .mat-icon {
+//     -webkit-user-select: none;
+//     user-select: none;
+//     background-repeat: no-repeat;
+//     display: inline-block;
+//     fill: currentColor;
+//      height: auto !important;
+//      width: auto !important;
+//      overflow: auto !important;
+//      color: #19834a;
+//   }
+// }
+
+.mat-icon {
+  -webkit-user-select: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  display: inline-block;
+  fill: currentColor;
+   height: auto !important;
+   width: auto !important;
+   overflow: auto !important;
 }

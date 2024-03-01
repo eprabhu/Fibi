@@ -30,7 +30,7 @@
             </div>
           </div>
           <div class="align-items-center d-flex" tabindex="-1">
-            <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded" 
+            <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded"
             class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
             aria-label="Click here to expand / collapse">
               <mat-icon class="mb-2 icon-height">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
@@ -84,7 +84,7 @@
                             {{entityDetails?.webURL}}
                           </a></span>
                       </app-no-data-label>
-  
+
                     </td>
                   </tr>
                   <tr tabindex="0">
@@ -195,7 +195,7 @@
         <!-- last update date -->
         <div class="fs-14 ash-text ps-0 d-sm-flex d-md-block  mt-md-0 mt-sm-2" [class.mt-3]="!isCardExpanded" tabindex="0">
           <div class="fw-medium me-3">Last Updated By :</div>
-          <div>{{entityDetails?.updatedUserFullName}} On 
+          <div>{{entityDetails?.updatedUserFullName}} On
             {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}</div>
         </div>
         </div>
@@ -386,7 +386,7 @@
                   <br>
                   <div class="mt-2">
                     <i class="fa fa-angle-double-right me-1" aria-hidden="true"></i>
-                      You may mark multiple entity relations.
+                    You can mark entity relations from the dropdown.
                   </div>
                   <div class="mt-1">
                     <i class="fa fa-angle-double-right me-1" aria-hidden="true"></i>
@@ -440,4 +440,6 @@
   </div>
 
 <app-entity-risk-slider *ngIf="isOpenSlider" [isOpenSlider]="isOpenSlider"
-(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails"  ></app-entity-risk-slider> 
+(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails"  ></app-entity-risk-slider>
+
+<app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

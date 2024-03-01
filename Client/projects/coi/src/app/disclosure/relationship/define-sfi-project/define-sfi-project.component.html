@@ -200,3 +200,7 @@
                         [selectedSfiIndex]="selectedSfiIndex"
                         [sfiList]="disclosureSfi.personEntities"></app-define-switch-view>
 
+
+<app-no-information *ngIf="!disclosureSfi.personEntities.length"></app-no-information>
+
+

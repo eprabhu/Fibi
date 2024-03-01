@@ -40,7 +40,7 @@
                             <label class="label-text">Department<span class="d-inline d-md-none d-lg-inline">:</span></label>
                             <span class="grey-text break-point-1200"
                                 [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                {{getPersonLeadUnitDetails(disclosure)}}</span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -275,7 +275,7 @@
                             <div>
                                 <label class="label-text">Department <span class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="grey-text break-point-1200" [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                    {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                    {{getPersonLeadUnitDetails(disclosure)}}</span>
                             </div>
                         </div>
                     </div>

@@ -111,4 +111,7 @@ public class CoiReview implements Serializable {
 	@Transient
 	private String currentLocationTypeCode;
 
+	@Transient
+	private String updateUserFullName;
+
 }

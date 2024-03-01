@@ -76,10 +76,10 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.locationTypeCode = event[0].code;
             this.reviewDetails.reviewLocationType = {};
             this.reviewDetails.reviewLocationType['description'] = event[0].description;
-            this.reviewDetails.reviewLocationType['locationTypeCode'] = event[0].code; 
+            this.reviewDetails.reviewLocationType['locationTypeCode'] = event[0].code;
         } else {
-            this.reviewDetails.locationTypeCode = null; 
-            this.reviewDetails.reviewLocationType = {};  
+            this.reviewDetails.locationTypeCode = null;
+            this.reviewDetails.reviewLocationType = {};
         }
     }
 
@@ -91,14 +91,14 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.reviewStatusTypeCode = event[0].code;
             this.reviewDetails.reviewerStatusType = {};
             this.reviewDetails.reviewerStatusType['description'] = event[0].description;
-            this.reviewDetails.reviewerStatusType['reviewStatusCode'] = event[0].code; 
+            this.reviewDetails.reviewerStatusType['reviewStatusCode'] = event[0].code;
             if(this.reviewDetails.reviewStatusTypeCode === '2') {
                 this.reviewEndDate = new Date();
                 this.reviewEndDate.setHours(0, 0, 0, 0);
             }
         } else {
-            this.reviewDetails.reviewStatusTypeCode = null;  
-            this.reviewDetails.reviewerStatusType = {}; 
+            this.reviewDetails.reviewStatusTypeCode = null;
+            this.reviewDetails.reviewerStatusType = {};
         }
     }
 
@@ -106,7 +106,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     //     this.reviewDetails[typeCode] = event[0].code;
     //     this.reviewDetails[type] = {};
     //     this.reviewDetails[type]['description'] = event[0].description;
-    //     this.reviewDetails[type][typeCode] = event[0].code; 
+    //     this.reviewDetails[type][typeCode] = event[0].code;
     // }
 
     private listenDataChangeFromStore() {
@@ -153,7 +153,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
         if (this.reviewDetails.reviewLocationType) {
             this.locationType.push({'code': this.reviewDetails.reviewLocationType.locationTypeCode, 'description': this.reviewDetails.reviewLocationType.description});
-        } 
+        }
         if (this.reviewDetails.reviewerStatusType) {
             this.reviewerStatusType.push({'code': this.reviewDetails.reviewerStatusType.reviewStatusCode, 'description': this.reviewDetails.reviewerStatusType.description});
         }
@@ -168,9 +168,9 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.disclosureId = this.coiDisclosure.disclosureId;
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview({ coiReview: this.reviewDetails }).subscribe((res: any) => {
+                this.updateTimeAndUser(res)
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.reviewDetails = {};
-                this._dataStore.updateTimestampEvent.next();
                 this.isExpanded = true;
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
                 document.getElementById('add-review-modal-trigger').click();
@@ -190,21 +190,27 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.reviewDetails.endDate = parseDateWithoutTimestamp(this.reviewEndDate)
     }
 
+    updateTimeAndUser(review) {
+        this.coiDisclosure.updateTimestamp = review.updateTimestamp;
+        this.coiDisclosure.updateUserFullName = review.updateUserFullName;
+    }
+
     addReviewToList(review: any) {
         this.reviewerList.push(review);
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });        
-        this._dataStore.updateTimestampEvent.next();
-        this.startOrCompleteReview();
+        this.updateReviewDetails();
         this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
+    }
+
+    updateReviewDetails() {
+        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
+        this.startOrCompleteReview();
     }
 
     updateReview(review: any) {
         this.reviewerList.splice(this.modifyIndex, 1, review);
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
-        this._dataStore.updateTimestampEvent.next();
-       this.startOrCompleteReview();
+        this.updateReviewDetails();
     }
 
     startOrCompleteReview() {
@@ -213,12 +219,12 @@ export class LocationComponent implements OnInit, OnDestroy {
         let nextAssignedReview = this.getNextAssignedReview();
         if (nextAssignedReview) {
             this.coiService.currentReviewForAction = nextAssignedReview;
-            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+            if(nextAssignedReview.reviewStatusTypeCode == 1)
                 this.coiService.isStartReview = true;
             else if (nextAssignedReview.reviewStatusTypeCode == 3)
                 this.coiService.isCompleteReview = true;
         }
-       
+
     }
 
     private clearActionData() {
@@ -227,9 +233,10 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     deleteReview() {
-        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((_res: any) => {
+        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((response: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.coiDisclosure.coiReviewStatusType = _res.coiReviewStatusType;
+            this.coiDisclosure.coiReviewStatusType = response.coiReviewStatusType;
+            this.updateTimeAndUser(response);
             this._dataStore.updateStore(['coiReviewerList' , 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
              this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
              this.startOrCompleteReview();
@@ -255,7 +262,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             coiSubSectionsTitle: 'Review comments at ' + reviewDetails.reviewLocationType.description
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
-        this.coiService.isShowCommentNavBar = true;	
+        this.coiService.isShowCommentNavBar = true;
     }
 
     validateReview() {
@@ -283,7 +290,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         if (this.reviewStartDate && this.reviewEndDate &&
             (compareDates(this.reviewStartDate, this.reviewEndDate) === 1)) {
             this.validationMap.set('endDate', 'Please provide a valid review end date.');
-        } 
+        }
     }
 
     compareDates(type: any) {
@@ -303,7 +310,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
     }
 
-   
+
     // Assigned - 1, Completed - 2, In Progress - 3.
     getReviewStatusBadge(statusCode: any) {
         switch (statusCode) {

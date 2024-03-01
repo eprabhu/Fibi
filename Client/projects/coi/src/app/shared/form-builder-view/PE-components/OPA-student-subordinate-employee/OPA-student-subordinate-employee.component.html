@@ -91,21 +91,21 @@
                         </div>
                         <div class="col-6">
                             <label for="stud-sub-days" class="form-label"># of Days </label>
-                            <input type="text" class="form-control"
+                            <input type="text" class="form-control" name='stud-sub-days'
                                 [(ngModel)]="studentSubordinateData.numOfDays">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="stud-sub-description" class="form-label">Describe the type of work </label>{{studentSubordinateData.natureOfWork}}
-                            <textarea appAutoGrow class="form-control" rows="1"
+                            <label for="stud-sub-description-work" class="form-label">Describe the type of work </label>{{studentSubordinateData.natureOfWork}}
+                            <textarea appAutoGrow class="form-control" rows="1" name="stud-sub-description"
                                 [(ngModel)]="studentSubordinateData.natureOfWork" appLengthValidator
                                 [limit]=4000>
                             </textarea>
                         </div>
                         <div class="col-12">
-                            <label for="stud-sub-description" class="form-label">Relationship with student/subordinate</label>{{studentSubordinateData.relationWithPerson}}
-                            <textarea appAutoGrow class="form-control" rows="1"
+                            <label for="stud-sub-description-relationship" class="form-label">Relationship with student/subordinate</label>{{studentSubordinateData.relationWithPerson}}
+                            <textarea appAutoGrow class="form-control" rows="1" name="stud-sub-description-relationship"
                                 [(ngModel)]="studentSubordinateData.relationWithPerson" appLengthValidator
                                 [limit]=4000>
                             </textarea>

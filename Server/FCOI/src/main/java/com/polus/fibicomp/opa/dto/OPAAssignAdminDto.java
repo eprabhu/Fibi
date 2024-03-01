@@ -16,5 +16,6 @@ public class OPAAssignAdminDto {
     private Integer adminGroupId;
     private String adminPersonId;
     private String opaDisclosureStatus;
+    private String actionType;
 
 }

@@ -88,9 +88,19 @@ export class PELayerComponent implements OnInit, OnChanges {
         const RO: FormBuilderSaveRO = this.prepareROForSave(data);
         this._formBuilder.saveFormComponent(RO).subscribe((res: SectionComponent) => {
             this.saveEventForChildComponent.next({ eventType: 'SAVE_COMPLETE', data: res.programmedElement });
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure saved successfully.');
+            switch (data.action) {
+                case 'ADD': this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity added successfully.'); break;
+                case 'UPDATE': this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity updated successfully.'); break;
+                case 'DELETE': this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity removed successfully.'); break;
+                default: break;
+            }
         }, err => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving disclosure. Please try again.');
+            switch (data.action) {
+                case 'ADD': this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding entity. Please try again.'); break;
+                case 'UPDATE': this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating entity. Please try again.'); break;
+                case 'DELETE': this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in deleting entity. Please try again.'); break;
+                default: break;
+            }
         });
     }
 

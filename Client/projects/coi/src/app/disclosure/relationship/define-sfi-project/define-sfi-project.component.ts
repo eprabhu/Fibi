@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, OnChanges, OnDestroy, SimpleChanges, EventEmitter} from '@angular/core';
 import {RelationshipService} from '../relationship.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -22,6 +22,7 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
     @Input() coiStatusList = [];
     @Input() coiData: any;
     @Input() isEditMode = false;
+    @Output() conflictStatusChanged = new EventEmitter();
 
     deployMap = environment.deployUrl;
     disclosureSfi: DisclosureSFIs = new DisclosureSFIs();
@@ -112,6 +113,8 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
                 .subscribe((res: DisclosureSFIs) => {
                     setTimeout(() => {
                         this.disclosureSfi = res;
+                        this.coiService.isRelationshipSaving = true;
+                        this.conflictStatusChanged.next();
                     }, 500);
                 }));
         }
