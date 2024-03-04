@@ -13,6 +13,10 @@ import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { HeaderService } from '../../common/header/header.service';
+import { getPersonLeadUnitDetails, openCoiSlider } from '../../common/utilities/custom-utilities';
+
+@Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
     styleUrls: ['./user-disclosure.component.scss'],

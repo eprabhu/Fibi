@@ -220,13 +220,19 @@
             align-items: flex-start;
             justify-content: center;
         }
-        .card-toolbar {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        // .card-toolbar {
+        //     display: flex;
+        //     align-items: center;
+        //     flex-wrap: wrap;
+        // }
     }
     .card-footer {
         background-color: var(--theme-card-bg-color);
     }
 }
+
+//boxes
+
+.coi-box-red {  
+    background-color: var(--theme-box-red-bg-color);
+  }

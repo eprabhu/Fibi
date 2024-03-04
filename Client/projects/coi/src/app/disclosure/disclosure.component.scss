@@ -8,10 +8,10 @@
   height: 96px;
 }
 
-.navigation-tabs {
-  height: 45px;
-  background-color: #E4F1FF;
-}
+// .navigation-tabs {
+//   height: 45px;
+//   background-color: #E4F1FF;
+// }
 
 .collapsed-nav-tabs {
   height: 58px;
@@ -325,21 +325,39 @@ table {
 }
 
 .invalid {
-  position: relative;
-  top: 2px;
+  // position: relative;
+  // top: 2px;
   color: #ff0000;
 }
 
 .medium-risk {
-  position: relative;
-  top: 2px;
+  // position: relative;
+  // top: 2px;
   color: #ff8c00;
 }
 
 .low-risk {
-  position: relative;
-  top: 2px;
+  // position: relative;
+  // top: 2px;
   color: rgb(26, 172, 62);
+}
+
+span.low-risk {
+  color: #328055;
+  border-color: #E8FFF3;
+  background-color: #E8FFF3;
+}
+
+span.medium-risk {
+  color: #8b6d00;
+  border-color: #fff8dd;
+  background-color: #fff8dd;
+}
+
+.coi-status-wrapper span.invalid {
+  color: #cc375c;
+  border-color: #fff5f8;
+  background-color: #fff5f8;
 }
 
 .nav-border-right {
@@ -389,8 +407,8 @@ table {
   width: max-content;
   height: 27px;
   position: relative;
-  left: -23px;
-  top: -4px;
+  left: -10px;
+  top: 0;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
