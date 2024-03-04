@@ -1,43 +1,45 @@
 <button class="d-none" data-bs-toggle="modal" data-bs-target="#entitypersondetails" id="entityPersonDetailsTrigger">
 </button>
 
-<div class="modal modal-xl fade" id="entitypersondetails" tabindex="-1" aria-labelledby="exampleModalLabel"
-    data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade mySkinDialog modal-xl" data-bs-backdrop="static" id="entitypersondetails" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header headerStyle">
-                <h5 class="modal-title userDetail " id="exampleModalLabel"><i class="mr-2 fa fa-user-o"
-                        aria-hidden="true"></i>{{userdetails?.fullName}}</h5>
-                <button type="button" (click)="addNewValue(false)" class="btn-close fs-12" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+            <div class="modal-header">
+                <h4 class="modal-title userDetail"><i class="mr-2 fa fa-user-o"
+                        aria-hidden="true"></i>{{userdetails?.fullName}}</h4>
+                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="addNewValue(false)"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex nav-sticky ms-4 mb-3" id="person-modal">
-                    <nav class="border-nav bg-white border br-bottom d-flex fs-14 fw-bold shadow-sm user-dashboard-nav
-                        d-flex align-items-center d-inline-block w-100">
-                        <div class="text-secondary header-icons cursor-pointer px-0" (click)="currentTab='PERSON_DETAILS'"
-                        [class.active]="currentTab == 'PERSON_DETAILS'">
-                            <span title="Click to view Person Details" class="r-title px-3 border-end fw-500">
-                                Person Details 
+                <div class="d-flex nav-sticky mb-3" id="person-modal">
+                    <nav class="card-nav bg-white br-bottom d-flex fs-14 fw-bold d-flex align-items-center d-inline-block w-100 border-bottom">
+                        <div class="text-secondary header-icons cursor-pointer px-0 nav-options"
+                            (click)="currentTab='PERSON_DETAILS'" [class.active]="currentTab == 'PERSON_DETAILS'">
+                            <span title="Click to view Person Details" class="r-title px-3 fw-500 fs-16">
+                                Person Details
                             </span>
                         </div>
-                        <div class="text-secondary header-icons cursor-pointer" (click)="currentTab='TRAINING_DETAILS'"
-                        [class.active]="currentTab == 'TRAINING_DETAILS'">
-                            <span title="Click to view Training" class="r-title px-3  fw-500">
+                        <div class="text-secondary header-icons cursor-pointer nav-options" (click)="currentTab='TRAINING_DETAILS'"
+                            [class.active]="currentTab == 'TRAINING_DETAILS'">
+                            <span title="Click to view Training" class="r-title px-3 fw-500 fs-16">
                                 Training
                             </span>
                         </div>
                     </nav>
                 </div>
-                <app-person-details [personValues]="personValues" [user]="id"
+                <app-person-details class="fs-14" [personValues]="personValues" [user]="id"
                     *ngIf="currentTab =='PERSON_DETAILS'"></app-person-details>
-                <app-Training-details [userdetails]="userdetails"
+                <app-Training-details class="fs-14" [userdetails]="userdetails"
                     *ngIf="currentTab == 'TRAINING_DETAILS'"></app-Training-details>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary fs-15" (click)="addNewValue(false)"
-                    data-bs-dismiss="modal">Close</button>
-                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" (click)="viewPersonDetails(userdetails?.personId)" class="btn btn-primary fs-14" >View Person Details</button>
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Cancel"
+                    (click)="addNewValue(false)">Close
+                </button>
+                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" class="btn btn-primary me-0"
+                    type="button" (click)="viewPersonDetails(userdetails?.personId)">
+                    View Person Details
+                </button>
             </div>
         </div>
     </div>

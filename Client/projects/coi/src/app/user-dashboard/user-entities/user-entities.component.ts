@@ -10,6 +10,7 @@ import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../common/utilities/animations';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { openCoiSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-user-entities',
@@ -19,7 +20,6 @@ import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-u
   providers: [UserEntitiesService]
 })
 export class UserEntitiesComponent implements OnInit, OnDestroy {
-  @ViewChild('viewMyEntitiesOverlay', { static: true }) viewMyEntitiesOverlay: ElementRef;
   sfiDashboardRequestObject = new RO();
   $subscriptions = [];
   entityArray = [];
@@ -39,6 +39,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   isLoading = false;
   isHideFilterSearchAndShowCreate = false;
   isConcurrency = false;
+  sliderElementId = '';
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService, private elementRef: ElementRef) {
@@ -142,11 +143,8 @@ removeEntityId() {
   viewSlider(event) {
     this.showSlider = event.flag;
     this.entityId = event.entityId;
-    document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
-    setTimeout(() => {
-        const slider = document.querySelector('.slider-base');
-        slider.classList.add('slider-opened');
-    });
+    this.sliderElementId = `admin-dashboard-entity-slider-${this.entityId}`;
+    openCoiSlider(this.sliderElementId);
   }
 
   getEntities() {
@@ -162,18 +160,12 @@ removeEntityId() {
     ));
   }
 
-  hideSfiNavBar() {
-    this.addBodyScroll();
-    let slider = document.querySelector('.slider-base');
-    slider.classList.remove('slider-opened');        
+  hideSfiNavBar() {       
     setTimeout(() => {
         this.showSlider = false;
+        this.entityId = null;
+        this.sliderElementId = '';
     },500);
-}
-
-addBodyScroll() {
-    document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-    document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
 }
 
 closeActivateInactivateSfiModal(event) {
@@ -207,11 +199,6 @@ clearSearchText() {
 
 addSFI(type) {
   this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
-}
-
-onWindowScroll(event) {
-    const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
-    this._commonService.$sliderScrollAction.next({event, pageYOffset});
 }
 
 }

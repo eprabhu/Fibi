@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -254,4 +254,10 @@ export class CountModalComponent implements OnInit {
         }
     }
 
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal.emit(false);
+        }
+    }
 }

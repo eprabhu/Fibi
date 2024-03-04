@@ -694,13 +694,13 @@
   </ng-container>
   <app-entity-history *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'" [entityDetails] = "entityDetails"></app-entity-history>
 </div>
-<div #viewSFIDetailsOverlay [class.overlay]="showSlider">
-  <div class="slider-base" *ngIf="showSlider">
-    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-    <div class="slider-container">
+
+<ng-container *ngIf="showSlider">
+  <app-coi-slider (closeSlider)="hideSfiNavBar()" [elementId]="'view-entity-details'">
+    <ng-container content>
       <app-entity-details [entityId]="personEntityId" (closeAction)="hideSfiNavBar()"></app-entity-details>
-    </div>
-  </div>
-</div>
+    </ng-container>
+  </app-coi-slider>
+</ng-container>
 
 <app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
