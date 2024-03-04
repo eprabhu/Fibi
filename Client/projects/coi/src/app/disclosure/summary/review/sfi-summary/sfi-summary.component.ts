@@ -44,6 +44,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this.getSfiDetails();
         this.commentConfiguration.coiSectionsTypeCode = 2;
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
+        this.listenToolKitFocusSection();
     }
 
     ngOnDestroy() {
@@ -121,6 +122,15 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         }
         this._commonService.$commentConfigurationDetails.next(REQ_BODY);
         this._coiService.isShowCommentNavBar = true;
+    }
+
+    //'COI802' parent element of SfiSummaryComponent.
+    private listenToolKitFocusSection() {
+        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele => {
+            if (ele.section == 'COI802') {
+                this.isCollapsed = ele.isExpand;
+            }
+        }));
     }
 
 }
