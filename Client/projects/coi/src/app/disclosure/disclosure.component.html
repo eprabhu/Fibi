@@ -42,7 +42,7 @@
                                                 <span class="coi-text-light">
                                                     {{coiData?.coiDisclosure?.personPrimaryTitle}} |
                                                     <span
-                                                        class="coi-text-lighter">{{personUnitDetail}}</span>
+                                                        class="coi-text-lighter">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
                                                     |
                                                     {{coiData?.coiDisclosure?.personEmail}}
                                                 </span>
@@ -108,7 +108,7 @@
                                                     <span class="coi-text-light">
                                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
                                                             <span class="text-overflow"
-                                                                [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                                                [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.unit)}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>

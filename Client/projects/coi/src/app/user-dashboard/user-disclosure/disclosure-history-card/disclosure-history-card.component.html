@@ -47,7 +47,7 @@
                             <label class="coi-text-dark d-block">Department<span class="d-inline d-md-none d-lg-inline">:</span></label>
                             <span class="coi-text-light"
                                 [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                {{getPersonLeadUnitDetails(disclosure)}}</span>
+                                {{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
                             </div>
                         </div>
                         <div class="col-6 col-md-3 mb-2">
@@ -480,7 +480,7 @@
                             <div>
                                 <label class="label-text">Department <span class="d-inline d-md-none d-lg-inline">:</span></label>
                                 <span class="grey-text break-point-1200" [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                    {{getPersonLeadUnitDetails(disclosure)}}</span>
+                                    {{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
                             </div>
                         </div>
                     </div>
@@ -570,7 +570,7 @@
                             <label class="coi-text-dark d-block">Department</label>
                             <span class="coi-text-light"
                                 [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
-                                {{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+                                {{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
                         </div>
                     </div>
                 </div>

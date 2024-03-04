@@ -116,7 +116,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
-    personUnitDetail = '';
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -159,7 +158,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         });
         this.routerEventSubscription();
         this.setPersonProjectDetails();
-        this.personUnitDetail = this.getPersonLeadUnitDetails();
     }
 
     routerEventSubscription() {
@@ -532,10 +530,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         } else {
             this.router.navigate(['/coi/user-dashboard']);
         }
-    }
-
-    getPersonLeadUnitDetails() {
-        return getPersonLeadUnitDetails(this.coiData.coiDisclosure.person.unit);
     }
 
     closeAssignAdministratorModal(event) {

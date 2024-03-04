@@ -28,7 +28,7 @@
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Department</span>
                                                         <span class="coi-text-dark"
-                                                            [attr.aria-label]="disclosure?.unit?.unitDetail">{{disclosure?.unit?.unitDetail}}</span>
+                                                            [attr.aria-label]="disclosure?.unit?.unitDetail"> {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                                     </div>
                                                 </div>
                     
@@ -174,7 +174,7 @@
                                             <div class="col-lg-6">                    
                                                 <span class="fs-14 text-gray-700 fw-bold"
                                                             [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                            {{disclosure?.unit?.unitDetail}}</span>               
+                                                             {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>               
                                             </div>
                                         </div>
                                         <div class="col-6 col-lg-4">
@@ -295,7 +295,7 @@
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Department</span>
                                                         <span class="coi-text-dark" [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                            {{disclosure?.unit?.unitDetail}}</span>
+                                                            {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                                     </div>
                                                 </div>
                     
@@ -426,7 +426,7 @@
                                             <div class="col-lg-6">                    
                                                 <span class="fs-14 text-gray-700 fw-bold"
                                                 [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                {{disclosure?.unit?.unitDetail}}</span>               
+                                                {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>               
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -730,9 +730,7 @@
                                                     <span class="coi-text-lighter fs-12 d-block">Department</span>
                                                     <span class="coi-text-dark" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                            <span class="coi-text-dark">
-                                                                {{opaDisclosure?.homeUnit}} -
-                                                                {{opaDisclosure?.homeUnitName}}</span>
+                                                            <span class="coi-text-dark">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
@@ -859,9 +857,7 @@
                                             <span class="fs-14 text-gray-700 fw-bold"
                                             [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                             <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                <span class="text-gray-700 fw-bold">
-                                                    {{opaDisclosure?.homeUnit}} -
-                                                    {{opaDisclosure?.homeUnitName}}</span>
+                                                <span class="text-gray-700 fw-bold"> {{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                             </app-no-data-label></span>               
                                         </div>
                                     </div>
@@ -962,9 +958,7 @@
                                                     <span class="coi-text-lighter fs-12 d-block">Department</span>
                                                     <span class="coi-text-dark" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                            <span class="coi-text-dark">
-                                                                {{opaDisclosure?.homeUnit}} -
-                                                                {{opaDisclosure?.homeUnitName}}</span>
+                                                            <span class="coi-text-dark">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
@@ -1086,9 +1080,7 @@
                                             <span class="fs-14 text-gray-700 fw-bold"
                                             [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                             <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                <span class="text-gray-700">
-                                                    {{opaDisclosure?.homeUnit}} -
-                                                    {{opaDisclosure?.homeUnitName}}</span>
+                                                <span class="text-gray-700">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                             </app-no-data-label></span>               
                                         </div>
                                     </div>
@@ -1303,7 +1295,7 @@
                                         <!-- Coi card Department -->
                                         <div tabindex="0" [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
                                             <label class="d-block coi-text-dark">Department</label>
-                                            <span class="coi-text-light">{{getPersonLeadUnitDetails(disclosure)}}</span>
+                                            <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-6 mb-2">
@@ -1522,7 +1514,7 @@
                                             <span [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
                                                 <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
                                                     <span class="coi-text-light"
-                                                        [title]="disclosure?.unitDetails?.unitDetail">{{getPersonLeadUnitDetails(disclosure)}}</span>
+                                                        [title]="disclosure?.unitDetails?.unitDetail">{{commonService.getPersonLeadUnitDetails(disclosure?.unitDetails?.unitDetail)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1699,8 +1691,7 @@
                                         <div tabindex="0"
                                             [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                             <label class="d-block coi-text-dark">Department</label>
-                                             <span class="coi-text-light">
-                                                {{getPersonLeadUnitDetails(disclosure)}} </span>
+                                             <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-6 mb-2">

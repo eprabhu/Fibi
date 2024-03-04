@@ -68,7 +68,7 @@
 						<div class="col-6 col-md-4 mb-2">
 							<label class="coi-text-dark d-block">Lead Unit</label>
 							<app-no-data-label [valueToShow]="selectedProject?.unitName">
-								<span class="coi-text-light">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+								<span class="coi-text-light">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
 							</app-no-data-label>
 						</div>
 					</div>
