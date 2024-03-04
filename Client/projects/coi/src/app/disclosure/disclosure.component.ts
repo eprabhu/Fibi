@@ -116,7 +116,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
-    personUnitDetail = '';
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -159,7 +158,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         });
         this.routerEventSubscription();
         this.setPersonProjectDetails();
-        this.personUnitDetail = this.getPersonLeadUnitDetails();
     }
 
     routerEventSubscription() {
@@ -534,10 +532,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    getPersonLeadUnitDetails() {
-        return getPersonLeadUnitDetails(this.coiData.coiDisclosure.person.unit);
-    }
-
     closeAssignAdministratorModal(event) {
         if (event && (event.adminPersonId || event.adminGroupId)) {
             this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
@@ -769,5 +763,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     closeHeaderSlider() {
         this.showSlider = false;
         this.selectedType = '';
+    }
+
+    getColorBadges() {
+        switch (this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
     }
 }

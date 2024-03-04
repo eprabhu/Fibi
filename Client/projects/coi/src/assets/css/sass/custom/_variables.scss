@@ -12,6 +12,8 @@
     --theme-black: #000;
     --theme-white: #fff;
     --theme-gray: #6c757d;
+    --theme-red: #dc3545;
+    --theme-pale-red: #fff7f1;
 
     --theme-sidebar-width: 55px;
     --theme-topbar-height: 51px;
@@ -23,6 +25,7 @@
     --theme-font-size: 0.875rem;
     --theme-line-height: 1.5;
 }
+
 
 $--theme-body-color: --theme-body-color;
 $--theme-body-bg-color: --theme-body-bg-color;
@@ -57,6 +60,12 @@ $--theme-card-body-bg-color: --theme-card-body-bg-color;
 $--theme-card-body-border: --theme-card-body-border;
 $--theme-card-symbol-bg-color: --theme-card-symbol-bg-color;
 $--theme-card-symbol-color: --theme-card-symbol-color;
+
+//tabs
+$--theme-navtab-bg-color: --theme-navtab-bg-color;
+
+//boxes
+$--theme-box-red-bg-color: --theme-box-red-bg-color;
 
 
 // Font size
@@ -122,6 +131,10 @@ $theme-map-default: (
     $--theme-text-gray-800: #252F4A,
     $--theme-text-gray-900: #071437,
 
+    $--theme-navtab-bg-color: #E4F1FF,
+    $--theme-box-red-bg-color: var(--theme-pale-red),
+    
+
 );
 
 $theme-map-light: (
@@ -158,6 +171,10 @@ $theme-map-light: (
     $--theme-text-gray-800: #252F4A,
     $--theme-text-gray-900: #071437,
 
+    $--theme-navtab-bg-color: #E4F1FF,
+    $--theme-box-red-bg-color: var(--theme-pale-red),
+    
+
 );
 
 $theme-map-dark: (
@@ -181,18 +198,32 @@ $theme-map-dark: (
     $--theme-card-box-shadow: none,
     $--theme-card-body-bg-color: #1e1e2d,
     $--theme-card-body-border: 1px solid #1E2027,
-    $--theme-card-symbol-bg-color: lighten(#1e1e2d, 5%),
+    $--theme-card-symbol-bg-color: lighten(#1e1e2d, 3%),
     $--theme-card-symbol-color: lighten(#1e1e2d, 40%),
 
-    $--theme-text-gray-100: #F9F9F9,
-    $--theme-text-gray-200: #F1F1F2,
-    $--theme-text-gray-300: #DBDFE9,
+    // $--theme-text-gray-100: #F9F9F9,
+    // $--theme-text-gray-200: #F1F1F2,
+    // $--theme-text-gray-300: #DBDFE9,
+    // $--theme-text-gray-400: #474761,
+    // $--theme-text-gray-500: #99A1B7,
+    // $--theme-text-gray-600: #6c758d,
+    // $--theme-text-gray-700: #92929f,
+    // $--theme-text-gray-800: #cdcdde,
+    // $--theme-text-gray-900:  #F5F5F5,
+
+    $--theme-text-gray-100: #1b1b29,
+    $--theme-text-gray-200: #2B2B40,
+    $--theme-text-gray-300: #323248,
     $--theme-text-gray-400: #474761,
-    $--theme-text-gray-500: #99A1B7,
-    $--theme-text-gray-600: #6c758d,
-    $--theme-text-gray-700: #92929f,
-    $--theme-text-gray-800: #cdcdde,
-    $--theme-text-gray-900:  var(--theme-white),
+    $--theme-text-gray-500: #565674,
+    $--theme-text-gray-600: #6D6D80,
+    $--theme-text-gray-700: #92929F,
+    $--theme-text-gray-800: #CDCDDE,
+    $--theme-text-gray-900: #F5F5F5,
+
+    $--theme-navtab-bg-color: #1e1e2d,
+    $--theme-box-red-bg-color: #1e1e2d,
+    
 );
 //#a92034
 $theme-map-red: (
@@ -216,8 +247,8 @@ $theme-map-red: (
     $--theme-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
     $--theme-card-body-bg-color: #f5f6fb,
     $--theme-card-body-border: 1px solid #e5e8f5,
-    $--theme-card-symbol-bg-color: darken(#f5f6fb, 5%),
-    $--theme-card-symbol-color: darken(#f5f6fb, 85%),
+    $--theme-card-symbol-bg-color: darken(#f5f6fb, 3%),
+    $--theme-card-symbol-color: darken(#f5f6fb, 75%),
 
     $--theme-text-gray-100: #F9F9F9,
     $--theme-text-gray-200: #F1F1F2,
@@ -228,6 +259,10 @@ $theme-map-red: (
     $--theme-text-gray-700: #4B5675,
     $--theme-text-gray-800: #252F4A,
     $--theme-text-gray-900: #071437,
+
+    $--theme-navtab-bg-color: #E4F1FF,
+    $--theme-box-red-bg-color: var(--theme-pale-red),
+    
 );
 
 $theme-map-blue: (
@@ -251,8 +286,8 @@ $theme-map-blue: (
     $--theme-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
     $--theme-card-body-bg-color: #f0fff1,
     $--theme-card-body-border: 1px solid #e5e8f5,
-    $--theme-card-symbol-bg-color: darken(#f0fff1, 5%),
-    $--theme-card-symbol-color: darken(#f0fff1, 85%),
+    $--theme-card-symbol-bg-color: darken(#f0fff1, 3%),
+    $--theme-card-symbol-color: darken(#f0fff1, 75%),
 
     $--theme-text-gray-100: #F9F9F9,
     $--theme-text-gray-200: #F1F1F2,
@@ -263,5 +298,9 @@ $theme-map-blue: (
     $--theme-text-gray-700: #4B5675,
     $--theme-text-gray-800: #252F4A,
     $--theme-text-gray-900: #071437,
+
+    $--theme-navtab-bg-color: #E4F1FF,
+    $--theme-box-red-bg-color: var(--theme-pale-red),
+    
 
 );

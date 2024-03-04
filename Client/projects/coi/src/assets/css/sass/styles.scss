@@ -630,11 +630,6 @@ ul.timeline > li:before {
   box-shadow: -1px 3px 50px -17px rgb(0 0 0 / 22%);
 }
 
-.coi-pale-red {  
-  background-color: #fff7f1;
-  border: 1px solid #e1d9d3;
-}
-
 .coi-nav-tab {
   background-color: var(--theme-card-bg-color) !important;
   border: var(--theme-card-border) !important;
@@ -645,4 +640,15 @@ ul.timeline > li:before {
   background-color: var(--theme-card-bg-color) !important;
   border: var(--theme-card-border) !important;
   box-shadow: var(--theme-card-box-shadow);
+}
+
+.mat-icon {
+  -webkit-user-select: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  display: inline-block;
+  fill: currentColor;
+  height: auto !important;
+  width: max-content !important;
+  overflow: auto !important;
 }

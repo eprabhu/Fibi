@@ -9,6 +9,7 @@ import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utiliti
 import {HTTP_ERROR_STATUS} from '../../../../../../fibi/src/app/app-constants';
 import { listAnimation, slideInAnimation } from '../../../common/utilities/animations';
 import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
+import { CoiService } from '../../services/coi.service';
 
 @Component({
     selector: 'app-tool-kit',
@@ -38,7 +39,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     constructor(
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         private _coiSummaryService: CoiSummaryService,
-        private _commonService: CommonService
+        private _commonService: CommonService,private _coiService: CoiService
     ) { }
 
     ngOnInit() {
@@ -126,14 +127,18 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         } else {
             this.isRelationshipCollapse = !this.isRelationshipCollapse;
         }
+        this.openCollapsedSection(section);
         this.windowScroll(section);
     }
 
     jumpToProjectSection(parentSection: string, activeSubSection: string, subNavSection: string) {
+        this.openCollapsedSection(parentSection);
         this.activeNav = parentSection;
         this.activeSubNav = activeSubSection;
         this.subNavActive = subNavSection;
-        this.windowScroll(subNavSection)
+        setTimeout(() => {
+            this.windowScroll(subNavSection);
+        });
     }
 
     windowScroll(scrollTo: string) {
@@ -143,4 +148,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         window.scrollTo({ behavior: 'smooth', top: sectionHeight });
     }
 
+    private openCollapsedSection(section) {
+        this._coiService.$isExpandSection.next({ section: section, isExpand: true });
+    }
 }

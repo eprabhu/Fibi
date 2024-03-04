@@ -30,8 +30,7 @@
                         </div>
                         <div class="col-auto p-0 d-flex align-items-center">
                             <mat-icon class="fs-2">home</mat-icon>
-                        <span class="fst-italic">{{disclosureDetails?.person?.unit?.unitNumber}} -
-                            {{disclosureDetails?.person?.unit?.unitName}}</span>
+                        <span class="fst-italic">{{commonService.getPersonLeadUnitDetails(disclosureDetails?.person?.unit)}}</span>
                         </div>
                     </div>
                 </div>

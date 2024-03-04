@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
 import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { CoiService } from '../../services/coi.service';
 
 @Component({
     selector: 'app-coi-review',
@@ -20,12 +21,13 @@ export class ReviewComponent implements OnInit {
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _dataStore: DataStoreService, public commonService: CommonService
+        private _dataStore: DataStoreService, public commonService: CommonService, private _coiService: CoiService
     ) { }
 
     ngOnInit() {
         this.fetchCOIDetails();
         this.listenDataChangeFromStore();
+        this.listenToolKitFocusSection();
     }
 
     fetchCOIDetails(): void {
@@ -63,6 +65,15 @@ export class ReviewComponent implements OnInit {
             redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
         }
         window.open(redirectUrl);
+    }
+
+    // 'COI803' parent element of Relationships header.
+    private listenToolKitFocusSection() {
+        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele =>{
+            if (ele.section == 'COI803') {
+                this.isRelationCollapsed = ele.isExpand;
+            }
+        }));
     }
     
 }

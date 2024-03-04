@@ -8,7 +8,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { openCoiSlider, openCommonModal } from '../../common/utilities/custom-utilities';
 import { CoiService } from '../services/coi.service';
 
 @Component({

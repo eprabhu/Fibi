@@ -20,7 +20,7 @@ export class PersonProjectEntityCardComponent implements OnChanges {
     constructor(public _commonService: CommonService) { }
 
     ngOnChanges(): void {
-        this.personUnitDetail = this.getPersonLeadUnitDetail();
+        this.personUnitDetail = this._commonService.getPersonLeadUnitDetails(this.personProjectOrEntity);
     }
     
     getPersonLeadUnitDetail() {
