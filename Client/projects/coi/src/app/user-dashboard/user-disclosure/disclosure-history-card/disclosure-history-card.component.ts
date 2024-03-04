@@ -54,11 +54,4 @@ export class DisclosureHistoryCardComponent implements OnInit {
             { queryParams: { disclosureId: this.disclosure.travelDisclosureId || this.disclosure.disclosureId || this.disclosure.opaDisclosureId} });
     }
 
-    getPersonLeadUnitDetails(disclosure: any): string {
-        const UNIT_DATA = { unitNumber: '', unitName: ''};
-        UNIT_DATA.unitNumber = disclosure.homeUnit ? disclosure.homeUnit : '';
-        UNIT_DATA.unitName = disclosure.homeUnitName ? disclosure.homeUnitName : '';
-        return getPersonLeadUnitDetails(UNIT_DATA);
-    }
-
 }

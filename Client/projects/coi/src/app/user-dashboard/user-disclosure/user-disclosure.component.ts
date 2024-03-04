@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
@@ -8,11 +8,11 @@ import {
 } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
-import { Subject, interval } from 'rxjs';
-import { debounce, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
-import { closeSlider, getPersonLeadUnitDetails, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
 
@@ -87,28 +87,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.loadDashboard();
         this.getDashboardBasedOnTab();
         this.loadDashboardCount();
-    }
-
-    /**
-     * Description
-     * @param {any} disclosure:any
-     * @returns {any}
-     * Here the function will checks getting the unit name and number for project disclosures and for OPA and travel disclosures.
-     * The first block sets the unit details for project disclosure(Award, Proposal) and the second block sets the unit details
-     * for OPA and Travel disclosures.
-     * Here we need to handle them seperately because from the server, the objects coming are different for opa and travel when
-     * compared to project disclosures.
-     */
-    getPersonLeadUnitDetails(disclosure: any): string {
-        const UNIT_DATA = { unitNumber: '', unitName: '' };
-        if (disclosure?.unit) {
-            UNIT_DATA.unitNumber = disclosure.unit.unitNumber ? disclosure.unit.unitNumber : '';
-            UNIT_DATA.unitName = disclosure.unit.unitName ? disclosure.unit.unitName : '';
-        } else {
-            UNIT_DATA.unitNumber = disclosure.homeUnit ? disclosure.homeUnit : disclosure.unitDetails ? disclosure.unitDetails.unitNumber : '';
-            UNIT_DATA.unitName = disclosure.homeUnitName ? disclosure.homeUnitName : disclosure.unitDetails ? disclosure.unitDetails.unitName : '';
-        }
-        return getPersonLeadUnitDetails(UNIT_DATA);
     }
 
     loadDashboard() {

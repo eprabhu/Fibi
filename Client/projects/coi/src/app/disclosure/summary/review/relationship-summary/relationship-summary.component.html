@@ -66,7 +66,7 @@
 						<div class="col-7">
 							<label class="label-text">Lead Unit :</label>
 							<app-no-data-label [valueToShow]="selectedProject?.unitName">
-								<span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+								<span class="ml-2 grey-text">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
 							</app-no-data-label>
 						</div>
 					</div>

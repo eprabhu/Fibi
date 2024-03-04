@@ -311,10 +311,7 @@
                 <label>Department <span class="me-1">:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="entityListData?.unit?.unitName">
-                    <span>{{entityListData?.unit?.unitNumber}}</span> -
-                    <span>
-                      {{entityListData?.unit?.unitName}}
-                    </span>
+                    <span>{{commonService?.getPersonLeadUnitDetails(entityListData?.unit)}}</span>
                   </app-no-data-label>
                 </span>
               </div>

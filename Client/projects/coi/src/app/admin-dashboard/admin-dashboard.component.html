@@ -453,7 +453,7 @@
                                                 <span class="break-point-1200"
                                                       [attr.aria-label]="coi?.unit?.unitDetail">
                                                 <span id="id"
-                                                      class="grey-text break-point-1200">{{coi?.unit?.unitDetail}}</span>
+                                                      class="grey-text break-point-1200">{{commonService.getPersonLeadUnitDetails(coi?.unit)}}</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -651,7 +651,7 @@
                                             <label for="department-id" class="label-text">Department <span>:</span></label>
                                             <span class="break-point-1200">
                                                 <app-no-data-label id="department-id" [valueToShow]="coi?.travelEntityName">
-                                                    <span class="grey-text ms-xl-2 ms-sm-0">{{coi?.unitDetails?.unitDetail}}</span>
+                                                    <span class="grey-text ms-xl-2 ms-sm-0">{{commonService.getPersonLeadUnitDetails(coi?.unitDetails)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>

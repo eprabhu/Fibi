@@ -71,7 +71,7 @@
                         <label for="desc-award"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :
                         </label>
                         <span class="margin-left-2 d-flex mt-2 pointer fs-14" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
-                            <span>{{commonService.currentUserDetails.homeUnit}} - {{commonService.currentUserDetails.homeUnitName}}</span>
+                            <span>{{commonService.getPersonLeadUnitDetails(commonService.currentUserDetails)}}</span>
                             <span class="btn btn-primary-icon btn-sm margin-left-1 px-2 py-0" id="close-edit-home-unit" title="Edit Unit" type="button">
                                 <mat-icon class=" fs-16 mt-1 close-line-height">edit</mat-icon>
                             </span>
@@ -264,8 +264,7 @@
                                     <label class="f-14 pe-2">Department : </label>
                                     <span>
                                         <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit">
-                                            <span [title]="existingDisclosureDetails?.homeUnitName" class="grey-text">{{existingDisclosureDetails?.homeUnit}} -
-                                                {{existingDisclosureDetails?.homeUnitName}}</span>
+                                            <span [title]="existingDisclosureDetails?.homeUnitName" class="grey-text">{{commonService.getPersonLeadUnitDetails(existingDisclosureDetails)}}</span>
                                         </app-no-data-label>
                                     </span>
                                 </div>

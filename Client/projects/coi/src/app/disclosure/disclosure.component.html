@@ -36,7 +36,7 @@
                     <p class="m-0 label-text">
                         <strong>
                             {{coiData?.coiDisclosure?.personPrimaryTitle}} |
-                            <span>{{personUnitDetail}}</span> |
+                            <span>{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span> |
                             {{coiData?.coiDisclosure?.personEmail}}
                         </strong>
                     </p>
@@ -99,7 +99,7 @@
                                 <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Department : </label>
                                 <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
-                                        <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</div>
+                                        <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.unit)}}</div>
                                     </app-no-data-label>
                                 </span>
                             </div>
