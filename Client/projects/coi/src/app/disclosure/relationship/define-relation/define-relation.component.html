@@ -35,7 +35,7 @@
               </div>
               <div class="col-4">
                 <label class="label-text">Lead Unit :</label>
-                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
                 <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
               </div>
               <div class="col-3">

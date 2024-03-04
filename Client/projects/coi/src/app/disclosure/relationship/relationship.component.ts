@@ -55,7 +55,7 @@ export class RelationshipComponent implements OnInit {
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
               public _router: Router,
-              private _commonService: CommonService,
+              public _commonService: CommonService,
               public coiService: CoiService
               ) { }
 

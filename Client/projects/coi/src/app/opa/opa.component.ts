@@ -1,20 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
-import {Subject} from 'rxjs';
-import {OpaService} from './services/opa.service';
-import {hideModal, isEmptyObject, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import {DataStoreService} from './services/data-store.service';
-import {CommonService} from '../common/services/common.service';
-import {environment} from '../../environments/environment';
-import {REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
-import {OPA, OpaDisclosure} from './opa-interface';
-import {DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment} from '../shared-components/shared-interface';
-import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
-import {Router} from '@angular/router';
-import {Location} from '@angular/common';
-import {ModalType} from '../disclosure/coi-interface';
-import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
-import {NavigationService} from "../common/services/navigation.service";
+import { Component, OnInit} from '@angular/core';
+import { FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
+import { Subject} from 'rxjs';
+import { OpaService} from './services/opa.service';
+import { hideModal, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import { DataStoreService} from './services/data-store.service';
+import { CommonService} from '../common/services/common.service';
+import { environment} from '../../environments/environment';
+import { REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
+import { OPA } from './opa-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment} from '../shared-components/shared-interface';
+import { HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
+import { Router} from '@angular/router';
+import { Location} from '@angular/common';
+import { ModalType} from '../disclosure/coi-interface';
+import { NavigationService} from "../common/services/navigation.service";
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
@@ -56,7 +55,6 @@ export class OpaComponent implements OnInit {
         canViewPrivateComments: boolean;
         canMaintainPrivateComments: boolean;
     };
-    personUnitDetail = '';
     isHomeClicked = false;
     isSubmitClicked = false;
 
@@ -71,15 +69,10 @@ export class OpaComponent implements OnInit {
     ngOnInit(): void {
         this.getDataFromStore();
         this.setPersonProjectDetails();
-        this.personUnitDetail = this.getPersonLeadUnitDetails();
         this.listenDataChangeFromStore();
         this.subscribeSaveComplete();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
-    }
-
-    getPersonLeadUnitDetails() {
-        return getPersonLeadUnitDetails(this.personProjectDetails);
     }
 
     triggerSave() {

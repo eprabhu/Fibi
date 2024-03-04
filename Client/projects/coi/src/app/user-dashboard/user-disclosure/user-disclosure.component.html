@@ -19,6 +19,7 @@
                                 </div>
                             </h4>
                         </div>
+                        <!-- FCOI Disclosure Card -->
                         <div class="card-content disclosure-master-body-bg min-card-height">
                             <div class="card-body">
                                 <div class="row">
@@ -26,7 +27,7 @@
                                         <div class="row">
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1560" [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                    {{disclosure?.unit?.unitDetail}}</span>
+                                                    {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Certification Date <span>:</span></label>
@@ -130,7 +131,7 @@
                                         <div class="row">
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text">Department <span>:</span></label> <span class="grey-text break-point-1560" [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                    {{disclosure?.unit?.unitDetail}}</span>
+                                                    {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                             </div>
                                             <div class="col-12" tabindex="0">
                                                 <label class="label-text me-2">Certification Date <span>:</span></label>
@@ -317,7 +318,7 @@
                                             <span class="break-point-1560" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                     <span class="grey-text">
-                                                        {{opaDisclosure?.homeUnit}} - {{opaDisclosure?.homeUnitName}}</span>
+                                                        {{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                                 </app-no-data-label>
                                             </span>
 
@@ -413,7 +414,7 @@
                                             <span class="break-point-1560" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                     <span class="grey-text">
-                                                        {{opaDisclosure?.homeUnit}} - {{opaDisclosure?.homeUnitName}}</span>
+                                                        {{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -598,7 +599,7 @@
                                      <!-- Coi card Department -->
                                      <div tabindex="0" class=" mb-md-3 mb-lg-3 mb-xl-0" [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
                                         <label class="label-text">Department <span>:</span></label>
-                                        <span class="grey-text break-point-1200 ps-2">{{getPersonLeadUnitDetails(disclosure)}}</span>
+                                        <span class="grey-text break-point-1200 ps-2">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                     </div>
                                     <!-- Coi card Description (FCOI)-->
                                     <div class="mb-3" *ngIf="disclosure?.fcoiTypeCode== 1" tabindex="0" [attr.aria-label]="'Description' + disclosure?.reviseComment">
@@ -790,8 +791,8 @@
                                             <span class="col break-point-1200" [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
                                                 <app-no-data-label id="department-id" class=""
                                                     [valueToShow]="disclosure?.travelEntityName">
-                                                    <span class="grey-text text-slice ps-2"
-                                                        [title]="disclosure?.unitDetails?.unitDetail">{{getPersonLeadUnitDetails(disclosure)}}</span>
+                                                    <span class="grey-text text-slice"
+                                                        [title]="disclosure?.unitDetails?.unitDetail">{{commonService.getPersonLeadUnitDetails(disclosure?.unitDetails)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -951,7 +952,7 @@
                                             <!-- OPA Card Department -->
                                             <div tabindex="0" [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                                 <label class="label-text">Department <span>:</span></label>
-                                                <span class="grey-text break-point-1200 ps-2">{{getPersonLeadUnitDetails(disclosure)}} </span>
+                                                <span class="grey-text break-point-1200 ps-2">{{commonService.getPersonLeadUnitDetails(disclosure)}} </span>
                                             </div>
                                             <!-- OPA Card Administrator -->
                                             <div class="mb-3" tabindex="0" [attr.aria-label]="'Administrator' + (disclosure?.adminPersonName)">
