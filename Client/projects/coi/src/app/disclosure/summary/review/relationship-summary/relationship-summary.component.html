@@ -1,12 +1,14 @@
 
-<div [id]= selectedProject?.moduleItemId class="left-margin card border shadow mt-2" *ngIf="selectedProject?.moduleCode">
-    <div class="card-header px-4 d-flex align-items-center justify-content-between">
-      <span class="d-flex mt-3 mb-3">
+<div [id]= selectedProject?.moduleItemId class="card coi-card-regular border shadow mt-2" *ngIf="selectedProject?.moduleCode">
+    <div class="card-header px-4 py-2 d-flex align-items-center justify-content-between border-bottom-0">
+      <span class="align-items-center d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
           <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
           <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</strong></u>
+            <span class="coi-text-darker fs-6 clickable-content text-decoration-underline" (click)="openModule();">
+              #{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}
+              </span>
             <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
               <span *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
                 <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
@@ -21,8 +23,8 @@
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
           <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</strong></u>
+            <span class="coi-text-darker clickable-content text-decoration-underline" (click)="openModule();">#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</span>
             <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
               <span *ngIf="!redivdMoreOrLess" (click)="readMoreOrLess=true">
                 <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
@@ -43,35 +45,35 @@
     </div>
       <div *ngIf="isCollapsed" class="card-body">
 			<div class="row">
-				<div class="col ms-3 my-3">
+				<div class="col">
 					<div class="row">
-						<div class="col-5">
-							<label class="label-text">Principal Investigator :</label>
-							<span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+						<div class="col-6 col-md-4 mb-2">
+							<label class="coi-text-dark d-block">Principal Investigator</label>
+							<span class="coi-text-light">{{selectedProject?.principalInvestigator}}</span>
 						</div>
-						<div class="col-4">
-							<label class="label-text">Project Role : </label>
-							<span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
+						<div class="col-6 col-md-4 mb-2">
+							<label class="coi-text-dark d-block">Project Role</label>
+							<span class="coi-text-light">{{selectedProject?.reporterRole}}</span>
 						</div>
-						<div class="col-3">
-							<label class="label-text">Period :</label>
-							<span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+						<div class="col-6 col-md-4 mb-2">
+							<label class="coi-text-dark d-block">Period</label>
+							<span class="coi-text-light">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
 								|
 								dateFormatter}}</span>
 						</div>
-						<div class="col-5">
-							<label class="label-text">Sponsor :</label>
-							<span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
+						<div class="col-6 col-md-4 mb-2">
+							<label class="coi-text-dark d-block">Sponsor</label>
+							<span class="coi-text-light">{{selectedProject?.sponsor}}</span>
 						</div>
-						<div class="col-7">
-							<label class="label-text">Lead Unit :</label>
+						<div class="col-6 col-md-4 mb-2">
+							<label class="coi-text-dark d-block">Lead Unit</label>
 							<app-no-data-label [valueToShow]="selectedProject?.unitName">
-								<span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+								<span class="coi-text-light">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
 							</app-no-data-label>
 						</div>
 					</div>
 				</div>
-				<div class="border-start col-auto p-10 d-flex align-items-center">
+				<div class="col-auto p-10 d-flex align-items-center">
                     <div *ngIf="projectRelations.length > 0" class="me-2">
                         <span class="{{_commonService
                         .getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>

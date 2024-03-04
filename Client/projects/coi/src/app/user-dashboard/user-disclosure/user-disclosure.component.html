@@ -45,7 +45,7 @@
                                                         <span class="coi-text-dark"
                                                             [attr.aria-label]="disclosure?.certifiedAt |dateFormatterWithTimeZone">
                                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                                <span class="text-gray-700">{{disclosure?.certifiedAt|dateFormatterWithTimeZone}}</span>
+                                                                <span class="coi-text-dark">{{disclosure?.certifiedAt|dateFormatterWithTimeZone}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
@@ -62,7 +62,7 @@
                                                         <span class="coi-text-dark"
                                                             [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                                <span class="text-gray-700">{{disclosure?.expirationDate |
+                                                                <span class="coi-text-dark">{{disclosure?.expirationDate |
                                                                     dateFormatter}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="mb-6">
                                             <div class="d-flex">                    
-                                                <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                                <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disclosure Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                         <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
@@ -84,7 +84,7 @@
                                                     </span>
                                                 </div>
                     
-                                                <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                                <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                         <span
@@ -96,7 +96,7 @@
                                                     </span>
                                                 </div>
                     
-                                                <div class="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-2">
+                                                <div class="border border-gray-300 border-dashed ms-2 rounded min-w-100px w-100 py-2 px-2">
                                                     <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                         <span
@@ -337,7 +337,7 @@
                                         </div>
                                         <div class="mb-6">
                                             <div class="d-flex">                    
-                                                <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                                <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disclosure Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                         <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
@@ -352,7 +352,7 @@
                                                     </span>
                                                 </div>
                     
-                                                <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                                <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                         <span
@@ -364,7 +364,7 @@
                                                     </span>
                                                 </div>
                     
-                                                <div class="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-2">
+                                                <div class="border border-gray-300 border-dashed ms-2 rounded min-w-100px w-100 py-2 px-2">
                                                     <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                         <span
@@ -779,7 +779,7 @@
                                     </div>
                                     <div class="mb-6">
                                         <div class="d-flex">                    
-                                            <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                            <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                 <span>
                                                     <app-no-data-label [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
@@ -790,7 +790,7 @@
                                                 </span>
                                             </div>
                 
-                                            <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                            <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                 <span>
                                                     <app-no-data-label
@@ -1011,7 +1011,7 @@
                                     </div>
                                     <div class="mb-6">
                                         <div class="d-flex">                    
-                                            <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                            <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                 <span>
                                                     <app-no-data-label
@@ -1024,7 +1024,7 @@
                                                 </span>
                                             </div>
                 
-                                            <div class="border border-dashed border-gray-300 me-2 min-w-100px px-2 py-2 rounded w-100">
+                                            <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                 <span>
                                                     <app-no-data-label
@@ -1199,9 +1199,9 @@
 <!-- Search and filter -->
 <div class="coi-search-box advance-search mt-2" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
-        <div class="col-lg-5 py-2">
+        <div class="col-lg-5 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
             <div class="fs-14 d-inline-block" 
-                *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
+                 [@leftSlideInOut]>
                 <label>Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
                     tabindex="0"
@@ -1233,13 +1233,13 @@
                     class="filter-pills" role="button">OPA</span>
             </div>
         </div>
-        <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
-            class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative">
+        <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative py-2"
+            *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
+            [ngClass]="currentSelected.tab == 'TRAVEL_DISCLOSURES' ? 'col-lg-12' : ''">
             <span class="filter-search">
                 <mat-icon class="fs-25px searchButton">search</mat-icon>
-                <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()"
-                    type="text" [(ngModel)]="searchText"
-                    (ngModelChange)="getFilteredDisclosureListForSearchWord()">
+                <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()" type="text"
+                    [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
             </span>
             <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
         </div>
