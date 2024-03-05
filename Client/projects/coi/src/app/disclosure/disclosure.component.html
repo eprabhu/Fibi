@@ -6,7 +6,7 @@
                 <div class="card coi-card-expanded">
                     <div class="row mx-0">
                         <div class="col-lg px-0">
-                            <div class="card-header px-3 border-bottom">
+                            <div class="card-header px-3">
                                 <div class="row flex-grow-1">
                                     <div class="col-xl-8 d-flex align-items-center px-0">
                                         <span class="d-flex" tabindex="0"
@@ -374,7 +374,7 @@
                                             <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                                         </button>
                                         <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}">
-                                            <label class="coi-text-lighter d-block fs-13 fw-medium">Last Updated By</label>
+                                            <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
                                             <span class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
                                         </div>
                                 </div>
