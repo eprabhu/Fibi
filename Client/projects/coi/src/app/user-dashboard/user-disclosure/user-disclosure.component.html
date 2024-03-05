@@ -1189,40 +1189,40 @@
     </div>
 </nav>
 <!-- Search and filter -->
-<div class="coi-search-box advance-search mt-2" *ngIf="isShowFilterAndSearch">
+<div class="advance-search coi-search-box mt-2" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
         <div class="col-lg-5 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
             <div class="fs-14 d-inline-block" 
                  [@leftSlideInOut]>
-                <label>Filter By Type :</label>
+                <label class="coi-text-dark">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
                     tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
                     title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-                    class="filter-pills" role="button">All</span>
+                    class="filter-pills coi-text-light" role="button">All</span>
 
                 <span (click)="setFilter('FCOI')" [class.active-filter-pills]="currentSelected.filter=='FCOI'"
                     tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='FCOI' ? 'Selected filter type is fcoi ' : 'Fcoi'"
                     title="Click to filter by type: FCOI" area-describedby="Click to filter by type: FCOI"
-                    class="filter-pills" role="button">FCOI</span>
+                    class="filter-pills coi-text-light" role="button">FCOI</span>
 
                     <span (click)="setFilter('PROJECT')"
                     [class.active-filter-pills]="currentSelected.filter=='PROJECT'" tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='PROJECT' ? 'Selected filter type is Project ' : 'Project'" tabindex="0"
                     title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
-                     class="filter-pills" role="button">Project</span>
+                     class="filter-pills coi-text-light" role="button">Project</span>
 
                 <span *ngIf="currentSelected.tab == 'TRAVEL'" (click)="setFilter('TRAVEL')"
                     [class.active-filter-pills]="currentSelected.filter=='TRAVEL'" tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'"
                     tabindex="0" title="Click to filter by type: Travel"
-                    area-describedby="Click to filter by type: Travel" class="filter-pills" role="button">Travel</span>
+                    area-describedby="Click to filter by type: Travel" class="filter-pills coi-text-light" role="button">Travel</span>
 
                 <span (click)="setFilter('OPA')" [class.active-filter-pills]="currentSelected.filter=='OPA'"
                     tabindex="0" title="Click to filter by type: OPA"
                     [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
-                    class="filter-pills" role="button">OPA</span>
+                    class="filter-pills coi-text-light" role="button">OPA</span>
             </div>
         </div>
         <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative py-2"
