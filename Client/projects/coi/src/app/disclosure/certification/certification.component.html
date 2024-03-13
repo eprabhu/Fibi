@@ -22,7 +22,7 @@
                 <div role="alert"
                 class="error-tab alert ps-4" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
                 <div class="d-flex">
-                    <span class="ms-2 fw-400 fs-14"> 
+                    <span class="ms-2 fw-400 fs-14">
                         <i class="fa fa-exclamation-circle icon mr-2"></i>{{error.validationMessage}}
                     </span>
                     <span class="clickable fs-14" *ngIf="collapseViewMore[errorIndex]" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
@@ -39,7 +39,7 @@
                                 <ng-container *ngFor="let sfiName of error.sfiList; let sfiIndex = index;">
                                     <div *ngIf="sfiIndex<5" class="cursor-pointer clickable-content mt-3 fs-14 fw-500" (click)="openSFI(sfiName)">
                                         <span class="d-flex align-items-center">
-                                            <mat-icon class="fs-2">domain</mat-icon>
+                                            <mat-icon>domain</mat-icon>
                                             <u>{{getSFIName(sfiName)}}</u>
                                         </span>
                                     </div>
@@ -60,7 +60,7 @@
                                     </span>
                                         <div *ngFor="let sfiList of projectList;let SFIIndex = index" class="mt-3 ps-3">
                                             <span class="d-flex align-items-center">
-                                                <mat-icon class="fs-2">domain</mat-icon>
+                                                <mat-icon>domain</mat-icon>
                                                 <u class="clickable-content" (click)="openRelationship(sfiList)">{{sfiList.Entity}} </u>
                                             </span>
                                         </div>

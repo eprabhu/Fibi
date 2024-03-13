@@ -18,7 +18,9 @@
     <div class="offcanvas-body pt-0">
         <!-- sticky-content -->
         <ng-container *ngIf="isStickyNeeded">
-            <ng-content select="[content-sticky]"></ng-content>
+            <div class="position-sticky top-0 z-1">
+                <ng-content select="[content-sticky]"></ng-content>
+            </div>
         </ng-container>
         <!--content -->
         <ng-content select="[content]"></ng-content>

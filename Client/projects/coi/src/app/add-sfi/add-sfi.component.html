@@ -119,12 +119,12 @@
 						<div class="m-0 mb-2 pt-2 row">
 								<!-- Relationship -->
 						<div class="col-7 text-secondary fs-14" tabindex="0" aria-label="Relationship">
-							<span class="fw-bold me-3 label-text">Relationship :</span> 
+							<span class="fw-bold me-3 label-text">Relationship :</span>
 								<span *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships);else noRelation">
 									<ng-container>
 										<em
 												*ngFor="let subsection of existingEntityDetails.personEntityRelationships | keyvalue ;let isKeyFirst = first">
-											<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span> 
+											<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span>
 												<ng-container *ngFor="let relationship of subsection.value;let isFirst = first; let isLast = last;">
 													<span
 														*ngIf="!isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description+'/'}}
@@ -239,7 +239,7 @@
 						<span>
 							<label class="fs-14 fw-500 pb-1 label-text">
 								<span class="mandatory">*</span>
-								Address							
+								Address
 							</label>
 							<textarea appAutoGrow class="form-control" rows="1"
 								[(ngModel)]="entityDetails.coiEntity.address"
@@ -425,7 +425,7 @@
 										(click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
 										[(ngModel)]="involvementDate.involvementEndDate"
 										(ngModelChange)="endDateValidation()"
-										(keypress)="_commonService._keyPress($event, 'date')" 
+										(keypress)="_commonService._keyPress($event, 'date')"
 										[ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"/>
 									<i title="Click to select End date" (click)="endDate.open()"
 									[class.date-field-error]="mandatoryList?.has('endDate')"
@@ -506,7 +506,7 @@
 							</div>
 						</div>
 					</div>
-					<div *ngIf="mandatoryList.has('relationRadio')" class="invalid-feedback d-block fs-13 px-4"
+					<div *ngIf="mandatoryList.has('relationRadio')" class="invalid-feedback d-block fs-13"
 						tabindex="0" aria-label="Relationship Details Validation" aria-describedby="relation-details-validation">
 						<span id="relation-details-validation">{{mandatoryList.get('relationRadio')}}</span>
 					</div>
@@ -627,7 +627,7 @@
   <!-- Entity Details Modal -->
   <button class="d-none" data-bs-toggle="modal" data-bs-target="#entity-details" id="persondetailsTrigger">
   </button>
-  
+
   <div class="modal fade mySkinDialog modal-lg" id="entity-details" tabindex="0" aria-labelledby="exampleModalLabel"
     data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog">
@@ -653,7 +653,7 @@
                 ?'Active':'Inactive'}}</span>
             </div>
             <div class="text-secondary fs-14 col-8 mt-2" tabindex="0" [attr.aria-label]="'Address' + (addEntityConfirmation?.address)">
-              <div> 
+              <div>
 				<label class="grey-text me-2">Address</label></div>
 			  <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
 				<span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
@@ -667,7 +667,7 @@
 					<span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
 					  class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
 					</span>
-				  </ng-template>			
+				  </ng-template>
 				</app-no-data-label>
             </div>
             <div class="col text-secondary fs-14 align-items-center mt-2" tabindex="0" [attr.aria-label]="'Risk' + (addEntityConfirmation?.entityRiskCategory.description)">
@@ -696,7 +696,7 @@
   </div>
 
   <!-- Concurrency Modal -->
-  
+
   <div class="modal modal-coi fade mySkinDialog" id="sfi-concurrency-modal" role="dialog"
     aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">

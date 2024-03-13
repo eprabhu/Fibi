@@ -8,11 +8,11 @@
                     <div class="card-header bg-white px-3 border-bottom">
                         <div class="row flex-grow-1">
                             <div class="col-lg-6 d-flex align-items-center">
-                                <div class="fw-bold cursor-pointer d-flex align-items-center" tabindex="0">
+                                <div class="fw-bold d-flex align-items-center" tabindex="0">
                                     <span (click)="viewEntityDetails()" tabindex="0" title="Click to view Disclosure"
                                         area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure"
-                                        [ngClass]="{'clickable-content':showViewButton()}"
-                                        class="text-primary fw-medium">{{entityDetails?.entityName}}</span>
+                                        [ngClass]="showViewButton() ? 'cursor-pointer clickable-content text-primary' : ''"
+                                        class="fw-medium">{{entityDetails?.entityName}}</span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
                                         *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
                                 </div>
@@ -361,7 +361,7 @@
 </div>
 
 <!-- SFI Details section if SFI Details tab is clicked -->
-<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'"> 
+<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'">
         <div *ngIf="!isEditMode" class="card mb-3">
             <div class="row d-flex px-4 mb-3 mt-4">
                 <div class="col-3" tabindex="0">
@@ -597,7 +597,7 @@
                 </div>
             </div>
         </div>
- 
+
 
 </div>
 

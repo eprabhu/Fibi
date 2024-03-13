@@ -17,7 +17,7 @@ export class ReviewCommentsService {
     }
 
     getCoiReviewComments(params) {
-        return this._http.post(this._commonService.baseUrl + '/reviewComments/fetch', params);
+        return this._http.post(this._commonService.baseUrl + '/coi/reviewComments/fetch', params);
     }
 
     getOPAReviewComments(params) {
@@ -50,7 +50,7 @@ export class ReviewCommentsService {
     addCOIReviewComment(params: any) {
         const formData = new FormData();
         formData.append('formDataJson', JSON.stringify(params));
-        return this._http.post(this._commonService.baseUrl + '/reviewComments', formData);
+        return this._http.post(this._commonService.baseUrl + '/coi/reviewComments', formData);
     }
 
     addOPAReviewComment(params: any) {
