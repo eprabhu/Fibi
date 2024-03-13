@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
-
+ 
 @Component({
   standalone: true,
   selector: 'app-entity-card',
@@ -17,10 +17,10 @@ import { DataService } from '../data.service';
             <p class="sub-heading">Risk : {{data.risk}}</p>
         </div>
         <div class="align-items-end d-flex ms-auto">
-          <button (click)="openEntity(data.entity_number)"
+          <button (click)="openEntity(data.id)"
           class="align-items-center btn btn-primary d-flex fs-14"
           title="Click to view Entity Details"
-          area-describedby="Click to view Entity Details">
+          area-label="Click to view Entity Details">
           <i class="fa fa-eye mr-2" aria-hidden="true"></i>
           View
           </button>
@@ -52,13 +52,15 @@ import { DataService } from '../data.service';
   `],
 })
 export class EntityCardComponent {
-
+ 
   @Input() data: any = {};
   @Input() imagePath: any = {};
-
+ 
   constructor(public graphDataService: DataService) {}
-
+ 
   openEntity(id) {
-    this.graphDataService.openDetailsEvent.next({'node': 'Entity', 'id': id});
+    const ID = id.includes('ENT') ? id.replace('ENT', '') : id;
+    this.graphDataService.openDetailsEvent.next({'node': 'Entity', 'id': ID});
   }
+  
 }
