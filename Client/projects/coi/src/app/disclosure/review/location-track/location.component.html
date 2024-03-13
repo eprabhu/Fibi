@@ -1,19 +1,19 @@
 <!-- Location -->
-<div class="card mb-3">
+<div class="card mb-3 mt-3">
     <div class="card-header px-4 py-2 justify-content-between d-flex align-items-center">
 					<h4 class="card-title ">
                             <div class="fs-16 fw-bold">Reviewers</div>
                             <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
-                            
-                               
+
+
                             <!-- <button class=" updown-arrow mt-1" (click)="isExpanded = !isExpanded">
                                 <i [ngClass]="!isExpanded?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                                     class="fa-large" aria-hidden="true"></i>
                             </button> -->
-                            
+
                     </h4>
                     <span class="d-flex">
-                        <div *ngIf="coiService.isCOIAdministrator && 
+                        <div *ngIf="coiService.isCOIAdministrator &&
                                                     ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                             class=" me-2">
                             <button (click)="clearReviewModal()"
@@ -59,7 +59,7 @@
                     <th scope="col-3">
                         Status
                     </th>
-                    <th scope="col-2" class="text-end table-actions-margin">Actions</th>
+                    <th scope="col-2" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,7 +88,7 @@
                     <td class="text-center" *ngIf="reviewer?.endDate">{{reviewer?.endDate | dateFormatter }}</td>
                     <td class="text-center" *ngIf="!reviewer?.endDate">  </td>
                     <td class="text-center">{{getDaysAtLocation(reviewer.startDate, reviewer.endDate)}}</td>
-                    <td class="text-center">
+                    <td>
                       <app-no-data-label *ngIf="!reviewer?.reviewStatusTypeCode"[valueToShow]="reviewer?.reviewStatusTypeCode"></app-no-data-label>
                       <span *ngIf="reviewer?.reviewStatusTypeCode" [class.text-black]="reviewer?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(reviewer?.reviewerStatusType?.reviewStatusCode)}} fs-14 rounded-5">
                       {{reviewer?.reviewerStatusType?.description}}
@@ -97,7 +97,7 @@
                     <td>
                         <div class="d-flex align-items-center justify-content-center">
                             <ng-container *ngIf="isMangeReviewAction">
-                                <button *ngIf="reviewer.reviewStatusTypeCode == '1'" 
+                                <button *ngIf="reviewer.reviewStatusTypeCode == '1'"
                                     class="btn-primary-icon d-flex align-items-center my-1" title="Start review">
                                     <mat-icon id="start-review-btn" title="Start review" class="material-icons-outlined"
                                         (click)="updateCoiReviewStage(index,reviewer,'START')">play_circle_filled</mat-icon>
@@ -113,7 +113,7 @@
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
-                                
+
                                 <ng-container *ngIf="isMangeReviewAction">
                                     <button  *ngIf="reviewer.reviewStatusTypeCode !== '2'" [matMenuTriggerFor]="beforeMenu"
                                         class="btn-primary-icon d-flex align-items-center my-1"
@@ -136,7 +136,7 @@
                                         <mat-icon class="me-2 more-options-icon">delete</mat-icon>
                                         <span>Delete Review</span>
                                     </button>
-                                </mat-menu> 
+                                </mat-menu>
                         </div>
                     </td>
                 </tr>
@@ -190,14 +190,14 @@
                         <label class="block-display">
                             <span class="text-danger me-1">*</span>Location</label>
                         <app-look-up (selectedResult)="onLocationSelect($event)"
-                        [options]="disReviewLocation" 
+                        [options]="disReviewLocation"
                         [selectedLookUpList]="locationType"
                         [isError]="validationMap.has('location')"
                         [defaultValue]="reviewDetails.reviewLocationType ? reviewDetails.reviewLocationType.description : ''"
                         [uniqueId]="'disclosure-review-location'">
                         </app-look-up>
-                        <div class="ms-2" *ngIf="validationMap.has('location')">
-                            <span class="mandatory d-inline-block">{{validationMap.get('location')}}</span>
+                        <div *ngIf="validationMap.has('location')">
+                            <span class="mandatory text-danger fs-14 d-inline-block">{{validationMap.get('location')}}</span>
                         </div>
                     </div>
                     <div class="col-4">
@@ -207,7 +207,7 @@
                                      [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
                         <div *ngIf="validationMap?.has('reviewer')">
-                           <span class="mandatory d-inline-block">{{validationMap?.get('reviewer')}}</span>
+                           <span class="mandatory text-danger fs-14 d-inline-block">{{validationMap?.get('reviewer')}}</span>
                         </div>
                     </div>
                     <div class="col-4">
@@ -220,7 +220,7 @@
                             [uniqueId]="'disclosure-review-status'">
                             </app-look-up>
                             <div *ngIf="validationMap?.has('reviewStatus')">
-                                <span class="mandatory d-inline-block">{{validationMap?.get('reviewStatus')}}</span>
+                                <span class="mandatory text-danger fs-14 d-inline-block">{{validationMap?.get('reviewStatus')}}</span>
                             </div>
                     </div>
                 </div>
@@ -239,8 +239,8 @@
                                   <mat-datepicker #startDate>
                                   </mat-datepicker>
                                 </span>
-                                <div class="ms-2" *ngIf="validationMap.has('reviewStartDate')">
-                                    <span class="mandatory d-inline-block">{{validationMap.get('reviewStartDate')}}</span>
+                                <div *ngIf="validationMap.has('reviewStartDate')">
+                                    <span class="mandatory text-danger fs-14 d-inline-block">{{validationMap.get('reviewStartDate')}}</span>
                                 </div>
                               </div>
                     </div>
@@ -257,11 +257,11 @@
                               <mat-datepicker #endDate>
                               </mat-datepicker>
                             </span>
-                            <div class="ms-2" *ngIf="validationMap.has('reviewEndDate')">
-                                <span class="mandatory d-inline-block">{{validationMap.get('reviewEndDate')}}</span>
+                            <div *ngIf="validationMap.has('reviewEndDate')">
+                                <span class="mandatory text-danger fs-14 d-inline-block">{{validationMap.get('reviewEndDate')}}</span>
                             </div>
-                            <div class="ms-2" *ngIf="validationMap.has('endDate')">
-                                <span class="mandatory d-inline-block">{{validationMap.get('endDate')}}</span>
+                            <div *ngIf="validationMap.has('endDate')">
+                                <span class="mandatory text-danger fs-14 d-inline-block">{{validationMap.get('endDate')}}</span>
                             </div>
                           </div>
                     </div>
