@@ -1,4 +1,4 @@
-<div class="sticky-0 page-header-color" [@fadeInOutHeight]>
+<div class="sticky-0" [@fadeInOutHeight]>
   <div class="mx-4 row">
     <div class="col-md-9 col-12 p-0">
       <div class="border shadow-sm">
@@ -33,7 +33,7 @@
             <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded"
             class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
             aria-label="Click here to expand / collapse">
-              <mat-icon class="mb-2 icon-height">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+              <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
             </button>
           </div>
         </div>

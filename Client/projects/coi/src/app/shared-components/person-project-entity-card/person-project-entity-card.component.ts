@@ -17,10 +17,11 @@ export class PersonProjectEntityCardComponent implements OnChanges {
     isReadMore = false;
     personUnitDetail = '';
 
-    constructor(public _commonService: CommonService) { }
+    constructor(public commonService: CommonService) { }
 
     ngOnChanges(): void {
-        this.personUnitDetail = this._commonService.getPersonLeadUnitDetails(this.personProjectOrEntity);
+        this.personUnitDetail = this.commonService.getPersonLeadUnitDetails(this.personProjectOrEntity);
+        
     }
     
     getPersonLeadUnitDetail() {
