@@ -43,14 +43,13 @@
                         </div>
                         <div class="row">
                             <div class="col d-flex">
-                                <label class="grey-text left-margin me-2">Person associated with the Disclosure:
-                                </label>
+                                <label class="grey-text left-margin me-2">Person associated with the Disclosure : </label>
                                 <app-no-data-label [valueToShow]="disclosureDetails?.person?.fullName">
                                     <span class="grey-text fw-normal">{{disclosureDetails?.person?.fullName}}</span>
                                 </app-no-data-label>
                             </div>
                             <div class="col d-flex">
-                                <label class="grey-text">Department: </label>
+                                <label class="grey-text">Department : </label>
                                 <span class="ml-2 grey-text fw-normal">
                                     <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
                                         <span>{{commonService.getPersonLeadUnitDetails(disclosureDetails?.unit)}}</span>
@@ -60,7 +59,7 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col d-flex align-items-center">
-                                <label class="grey-text">Risk: </label>
+                                <label class="grey-text">Risk : </label>
                                 <span class="ml-2 grey-text fw-normal">
                                     <div class="text-color fs-14 d-flex align-items-center">
                                         <span class="text-secondary fs-14">
@@ -103,7 +102,7 @@
         <div class="card-body">
             <div>
                 <div class="card comment-card shadow-sm mx-1">
-                    <div class="row ml-15 mt-4">
+                    <div class="row mx-0 mt-4">
                         <div class="col-4 ml-15 align-items-center">
                             <label class="fs-14 fw-500">Risk:</label>
                             <span>
@@ -124,7 +123,7 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="col mr-10">
+                        <div class="col">
                             <label class="fs-14 fw-500">Describe the reason for Risk level change:</label>
                             <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
                                 [(ngModel)]="riskComment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
@@ -135,9 +134,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="text-muted mb-3 mr-10 mt-2">
-                        <button type="button" class="btn btn-primary float-end fs-14" (click)="checkForModification()">Save</button>
-                        <button type="button" class="btn btn-outline-secondary float-end mr-10"
+                    <div class="text-muted mb-3 me-2 mt-2">
+                        <button type="button" class="btn btn-primary float-end fs-14" title="Save" (click)="checkForModification()">Save</button>
+                        <button type="button" class="btn btn-outline-secondary float-end me-2 fs-14" title="Clear"
                             (click)="clearRiskChanges()">Clear</button>
                     </div>
                 </div>
@@ -146,7 +145,7 @@
 
         <!-- risk history heading -->
         <div class="main-title mt-2 mx-4" id="">
-            <h3 class="d-flex align-items-center mx-4"><strong>Risk History</strong>
+            <h3 class="d-flex align-items-center fs-18"><strong>Risk History</strong>
                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Click to view Risk history."
                     data-bs-placement="top">
                 </span>
@@ -164,11 +163,10 @@
                                 <thead class="sr-none"></thead>
                                 <tbody>
                                     <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
-                                        <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
+                                        <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3 fs-16">
                                             {{disclosure.key}}</h4>
                                         <ul class="pl-4 pr-3 mb-0">
-                                            <li *ngFor="let historyEntry of disclosure.value;let index=index"
-                                                class="p-3">
+                                            <li *ngFor="let historyEntry of disclosure.value;let index=index">
                                                 <div class="form-row">
                                                     <div class="col">
                                                         <p class="fs-14 mb-0">

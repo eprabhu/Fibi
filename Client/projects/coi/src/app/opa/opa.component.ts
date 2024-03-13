@@ -227,6 +227,8 @@ export class OpaComponent implements OnInit {
         this.personProjectDetails.personFullName = this.opa.opaDisclosure.opaPerson.personName;
         this.personProjectDetails.unitNumber = this.opa.opaDisclosure.homeUnit;
         this.personProjectDetails.unitName = this.opa.opaDisclosure.homeUnitName;
+        this.personProjectDetails.homeUnit = this.opa.opaDisclosure.homeUnit;
+        this.personProjectDetails.homeUnitName = this.opa.opaDisclosure.homeUnitName;
     }
 
     completeDisclosureReview() {

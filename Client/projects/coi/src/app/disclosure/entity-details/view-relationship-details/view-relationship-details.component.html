@@ -61,8 +61,9 @@
                                     <span class="text-color fs-14">{{entityDetails?.phone}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div tabindex="0" class="col-lg-8">
-                                <label class="d-block fw-500 fs-14 label-text mt-3">Relationship</label>
+                            <div tabindex="0" class="col-lg-12">
+                                <label class="fw-500 fs-14 label-text mt-3 me-2">Relationship : </label>
+                            <span>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
                                         <em
@@ -83,6 +84,7 @@
                                         </em>
                                     </span>
                                 </app-no-data-label>
+                            </span>
                             </div>
                         </div>
                     </div>
@@ -330,7 +332,6 @@
 
     <!-- Add Relationship Button when no relation is added -->
     <ng-container *ngIf="this.entityDetailsServices.definedRelationships?.length == 0 && canAddRelationship()">
-        <div class="card mx-4">
             <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
                 <p class="fs-14 m-0">
                     <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
@@ -347,7 +348,6 @@
                     <span class="mr-2 fs-15">Add Relationship</span>
                 </button>
             </span>
-        </div>
     </ng-container>
 
     <!-- No data section when no relation and there is no right to add relation -->

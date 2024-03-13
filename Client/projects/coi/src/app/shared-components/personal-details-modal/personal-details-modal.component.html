@@ -36,7 +36,7 @@
                 <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Cancel"
                     (click)="addNewValue(false)">Close
                 </button>
-                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" class="btn btn-primary me-0"
+                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" class="btn btn-primary me-0" title="View Person Details"
                     type="button" (click)="viewPersonDetails(userdetails?.personId)">
                     View Person Details
                 </button>
