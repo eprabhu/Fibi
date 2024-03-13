@@ -155,7 +155,7 @@
     background-color: var(--theme-card-body-bg-color) !important;
     box-shadow: -1px 3px 50px -17px rgb(0 0 0 / 22%);
     border-radius: 1.250rem;
-    border: 0;
+    border: var(--theme-card-body-border);
     .card-header {
         padding: 1rem 1.875rem !important;
     }
@@ -235,4 +235,5 @@
 
 .coi-box-red {  
     background-color: var(--theme-box-red-bg-color);
+    border-style: dashed !important;
   }

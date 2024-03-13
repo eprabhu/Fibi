@@ -1250,7 +1250,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
-                                    <div class="col-12 d-inline-flex align-items-center mb-2">
+                                    <div class="col-12 d-inline-flex mb-2">
                                         <!-- Coi card badge -->
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
@@ -1259,21 +1259,26 @@
                                             </span></span>
                                         <!-- Coi card header -->
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
-                                            class="mb-0 d-flex fs-14 align-items-center">
-                                            <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i>
-                                            <span class="coi-text-light text-nowrap h-14" tabindex="0"
-                                                [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
-                                                {{disclosure.disclosurePersonFullName}}</span>
+                                            class="mb-0 d-flex fs-14">
+                                            <span class="d-inline-flex">
+                                                <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
+                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <span class="coi-text-light text-nowrap h-14" tabindex="0"
+                                                    [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
+                                                    {{disclosure.disclosurePersonFullName}}</span>
+                                            </span>
                                             <ng-container
                                                 *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'"
                                                 class="">
-                                                <span class="" tabindex="0"
+                                                <span class="d-inline-flex" tabindex="0"
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
-                                                    <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon"
-                                                        src="{{deployMap}}assets/images/proposal.png">
-                                                    <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon"
-                                                        src="{{deployMap}}assets/images/award.png">
+                                                    <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
+                                                    <!-- <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon"
+                                                        src="{{deployMap}}assets/images/proposal.png"> -->
+                                                    <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
+                                                    <!-- <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon"
+                                                        src="{{deployMap}}assets/images/award.png"> -->
                                                     <span class="hyper-link coi-text-darker fs-6">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">...
@@ -1479,11 +1484,14 @@
                                         </span>
                                         <!-- Travel Card Entity -->
                                         <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0">
-                                            <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i>
-                                            <strong class="coi-text-light h-14 text-nowrap" tabindex="0"
-                                                [attr.aria-label]="'Disclosure Person' + (disclosure.travellerName)">
-                                                {{disclosure.travellerName}}
-                                            </strong>
+                                            <span class="d-inline-flex">
+                                                <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
+                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <strong class="coi-text-light h-14 text-nowrap" tabindex="0"
+                                                    [attr.aria-label]="'Disclosure Person' + (disclosure.travellerName)">
+                                                    {{disclosure.travellerName}}
+                                                </strong>
+                                            </span>
                                             <ng-container>
                                                 <span class="pipe me-1"></span>
                                                 <mat-icon class="fs-18 me-1">apartment</mat-icon>
@@ -1654,7 +1662,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
-                                    <div class="col-12 d-inline-flex align-items-center mb-2">
+                                    <div class="col-12 d-inline-flex mb-2">
                                         <!-- OPA Card badge -->
                                         <span class="d-flex">
                                             <span
@@ -1668,16 +1676,19 @@
                                             </span>
                                         </span>
                                         <!-- OPA Card Reporting Cycle -->
-                                        <h4 *ngIf="disclosure.opaDisclosureId" class="align-items-center d-flex fs-14 mb-0">
-                                            <i class="fa fa-user me-1" aria-hidden="true"></i>
-                                            <span class="coi-text-light h-14 text-nowrap" tabindex="0"
-                                                [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
+                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex fs-14 mb-0">
+                                            <span class="d-inline-flex">
+                                                <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
+                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <span class="coi-text-light h-14 text-nowrap" tabindex="0"
+                                                    [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
+                                            </span>
                                             <ng-container class="ms-1">
                                                 <div class="col" tabindex="0"
                                                     [attr.aria-label]="'Reporting Cycle' + (disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate |dateFormatter)">
                                                     <span class="pipe mx-1"></span>
                                                     <span class="text-nowrap">Reporting Cycle:</span>
-                                                    <span class="coi-text-darker fs-6 hyper-link ms-1">
+                                                    <span class="coi-text-darker hyper-link ms-1">
                                                         <span>{{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate | dateFormatter}}</span>
                                                     </span>
                                                 </div>
@@ -1769,7 +1780,7 @@
                     <div class="row">
                         <ng-container *ngIf="!disclosure?.travelDisclosureId">
                             <div class="col-lg-10">
-                                <div class="row">
+                                <div class="row align-items-center">
                                     <!-- <div class="col-lg-9">
                                         <div class="d-flex" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
                                             <div class="me-5">
@@ -1840,8 +1851,22 @@
                                             </div>
                                         </div>
                                     </div> -->
-                                    <div class="col-md-3 text-center text-lg-start" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
-                                        <div class="link-heading align-items-center fs-14 cursor-pointer flex-column" *ngIf="!disclosure?.opaDisclosureId"
+                                    <div class="col-md-4 text-center text-lg-start" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
+                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId"
+                                            [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                            [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
+                                            <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="disclosure?.noOfSfi"
+                                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                                                area-describedby="Click to view SFI list"
+                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">{{disclosure?.noOfSfi
+                                                || 0}}</span>
+                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                                [class.text-decoration-underline]="isHover[index]&& disclosure?.noOfSfi > 0"
+                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">Significant
+                                                Financial Interest</span>
+                                        </div>
+
+                                        <!-- <div class="link-heading align-items-center fs-14 cursor-pointer flex-column" *ngIf="!disclosure?.opaDisclosureId"
                                             [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                                             [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                                             area-describedby="Click to view SFI list">
@@ -1860,10 +1885,22 @@
                                                     </strong>
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <div class="col-md-3 text-center text-lg-start">
-                                        <div class="link-heading align-items-center fs-14 cursor-pointer flex-column"
+                                    <div class="col-md-2 text-center text-lg-start">
+                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
+                                        [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                        area-describedby="Click to view Proposal list">
+                                            <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                area-describedby="Click to view Proposal list"
+                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</span>
+                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfProposal > 0"
+                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
+                                        </div>
+
+                                        <!-- <div class="link-heading align-items-center fs-14 cursor-pointer flex-column"
                                             *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                             [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                             [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
@@ -1882,10 +1919,21 @@
                                                     </strong>
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <div class="col-md-3 text-center text-lg-start">
-                                        <div class="link-heading align-items-center fs-14 cursor-pointer  flex-column"
+                                    <div class="col-md-2 text-center text-lg-start">
+                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
+                                        [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                        [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
+                                        area-describedby="Click to view Award list">
+                                            <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</span>
+                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
+                                                (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
+                                        </div>
+
+
+                                        <!-- <div class="link-heading align-items-center fs-14 cursor-pointer  flex-column"
                                             *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                             [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                             [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
@@ -1902,9 +1950,9 @@
                                                     </strong>
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <div class="col-md-3 text-center text-md-start" tabindex="0">
+                                    <div class="col-md-4 text-center text-md-start" tabindex="0">
                                         <label class="coi-text-lighter d-block fs-13 fw-medium" for="id">Last Updated By</label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                             [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
