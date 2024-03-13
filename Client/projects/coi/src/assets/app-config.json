@@ -11,6 +11,6 @@
   "elasticDelimiter": ":",
   "elasticPassword": "changeme",
   "elasticAuthScheme": "Basic",
-  "elasticIndexUrl": "http://192.168.1.47:9200/",
+  "elasticIndexUrl": "http://192.168.1.225:9210/",
   "fibiApplicationUrl": "http://192.168.1.47:8080/fibi"
 }

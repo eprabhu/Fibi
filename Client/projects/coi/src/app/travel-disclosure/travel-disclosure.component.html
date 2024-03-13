@@ -458,12 +458,12 @@
         <span>{{modalActionBtnName}} Travel Disclosure</span>
     </ng-container>
 
-    <ng-container content-sticky>
-        <app-person-project-entity-card [personProjectOrEntity]="personEntityDetails"></app-person-project-entity-card>
+    <ng-container content>
         <!-- help text -->
-        <div class="mx-3 mt-2" >
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "modalActionBtnName" ></app-help-text>
+        <div>
+            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "modalActionBtnName" [rowLimit]="2"></app-help-text>
         </div>
+        <app-person-project-entity-card [personProjectOrEntity]="personEntityDetails" [disclosureHeaderDetails]="travelDisclosure"></app-person-project-entity-card>
     </ng-container>
 
     <!-- modal content -->

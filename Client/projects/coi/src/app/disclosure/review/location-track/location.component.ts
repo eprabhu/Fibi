@@ -364,5 +364,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.personProjectDetails.personFullName = this.coiDisclosure.person.fullName;
         this.personProjectDetails.projectDetails = this.projectDetail;
         this.personProjectDetails.unitDetails = this.coiDisclosure.person.unit.unitDetail;
+        this.personProjectDetails.homeUnit = this.coiDisclosure?.person?.unit?.unitNumber;
+        this.personProjectDetails.homeUnitName = this.coiDisclosure?.person?.unit?.unitName;
     }
 }
