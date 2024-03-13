@@ -125,11 +125,11 @@ input:checked+.slider:before {
     left: 95px;
 }
 
-#add-new-entity,
-#advanced-search {
-    width: 145px;
-    height: 33px;
-}
+// #add-new-entity,
+// #advanced-search {
+//     width: 145px;
+//     height: 33px;
+// }
 
 .border-nav {
     width: 26rem;
@@ -351,3 +351,23 @@ td {
     white-space: nowrap; /* added line */
     width: 1px;
  }
+
+ .nav-line-tabs .nav-item .nav-link {
+    color: #99A1B7;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease;
+    padding: 0.5rem 0;
+    margin: 0 1rem;
+}
+
+ .nav-line-tabs .nav-item.active .nav-link {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--bs-primary);
+    transition: color 0.2s ease;
+}
+
+.nav-line-tabs.nav-line-tabs-2x .nav-item.active .nav-link {
+    border-bottom-width: 2px;
+}

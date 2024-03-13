@@ -757,7 +757,7 @@
                                     </div>
                                     <div class="col-lg col-md-4 col-12 last-updated" tabindex="0">
                                         <label class="label-text" for="id">Last Updated By <span>:</span> </label>
-                                        <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="coi?.updateUser + ' on ' + 
+                                        <span id="last-updated" class="grey-text break-point-1200" [attr.aria-label]="coi?.updateUser + ' on ' +
                                                         (coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
                                             {{coi?.updateUser}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone:
                                             'long'}}</span>
@@ -851,7 +851,7 @@
         </div>
     </section>
     <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"
-        [disclosureId]="addAdmin.disclosureId" [path]="assignAdminPath">
+        [disclosureId]="addAdmin.disclosureId" [path]="assignAdminPath" [actionType]="'A'">
     </app-assign-administrator-modal>
     <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
         [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"

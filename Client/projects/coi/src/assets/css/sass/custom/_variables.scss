@@ -24,6 +24,7 @@
 
     --theme-font-size: 0.875rem;
     --theme-line-height: 1.5;
+    --theme-electric-blue: rgba(44, 119, 244, .1);
 }
 
 
@@ -193,10 +194,10 @@ $theme-map-dark: (
     $--theme-sidebar-box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05),
     $--theme-sidebar-border: 0,
 
-    $--theme-card-bg-color: #1e1e2d,
-    $--theme-card-border: 0,
+    $--theme-card-bg-color: #15171c,
+    $--theme-card-border: 1px solid #1e2027,
     $--theme-card-box-shadow: none,
-    $--theme-card-body-bg-color: #1e1e2d,
+    $--theme-card-body-bg-color: #15171c,
     $--theme-card-body-border: 1px solid #1E2027,
     $--theme-card-symbol-bg-color: lighten(#1e1e2d, 3%),
     $--theme-card-symbol-color: lighten(#1e1e2d, 40%),
@@ -285,7 +286,7 @@ $theme-map-blue: (
     $--theme-card-border: 1px solid #F1F1F4,
     $--theme-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03),
     $--theme-card-body-bg-color: #f0fff1,
-    $--theme-card-body-border: 1px solid #e5e8f5,
+    $--theme-card-body-border: 0,//1px solid #e5e8f5,
     $--theme-card-symbol-bg-color: darken(#f0fff1, 3%),
     $--theme-card-symbol-color: darken(#f0fff1, 75%),
 

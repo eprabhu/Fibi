@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
@@ -116,6 +116,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
+    isUserCollapse = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -136,6 +137,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.listenScreenSize();
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
@@ -776,6 +778,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 return 'bg-award-clip';
             default:
                 return;
+        }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = !(window.innerWidth <= 992);
         }
     }
 }

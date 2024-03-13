@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title" *ngIf="!isShowExistingDisclosure">
+          <h4 class="modal-title" *ngIf="!isShowExistingDisclosure"> 
             <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Revise
                 Disclosure : #{{disclosureNumber}}</ng-container>
             <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Create FCOI
@@ -18,7 +18,7 @@
               <div class="alert alert-primary d-flex p-2" role="alert" title="{{setHelpTextToolTip()}}" data-bs-placement="top">
                   <mat-icon role="img" class="mat-icon material-icons mat-icon-no-color fs-16" aria-hidden="true"
                      data-mat-icon-type="font">info</mat-icon>
-
+                
                     <p class="fs-14 mb-0" *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
                         <span class="d-flex align-items-start">
                         <mat-icon class="fs-16">keyboard_double_arrow_right</mat-icon> To disclose at any other unit, please click on the 'Edit' icon near the unit field, and proceed to disclosure creation.
@@ -28,7 +28,7 @@
                          <mat-icon class="fs-16">keyboard_double_arrow_right</mat-icon> To revert to the original unit, click on the 'Reset' icon.
                         <br>
                     </span>
-                        <span *ngIf="(triggeredFrom == 'TRAVEL_DISCLOSURE')">
+                        <span *ngIf="(triggeredFrom == 'TRAVEL_DISCLOSURE')"> 
                             <span class="d-flex align-items-start">
                                 <mat-icon class="fs-16"> keyboard_double_arrow_right</mat-icon> Add the purpose of the trip in the field provided.</span>
                     </span>
@@ -118,12 +118,11 @@
                 <label class="f-14 pe-2">Department: </label>
                 <span class="fs-14">
                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit">
-                        <span class="fs-14" [title]="existingDisclosureDetails?.homeUnitName">{{commonService.getPersonLeadUnitDetails(existingDisclosureDetails)}}
-                        </span>
+                        <span class="fs-14" [title]="existingDisclosureDetails?.homeUnitName">{{commonService.getPersonLeadUnitDetails(existingDisclosureDetails)}}</span>
                     </app-no-data-label>
                 </span>
             </div>
-
+                    
             <div class="col-4 mb-2">
                 <label class="f-14 pe-2">Create Date : </label>
                 <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
@@ -145,7 +144,7 @@
                         dateFormatter}}</span>
                 </app-no-data-label>
             </div>
-
+            
             <div class="col-4">
                 <label class="f-14 pe-2">Review Status : </label>
                 <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
@@ -153,7 +152,7 @@
                         class="badge {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
                 </app-no-data-label>
             </div>
-
+           
             <div class="col-4">
                 <label class="f-14 pe-2">Disclosure Status : </label>
                 <app-no-data-label
@@ -162,7 +161,7 @@
                         class="{{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}">{{existingDisclosureDetails?.conflictStatus}}</span>
                 </app-no-data-label>
             </div>
-
+          
             <div class="col-4">
                 <label class="f-14 pe-2">Disposition Status : </label>
                 <app-no-data-label
@@ -246,7 +245,7 @@
                             </span>
                         </app-no-data-label>
                     </div>
-
+                    
                 </div>
             </div>
 
@@ -390,11 +389,11 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Cancel" (click)="clearModal()">Cancel</button>
-          <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn"
+          <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn" 
           type="button" (click)="createOrReviseDisclosure()">
           <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
           <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container></button>
-          <button  *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary" id="claim-sumbit-no-btn"
+          <button  *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary" id="claim-sumbit-no-btn" 
           data-bs-dismiss="modal" type="button" title="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();"
           area-describedby="Click here to continue with creating the project disclosure">Create</button>
           <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" data-bs-dismiss="modal" type="button" title="Click here to continue with creating the travel disclosure"

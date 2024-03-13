@@ -1,25 +1,25 @@
-<div class="advance-search" *ngIf="!isHideFilterSearchAndShowCreate">
+<div class="advance-search coi-search-box" *ngIf="!isHideFilterSearchAndShowCreate">
   <div class="row m-0">
     <div class="col-lg-5 py-2">
       <div>
-        <label>Filter By Status :</label>
+        <label class="coi-text-dark">Filter By Status :</label>
         <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0" 
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
               title="Click to filter by type: All"
-              class="filter-pills"
+              class="filter-pills coi-text-light"
               role="button">All</span>
         <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='COMPLETE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='COMPLETE' ? 'Selected filter type is Complete ' : 'Complete'"
               title="Click to filter by type: Complete" 
-              class="filter-pills" role="button">Complete</span>
+              class="filter-pills coi-text-light" role="button">Complete</span>
         <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INCOMPLETE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INCOMPLETE' ? 'Selected filter type is Incomplete' : 'Incomplete'"
               title="Click to filter by type: Incomplete" 
-              class="filter-pills" role="button">Incomplete</span>
+              class="filter-pills coi-text-light" role="button">Incomplete</span>
         <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INACTIVE' ? 'Selected filter type is Inactive ' : 'Inactive'"
               title="Click to filter by type: Inactive"
-              class="filter-pills" role="button">Inactive</span>
+              class="filter-pills coi-text-light" role="button">Inactive</span>
     </div>
   </div>
     <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative">
