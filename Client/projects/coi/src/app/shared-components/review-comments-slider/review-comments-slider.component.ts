@@ -1,17 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
-import { CommentConfiguration, RO, ReviewComments, CompleterOptions, CommentFetch, CoiReviewComment } from './review-comments-interface';
+import { CommentConfiguration, CompleterOptions, CommentFetch, CoiReviewComment } from './review-comments-interface';
 import { ReviewCommentsService } from './review-comments.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { topSlideInOut } from '../../common/utilities/animations';
 import {EDITOR_CONFIURATION} from '../../../../../fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { DataStoreService } from '../../disclosure/services/data-store.service';
-import { CoiService } from '../../disclosure/services/coi.service';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 

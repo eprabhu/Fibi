@@ -53,7 +53,7 @@
                                 <label class="grey-text">Department: </label>
                                 <span class="ml-2 grey-text fw-normal">
                                     <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
-                                        <span>{{disclosureDetails?.unit?.unitDetail}}</span>
+                                        <span>{{commonService.getPersonLeadUnitDetails(disclosureDetails?.unit)}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
