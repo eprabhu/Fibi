@@ -1251,19 +1251,16 @@
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
                                     <div class="col-12 d-inline-flex mb-2">
-                                        <!-- Coi card badge -->
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
                                                 <span>{{ disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType }}</span>
                                             </span></span>
-                                        <!-- Coi card header -->
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
                                             class="mb-0 d-flex fs-14">
                                             <span class="d-inline-flex">
-                                                <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
                                                 <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
-                                                <span class="coi-text-light text-nowrap h-14" tabindex="0"
+                                                <span class="coi-text-light text-nowrap fs-6" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
                                                     {{disclosure.disclosurePersonFullName}}</span>
                                             </span>
@@ -1274,12 +1271,8 @@
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
                                                     <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
-                                                    <!-- <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon"
-                                                        src="{{deployMap}}assets/images/proposal.png"> -->
                                                     <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
-                                                    <!-- <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon"
-                                                        src="{{deployMap}}assets/images/award.png"> -->
-                                                    <span class="hyper-link coi-text-darker fs-6">
+                                                    <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">...
                                                             <a *ngIf="!readMoreOrLess[index]"
@@ -1487,28 +1480,30 @@
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
-                                                <strong class="coi-text-light h-14 text-nowrap" tabindex="0"
+                                                <strong class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure Person' + (disclosure.travellerName)">
                                                     {{disclosure.travellerName}}
                                                 </strong>
                                             </span>
                                             <ng-container>
-                                                <span class="pipe me-1"></span>
-                                                <mat-icon class="fs-18 me-1">apartment</mat-icon>
-                                                <span class="coi-text-light h-14 text-nowrap" tabindex="0"
-                                                    [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity
-                                                    :</span>
-                                                <span class="coi-text-darker fs-6 hyper-link">
-                                                    {{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
-                                                    <span
-                                                        *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">...
-                                                        <a *ngIf="!readMoreOrLess[index]"
-                                                            (click)="readMoreOrLess[index]=true"><span
-                                                                class="readMore fw-500">Read More</span></a>
+                                                <span class="pipe mx-1"></span>
+                                                <span class="d-inline-flex">
+                                                    <mat-icon class="fs-18 me-1">apartment</mat-icon>
+                                                    <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
+                                                        [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity
+                                                        :</span>
+                                                    <span class="coi-text-darker fs-6 hyper-link">
+                                                        {{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
+                                                        <span
+                                                            *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">...
+                                                            <a *ngIf="!readMoreOrLess[index]"
+                                                                (click)="readMoreOrLess[index]=true"><span
+                                                                    class="readMore fw-500">Read More</span></a>
+                                                        </span>
+                                                        <a *ngIf="readMoreOrLess[index]"
+                                                            (click)="readMoreOrLess[index]=false"><span
+                                                                class="readMore ms-1 fw-500">Read Less</span></a>
                                                     </span>
-                                                    <a *ngIf="readMoreOrLess[index]"
-                                                        (click)="readMoreOrLess[index]=false"><span
-                                                            class="readMore ms-1 fw-500">Read Less</span></a>
                                                 </span>
                                             </ng-container>
                                         </h4>
@@ -1680,15 +1675,15 @@
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
                                                 <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
-                                                <span class="coi-text-light h-14 text-nowrap" tabindex="0"
+                                                <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
                                             </span>
                                             <ng-container class="ms-1">
-                                                <div class="col" tabindex="0"
+                                                <div class="d-inline-flex" tabindex="0"
                                                     [attr.aria-label]="'Reporting Cycle' + (disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate |dateFormatter)">
                                                     <span class="pipe mx-1"></span>
-                                                    <span class="text-nowrap">Reporting Cycle:</span>
-                                                    <span class="coi-text-darker hyper-link ms-1">
+                                                    <span class="fs-6 text-nowrap">Reporting Cycle:</span>
+                                                    <span class="coi-text-darker hyper-link fs-6 ms-1">
                                                         <span>{{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate | dateFormatter}}</span>
                                                     </span>
                                                 </div>
