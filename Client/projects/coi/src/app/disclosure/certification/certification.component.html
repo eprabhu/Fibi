@@ -1,13 +1,10 @@
-<div class="border pi-info-text p-3 rounded-1">
+<div class="alert alert-secondary my-2">
     <p class="fs-14 m-0">
-
         <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
             {{headerInfoText | slice:0:650}}...
             <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u
                     title="Expand COI policy text">Read More</u></span>
         </span>
-
-
         <ng-template #showFullInfo>
             {{headerInfoText}}
             <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u
@@ -15,17 +12,13 @@
         </ng-template>
     </p>
 </div>
-<div class="card mt-1" [@fadeInOutHeight]>
-    <div class="errorMessage">
-        <div class="text-danger" *ngFor="let error of _coiService.certificationResponseErrors; let errorIndex = index">
+<div class="card mt-2 p-4" [@fadeInOutHeight]>
+    <div class="fs-14">
+        <ng-container *ngFor="let error of _coiService.certificationResponseErrors; let errorIndex = index">
             <ng-container *ngIf="this._coiService.certificationResponseErrors.length > 0">
-                <div role="alert"
-                class="error-tab alert ps-4" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
-                <div class="d-flex">
-                    <span class="ms-2 fw-400 fs-14">
-                        <i class="fa fa-exclamation-circle icon mr-2"></i>{{error.validationMessage}}
-                    </span>
-                    <span class="clickable fs-14" *ngIf="collapseViewMore[errorIndex]" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
+                <div role="alert" class="alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
+                        <i class="fa fa-exclamation-circle icon me-2"></i>{{error.validationMessage}}
+                    <span *ngIf="collapseViewMore[errorIndex]" class="clickable fs-14" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
                         <u>{{error.sfiList && error.sfiList.length>0 ? 'View affected SFIs' : 'View affected Projects'}}</u>
                         <i class="fa fa-angle-double-up ms-2"></i>
                     </span>
@@ -33,13 +26,12 @@
                         <u>{{error.sfiList && error.sfiList.length>0 ? 'View affected SFIs' : 'View affected Projects'}}</u>
                         <i class="fa fa-angle-double-down ms-2"></i>
                     </span>
-                </div>
                     <span *ngIf="error.sfiList && error.sfiList.length>0">
                         <ng-container *ngIf="collapseViewMore[errorIndex]">
                                 <ng-container *ngFor="let sfiName of error.sfiList; let sfiIndex = index;">
-                                    <div *ngIf="sfiIndex<5" class="cursor-pointer clickable-content mt-3 fs-14 fw-500" (click)="openSFI(sfiName)">
-                                        <span class="d-flex align-items-center">
-                                            <mat-icon>domain</mat-icon>
+                                    <div *ngIf="sfiIndex<5" class="cursor-pointer clickable-content mt-2 fs-14 fw-500" (click)="openSFI(sfiName)" [arr.aria-label]="'Click here navigate to '+ getSFIName(sfiName)">
+                                        <span class="d-flex align-items-center ms-3">
+                                            <mat-icon class="mx-1">domain</mat-icon>
                                             <u>{{getSFIName(sfiName)}}</u>
                                         </span>
                                     </div>
@@ -50,18 +42,16 @@
                     <span *ngIf="error.projectSfiList && error.projectSfiList.length>0">
                         <ng-container *ngIf="collapseViewMore[errorIndex]">
                             <ng-container *ngFor="let projectList of error.projectSfiList; let projectIndex = index;">
-                                <div *ngIf="projectIndex<2" class="card mt-3 fs-14 p-2" [ngClass]="error.validationType == 'VW' ? 'bg-warning-subtle border-warning' : 'bg-danger-subtle border-danger-subtle'">
-                                    <span class = "d-flex align-items-center">
-                                        <img *ngIf="projectList[0]?.ModuleCode==1 && error.validationType == 'VE'" class="proposal-icon mb-2" src="{{deployMap}}assets/images/error-proposal.png">
-                                        <img *ngIf="projectList[0]?.ModuleCode==1 && error.validationType == 'VW'" class="proposal-icon mb-2" src="{{deployMap}}assets/images/warning-proposal.png">
-                                        <img *ngIf="projectList[0]?.ModuleCode==3 && error.validationType == 'VE'" class="award-icon mb-1" src="{{deployMap}}assets/images/error-award.png">
-                                        <img *ngIf="projectList[0]?.ModuleCode==3 && error.validationType == 'VW'" class="award-icon mb-1" src="{{deployMap}}assets/images/warning-award.png">
-                                        <strong>{{projectList[0].Title}}</strong>
+                                <div *ngIf="projectIndex<2" class="card fs-14 mt-2 p-2" [ngClass]="error.validationType == 'VW' ? 'bg-warning-subtle border-warning' : 'bg-danger-subtle border-danger-subtle'">
+                                    <span class="d-flex align-items-center">
+                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 3" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">workspace_premium</mat-icon>
+                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 1" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">article</mat-icon>
+                                        <strong class="fs-6 ms-1">{{projectList[0].Title}}</strong>
                                     </span>
-                                        <div *ngFor="let sfiList of projectList;let SFIIndex = index" class="mt-3 ps-3">
-                                            <span class="d-flex align-items-center">
-                                                <mat-icon>domain</mat-icon>
-                                                <u class="clickable-content" (click)="openRelationship(sfiList)">{{sfiList.Entity}} </u>
+                                        <div *ngFor="let sfiList of projectList;let SFIIndex = index;let last = last" class="mt-2 ms-4">
+                                            <span class="d-flex align-items-center ms-1 cursor-pointer clickable-content" (click)="openRelationship(sfiList)" [arr.aria-label]="'Click here navigate to '+ sfiList.Entity">
+                                                <mat-icon class="me-1">domain</mat-icon>
+                                                <u>{{sfiList.Entity}} </u>
                                             </span>
                                         </div>
                                 </div>
@@ -71,20 +61,17 @@
                     </span>
             </div>
             </ng-container>
-        </div>
+        </ng-container>
 
-    <div class="card-body d-flex justify-content-center custom-margin ">
-        <div class="gridSkin text-center d-flex ">
-            <div class="me-3"><input
-                    (change)="toggleCertification()"
-                    [checked]="_coiService.isCertified"
-                    [disabled]="checkForDisable()" class="certify-box mt-1"
-                    type="checkbox"></div>
+    <div class="d-flex justify-content-center card-body text-center mx-3 mt-3 py-0">
+        <div class="text-secondary text-center d-flex ">
+            <div class="me-2"><input (change)="toggleCertification()" [checked]="_coiService.isCertified" aria-label="Please check here to certify the disclosure"
+                    [disabled]="checkForDisable()" class="certify-box mt-1" type="checkbox"></div>
             <div class="fs-16">
-                <p *ngIf="coiDisclosure?.certificationText">{{coiDisclosure.certificationText}}</p>
-                <p *ngIf="!coiDisclosure?.certificationText">{{certificationText}}</p>
+                <p *ngIf="coiDisclosure?.certificationText" class="mb-0">{{coiDisclosure.certificationText}}</p>
+                <p *ngIf="!coiDisclosure?.certificationText" class="mb-0">{{certificationText}}</p>
             </div>
+        </div>
     </div>
     </div>
-</div>
-    </div>
+ </div>
