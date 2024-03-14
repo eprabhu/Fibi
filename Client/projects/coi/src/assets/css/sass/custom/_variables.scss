@@ -100,7 +100,7 @@ $--theme-text-gray-900: --theme-text-gray-900;
 
 $theme-map-default: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #FCFCFD,    
+    $--theme-body-bg-color: #f1f1f1,    
     $--theme-primary-color: var(--theme-blue),
     $--theme-primary-color-inverse:  var(--theme-white),
     
@@ -268,7 +268,7 @@ $theme-map-red: (
 
 $theme-map-blue: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #FCFCFD,    
+    $--theme-body-bg-color: #f1f1f1,    
     $--theme-primary-color:  var(--theme-blue),
     $--theme-primary-color-inverse:  var(--theme-white),
     
