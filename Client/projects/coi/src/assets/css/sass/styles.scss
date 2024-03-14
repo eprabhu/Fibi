@@ -671,3 +671,7 @@ ul.timeline > li:before {
 .coi-flex-1 {
   flex: 1;
 }
+
+.format_quote {
+  transform: rotateY(180deg);
+}

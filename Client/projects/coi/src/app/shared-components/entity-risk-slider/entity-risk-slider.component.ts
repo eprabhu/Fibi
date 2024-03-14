@@ -22,7 +22,7 @@ export class EntityRiskSliderComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     riskLevelChanges = [];
     coiConflictStatusType = [];
-    isReadMore = false;
+    isReadMore: boolean[] = [];
     riskValidationMap = new Map();
     entityRiskRO: RiskHistoryRO = new RiskHistoryRO;
     isStatusEdited = false;
