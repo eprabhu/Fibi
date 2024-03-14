@@ -76,6 +76,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     DATA_PER_PAGE: number = 20; /* Number of data to be shown in single page */
     paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
     sliderElementId: string = '';
+    isPurposeRead = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,
