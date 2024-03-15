@@ -99,7 +99,7 @@
             "relation":"BELONGS_TO",
             "colour": "#5ab008",
             "lineWidth": 1.5,
-            "name": "Belongs to"
+            "name": "Country"
         },
         "CITIZEN_OF":{
             "relation":"CITIZEN_OF",
