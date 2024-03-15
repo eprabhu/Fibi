@@ -13,7 +13,7 @@
                         </p>
                         <p class="m-0 label-text">
                             <strong>{{opa?.opaDisclosure?.personPrimaryTitle}} |
-                                <span>{{personUnitDetail}}</span> |
+                                <span>{{commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)}}</span> |
                                 {{opa?.opaDisclosure?.personEmail}}</strong>
                         </p>
                     </div>
@@ -398,7 +398,7 @@
             <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts"
                            [tooltip]="primaryBtnName"></app-help-text>
         </div>
-        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="opa.opaDisclosure"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>
 

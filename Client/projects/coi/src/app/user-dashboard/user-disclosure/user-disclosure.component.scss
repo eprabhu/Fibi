@@ -119,7 +119,7 @@ margin-top-3px{
   height: 27px;
   position: relative;
   left: -10px;
-  top: 0;
+  top: -5px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -193,6 +193,7 @@ margin-top-3px{
   border-left: 2px solid #48647f82;
   padding-top: 2px;
   height: 18px;
+  display: inline-block;
 }
 
 .award-icon {
@@ -462,13 +463,18 @@ padding-right: 17px;
 //   }
 // }
 
+// .mat-icon {
+//   -webkit-user-select: none;
+//   user-select: none;
+//   background-repeat: no-repeat;
+//   display: inline-block;
+//   fill: currentColor;
+//    height: auto !important;
+//    width: auto !important;
+//    overflow: auto !important;
+// }
+
 .mat-icon {
-  -webkit-user-select: none;
-  user-select: none;
-  background-repeat: no-repeat;
-  display: inline-block;
-  fill: currentColor;
-   height: auto !important;
-   width: auto !important;
-   overflow: auto !important;
+  font-size: 1.22rem !important;
 }
+

@@ -1,4 +1,4 @@
-<div class="card disclosure-card" [id]="SFIObject?.entityId">
+<div class="card coi-card-regular" [id]="SFIObject?.entityId">
     <div class="card-body">
         <div class="row">
             <div class="col-12  mb-3">
@@ -8,8 +8,8 @@
                                     [attr.aria-label]="SFIObject?.isActive ? 'Active': 'Inactive'"
                                     [ngClass]="SFIObject?.isActive ? SFIObject.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'">
                                     {{SFIObject?.isActive ? SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span> -->
-                        <p class="entity-title entity-name my-auto mb-0"><strong tabindex="0"
-                                [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName}}</strong></p>
+                        <p class="entity-title entity-name my-auto mb-0 coi-text-darker fs-6" tabindex="0"
+                                [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName}}</p>
                     </div>
                     <div class="col-auto text-end">
                         <span *ngIf="checkForEntityWarning()" class="info-text rounded-pill f-14 me-2 px-3 py-1 rounded-5 px-3 py-0" data-bs-toggle="tooltip"
@@ -32,17 +32,17 @@
             <div class="col-lg-9">
                 <div class="row">
                     <div tabindex="0" class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                        <label class="fw-bold me-2 fs-14 d-block">Entity Type</label>
-                        <span class="break-point-1200">
+                        <label class="coi-text-dark d-block">Entity Type</label>
+                        <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="SFIObject?.entityType">
-                                <span class="fs-14" [attr.aria-label]="SFIObject?.entityType">
+                                <span class="coi-text-light" [attr.aria-label]="SFIObject?.entityType">
                                     {{SFIObject?.entityType}}</span>
                             </app-no-data-label>
                         </span>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                        <label class="fw-bold me-2 text-nowrap fs-14 d-block"> Country</label>
-                        <span class="col break-point-1200 fs-14">
+                        <label class="coi-text-dark d-block"> Country</label>
+                        <span class="col coi-text-light">
                             <app-no-data-label [valueToShow]="SFIObject?.countryName">
                                 <span [attr.aria-label]="SFIObject?.countryName" class="grey-text text-slice"
                                     title="{{SFIObject?.countryName}}">{{SFIObject?.countryName}}</span>
@@ -50,10 +50,10 @@
                         </span>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-lg-2 mb-sm-2 mb-2">
-                        <label class="fw-bold me-2 fs-14 d-block"
+                        <label class="coi-text-dark d-block"
                         [attr.aria-label]="'Start Date Of Involvement' + SFIObject?.involvementStartDate | dateFormatter">
                         Start Date Of Involvement</label>
-                        <span class="break-point-1200 fs-14">
+                        <span class="coi-text-light">
                             <app-no-data-label
                                 [valueToShow]="SFIObject?.involvementStartDate"><span>{{SFIObject?.involvementStartDate | dateFormatter }}</span>
                             </app-no-data-label>
@@ -61,10 +61,10 @@
                     </div>
                     <div class="col-lg-3 col-md-6 mb-lg-2 mb-sm-2 mb-2" tabindex="0">
                         <div tabindex="0" class="mb-2">
-                            <label class="fw-bold me-2 fs-14 d-block"
+                            <label class="coi-text-dark d-block"
                                 [attr.aria-label]="'End Date Of Involvement' + SFIObject?.involvementEndDate | dateFormatter">
                                 End Date Of Involvement</label>
-                            <span class="break-point-1200 fs-14">
+                            <span class="coi-text-light">
                                 <app-no-data-label [valueToShow]="SFIObject?.involvementEndDate">
                                     <span>{{ SFIObject?.involvementEndDate | dateFormatter }}</span>
                                 </app-no-data-label>
@@ -74,19 +74,19 @@
                     <div class="col-lg-12 d-flex align-items-center">
                         <div>
                         <label tabindex="0" aria-label="Relationship"
-                            class="fw-bold me-3 fs-14">Relationship</label>
+                            class="coi-text-dark me-3">Relationship</label>
                         <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
                             <ng-container *ngIf="reqObject.validPersonEntityRelTypes?.length">
-                                <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color fst-italic d-inline-block fs-14"
+                                <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color fst-italic d-inline-block"
                                     *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue; let isFirst = first"
                                     [class.pill-spacing]="!isFirst">
-                                    <label class="fw-medium me-1"
+                                    <label class="coi-text-light me-1"
                                         [attr.aria-label]="relation?.personEntityRelType?.description">{{relationship.key}}</label>
                                     <ng-container *ngFor="let relation of relationship.value; let last = last">
-                                        <span class="r-title" *ngIf="!last"
+                                        <span class="r-title coi-text-lighter" *ngIf="!last"
                                             [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description
                                             +'/'}}</span>
-                                        <span class="r-title" *ngIf="last"
+                                        <span class="r-title coi-text-lighter" *ngIf="last"
                                             [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description}}</span>
                                     </ng-container>
                                 </span>

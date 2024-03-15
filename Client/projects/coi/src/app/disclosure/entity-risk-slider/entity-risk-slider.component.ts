@@ -8,7 +8,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { openCoiSlider, openCommonModal } from '../../common/utilities/custom-utilities';
 import { CoiService } from '../services/coi.service';
 
 @Component({
@@ -81,7 +81,7 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.riskCategoryCode = null;
 				this.riskComment = null;
 				this.emitRiskChange(data);
-				this.getDisclosureRiskHistory();
+				this.getDisclosureRiskHistory(false);
 				this.isStatusEdited = false;
 			}, err => {
 				if (err.status === 405) {
@@ -129,7 +129,7 @@ export class EntityRiskSliderComponent implements OnInit {
 		}
 	}
 
-	private  getDisclosureRiskHistory(): void {
+	private  getDisclosureRiskHistory(flag = true): void {
 		this.$subscriptions.push(this._entityRiskSliderService.getDisclosureRiskHistory(
 			{
 				'disclosureId': this.disclosureDetails.disclosureId,
@@ -138,9 +138,9 @@ export class EntityRiskSliderComponent implements OnInit {
 			}).subscribe((data: any) => {
 				this.updateHistoryLogs(data);
 				this.isReadMore = [];
-				setTimeout(() => {
-					openCoiSlider('disclosure-entity-risk-slider');
-				});			
+				if (flag) {
+						openCoiSlider('disclosure-entity-risk-slider');		
+				}
 			}));
 	}
 

@@ -137,6 +137,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.userDetails.homeUnit = this.travelDisclosure.homeUnitNumber;
             this.userDetails.homeUnitName = this.travelDisclosure.homeUnitName;
             this.entityDetails = this._dataStore.getEntityDetails();
+            this.setPersonEntityDetails();
         } else {
             this.setUserDetails();
         }
@@ -270,7 +271,6 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.helpTexts = helpTexts;
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Approve' ? 'Approval' : actionBtnName;
         this.modalSize = 'lg';
-        this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);
         this.descriptionErrorMsg = descriptionErrorMsg;
         openCommonModal('travel-confirmation-modal');
@@ -280,6 +280,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.personEntityDetails.personFullName = this.travelDisclosure?.personFullName;
         this.personEntityDetails.entityName = this.travelDisclosure?.travelEntityName;
         this.personEntityDetails.unitDetails = `${this.travelDisclosure?.homeUnitNumber} - ${this.travelDisclosure?.homeUnitName}`;
+        this.personEntityDetails.homeUnitName = this.travelDisclosure?.homeUnitName;
+        this.personEntityDetails.homeUnit = this.travelDisclosure?.homeUnitNumber;
     }
 
     openConflictSlider(): void {

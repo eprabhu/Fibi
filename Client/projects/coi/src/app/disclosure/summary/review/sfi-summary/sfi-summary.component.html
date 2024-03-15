@@ -20,11 +20,11 @@
     </strong>
     <span class="d-inline-block" data-bs-toggle="tooltip" title="View SFI details."
       data-bs-placement="top">
-      <mat-icon class="me-2 info-icon position-relative mt-3"  data-bs-toggle="tooltip">info</mat-icon>
+      <mat-icon class="me-2 info-icon position-relative mt-2"  data-bs-toggle="tooltip">info</mat-icon>
     </span>
   </span>
   </h3>
-  <button class="toggle-header-btn mr-8 align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
+  <button class="toggle-header-btn mr-8 align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
   [attr.aria-label]="'Click here to ' + (isCollapsed ? 'collapse' : 'expand') + ' Significant Financial Interest'"
   [title]="isCollapsed ? 'Click here to collapse Significant Financial Interest (SFI)' : 'Click here to expand Significant Financial Interest (SFI)'"
   (click)="isCollapsed = !isCollapsed">
@@ -34,7 +34,7 @@
 <ng-container *ngIf="isCollapsed">
   <ng-container *ngIf="isShowNoDataCard">
     <ng-container *ngIf="coiFinancialEntityDetails?.length">
-      <div class="px-2 mb-2 mt-3 "
+      <div class="mb-2 mt-3 "
         *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
         <app-shared-sfi-card [reqObject]='item' [referredFrom]="'SFI_SUMMARY'" (viewSlider)="viewSlider($event)" (reviewSlider)="openReviewerComment($event)"></app-shared-sfi-card>
       </div>
