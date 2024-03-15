@@ -74,5 +74,7 @@ public class CoiTravelDisclosureDto {
 	private String comment;
 	private String riskCategoryCode;
 	private EntityRiskCategory entityRiskCategory;
+	private String personPrimaryTitle;
+	private String personEmail;
 
 }

@@ -1456,7 +1456,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setTravellerHomeUnit(coiTravelDisclosure.getTravellerHomeUnit());
 		dto.setTravelSubmissionDate(coiTravelDisclosure.getTravelSubmissionDate());
 		dto.setPersonId(coiTravelDisclosure.getPersonId());
-		dto.setPersonFullName(personDao.getPersonFullNameByPersonId(dto.getPersonId()));
+		Person personDetails = personDao.getPersonDetailById(dto.getPersonId());
+		dto.setPersonFullName(personDetails.getFullName());
+		dto.setPersonPrimaryTitle(personDetails.getPrimaryTitle());
+		dto.setPersonEmail(personDetails.getEmailAddress());
 		dto.setCertifiedAt(coiTravelDisclosure.getCertifiedAt());
 		dto.setCertifiedBy(coiTravelDisclosure.getCertifiedBy());
 		dto.setDescription(coiTravelDisclosure.getDescription());
