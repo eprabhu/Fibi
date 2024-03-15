@@ -119,9 +119,9 @@
       </div>
 
       <!-- risk history heading -->
-      <div class="main-title mt-3 mx-4" id="">
+      <div class="main-title mt-3 mx-4" id="" tabindex="0">
           <h3 class="d-flex align-items-center fs-16"><strong>Travel Risk History</strong>
-              <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Click to view Risk history."
+              <span class="d-inline-block" data-bs-toggle="tooltip"
                   data-bs-placement="top">
               </span>
           </h3>
@@ -135,9 +135,9 @@
                         <ul class="timeline">
                             <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
                             <li *ngFor="let historyEntry of disclosure.value; let index=index">
-                                <span class="fs-14" [innerHTML]="historyEntry?.description"></span>
-                                <p class="coi-text-lighter fs-13">{{disclosure.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
-                                <p *ngIf="historyEntry?.description" class="coi-text-light">
+                                <span class="fs-14" [innerHTML]="historyEntry?.description" tabindex="0"></span>
+                                <p class="coi-text-lighter fs-13" tabindex="0">{{disclosure.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                                <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="0">
                                     <span *ngIf="historyEntry?.comment" class="fs-14">
                                         <mat-icon class="format_quote">format_quote</mat-icon>
                                         <span class="fst-italic mx-2" [attr.aria-label]="historyEntry?.comment"

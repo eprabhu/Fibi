@@ -5,10 +5,12 @@
                 <ul class="timeline">
                     <ng-container *ngFor="let entity of entityHistoryLogs | keyvalue: sortNull">
                         <li *ngFor="let historyEntry of entity.value;">
-                            <span class="fs-14" [innerHTML]="historyEntry?.description"></span>
-                            <span *ngIf="historyEntry?.updateUserFullName" class="ms-1 fs-14">by </span>
-                            <span class="history-username fw-700 fs-14"> {{historyEntry?.updateUserFullName}} </span>
-                            <p class="coi-text-lighter fs-13">{{entity.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                            <div class="fs-14" tabindex="0">
+                                <span [innerHTML]="historyEntry?.description"></span>
+                                <span *ngIf="historyEntry?.updateUserFullName" class="ms-1">by </span>
+                                <span class="history-username fw-700"> {{historyEntry?.updateUserFullName}} </span>
+                            </div>
+                            <p class="coi-text-lighter fs-13" tabindex="0">{{entity.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
                             <p *ngIf="historyEntry?.comment" class="coi-text-light">
                                 <span class="fs-14" tabindex="0">
                                     <mat-icon class="format_quote">format_quote</mat-icon>
@@ -20,7 +22,7 @@
                                         </span>
                                     </span>
                                     <ng-template #showFullInfo>
-                                        <span tabindex='0' [attr.aria-label]="historyEntry?.comment" class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
+                                        <span [attr.aria-label]="historyEntry?.comment" class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
                                         <span *ngIf="historyEntry?.comment?.length > 460" class="hand-cursor mt-2 fw-medium" title="Read Less"
                                             (click)="isReadMore[historyEntry?.updateTimestamp] = false" aria-hidden="true">
                                             <span class="fw-medium"><u>Read Less</u>
