@@ -1,5 +1,7 @@
 package com.polus.fibicomp.security;
 
+import com.polus.core.common.service.CommonService;
+import com.polus.core.roles.dao.RolesManagementDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.login.dao.LoginDao;
-import com.polus.fibicomp.login.service.LoginService;
-import com.polus.fibicomp.roles.dao.RolesManagementDao;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -27,8 +25,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	@Autowired
-	private LoginDao loginDao;
+//	@Autowired
+//	private LoginDao loginDao;
 
 	@Autowired
 	private CommonService commonService;
@@ -36,8 +34,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private RolesManagementDao rolesManagementDao;
 
-	@Autowired
-	private LoginService loginService;
+//	@Autowired
+//	private LoginService loginService;
 	
 	@Autowired
 	private Environment environment;
