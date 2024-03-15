@@ -113,6 +113,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     getCoiReview() {
         this.$subscriptions.push(this._reviewService.getCoiReview(this.opaDisclosure.opaDisclosureId).subscribe((res) => {
             this.reviewerList = res || [];
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching review details.');
         }));
     }
 
@@ -153,12 +155,13 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewDetails.opaDisclosureId = this.opaDisclosure.opaDisclosureId;
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, `Reviewer ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
+                this.opaDisclosure.updateTimestamp = res.opaDisclosure.updateTimestamp;
+                this.opaDisclosure.updateUserFullName = res.updateUserFullName;
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.reviewDetails = {};
-                this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
                 this.isExpanded = true;
-                // this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
                 if (_err.status === 405) {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Action you are trying to perform is not valid for current state, please refresh.');
@@ -174,18 +177,6 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.reviewDetails.endDate = parseDateWithoutTimestamp(this.reviewEndDate);
     }
 
-    addReviewToList(review: any) {
-        const reviewer = this.setReviewAndOPAData(review);
-        this.reviewerList.push(reviewer);
-        this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
-            opaReviewerList: this.reviewerList,
-            opaDisclosure: this.opaDisclosure
-        });
-        this._dataStore.updateTimestampEvent.next();
-        this.startOrCompleteReview();
-        this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
-    }
-
     private setReviewAndOPAData(review: any) {
         const {opaDisclosure, ...reviewer} = review;
         this.opaDisclosure.reviewStatusType  = opaDisclosure.reviewStatusType;
@@ -193,21 +184,33 @@ export class LocationComponent implements OnInit, OnDestroy {
         return reviewer;
     }
 
+    addReviewToList(review: any) {
+        const reviewer = this.setReviewAndOPAData(review);
+        this.reviewerList.push(reviewer);
+        this.updateReviewDetails();
+        this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
+    }
+
     updateReview(review: any) {
         const reviewer = this.setReviewAndOPAData(review);
         this.reviewerList.splice(this.modifyIndex, 1, reviewer);
+        this.updateReviewDetails();
+    }
+
+    updateReviewDetails() {
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
             opaReviewerList: this.reviewerList,
             opaDisclosure: this.opaDisclosure
         });
-        this._dataStore.updateTimestampEvent.next();
         this.startOrCompleteReview();
     }
 
     deleteReview() {
-        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((_res: any) => {
+        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.setReviewAndOPAData(_res);
+            this.opaDisclosure.updateTimestamp = res.updateTimestamp;
+            this.opaDisclosure.updateUserFullName = res.updateUserFullName;
+            this.setReviewAndOPAData(res);
             this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
                 opaReviewerList: this.reviewerList,
                 opaDisclosure: this.opaDisclosure
@@ -365,12 +368,12 @@ export class LocationComponent implements OnInit, OnDestroy {
         let nextAssignedReview = this.getNextAssignedReview();
         if (nextAssignedReview) {
             this.opaService.currentOPAReviewForAction = nextAssignedReview;
-            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+            if(nextAssignedReview.reviewStatusTypeCode == 1)
                 this.opaService.isStartReview = true;
             else if (nextAssignedReview.reviewStatusTypeCode == 2)
                 this.opaService.isCompleteReview = true;
         }
-       
+
     }
 
     private getNextAssignedReview(): any {

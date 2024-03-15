@@ -4,11 +4,11 @@
             <div class="row">
                 <div class="col-md-8 col-12">
                     <div class="col-12 d-flex">
-                    <span class="shadow-sm align-items-center d-flex" 
-                    [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE' 
+                    <span class="shadow-sm align-items-center d-flex"
+                    [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
                     || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
                     sfi?.personEntityRelationshipDto?.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'" tabindex='0'
-                          aria-label="proposal">{{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE' 
+                          aria-label="proposal">{{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
                           || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
                           sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
                         <p class="entity-title mt-1">
@@ -184,6 +184,7 @@
         </div>
         <section class="mx-3 mb-3" *ngIf="isShowCollapsedConflictRelationship">
             <app-sfi-project-relation-shared
+                [(isSaving)]="coiService.isRelationshipSaving"
                 [projectSFIDetails]="relationshipService.projectSFIDetails[sfi.personEntityId]"
                 [coiStatusList]="coiStatusList"
                 [projectIdTitleMap]="projectIdTitleMap"
@@ -198,4 +199,8 @@
                         [coiStatusList]="coiStatusList" [projectIdTitleMap]="projectIdTitleMap"
                         [selectedSfiIndex]="selectedSfiIndex"
                         [sfiList]="disclosureSfi.personEntities"></app-define-switch-view>
+
+
+<app-no-information *ngIf="!disclosureSfi.personEntities.length"></app-no-information>
+
 

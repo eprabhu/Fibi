@@ -11,7 +11,6 @@
           <button type="button" class="btn-close" title="Close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
         </div>
         <ng-content select="[content-sticky]"></ng-content>
-
         <div class="modal-body">
           <div class="row">
             <div class="col-12">
@@ -41,11 +40,11 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-outline-secondary" (click)="performSecondaryAction()"
-          [attr.aria-label]="'click to ' + secondaryBtnName" role="button">
+          [attr.aria-label]="'click to ' + secondaryBtnName" role="button" title="{{secondaryBtnTooltip}}">
           {{secondaryBtnName}}
           </button>
           <button class="btn btn-primary me-0" type="button" (click)="performPrimaryAction()"
-          [attr.aria-label]="'click to ' + primaryBtnName" role="button">
+          [attr.aria-label]="'click to ' + primaryBtnName" role="button" title= "{{primaryBtnTooltip}}">
           {{primaryBtnName}}
           </button>
         </div>

@@ -63,7 +63,7 @@ export class DefineRelationComponent implements OnInit {
   isSaving = false;
   isShowSlider = false;
 
-  constructor(private _relationShipService: RelationshipService, private _coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
+  constructor(private _relationShipService: RelationshipService, public coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
     this.getDataFromStore();
@@ -98,11 +98,10 @@ export class DefineRelationComponent implements OnInit {
         this.calculateSize();
         this.showTaskNavBar();
         setTimeout(() => {
-          if(this._coiService.focusSFIRelationId) {
-              scrollIntoView(this._coiService.focusSFIRelationId);
-              const ELEMENT = document.getElementById(this._coiService.focusSFIRelationId);
+          if(this.coiService.focusSFIRelationId) {
+              scrollIntoView(this.coiService.focusSFIRelationId);
+              const ELEMENT = document.getElementById(this.coiService.focusSFIRelationId);
               ELEMENT.classList.add('error-highlight-card');
-              this._coiService.focusSFIRelationId = null;
           }
         });
       }, err => {
@@ -147,7 +146,7 @@ export class DefineRelationComponent implements OnInit {
       }, err => {
         this.coiDescription = '';
         this.coiStatusCode = null;
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
       }));
     }
 
@@ -158,7 +157,7 @@ export class DefineRelationComponent implements OnInit {
           this.coiValidationMap.clear();
           this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
       }));
     }
 
@@ -269,7 +268,7 @@ validateProjectSfiSliderOnClose() {
 }
 
   goBackStep() {
-    if (this.isSaving) { return; }
+    if (this.coiService.isRelationshipSaving) { return; }
     this.currentRelation--;
     this.navigateToStep(this.relationList[this.currentRelation]);
   }
@@ -282,7 +281,7 @@ validateProjectSfiSliderOnClose() {
   }
 
   goToStep(stepPosition?: any) {
-    if (this.isSaving) { return; }
+    if (this.coiService.isRelationshipSaving) { return; }
     this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
     this.navigateToStep(this.relationList[this.currentRelation]);
   }

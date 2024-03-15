@@ -20,7 +20,7 @@ export class SfiHistoryComponent implements OnChanges {
     $subscriptions: Subscription[] = [];
     sfiHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor( private _commonService: CommonService,
                  public entityDetailService: EntityDetailsService,

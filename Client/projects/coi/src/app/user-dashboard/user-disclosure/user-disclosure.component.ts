@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
@@ -8,13 +8,13 @@ import {
 } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
-import { Subject, interval } from 'rxjs';
-import { debounce, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
+import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -76,6 +76,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     DATA_PER_PAGE: number = 20; /* Number of data to be shown in single page */
     paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
     sliderElementId: string = '';
+    isPurposeRead = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,

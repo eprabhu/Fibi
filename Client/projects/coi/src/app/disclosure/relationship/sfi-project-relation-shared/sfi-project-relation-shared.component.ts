@@ -30,6 +30,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     conflictStatusMap = {};
     isEditMode = true;
     tempProjectSFIDetails = [];
+    focusableId = '';
     $debounceEvent = new Subject<any>();
     $subscriptions = [];
 
@@ -67,7 +68,8 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         return STATUS ? STATUS.description : '';
     }
 
-    sfiSingleSave(index, sfi) {
+    sfiSingleSave(index, sfi, focusableId: string) {
+        this.focusableId = focusableId;
         this.updateIsSaving(true);
         this.$debounceEvent.next({index: index, SFI: sfi});
     }
@@ -113,17 +115,25 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
             this._relationShipService.projectSFIDetails[index] = data.coiDisclEntProjDetail;
             this.coiValidationMap.clear();
-            setTimeout(() => {
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
-            }, 1500);
             this.relationshipChanged.emit(true);
             this.updateIsSaving(false);
+            this.focusLastEditedInput();
         }, err => {
             setTimeout(() => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
+                this.updateIsSaving(false);
+                this.focusLastEditedInput();
             }, 1500);
-            this.updateIsSaving(false);
         }));
+    }
+
+    focusLastEditedInput() {
+        setTimeout(() => {
+            if (this.focusableId) {
+                document?.getElementById(this.focusableId)?.focus();
+                this.focusableId = '';
+            }
+        }, 1000);
     }
 
     clearValues() {
@@ -157,7 +167,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
                 this.relationshipChanged.emit(true);
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
             }));
     }
 

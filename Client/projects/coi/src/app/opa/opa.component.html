@@ -13,7 +13,7 @@
                         </p>
                         <p class="m-0 label-text">
                             <strong>{{opa?.opaDisclosure?.personPrimaryTitle}} |
-                                <span>{{opa?.opaDisclosure?.homeUnit}}-{{opa?.opaDisclosure?.homeUnitName}}</span> |
+                                <span>{{commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)}}</span> |
                                 {{opa?.opaDisclosure?.personEmail}}</strong>
                         </p>
                     </div>
@@ -185,7 +185,7 @@
                     </div>
                     <div *ngIf="dataStore.isFormEditable()"
                          class="d-flex justify-content-around px-3 mt-3">
-                        <button (click)="submitOPA()"
+                        <button (click)="opaSubmissionModal()"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center fit-height"
                                 title="Click to submit your disclosure">
                             <mat-icon class="me-2">done</mat-icon>
@@ -193,7 +193,7 @@
                         </button>
                     </div>
                     <div class="d-flex justify-content-around px-3"
-                         *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode  =='2' && checkForOPAAdmin()">
+                         *ngIf="!opa?.opaDisclosure?.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode  =='2' && checkForOPAAdmin()">
                         <button title="Click to Assign Administrator/Admin Group"
                                 aria-describedby="Click to assign administrator"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
@@ -203,7 +203,7 @@
                         </button>
                     </div>
                     <div class="d-flex justify-content-around px-3 mt-3"
-                    *ngIf="!['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)">
+                    *ngIf="!dataStore.isFormEditable()">
                          <button
                          title="Click here to add new review comment"
                          (click)="openReviewComment()"
@@ -257,7 +257,7 @@
                             <span *ngIf="isCardExpanded">More Actions</span>
                         </button>
                         <button
-                            *ngIf="!opa?.opaDisclosure.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode =='2' && checkForOPAAdmin()"
+                            *ngIf="!opa?.opaDisclosure?.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode =='2' && checkForOPAAdmin()"
                             title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             class="ms-2 fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
@@ -280,7 +280,7 @@
                         </button>
                         <button
                             *ngIf="dataStore.isFormEditable()"
-                            (click)="submitOPA()"
+                            (click)="opaSubmissionModal()"
                             title="Click to submit your disclosure"
                             class="btn btn-primary pb-0 fs-14 col me-2 fit-height">
                             <mat-icon>done</mat-icon>
@@ -323,7 +323,7 @@
 
                     <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                     <!-- check logged person & disclosure created person is same -->
-                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(opa?.opaDisclosure.adminPersonId) &&
+                    <button mat-menu-item *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(opa?.opaDisclosure?.adminPersonId) &&
                         (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.personId)"
                             title="Click to Withdraw"
                             area-describedby="Click to Withdraw"
@@ -372,7 +372,7 @@
 </div>
 
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
-                                [disclosureNumber]="opa?.opaDisclosure?.opaDisclosureNumber"
+                                [disclosureNumber]="opa?.opaDisclosure?.opaDisclosureNumber" [actionType]="opa?.opaDisclosure?.adminPersonId ? 'R' : 'A'"
                                 [path]="'OPA_DISCLOSURES'" [disclosureId]="opa?.opaDisclosure?.opaDisclosureId"
                                 [defaultAdminDetails]="defaultAdminDetails">
 </app-assign-administrator-modal>
@@ -385,7 +385,8 @@
                         (primaryBtnAction)="performDisclosureAction($event)"
                         [primaryBtnName]="primaryBtnName" [modalSize]="'lg'"
                         [textAreaLabelName]="'Reason for ' + textAreaLabelName"
-                        [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
+                        [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
+                        [primaryBtnTooltip]= "'Click to'+' '+ primaryBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{primaryBtnName}} Disclosure : OPA Disclosure By {{personProjectDetails?.personFullName}}</span>
@@ -397,7 +398,7 @@
             <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts"
                            [tooltip]="primaryBtnName"></app-help-text>
         </div>
-        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="opa.opaDisclosure"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>
 
@@ -435,3 +436,47 @@
     <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="opa.opaDisclosure" [disclosureType]="'OPA'"></app-review-comments-slider>
 </div>
 
+<!--opa submit confirmation modal-->
+<div class="modal fade mySkinDialog" tabindex="-1" id="opa-submit-confirm-modal" tabindex="-1" role="dialog" data-backdrop="static"
+    data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="opa-submit-confirmation-header">
+                <h4 class="fs-16"><strong> OPA Disclosure </strong></h4>
+                <button type="button" id="opa-submit-close-btn" class="btn-close fs-12" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                           <p class="fs-14">Are you sure you want to submit the <strong>OPA</strong> disclosure?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <ng-container>
+                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal" id="opa-submit-dismiss-btn" title="Click to cancel">Cancel</button>
+                    <button (click)="saveAndSubmit()" class=" btn btn-primary btn-sm fs-14" data-bs-dismiss="modal"
+                        id="opa-submit-btn" title="Click to submit">Submit</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-concurrency-warning-modal *ngIf="opaService.concurrentUpdateAction" [sectionName]="opaService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
+
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName] = "'opa-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
+                        [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p class="fs-14">Do you want to leave the page without saving</p>
+    </div>
+</app-confirmation-modal>
+<!--Unsaved Changes confirmation Modal end-->

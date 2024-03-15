@@ -23,7 +23,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     opaDisclosure: OpaDisclosure = new OpaDisclosure();
     disclosureHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor(public _opaService: OpaService,
                 private _commonService: CommonService,

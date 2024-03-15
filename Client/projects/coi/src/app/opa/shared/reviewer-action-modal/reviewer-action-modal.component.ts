@@ -7,6 +7,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import {OpaService} from '../../services/opa.service';
 import {isEmptyObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {OPA} from '../../opa-interface';
+import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 
 @Component({
     selector: 'app-reviewer-action-modal',
@@ -40,33 +41,51 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
             if (!isEmptyObject(res)) {
                 this.currentReviewer = res;
             }
+        }, _err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching reviewer details. Please try again.')
         }));
     }
 
     startCOIReview() {
-        this.$subscriptions.push(this._opaService.startReviewerReview(this.currentReviewer.opaReviewId)
+        this.$subscriptions.push(this._opaService.startReviewerReview({
+            opaReviewId: this.currentReviewer.opaReviewId,
+            opaDisclosureId: this.currentReviewer.opaDisclosureId
+        })
             .subscribe((res: any) => {
             this.updateDataStore(res);
             this.currentReviewer = {};
-            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review started successfully.`);
-        }, _err => {
-            this.currentReviewer = {};
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
+        }, error => {
+            this.closeModal();
+            if (error.status === 405) {
+                this._opaService.concurrentUpdateAction = 'Start Review';
+            } else {
+                this.currentReviewer = {};
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
+            }
         }));
     }
 
     completeReview() {
-        this.$subscriptions.push(this._opaService.completeReviewerReview(this.currentReviewer.opaReviewId)
-            .subscribe((res: any) => {
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        this.$subscriptions.push(this._opaService.completeReviewerReview(({
+            opaReviewId: this.currentReviewer.opaReviewId,
+            endDate: parseDateWithoutTimestamp(currentDate),
+            opaDisclosureId: this.currentReviewer.opaDisclosureId
+        })).subscribe((res: any) => {
             this.updateDataStore(res);
             this.startOrCompleteReview();
             this.currentReviewer = {};
-            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
-        }, _err => {
-            this.currentReviewer = {};
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+        }, error => {
+            this.closeModal();
+            if (error.status === 405) {
+                this._opaService.concurrentUpdateAction = 'Complete Review';
+            } else {
+                this.currentReviewer = {};
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+            }
         }));
     }
 
@@ -83,6 +102,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this.reviewerList[index] = reviewer;
         DATA.opaDisclosure.reviewStatusCode  = opaDisclosure.reviewStatusCode;
         DATA.opaDisclosure.reviewStatusType = opaDisclosure.reviewStatusType;
+        DATA.opaDisclosure.updateTimestamp = reviewer.updateTimestamp;
+        DATA.opaDisclosure.updateUserFullName = reviewer.updateUserFullName;
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'],
             { opaReviewerList: this.reviewerList, opaDisclosure: DATA.opaDisclosure });
         this._opaService.isReviewActionCompleted = this._opaService.isAllReviewsCompleted(this.reviewerList);
@@ -105,15 +126,14 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this._opaService.isStartReview = false;
         this._opaService.isCompleteReview = false;
         let nextAssignedReview = this.getNextAssignedReview();
-        console.log(nextAssignedReview);
         if (nextAssignedReview) {
             this._opaService.currentOPAReviewForAction = nextAssignedReview;
-            if(nextAssignedReview.reviewStatusTypeCode == 1) 
+            if(nextAssignedReview.reviewStatusTypeCode == 1)
                 this._opaService.isStartReview = true;
             else if (nextAssignedReview.reviewStatusTypeCode == 2)
                 this._opaService.isCompleteReview = true;
         }
-       
+
     }
 
     private getNextAssignedReview(): any {

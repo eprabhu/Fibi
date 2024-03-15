@@ -5,6 +5,7 @@ export class AssignAdminRO {
     opaDisclosureId?: '';
     opaDisclosureNumber?: '';
     disclosureId?: '';
+    actionType?:'R' | 'A' ;
 }
 
 export class DefaultAssignAdminDetails {
@@ -19,6 +20,10 @@ export class PersonProjectOrEntity {
     projectDetails ?: any = {};
     entityName ? = '';
     unitDetails = '';
+    unitNumber = null;
+    unitName = '';
+    homeUnit? = '';
+    homeUnitName? = '';
 }
 
 export class Disclosure {

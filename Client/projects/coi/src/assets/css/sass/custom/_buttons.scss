@@ -1,5 +1,5 @@
 .btn-primary {
-    --bs-btn-color: #fff;
+    --bs-btn-color: var(--theme-primary-color-inverse);
     --bs-btn-bg: var(--theme-primary-color) !important;
     --bs-btn-border-color: var(--theme-primary-color) !important;
     --bs-btn-hover-color: #fff;
@@ -58,3 +58,16 @@
   .btn{
     border-radius: 0.625rem;
   }
+
+  .coi-icon-btn {
+    @extend .fs-14;
+    @extend .fw-600;
+    display: inline-flex;
+    align-items: center;
+    letter-spacing: normal;
+}
+
+  .coi-btn-tertiary {
+    background-color: var(--theme-electric-blue);
+    color: var(--theme-primary-color);;
+}

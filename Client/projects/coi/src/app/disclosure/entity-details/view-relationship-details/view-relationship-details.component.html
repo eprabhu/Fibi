@@ -1,6 +1,5 @@
-
 <!-- SFI header card -->
-<div class="row mb-3 sticky-0">
+<div class="row mb-3" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="row mx-0">
@@ -8,11 +7,11 @@
                     <div class="card-header bg-white px-3 border-bottom">
                         <div class="row flex-grow-1">
                             <div class="col-lg-6 d-flex align-items-center">
-                                <div class="fw-bold cursor-pointer d-flex align-items-center" tabindex="0">
+                                <div class="fw-bold d-flex align-items-center" tabindex="0">
                                     <span (click)="viewEntityDetails()" tabindex="0" title="Click to view Disclosure"
                                         area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure"
-                                        [ngClass]="{'clickable-content':showViewButton()}"
-                                        class="text-primary fw-medium">{{entityDetails?.entityName}}</span>
+                                        [ngClass]="showViewButton() ? 'cursor-pointer clickable-content text-primary' : ''"
+                                        class="fw-medium">{{entityDetails?.entityName}}</span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
                                         *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
                                 </div>
@@ -61,8 +60,9 @@
                                     <span class="text-color fs-14">{{entityDetails?.phone}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div tabindex="0" class="col-lg-8">
-                                <label class="d-block fw-500 fs-14 label-text mt-3">Relationship</label>
+                            <div tabindex="0" class="col-lg-12">
+                                <label class="fw-500 fs-14 label-text mt-3 me-2">Relationship : </label>
+                            <span>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
                                         <em
@@ -83,6 +83,7 @@
                                         </em>
                                     </span>
                                 </app-no-data-label>
+                            </span>
                             </div>
                         </div>
                     </div>
@@ -330,7 +331,6 @@
 
     <!-- Add Relationship Button when no relation is added -->
     <ng-container *ngIf="this.entityDetailsServices.definedRelationships?.length == 0 && canAddRelationship()">
-        <div class="card mx-4">
             <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
                 <p class="fs-14 m-0">
                     <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
@@ -347,7 +347,6 @@
                     <span class="mr-2 fs-15">Add Relationship</span>
                 </button>
             </span>
-        </div>
     </ng-container>
 
     <!-- No data section when no relation and there is no right to add relation -->
@@ -361,7 +360,7 @@
 </div>
 
 <!-- SFI Details section if SFI Details tab is clicked -->
-<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'"> 
+<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'">
         <div *ngIf="!isEditMode" class="card mb-3">
             <div class="row d-flex px-4 mb-3 mt-4">
                 <div class="col-3" tabindex="0">
@@ -540,7 +539,7 @@
                             [(ngModel)]="additionalDetails.staffInvolvement"
                             (ngModelChange)="addUnSavedChanges();additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim();"
                             [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
-                            [limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+                            [limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                       </textarea>
                         <div class="help-text">
                             This description is presented in the Relationship section to help you relate this entity
@@ -563,7 +562,7 @@
                             [(ngModel)]="additionalDetails.studentInvolvement"
                             (ngModelChange)="addUnSavedChanges();additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
                             [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
-                            [limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+                            [limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                   </textarea>
                         <div class="help-text">
                             Please enter an adequate description of the entity's principal are of business.
@@ -584,7 +583,7 @@
                             [(ngModel)]="additionalDetails.instituteResourceInvolvement"
                             (ngModelChange)="isChangesInFieldValue = true;addUnSavedChanges()"
                             [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator
-                            [limit]=2000 [position]="'ABOVE'" [styleList]="'mt-2 float-end word-count'">
+                            [limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
                         <div class="help-text">
                             Please enter an adequate description of the entity's relationship to your University
@@ -597,7 +596,7 @@
                 </div>
             </div>
         </div>
- 
+
 
 </div>
 

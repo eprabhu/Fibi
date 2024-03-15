@@ -34,6 +34,8 @@ export class CoiService {
     focusSFIId: any;
     focusModuleId: any;
     focusSFIRelationId: any;
+    isRelationshipSaving = false;
+    $isExpandSection = new Subject<{section: string,isExpand: boolean}>();
 
     constructor(
         private _http: HttpClient,
@@ -112,6 +114,10 @@ export class CoiService {
         return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
      }
 
+     riskAlreadyModified(params: any) {
+        return this._http.post(`${this._commonService.baseUrl}/disclosure/riskStatus`, params);
+     }
+
 }
 
 export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData, ) {
@@ -121,7 +127,7 @@ export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireD
             let questionnaire_error = {validationMessage: '', validationType : "VE", };
             questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
             errorArray.push(questionnaire_error);
-        } 
+        }
         if (!isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
             let questionnaire_error = {validationMessage: '', validationType : "VW", };
             questionnaire_error.validationMessage = 'Please complete all the Questionnaire(s) in the “Screening Questionnaire” section.';

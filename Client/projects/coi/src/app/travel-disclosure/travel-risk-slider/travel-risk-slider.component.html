@@ -8,7 +8,7 @@
   <!-- slider header card -->
   <ng-container content-sticky>
       <div class="mt-1">
-          <div class="info-card-border card-scroll mt-2 rounded-2 shadow-medium bg-light mx-4 ms-4">
+          <div class="info-card-border card-scroll mt-2 rounded-2 shadow-medium bg-light mx-3">
               <div class="row ml-15 mt-2">
                   <div class="position-relative p-3 fs-14 pl-5 fw-500">
                       <div class="row">
@@ -71,7 +71,7 @@
   <!-- modal content -->
   <ng-container content>
       <!-- help text -->
-      <div class="mx-4 mt-3" *ngIf="isEditMode">
+      <div class="mx-3 mt-3" *ngIf="isEditMode">
           <app-help-text [helpTextList]="helpTexts" [tooltip]="'Disclosure Risk History'"></app-help-text>
       </div>
 
@@ -111,7 +111,7 @@
                       </div>
                   </div>
                   <div class="text-muted mb-3 mr-10 mt-2">
-                      <button type="button" class="btn btn-primary float-end fs-14" (click)="saveRisk()">Save</button>
+                      <button type="button" class="btn btn-primary float-end fs-14" (click)="checkForModification()">Save</button>
                       <button type="button" class="btn btn-outline-secondary float-end mr-10"
                           (click)="clearRiskChanges()">Clear</button>
                   </div>
@@ -120,7 +120,7 @@
 
       <!-- risk history heading -->
       <div class="main-title mt-3 mx-4" id="">
-          <h3 class="d-flex align-items-center"><strong>Travel Risk History</strong>
+          <h3 class="d-flex align-items-center fs-16"><strong>Travel Risk History</strong>
               <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Click to view Risk history."
                   data-bs-placement="top">
               </span>
@@ -131,58 +131,39 @@
       <div class="card mt-3 mx-4" id="travel-risk-history">
           <div class="card-content">
               <div class="card-body">
-                  <div class="form-row">
-                      <div class="table-responsive" *ngIf="!isEmptyHistory()">
-                          <table class="table mb-0">
-                              <caption class="sr-only">Risk History Comments </caption>
-                              <thead class="sr-none"></thead>
-                              <tbody>
-                                  <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
-                                      <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
-                                          {{disclosure.key}}</h4>
-                                      <ul class="pl-4 pr-3 mb-0">
-                                          <li *ngFor="let historyEntry of disclosure.value;let index=index"
-                                              class="p-3">
-                                              <div class="form-row">
-                                                  <div class="col">
-                                                      <p class="fs-14 mb-0">
-                                                          <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                          <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
-                                                              dateFormatterWithTimeZone:'time'}}</label>
-                                                          <span [innerHTML]="historyEntry?.description"></span>
-                                                      </p>
-                                                  </div>
-                                              </div>
-                                              <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
-                                                  <span
-                                                      *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                                                      <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'"> {{(historyEntry?.comment | slice:0:230)}}</span>
-                                                      <span (click)="isReadMore[index] = !isReadMore[index]"
-                                                          class="hand-cursor"><span class="fw-medium">... <u>Read
-                                                                  more</u>
-                                                              <i aria-hidden="true"></i></span>
-                                                      </span>
-                                                  </span>
-                                                  <ng-template #showFullInfo>
-                                                      <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'">{{historyEntry?.comment}}</span>
-                                                      <span *ngIf="historyEntry?.comment?.length > 230"
-                                                          (click)="isReadMore[index] = !isReadMore[index]"
-                                                          aria-hidden="true" class="hand-cursor"><span
-                                                              class="fw-medium">. <u>Read Less</u>
-                                                              <i aria-hidden="true"></i></span>
-                                                      </span>
-                                                  </ng-template>
-                                              </div>
-                                          </li>
-                                      </ul>
-                                  </tr>
-                              </tbody>
-                          </table>
+                      <div *ngIf="!isEmptyHistory()">
+                        <ul class="timeline">
+                            <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
+                            <li *ngFor="let historyEntry of disclosure.value; let index=index">
+                                <span class="fs-14" [innerHTML]="historyEntry?.description"></span>
+                                <p class="coi-text-lighter fs-13">{{disclosure.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                                <p *ngIf="historyEntry?.description" class="coi-text-light">
+                                    <span *ngIf="historyEntry?.comment" class="fs-14">
+                                        <mat-icon class="format_quote">format_quote</mat-icon>
+                                        <span class="fst-italic mx-2" [attr.aria-label]="historyEntry?.comment"
+                                            *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
+                                            <span class="coi-text-light mt-2"> {{(historyEntry?.comment | slice:0:230)}}</span>
+                                            <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor" title="Read More"><span class="fw-medium">... <u>Read more</u>
+                                                    <i aria-hidden="true"></i></span>
+                                            </span>
+                                        </span>
+                                        <ng-template #showFullInfo>
+                                            <span tabindex='0' [attr.aria-label]="historyEntry?.comment" class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
+                                            <span *ngIf="historyEntry?.comment?.length > 230" class="hand-cursor mt-2 fw-medium" title="Read Less"
+                                                (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true">
+                                                <span class="fw-medium"><u>Read Less</u>
+                                                    <i aria-hidden="true"></i></span>
+                                            </span>
+                                        </ng-template>
+                                    </span>
+                                </p>
+                            </li>
+                        </ng-container>
+                        </ul>
                       </div>
                       <div *ngIf="isEmptyHistory()">
                           <app-no-information [isBorderNeeded]="false"> </app-no-information>
                       </div>
-                  </div>
               </div>
           </div>
       </div>
@@ -193,3 +174,63 @@
 
 </app-coi-slider>
 
+
+  <!-- risk history log -->
+  <!-- <div class="card mt-3 mx-4" id="travel-risk-history">
+    <div class="card-content">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive" *ngIf="!isEmptyHistory()">
+                    <table class="table mb-0">
+                        <caption class="sr-only">Risk History Comments </caption>
+                        <thead class="sr-none"></thead>
+                        <tbody>
+                            <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
+                                <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
+                                    {{disclosure.key}}</h4>
+                                <ul class="pl-4 pr-3 mb-0">
+                                    <li *ngFor="let historyEntry of disclosure.value;let index=index"
+                                        class="p-3">
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <p class="fs-14 mb-0">
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
+                                                        dateFormatterWithTimeZone:'time'}}</label>
+                                                    <span [innerHTML]="historyEntry?.description"></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
+                                            <span
+                                                *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
+                                                <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'"> {{(historyEntry?.comment | slice:0:230)}}</span>
+                                                <span (click)="isReadMore[index] = !isReadMore[index]"
+                                                    class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                            more</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </span>
+                                            <ng-template #showFullInfo>
+                                                <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'">{{historyEntry?.comment}}</span>
+                                                <span *ngIf="historyEntry?.comment?.length > 230"
+                                                    (click)="isReadMore[index] = !isReadMore[index]"
+                                                    aria-hidden="true" class="hand-cursor"><span
+                                                        class="fw-medium">. <u>Read Less</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </ng-template>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="isEmptyHistory()">
+                    <app-no-information [isBorderNeeded]="false"> </app-no-information>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

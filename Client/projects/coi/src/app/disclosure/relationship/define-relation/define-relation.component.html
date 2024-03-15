@@ -35,8 +35,7 @@
               </div>
               <div class="col-4">
                 <label class="label-text">Lead Unit :</label>
-                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} -
-                  {{selectedProject?.unitName}}</span>
+                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
                 <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
               </div>
               <div class="col-3">
@@ -77,10 +76,9 @@
           </div>
         </div>
       </div>
-      <app-SFI-conflict-relationship [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode"
-        [coiStatusList]="coiStatusList" [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription" [(isSavingRelation)]="isSaving"
-        [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex"
-        [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
+      <app-SFI-conflict-relationship [(isSavingRelation)]="coiService.isRelationshipSaving" [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
+      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
+      [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
     </ng-container>
   </app-coi-slider>
 </ng-container>

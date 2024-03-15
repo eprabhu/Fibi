@@ -80,8 +80,10 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private setDisclosureDetails(responseObject: TravelDisclosure): void {
+        this.clearField = new String('false');
         this.entitySearchOptions.defaultValue = responseObject.travelEntityName;
         this.entityName = responseObject.travelEntityName;
+        this.countryClearField = new String('false');
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;
         this.destination = responseObject.destinationCountry ? 'International' : 'Domestic';
         this.travelDisclosureRO = this._dataStore.getTravelDisclosureRO();
@@ -179,6 +181,9 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         if (!this.travelDisclosureRO.travelAmount) {
             this.mandatoryList.set('amount', 'Please enter the amount.');
         }
+        if (!this.destination) {
+            this.mandatoryList.set('destination', 'Please choose a destination.');
+        }
         if (this.destination === 'Domestic') {
             if (!this.travelDisclosureRO.travelState) {
                 this.mandatoryList.set('state', 'Please enter the state.');
@@ -198,7 +203,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             this.clearEntity();
         }
         this.addEntityConfirmation = event ? event : null;
-        this.setUnSavedChangesTrue();  
+        this.setUnSavedChangesTrue();
     }
 
     clearEntity() {
@@ -317,6 +322,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     clearEntityDetails() {
         this.clearField = new String('true');
+        this.countryClearField = new String('true');
         this.addEntityConfirmation = null;
         this.entityDetails = null;
         this.isResultFromSearch = false;

@@ -64,7 +64,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     };
     helpTexts = [];
     withdrawHelpTexts = [
-        `Withdraw any disclosure in 'Submitted' status.`,
+        `Withdraw disclosures currently in the 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
@@ -137,6 +137,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.userDetails.homeUnit = this.travelDisclosure.homeUnitNumber;
             this.userDetails.homeUnitName = this.travelDisclosure.homeUnitName;
             this.entityDetails = this._dataStore.getEntityDetails();
+            this.setPersonEntityDetails();
         } else {
             this.setUserDetails();
         }
@@ -270,7 +271,6 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.helpTexts = helpTexts;
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Approve' ? 'Approval' : actionBtnName;
         this.modalSize = 'lg';
-        this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);
         this.descriptionErrorMsg = descriptionErrorMsg;
         openCommonModal('travel-confirmation-modal');
@@ -280,6 +280,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.personEntityDetails.personFullName = this.travelDisclosure?.personFullName;
         this.personEntityDetails.entityName = this.travelDisclosure?.travelEntityName;
         this.personEntityDetails.unitDetails = `${this.travelDisclosure?.homeUnitNumber} - ${this.travelDisclosure?.homeUnitName}`;
+        this.personEntityDetails.homeUnitName = this.travelDisclosure?.homeUnitName;
+        this.personEntityDetails.homeUnit = this.travelDisclosure?.homeUnitNumber;
     }
 
     openConflictSlider(): void {
@@ -408,7 +410,18 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     openRiskSlider() {
-        this.isOpenRiskSlider = true;
+        this.$subscriptions.push(this.service.riskAlreadyModified({
+            'riskCategoryCode': this.travelDisclosure.riskCategoryCode,
+            'travelDisclosureId': this.travelDisclosure.travelDisclosureId
+        }).subscribe((data: any) => {
+            this.isOpenRiskSlider = true;
+        }, err => {
+            if (err.status === 405) {
+                this.service.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk. Please try again.');
+            }
+        }))
     }
 
     closeSlider(event) {

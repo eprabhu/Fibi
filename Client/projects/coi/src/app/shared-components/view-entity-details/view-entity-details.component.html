@@ -340,7 +340,7 @@
         <div class="row">
           <div class="col">
             <span class="block-display fw-bold fs-14"><span *ngIf="entityDetails.isActive" class="mandatory px-1">*</span>Reason for {{entityDetails.isActive?'Inactivation' :'Activation'}} :</span>
-            <textarea placeholder="Please enter the reason."  [(ngModel)]="inactivateReason" [isShowLimiter]="true" [limit]="2000" rows="1" class="form-control"
+            <textarea placeholder="Please enter the reason."  [(ngModel)]="inactivateReason" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
               appAutoGrow appLengthValidator [ngClass]="{'invalid-border':reasonValidateMapEntity.has('reason')}"></textarea>
             <span *ngIf="reasonValidateMapEntity.has('reason')" class="invalid-feedback d-block fs-13">
               {{reasonValidateMapEntity.get('reason')}}
@@ -386,7 +386,7 @@
               </div>
               <div class="ml-15">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                You may mark multiple entity relations.
+                You can mark entity relations from the dropdown.
               </div>
               <div class="ml-15">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>

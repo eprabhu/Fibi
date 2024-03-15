@@ -6,6 +6,7 @@ import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {Toast} from 'bootstrap';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
@@ -392,6 +393,10 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
       } else {
         return rightsArray.some((right) => this.rightsArray.includes(right));
       }
+    }
+
+    getPersonLeadUnitDetails(unitData: any): string {
+        return getPersonLeadUnitDetails(unitData);
     }
 
 }

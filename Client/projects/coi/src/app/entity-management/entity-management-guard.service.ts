@@ -12,7 +12,7 @@ export class EntityManagementGuardService implements CanActivate {
         if (this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')) {
             return true;
         } else {
-            this.router.navigate(['/coi/error-handler/401']);
+            this.router.navigate(['/coi/error-handler/403']);
             return false;
         }
     }

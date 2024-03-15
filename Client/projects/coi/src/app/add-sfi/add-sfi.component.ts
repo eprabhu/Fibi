@@ -178,7 +178,7 @@ export class AddSfiComponent implements OnInit {
         if (!this.isSlider) {
             this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.coiEntity.entityId } });
         }
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity ? 'Update ' : 'Created '}Entity Successfully completed.`);
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.isEditEntity ? 'updated ' : 'created '} successfully.`);
     }
 
     setDateValues() {
@@ -200,13 +200,14 @@ export class AddSfiComponent implements OnInit {
                     this.isSaving = false;
                     this.navigateToSFI(data.personEntityId);
                 }
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'SFI saved successfully.');
             }, _err => {
                 this.isSaving = false;
                     if (_err.status === 405) {
                         this.concurrencyPersonEntityId = _err.error.personEntityId;
                         openModal('sfi-concurrency-modal');
                     } else {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving SFI. Please try again.');
                     }
             }));
     }
@@ -224,6 +225,7 @@ export class AddSfiComponent implements OnInit {
     selectNewEntity(event): void {
         this.clearSFIFields();
         this.EntitySearchOptions.defaultValue = event.searchString;
+        this.clearField = new String('false');
         this.entityDetails.coiEntity.entityName = event.searchString;
         this.canShowEntityFields = true;
     }
@@ -262,23 +264,23 @@ export class AddSfiComponent implements OnInit {
     private checkMandatoryFilled(): boolean {
         this.mandatoryList.clear();
         if (!this.entityDetails.coiEntity.entityName) {
-            this.mandatoryList.set('entityName', 'Please choose an entity name.');
+            this.mandatoryList.set('entityName', 'Please enter Entity Name.');
         }
         if (!this.isResultFromSearch) {
             this.entityDetailsValidation();
         }
         if (!this.isEntityManagement) {
             if (!this.involvementDate.involvementStartDate) {
-                this.mandatoryList.set('date', 'Please enter a start date.');
+                this.mandatoryList.set('date', 'Please enter Start Date.');
             }
             if (!this.additionalDetails.staffInvolvement) {
-                this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
+                this.mandatoryList.set('staff', 'Please enter Relationship with Entity.');
             }
             if (!this.additionalDetails.studentInvolvement) {
-                this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
+                this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity.');
             }
             if (!this.additionalDetails.instituteResourceInvolvement) {
-                this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
+                this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities.');
             }
             this.endDateValidation();
             this.validateRelationship();
@@ -288,13 +290,13 @@ export class AddSfiComponent implements OnInit {
 
     private entityDetailsValidation(): void {
         if (!this.entityDetails.coiEntity.countryCode) {
-            this.mandatoryList.set('country', 'Please choose a country.');
+            this.mandatoryList.set('country', 'Please enter Country.');
         }
         if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
-            this.mandatoryList.set('entityType', 'Please choose an entity type.');
+            this.mandatoryList.set('entityType', 'Please enter Entity Type.');
         }
         if (!this.entityDetails.coiEntity.address) {
-            this.mandatoryList.set('address', 'Please enter an address.');
+            this.mandatoryList.set('address', 'Please enter Address.');
         }
         this.emailValidation();
     }
@@ -383,7 +385,7 @@ export class AddSfiComponent implements OnInit {
         if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled() || this.emailWarningMsg) && !this.isSaving)) {
             return;
         }
-        this.modifyType ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();
+        this.modifyType == '1' ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();
     }
 
     backToPreviousPage(): void {

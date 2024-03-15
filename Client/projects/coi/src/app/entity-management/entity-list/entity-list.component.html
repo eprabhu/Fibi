@@ -1,11 +1,53 @@
 <div class="px-3">
     <div class="fs-18 fw-bold mt-3" tabindex="0" aria-label="Manage Entity Dashboard">Entity Management</div>
     <hr class="mt-1">
-    <div [@fadeInOutHeight]>
-        <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
-            <nav class="coi-admin-dash mx-0 borderlist">
+    <div [@fadeInOutHeight]>        
+        <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex align-items-center border">
+            <nav class="mx-0 borderlist">
+                <!-- new tab design -->
+        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fw-semibold mb-8" role="tablist">            
+            <li *ngIf="isManageEntity" class="nav-item" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="tab"
+                (keyup.enter)="entityTabName('ALL_ENTITIES')" (keyup.space)="entityTabName('ALL_ENTITIES')"
+                (click)="entityTabName('ALL_ENTITIES')" title="Click to view All Entities"
+                area-describedby="Click to view the list of all entities" aria-label="All Entities">
+                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="0">All
+                    Entities</a>
+            </li>
+            <li class="separator px-0"></li>
+            <li *ngIf="isManageEntity" tabindex="0" class="nav-item"
+                        [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="tab"
+                        (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
+                        (click)="entityTabName('UNVERIFIED')" title="Click to view Unverified Entities"
+                        area-describedby="Click to view the list of all unverified entities" aria-label="Unverified Entities" role="presentation">
+                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_security" data-kt-initialized="1" aria-selected="false" role="tab" tabindex="-1">Unverified Entities</a>
+            </li>            
+            <li class="separator px-0"></li>
+            <li *ngIf="isManageEntity" tabindex="0" class="nav-item"
+                        [ngClass]="{'active': activeTabName === 'HIGH_RISK'}" role="tab"
+                        (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
+                        (click)="entityTabName('HIGH_RISK')"
+                        title="Click to view High Risk Entities" aria-label="High Risk Entities"
+                        area-describedby="Click to view the list of all high risk entities" role="presentation">
+                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#kt_user_view_overview_events_and_logs_tab" aria-selected="true" role="tab">High Risk Entities</a>
+            </li>            
+            
+            <li class="nav-item ms-auto">
+                <button tabindex="0" aria-label="Toggle Advanced Search" role="button" class="btn coi-icon-btn coi-btn-tertiary ms-auto"
+                         (click)="toggleAdvanceSearch()" aria-controls="view-advance-search"
+                        aria-expanded="false" title="Click here to expand / collapse Advanced Search fields">
+                        <mat-icon class="me-3">tune</mat-icon>
+                        Advanced Search
+                    </button>
+                    <button tabindex="0" aria-label="Add new Entity" role="button" class="btn coi-icon-btn btn-outline-secondary" id="add-new-entity"
+                        title="Click here to add an entity" area-describedby="Click here to add a new entity"
+                        (click)="addNewEntity()"><mat-icon class="me-1">add</mat-icon> Add New
+                        Entity</button>
+            </li>            
+        </ul>
+        <!-- new tab design ends -->
+
                 <!--Entity Dashboard Tabs -->
-                <ul tabindex="0" aria-label=""
+                <!-- <ul tabindex="0" aria-label=""
                     class="header-navigation-links d-flex align-items-center m-0 f-15 cursor-pointer p-0 text-secondary">
                     <li *ngIf="isManageEntity" tabindex="0" class="cursor-pointer"
                         [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="tab"
@@ -28,11 +70,11 @@
                         title="Click to view High Risk Entities" aria-label="High Risk Entities"
                         area-describedby="Click to view the list of all high risk entities">High Risk Entities
                     </li>
-                </ul>
+                </ul> -->
             </nav>
-            <div class="align-items-center d-flex justify-content-end">
+            <!-- <div class="align-items-center d-flex justify-content-end">
                 <div>
-                    <button tabindex="0" aria-label="Toggle Advanced Search" role="button" class="btn btn-tertiary d-flex align-items-center mt-1 ms-auto fs-14"
+                    <button tabindex="0" aria-label="Toggle Advanced Search" role="button" class="btn coi-icon-btn coi-btn-tertiary ms-auto"
                          (click)="toggleAdvanceSearch()" aria-controls="view-advance-search"
                         aria-expanded="false" title="Click here to expand / collapse Advanced Search fields">
                         <mat-icon class="me-3">tune</mat-icon>
@@ -40,12 +82,12 @@
                     </button>
                 </div>
                 <div class="mx-4">
-                    <span tabindex="0" aria-label="Add new Entity" role="button" class="btn btn-outline-secondary d-flex fs-14 align-items-center px-3" id="add-new-entity"
+                    <button tabindex="0" aria-label="Add new Entity" role="button" class="btn coi-icon-btn btn-outline-secondary" id="add-new-entity"
                         title="Click here to add an entity" area-describedby="Click here to add a new entity"
-                        (click)="addNewEntity()"><mat-icon class="add-icon mt-1">add</mat-icon> Add New
-                        Entity</span>
+                        (click)="addNewEntity()"><mat-icon class="me-1">add</mat-icon> Add New
+                        Entity</button>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row mt-1">
             <div class="col-12 d-flex mt-1">

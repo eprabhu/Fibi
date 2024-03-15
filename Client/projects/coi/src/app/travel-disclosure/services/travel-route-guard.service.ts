@@ -86,7 +86,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         let reRoutePath = null;
 
         if (isEditPage) {
-            reRoutePath = this.getPathForEditPage(hasCreateUserRight, hasCreateTravelPath);
+            reRoutePath = hasCreateUserRight ? this.getPathForEditPage(hasCreateUserRight, hasCreateTravelPath) : this.getPathForViewPage(hasCreateUserRight, hasCreateTravelPath);
         } else {
             reRoutePath = this.getPathForViewPage(hasCreateUserRight, hasCreateTravelPath);
         }
@@ -97,9 +97,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     private getPathForEditPage(hasCreateUserRight: boolean, hasCreateTravelPath: boolean): string | null {
-        if (!hasCreateUserRight) {
-            this.redirectToErrorPage();
-        } else if (!hasCreateTravelPath) {
+        if (hasCreateUserRight && !hasCreateTravelPath) {
             return CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
         }
         return null;
@@ -107,9 +105,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
 
     private getPathForViewPage(hasCreateUserRight: boolean, hasCreateTravelPath: boolean): string | null {
         const hasAdminViewRight = this._commonService.getAvailableRight(['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE']);
-        if (!(hasAdminViewRight || hasCreateUserRight)) {
-            this.redirectToErrorPage();
-        } else if (hasCreateTravelPath) {
+         if (hasCreateTravelPath && (hasAdminViewRight || hasCreateUserRight)) {
             return POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
         }
         return null;

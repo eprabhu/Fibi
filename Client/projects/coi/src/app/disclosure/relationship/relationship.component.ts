@@ -55,8 +55,8 @@ export class RelationshipComponent implements OnInit {
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
               public _router: Router,
-              private _commonService: CommonService,
-              private _coiService: CoiService
+              public _commonService: CommonService,
+              public coiService: CoiService
               ) { }
 
   closePage(event: any) {
@@ -87,15 +87,18 @@ getDisclosureCount(typeCode, disclosureStatus) {
   }
 
   private updateConflictStatus(): void {
+    this.coiService.isRelationshipSaving = true;
     this.$subscriptions.push( this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
       if (data) {
         this.coiData.coiDisclosure.coiConflictStatusType = data;
         this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
         this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
         this._relationShipService.isSliderDataUpdated = false;
+        this.coiService.isRelationshipSaving = false;
       }
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
+      this.coiService.isRelationshipSaving = false;
     }));
   }
 
@@ -135,11 +138,10 @@ getDisclosureCount(typeCode, disclosureStatus) {
         }
         if(!this.isShowCollapsedConflictRelationship) {
           setTimeout(() => {
-            if(this._coiService.focusModuleId) {
-                scrollIntoView(this._coiService.focusModuleId);
-                const ELEMENT = document.getElementById(this._coiService.focusModuleId);
+            if(this.coiService.focusModuleId) {
+                scrollIntoView(this.coiService.focusModuleId);
+                const ELEMENT = document.getElementById(this.coiService.focusModuleId);
                 ELEMENT.classList.add('error-highlight-card');
-                this._coiService.focusModuleId = null;
             }
           },100);
         }
@@ -226,6 +228,8 @@ getDependencyDetails() {
   }
 
   ngOnDestroy(): void {
+    this.coiService.focusModuleId = null;
+    this.coiService.focusSFIRelationId = null;
     subscriptionHandler(this.$subscriptions);
 }
 

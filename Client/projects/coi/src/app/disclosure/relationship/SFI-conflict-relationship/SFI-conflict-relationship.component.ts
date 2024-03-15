@@ -37,6 +37,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   coiTableValidation: Map<string, string> = new Map();
   textareaValue: string;
   isSaving = false;
+  focusableId = '';
 
   constructor(private _relationShipService: RelationshipService,
               private _commonService: CommonService,
@@ -52,7 +53,6 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
           ELEMENT.classList.remove('border-bottom');
           ELEMENT.classList.remove('border-top');
           ELEMENT.classList.add('error-highlight-card');
-          this._coiService.focusSFIRelationId = null;
       }
   });
     this.triggerSingleSave();
@@ -92,6 +92,9 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
       this.prepareSaveObject(), this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.personId)
       .subscribe((data: any) => {
         this.entityProjectDetails = data.coiDisclEntProjDetails;
+        if(this._coiService.focusModuleId && this._coiService.focusModuleId == this.selectedProject.moduleItemId) {
+            this.removeFocusId();
+        }
         hideModal('applyToAllConfirmationModal');
         this.changeCloseBtnZIndex(1500);
         this.coiDescription = '';
@@ -100,7 +103,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this._relationShipService.isSliderDataUpdated = true;
         this.closePage.emit();
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
       }));
   }
 
@@ -141,7 +144,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   saveSingleEntity(index, test) {
     this.coiTableValidation.delete('save-status' + index );
     this.coiTableValidation.delete('save-description' + index );
-    if(this.entityProjectDetails[index].disclComment.comment) {
+    if (this.entityProjectDetails[index].disclComment.comment) {
       this.entityProjectDetails[index].disclComment.comment  = this.entityProjectDetails[index].disclComment.comment.trim();
     }
     if ([null, 'null'].includes(this.entityProjectDetails[index].projectConflictStatusCode)) {
@@ -173,26 +176,47 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
         this.coiData.coiDisclosure.personId).subscribe((data: any) => {
         this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
         this.clearIndex = null;
+        if(this._coiService.focusModuleId && this._coiService.focusSFIRelationId
+            && this._coiService.focusModuleId == this.selectedProject.moduleItemId
+            && this._coiService.focusSFIRelationId == data.coiDisclEntProjDetail.disclosureDetailsId) {
+            this.removeFocusId();
+        }
         this.coiValidationMap.clear();
-        setTimeout(() => {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
-        }, 1500);
         this.closePage.emit();
         this.updateIsSavingRelation(false);
+        this.focusLastEditedInput();
     }, err => {
       setTimeout(() => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
         this.updateIsSavingRelation(false);
+        this.focusLastEditedInput();
       }, 1500);
     }));
 }
+
+removeFocusId() {
+    const ELEMENT = document.getElementById(this._coiService.focusModuleId);
+    ELEMENT.classList.remove('error-highlight-card');
+    this._coiService.focusModuleId = null;
+    this._coiService.focusSFIRelationId = null;
+}
+
+    focusLastEditedInput() {
+        setTimeout(() => {
+            if (this.focusableId) {
+                document?.getElementById(this.focusableId)?.focus();
+                this.focusableId = '';
+            }
+        });
+    }
 
 sliderDataChanges() {
   this._dataStore.dataChanged = false;
   this._relationShipService.isSliderInputModified = false;
 }
 
-sfiSingleSave(index, sfi) {
+sfiSingleSave(index, sfi, focusableId: string) {
+  this.focusableId = focusableId;
   this.updateIsSavingRelation(true);
   this.$debounceEvent.next({index: index, SFI: sfi});
 }

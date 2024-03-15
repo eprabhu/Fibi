@@ -97,8 +97,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   }
 
   checkForEntityWarning() {
-    return this.referredFrom != 'SFI_SUMMARY' && 
-           (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE' || (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')));
+    return this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE' || (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive'));
   }
 
   getHelpText() {

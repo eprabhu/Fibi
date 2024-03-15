@@ -41,5 +41,6 @@ public class CoiDisclosureDto {
 	private String adminPersonName;
 	private String riskCategoryCode;
 	private String revisionComment;
+	private String actionType;
 
 }

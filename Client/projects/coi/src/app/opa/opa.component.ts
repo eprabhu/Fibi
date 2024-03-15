@@ -1,18 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
-import {Subject} from 'rxjs';
-import {OpaService} from './services/opa.service';
-import {isEmptyObject} from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import {DataStoreService} from './services/data-store.service';
-import {CommonService} from '../common/services/common.service';
-import {environment} from '../../environments/environment';
-import {REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
-import {OPA, OpaDisclosure} from './opa-interface';
-import {DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment} from '../shared-components/shared-interface';
-import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
-import {Router} from '@angular/router';
-import {Location} from '@angular/common';
-import {ModalType} from '../disclosure/coi-interface';
+import { Component, OnInit} from '@angular/core';
+import { FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
+import { Subject} from 'rxjs';
+import { OpaService} from './services/opa.service';
+import { hideModal, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import { DataStoreService} from './services/data-store.service';
+import { CommonService} from '../common/services/common.service';
+import { environment} from '../../environments/environment';
+import { REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
+import { OPA } from './opa-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment} from '../shared-components/shared-interface';
+import { HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
+import { Router} from '@angular/router';
+import { Location} from '@angular/common';
+import { ModalType} from '../disclosure/coi-interface';
+import { NavigationService} from "../common/services/navigation.service";
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-opa',
@@ -34,7 +36,7 @@ export class OpaComponent implements OnInit {
     withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
     returnErrorMsg = 'Describe the reason for returning the disclosure';
     withdrawHelpTexts = [
-        `Withdraw any disclosure in 'Submitted' status.`,
+        `Withdraw disclosures currently in the 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
@@ -52,33 +54,64 @@ export class OpaComponent implements OnInit {
     commentsRight: {
         canViewPrivateComments: boolean;
         canMaintainPrivateComments: boolean;
-    }
+    };
+    isHomeClicked = false;
+    isSubmitClicked = false;
 
     constructor(public opaService: OpaService,
                 private _router: Router,
                 public location: Location,
                 public commonService: CommonService,
+                private _navigationService: NavigationService,
                 public dataStore: DataStoreService) {
     }
 
     ngOnInit(): void {
         this.getDataFromStore();
+        this.setPersonProjectDetails();
         this.listenDataChangeFromStore();
+        this.subscribeSaveComplete();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
 
     triggerSave() {
+        this.isSubmitClicked = false;
         this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
+    }
+
+    opaSubmissionModal() {
+        openModal('opa-submit-confirm-modal');
+    }
+
+    saveAndSubmit() {
+        if(this.opaService.isFormBuilderDataChangePresent) {
+            this.isSubmitClicked = true;
+            this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
+        } else {
+            this.submitOPA();
+        }
+    }
+
+    subscribeSaveComplete() {
+        this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
+            if(data && this.isSubmitClicked) {
+                this.submitOPA();
+            }
+        }))
     }
 
     submitOPA() {
         this.$subscriptions.push(this.opaService.submitOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
                 this.opa.opaDisclosure = res;
+                this.isSubmitClicked = false;
                 this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA submitted successfully.`);
-            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+            }, err => {
+                this.isSubmitClicked = false;
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+            }));
     }
 
     openAddAssignModal(): void {
@@ -131,6 +164,7 @@ export class OpaComponent implements OnInit {
 
     goToHomeUrl() {
         // TODO admin/reviewer/pi based redirect once rights are implemented.
+        this.isHomeClicked = true;
         const reRouteUrl = this.opaService.previousHomeUrl || REPORTER_HOME_URL;
         this._router.navigate([reRouteUrl]);
     }
@@ -142,8 +176,13 @@ export class OpaComponent implements OnInit {
                 this.opa.opaDisclosure = res;
                 this.dataStore.updateStore(['opaDisclosure'], this.opa);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA withdrawn successfully.`);
-            }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+            }, err => {
+                if (err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.opaService.concurrentUpdateAction = 'Withdraw Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                }
             }));
     }
 
@@ -186,8 +225,10 @@ export class OpaComponent implements OnInit {
 
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.opa.opaDisclosure.opaPerson.personName;
-        // this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitDetails = this.opa.opaDisclosure.homeUnitName;
+        this.personProjectDetails.unitNumber = this.opa.opaDisclosure.homeUnit;
+        this.personProjectDetails.unitName = this.opa.opaDisclosure.homeUnitName;
+        this.personProjectDetails.homeUnit = this.opa.opaDisclosure.homeUnit;
+        this.personProjectDetails.homeUnitName = this.opa.opaDisclosure.homeUnitName;
     }
 
     completeDisclosureReview() {
@@ -251,6 +292,23 @@ export class OpaComponent implements OnInit {
 
     closeReviewComment(event) {
         this.opaService.isShowCommentNavBar = event;
+    }
+
+    cancelConcurrency() {
+        this.opaService.concurrentUpdateAction = '';
+    }
+
+    leavePageClicked() {
+        this.opaService.isFormBuilderDataChangePresent = false;
+        if (this.isHomeClicked) {
+           this.goToHomeUrl();
+        } else {
+            this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
+        }
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
 }

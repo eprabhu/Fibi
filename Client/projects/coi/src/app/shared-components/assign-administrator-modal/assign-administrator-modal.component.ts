@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
-import {COI_MODULE_CODE, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_MODULE_CODE} from '../../app-constants';
+import {COI_MODULE_CODE, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_MODULE_CODE, TRAVEL_MODULE_CODE} from '../../app-constants';
 
 declare const $: any;
 
@@ -32,6 +32,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     @Input() disclosureId = null;
     @Input() disclosureNumber = null;
     @Input() defaultAdminDetails = new DefaultAssignAdminDetails();
+    @Input() actionType: 'R' | 'A';
     @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' | 'OPA_DISCLOSURES' = 'DISCLOSURES';
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 
@@ -64,6 +65,8 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     getModuleCode() {
         if (this.path === 'OPA_DISCLOSURES') {
             return OPA_MODULE_CODE;
+        } else if (this.path === 'TRAVEL_DISCLOSURES') {
+            return TRAVEL_MODULE_CODE;
         } else {
             return COI_MODULE_CODE;
         }
@@ -80,6 +83,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     }
 
     private setDisclosureId(): void {
+        this.addAdmin.actionType = this.actionType;
         if (this.path === 'TRAVEL_DISCLOSURES') {
             this.addAdmin.travelDisclosureId = this.disclosureId;
         } else if (this.path === 'OPA_DISCLOSURES') {

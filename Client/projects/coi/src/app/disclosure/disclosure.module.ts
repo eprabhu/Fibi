@@ -20,6 +20,7 @@ import { EntityRiskSliderModule } from './entity-risk-slider/entity-risk-slider.
 import { HeaderSlidersModule } from './header-sliders/header-sliders.module';
 import { SfiListComponent } from './sfi-list/sfi-list.component';
 import { CoiService } from './services/coi.service';
+import { ReviewRouteGuardService } from './services/review-route-guard.service';
 
 
 const routes: Routes = [
@@ -50,7 +51,7 @@ const routes: Routes = [
                 loadChildren: () => import('./attachment/attachment.module').then(m => m.AttachmentModule)
             },
             {
-                path: 'review', canDeactivate: [RouterGuardService], canActivate: [ResolveServiceService],
+                path: 'review', canDeactivate: [RouterGuardService], canActivate: [ReviewRouteGuardService, ResolveServiceService],
                 loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)
             },
             {
@@ -71,6 +72,7 @@ const routes: Routes = [
         DataStoreService,
         ResolveServiceService,
         RouterGuardService,
+        ReviewRouteGuardService,
         CoiService
     ],
     exports: [],

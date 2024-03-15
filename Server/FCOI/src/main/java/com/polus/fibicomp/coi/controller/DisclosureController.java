@@ -41,5 +41,9 @@ public class DisclosureController {
         return conflictOfInterestService.fetchDisclosureHistory(actionLogDto);
     }
 
+    @PostMapping("/disclosure/riskStatus")
+    public ResponseEntity<Object> checkRiskStatus(@RequestBody CoiDisclosureDto disclosureDto) {
+        return conflictOfInterestService.checkDisclosureRiskStatus(disclosureDto);
+    }
 
 }

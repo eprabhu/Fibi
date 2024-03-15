@@ -89,6 +89,12 @@
                         International
                     </label>
                 </div>
+                <span *ngIf="mandatoryList.has('destination')" class="fs-13 invalid-msg d-block destination-margin">
+                    {{mandatoryList.get('destination')}}
+                </span>
+                <span *ngIf="!mandatoryList?.has('destination')" class="fs-13 d-block text-secondary mb-0 destination-margin">
+                    Choose the destination of your trip.
+                </span>
             </div>
 
             <!-- country/state/city -->
@@ -105,11 +111,11 @@
                             {{mandatoryList?.get('city')}}
                         </span>
                         <span *ngIf="!mandatoryList?.has('city')" class="position-absolute fs-13 col text-secondary mb-0">
-                            Type city.
+                            Please enter the city.
                         </span>
                     </div>
                 </div>
-            
+
                 <!-- Country and State list -->
                 <div class="row col-6">
                     <ng-container *ngIf="destination === 'International'">
@@ -129,7 +135,7 @@
                             </span>
                         </div>
                     </ng-container>
-            
+
                     <ng-container *ngIf="destination !== 'International' && destination !== null">
                         <!-- State list -->
                         <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
@@ -142,7 +148,7 @@
                                 {{mandatoryList?.get('state')}}
                             </span>
                             <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
-                                Type the state you traveled to.
+                                Please enter the state.
                             </span>
                         </div>
                     </ng-container>
@@ -256,7 +262,7 @@
                         {{mandatoryList?.get('amount')}}
                     </span>
                     <span *ngIf="!mandatoryList?.has('amount')" class="position-absolute fs-13 col text-secondary mb-0">
-                        Type your travel amount.
+                        Please enter the amount.
                     </span>
                 </div>
             </div>
@@ -294,13 +300,15 @@
               ?'Active':'Inactive'}}</span>
           </div>
           <div class="text-secondary fs-14 col-8 mt-2">
-            <label class="grey-text me-2"> Address</label>
-            <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
-              <span> {{(addEntityConfirmation?.address |
-                slice:0:55)}}
-              <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
-              </span></span>
-            </span>
+            <label class="grey-text me-2 d-flex"> Address</label>
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
+                <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
+                  <span> {{(addEntityConfirmation?.address |
+                    slice:0:55)}}
+                  <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+                  </span></span>
+                </span>
+              </app-no-data-label>
             <ng-template #showFullInfo>
               <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
               <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"

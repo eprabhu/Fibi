@@ -94,6 +94,10 @@ public class PersonEntityCtrl {
     @PostMapping("/getRelationship")
     public ResponseEntity<Object> getPersonEntityRelationship(@RequestBody ConflictOfInterestVO vo) {
         logger.info("Requesting for getPersonEntityRelationship");
+        if (!documentAuthorization.isAuthorized(Constants.COI_MODULE_CODE, String.valueOf(vo.getPersonEntityId()), AuthenticatedUser.getLoginPersonId(),
+                Constants.COI_SFI_SUBMODULE_CODE, null)) {
+            return new ResponseEntity<>("Not Authorized to view this Disclosure", HttpStatus.FORBIDDEN);
+        }
         return personEntityService.getPersonEntityRelationship(vo);
     }
 

@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
+import { COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -23,7 +23,7 @@ import {
     CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
+import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
@@ -33,7 +33,6 @@ import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } fr
     templateUrl: './disclosure.component.html',
     styleUrls: ['./disclosure.component.scss'],
 })
-
 
 export class DisclosureComponent implements OnInit, OnDestroy {
 
@@ -101,13 +100,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     showSlider = false;
     selectedType: '';
     withdrawHelpTexts = [
-        `Withdraw any disclosure in 'Submitted' status.`,
-        `Describe the reason for withdrawal in the field provided.`,
+        `Withdraw disclosures currently in the 'Submitted' status.`,
+        `Specify the reason for the withdrawal of the disclosure.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
     returnHelpTexts = [
-        `Return any disclosure in 'Review in progress' status.`,
-        `Describe the reason for returning  in the field provided.`,
+        `Return disclosures currently in the 'Review in progress' status.`,
+        `Specify the reason for the returning of the disclosure.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
@@ -116,7 +115,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
-    commentsRight: any = {}
+    commentsRight: any = {};
+    isUserCollapse = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -137,6 +137,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.listenScreenSize();
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
@@ -157,8 +158,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.updateTimeStampEvent();
         this.routerEventSubscription();
+        this.setPersonProjectDetails();
     }
 
     routerEventSubscription() {
@@ -196,6 +197,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goToStep(stepPosition?: any) {
+        if (this.coiService.isRelationshipSaving) { return; }
         this.isHomePageClicked = false;
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
@@ -304,7 +306,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
         this.validateRelationship();
     }
-    
+
     getApplicationQuestionnaireRO() {
         return {
             'moduleItemCode': 8,
@@ -531,9 +533,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.router.navigate(['/coi/user-dashboard']);
         }
     }
-    unitTitle() {
-        return getSponsorSearchDefaultValue(this.coiData.coiDisclosure.person.unit);
-    }
 
     closeAssignAdministratorModal(event) {
         if (event && (event.adminPersonId || event.adminGroupId)) {
@@ -578,13 +577,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         } else {
             openModal('confirmModal');
         }
-    }
-
-    updateTimeStampEvent() {
-        this.dataStore.updateTimestampEvent.subscribe((value) => {
-            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
-            this.coiData = JSON.parse(JSON.stringify(this.coiData));
-        });
     }
 
     getDisclosureTypeMessage(): string {
@@ -682,7 +674,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.coiData?.coiDisclosure?.person?.fullName;
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitDetails = this.coiData?.coiDisclosure?.person.unit?.unitDetail;
+        this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
+        this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
+        this.personProjectDetails.homeUnit = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
+        this.personProjectDetails.homeUnitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
     }
 
     performDisclosureAction(event): void {
@@ -698,7 +693,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     openRiskSlider() {
-        this.isOpenRiskSlider = true;
+        this.$subscriptions.push(this.coiService.riskAlreadyModified({
+            'riskCategoryCode': this.coiData.coiDisclosure.riskCategoryCode,
+            'disclosureId': this.coiData.coiDisclosure.disclosureId
+        }).subscribe((data: any) => {
+            this.isOpenRiskSlider = true;
+        }, err => {
+            if (err.status === 405) {
+                this.coiService.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }
+        }))
     }
 
     closeSlider(event) {
@@ -760,5 +766,25 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     closeHeaderSlider() {
         this.showSlider = false;
         this.selectedType = '';
+    }
+
+    getColorBadges() {
+        switch (this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = !(window.innerWidth <= 992);
+        }
     }
 }

@@ -6,12 +6,12 @@
                 <th scope="col" width="20%" rowspan="2"> Nature of Relationship</th>
                 <th scope="col" width="10%" rowspan="2"> Compensated/ Uncompensated</th>
                 <th scope="col" width="10%" colspan="2" class="text-center"># Number of days per Year</th>
-                <th scope="col" width="18%" class="text-center">
+                <th scope="col" width="18%" class="text-center" *ngIf="isFormEditable">
                     <div class="form-builder-sticky-button">
                         <div class="form-builder-sticky-button-color">
-                            <div class="text-end mb-1" *ngIf="isFormEditable">
+                            <div class="text-end mb-1">
                                 <button type="button" class="btn btn-primary fs-15 mb-10 w-94" title="Click here to add an entity" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add"
+                                    [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" aria-label="Click here to add"
                                     (click)="getMyEntities()">
                                     Add Entity
                                 </button>
@@ -88,8 +88,8 @@
 </div>
 
 <div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
-    <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
-        [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" area-describedby="Click here to add" (click)="getMyEntities()">
+    <button type="button" class="btn btn-primary fs-15 mb-10" title="Add Entity" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id" aria-label="Click here to add" (click)="getMyEntities()">
         Add Entity
     </button>
     <p> Please click on 'Add Entity' to link compensated/uncompensated activities
@@ -107,11 +107,11 @@
             <div class="modal-body">
                 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
-                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' ">
-                        <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
+                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' " title="My Entities">
+                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
                     </div>
-                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'">
-                        <span class="pb-3" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
+                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'" title="Add New Entity">
+                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
                     </div>
                 </nav>
 
@@ -125,22 +125,22 @@
                             <div class="border-end fs-14 p-3" [@leftSlideInOut]>
                                 <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
                                 <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
-                                    title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+                                    title="Click to filter by type: All" aria-label="Click to filter by type: All"
                                     class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active me-1"
                                     role="button">All</span>
                                 <span (click)="setFilter('COMPLETE')" [class.filter-active]="currentFilter=='COMPLETE'"
                                     title="Click to filter by type: Complete"
-                                    area-describedby="Click to filter by type: Complete"
+                                    aria-label="Click to filter by type: Complete"
                                     class="shadow-sm fw-medium mr-025 border rounded-5 bg-white"
                                     role="button">Complete</span>
                                 <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="currentFilter=='INCOMPLETE'"
                                     title="Click to filter by type: Incomplete"
-                                    area-describedby="Click to filter by type: Draft"
+                                    aria-label="Click to filter by type: Draft"
                                     class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white"
                                     role="button">Incomplete</span>
                                 <span (click)="setFilter('INACTIVE')" [class.filter-active]="currentFilter=='INACTIVE'"
                                     title="Click to filter by type: Inactive"
-                                    area-describedby="Click to filter by type: Inactive"
+                                    aria-label="Click to filter by type: Inactive"
                                     class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white"
                                     role="button">Inactive</span>
                             </div>
@@ -355,16 +355,16 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_add"
+                <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_add" title="Cancel"
                     (click)="clearData()" type="button">Cancel
                 </button>
-                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate"
-                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
-                    area-describedby="Click here to add">
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate || !isEntitySelected"
+                    class="btn btn-primary fs-15 mr-8" title="Add Entity" (click)="eventType='NEW'; addRowItem()"
+                    aria-label="Click here to add">
                     Add
                 </button>
-                <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure"
-                    (click)="eventType='NEW'; updateEntity();" area-describedby="Click here to add">
+                <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="Update Entity"
+                    (click)="eventType='NEW'; updateEntity();" aria-label="Click here to add">
                     Update
                 </button>
             </div>
@@ -407,7 +407,7 @@
                     (click)="clearData()" type="button">Cancel
                 </button>
                 <button ype="button" class="btn btn-primary fs-15" title="Delete" (click)="deleteEntity()"
-                    area-describedby="Click here to add">
+                aria-label="Click here to add">
                     Delete
                 </button>
             </div>

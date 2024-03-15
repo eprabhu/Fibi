@@ -59,3 +59,38 @@
 .fs-20 {
     font-size: 1.25rem !important;
 }
+//weight
+.fw-500 {
+    font-weight: 500 !important;
+}
+
+.fw-600 {
+    font-weight: 600 !important;
+}
+
+.fw-700 {
+    font-weight: 700 !important;
+}
+
+.coi-text-darker {
+    color: var(--theme-text-gray-900) !important;
+    font-size: var(--theme-font-size);
+    font-weight: 700;
+}
+.coi-text-dark {
+    color: var(--theme-text-gray-800) !important;
+    font-size: var(--theme-font-size);
+    font-weight: 600;
+}
+
+.coi-text-light {
+    color: var(--theme-text-gray-700) !important;
+    font-size: var(--theme-font-size);
+    font-weight: 400;
+}
+
+.coi-text-lighter {
+    color: var(--theme-text-gray-600) !important;
+    font-size: var(--theme-font-size);
+    font-weight: 400 !important;
+}

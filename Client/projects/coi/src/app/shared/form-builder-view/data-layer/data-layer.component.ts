@@ -1,7 +1,9 @@
 import { Questionnaire } from './../../view-questionnaire-v2/questionnaire-interface';
-import { Component, Input, } from '@angular/core';
+import { Component, EventEmitter, Input, Output, } from '@angular/core';
 import { CustomElementVO, FBConfiguration, FormBuilderSaveRO, FormSection, QuestionnaireVO, SectionComponent } from '../form-builder-interface';
 import { FormBuilderService } from '../form-builder.service';
+import { CommonService } from '../../../common/services/common.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 
 @Component({
     selector: 'app-data-layer',
@@ -16,7 +18,7 @@ export class DataLayerComponent {
     @Input() isFormEditable: boolean;
     @Input() formBuilderId: number;
 
-    constructor(private _formBuilderService: FormBuilderService) { }
+    constructor(private _formBuilderService: FormBuilderService, private _commonService: CommonService) { }
 
     saveEventsFromChild(data: CustomElementVO | QuestionnaireVO | any) {
         const RO: FormBuilderSaveRO = this.prepareROForSave(data);
@@ -27,8 +29,10 @@ export class DataLayerComponent {
                 this.component.customElement.customDataElements = res.customElement.customDataElements;
             }
             this.saveEventForChildComponent.next({ eventType: 'SAVE_COMPLETE', data: res });
+            this.emitEditOrSaveAction('SAVE_COMPLETE', res);
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure saved successfully.');
         }, err => {
-            // Do something
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving disclosure. Please try again.');
         });
     }
 
@@ -52,5 +56,8 @@ export class DataLayerComponent {
         return RO;
     }
 
+    emitEditOrSaveAction(actionPerformed, event) {
+        this._formBuilderService.$formBuilderActionEvents.next({action: actionPerformed, actionResponse: event, component: this.component});
+    }
 
 }
