@@ -11,6 +11,7 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
+import { openCoiSlider } from '../../common/utilities/custom-utilities';
 
 
 @Component({
@@ -93,21 +94,37 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     subSectionTitle: string;
     subSectionId: any;
     showAddComment = false;
+    showSlider = false;
+    sliderElementId: any;
     imgUrl = this.deployMap + 'assets/images/close-black.svg';
     @ViewChild('reviewCommentsOverlay', { static: true }) reviewCommentsOverlay: ElementRef;
 
     constructor(
-        public commonService: CommonService, private _reviewCommentsService: ReviewCommentsService, 
+        public commonService: CommonService, private _reviewCommentsService: ReviewCommentsService,
         private _router: Router
     ) { }
 
     ngOnInit() {
         this.getReviewerActionDetails();
         this.loadSectionsTypeCode();
-        setTimeout(() => {
-            this.showTaskNavBar();
-        })
+        this.viewSlider();
     }
+
+    viewSlider() {
+        this.showSlider = true;
+        this.sliderElementId = `review-comments-slider-${this.reviewCommentDetails.componentTypeCode}`;
+        setTimeout(() => {
+            openCoiSlider(this.sliderElementId);
+        });
+    }
+
+    validateSliderClose() {
+        setTimeout(() => {
+            this.showSlider = false;
+            this.sliderElementId = '';
+            this.closePage.emit();
+		}, 500);
+	}
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
@@ -117,15 +134,15 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         document.getElementById('review-comments-confirmation-modal-trigger-btn').click();
     }
 
-    validateSliderClose() {
-        this.isCloseSlider = true;
-        (this.isChangesInField) ? this.openConformationModal() : this.closeReviewSlider();
-    }
+    // validateSliderClose() {
+    //     this.isCloseSlider = true;
+    //     (this.isChangesInField) ? this.openConformationModal() : this.closeReviewSlider();
+    // }
 
     closeReviewSlider() {
         const slider = document.querySelector('.slider-base');
-        slider.classList.remove('slider-opened');   
-        this.addBodyScroll();
+        slider.classList.remove('slider-opened');
+        // this.addBodyScroll();
         setTimeout(() => {
             this.cancelOrClearCommentsDetails();
             this.closePage.emit(false);
@@ -158,7 +175,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
             this.selectedAttachmentType.push(null);
             this.isChangesInField = true;
         }
-                    
+
     }
 
     updateAddAttachmentDetails(files, index) {
@@ -309,13 +326,13 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     setLocalVariableValue(type) {
         if(type.sfiStatus) {
             this.sfiStatus = type.sfiStatus;
-        } 
+        }
         if (type.subSectionTitle) {
             this.subSectionTitle = type.subSectionTitle;
         }
         if(type.subSectionId) {
             this.subSectionId = type.subSectionId;
-        } 
+        }
     }
 
     deleteCoiCommentAttachments(item) {
@@ -359,7 +376,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         // this.commentList.splice(event, 1);
         if (!this.isCloseSlider) {
             this.getReviewerActionDetails();
-        }    
+        }
     }
 
     editReviewerParentComment(event) {
@@ -419,7 +436,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         const REQ_BODY = new CommentFetch();
         REQ_BODY.componentTypeCode = ['3', '9'].includes(details.componentTypeCode) ? null : details.componentTypeCode;
         REQ_BODY.moduleItemKey = this.disclosureType === 'COI' ? this.disclosureDetails.disclosureId : this.disclosureDetails.opaDisclosureId;
-        REQ_BODY.moduleItemNumber = this.disclosureDetails.disclosureNumber; 
+        REQ_BODY.moduleItemNumber = this.disclosureDetails.disclosureNumber;
         REQ_BODY.parentCommentId = this.disclosureDetails.parentCommentId || null;
         REQ_BODY.subModuleCode = details.subModuleCode || null;
         REQ_BODY.subModuleItemKey = details.subModuleItemKey || null;
@@ -461,7 +478,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
             return 'project-background'
         }
 	}
-    
+
     modalHeader(projectDetails): string {
 		return `# ${projectDetails.moduleCode == '3' ? projectDetails.moduleItemId : projectDetails.moduleItemKey} - ${projectDetails?.title}`;
 	}
@@ -478,7 +495,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         });
     }
         this.dismissAttachmentModal();
-    
+
     }
 
     dismissAttachmentModal() {
@@ -513,7 +530,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         this.selectedAttachmentStatus.splice(index, 1);
         this.uploadedFile.splice(index, 1);
     }
-    
+
     private setCompleterOptions(array, field) {
         return {
             arrayList: array,
@@ -581,7 +598,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         return this.reviewCommentDetails.componentTypeCode == code
         && ((this.reviewCommentDetails.subModuleItemKey || (this.reviewCommentDetails.formBuilderSectionId && !this.reviewCommentDetails.formBuilderComponentId)));
     }
- 
+
     openSFI(personEntityId) {
         this.validateSliderClose();
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'view' } })
@@ -604,7 +621,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     }
 
     showTaskNavBar() {
-        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
+        // document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         const slider = document.querySelector('.slider-base');
         slider.classList.add('slider-opened');
     }

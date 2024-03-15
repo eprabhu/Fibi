@@ -12,14 +12,16 @@ import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilitie
 export class PersonProjectEntityCardComponent implements OnChanges {
 
     @Input() personProjectOrEntity: PersonProjectOrEntity = new PersonProjectOrEntity();
+    @Input() disclosureHeaderDetails;
 
     isReadMore = false;
     personUnitDetail = '';
 
-    constructor(public _commonService: CommonService) { }
+    constructor(public commonService: CommonService) { }
 
     ngOnChanges(): void {
-        this.personUnitDetail = this._commonService.getPersonLeadUnitDetails(this.personProjectOrEntity);
+        this.personUnitDetail = this.commonService.getPersonLeadUnitDetails(this.personProjectOrEntity);
+        
     }
     
     getPersonLeadUnitDetail() {

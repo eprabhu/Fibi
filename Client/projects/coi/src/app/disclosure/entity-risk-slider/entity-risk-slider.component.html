@@ -1,4 +1,4 @@
-<app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'disclosure-entity-risk-slider'">
+<app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'disclosure-entity-risk-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
 
     <!-- slider header -->
     <ng-container header>
@@ -7,22 +7,20 @@
 
     <!-- slider header card -->
     <ng-container content-sticky>
-        <div class="mt-1">
-            <div class="info-card-border card-scroll mt-2 rounded-2 shadow-medium bg-light mx-4 ms-4">
-                <div class="row ml-15 mt-2">
-                    <div class="position-relative p-3 fs-14 pl-5 fw-500">
+            <div class="card card-scroll rounded-2 shadow-medium coi-box-red mt-3 p-0">
+                <div class="card-body">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-lg-9">
                                 <span class="d-flex">
                                     <span
                                         class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails)}}">
                                         <span>{{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
                                     </span>
-                                    <h4 class="mb-0 d-flex margin-project-title label-text">
+                                    <h4 class="mb-0 d-flex label-text f-16">
                                         <ng-container
                                             *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'"
                                             class="ms-1">
-                                            <span class="title-text ml-2 mt-2 word-break-all new-line-property">
+                                            <span class="title-text word-break-all new-line-property">
                                                 {{(readMoreOrLess ? modalHeader(projectDetails) :
                                                 modalHeader(projectDetails) | slice:0:180)}}
                                                 <span
@@ -40,43 +38,43 @@
                                     </h4>
                                 </span>
                             </div>
+                            <div class="col-lg-3 d-flex align-items-start justify-content-end">
+                                <div class="d-inline-flex align-items-center">
+                                    <label class="grey-text">Risk: </label>
+                                    <span class="ml-2 grey-text fw-normal">
+                                        <div class="text-color fs-14 d-flex align-items-center">
+                                            <span class="text-secondary fs-14">
+                                                <mat-icon class="{{getWarningClass(disclosureDetails?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                                            </span>
+                                            <app-no-data-label
+                                                [valueToShow]="disclosureDetails?.coiRiskCategory?.description">
+                                                <span
+                                                    class="ml-2 mt-1 fw-normal">{{disclosureDetails?.coiRiskCategory?.description}}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col d-flex">
-                                <label class="grey-text left-margin me-2">Person associated with the Disclosure:
+                        <div class="row mt-3">
+                            <div class="col-lg">
+                                <label class="grey-text d-block">Person associated with the Disclosure
                                 </label>
                                 <app-no-data-label [valueToShow]="disclosureDetails?.person?.fullName">
                                     <span class="grey-text fw-normal">{{disclosureDetails?.person?.fullName}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div class="col d-flex">
-                                <label class="grey-text">Department: </label>
-                                <span class="ml-2 grey-text fw-normal">
+                            <div class="col-lg mb-lg-0 mb-md-3 mb-3">
+                                <label class="grey-text d-block">Department</label>
+                                <span class="grey-text fw-normal">
                                     <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
                                         <span>{{commonService.getPersonLeadUnitDetails(disclosureDetails?.unit)}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col d-flex align-items-center">
-                                <label class="grey-text">Risk: </label>
-                                <span class="ml-2 grey-text fw-normal">
-                                    <div class="text-color fs-14 d-flex align-items-center">
-                                        <span class="text-secondary fs-14">
-                                            <mat-icon class="{{getWarningClass(disclosureDetails?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                                        </span>
-                                        <app-no-data-label
-                                            [valueToShow]="disclosureDetails?.coiRiskCategory?.description">
-                                            <span
-                                                class="ml-2 mt-1 fw-normal">{{disclosureDetails?.coiRiskCategory?.description}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                </span>
-                            </div>
-                            <div class="col d-flex align-items-center">
-                                <label class="grey-text">Disclosure : </label>
-                                <span class="ml-2 grey-text fw-normal">
+                            <div class="col-lg">
+                                <label class="grey-text d-block">Disclosure</label>
+                                <span class="grey-text fw-normal">
                                     <app-no-data-label
                                         [valueToShow]="disclosureDetails?.coiConflictStatusType?.description">
                                         <span
@@ -86,26 +84,24 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
+                 
                 </div>
             </div>
-        </div>
     </ng-container>
 
     <!-- modal content -->
     <ng-container content>
         <!-- help text -->
-        <div class="mx-4 mt-3">
+        <div class="mt-3">
             <app-help-text [helpTextList]="helpText" [tooltip]="'Disclosure Risk History'"></app-help-text>
         </div>
 
         <!-- risk edit section -->
-        <div class="card-body">
-            <div>
-                <div class="card comment-card shadow-sm mx-1">
-                    <div class="row ml-15 mt-4">
-                        <div class="col-4 ml-15 align-items-center">
-                            <label class="fs-14 fw-500">Risk:</label>
+                <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 align-items-center">
+                            <label class="fs-14 fw-500">Risk</label>
                             <span>
                                 <select class="form-control form-select" [(ngModel)]="riskCategoryCode"
                                     [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"
@@ -124,8 +120,8 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="col mr-10">
-                            <label class="fs-14 fw-500">Describe the reason for Risk level change:</label>
+                        <div class="col-12 mt-3">
+                            <label class="fs-14 fw-500">Describe the reason for Risk level change</label>
                             <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
                                 [(ngModel)]="riskComment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
                                 [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
@@ -135,18 +131,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="text-muted mb-3 mr-10 mt-2">
-                        <button type="button" class="btn btn-primary float-end fs-14" (click)="checkForModification()">Save</button>
-                        <button type="button" class="btn btn-outline-secondary float-end mr-10"
+                    <div class="mt-2 text-end">
+                        <button type="button" class="btn btn-outline-secondary fs-14 me-2"
                             (click)="clearRiskChanges()">Clear</button>
+                        <button type="button" class="btn btn-primary fs-14" (click)="checkForModification()">Save</button>
                     </div>
                 </div>
             </div>
-        </div>
-
         <!-- risk history heading -->
-        <div class="main-title mt-2 mx-4" id="">
-            <h3 class="d-flex align-items-center mx-4"><strong>Risk History</strong>
+        <div class="main-title mt-3 mb-2" id="">
+            <h3 class="d-flex align-items-center fs-18"><strong>Risk History</strong>
                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Click to view Risk history."
                     data-bs-placement="top">
                 </span>
@@ -154,77 +148,109 @@
         </div>
 
         <!-- risk history log -->
-        <div class="card mt-3 mx-4" id="agreement-history">
+        <div class="card" id="risk-history">
             <div class="card-content">
                 <div class="card-body">
-                    <div class="form-row">
-                        <div class="table-responsive" *ngIf="!isEmptyHistory()">
-                            <table class="table mb-0">
-                                <caption class="sr-only">Risk History Comments </caption>
-                                <thead class="sr-none"></thead>
-                                <tbody>
-                                    <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
-                                        <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
-                                            {{disclosure.key}}</h4>
-                                        <ul class="pl-4 pr-3 mb-0">
-                                            <li *ngFor="let historyEntry of disclosure.value;let index=index"
-                                                class="p-3">
-                                                <div class="form-row">
-                                                    <div class="col">
-                                                        <p class="fs-14 mb-0">
-                                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                            <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
-                                                                dateFormatterWithTimeZone:'time'}}</label>
-                                                            <span [innerHTML]="historyEntry?.description"></span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
-                                                    <span
-                                                        *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                                                        <span> {{(historyEntry?.comment | slice:0:230)}}</span>
-                                                        <span (click)="isReadMore[index] = !isReadMore[index]"
-                                                            class="hand-cursor"><span class="fw-medium">... <u>Read
-                                                                    more</u>
-                                                                <i aria-hidden="true"></i></span>
-                                                        </span>
-                                                    </span>
-                                                    <ng-template #showFullInfo>
-                                                        <span class="word-break-all new-line-property">{{historyEntry?.comment}}</span>
-                                                        <span *ngIf="historyEntry?.comment?.length > 230"
-                                                            (click)="isReadMore[index] = !isReadMore[index]"
-                                                            aria-hidden="true" class="hand-cursor"><span
-                                                                class="fw-medium">. <u>Show Less</u>
-                                                                <i aria-hidden="true"></i></span>
-                                                        </span>
-                                                    </ng-template>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div *ngIf="!isEmptyHistory()">
+                            <ul class="timeline">
+                                <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
+                                <li *ngFor="let historyEntry of disclosure.value;let index=index">
+                                    <span class="fs-14" [innerHTML]="historyEntry?.description"></span>
+                                    <p class="coi-text-lighter fs-13">{{disclosure.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                                    <p *ngIf="historyEntry?.description" class="coi-text-light">
+                                        <span *ngIf="historyEntry?.comment" class="fs-14">
+                                            <mat-icon class="format_quote">format_quote</mat-icon>
+                                            <span *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 430; else showFullInfo" 
+                                                class="fst-italic mx-2" [attr.aria-label]="historyEntry?.comment">
+                                                <span class="coi-text-light mt-2">{{(historyEntry?.comment | slice:0:430)}}</span>
+                                                <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor" title="Read More"><span class="fw-medium">... <u>Read more</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </span>
+                                            <ng-template #showFullInfo>
+                                                <span tabindex='0' [attr.aria-label]="historyEntry?.comment" class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
+                                                <span *ngIf="historyEntry?.comment?.length > 430" class="hand-cursor mt-2 fw-medium" title="Read Less"
+                                                    (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true">
+                                                    <span class="fw-medium"><u>Read Less</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </ng-template>
+                                        </span>
+                                    </p>
+                                </li>
+                            </ng-container>
+                            </ul>
                         </div>
                         <div class="noDataExists p-2" *ngIf="isEmptyHistory()">
                             <app-no-information [isBorderNeeded]="false"> </app-no-information>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
     </ng-container>
+    <ng-container confirmation-content>
+        You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
+    </ng-container>
 
 </app-coi-slider>
 
-<!--risk confirmation Modal-->
-<app-confirmation-modal [modalName]="'risk-conflict-confirmation-modal'" (secondaryBtnAction)="leavePageClicked()"
-    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
-    <!-- modal header -->
-    <ng-container header>
-        <span>Confirmation</span>
-    </ng-container>
-    <!-- modal content -->
-    <p content class="fs-14 ms-2">
-        You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
-    </p>
-</app-confirmation-modal>
+
+<!-- risk history log -->
+<!-- <div class="card" id="risk-history">
+    <div class="card-content">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive" *ngIf="!isEmptyHistory()">
+                    <table class="table mb-0">
+                        <caption class="sr-only">Risk History Comments </caption>
+                        <thead class="sr-none"></thead>
+                        <tbody>
+                            <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
+                                <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
+                                    {{disclosure.key}}</h4>
+                                <ul class="pl-4 pr-3 mb-0">
+                                    <li *ngFor="let historyEntry of disclosure.value;let index=index"
+                                        class="p-3">
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <p class="fs-14 mb-0">
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
+                                                        dateFormatterWithTimeZone:'time'}}</label>
+                                                    <span [innerHTML]="historyEntry?.description"></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
+                                            <span
+                                                *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
+                                                <span> {{(historyEntry?.comment | slice:0:230)}}</span>
+                                                <span (click)="isReadMore[index] = !isReadMore[index]"
+                                                    class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                            more</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </span>
+                                            <ng-template #showFullInfo>
+                                                <span class="word-break-all new-line-property">{{historyEntry?.comment}}</span>
+                                                <span *ngIf="historyEntry?.comment?.length > 230"
+                                                    (click)="isReadMore[index] = !isReadMore[index]"
+                                                    aria-hidden="true" class="hand-cursor"><span
+                                                        class="fw-medium">. <u>Show Less</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </ng-template>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="noDataExists p-2" *ngIf="isEmptyHistory()">
+                    <app-no-information [isBorderNeeded]="false"> </app-no-information>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

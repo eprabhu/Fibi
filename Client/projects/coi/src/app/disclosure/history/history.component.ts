@@ -22,7 +22,7 @@ export class HistoryComponent implements OnInit {
     coiDisclosure: any = {};
     disclosureHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor( public _coiService: CoiService, 
                  private _commonService: CommonService, 

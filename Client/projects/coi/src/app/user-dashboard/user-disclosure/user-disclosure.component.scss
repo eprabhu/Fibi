@@ -60,7 +60,7 @@
 
 .user-dashboard-nav {
   min-height: 42px;
-  color: #7c7c7c;
+  // color: #7c7c7c;
 }
 
 .mb-4px {
@@ -82,11 +82,11 @@
   background-color: #4cb57d !important;
 }
 
-h4 {
-  color: #151515;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
+// h4 {
+//   color: #151515;
+//   font-size: 1.5rem;
+//   font-weight: 700;
+// }
 
 .cursor {
   cursor: context-menu !important;
@@ -103,7 +103,7 @@ margin-top-3px{
 }
 
 .grey-text {
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   color: #48647f;
   font-weight: 400;
   margin-left: 5px;
@@ -118,8 +118,8 @@ margin-top-3px{
   width: max-content;
   height: 27px;
   position: relative;
-  left: -5px;
-  top: -4px;
+  left: -10px;
+  top: -5px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -160,7 +160,6 @@ margin-top-3px{
 .closeButton {
     position: absolute;
     right: 10px;
-    top: 10px;
     color: #9E9E9E;
     cursor: pointer;
 }
@@ -173,7 +172,7 @@ margin-top-3px{
   padding-left: 28px;
 }
 
-.search-area {
+.search-area:hover {
   background-color: white !important;
 }
 
@@ -194,11 +193,11 @@ margin-top-3px{
   border-left: 2px solid #48647f82;
   padding-top: 2px;
   height: 18px;
+  display: inline-block;
 }
 
 .award-icon {
   width: 18px;
-  margin-right: 3px;
   color: grey;
   height: 18px;
 }
@@ -217,7 +216,6 @@ margin-top-3px{
 
 .proposal-icon {
   width: 16px;
-  margin-right: 3px;
   color: grey;
   height: 17px;
 }
@@ -372,14 +370,14 @@ padding-right: 17px;
 
 /* Adjusting the height for FCOI, OPA disclosures creation card.
  - My COI Dashboard green, yellow cards */
-.card {
-  display: flex;
-  height: 100%;
-  margin: 0 5px;
-  .card-content {
-    flex-grow: 1;
-  }
-}
+// .card {
+//   display: flex;
+//   height: 100%;
+//   margin: 0 5px;
+//   .card-content {
+//     flex-grow: 1;
+//   }
+// }
 
 @media (max-width: 1025px) {
   .min-card-height {
@@ -430,16 +428,53 @@ padding-right: 17px;
 /* This class will remove the colon symbol from the label and value till the resolution = Medium(1560px).
     i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
 */
-@media (max-width : 1560px) {
-  .create-disclosure div label span  {
-    display: none !important;
-  }
-}
+// @media (max-width : 1560px) {
+//   .create-disclosure div label span  {
+//     display: none !important;
+//   }
+// }
 /* This class will add the colon symbol to the label and value from resolution = Medium(1560px) */
-@media (min-width : 1560px) {
-  .create-disclosure div label span  {
-    display: inline-block !important;
-  }
+// @media (min-width : 1560px) {
+//   .create-disclosure div label span  {
+//     display: inline-block !important;
+//   }
+// }
+
+.searchButton:hover{
+  color: #0a58ca !important;
 }
 
+// .symbol-circle {
+//   width: 42px;
+//   height: 42px;
+//   border-radius: 50%;
+//   background: #d6ebe0;
+
+//   .mat-icon {
+//     -webkit-user-select: none;
+//     user-select: none;
+//     background-repeat: no-repeat;
+//     display: inline-block;
+//     fill: currentColor;
+//      height: auto !important;
+//      width: auto !important;
+//      overflow: auto !important;
+//      color: #19834a;
+//   }
+// }
+
+// .mat-icon {
+//   -webkit-user-select: none;
+//   user-select: none;
+//   background-repeat: no-repeat;
+//   display: inline-block;
+//   fill: currentColor;
+//    height: auto !important;
+//    width: auto !important;
+//    overflow: auto !important;
+// }
+
+.mat-icon {
+  font-size: 1.22rem !important;
+}
 

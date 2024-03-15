@@ -12,9 +12,9 @@ import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
+import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -75,6 +75,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     completeDisclosureListCopy: any = []; /* Excat copy of original list which is to perform every array operations */
     DATA_PER_PAGE: number = 20; /* Number of data to be shown in single page */
     paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
+    sliderElementId: string = '';
+    isPurposeRead = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,
@@ -407,15 +409,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
+        this.sliderElementId = `user-disclosure-entity-${this.entityId}`;
         setTimeout(() => {
-            openSlider('disclosure-entity-view-2-slider');
+            openCoiSlider(this.sliderElementId);
         });
     }
 
     validateSliderClose() {
-        closeSlider('disclosure-entity-view-2-slider');
         setTimeout(() => {
             this.showSlider = false;
+            this.entityId = null;
+            this.sliderElementId = ''; 
         }, 500);
     }
 

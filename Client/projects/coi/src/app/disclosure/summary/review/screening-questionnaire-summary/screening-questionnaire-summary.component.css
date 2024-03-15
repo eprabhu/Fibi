@@ -5,9 +5,9 @@
 
 .add-activity-button {
     position: absolute;
-    top: 2px;
+    top: -4px;
     z-index: 2;
-    right: 40px;
+    right: 45px;
 }
 
 .main-title {
@@ -16,7 +16,7 @@
       margin-top: 10px;
   }
 
-  
+
   .info-icon {
     margin-top : -7px;
     height     : 22px;

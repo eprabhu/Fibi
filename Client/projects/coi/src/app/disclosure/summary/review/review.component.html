@@ -27,7 +27,7 @@
 	  <strong tabindex="0" aria-label="Relationships">Relationships</strong>
 	  <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships."
 		data-bs-placement="top">
-		<mat-icon aria-label="info" class="me-2 info-icon position-relative mt-3" data-bs-toggle="tooltip">info</mat-icon>
+		<mat-icon aria-label="info" class="me-2 info-icon position-relative mt-2" data-bs-toggle="tooltip">info</mat-icon>
 	  </span>
 	</span>
 	</h3>
@@ -36,7 +36,7 @@
 	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
   </div>
-<ng-container *ngIf="isRelationCollapsed">
+<div [hidden]="!isRelationCollapsed">
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
 			<app-relationship-summary [selectedProject]="award" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
@@ -45,7 +45,7 @@
 	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<app-no-information> </app-no-information>
 	</div>
-</ng-container>
+</div>
 <!--<app-conflict-management-summary></app-conflict-management-summary>-->
 <app-certify-summary></app-certify-summary>
 
