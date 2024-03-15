@@ -90,7 +90,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     sortCountObj: SortCountObj;
     clearField: string;
     countryClearField: string;
-    isHover: [] = [];
+    isHover: boolean[] = [];
     isViewAdvanceSearch = true;
     adminData: any;
     fcoiTypeCode: any;
