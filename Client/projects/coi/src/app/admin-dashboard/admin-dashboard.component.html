@@ -312,9 +312,10 @@
         <ng-container *ngIf="isShowDisclosureList && !isLoading;">
             <div *ngIf="coiList.length > 0;else noData" [@listAnimation]="coiList.length">
 
-                <section class="d-flex justify-content-between align-items-center select-all-section p-2"
+                <section class="d-flex justify-content-between align-items-center select-all-section shadow-sm p-2 border border-primary-subtle complete-review-section"
+                         [class.position-sticky]="selectedItemCount()"
                         *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS_WITHOUT_SFI'">
-                    <div class="d-flex align-items-center ms-3">
+                    <div class="d-flex align-items-center ms-2">
                         <input type="checkbox" id="select-all" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()">
                         <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer">Select all <span *ngIf="selectedItemCount()"
                                                                                                                   class="fs-14 py-2 ms-2 fw-medium"
@@ -323,13 +324,14 @@
                         </span></label>
                     </div>
                     <div>
-                        <button class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()" (click)="confirmCompleteReview()">
+                        <button [@topSlideInOut] class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()" (click)="confirmCompleteReview()">
                             <mat-icon class="me-2">done</mat-icon> Complete Review</button>
                     </div>
                 </section>
 
                 <ng-container *ngFor="let coi of coiList;let index=index;">
-                    <div class="card coi-card-regular">
+                    <div class="card coi-card-regular" [class.selected-active-background]="selectedDisclosures[index]" (mouseover)="isHover[index] = true"
+                         (mouseout)="isHover[index] = false">
                         <div class="card-body px-3 py-2">
 
                             <div class="row" *ngIf="!coi?.travelDisclosureId">
@@ -377,19 +379,24 @@
                                         </div>
                                     </div>
                                     <div class="row mx-0">
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Department -->
-                                            <div tabindex="0" [attr.aria-label]="'Department' + coi?.unit?.unitDetail">
-                                                <label class="d-block coi-text-dark">Department</label>
-                                                <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(coi?.unit)}}</span>
-                                            </div>
+                                        <div class="col-auto align-self-center"  *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS_WITHOUT_SFI'">
+                                            <input type="checkbox" [checked]="selectedDisclosures[index]"
+                                                   (change)="selectedDisclosures[index] = !selectedDisclosures[index]; checkIfAllDisclosuresSelected()">
                                         </div>
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Description (FCOI)-->
-                                            <div *ngIf="coi?.fcoiTypeCode== 1" tabindex="0"
-                                                 [attr.aria-label]="'Description' + coi?.reviseComment">
-                                                <label for="id" class="d-block coi-text-dark">Description</label>
-                                                <span>
+                                        <div class="col row">
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Department -->
+                                                <div tabindex="0" [attr.aria-label]="'Department' + coi?.unit?.unitDetail">
+                                                    <label class="d-block coi-text-dark">Department</label>
+                                                    <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(coi?.unit)}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Description (FCOI)-->
+                                                <div *ngIf="coi?.fcoiTypeCode== 1" tabindex="0"
+                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
+                                                    <label for="id" class="d-block coi-text-dark">Description</label>
+                                                    <span>
                                                 <app-no-data-label [valueToShow]="coi?.reviseComment">
                                                     <span *ngIf="coi?.reviseComment" class="fs-14">
                                                         <span class="word-break-all new-line-property mx-2"
@@ -412,14 +419,14 @@
                                                     </span>
                                                 </app-no-data-label>
                                             </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Description(Not FCOI) -->
-                                            <div *ngIf="coi?.fcoiTypeCode!= 1" tabindex="0"
-                                                 [attr.aria-label]="'Description' + coi?.reviseComment">
-                                                <label for="id" class="d-block coi-text-dark">Description</label>
-                                                <span class="break-point-1200">
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Description(Not FCOI) -->
+                                                <div *ngIf="coi?.fcoiTypeCode!= 1" tabindex="0"
+                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
+                                                    <label for="id" class="d-block coi-text-dark">Description</label>
+                                                    <span class="break-point-1200">
                                                 <app-no-data-label [valueToShow]="coi?.reviseComment">
                                                     <span *ngIf="coi?.reviseComment" class="fs-14">
                                                         <span class="word-break-all new-line-property mx-2"
@@ -442,50 +449,51 @@
                                                     </span>
                                                 </app-no-data-label>
                                             </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Certification Date -->
-                                            <div tabindex="0" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
-                                                <label class="d-block coi-text-dark">Certification Date</label>
-                                                <span class="coi-text-light">
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Certification Date -->
+                                                <div tabindex="0" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
+                                                    <label class="d-block coi-text-dark">Certification Date</label>
+                                                    <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="coi?.certifiedAt">
                                                     <span class="coi-text-light">{{coi?.certifiedAt | dateFormatter}}</span>
                                                 </app-no-data-label>
                                             </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Administrator -->
-                                            <div tabindex="0" [attr.aria-label]="'Administrator' + (coi?.administrator)">
-                                                <label for="id" class="d-block coi-text-dark">Administrator</label>
-                                                <span class="coi-text-light">
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Administrator -->
+                                                <div tabindex="0" [attr.aria-label]="'Administrator' + (coi?.administrator)">
+                                                    <label for="id" class="d-block coi-text-dark">Administrator</label>
+                                                    <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="coi?.administrator">
                                                     <span id="id" class="coi-text-light">{{coi?.administrator}}</span>
                                                 </app-no-data-label>
                                             </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Expiration Date -->
-                                            <div tabindex="0">
-                                                <label class="d-block coi-text-dark">Expiration Date</label>
-                                                <span>
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Expiration Date -->
+                                                <div tabindex="0">
+                                                    <label class="d-block coi-text-dark">Expiration Date</label>
+                                                    <span>
                                                 <app-no-data-label [valueToShow]="coi?.expirationDate">
                                                     <span class="coi-text-light">{{coi?.expirationDate | dateFormatter}}</span>
                                                 </app-no-data-label>
                                             </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 col-6 mb-2">
-                                            <!-- Coi card Admin Group -->
-                                            <div tabindex="0" [attr.aria-label]="'Admin Group' + (coi?.adminGroupName)">
-                                                <label for="id" class="d-block coi-text-dark">Admin Group</label>
-                                                <span class="coi-text-light">
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Coi card Admin Group -->
+                                                <div tabindex="0" [attr.aria-label]="'Admin Group' + (coi?.adminGroupName)">
+                                                    <label for="id" class="d-block coi-text-dark">Admin Group</label>
+                                                    <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="coi?.adminGroupName">
                                                     <span id="id" class="coi-text-light">{{coi?.adminGroupName}}</span>
                                                 </app-no-data-label>
                                             </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -576,8 +584,7 @@
                                                     <span class="d-inline-flex">
                                                         <mat-icon class="fs-18 me-1">apartment</mat-icon>
                                                         <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
-                                                              [attr.aria-label]="'Entity Name' + (coi.travelEntityName)">Entity
-                                                            :</span>
+                                                              [attr.aria-label]="'Entity Name' + (coi.travelEntityName)">Entity:&nbsp;</span>
                                                         <span class="coi-text-darker fs-6 hyper-link">
                                                         {{(readMoreOrLess[index] ? coi.travelEntityName : coi.travelEntityName | slice:0:120)}}
                                                         <span
@@ -596,7 +603,7 @@
                                             </div>
                                         </div>
                                         <div class="row mx-0">
-                                            <div class="col-md-3 col-6 mb-2">
+                                            <div class="col-lg-3 col-md-6 mb-2">
                                                 <!-- Travel Card Department -->
                                                 <div tabindex="0" [attr.aria-label]="'Department Name' + (coi?.unitDetails?.unitDetail)">
                                                     <label for="department-id" class="d-block coi-text-dark">Department</label>
@@ -608,7 +615,7 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-6 mb-2">
+                                            <div class="col-lg-3 col-md-6 mb-2">
                                                 <!-- Travel Card Traveller -->
                                                 <div tabindex="0" [attr.aria-label]="'Traveller Type' + formatTravellerTypes(coi?.travellerTypeDescription)">
                                                     <label for="traveller" class="d-block coi-text-dark">Traveller</label>
@@ -620,7 +627,7 @@
                                                 </div>
                                             </div>
                                             <!-- Travel Card Destination -->
-                                            <div class="col-md-3 col-6 mb-2">
+                                            <div class="col-lg-3 col-md-6 mb-2">
                                                 <div *ngIf="coi?.fcoiTypeCode!= 1" tabindex="0"
                                                      [attr.aria-label]="'Destination' + (coi?.travelCity || coi?.travelCountry || coi?.travelState)">
                                                     <label for="destination" class="d-block coi-text-dark">Destination</label>
@@ -637,7 +644,7 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-6 mb-2">
+                                            <div class="col-lg-3 col-md-6 mb-2">
                                                 <!-- Travel Card Certification Date -->
                                                 <div tabindex="0" [attr.aria-label]="'Certification Date' + (coi?.travelSubmissionDate)">
                                                     <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
@@ -649,7 +656,7 @@
                                                 </div>
                                             </div>
                                             <!-- Travel Card Actual Amount -->
-                                            <div class="col-md-3 col-6 mb-2">
+                                            <div class="col-lg-3 col-md-6 mb-2">
                                                 <div tabindex="0" [attr.aria-label]="'Actual Amount' + (coi.travelAmount)">
                                                     <label for="travel-amount" class="d-block coi-text-dark">Actual Amount</label>
                                                     <span>
@@ -659,7 +666,7 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-6 mb-2">
+                                            <div class="col-lg-3 col-md-6 mb-2">
                                                 <!-- Travel Card Expiration Date -->
                                                 <div tabindex="0" [attr.aria-label]="'Expiration Date' + (coi.expirationDate)">
                                                     <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
