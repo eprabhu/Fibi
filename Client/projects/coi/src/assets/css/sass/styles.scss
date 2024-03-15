@@ -675,3 +675,20 @@ ul.timeline > li:before {
 .format_quote {
   transform: rotateY(180deg);
 }
+
+.mat-icon {
+  font-size: 1.25rem !important;
+}
+
+.fs-25px {
+  font-size: 25px !important;
+}
+
+/* for fixing fibi style issues across application */
+.btn-outline-secondary, .section-header, .content, .side-info, .navigation-box, .status-pill, .form-control::placeholder {
+  @extend .fs-14;
+}
+
+.btn-outline-secondary {
+  padding: .375rem 0.75rem !important;
+}
