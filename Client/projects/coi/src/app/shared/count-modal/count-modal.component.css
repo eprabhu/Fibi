@@ -6,7 +6,6 @@
 .btn-outline-secondary {
     font-size: 0.875rem;
     min-width: 5em;
-    padding: .5rem 1rem;
     height: 35px;
 }
 
@@ -78,7 +77,7 @@
     top: 0px;
     right: 15px;
   }
-  
+
   .navigation-title {
     .active {
       color: #007DEC;
@@ -88,7 +87,7 @@
       bottom: 5px;
     }
   }
-  
+
   .navigation-icons {
     .active {
       border-bottom: 3px solid #007DEC;
@@ -97,21 +96,21 @@
       box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
     }
   }
-  
+
   .nav-options:hover {
     background-color: #e6f3ff !important;
     box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
   }
-  
+
   .user-dashboard-nav {
     min-height: 40px;
   }
-  
+
   .btn-position {
     position: relative;
     bottom: 5px;
   }
-  
+
   .border-nav {
     width: max-content;
     position: relative;
