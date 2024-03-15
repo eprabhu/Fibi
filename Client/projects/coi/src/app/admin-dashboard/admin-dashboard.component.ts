@@ -446,6 +446,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
+    formatTravellerTypes(travellerTypes: string): string {
+        return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
+    }
+
     performAdvanceSearch() {
         this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
@@ -887,7 +891,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     // The function is used for closing nav dropdown at mobile screen
     offClickMainHeaderHandler(event: any) {
-        if (window.innerWidth < 1093) {
+        if (window.innerWidth < 1200) {
             const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
             if (document.getElementById('navbarResponsive').classList.contains('show')) {
                 document.getElementById('navbarResponsive').classList.remove('show');
@@ -905,5 +909,5 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     selectedItemCount() {
        return this.selectedDisclosures.filter(e => e).length;
     }
-    
+
 }
