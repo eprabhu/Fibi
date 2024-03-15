@@ -9,12 +9,12 @@
                 <span class="px-2">{{relationshipsDetails?.versionStatus == 'ACTIVE' ||
                     relationshipsDetails?.versionStatus == 'ARCHIVE'?
                     relationshipsDetails?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span></span>
-            <div class="fw-bold fs-18 mt-4 px-3 cursor-pointer d-flex align-items-center" tabindex="0">
+            <div class="fw-bold fs-18 mt-4 px-3 cursor-pointer d-flex align-items-center col" tabindex="0">
                 <span>{{entityDetails?.entityName}}</span>
                 <span class="badge rounded-pill bg-warning ms-2"
                     *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
             </div>
-            <div class="ms-auto d-flex align-items-center">
+            <div class="ms-auto d-flex align-items-center col-auto">
                 <label class="fs-14 fw-500 mt-3 me-3" for="risk-level">SFI Version :
                 </label>
                 <div *ngIf="entityVersionList.length > 0">
