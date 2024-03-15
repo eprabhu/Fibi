@@ -5,9 +5,9 @@
                 <ul class="timeline">
                     <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull;">
                         <li *ngFor="let historyEntry of disclosure.value">
-                            <span class="fs-14" [innerHTML]="historyEntry?.message"></span>
-                            <p class="coi-text-lighter fs-13">{{disclosure?.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
-                            <p class="coi-text-light" *ngIf="historyEntry?.comment">
+                            <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="0"></span>
+                            <p class="coi-text-lighter fs-13" tabindex="0">{{disclosure?.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                            <p class="coi-text-light" *ngIf="historyEntry?.comment" tabindex="0">
                                 <span class="fs-14">
                                     <mat-icon class="format_quote">format_quote</mat-icon>
                                     <span class="fst-italic mx-2" [attr.aria-label]="historyEntry?.comment"
