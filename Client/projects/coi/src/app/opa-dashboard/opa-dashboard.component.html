@@ -1,170 +1,205 @@
-<div class="px-3" [@fadeInOutHeight]>
+<div [@fadeInOutHeight]>
     <section class="section-advanced-search">
-        <div class="fs-18 fw-bold mt-3" tabindex="0" aria-label="OPA Disclosure Dashboard">OPA Disclosures</div>
-        <hr class="mt-1">
-        <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
-            <div class="align-items-center bg-white d-flex justify-content-between list">
-                <!--OPA Dashboard Tabs -->
-                <ul class="m-0 p-0">
-                    <li *ngIf="isShowAdminDashboard" tabindex="0" aria-label="All Disclosures" role="tab" (click)="changeTab('ALL_DISCLOSURES')"
-                        (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES'"
-                        class="p-3 position-relative text-center ml-3" title="Click to view All Disclosures"
-                        aria-labelledby="Click to view the list of all disclosures under All Disclosures tab">
-                        All Disclosures
-                    </li>
-                    <li class="separator" *ngIf="isShowAdminDashboard"></li>
-                    <li *ngIf="isShowAdminDashboard" tabindex="0" aria-label="New Submissions" role="tab" (click)="changeTab('NEW_SUBMISSIONS')"
-                        (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='NEW_SUBMISSIONS'"
-                        class="p-3 position-relative text-center" title="Click to view New Submissions"
-                        area-describedby="Click to view the list of all disclosures under New Submissions tab">
-                        New Submissions
-                    <li class="separator" *ngIf="isShowAdminDashboard"></li>
-                    <li tabindex="0" aria-label="My Reviews" role="tab" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
-                        (keyup.space)="changeTab('MY_REVIEWS')" class="p-3 position-relative text-center"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
-                        title="Click to view My Reviews"
-                        area-describedby="Click to view the list of all the OPA disclosures under My Reviews tab">My Reviews
-                    </li>
-                    <li class="separator"></li>
-                    <li tabindex="0" aria-label="All Reviews" role="tab" (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
-                        (keyup.space)="changeTab('ALL_REVIEWS')" class="p-3 position-relative text-center"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'" title="Click to view All Reviews"
-                        area-describedby="Click to view the list of all disclosures under All Reviews tab">All Reviews
-                    </li>
-                </ul>
-                <div class="mx-1">
-                    <span tabindex="0" aria-label="Toggle Advanced Search" role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0"
-                        id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
-                        (click)="toggleAdvanceSearch();" aria-label="Toggle Advanced Search"
-                        title="Click here to expand / collapse  Advanced Search fields">
-                        <mat-icon class="me-3">tune</mat-icon>Advanced Search</span>
+        <div class="fs-18 fw-bold d-inline-block mb-2" tabindex="0" title="OPA Disclosures Dashboard"
+            aria-label="OPA Disclosures Dashboard">OPA Disclosures</div>
+        <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm bg-white">
+            <div class="list navbar-toggleable-xs">
+                <div class="border-bottom d-flex justify-content-between">
+                    <button #mainHeaders id="responsiveColapse" [ngClass]="isShowOptions ? 'd-none' : 'hamburger-display'"
+                        class="navbar-toggler hidden-sm-up px-0 px-sm-3" (click)="isShowOptions = true" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <i class="fa fa-bars f-14 text-muted mx-colr" aria-hidden="true" title="Click for more pages"></i>
+                    </button>
+                    <button class="navbar-toggler hidden-sm-up px-0 mt-1 px-sm-3" [@topSlideInOut]="isShowOptions" type="button"
+                        [ngClass]="!isShowOptions ? 'd-none' : 'hamburger-display'" (click)="isShowOptions = false"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars f-14 text-muted mx-colr" aria-hidden="true" title="Click for more pages"></i>
+                    </button>
+                    <ul class="m-0 p-0 menu-responsive fit-content tabs-collapsed collapse" id="navbarResponsive" aria-label=""
+                        tabindex="0">
+                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('ALL_DISCLOSURES')"
+                            (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
+                            [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES'"
+                            class="p-3 fs-6 align-self-center" aria-label="Click to view All Disclosures"
+                            [attr.title]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES' ? 'All Disclosures' : 'Click to view All Disclosures'"
+                            [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'All Disclosures'">
+                            All Disclosures
+                        </li>
+                        <li class="separator" *ngIf="isShowAdminDashboard"></li>
+                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS')" tabIndex="0"
+                            (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
+                            [class.active]="_opaDashboardService.opaRequestObject.tabType=='NEW_SUBMISSIONS'"
+                            class="p-3 fs-6 align-self-center"
+                            aria-label="Click to view the list of all newly submitted disclosures"
+                            [attr.title]="_opaDashboardService.opaRequestObject.tabType=='NEW_SUBMISSIONS' ? 'New Submissions ' : 'Click to view New Submissions'"
+                            [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='NEW_SUBMISSIONS' ? 'Selected tab is New Submissions ' : 'New Submissions'">
+                            New Submissions
+                        </li>
+                        <li class="separator" *ngIf="isShowAdminDashboard"></li>
+                        <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabIndex="0"
+                            (keyup.space)="changeTab('MY_REVIEWS')"
+                            [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
+                            class="p-3 fs-6 align-self-center"
+                            aria-label="Click to view the list of all disclosures under my review"
+                            [attr.title]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS' ? 'My Reviews' : 'Click to view My Reviews'"
+                            [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'My Reviews'">
+                            My Reviews
+                        </li>
+                        <li class="separator"></li>
+                        <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabIndex="0"
+                            (keyup.space)="changeTab('ALL_REVIEWS')"
+                            [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'"
+                            class="p-3 fs-6 align-self-center"
+                            aria-label="Click to view the list of all disclosures under all reviews"
+                            [attr.title]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'All Reviews' : 'Click to view All Reviews'"
+                            [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'All Reviews'">
+                            All Reviews
+                        </li>
+                    </ul>
+                    <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
+                        <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0 adv-search" id="advanced-search" tabindex="0"
+                            aria-controls="collapseExample" aria-expanded="false" (click)="toggleAdvanceSearch();"
+                            (keyup.enter)="toggleAdvanceSearch();" (keyup.space)="toggleAdvanceSearch()"
+                            title="Click here to expand / collapse Advanced Search fields"
+                            aria-label="Toggle Advanced Search">
+                            <mat-icon class="me-3">tune</mat-icon>Advanced Search</span>
+                    </div>
                 </div>
             </div>
-        </nav>
-
-        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample" [@topSlideInOut]>
-            <div class="card-body">
-                <div class="form-row row">
-                    <!-- Person Search Field -->
-                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" tabindex="0" aria-label="Person Search Field" role="searchbox">
-                        <label class="d-block" for="adv-disclosure-person-name">Person</label>
-                        <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField" [placeHolder]="'Type here to search by Person Name'"
-                            (selectedResult)="personSelect($event)">
+            <div class="pb-3 px-3 pt-2" id="collapseExample" *ngIf="isViewAdvanceSearch"  [@topSlideInOut]>
+                <div class="row g-3">
+                    <!-- Person Name -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Person Name" tabindex="0"
+                         aria-label="Person search field" role="searchbox">
+                        <label class="d-block mb-1" for="adv-opa-disclosure-person-name">Person</label>
+                        <app-elastic (selectedResult)="personSelect($event)" [clearField]="assigneeClearField"
+                                     [options]="personElasticOptions" [placeHolder]="'Search by Person'"
+                                     [uniqueId]="'adv-opa-disclosure-person-name'">
                         </app-elastic>
                     </div>
-                    <!-- Unit Name Search Field -->
-                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-3" tabindex="0" aria-label="Department Search Field" role="searchbox">
-                        <label class="d-block" for="adv-disclosure-department-name">
+                    <!-- Department Name -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Department Name"
+                         tabindex="0"
+                         aria-label="Department search field" role="searchbox">
+                        <label class="d-block mb-1" for="adv-opa-disclosure-department-name">
                             Department
                         </label>
                         <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)"
-                            [clearField]="advSearchClearField" [httpOptions]="leadUnitSearchOptions"
-                            [placeHolder]="'Type here to search by Department'" [uniqueId]="'adv-disclosure-department-name'">
+                                             [clearField]="advSearchClearField" [httpOptions]="leadUnitSearchOptions"
+                                             [placeHolder]="'Search by Department'"
+                                             [uniqueId]="'adv-opa-disclosure-department-name'">
                         </app-endpoint-search>
                     </div>
-                    <!-- OPA Review Status Dropdown(lookup) -->
-                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-3" tabindex="0" aria-label="Review Status Dropdown" role="listbox">
-                        <label class="d-block" for="adv-disclosure-status">
-                            Review Status
+                    <!-- Review Status -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Review Status" tabindex="0"
+                         role="listbox"
+                         aria-label="Review dropdown">
+                        <label class="d-block mb-1" for="adv-opa-review-status">
+                            <ng-container>Review Status</ng-container>
                         </label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'reviewStatusCodes')"
-                            [options]="opaDisclosureStatusOptions"
-                            [selectedLookUpList]="lookupValues['reviewStatusCodes']"
-                            [uniqueId]="'adv-disclosure-status'">
+                                     [options]="opaDisclosureStatusOptions"
+                                     [selectedLookUpList]="lookupValues['reviewStatusCodes']"
+                                     [uniqueId]="'adv-opa-review-status'">
                         </app-look-up>
                     </div>
-                    <!-- Disposition Status Dropdown(lookup) -->
-                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-3" tabindex="0" aria-label="Disposition Status Dropdown" role="listbox">
-                        <label class="d-block" for="adv-disposition-status">
-                            Disposition Status
-                        </label>
-                        <app-look-up (selectedResult)="onLookupSelect($event, 'dispositionStatusCodes')"
-                            [options]="opaDispositionStatusOption"
-                            [selectedLookUpList]="lookupValues['dispositionStatusCodes']"
-                            [uniqueId]="'adv-disposition-status'">
-                        </app-look-up>
+                    <!-- Disposition Status -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" role="listbox"
+                    aria-label="Disposition Status dropdown"
+                    title="Click to search by Disposition Status">
+                    <label class="d-block mb-1" for="adv-opa-disposition-status">
+                        Disposition Status
+                    </label>
+                    <app-look-up (selectedResult)="onLookupSelect($event, 'dispositionStatusCodes')"
+                                [options]="opaDispositionStatusOption" [selectedLookUpList]="lookupValues['dispositionStatusCodes']"
+                                [uniqueId]="'adv-opa-disposition-statuss'">
+                    </app-look-up>
                     </div>
-                </div>
-                <div class="form-row row mt-3">
-                    <!-- Submission Date -->
-                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-3" tabindex="0" aria-label="Certification Date field">
-                        <label class="d-block" for="adv-disclosure-expiration-date">
+                    <!-- Certification Date -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" aria-label="Certification Date"
+                         title="Click to search by Certification Date">
+                        <label class="d-block mb-1" for="adv-opa-disclosure-certification-date">
                             Certification Date
                         </label>
                         <span class="dateField">
-                            <input matInput [matDatepicker]="submissionDate" (keypress)="submissionDate.open()"
-                                id="adv-disclosure-expiration-date" (click)="submissionDate.open()" class="form-control d-inline-block"
-                                [(ngModel)]="advanceSearchDates.submissionDate" placeholder="{{datePlaceHolder}}">
+                            <input matInput [matDatepicker]="submissionDate" (keypress)="submissionDate.open()" id="adv-disclosure-expiration-date"
+                                (click)="submissionDate.open()" class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.submissionDate"
+                                placeholder="{{datePlaceHolder}}">
                             <i (click)="submissionDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                             <mat-datepicker #submissionDate></mat-datepicker>
                         </span>
                     </div>
                     <!-- Period Date -->
-                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" tabindex="0" aria-label="Reporting Cycle">
-                        <div>
-                            <label class="d-block" for="adv-disclosure-reporting-cycle">Reporting Cycle</label>
-                            <div class="row mx-0 align-items-center d-flex" >
-                                <span class="col dateField p-0">
-                                    <input matInput [matDatepicker]="periodFromDate" (keypress)="periodFromDate.open()"
-                                        id="adv-disclosure-reporting-cycle" (click)="periodFromDate.open()"
-                                        [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
-                                        class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.periodStartDate"
-                                        placeholder="From({{datePlaceHolder}})">
-                                    <i (click)="periodFromDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                                    <mat-datepicker #periodFromDate></mat-datepicker>
-                                </span>
-                                <label class="col-auto"> - </label>
-                                <span class="col dateField p-0">
-                                    <input matInput [matDatepicker]="periodToDate" (keypress)="periodToDate.open()"
-                                        id="adv-disclosure-reporting-cycle" (click)="periodToDate.open()"
-                                        [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
-                                        class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.periodEndDate"
-                                        placeholder="To({{datePlaceHolder}})">
-                                    <i (click)="periodToDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                                    <mat-datepicker #periodToDate></mat-datepicker>
-                                </span>
-                            </div>
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0"
+                    aria-label="Reporting Cycle">
+                    <div>
+                        <label class="d-block mb-1" for="adv-opa-disclosure-reporting-cycle">Reporting Cycle <span class="coi-text-light">({{datePlaceHolder}})</span></label>
+                        <div class="row mx-0 align-items-center d-flex">
+                            <span class="col dateField p-0">
+                                <input matInput [matDatepicker]="periodFromDate" (keypress)="periodFromDate.open()"
+                                    id="adv-opa-disclosure-reporting-cycle" (click)="periodFromDate.open()"
+                                    [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
+                                    class="form-control d-inline-block"
+                                    [(ngModel)]="advanceSearchDates.periodStartDate"
+                                    placeholder="From">
+                                <i (click)="periodFromDate.open()"
+                                    class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                <mat-datepicker #periodFromDate></mat-datepicker>
+                            </span>
+                            <label class="col-auto"> - </label>
+                            <span class="col dateField p-0">
+                                <input matInput [matDatepicker]="periodToDate" (keypress)="periodToDate.open()"
+                                    id="adv-opa-disclosure-reporting-cycle" (click)="periodToDate.open()"
+                                    [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
+                                    class="form-control d-inline-block"
+                                    [(ngModel)]="advanceSearchDates.periodEndDate"
+                                    placeholder="To">
+                                <i (click)="periodToDate.open()"
+                                    class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                <mat-datepicker #periodToDate></mat-datepicker>
+                            </span>
                         </div>
                     </div>
+                    </div>
                     <!-- Staff / Faculty -->
-                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 align-items-end"
-                        tabindex="0" aria-label="Employee Type Dropdown" role="listbox">
-                        <label class="d-block" for="adv-employee-type">
-                           Employee Type
-                        </label>
-                        <app-look-up (selectedResult)="onLookupSelect($event, 'designationStatusCodes')"
-                            [selectedLookUpList]="lookupValues['designationStatusCodes']"
-                            [options]="opaEmployeeRoleTypeOption"
-                            [uniqueId]="'opa-adv-person-role-status'"
-                            [externalArray]="_opaDashboardService.rolesList"
-                            [isExternalArray]="true">
-                        </app-look-up>
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0"
+                    aria-label="Employee Type Dropdown" role="listbox">
+                    <label class="d-block mb-1" for="adv-employee-type">
+                        Employee Type
+                    </label>
+                    <app-look-up (selectedResult)="onLookupSelect($event, 'designationStatusCodes')"
+                        [selectedLookUpList]="lookupValues['designationStatusCodes']"
+                        [options]="opaEmployeeRoleTypeOption" [uniqueId]="'opa-adv-person-role-status'"
+                        [externalArray]="_opaDashboardService.rolesList" [isExternalArray]="true">
+                    </app-look-up>
                     </div>
-                </div>
-                <div class="d-flex justify-content-end mt-4">
-                    <div class="invalid-feedback block-display" *ngIf="map.get('fromDate')">
-                        {{map.get('fromDate')}}
+                    <div class="col d-flex justify-content-end mt-4 align-items-end">
+                        <button class="btn btn-outline-secondary fs-14 mx-2 px-3" id="btn-clear" tabindex="0"
+                                role="button"
+                                (click)="resetAndPerformAdvanceSearch()" title="Click here to clear all the fields"
+                                aria-label="Click here to clear all the fields">Clear
+                        </button>
+                        <button class="btn btn-primary fs-14" id="btn-search" (click)="performAdvanceSearch()"
+                                title="Click here to Initiate search" tabindex="0" role="button"
+                                aria-label="Click here to get the search results with/without fields">Search
+                        </button>
                     </div>
-                    <button tabindex="0" aria-label="Clear button" role="button" (click)="resetAndPerformAdvanceSearch()" class="btn btn-outline-secondary btn-xs fs-14 px-4"
-                        title="Click here to clear all the fields">Clear</button>
-                    <button tabindex="0" aria-label="Search" role="button" (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button"
-                        title="Click here to Initiate search">Search</button>
                 </div>
             </div>
-        </div>
-
+        </nav>
         <!-- sorting for all disclosures -->
-        <div class="sort-div border mt-2 pb-0" *ngIf="isShowOPAList && opaList.length">
-            <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
+        <div class="sort-div border mt-2" *ngIf="isShowOPAList && opaList.length">
+            <span class="fs-14 fw-medium me-2 text-secondary" tabindex="0" aria-label="Sort By">Sort By :</span>
             <button tabindex="0" *ngFor="let sortSection of sortSectionsList; let index = index"
-                title="Click to sort by {{sortSection?.fieldName}}" (click)="sortResult(sortSection?.variableName)"
+                title="Click to sort by {{sortSection?.fieldName}}"
+                (click)="sortResult(sortSection?.variableName)"
                 (keydown.enter)="sortResult(sortSection?.variableName)"
-                aria-describedby="Click to sort by {{sortSection?.fieldName}}"
+                aria-label="Click to sort by {{sortSection?.fieldName}}"
+                [ngClass]="index == 0 ? 'ms-1' : 'mx-0'"
                 [class.px-8]="!_opaDashboardService.opaRequestObject.sort[sortSection?.variableName]"
                 [class.filter-active]="_opaDashboardService.opaRequestObject.sort[sortSection?.variableName]"
-                class="shadow-sm fw-medium pr-05 py-2 px-3 fs-13 border rounded-5 bg-white mb-3 mx-1" role="button">
+                class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white sort-filter" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label class="offscreen">Click to Sort by {{sortSection?.fieldName}} in
                         {{_opaDashboardService.opaRequestObject.sort[sortSection?.variableName]=== 'asc' ?
@@ -177,147 +212,183 @@
                 </div>
             </button>
         </div>
+
         <ng-container *ngIf="isShowOPAList && !isLoading;">
             <div *ngIf="opaList.length > 0;else noData" [@listAnimation]="opaList.length">
                 <ng-container *ngFor="let coi of opaList;let index=index;">
-                    <section class="disclosure-card" (mouseover)="isHover[index] = true"
+                    <!-- New card design starts(master card) -->
+                    <div class="card coi-card-regular" (mouseover)="isHover[index] = true"
                         (mouseout)="isHover[index] = false">
-                        <div>
-                            <div class="border-bottom">
-                                <div class="row mb-3 p-013 mt-2">
-                                    <div class="col" tabindex="0"
-                                        [attr.aria-label]="'Inside OPA card, Person Name ' + (coi?.personName) + 'The person is a' +(coi?.isFaculty ? 'Faculty' : 'Staff') +
-                                            'Reporting Cycle ' + (coi?.periodStartDate | dateFormatter) + 'to' + (coi?.periodEndDate | dateFormatter)">
-                                        <span class="d-flex">
-                                            <span
-                                                class="entity-status shadow-sm align-items-center d-flex mt-2 bg-opa-clip">
-                                                <span>OPA</span></span>
-                                            <h4 class="mb-0 mt-2 d-flex label-text align-items-baseline person">
-                                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
-                                                <strong class="me-2 ml-2 text-nowrap mt-2">{{coi?.personName}} |
-                                                <label *ngIf="coi?.isFaculty != null">
-                                                {{coi?.isFaculty ? 'Faculty' : 'Staff'}} |
-                                                </label>
-                                                <span> {{' Reporting Cycle :'}}
-                                                    <app-no-data-label [valueToShow]="coi?.periodStartDate">
-                                                        <span id="id" class="grey-text">{{coi?.periodStartDate |
-                                                            dateFormatter}} - {{coi?.periodEndDate |
-                                                            dateFormatter}}</span>
-                                                    </app-no-data-label>
+                        <div class="card-body px-3 py-2">
+                            <div class="row">
+                                <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
+                                    <div class="row">
+                                        <div class="col-12 d-inline-flex mb-2">
+                                            <!-- OPA card badge -->
+                                                <span class="d-flex" tabindex="0"
+                                                    [attr.aria-label]="'Inside OPA card, Person Name ' + (coi?.personName) + 'The person is a' +(coi?.isFaculty ? 'Faculty' : 'Staff') +
+                                                                                                'Reporting Cycle ' + (coi?.periodStartDate | dateFormatter) + 'to' + (coi?.periodEndDate | dateFormatter)">
+                                                    <span class="entity-status shadow-sm d-flex align-items-center bg-opa-clip">
+                                                        <span>OPA</span>
+                                                    </span>
                                                 </span>
-                                                </strong>
-                                            </h4>
-                                        </span>
+                                            <!-- Coi card header -->
+                                                <h4 class="mb-0 d-flex fs-14">
+                                                    <span class="d-inline-flex">
+                                                        <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                        <span class="coi-text-light text-nowrap d-inline-flex fs-6" tabindex="0"
+                                                            [attr.aria-label]="'Disclosure person ' + coi?.personName">
+                                                            {{coi?.personName}}
+                                                            <span class="d-inline-flex" tabindex="0" [attr.aria-label]="coi?.isFaculty ? 'Faculty' : 'Staff'" *ngIf="coi?.isFaculty != null">
+                                                                <span class="pipe mx-1"></span>
+                                                                {{coi?.isFaculty ? 'Faculty' : 'Staff'}}
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                    <span class="d-inline-flex" tabindex="0" [attr.aria-label]="'Reporting Cycle'">
+                                                        <span class="pipe mx-1"></span>
+                                                        <span class="text-nowrap fs-6 ">Reporting Cycle:</span>
+                                                        <span class="coi-text-darker hyper-link ms-1 fs-6">
+                                                            <app-no-data-label [valueToShow]="coi?.periodStartDate">
+                                                            <span>{{coi?.periodStartDate | dateFormatter}} - {{coi?.periodEndDate | dateFormatter}}</span>
+                                                            </app-no-data-label>
+                                                        </span>
+                                                    </span>
+                                                </h4>
+                                        </div>
                                     </div>
-                                </div>
-<!-- OPA dashboard cards -->
-                                <!-- Department -->
-                                <div class="row mb-3 ms-3">
-                                    <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-0 order-xl-0 order-lg-0 order-md-6 mt-3"
-                                        tabindex="0" [attr.aria-label]="'Department ' + coi?.homeUnit + coi?.homeUnitName">
-                                        <label for="id" class="label-text d-lg-inline-block d-block">Department <span>:</span></label>
-                                        <span id="id" class="grey-text dashboard-card-margin ps-2">{{commonService.getPersonLeadUnitDetails(coi)}}</span>
-                                    </div>
-                                     <!-- Certification Date -->
-                                    <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-1 order-xl-1 order-lg-1 order-md-1 mt-3" tabindex="0"
+                                    <div class="row mx-0">
+                                        <div class="col-lg-3 col-md-6 mb-2" tabindex="0" [attr.aria-label]="'Department ' + coi?.homeUnit + coi?.homeUnitName">
+                                            <!-- Coi card Department -->
+                                            <label class="d-block coi-text-dark">Department</label>
+                                            <span class="coi-text-light"> {{commonService.getPersonLeadUnitDetails(coi)}}</span>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 mb-2" tabindex="0"
                                         [attr.aria-label]="'Certification Date ' + (coi?.submissionTimestamp | dateFormatter)">
-                                        <label for="event-type" class="label-text d-lg-inline-block d-block">Certification Date <span>:</span></label>
-                                        <app-no-data-label [valueToShow]="coi?.openDate">
-                                            <span id="event-type" class="grey-text dashboard-card-margin">{{coi?.submissionTimestamp |
-                                                dateFormatter}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <!-- Disposition Status -->
-                                    <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-2 order-xl-5 order-lg-5 order-md-5 mt-3" tabindex="0"
-                                        [attr.aria-label]="'Disposition Status ' + coi?.dispositionStatus">
-                                        <label for="id" class="label-text d-lg-inline-block d-block">Disposition Status <span>:</span></label>
-                                        <app-no-data-label [valueToShow]="coi?.dispositionStatus">
-                                            <span
-                                                class="ms-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}} dashboard-card-margin"
-                                                [class.text-dark]="commonService.getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
-                                                id="disp-status"></span>
-                                            <span id="id" class="badgeFont">{{coi?.dispositionStatus}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <!-- Administrator -->
-									 <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-3 order-xl-2 order-lg-2 order-md-2 mt-3" tabindex="0"
-                                        [attr.aria-label]="'Administrator ' + coi?.adminPersonName">
-                                        <label for="id" class="label-text d-lg-inline-block d-block">Administrator <span>:</span></label>
-                                        <app-no-data-label [valueToShow]="coi?.adminPersonName">
-                                            <span id="id" class="grey-text dashboard-card-margin">{{coi?.adminPersonName}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <!-- Admin Group -->
-                                    <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-4 order-xl-4 order-lg-4 order-md-4 mt-3" tabindex="0"
-                                        [attr.aria-label]="'Admin Group ' + coi?.adminGroupName">
-                                        <label for="id" class="label-text d-lg-inline-block d-block">Admin Group <span>:</span></label>
-                                        <app-no-data-label [valueToShow]="coi?.adminGroupName">
-                                            <span id="id" class="grey-text dashboard-card-margin">{{coi?.adminGroupName}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <!-- Review Status -->
-                                    <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 order-xxl-5 order-xl-3 order-lg-3 order-md-3 mt-3" tabindex="0"
-                                        [attr.aria-label]="'Review Status ' + coi?.reviewStatus">
-                                        <label for="disp-status" class="label-text d-lg-inline-block d-block pr-25">Review Status <span>:</span></label>
-                                        <app-no-data-label [valueToShow]="coi?.reviewStatus">
-                                            <span
-                                                class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}} dashboard-card-margin"
-                                                [class.text-dark]="commonService.getReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
-                                                id="disp-status"></span>
-                                            <span class="badgeFont">
-                                                {{coi?.reviewStatus}}
+                                            <!-- Coi card Certification Date -->
+                                            <label class="d-block coi-text-dark">Certification Date</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="coi?.submissionTimestamp">
+                                                    <span class="coi-text-light">{{coi?.submissionTimestamp | dateFormatter}}</span>
+                                                </app-no-data-label>
                                             </span>
-                                        </app-no-data-label>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 mb-2" tabindex="0" [attr.aria-label]="'Administrator ' + coi?.adminPersonName">
+                                            <!-- Coi card Administrator -->
+                                            <label class="d-block coi-text-dark">Administrator</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="coi?.adminPersonName">
+                                                    <span class="coi-text-light">{{coi?.adminPersonName}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 mb-2" tabindex="0"
+                                        [attr.aria-label]="'Admin Group ' + coi?.adminGroupName">
+                                            <!-- Coi card Admin Group -->
+                                            <label class="d-block coi-text-dark">Admin Group</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="coi?.adminGroupName">
+                                                    <span class="coi-text-light">{{coi?.adminGroupName}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-12 col-6" tabindex="0"
+                                        [attr.aria-label]="Reviewers">
+                                            <!-- Coi Reviewers -->
+                                            <label class="d-block coi-text-dark">Reviewers</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="coi?.reviewers">
+                                                <ng-container *ngFor="let reviewer of coi?.reviewers; let isLast = last">
+                                                    <span class="fileChips regularFont">{{reviewer[0]}}
+                                                        <ng-container *ngIf="reviewer[1] != 'null'">| {{reviewer[1]}} </ng-container> |
+                                                        <span class="reviewer-{{getReviewerStatus(reviewer[3])}}">{{reviewer[2]}}</span>
+                                                    </span>
+                                                </ng-container>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
                                     </div>
-                                    <!-- Reviewers -->
-                                    <div class="col-12 order-lg-last order-md-last order-xl-last order-xxl-last mt-3" tabindex="0">
-                                        <label for="id" class="label-text d-lg-inline-block d-block">Reviewers:</label>
-                                        <span class="grey-text dashboard-card-margin">
-                                            <ng-container *ngFor="let reviewer of coi?.reviewers; let isLast = last">
-                                                <span class="fileChips regularFont">{{reviewer[0]}}
-                                                    <ng-container *ngIf="reviewer[1] != 'null'">| {{reviewer[1]}} </ng-container> |
-                                                    <span class="reviewer-{{getReviewerStatus(reviewer[3])}}">{{reviewer[2]}}</span>
+                                 </div>
+                                <div class="col-lg-2 d-flex d-lg-block">
+                                    <!-- Coi card Disclosure Status -->
+                                    <div class="flex-grow-1 lh-sm mb-2" tabindex="0"
+                                        [attr.aria-label]="'Disposition Status ' + coi?.dispositionStatus">
+                                        <label class="d-block coi-text-lighter">Disposition Status</label>
+                                        <span class="break-point-1200">
+                                            <app-no-data-label [valueToShow]="coi?.dispositionStatus">
+                                                <span
+                                                    class="{{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                                                    id="status">
                                                 </span>
-                                            </ng-container>
+                                                <span class="coi-text-dark">
+                                                    {{coi?.dispositionStatus}}
+                                                </span>
+                                            </app-no-data-label>
                                         </span>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- Last Updated By -->
-                            <div class="row px-2 py-2 m-0 bg-white d-flex align-items-center">
-                                <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12"></div>
-                                <div class="col-xxl-4 col-xl-5 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
-                                    [attr.aria-label]="'Last Updated By ' + (coi?.updateUserFullName) + 'on' + (coi?.updateTimeStamp| dateFormatterWithTimeZone: 'long')">
-                                    <label class="label-text" for="last-updated">Last Updated By : </label>
-                                    <span id="last-updated" class="grey-text">{{coi?.updateUserFullName}} On
-                                        {{coi?.updateTimeStamp
-                                        | dateFormatterWithTimeZone: 'long'}}</span>
-                                </div>
-                                <div class="col-xxl-4 col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12 d-flex m-0 justify-content-end px-0 pe-2">
-                                    <button title="Click to view OPA disclosure details" tabindex="0" aria-label="Click to view OPA disclosure details" role="button"
-                                        (click)="redirectToDisclosure(coi)"
-                                        class="align-items-center btn btn-outline-primary d-flex fs-14">
-                                        <mat-icon class="me-1">visibility</mat-icon>
-                                        View
-                                    </button>
-                                    <button *ngIf="showAssignAdminButton(coi)" aria-label="Click to assign administrator" role="button"
-                                        title="Click to Assign Administrator/Admin Group" tabindex="0"
-                                        area-describedby="Click to assign administrator"
-                                        class="align-items-center btn btn-outline-primary d-flex fs-14 ml-2"
-                                        (click)="openAssignAdminModal(coi);">
-                                        <mat-icon class="me-1">group_add</mat-icon>
-                                        Assign Admin
-                                    </button>
+                                    <!-- Coi card Review Status -->
+                                    <div class="flex-grow-1 lh-sm mb-2" tabindex="0"
+                                        [attr.aria-label]="'Review Status ' + coi?.reviewStatus">
+                                        <label class="d-block coi-text-lighter">Review Status</label>
+                                        <span class="break-point-1200">
+                                            <app-no-data-label [valueToShow]="coi?.reviewStatus">
+                                                <span
+                                                    class="{{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
+                                                    id="status">
+                                                </span>
+                                                <span class="coi-text-dark">
+                                                    {{coi?.reviewStatus}}
+                                                </span>
+                                            </app-no-data-label>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-1g-6 col-md-6 col-sm-12 col-x1-9">
+                                    <div class="row align-items-center justify-content-start">
+                                        <div class="col-md-12 text-md-start" tabindex="0"
+                                            [attr.aria-label]="'Last Updated By ' + (coi?.updateUserFullName) + 'on' + (coi?.updateTimeStamp| dateFormatterWithTimeZone: 'long')">
+                                            <label class="coi-text-lighter d-block fs-13 fw-medium" for="last-updated">Last Updated By</label>
+                                            <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
+                                                [attr.aria-label]="coi?.updateUserFullName + ' on ' +
+                                                                                                    (coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
+                                                {{coi?.updateUserFullName}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="align-items-center col-1g-6 col-md-6 col-sm-12 co1-x1-3 d-flex justify-content-end">
+                                    <div class="d-flex d-inline-block justify-content-center justify-content-lg-end px-0">
+                                        <button (click)="redirectToDisclosure(coi)" role="button" aria-describedby="Click to view OPA Disclosure"
+                                            class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
+                                            title="Click to view OPA disclosure details"
+                                            aria-label="Click to view OPA disclosure details">
+                                            <mat-icon class="me-1">visibility</mat-icon>View
+                                        </button>
+                                        <button *ngIf="showAssignAdminButton(coi)" (click)="openAssignAdminModal(coi)" role="button"
+                                            class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content ms-2"
+                                            title="Click to Assign Administrator/Admin Group"
+                                            area-describedby="Click to assign administrator"
+                                            aria-label="Click to assign administrator">
+                                            <mat-icon class="me-1">group_add</mat-icon>
+                                            Assign Admin
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-container>
             </div>
+
             <ng-template #noData>
                 <app-no-information></app-no-information>
             </ng-template>
         </ng-container>
+
         <!-- Pagination Pannel -->
         <div [hidden]="isLoading" *ngIf="isShowOPAList && opaList.length > 0" tabindex="2" aria-label="Pagination Menu"
             class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
@@ -327,7 +398,7 @@
                 </app-pagination>
             </nav>
         </div>
-    <!-- </section> -->
+    </section>
 
 <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"
     [disclosureId]="addAdmin.disclosureId" [path]="assignAdminPath" [actionType]="'A'">
