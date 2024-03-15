@@ -13,9 +13,9 @@
                 <ul class="timeline">
                     <ng-container *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
                     <li *ngFor="let historyEntry of review.value;">
-                        <span class="fs-14" [innerHTML]="historyEntry?.description"></span>
-                        <p class="coi-text-lighter fs-13">{{review.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
-                        <p *ngIf="historyEntry?.description" class="coi-text-light">
+                        <span class="fs-14" [innerHTML]="historyEntry?.description" tabindex="0"></span>
+                        <p class="coi-text-lighter fs-13" tabindex="0">{{review.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                        <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="0">
                             <span *ngIf="historyEntry?.comment" class="fs-14">
                                 <mat-icon class="format_quote">format_quote</mat-icon>
                                 <span class="fst-italic mx-2"
