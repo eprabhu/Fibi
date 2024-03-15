@@ -385,7 +385,7 @@ export class AddSfiComponent implements OnInit {
         if (this.mandatoryList.has('entityAlreadyAdded') || ((!this.checkMandatoryFilled() || this.emailWarningMsg) && !this.isSaving)) {
             return;
         }
-        this.modifyType == '1' ? $('#actionConfirmationModal').modal('show') : this.createOrUpdateEntitySFI();
+        this.modifyType == '1' ? $('#actionConfirmationModal').modal('show') : this.updateEntityDetails();
     }
 
     backToPreviousPage(): void {
@@ -483,4 +483,4 @@ export class AddSfiComponent implements OnInit {
         this._router.navigateByUrl(this._navigationService.previousURL);
     }
 
-} 
+}
