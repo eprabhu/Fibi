@@ -1,3 +1,4 @@
+import { DEFAULT_UNIT_FORMAT } from 'projects/coi/src/app/app-constants';
 import { ENDPOINT_SPONSOR_OUTPUT_FORMAT, LEAD_UNIT_OUTPUT_FORMAT } from '../../app-constants';
 
 const endPointOptions: any = {
@@ -51,8 +52,8 @@ export function getEndPointOptionsForSponsorByType(sponsorName, sponsorTypeCode)
 }
 
 export function getEndPointOptionsForLeadUnit(defaultValue = '', baseUrl = '', formatString = 'unitName') {
-    endPointOptions.contextField = formatString;
-    endPointOptions.formatString = formatString;
+    endPointOptions.contextField = DEFAULT_UNIT_FORMAT;
+    endPointOptions.formatString = DEFAULT_UNIT_FORMAT;
     // endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
     // endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
     endPointOptions.path = baseUrl + '/' + 'findLeadUnits';

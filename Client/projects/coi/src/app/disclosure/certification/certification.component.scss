@@ -3,38 +3,6 @@
   height: 17px;
 }
 
-.certify-heading {
-  justify-content: space-between;
-}
-
-.highlight-node {
-  background-color: #e9ffff;
-  color: #202c2e;
-  font-size: 16px;
-  font-weight: 400;
-  border: 1px solid #ded8d8;
-  /* cursor: pointer; */
-}
-
-.gridSkin {
-  color: #6A7980;
-}
-
-.custom-margin {
-  margin-top: 60px;
-  margin-bottom: 71px;
-  margin-right: 67px;
-}
-
-.errorMessage {
-  margin-left: 49px;
-  margin-top: 38px;
-}
-
-.error-tab {
-  width: 96%;
-}
-
 .award-icon {
   width: 18px;
   margin-right: 3px;
@@ -55,4 +23,8 @@
   &:hover {
     font-weight: 800;
   }
+}
+
+.mat-icon {
+  font-size: 1.22rem !important;
 }

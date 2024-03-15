@@ -106,24 +106,30 @@
         </div>
         <div *ngIf="entityDetailService.remainingRelationships && entityDetailService.remainingRelationships?.length; else noData"  class="relation d-flex justify-content-center mt-4">
           <div class="card custom-padding position-relative w-65" [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-            <div class="color-black mb-2" tabindex="0">
-              <label class="form-check-label colour-black relation-header px-2"><b>Relationship Details </b>[Disclose financial details for the SFI]</label>
+            <div class="color-black mb-2">
+                <label class="form-check-label colour-black relation-header px-2 fs-14 label-text">Relationship Details
+                    [Disclose financial details for the SFI]
+                </label>
             </div>
-            <div class="col pl-20 mt-4">
-              <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="mb-3 d-flex align-items-baseline row">
-                <div class="col-5" tabindex="0"><label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}} : </label></div>
-                <div class="col-7">
-                  <div *ngFor="let relation of subsection.value; let isFirst = first; let isLast = last;" class="form-check d-inline-block" [class.ml-last]="!isLast">
-                    <input type="checkbox" name="relation"
-                      class="form-check-input text-secondary border border-secondary"
-                      [value]="relation?.validPersonEntityRelTypeCode"
-                      [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
-                      [(ngModel)]="checkedRelationships[relation?.validPersonEntityRelTypeCode]">
-                    <label class="text-secondary r-title fs-14" [for]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode">
-                      {{relation?.personEntityRelType?.description}} </label>
-                  </div>
+            <div class="row mb-3 mt-2 mx-0 px-2">
+                <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="col-lg-4 col-md-6 col-xl-4 col-xxl-4">
+                    <div tabindex="0" [attr.aria-label]="subsection?.key">
+                        <label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
+                    </div>
+                    <div class="relation">
+                        <div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
+                            class="form-check d-block mb-2" tabindex="0"
+                            [attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
+                            <input type="checkbox" name="relation"
+                            class="form-check-input text-secondary border border-secondary"
+                            [value]="relation?.validPersonEntityRelTypeCode"
+                            [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
+                            [(ngModel)]="checkedRelationships[relation?.validPersonEntityRelTypeCode]">
+                            <label class="text-secondary r-title fs-14" [for]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode">
+                            {{relation?.personEntityRelType?.description}} </label>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>

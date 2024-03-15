@@ -1,5 +1,5 @@
 
-<div [id]= selectedProject?.moduleItemId class="card coi-card-regular border shadow mt-2" *ngIf="selectedProject?.moduleCode">
+<div [id]= selectedProject?.moduleItemId class="card coi-card-regular border shadow ms-2 mt-2" *ngIf="selectedProject?.moduleCode">
     <div class="card-header px-4 py-2 d-flex align-items-center justify-content-between border-bottom-0">
       <span class="align-items-center d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
@@ -82,14 +82,14 @@
                     <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
 				</div>
 			</div>
-      <div class="table-responsive">        
+      <div class="table-responsive">
       <table class="table table-bordered fs-14 fw-medium" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light">
-                      <th style="width: 40%;" class="border-end px-3">Significant Financial Interest</th>
-                      <th style="width: 26%;" class="border-end px-3">Relationship between SFIs and Projects</th>
-                        <th style="width: 14%;" class="border-end px-3">Conflict Status
+                      <th style="width: 40%;" class="border-end border-start px-3">Significant Financial Interest</th>
+                      <th style="width: 26%;" class="border-end border-start px-3">Relationship between SFIs and Projects</th>
+                        <th style="width: 14%;" class="border-end border-start px-3">Conflict Status
                             <button title="Sort conflict Status in ascending order" class="sortable-icon btn p-0"
                                     aria-label=""
                                     *ngIf="isDesc" (click)="sortConflictStatus(true)">
@@ -100,12 +100,12 @@
                                 <mat-icon>arrow_downward</mat-icon>
                             </button>
                         </th>
-                      <th style="width: 8%;" class="border-end px-3">Actions</th>
+                      <th style="width: 8%;" class="border-end border-start px-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="white-bg">
                   <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
-                    <td class="table-data border-end border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">
+                    <td class="table-data border-end border-start border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">
                         <div class="m-0 mb-2 row py-1">
                             <span class="align-items-center d-flex">
                                 <span class="entity-title mr-2 cursor-pointer clickable-content" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)">
@@ -133,7 +133,7 @@
                             </span>
                         </div>
                     </td>
-                    <td class="border-end border-top-0 px-3" [class.border-0]="i != projectRelations?.length-1">
+                    <td class="border-end border-start border-top-0 px-3" [class.border-0]="i != projectRelations?.length-1">
                       <div class="p-3 person-card fs-13 grey-text word-break-all new-line-property">
                         <span *ngIf="!isReadMore[i] && relation?.disclComment?.comment?.length > 60; else showFullInfo">
                           <span> {{(relation?.disclComment?.comment | slice:0:60)}}</span>
@@ -148,7 +148,7 @@
                         </ng-template>
                       </div>
                     </td>
-                    <td class="border-end border-top-0 px-3 text-center text-nowrap" [class.border-0]="i != projectRelations?.length-1">
+                    <td class="border-end border-start border-top-0 px-3 text-center text-nowrap" [class.border-0]="i != projectRelations?.length-1">
                       <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}"></span>
                       <span class="badgeFont">
                         {{relation?.coiProjConflictStatusType?.description}}

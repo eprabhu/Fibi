@@ -22,6 +22,8 @@ export class PersonProjectOrEntity {
     unitDetails = '';
     unitNumber = null;
     unitName = '';
+    homeUnit? = '';
+    homeUnitName? = '';
 }
 
 export class Disclosure {

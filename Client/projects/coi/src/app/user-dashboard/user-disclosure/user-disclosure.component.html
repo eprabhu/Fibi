@@ -23,7 +23,7 @@
                                                     <div class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                         <mat-icon _ngcontent-vot-c239="" role="img"
                                                             class="fs-3 mat-icon mat-icon-no-color mat-ligature-font material-icons ng-tns-c239-66 notranslate"
-                                                            aria-hidden="true" data-mat-icon-type="font">home</mat-icon>                                                
+                                                            aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Department</span>
@@ -31,14 +31,14 @@
                                                             [attr.aria-label]="disclosure?.unit?.unitDetail"> {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                                     </div>
                                                 </div>
-                    
+
                                                 <div class="d-flex align-items-center">
                                                     <div
                                                         class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                         <mat-icon _ngcontent-vot-c239="" role="img"
                                                             class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
                                                             aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
-                    
+
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Certification Date</span>
@@ -49,13 +49,13 @@
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
-                    
+
                                                 <div class="d-flex align-items-center">
                                                     <div
                                                         class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                         <mat-icon _ngcontent-vot-c239="" role="img"
                                                             class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
-                                                            aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>                    
+                                                            aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Expiration Date</span>
@@ -70,7 +70,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-6">
-                                            <div class="d-flex">                    
+                                            <div class="d-flex">
                                                 <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disclosure Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
@@ -83,7 +83,7 @@
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
-                    
+
                                                 <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
@@ -95,7 +95,7 @@
                                                         </span>
                                                     </span>
                                                 </div>
-                    
+
                                                 <div class="border border-gray-300 border-dashed ms-2 rounded min-w-100px w-100 py-2 px-2">
                                                     <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
@@ -108,7 +108,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                    
+
                                         <div class="d-flex flex-stack mt-auto bd-highlight">
                                             <h5 *ngIf="dateWarning" class="mb-3 fs-15" id="dateWarning"
                                                 [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'"
@@ -121,7 +121,7 @@
                                                     months</span><span *ngIf="differenceInDays?.durInDays">, {{differenceInDays?.durInDays}}
                                                     days.</span>
                                             </h5>
-                    
+
                                             <div>
                                                 <a class="align-items-center btn btn-sm btn-success d-inline-flex me-2"
                                                     *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" role="button"
@@ -171,38 +171,38 @@
                                 <div class="row">
                                         <div class="col-6 col-lg-4">
                                             <label class="col-lg-6 fs-14 text-gray-900">Department</label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span class="fs-14 text-gray-700 fw-bold"
                                                             [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                             {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>               
+                                                             {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-lg-4">
                                             <label class="col-lg-6 fs-14 text-gray-900">Certification Date</label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span class="fw-bold fs-14 text-gray-700"
                                                             [attr.aria-label]="disclosure?.certifiedAt |dateFormatterWithTimeZone">
                                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                                                 <span class="text-gray-700">{{disclosure?.certifiedAt
                                                                     |dateFormatterWithTimeZone}}</span>
-                                                            </app-no-data-label></span>               
+                                                            </app-no-data-label></span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-lg-4">
                                             <label class="col-lg-6 fs-14 text-gray-900">Expiration Date</label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span class="fw-bold fs-14 text-gray-700"
                                                             [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                                                 <span class="text-gray-700">{{disclosure?.expirationDate |
                                                                     dateFormatter}}</span>
-                                                            </app-no-data-label></span>               
+                                                            </app-no-data-label></span>
                                             </div>
                                         </div>
 
                                     <div class="col-6 col-lg-4">
                                             <label class="col-lg-6 fs-14 text-gray-700">Disclosure Status</label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span
                                                     [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                     <app-no-data-label
@@ -215,12 +215,12 @@
                                                             </span>
                                                         </span>
                                                     </app-no-data-label>
-                                                </span>               
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-lg-4">
                                             <label class="col-lg-6 fs-14 text-gray-700">Disposition Status</label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span
                                                     [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                     <span
@@ -229,22 +229,22 @@
                                                     <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiDispositionStatusType?.description}}
                                                     </span>
-                                                </span>               
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-lg-4">
                                             <label class="col-lg-6 fs-14 text-gray-700">Review Status</label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                     <span
                                                         class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
                                                     <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiReviewStatusType?.description}}
                                                     </span>
-                                                </span>              
+                                                </span>
                                             </div>
                                         </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -272,7 +272,7 @@
             <!-- card design for (pending) FCOI Disclosure-->
             <ng-container *ngIf="!hasActiveFCOI && hasPendingFCOI">
                 <div class="col-lg-6 mb-10 mb-lg-0">
-                    
+
                     <!-- new card design(modern)2 -->
                     <div class="card coi-card-lite h-100" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING'">
                         <div class="card-body">
@@ -298,14 +298,14 @@
                                                             {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                                     </div>
                                                 </div>
-                    
+
                                                 <div class="d-flex align-items-center">
                                                     <div
                                                         class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                         <mat-icon _ngcontent-vot-c239="" role="img"
                                                             class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
                                                             aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
-                    
+
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Certification Date</span>
@@ -316,13 +316,13 @@
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
-                    
+
                                                 <div class="d-flex align-items-center">
                                                     <div
                                                         class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                         <mat-icon _ngcontent-vot-c239="" role="img"
                                                             class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
-                                                            aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>                    
+                                                            aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-lighter fs-12 d-block">Expiration Date</span>
@@ -336,7 +336,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-6">
-                                            <div class="d-flex">                    
+                                            <div class="d-flex">
                                                 <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disclosure Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
@@ -351,7 +351,7 @@
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
-                    
+
                                                 <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                     <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
@@ -363,7 +363,7 @@
                                                         </span>
                                                     </span>
                                                 </div>
-                    
+
                                                 <div class="border border-gray-300 border-dashed ms-2 rounded min-w-100px w-100 py-2 px-2">
                                                     <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                     <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
@@ -376,7 +376,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                    
+
                                         <div class="d-flex flex-stack mt-auto bd-highlight">
                                             <div class="ms-auto">
                                                 <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
@@ -423,34 +423,34 @@
                                         <div class="row mb-2">
                                             <label class="col-lg-6 fs-14 text-gray-900">Department<span
                                                 class="d-none d-md-inline">:</span></label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span class="fs-14 text-gray-700 fw-bold"
                                                 [attr.aria-label]="disclosure?.unit?.unitDetail">
-                                                {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>               
+                                                {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
                                             <label class="col-lg-6 fs-14 text-gray-900">Certification Date<span
                                                 class="d-none d-md-inline">:</span></label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span class="fw-bold fs-14 text-gray-700"
                                                 [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                                 <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                                     <span class="text-gray-700">{{disclosure?.certifiedAt |
                                                         dateFormatter}}</span>
-                                                </app-no-data-label></span>               
+                                                </app-no-data-label></span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
                                             <label class="col-lg-6 fs-14 text-gray-900">Expiration Date<span
                                                 class="d-none d-md-inline">:</span></label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span class="fw-bold fs-14 text-gray-700"
                                                 [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
                                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                                     <span class="text-gray-700">{{disclosure?.expirationDate |
                                                         dateFormatter}}</span>
-                                                </app-no-data-label></span>               
+                                                </app-no-data-label></span>
                                             </div>
                                         </div>
                                     </div>
@@ -459,7 +459,7 @@
                                         <div class="row mb-2">
                                             <label class="col-lg-6 fs-14 text-gray-700">Disclosure Status<span
                                                 class="d-none d-md-inline">:</span></label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span
                                                 [attr.aria-label]="disclosure?.coiConflictStatusType?.description">
                                                 <app-no-data-label
@@ -472,13 +472,13 @@
                                                     </span>
                                                 </span>
                                             </app-no-data-label>
-                                                </span>               
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
                                             <label class="col-lg-6 fs-14 text-gray-700">Disposition Status<span
                                                 class="d-none d-md-inline">:</span></label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span
                                                 [attr.aria-label]="disclosure?.coiDispositionStatusType?.description">
                                                     <span
@@ -487,34 +487,34 @@
                                                     <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiDispositionStatusType?.description}}
                                                     </span>
-                                                </span>               
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
                                             <label class="col-lg-6 fs-14 text-gray-700">Review Status<span
                                                 class="d-none d-md-inline">:</span></label>
-                                            <div class="col-lg-6">                    
+                                            <div class="col-lg-6">
                                                 <span [attr.aria-label]="disclosure?.coiReviewStatusType?.description">
                                                     <span
                                                         class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
                                                     <span class="fs-14 fw-bold ps-1 text-gray-900">
                                                         {{disclosure?.coiReviewStatusType?.description}}
                                                     </span>
-                                                </span>              
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg">                            
+                        <div class="card-footer d-flex justify-content-between align-items-center footer-gray-bg">
                         </div>
                     </div> -->
                 </div>
             </ng-container>
         </ng-container>
     </ng-container>
-    
+
     <!-- card design for (create) FCOI Disclosure-->
     <ng-container *ngIf="!getActiveFCOI().length">
         <div class="col-lg-6 mb-10 mb-lg-0">
@@ -546,7 +546,7 @@
                                         </p>
                                     </div>
                                 </div>
-            
+
                                 <div class="d-flex flex-stack mt-auto bd-highlight">
                                     <div class="ms-auto">
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
@@ -564,7 +564,7 @@
             </div>
             <!-- new card design(modern) ends -->
 
-            
+
             <!-- <div class="card d-flex m-0 coi-card-overview mb-3 h-100">
                 <div class="card-header align-items-center">
                     <h5 class="card-title align-items-start flex-column">
@@ -641,7 +641,7 @@
                                         </p>
                                     </div>
                                 </div>
-            
+
                                 <div class="d-flex flex-stack mt-auto bd-highlight">
                                     <div class="ms-auto">
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex" (click)="createOPA()" tabindex="0"
@@ -679,7 +679,7 @@
                                         on boards. Please disclose any outside
                                         professional activities you are currently engaged in or plan to engage in. Include details such as the name of the
                                         organization, your role, and the time commitment involved. Click on the button
-                                        below to start your disclosure OPA creation.                                        
+                                        below to start your disclosure OPA creation.
                                     </p>
                                 </div>
                             </div>
@@ -724,7 +724,7 @@
                                                 <div class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                     <mat-icon _ngcontent-vot-c239="" role="img"
                                                         class="fs-3 mat-icon mat-icon-no-color mat-ligature-font material-icons ng-tns-c239-66 notranslate"
-                                                        aria-hidden="true" data-mat-icon-type="font">home</mat-icon>                                                
+                                                        aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-lighter fs-12 d-block">Department</span>
@@ -734,14 +734,14 @@
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
-                
+
                                             <div class="d-flex align-items-center">
                                                 <div
                                                     class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                     <mat-icon _ngcontent-vot-c239="" role="img"
                                                         class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
                                                         aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
-                
+
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-lighter fs-12 d-block">Period</span>
@@ -756,13 +756,13 @@
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
-                
+
                                             <div class="d-flex align-items-center">
                                                 <div
                                                     class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                     <mat-icon _ngcontent-vot-c239="" role="img"
                                                         class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
-                                                        aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>                    
+                                                        aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-lighter fs-12 d-block">Create Date</span>
@@ -776,7 +776,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-6">
-                                        <div class="d-flex">                    
+                                        <div class="d-flex">
                                             <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                 <span>
@@ -787,7 +787,7 @@
                                                     </app-no-data-label>
                                                 </span>
                                             </div>
-                
+
                                             <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                 <span>
@@ -803,7 +803,7 @@
                                             </div>
                                         </div>
                                     </div>
-                
+
                                     <div class="d-flex flex-stack mt-auto bd-highlight">
                                         <div class="ms-auto">
                                             <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
@@ -815,7 +815,7 @@
                                 title="Click to view OPA Disclosure details">
                                 <mat-icon class="hyper-link me-1">visibility</mat-icon>
                                                 <span class="hyper-link fs-14">View</span>
-                            </a>                                            
+                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -853,18 +853,18 @@
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-900">Department<span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span class="fs-14 text-gray-700 fw-bold"
                                             [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                             <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                 <span class="text-gray-700 fw-bold"> {{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
-                                            </app-no-data-label></span>               
+                                            </app-no-data-label></span>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-900">Period <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span class="fw-bold fs-14 text-gray-700"
                                             [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                             <app-no-data-label
@@ -874,19 +874,19 @@
                                                         -
                                                         {{opaDisclosure?.opaCycles?.periodEndDate |
                                                         dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>               
+                                                </app-no-data-label></span>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-900">Create Date <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span class="fw-bold fs-14 text-gray-700"
                                             [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
                                             <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
                                                 <span class="text-gray-700">{{opaDisclosure?.createTimestamp |
                                                     dateFormatterWithTimeZone}}</span>
-                                            </app-no-data-label></span>               
+                                            </app-no-data-label></span>
                                         </div>
                                     </div>
                                 </div>
@@ -895,7 +895,7 @@
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-700">Disposition Status <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span>
                                                 <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
@@ -904,13 +904,13 @@
                                                 <span
                                                     class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.dispositionStatusType?.description}}</span>
                                             </app-no-data-label>
-                                            </span>               
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-700">Review Status <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span>
                                                 <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.reviewStatusType?.description">
@@ -920,7 +920,7 @@
                                                     class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.reviewStatusType?.description}}
                                                 </span>
                                             </app-no-data-label>
-                                            </span>               
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -952,7 +952,7 @@
                                                 <div class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                     <mat-icon _ngcontent-vot-c239="" role="img"
                                                         class="fs-3 mat-icon mat-icon-no-color mat-ligature-font material-icons ng-tns-c239-66 notranslate"
-                                                        aria-hidden="true" data-mat-icon-type="font">home</mat-icon>                                                
+                                                        aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-lighter fs-12 d-block">Department</span>
@@ -962,14 +962,14 @@
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
-                
+
                                             <div class="d-flex align-items-center">
                                                 <div
                                                     class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                     <mat-icon _ngcontent-vot-c239="" role="img"
                                                         class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
                                                         aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
-                
+
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-lighter fs-12 d-block">Period</span>
@@ -984,13 +984,13 @@
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
-                
+
                                             <div class="d-flex align-items-center">
                                                 <div
                                                     class="align-items-center d-inline-flex justify-content-center me-2 symbol symbol-30px symbol-circle flex-shrink-0">
                                                     <mat-icon _ngcontent-vot-c239="" role="img"
                                                         class="mat-icon notranslate fs-3 ng-tns-c239-66 material-icons mat-ligature-font mat-icon-no-color"
-                                                        aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>                    
+                                                        aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-lighter fs-12 d-block">Create Date</span>
@@ -1004,7 +1004,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-6">
-                                        <div class="d-flex">                    
+                                        <div class="d-flex">
                                             <div class="border border-dashed border-gray-300 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Disposition Status</div>
                                                 <span>
@@ -1017,7 +1017,7 @@
                                                 </app-no-data-label>
                                                 </span>
                                             </div>
-                
+
                                             <div class="border border-dashed border-gray-300 ms-2 min-w-100px px-2 py-2 rounded w-100">
                                                 <div class="coi-text-lighter fw-semibold">Review Status</div>
                                                 <span>
@@ -1033,7 +1033,7 @@
                                             </div>
                                         </div>
                                     </div>
-                
+
                                     <div class="d-flex flex-stack mt-auto bd-highlight">
                                         <div class="ms-auto">
                                             <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
@@ -1076,18 +1076,18 @@
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-900">Department<span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span class="fs-14 text-gray-700 fw-bold"
                                             [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                             <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
                                                 <span class="text-gray-700">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
-                                            </app-no-data-label></span>               
+                                            </app-no-data-label></span>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-900">Period <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span class="fw-bold fs-14 text-gray-700"
                                             [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                             <app-no-data-label
@@ -1097,18 +1097,18 @@
                                                         -
                                                         {{opaDisclosure?.opaCycles?.periodEndDate |
                                                         dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>               
+                                                </app-no-data-label></span>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-900">Create Date <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span class="fw-bold fs-14 text-gray-700">
                                                 <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
                                                     <span class="text-gray-700">{{opaDisclosure?.createTimestamp |
                                                         dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label></span>               
+                                                </app-no-data-label></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1117,7 +1117,7 @@
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-700">Disposition Status <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span>
                                                 <app-no-data-label
                                                 [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
@@ -1126,13 +1126,13 @@
                                                 <span
                                                     class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.dispositionStatusType?.description}}</span>
                                             </app-no-data-label>
-                                            </span>               
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-lg-6 fs-14 text-gray-700">Review Status <span
                                             class="d-none d-md-inline">:</span></label>
-                                        <div class="col-lg-6">                    
+                                        <div class="col-lg-6">
                                             <span>
                                                 <app-no-data-label
                                                     [valueToShow]="opaDisclosure?.reviewStatusType?.description">
@@ -1142,7 +1142,7 @@
                                                         class="fs-14 fw-bold ps-1 text-gray-900">{{opaDisclosure?.reviewStatusType?.description}}
                                                     </span>
                                                 </app-no-data-label>
-                                            </span>               
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -1192,7 +1192,7 @@
 <div class="advance-search coi-search-box mt-2" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
         <div class="col-lg-5 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
-            <div class="fs-14 d-inline-block" 
+            <div class="fs-14 d-inline-block"
                  [@leftSlideInOut]>
                 <label class="coi-text-dark">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
@@ -1229,7 +1229,7 @@
             *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
             [ngClass]="currentSelected.tab == 'TRAVEL_DISCLOSURES' ? 'col-lg-12' : ''">
             <span class="filter-search">
-                <mat-icon class="fs-25px searchButton">search</mat-icon>
+                <mat-icon class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
                 <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()" type="text"
                     [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
             </span>
@@ -1251,19 +1251,16 @@
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
                                     <div class="col-12 d-inline-flex mb-2">
-                                        <!-- Coi card badge -->
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
                                                 <span>{{ disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType }}</span>
                                             </span></span>
-                                        <!-- Coi card header -->
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
                                             class="mb-0 d-flex fs-14">
                                             <span class="d-inline-flex">
-                                                <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
                                                 <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
-                                                <span class="coi-text-light text-nowrap h-14" tabindex="0"
+                                                <span class="coi-text-light text-nowrap fs-6" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
                                                     {{disclosure.disclosurePersonFullName}}</span>
                                             </span>
@@ -1274,12 +1271,8 @@
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
                                                     <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
-                                                    <!-- <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon"
-                                                        src="{{deployMap}}assets/images/proposal.png"> -->
                                                     <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
-                                                    <!-- <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon"
-                                                        src="{{deployMap}}assets/images/award.png"> -->
-                                                    <span class="hyper-link coi-text-darker fs-6">
+                                                    <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">...
                                                             <a *ngIf="!readMoreOrLess[index]"
@@ -1487,28 +1480,29 @@
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
-                                                <strong class="coi-text-light h-14 text-nowrap" tabindex="0"
+                                                <strong class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure Person' + (disclosure.travellerName)">
                                                     {{disclosure.travellerName}}
                                                 </strong>
                                             </span>
                                             <ng-container>
-                                                <span class="pipe me-1"></span>
-                                                <mat-icon class="fs-18 me-1">apartment</mat-icon>
-                                                <span class="coi-text-light h-14 text-nowrap" tabindex="0"
-                                                    [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity
-                                                    :</span>
-                                                <span class="coi-text-darker fs-6 hyper-link">
-                                                    {{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
-                                                    <span
-                                                        *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">...
-                                                        <a *ngIf="!readMoreOrLess[index]"
-                                                            (click)="readMoreOrLess[index]=true"><span
-                                                                class="readMore fw-500">Read More</span></a>
+                                                <span class="pipe mx-1"></span>
+                                                <span class="d-inline-flex">
+                                                    <mat-icon class="fs-18 me-1">apartment</mat-icon>
+                                                    <span class="coi-text-light fs-6 text-nowrap me-1" tabindex="0"
+                                                        [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity:</span>
+                                                    <span class="coi-text-darker fs-6 hyper-link">
+                                                        {{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
+                                                        <span
+                                                            *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">...
+                                                            <a *ngIf="!readMoreOrLess[index]"
+                                                                (click)="readMoreOrLess[index]=true"><span
+                                                                    class="readMore fw-500">Read More</span></a>
+                                                        </span>
+                                                        <a *ngIf="readMoreOrLess[index]"
+                                                            (click)="readMoreOrLess[index]=false"><span
+                                                                class="readMore ms-1 fw-500">Read Less</span></a>
                                                     </span>
-                                                    <a *ngIf="readMoreOrLess[index]"
-                                                        (click)="readMoreOrLess[index]=false"><span
-                                                            class="readMore ms-1 fw-500">Read Less</span></a>
                                                 </span>
                                             </ng-container>
                                         </h4>
@@ -1522,7 +1516,7 @@
                                             <span [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
                                                 <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
                                                     <span class="coi-text-light"
-                                                        [title]="disclosure?.unitDetails?.unitDetail">{{commonService.getPersonLeadUnitDetails(disclosure?.unitDetails?.unitDetail)}}</span>
+                                                        [title]="disclosure?.unitDetails?.unitDetail">{{commonService.getPersonLeadUnitDetails(disclosure?.unitDetails)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1680,15 +1674,15 @@
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
                                                 <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
-                                                <span class="coi-text-light h-14 text-nowrap" tabindex="0"
+                                                <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
                                             </span>
                                             <ng-container class="ms-1">
-                                                <div class="col" tabindex="0"
+                                                <div class="d-inline-flex" tabindex="0"
                                                     [attr.aria-label]="'Reporting Cycle' + (disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate |dateFormatter)">
                                                     <span class="pipe mx-1"></span>
-                                                    <span class="text-nowrap">Reporting Cycle:</span>
-                                                    <span class="coi-text-darker hyper-link ms-1">
+                                                    <span class="fs-6 text-nowrap">Reporting Cycle:</span>
+                                                    <span class="coi-text-darker hyper-link fs-6 ms-1">
                                                         <span>{{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate | dateFormatter}}</span>
                                                     </span>
                                                 </div>
@@ -1702,7 +1696,7 @@
                                         <div tabindex="0"
                                             [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                             <label class="d-block coi-text-dark">Department</label>
-                                             <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
+                                             <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-6 mb-2">
@@ -1717,7 +1711,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-3 col-6 mb-2">
                                         <!-- OPA Card Certification Date -->
                                         <div [attr.aria-label]="'Certification Date' + (disclosure?.submissionTimestamp | dateFormatter)">
@@ -1774,7 +1768,7 @@
                         </div>
                     </ng-container>
                 </div>
-                
+
             <!-- Footer section -->
                 <div class="card-footer">
                     <div class="row">
@@ -1851,7 +1845,7 @@
                                             </div>
                                         </div>
                                     </div> -->
-                                    <div class="col-md-4 text-center text-lg-start" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
+                                    <div class="col-md-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId"
                                             [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                                             [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
@@ -1887,7 +1881,7 @@
                                             </div>
                                         </div> -->
                                     </div>
-                                    <div class="col-md-2 text-center text-lg-start">
+                                    <div class="col-md-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
@@ -1921,7 +1915,7 @@
                                             </div>
                                         </div> -->
                                     </div>
-                                    <div class="col-md-2 text-center text-lg-start">
+                                    <div class="col-md-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
@@ -1952,7 +1946,7 @@
                                             </div>
                                         </div> -->
                                     </div>
-                                    <div class="col-md-4 text-center text-md-start" tabindex="0">
+                                    <div class="col-md-4 text-end text-lg-start" tabindex="0">
                                         <label class="coi-text-lighter d-block fs-13 fw-medium" for="id">Last Updated By</label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                             [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
@@ -1965,20 +1959,40 @@
                         <ng-container *ngIf="disclosure?.travelDisclosureId">
                             <div class="col-lg-10">
                                     <div class="row">
-                                        <div class="col-md-3 text-center text-lg-start">
+                                        <div class="col-md-3">
                                             <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
                                                 <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
                                                     <label for="purpose" class="coi-text-dark d-block">Purpose</label>
-                                                    <span>
+                                                    <span class="col break-point-1200">
                                                         <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                                                            <span class="coi-text-light"
-                                                                [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
+                                                                <span *ngIf="disclosure?.travelPurpose" class="fs-14">
+                                                                    <span class="word-break-all new-line-property mx-2"
+                                                                        *ngIf="!isPurposeRead && disclosure?.travelPurpose?.length > 80; else showFullInfo">
+                                                                        <span class="grey-text mt-2">{{(disclosure?.travelPurpose |
+                                                                            slice:0:80)}}</span>
+                                                                        <span (click)="isPurposeRead = !isPurposeRead"
+                                                                            class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                                                    More</u>
+                                                                                <i aria-hidden="true"></i></span>
+                                                                        </span>
+                                                                    </span>
+                                                                    <ng-template #showFullInfo>
+                                                                        <span
+                                                                            class="word-break-all new-line-property grey-text">{{disclosure?.travelPurpose}}</span>
+                                                                        <span class="hand-cursor mt-2 fw-medium"
+                                                                            *ngIf="disclosure?.travelPurpose?.length > 80"
+                                                                            (click)="isPurposeRead = !isPurposeRead" aria-hidden="true">
+                                                                            <span class="fw-medium"><u> Read Less</u>
+                                                                                <i aria-hidden="true"></i></span>
+                                                                        </span>
+                                                                    </ng-template>
+                                                                </span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 text-center text-lg-start">
+                                        <div class="col-md-3">
                                             <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
                                                 <div
                                                     [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
@@ -1992,7 +2006,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 text-center text-lg-start">
+                                        <div class="col-md-3">
                                             <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
                                                 <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
                                                     <label for="end-date" class="coi-text-dark d-block">End Date</label>
@@ -2009,7 +2023,7 @@
                             </div>
                         </ng-container>
                         <div class="col-lg-2">
-                            <div class="d-flex d-inline-block justify-content-center justify-content-lg-end px-0">
+                            <div class="d-flex d-inline-block justify-content-end px-0">
                                 <button (click)="redirectToDisclosure(disclosure)" role="button"
                                     aria-describedby="Click to view Disclosure"
                                     class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
@@ -2052,7 +2066,7 @@
     </div>
 </ng-container>
 
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType" 
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
     (closeModal)="closeModalEvent($event)" (viewSlider)="viewSlider($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures">

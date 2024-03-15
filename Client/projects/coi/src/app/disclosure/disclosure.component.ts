@@ -23,7 +23,7 @@ import {
     CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getPersonLeadUnitDetails, openCommonModal } from '../common/utilities/custom-utilities';
+import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
@@ -676,7 +676,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
         this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
         this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
-
+        this.personProjectDetails.homeUnit = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
+        this.personProjectDetails.homeUnitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
     }
 
     performDisclosureAction(event): void {

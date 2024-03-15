@@ -20,7 +20,7 @@ export class EntityHistoryComponent implements OnChanges {
     entityHistoryLogs: any = {};
     @Input() entityDetails: any;
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor( private _commonService: CommonService,
                  public entityManagementService: EntityManagementService,

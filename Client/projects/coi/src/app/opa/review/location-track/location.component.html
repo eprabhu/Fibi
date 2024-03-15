@@ -57,7 +57,7 @@
                     <th scope="col-3" class="px-3">
                         Status
                     </th>
-                    <th scope="col-2" class="text-end table-actions-margin">Actions</th>
+                    <th scope="col-2" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -208,7 +208,7 @@
                 <div class="row">
                     <div class="col-4">
                         <label class="block-display">
-                            <span class="mandatory">*</span>Location</label>
+                            <span class="mandatory text-danger me-1">*</span>Location</label>
                         <app-look-up (selectedResult)="onLocationSelect($event)"
                         [options]="disReviewLocation"
                         [selectedLookUpList]="locationType"
@@ -216,8 +216,8 @@
                         [defaultValue]="reviewDetails.reviewLocationType ? reviewDetails.reviewLocationType.description : ''"
                         [uniqueId]="'disclosure-review-location'">
                         </app-look-up>
-                        <div class="ms-2" *ngIf="validationMap.has('location')">
-                            <span class="mandatory d-inline-block">{{validationMap.get('location')}}</span>
+                        <div *ngIf="validationMap.has('location')">
+                            <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('location')}}</span>
                         </div>
                     </div>
                     <div class="col-4">
@@ -227,12 +227,12 @@
                                      [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
                         <div *ngIf="validationMap?.has('reviewer')">
-                           <span class="mandatory d-inline-block">{{validationMap?.get('reviewer')}}</span>
+                           <span class="mandatory d-inline-block text-danger fs-14">{{validationMap?.get('reviewer')}}</span>
                         </div>
                     </div>
                     <div class="col-4">
                         <label class="block-display">
-                            <span class="mandatory">*</span>Status</label>
+                            <span class="mandatory text-danger me-1">*</span>Status</label>
                             <app-look-up (selectedResult)="onStatusSelect($event)"
                             [options]="disReviewStatus" [isError]="validationMap.has('reviewStatus')"
                             [selectedLookUpList]="reviewStatusType"
@@ -240,14 +240,14 @@
                             [uniqueId]="'disclosure-review-status'">
                             </app-look-up>
                             <div *ngIf="validationMap?.has('reviewStatus')">
-                                <span class="mandatory d-inline-block">{{validationMap?.get('reviewStatus')}}</span>
+                                <span class="mandatory d-inline-block text-danger fs-14">{{validationMap?.get('reviewStatus')}}</span>
                             </div>
                     </div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-4">
                         <label class="block-display">
-                            <span class="mandatory">*</span>Assigned On</label>
+                            <span class="mandatory text-danger me-1">*</span>Assigned On</label>
                             <div>
                                 <span class="dateField w-100">
                                   <input matInput [matDatepicker]="startDate" id="start-date-involvement" placeholder="{{datePlaceHolder}}"
@@ -259,13 +259,13 @@
                                   <mat-datepicker #startDate>
                                   </mat-datepicker>
                                 </span>
-                                <div class="ms-2" *ngIf="validationMap.has('reviewStartDate')">
-                                    <span class="mandatory d-inline-block">{{validationMap.get('reviewStartDate')}}</span>
+                                <div *ngIf="validationMap.has('reviewStartDate')">
+                                    <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('reviewStartDate')}}</span>
                                 </div>
                               </div>
                     </div>
                     <div class="col-4" *ngIf="reviewDetails?.reviewStatusTypeCode == '3'">
-                        <label class="d-block"><span class="mandatory">*</span>Review End Date </label>
+                        <label class="d-block"><span class="mandatory text-danger me-1">*</span>Review End Date </label>
                         <div>
                             <span class="dateField w-100">
                               <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="{{datePlaceHolder}}"
@@ -277,11 +277,11 @@
                               <mat-datepicker #endDate>
                               </mat-datepicker>
                             </span>
-                            <div class="ms-2" *ngIf="validationMap.has('reviewEndDate')">
-                                <span class="mandatory d-inline-block">{{validationMap.get('reviewEndDate')}}</span>
+                            <div *ngIf="validationMap.has('reviewEndDate')">
+                                <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('reviewEndDate')}}</span>
                             </div>
-                            <div class="ms-2" *ngIf="validationMap.has('endDate')">
-                                <span class="mandatory d-inline-block">{{validationMap.get('endDate')}}</span>
+                            <div *ngIf="validationMap.has('endDate')">
+                                <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('endDate')}}</span>
                             </div>
                           </div>
                     </div>

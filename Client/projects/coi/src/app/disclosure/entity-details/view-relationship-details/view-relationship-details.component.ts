@@ -397,8 +397,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     viewEntityDetails() {
-        this.closeEntityInfoCard.emit(false);
-        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.entityId } });
+        if(this.showViewButton()) {
+            this.closeEntityInfoCard.emit(false);
+            this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.entityId } });
+        }
     }
 
     modifySfi() {

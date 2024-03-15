@@ -20,11 +20,11 @@
     </strong>
     <span class="d-inline-block" data-bs-toggle="tooltip" title="View SFI details."
       data-bs-placement="top">
-      <mat-icon class="me-2 info-icon position-relative mt-3"  data-bs-toggle="tooltip">info</mat-icon>
+      <mat-icon class="me-2 info-icon position-relative mt-2"  data-bs-toggle="tooltip">info</mat-icon>
     </span>
   </span>
   </h3>
-  <button class="toggle-header-btn mr-8 align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
+  <button class="toggle-header-btn mr-8 align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
   [attr.aria-label]="'Click here to ' + (isCollapsed ? 'collapse' : 'expand') + ' Significant Financial Interest'"
   [title]="isCollapsed ? 'Click here to collapse Significant Financial Interest (SFI)' : 'Click here to expand Significant Financial Interest (SFI)'"
   (click)="isCollapsed = !isCollapsed">

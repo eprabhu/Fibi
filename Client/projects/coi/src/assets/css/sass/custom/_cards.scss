@@ -134,6 +134,7 @@
     }
     .card-footer {
         background-color: var(--theme-card-bg-color);
+        border-top: 1px solid var(--theme-body-bg-color);
     }
 }
 
@@ -236,4 +237,15 @@
 .coi-box-red {  
     background-color: var(--theme-box-red-bg-color);
     border-style: dashed !important;
+
+    .coi-field-set {
+        position: absolute;
+        top: -13px;
+        background: var(--theme-box-red-bg-color);//#fff7f1;
+        padding: 0px 10px;
+        border: solid 1px #b5b6b7;
+        border-radius: 5px;
+        left: 10px;
+        border-style: dashed !important;
+    }
   }

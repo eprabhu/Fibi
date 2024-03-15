@@ -1,6 +1,42 @@
 
 <div [@fadeInOutHeight]>
-  <div class="card mt-3" id="disclosure-history">
+    <div class="card" id="opa-review-history">
+        <div class="card-header px-4">
+            <h4 class="card-title review-title">
+              <div class="justify-content-between row d-flex align-items-center"tabindex="0">
+                <div class="col fs-16 mt-2">Review History</div>
+              </div>
+            </h4>
+          </div>
+        <div class="card-content">
+            <div class="card-body">
+                <ul class="timeline">
+                    <ng-container *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
+                    <li *ngFor="let historyEntry of review.value;">
+                        <span class="fs-14" [innerHTML]="historyEntry?.description"></span>
+                        <p class="coi-text-lighter fs-13">{{review.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                        <p *ngIf="historyEntry?.description" class="coi-text-light">
+                            <span *ngIf="historyEntry?.comment" class="fs-14">
+                                <mat-icon class="format_quote">format_quote</mat-icon>
+                                <span class="fst-italic mx-2"
+                                    [attr.aria-label]="historyEntry?.description">
+                                    <span class="coi-text-light mt-2">{{historyEntry?.comment}}</span>
+                                </span>
+                            </span>
+                        </p>
+                    </li>
+                </ng-container>
+                </ul>
+            </div>
+            <div *ngIf="isEmptyObject(reviewHistoryLogs)">
+                <app-no-information [isBorderNeeded]="false"> </app-no-information>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div [@fadeInOutHeight]>
+  <div class="card mt-3" id="opa-history">
     <div class="card-header px-4">
       <h4 class="card-title review-title">
         <div class="justify-content-between row d-flex align-items-center"tabindex="0">
@@ -63,4 +99,4 @@
           </div>
       </div>
   </div>
-</div>
+</div> -->
