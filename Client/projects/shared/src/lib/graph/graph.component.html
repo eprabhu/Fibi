@@ -24,7 +24,7 @@
                     </div>
                     <div class="dropdown-wrapper">
                         <span *ngFor="let node of graphDataService.graphMetaData.nodes | keyvalue" class="card-color py-2 px-3 rounded-2 d-flex flex-end">
-                            <img [src]="getLinkForAdditionalImage(node.value.image)" [alt]="node.key.name" class="image-frame mr-2"> 
+                            <img [src]="getLinkForAdditionalImage(node.value.image)" [alt]="node.key.name" class="image-frame mr-2">
                             <span>{{node.value.name}}</span>
                         </span>
                     </div>
@@ -33,7 +33,7 @@
                     <div *ngIf="!showtimeLine" (click)="showtimeLine = true;hideToolTipAndCard();" class="timeline-btn mr-2" title="View graph history">
                         <span>
                             <img class="image-container" alt="icon representing timeline"
-                            src="./assets/images/g_timeline.png">                        
+                            src="./assets/images/g_timeline.png">
                         </span>
                     </div>
                     <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="graph-modal-dismiss-btn"
@@ -75,7 +75,7 @@
             </ng-container>
             <ng-container *ngIf="cardData.label === 'Entity'">
                 <app-entity-card [data]="cardData"
-                    [imagePath]="graphDataService.getLinkForImage('Entity')"></app-entity-card>
+                    [imagePath]="cardData?.is_sponsor == 'Y' ?  graphDataService.getLinkForAdditionalImage(entitySponsorImage) : graphDataService.getLinkForImage('Entity')"></app-entity-card>
             </ng-container>
             <ng-container *ngIf="cardData.label === 'Proposal'">
                 <app-proposal-card [data]="cardData"

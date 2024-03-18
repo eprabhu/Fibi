@@ -193,7 +193,7 @@
         "COI": "https://coi.fibiweb.com/fibicoi/"
     },
     "additionalImages": [
-        {"id": "ESponsor", "image":"/assets/images/g_proposal.png"}
+        {"id": "ESponsor", "image":"/assets/images/g_entity_sponsor.png"}
     ]
 
 }
