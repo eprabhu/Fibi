@@ -9,7 +9,7 @@
     "root_relations": [
         "ASSOCIATED_PERSONS_WITH_CITIZEN_INFO",
         "AFFILIATED_ENTITIES",
-        "BELONGS_TO",
+        "COUNTRY",
         "ASSOCIATED_PERSONS"
     ],
     "root_name" : "Root",
@@ -34,7 +34,7 @@
             "relationships": [
                 {
                     "id": "1",
-                    "relation": ["BELONGS_TO"],
+                    "relation": ["COUNTRY"],
                     "description": "Country"
                 },
                 {
@@ -44,7 +44,7 @@
                 },
                 {
                     "id": "3",
-                    "relation": ["AFFILIATED_ENTITIES", "BELONGS_TO"],
+                    "relation": ["AFFILIATED_ENTITIES", "COUNTRY"],
                     "description": "Related Entities"
                 }
             ]
