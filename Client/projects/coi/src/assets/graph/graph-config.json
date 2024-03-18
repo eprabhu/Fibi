@@ -95,8 +95,8 @@
             "lineWidth": 1.5,
             "name": "Award Sponsor"
         },
-        "BELONGS_TO":{
-            "relation":"BELONGS_TO",
+        "COUNTRY":{
+            "relation":"COUNTRY",
             "colour": "#5ab008",
             "lineWidth": 1.5,
             "name": "Country"
