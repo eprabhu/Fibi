@@ -59,7 +59,7 @@ export class GraphComponent implements OnInit {
         type: ''
     };
     $debounceEventForTooltip = new Subject();
-    entitySponsorImage = '/assets/images/g_entity-1.png';
+    entitySponsorImage = '/assets/images/g_entity_sponsor.png';
 
     constructor(public graphDataService: DataService) { }
 
