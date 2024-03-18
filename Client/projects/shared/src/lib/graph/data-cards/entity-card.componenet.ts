@@ -7,7 +7,7 @@ import { DataService } from '../data.service';
   template: `
       <div class="data-grid">
         <div class="mr-15">
-            <img class="profile_img" [src]="imagePath" alt="an icon for representing a person">
+            <img class="profile_img" [class.h-auto]="data.is_sponsor == 'Y'" [src]="imagePath" alt="an icon for representing a entity">
         </div>
         <div class="ml-15">
             <h2 class="heading">{{data.name}}</h2>
