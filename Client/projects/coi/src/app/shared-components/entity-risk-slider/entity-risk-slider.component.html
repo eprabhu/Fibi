@@ -1,12 +1,12 @@
 <app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'risk-conflict-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
     <!-- slider header -->
     <ng-container header>
-        <span>Manage Risk Status</span>
+        <span>Manage Entity Risk</span>
     </ng-container>
 
     <!-- slider header card -->
     <ng-container content-sticky>
-        <div class="mx-3 mt-1">
+        <div class="mt-1">
             <app-shared-entity-info-card [entityDetails]="entityDetails" [isShowRisk]="true"></app-shared-entity-info-card>
         </div>
     </ng-container>
@@ -14,11 +14,52 @@
     <!-- modal content -->
     <ng-container content>
         <!-- help text -->
-        <div class="mx-3 mt-3">
-            <app-help-text [helpTextList]="helpText"></app-help-text>
+        <div class="mt-3">
+            <app-help-text [helpTextList]="helpText" [tooltip]="'Entity Risk History'"></app-help-text>
         </div>
-        <!-- risk status edit -->
-        <div class="card risk-card">
+
+         <!-- risk edit section -->
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 align-items-center">
+                        <label class="fs-14 fw-500">Risk</label>
+                        <span>
+                            <select class="form-control form-select" [(ngModel)]="currentRiskCategorycode"
+                                [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"
+                                (ngModelChange)="removeValidationMap('LEVEL'); setCoiProjConflictStatusType();">
+                                <option [value]=null>--Select--</option>
+                                <option *ngFor="let riskLevel of riskLevelLookup" [value]="riskLevel.riskCategoryCode">
+                                    {{riskLevel?.description}}</option>
+                            </select>
+                            <div *ngIf="riskValidationMap?.has('riskLevelCode')" class="invalid-feedback d-block fs-12">
+                                {{riskValidationMap?.get('riskLevelCode')}}
+                            </div>
+                            <div *ngIf="riskValidationMap?.has('duplicateRisk')" class="d-block fs-12 invalid-feedback">
+                                {{riskValidationMap?.get('duplicateRisk')}}
+                            </div>
+                        </span>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label class="fs-14 fw-500">Describe the reason for Risk level change</label>
+                        <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
+                            [(ngModel)]="revisionComment" appAutoGrow appLengthValidator rows="1" [limit]="2000"
+                            [isShowLimiter]="true" [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
+                            (ngModelChange)="removeValidationMap('COMMENT'); revisionComment = revisionComment.trim()"></textarea>
+                        <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
+                            {{riskValidationMap?.get('comment')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 text-end">
+                    <button type="button" class="btn btn-outline-secondary fs-14 me-2"
+                        (click)="clearConflictModal()">Clear</button>
+                    <button type="button" class="btn btn-primary fs-14" (click)="checkForModification()">Save</button>
+                </div>
+            </div>
+        </div>
+        <!-- risk status edit old design-->
+        <!-- <div class="card risk-card">
             <div class="card-body comment-card ">
                 <div class="row">
                     <div class="col-4 pl-85">
@@ -64,15 +105,56 @@
                         class="btn btn-outline-secondary float-end mr-10">Clear</button>
                 </div>
             </div>
-        </div>
-        <!-- Risk History -->
-        <div class="main-title mt-15" tabindex="0">
-            <h3 class="d-flex align-items-center mx-4 fs-16"><strong>Risk History</strong>
-                <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top">
+        </div> -->
+
+         <!-- risk history heading -->
+         <div class="main-title mt-3 mb-2" id="" tabindex="0">
+            <h3 class="d-flex align-items-center fs-18"><strong>Risk History</strong>
+                <span class="d-inline-block" data-bs-toggle="tooltip"
+                    data-bs-placement="top">
                 </span>
             </h3>
         </div>
-        <div class="card history">
+          <!-- risk history log -->
+          <div class="card" id="risk-history">
+            <div class="card-content">
+                <div class="card-body">
+                            <ul class="timeline">
+                                <ng-container *ngFor="let risk of riskHistoryLogs | keyvalue: sortNull">
+                                <li *ngFor="let historyEntry of risk.value; let index=index">
+                                    <span class="fs-14" [innerHTML]="historyEntry?.description" tabindex="0"></span>
+                                    <p class="coi-text-lighter fs-13" tabindex="0">{{risk.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                                    <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="0">
+                                        <span *ngIf="historyEntry?.comment" class="fs-14">
+                                            <mat-icon class="format_quote">format_quote</mat-icon>
+                                            <span *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 170; else showFullInfo" class="fst-italic mx-2" 
+                                                [attr.aria-label]="historyEntry?.comment">
+                                                <span class="coi-text-light mt-2">{{(historyEntry?.comment | slice:0:170)}}</span>
+                                                <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor" title="Read More"><span class="fw-medium">... <u>Read More</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </span>
+                                            <ng-template #showFullInfo>
+                                                <span tabindex='0' [attr.aria-label]="historyEntry?.comment" class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
+                                                <span *ngIf="historyEntry?.comment?.length > 170" class="hand-cursor mt-2 fw-medium" title="Read Less"
+                                                    (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true">
+                                                    <span class="fw-medium"><u>Read Less</u>
+                                                        <i aria-hidden="true"></i></span>
+                                                </span>
+                                            </ng-template>
+                                        </span>
+                                    </p>
+                                </li>
+                            </ng-container>
+                            </ul>
+                      <div *ngIf="isEmptyObject(riskHistoryLogs)" class="noDataExists p-2">
+                            <app-no-information [isBorderNeeded]="false"> </app-no-information>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- <div class="card history">
             <div class="history-card">
                 <div class="card-body">
                     <ul class="timeline">
@@ -108,82 +190,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
     </ng-container>
     <ng-container confirmation-content>
         You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
     </ng-container>
-
 </app-coi-slider>
 
 
 <app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Entity Risk Status'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>
-
-
-<!-- Risk History -->
-<!-- <div class="main-title mt-15">
-    <h3 class="d-flex align-items-center mx-4 "><strong>Risk History</strong>
-        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
-            title="Click to view Project - SFI conflict history." data-bs-placement="top">
-        </span>
-    </h3>
-</div>
-<div class="card history">
-    <div class=" history-card">
-        <div class="card-body">
-            <div class="form-row">
-                <div class="table-responsive">
-                    <div *ngFor="let risk of riskHistoryLogs | keyvalue: sortNull">
-                        <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
-                            {{risk.key}}
-                        </h4>
-                        <div class="pl-4 pr-3 ml-15 row">
-                            <span *ngFor="let historyEntry of risk.value;" class="p-3">
-                                <div class="form-row">
-                                    <div class="col">
-                                        <div class="col-12">
-                                            <p class="fs-14 mb-0">
-                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
-                                                    dateFormatterWithTimeZone:'time'}}</label>
-                                                <span [innerHTML]="historyEntry?.description"></span>
-                                            </p>
-                                        </div>
-                                        <div *ngIf="historyEntry?.comment" class="col-12 mx-auto comment-box-height mt-2">
-                                            <div class="align-items-center ml-5 mx-0">
-                                                <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
-                                                    <span
-                                                        *ngIf="!isReadMore && historyEntry?.comment?.length > 170; else showFullInfo">
-                                                        <span> {{(historyEntry?.comment |
-                                                            slice:0:170)}}</span>
-                                                        <span (click)="isReadMore = !isReadMore"
-                                                            class="hand-cursor"><span class="fw-medium">...
-                                                                <u>Read more</u>
-                                                                <i aria-hidden="true"></i></span>
-                                                        </span>
-                                                    </span>
-                                                    <ng-template #showFullInfo>
-                                                        <span class="word-break-all">{{historyEntry?.comment}}</span>
-                                                        <span *ngIf="historyEntry?.comment?.length > 170"
-                                                            (click)="isReadMore = !isReadMore" aria-hidden="true"
-                                                            class="hand-cursor"><span class="fw-medium">. <u>Read
-                                                                    Less</u>
-                                                                <i aria-hidden="true"></i></span>
-                                                        </span>
-                                                    </ng-template>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="isEmptyObject(riskHistoryLogs)">
-                    <app-no-information> </app-no-information>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
