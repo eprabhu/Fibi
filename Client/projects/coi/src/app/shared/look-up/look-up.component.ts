@@ -50,6 +50,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Input() selectedLookUpList: Array<LookUp> = [];
   @Input() defaultValue: any;
   @Input() isError;
+  @Input() title = '';
   @Input() options: string;
   @Input() isExternalArray = false;
   @Input() externalArray: any = [];
@@ -68,7 +69,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     if (this.selectedLookUpList?.length || this.defaultValue) {
       this.getLookUpValues();
     } else {
-      this.lookupTitle = '';
+      this.lookupTitle = this.title || '';
       this.selection = [];
     }
   }
@@ -104,7 +105,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
             this.setSelections();
             if (!this.selectedLookUpList?.length && !this.defaultValue) {
               this.mySelect.open();
-            } 
+            }
             this._changeRef.markForCheck();
           }));
       }
@@ -148,6 +149,8 @@ export class LookUpComponent implements OnChanges, OnDestroy {
       this.getLookupListForSelectAll().forEach((L: LookUp) => {
         this.selection.push(L.code || L.description);
       });
+    } else {
+        this.lookupTitle = this.title || '';
     }
   }
 
