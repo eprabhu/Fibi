@@ -469,3 +469,8 @@ small {
 .sort-filter:focus {
     border: 2px solid #54BF5B !important;
 }
+
+nav ul li {
+    white-space: nowrap;
+    font-weight: 500;
+}
