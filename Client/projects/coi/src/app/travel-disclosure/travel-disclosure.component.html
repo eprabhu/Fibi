@@ -1,6 +1,6 @@
 <div class="border-top-0 mb-3 mx-3 row header-sticky">
     <div class="col-9 p-0">
-        <div class="border shadow-sm bg-white" [class.min-height-189]="isCardExpanded && !isCreateMode">
+        <div class="border shadow-sm bg-white h-100">
             <div class="disclosure-heading px-3 d-flex">
                 <!-- disclosure heading -->
                 <div class="align-self-center flex-fill d-flex">
@@ -59,10 +59,10 @@
                     </ng-container>
                 </div>
             </div>
-            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white" tabindex="0" aria-label="Details of Travel Disclosure Document">
+            <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="0" aria-label="Details of Travel Disclosure Document">
                 <!-- user details -->
                 <div class="col mr-15">
-                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                    <div class="border rounded-1 position-relative p-3 fw-medium">
                         <div class="row mt-2" tabindex="0">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Department is">
@@ -109,7 +109,7 @@
                 </div>
                 <!-- for date box -->
                 <div class="col-auto mr-15">
-                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                    <div class="border rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill" tabindex="0" aria-label="Important Dates Of Travel Disclosure">Date</span>
                         <div class="row mt-2" tabindex="0">
                             <div class="col d-flex">
@@ -148,7 +148,7 @@
                 </div>
                 <!-- for status box -->
                 <div class="col-auto status-card-width" >
-                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                    <div class="border rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill" tabindex="0" aria-label="Statuses Of Travel Disclosure">Status</span>
                         <div class="row mt-2" tabindex="0">
                             <div class="col d-flex">
@@ -230,8 +230,8 @@
     </div>
     <!-- right side options -->
     <div class="col-3 px-0">
-        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm"
-            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : 'min-height-189' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
+        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm h-100"
+            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : '' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
             <div class="row m-0 py-3 px-3">
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home" aria-label="Go to home"
@@ -339,7 +339,7 @@
                         title="Click to Approve Travel Disclosure"
                         aria-label="Click to Approve Travel Disclosure"
                         (click)="openConfirmationModal('Approve', true);"
-                        [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
+                        [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                         class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
                         <mat-icon>check_circle_outline</mat-icon>
                         <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
