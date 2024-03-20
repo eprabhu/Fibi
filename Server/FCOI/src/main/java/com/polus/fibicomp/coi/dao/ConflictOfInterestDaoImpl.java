@@ -2671,6 +2671,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			statement.execute();
 		} catch (Exception e) {
 			logger.error("Exception in syncProjectWithDisclosure {}", e.getMessage());
+			throw new ApplicationException(e.getMessage(), e, Constants.DB_PROC_ERROR);
 		}
 	}
 
