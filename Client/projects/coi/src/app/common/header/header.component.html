@@ -78,6 +78,7 @@
                 <mat-icon [attr.title]="'Sign out of COI Module'"
                           [routerLink]="['/login']"
                           [attr.aria-labelledby]="'Click here to sign out'"
+                          (click)="logout()"
                           class="halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     power_settings_new
                 </mat-icon>

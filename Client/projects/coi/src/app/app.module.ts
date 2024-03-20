@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
 import { DragDirective } from './common/header/drag.directive';
 import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
 import {HeaderService} from "./common/header/header.service";
+import { LoginGuard } from './common/services/guards/login-guard.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -69,7 +70,9 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         }, {
             provide: LocationStrategy,
             useClass: HashLocationStrategy
-        }, NavigationService, AdminRouteGuardService],
+        }, NavigationService,
+        AdminRouteGuardService,
+        LoginGuard],
     bootstrap: [AppComponent]
 })
 export class AppModule {
