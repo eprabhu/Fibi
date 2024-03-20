@@ -1,9 +1,13 @@
 .navigation-icons{
+  span {
+    padding-top: 11px !important;
+    padding-bottom: 11px !important;
+  }
+
   .active {
     color: #007DEC;
     font-weight: bold;
     border-bottom: 3px solid #007DEC;
-    padding: 8px 16px;
   }
 }
 
@@ -179,18 +183,29 @@ th{
 }
 
 /* For showing the word disclosure as (discl). for page responsive time*/
-.disclosure-text {
+.disclosure-text,
+.disclosures-text {
   padding-left: 2px;
 }
 
 .disclosure-text:after {
-  content: "Disclosures";
+  content: "Disclosure";
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .disclosure-text:after {
     content: "Discl.";
   }
+}
+
+.disclosures-text:after {
+    content: "Disclosures";
+}
+
+@media (max-width: 992px) {
+    .disclosures-text:after {
+        content: "Discl.";
+    }
 }
 
 .person-name {
