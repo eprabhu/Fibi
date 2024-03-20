@@ -3,6 +3,7 @@ import {CommonService} from "../services/common.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { NavigationEnd, Router } from '@angular/router';
 import { focusElementyById } from '../utilities/custom-utilities';
+import { SSO_LOGOUT_URL, SSO_TIMEOUT_ERROR_MESSAGE } from '../../app-constants';
 
 @Component({
     selector: 'app-app-router',
@@ -13,6 +14,8 @@ export class AppRouterComponent implements OnInit, OnDestroy {
 
     isShowLoader = false;
     $subscriptions = [];
+    errorMessage = SSO_TIMEOUT_ERROR_MESSAGE;
+
 
     constructor(public commonService: CommonService, private elementRef: ElementRef, private _router: Router) {
         this._router.events.subscribe((event: any) => {
@@ -42,4 +45,9 @@ export class AppRouterComponent implements OnInit, OnDestroy {
         const pageYOffset = this.elementRef.nativeElement.querySelector('.canvas').scrollTop;
         this.commonService.$ScrollAction.next({event, pageYOffset});
     }
+
+    redirectToLogoutPage() {
+        localStorage.clear();
+        window.location.href = SSO_LOGOUT_URL;
+      }
 }
