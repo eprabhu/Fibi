@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit} from '@angular/core';
 import { FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
 import { Subject} from 'rxjs';
 import { OpaService} from './services/opa.service';
@@ -57,6 +57,7 @@ export class OpaComponent implements OnInit {
     };
     isHomeClicked = false;
     isSubmitClicked = false;
+    isUserCollapse = false;
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -309,6 +310,13 @@ export class OpaComponent implements OnInit {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = !(window.innerWidth <= 992);
+        }
     }
 
 }

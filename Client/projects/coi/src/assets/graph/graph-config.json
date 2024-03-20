@@ -1,6 +1,6 @@
 
-{    
-    "nodes": { 
+{
+    "nodes": {
         "Award" : {
             "colour": "#dd7d33",
             "size": 10,
@@ -95,11 +95,11 @@
             "lineWidth": 1.5,
             "name": "Award Sponsor"
         },
-        "BELONGS_TO":{
-            "relation":"BELONGS_TO",
+        "COUNTRY":{
+            "relation":"COUNTRY",
             "colour": "#5ab008",
             "lineWidth": 1.5,
-            "name": "Belongs to"
+            "name": "Country"
         },
         "CITIZEN_OF":{
             "relation":"CITIZEN_OF",
@@ -193,7 +193,7 @@
         "COI": "http://10.199.100.35:2222/"
     },
     "additionalImages": [
-        {"id": "ESponsor", "image":"/assets/images/g_proposal.png"}
+        {"id": "ESponsor", "image":"/assets/images/g_entity_sponsor.png"}
     ]
-      
+
 }

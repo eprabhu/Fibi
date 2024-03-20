@@ -4,7 +4,7 @@
         <div class="modal-header">
           <h4 class="modal-title" *ngIf="!isShowExistingDisclosure">
             <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Revise
-                Disclosure : #{{disclosureNumber}}</ng-container>
+                Disclosure</ng-container>
             <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Create FCOI
                 Disclosure</ng-container>
             <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</ng-container>
@@ -67,9 +67,9 @@
           <div class="row mb-2" *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
             <div class="col">
                 <label for="desc-award"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :</label>
-                <span class="margin-left-2 d-flex mt-1 pointer fs-14" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
+                <span class="d-flex mt-1 fs-14 align-items-center" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
                     <span>{{commonService.getPersonLeadUnitDetails(commonService.currentUserDetails)}}</span>
-                    <span class="btn btn-primary-icon btn-sm margin-left-1 px-2 py-0" id="close-edit-home-unit" title="Edit Unit" type="button">
+                    <span class="btn ms-2 px-2 py-0" id="close-edit-home-unit" title="Edit Unit" type="button">
                         <mat-icon class="fs-16 close-line-height mt-1">edit</mat-icon>
                     </span>
                 </span>
@@ -390,7 +390,7 @@
         <div class="modal-footer">
           <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Cancel" (click)="clearModal()">Cancel</button>
           <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn"
-          type="button" (click)="createOrReviseDisclosure()">
+          type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Create Revision' : 'Create FCOI'">
           <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
           <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container></button>
           <button  *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary" id="claim-sumbit-no-btn"

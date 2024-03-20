@@ -286,6 +286,23 @@ export class CommonService {
                 return 'yellow-badge';
         }
     }
+  
+    getDisclosureConflictBadgeForSlider(statusCode: string) {
+        switch (String(statusCode)) {
+            case '1':
+                return 'green-badge-for-slider';
+            case '2':
+            case '5':
+                return 'brown-badge-for-slider';
+            case '3':
+            case '6':
+                return 'red-badge-for-slider';
+            case '4':
+                return 'green-badge-for-slider';
+            default:
+                return 'yellow-badge-for-slider';
+        }
+    }
 
     getReviewStatusBadge(statusCode: string): string {
         switch (statusCode) {
