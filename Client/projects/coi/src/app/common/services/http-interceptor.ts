@@ -12,6 +12,7 @@ import { catchError, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonService } from './common.service';
 import {SSO_TIMEOUT_ERROR_CODE} from "../../../../../fibi/src/app/app-constants";
+import { openCommonModal } from '../utilities/custom-utilities';
 /**
  * this is used to add authorization token and handle error on token expiration
  * and loader for the entire application is handled here
@@ -62,7 +63,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 }
 
                 if (error.status === SSO_TIMEOUT_ERROR_CODE && this._commonService.enableSSO) {
-                    document.getElementById('timeoutModalButton').click();
+                    openCommonModal('sessionTimeoutModal');
                 }
                 if (error.error instanceof Blob) {
                     return from(Promise.resolve(error).then(async x => {
