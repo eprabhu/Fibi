@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -51,6 +51,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isShowRiskHistory = false;
     isOpenSlider = false;
     isConcurrency = false;
+    isUserCollapse = false;
 
     constructor(private _router: Router, private _route: ActivatedRoute,
         public entityManagementService: EntityManagementService,
@@ -283,5 +284,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
           this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
       }
+
+    /* Auto expand and collapse based on screen responsiveness */
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if (!this.isUserCollapse) {
+            this.isCardExpanded = !(window.innerWidth <= 992);
+        }
+    }
 
 }

@@ -94,7 +94,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
-        this.router.navigate(['/logout']);
+        if (!this.commonService.enableSSO) {
+            ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
+            this.commonService.currentUserDetails = {};
+          }
+          this.commonService.rightsArray = [];
     }
 
     changePassword() {

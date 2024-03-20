@@ -6,9 +6,9 @@
     <div class="modal-dialog modal-custom-width modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="mb-0">
+                <h4 class="mb-0 modal-title fs-16">
                     <span (click)="isShowFilter = !isShowFilter;hideToolTipAndCard()" class="col-auto me-2">
-                        <button class="btn btn-sm btn-outline-dark"><i class="fa fa-info" aria-hidden="true"></i></button>
+                        <button class="btn btn-sm btn-outline-dark rounded-5"><i class="fa fa-info" aria-hidden="true"></i></button>
                     </span>
                     {{graphDataService.graphTypeConfiguration.header}} {{graphDetail.name}}</h4>
                 <div class="container" *ngIf="isShowFilter">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="dropdown-wrapper">
                         <span *ngFor="let node of graphDataService.graphMetaData.nodes | keyvalue" class="card-color py-2 px-3 rounded-2 d-flex flex-end">
-                            <img [src]="getLinkForAdditionalImage(node.value.image)" [alt]="node.key.name" class="image-frame mr-2"> 
+                            <img [src]="getLinkForAdditionalImage(node.value.image)" [alt]="node.key.name" class="image-frame mr-2">
                             <span>{{node.value.name}}</span>
                         </span>
                     </div>
@@ -33,10 +33,10 @@
                     <div *ngIf="!showtimeLine" (click)="showtimeLine = true;hideToolTipAndCard();" class="timeline-btn mr-2" title="View graph history">
                         <span>
                             <img class="image-container" alt="icon representing timeline"
-                            src="./assets/images/g_timeline.png">                        
+                            src="./assets/images/g_timeline.png">
                         </span>
                     </div>
-                    <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="graph-modal-dismiss-btn"
+                    <button type="button" data-bs-dismiss="modal" class="btn-close" id="graph-modal-dismiss-btn"
                         aria-label="Close" (click)="popOverEvents.next(false); clearGraph();"></button>
                 </div>
             </div>
@@ -75,7 +75,7 @@
             </ng-container>
             <ng-container *ngIf="cardData.label === 'Entity'">
                 <app-entity-card [data]="cardData"
-                    [imagePath]="graphDataService.getLinkForImage('Entity')"></app-entity-card>
+                    [imagePath]="cardData?.is_sponsor == 'Y' ?  graphDataService.getLinkForAdditionalImage(entitySponsorImage) : graphDataService.getLinkForImage('Entity')"></app-entity-card>
             </ng-container>
             <ng-container *ngIf="cardData.label === 'Proposal'">
                 <app-proposal-card [data]="cardData"

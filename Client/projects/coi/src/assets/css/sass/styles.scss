@@ -236,7 +236,8 @@ body {
   .success-banner {
     color: #151313;
     background-color: #F3F3F3;
-    font-size: 1.4rem;
+    // font-size: 1.4rem;
+    @extend .fs-14;
   }
   
   .bg-fcoi-clip {
@@ -675,3 +676,32 @@ ul.timeline > li:before {
 .format_quote {
   transform: rotateY(180deg);
 }
+
+.mat-icon {
+  font-size: 1.25rem !important;
+}
+
+.fs-25px {
+  font-size: 25px !important;
+}
+
+/* for fixing fibi style issues across application */
+.btn-outline-secondary, .section-header, .content, .side-info, .navigation-box, .status-pill, .form-control::placeholder {
+  @extend .fs-14;
+}
+
+.btn-outline-secondary {
+  padding: .375rem 0.75rem !important;
+}
+
+.media {
+  .media-body {
+    h6 {
+      @extend .fs-16;
+  }
+  p {
+    @extend .fs-14;
+  }
+  } 
+} 
+

@@ -18,7 +18,8 @@
                                         </span>
                                         <h3 class="card-title align-items-start flex-column fs-16 mb-0">
                                             <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                                                <span class="clickable-content cursor-pointer text-decoration-underline" (click)="openDetailModal(coiData)"
+                                                <span class="link-primary cursor-pointer text-dark text-decoration-underline" tabindex="0" (click)="openDetailModal(coiData)"
+                                                    (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
                                                     title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</span>
                                             </ng-container>
                                             <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
@@ -32,8 +33,9 @@
                                                     {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
                                                     coiData?.projectDetail?.title }}
                                                     ] By
-                                                    <span class="clickable-content coi-text-light text-decoration-underline"
+                                                    <span class="link-primary coi-text-light text-dark text-decoration-underline" tabindex="0"
                                                         (click)="openDetailModal(coiData)"
+                                                        (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
                                                         title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
                                                         {{ coiData?.coiDisclosure?.person?.fullName }}</span>
                                                 </span>
@@ -71,25 +73,31 @@
                                                 </div>
                                             </div>
                                             <div class="align-items-center d-flex f-14">
-                                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover me-2"
-                                                    [class.clickable-content]="4">
+                                                <span class="cursor-pointer ms-2 me-2"
+                                                    [class.link-primary]="4" tabindex="0">
                                                     Trainings({{1}})
-                                                </a> |
-                                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover ms-2 me-2"
+                                                </span> |
+                                                <span class="cursor-pointer ms-2 me-2"
                                                     (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    [class.clickable-content]="coiData.personEntitiesCount">
+                                                    (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)" (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    [class.link-primary]="coiData.personEntitiesCount"
+                                                    tabindex="0">
                                                     Entities({{coiData.personEntitiesCount}})
-                                                </a> |
-                                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover ms-2 me-2"
+                                                </span> |
+                                                <span class="cursor-pointer ms-2 me-2"
                                                     (click)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    [class.clickable-content]="coiData.personNotesCount">
+                                                    (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)" (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
+                                                    [class.link-primary]="coiData.personNotesCount"
+                                                    tabindex="0">
                                                     Notes({{coiData.personNotesCount}})
-                                                </a> |
-                                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover ms-2 me-2"
+                                                </span> |
+                                                <span class="cursor-pointer ms-2 me-2"
                                                     (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    [class.clickable-content]="coiData.personAttachmentsCount">
+                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
+                                                    [class.link-primary]="coiData.personAttachmentsCount"
+                                                    tabindex="0">
                                                     Attachments({{coiData.personAttachmentsCount}})
-                                                </a>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -408,7 +416,7 @@
         </ng-container>
         <ng-container *ngIf="isCreateMode">
         <div class="navigation-tabs coi-navigation-tabs d-flex align-items-center">
-           <div class="p-0">
+           <div class="p-0 flex-grow-1">
                 <div class="nav-progress navigation-tabs coi-navigation-tabs row">
                     <div (click)="goToStep(1);"
                         [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"

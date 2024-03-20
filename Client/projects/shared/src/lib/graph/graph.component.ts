@@ -59,6 +59,7 @@ export class GraphComponent implements OnInit {
         type: ''
     };
     $debounceEventForTooltip = new Subject();
+    entitySponsorImage = '/assets/images/g_entity_sponsor.png';
 
     constructor(public graphDataService: DataService) { }
 
@@ -150,8 +151,8 @@ export class GraphComponent implements OnInit {
     }
 
     getImageURL(node) {
-        if (node.isGrantSponsor && node.isGrantSponsor === 1 ) {
-            return `url(#ESponsor)`;
+        if ( node.is_sponsor == 'Y') {
+            return 'url(#ESponsor)';
         }
         return `url(#${node.label})`;
     }

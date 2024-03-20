@@ -31,3 +31,18 @@
         <div class="loading-text"><span>{{commonService.appLoaderContent}}</span></div>
     </div>
 </div>
+
+
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName]="'sessionTimeoutModal'" [primaryBtnName]="'Continue'"
+    (primaryBtnAction)="redirectToLogoutPage()">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Session Expired</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p>{{errorMessage}}</p>
+    </div>
+</app-confirmation-modal>
+<!--Unsaved Changes confirmation Modal end-->
