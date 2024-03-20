@@ -156,8 +156,8 @@
                                         <div class="col-md-12 col-xl-4">
                                             <div class="border h-100 p-3 position-relative rounded-1 table-bg-color mt-md-3 mt-xl-0">
                                                 <span class="status-pill fs-13">Project/SFI Relationship</span>
-                                                <div *ngIf=" !relation.isRelationShipExists" class="emptySfi mt-5 pt-3">
-                                                    <p class="fw-600">No SFI(s) Attached</p>
+                                                <div *ngIf="!relation.isRelationShipExists" class="d-flex justify-content-center align-items-center h-100">
+                                                    <p class="fw-600 mb-0 text-gray-600">No SFI(s) Attached</p>
                                                 </div>
                                                 <div class="row">
                                                     <div *ngIf="relation.isRelationShipExists" class="col-6 fs-14">
