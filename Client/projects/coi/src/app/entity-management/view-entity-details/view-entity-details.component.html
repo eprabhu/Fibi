@@ -4,9 +4,8 @@
       <div class="card coi-card-expanded">
         <div class="row mx-0">
           <div class="col-lg px-0">
-            <!-- <div class="border shadow-sm"> -->
               <div class="card-header">
-                <div class="row flex-grow-1 position-relative pe-3">
+                <div class="row flex-grow-1 position-relative">
                   <div class="col-xl d-flex align-items-center">
                     <h1 class="fw-bold mt-3 px-3 fs-18" [attr.aria-label]="entityDetails?.entityName">
                       {{entityDetails?.entityName}}</h1>
@@ -20,12 +19,6 @@
                                 title="{{entityDetails?.entityName}} is Unverified">
                               <i aria-hidden="true" class="fa fa-times mr-2"></i>
                               Unverified</span>
-                          
-                          <!-- <span class="pill d-flex me-3 unverified-label">
-                            <mat-icon role="img">close</mat-icon>
-                            <span class="fs-14"
-                              aria-label="entityDetails?.entityStatus?.description">{{entityDetails?.entityStatus?.description}}</span>
-                          </span> -->
                         </span>
                         <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="0"
                           [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'">
