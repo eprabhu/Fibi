@@ -152,11 +152,11 @@ public class COIEntityGraphDao {
 
 		for (String relationship : lsRelationships) {
 
-			if ("BELONGS_TO".equalsIgnoreCase(relationship)) {
+			if ("COUNTRY".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				
 				cypher = cypher
-						.concat("MATCH p=(e1:Entity)-[r1:BELONGS_TO]->(e2:Country) ");
+						.concat("MATCH p=(e1:Entity)-[r1:COUNTRY]->(e2:Country) ");
 
 				HashMap<String,String> aliasHm = new HashMap<>();
 				aliasHm.put(NODE_ENTITY, "e1");	
@@ -237,7 +237,7 @@ public class COIEntityGraphDao {
 			} else if ("ENTITIES_BELONGS_WITH".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher
-						.concat("MATCH p=(e1:Country)<-[r1:BELONGS_TO]-(e2:Entity) ");
+						.concat("MATCH p=(e1:Country)<-[r1:COUNTRY]-(e2:Entity) ");
 
 				HashMap<String,String> aliasHm = new HashMap<>();
 				aliasHm.put(NODE_ENTITY, "e2");	

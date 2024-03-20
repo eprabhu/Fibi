@@ -342,12 +342,12 @@ public class COIImportGraphDataDao {
 	}
 
 	private void deleteCOIRelationships() {
-		String cypherQuery = "MATCH ()-[r:BELONGS_TO | CITIZEN_OF | ASSOCIATED_ENTITIES | AFFILIATED_ENTITIES]->() DELETE r";
+		String cypherQuery = "MATCH ()-[r:COUNTRY | CITIZEN_OF | ASSOCIATED_ENTITIES | AFFILIATED_ENTITIES]->() DELETE r";
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 	}
 
 	private void deleteCOINodes() {
-		String cypherQuery = "MATCH (n:Country:Person:COIEntity) DETACH DELETE n";
+		String cypherQuery = "MATCH (n) WHERE n:Country OR n:Person OR n:Entity DETACH DELETE n";
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 	}
 }
