@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRouterComponent } from "./common/app-router/app-router.component";
 import { DashboardGuardService } from './common/services/dashboard-guard.service';
 import { AdminRouteGuardService } from './common/services/guards/admin-route-guard.service';
+import { LoginGuard } from './common/services/guards/login-guard.service';
 
 const routes: Routes = [
     {
@@ -79,7 +80,7 @@ const routes: Routes = [
             },
           ]
     },
-{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
+{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginGuard] }
 ];
 
 @NgModule({

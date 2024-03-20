@@ -59,3 +59,8 @@ export const OPA_REVIEW_STATUS = {
     RETURNED: '5',
     WITHDRAWN: '6'
 };
+
+// sso timeout related variables
+export const SSO_TIMEOUT_ERROR_MESSAGE = 'Your session has been expired.';
+export const SSO_TIMEOUT_ERROR_CODE = 0;
+export const SSO_LOGOUT_URL = '';
