@@ -100,6 +100,7 @@
                         </label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'reviewStatusCodes')"
                                      [options]="opaDisclosureStatusOptions"
+                                     [title]="'Click to search by Review Status'"
                                      [selectedLookUpList]="lookupValues['reviewStatusCodes']"
                                      [uniqueId]="'adv-opa-review-status'">
                         </app-look-up>
@@ -112,6 +113,7 @@
                         Disposition Status
                     </label>
                     <app-look-up (selectedResult)="onLookupSelect($event, 'dispositionStatusCodes')"
+                                [title]="'Click to search by Disposition Status'"
                                 [options]="opaDispositionStatusOption" [selectedLookUpList]="lookupValues['dispositionStatusCodes']"
                                 [uniqueId]="'adv-opa-disposition-statuss'">
                     </app-look-up>
@@ -142,6 +144,7 @@
                                     [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
                                     class="form-control d-inline-block"
                                     [(ngModel)]="advanceSearchDates.periodStartDate"
+                                    title="Click to search by Reporting Cycle From Date"
                                     placeholder="From">
                                 <i (click)="periodFromDate.open()"
                                     class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
@@ -154,6 +157,7 @@
                                     [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
                                     class="form-control d-inline-block"
                                     [(ngModel)]="advanceSearchDates.periodEndDate"
+                                    title="Click to search by Reporting Cycle To Date"
                                     placeholder="To">
                                 <i (click)="periodToDate.open()"
                                     class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
@@ -170,6 +174,7 @@
                     </label>
                     <app-look-up (selectedResult)="onLookupSelect($event, 'designationStatusCodes')"
                         [selectedLookUpList]="lookupValues['designationStatusCodes']"
+                        [title]="'Click to search by Employee Type'"
                         [options]="opaEmployeeRoleTypeOption" [uniqueId]="'opa-adv-person-role-status'"
                         [externalArray]="_opaDashboardService.rolesList" [isExternalArray]="true">
                     </app-look-up>
