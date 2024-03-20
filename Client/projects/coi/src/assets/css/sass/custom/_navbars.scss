@@ -124,6 +124,7 @@ header {
     position: sticky;
     top: var(--theme-topbar-height);
     z-index: 50;
+    background: var(--theme-body-bg-color);
 }
 
 //dashboard nav
