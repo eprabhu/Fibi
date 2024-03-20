@@ -30,6 +30,11 @@ DECLARE LI_PERSON_ENTITY_NUMBER     VARCHAR(30);
 DECLARE LI_COUNT   	            INT(30);
 DECLARE LI_DISCLOSURE_STATUS    INT(3);
 DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE LI_LOCK_ACQUIRED INT DEFAULT 0;
+
+START TRANSACTION;
+SELECT GET_LOCK('coi_sfi_projects_lock', 30) INTO LI_LOCK_ACQUIRED;
+IF LI_LOCK_ACQUIRED = 1 THEN
 
     BEGIN 
         /**
@@ -200,5 +205,12 @@ DECLARE done BOOLEAN DEFAULT FALSE;
             END;
         END IF;	
 	END;
+COMMIT;
+SET LI_LOCK_ACQUIRED = RELEASE_LOCK('coi_sfi_projects_lock');
+	SELECT '1';
+ELSE
+        SELECT 'Unable to acquire lock. Another process may sync the projects vs entity.';
+
+END IF;
 END
 //
