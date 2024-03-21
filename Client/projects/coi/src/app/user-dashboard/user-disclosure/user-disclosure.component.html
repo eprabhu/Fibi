@@ -773,9 +773,9 @@
                                             <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-lg-3 col-md-6 mb-2">
                                         <!-- Coi card Description (FCOI)-->
-                                        <div *ngIf="disclosure?.fcoiTypeCode== 1" tabindex="0"
+                                        <div tabindex="0"
                                             [attr.aria-label]="'Description' + disclosure?.reviseComment">
                                             <label for="id" class="d-block coi-text-dark">Description</label>
                                             <span>
@@ -803,9 +803,9 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-lg-3 col-md-6 mb-2">
                                         <!-- Coi card Description(Not FCOI) -->
-                                        <div *ngIf="disclosure?.fcoiTypeCode!= 1" tabindex="0"
+                                        <div tabindex="0"
                                             [attr.aria-label]="'Description' + disclosure?.reviseComment">
                                             <label for="id" class="d-block coi-text-dark">Description</label>
                                             <span class="break-point-1200">
@@ -1252,7 +1252,7 @@
                         <ng-container *ngIf="!disclosure?.travelDisclosureId">
                             <div class="col-lg-10">
                                 <div class="row align-items-center">
-                                    <div class="col-md-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
+                                    <div class="col-md-6 col-lg-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId"
                                             [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                                             [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
@@ -1267,7 +1267,7 @@
                                                 Financial Interest</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3 col-lg-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
@@ -1280,7 +1280,7 @@
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3 col-lg-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
@@ -1291,8 +1291,8 @@
                                                 (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
                                         </div>                                        
                                     </div>
-                                    <div class="col-md-4 text-end text-lg-start" tabindex="0">
-                                        <label class="coi-text-lighter d-block fs-13 fw-medium" for="id">Last Updated By</label>
+                                    <div class="col-md-12 col-lg-4" tabindex="0">
+                                        <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                             [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
                                                                                                 (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
