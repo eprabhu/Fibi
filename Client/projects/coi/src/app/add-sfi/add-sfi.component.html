@@ -2,7 +2,7 @@
     <div class="col-12">
 		<div class="card shadow-sm">
 			<div class="row mx-0">
-				<div class="col-lg px-0">
+				<div class="col-xl px-0">
 					<div class="card-header bg-white px-3 border-bottom min-height-unset">
 						<div class="row flex-grow-1">
 							<div class="col-lg-12 d-flex align-items-center" tabindex="0" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-3 py-3 border-start">
+				<div class="col-xl-3 py-3 border-start">
 					<div class="d-grid gap-2 d-md-flex flex-md-wrap">
 						<button class="btn btn-outline-grey col pb-0 w-100" title="Go to COI home page" tabindex="0"
 							(click)="goToHome()" aria-label="Home" role="button">
@@ -197,7 +197,7 @@
 					</div>
 				</div>
 				<ng-container *ngIf="canShowEntityFields">
-					<div class="mb-3 px-4 row">
+					<div class="mb-3 row mx-0 px-0">
 						<!-- Country -->
 						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Country Search Field" role="searchbox">
 							<div class="d-flex position-relative">
@@ -221,7 +221,7 @@
 							</div>
 						</div>
 					<!-- City -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="City">
+						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="0" aria-label="City">
 							<div class="d-flex fs-15 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="City">City</label>
 							</div>
@@ -235,7 +235,7 @@
 						</div>
 					</div>
 					<!-- Address -->
-					<div class="px-4 mb-3 row" tabindex="0" aria-label="Address">
+					<div class="px-0 mx-0 mb-3 row" tabindex="0" aria-label="Address">
 						<span>
 							<label class="fs-14 fw-500 pb-1 label-text">
 								<span class="mandatory">*</span>
@@ -250,13 +250,13 @@
 							<div class="help-text">
 								Type in the address of the business or organization you want to report.
 							</div>
-							<div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13">
+							<div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13 position-absolute">
 								{{mandatoryList?.get('address')}}
 							</div>
 						</span>
 					</div>
 					<!-- Phone -->
-					<div class="px-4 mb-3 row">
+					<div class="px-0 mx-0 mb-3 row">
 						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Phone">
 							<div class="d-flex px-1 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="Phone">
@@ -275,7 +275,7 @@
 							</div>
 						</div>
 						<!-- Zip Code -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Zip Code">
+						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="0" aria-label="Zip Code">
 							<div class="d-flex fs-15 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="Zip Code">
 									Zip Code
@@ -292,7 +292,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="px-4 mb-3 row">
+					<div class="px-0 mx-0 mb-3 row">
 						<!-- Website -->
 						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Website">
 							<div class="d-flex position-relative">
@@ -307,7 +307,7 @@
 							</div>
 						</div>
 						<!-- Email Address -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Email Address">
+						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="0" aria-label="Email Address">
 							<div class="d-flex fs-15 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="email"> Email Address
 								</label>
@@ -325,7 +325,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="px-4 row" [ngClass]="isEntityManagement ? 'mb-4' : 'mb-3'">
+					<div class="px-0 mx-0 row" [ngClass]="isEntityManagement ? 'mb-4' : 'mb-3'">
 						<!-- Entity Type -->
 						<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" tabindex="0" aria-label="Entity Type Dropdown">
 							<div class="d-flex position-relative">
@@ -334,7 +334,7 @@
 								</label>
 							</div>
 							<div class="col">
-								<select class="form-control mt-2 form-select" id="entity-type"
+								<select class="form-control form-select" id="entity-type"
 									[(ngModel)]="entityDetails.coiEntity.entityTypeCode"
 									(ngModelChange)="setEntityTypeObj();"
 									[ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''"
@@ -352,13 +352,13 @@
 							</div>
 						</div>
 						<!-- Risk -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="isEntityManagement"  tabindex="0" aria-label="Risk Dropdwon">
+						<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-3 mt-md-0" *ngIf="isEntityManagement"  tabindex="0" aria-label="Risk Dropdwon">
 							<div class="d-flex px-1 position-relative">
 								<label class="d-block fs-14 fw-500 px-1 pb-1 label-text" for="risk-level">Risk
 								</label>
 							</div>
 							<div class="col px-1">
-								<select class="form-select mt-2 form-control fs-14"
+								<select class="form-select form-control fs-14"
 									[(ngModel)]="entityDetails.coiEntity.riskCategoryCode"
 									[disabled]="modifyType ==='1'" (ngModelChange)="setEntityRiskCategoryObj()"
 									id="risk-level">
