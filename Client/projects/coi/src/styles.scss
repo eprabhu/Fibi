@@ -216,3 +216,49 @@
         box-shadow: none !important;
     }
 }
+
+.coi-table-striped {
+
+    .table-striped>thead>tr th,
+    .table-striped>thead>tr td {
+        --bs-table-bg-type: #f0f2f3;
+    }
+
+    .table-striped>tbody>tr:nth-of-type(odd)>th,
+    .table-striped>tbody>tr:nth-of-type(odd)>td {
+        --bs-table-bg-type: #fff;
+    }
+
+    .table-striped>tbody>tr:nth-of-type(even)>th,
+    .table-striped>tbody>tr:nth-of-type(even)>td {
+        --bs-table-bg-type: #f9f9f9;
+    }
+
+    .table-striped tbody tr:hover {
+        cursor: default !important;
+        box-shadow: none !important;
+    }
+}
+
+.link-primary {
+    cursor: pointer;
+    &:hover,
+    &:focus {
+        text-decoration: underline !important;
+    }
+}
+
+.text-conflict-badge {
+    background-color: #ffe6e7;
+    color: #ca4e4f;
+}
+
+.text-potential-conflict-badge {
+    background-color: #fff5e6;
+    color: #c59c59;
+}
+
+.text-no-conflict-badge {
+    background-color: #e3ffe5;
+    color: #6cc974;
+}

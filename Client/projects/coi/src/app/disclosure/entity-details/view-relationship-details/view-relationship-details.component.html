@@ -316,11 +316,11 @@
 </div>
 
 <!-- Relationship questionnaire section if Relationship Details tab is clicked -->
-<div *ngIf="entityDetailsServices.activeTab === 'QUESTIONNAIRE'">
+<div *ngIf="entityDetailsServices.activeTab === 'QUESTIONNAIRE'" class="m-0">
 
     <!-- Questionnaire Section -->
-    <div class="row" *ngIf="entityDetailsServices.definedRelationships?.length">
-        <div class="col-12 custom-quest-relationship my-3">
+    <div *ngIf="entityDetailsServices.definedRelationships?.length" class="row p-3 m-0">
+        <div class="col-12 custom-quest-relationship p-0">
            <app-entity-questionnaire *ngIf="isRelationshipDetailsFetched()" [entityId]="entityId"
                 [relationshipDetails]="relationshipsDetails" id="focusQuestionnaire" [isEditMode]="isEditMode"
                 (positionsToView)="scrollPosition($event)">
@@ -360,37 +360,37 @@
 </div>
 
 <!-- SFI Details section if SFI Details tab is clicked -->
-<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'">
-        <div *ngIf="!isEditMode" class="card mb-3">
-            <div class="row d-flex px-4 mb-3 mt-4">
+<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'" class="p-3">
+        <div *ngIf="!isEditMode" class="card p-3">
+            <div class="row mb-2">
                 <div class="col-3" tabindex="0">
-                    <label class="d-block fw-500 fs-14 pb-1 label-text">Sponsors Research</label>
-                    <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
+                    <label class="d-block coi-text-dark">Sponsors Research</label>
+                    <span class="coi-text-light">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
                 </div>
                 <div class="col-3" tabindex="0">
-                    <label class="d-block fw-500 fs-14 pb-1 label-text" aria-label="Start Date Of Involvement">Start
+                    <label class="d-block coi-text-dark" aria-label="Start Date Of Involvement">Start
                         Date Of Involvement</label>
                     <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementStartDate">
-                        <span class="text-color fs-14"
+                        <span class="coi-text-light"
                             aria-label="involvementDate.involvementStartDate | dateFormatterWithTimeZone">
                             {{involvementDate.involvementStartDate | dateFormatterWithTimeZone}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col-3" tabindex="0">
-                    <label class="d-block fw-500 fs-14 pb-1 label-text">End Date Of Involvement</label>
+                    <label class="d-block coi-text-dark">End Date Of Involvement</label>
                     <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementEndDate">
-                        <span class="text-color fs-14">{{involvementDate.involvementEndDate |
+                        <span class="coi-text-light">{{involvementDate.involvementEndDate |
                             dateFormatterWithTimeZone}}</span>
                     </app-no-data-label>
                 </div>
             </div>
-            <div class="row d-flex px-4 mb-3 mt-4">
+            <div class="row mb-2">
                 <div class="col-12" tabindex="0">
-                    <label class="d-block fw-500 fs-14 pb-1 label-text">Relationship With Entity</label>
+                    <label class="d-block coi-text-dark">Relationship With Entity</label>
                     <app-no-data-label [classesToApply]="'fs-14'"
                         [valueToShow]="relationshipsDetails?.staffInvolvement">
                         <span *ngIf="!isReadMoreRelationWith;else more1"
-                            class="text-color fs-14">{{(relationshipsDetails?.staffInvolvement?.length>145)?(relationshipsDetails?.staffInvolvement|slice:0:142)
+                            class="coi-text-light">{{(relationshipsDetails?.staffInvolvement?.length>145)?(relationshipsDetails?.staffInvolvement|slice:0:142)
                             :relationshipsDetails?.staffInvolvement}}
                             <span *ngIf="relationshipsDetails?.staffInvolvement?.length>145">...<span
                                     class="collapse-text fw-medium"
@@ -405,12 +405,12 @@
                     </app-no-data-label>
                 </div>
             </div>
-            <div class="row d-flex px-4 mb-3 mt-4">
+            <div class="row mb-2">
                 <div class="col-12" tabindex="0">
-                    <label class="d-block fw-500 fs-14 pb-1 label-text">Principal Business Area Of Entity</label>
+                    <label class="d-block coi-text-dark">Principal Business Area Of Entity</label>
                     <app-no-data-label [classesToApply]="'fs-14'"
                         [valueToShow]="relationshipsDetails?.studentInvolvement">
-                        <span *ngIf="!isReadMoreBusinessArea;else more2" class="text-color fs-14">
+                        <span *ngIf="!isReadMoreBusinessArea;else more2" class="coi-text-light">
                             {{(relationshipsDetails?.studentInvolvement?.length>145)?(relationshipsDetails?.studentInvolvement|slice:0:142)
                             :relationshipsDetails?.studentInvolvement}}
                             <span *ngIf="relationshipsDetails?.studentInvolvement?.length>145">...<span
@@ -426,14 +426,14 @@
                     </app-no-data-label>
                 </div>
             </div>
-            <div class="row d-flex px-4 mt-3 mb-15">
+            <div class="row">
                 <div class="col-12" tabindex="0">
-                    <label class="d-block fw-500 fs-14 pb-1 label-text">Relationship Of Entity To Your University
+                    <label class="d-block coi-text-dark">Relationship Of Entity To Your University
                         Responsibilities</label>
                     <app-no-data-label [classesToApply]="'fs-14'"
                         [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
                         <span *ngIf="!isReadMoreUniversity;else more3"
-                            class="text-color fs-14">{{(relationshipsDetails?.instituteResourceInvolvement?.length>145)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:142)
+                            class="coi-text-light">{{(relationshipsDetails?.instituteResourceInvolvement?.length>145)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:142)
                             :relationshipsDetails?.instituteResourceInvolvement}}
                             <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>145">...<span
                                     class="collapse-text fw-medium"
