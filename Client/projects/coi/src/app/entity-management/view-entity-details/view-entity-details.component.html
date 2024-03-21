@@ -125,7 +125,7 @@
           <!-- New design -->
           <div class="col-lg-3 border-prev-nxt">
             <div class="h-100 mb-md-3">
-              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3">
+              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center">
                 <!-- home -->
                 <button *ngIf="hasManageEntity"
                   class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
@@ -161,7 +161,7 @@
                   <mat-icon>reply</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Back</span> -->
                 </button>
-    
+
                 <ng-container *ngIf="hasManageEntity">
                   <!-- inactivate -->
                   <ng-container *ngIf="entityDetails.isActive">
@@ -173,7 +173,7 @@
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Inactivate</span>
                     </button>
                   </ng-container>
-    
+
                   <!-- Activate -->
                   <ng-container *ngIf="!entityDetails.isActive">
                     <button title="Click to activate Entity" id="btn-activate" tabindex="0" role="button"
@@ -184,7 +184,7 @@
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Activate</span>
                     </button>
                   </ng-container>
-    
+
                   <!-- Approve Entity -->
                   <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
                     <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12' : 'col'"
@@ -209,7 +209,7 @@
       </div>
     </div>
    <!-- new top card ends -->
-  
+
 </div>
 <div *ngIf="sfiService.isShowSfiNavBar" id="task-navigation-bar">
   <app-add-sfi-slider [coiEntityManageId]="entityDetails.entityId" [isEditEntity]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
@@ -229,39 +229,48 @@
         <div class="row">
           <div class="col-12">
             <div class="alert alert-primary d-flex p-2" role="alert">
-              <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color" aria-hidden="true"
+              <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color col-auto" aria-hidden="true"
                 data-mat-icon-type="font">info</mat-icon>
                 <div class="fs-14 ms-2">
-                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                    <strong class="fw-bold">Minor modification</strong> - Select for minor corrections like typos.
-                    <br>
-                  <div class="d-flex mt-2">
-                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                    <div>
-                      <strong class="fw-bold">Major modification</strong> - Select for major corrections like
-                      changes in the company name, ownership type,
-                      and permanent change in entity address that reflects in entity country.
+                    <div class="d-flex">
+                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                        <div>
+                            <strong class="fw-bold">Minor modification</strong> - Select for minor corrections like
+                            typos.
+                        </div>
                     </div>
-                  </div>
-                  <div class="mt-2">
-                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                    <strong class="fw-bold">Description</strong> - Provide any description or comments on why you want to modify the
-                    entity.
-                  </div>
+                    <div class="d-flex mt-2">
+                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                        <div>
+                            <strong class="fw-bold">Major modification</strong> - Select for major corrections like
+                            changes in the company name, ownership type,
+                            and permanent change in entity address that reflects in entity country.
+                        </div>
+                    </div>
+                    <div class="d-flex mt-2">
+                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                        <div>
+                            <strong class="fw-bold">Description</strong> - Provide any description or comments on why
+                            you want to modify the
+                            entity.
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="fs-14 fw-bold mx-1"><span class="text-danger px-1">*</span>Modify Type :
             </div>
-            <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-3">
+            <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-1">
               <span class="pr-25 d-flex">
-                <input type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="1"> <span
-                  class="px-3">Minor
-                  modification</span>
+                <input id="minor-modification" type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="1">
+                  <label for="minor-modification" class="cursor-pointer"><span
+                      class="ps-2 pe-3 text-secondary fw-500">Minor
+                  modification</span></label>
               </span>
               <span class="d-flex">
-                <input type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="2"> <span
-                  class="px-3">Major
-                  modification</span>
+                <input id="major-modification" type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="2"> <label
+                  for="major-modification" class="cursor-pointer"><span
+                  class="ps-2 pe-3 text-secondary fw-500">Major
+                  modification</span></label>
               </span>
             </div>
             <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13 px-4">
@@ -433,7 +442,7 @@
                   </div>
                 </div>
               </div>
-  
+
             </div>
           </div>
         </div>

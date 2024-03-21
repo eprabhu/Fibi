@@ -6,7 +6,7 @@
     (keypress)="getEndpointSearchResult()" (keydown.backspace)="backSpaceEvent()"
     class="app-endpoint-search form-control pr-25" autocomplete="off"
     (paste)="getEndpointSearchResult()" [matAutocomplete]="endpoint"/>
-  <a class="searchButton" *ngIf="!isDisabled">
+  <a class="searchButton" [class.pe-4]="isError" *ngIf="!isDisabled" >
     <i aria-hidden="true" *ngIf="searchText == ''" class="fa fa-search fa-med" title="Click to search"></i>
     <i aria-hidden="true" *ngIf="searchText != '' && !isDisabled" class="fa fa-times" title="Click to clear search"
       (click)="emitSelectedObject(null);"></i>
