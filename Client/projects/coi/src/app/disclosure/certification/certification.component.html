@@ -2,13 +2,13 @@
     <p class="fs-14 m-0">
         <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
             {{headerInfoText | slice:0:650}}...
-            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u
-                    title="Expand COI policy text">Read More</u></span>
+            <span (click)="isReadMore = !isReadMore" class="fw-medium link-primary" title="Expand COI policy text" (keydown.enter)="isReadMore = !isReadMore"
+             aria-label="Expand COI policy text" tabindex="0" role="link" id="link-expand-policy">Read More</span>
         </span>
         <ng-template #showFullInfo>
             {{headerInfoText}}
-            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u
-                    title="Collapse COI policy text">Read Less</u></span>
+            <span (click)="isReadMore = !isReadMore" class="fw-medium link-primary" title="Collapse COI policy text" (keydown.enter)="isReadMore = !isReadMore"
+            aria-label="Collapse COI policy text" tabindex="0" role="link" id="link-collapse-policy">Read Less</span>
         </ng-template>
     </p>
 </div>
@@ -18,21 +18,31 @@
             <ng-container *ngIf="this._coiService.certificationResponseErrors.length > 0">
                 <div role="alert" class="alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
                         <i class="fa fa-exclamation-circle icon me-2"></i>{{error.validationMessage}}
-                    <span *ngIf="collapseViewMore[errorIndex]" class="clickable fs-14" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
-                        <u>{{error.sfiList && error.sfiList.length>0 ? 'View affected SFIs' : 'View affected Projects'}}</u>
+                    <span *ngIf="collapseViewMore[errorIndex]" class="link-primary fs-14" (keydown.enter)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])"
+                        (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])" tabindex="0" role="link" [id]="'link-error-'+errorIndex"
+                        [attr.aria-label]="error.sfiList && error.sfiList.length>0 ?'Click here View affected SFIs':'Click here View affected Projects'"
+                        [title]="error.sfiList && error.sfiList.length>0 ?'Click here View affected SFIs':'Click here View affected Projects'">
+                        <span>{{error.sfiList && error.sfiList.length>0 ? 'View affected SFIs' : 'View affected Projects'}}</span>
                         <i class="fa fa-angle-double-up ms-2"></i>
                     </span>
-                    <span *ngIf="((error.sfiList && error.sfiList.length>0) || (error.projectSfiList && error.projectSfiList.length>0))&&!collapseViewMore[errorIndex]" class="clickable fs-14" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])">
-                        <u>{{error.sfiList && error.sfiList.length>0 ? 'View affected SFIs' : 'View affected Projects'}}</u>
+                    <span *ngIf="((error.sfiList && error.sfiList.length>0) || (error.projectSfiList && error.projectSfiList.length>0))&&!collapseViewMore[errorIndex]"
+                        (keydown.enter)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])"
+                        class="link-primary fs-14" (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])" tabindex="0" [id]="'link-error-'+errorIndex"
+                        role="link"
+                        [attr.aria-label]="error.sfiList && error.sfiList.length>0 ?'Click here View affected SFIs':'Click here View affected Projects'"
+                        [title]="error.sfiList && error.sfiList.length>0 ?'Click here View affected SFIs':'Click here View affected Projects'">
+                        <span>{{error.sfiList && error.sfiList.length>0 ? 'View affected SFIs' : 'View affected Projects'}}</span>
                         <i class="fa fa-angle-double-down ms-2"></i>
                     </span>
                     <span *ngIf="error.sfiList && error.sfiList.length>0">
                         <ng-container *ngIf="collapseViewMore[errorIndex]">
                                 <ng-container *ngFor="let sfiName of error.sfiList; let sfiIndex = index;">
-                                    <div *ngIf="sfiIndex<5" class="cursor-pointer clickable-content mt-2 fs-14 fw-500" (click)="openSFI(sfiName)" [arr.aria-label]="'Click here navigate to '+ getSFIName(sfiName)">
+                                    <div *ngIf="sfiIndex<5" class="mt-2 fs-14 fw-500" (click)="openSFI(sfiName)" (keydown.enter)="openSFI(sfiName)" [id]="'link-sfi-'+sfiIndex"
+                                        [arr.aria-label]="'Click here navigate to '+ getSFIName(sfiName)" tabindex="0" role="link"
+                                        [title]="'Click here navigate to '+ getSFIName(sfiName)">
                                         <span class="d-flex align-items-center ms-3">
-                                            <mat-icon class="mx-1">domain</mat-icon>
-                                            <u>{{getSFIName(sfiName)}}</u>
+                                            <mat-icon class="mx-1 flex-shrink-0">domain</mat-icon>
+                                            <span class="link-primary">{{getSFIName(sfiName)}}</span>
                                         </span>
                                     </div>
                                 </ng-container>
@@ -42,16 +52,17 @@
                     <span *ngIf="error.projectSfiList && error.projectSfiList.length>0">
                         <ng-container *ngIf="collapseViewMore[errorIndex]">
                             <ng-container *ngFor="let projectList of error.projectSfiList; let projectIndex = index;">
-                                <div *ngIf="projectIndex<2" class="card fs-14 mt-2 p-2" [ngClass]="error.validationType == 'VW' ? 'bg-warning-subtle border-warning' : 'bg-danger-subtle border-danger-subtle'">
-                                    <span class="d-flex align-items-center">
-                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 3" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">workspace_premium</mat-icon>
-                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 1" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">article</mat-icon>
-                                        <strong class="fs-6 ms-1">{{projectList[0].Title}}</strong>
+                                <div *ngIf="projectIndex<2" class="card fs-14 mt-2 p-2 alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'">
+                                    <span class="d-flex">
+                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 3" class="mt-1 flex-shrink-0" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">workspace_premium</mat-icon>
+                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 1" class="mt-1 flex-shrink-0" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">article</mat-icon>
+                                        <strong class="fs-6 ms-1 text-dark">{{projectList[0].Title}}</strong>
                                     </span>
                                         <div *ngFor="let sfiList of projectList;let SFIIndex = index;let last = last" class="mt-2 ms-4">
-                                            <span class="d-flex align-items-center ms-1 cursor-pointer clickable-content" (click)="openRelationship(sfiList)" [arr.aria-label]="'Click here navigate to '+ sfiList.Entity">
-                                                <mat-icon class="me-1">domain</mat-icon>
-                                                <u>{{sfiList.Entity}} </u>
+                                            <span class="d-flex align-items-center ms-1" (click)="openRelationship(sfiList)" (keydown.enter)="openRelationship(sfiList)" [arr.aria-label]="'Click here navigate to '+ sfiList.Entity"
+                                            tabindex="0" role="link" [title]="'Click here navigate to '+ sfiList.Entity" [id]="'link-sfi-'+DisclDetailId">
+                                                <mat-icon class="me-1 flex-shrink-0">domain</mat-icon>
+                                                <span class="link-primary fw-500">{{sfiList.Entity}}</span>
                                             </span>
                                         </div>
                                 </div>
@@ -67,7 +78,7 @@
         <div class="text-secondary text-center d-flex ">
             <div class="me-2"><input (change)="toggleCertification()" [checked]="_coiService.isCertified" aria-label="Please check here to certify the disclosure"
                     [disabled]="checkForDisable()" class="certify-box mt-1" type="checkbox"></div>
-            <div class="fs-16">
+            <div class="fs-14">
                 <p *ngIf="coiDisclosure?.certificationText" class="mb-0">{{coiDisclosure.certificationText}}</p>
                 <p *ngIf="!coiDisclosure?.certificationText" class="mb-0">{{certificationText}}</p>
             </div>

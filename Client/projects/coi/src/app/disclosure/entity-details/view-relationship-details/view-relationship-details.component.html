@@ -8,7 +8,7 @@
                         <div class="row flex-grow-1">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <div class="fw-bold d-flex align-items-center" tabindex="0">
-                                    <span (click)="viewEntityDetails()" tabindex="0" title="Click to view Disclosure"
+                                    <span (click)="viewEntityDetails()" tabindex="0" title="Click to view Disclosure" role="button" (keydown.enter)="viewEntityDetails()"
                                         area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure"
                                         [ngClass]="showViewButton() ? 'cursor-pointer clickable-content text-primary' : ''"
                                         class="fw-medium">{{entityDetails?.entityName}}</span>
@@ -41,7 +41,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-4 col-md-6 mb-md-3 mb-lg-0 mb-3" tabindex="0">
-                                <label aria-label="Country" class="d-block fw-500 fs-14 label-text">Country</label>
+                                <label aria-label="Country" class="d-block coi-text-dark">Country</label>
                                 <app-no-data-label [classesToApply]="'fs-14'"
                                     [valueToShow]="entityDetails?.country?.countryName">
                                     <span class="text-color fs-14"
@@ -49,19 +49,19 @@
                                 </app-no-data-label>
                             </div>
                             <div tabindex="0" class="col-lg-4 col-md-6 mb-md-3 mb-lg-0 mb-3">
-                                <label class="d-block fw-500 fs-14 label-text ">City</label>
+                                <label class="d-block coi-text-dark ">City</label>
                                 <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.city">
                                     <span class="text-color fs-14">{{entityDetails?.city}}</span>
                                 </app-no-data-label>
                             </div>
                             <div tabindex="0" class="col-lg-4 col-md-6">
-                                <label class="d-block fw-500 fs-14 label-text">Phone</label>
+                                <label class="d-block coi-text-dark">Phone</label>
                                 <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.phone">
                                     <span class="text-color fs-14">{{entityDetails?.phone}}</span>
                                 </app-no-data-label>
                             </div>
                             <div tabindex="0" class="col-lg-12">
-                                <label class="fw-500 fs-14 label-text mt-3 me-2">Relationship : </label>
+                                <label class="coi-text-dark mt-3 me-2">Relationship : </label>
                             <span>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
@@ -392,15 +392,16 @@
                         <span *ngIf="!isReadMoreRelationWith;else more1"
                             class="coi-text-light">{{(relationshipsDetails?.staffInvolvement?.length>145)?(relationshipsDetails?.staffInvolvement|slice:0:142)
                             :relationshipsDetails?.staffInvolvement}}
-                            <span *ngIf="relationshipsDetails?.staffInvolvement?.length>145">...<span
-                                    class="collapse-text fw-medium"
+                            <span *ngIf="relationshipsDetails?.staffInvolvement?.length>145" class="link-primary">...<span
+                                    class="fw-medium" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" id="link-read-more-relationship"
                                     (click)="isReadMoreRelationWith =!isReadMoreRelationWith">Read
                                     more</span></span>
                         </span>
                         <ng-template #more1>
-                            <span class="text-color text-break fs-14">{{ relationshipsDetails?.staffInvolvement}}
+                            <span class="coi-text-light text-break fs-14">{{ relationshipsDetails?.staffInvolvement}}
                             </span><span (click)="isReadMoreRelationWith =!isReadMoreRelationWith"
-                                class="collapse-text fw-medium fs-14">Read Less</span>
+                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-relationship"
+                                class="fw-medium link-primary">Read Less</span>
                         </ng-template>
                     </app-no-data-label>
                 </div>
@@ -413,15 +414,15 @@
                         <span *ngIf="!isReadMoreBusinessArea;else more2" class="coi-text-light">
                             {{(relationshipsDetails?.studentInvolvement?.length>145)?(relationshipsDetails?.studentInvolvement|slice:0:142)
                             :relationshipsDetails?.studentInvolvement}}
-                            <span *ngIf="relationshipsDetails?.studentInvolvement?.length>145">...<span
-                                    class="collapse-text fw-medium"
+                            <span *ngIf="relationshipsDetails?.studentInvolvement?.length>145" class="link-primary">...<span
+                                    class="fw-medium" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" id="link-read-more-PBA"
                                     (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea">Read
                                     more</span></span>
                         </span>
                         <ng-template #more2>
-                            <span class="text-color text-break fs-14">{{relationshipsDetails?.studentInvolvement}}
+                            <span class="coi-text-light text-break fs-14">{{relationshipsDetails?.studentInvolvement}}
                             </span><span (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea"
-                                class="collapse-text fs-14 fw-medium">Read Less</span>
+                                class="link-primary fw-medium"  tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-PBA">Read Less</span>
                         </ng-template>
                     </app-no-data-label>
                 </div>
@@ -435,16 +436,17 @@
                         <span *ngIf="!isReadMoreUniversity;else more3"
                             class="coi-text-light">{{(relationshipsDetails?.instituteResourceInvolvement?.length>145)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:142)
                             :relationshipsDetails?.instituteResourceInvolvement}}
-                            <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>145">...<span
-                                    class="collapse-text fw-medium"
-                                    (click)="isReadMoreUniversity =!isReadMoreUniversity">Read
+                            <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>145" class="link-primary">...<span
+                                    class="fw-medium" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" id="link-read-more-REYU"
+                                    (click)="isReadMoreUniversity =!isReadMoreUniversity" (keydown.enter)="isReadMoreUniversity =!isReadMoreUniversity">Read
                                     more</span></span>
                         </span>
                         <ng-template #more3>
-                            <span class="text-color text-break fs-14">{{
+                            <span class="coi-text-light text-break">{{
                                 relationshipsDetails?.studentInvolvement}}
-                            </span><span (click)="isReadMoreUniversity =!isReadMoreUniversity"
-                                class="collapse-text fs-14 fw-medium">Read Less</span>
+                            </span><span (click)="isReadMoreUniversity =!isReadMoreUniversity" (keydown.enter)="isReadMoreUniversity =!isReadMoreUniversity"
+                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-REYU"
+                                class="link-primary fw-medium">Read Less</span>
                         </ng-template>
                     </app-no-data-label>
                 </div>
