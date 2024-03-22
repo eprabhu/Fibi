@@ -24,7 +24,7 @@
 
     --theme-font-size: 0.875rem;
     --theme-line-height: 1.5;
-    --theme-electric-blue: rgba(44, 119, 244, .1);
+    --theme-electric-blue: rgba(44, 119, 244, .1);    
 }
 
 
@@ -33,6 +33,7 @@ $--theme-body-bg-color: --theme-body-bg-color;
 
 
 $--theme-primary-color: --theme-primary-color;
+$--theme-primary-color-light: --theme-primary-color-light;
 $--theme-primary-color-inverse: --theme-primary-color-inverse;
 $--theme-secondary-color: --theme-secondary-color;
 $--theme-secondary-color-inverse: --theme-secondary-color-inverse;
@@ -96,12 +97,11 @@ $--theme-text-gray-900: --theme-text-gray-900;
 // Border width
 // Opacity
 
-
-
 $theme-map-default: (
     $--theme-body-color:  var(--theme-white),
     $--theme-body-bg-color: #f1f1f1,    
     $--theme-primary-color: var(--theme-blue),
+    $--theme-primary-color-light: lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
     
     $--theme-header-bg-color:  var(--theme-white),
@@ -142,6 +142,7 @@ $theme-map-light: (
     $--theme-body-color:  var(--theme-white),
     $--theme-body-bg-color: #FCFCFD,    
     $--theme-primary-color:  var(--theme-blue),
+    $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
     
     $--theme-header-bg-color:  var(--theme-white),
@@ -182,6 +183,7 @@ $theme-map-dark: (
     $--theme-body-color:  var(--theme-white),
     $--theme-body-bg-color: #151521,    
     $--theme-primary-color:  var(--theme-blue),
+    $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
     
     $--theme-header-bg-color: #1e1e2d,
@@ -231,6 +233,7 @@ $theme-map-red: (
     $--theme-body-color:  var(--theme-white),
     $--theme-body-bg-color: #FCFCFD,    
     $--theme-primary-color:  var(--theme-blue),
+    $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
     
     $--theme-header-bg-color:  var(--theme-white),
@@ -270,6 +273,7 @@ $theme-map-blue: (
     $--theme-body-color:  var(--theme-white),
     $--theme-body-bg-color: #f1f1f1,    
     $--theme-primary-color:  var(--theme-blue),
+    $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
     
     $--theme-header-bg-color:  var(--theme-white),
