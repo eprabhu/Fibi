@@ -2,143 +2,106 @@
     <app-coi-slider (closeSlider)="hideConflictNavBar()" [elementId]="'add-conflict'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
         <ng-container header>Relationship between SFIs and Projects</ng-container>
         <ng-container content>
-            <div class="info-card-border mt-2 rounded-2 shadow-medium bg-light mx-4 ms-4">
-                <div class="row ml-15 mt-2">
-                    <div class="position-relative p-3 fs-14 pl-5 fw-500">
-                        <div class="row">
-                            <div class="col d-flex">
-                                <label class="label-text left-margin me-2">Person Associated with Disclosure: </label>
-                                <app-no-data-label [valueToShow]="disclosureMetaData?.coiPersonFullName">
-                                    <span class="grey-text">{{disclosureMetaData?.coiPersonFullName}}</span>
-                                </app-no-data-label>
-                            </div>
-                            <div class="col d-flex">
-                                <label class="label-text">Significant Financial Interest: </label>
-                                <span class="ml-2 grey-text">
-                                    <app-no-data-label [valueToShow]="entityDetails?.entityName">
-                                        <span>{{entityDetails?.entityName}}</span>
-                                    </app-no-data-label>
+            <div class="row p-3 coi-box-red border border-secondary border-opacity-50 mx-0 mt-2 rounded-2 shadow-medium">
+                <div class="col-lg-6 col-md-12 px-0 mb-2">
+                    <label class="d-block coi-text-dark" for="">Person Associated with Disclosure</label>
+                    <app-no-data-label [valueToShow]="disclosureMetaData?.coiPersonFullName">
+                        <span class="grey-text fw-500">{{disclosureMetaData?.coiPersonFullName}}</span>
+                    </app-no-data-label>
+                </div>
+                <div class="col-lg-6 col-md-12 px-0 mb-2">
+                    <label class="d-block coi-text-dark" for="">Significant Financial Interest</label>
+                    <app-no-data-label [valueToShow]="entityDetails?.entityName">
+                        <span class="grey-text fw-500">{{entityDetails?.entityName}}</span>
+                    </app-no-data-label>
+                </div>
+                <div class="col-12 px-0 mb-2">
+                    <label class="d-block coi-text-dark" for="">Project</label>
+                    <ng-container *ngIf="entityDetails?.moduleCode == 3 || entityDetails?.moduleCode == 1">
+                        <app-no-data-label [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
+                            <span class="grey-text fw-500">
+                                <strong>#{{entityDetails?.moduleItemId}} - {{!titleReadMore ? (entityDetails?.title |
+                                    slice:0:120) :
+                                    entityDetails?.title}}</strong>
+                                <span *ngIf="entityDetails?.title?.length>120" class="fw-500 ms-1 link-primary"
+                                    (click)="titleReadMore = !titleReadMore">{{titleReadMore? 'Read Less': '...Read More'}}
                                 </span>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col d-flex">
-                                    <label class="label-text">Project: </label>
-                                    <ng-container *ngIf="entityDetails?.moduleCode == 3 || entityDetails?.moduleCode == 1">
-                                        <span class="ml-2 grey-text">
-                                            <app-no-data-label [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
-                                                <span class="title-text ml-2 mt-2 word-break-all new-line-property">
-                                                    <strong>#{{entityDetails?.moduleItemId}} - {{!titleReadMore ? (entityDetails?.title | slice:0:120) :
-                                                        entityDetails?.title}}</strong>
-                                                    <span *ngIf="!titleReadMore && entityDetails?.title?.length>120">...
-                                                        <a *ngIf="!titleReadMore" (click)="titleReadMore=true">
-                                                            <span class="readMore fw-500 hand-cursor">Read More</span>
-                                                        </a>
-                                                    </span>
-                                                    <a *ngIf="titleReadMore" (click)="titleReadMore= false">
-                                                        <span class="readMore ms-1 fw-500 hand-cursor">Read Less</span>
-                                                    </a>
-                                                </span>
-                                            </app-no-data-label>
-                                        </span>
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col d-flex">
-                                <label class="label-text">Sponsor: </label>
-                                <span class="ml-2 grey-text">
-                                    <app-no-data-label [valueToShow]="entityDetails?.sponsor">
-                                        <span>{{entityDetails?.sponsor}}</span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                            <div class="col d-flex">
-                                <label class="label-text left-margin">Prime Sponsor: </label>
-                                <span class="ml-2 grey-text">
-                                <app-no-data-label [valueToShow]="entityDetails?.primeSponsor">
-                                    <span>{{entityDetails?.primeSponsor}}</span>
-                                </app-no-data-label>
                             </span>
+                        </app-no-data-label>
+                    </ng-container>
+                </div>
+                <div class="col-lg-6 col-md-12 px-0 mb-md-2 mb-lg-0">
+                    <label class="d-block coi-text-dark" for="">Sponsor</label>
+                    <app-no-data-label [valueToShow]="entityDetails?.sponsor">
+                        <span class="grey-text fw-500">{{entityDetails?.sponsor}}</span>
+                    </app-no-data-label>
+                </div>
+                <div class="col-lg-6 col-md-12 px-0">
+                    <label class="d-block coi-text-dark" for="">Prime Sponsor</label>
+            
+                    <app-no-data-label [valueToShow]="entityDetails?.primeSponsor">
+                        <span class="grey-text fw-500">{{entityDetails?.primeSponsor}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <div *ngIf="isEditMode" class="d-flex alert alert-primary fs-14 my-2">
+                <mat-icon role="img" class="flex-shrink-0" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                <p class="fs-14 mb-0 ms-2">
+                    <span class="d-flex algin-items-start">
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                        <span>Modify the conflict status of this Project - SFI relation from the Conflict Status field.</span>
+                    </span>
+                    <span class="d-flex algin-items-start mt-2">
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                        <span>Provide an adequate reason for your decision in the description field provided.
+                        </span>
+                    </span>
+                </p>
+            </div>
+            <div *ngIf="isEditMode" class="card shadow-sm p-3">
+                <div class="row">
+                    <div class="col-md-12 col-xl-4">
+                        <label class="fs-14 fw-500" for="select-conflict-status">Conflict Status</label>
+                        <span>
+                            <select class="form-control form-select" [(ngModel)]="conflictStatus" id="select-conflict-status"
+                                [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') || projectConflictValidationMap?.has('duplicateStatus')  ? 'is-invalid d-block' : ''"
+                                (ngModelChange)="setCoiProjConflictStatusType()">
+                                <option [value]=null>--Select--</option>
+                                <option *ngFor="let status of conflictLookUpList" [value]="status.projectConflictStatusCode">
+                                    {{status?.description}}</option>
+                            </select>
+                            <div *ngIf="projectConflictValidationMap?.has('coiConflictStatusCode')"
+                                class="invalid-feedback d-block fs-12">
+                                {{projectConflictValidationMap?.get('coiConflictStatusCode')}}
                             </div>
+                            <div *ngIf="projectConflictValidationMap?.has('duplicateStatus')"
+                                class="invalid-feedback d-block fs-12">
+                                {{projectConflictValidationMap?.get('duplicateStatus')}}
+                            </div>
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-xl-8">
+                        <label class="fs-14 fw-500" for="main-panel-comnt">Describe the reason for Conflict status change</label>
+                        <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
+                            [(ngModel)]="comment" appAutoGrow rows="1" appLengthValidator [limit]="2000" [isShowLimiter]="true"
+                            (ngModelChange)="comment = comment.trim()"
+                            [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
+                        <div *ngIf="projectConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
+                            {{projectConflictValidationMap?.get('comment')}}
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div *ngIf="isEditMode" class="fs-14 mt-3 mx-4">
-                <div class="col-12 py-2 grey-info font px-2 d-flex align-items-center position-relative">
-                    <span data-bs-toggle="tooltip" title="Conflict History." data-bs-placement="top"
-                        class="d-inline-block pe-2">
-                        <mat-icon role="img"
-                            class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
-                            aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-                    </span>
-                    <span class="fs-14">
-                        <div class="mt-2 ml-15">
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            Modify the conflict status of this Project - SFI relation from the Conflict Status field.
-                        </div>
-                        <div class="mt-2 ml-15">
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            Provide an adequate reason for your decision in the description field provided.
-                        </div>
-                    </span>
-                </div>
-            </div>
-            <div>
-
-                <div *ngIf="isEditMode" class="card-body">
-                    <div>
-                        <div class="card comment-card shadow-sm mx-1">
-                            <div class="row ml-15 mt-4">
-                                <div class="col-4 ml-15 align-items-center">
-                                    <label class="fs-14 fw-500">Conflict Status:</label>
-                                    <span>
-                                        <select class="form-control form-select" [(ngModel)]="conflictStatus"
-                                            [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') || projectConflictValidationMap?.has('duplicateStatus')  ? 'is-invalid d-block' : ''"
-                                            (ngModelChange)="setCoiProjConflictStatusType()">
-                                            <option [value]=null>--Select--</option>
-                                            <option *ngFor="let status of conflictLookUpList"
-                                                [value]="status.projectConflictStatusCode">
-                                                {{status?.description}}</option>
-                                        </select>
-                                        <div *ngIf="projectConflictValidationMap?.has('coiConflictStatusCode')"
-                                            class="invalid-feedback d-block fs-12">
-                                            {{projectConflictValidationMap?.get('coiConflictStatusCode')}}
-                                        </div>
-                                        <div *ngIf="projectConflictValidationMap?.has('duplicateStatus')"
-                                        class="invalid-feedback d-block fs-12">
-                                        {{projectConflictValidationMap?.get('duplicateStatus')}}
-                                    </div>
-                                    </span>
-                                </div>
-                                <div class="col mr-10">
-                                    <label class="fs-14 fw-500">Describe the reason for Conflict status change:</label>
-                                    <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all new-line-property" placeholder="Description"
-                                        row="1" [(ngModel)]="comment" appAutoGrow rows="1" appLengthValidator [limit]="2000" [isShowLimiter]="true"
-                                        (ngModelChange)="comment = comment.trim()"
-                                        [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
-                                    <div *ngIf="projectConflictValidationMap?.has('comment')"
-                                        class="invalid-feedback d-block fs-12">
-                                        {{projectConflictValidationMap?.get('comment')}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-muted mb-3 mr-10 mt-2">
-                                <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
-                                    (click)="updateProjectRelationship()">Save</button>
-                                <button type="button" class="btn btn-outline-secondary float-end mr-10"
-                                    data-bs-dismiss="modal" (click)="clearConflictModal()">Clear</button>
-                            </div>
-                        </div>
+                    <div class="col-12 mt-2">
+                        <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
+                            (click)="updateProjectRelationship()">Save</button>
+                        <button type="button" class="btn btn-outline-secondary float-end mr-10" data-bs-dismiss="modal"
+                            (click)="clearConflictModal()">Clear</button>
                     </div>
                 </div>
             </div>
 
             <!-- Conflict History -->
-            <div class="main-title mt-15" id="" tabindex="0">
-                <h3 class="d-flex align-items-center mx-4"><strong>Conflict History</strong>
+            <div class="mt-2" id="" tabindex="0">
+                <h3 class="d-flex align-items-center"><strong>Conflict History</strong>
                     <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top">
                     </span>
                 </h3>

@@ -88,7 +88,7 @@
 
  .updown-arrow:hover{
   color: #007DEC;
-} 
+}
 
 .ml-0 {
     margin-left: 0 !important;
@@ -111,15 +111,11 @@ a {
     width: 30px;
     color: #A64040;
     height: 30px;
-  
+
     mat-icon {
       transform: scale(1.2);
     }
   }
-
-.table-data {
-    color:#48647f;
-}
 
 .table-actions-margin {
     padding-right: 80px;
@@ -128,7 +124,7 @@ a {
 .btn-outline-grey {
     color: #48647F;
     background-color: white ;
-  
+
     &:hover {
       background-color: #007DEC !important;
       color: white;
@@ -156,3 +152,29 @@ a {
     top: 8px;
 }
 
+.toggle-btn {
+    transform: translate(-50%, -50%);
+    top: 50%;
+    right: 0px;
+}
+
+.btn-primary-icon:focus {
+    background-color: #E2F1FF;
+    color: #007DEC !important;
+}
+
+@media(max-width: 991px) {
+    .table {
+        width: max-content;
+    }
+    .desc-col {
+        width : 200px !important;
+    }
+    .modal-lg {
+        max-width: 80%;
+    }
+}
+
+.desc-col {
+    width : 30%;
+}

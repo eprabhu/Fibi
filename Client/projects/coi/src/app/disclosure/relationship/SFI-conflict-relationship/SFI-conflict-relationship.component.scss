@@ -111,17 +111,9 @@
     height: 75px !important;
 }
 
-.w-14 {
-    width: 14%;
-}
-
 .area-position {
     position: relative;
     top: 9px;
-}
-
-.btn-primary {
-    height: 33px;
 }
 
 .tableSkin th {
@@ -271,4 +263,17 @@
     font-size: 16px;
     font-weight: 400;
     border: 1px solid #caced2;
+}
+
+.table-responsive {
+    overflow: auto;
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+    
+      &::-webkit-scrollbar-track {
+        width: 6px;
+        height: 6px;
+      }
 }

@@ -4,7 +4,7 @@
     <div class="card-header">
       <h4 class="fs-16">
         <div class="row d-flex align-items-center justify-content-between" tabindex="0">
-          <div class="col">Review History</div>
+          <div class="col mt-2 fw-bold">Review History</div>
         </div>
       </h4>
     </div>
@@ -70,7 +70,7 @@
                                                     </span>
                                                     <ng-template #showFullInfo>
                                                         <span class="word-break-all new-line-property fst-italic mx-2 grey-text">{{historyEntry?.comment}}</span>
-                                                        <span class="hand-cursor mt-2 fw-medium" *ngIf="historyEntry?.comment?.length > 460" 
+                                                        <span class="hand-cursor mt-2 fw-medium" *ngIf="historyEntry?.comment?.length > 460"
                                                             (click)="isReadMore = !isReadMore" aria-hidden="true">
                                                             <span class="fw-medium"><u>Read Less</u>
                                                                 <i aria-hidden="true"></i></span>

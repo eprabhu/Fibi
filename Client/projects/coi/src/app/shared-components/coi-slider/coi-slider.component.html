@@ -4,9 +4,9 @@
 </button>
 <div #Backdrop class="offcanvas-backdrop fade"></div>
 <div #SliderParentElement class="offcanvas offcanvas-end" tabindex="-1" [id]="elementId"
-    aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false" data-bs-keyboard="false" data-bs-scroll="true">
-    <div class="offcanvas-header" [class.border-bottom]="isHeaderNeeded">
-        <h5 id="offcanvasRightLabel" class="fw-bold">
+    aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false" data-bs-keyboard="false">
+    <div class="offcanvas-header" [class.border-bottom]="isHeaderNeeded" id="{{elementId}}-slider-header">
+        <h5 id="offcanvasRightLabel" class="fw-bold mb-0">
             <!-- header -->
             <ng-content select="[header]"></ng-content>
         </h5>
@@ -15,7 +15,7 @@
         <button type="button" hidden="true" class="btn-close text-reset" [id]="elementId+'-close-btn'" data-bs-dismiss="offcanvas"
             aria-label="Close" ></button>
     </div>
-    <div class="offcanvas-body pt-0">
+    <div class="offcanvas-body pt-0" id="{{elementId}}-slider-body">
         <!-- sticky-content -->
         <ng-container *ngIf="isStickyNeeded">
             <div class="position-sticky top-0 z-2">
