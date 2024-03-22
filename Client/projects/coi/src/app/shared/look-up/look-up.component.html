@@ -1,4 +1,4 @@
-<mat-select class="form-control {{customClass}}" #mySelect [(ngModel)]="selection" name="lookupFilter" (focus)="showLookUpList()" placeholder="--select--"
+<mat-select class="form-control {{customClass}}" [id]="uniqueId" #mySelect [(ngModel)]="selection" name="lookupFilter" (focus)="showLookUpList()" placeholder="--select--"
   [multiple]="isMultiple" [class.is-invalid]="isError" (closed)="emitDataToParentComponent()" (selectionChange)="checkIfAllOptionsSelected()"
   [title]="lookupTitle">
   <mat-select-trigger>

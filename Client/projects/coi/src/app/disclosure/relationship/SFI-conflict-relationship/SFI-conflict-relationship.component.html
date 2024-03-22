@@ -1,70 +1,59 @@
-<div class="relationship-sfi-global-save mt-3 d-flex save-btn align-items-center justify-content-between">
-  <ng-container *ngIf="isEditMode">
-    <div class="ms-3 fs-14">
+<ng-container *ngIf="isEditMode">
+  <div class="d-flex align-items-center justify-content-between alert alert-secondary px-3 py-2 mb-2"
+    id="info-card">
+    <div class="fs-14 me-2">
       Click 'Apply to All' to update the Conflict of Interest (COI) status and description simultaneously for all
       Project SFI relationships.
     </div>
-    <button type="button" class="btn btn-primary btn-sm fs-14 my-2 px-3 mr-10 col-auto"
-      id="apply common conflict status and description and save" title="Click to apply for all SFIs  and save"
-      (click)="openSaveAllConfirmationModal()">Apply to All</button>
-  </ng-container>
-</div>
-  <div *ngIf="entityProjectDetails.length" class="relationship-sfi-header card mt-3">
-    <div class="row m-0 p-3">
-      <div title="List of SFIs" class="col-4 fs-14 border-end" [class.p-10]="!isEditMode">
-          <div class="fw-600" tabindex="0" aria-label="Significant Financial Interest">Significant Financial Interest</div>
-      </div>
-      <div class="col-2 fs-14 border-end" [class.p-10]="!isEditMode">
-        <span class="mandatory fw-600">*</span>
-         <span title="List of Conflict status" tabindex="0" aria-label="conflict status" class="fw-600">Conflict Status</span>
-      </div>
-      <div class="fs-14 border-end"[ngClass] = "isEditMode ? 'col' : 'col-6 p-10'">
-        <span class="mandatory fw-600" id="description">*</span>
-        <span class="fw-600" tabindex="0" aria-label="Define Project - SFI Relation" role="field" aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
-      </div>
-    </div>
+    <button type="button" class="btn btn-primary fs-14 text-nowrap" aria-label="Click to apply for all SFIs  and save"
+      id="btn-apply-all" title="Click to apply for all SFIs  and save" (click)="openSaveAllConfirmationModal()">Apply to
+      All</button>
   </div>
-  <!-- List of SFI's -->
-  <div class="mb-10">
-  <ng-container *ngFor="let test of entityProjectDetails; let i = index">
-    <div class="relationship-sfi-data row m-0" [id]="test?.disclosureDetailsId"  [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
-        <div class="col-4 fs-14 border-end"tabindex='0'>
-         <div class="table-text my-4" [attr.aria-label]="test?.coiEntity?.entityName">
-          {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
-          <span *ngIf="isShowWarning(test)" class="text-danger">*</span>
-         </div>
-        </div>
-        <div class="col-2 fs-14 border-end" tabindex='0'>
-          <select [(ngModel)]="test.projectConflictStatusCode"
-          class="form-select form-control mt-3" [attr.aria-label]="getStatusDescriptionByCode(test.projectConflictStatusCode)"
-          (ngModelChange)="sfiSingleSave(i, test, 'form-field-select-'+i)"
-          [ngClass] ="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''"
-          [disabled]="!isEditMode" [id]="'form-field-select-'+i">
-          <option value=null>--Select--</option>
-          <option aria-label="" [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
-              {{status?.description}}</option>
-          </select>
-          <div>
-            <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-status'+i)">
-              {{coiTableValidation.get('save-status'+i)}}
+</ng-container>
+  <div #relationshipConflict class="table-responsive coi-table-striped">
+    <table class="table table-bordered fs-14 table-striped">
+      <thead #conflictTableHeader class="sticky-top">
+        <tr class="fw-600" id="table-header-tr">
+          <th scope="col" class="col-xl-3" tabindex="0" aria-label="Significant Financial Interest">Significant Financial Interest</th>
+          <th scope="col" class="col-xl-2" tabindex="0" aria-label="conflict status"><span class="d-inline-block text-danger fw-600">*</span> Conflict Status</th>
+          <th scope="col" class="col-xl-7" tabindex="0" aria-label="Define Project - SFI Relation" aria-describedby="list of project sfi relations"><span class="d-inline-block text-danger fw-600">*</span> Define Project - SFI Relation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let test of entityProjectDetails; let i = index" [id]="test.disclosureDetailsId">
+          <td [attr.aria-label]="test?.coiEntity?.entityName" [id]="'sfi_name_'+test?.disclosureDetailsId" class="pt-2">
+              {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' :
+              test?.coiEntity?.entityName}}
+            <span *ngIf="isShowWarning(test)" class="text-danger">*</span>
+          </td>
+          <td>
+            <select [(ngModel)]="test.projectConflictStatusCode" class="form-select form-control"
+              [attr.aria-label]="getStatusDescriptionByCode(test.projectConflictStatusCode)"
+              (ngModelChange)="sfiSingleSave(i, test, 'conflict-status-select-'+i)" title="Click here to select Conflict Status"
+              [ngClass]="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''" [disabled]="!isEditMode"
+              [id]="'conflict-status-select-'+i">
+              <option value=null>--Select--</option>
+              <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">{{status?.description}}</option>
+            </select>
+              <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-status'+i)">
+                {{coiTableValidation.get('save-status'+i)}}
+              </span>
+          </td>
+          <td>
+            <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt" appAutoGrow
+              [(ngModel)]="test.disclComment.comment" [id]="'description-textarea-'+i" [disabled]="!isEditMode" rows="1"
+              appLengthValidator [ngClass]="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''"
+              (ngModelChange)="sfiSingleSave(i, test, 'description-textarea-'+i);" title="Click here provide your description"
+              placeholder="Provide your description here" [limit]=2000 spellcheck="false"
+              [attr.aria-label]="test.disclComment.comment"></textarea>
+            <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-description'+i)">
+              {{coiTableValidation.get('save-description'+i)}}
             </span>
-          </div>
-        </div>
-        <div class="col fs-14 border-end"  tabindex='0' [class.col-6]="!isEditMode">
-          <textarea  class="form-control comment-text-box textarea-height mt-3"id="main-panel-comnt"
-          appAutoGrow [(ngModel)]="test.disclComment.comment" [id]="'form-field-textarea-'+i"
-          [disabled]="!isEditMode" rows="1" appLengthValidator
-          [ngClass] ="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''"
-          (ngModelChange)="sfiSingleSave(i, test, 'form-field-textarea-'+i);"
-          placeholder="Provide your description here" [limit]=2000 spellcheck="false" [attr.aria-label]="test.disclComment.comment"></textarea>
-          <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-description'+i)">
-            {{coiTableValidation.get('save-description'+i)}}
-          </span>
-        </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     </div>
-  </ng-container>
-</div>
-
 <!-- Apply to All modal -->
 
 <div class="modal fade mySkinDialog" data-bs-backdrop="static" id="applyToAllConfirmationModal" role="dialog">
@@ -100,9 +89,9 @@
             </div>
             <div class="fs-14 mt-3">
               <span class="mandatory fw-600" id="description">*</span>
-              <span class="fw-600" tabindex="0" aria-label="Define Project - SFI Relation" role="field"
+              <span class="fw-600" aria-label="Define Project - SFI Relation"
                 aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
-              <textarea class="form-control comment-text-box textarea-height mt-2" id="coi_description"
+              <textarea class="form-control" id="coi_description"  tabindex="0" aria-label="Please Provide your description for define Project - SFI Relation"
                 [(ngModel)]="coiDescription"
                 (ngModelChange)="coiDescription = coiDescription.trim();" appAutoGrow
                 appLengthValidator rows="1"
@@ -116,10 +105,10 @@
         </div>
       </div>
       <div class="modal-footer ct-footer-padding">
-        <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+        <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal" aria-label="Click to cancel" title="Click to cancel"
           (click)="clearValues()" type="button">Cancel
         </button>
-        <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button" (click)="applyToAll()">Apply to All</button>
+        <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all" aria-label="Click to Apply to All" title="Click to Apply to All">Apply to All</button>
       </div>
     </div>
   </div>

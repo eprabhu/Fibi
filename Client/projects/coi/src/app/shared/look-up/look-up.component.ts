@@ -63,6 +63,10 @@ export class LookUpComponent implements OnChanges, OnDestroy {
 
   constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef, private lookupFilterPipe: LookupFilterPipe) { }
 
+  ngOnInit() {
+    this.setUniqueIdForSearchText();
+  }
+
   ngOnChanges() {
     this.searchText = '';
     this.updateLookUpSettings();
@@ -72,6 +76,10 @@ export class LookUpComponent implements OnChanges, OnDestroy {
       this.lookupTitle = this.title || '';
       this.selection = [];
     }
+  }
+
+  setUniqueIdForSearchText() {
+    this.uniqueId = this.uniqueId || new Date().getTime().toString();
   }
 
   ngOnDestroy() {
@@ -123,9 +131,11 @@ export class LookUpComponent implements OnChanges, OnDestroy {
             const select = this.selectedLookUpList.find(e => e.code || e.description);
             if (select) {
                 this.selection = select.code || select.description;
+                this.setLookupTitle();
             }
         } else {
             this.selection = this.selectedLookUpList.map(e => e.code || e.description) || [];
+            this.setLookupTitle();
         }
         this.setSelectedLookUpList();
         this.checkIfAllOptionsSelected();

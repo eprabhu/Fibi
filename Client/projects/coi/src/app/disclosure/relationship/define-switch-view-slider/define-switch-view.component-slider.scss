@@ -10,13 +10,6 @@
     margin-left: 8px;
 }
 
-.btn-outline-secondary {
-    font-size: 1.4rem;
-    min-width: max-content;
-    padding: .5rem 1rem;
-    height: 35px;
-}
-
 .active-ribbon {
     color: #fff;
     width: max-content;
@@ -58,13 +51,6 @@
 }
 
 .info-icon {
-    margin-top: -7px;
-    height: 22px;
-    width: 22px;
-    font-size: 16px;
-    position: relative;
-    top: 4px;
-    margin-left: 2px;
     color: #6f7395;
     cursor: pointer;
 }
@@ -186,11 +172,6 @@
     margin-right: -10px;
 }
 
-.relationship-details-box {
-    width: 100%;
-    margin-top: 10px;
-    // height: 118px;
-}
 
 .relationship-info {
     // height: 30px;
@@ -272,9 +253,6 @@
     border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
 }
 
-.previous-nxt {
-    background-color: #f6f7f8 !important;
-}
 
 .keyboard-backspace {
     transform: rotateY(180deg);
@@ -377,3 +355,15 @@
 }
 }
 
+@media (min-width: 1200px) {
+    .border-prev-nxt {
+        border-left: 1px solid #0000002d;
+    }
+}
+
+@media (max-width: 1199px) {
+    .border-prev-nxt {
+        border-top: 1px solid #0000002d;
+        border-left: 0 !important;
+    }
+}
