@@ -244,7 +244,6 @@ export class GraphComponent implements OnInit {
 
     addNodes(node) {
         if (!this.graph.nodes.find(N => N.elementId === node.elementId)) {
-            node['id'] = node['elementId'];
             this.graph.nodes.push(node);
             this.drawGraph();
         }

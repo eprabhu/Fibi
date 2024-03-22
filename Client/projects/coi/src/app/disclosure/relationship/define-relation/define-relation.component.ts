@@ -62,13 +62,14 @@ export class DefineRelationComponent implements OnInit {
   isDataModified = false;
   isSaving = false;
   isShowSlider = false;
+  isReadMore = false;
 
-  constructor(private _relationShipService: RelationshipService, public coiService: CoiService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
+  constructor(private _relationShipService: RelationshipService, public coiService: CoiService, public snackBar: MatSnackBar, public commonService: CommonService, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
     this.getDataFromStore();
     this.getEntityList();
-    this.resizeEvent();
+    // this.resizeEvent();
   }
 
   private getDataFromStore() {
@@ -95,17 +96,18 @@ export class DefineRelationComponent implements OnInit {
       this.$subscriptions.push(  this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
         this.entityProjectDetails = data;
         this.selectedProject = this.module;
-        this.calculateSize();
+        // this.calculateSize();
         this.showTaskNavBar();
         setTimeout(() => {
           if(this.coiService.focusSFIRelationId) {
               scrollIntoView(this.coiService.focusSFIRelationId);
               const ELEMENT = document.getElementById(this.coiService.focusSFIRelationId);
               ELEMENT.classList.add('error-highlight-card');
+              this.addTableBorder();
           }
         });
       }, err => {
-        this.calculateSize();
+        // this.calculateSize();
         this.showTaskNavBar();
       }));
     }
@@ -142,11 +144,11 @@ export class DefineRelationComponent implements OnInit {
         this.entityProjectDetails = data.coiDisclEntProjDetails;
         this.coiDescription = '';
         this.coiStatusCode = null;
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
+        this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
       }, err => {
         this.coiDescription = '';
         this.coiStatusCode = null;
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
+        this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships. Please try again.');
       }));
     }
 
@@ -155,9 +157,9 @@ export class DefineRelationComponent implements OnInit {
           this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
           this.clearIndex = null;
           this.coiValidationMap.clear();
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
+          this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
+        this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
       }));
     }
 
@@ -277,6 +279,7 @@ validateProjectSfiSliderOnClose() {
     this.moduleCode = relation.moduleCode;
     this.moduleItemId = relation.moduleItemId;
     this.module = relation;
+    this.isReadMore = false;
     this.getEntityList();
   }
 
@@ -284,6 +287,22 @@ validateProjectSfiSliderOnClose() {
     if (this.coiService.isRelationshipSaving) { return; }
     this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
     this.navigateToStep(this.relationList[this.currentRelation]);
+  }
+
+  private addTableBorder() {
+    if(this.coiService.focusSFIRelationId) {
+      const INDEX = this.entityProjectDetails.findIndex(ele=>ele.disclosureDetailsId == this.coiService.focusSFIRelationId);
+      if(INDEX !=-1) {
+        if(INDEX == 0) {
+          const ELEMENT = document.getElementById('table-header-tr');
+          ELEMENT.classList.add('border-bottom-0');
+        } else {
+          const ELEMENT_ID = (this.entityProjectDetails[INDEX-1].disclosureDetailsId).toString();
+          const ELEMENT = document.getElementById(ELEMENT_ID);
+          ELEMENT.classList.add('border-bottom-0');
+        } 
+      }
+    }
   }
 
 }

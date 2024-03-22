@@ -1,22 +1,3 @@
-.label-text {
-  font-weight: 700;
-  color      : #6A7980;
-  font-size  : 14px;
-}
-
-.grey-text {
-  font-size: 14px;
-  color: #48647F;
-  margin-left: 8px;
-}
-
-.btn-outline-secondary {
-    font-size: 1.4rem;
-    min-width: max-content  ;
-    padding: .5rem 1rem;
-    height: 35px;
-}
-
 .active-ribbon {
   color: #fff;
   width: max-content;
@@ -41,239 +22,29 @@
   }
 }
 
-.info-text{
-    margin-left: 27px;
-}
-
-.ml-11 {
-  margin: 11px;
-}
-
-.margin-top-23 {
-  margin-top: -33px;
-}
-
-.pl-6 {
-  padding-left: 6px;
-}
-
 .info-icon {
-  margin-top : -7px;
-  height     : 22px;
-  width      : 22px;
-  font-size  : 16px;
-  position   : absolute;
-  top: 10px;  
-  margin-left: 2px;
-  color      : #6f7395;
-  cursor     : pointer;
-}
-
-.noDataExists {
-  color: #9e9e9e !important;
-  font-size: 14px;
-  margin-left: 8px;
-}
-
-.mandatory {
-  color        : red !important;
-  padding-right: 2px;
-  font-size    : 1.2rem
-}
-
-.invalid-feedback {
-  display: block;
-}
-
-
-  .grey-info {
-    background: #EEEEEE;
-    color: #202c2e;
-    font-size: 16px;
-    font-weight: 400;
-    border: 1px solid #caced2;
-}
-
-.textarea-overflow-table{
-  overflow: auto !important;
-  height: 75px !important;
-  position: relative;
-  top: 20px;
-}
-.textarea-overflow{
-  overflow: auto !important;
-  height: 75px !important;
-}
-
-.w-14 {
-  width: 14%;
-}
-.area-position{
-  position: relative;
-  top: 9px;
-}
-
-.btn-primary {
-  height: 33px;
-}
-
-.tableSkin th {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.header-card {
-  background-color: #F0F2FA;
-  position: sticky;
-}
-
-.slider-base {
-  position: fixed;
-  z-index: 51;
-  top: 0;
-  right: -83%;
-  width: 80%;
-  height: 100%;
-  padding-left: 0;
-  background-color: #ffecec85;
-  box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
-  transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
-}
-
-.slider-opened {
-  right: 0 !important;
-}
-
-.slider-container {
-  background-color: #fff;
-  height: 100vh;
-  padding: 0px 10px 10px 10px;
-  overflow-y: scroll;
-}
-
-.btn-container {
-  position: relative;
-  margin-left: -10px;
-  margin-right: -10px;
-}
-
-.close-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: grid;
-  place-content: center;
-  color: white;
-  background-color: red;
-  position: absolute;
-  left: -25px;
-  top: 10px;
-  z-index: 10;
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  background-color: #b30000;
-}
-
-.slider-heading {
-  background-color: #606060;
-  padding: 10px;
-  color: azure;
-  margin-left: -10px;
-  margin-right: -10px;
-}
-
-.relationship-details-box {
-  width: 100%;
-  margin-top: 10px;
-  // height: 118px;
-}
-
-.relationship-info {
-  // height: 30px;
-  width: 100%;
-  display: block;
-  margin-top: 10px;
-}
-
-.relationship-sfi-header {
-  width: 100%;
-  color: #333;
-  background-color: #f0f2f3;
-  border: 1px solid #d7dbdf;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  margin-top: 10px;
-}
-
-.relationship-sfi-data {
-  width: 100%;
-  display: flex;
-  margin-bottom: 8px;
-  background-color: #f5f5f5;
-  border-left: 1px solid #d7dbdf;
-  border-right: 1px solid #d7dbdf;
-}
-
-.border-bottom {
-  border-bottom: 1px solid #d7dbdf;
-}
-
-.border-top {
-  border-top: 1px solid #d7dbdf;
-}
-.white-bg{
-  background-color: #ffff;
-}
-.sfi-data {
-  height: 15px;
-  width: 100%;
-  background-color: #fabc5f;
-  margin: 5px;
-  display: grid;
-  place-content: center;
-  color: azure;
-}
-
-.overlay {
-  position: fixed; /* Sit on top of the page content */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:rgb(74 74 74 / 32%);
-  z-index: 50; /* Specify a stack order in case you're using a different order for other elements */
-}
-
-.triple-card {
-  height: 96px;
-}
-
-.info-icon-count {
-  margin-top: -14px;
-  height: 22px;
-  width: 22px;
-  font-size: 16px;
-  position: absolute;
-  top: 10px;
-  margin-left: 2px;
   color: #6f7395;
   cursor: pointer;
 }
 
-.border-right {
-  border-right: var(--bs-border-width) 
-  var(--bs-border-style) 
-  var(--bs-border-color)!important;
-}
-
-.previous-nxt {
-  background-color: #f6f7f8 !important;
+.noDataExists {
+  color: #9e9e9e !important;
 }
 
 .keyboard-backspace {
   transform: rotateY(180deg);
 }
+
+@media (min-width: 1200px) {
+  .border-prev-nxt {
+      border-left: 1px solid #0000002d;
+  }
+}
+
+@media (max-width: 1199px) {
+  .border-prev-nxt {
+      border-top: 1px solid #0000002d;
+      border-left: 0 !important;
+  }
+}
+
