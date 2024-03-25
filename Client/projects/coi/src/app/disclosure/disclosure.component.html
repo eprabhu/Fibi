@@ -7,8 +7,8 @@
                     <div class="row mx-0">
                         <div class="col-lg px-0">
                             <div class="card-header px-3">
-                                <div class="row flex-grow-1">
-                                    <div class="col-xl-8 d-flex align-items-center px-0">
+                                <div class="row flex-grow-1 position-relative">
+                                    <div class="col-xl-8 d-flex px-0">
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId? 'OPA' :  coiData?.coiDisclosure?.coiDisclosureFcoiType?.description) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges()}}">
@@ -16,7 +16,7 @@
                                                     'OPA' : coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
                                             </span>
                                         </span>
-                                        <h3 class="card-title align-items-start flex-column fs-16 mb-0">
+                                        <h3 class="card-title align-self-baseline flex-column fs-16 mb-0">
                                             <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                                                 <span class="link-primary cursor-pointer text-dark text-decoration-underline" tabindex="0" (click)="openDetailModal(coiData)"
                                                     (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
@@ -33,7 +33,7 @@
                                                     {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
                                                     coiData?.projectDetail?.title }}
                                                     ] By
-                                                    <span class="link-primary coi-text-light text-dark text-decoration-underline" tabindex="0"
+                                                    <span class="link-primary coi-text-light text-dark text-decoration-underline" tabindex="0" role="link"
                                                         (click)="openDetailModal(coiData)"
                                                         (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
                                                         title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
@@ -51,54 +51,50 @@
                                             </div>
                                         </h3>
                                     </div>
-                                    <div class="d-flex justify-content-end align-items-center col-xl-4">
-                                        <div class="card-toolbar ms-auto">
+                                    <div class="d-flex justify-content-end align-items-center col-xxl-4" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ?'mt-xxl-2':'pe-md-0 pe-xxl-2'">
+                                        <div class="card-toolbar ms-auto" [class.py-0]="coiData?.coiDisclosure?.riskCategoryCode">
                                             <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode"
-                                                class="align-items-center d-flex fs-14 justify-content-end position-relative">
-                                                <label class="coi-text-dark me-2">Risk :</label>
-                                                <div class="align-items-center d-flex coi-status-wrapper me-5">
-                                                    <span>
-                                                        <mat-icon
-                                                            class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1">warning</mat-icon>
-                                                    </span>
+                                                class="d-flex justify-content-end align-items-center pe-md-0 pe-xxl-4">
+                                                <label class="coi-text-dark me-2" for="badge-risk">Risk :</label>
+                                                <span class="d-flex pe-xl-1" id="badge-risk">
+                                                    <mat-icon
+                                                        class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1">warning</mat-icon>
                                                     <span class="coi-text-light">
                                                         {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
                                                     </span>
-                                                </div>
-                                                <div class="align-items-center d-flex position-absolute top-0" title="Click here to collapse / expand">
-                                                    <button (click)="isCardExpanded=!isCardExpanded;isUserCollapse=!isUserCollapse"
-                                                        class="toggle-header-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                                        <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
-                                                    </button>
-                                                </div>
+                                                </span>
                                             </div>
-                                            <div class="align-items-center d-flex f-14">
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    [class.link-primary]="4" tabindex="0">
+                                    
+                                            <div class="d-flex justify-content-end align-items-center f-14 pe-md-0" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ? 'py-xxl-2':'pe-xxl-4'"
+                                                [class.]="!coiData?.coiDisclosure?.riskCategoryCode">
+                                                <span class="cursor-pointer ms-2 me-2" [class.link-primary]="4" tabindex="0" role="link">
                                                     Trainings({{1}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)" (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    [class.link-primary]="coiData.personEntitiesCount"
-                                                    tabindex="0">
+                                                <span class="cursor-pointer ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    role="link" (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    [class.link-primary]="coiData.personEntitiesCount" tabindex="0">
                                                     Entities({{coiData.personEntitiesCount}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    (click)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)" (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    [class.link-primary]="coiData.personNotesCount"
-                                                    tabindex="0">
+                                                <span class="cursor-pointer ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" role="link"
+                                                    (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)"
+                                                    (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
+                                                    [class.link-primary]="coiData.personNotesCount" tabindex="0">
                                                     Notes({{coiData.personNotesCount}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    [class.link-primary]="coiData.personAttachmentsCount"
-                                                    tabindex="0">
+                                                <span class="cursor-pointer ms-2" [class.me-xl-2]="!coiData?.coiDisclosure?.riskCategoryCode"
+                                                    (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" role="link"
+                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
+                                                    (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
+                                                    [class.link-primary]="coiData.personAttachmentsCount" tabindex="0">
                                                     Attachments({{coiData.personAttachmentsCount}})
                                                 </span>
                                             </div>
+                                            <button (click)="isCardExpanded=!isCardExpanded;isUserCollapse=!isCardExpanded"
+                                                title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                                <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -216,7 +212,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 border-left border-start py-3">
+                        <div class="col-lg-3 py-3 action-header-border">
                             <div class="h-100" *ngIf="isCreateMode">
                                 <div class="d-grid gap-2 d-md-flex flex-md-wrap">
                                     <button class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
@@ -354,7 +350,7 @@
                                         title="Click to start review" area-describedby="Click to start review"
                                         (click)="updateCoiReview('START')"
                                         id="start-review-btn"
-                                        [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
+                                        [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                         <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
@@ -415,9 +411,9 @@
             <!-- </div> -->
         </ng-container>
         <ng-container *ngIf="isCreateMode">
-            <div class="col-12 my-3">
+            <div class="col-12 mt-2">
                 <div class="steps-outer px-3">
-                    <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1 border-end">
+                    <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1" [class.border-end]="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
                         <li>
                             <div class="step-pills"
                                 [class.active-step]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
