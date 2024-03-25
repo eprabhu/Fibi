@@ -55,16 +55,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // }
 
     onClickMenuBar() {
-        if (document.getElementById('responsive-nav').classList.contains('show-menu')) {
-            document.getElementById('responsive-nav').classList.remove('show-menu');
-            if (window.screen.width <= 1300) {
+        const NAV_ELEMENT = document.getElementById('responsive-nav');
+        const IS_MENU_SHOW = NAV_ELEMENT.classList.contains('show-menu');
+        const IS_SCREEN = window.innerWidth <= 1300;
+    
+        if (IS_MENU_SHOW) {
+            NAV_ELEMENT.classList.remove('show-menu');
+            if (IS_SCREEN) {
                 this.isShowNavBarOverlay = false;
             }
         } else {
-            if (window.screen.width <= 1300) {
+            if (IS_SCREEN) {
                 this.isShowNavBarOverlay = true;
             }
-            document.getElementById('responsive-nav').classList.add('show-menu');
+            NAV_ELEMENT.classList.toggle('show-menu', IS_SCREEN);
         }
     }
 
