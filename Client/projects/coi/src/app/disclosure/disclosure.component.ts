@@ -209,6 +209,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.currentStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
             this.navigateToStep();
         }
+        this.setFocus('step_'+stepPosition);
     }
 
     leavePageClicked() {
@@ -785,6 +786,15 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     listenScreenSize() {
         if(!this.isUserCollapse) {
             this.isCardExpanded = !(window.innerWidth <= 992);
+        }
+    }
+
+    setFocus(id) {
+        var focusedElement = document.getElementById(id);
+        if(focusedElement) {
+            setTimeout(() => {
+                focusedElement.focus();
+            },500)
         }
     }
 }

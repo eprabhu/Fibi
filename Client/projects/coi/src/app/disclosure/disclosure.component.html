@@ -415,56 +415,70 @@
             <!-- </div> -->
         </ng-container>
         <ng-container *ngIf="isCreateMode">
-        <div class="navigation-tabs coi-navigation-tabs d-flex align-items-center">
-           <div class="p-0 flex-grow-1">
-                <div class="nav-progress navigation-tabs coi-navigation-tabs row">
-                    <div (click)="goToStep(1);"
-                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
-                        Screening Questionnaire
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
+            <div class="col-12 my-3">
+                <div class="steps-outer px-3">
+                    <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1 border-end">
+                        <li>
+                            <div class="step-pills"
+                                [class.active-step]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
+                                tabindex="0" (click)="goToStep(1);" (keyup.enter)="goToStep(1);" (keyup.space)="goToStep(1);"
+                                id="step_1" attr.aria-label="Screening Questionnaire">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                        question_mark</mat-icon></span>
+                                <label class="plls-text" title="Screening Questionnaire">Screening Questionnaire</label>
                             </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(2);" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
-                        class="col ps-5 text-nowrap" queryParamsHandling='merge' title="Go to SFI section">
-                        Significant Financial Interest(SFIs)
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <div class="step-pills"
+                                [class.active-step]="isRouteComplete(['sfi', 'relationship', 'certification'])" tabindex="0"
+                                id="step_2" (click)="goToStep(2);" (keyup.enter)="goToStep(2);" (keyup.space)="goToStep(2);"
+                                attr.aria-label="Significant Financial Interest(SFIs)">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                        apartment</mat-icon></span>
+                                <label class="plls-text" title="Significant Financial Interest(SFIs)">Significant Financial
+                                    Interest(SFIs)</label>
                             </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
-                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
-                        <span class="align-self-center">Relationships</span>
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['sfi', 'relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <div class="step-pills" [class.active-step]="isRouteComplete(['relationship', 'certification'])"
+                                tabindex="0" id="step_3" attr.aria-label="Relationships" (click)="goToStep(3);"
+                                (keyup.enter)="goToStep(3);" (keyup.space)="goToStep(3);">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                        handshake</mat-icon></span>
+                                <label class="plls-text" title="Relationships">Relationships</label>
                             </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(4);" [class.complete]="isRouteComplete(['certification'])" class="col"
-                        queryParamsHandling='merge' title="Go to Certification section">
-                        <span class="align-self-center">Certification</span>
-                    </div>
-                    <!-- <span
-                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor nav-border-right border-r-0">
-                        Notes & Attachments
-                    </span> -->
-                    <span
-                        *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null"
-                        [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
-                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor border-r-0">
-                        History
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <div class="step-pills" [class.active-step]="isRouteComplete(['certification'])" tabindex="0"
+                                id="step_4" attr.aria-label="Certification" (click)="goToStep(4);" (keyup.enter)="goToStep(4);"
+                                (keyup.space)="goToStep(4);">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">military_tech</mat-icon></span>
+                                <label class="plls-text" title="Certification">Certification</label>
+                            </div>
+                        </li>
+                    </ul>
+                    <span class="d-inline-block ms-auto ps-3" *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
+                        <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" tabindex="0"  id="history"
+                        [class.btn-active]="isRouteComplete(['history'])" [routerLink]="['history']" (click)="setFocus('history')"><mat-icon
+                                class="mat-step-icon mr-2">update</mat-icon><label>History</label></button>
                     </span>
                 </div>
             </div>
+            <!--navigation-step-end-->
+        </ng-container>
         </div>
-    </ng-container>
-    </div>
 </div>
 <!-- New card header ends-->
 
