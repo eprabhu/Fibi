@@ -3,7 +3,7 @@
     width: max-content;
     height: 22px;
     position: relative;
-    left: -18px;
+    left: -28px;
     top: 0;
     font-size: 12px;
     font-weight: 500;
@@ -88,14 +88,14 @@
    border-radius: 12px;
    padding: 3px 9px 3px 9px;
  }
- 
- 
+
+
  .inactive {
      background-color: #949494;
      color: #fff;
      @extend .statuspillposition;
- }  
- 
+ }
+
  .riskbadge {
    top: -5px;
    position: relative;
@@ -104,12 +104,12 @@
    @extend .riskbadge;
    color: #ff0000;
  }
- 
+
  .medium-risk {
    @extend .riskbadge;
    color: #ff8c00;
  }
- 
+
  .low-risk {
    @extend .riskbadge;
    color: rgb(26, 172, 62);

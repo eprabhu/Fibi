@@ -690,16 +690,22 @@ ul.timeline {
   box-shadow: -1px 3px 50px -17px rgb(0 0 0 / 22%);
 }
 
-.coi-nav-tab {
+.coi-nav-tab,
+.coi-search-box,
+.coi-admin-dash,
+.sort-div,
+.no-data-container,
+.user-dashboard-nav {
   background-color: var(--theme-card-bg-color) !important;
   border: var(--theme-card-border) !important;
   box-shadow: var(--theme-card-box-shadow);
 }
 
-.coi-search-box {
-  background-color: var(--theme-card-bg-color) !important;
+.coi-admin-dash {
+  .form-control{
+    background-color: var(--theme-card-bg-color) !important;
   border: var(--theme-card-border) !important;
-  box-shadow: var(--theme-card-box-shadow);
+  }
 }
 
 .mat-icon {
