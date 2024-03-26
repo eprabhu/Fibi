@@ -57,6 +57,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
           ELEMENT.classList.remove('border-bottom');
           ELEMENT.classList.remove('border-top');
           ELEMENT.classList.add('error-highlight-card');
+          this._coiService.addTableBorder(this.entityProjectDetails,'table-header-tr');
       }
   });
     this.triggerSingleSave();
@@ -206,7 +207,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
 removeFocusId() {
     const ELEMENT = document.getElementById(this._coiService.focusModuleId);
     ELEMENT.classList.remove('error-highlight-card');
-	this.removeBorder();
+	  this.removeBorder();
     this._coiService.focusModuleId = null;
     this._coiService.focusSFIRelationId = null;
 }
