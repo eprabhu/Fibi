@@ -118,6 +118,22 @@ export class CoiService {
         return this._http.post(`${this._commonService.baseUrl}/disclosure/riskStatus`, params);
      }
 
+    addTableBorder(projectList, headerElementId) {
+        if (this.focusSFIRelationId) {
+            const INDEX = projectList.findIndex(ele => ele.disclosureDetailsId == this.focusSFIRelationId);
+            if (INDEX != -1) {
+                if (INDEX == 0) {
+                    const ELEMENT = document.getElementById(headerElementId);
+                    ELEMENT.classList.add('border-bottom-0');
+                } else {
+                    const ELEMENT_ID = (projectList[INDEX - 1].disclosureDetailsId).toString();
+                    const ELEMENT = document.getElementById(ELEMENT_ID);
+                    ELEMENT.classList.add('border-bottom-0');
+                }
+            }
+        }
+    }
+
 }
 
 export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData, ) {

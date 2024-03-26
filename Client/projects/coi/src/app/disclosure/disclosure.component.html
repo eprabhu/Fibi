@@ -181,27 +181,27 @@
                                             <span class="coi-text-darker fs-6 coi-field-set">Status</span>
                                             <div class="row">
                                                 <div class="col-4 col-lg-4 col-xl-6 mt-2 pe-0">
-                                                    <label class="coi-text-dark d-block">Disposition
+                                                    <label class="coi-text-lighter d-block">Disposition
                                                     </label>
                                                     <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}"></span>
-                                                    <span class="coi-text-light">
+                                                    <span class="coi-text-dark">
                                                         {{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}
                                                     </span>
                                                 </div>
                                                 <div class="col-4 col-lg-4 col-xl-6 mt-2 pe-0">
-                                                    <label class="coi-text-dark d-block">Review
+                                                    <label class="coi-text-lighter d-block">Review
                                                     </label>
                                                     <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
-                                                    <span class="coi-text-light">
+                                                    <span class="coi-text-dark">
                                                         {{coiData?.coiDisclosure?.coiReviewStatusType?.description}}
                                                     </span>
                                                 </div>
                                                 <div class="col-4 col-lg-4 col-xl-6 mt-2 pe-0">
-                                                    <label class="coi-text-dark d-block">Disclosure
+                                                    <label class="coi-text-lighter d-block">Disclosure
                                                     </label>
                                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
                                                         <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}"></span>
-                                                        <span class="coi-text-light">
+                                                        <span class="coi-text-dark">
                                                             {{coiData?.coiDisclosure?.coiConflictStatusType?.description}}
                                                         </span>
                                                     </app-no-data-label>
