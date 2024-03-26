@@ -103,7 +103,7 @@ export class DefineRelationComponent implements OnInit {
               scrollIntoView(this.coiService.focusSFIRelationId);
               const ELEMENT = document.getElementById(this.coiService.focusSFIRelationId);
               ELEMENT.classList.add('error-highlight-card');
-              this.addTableBorder();
+              this.coiService.addTableBorder(this.entityProjectDetails,'table-header-tr');
           }
         });
       }, err => {
@@ -287,22 +287,6 @@ validateProjectSfiSliderOnClose() {
     if (this.coiService.isRelationshipSaving) { return; }
     this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
     this.navigateToStep(this.relationList[this.currentRelation]);
-  }
-
-  private addTableBorder() {
-    if(this.coiService.focusSFIRelationId) {
-      const INDEX = this.entityProjectDetails.findIndex(ele=>ele.disclosureDetailsId == this.coiService.focusSFIRelationId);
-      if(INDEX !=-1) {
-        if(INDEX == 0) {
-          const ELEMENT = document.getElementById('table-header-tr');
-          ELEMENT.classList.add('border-bottom-0');
-        } else {
-          const ELEMENT_ID = (this.entityProjectDetails[INDEX-1].disclosureDetailsId).toString();
-          const ELEMENT = document.getElementById(ELEMENT_ID);
-          ELEMENT.classList.add('border-bottom-0');
-        } 
-      }
-    }
   }
 
 }
