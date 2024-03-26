@@ -7,8 +7,8 @@
                     <div class="row mx-0">
                         <div class="col-lg px-0">
                             <div class="card-header px-3">
-                                <div class="row flex-grow-1">
-                                    <div class="col-xl-8 d-flex align-items-center px-0">
+                                <div class="row flex-grow-1 position-relative">
+                                    <div class="col-xl-8 d-flex px-0">
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId? 'OPA' :  coiData?.coiDisclosure?.coiDisclosureFcoiType?.description) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges()}}">
@@ -16,7 +16,7 @@
                                                     'OPA' : coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
                                             </span>
                                         </span>
-                                        <h3 class="card-title align-items-start flex-column fs-16 mb-0">
+                                        <h3 class="card-title align-self-baseline flex-column fs-16 mb-0">
                                             <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                                                 <span class="link-primary cursor-pointer text-dark text-decoration-underline" tabindex="0" (click)="openDetailModal(coiData)"
                                                     (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
@@ -33,7 +33,7 @@
                                                     {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
                                                     coiData?.projectDetail?.title }}
                                                     ] By
-                                                    <span class="link-primary coi-text-light text-dark text-decoration-underline" tabindex="0"
+                                                    <span class="link-primary coi-text-light text-dark text-decoration-underline" tabindex="0" role="link"
                                                         (click)="openDetailModal(coiData)"
                                                         (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
                                                         title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
@@ -51,54 +51,50 @@
                                             </div>
                                         </h3>
                                     </div>
-                                    <div class="d-flex justify-content-end align-items-center col-xl-4">
-                                        <div class="card-toolbar ms-auto">
+                                    <div class="d-flex justify-content-end align-items-center col-xxl-4" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ?'mt-xxl-2':'pe-md-0 pe-xxl-2'">
+                                        <div class="card-toolbar ms-auto" [class.py-0]="coiData?.coiDisclosure?.riskCategoryCode">
                                             <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode"
-                                                class="align-items-center d-flex fs-14 justify-content-end position-relative">
-                                                <label class="coi-text-dark me-2">Risk :</label>
-                                                <div class="align-items-center d-flex coi-status-wrapper me-5">
-                                                    <span>
-                                                        <mat-icon
-                                                            class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1">warning</mat-icon>
-                                                    </span>
+                                                class="d-flex justify-content-end align-items-center pe-md-0 pe-xxl-4">
+                                                <label class="coi-text-dark me-2" for="badge-risk">Risk :</label>
+                                                <span class="d-flex pe-xl-1" id="badge-risk">
+                                                    <mat-icon
+                                                        class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1">warning</mat-icon>
                                                     <span class="coi-text-light">
                                                         {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
                                                     </span>
-                                                </div>
-                                                <div class="align-items-center d-flex position-absolute top-0" title="Click here to collapse / expand">
-                                                    <button (click)="isCardExpanded=!isCardExpanded;isUserCollapse=!isUserCollapse"
-                                                        class="toggle-header-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                                        <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
-                                                    </button>
-                                                </div>
+                                                </span>
                                             </div>
-                                            <div class="align-items-center d-flex f-14">
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    [class.link-primary]="4" tabindex="0">
+                                    
+                                            <div class="d-flex justify-content-end align-items-center f-14 pe-md-0" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ? 'py-xxl-2':'pe-xxl-4'"
+                                                [class.]="!coiData?.coiDisclosure?.riskCategoryCode">
+                                                <span class="cursor-pointer ms-2 me-2" [class.link-primary]="4" tabindex="0" role="link">
                                                     Trainings({{1}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)" (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    [class.link-primary]="coiData.personEntitiesCount"
-                                                    tabindex="0">
+                                                <span class="cursor-pointer ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    role="link" (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                    [class.link-primary]="coiData.personEntitiesCount" tabindex="0">
                                                     Entities({{coiData.personEntitiesCount}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    (click)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)" (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    [class.link-primary]="coiData.personNotesCount"
-                                                    tabindex="0">
+                                                <span class="cursor-pointer ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" role="link"
+                                                    (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)"
+                                                    (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
+                                                    [class.link-primary]="coiData.personNotesCount" tabindex="0">
                                                     Notes({{coiData.personNotesCount}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2"
-                                                    (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    [class.link-primary]="coiData.personAttachmentsCount"
-                                                    tabindex="0">
+                                                <span class="cursor-pointer ms-2" [class.me-xl-2]="!coiData?.coiDisclosure?.riskCategoryCode"
+                                                    (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" role="link"
+                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
+                                                    (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
+                                                    [class.link-primary]="coiData.personAttachmentsCount" tabindex="0">
                                                     Attachments({{coiData.personAttachmentsCount}})
                                                 </span>
                                             </div>
+                                            <button (click)="isCardExpanded=!isCardExpanded;isUserCollapse=!isCardExpanded"
+                                                title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                                <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -216,7 +212,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 border-left border-start py-3">
+                        <div class="col-lg-3 py-3 action-header-border">
                             <div class="h-100" *ngIf="isCreateMode">
                                 <div class="d-grid gap-2 d-md-flex flex-md-wrap">
                                     <button class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
@@ -354,7 +350,7 @@
                                         title="Click to start review" area-describedby="Click to start review"
                                         (click)="updateCoiReview('START')"
                                         id="start-review-btn"
-                                        [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
+                                        [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                         <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
@@ -415,56 +411,70 @@
             <!-- </div> -->
         </ng-container>
         <ng-container *ngIf="isCreateMode">
-        <div class="navigation-tabs coi-navigation-tabs d-flex align-items-center">
-           <div class="p-0 flex-grow-1">
-                <div class="nav-progress navigation-tabs coi-navigation-tabs row">
-                    <div (click)="goToStep(1);"
-                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
-                        Screening Questionnaire
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
+            <div class="col-12 mt-2">
+                <div class="steps-outer px-3">
+                    <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1" [class.border-end]="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
+                        <li>
+                            <div class="step-pills"
+                                [class.active-step]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
+                                tabindex="0" (click)="goToStep(1);" (keyup.enter)="goToStep(1);" (keyup.space)="goToStep(1);"
+                                id="step_1" attr.aria-label="Screening Questionnaire">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                        question_mark</mat-icon></span>
+                                <label class="plls-text" title="Screening Questionnaire">Screening Questionnaire</label>
                             </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(2);" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
-                        class="col ps-5 text-nowrap" queryParamsHandling='merge' title="Go to SFI section">
-                        Significant Financial Interest(SFIs)
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <div class="step-pills"
+                                [class.active-step]="isRouteComplete(['sfi', 'relationship', 'certification'])" tabindex="0"
+                                id="step_2" (click)="goToStep(2);" (keyup.enter)="goToStep(2);" (keyup.space)="goToStep(2);"
+                                attr.aria-label="Significant Financial Interest(SFIs)">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                        apartment</mat-icon></span>
+                                <label class="plls-text" title="Significant Financial Interest(SFIs)">Significant Financial
+                                    Interest(SFIs)</label>
                             </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
-                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
-                        <span class="align-self-center">Relationships</span>
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['sfi', 'relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <div class="step-pills" [class.active-step]="isRouteComplete(['relationship', 'certification'])"
+                                tabindex="0" id="step_3" attr.aria-label="Relationships" (click)="goToStep(3);"
+                                (keyup.enter)="goToStep(3);" (keyup.space)="goToStep(3);">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                        handshake</mat-icon></span>
+                                <label class="plls-text" title="Relationships">Relationships</label>
                             </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(4);" [class.complete]="isRouteComplete(['certification'])" class="col"
-                        queryParamsHandling='merge' title="Go to Certification section">
-                        <span class="align-self-center">Certification</span>
-                    </div>
-                    <!-- <span
-                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor nav-border-right border-r-0">
-                        Notes & Attachments
-                    </span> -->
-                    <span
-                        *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null"
-                        [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
-                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor border-r-0">
-                        History
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <div class="step-pills" [class.active-step]="isRouteComplete(['certification'])" tabindex="0"
+                                id="step_4" attr.aria-label="Certification" (click)="goToStep(4);" (keyup.enter)="goToStep(4);"
+                                (keyup.space)="goToStep(4);">
+                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">military_tech</mat-icon></span>
+                                <label class="plls-text" title="Certification">Certification</label>
+                            </div>
+                        </li>
+                    </ul>
+                    <span class="d-inline-block ms-auto ps-3" *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
+                        <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" tabindex="0"  id="history"
+                        [class.btn-active]="isRouteComplete(['history'])" [routerLink]="['history']" (click)="setFocus('history')"><mat-icon
+                                class="mat-step-icon mr-2">update</mat-icon><label>History</label></button>
                     </span>
                 </div>
             </div>
+            <!--navigation-step-end-->
+        </ng-container>
         </div>
-    </ng-container>
-    </div>
 </div>
 <!-- New card header ends-->
 
