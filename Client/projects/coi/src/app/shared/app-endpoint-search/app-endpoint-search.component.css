@@ -10,8 +10,8 @@
 .searchButton {
 	position: absolute;
 	right: 10px;
-	top: 5px;
-	 font-size: 0.9375rem; 
+	top: 6px;
+    font-size: 0.9375rem;
 	color: #9E9E9E;
 	cursor: pointer;
 }

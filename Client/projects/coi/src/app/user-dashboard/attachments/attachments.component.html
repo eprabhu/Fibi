@@ -16,37 +16,50 @@
             <span class="fs-14 ml-15">Versions</span>
         </span>
     </mat-menu>
-    <div class="card">
+    <div class="card mt-2">
         <div class="card-body">
             <div class="table-responsive" *ngIf="attachmentLists.length">
-                <table class="table">
-                    <thead class="grey-text table-head">
+                <table class="table border-light-subtle">
+                    <thead class="grey-text table-head ">
                         <tr>
-                            <th scope="col" style="width: 20%">Attachment Type</th>
-                            <th scope="col" style="width: 30%">Description</th>
-                            <th scope="col" style="width: 25%">File name</th>
-                            <th scope="col" style="width: 15%">Last Updated</th>
-                            <th scope="col" style="width: 10%" *ngIf="!coiPersonId">Action</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 20%">Attachment Type</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 30%">Description</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 25%">File name</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 15%">Last Updated</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 10%" *ngIf="!coiPersonId">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white">
                         <tr *ngFor="let attachment of attachmentLists ; let index = index;" class="grey-text">
                             <td>{{attachment?.disclAttaTypeDetails?.description}}</td>
-                            <td>{{attachment.description}}</td>
+                            <td>{{attachment?.description?.length>75 && !collapseViewMore[attachment.attachmentId]?(attachment.description |
+                                slice:0:75) : attachment.description}}
+                                <ng-container *ngIf="attachment?.description?.length>75">
+                                    <span class="link-primary" tabindex="0" role="link"
+                                        (click)="collapseViewMoreOption(attachment.attachmentId,collapseViewMore[attachment.attachmentId])"
+                                        (keydown.enter)="collapseViewMoreOption(attachment.attachmentId,collapseViewMore[attachment.attachmentId])"
+                                        [attr.aria-label]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read Less' : 'Click here to  Read More'"
+                                        [title]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read Less' : 'Click here to  Read More'">
+                                        {{(attachment?.description?.length >75 && collapseViewMore[attachment.attachmentId]) ? 'Read Less':'...Read More'}}
+                                    </span>
+                                </ng-container>
+                            </td>
                             <td>{{attachment.fileName}}</td>
                             <td>{{attachment.updateTimestamp |
                                 dateFormatterWithTimeZone:'long'}}</td>
                             <td *ngIf="!coiPersonId">
-                                <span class="mr-2 cursor-pointer d-inline-block" title="Click to edit attachment">
-                                    <mat-icon>edit</mat-icon>
-                                </span>
-                                <span class="mr-2 cursor-pointer d-inline-block" title="Click to download attachment">
-                                    <mat-icon>vertical_align_bottom</mat-icon>
-                                </span>
-                                <span class="mr-2 cursor-pointer d-inline-block" title="Click to open more options"
-                                    [matMenuTriggerFor]="createActionMenu">
-                                    <mat-icon>more_vert</mat-icon>
-                                </span>
+                                <div class="d-inline-flex">
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to edit attachment">
+                                        <mat-icon>edit</mat-icon>
+                                    </span>
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to download attachment">
+                                        <mat-icon>vertical_align_bottom</mat-icon>
+                                    </span>
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to open more options"
+                                        [matMenuTriggerFor]="createActionMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </span>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

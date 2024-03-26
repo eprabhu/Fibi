@@ -237,6 +237,7 @@
 .coi-box-red {  
     background-color: var(--theme-box-red-bg-color);
     border-style: dashed !important;
+    border-width: 1px;
 
     .coi-field-set {
         position: absolute;
@@ -249,3 +250,14 @@
         border-style: dashed !important;
     }
   }
+
+.coi-box-status {
+    background: #f1faff;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 1px dashed #00b2ff;
+    @media (min-width: 960px) {
+        width: 100%;
+        display: flex;
+    }
+}
