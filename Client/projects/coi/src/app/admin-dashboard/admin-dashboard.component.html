@@ -849,8 +849,8 @@
                                         </div>
                                     </div>
                                 </ng-container>
-                                <div class="col-lg-2">
-                                    <div class="d-flex d-inline-block justify-content-end px-0">
+                                <div class="col d-flex justify-content-end align-items-center">
+                                    <div class="d-flex d-inline-block justify-content-center justify-content-lg-end px-0">
                                         <button (click)="redirectToDisclosure(coi)" role="button"
                                                 aria-label="Click to view Disclosure"
                                                 class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
@@ -859,6 +859,14 @@
                                                 [attr.aria-label]="coi?.travelDisclosureId ? 'Click to view Travel disclosure' : coi?.opaDisclosureId ? 'Click to view OPA disclosure' :
                                                             coi?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'">
                                             <mat-icon class="me-1">visibility</mat-icon>View
+                                        </button>
+                                        <button *ngIf="showAssignAdminButton(coi)" (click)="openAssignAdminModal(coi);" role="button"
+                                            class="d-flex flex-shrink-0 align-items-center btn btn-outline-secondary fs-14 height-fit-content ms-2"
+                                            title="Click to Assign Administrator/Admin Group"
+                                            area-describedby="Click to assign administrator"
+                                            aria-label="Click to assign administrator">
+                                            <mat-icon class="me-1">group_add</mat-icon>
+                                            Assign Admin
                                         </button>
                                     </div>
                                 </div>
