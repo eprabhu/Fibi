@@ -72,6 +72,7 @@ export class OpaComponent implements OnInit {
         this.setPersonProjectDetails();
         this.listenDataChangeFromStore();
         this.subscribeSaveComplete();
+        this.setTopDynamically();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
@@ -312,11 +313,38 @@ export class OpaComponent implements OnInit {
         subscriptionHandler(this.$subscriptions);
     }
 
+    collapseHeader() {
+        this.isCardExpanded=!this.isCardExpanded;
+        this.isUserCollapse=!this.isUserCollapse;
+        this.setTopDynamically();
+    }
+
+    setTopDynamically() {
+        setTimeout(() => {
+            const STICKY_HEADER = document.querySelector<HTMLElement>('.header-sticky');
+            if(STICKY_HEADER) {
+                const elements = document.querySelectorAll('.form-builder-sticky-header');
+                if(elements.length) {
+                    elements.forEach((element: HTMLElement) => {
+                        element.style.top = STICKY_HEADER.offsetHeight + 50 + 'px';
+                    });
+                }
+                const TABLE_STICKY_HEADER = document.querySelectorAll('.form-builder-table-header');
+                if(TABLE_STICKY_HEADER.length) {
+                    TABLE_STICKY_HEADER.forEach((element: HTMLElement) => {
+                        element.style.top = STICKY_HEADER.offsetHeight + 101 + 'px';
+                    });
+                }
+            }
+        }, 1000)
+    }
+
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
             this.isCardExpanded = !(window.innerWidth <= 992);
         }
+        this.setTopDynamically();
     }
 
 }

@@ -58,7 +58,7 @@
                                             [class.link-primary]="opa?.opaDisclosure?.personAttachmentsCount">
                                             Attachments({{opa?.opaDisclosure?.personAttachmentsCount}})
                                         </span>
-                                        <button (click)="isCardExpanded=!isCardExpanded;isUserCollapse=!isUserCollapse"
+                                        <button (click)="collapseHeader()"
                                             title="Click to {{isCardExpanded ? 'collapse' : 'view'}} OPA Disclosure"
                                             attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} OPA Disclosure"
                                             class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
@@ -352,7 +352,7 @@
     </div>
     <div class="col-lg-12">
         <div class="navigation-tabs d-flex align-items-center">
-            <div [routerLink]="['form']" class="navigation-box border-end" queryParamsHandling='merge'
+            <div [routerLink]="['form']" (click)="setTopDynamically()" class="navigation-box border-end" queryParamsHandling='merge'
                  role="button">
                 <div class="navigation-box-content" routerLinkActive="active"
                      title="Click to view the disclosure screening form"
