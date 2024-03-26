@@ -1,47 +1,56 @@
-<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode && !isTriggeredFromSlider">
-    <span data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top" class="d-inline-block">
-      <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-    </span>
-    <div class="info-text fs-14">
-      <div class="mt-2">
-        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-        Below, you can see a list of your completed, Incomplete, and inactive SFIs. You may filter the SFI list according to your needs.
-        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
-    </div>
-      <ng-container *ngIf= "expandInfo">
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          An incomplete SFI should either be Completed or Inactivated before establishing the Project-SFI relationship(s).
-        </div>
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any changes to the SFI, click on the modify button.
-        </div>
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          Please ensure you have the updated list of Completed SFI(s) before proceeding to the next step.
-          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Read Less</u></span>
-        </div>
-      </ng-container>
-    </div>
+<div *ngIf="isEditMode && !isTriggeredFromSlider" class="d-flex alert alert-primary mb-0 py-2 mt-2">
+    <mat-icon role="img" class="mat-icon material-icons flex-shrink-0" aria-hidden="true"
+        data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top"
+        data-mat-icon-type="font">info</mat-icon>
+    <p class="fs-14 mb-0 ms-2">
+        <span class="d-flex algin-items-start">
+            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+            <span>Below, you can see a list of your completed, Incomplete, and inactive SFIs. You may filter the SFI
+                list according to your needs.
+                <span *ngIf="!expandInfo" (click)="expandInfo = true" (keydown.enter)="expandInfo = true"
+                    class="fw-700 link-primary" aria-label="Expand SFI help text" tabindex="0" role="link">...<span
+                        id="link-read-more-info" title="Expand SFI help text" class="fw-700">Read More</span></span>
+            </span>
+        </span>
+        <ng-container *ngIf="expandInfo">
+            <span class="d-flex algin-items-start mt-2">
+                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                An incomplete SFI should either be Completed or Inactivated before establishing the Project-SFI
+                relationship(s).
+            </span>
+            <span class="d-flex algin-items-start mt-2">
+                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                <span>For making any changes to the SFI, click on the modify button.
+                </span>
+            </span>
+            <span class="d-flex algin-items-start mt-2">
+                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                <span>Please ensure you have the updated list of Completed SFI(s) before proceeding to the next step.
+                    <span *ngIf="expandInfo" (click)="expandInfo = false" (keydown.enter)="expandInfo = false"
+                        class="fw-700 link-primary"><span tabindex="0" role="link" id="link-read-less-info"
+                            title="Collapse SFI help text" aria-label="Collapse SFI help text">Read Less</span></span>
+                </span>
+            </span>
+        </ng-container>
+    </p>
 </div>
-<div class="advance-search mt-3">
+<div class="advance-search mt-2 coi-search-box rounded">
   <div class="row m-0">
     <div class="col-lg-5 py-2">
   <div  [@leftSlideInOut]>
-      <label>Filter By Status :</label>
+      <label class="coi-text-dark" for="">Filter By Status :</label>
       <span (click)="setFilter('ALL')" [class.active-filter-pills]="filterType=='ALL'"
           title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-          class="filter-pills" role="button">All</span>
+          class="filter-pills coi-text-light" role="button">All</span>
       <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="filterType=='COMPLETE'"
           title="Click to filter by type: Complete" area-describedby="Click to filter by type: Complete"
-          class="filter-pills" role="button">Complete</span>
+          class="filter-pills coi-text-light" role="button">Complete</span>
       <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="filterType=='INCOMPLETE'"
           title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
-          class="filter-pills" role="button">Incomplete</span>
+          class="filter-pills coi-text-light" role="button">Incomplete</span>
       <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="filterType=='INACTIVE'"
           title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
-          class="filter-pills" role="button">Inactive</span>
+          class="filter-pills coi-text-light" role="button">Inactive</span>
   </div>
   </div>
   <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative">
