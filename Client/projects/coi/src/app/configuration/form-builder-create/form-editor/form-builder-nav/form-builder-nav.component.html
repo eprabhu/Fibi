@@ -1,0 +1,30 @@
+<div class="nav-header ">
+    <nav class="d-flex align-items-center fbnav ">
+        <div class="form-builder-logo fs-20 fw-500 flex-grow-1" tabindex="0" id="formTitle"
+            (click)="editFormTitle = true; editTitle();" (keydown.enter)="editFormTitle = true; editTitle();"
+            *ngIf="!editFormTitle">{{formTitle | slice:0:30}}</div>
+        <ng-container *ngIf="editFormTitle">
+            <input tabindex="0" [(ngModel)]="formTitle" id="edit-Input" (focusout)="saveTitle();editFormTitle = false;"
+                type="text" class="form-control col">
+        </ng-container>
+        <ul class="nav-options mb-0">
+            <li role="tab" aria-label="build" (keydown.enter)="navigateToTab('1');"
+                class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0"
+                [routerLink]="['editor']" [queryParams]={formBuilderId:formBuilderId}>Build</li>
+            <!-- <li role ="tab" aria-label="build" class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0" (click)="navigateToTab()">Build</li> -->
+            <li role="tab" aria-label="Integration" (keydown.enter)="navigateToTab('2');"
+                class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0"
+                [routerLink]="['integration']" [queryParams]={formBuilderId:formBuilderId,title:formTitle}>Integration
+            </li>
+            <li role="tab" aria-label="Preview" (keydown.enter)="navigateToTab('3');"
+                class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0"
+                [routerLink]="['preview']" [queryParams]={formBuilderId:formBuilderId}>Preview</li>
+        </ul>
+        <button role="button" tabindex="0" aria-label="Click here to publish form" title="Click here to publish form"
+            class="btn btn-primary  preview-button fs-14">
+            <i class="fa fa-solid fa-upload"></i>
+            Publish
+        </button>
+    </nav>
+</div>
+<router-outlet></router-outlet>

@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-end update-configuration" *ngIf="showSelectedSection && selectedSection.sectionId">
+    <button class="btn btn-primary fs-14 preview-button mt-2" tabindex="0" (click)="updateForSection();"> Update
+        Configurations</button>
+</div>
+<div class="section-edit" title="" tabindex="0" aria-label="" *ngIf="showSelectedSection && selectedSection.sectionId">
+    <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">Section name</label>
+    <input id="section-name" type="text" class="form-control"
+        (ngModelChange)="this.formBuilderService.unSavedChange = true;" [(ngModel)]="selectedSection.sectionName">
+    <label class="d-block fw-600 mt-5 mb-2 label-font-size" for="">
+        Section Header
+    </label>
+    <ckeditor (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+        [(ngModel)]="selectedSection.sectionHeader" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
+        placeholder="Comment" row="1" maxlength="2000"></ckeditor>
+    <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">
+        Section Footer
+    </label>
+    <ckeditor (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+        [(ngModel)]="selectedSection.sectionFooter" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
+        placeholder="Comment" row="1" maxlength="2000"></ckeditor>
+</div>
+
+<div class="d-flex justify-content-end update-configuration"
+    *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE' || selectedComponent.componentType == 'RT' ">
+    <button type="button" tabindex="0" class="btn btn-primary fs-14 preview-button mt-2"
+        (click)="updateForComponent();"> Update Configurations</button>
+</div>
+<div class="section-edit" title="" tabindex="0" aria-label=""
+    *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE' || selectedComponent.componentType == 'RT' ">
+    <div
+        *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE' ">
+        <label class="mt-5 fw-600 mb-2 label-font-size" *ngIf="selectedComponent.componentType == 'CE'" for="">Custom
+            Element</label>
+        <label class="mt-5 fw-600 mb-2 label-font-size" *ngIf="selectedComponent.componentType == 'QN'"
+            for="">Questionnaire Element</label>
+        <label class="mt-5 fw-600 mb-2 label-font-size" *ngIf="selectedComponent.componentType == 'PE'" for="">Program
+            Element</label>
+        <app-autocompleter [completerOptions]="autoCompleterOption"
+            (ngModelChange)="this.formBuilderService.unSavedChange = true;" [clearField]="clearField" [placeHolder]=""
+            (onSelect)="refrenceId($event)">
+        </app-autocompleter>
+    </div>
+    <ng-container *ngIf="selectedComponent.componentType != 'BR' && selectedComponent.componentType != 'HL' ">
+        <label class="d-block mt-5 fw-600 label-font-size" for="">Label</label>
+        <input type="text" id="label" class="form-control "
+            (ngModelChange)="this.formBuilderService.unSavedChange = true;" [(ngModel)]="selectedComponent.label">
+    </ng-container>
+
+    <ng-container
+        *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE'">
+        <label class="d-block fw-600 mt-5 mb-2 label-font-size" for="">
+            Component Header
+        </label>
+        <ckeditor tabindex="0" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+            [(ngModel)]="selectedComponent.componentHeader" [editor]="Editor" [config]="editorConfig"
+            (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
+        <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">
+            Component Footer
+        </label>
+        <ckeditor tabindex="0" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+            [(ngModel)]="selectedComponent.componentFooter" [editor]="Editor" [config]="editorConfig"
+            (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
+    </ng-container>
+
+    <ng-container *ngIf="selectedComponent.componentType == 'PE' || selectedComponent.componentType == 'RT'">
+        <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">Component data</label>
+        <ckeditor tabindex="0" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+            [(ngModel)]="selectedComponent.componentData" [editor]="Editor" [config]="editorConfig"
+            (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
+    </ng-container>
+
+    <div *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN'">
+        <label tabindex="0" class="d-block mt-5 fw-600 mb-2 label-font-size" for="">
+            Is this component mandatory?
+        </label>
+        <span class="py-1" aria-label="" role="switch">
+            <a *ngIf="selectedComponent.isMandatory == 'Y' " class="pl-2">
+                <label class="switch" tabindex="0" (click)="selectedComponent.isMandatory = 'N'"
+                    (keyup.enter)="selectedComponent.isMandatory = 'N'">
+                    <input type="checkbox" checked>
+                    <span class="slider round"><small (keyup.enter)="selectedComponent.isMandatory = 'N'"
+                            class="fs-12 mt-1 activate-text">Yes</small></span>
+                </label>
+            </a>
+            <a *ngIf="selectedComponent.isMandatory == 'N' " class="pl-2">
+                <label class="switch" tabindex="0" (click)="selectedComponent.isMandatory = 'Y'"
+                    (keyup.enter)="selectedComponent.isMandatory = 'Y'">
+                    <input type="checkbox">
+                    <span class="slider round"><small (keyup.enter)="selectedComponent.isMandatory = 'Y'"
+                            class="deactivate-text deactivate-text-color  fs-12 mt-1">No</small></span>
+                </label>
+            </a>
+        </span>
+        <ng-container *ngIf="selectedComponent.isMandatory == 'Y'">
+            <label class="d-block mt-5 fw-600 mb-2 label-font-size" for=""> Provide a validation Message</label>
+            <input type="text" tabindex="0" class="form-control "
+                (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+                [(ngModel)]="selectedComponent.validationMessage">
+        </ng-container>
+    </div>
+</div>
