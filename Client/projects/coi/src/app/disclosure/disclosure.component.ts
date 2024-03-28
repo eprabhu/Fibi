@@ -785,16 +785,21 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            this.isCardExpanded = !(window.innerWidth <= 992);
+            this.isCardExpanded = window.innerWidth > 1399;
         }
     }
 
     setFocus(id) {
-        var focusedElement = document.getElementById(id);
+        const focusedElement = document.getElementById(id);
         if(focusedElement) {
             setTimeout(() => {
                 focusedElement.focus();
             },500)
         }
+    }
+
+    collapseHeader() {
+        this.isCardExpanded = !this.isCardExpanded;
+        this.isUserCollapse = !this.isUserCollapse;
     }
 }
