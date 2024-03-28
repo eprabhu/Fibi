@@ -342,7 +342,7 @@ export class OpaComponent implements OnInit {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            this.isCardExpanded = !(window.innerWidth <= 992);
+            this.isCardExpanded = window.innerWidth > 1399;
         }
         this.setTopDynamically();
     }
