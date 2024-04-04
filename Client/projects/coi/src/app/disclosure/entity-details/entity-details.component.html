@@ -104,8 +104,8 @@
             </div>
           </div>
         </div>
-        <div *ngIf="entityDetailService.remainingRelationships && entityDetailService.remainingRelationships?.length; else noData"  class="relation d-flex justify-content-center mt-4">
-          <div class="card custom-padding position-relative w-65" [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+        <div *ngIf="entityDetailService.remainingRelationships && entityDetailService.remainingRelationships?.length; else noData"  class="mx-0 row mt-3">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12 card position-relative px-0" [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
             <div class="color-black mb-2">
                 <label class="form-check-label colour-black relation-header px-2 fs-14 label-text">Relationship Details
                     [Disclose financial details for the SFI]
@@ -140,9 +140,9 @@
         </ng-template>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary" id="add-relationship-btn" data-bs-dismiss="modal" type="button"
+        <button class="btn btn-outline-secondary" id="add-relationship-btn" data-bs-dismiss="modal" type="button" aria-label="Click to cancel"
           title="Cancel" (click)="clearModal()">Cancel</button>
-        <button class="btn btn-primary me-0" id="add-relationship-btn" type="button" (click)="addRelation()">Add</button>
+        <button class="btn btn-primary me-0" id="add-relationship-btn" type="button" title="Click to add relationship" aria-label="Click to add relationship"  (click)="addRelation()">Add</button>
       </div>
     </div>
   </div>

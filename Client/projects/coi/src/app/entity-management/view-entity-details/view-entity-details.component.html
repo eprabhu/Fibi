@@ -312,7 +312,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">{{entityDetails?.isActive?'Inactivate':'Activate'}} {{entityDetails?.entityName}}</h4>
+        <h4 class="modal-title me-1">{{entityDetails?.isActive?'Inactivate':'Activate'}} - <span class="fw-normal">{{entityDetails?.entityName}}</span></h4>
         <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
           (click)="inactivateReason=''"></button>
       </div>
@@ -387,7 +387,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Approve Entity {{entityDetails?.entityName}}</h4>
+          <h4 class="modal-title me-1">Approve Entity - <span class="fw-normal">{{entityDetails?.entityName}}</span></h4>
           <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
             (click)="clearApproveEntityFiled()"></button>
         </div>

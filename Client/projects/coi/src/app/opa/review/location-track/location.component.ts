@@ -349,6 +349,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.commentConfiguration.disclosureId = this.opaDisclosure.opaDisclosureId;
         this.isCOIAdministrator = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
         this.getCoiReview();
+        this.setPersonProjectDetails();
     }
 
     private clearActionData() {
@@ -382,9 +383,10 @@ export class LocationComponent implements OnInit, OnDestroy {
             && ele.reviewStatusTypeCode !== '3');
     }
 
-    // private setPersonProjectDetails(): void {
-    //     this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
-    //     this.personProjectDetails.projectDetails = this.projectDetail;
-    //     this.personProjectDetails.unitDetails = this.opaDisclosure.homeUnitName;
-    // }
+    private setPersonProjectDetails(): void {
+        this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
+        this.personProjectDetails.projectDetails = this.projectDetail;
+        this.personProjectDetails.homeUnit = this.opaDisclosure.homeUnit;
+        this.personProjectDetails.homeUnitName = this.opaDisclosure.homeUnitName;
+    }
 }

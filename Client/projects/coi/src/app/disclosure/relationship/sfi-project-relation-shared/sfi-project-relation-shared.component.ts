@@ -117,7 +117,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....', 1250);
         this.$subscriptions.push(this._relationShipService.singleEntityProjectRelationSFI(element, element.personEntityId,
             element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
-            this._relationShipService.projectSFIDetails[index] = data.coiDisclEntProjDetail;
+            this._relationShipService.projectSFIDetails[element.personEntityId][index] = data.coiDisclEntProjDetail;
             this.coiValidationMap.clear();
             this.relationshipChanged.emit(true);
             this.updateIsSaving(false);
@@ -203,18 +203,18 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     listenScreenSize() {
         setTimeout(() => {
             if(this.isSlider) {
-                const INFO_CARD_HEIGHT = document.getElementById('info-card')?.offsetHeight || 0; 
-                const HEADER_HEIGHT = document.getElementById('relationship-details')?.offsetHeight; 
+                const INFO_CARD_HEIGHT = document.getElementById('info-card')?.offsetHeight || 0;
+                const HEADER_HEIGHT = document.getElementById('relationship-details')?.offsetHeight;
                 const TABLE_HEADER_HEIGHT = document.getElementById('sfi-relationship-table-header')?.offsetHeight;
                 document.getElementById('sfi-relationship-table-header').style.top ='-10px'
-        
+
                 if(window.innerWidth >= 1200) {
                     document.getElementById('sfi-relationship').style.maxHeight = (window.innerHeight - (INFO_CARD_HEIGHT + HEADER_HEIGHT + TABLE_HEADER_HEIGHT + 60)) + 'px';
                 } else {
                     const HEADER_HEIGHT = document.getElementById('relationship-details-box-slider-header')?.offsetHeight;
                     document.getElementById('sfi-relationship').style.maxHeight = (window.innerHeight - (HEADER_HEIGHT +10)) + 'px';
                 }
-            }     
+            }
         });
     }
 

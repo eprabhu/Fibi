@@ -60,7 +60,7 @@
                         </span>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-lg-2 mb-sm-2 mb-2" tabindex="0">
-                        <div tabindex="0" class="mb-2">
+                        <div class="mb-2">
                             <label class="coi-text-dark d-block"
                                 [attr.aria-label]="'End Date Of Involvement' + SFIObject?.involvementEndDate | dateFormatter">
                                 End Date Of Involvement</label>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-lg-12 d-flex align-items-center">
                         <div>
-                        <label tabindex="0" aria-label="Relationship"
+                        <label aria-label="Relationship"
                             class="coi-text-dark me-3">Relationship</label>
                         <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
                             <ng-container *ngIf="reqObject.validPersonEntityRelTypes?.length">
@@ -81,7 +81,7 @@
                                     *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue; let isFirst = first"
                                     [class.pill-spacing]="!isFirst">
                                     <label class="coi-text-light me-1"
-                                        [attr.aria-label]="relation?.personEntityRelType?.description">{{relationship.key}}</label>
+                                        [attr.aria-label]="relation?.personEntityRelType?.description">{{relationship.key}} : </label>
                                     <ng-container *ngFor="let relation of relationship.value; let last = last">
                                         <span class="r-title coi-text-lighter" *ngIf="!last"
                                             [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description
@@ -104,15 +104,15 @@
                     <button class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" tabindex="0" (click)="openReviewComment(SFIObject);" id="add-activity" title="Comments" type="button"
                         role="button" aria-label="sfi comments"><mat-icon>rate_review</mat-icon></button></div>
                 <div *ngIf="referredFrom !== 'SFI_SUMMARY'" class="align-items-center col-lg col-12 mt-2 d-flex text-secondary justify-content-end">
-                    <button *ngIf="!isTriggeredFromSlider && SFIObject.isActive" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')" title="Click to modify SFI">
+                    <button *ngIf="!isTriggeredFromSlider && SFIObject.isActive" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')" aria-label="Click to modify SFI" title="Click to modify SFI">
                         <mat-icon class="me-1">edit</mat-icon>Modify</button>
-                    <button class="align-items-center btn btn-outline-secondary d-flex fs-14" [ngClass]="!isTriggeredFromSlider ? 'ms-2' : 'me-0'" (click)="openSfiDetails(SFIObject?.entityId, 'view')" title="Click to view SFI">
+                    <button class="align-items-center btn btn-outline-secondary d-flex fs-14" [ngClass]="!isTriggeredFromSlider ? 'ms-2' : 'me-0'" (click)="openSfiDetails(SFIObject?.entityId, 'view')" aria-label="Click to view SFI" title="Click to view SFI">
                         <mat-icon class="me-1">visibility</mat-icon>View</button>
-                    <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject.canDelete && !isTriggeredFromSlider" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" title="Click to delete SFI">
+                    <button (click)="deleteConfirmation(SFIObject.personEntityId)" *ngIf="SFIObject.canDelete && !isTriggeredFromSlider" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" aria-label="Click to delete SFI" title="Click to delete SFI">
                       <mat-icon class="me-1">delete</mat-icon>Delete</button>
-                    <button *ngIf="!SFIObject?.isActive && !isTriggeredFromSlider" title="Click to activate SFI" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="activateDeactivate(SFIObject)">
+                    <button *ngIf="!SFIObject?.isActive && !isTriggeredFromSlider" title="Click to activate SFI" aria-label="Click to activate SFI" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="activateDeactivate(SFIObject)">
                         <mat-icon class="me-1">offline_bolt</mat-icon>Activate</button>
-                    <button *ngIf="SFIObject?.isActive && !isTriggeredFromSlider" title="Click to inactivate SFI" class="align-items-center btn btn-outline-secondary d-flex fs-14 ms-2" (click)="activateDeactivate(SFIObject)" >
+                    <button *ngIf="SFIObject?.isActive && !isTriggeredFromSlider" title="Click to inactivate SFI" aria-label="Click to inactivate SFI" class="align-items-center btn btn-outline-secondary d-flex fs-14 ms-2" (click)="activateDeactivate(SFIObject)" >
                         <mat-icon class="me-1">schedule</mat-icon>Inactivate </button>
                 </div>
             </div>

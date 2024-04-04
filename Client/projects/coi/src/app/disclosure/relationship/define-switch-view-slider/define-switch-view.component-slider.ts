@@ -83,4 +83,11 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
         openCoiSlider('relationship-details-box');
     }
 
+    isShowWarning(sfi) {
+        if(this.projectSFIDetails[sfi.personEntityId] && this.projectSFIDetails[sfi.personEntityId].length) {
+            let isModified = this.projectSFIDetails[sfi.personEntityId].find(ele => ele.prePersonEntityId && ele.personEntityId != ele.prePersonEntityId);
+            return isModified ? true : false;
+        }
+    }
+
 }

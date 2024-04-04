@@ -104,11 +104,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Specify the reason for the withdrawal of the disclosure.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
-    returnHelpTexts = [
-        `Return disclosures currently in the 'Review in progress' status.`,
-        `Specify the reason for the returning of the disclosure.`,
-        `Click on 'Return' button to return the disclosure for any modification.`
-    ];
+    returnHelpTexts = [];
     isOpenRiskSlider = false;
    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
@@ -363,6 +359,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiData = coiData;
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
+        this.returnHelpTexts = [ `Return disclosures currently in the '${this.coiData.coiDisclosure.coiReviewStatusType.description}' status.`,
+        `Specify the reason for the returning of the disclosure.`,
+        `Click on 'Return' button to return the disclosure for any modification.`];
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
     }
@@ -785,16 +784,21 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            this.isCardExpanded = !(window.innerWidth <= 992);
+            this.isCardExpanded = window.innerWidth > 1399;
         }
     }
 
     setFocus(id) {
-        var focusedElement = document.getElementById(id);
+        const focusedElement = document.getElementById(id);
         if(focusedElement) {
             setTimeout(() => {
                 focusedElement.focus();
             },500)
         }
+    }
+
+    collapseHeader() {
+        this.isCardExpanded = !this.isCardExpanded;
+        this.isUserCollapse = !this.isUserCollapse;
     }
 }
