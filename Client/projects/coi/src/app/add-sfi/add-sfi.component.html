@@ -2,7 +2,7 @@
     <div class="col-12">
 		<div class="card shadow-sm">
 			<div class="row mx-0">
-				<div class="col-xl px-0">
+				<div class="col-xl-9 col-lg-9 col-md-12 px-0">
 					<div class="card-header bg-white px-3 border-bottom min-height-unset">
 						<div class="row flex-grow-1">
 							<div class="col-lg-12 d-flex align-items-center" tabindex="0" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
@@ -17,7 +17,7 @@
 					<div class="card-body">
 						<div class="row" *ngIf="!isEntityManagement">
 							<!-- Start Date Of Involvement -->
-							<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
 								[attr.aria-label]="'Start Date of Involvement' + (involvementDate.involvementStartDate | dateFormatterWithTimeZone)">
 								<div class="fw-bold me-2 fs-14 label-text">Start Date Of Involvement</div>
 								<app-no-data-label [classesToApply]="'fs-14'"
@@ -27,7 +27,7 @@
 								</app-no-data-label>
 							</div>
 							<!-- End Date Of Involvement -->
-							<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
 							[attr.aria-label]="'End Date of Involvement' + (involvementDate.involvementEndDate | dateFormatterWithTimeZone)">
 								<div class="fw-bold me-2 fs-14 label-text">End Date Of Involvement </div>
 								<app-no-data-label [classesToApply]="'fs-14'"
@@ -37,7 +37,7 @@
 								</app-no-data-label>
 							</div>
 							<!-- Sponsors Research -->
-							<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
 							[attr.aria-label]="'Sponsors Research' + (additionalDetails?.sponsorsResearch ? 'Yes' : 'No')">
 								<div class="fw-bold me-2 fs-14 label-text">Sponsors Research </div>
 								<span class="text-color fs-14">{{additionalDetails?.sponsorsResearch ? 'Yes' :
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xl-3 py-3 border-start">
+				<div class="col-xl-3 col-lg-3 col-md-12 py-3 border-start">
 					<div class="d-grid gap-2 d-md-flex flex-md-wrap">
 						<button class="btn btn-outline-grey col pb-0 w-100" title="Go to COI home page" tabindex="0"
 							(click)="goToHome()" aria-label="Home" role="button">
@@ -386,7 +386,7 @@
 						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Start Date of Involvement Date Field">
 							<div class="d-flex">
 								<label class="d-block fw-500 fs-14 pb-1 label-text"
-									for="Start date of involvement"><span class="mandatory">*</span>Start Date of
+									for="Start date of involvement"><span class="mandatory">*</span> Start Date of
 									Involvement
 								</label>
 							</div>
@@ -414,7 +414,7 @@
 							</div>
 						</div>
 						<!-- End Date of Involvement -->
-						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="End Date of Involvement Date Field">
+						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 mt-lg-2 mt-xl-0 mt-md-2 mt-2" tabindex="0" aria-label="End Date of Involvement Date Field">
 							<label class="d-block fs-14 fw-500 px-1 pb-1 label-text"
 								for="End date of involvement">End Date of Involvement
 							</label>
@@ -441,7 +441,7 @@
 							</div>
 						</div>
 						<!-- Sponsors Research -->
-						<div class="col-xxl-2 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Sponsors Research Toggle Button">
+						<div class="col-xxl-2 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 mt-lg-2 mt-xl-0 mt-md-2 mt-2" tabindex="0" aria-label="Sponsors Research Toggle Button">
 							<div class="d-flex px-3">
 								<label class="d-block fs-14 fw-500 px-1 pb-1 row label-text">Sponsors Research</label>
 							</div>
@@ -470,7 +470,7 @@
 							tabindex="0" aria-label="Relationship Details Card" [class.invalid-border]="mandatoryList.has('relationRadio')">
 							<div class="color-black mb-2">
 								<label class="form-check-label colour-black relation-header px-2 fs-14 label-text"><span
-										class="mandatory">*</span>Relationship Details
+										class="mandatory">*</span> Relationship Details
 									[Disclose financial details for the SFI]
 								</label>
 							</div>

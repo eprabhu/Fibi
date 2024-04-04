@@ -1,0 +1,25 @@
+<div class="fs-18 fw-bold mt-3 d-flex justify-content-between">
+    Form List
+    <button [routerLink]="['/coi/form-builder-create/create-form']" class="btn btn-primary"><span
+            class="px-2 fs-15">Create Form </span></button>
+</div>
+<hr class="mt-1">
+<div *ngFor="let item of formList;">
+    <div class="card card-shadow mb-3">
+        <div class="card-header">
+            {{item.title}}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{item.description}}</h5>
+            <div class="d-flex justify-content-end">
+                <button [routerLink]="['/coi/form-builder-create/form-editor']"
+                    [queryParams]={formBuilderId:item.formBuilderId} role="button"
+                    aria-describedby="Click to view {{item.name}}"
+                    class="d-flex align-items-center btn btn-primary-outline fs-14 height-fit-content"
+                    title="Click to view {{item.description}}" aria-label="Click to view {{item.description}}"><mat-icon
+                        role="img" class="mat-icon notranslate me-1  material-icons mat-ligature-font mat-icon-no-color"
+                        aria-hidden="true" data-mat-icon-type="font">visibility</mat-icon> View </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,26 +2,32 @@
         <div class="row">
         <!-- person name -->
         <div class="col-lg col-md-6">
-            <i class="fa fa-user mt-sm-2 mt-2 coi-text-light" aria-hidden="true"></i>
-            <app-no-data-label [valueToShow]="personProjectOrEntity?.personFullName">
-                <span class="ms-2 coi-text-light fs-14">{{personProjectOrEntity?.personFullName}}</span>
-            </app-no-data-label>
+            <div class="flex">
+                <i class="fa fa-user mt-sm-2 mt-2 coi-text-light flex-shrink-0" aria-hidden="true"></i>
+                <app-no-data-label [valueToShow]="personProjectOrEntity?.personFullName">
+                    <span class="ms-2 coi-text-light fs-14 word-break-all">{{personProjectOrEntity?.personFullName}}</span>
+                </app-no-data-label>
+            </div>
         </div>
 
         <!-- Primary title -->
         <div class="col-lg col-md-6">
-            <i class="fa fa-briefcase mt-sm-2 mt-2 coi-text-light" aria-hidden="true"></i>
-            <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personPrimaryTitle">
-                <span class="ms-2 coi-text-light fs-14">{{disclosureHeaderDetails?.personPrimaryTitle}}</span>
-            </app-no-data-label>
+            <div class="flex">
+                <i class="fa fa-briefcase mt-sm-2 mt-2 coi-text-light flex-shrink-0" aria-hidden="true"></i>
+                <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personPrimaryTitle">
+                    <span class="ms-2 coi-text-light fs-14 word-break-all">{{disclosureHeaderDetails?.personPrimaryTitle}}</span>
+                </app-no-data-label>
+            </div>
         </div>
 
         <!-- Person email -->
         <div class="col-lg col-md-6">
-            <i class="fa fa-envelope mt-sm-2 mt-2 coi-text-light" aria-hidden="true"></i>
+            <div class="flex">
+            <i class="fa fa-envelope mt-sm-2 mt-2 coi-text-light flex-shrink-0" aria-hidden="true"></i>
             <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personEmail">
-                <span class="ms-2 coi-text-light fs-14">{{disclosureHeaderDetails?.personEmail}}</span>
+                <span class="ms-2 coi-text-light fs-14 word-break-all">{{disclosureHeaderDetails?.personEmail}}</span>
             </app-no-data-label>
+            </div>
         </div>
 
         <!-- department -->

@@ -110,9 +110,8 @@
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         type="button" title="Go to COI home page" (click)="goToHome()">
                                         <mat-icon role="img"
-                                            class="mat-icon notranslate me-2 material-icons mat-ligature-font mat-icon-no-color"
+                                            class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
                                             aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
-                                        <span class="fs-14">Home</span>
                                     </button>
                                 </ng-template>
                                 <button
@@ -134,7 +133,6 @@
                                     class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                     type="button" title="Click for More Actions">
                                     <mat-icon class="moreActionIcon">more_vert</mat-icon>
-                                    <span *ngIf="isCardExpanded">More Actions</span>
                                 </button>
                                 <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi"
                                 class="col-12 justify-content-around mt-2">
@@ -152,7 +150,6 @@
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         title="Go to COI home page" tabindex="0" (click)="goToHome()">
                                         <mat-icon>home</mat-icon>
-                                        <span class="fs-14 mx-1 btn-content-home">Home</span>
                                     </button>
                                     <button
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
@@ -164,7 +161,6 @@
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         role="button" title="Click for More Actions">
                                         <mat-icon class="moreActionIcon">more_vert</mat-icon>
-                                        <span *ngIf="isCardExpanded">More Actions</span>
                                     </button>
                                 </div>
                             </ng-template>

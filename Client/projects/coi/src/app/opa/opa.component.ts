@@ -40,11 +40,7 @@ export class OpaComponent implements OnInit {
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
-    returnHelpTexts = [
-        `Return any disclosure in 'Review in progress' status.`,
-        `Describe the reason for returning  in the field provided.`,
-        `Click on 'Return' button to return the disclosure for any modification.`
-    ];
+    returnHelpTexts = [];
     description: any;
     showSlider = false;
     selectedType: string;
@@ -208,6 +204,11 @@ export class OpaComponent implements OnInit {
 
     private getDataFromStore() {
         this.opa = this.dataStore.getData();
+        this.returnHelpTexts = [
+            `Return any disclosure in '${this.opa.opaDisclosure.reviewStatusType.description}' status.`,
+            `Describe the reason for returning  in the field provided.`,
+            `Click on 'Return' button to return the disclosure for any modification.`
+        ];
     }
 
     private listenDataChangeFromStore() {
@@ -342,7 +343,7 @@ export class OpaComponent implements OnInit {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            this.isCardExpanded = !(window.innerWidth <= 992);
+            this.isCardExpanded = window.innerWidth > 1399;
         }
         this.setTopDynamically();
     }

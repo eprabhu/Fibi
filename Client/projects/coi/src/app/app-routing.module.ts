@@ -78,6 +78,10 @@ const routes: Routes = [
                 path: 'opa-dashboard',
                 loadChildren: () => import('./opa-dashboard/opa-dashboard.module').then(m => m.OpaDashboardModule)
             },
+            {
+                path: 'form-builder-create',
+                loadChildren: () => import('./configuration/form-builder-create/form-builder-create.module').then(m => m.FormBuilderCreateModule)
+            },
           ]
     },
 { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginGuard] }

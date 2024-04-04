@@ -38,17 +38,21 @@
   <div class="row m-0">
     <div class="col-lg-5 py-2">
   <div  [@leftSlideInOut]>
-      <label class="coi-text-dark" for="">Filter By Status :</label>
-      <span (click)="setFilter('ALL')" [class.active-filter-pills]="filterType=='ALL'"
+      <label class="coi-text-dark" for="" tabindex="0">Filter By Status :</label>
+      <span (click)="setFilter('ALL')" [class.active-filter-pills]="filterType=='ALL'" tabindex="0"
+          [attr.aria-label]="filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
           title="Click to filter by type: All" area-describedby="Click to filter by type: All"
           class="filter-pills coi-text-light" role="button">All</span>
-      <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="filterType=='COMPLETE'"
+      <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="filterType=='COMPLETE'" tabindex="0"
+          [attr.aria-label]="filterType=='COMPLETE' ? 'Selected filter type is complete ' : 'Complete'"
           title="Click to filter by type: Complete" area-describedby="Click to filter by type: Complete"
           class="filter-pills coi-text-light" role="button">Complete</span>
-      <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="filterType=='INCOMPLETE'"
+      <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="filterType=='INCOMPLETE'" tabindex="0"
+          [attr.aria-label]="filterType=='INCOMPLETE' ? 'Selected filter type is incomplete ' : 'Incomplete'"
           title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
           class="filter-pills coi-text-light" role="button">Incomplete</span>
-      <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="filterType=='INACTIVE'"
+      <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="filterType=='INACTIVE'" tabindex="0"
+      [attr.aria-label]="filterType=='INACTIVE' ? 'Selected filter type is inactive ' : 'Inactive'"
           title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
           class="filter-pills coi-text-light" role="button">Inactive</span>
   </div>

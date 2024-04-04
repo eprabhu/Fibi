@@ -51,4 +51,8 @@ export class LeftNavBarComponent implements OnInit {
                 'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
             'SOME');
     }
+
+    scrollToTop(): void {
+        window.scrollTo(0,0);
+    }
 }

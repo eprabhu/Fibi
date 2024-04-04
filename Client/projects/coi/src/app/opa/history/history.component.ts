@@ -34,6 +34,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        window.scrollTo(0,0);
     }
 
     ngOnDestroy() {
