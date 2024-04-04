@@ -272,3 +272,29 @@
     background-color: #e3ffe5;
     color: #6cc974;
 }
+
+.sfi-info-text {
+    color: #c39200;
+    border: 1px solid #c39200;
+    line-height: 20px;
+    display: inline-block;
+}
+
+.slideLeft {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideLeftFrame .3s ease-out forwards;
+}
+
+@keyframes slideLeftFrame {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+

@@ -11,11 +11,11 @@
               </span>
             <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
               <span *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
+                <span class="link-primary fw-medium fs-14">Read More</span>
               </span>
             </span>
             <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
-              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+              <span class="link-primary fw-medium fs-14">Read Less</span>
             </span>
           </span>
         </ng-container>

@@ -1,4 +1,4 @@
-<span class="coi-text-darker mb-0 fs-14" [title]="disclosure?.updateTimeStamp | date:'dd MMM yyyy'"
+<span class="coi-text-darker mb-0 fs-14" [title]="disclosure?.updateTimeStamp | date:'dd MMM yyyy'" tabindex="0"
     [attr.aria-label]="'Results showing for' + (disclosure?.updateTimeStamp | date : 'dd MMM yyyy')"
     *ngIf="disclosure?.updateTimeStamp">{{disclosure?.updateTimeStamp | date : 'dd MMM yyyy'}}</span>
 
@@ -115,12 +115,12 @@
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
                 <div tabindex="0"
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
                     <button role="button"
                         class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details"
+                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
                         [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                                        'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                                        'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
                         <mat-icon class="me-1">visibility</mat-icon> View
                     </button>
                 </div>
@@ -257,13 +257,13 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div tabindex="0"
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                <div
+                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
                     <button role="button"
                         class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details"
+                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
                         [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                                            'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                                            'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
                         <mat-icon class="me-1">visibility</mat-icon> View
                     </button>
                 </div>
@@ -290,12 +290,11 @@
                 <div class="row mx-0">
                     <div class="col-md-6 col-lg-3 mb-2" tabindex="0">
                         <div>
-                            <label class="coi-text-dark d-block" aria-label="Reporting Cycle">Reporting Cycle</label>
+                            <label class="coi-text-dark d-block">Reporting Cycle</label>
                             <span>
                                 <span class="coi-text-light"
-                                    aria-label="{{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate | dateFormatter}}">
-                                    {{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate |
-                                    dateFormatter}}</span>
+                                [attr.aria-label]="(disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate | dateFormatter)">
+                                {{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate | dateFormatter}}</span>
                             </span>
                         </div>
                     </div>
@@ -305,7 +304,7 @@
                             <span>
                                 <app-no-data-label [valueToShow]="disclosure?.submissionTimestamp">
                                     <span class="coi-text-light"
-                                        aria-label="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
+                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
                                         | dateFormatter}}</span>
                                 </app-no-data-label>
                             </span>
@@ -347,12 +346,12 @@
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
                 <div tabindex="0"
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                    aria-label="Click to view OPA disclosure details">
                     <button role="button"
                         class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details"
+                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
                         [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                            'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                            'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
                         <mat-icon class="me-1">visibility</mat-icon> View
                     </button>
                 </div>
