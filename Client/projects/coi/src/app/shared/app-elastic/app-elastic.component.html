@@ -3,7 +3,7 @@
   <input id="searchBox" #searchField type="text" placeholder="{{placeHolder}}" [disabled]="isDisabled"
     [(ngModel)]="searchText" (keypress)="getElasticResult()" (paste)="getElasticResult()" (keydown.backspace)="backSpaceEvent()"
     (keydown.esc)="hideSearchResults();"
-    class = "app-elastic-search form-control pr-25" autocomplete="off" [matAutocomplete]="elastic"/>
+    class = "app-elastic-search form-control pe-4" autocomplete="off" [matAutocomplete]="elastic"/>
   <a class="searchButton" >
     <i aria-hidden="true" *ngIf = "searchText == ''" class="fa fa-search fa-med"></i>
     <i aria-hidden="true"  *ngIf="searchText != '' && !isDisabled" class="fa fa-times fa-med" (click)="emitSelectedObject(null);"></i>
