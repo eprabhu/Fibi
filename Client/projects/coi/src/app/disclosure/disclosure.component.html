@@ -216,22 +216,24 @@
                             <div class="h-100" *ngIf="isCreateMode">
                                 <div class="d-grid gap-2 d-md-flex flex-md-wrap">
                                     <button class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                        title="Go to COI home page" (click)="goBackInEditMode()">
+                                        title="Go to COI home page" aria-label="Go to home page" (click)="goBackInEditMode()">
                                         <mat-icon>home</mat-icon>
                                     </button>
                                     <button (click)="goBackStep(); clickedOption = 'previous'" [disabled]="currentStepNumber==1"
+                                        title="Go to previous page" aria-label="Go to previous page"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                        <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
-                                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Previous</span>
+                                        <mat-icon class="mr-15">keyboard_backspace</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
                                     </button>
                                     <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
+                                        title="Go to next page" aria-label="Go to next page"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                        <mat-icon class="me-2 keyboard-backspace">keyboard_backspace</mat-icon>
-                                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Next</span>
+                                        <mat-icon class="keyboard-backspace">keyboard_backspace</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded">Next</span>
                                     </button>
                                     <button (click)="sfiService.isShowSfiNavBar = true" title="Click to add new SFI"
                                         *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')"
-                                        title="Click to save your progress"
+                                        aria-label="Click to add new SFI"
                                         class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
                                         <mat-icon class="me-2">add</mat-icon>
@@ -239,60 +241,61 @@
                                     </button>
                                     <button (click)="triggerSave()"
                                         *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                                        title="Click to save your progress"
+                                        title="Click to save your progress" aria-label="Click to save your progress"
                                         class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                        <mat-icon class="me-2">save</mat-icon>
-                                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Save</span>
+                                        <mat-icon>save</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded">Save</span>
                                     </button>
                                     <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
                                         *ngIf="router.url.includes('create-disclosure/certification')" title="Click to submit your disclosure"
+                                        aria-label="Click to submit your disclosure"
                                         class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                        <mat-icon class="me-2">done</mat-icon>
-                                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Submit</span>
+                                        <mat-icon>done</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded">Submit</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="h-100" *ngIf="!isCreateMode">
                                 <div class="d-grid d-md-flex flex-md-wrap gap-2 mb-2">
-                                        <button title="Go to COI home page" (click)="goToHomeUrl()"
+                                        <button title="Go to COI home page" (click)="goToHomeUrl()" aria-label="Go to COI home page"
                                         [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
                                         <mat-icon>home</mat-icon>
-                                        <span class="fs-14 mt-1 ml-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
+                                        <span class="fs-14  ms-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
                                         </button>
 
                                         <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
-                                        [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col'"
+                                        [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col'" title="Go to previous page" aria-label="Go to previous page"
                                         class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center col">
-                                        <mat-icon class="me-2" title="Go to previous page">undo</mat-icon>
-                                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Previous</span>
+                                        <mat-icon>undo</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
                                         </button>
 
                                         <button
                                             title="Click here to add new review comment"
                                             (click)="openReviewComment()"
                                             class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
-                                            <mat-icon class="me-2">rate_review</mat-icon>
-                                            <span class="fs-14" *ngIf="isCardExpanded">Comments</span>
+                                            <mat-icon>rate_review</mat-icon>
+                                            <span class="fs-14 ms-2" *ngIf="isCardExpanded">Comments</span>
                                         </button>
                                         <!-- more option button for expanded & collapsed card -->
                                         <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
                                         <button
                                         [matMenuTriggerFor]="beforeMenu"
                                             class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                            role="button" title="Click for More Actions">
+                                            role="button" title="Click for More Actions" aria-label="Click for More Actions">
                                             <mat-icon class="moreActionIcon">more_vert</mat-icon>
                                         </button>
 
                                         <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
-                                            <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                            <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" aria-label="Click to Assign Administrator/Admin Group"
                                                 class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col'}}"
                                                 (click)="openAddAssignModal();">
-                                                <mat-icon class="me-1">group_add</mat-icon>
-                                                <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
+                                                <mat-icon>group_add</mat-icon>
+                                                <span class="ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
                                             </button>
                                         </ng-container>
 
@@ -353,16 +356,16 @@
                                         [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                         <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
-                                        <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
+                                        <span class="ms-2" *ngIf="isCardExpanded"> Start Review </span>
                                     </button>
 
                                       <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
                                       title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
                                       id="complete-review-btn"
-                                      [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
+                                      [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                       class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                       <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
-                                      <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
+                                      <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                                       </button>
                                         <button *ngIf="coiService.isCOIAdministrator &&
                                                      ((coiService.isReviewActionCompleted
@@ -374,8 +377,8 @@
                                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                                                 [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click to complete review"
                                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
-                                            <mat-icon class="me-2">done</mat-icon>
-                                            <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
+                                            <mat-icon>done</mat-icon>
+                                            <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                                         </button>
                                         <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}">
                                             <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
