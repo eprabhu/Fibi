@@ -433,6 +433,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ConflictOfInterestVO saveEntityProjectRelation(ConflictOfInterestVO vo) {
 		List<CoiDisclEntProjDetails> entityProjectRelations = vo.getCoiDisclEntProjDetails();
 		entityProjectRelations.forEach(entityProjectRelation -> {
+			entityProjectRelation.setPrePersonEntityId(entityProjectRelation.getPersonEntityId());
 			conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(entityProjectRelation);
 			saveDisclProjRelationComment(entityProjectRelation);
 		});
