@@ -27,6 +27,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.getDataFromStore();
         this.listenToDataChange();
+        window.scrollTo(0,0);
     }
 
     ngAfterViewInit(): void {

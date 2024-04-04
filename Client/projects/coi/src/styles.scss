@@ -279,3 +279,22 @@
     line-height: 20px;
     display: inline-block;
 }
+
+.slideLeft {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideLeftFrame .3s ease-out forwards;
+}
+
+@keyframes slideLeftFrame {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+

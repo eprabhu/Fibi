@@ -1389,7 +1389,7 @@
         </ng-container>
         <!-- new history design   -->
         <ul class="timeline" *ngIf="currentSelected.tab=='DISCLOSURE_HISTORY'">
-            <li class="mb-5" *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
+            <li class="pb-5" *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
                 <app-disclosure-history-card [disclosure]="disclosure" [isLastElement]="isLast"></app-disclosure-history-card>
             </li>
         </ul>
