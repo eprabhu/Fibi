@@ -119,4 +119,11 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
                 }));
         }
     }
+
+    isShowWarning(sfi) {
+        if(this.relationshipService.projectSFIDetails[sfi.personEntityId] && this.relationshipService.projectSFIDetails[sfi.personEntityId].length) {
+            let isModified = this.relationshipService.projectSFIDetails[sfi.personEntityId].find(ele => ele.prePersonEntityId && ele.personEntityId != ele.prePersonEntityId);
+            return isModified ? true : false;
+        }
+    }
 }
