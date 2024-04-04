@@ -1,4 +1,4 @@
-<div *ngIf="isToolkitVisible" class="card right-navigation-card mb-3 slideLeft">
+<div *ngIf="isToolkitVisible" class="card right-navigation-card mb-3 slideLeft" id="disclosure-toolkit">
     <div class="card-header h-auto d-flex align-items-center border-bottom">
         Navigate to
     </div>
@@ -19,7 +19,7 @@
                         title="Click here to collapse / expand Relationships section"
                         aria-label="Click here to collapse / expand Relationships section">{{isRelationshipCollapse ?
                         'keyboard_arrow_up' :'keyboard_arrow_down'}}</mat-icon></a>
-                <ul *ngIf="isRelationshipCollapse" class="right-sub-nav fs-14">
+                <ul *ngIf="isRelationshipCollapse" class="right-sub-nav fs-14" id="relationship-chid-section">
                     <li *ngIf="projectList?.awards?.length" class="fw-medium sub-nav-inner-list">
                         <span [ngClass]="{'active-sub-nav': activeSubNav == 'AWARD'}"
                             class="ps-active-nav">Awards</span>
@@ -30,7 +30,7 @@
                                     [attr.aria-label]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'">
                                     <a class="px-2 d-block"
                                         [ngClass]="{'sub-nav-active': subNavActive == award?.moduleItemId}">{{award?.moduleItemKey}}
-                                        {{award?.title}}</a>
+                                        {{award?.title.length>51 ? (award?.title | slice:0: 51)+'...': award?.title}}</a>
                                 </li>
                             </ng-container>
 
@@ -46,7 +46,7 @@
                                     [attr.aria-label]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'">
                                     <a class="px-2 d-block"
                                         [ngClass]="{'sub-nav-active': subNavActive == proposals?.moduleItemId}">{{proposals?.moduleItemId}}
-                                        {{proposals?.title}}</a>
+                                        {{proposals?.title.length>51 ?(proposals?.title | slice:0:51)+'...' : proposals?.title}}</a>
                                 </li>
                             </ng-container>
                         </ul>

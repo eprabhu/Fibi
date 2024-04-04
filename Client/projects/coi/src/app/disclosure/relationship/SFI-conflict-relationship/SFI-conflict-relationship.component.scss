@@ -262,7 +262,7 @@
 }
 
 .table-responsive {
-    overflow: auto;
+    overflow: auto !important;
     &::-webkit-scrollbar {
         width: 6px;
         height: 6px;

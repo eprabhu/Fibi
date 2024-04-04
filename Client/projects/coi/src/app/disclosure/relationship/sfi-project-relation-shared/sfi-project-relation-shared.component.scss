@@ -56,7 +56,7 @@
   .table-responsive {
     background: #f1f1f1;
     border-radius: 5px;
-    overflow: auto;
+    overflow: auto !important;
     &::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -65,5 +65,19 @@
       &::-webkit-scrollbar-track {
         width: 6px;
         height: 6px;
+      }
+}
+
+.th-border-left {
+    position: relative;
+    &:before {
+        content: "";
+        position: absolute;
+        background: #f1f1f1;
+        left: -10px;
+        height: 100%;
+        width: 10px;
+        top: 0px;
+        border-right: #dee2e6 solid 1px;
       }
 }
