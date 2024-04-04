@@ -4,7 +4,7 @@
   <input #searchField type="text" placeholder="{{placeHolder}}" [disabled]="isDisabled"
     (focus)="getEndpointSearchResultOnfocus()" [(ngModel)]="searchText"
     (keypress)="getEndpointSearchResult()" (keydown.backspace)="backSpaceEvent()"
-    class="app-endpoint-search form-control pr-25" autocomplete="off"
+    class="app-endpoint-search form-control pe-4" autocomplete="off"
     (paste)="getEndpointSearchResult()" [matAutocomplete]="endpoint"/>
   <a class="searchButton" [class.pe-4]="isError" *ngIf="!isDisabled" >
     <i aria-hidden="true" *ngIf="searchText == ''" class="fa fa-search fa-med" title="Click to search"></i>

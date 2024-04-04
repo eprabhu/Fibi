@@ -29,7 +29,7 @@
                 </div>
               
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-12 col-xl-9 col-md-12">
                 <div class="row">
                     <div tabindex="0" class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
                         <label class="coi-text-dark d-block">Entity Type</label>
@@ -71,32 +71,34 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-lg-12 d-flex align-items-center">
-                        <div>
-                        <label aria-label="Relationship"
-                            class="coi-text-dark me-3">Relationship</label>
-                        <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
-                            <ng-container *ngIf="reqObject.validPersonEntityRelTypes?.length">
-                                <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color fst-italic d-inline-block"
-                                    *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue; let isFirst = first"
-                                    [class.pill-spacing]="!isFirst">
-                                    <label class="coi-text-light me-1"
-                                        [attr.aria-label]="relation?.personEntityRelType?.description">{{relationship.key}} : </label>
-                                    <ng-container *ngFor="let relation of relationship.value; let last = last">
-                                        <span class="r-title coi-text-lighter" *ngIf="!last"
-                                            [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description
-                                            +'/'}}</span>
-                                        <span class="r-title coi-text-lighter" *ngIf="last"
-                                            [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description}}</span>
-                                    </ng-container>
-                                </span>
-                            </ng-container>
-                        </app-no-data-label>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div class="col-lg-3 d-flex align-items-end justify-content-end mt-lg-0 mt-md-2">
+        </div>
+        <div class="row">
+            <div class="col-lg-auto d-flex align-items-center">
+                <div>
+                <label aria-label="Relationship"
+                    class="coi-text-dark me-3">Relationship</label>
+                <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
+                    <ng-container *ngIf="reqObject.validPersonEntityRelTypes?.length">
+                        <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color fst-italic d-inline-block"
+                            *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue; let isFirst = first"
+                            [class.pill-spacing]="!isFirst">
+                            <label class="coi-text-light me-1"
+                                [attr.aria-label]="relation?.personEntityRelType?.description">{{relationship.key}} : </label>
+                            <ng-container *ngFor="let relation of relationship.value; let last = last">
+                                <span class="r-title coi-text-lighter" *ngIf="!last"
+                                    [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description
+                                    +'/'}}</span>
+                                <span class="r-title coi-text-lighter" *ngIf="last"
+                                    [attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description}}</span>
+                            </ng-container>
+                        </span>
+                    </ng-container>
+                </app-no-data-label>
+                </div>
+            </div>
+            <div class="col-lg d-flex align-items-end justify-content-end mt-lg-0 mt-md-2">
                 <div *ngIf="referredFrom === 'SFI_SUMMARY'"
                     class="align-items-center col-1 d-flex text-secondary justify-content-end">
                     <button id="view-sfi" aria-label="view sfi details" title="View sfi details"  class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14"

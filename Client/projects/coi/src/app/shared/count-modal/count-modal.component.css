@@ -15,11 +15,6 @@
     margin-top: 0px
 }
 
-.widget-container {
-    max-height: 400px;
-    overflow: auto;
-}
-
 .textUnderline {
     text-decoration: none;
 }
@@ -36,7 +31,7 @@
 }
 
 .active {
-    color: black !important;
+    color: #007dec !important;
     border-bottom: 3px solid #007DEC;
     padding: 5px 11px;
     font-size: 16px;
@@ -124,4 +119,22 @@
 
   .tab-hover:hover {
     background-color: #e2f1ff;
+}
+
+.table-responsive {
+  overflow: auto !important;
+  .sticky-top {
+    top:-1px;
+  }
+}
+
+@media (min-width: 576px) {
+  .table-responsive {
+    max-height: 300px;
+  }
+}
+@media (min-width: 991px) {
+  .table-responsive {
+    max-height: 335px;
+  }
 }

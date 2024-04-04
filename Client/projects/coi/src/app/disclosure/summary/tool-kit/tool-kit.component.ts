@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { CommonService } from '../../../common/services/common.service';
@@ -47,6 +47,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         this.getProjectRelationshipList();
         this.getToolkitVisibility();
         this.activeNav = 'COI801';
+        this.listenScreenSize();
     }
 
     getProjectRelationshipList() {
@@ -128,6 +129,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
             this.isRelationshipCollapse = !this.isRelationshipCollapse;
         }
         this.openCollapsedSection(section);
+        this.listenScreenSize();
         this.windowScroll(section);
     }
 
@@ -150,5 +152,19 @@ export class ToolKitComponent implements OnInit, OnDestroy {
 
     private openCollapsedSection(section) {
         this._coiService.$isExpandSection.next({ section: section, isExpand: true });
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        setTimeout(() => {
+            const WINDOW_HEIGHT = window.innerHeight;
+            const HEADER_HEIGHT = document.getElementById('COI-DISCLOSURE-HEADER')?.offsetHeight || 0;
+            const TOOL_KIT_HEIGHT = WINDOW_HEIGHT - (HEADER_HEIGHT + 60);
+            document.getElementById('disclosure-toolkit').style.maxHeight = TOOL_KIT_HEIGHT + 'px';
+            if (this.isRelationshipCollapse) {
+                const RELATIONSHIP_HEIGHT = TOOL_KIT_HEIGHT / 4;
+                document.getElementById('relationship-chid-section').style.maxHeight = RELATIONSHIP_HEIGHT + 'px';
+            }
+        });
     }
 }

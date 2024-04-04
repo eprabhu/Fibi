@@ -206,8 +206,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
                 const INFO_CARD_HEIGHT = document.getElementById('info-card')?.offsetHeight || 0;
                 const HEADER_HEIGHT = document.getElementById('relationship-details')?.offsetHeight;
                 const TABLE_HEADER_HEIGHT = document.getElementById('sfi-relationship-table-header')?.offsetHeight;
-                document.getElementById('sfi-relationship-table-header').style.top ='-10px'
-
+                document.getElementById('sfi-relationship-table-header').style.top ='-9px';
                 if(window.innerWidth >= 1200) {
                     document.getElementById('sfi-relationship').style.maxHeight = (window.innerHeight - (INFO_CARD_HEIGHT + HEADER_HEIGHT + TABLE_HEADER_HEIGHT + 60)) + 'px';
                 } else {
