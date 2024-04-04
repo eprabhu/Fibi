@@ -2,7 +2,7 @@
   <div class="row m-0">
     <div class="col-lg-5 py-2">
       <div>
-        <label class="coi-text-dark">Filter By Status :</label>
+        <label class="coi-text-dark" tabindex="0">Filter By Status :</label>
         <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
               title="Click to filter by type: All"

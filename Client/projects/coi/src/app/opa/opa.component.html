@@ -1,4 +1,4 @@
-<div class="row header-sticky">
+<div class="row header-sticky mb-2">
     <div class="col-12">
         <!-- new top card -->
         <div class="card coi-card-expanded">
@@ -70,8 +70,8 @@
                         </div>
                     </div>
                     <div class="card-body" *ngIf="isCardExpanded">
-                        <div class="row">
-                            <div class="col-6 col-xxl-5 pe-xl-0 pe-xxl-0">
+                        <div class="row gap-0">
+                            <div class="col-6 col-xxl-5">
                                 <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                                     <span class="coi-text-darker fs-6 coi-field-set">Details</span>
                                     <div class="row">
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-6 col-xxl-3 pe-xxl-0">
+                            <div class="col-6 col-lg-6 col-xxl-3">
                                 <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                                     <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
                                     <div class="row">
@@ -213,7 +213,7 @@
                                 (click)="updateOpaReview('START')" aria-label="Start Review" role="button"
                                 *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
+                                <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
                                 <span class="mt-1 ms-2"> Start Review </span>
                             </button>
                             <button title="Click to complete review" id="opa_complete_reviewer_review_btn"
@@ -451,7 +451,7 @@
 <!--opa submit confirmation modal-->
 <div class="modal fade mySkinDialog" tabindex="-1" id="opa-submit-confirm-modal" tabindex="-1" role="dialog" data-backdrop="static"
     data-keyboard="false" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" id="opa-submit-confirmation-header">
                 <h4 class="fs-16"><strong> OPA Disclosure </strong></h4>

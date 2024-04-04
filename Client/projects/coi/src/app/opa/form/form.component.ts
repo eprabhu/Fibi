@@ -29,6 +29,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.getDataFromStore();
         this.listenToDataChange();
+        window.scrollTo(0,0);
         this._route.queryParamMap.subscribe(queryParams => {
             this.formBuilderId = queryParams.get('formBuilderId');
             if (this.formBuilderId) {

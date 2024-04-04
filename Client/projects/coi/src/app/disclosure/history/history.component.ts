@@ -32,6 +32,7 @@ export class HistoryComponent implements OnInit {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        window.scrollTo(0,0);
     }
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
