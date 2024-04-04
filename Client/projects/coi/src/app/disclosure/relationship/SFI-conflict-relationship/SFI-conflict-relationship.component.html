@@ -22,9 +22,12 @@
       <tbody>
         <tr *ngFor="let test of entityProjectDetails; let i = index" [id]="test.disclosureDetailsId">
           <td [attr.aria-label]="test?.coiEntity?.entityName" [id]="'sfi_name_'+test?.disclosureDetailsId" class="pt-2">
-              {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' :
-              test?.coiEntity?.entityName}}
-            <span *ngIf="isShowWarning(test)" class="text-danger">*</span>
+                <span class="me-1"> {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' :
+                    test?.coiEntity?.entityName}}</span>
+                <span *ngIf="isShowWarning(test)" class="fs-12 sfi-info-text px-2 rounded-5 rounded-pill"
+                title="Modified">
+                Modified
+                </span>
           </td>
           <td>
             <select [(ngModel)]="test.projectConflictStatusCode" class="form-select form-control"
