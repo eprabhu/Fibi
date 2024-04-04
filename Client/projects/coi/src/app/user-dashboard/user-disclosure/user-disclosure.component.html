@@ -262,10 +262,10 @@
                                             <div class="ms-auto">
                                                 <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
                                                 [queryParams]={disclosureId:disclosure.disclosureId}
-                                    [routerLink]="['/coi/disclosure/summary']" tabindex="0"
-                                    aria-label="Click to view FCOI Disclosure details"
-                                    [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                    area-describedby="Click to view FCOI Disclosure details">
+                                                [routerLink]="['/coi/disclosure/summary']" tabindex="0"
+                                                aria-label="Click to view FCOI Disclosure details"
+                                                [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                                area-describedby="Click to view FCOI Disclosure details">
                                                     <mat-icon class="hyper-link me-1">visibility</mat-icon>
                                                     <span class="hyper-link fs-14">View</span>
                                                 </a>
@@ -490,15 +490,15 @@
                                     <div class="d-flex flex-stack mt-auto bd-highlight">
                                         <div class="ms-auto">
                                             <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
-                                [queryParams]={disclosureId:opaDisclosure.opaDisclosureId}
-                                [routerLink]="['/coi/opa/form']" tabindex="0"
-                                aria-label="Click to view OPA Disclosure details"
-                                [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                area-describedby="Click to view OPA Disclosure details"
-                                title="Click to view OPA Disclosure details">
-                                <mat-icon class="hyper-link me-1">visibility</mat-icon>
+                                                [queryParams]={disclosureId:opaDisclosure.opaDisclosureId}
+                                                [routerLink]="['/coi/opa/form']" tabindex="0"
+                                                aria-label="Click to view OPA Disclosure details" role="button"
+                                                [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                                area-describedby="Click to view OPA Disclosure details"
+                                                title="Click to view OPA Disclosure details">
+                                            <mat-icon class="hyper-link me-1">visibility</mat-icon>
                                                 <span class="hyper-link fs-14">View</span>
-                            </a>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -614,9 +614,10 @@
 
                                     <div class="d-flex flex-stack mt-auto bd-highlight">
                                         <div class="ms-auto">
-                                            <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
+                                            <a class="align-items-center btn btn-sm btn-primary d-inline-flex" tabindex="0"
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
-                                                title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details">
+                                                title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details" 
+                                                aria-label="Click to view OPA Disclosure details" role="button">
                                                 <mat-icon class="hyper-link me-1">visibility</mat-icon>
                                                 <span class="hyper-link fs-14">View</span>
                                             </a>
@@ -661,7 +662,7 @@
         [attr.title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click to view Disclosure History'"
         aria-describedby="Click to view Disclosure History" tabindex="0">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="py-2"
-        [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Selected tab is Disclosure History with ' + (dashboardCount?.disclosureHistoryCount || 0) + ' disclosures' : 'Disclosure History with ' + (dashboardCount?.disclosureHistoryCount || 0) + ' disclosures'">
+        [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Selected tab is Disclosure History' : 'Disclosure History'">
         <span class="disclosure-text"></span> History</span>
     </div>
 </nav>
@@ -671,7 +672,7 @@
         <div class="col-lg-5 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
             <div class="fs-14 d-inline-block"
                  [@leftSlideInOut]>
-                <label class="coi-text-dark">Filter By Type :</label>
+                <label class="coi-text-dark" tabindex="0">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
                     tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
@@ -1029,7 +1030,7 @@
                                     </div>
                                     <div class="col-lg-3 col-md-6 mb-2">
                                         <!-- Travel Card Certification Date -->
-                                        <div tabindex="0" [attr.aria-label]="'Certification Date' + (disclosure?.travelSubmissionDate)">
+                                        <div tabindex="0" [attr.aria-label]="'Certification Date' + (disclosure?.travelSubmissionDate | dateFormatter)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.travelSubmissionDate">
@@ -1051,7 +1052,7 @@
                                     </div>
                                     <div class="col-lg-3 col-md-6 mb-2">
                                         <!-- Travel Card Expiration Date -->
-                                        <div tabindex="0" [attr.aria-label]="'Expiration Date' + (disclosure.expirationDate)">
+                                        <div tabindex="0" [attr.aria-label]="'Expiration Date' + (disclosure.expirationDate | dateFormatter)">
                                             <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
                                             <span>
                                                 <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
@@ -1067,7 +1068,7 @@
                                 <!-- Travel Card Disclosure Status -->
                                 <div tabindex="0" *ngIf="!disclosure?.opaDisclosureId"
                                     class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Disclosure Status' + (disclosure.conflictStatus)">
+                                    [attr.aria-label]="'Disclosure Status' + (disclosure?.travelDisclosureStatusDescription)">
                                     <label for="status" class="d-block coi-text-lighter">Disclosure Status</label>
                                     <span>
                                         <app-no-data-label [valueToShow]="disclosure?.conflictStatus"
@@ -1094,7 +1095,7 @@
                                 </div>
                                 <!-- Travel Card Document Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Document Status' + (disclosure.documentStatusDescription)">
+                                    [attr.aria-label]="'Document Status' + (disclosure?.documentStatusDescription)">
                                     <label for="review-status" class="d-block coi-text-lighter">Document Status</label>
                                     <span>
                                         <app-no-data-label id="review-status"
@@ -1110,7 +1111,7 @@
                                 </div>
                                 <!-- Travel Card Review Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
+                                    [attr.aria-label]="'Review Status' + (disclosure?.reviewDescription)">
                                     <label for="id" class="d-block coi-text-lighter">Review Status</label>
                                     <span>
                                         <app-no-data-label id="review-status"
@@ -1267,7 +1268,7 @@
                                                 Financial Interest</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-lg-2">
+                                    <div class="col-md-3 col-lg-2" tabindex="{{disclosure?.fcoiTypeCode == '1' ? 0 : -1}}">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
@@ -1280,7 +1281,7 @@
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-lg-2">
+                                    <div class="col-md-3 col-lg-2" tabindex="{{disclosure?.fcoiTypeCode == '1' ? 0 : -1}}">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
                                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "

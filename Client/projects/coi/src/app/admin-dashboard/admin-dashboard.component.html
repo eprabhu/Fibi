@@ -18,70 +18,63 @@
                                             title="Click for more pages"></i>
                     </button>
                     <ul class="m-0 p-0 menu-responsive fit-content tabs-collapsed collapse" id="navbarResponsive" aria-label="" tabindex="0">
-                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('ALL_DISCLOSURES')"
+                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('ALL_DISCLOSURES')" tabindex="0"
                             (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
                             class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view All Disclosures"
                             [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'All Disclosures' : 'Click to view All Disclosures'"
-                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'All Disclosures'" >
+                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'All Disclosures'" >
                             All Disclosures
                         </li>
                         <li class="separator" *ngIf="isShowAdminDashboard" ></li>
-                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS')"
+                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0"
                             (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
                             class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view the list of all newly submitted disclosures"
                             [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'New Submissions ' : 'Click to view New Submissions'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'Selected tab is New Submissions ' : 'New Submissions'">
                             New Submissions
                         </li>
                         <li class="separator" *ngIf="isShowAdminDashboard" ></li>
-                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
+                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')" tabindex="0"
                             (keyup.enter)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                             (keyup.space)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'"
                             class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view the list of all newly submitted disclosures"
                             [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'New Submission - No SFI' : 'Click to view New Submission - No SFI'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'Selected tab is New Submission - No SFI ' : 'New Submission - No SFI'">
                             New Submissions - No SFI
                         </li>
                         <li class="separator" *ngIf="isShowAdminDashboard" ></li>
-                        <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
+                        <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabindex="0"
                             (keyup.space)="changeTab('MY_REVIEWS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
                             class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view the list of all disclosures under my review"
                             [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'My Reviews' : 'Click to view My Reviews'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'My Reviews'">
                             My Reviews
                         </li>
                         <li class="separator"></li>
-                        <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
+                        <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabindex="0"
                             (keyup.space)="changeTab('ALL_REVIEWS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
                             class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view the list of all disclosures under all reviews"
                             [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'All Reviews' : 'Click to view All Reviews'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'All Reviews'">
                             All Reviews
                         </li>
                         <li class="separator" *ngIf="isShowAdminDashboard" ></li>
-                        <li *ngIf="hasTravelDisclosureRights" (click)="changeTab('TRAVEL_DISCLOSURES')"
+                        <li *ngIf="hasTravelDisclosureRights" (click)="changeTab('TRAVEL_DISCLOSURES')" tabindex="0"
                             (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
-                            class="p-3 fs-6 align-self-center" title="Click to view Travel Disclosures"
-                             aria-label="Travel Disclosures"
-                            aria-label="Click to view Travel Disclosures"
+                            class="p-3 fs-6 align-self-center"
                             [attr.title]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Travel Disclosures'">
                             Travel Disclosures
                         </li>
                     </ul>
-                    <div class="mx-1 py-2 d-inline-flex align-items-center pe-2" tabindex="0">
-                        <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0"
+                    <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
+                        <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0" tabindex="0"
                             id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
                             (click)="toggleAdvanceSearch();" aria-label="Toggle Advanced Search"
                             title="Click here to expand / collapse Advanced Search fields"
@@ -183,7 +176,7 @@
                     <!-- Review Status -->
                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Review Status" tabindex="0"
                          role="listbox"
-                         aria-label="Review dropdown">
+                         aria-label="Review Status dropdown">
                         <label class="d-block" for="adv-review-status">
                             <ng-container>Review Status</ng-container>
                         </label>
@@ -316,8 +309,8 @@
                          [class.position-sticky]="selectedItemCount()"
                         *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS_WITHOUT_SFI'">
                     <div class="d-flex align-items-center ms-2">
-                        <input type="checkbox" id="select-all" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()">
-                        <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer">Select all <span *ngIf="selectedItemCount()"
+                        <input type="checkbox" id="select-all" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()" tabindex="0">
+                        <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer" tabindex="0">Select all <span *ngIf="selectedItemCount()"
                                                                                                                   class="fs-14 py-2 ms-2 fw-medium"
                                                                                                                   title="{{selectedItemCount()}}">
                             ({{selectedItemCount()}} Selected)
@@ -755,10 +748,9 @@
                                             <div class="col-md-6 col-lg-4" tabindex="{{coi?.opaDisclosureId ? -1 : 0}}">
                                                 <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId"
                                                      [ngClass]="coi?.noOfSfiInActive > 0 ? 'cursor-pointer' : '' "
-                                                     [attr.title]="coi?.noOfSfiInActive > 0 ? 'Click to view SFI list' : '' " aria-label="Click to view SFI list">
+                                                     [attr.title]="coi?.noOfSfiInActive > 0 ? 'Click to view SFI list' : '' ">
                                             <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfiInActive"
                                                   [attr.title]="coi?.noOfSfiInActive > 0 ? 'Click to view SFI list' : '' "
-                                                  aria-label="Click to view SFI list"
                                                   (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);">{{coi?.noOfSfiInActive
                                             || 0}}</span>
                                                     <span class="coi-text-light fw-500" [ngClass]="coi?.noOfSfiInActive > 0 ? 'cursor-pointer' : '' "
@@ -767,13 +759,11 @@
                                                 Financial Interest</span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-lg-2">
+                                            <div class="col-md-3 col-lg-2" tabindex="{{coi?.fcoiTypeCode == '1' ? 0 : -1}}">
                                                 <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'"
                                                      [ngClass]="coi?.noOfProposalInActive > 0 ? 'cursor-pointer' : '' "
-                                                     [attr.title]="coi?.noOfProposalInActive > 0 ? 'Click to view Proposal list' : '' "
-                                                     aria-label="Click to view Proposal list">
+                                                     [attr.title]="coi?.noOfProposalInActive > 0 ? 'Click to view Proposal list' : '' ">
                                             <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [attr.title]="coi?.noOfProposalInActive > 0 ? 'Click to view Proposal list' : '' "
-                                                  aria-label="Click to view Proposal list"
                                                   (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);">{{coi?.noOfProposalInActive}}</span>
                                                     <span class="coi-text-light fw-500" [ngClass]="coi?.noOfProposalInActive > 0 ? 'cursor-pointer' : '' "
                                                           [class.text-decoration-underline]="isHover[index] && coi.noOfProposalInActive > 0"
@@ -781,11 +771,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 col-lg-2">
+                                            <div class="col-md-3 col-lg-2" tabindex="{{coi?.fcoiTypeCode == '1' ? 0 : -1}}">
                                                 <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'"
                                                      [ngClass]="coi?.noOfAwardInActive > 0 ? 'cursor-pointer' : '' "
-                                                     [attr.title]="coi?.noOfAwardInActive > 0 ? 'Click to view Award list' : '' "
-                                                     aria-label="Click to view Award list">
+                                                     [attr.title]="coi?.noOfAwardInActive > 0 ? 'Click to view Award list' : '' ">
                                                     <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);">{{coi?.noOfAwardInActive}}</span>
                                                     <span class="coi-text-light fw-500" [ngClass]="coi?.noOfAwardInActive > 0 ? 'cursor-pointer' : '' "
                                                           [class.text-decoration-underline]="isHover[index] && coi.noOfAwardInActive > 0"
@@ -807,7 +796,7 @@
                                     <div class="col-lg-10">
                                         <div class="row">
                                             <div class="col-md-3 text-center text-lg-start">
-                                                <div class="align-items-center flex-column fs-14 link-heading">
+                                                <div class="align-items-center flex-column fs-14 link-heading" tabindex="0">
                                                     <div [attr.aria-label]="'Purpose' + (coi?.travelPurpose)">
                                                         <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                         <span>
@@ -820,7 +809,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3 text-center text-lg-start">
-                                                <div class="align-items-center flex-column fs-14 link-heading">
+                                                <div class="align-items-center flex-column fs-14 link-heading" tabindex="0">
                                                     <div
                                                         [attr.aria-label]="'Start Date' + (coi.travelStartDate | dateFormatterWithTimeZone)">
                                                         <label for="start-date" class="coi-text-dark d-block">Start Date</label>
@@ -834,7 +823,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3 text-center text-lg-start">
-                                                <div class="align-items-center flex-column fs-14 link-heading">
+                                                <div class="align-items-center flex-column fs-14 link-heading" tabindex="0">
                                                     <div [attr.aria-label]="'End Date' + (coi?.travelEndDate | dateFormatterWithTimeZone)">
                                                         <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                         <span>

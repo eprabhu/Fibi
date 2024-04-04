@@ -53,7 +53,7 @@
                                 <td> <app-no-data-label [valueToShow]="item?.involvementStartDate"><span>{{ item?.involvementStartDate |dateFormatter }}</span></app-no-data-label></td>
                                 <td> <app-no-data-label [valueToShow]="item?.involvementEndDate"><span>{{ item?.involvementEndDate |dateFormatter }}</span></app-no-data-label>
                                     <td><button class="align-items-center btn-primary-icon d-flex fs-16 m-0 py-1 px-2 action-icons"
-                                        title="View SFI" aria-label="Edit Organization"
+                                        title="View SFI" aria-label="Click to view SFI details"
                                         (click)="viewSliderEmit(true, item?.personEntityId)">
                                         <mat-icon>visibility</mat-icon>
                                     </button>
@@ -128,13 +128,13 @@
                                     </app-no-data-label>
                                 </td>
                                 <td *ngIf="currentModalTab == 'Proposal'">
-                                    <button class="btn-primary-icon p-1 action-icons" aria-label="Edit Organization"
+                                    <button class="btn-primary-icon p-1 action-icons" aria-label="Click to view proposal details"
                                         (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId)">
                                         <mat-icon>visibility</mat-icon>
                                     </button>
                                 </td>
                                 <td *ngIf="currentModalTab == 'Award'">
-                                    <button class="btn-primary-icon p-1 action-icons" aria-label="Edit Organization"
+                                    <button class="btn-primary-icon p-1 action-icons" aria-label="Click to view award details"
                                         (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);">
                                         <mat-icon>visibility</mat-icon>
                                     </button>
