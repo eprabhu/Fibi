@@ -1,6 +1,6 @@
-<div class="advance-search coi-search-box" *ngIf="!isHideFilterSearchAndShowCreate">
+<div class="advance-search coi-search-box sticky-top-51 sticky-top" *ngIf="!isHideFilterSearchAndShowCreate">
   <div class="row m-0">
-    <div class="col-lg-5 py-2">
+    <div class="col-lg-auto py-2">
       <div>
         <label class="coi-text-dark" tabindex="0">Filter By Status :</label>
         <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0"
@@ -22,7 +22,7 @@
               class="filter-pills coi-text-light" role="button">Inactive</span>
     </div>
   </div>
-    <div class="col-lg-7 py-2 border-start d-flex align-items-center filter-s-outer search-area position-relative">
+    <div class="col-lg py-2 border-start d-flex align-items-center filter-s-outer search-area position-relative">
     <span class="filter-search">
         <mat-icon class="fs-25px searchButton">search</mat-icon>
         <input class="form-control pe-5" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
