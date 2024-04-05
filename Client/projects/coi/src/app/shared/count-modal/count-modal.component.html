@@ -30,7 +30,8 @@
                                             *ngIf="!isEntityNameRead && item?.coiEntity?.entityName?.length > 50; else showFullInfo">
                                             <span class="mt-2">{{(item?.coiEntity?.entityName |
                                                 slice:0:50)}}</span>
-                                            <span (click)="isEntityNameRead = !isEntityNameRead"
+                                            <span (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead"
+                                              tabindex="0" role="link" aria-label="Click here to read more" title="Click here to read more"
                                                 class="link-primary"><span class="fw-medium">... <u>Read
                                                         More</u>
                                                     <i aria-hidden="true"></i></span>
@@ -39,9 +40,8 @@
                                         <ng-template #showFullInfo>
                                             <span
                                                 class="word-break-all new-line-property">{{item?.coiEntity?.entityName}}</span>
-                                            <span class="link-primary mt-2 fw-medium"
-                                                *ngIf="item?.coiEntity?.entityName?.length > 50"
-                                                (click)="isEntityNameRead = !isEntityNameRead" aria-hidden="true">
+                                            <span *ngIf="item?.coiEntity?.entityName?.length > 50" class="link-primary mt-2 fw-medium" tabindex="0" role="link" aria-label="Click here to read less"
+                                                title="Click here to read less" (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead">
                                                 <span class="fw-medium"><u> Read Less</u>
                                                     <i aria-hidden="true"></i></span>
                                             </span>
@@ -76,16 +76,18 @@
                 </div>
             </div>
             <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
-                <nav class="d-flex fw-bold shadow-sm rounded mt-1 mb-2">
-                    <div class="text-secondary cursor-pointer d-flex tab-hover border-end">
-                        <span title="Click to view Proposals" class="r-title px-2 py-2 fw-500" (click)='currentModalTab="Proposal"; switchTableData()'
-                            [class.active]="currentModalTab == 'Proposal'">
+                <nav class="d-flex fw-bold border-bottom mt-1 mb-2 nav nav-underline">
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Proposals" 
+                         aria-label="Click to view Proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
+                         (click)='currentModalTab="Proposal"; switchTableData()' (keydown.enter)="currentModalTab='Proposal';switchTableData()">
+                        <span  class="px-2 fw-500">
                             {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}
                         </span>
                     </div>
-                    <div class="text-secondary cursor-pointer d-flex tab-hover" (click)='currentModalTab = "Award"; switchTableData()'>
-                        <span title="Click to view Awards" class="r-title px-2 py-2 fw-500"
-                            [class.active]="currentModalTab == 'Award'">
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()' 
+                        (keydown.enter)="currentModalTab='Award';switchTableData()"
+                         title="Click to view Awards" aria-label="Click to view Awards" role="button" [class.active]="currentModalTab == 'Award'">
+                        <span class="px-2 fw-500">
                             {{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
                             'Awards'}}
                         </span>
@@ -109,13 +111,16 @@
                                 <td>#{{name?.moduleItemId}}:
                                     <span *ngIf="!isReadMore[index] && name?.title?.length > 50; else showFullInfo">
                                         <span class="word-break-all new-line-property">{{(name?.title | slice:0:50)}}</span>
-                                        <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium link-primary">... <u>Read more</u></span>
+                                        <span tabindex="0" role="link" aria-label="Click here to read more" title="Click here to read more"
+                                          (keydown.enter)="isReadMore[index] = !isReadMore[index]"
+                                          (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium link-primary">... <u>Read more</u></span>
                                     </span>
                                     <ng-template #showFullInfo>
                                         <span class="word-break-all new-line-property">{{name?.title}}</span>
-                                        <span *ngIf="name?.title?.length > 50"
-                                              (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true"
-                                              class="link-primary fw-medium ms-1"><u>Read Less</u>
+                                        <span *ngIf="name?.title?.length > 50" tabindex="0" role="link" aria-label="Click here to read less"
+                                            title="Click here to read less" (click)="isReadMore[index] = !isReadMore[index]"
+                                             (keydown.enter)="isReadMore[index] = !isReadMore[index]"
+                                            class="link-primary fw-medium ms-1"><u>Read Less</u>
                                         </span>
                                     </ng-template></td>
                                 <td>{{name?.principalInvestigator}}</td>
