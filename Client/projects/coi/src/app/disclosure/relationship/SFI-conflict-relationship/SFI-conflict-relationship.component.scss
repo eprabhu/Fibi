@@ -263,13 +263,4 @@
 
 .table-responsive {
     overflow: auto !important;
-    &::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        width: 6px;
-        height: 6px;
-      }
 }

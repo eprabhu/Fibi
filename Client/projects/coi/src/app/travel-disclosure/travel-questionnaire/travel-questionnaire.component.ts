@@ -38,7 +38,9 @@ export class TravelQuestionnaireComponent {
     };
 
     constructor(private _commonService: CommonService,
-                private _service: TravelDisclosureService) { }
+                private _service: TravelDisclosureService) {
+                    window.scrollTo(0, 0);
+                }
 
     getSaveEvent(_event: any): void {
         this._service.travelDataChanged = false;

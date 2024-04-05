@@ -616,7 +616,7 @@
                                         <div class="ms-auto">
                                             <a class="align-items-center btn btn-sm btn-primary d-inline-flex" tabindex="0"
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
-                                                title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details" 
+                                                title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details"
                                                 aria-label="Click to view OPA Disclosure details" role="button">
                                                 <mat-icon class="hyper-link me-1">visibility</mat-icon>
                                                 <span class="hyper-link fs-14">View</span>
@@ -633,8 +633,9 @@
         </ng-container>
     </ng-container>
 </div>
-<!-- Dashboard tabs and counts -->
-<nav class="coi-nav-tab d-flex align-items-center fs-14 fw-bold mt-3 user-dashboard-nav d-inline-block" *ngIf="!isShowCreate">
+<div class="nav-filter-card-sticky">
+    <!-- Dashboard tabs and counts -->
+<nav class="coi-nav-tab d-flex align-items-center fs-14 fw-bold mt-3 user-dashboard-nav d-inline-block overflow-hide-nav" *ngIf="!isShowCreate">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
         aria-describedby="Click to view In Progress Disclosures"
         [attr.title]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'In Progress Disclosures' : 'Click to view In Progress Disclosures'"
@@ -667,9 +668,9 @@
     </div>
 </nav>
 <!-- Search and filter -->
-<div class="advance-search coi-search-box mt-2" *ngIf="isShowFilterAndSearch">
+<div class="advance-search coi-search-box mt-2 overflow-hide-nav" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
-        <div class="col-lg-5 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
+        <div class="col-lg-auto p-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
             <div class="fs-14 d-inline-block"
                  [@leftSlideInOut]>
                 <label class="coi-text-dark" tabindex="0">Filter By Type :</label>
@@ -703,7 +704,7 @@
                     class="filter-pills coi-text-light" role="button">OPA</span>
             </div>
         </div>
-        <div class="col-lg-7 border-start d-flex align-items-center filter-s-outer search-area position-relative py-2"
+        <div class="col-lg border-start d-flex align-items-center filter-s-outer search-area position-relative p-2"
             *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
             [ngClass]="currentSelected.tab == 'TRAVEL_DISCLOSURES' ? 'col-lg-12' : ''">
             <span class="filter-search">
@@ -714,6 +715,7 @@
             <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
         </div>
     </div>
+</div>
 </div>
 <!-- Dashboard Cards -->
 <ng-container *ngIf="!isLoading">
@@ -1290,14 +1292,14 @@
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                                 [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
                                                 (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div class="col-md-12 col-lg-4" tabindex="0">
                                         <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                             [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
                                                                                                 (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
-                                            {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                            {{disclosure?.updateUserFullName}} <span class="coi-text-lighter fs-13 fw-medium"> On </span> {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                                     </div>
                                 </div>
                             </div>
