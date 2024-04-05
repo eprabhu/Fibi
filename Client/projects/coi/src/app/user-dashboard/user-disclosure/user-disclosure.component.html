@@ -616,7 +616,7 @@
                                         <div class="ms-auto">
                                             <a class="align-items-center btn btn-sm btn-primary d-inline-flex" tabindex="0"
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
-                                                title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details" 
+                                                title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details"
                                                 aria-label="Click to view OPA Disclosure details" role="button">
                                                 <mat-icon class="hyper-link me-1">visibility</mat-icon>
                                                 <span class="hyper-link fs-14">View</span>
@@ -1290,14 +1290,14 @@
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                                 [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
                                                 (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div class="col-md-12 col-lg-4" tabindex="0">
                                         <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                             [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
                                                                                                 (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
-                                            {{disclosure?.updateUserFullName}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                            {{disclosure?.updateUserFullName}} <span class="coi-text-lighter fs-13 fw-medium"> On </span> {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                                     </div>
                                 </div>
                             </div>

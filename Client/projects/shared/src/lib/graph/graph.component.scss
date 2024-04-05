@@ -96,7 +96,7 @@
 .interests_title {
   color: #222222;
   margin-bottom: 5px;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .interests_item {
@@ -171,4 +171,22 @@
 .image-container {
   width: 19px;
   height: 19px
+}
+
+.info-btn {
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+}
+
+.btn-outline-grey {
+    color: #48647F;
+    border: 1px solid #48647F;
+    background-color: white;
+
+    &:hover {
+        background-color: #007DEC;
+        color: white;
+        border: 1px solid #007DEC;
+    }
 }
