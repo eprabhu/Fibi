@@ -358,13 +358,13 @@
                                                    <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(coi) : modalHeader(coi) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>120">...
-                                                            <a *ngIf="!readMoreOrLess[index]"
-                                                               (click)="readMoreOrLess[index]=true"><span
-                                                                class="readMore fw-500">Read More</span></a>
+                                                            <span *ngIf="!readMoreOrLess[index]"
+                                                                (click)="readMoreOrLess[index]=true"
+                                                                class="link-primary fs-14">Read More</span>
                                                         </span>
-                                                        <a *ngIf="readMoreOrLess[index]"
-                                                           (click)="readMoreOrLess[index]=false"><span
-                                                            class="readMore ms-1 fw-500">Read Less</span></a>
+                                                        <span *ngIf="readMoreOrLess[index]"
+                                                        (click)="readMoreOrLess[index]=false"
+                                                        class="link-primary fs-14 ms-1">Read Less</span>
                                                     </span>
                                                 </span>
                                                 </ng-container>
@@ -377,74 +377,14 @@
                                                    (change)="selectedDisclosures[index] = !selectedDisclosures[index]; checkIfAllDisclosuresSelected()">
                                         </div>
                                         <div class="col row">
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Coi card Department -->
                                                 <div tabindex="0" [attr.aria-label]="'Department' + coi?.unit?.unitDetail">
                                                     <label class="d-block coi-text-dark">Department</label>
                                                     <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(coi?.unit)}}</span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
-                                                <!-- Coi card Description (FCOI)-->
-                                                <div *ngIf="coi?.fcoiTypeCode== 1" tabindex="0"
-                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
-                                                    <label for="id" class="d-block coi-text-dark">Description</label>
-                                                    <span>
-                                                <app-no-data-label [valueToShow]="coi?.reviseComment">
-                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
-                                                        <span class="word-break-all new-line-property mx-2"
-                                                              *ngIf="!isReadMore && coi?.reviseComment?.length > 60; else showFullInfo">
-                                                            <span class="coi-text-light">{{(coi?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span>...<u class="bold">Read
-                                                                        More</u>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </span>
-                                                        <ng-template #showFullInfo>
-                                                            <span
-                                                                class="word-break-all new-line-property coi-text-light">{{coi?.reviseComment}}</span>
-                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 60"
-                                                                  (click)="isReadMore = !isReadMore" aria-hidden="true">
-                                                                <span><u class="bold"> Read Less</u>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </ng-template>
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
-                                                <!-- Coi card Description(Not FCOI) -->
-                                                <div *ngIf="coi?.fcoiTypeCode!= 1" tabindex="0"
-                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
-                                                    <label for="id" class="d-block coi-text-dark">Description</label>
-                                                    <span class="break-point-1200">
-                                                <app-no-data-label [valueToShow]="coi?.reviseComment">
-                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
-                                                        <span class="word-break-all new-line-property mx-2"
-                                                              *ngIf="!isReadMore && coi?.reviseComment?.length > 60; else showFullInfo">
-                                                            <span class="coi-text-light">{{(coi?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span>...
-                                                                    <u class="bold">Read More</u>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </span>
-                                                        <ng-template #showFullInfo>
-                                                            <span
-                                                                class="word-break-all new-line-property coi-text-light">{{coi?.reviseComment}}</span>
-                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 60"
-                                                                  (click)="isReadMore = !isReadMore" aria-hidden="true">
-                                                                <span><u class="bold"> Read Less</u>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </ng-template>
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Coi card Certification Date -->
                                                 <div tabindex="0" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
                                                     <label class="d-block coi-text-dark">Certification Date</label>
@@ -455,18 +395,7 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
-                                                <!-- Coi card Administrator -->
-                                                <div tabindex="0" [attr.aria-label]="'Administrator' + (coi?.administrator)">
-                                                    <label for="id" class="d-block coi-text-dark">Administrator</label>
-                                                    <span class="coi-text-light">
-                                                <app-no-data-label [valueToShow]="coi?.administrator">
-                                                    <span id="id" class="coi-text-light">{{coi?.administrator}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Coi card Expiration Date -->
                                                 <div tabindex="0">
                                                     <label class="d-block coi-text-dark">Expiration Date</label>
@@ -477,7 +406,78 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2" *ngIf="coi?.fcoiTypeCode== 1" >
+                                                <!-- Coi card Description (FCOI)-->
+                                                <div tabindex="0"
+                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
+                                                    <label for="id" class="d-block coi-text-dark">Description</label>
+                                                    <span>
+                                                <app-no-data-label [valueToShow]="coi?.reviseComment">
+                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
+                                                        <span class="word-break-all new-line-property"
+                                                              *ngIf="!isReadMore && coi?.reviseComment?.length > 60; else showFullInfo">
+                                                            <span class="coi-text-light">{{(coi?.reviseComment | slice:0:60)}}</span>
+                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span>...<span class="link-primary fs-14">Read
+                                                                        More</span>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </span>
+                                                        <ng-template #showFullInfo>
+                                                            <span
+                                                                class="word-break-all new-line-property coi-text-light">{{coi?.reviseComment}}</span>
+                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 60"
+                                                                  (click)="isReadMore = !isReadMore" aria-hidden="true">
+                                                                <span><span class="link-primary fs-14"> Read Less</span>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </ng-template>
+                                                    </span>
+                                                </app-no-data-label>
+                                            </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 mb-2" *ngIf="coi?.fcoiTypeCode!= 1">
+                                                <!-- Coi card Description(Not FCOI) -->
+                                                <div tabindex="0"
+                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
+                                                    <label for="id" class="d-block coi-text-dark">Description</label>
+                                                    <span class="break-point-1200">
+                                                <app-no-data-label [valueToShow]="coi?.reviseComment">
+                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
+                                                        <span class="word-break-all new-line-property"
+                                                              *ngIf="!isReadMore && coi?.reviseComment?.length > 60; else showFullInfo">
+                                                            <span class="coi-text-light">{{(coi?.reviseComment | slice:0:60)}}</span>
+                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span>...
+                                                                    <span class="link-primary fs-14">Read More</span>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </span>
+                                                        <ng-template #showFullInfo>
+                                                            <span
+                                                                class="word-break-all new-line-property coi-text-light">{{coi?.reviseComment}}</span>
+                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 60"
+                                                                  (click)="isReadMore = !isReadMore" aria-hidden="true">
+                                                                <span><span class="link-primary fs-14"> Read Less</span>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </ng-template>
+                                                    </span>
+                                                </app-no-data-label>
+                                            </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 mb-2">
+                                                <!-- Coi card Administrator -->
+                                                <div tabindex="0" [attr.aria-label]="'Administrator' + (coi?.administrator)">
+                                                    <label for="id" class="d-block coi-text-dark">Administrator</label>
+                                                    <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="coi?.administrator">
+                                                    <span id="id" class="coi-text-light">{{coi?.administrator}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Coi card Admin Group -->
                                                 <div tabindex="0" [attr.aria-label]="'Admin Group' + (coi?.adminGroupName)">
                                                     <label for="id" class="d-block coi-text-dark">Admin Group</label>
@@ -487,6 +487,21 @@
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-12 col-6" tabindex="0"
+                                            [attr.aria-label]="Reviewers">
+                                                <!-- Coi Reviewers -->
+                                                <label class="d-block coi-text-dark">Reviewers</label>
+                                                <span class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coi?.reviewerList">
+                                                    <ng-container *ngFor="let reviewer of coi?.reviewerList; let isLast = last">
+                                                        <span class="fileChips regularFont">{{reviewer[0]}}
+                                                            <ng-container *ngIf="reviewer[1] != 'null'">| {{reviewer[1]}} </ng-container> |
+                                                            <span class="reviewer-{{getReviewerStatus(reviewer[3])}}">{{reviewer[2]}}</span>
+                                                        </span>
+                                                    </ng-container>
+                                                    </app-no-data-label>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -582,13 +597,13 @@
                                                         {{(readMoreOrLess[index] ? coi.travelEntityName : coi.travelEntityName | slice:0:120)}}
                                                         <span
                                                             *ngIf="!readMoreOrLess[index] && coi.travelEntityName?.length>120">...
-                                                            <a *ngIf="!readMoreOrLess[index]"
-                                                               (click)="readMoreOrLess[index]=true"><span
-                                                                class="readMore fw-500">Read More</span></a>
+                                                            <span *ngIf="!readMoreOrLess[index]"
+                                                            (click)="readMoreOrLess[index]=true"
+                                                                class="link-primary fs-14">Read More</span>
                                                         </span>
-                                                        <a *ngIf="readMoreOrLess[index]"
-                                                           (click)="readMoreOrLess[index]=false"><span
-                                                            class="readMore ms-1 fw-500">Read Less</span></a>
+                                                        <span *ngIf="readMoreOrLess[index]"
+                                                        (click)="readMoreOrLess[index]=false"
+                                                            class="link-primary ms-1 fs-14">Read Less</span>
                                                         </span>
                                                     </span>
                                                 </ng-container>
@@ -596,31 +611,19 @@
                                             </div>
                                         </div>
                                         <div class="row mx-0">
-                                            <div class="col-lg-3 col-md-6 mb-2">
-                                                <!-- Travel Card Department -->
-                                                <div tabindex="0" [attr.aria-label]="'Department Name' + (coi?.unitDetails?.unitDetail)">
-                                                    <label for="department-id" class="d-block coi-text-dark">Department</label>
-                                                    <span [attr.aria-label]="coi?.unitDetails?.unitDetail">
-                                                <app-no-data-label id="department-id" class="" [valueToShow]="coi?.travelEntityName">
-                                                    <span class="coi-text-light"
-                                                          [title]="coi?.unitDetails?.unitDetail">{{commonService.getPersonLeadUnitDetails(coi?.unitDetails)}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
+                                            <div class="col-lg-4 col-md-6 mb-2">
+                                            <!-- Travel Card Traveller -->
+                                            <div tabindex="0" [attr.aria-label]="'Traveller Type' + formatTravellerTypes(coi?.travellerTypeDescription)">
+                                                <label for="traveller" class="d-block coi-text-dark">Traveller</label>
+                                                <span>
+                                                    <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
+                                                        <span class="coi-text-light">{{formatTravellerTypes(coi?.travellerTypeDescription)}}</span>
+                                                    </app-no-data-label>
+                                                </span>
                                             </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
-                                                <!-- Travel Card Traveller -->
-                                                <div tabindex="0" [attr.aria-label]="'Traveller Type' + formatTravellerTypes(coi?.travellerTypeDescription)">
-                                                    <label for="traveller" class="d-block coi-text-dark">Traveller</label>
-                                                    <span>
-                                                <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
-                                                    <span class="coi-text-light">{{formatTravellerTypes(coi?.travellerTypeDescription)}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
                                             </div>
                                             <!-- Travel Card Destination -->
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <div *ngIf="coi?.fcoiTypeCode!= 1" tabindex="0"
                                                      [attr.aria-label]="'Destination' + (coi?.travelCity || coi?.travelCountry || coi?.travelState)">
                                                     <label for="destination" class="d-block coi-text-dark">Destination</label>
@@ -637,7 +640,30 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <!-- Travel Card Actual Amount -->
+                                            <div class="col-lg-4 col-md-6 mb-2">
+                                                <div tabindex="0" [attr.aria-label]="'Actual Amount' + (coi.travelAmount)">
+                                                    <label for="travel-amount" class="d-block coi-text-dark">Actual Amount</label>
+                                                    <span>
+                                                <app-no-data-label id="travel-amount" [valueToShow]="coi?.travelAmount">
+                                                    <span class="coi-text-light">${{coi?.travelAmount}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 mb-2">
+                                            <!-- Travel Card Department -->
+                                            <div tabindex="0" [attr.aria-label]="'Department Name' + (coi?.unitDetails?.unitDetail)">
+                                                <label for="department-id" class="d-block coi-text-dark">Department</label>
+                                                <span [attr.aria-label]="coi?.unitDetails?.unitDetail">
+                                            <app-no-data-label id="department-id" class="" [valueToShow]="coi?.travelEntityName">
+                                                <span class="coi-text-light"
+                                                        [title]="coi?.unitDetails?.unitDetail">{{commonService.getPersonLeadUnitDetails(coi?.unitDetails)}}</span>
+                                            </app-no-data-label>
+                                            </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Travel Card Certification Date -->
                                                 <div tabindex="0" [attr.aria-label]="'Certification Date' + (coi?.travelSubmissionDate)">
                                                     <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
@@ -648,18 +674,7 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <!-- Travel Card Actual Amount -->
-                                            <div class="col-lg-3 col-md-6 mb-2">
-                                                <div tabindex="0" [attr.aria-label]="'Actual Amount' + (coi.travelAmount)">
-                                                    <label for="travel-amount" class="d-block coi-text-dark">Actual Amount</label>
-                                                    <span>
-                                                <app-no-data-label id="travel-amount" [valueToShow]="coi?.travelAmount">
-                                                    <span class="coi-text-light">${{coi?.travelAmount}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Travel Card Expiration Date -->
                                                 <div tabindex="0" [attr.aria-label]="'Expiration Date' + (coi.expirationDate)">
                                                     <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
@@ -795,7 +810,7 @@
                                 <ng-container *ngIf="coi?.travelDisclosureId">
                                     <div class="col-lg-10">
                                         <div class="row">
-                                            <div class="col-md-3 text-center text-lg-start">
+                                            <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column fs-14 link-heading" tabindex="0">
                                                     <div [attr.aria-label]="'Purpose' + (coi?.travelPurpose)">
                                                         <label for="purpose" class="coi-text-dark d-block">Purpose</label>
@@ -808,7 +823,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 text-center text-lg-start">
+                                            <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column fs-14 link-heading" tabindex="0">
                                                     <div
                                                         [attr.aria-label]="'Start Date' + (coi.travelStartDate | dateFormatterWithTimeZone)">
@@ -822,7 +837,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 text-center text-lg-start">
+                                            <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column fs-14 link-heading" tabindex="0">
                                                     <div [attr.aria-label]="'End Date' + (coi?.travelEndDate | dateFormatterWithTimeZone)">
                                                         <label for="end-date" class="coi-text-dark d-block">End Date</label>
