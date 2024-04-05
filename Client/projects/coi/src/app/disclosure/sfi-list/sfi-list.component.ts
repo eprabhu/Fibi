@@ -18,6 +18,7 @@ export class SfiListComponent implements OnInit {
   ngOnInit() {
     this.listenDataChangeFromStore();
     this.getDataFromStore();
+    window.scrollTo(0, 0);
   }
 
   private listenDataChangeFromStore() {

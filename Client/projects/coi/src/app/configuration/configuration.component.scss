@@ -42,7 +42,7 @@
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: start;
-  align-items: flex-start
+  align-items: center
 }
 
 .media-body {
@@ -52,6 +52,12 @@
 
 .pull-up {
   padding: 0 1rem !important;
+  transition: all .25s ease;
+}
+
+.pull-up:hover {
+  box-shadow: 0 14px 24px #3e396b33;
+  transform: translateY(-4px);
 }
 
 .card-top-outer
@@ -61,7 +67,7 @@
 }
 .card-top-body
 {
-  padding: 1rem;
+  padding: 1rem .7rem;
 }
 
 .line-space {
@@ -69,9 +75,9 @@
 }
 
 .cards-icon1 {
+  height: 40px;
   text-align: center;
   font-size: 2.6rem;
-  margin-top: 1rem;
 }
 
 .w-41 {

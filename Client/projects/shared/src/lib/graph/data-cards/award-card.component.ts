@@ -9,7 +9,7 @@ import { DataService } from '../data.service';
         <div class="mr-15">
             <img class="profile_img" [src]="imagePath" alt="an icon for representing a person">
         </div>
-        <div class="ml-15 mr-8">
+        <div class="ms-2 mr-8">
             <h2 class="heading">{{data.title}}({{data.award_number}})</h2>
             <p class="sub-heading">{{data.pi_name}} (PI)</p>
         </div>
@@ -51,7 +51,7 @@ import { DataService } from '../data.service';
     }
     .heading {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       margin: 3px 0;
       color: #007dec;
     }
