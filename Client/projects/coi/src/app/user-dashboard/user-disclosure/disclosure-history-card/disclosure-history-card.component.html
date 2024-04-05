@@ -23,12 +23,13 @@
                                 <span class="coi-text-darker fs-6 hyper-link ms-1"> {{(readMoreOrLess ?
                                     getProjectTitle(disclosure) :
                                     getProjectTitle(disclosure) | slice:0:150)}}</span>
-                                <span *ngIf="!readMoreOrLess && getProjectTitle(disclosure)?.length>150">...
-                                    <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true"><span class="readMore">Read
+                                <span *ngIf="!readMoreOrLess && getProjectTitle(disclosure)?.length>150">
+                                    <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true" (keydown.enter)="readMoreOrLess=true"
+                                    tabindex="0" role="link" aria-label="Click here read more" title="Click here read more" class="link-primary fw-500"><span>...Read
                                             More</span></a>
                                 </span>
-                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false"><span
-                                        class="readMore ms-1">Read
+                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500" 
+                                tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"><span>Read
                                         Less</span></a>
                             </span>
                         </h4>
@@ -37,8 +38,7 @@
                 <div class="row mx-0">
                     <div class="col-md-6 col-lg-3 mb-2">
                         <div>
-                            <label class="coi-text-dark d-block">Department<span
-                                    class="d-inline d-md-none d-lg-inline">:</span></label>
+                            <label class="coi-text-dark d-block">Department</label>
                             <span class="coi-text-light"
                                 [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
                                 {{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
@@ -46,8 +46,7 @@
                     </div>
                     <div class="col-md-6 col-lg-3 mb-2">
                         <div>
-                            <label class="coi-text-dark d-block">Certification Date<span
-                                    class="d-inline d-md-none d-lg-inline">:</span></label>
+                            <label class="coi-text-dark d-block">Certification Date</label>
                             <span class="break-point-1200">
                                 <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                     <span class="coi-text-light"
@@ -59,8 +58,7 @@
                     </div>
                     <div class="col-md-6 col-lg-3 mb-2">
                         <div>
-                            <label class="coi-text-dark d-block">Expiration Date<span
-                                    class="d-inline d-md-none d-lg-inline">:</span></label>
+                            <label class="coi-text-dark d-block">Expiration Date</label>
                             <span class="break-point-1200">
                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                     <span class="coi-text-light"
@@ -145,7 +143,7 @@
                         <h4 *ngIf="disclosure.travelDisclosureId"
                             class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
                             <span>
-                                <span>Entity : </span>
+                                <span>Entity  </span>
                                 <span [attr.aria-label]="disclosure.entityName"
                                     class="coi-text-darker fs-6 hyper-link ms-1">{{disclosure.entityName}}</span>
                             </span>
@@ -208,8 +206,9 @@
                                         *ngIf="!isPurposeReadMore && disclosure?.purposeOfTheTrip?.length > 55; else showFullInfo">
                                         <span> {{(disclosure?.purposeOfTheTrip |
                                             slice:0:55)}}
-                                            <span (click)="isPurposeReadMore = !isPurposeReadMore"
-                                                class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+                                            <span (click)="isPurposeReadMore = !isPurposeReadMore" (keydown.enter)="isPurposeReadMore = !isPurposeReadMore"
+                                            tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"
+                                                class="link-primary"><span class="fw-500">...Read more</span>
                                             </span>
                                         </span>
                                     </span>
@@ -217,9 +216,10 @@
                                         <span
                                             class="word-break-all d-flex coi-text-light ms-0">{{disclosure?.purposeOfTheTrip}}</span>
                                         <span *ngIf="disclosure?.purposeOfTheTrip?.length > 55"
-                                            (click)="isPurposeReadMore = !isPurposeReadMore" aria-hidden="true"
-                                            class="d-flex hand-cursor"><span
-                                                class="fw-medium fs-14 coi-text-light"><u>Read Less</u></span>
+                                            (click)="isPurposeReadMore = !isPurposeReadMore" (keydown.enter)="isPurposeReadMore = !isPurposeReadMore"
+                                            tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"
+                                            class="d-flex link-primary"><span
+                                                class="fw-500fs-14">Read Less</span>
                                         </span>
                                     </ng-template>
                                 </app-no-data-label>

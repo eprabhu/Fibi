@@ -1,5 +1,5 @@
 <!-- SFI header card -->
-<div class="row mb-3" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
+<div class="row my-3" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="row mx-0">
@@ -216,14 +216,14 @@
 <!-- SFI main navigation tabs -->
   <ul class="nav nav-underline border-bottom">
     <li tabindex="0">
-            <a class="nav-link px-3 py-3" title="Click to view SFI Details" [class.active]="entityDetailsServices.activeTab === 'RELATION_DETAILS'"
+            <a class="nav-link px-3 py-3 border-end" title="Click to view SFI Details" [class.active]="entityDetailsServices.activeTab === 'RELATION_DETAILS'"
             (click)="openRelationShipSection()"
                 [attr.aria-label]="entityDetailsServices.activeTab === 'RELATION_DETAILS' ? 'Selected tab is SFI details' : 'Click to view SFI Details'">
                 SFI Details
             </a>
     </li>
     <li tabindex="0">
-            <a  class="nav-link px-3 py-3" title="Click to view Relationship Details" [class.active]="entityDetailsServices.activeTab === 'QUESTIONNAIRE'"
+            <a  class="nav-link px-3 py-3 border-end" title="Click to view Relationship Details" [class.active]="entityDetailsServices.activeTab === 'QUESTIONNAIRE'"
             (click)="openRelationshipQuestionnaire(entityDetailsServices.definedRelationships[0])"
                 [attr.aria-label]="entityDetailsServices.activeTab === 'QUESTIONNAIRE' ? 'Selected tab is Relationship details' : 'Click to view Relationship Details'">
                 Relationship Details
