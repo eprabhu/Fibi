@@ -60,7 +60,9 @@
 
 .user-dashboard-nav {
   min-height: 42px;
-  // color: #7c7c7c;
+  &:before {
+    height: 125% !important;
+  }
 }
 
 .mb-4px {
@@ -479,3 +481,33 @@ padding-right: 17px;
 //   }
 // }
 
+
+.nav-filter-card-sticky {
+  position: sticky;
+  top: 50px;
+  z-index: 2;
+  background-color: #f1f1f1;;
+}
+
+.overflow-hide-nav {
+  position: relative;
+  border: 0px;
+  box-shadow: none!important;
+  &:before {
+      content: "";
+      position: absolute;
+      background: #f1f1f1;;
+      left: -10px;
+      height: 101%;
+      width: 10px;
+      top: 0px;
+    }
+}
+
+@media (min-width:1200px) {
+  .overflow-hide-nav {
+    &:before{
+      height: 102%;
+    }
+  }
+}
