@@ -34,7 +34,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   isApplyToAllModal = false;
   @ViewChild('relationshipConflict', { static: false }) tableResponsive: ElementRef;
   @ViewChild('conflictTableHeader', { static: false }) conflictTableHeader: ElementRef;
-
+  readMore = [];
 
   $subscriptions: Subscription[] = [];
   coiValidationMap: Map<string, string> = new Map();
@@ -278,6 +278,10 @@ isShowWarning(data) {
 
     }
   }
+
+    readMoreOption(id: number, flag: boolean): void {
+        this.readMore[id] = !flag;
+    }
 
   private removeBorder() {
     if (this._coiService.focusSFIRelationId) {
