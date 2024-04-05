@@ -122,7 +122,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public coiService: CoiService,
         public location: Location,
         public dataStore: DataStoreService, public navigationService: NavigationService) {
-        document.getElementById('COI_SCROLL').scrollTo(0, 0);
+        window.scrollTo(0, 0);
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {

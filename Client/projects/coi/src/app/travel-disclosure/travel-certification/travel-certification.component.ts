@@ -38,7 +38,7 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
     constructor(public travelService: TravelDisclosureService, private _dataStore: TravelDataStoreService) {
-        document.getElementById('COI_SCROLL').scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }
 
     ngOnInit(): void {
