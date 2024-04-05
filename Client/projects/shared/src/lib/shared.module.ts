@@ -16,6 +16,8 @@ import { CountryCardComponent } from './graph/data-cards/country-card.component'
 import { TimelineComponent } from './graph/timeline/timeline.component';
 import { DragDirective } from './directives/drag.directive';
 import { TooltipComponent } from './graph/tooltip/tooltip.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -24,11 +26,14 @@ import { TooltipComponent } from './graph/tooltip/tooltip.component';
     DynamicPopoverComponent,
     TimelineComponent,
     DragDirective,
-    TooltipComponent
+    TooltipComponent,
+
   ],
   imports: [
       FormsModule,
       CommonModule,
+      MatIconModule,
+      MatButtonModule,
       PersonCardComponent,
       AwardCardComponent,
       SponsorCardComponent,

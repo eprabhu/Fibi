@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
         <div class="mr-15">
             <img class="profile_img" [src]="imagePath" alt="an icon for representing an entity">
         </div>
-        <div class="ml-15">
+        <div class="ms-2">
             <h2 class="heading">{{data.country_name}}({{data.country_code}})</h2>
             <p class="sub-heading">{{data.currency_code}}</p>
         </div>
@@ -27,7 +27,7 @@ import { Component, Input } from '@angular/core';
     }
     .heading {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       margin: 3px 0;
       color: #007dec;
     }

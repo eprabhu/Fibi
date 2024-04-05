@@ -9,4 +9,7 @@ import { fadeInOutHeight } from '../../common/utilities/animations';
 })
 export class TravelSummaryComponent {
 
+  constructor() {
+    window.scrollTo(0, 0);
+  }
 }

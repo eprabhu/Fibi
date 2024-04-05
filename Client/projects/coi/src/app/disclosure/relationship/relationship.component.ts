@@ -77,6 +77,7 @@ export class RelationshipComponent implements OnInit {
     this.getDataFromStore();
     this.loadProjectRelations(true);
     this.getDependencyDetails();
+    window.scrollTo(0, 0);
   }
 
 getDisclosureCount(typeCode, disclosureStatus) {

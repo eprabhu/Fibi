@@ -298,3 +298,14 @@
     }
 }
 
+.table-responsive {
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        width: 6px;
+        height: 6px;
+      }
+}
