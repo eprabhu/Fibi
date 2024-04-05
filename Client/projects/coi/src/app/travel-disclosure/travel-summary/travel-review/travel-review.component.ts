@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
 export class TravelReviewComponent {
 
   constructor() {
-    document.getElementById('COI_SCROLL').scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }
 }
