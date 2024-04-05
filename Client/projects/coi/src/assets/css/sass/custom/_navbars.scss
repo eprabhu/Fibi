@@ -133,11 +133,16 @@ header {
 }
 
 .navigation-icons .active {
-    border-bottom: 2px solid #007DEC;
-    color: #007dec;
+    border-bottom: 2px solid var(--theme-blue);
+    color: var(--theme-blue);
 }
 
 .coi-navigation-tabs {
     min-height: 45px;
     background-color: var(--theme-navtab-bg-color);// #E4F1FF;
+}
+
+.navigation-icons > span:hover {
+    color: var(--theme-blue);
+    border-bottom: 2px solid var(--theme-blue);
 }
