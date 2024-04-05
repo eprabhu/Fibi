@@ -135,6 +135,11 @@
     .card-footer {
         background-color: var(--theme-card-bg-color);
         border-top: 1px solid var(--theme-body-bg-color);
+
+        .badge:hover{
+            background-color: var(--theme-blue) !important;
+            color: #fff !important;
+        }
     }
 }
 
