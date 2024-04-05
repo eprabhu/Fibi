@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
         <div class="mr-15">
             <img class="profile_img" [src]="imagePath" alt="an Ican for represrnting a person">
         </div>
-        <div class="ml-15">
+        <div class="ms-2">
             <h2 class="heading">Disclosure Number{{data.disclosure_number}}</h2>
         </div>
       </div>
@@ -26,7 +26,7 @@ import { Component, Input } from '@angular/core';
     }
     .heading {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       margin: 3px 0;
       color: #007dec;
     }

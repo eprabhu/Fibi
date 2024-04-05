@@ -360,7 +360,7 @@
                                             <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                                 [attr.aria-label]="coi?.updateUserFullName + ' on ' +
                                                                                                     (coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
-                                                {{coi?.updateUserFullName}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}
+                                                {{coi?.updateUserFullName}}<span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}
                                             </span>
                                         </div>
                                     </div>

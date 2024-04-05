@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
- 
+
 @Component({
   standalone: true,
   selector: 'app-entity-card',
@@ -9,7 +9,7 @@ import { DataService } from '../data.service';
         <div class="mr-15">
             <img class="profile_img" [class.h-auto]="data.is_sponsor == 'Y'" [src]="imagePath" alt="an icon for representing a entity">
         </div>
-        <div class="ml-15">
+        <div class="ms-2">
             <h2 class="heading">{{data.name}}</h2>
             <p class="sub-heading">Country : {{data.country_name}}</p>
             <p class="sub-heading">Type : {{data.type}}</p>
@@ -40,7 +40,7 @@ import { DataService } from '../data.service';
     }
     .heading {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       margin: 3px 0;
       color: #007dec;
     }
@@ -52,15 +52,15 @@ import { DataService } from '../data.service';
   `],
 })
 export class EntityCardComponent {
- 
+
   @Input() data: any = {};
   @Input() imagePath: any = {};
- 
+
   constructor(public graphDataService: DataService) {}
- 
+
   openEntity(id) {
     const ID = id.includes('ENT') ? id.replace('ENT', '') : id;
     this.graphDataService.openDetailsEvent.next({'node': 'Entity', 'id': ID});
   }
-  
+
 }

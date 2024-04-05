@@ -3,7 +3,7 @@
     [attr.data-bs-target]="'#'+elementId" aria-controls="offcanvasRight">
 </button>
 <div #Backdrop class="offcanvas-backdrop fade"></div>
-<div #SliderParentElement class="offcanvas offcanvas-end" tabindex="-1" [id]="elementId"
+<div #SliderParentElement class="offcanvas offcanvas-end" [id]="elementId"
     aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false" data-bs-keyboard="false">
     <div class="offcanvas-header" [class.border-bottom]="isHeaderNeeded" id="{{elementId}}-slider-header">
         <h5 id="offcanvasRightLabel" class="fw-bold mb-0">
