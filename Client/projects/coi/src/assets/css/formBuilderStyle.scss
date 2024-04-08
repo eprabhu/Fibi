@@ -12,7 +12,7 @@ $nav-bar-background: white;
     display: inline-block;
     vertical-align: top;
   }
-  
+
   .field-list {
     min-height: 60px;
     background: white;
@@ -20,7 +20,7 @@ $nav-bar-background: white;
     overflow: hidden;
     display: block;
   }
-  
+
   .field-box {
     margin: 10px;
     padding: 20px 10px;
@@ -72,9 +72,9 @@ $nav-bar-background: white;
     i{
       color: #c6d5d4;
     }
-    
+
   }
-  
+
   .cdk-drag-preview {
     box-sizing: border-box;
     border-radius: 4px;
@@ -82,15 +82,15 @@ $nav-bar-background: white;
                 0 8px 10px 1px rgba(0, 0, 0, 0.14),
                 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   }
-  
+
   .cdk-drag-placeholder {
     opacity: 0;
   }
-  
+
   .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
-  
+
   .field-list.cdk-drop-list-dragging .field-box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
@@ -120,14 +120,14 @@ $nav-bar-background: white;
   background-color: #1e847b;
   color: white;
   border: none;
- 
+
 
   &:hover{
   background-color: #127a72 !important;
   color: white;
   }
 
-  &:active{ 
+  &:active{
     background-color: #127a72 !important;
     color: white;
     }
@@ -138,7 +138,6 @@ $nav-bar-background: white;
   background-color: white;
   height: 100vh;
 }
-
 
 .components {
   border-bottom: 0.5px solid #e5e5e5;
@@ -158,7 +157,7 @@ $nav-bar-background: white;
   height:calc(100vh - 225px);
   overflow-y: auto;
 
-  
+
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -212,7 +211,7 @@ scrollbar-width: none;  /* Firefox */
 
 .addition-info{
   width: 35%;
-  height: calc(100vh - 188px);  
+  height: calc(100vh - 188px);
   background-color: white;
   margin: 0 0 0 10px;
   overflow-y: auto;
