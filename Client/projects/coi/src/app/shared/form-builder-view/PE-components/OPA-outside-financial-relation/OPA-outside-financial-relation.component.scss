@@ -97,9 +97,10 @@
  }
 
  .riskbadge {
-   top: -5px;
+   top: -7px;
    position: relative;
  }
+ 
  .invalid {
    @extend .riskbadge;
    color: #ff0000;
@@ -113,11 +114,6 @@
  .low-risk {
    @extend .riskbadge;
    color: rgb(26, 172, 62);
- }
-
- .small-icon {
-    transform: scale(0.7);
-    cursor: pointer;
  }
 
  .table-background {
@@ -140,7 +136,7 @@
 
 .navigation-icons {
   .active {
-    border-bottom: 2px solid #007DEC;
+    border-bottom: 3px solid #007DEC;
     color: #007dec;
   }
 }
@@ -156,7 +152,6 @@
   min-height: 42px;
   background-color: white !important
 }
-
 
 .inactive-ribbon {
   color: #fff;
@@ -262,13 +257,23 @@
 }
 
 .small-btn-height {
-  height: 25px;
+  height: 28px;
 }
 
 .entity-list-container {
-  max-height: 70vh;
+  max-height: 45vh;
   overflow-y: auto;
-  overflow-x: hidden;
+
+  // overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    width: 6px;
+    height: 6px;
+  }
 }
 
 .advance-search-area {
@@ -352,3 +357,9 @@
 .grey-text{
   color: #6A7980;
 }
+
+.filter-border {
+  border-top: solid 6px #ffff;
+}
+
+
