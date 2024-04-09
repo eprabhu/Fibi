@@ -33,7 +33,7 @@
                     </p>
                 </div>
                 <!-- risk details -->
-                <div tabindex="0" class="d-flex ms-auto mr-15" *ngIf="travelDisclosure?.riskLevel">
+                <div tabindex="0" class="d-flex ms-auto me-2" *ngIf="travelDisclosure?.riskLevel">
                     <div class="align-items-center d-flex ml-15">
                         <label class="fw-500 fs-14 mr-2 mt-1" aria-label="Risk is">Risk :</label>
                         <div class="text-color fs-14 d-flex align-items-center">
@@ -61,7 +61,7 @@
             </div>
             <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="0" aria-label="Details of Travel Disclosure Document">
                 <!-- user details -->
-                <div class="col mr-15">
+                <div class="col me-2">
                     <div class="border rounded-1 position-relative p-3 fw-medium">
                         <div class="row mt-2" tabindex="0">
                             <div class="col d-flex">
@@ -108,7 +108,7 @@
                     </div>
                 </div>
                 <!-- for date box -->
-                <div class="col-auto mr-15">
+                <div class="col-auto me-2">
                     <div class="border rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill" tabindex="0" aria-label="Important Dates Of Travel Disclosure">Date</span>
                         <div class="row mt-2" tabindex="0">
@@ -236,7 +236,7 @@
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home" aria-label="Go to home"
                     [ngClass]="(travelDisclosure?.reviewStatusCode != '2' && !isCreateMode && travelDisclosure?.reviewStatusCode != '7') ? 'col-2' : 'col'"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14">
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 mx-1 mb-2">
                     <mat-icon>home</mat-icon>
                     <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
                 </button>
@@ -244,14 +244,14 @@
                 <!-- Comments -->
                 <button title="Click to add new review comments" aria-label="Click to add new review comments"
                     *ngIf="!isCreateMode"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col mx-1 mb-2">
                     <mat-icon>rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
                 </button>
 
                 <!-- more option button for expanded card-->
                 <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && isCardExpanded"
-                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1 mb-2"
                     role="menu" title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
                     <mat-icon class="moreActionIcon">more_vert</mat-icon>
                     <span>More Actions</span>
@@ -350,14 +350,14 @@
                     <!-- save -->
                     <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
                         aria-label="Click to Save Travel Disclosure"
-                        class="col-12 mt-3  fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                        class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
                         (click)="saveTravelDisclosure()" title="Click to Save Travel Disclosure">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
                     </button>
 
                     <!-- submit -->
-                    <button class="col-12 mt-3 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                    <button class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
                         aria-label="Click to Submit Travel Disclosure"
                         (click)="openConfirmationModal('Submit', false);" *ngIf="isRouteComplete(['certification'])"
                         [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
@@ -368,13 +368,13 @@
 
                 <!-- more option for collapse card-->
                 <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && !isCardExpanded"
-                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col ms-2"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1 mb-2"
                     role="menu" title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
                     <mat-icon>more_vert</mat-icon>
                 </button>
 
                 <!-- last update date -->
-                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : 'mt-1'" tabindex="0">
+                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : ''" tabindex="0">
                     <div class="fw-medium me-3">Last Updated By :</div>
                     <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>

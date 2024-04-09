@@ -4,17 +4,18 @@
       <span class="d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
           <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
-          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <span class="coi-text-darker fs-6 clickable-content text-decoration-underline" (click)="openModule();">
+          <span class="word-break-all new-line-property badge-margin coi-text-darker fs-16 mt-1">
+            <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
+              aria-label="Click here to view project details" title="Click here to view project details">
               #{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
               selectedProject?.title}}
               </span>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
-              <span *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="link-primary fw-medium fs-14">Read More</span>
-              </span>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more" 
+                title="Click here to Read more" (keydown.enter)="readMoreOrLess= true">
+                <span class="link-primary fw-medium fs-14">...Read More</span>
             </span>
-            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false" (keydown.enter)="readMoreOrLess= false"
+            tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less">
               <span class="link-primary fw-medium fs-14">Read Less</span>
             </span>
           </span>
@@ -22,23 +23,26 @@
 
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
-          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <span class="coi-text-darker clickable-content text-decoration-underline" (click)="openModule();">#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+          <span class="mt-1 fs-16 word-break-all new-line-property badge-margin coi-text-dark">
+            <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
+             aria-label="Click here to view project details" title="Click here to view project details">
+            #{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
               selectedProject?.title}}</span>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
-              <span *ngIf="!redivdMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
-              </span>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" class="link-primary fs-14 fw-medium" 
+              tabindex="0" role="link" aria-label="Click here to Read more" title="Click here to Read more"
+              (click)="readMoreOrLess=true" (keydown.enter)="readMoreOrLess= true">...Read More
             </span>
-            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
-              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false" (keydown.enter)="readMoreOrLess= false"
+             tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"
+            class="link-primary fs-14 fw-medium">
+              Read Less
             </span>
           </span>
         </ng-container>
       </span>
 
-      <span class="align-items-center d-flex my-3">
-        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+      <span class="align-items-center d-flex">
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
       </button>
       </span>
@@ -82,8 +86,8 @@
                     <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
 				</div>
 			</div>
-      <div class="table-responsive">
-      <table class="table table-bordered fs-14 fw-medium" *ngIf="projectRelations.length > 0">
+      <div class="table-responsive coi-table-striped">
+      <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light">
@@ -100,7 +104,7 @@
                                 <mat-icon>arrow_downward</mat-icon>
                             </button>
                         </th>
-                      <th style="width: 8%;" class="px-3">Actions</th>
+                      <th style="width: 8%;" class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="white-bg">
@@ -108,11 +112,11 @@
                     <td class="table-data fw-600 px-3">
                         <div class="m-0 mb-2 row py-1">
                             <span class="align-items-center d-flex">
-                                <span class="entity-title mr-2 cursor-pointer clickable-content" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)">
-                                    <strong tabindex="0" [attr.aria-label]="'entity name'">
-                                        <u>{{relation?.coiEntity?.entityName.length > 100 ?
+                                <span class="link-primary" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
+                                (keydown.enter)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
+                                tabindex="0" [attr.aria-label]="'Click here to view SFI details'" role="link" title="Click here to view SFI details">
+                                        {{relation?.coiEntity?.entityName.length > 100 ?
                                             (relation?.coiEntity?.entityName | slice:0:100)+'...' : relation?.coiEntity?.entityName}}
-                                        </u></strong>
                                 </span>
                             </span>
                         </div>

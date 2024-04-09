@@ -23,3 +23,20 @@
 .iconStyle {
     padding-top: 0.25rem;
 }
+
+.sticky-top {
+    top:-1px;
+}
+
+@media (min-width: 576px) {
+    .table-responsive {
+      max-height: 270px;
+      overflow: auto !important;
+    }
+  }
+  @media (min-width: 991px) {
+    .table-responsive {
+      max-height: 290px;
+      overflow: auto !important;
+    }
+  }

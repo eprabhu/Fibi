@@ -6,7 +6,7 @@
         <ng-container *ngFor="let helpText of helpTextList; let isLast = last; let index = index">
             <div title="{{helpText}}" [attr.aria-label]="helpText" tabindex="0"
                 class="d-flex align-items-center" *ngIf="index <= rowLimit-1 || isExpanded">
-                <mat-icon class="fs-16">keyboard_double_arrow_right</mat-icon>
+                <mat-icon class="fs-16 me-1">keyboard_double_arrow_right</mat-icon>
                 <span>{{helpText}}</span>
                 <!-- for read more and less -->
                 <ng-container *ngIf="helpTextList.length > rowLimit && isReadMoreLess">

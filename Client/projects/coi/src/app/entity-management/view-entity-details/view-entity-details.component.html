@@ -97,24 +97,18 @@
                             </app-no-data-label>
                           </span>
                         </div>
-                        <div class="col-lg-6 d-flex align-items-center mt-2 pe-0">
+                        <div *ngIf="entityDetails?.emailAddress" class="col-lg-6 d-flex align-items-center mt-2 pe-0">
                             <mat-icon class="coi-text-lighter me-2 flex-shrink-0">mail</mat-icon>
-                            <app-no-data-label [valueToShow]="entityDetails?.emailAddress">
                               <span class="coi-text-light">{{entityDetails?.emailAddress}}</span>
-                            </app-no-data-label>
                         </div>
-                        <div class="col-lg-6 d-flex align-items-center mt-2 pe-0 me-md-2 me-xl-0">
+                        <div *ngIf="entityDetails?.phone" class="col-lg-6 d-flex align-items-center mt-2 pe-0 me-md-2 me-xl-0">
                             <mat-icon class="coi-text-lighter flex-shrink-0 me-2">call</mat-icon>
-                            <app-no-data-label [valueToShow]="entityDetails?.phone">
                               <span class="coi-text-light">{{entityDetails?.phone}}</span>
-                            </app-no-data-label>
                         </div>
-                        <div class="col-12 d-flex align-items-center mt-2 pe-0">
+                        <div *ngIf="entityDetails?.webURL" class="col-12 d-flex align-items-center mt-2 pe-0">
                           <mat-icon class="coi-text-lighter me-2 flex-shrink-0">language</mat-icon>
-                            <app-no-data-label [valueToShow]="entityDetails?.webURL">
                               <a class="anchor-link fs-14 word-break-all" (click)="redirectUrl(entityDetails?.webURL)">
                                 {{entityDetails?.webURL}} </a>
-                            </app-no-data-label>
                         </div>
                       </div>
                     </div>
