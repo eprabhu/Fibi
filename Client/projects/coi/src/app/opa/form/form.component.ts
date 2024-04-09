@@ -22,6 +22,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     opa: OPA = new OPA();
     $subscriptions: Subscription[] = [];
     formBuilderId: any;
+    disclosureId: any;
 
     constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService, private _route: ActivatedRoute) {
     }
