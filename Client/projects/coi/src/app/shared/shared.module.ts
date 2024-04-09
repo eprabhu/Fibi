@@ -99,6 +99,7 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         PELayerComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
         TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent ],
+
     exports: [
         AppElasticComponent,
         FileDropComponent,
