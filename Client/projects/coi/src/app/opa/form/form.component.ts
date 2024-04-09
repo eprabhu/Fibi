@@ -22,6 +22,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     opa: OPA = new OPA();
     $subscriptions: Subscription[] = [];
     formBuilderId: any;
+    disclosureId: any;
 
     constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService, private _route: ActivatedRoute) {
     }
@@ -32,27 +33,25 @@ export class FormComponent implements OnInit, AfterViewInit {
         window.scrollTo(0,0);
         this._route.queryParamMap.subscribe(queryParams => {
             this.formBuilderId = queryParams.get('formBuilderId');
-            if (this.formBuilderId) {
-            }
+            this.disclosureId = queryParams.get('disclosureId');
         });
     }
 
     ngAfterViewInit(): void {
-        if(this.formBuilderId){
+        if(this.formBuilderId && !this.disclosureId){
             this.fbConfiguration.moduleItemCode = '23';
             this.fbConfiguration.moduleSubItemCode = '0';
             this.fbConfiguration.documentOwnerPersonId = this.opa.opaDisclosure.personId;
             this.fbConfiguration.formBuilderId = this.formBuilderId;
             this._opa.formBuilderEvents.next({eventType: 'BLANK_FORM', data: this.fbConfiguration});
-        }else{
-            // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
+        } else if(!this.formBuilderId && this.disclosureId){
             this.fbConfiguration.moduleItemCode = '23';
             this.fbConfiguration.moduleSubItemCode = '0';
             this.fbConfiguration.moduleItemKey = this.opa.opaDisclosure.opaDisclosureId.toString();
             this.fbConfiguration.moduleSubItemKey = '0';
             this.fbConfiguration.documentOwnerPersonId = this.opa.opaDisclosure.personId;
-            this.fbConfiguration.formBuilderId = 206;
-            this._opa.formBuilderEvents.next({eventType: 'BLANK_FORM', data: this.fbConfiguration});
+            this.fbConfiguration.formBuilderId = this.opa.opaDisclosure.opaFormBuilderDetails[0].formBuilderId;
+            this._opa.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
             this.updateFormEditMode();
         }
     }
