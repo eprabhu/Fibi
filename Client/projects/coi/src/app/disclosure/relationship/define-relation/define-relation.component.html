@@ -17,14 +17,14 @@
                     selectedProject?.title}}
                     <span *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore" class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
                       tabindex="0" role="link" [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
-                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
+                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'"
                       [id]="'link-proposal-moduleItemId'">{{selectedProject?.title?.length > 60 && isReadMore ?'Read Less' : '...Read More'}}</span>
                   </span>
                   <span *ngIf="selectedProject?.moduleCode == 1" class="coi-text-darker fs-16">
                     #{{selectedProject?.moduleItemKey}} - {{!isReadMore ? (selectedProject?.title.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) : selectedProject?.title }}
                     <span tabindex="0" *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore" class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
                       tabindex="0" role="link" [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
-                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'" 
+                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'" 
                       [id]="'link-award-moduleItemKey'">{{selectedProject?.title?.length > 60 && isReadMore ?'Read Less' : '...Read More'}}</span>
                   </span>
                 </span>

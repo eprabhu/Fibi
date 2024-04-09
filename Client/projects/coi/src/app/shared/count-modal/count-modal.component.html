@@ -31,9 +31,9 @@
                                             <span class="mt-2">{{(item?.coiEntity?.entityName |
                                                 slice:0:50)}}</span>
                                             <span (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead"
-                                              tabindex="0" role="link" aria-label="Click here to read more" title="Click here to read more"
-                                                class="link-primary"><span class="fw-medium">... <u>Read
-                                                        More</u>
+                                              tabindex="0" role="link" aria-label="Click here to Read more" title="Click here to Read more"
+                                                class="link-primary"><span class="fw-medium">...Read
+                                                        More
                                                     <i aria-hidden="true"></i></span>
                                             </span>
                                         </span>
@@ -41,7 +41,7 @@
                                             <span
                                                 class="word-break-all new-line-property">{{item?.coiEntity?.entityName}}</span>
                                             <span *ngIf="item?.coiEntity?.entityName?.length > 50" class="link-primary mt-2 fw-medium" tabindex="0" role="link" aria-label="Click here to read less"
-                                                title="Click here to read less" (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead">
+                                                title="Click here to Read less" (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead">
                                                 <span class="fw-medium"><u> Read Less</u>
                                                     <i aria-hidden="true"></i></span>
                                             </span>
@@ -111,16 +111,16 @@
                                 <td>#{{name?.moduleItemId}}:
                                     <span *ngIf="!isReadMore[index] && name?.title?.length > 50; else showFullInfo">
                                         <span class="word-break-all new-line-property">{{(name?.title | slice:0:50)}}</span>
-                                        <span tabindex="0" role="link" aria-label="Click here to read more" title="Click here to read more"
+                                        <span tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                           (keydown.enter)="isReadMore[index] = !isReadMore[index]"
-                                          (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium link-primary">... <u>Read more</u></span>
+                                          (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium link-primary">... Read more</span>
                                     </span>
                                     <ng-template #showFullInfo>
                                         <span class="word-break-all new-line-property">{{name?.title}}</span>
-                                        <span *ngIf="name?.title?.length > 50" tabindex="0" role="link" aria-label="Click here to read less"
-                                            title="Click here to read less" (click)="isReadMore[index] = !isReadMore[index]"
+                                        <span *ngIf="name?.title?.length > 50" tabindex="0" role="link" aria-label="Click here to Read less"
+                                            title="Click here to Read less" (click)="isReadMore[index] = !isReadMore[index]"
                                              (keydown.enter)="isReadMore[index] = !isReadMore[index]"
-                                            class="link-primary fw-medium ms-1"><u>Read Less</u>
+                                            class="link-primary fw-medium ms-1">Read Less
                                         </span>
                                     </ng-template></td>
                                 <td>{{name?.principalInvestigator}}</td>

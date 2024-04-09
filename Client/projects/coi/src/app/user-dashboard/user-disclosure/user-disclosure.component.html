@@ -673,7 +673,7 @@
         <div class="col-lg-auto p-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
             <div class="fs-14 d-inline-block"
                  [@leftSlideInOut]>
-                <label class="coi-text-dark" tabindex="0">Filter By Type :</label>
+                <label class="text-secondary" tabindex="0">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
                     tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
@@ -722,8 +722,7 @@
     <div [@listAnimation]="completeDisclosureList.length" tabindex="0" [attr.aria-label]="selectedTabLabel()">
         <ng-container *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
             <!-- New card design starts(master card) -->
-            <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="card coi-card-regular"
-                (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
+            <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="card coi-card-regular">
                 <div class="card-body px-3 py-2">
                     <!-- For Coi disclosures card -->
                     <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId">
@@ -755,12 +754,12 @@
                                                     <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">
-                                                            <a *ngIf="!readMoreOrLess[index]" tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"
+                                                            <a *ngIf="!readMoreOrLess[index]" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                                 (click)="readMoreOrLess[index]=true" (keydown.enter)="readMoreOrLess[index]=true" class="link-primary"><span
                                                                     class="fw-500">...Read More</span></a>
                                                         </span>
                                                         <a *ngIf="readMoreOrLess[index]" class="link-primary ms-1"
-                                                            tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"
+                                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
                                                             (click)="readMoreOrLess[index]=false" (keydown.enter)="readMoreOrLess[index]=false">
                                                             <span class="fw-500">Read Less</span></a>
                                                     </span>
@@ -770,14 +769,14 @@
                                     </div>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Department -->
                                         <div tabindex="0" [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
                                             <label class="d-block coi-text-dark">Department</label>
                                             <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Certification Date -->
                                         <div tabindex="0" [attr.aria-label]="'Certification Date' + (disclosure?.certifiedAt | dateFormatter)">
                                             <label class="d-block coi-text-dark">Certification Date</label>
@@ -788,7 +787,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Expiration Date -->
                                         <div tabindex="0">
                                             <label class="d-block coi-text-dark">Expiration Date</label>
@@ -799,7 +798,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-lg-3 col-md-6 mb-2">
+                                    <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Description (FCOI)-->
                                         <div tabindex="0"
                                             [attr.aria-label]="'Description' + disclosure?.reviseComment">
@@ -811,7 +810,7 @@
                                                             *ngIf="!isReadMore && disclosure?.reviseComment?.length > 60; else showFullInfo">
                                                             <span class="coi-text-light">{{(disclosure?.reviseComment | slice:0:60)}}</span>
                                                             <span (click)="isReadMore = !isReadMore"  class="link-primary"
-                                                            tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"
+                                                            tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                             (keydown.enter)="isReadMore = !isReadMore"><span class="fw-500">...Read
                                                                         More
                                                                     <i aria-hidden="true"></i></span>
@@ -822,7 +821,7 @@
                                                                 class="word-break-all new-line-property coi-text-light">{{disclosure?.reviseComment}}</span>
                                                             <span class="link-primary mt-2 fw-medium" *ngIf="disclosure?.reviseComment?.length > 60"
                                                                 (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore"
-                                                                tabindex="0" role="link" aria-label="Click here read less" title="Click here read less">
+                                                                tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less">
                                                                 <span><span class="fw-500"> Read Less</span>
                                                                     <i aria-hidden="true"></i></span>
                                                             </span>
@@ -832,7 +831,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-lg-3 col-md-6 mb-2">
+                                    <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Description(Not FCOI) -->
                                         <div tabindex="0"
                                             [attr.aria-label]="'Description' + disclosure?.reviseComment">
@@ -844,7 +843,7 @@
                                                             *ngIf="!isReadMore && disclosure?.reviseComment?.length > 60; else showFullInfo">
                                                             <span class="coi-text-light">{{(disclosure?.reviseComment | slice:0:60)}}</span>
                                                             <span (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore" 
-                                                            tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"
+                                                            tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                              class="link-primary"><span class="fw-500">...
                                                                     Read More
                                                                     <i aria-hidden="true"></i></span>
@@ -855,7 +854,7 @@
                                                                 class="word-break-all new-line-property coi-text-light">{{disclosure?.reviseComment}}</span>
                                                             <span class="link-primary mt-2 fw-medium" *ngIf="disclosure?.reviseComment?.length > 60"
                                                                 (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore"
-                                                                tabindex="0" role="link" aria-label="Click here read less" title="Click here read less">
+                                                                tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less">
                                                                 <span class="fw-500"> Read Less
                                                                     <i aria-hidden="true"></i></span>
                                                             </span>
@@ -866,7 +865,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Administrator -->
                                         <div tabindex="0" [attr.aria-label]="'Administrator' + (disclosure?.administrator)">
                                             <label for="id" class="d-block coi-text-dark">Administrator</label>
@@ -877,7 +876,7 @@
                                             </span>
                                         </div>
                                     </div>                   
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Admin Group -->
                                         <div tabindex="0" [attr.aria-label]="'Admin Group' + (disclosure?.adminGroupName)">
                                             <label for="id" class="d-block coi-text-dark">Admin Group</label>
@@ -985,12 +984,12 @@
                                                             *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">
                                                             <a *ngIf="!readMoreOrLess[index]" class="link-primary"
                                                                 (click)="readMoreOrLess[index]=true" (keydown.enter)="readMoreOrLess[index]=true"
-                                                                tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"><span
+                                                                tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"><span
                                                                     class="fw-500">...Read More</span></a>
                                                         </span>
                                                         <a *ngIf="readMoreOrLess[index]" class="link-primary"
                                                             (click)="readMoreOrLess[index]=false" (keydown.enter)="readMoreOrLess[index]=false"
-                                                            tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"><span
+                                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"><span
                                                                 class="fw-500">Read Less</span></a>
                                                     </span>
                                                 </span>
@@ -999,7 +998,7 @@
                                     </div>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Department -->
                                         <div tabindex="0" [attr.aria-label]="'Department Name' + (disclosure?.unitDetails?.unitDetail)">
                                             <label for="department-id" class="d-block coi-text-dark">Department</label>
@@ -1011,7 +1010,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Traveller -->
                                         <div tabindex="0" [attr.aria-label]="'Traveller Type' + formatTravellerTypes(disclosure?.travellerTypeDescription)">
                                             <label for="traveller" class="d-block coi-text-dark">Traveller</label>
@@ -1023,7 +1022,7 @@
                                         </div>
                                     </div>
                                     <!-- Travel Card Destination -->
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <div *ngIf="disclosure?.fcoiTypeCode!= 1" tabindex="0"
                                             [attr.aria-label]="'Destination' + (disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState)">
                                             <label for="destination" class="d-block coi-text-dark">Destination</label>
@@ -1040,7 +1039,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Certification Date -->
                                         <div tabindex="0" [attr.aria-label]="'Certification Date' + (disclosure?.travelSubmissionDate | dateFormatter)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
@@ -1052,7 +1051,7 @@
                                         </div>
                                     </div>
                                     <!-- Travel Card Actual Amount -->
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <div tabindex="0" [attr.aria-label]="'Actual Amount' + (disclosure.travelAmount)">
                                             <label for="travel-amount" class="d-block coi-text-dark">Actual Amount</label>
                                             <span>
@@ -1062,7 +1061,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Expiration Date -->
                                         <div tabindex="0" [attr.aria-label]="'Expiration Date' + (disclosure.expirationDate | dateFormatter)">
                                             <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
@@ -1181,7 +1180,7 @@
                                     </div>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Department -->
                                         <div tabindex="0"
                                             [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
@@ -1189,7 +1188,7 @@
                                              <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Certification Date -->
                                         <div [attr.aria-label]="'Certification Date' + (disclosure?.submissionTimestamp | dateFormatter)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
@@ -1200,7 +1199,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Administrator -->
                                         <div tabindex="0" [attr.aria-label]="'Administrator' + (disclosure?.adminPersonName)">
                                             <label for="id" class="d-block coi-text-dark">Administrator</label>
@@ -1212,7 +1211,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                        <div class="col-lg-3 col-md-6 mb-2">
+                                        <div class="col-lg-4 col-md-6 mb-2">
                                             <!-- OPA Card Admin Group -->
                                             <div tabindex="0" class="mb-3 mb-xl-0" [attr.aria-label]="'Admin Group' + (disclosure?.adminGroupName)">
                                                 <label for="id" class="d-block coi-text-dark">Admin Group</label>
@@ -1265,41 +1264,47 @@
                             <div class="col-lg-10">
                                 <div class="row align-items-center">
                                     <div class="col-md-6 col-lg-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
-                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId"
-                                            [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                            [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
-                                            <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="disclosure?.noOfSfi"
-                                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
-                                                area-describedby="Click to view SFI list"
-                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">{{disclosure?.noOfSfi
+                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId">
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="disclosure?.noOfSfi"
+                                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link" [ngClass]="disclosure?.noOfSfi > 0 ?'badge':'zero-count-padding'"
+                                                [attr.area-label]="disclosure?.noOfSfi > 0 ?'Click to view SFI list':''" [tabIndex]="disclosure?.noOfSfi > 0 ? 0 :-1"
+                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
+                                                (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)">{{disclosure?.noOfSfi
                                                 || 0}}</span>
-                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                                [class.text-decoration-underline]="isHover[index]&& disclosure?.noOfSfi > 0"
+                                            <span class="fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'link-primary': 'coi-text-light' "
+                                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
+                                                [attr.area-label]="disclosure?.noOfSfi > 0 ?'Click to view SFI list':''" [tabIndex]="disclosure?.noOfSfi > 0 ? 0 :-1"
+                                                (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
                                                 (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">Significant
                                                 Financial Interest</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-lg-2" tabindex="{{disclosure?.fcoiTypeCode == '1' ? 0 : -1}}">
-                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
-                                        [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                        area-describedby="Click to view Proposal list">
-                                            <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                                area-describedby="Click to view Proposal list"
+                                    <div class="col-md-3 col-lg-2">
+                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
+                                                [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfProposal"
+                                                (keydown.enter)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal)"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</span>
-                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfProposal > 0"
+                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'link-primary' : 'coi-text-light' "
+                                                [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " 
+                                                [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-lg-2" tabindex="{{disclosure?.fcoiTypeCode == '1' ? 0 : -1}}">
-                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'"
-                                        [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                        [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
-                                        area-describedby="Click to view Award list">
-                                            <span class="badge bg-light fs-18 fw-700 me-2 rounded-3 text-primary" (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</span>
-                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                                [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
+                                    <div class="col-md-3 col-lg-2">
+                                        <div class="d-flex align-items-center fw-semibold"
+                                            *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
+                                                (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)" [ngClass]="disclosure?.noOfAward > 0 ?'badge':'zero-count-padding'"
+                                                (keydown.enter)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)"
+                                                [tabIndex]="disclosure?.noOfAward > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfAward"
+                                                [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' ">{{disclosure?.noOfAward}}</span>
+                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'link-primary':'coi-text-light'"
+                                                (keydown.enter)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)"
+                                                [tabIndex]="disclosure?.noOfAward > 0 ? 0 : -1" role="link"
+                                                [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
                                                 (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
                                         </div>
                                     </div>
@@ -1316,19 +1321,20 @@
                         <ng-container *ngIf="disclosure?.travelDisclosureId">
                             <div class="col-lg-10">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
                                                 <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
                                                     <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                     <span class="col break-point-1200">
                                                         <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
                                                                 <span *ngIf="disclosure?.travelPurpose" class="fs-14">
-                                                                    <span class="word-break-all new-line-property mx-2"
-                                                                        *ngIf="!isPurposeRead && disclosure?.travelPurpose?.length > 80; else showFullInfo">
+                                                                    <span class="word-break-all new-line-property"
+                                                                        *ngIf="!isPurposeRead[disclosure?.travelDisclosureId] && disclosure?.travelPurpose?.length > 80; else showFullInfo">
                                                                         <span class="grey-text mt-2">{{(disclosure?.travelPurpose |
                                                                             slice:0:80)}}</span>
-                                                                        <span (click)="isPurposeRead = !isPurposeRead" (keydown.enter)="isPurposeRead = !isPurposeRead"
-                                                                        tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"
+                                                                        <span (click)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])" 
+                                                                        (keydown.enter)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
+                                                                        tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                                             class="link-primary"><span class="fw-medium">...Read
                                                                                     More
                                                                                 <i aria-hidden="true"></i></span>
@@ -1338,9 +1344,9 @@
                                                                         <span
                                                                             class="word-break-all new-line-property grey-text">{{disclosure?.travelPurpose}}</span>
                                                                         <span class="mt-2 fw-medium link-primary"
-                                                                            *ngIf="disclosure?.travelPurpose?.length > 80" (keydown.enter)="isPurposeRead = !isPurposeRead"
-                                                                            tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"
-                                                                            (click)="isPurposeRead = !isPurposeRead">
+                                                                            *ngIf="disclosure?.travelPurpose?.length > 80 && isPurposeRead[disclosure?.travelDisclosureId]" (keydown.enter)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
+                                                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
+                                                                            (click)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])">
                                                                             <span class="fw-500"><span> Read Less</span>
                                                                                 <i aria-hidden="true"></i></span>
                                                                         </span>
@@ -1351,7 +1357,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
                                                 <div
                                                     [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
@@ -1365,7 +1371,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
                                                 <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
                                                     <label for="end-date" class="coi-text-dark d-block">End Date</label>
@@ -1382,7 +1388,7 @@
                             </div>
                         </ng-container>
                         <div class="col-lg-2">
-                            <div class="d-flex d-inline-block justify-content-end px-0">
+                            <div class="d-flex d-inline-block justify-content-end align-items-center px-0 h-100 ">
                                 <button (click)="redirectToDisclosure(disclosure)" role="button"
                                     aria-describedby="Click to view Disclosure"
                                     class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"

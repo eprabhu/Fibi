@@ -62,11 +62,13 @@ import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-compone
 import { OPAStudentSubordinateEmployeeComponent } from './form-builder-view/PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
 import { OPACompUncompService } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.service';
 import { FormBuilderService } from './form-builder-view/form-builder.service';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover.directive';
 import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
 import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -95,7 +97,8 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
-        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,FormBuilderViewComponent,FormSectionsComponent ],
+        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
+        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent ],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -149,6 +152,7 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         OPAInstituteResourceUseComponent,
         OPAStudentSubordinateEmployeeComponent,
         MatAutocompleteModule,
+        TailingSpaceRemoverDirective,
         FormBuilderViewComponent,
         FormSectionsComponent
     ],

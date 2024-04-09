@@ -39,7 +39,7 @@
                                         (click)="collapseViewMoreOption(attachment.attachmentId,collapseViewMore[attachment.attachmentId])"
                                         (keydown.enter)="collapseViewMoreOption(attachment.attachmentId,collapseViewMore[attachment.attachmentId])"
                                         [attr.aria-label]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read Less' : 'Click here to  Read More'"
-                                        [title]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read Less' : 'Click here to  Read More'">
+                                        [title]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read less' : 'Click here to  Read more'">
                                         {{(attachment?.description?.length >75 && collapseViewMore[attachment.attachmentId]) ? 'Read Less':'...Read More'}}
                                     </span>
                                 </ng-container>

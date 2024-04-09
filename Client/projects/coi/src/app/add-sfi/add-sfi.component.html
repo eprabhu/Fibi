@@ -227,7 +227,7 @@
 							</div>
 							<div class="col">
 								<input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.city"
-									[disabled]="isResultFromSearch || isViewMode">
+									[disabled]="isResultFromSearch || isViewMode" appTailingSpaceRemover>
 								<div class="help-text">
 									Type in the city of the business or organization you need to report.
 								</div>
@@ -243,7 +243,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" rows="1"
 								[(ngModel)]="entityDetails.coiEntity.address"
-								(ngModelChange)="entityDetails.coiEntity.address = entityDetails.coiEntity.address.trim()"
+								appTailingSpaceRemover
 								[ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator
 								[limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
@@ -265,7 +265,7 @@
 							</div>
 							<div class="col">
 									<input class="form-control" [(ngModel)]="entityDetails.coiEntity.phone"
-										(ngModelChange)="entityDetails.coiEntity.phone = entityDetails.coiEntity.phone.trim()"
+									    appTailingSpaceRemover
 										(keypress)="inputRestriction($event)"
 										[disabled]="isResultFromSearch || isViewMode"
 										(keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)" maxlength="15">
@@ -283,7 +283,7 @@
 							</div>
 							<div class="col pe-1">
 								<input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.zipCode"
-									(ngModelChange)="entityDetails.coiEntity.zipCode = entityDetails.coiEntity.zipCode.trim()"
+									appTailingSpaceRemover
 									(keypress)="inputRestriction($event)" maxlength="15"
 									[disabled]="isResultFromSearch || isViewMode">
 								<div class="help-text">
@@ -300,7 +300,8 @@
 							</div>
 							<div class="col">
 								<input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL"
-									id="website" [disabled]="isResultFromSearch || isViewMode">
+									id="website" [disabled]="isResultFromSearch || isViewMode"
+									appTailingSpaceRemover>
 								<div class="help-text">
 									Type in the website of the business or organization you want to report.
 								</div>
@@ -316,7 +317,8 @@
 								<input type="text" class="form-control"
 									[(ngModel)]="entityDetails.coiEntity.emailAddress"
 									[ngClass]="emailWarningMsg != null ? 'is-invalid d-block' : ''"
-									[disabled]="isResultFromSearch || isViewMode">
+									[disabled]="isResultFromSearch || isViewMode"
+									appTailingSpaceRemover>
 								<div class="help-text">Type the email address of the business or organization you want to report.
 								</div>
 								<div *ngIf="emailWarningMsg" class="invalid-feedback d-block fs-13">
@@ -519,7 +521,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.staffInvolvement"
-								(ngModelChange)="additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
+								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
 								[limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
@@ -544,7 +546,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.studentInvolvement"
-								(ngModelChange)="additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
+								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'">
@@ -568,7 +570,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.instituteResourceInvolvement"
-								(ngModelChange)="additionalDetails.instituteResourceInvolvement = additionalDetails.instituteResourceInvolvement.trim();"
+								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'">
