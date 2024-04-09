@@ -29,7 +29,7 @@
                 <span *ngIf="test?.coiEntity?.entityName?.length > 70" (keydown.enter)="readMoreOption(test?.personEntityId, readMore[test?.personEntityId])"
                 (click)="readMoreOption(test?.personEntityId, readMore[test?.personEntityId])" tabindex="0" role="link"
                 [attr.aria-label]="readMore[test?.personEntityId] ?'Click here to Read Less' : 'Click here to Read More'"
-                [title]="readMore[test?.personEntityId] ?'Click here to Read Less' : 'Click here to Read More'" id="btn-read-action-{{test?.personEntityId}}"
+                [title]="readMore[test?.personEntityId] ?'Click here to Read less' : 'Click here to Read more'" id="btn-read-action-{{test?.personEntityId}}"
                 class="link-primary fs-13">
                 {{readMore[test?.personEntityId] ? "Read Less" : "Read More"}}
                 </span>

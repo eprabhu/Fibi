@@ -14,6 +14,10 @@ export class NoDataLabelComponent {
 
 
   isArrayAndEmpty(value) {
-    return Array.isArray(value) ? value.length > 0 : (value != null || value === 0);
+    if (Array.isArray(value))
+    return value.length > 0;
+    if (typeof value == "string") 
+      return value != '';
+    return (value != null || value === 0);
   }
 }

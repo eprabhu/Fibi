@@ -75,7 +75,7 @@
 </div>
 
 <div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
-    <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
+    <button type="button" class="btn btn-primary fs-15 mb-10" title="Add Entity" data-bs-toggle="modal"
         [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id" area-describedby="Click here to add"
         (click)="getMyEntities()">
         Add Entity
@@ -84,61 +84,57 @@
     <p>
 </div>
 
-<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
+<!-- Add Entity Modal -->
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog modal-xl"
     data-bs-backdrop="static" id="OUTSIDE_FIN_REL_ADD{{id}}" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-white">
             <div class="modal-header">
                 <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
+                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
             </div>
             <div class="modal-body">
-                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
+                <nav class="align-items-center bg-white d-flex fs-14 fw-bold py-1 user-dashboard-nav border-bottom"
                     *ngIf="editIndex == -1">
-                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' " title="My Entities">
-                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
+                    <div class="navigation-icons px-2 pt-1 hand-cursor" tabindex="0" (click)="currentTab= 'MY_ENTITIES' " title="My Entities"
+                    [attr.aria-label]="currentTab== 'MY_ENTITIES' ? 'Selected tab is My Entities' : 'My Entities'">
+                        <span class="pb-2 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
                     </div>
-                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'" title="Add New Entity">
-                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
+                    <div class="navigation-icons px-3 pt-1 hand-cursor" tabindex="0" (click)="currentTab= 'ADD_ENTITY'" title="Add New Entity"
+                    [attr.aria-label]="currentTab== 'ADD_ENTITY' ? 'Selected tab is Add New Entity' : 'Add New Entity'">
+                        <span class="pb-2 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
                     </div>
                 </nav>
-                <div *ngIf="currentTab === 'MY_ENTITIES'" class="entity-list-container ">
+                <div *ngIf="currentTab === 'MY_ENTITIES'" class="pe-1">
                     <ng-container>
-                    <div class="help-text">
+                    <div class="help-text mt-2">
                         Presently displaying the entities that are not linked in your Outside Financial Interests and Relationships
                     </div>
-                    <div class="advance-search-area border d-flex mt-2 rounded-1">
-                        <div class="border-end fs-14 p-3" [@leftSlideInOut]>
-                            <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
-                            <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
-                                title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active me-1"
-                                role="button">All</span>
-                            <span (click)="setFilter('COMPLETE')" [class.filter-active]="currentFilter=='COMPLETE'"
-                                title="Click to filter by type: Complete"
-                                area-describedby="Click to filter by type: Complete"
-                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Complete</span>
-                            <span (click)="setFilter('INCOMPLETE')" [class.filter-active]="currentFilter=='INCOMPLETE'"
-                                title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
-                                class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white"
+                    <div class="col-lg-auto filter-border sticky-top">
+                        <div class="advance-search">
+                            <label class="coi-text-dark ms-2" tabindex="0">Filter By Status :</label>
+                            <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentFilter=='ALL'" tabindex="0"
+                                [attr.aria-label]="currentFilter=='ALL' ? 'Selected filter type is all ' : 'All'"
+                                title="Click to filter by type: All" class="filter-pills coi-text-light" role="button">All</span>
+                            <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="currentFilter=='COMPLETE'" tabindex="0"
+                                [attr.aria-label]="currentFilter=='COMPLETE' ? 'Selected filter type is Complete ' : 'Complete'"
+                                title="Click to filter by type: Complete" class="filter-pills coi-text-light" role="button">Complete</span>
+                            <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="currentFilter=='INCOMPLETE'" tabindex="0"
+                                [attr.aria-label]="currentFilter=='INCOMPLETE' ? 'Selected filter type is Incomplete' : 'Incomplete'"
+                                title="Click to filter by type: Incomplete" class="filter-pills coi-text-light"
                                 role="button">Incomplete</span>
-                            <span (click)="setFilter('INACTIVE')" [class.filter-active]="currentFilter=='INACTIVE'"
-                                title="Click to filter by type: Inactive"
-                                area-describedby="Click to filter by type: Inactive"
-                                class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white"
-                                role="button">Inactive</span>
+                            <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="currentFilter=='INACTIVE'" tabindex="0"
+                                [attr.aria-label]="currentFilter=='INACTIVE' ? 'Selected filter type is Inactive ' : 'Inactive'"
+                                title="Click to filter by type: Inactive" class="filter-pills coi-text-light" role="button">Inactive</span>
                         </div>
                     </div>
-                    <div [@listAnimation]="filteredEntities.length">
+                    <div [@listAnimation]="filteredEntities.length" class="entity-list-container">
                         <ng-container *ngFor="let item of filteredEntities">
-                            <div class="border bg-white rounded-3 p-1 my-2">
-                                <div class="mb-2 row">
-                                    <div class="col-11">
+                            <div class="border bg-white rounded-3 p-3 my-2 shadow-sm">
+                                <div class="row">
+                                    <div class="col-9">
                                         <span class="align-items-center d-flex">
-                                            <span class="shadow-sm align-items-center d-flex" tabindex="0"
-                                                [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
-                      'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
-                                                [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isFormCompleted)}}</span>
-                                            <p class="entity-title mt-3 clickable-content">
+                                            <p class="entity-title clickable-content">
                                                 <strong class="fs-14" tabindex="0" (click)="viewSlider(item.personEntityId)"
                                                     [attr.aria-label]="'entity name' + item?.entityName">
                                                     <u>{{item?.entityName
@@ -147,72 +143,74 @@
                                             </p>
                                         </span>
                                     </div>
-                                    <div class="col-1 d-flex align-items-center text-secondary">
-                                        <button (click)="linkEntity(item)"
-                                            class="align-items-center btn btn-outline-secondary d-flex fs-12 small-btn-height">
-                                            <mat-icon class="me-1 small-icon">link</mat-icon>
-                                            Link
-                                        </button>
-                                    </div>
+                                    <div class="col-3 d-flex align-items-center justify-content-end">
+                                        <span class="badge f-14 px-3 py-2 rounded-pill"
+                                            [ngClass]="SFIObject?.isActive ? SFIObject.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                            {{SFIObject?.isActive ? SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
+                                        </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <div class="text-secondary fs-12 col-6">
-                                        <ng-container *ngIf="item.validPersonEntityRelType">
-                                            <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
-                                                    <span class="d-flex align-items-baseline flex-wrap">
-                                                        <span class="fw-bold me-3" tabindex="0"
-                                                              aria-label="Relationship">Relationship :</span>
-                                                        <em class="mt-3"
-                                                            *ngFor="let relation of getEntityRelationTypePills(item.validPersonEntityRelType)">
-                                                            <span class="border px-3 py-1 rounded-4 me-2">
-                                                                <span class="fw-medium">{{relation?.relationshipType}} :</span>
-                                                                <span class="fw-normal">{{relation?.description}}</span>
-                                                            </span>
-                                                        </em>
-                                                    </span>
-                                            </app-no-data-label>
-                                        </ng-container>
-
-                                        <ng-container *ngIf="!item.validPersonEntityRelType">
-                                                <span class="fw-bold me-3" tabindex="0"
-                                                      aria-label="Relationship">Relationship :</span>
-                                            <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
-                                                <em class="mt-3"
-                                                    *ngFor="let relation of getEntityRelationTypePills(item.validPersonEntityRelType)">
-                                                            <span class="border px-3 py-1 rounded-4 me-2">
-                                                                <span class="fw-medium">{{relation?.relationshipType}}
-                                                                    :</span>
-                                                                <span class="fw-normal">{{relation?.description}}</span>
-                                                            </span>
-                                                </em>
-                                            </app-no-data-label>
-                                        </ng-container>
-                                    </div>
-                                    <div tabindex="0" class="text-secondary col-2 fs-12">
-                                        <span class="fw-bold me-2">Type :</span>
+                                    <div tabindex="0" class="text-secondary col-lg-6 mb-md-2 mb-lg-0">
+                                        <label class="fw-bold d-block">Type</label>
                                         <app-no-data-label [valueToShow]="item?.entityType">
-                                            <span [attr.aria-label]="item?.entityType"> {{item?.entityType}}</span>
+                                            <span class="coi-text-light" [attr.aria-label]="item?.entityType"> {{item?.entityType}}</span>
                                         </app-no-data-label>
                                     </div>
-                                    <div class="col-3 d-flex justify-content-between text-secondary fs-12">
+                                    <div class="col-lg-6 d-flex justify-content-between text-secondary">
                                         <div tabindex="0">
-                                            <span class="fw-bold me-2 " [attr.aria-label]="Involvement"> Involvement :
-                                            </span>
+                                            <label class="fw-bold d-block" [attr.aria-label]="Involvement"> Involvement
+                                            </label>
                                             <app-no-data-label [valueToShow]="item?.involvementStartDate">
-                                                <span> {{item?.involvementStartDate|dateFormatter }} - {{
+                                                <span class="coi-text-light"> {{item?.involvementStartDate|dateFormatter }} - {{
                                                     item?.involvementEndDate|dateFormatter
                                                     }}</span>
                                             </app-no-data-label>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="row">
+                                    <div class="text-secondary col-lg">
+                                        <ng-container *ngIf="item.validPersonEntityRelType">
+                                            <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
+                                                    <span class="align-items-baseline flex-wrap">
+                                                        <label class="fw-bold me-2"
+                                                              aria-label="Relationship">Relationship : </label>
+                                                        <em *ngFor="let relation of getEntityRelationTypePills(item.validPersonEntityRelType)">
+                                                            <span class="border px-3 py-1 rounded-4 me-2 d-inline-block mt-md-2 mt-lg-0">
+                                                                <label class="coi-text-light me-1">{{relation?.relationshipType}} : </label>
+                                                                <label class="coi-text-lighter">{{relation?.description}}</label>
+                                                            </span>
+                                                        </em>
+                                                    </span>
+                                            </app-no-data-label>
+                                        </ng-container>
+                                        <ng-container *ngIf="!item.validPersonEntityRelType">
+                                                <label class="fw-bold me-2" tabindex="0"
+                                                      aria-label="Relationship">Relationship : </label>
+                                            <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
+                                                <em class="mt-3"
+                                                    *ngFor="let relation of getEntityRelationTypePills(item.validPersonEntityRelType)">
+                                                            <span class="border px-3 py-1 rounded-4 me-2 d-inline-block mt-md-2 mt-lg-0">
+                                                                <span class="coi-text-light me-1">{{relation?.relationshipType}}
+                                                                    : </span>
+                                                                <span class="coi-text-lighter">{{relation?.description}}</span>
+                                                            </span>
+                                                </em>
+                                            </app-no-data-label>
+                                        </ng-container>
+                                    </div>
+                                    <div class="col-lg-auto col-md-12 d-flex align-items-center text-secondary justify-content-end mt-md-2 mt-lg-0">
+                                        <button class="align-items-center btn btn-outline-secondary d-flex fs-14" (click)="linkEntity(item)"
+                                            aria-label="Click to link entity" title="Click to link entity">
+                                            <mat-icon class="me-1">link</mat-icon>Link</button>
+                                    </div>
                                 </div>
                             </div>
                         </ng-container>
                     </div>
                 </ng-container>
                     <div *ngIf="!filteredEntities.length">
-                        <div class="no-data-container w-100 shadow-sm text-secondary">
+                        <div class="no-data-container w-100 shadow-sm text-secondary text-center">
                             <span class="no-data-icon-outer">
                                 <div class="no-data-icon">
                                     <mat-icon class="no-file form-builder-no-info-card-icon">folder_off</mat-icon>
@@ -225,7 +223,7 @@
                 <div *ngIf="currentTab === 'ADD_ENTITY'">
                     <div class="row mb-2">
                         <div class="col-12 mb-2" *ngIf="editIndex == -1">
-                            <label for="entity" class="label-text fs-16">Company/Entity</label>
+                            <label for="entity" class="label-text fs-16 mt-3 pb-1">Company/Entity</label>
                             <app-endpoint-search [httpOptions]="entitySearchOptions" [searchOnFocus]="true" class="p-0"
                                 (onSelect)="entitySelected($event)"></app-endpoint-search>
                             <div class="help-text">
@@ -235,39 +233,41 @@
                             </div>
                             <span *ngIf="isDuplicate" class="text-danger ml-2">*The Entity is already linked. </span>
                         </div>
-                        <div class="col-12 mb-2">
-                            <div class="bg-light info-card-border rounded-3 mt-2 p-3"
-                                *ngIf="entityDetails.entityId || editIndex > -1">
-                                <div class="ms-3 my-1 d-flex justify-content-between align-items-center">
+
+            <!-- Entity header card -->
+                <ng-container content-sticky>
+                <div class="col-12">
+                    <div *ngIf="entityDetails.entityId || editIndex > -1"
+                        class="card card-scroll rounded-2 shadow-medium coi-box-red my-2 p-0">
+                        <div class="card-body pt-1">
+                            <div class="row mb-3">
+                                <div class="col-lg-9 d-flex align-items-center">
                                     <span class="fw-bold fs-16 me-3">
-                                        {{entityDetails?.entityName}}
-                                        <span class="fs-12 ml-2" tabindex="0" *ngIf="entityDetails?.personEntityId && editIndex > -1"
-                                            [ngClass]="getClassForStatusInModalCard(entityDetails.sfiVersionStatus,entityDetails.isFormCompleted)">{{getDescriptionForStatus(entityDetails.sfiVersionStatus,entityDetails.isFormCompleted)}}</span>
-                                        <span class="fs-12 ml-2" tabindex="0" *ngIf="entityDetails?.personEntityId && editIndex == -1"
-                                            [ngClass]="getClassForStatusInModalCard(entityDetails.personEntityVersionStatus,entityDetails.isFormCompleted)">{{getDescriptionForStatus(entityDetails.personEntityVersionStatus,entityDetails.isFormCompleted)}}</span>
-                                    </span>
+                                        {{entityDetails?.entityName}}</span>
                                 </div>
-                                <div class="mx-1 row pt-1 d-flex align-items-center">
-                                    <div class="col-4 text-secondary fs-14">
-                                        <span class="fw-bold me-2"> Country :</span>
-                                        <span class="fs-14 fw-400">{{entityDetails?.countryName}}</span>
-                                    </div>
-                                    <div class="col-4 text-secondary fs-14">
-                                        <span class="fw-bold me-2">Entity Type :</span>
-                                        <span class="fs-14 fw-400">{{entityDetails?.entityType}}</span>
-                                    </div>
-                                    <div class="col-4 text-secondary fs-14 d-flex align-items-center">
-                                        <span class="fw-bold me-2">Risk : </span>
-                                        <span class="ml-2 grey-text fw-normal">
+                                <div class="col-lg-3 d-flex align-items-center justify-content-end">
+                                    <span tabindex="0" *ngIf="entityDetails?.personEntityId && editIndex > -1"
+                                        class="badge f-14 px-3 py-2 rounded-pill me-3"
+                                        [ngClass]="entityDetails?.sfiVersionStatus ? entityDetails?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                        {{entityDetails?.sfiVersionStatus ? entityDetails?.isFormCompleted ? 'Complete' : 'Incomplete' :
+                                        'Inactive'}}</span>
+                                    <span tabindex="0" *ngIf="entityDetails?.personEntityId && editIndex == -1"
+                                        class="badge f-14 px-3 py-2 rounded-pill me-3"
+                                        [ngClass]="entityDetails?.personEntityVersionStatus ? entityDetails?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                        {{entityDetails?.personEntityVersionStatus ? entityDetails?.isFormCompleted ? 'Complete' :
+                                        'Incomplete' : 'Inactive'}}</span>
+                                    <div class="d-inline-flex align-items-center">
+                                        <label class="coi-text-light me-1">Risk: </label>
+                                        <span class="coi-text-light fw-normal">
                                             <div class="text-color fs-14 d-flex align-items-center">
                                                 <span class="text-secondary fs-14 mt-3">
                                                     <span class="text-secondary fs-14">
                                                         <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
-                                                            class="invalid material-icons-round">warning</mat-icon>
+                                                            class="invalid material-icons-round me-1">warning</mat-icon>
                                                         <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
-                                                            class="medium-risk material-icons-round">warning</mat-icon>
+                                                            class="medium-risk material-icons-round me-1">warning</mat-icon>
                                                         <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
-                                                            class="low-risk material-icons-round">warning</mat-icon>
+                                                            class="low-risk material-icons-round me-1">warning</mat-icon>
                                                     </span>
                                                 </span>
                                                 <span>{{entityDetails?.entityRiskCategory}}</span>
@@ -275,36 +275,55 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="mx-1 row pt-1 d-flex align-items-center" *ngIf="entityDetails?.personEntityId">
-                                    <div class="text-secondary fs-14" [class.d-flex] = "!entityDetails?.validPersonEntityRelType && !entityDetails?.relationship">
-                                        <span class="fw-bold me-2"> Relationship :</span>
-                                        <div class="d-flex flex-wrap fw-medium fs-13 text-secondary" *ngIf="editIndex > -1">
-                                            <em class="mt-3" *ngFor="let relation of getEntityRelationTypePills(entityDetails?.relationship)">
-                                                <span class="border px-3 py-1 rounded-4 me-2">
-                                                    <span class="fw-medium">{{relation?.relationshipType}} :</span>
-                                                    <span class="fw-normal">{{relation?.description}}</span>
-                                                </span>
-                                            </em>
-                                        </div>
-                                        <div class="d-flex flex-wrap fw-medium fs-13 text-secondary" *ngIf="editIndex == -1">
-                                            <ng-container *ngIf="entityDetails?.validPersonEntityRelType">
-                                                <em class="mt-3" *ngFor="let relation of getEntityRelationTypePills(entityDetails?.validPersonEntityRelType)">
-                                                    <span class="border px-3 py-1 rounded-4 me-2">
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-secondary fs-14">
+                                    <label class="fw-bold me-2 d-block"> Country</label>
+                                    <span class="fs-14 fw-400">{{entityDetails?.countryName}}</span>
+                                </div>
+                                <div class="col-4 text-secondary fs-14">
+                                    <label class="fw-bold me-2 d-block">Entity Type</label>
+                                    <span class="fs-14 fw-400">{{entityDetails?.entityType}}</span>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row d-flex align-items-center mt-2" *ngIf="entityDetails?.personEntityId">
+                                        <div class="fs-14"
+                                            [class.d-flex]="!entityDetails?.validPersonEntityRelType && !entityDetails?.relationship">
+                                            <span class="fw-bold me-2"> Relationship :</span>
+                                            <div class="d-inline-flex flex-wrap fw-medium text-secondary" *ngIf="editIndex > -1">
+                                                <em class="mt-3"
+                                                    *ngFor="let relation of getEntityRelationTypePills(entityDetails?.relationship)">
+                                                    <span class="border px-3 py-1 rounded-4 me-2 d-inline-block">
                                                         <span class="fw-medium">{{relation?.relationshipType}} :</span>
                                                         <span class="fw-normal">{{relation?.description}}</span>
                                                     </span>
                                                 </em>
-                                            </ng-container>
-                                            <ng-container *ngIf="!entityDetails?.validPersonEntityRelType">
-                                                <span> -- </span>
-                                            </ng-container>
+                                            </div>
+                                            <div class="d-inline-flex flex-wrap fw-medium text-secondary" *ngIf="editIndex == -1">
+                                                <ng-container *ngIf="entityDetails?.validPersonEntityRelType">
+                                                    <em class="mt-3"
+                                                        *ngFor="let relation of getEntityRelationTypePills(entityDetails?.validPersonEntityRelType)">
+                                                        <span class="border px-3 py-1 rounded-4 me-2 d-inline-block">
+                                                            <span class="fw-medium">{{relation?.relationshipType}} :</span>
+                                                            <span class="fw-normal">{{relation?.description}}</span>
+                                                        </span>
+                                                    </em>
+                                                </ng-container>
+                                                <ng-container *ngIf="!entityDetails?.validPersonEntityRelType">
+                                                    <span> -- </span>
+                                                </ng-container>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                
                         </div>
+                    </div>
+                </div>
+                </ng-container>
                         <div class="col-12 mb-2">
-                            <label for="personsRelationWithEntity" class="label-text fs-14">Your Relationship with
+                            <label for="personsRelationWithEntity" class="label-text fs-14 mt-3 pb-1">Your Relationship with
                                 Company/Entity</label>
                             <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3"
                                 [(ngModel)]="outsideFinRelationData.personsRelationWithEntity"></textarea>
@@ -318,7 +337,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-12">
-                            <label for="entity" class="label-text fs-14">Company's/Entity's Relationship with
+                            <label for="entity" class="label-text fs-14 pb-1">Company's/Entity's Relationship with
                                 MIT</label>
                             <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3"
                                 [(ngModel)]="outsideFinRelationData.entityRelationWithInstitute"></textarea>
@@ -332,10 +351,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
-                    id="OUTSIDE_FIN_REL_ADD_BTN{{id}}" (click)="clearData()" type="button">Cancel
+                    id="OUTSIDE_FIN_REL_ADD_BTN{{id}}" (click)="clearData()" title="Cancel" type="button">Cancel
                 </button>
                 <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button" [disabled]="isDuplicate || !isEntitySelected"
-                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="eventType='NEW'; addRowItem()"
+                    class="btn btn-primary fs-15 mr-8" title="Add Entity" (click)="eventType='NEW'; addRowItem()"
                     area-describedby="Click here to add">
                     Add
                 </button>

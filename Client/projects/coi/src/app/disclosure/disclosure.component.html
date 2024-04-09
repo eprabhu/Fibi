@@ -18,7 +18,7 @@
                                         </span>
                                         <h3 class="card-title align-self-baseline flex-column fs-16 mb-0">
                                             <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                                                <span class="link-primary cursor-pointer text-dark text-decoration-underline" tabindex="0" (click)="openDetailModal(coiData)"
+                                                <span class="link-primary" tabindex="0" (click)="openDetailModal(coiData)"
                                                     (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
                                                     title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</span>
                                             </ng-container>
@@ -33,8 +33,8 @@
                                                     {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
                                                     coiData?.projectDetail?.title }}
                                                     ] By
-                                                    <span class="link-primary coi-text-light text-dark text-decoration-underline" tabindex="0" role="link"
-                                                        (click)="openDetailModal(coiData)"
+                                                    <span class="link-primary fw-lighter fs-14" tabindex="0" role="link"
+                                                        (click)="openDetailModal(coiData)" [attr.aria-label]="'click to view person details of '+ coiData?.coiDisclosure?.person?.fullName"
                                                         (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
                                                         title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
                                                         {{ coiData?.coiDisclosure?.person?.fullName }}</span>
@@ -43,8 +43,7 @@
                                             <div class="m-0">
                                                 <span class="coi-text-light">
                                                     {{coiData?.coiDisclosure?.personPrimaryTitle}} |
-                                                    <span
-                                                        class="coi-text-lighter">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
+                                                    <span>{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
                                                     |
                                                     {{coiData?.coiDisclosure?.personEmail}}
                                                 </span>
@@ -67,8 +66,8 @@
 
                                             <div class="d-flex justify-content-end align-items-center f-14 pe-md-0" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ? 'py-xxl-2':'pe-xxl-4'"
                                             [class.py-1]="!coiData?.coiDisclosure?.riskCategoryCode">
-                                                <span class="cursor-pointer ms-2 me-2" [class.link-primary]="4" tabindex="0" role="link">
-                                                    Trainings({{1}})
+                                                <span class="cursor-pointer ms-2 me-2" tabindex="0" role="link">
+                                                    Trainings({{0}})
                                                 </span> |
                                                 <span class="cursor-pointer ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
                                                     role="link" (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)"

@@ -25,11 +25,11 @@
                                     getProjectTitle(disclosure) | slice:0:150)}}</span>
                                 <span *ngIf="!readMoreOrLess && getProjectTitle(disclosure)?.length>150">
                                     <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true" (keydown.enter)="readMoreOrLess=true"
-                                    tabindex="0" role="link" aria-label="Click here read more" title="Click here read more" class="link-primary fw-500"><span>...Read
+                                    tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" class="link-primary fw-500"><span>...Read
                                             More</span></a>
                                 </span>
                                 <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500" 
-                                tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"><span>Read
+                                tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"><span>Read
                                         Less</span></a>
                             </span>
                         </h4>
@@ -207,7 +207,7 @@
                                         <span> {{(disclosure?.purposeOfTheTrip |
                                             slice:0:55)}}
                                             <span (click)="isPurposeReadMore = !isPurposeReadMore" (keydown.enter)="isPurposeReadMore = !isPurposeReadMore"
-                                            tabindex="0" role="link" aria-label="Click here read more" title="Click here read more"
+                                            tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                 class="link-primary"><span class="fw-500">...Read more</span>
                                             </span>
                                         </span>
@@ -217,9 +217,9 @@
                                             class="word-break-all d-flex coi-text-light ms-0">{{disclosure?.purposeOfTheTrip}}</span>
                                         <span *ngIf="disclosure?.purposeOfTheTrip?.length > 55"
                                             (click)="isPurposeReadMore = !isPurposeReadMore" (keydown.enter)="isPurposeReadMore = !isPurposeReadMore"
-                                            tabindex="0" role="link" aria-label="Click here read less" title="Click here read less"
+                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
                                             class="d-flex link-primary"><span
-                                                class="fw-500fs-14">Read Less</span>
+                                                class="fw-500 fs-14">Read Less</span>
                                         </span>
                                     </ng-template>
                                 </app-no-data-label>
