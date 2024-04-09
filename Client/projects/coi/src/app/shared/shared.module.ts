@@ -65,7 +65,8 @@ import { FormBuilderService } from './form-builder-view/form-builder.service';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
+import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -94,7 +95,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
-        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent ],
+        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,FormBuilderViewComponent,FormSectionsComponent ],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -147,7 +148,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         OPAOutsideFinancialRelationComponent,
         OPAInstituteResourceUseComponent,
         OPAStudentSubordinateEmployeeComponent,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        FormBuilderViewComponent,
+        FormSectionsComponent
     ],
 
     providers: [
