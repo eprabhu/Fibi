@@ -14,7 +14,7 @@
                                     <span *ngIf="sfi?.personEntityRelationshipDto?.entityName > 75" (keydown.enter)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"
                                         (click)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])" tabindex="0" role="link"
                                         [attr.aria-label]="readMore[sfi?.personEntityId] ?'Click here to Read Less' : 'Click here to Read More'"
-                                        [title]="readMore[sfi?.personEntityId] ?'Click here to Read Less' : 'Click here to Read More'" id="btn-read-action-{{sfi?.personEntityId}}"
+                                        [title]="readMore[sfi?.personEntityId] ?'Click here to Read less' : 'Click here to Read more'" id="btn-read-action-{{sfi?.personEntityId}}"
                                         class="link-primary fs-13">
                                         {{readMore[sfi?.personEntityId] ? "Read Less" : "Read More"}}
                                     </span>

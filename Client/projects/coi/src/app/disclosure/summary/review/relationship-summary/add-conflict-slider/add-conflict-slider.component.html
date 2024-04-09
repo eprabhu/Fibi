@@ -24,6 +24,9 @@
                                     slice:0:120) :
                                     entityDetails?.title}}</strong>
                                 <span *ngIf="entityDetails?.title?.length>120" class="fw-500 ms-1 link-primary"
+                                    (keydown.enter)="titleReadMore = !titleReadMore"
+                                    tabindex="0" role="link" aria-label="Click here to {{titleReadMore? 'Read less': 'Read more'}}" 
+                                    title="Click here to {{titleReadMore? 'Read less': 'Read more'}}"
                                     (click)="titleReadMore = !titleReadMore">{{titleReadMore? 'Read Less': '...Read More'}}
                                 </span>
                             </span>
