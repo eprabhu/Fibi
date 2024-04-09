@@ -131,14 +131,3 @@
     max-height: 335px;
   }
 }
-
-.nav-underline{
-  .nav-link {
-    color: var(--bs-secondary-rgb);
-    border-bottom-width: 3px;
-    cursor: pointer;
-  }
-  .nav-link.active, .nav-underline .show>.nav-link {
-    color: var(--theme-primary-color) !important;
-  }
-}
