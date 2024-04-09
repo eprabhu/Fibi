@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
-import { ComponentObject, ComponentOrder, CreateComponentObject, CreateFormHeader, FormSectionObject, SectionOrder, UpdateFormHeaderObject, UpdateSectionObject } from '../../shared/form-builder-view/form-builder-interface';
+import { ComponentObject, ComponentOrder, CreateComponentObject, CreateFormHeader, FormBuilderEvent, FormSectionObject, SectionOrder, UpdateFormHeaderObject, UpdateSectionObject } from '../../shared/form-builder-view/form-builder-interface';
 
 @Injectable()
 export class FormBuilderCreateService {
 
     unSavedChange = false;
     autoSaveTrigger$: Subject<any> = new Subject<any>();
+    formBuilderEvents = new Subject<FormBuilderEvent>();
 
     constructor(private _commonService: CommonService, private _http: HttpClient) { }
 

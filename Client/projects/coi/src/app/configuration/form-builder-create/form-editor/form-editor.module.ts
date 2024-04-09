@@ -6,10 +6,9 @@ import { FormEditorComponent } from '../form-editor/form-editor/form-editor.comp
 import { FormAddtionalInformationComponent } from '../form-editor/form-addtional-information/form-addtional-information.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Routes, RouterModule } from '@angular/router';
-import { OpaService } from '../../../opa/services/opa.service';
-import { DataStoreService } from '../../../opa/services/data-store.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { FormPreviewComponent } from './form-preview/form-preview.component';
 
 const routes: Routes = [
     {
@@ -17,7 +16,7 @@ const routes: Routes = [
         children: [
             { path: '', redirectTo: 'editor', pathMatch: 'full' },
             { path: 'editor', component: FormEditorComponent },
-            { path: 'preview', loadChildren: () => import('./../../../opa/form/form.module').then(m => m.FormModule) },
+            { path: 'preview', component:FormPreviewComponent  },
             { path: 'integration', component: FormIntegrationComponent },
         ]
     }]
@@ -36,8 +35,8 @@ const routes: Routes = [
         FormIntegrationComponent,
         FormEditorComponent,
         FormAddtionalInformationComponent,
+        FormPreviewComponent
     ],
-    providers: [OpaService, DataStoreService]
 
 })
 export class FormEditorModule { }
