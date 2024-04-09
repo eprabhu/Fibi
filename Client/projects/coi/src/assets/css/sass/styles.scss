@@ -764,5 +764,21 @@ ul.timeline>li:nth-child(1) {
   i {
     @extend .fs-14;
   }
-} 
+}
+
+.nav-underline {
+  .nav-link {
+    color: var(--bs-secondary-rgb);
+    border-bottom-width: 3px;
+    cursor: pointer;
+  }
+  .nav-link.active, .nav-underline .show>.nav-link {
+    color: var(--theme-primary-color) !important;
+  }
+}
+
+.zero-count-padding {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
 

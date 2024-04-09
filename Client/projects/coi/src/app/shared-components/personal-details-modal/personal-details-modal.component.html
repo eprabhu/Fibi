@@ -11,17 +11,19 @@
                     (click)="addNewValue(false)"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex nav-sticky mb-3" id="person-modal">
-                    <nav class="card-nav bg-white br-bottom d-flex fs-14 fw-bold d-flex align-items-center d-inline-block w-100 border-bottom">
-                        <div class="text-secondary header-icons cursor-pointer px-0 nav-options"
-                            (click)="currentTab='PERSON_DETAILS'" [class.active]="currentTab == 'PERSON_DETAILS'">
-                            <span title="Click to view Person Details" class="r-title px-3 fw-500 fs-16">
+                <div class="d-flex nav-sticky mb-" id="person-modal">
+                    <nav class="nav-underline border-bottom d-flex fw-bold mb-2 w-100">
+                        <div class="d-flex align-items-center text-secondary cursor-pointer nav-link px-3"
+                            tabindex="0" role="button" aria-label="Click to view Person Details" title="Click to view Person Details"
+                            (click)="currentTab='PERSON_DETAILS'" (keydown.enter)="currentTab='PERSON_DETAILS'"  [class.active]="currentTab == 'PERSON_DETAILS'">
+                            <span class="fw-500 fs-16">
                                 Person Details
                             </span>
                         </div>
-                        <div class="text-secondary header-icons cursor-pointer nav-options" (click)="currentTab='TRAINING_DETAILS'"
-                            [class.active]="currentTab == 'TRAINING_DETAILS'">
-                            <span title="Click to view Training" class="r-title px-3 fw-500 fs-16">
+                        <div class="d-flex align-items-center text-secondary cursor-pointer nav-link px-3" (click)="currentTab='TRAINING_DETAILS'"
+                            tabindex="0" role="button" aria-label="Click to view Training" title="Click to view Training"
+                            [class.active]="currentTab == 'TRAINING_DETAILS'" (keydown.enter)="currentTab == 'TRAINING_DETAILS'">
+                            <span class="fw-500 fs-16">
                                 Training
                             </span>
                         </div>

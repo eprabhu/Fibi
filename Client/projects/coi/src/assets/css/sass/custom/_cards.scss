@@ -136,7 +136,8 @@
         background-color: var(--theme-card-bg-color);
         border-top: 1px solid var(--theme-body-bg-color);
 
-        .badge:hover{
+        .badge:hover,
+        .badge:focus {
             background-color: var(--theme-blue) !important;
             color: #fff !important;
         }

@@ -13,7 +13,7 @@
                                     </span>
                                     <span *ngIf="sfi?.personEntityRelationshipDto?.entityName > 75" (click)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"
                                         (keydown.enter)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"  role="link" tabindex="0"
-                                        [title]="readMore[sfi?.personEntityId] ? 'Click here to Read Less' : 'Click here to Read More'"
+                                        [title]="readMore[sfi?.personEntityId] ? 'Click here to Read less' : 'Click here to Read more'"
                                         [attr.aria-label]="readMore[sfi?.personEntityId] ? 'Click here to Read Less' : 'Click here to Read More'"
                                         id="link-read-more-less"  class="collapse-text fs-13">
                                         {{readMore[sfi?.personEntityId] ? 'Read Less' : '...Read More'}}
