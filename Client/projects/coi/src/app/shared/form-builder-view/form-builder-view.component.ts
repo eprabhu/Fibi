@@ -51,6 +51,9 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
                     this.saveEventForChildComponent.next({eventType: 'CHANGE_FLAG', data: false});
                 } else if (E.eventType === 'IS_EDIT_MODE') {
                     this.isFormEditable = E.data;
+                }else if(E.eventType === 'BLANK_FORM'){
+                    this.fbConfiguration = E.data;
+                    this.getFormBuilderDataForBlankForm();
                 }
             }));
         }
@@ -58,6 +61,12 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
 
     private getFormBuilderData(): void {
         this._formBuilderService.getFormBuilderData(this.fbConfiguration).subscribe((data: any) => {
+            this.formBuilderData = data;
+        });
+    }
+
+    private getFormBuilderDataForBlankForm(): void {
+        this._formBuilderService.getFormBuilderDataForBlankForm(this.fbConfiguration).subscribe((data: any) => {
             this.formBuilderData = data;
         });
     }

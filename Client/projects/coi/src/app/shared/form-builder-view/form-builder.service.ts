@@ -22,6 +22,9 @@ export class FormBuilderService {
     getOpaPersonType(): any {
         return this._http.get(this.baseURL + '/opa' + '/getOpaPersonType');
     }
+    getFormBuilderDataForBlankForm(configuration: FBConfiguration) {
+        return this._http.post(this.baseURL + '/formbuilder/getBlankForm', configuration);
+    }
 
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {
         const formData = new FormData();
