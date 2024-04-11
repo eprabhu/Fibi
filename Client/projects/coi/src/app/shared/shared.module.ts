@@ -66,6 +66,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover.directive';
+import { ReadMoreComponent } from './read-more/read-more.component';
+
 
 @NgModule({
     imports: [
@@ -95,6 +97,7 @@ import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
+        ReadMoreComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
         TailingSpaceRemoverDirective],
     exports: [
@@ -150,7 +153,8 @@ import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover
         OPAInstituteResourceUseComponent,
         OPAStudentSubordinateEmployeeComponent,
         MatAutocompleteModule,
-        TailingSpaceRemoverDirective
+        TailingSpaceRemoverDirective,
+        ReadMoreComponent
     ],
 
     providers: [

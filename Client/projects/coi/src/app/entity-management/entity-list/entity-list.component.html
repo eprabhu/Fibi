@@ -170,7 +170,7 @@
                                             <p [attr.aria-label]="'Entity Status ' + (entityListData?.isActive ? 'Active' : 'Inactive') +
                         'Entity Name' + entityListData?.entityName + 'Verified Status' + 'Unverified'"
                                                class="my-auto mb-0 coi-text-darker fs-6">
-                                                {{entityListData?.entityName}}
+                                                <app-read-more [valueToShow]="entityListData?.entityName" [sliceCount]="100"></app-read-more>
                                             </p>
                                         </div>
                                         <div class="col-auto text-end">

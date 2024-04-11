@@ -8,7 +8,8 @@
                 <div class="row flex-grow-1 position-relative">
                   <div class="col-xl d-flex align-items-center">
                     <h1 class="fw-bold mt-3 px-3 fs-18" [attr.aria-label]="entityDetails?.entityName">
-                      {{entityDetails?.entityName}}</h1>
+                      <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
+                    </h1>
                   </div>
                   <div class="d-flex justify-content-end align-items-center col-xl-auto">
                     <div class="card-toolbar ms-auto">
@@ -128,7 +129,7 @@
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
                 </button>
                 <!-- Modify Entity -->
-                <button *ngIf="hasManageEntity" (click)="goBackStep();" [matMenuTriggerFor]="beforeMenu"
+                <button *ngIf="hasManageEntity" [matMenuTriggerFor]="beforeMenu"
                   title="More Actions" aria-label="More Actions"
                   class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
                   <mat-icon class="more-options-icon">more_vert</mat-icon>
@@ -216,7 +217,9 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header ct-footer-padding">
-        <h4 class="modal-title">{{entityDetails?.entityName}}</h4>
+        <h4 class="modal-title">
+            <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [readMore]="readMore"></app-read-more>
+        </h4>
         <button type="button" class="btn-close" title="Close" aria-label="Close" (click)="closeModal()"></button>
       </div>
       <div class="modal-body ct-footer-padding">
@@ -306,9 +309,11 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title me-1">{{entityDetails?.isActive?'Inactivate':'Activate'}} - <span class="fw-normal">{{entityDetails?.entityName}}</span></h4>
-        <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
-          (click)="inactivateReason=''"></button>
+        <h4 class="modal-title me-1">{{entityDetails?.isActive?'Inactivate':'Activate'}} - <span class="fw-normal">
+            <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [readMore]="readMore"></app-read-more>
+            </span>
+        </h4>
+        <button type="button" class="btn-close" title="Close" aria-label="Close" (click)="closeActiveInactiveModal()"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -360,8 +365,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary" id="inactive-sfi" data-bs-dismiss="modal" type="button" title="Cancel"
-          (click)="inactivateReason=''">Cancel</button>
+        <button class="btn btn-outline-secondary" id="inactive-sfi" type="button" title="Cancel"
+          (click)="closeActiveInactiveModal()">Cancel</button>
         <button class="btn btn-primary me-0" id="inactive-sfi" type="button"
           [attr.title]="entityDetails?.isActive?'Click to inactivate entity':'Click to activate entity'"
           (click)="activateAndInactivateEntity()">
@@ -381,7 +386,10 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title me-1">Approve Entity - <span class="fw-normal">{{entityDetails?.entityName}}</span></h4>
+          <h4 class="modal-title me-1">Approve Entity - <span class="fw-normal">
+            <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
+            </span>
+          </h4>
           <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
             (click)="clearApproveEntityFiled()"></button>
         </div>
