@@ -361,7 +361,7 @@ export class AddSfiComponent implements OnInit {
             }
         } else {
             this.heading = 'Significant Financial Interest';
-            this.buttonName = 'Save SFI';
+            this.buttonName = 'Save';
             this.btnTitle = 'Click to Save SFI';
         }
     }

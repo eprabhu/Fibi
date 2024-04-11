@@ -1,17 +1,17 @@
 <!-- SFI header card -->
-<div class="row my-3" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
+<div class="row" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="row mx-0">
                 <div class="col-lg px-0">
                     <div class="card-header bg-white px-3 border-bottom">
-                        <div class="row flex-grow-1">
+                        <div class="row flex-grow-1 position-relative">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <div class="fw-bold d-flex align-items-center" tabindex="0">
-                                    <span (click)="viewEntityDetails()" tabindex="0" title="Click to view Disclosure" role="button" (keydown.enter)="viewEntityDetails()"
-                                        area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure"
-                                        [ngClass]="showViewButton() ? 'cursor-pointer clickable-content text-primary' : ''"
-                                        class="fw-medium">{{entityDetails?.entityName}}</span>
+                                    <span tabindex="0" title="Click to view Disclosure"
+                                        area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure">
+                                        <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [clickableContent]="showViewButton() ? 'true' : 'false'" (emitClickEvent)="viewEntityDetails($event)"></app-read-more>
+                                    </span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
                                         *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
                                 </div>
@@ -23,7 +23,7 @@
                                     relationshipsDetails?.versionStatus == 'ARCHIVE'?
                                     relationshipsDetails?.isFormCompleted ? 'Complete' : 'Incomplete' :
                                     'Inactive'}}</span>
-                                <div class="ms-3 d-flex align-items-center">
+                                <div class="ms-3 d-flex align-items-center me-3">
                                     <label class="fs-14 fw-500 me-3" for="risk-level">SFI Version :
                                     </label>
                                     <div *ngIf="entityVersionList.length > 0">
@@ -35,10 +35,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                <button (click)="collapseHeader()" title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                    class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                    <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="isCardExpanded">
                         <div class="row">
                             <div class="col-lg-4 col-md-6 mb-md-3 mb-lg-0 mb-3" tabindex="0">
                                 <label aria-label="Country" class="d-block coi-text-dark">Country</label>
@@ -61,7 +65,7 @@
                                 </app-no-data-label>
                             </div>
                             <div tabindex="0" class="col-lg-12">
-                                <label class="coi-text-dark mt-3 me-2">Relationship : </label>
+                                <label class="coi-text-dark mt-3 me-2">Relationship </label>
                             <span>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
@@ -94,7 +98,7 @@
                     [class.custom-margin]="relationshipDetails?.isFormCompleted"
                     class="col-lg-3 border-left border-start">
                     <div class="h-100">
-                        <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 mb-2">
+                        <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-2 mb-2">
                             <ng-container *ngIf="canShowMoreActions() ;else noMangeRights"
                                 [class.px-1]="relationshipsDetails?.versionStatus !== 'ACTIVE'  && isEditMode">
                                 <button
@@ -119,6 +123,7 @@
                                     class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                     type="button" (click)="navigateBack()" title="Back">
                                     <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+                                    <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                 </button>
                                 <ng-template #noRightDesign3>
                                     <button (click)="navigateBack()" tabindex="0"
@@ -126,7 +131,7 @@
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         type="button" title="Back">
                                         <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
-                                        <span class="fs-14 mx-2 btn-content-back">Back</span>
+                                        <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                     </button>
                                 </ng-template>
                                 <button *ngIf="canShowMoreActions()" [matMenuTriggerFor]="beforeMenu"
@@ -134,15 +139,12 @@
                                     type="button" title="Click for More Actions">
                                     <mat-icon class="moreActionIcon">more_vert</mat-icon>
                                 </button>
-                                <div *ngIf="isEditMode && entityDetailsServices.canMangeSfi"
-                                class="col-12 justify-content-around mt-2">
-                                <button (click)="saveRelationship()" tabindex="0"
+                                <button (click)="saveRelationship()" tabindex="0" *ngIf="isEditMode && entityDetailsServices.canMangeSfi"
                                     class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-                                    title="Click to save">
-                                    <mat-icon class="me-2">save</mat-icon>
-                                    <span>Save</span>
+                                    title="Click to save" [ngClass]="isCardExpanded ? 'col-12 mt-2' : 'col'">
+                                    <mat-icon>save</mat-icon>
+                                    <span *ngIf="isCardExpanded" class="ms-2">Save</span>
                                 </button>
-                            </div>
                         </ng-container>
                             <ng-template #noMangeRights>
                                 <div class="mt-3 mx-3 d-flex justify-content-around px-1">
@@ -155,7 +157,7 @@
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         (click)="navigateBack()" tabindex="0" title="Click to go back to Entity list">
                                         <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
-                                        <span class="fs-14 mx-2 btn-content-back">Back</span>
+                                        <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                     </button>
                                     <button *ngIf="canShowMoreActions()" [matMenuTriggerFor]="beforeMenu"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
@@ -199,12 +201,14 @@
                                 </ng-container>
                             </mat-menu>
                         </div>
-                            <label class="fw-medium me-1">Last Updated By : </label>
+                        <ng-container *ngIf="isCardExpanded">
+                            <label class="fw-medium me-1 coi-text-lighter fs-13">Last Updated By : </label>
                             <app-no-data-label [classesToApply]="'fs-14'"
                                 [valueToShow]="relationshipsDetails?.updateTimestamp">
-                                <span class=" fs-14"> {{relationshipsDetails?.updateUserFullName}} On
+                                <span class="coi-text-dark fs-13 fw-normal"> {{relationshipsDetails?.updateUserFullName}} <span class="coi-text-lighter fs-13 fw-medium"> On </span>
                                     {{(relationshipsDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}} </span>
                             </app-no-data-label>
+                        </ng-container>
                     </div>
                 </div>
             </div>

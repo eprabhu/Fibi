@@ -66,6 +66,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover.directive';
+import { ReadMoreComponent } from './read-more/read-more.component';
 import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
 import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
 
@@ -97,6 +98,7 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
+        ReadMoreComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
         TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent ],
 
@@ -154,6 +156,7 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         OPAStudentSubordinateEmployeeComponent,
         MatAutocompleteModule,
         TailingSpaceRemoverDirective,
+        ReadMoreComponent,
         FormBuilderViewComponent,
         FormSectionsComponent
     ],

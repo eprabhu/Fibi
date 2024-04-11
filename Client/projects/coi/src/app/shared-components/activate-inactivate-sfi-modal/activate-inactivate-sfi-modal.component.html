@@ -7,7 +7,9 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} {{entityName}}</h4>
+          <h4 class="modal-title">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} -
+           <span class="fw-normal">  <app-read-more [valueToShow]="entityName" [sliceCount]="100"></app-read-more> </span>
+          </h4>
           <button type="button" class="btn-close" title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
         </div>
         <div class="modal-body">
