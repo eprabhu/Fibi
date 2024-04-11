@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.controller;
 
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 
 @RestController
 @RequestMapping("/coi")
