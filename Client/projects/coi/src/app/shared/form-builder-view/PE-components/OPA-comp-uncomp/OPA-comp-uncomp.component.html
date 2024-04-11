@@ -97,10 +97,10 @@
 </div>
 
 <!-- Add CompUncomp Modal -->
-<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog modal-xl"
     data-bs-backdrop="static" id="OPA_COMP_UNCOMP{{id}}" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-white">
             <div class="modal-header">
                 <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
             </div>
@@ -108,10 +108,10 @@
                 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
                     <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' " title="My Entities">
-                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
+                        <span class="pb-2 hand-cursor" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
                     </div>
                     <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'" title="Add New Entity">
-                        <span class="pb-3 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
+                        <span class="pb-2 hand-cursor" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
                     </div>
                 </nav>
 
@@ -149,7 +149,7 @@
                             <ng-container *ngFor="let item of filteredEntities">
                                 <div class="border bg-white rounded-3 p-1 my-2">
                                     <div class="mb-2 row">
-                                        <div class="col-11">
+                                        <div class="col-9">
                                             <span class="align-items-center d-flex">
                                                 <span class="shadow-sm align-items-center d-flex" tabindex="0"
                                                     [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
@@ -164,7 +164,7 @@
                                                 </p>
                                             </span>
                                         </div>
-                                        <div class="col-1 d-flex align-items-center text-secondary">
+                                        <div class="col-3 d-flex align-items-center text-secondary justify-content-end">
                                             <button (click)="linkEntity(item)"
                                                 class="align-items-center btn btn-outline-secondary d-flex fs-12 small-btn-height">
                                                 <mat-icon class="me-1 small-icon">link</mat-icon>
