@@ -27,7 +27,7 @@ import com.polus.fibicomp.coi.dao.COIFileAttachmentDao;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;;
 import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 

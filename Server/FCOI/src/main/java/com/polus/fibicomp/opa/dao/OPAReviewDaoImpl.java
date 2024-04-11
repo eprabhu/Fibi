@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.pojo.OPAReview;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
 
 @Repository
 @Transactional

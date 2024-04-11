@@ -192,7 +192,7 @@ ELSE
                                         T20.UNIT_NAME,
                                         T20.ORGANIZATION_ID,
                                         T20.PARENT_UNIT_NUMBER,
-                                        T20.ACTIVE_FLAG,
+                                        T20.IS_ACTIVE,
                                         T20.ACRONYM,
                                         T20.IS_FUNDING_UNIT,
                                         T1.CONFLICT_STATUS_CODE,

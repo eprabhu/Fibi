@@ -26,7 +26,7 @@ import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ModuleSectionDetailsDto;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

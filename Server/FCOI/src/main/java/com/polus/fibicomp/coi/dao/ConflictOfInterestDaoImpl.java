@@ -111,7 +111,7 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.core.inbox.pojo.Inbox;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;;
 import oracle.jdbc.OracleTypes;
 
 @Service(value = "conflictOfInterestDao")

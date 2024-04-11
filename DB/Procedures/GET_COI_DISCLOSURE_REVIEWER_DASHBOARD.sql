@@ -156,7 +156,7 @@ END IF;
                                         T22.UNIT_NAME,
                                         T22.ORGANIZATION_ID,
                                         T22.PARENT_UNIT_NUMBER,
-                                        T22.ACTIVE_FLAG,
+                                        T22.IS_ACTIVE,
                                         T22.ACRONYM,
                                         T22.IS_FUNDING_UNIT,
 										T1.FCOI_TYPE_CODE,
