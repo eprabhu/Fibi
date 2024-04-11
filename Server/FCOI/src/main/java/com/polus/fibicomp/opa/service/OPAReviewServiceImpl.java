@@ -25,7 +25,7 @@ import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
-import com.polus.fibicomp.security.AuthenticatedUser;
 
 @Service
 @Transactional

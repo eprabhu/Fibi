@@ -31,7 +31,6 @@ import com.polus.fibicomp.coi.vo.DashBoardProfile;
 import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
-import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -103,7 +102,7 @@ import com.polus.core.inbox.pojo.Inbox;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
 
 
 @Service(value = "conflictOfInterestService")
