@@ -607,10 +607,10 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public List<String> getAdministratorsByModuleCode(Integer coiModuleCode) {
+	public List<String> getAdministratorsByModuleCode(Integer moduleCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-	    String hqlQuery = "SELECT DISTINCT pr.personRoleRTAttributes.personId FROM PersonRoleRT pr WHERE pr.roleId IN (SELECT ag.roleId FROM AdminGroup ag WHERE ag.moduleCode = :moduleCode)";
-	    return session.createQuery(hqlQuery, String.class).setParameter("moduleCode", coiModuleCode).getResultList();
+		String hqlQuery = "SELECT DISTINCT pr.personId FROM PersonRoles pr WHERE pr.roleId IN (SELECT ag.roleId FROM AdminGroup ag WHERE ag.moduleCode = :moduleCode)";
+		return session.createQuery(hqlQuery, String.class).setParameter("moduleCode", moduleCode).getResultList();
 	}
 
 }
