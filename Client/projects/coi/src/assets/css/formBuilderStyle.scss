@@ -197,18 +197,6 @@ scrollbar-width: none;  /* Firefox */
   max-height: 100vh;
 }
 
-
-.left-div{
-  width: 20%;
-  background-color: white;
-}
-
-.right-div{
-  width: 50%;
-  overflow-y: auto;
-
-}
-
 .addition-info{
   width: 35%;
   height: calc(100vh - 188px);
@@ -444,4 +432,14 @@ scrollbar-width: none;  /* Firefox */
 
 .deactivate-text-color{
   color: #fff !important;
+}
+
+.fb-left-div{
+  width: 20%;
+  background-color: white;
+}
+
+.fb-right-div{
+  width: 50%;
+  overflow-y: auto;
 }
