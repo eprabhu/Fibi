@@ -14,7 +14,7 @@
                                     </span>
                                 </span>
                                 <h3 class="card-title align-items-start flex-column fs-16 mb-0">
-                                        <span class="link-primary text-dark cursor-pointer text-decoration-underline" tabindex="0" (click)="openDetailModal()"
+                                        <span class="link-primary cursor-pointer text-decoration-underline" tabindex="0" (click)="openDetailModal()"
                                             (keyup.enter)="openDetailModal()" (keyup.space)="openDetailModal()"
                                             [attr.aria-label]="opa?.opaDisclosure?.personName + opa?.opaDisclosure?.personPrimaryTitle + opa?.opaDisclosure?.homeUnitName + opa?.opaDisclosure?.personEmail"
                                             title="Click to view details of {{opa?.opaDisclosure?.personName}}">{{opa?.opaDisclosure?.personName}}
@@ -22,8 +22,7 @@
                                     <div class="m-0">
                                         <span class="coi-text-light">
                                             {{opa?.opaDisclosure?.personPrimaryTitle}} |
-                                            <span
-                                                class="coi-text-lighter">{{commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)}}</span>
+                                            {{commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)}}
                                             |
                                             {{opa?.opaDisclosure?.personEmail}}
                                         </span>
@@ -132,23 +131,23 @@
                                     <span class="coi-text-darker fs-6 coi-field-set">Status</span>
                                     <div class="row">
                                         <div class="col-4 col-lg-4 col-xl-6 mt-3 pe-0">
-                                            <label class="coi-text-dark d-block">Disposition
+                                            <label class="coi-text-lighter d-block">Disposition
                                             </label>
                                             <app-no-data-label
                                                  [valueToShow]="opa?.opaDisclosure?.dispositionStatusType?.description">
                                             <span class="{{commonService.getDispositionStatusBadge(opa?.opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
-                                            <span class="coi-text-light">
+                                            <span class="coi-text-dark">
                                                 {{opa?.opaDisclosure?.dispositionStatusType?.description}}
                                             </span>
                                             </app-no-data-label>
                                         </div>
                                         <div class="col-4 col-lg-4 col-xl-6 mt-3 pe-0">
-                                            <label class="coi-text-dark d-block">Review
+                                            <label class="coi-text-lighter d-block">Review
                                             </label>
                                             <app-no-data-label
                                                 [valueToShow]="opa?.opaDisclosure?.reviewStatusType?.description">
                                             <span class="{{commonService.getReviewStatusBadge(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
-                                            <span class="coi-text-light">
+                                            <span class="coi-text-dark">
                                                 {{opa?.opaDisclosure?.reviewStatusType?.description}}
                                             </span>
                                             </app-no-data-label>

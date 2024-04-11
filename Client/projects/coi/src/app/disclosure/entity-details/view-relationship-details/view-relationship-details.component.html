@@ -8,10 +8,10 @@
                         <div class="row flex-grow-1">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <div class="fw-bold d-flex align-items-center" tabindex="0">
-                                    <span (click)="viewEntityDetails()" tabindex="0" title="Click to view Disclosure" role="button" (keydown.enter)="viewEntityDetails()"
-                                        area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure"
-                                        [ngClass]="showViewButton() ? 'cursor-pointer clickable-content text-primary' : ''"
-                                        class="fw-medium">{{entityDetails?.entityName}}</span>
+                                    <span tabindex="0" title="Click to view Disclosure"
+                                        area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure">
+                                        <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [clickableContent]="showViewButton() ? 'true' : 'false'" (emitClickEvent)="viewEntityDetails($event)"></app-read-more>
+                                    </span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
                                         *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
                                 </div>
@@ -61,7 +61,7 @@
                                 </app-no-data-label>
                             </div>
                             <div tabindex="0" class="col-lg-12">
-                                <label class="coi-text-dark mt-3 me-2">Relationship : </label>
+                                <label class="coi-text-dark mt-3 me-2">Relationship </label>
                             <span>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
@@ -199,10 +199,10 @@
                                 </ng-container>
                             </mat-menu>
                         </div>
-                            <label class="fw-medium me-1">Last Updated By : </label>
+                            <label class="fw-medium me-1 coi-text-lighter d-block fs-13">Last Updated By : </label>
                             <app-no-data-label [classesToApply]="'fs-14'"
                                 [valueToShow]="relationshipsDetails?.updateTimestamp">
-                                <span class=" fs-14"> {{relationshipsDetails?.updateUserFullName}} On
+                                <span class="coi-text-dark fs-13 fw-normal"> {{relationshipsDetails?.updateUserFullName}} <span class="coi-text-lighter fs-13 fw-medium"> On </span>
                                     {{(relationshipsDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}} </span>
                             </app-no-data-label>
                     </div>
