@@ -445,3 +445,13 @@ scrollbar-width: none;  /* Firefox */
 .deactivate-text-color{
   color: #fff !important;
 }
+
+.fb-left-div{
+  width: 20%;
+  background-color: white;
+}
+
+.fb-right-div{
+  width: 50%;
+  overflow-y: auto;
+}
