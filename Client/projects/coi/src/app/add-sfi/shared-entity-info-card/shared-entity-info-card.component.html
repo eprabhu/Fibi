@@ -7,7 +7,7 @@
         <div class="col-lg-9">
           <span class="d-flex">
             <h4 class="mb-0 d-flex label-text f-16">
-              {{entityDetails?.entityName}}
+                <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
             </h4>
           </span>
         </div>

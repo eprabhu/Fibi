@@ -754,14 +754,14 @@
                                                     <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">
-                                                            <a *ngIf="!readMoreOrLess[index]" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                                                (click)="readMoreOrLess[index]=true" (keydown.enter)="readMoreOrLess[index]=true" class="link-primary"><span
-                                                                    class="fw-500">...Read More</span></a>
+                                                            <span *ngIf="!readMoreOrLess[index]" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
+                                                                (click)="readMoreOrLess[index]=true" (keydown.enter)="readMoreOrLess[index]=true" class="link-primary fs-14">
+                                                                <span class="fw-500">...Read More</span></span>
                                                         </span>
-                                                        <a *ngIf="readMoreOrLess[index]" class="link-primary ms-1"
+                                                        <span *ngIf="readMoreOrLess[index]" class="link-primary fs-14 ms-1"
                                                             tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
                                                             (click)="readMoreOrLess[index]=false" (keydown.enter)="readMoreOrLess[index]=false">
-                                                            <span class="fw-500">Read Less</span></a>
+                                                            <span class="fw-500">Read Less</span></span>
                                                     </span>
                                                 </span>
                                             </ng-container>
