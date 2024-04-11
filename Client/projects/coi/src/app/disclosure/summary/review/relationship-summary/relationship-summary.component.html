@@ -77,14 +77,14 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-auto p-10 d-flex align-items-center">
-                    <div *ngIf="projectRelations.length > 0" class="me-2">
-                        <span class="{{_commonService
-                        .getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
-                        <span class="badgeFont">{{worstCaseStatus?.description}}</span>
-                    </div>
-                    <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
-				</div>
+        <div class="col-auto">
+          <div *ngIf="projectRelations.length > 0" class="me-2">
+            <label class="coi-text-lighter d-block">Conflict Status</label>
+            <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
+            <span class="badgeFont">{{worstCaseStatus?.description}}</span>
+          </div>
+          <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
+        </div>
 			</div>
       <div class="table-responsive coi-table-striped">
       <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0">
@@ -154,7 +154,7 @@
                     </td>
                     <td class="px-3 text-center text-nowrap">
                       <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}"></span>
-                      <span class="badgeFont">
+                      <span>
                         {{relation?.coiProjConflictStatusType?.description}}
                     </span>
                     </td>

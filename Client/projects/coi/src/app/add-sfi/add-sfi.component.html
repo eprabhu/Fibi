@@ -7,9 +7,12 @@
 						<div class="row flex-grow-1">
 							<div class="col-lg-12 d-flex align-items-center" tabindex="0" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
 								<span class="fs-18 fw-500">
-									{{entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName :
-									isEntityManagement ?
-									'--Entity Name--' : '-- SFI Name --'}}
+                                    <ng-container *ngIf="entityDetails.coiEntity.entityName">
+                                        <app-read-more [valueToShow]="entityDetails.coiEntity.entityName" [sliceCount]="50"></app-read-more>
+                                    </ng-container>
+                                    <ng-container *ngIf="!entityDetails.coiEntity.entityName">
+                                        {{isEntityManagement ? '--Entity Name--' : '-- SFI Name --'}}
+                                    </ng-container>
 								</span>
 							</div>
 						</div>
@@ -51,7 +54,6 @@
 						<button class="btn btn-outline-grey col pb-0 w-100" title="Go to COI home page" tabindex="0"
 							(click)="goToHome()" aria-label="Home" role="button">
 							<mat-icon>home</mat-icon>
-							<span class="fs-14 mx-1 btn-content-home d-lg-inline">Home</span>
 						</button>
 						<button class="btn btn-outline-grey col w-100" (click)="navigateBack()" tabindex="0"
 							title="Click to go back to Entity list" aria-label="Back" role="button">
@@ -98,7 +100,8 @@
 							<input type="text" class="form-control fs-13"
 								[(ngModel)]="entityDetails.coiEntity.entityName"
 								[ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
-								id="entity-name" (ngModelChange)="setHeader();">
+								id="entity-name" (ngModelChange)="setHeader();" appLengthValidator
+								[limit]=500 [styleList]="'mt-2 float-end word-count'">
 						</ng-template>
 						<div class="help-text" tabindex="0" aria-label="Entity Name Helptext" aria-describedby="entity-name-helptext">
 							<span id="entity-name-helptext">Type in the official name of the business or organization you need to report. Entities to

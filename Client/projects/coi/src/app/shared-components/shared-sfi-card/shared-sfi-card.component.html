@@ -9,7 +9,9 @@
                                     [ngClass]="SFIObject?.isActive ? SFIObject.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'">
                                     {{SFIObject?.isActive ? SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span> -->
                         <p class="entity-title entity-name my-auto mb-0 coi-text-darker fs-6" tabindex="0"
-                                [attr.aria-label]="'entity name' + SFIObject?.entityName">{{SFIObject?.entityName}}</p>
+                                [attr.aria-label]="'entity name' + SFIObject?.entityName">
+                                <app-read-more [valueToShow]="SFIObject?.entityName" [sliceCount]="200"></app-read-more>
+                        </p>
                     </div>
                     <div class="col-auto text-end">
                         <span *ngIf="checkForEntityWarning()" class="info-text rounded-pill f-14 me-2 px-3 py-1 rounded-5 px-3 py-0" data-bs-toggle="tooltip"
@@ -27,7 +29,7 @@
                             ? SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
                     </div>
                 </div>
-              
+
             </div>
             <div class="col-lg-12 col-xl-9 col-md-12">
                 <div class="row">
