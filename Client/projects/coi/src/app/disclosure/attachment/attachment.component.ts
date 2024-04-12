@@ -16,6 +16,7 @@ export class AttachmentComponent implements OnInit {
 
   ngOnInit() {
     this._coiService.isShowAttachmentInfo = true;
+    window.scrollTo(0, 0);
   }
 
   closeAttachmentInfo() {

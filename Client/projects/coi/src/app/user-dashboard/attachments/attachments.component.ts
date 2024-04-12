@@ -19,6 +19,7 @@ export class AttachmentsComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     deployMap = environment.deployUrl;
     isShowCreate = false;
+    collapseViewMore = {};
 
     constructor(private _attachmentService: AttachmentsService, private _commonService: CommonService) { }
 
@@ -61,4 +62,7 @@ export class AttachmentsComponent implements OnInit {
         subscriptionHandler(this.$subscriptions);
     }
 
+    collapseViewMoreOption(attachmentId: number, flag: boolean): void {
+        this.collapseViewMore[attachmentId] = !flag;
+    }
 }

@@ -23,7 +23,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     opaDisclosure: OpaDisclosure = new OpaDisclosure();
     disclosureHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor(public _opaService: OpaService,
                 private _commonService: CommonService,
@@ -34,6 +34,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        window.scrollTo(0,0);
     }
 
     ngOnDestroy() {

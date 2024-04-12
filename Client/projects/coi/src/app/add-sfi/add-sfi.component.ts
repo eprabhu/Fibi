@@ -361,7 +361,7 @@ export class AddSfiComponent implements OnInit {
             }
         } else {
             this.heading = 'Significant Financial Interest';
-            this.buttonName = 'Save SFI';
+            this.buttonName = 'Save';
             this.btnTitle = 'Click to Save SFI';
         }
     }
@@ -472,6 +472,7 @@ export class AddSfiComponent implements OnInit {
 
     navigateToSFI(personEntityId) {
         this.sfiService.isShowSfiNavBar = false;
+        document.body.removeAttribute("style");
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, personEntityNumber: this.existingEntityDetails.entityNumber } });
     }
 

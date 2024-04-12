@@ -22,7 +22,7 @@ export class HistoryComponent implements OnInit {
     coiDisclosure: any = {};
     disclosureHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor( public _coiService: CoiService, 
                  private _commonService: CommonService, 
@@ -32,6 +32,7 @@ export class HistoryComponent implements OnInit {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        window.scrollTo(0,0);
     }
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);

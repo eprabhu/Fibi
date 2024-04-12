@@ -4,8 +4,8 @@
   height: 27px;
   background: #54BF5B;
   position: relative;
-  left: -17px;
-  top: -8px;
+  left: -23px;
+  top: -12px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -103,9 +103,15 @@ table {
   background-color: white;
 
   &:hover {
-    background-color: #007DEC;
-    color: white;
-    border: 1px solid #007DEC;
+      background-color: #007DEC;
+      color: white;
+      border: 1px solid #007DEC;
+  }
+
+  &:focus {
+      background-color: #007DEC;
+      color: white;
+      border: 1px solid #007DEC;
   }
 }
 
@@ -134,11 +140,6 @@ table {
   filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
 }
 
-.icon-height {
-  height: 19px !important;
-  overflow: initial;
-}
-
 .pencil {
   position: relative;
   right: 0.6rem;
@@ -153,11 +154,6 @@ table {
 .icon-approve-position {
   position: relative;
   right: 0.2rem;
-}
-
-.btn-approve-position {
-  position: relative;
-  left:  0.4rem;
 }
 
 .btn-save-content {
@@ -235,32 +231,17 @@ table {
 }
 
 .pill {
-  border: 1px solid #ffc107;
+  border: 1px solid #c39200;
   border-radius: 25px;
-  padding: 2px 10px 0px 4px;
+  padding: 2px 9px 3px 6px;
   font-weight: 500;
   width: max-content;
   height: auto;
 }
 
-.cross-wrapper {
-  display: inline-grid;
-  place-items: center;
-  background-color: #ffc107;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  font-size: 1.3rem;
-}
-
-.cross-wrapper>i {
-  color: #fff;
-}
-
 .unverified-label {
     margin-left: 5px;
     color: #c39200;
-    font-size: 1.3rem;
 }
 
 .medium-risk {
@@ -286,7 +267,7 @@ table {
 }
 .sticky-0 {
   top: 0;
-  z-index: 1;
+  z-index: 2;
   position: sticky;
 }
 
@@ -303,17 +284,6 @@ table {
 
 .fa-bolt {
   margin-right: 23px;
-}
-
-.info-icon {
-  top:11px;
-  height: 22px;
-  width: 22px;
-  font-size: 16px;
-  position: absolute;
-  margin-left: 2px;
-  color: #6f7395;
-  cursor: pointer;
 }
 
 .text-colors {
@@ -340,9 +310,9 @@ table {
   transform: scale(.7);
 }
 
-.actions-icon {
-  transform: scale(.8);
-}
+// .actions-icon {
+//   transform: scale(.8);
+// }
 
 .more-action {
   color: #6a7980 !important;
@@ -358,4 +328,34 @@ table {
       color: #007DEC !important;
     }
   }
+}
+
+// Only for Active Inactive SFI Modal
+.alert .info-icon {
+  height: 20px !important;
+  width: 30px !important;
+}
+
+@media (min-width: 992px) {
+  .border-prev-nxt {
+      border-left: 1px solid #0000002d;
+  }
+}
+
+@media (max-width: 991px) {
+  .border-prev-nxt {
+      border-top: 1px solid #0000002d;
+      border-left: 0 !important;
+  }
+}
+
+.toggle-btn {
+  position: inherit;
+}
+
+.info-text {
+  color: #c39200;
+  border: 1px solid #c39200;
+  line-height: 20px;
+  display: inline-block;
 }

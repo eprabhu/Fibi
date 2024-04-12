@@ -21,6 +21,7 @@ export class SummaryComponent implements OnInit {
     ngOnInit() {
         this.getCOIDetails();
         this.listenDataChangeFromStore();
+        window.scrollTo(0,0);
     }
     
     private listenDataChangeFromStore() {

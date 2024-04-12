@@ -1,11 +1,11 @@
 <div [@fadeInOutHeight]>
   <app-view-entity-sfi-details [entityDetails]="entityDetails" (modifiedEntityId)="getUpdatedEntityId($event)"
   (approveEntityDetails)="updateApprovedEntityDetails($event)"></app-view-entity-sfi-details>
-  <div class="fw-bold ms-4 mt-4 mb-2 px-1 fs-16" tabindex="0" aria-label="Relationships">Relationships</div>
-  <div class="ms-4 me-4 shadow-sm" >
+  <div class="fw-bold mt-3 mb-2 px-1 fs-16" tabindex="0" aria-label="Relationships">Relationships</div>
+  <div class="shadow-sm" >
     <nav
       class="d-flex align-items-center create-disclosure fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
-      <div (click)="currentTab('PERSON')" class="border-end navigation-icons text-secondary py-1"
+      <div (click)="currentTab('PERSON')" class="border-end navigation-icons text-secondary py-1 hand-cursor"
         id="btn-person" title="Click to view Person details" (keyup.enter)="currentTab('PERSON')" (keyup.space)="currentTab('PERSON')">
         <span tabindex="0" [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'PERSON'"
           class="px-md-5 px-3" aria-label="Click to view Person details">Person</span>
@@ -24,27 +24,26 @@
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'OTHER_ENTITIES'"
           class="px-5">Other Entities</span>
       </div>-->
-      <div (click)="currentTab('FINANCIAL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1"
+      <div (click)="currentTab('FINANCIAL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1 hand-cursor"
        id="btn-disclosure" title="Click to view Financial Disclosures"
         (keyup.enter)="currentTab('FINANCIAL_DISCLOSURES')" (keyup.space)="currentTab('FINANCIAL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'FINANCIAL_DISCLOSURES'"
-          class="px-md-5 px-3" aria-label="Click to view Financial disclosures">Financial <span class="disclosure-text"></span></span>
+          class="px-md-5 px-3" aria-label="Click to view Financial disclosures">Financial <span class="disclosures-text"></span></span>
       </div>
-      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1"
+      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1 hand-cursor"
         id="btn-travel-disclosure" title="Click to view Travel Disclosures" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
         (keyup.space)="currentTab('TRAVEL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'TRAVEL_DISCLOSURES'"
-          class="px-md-5 px-3" aria-label="Click to view Travel disclosures">Travel <span class="disclosure-text"></span></span>
+          class="px-md-5 px-3" aria-label="Click to view Travel disclosures">Travel <span class="disclosures-text"></span></span>
       </div>
-      <div (click)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'" class="navigation-icons text-secondary py-1"
+      <div (click)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'" class="navigation-icons text-secondary py-1 hand-cursor"
         id="btn-history" title="Click to view History">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'"
           class="px-md-5 px-3" aria-label="Click to view History">History</span>
       </div>
-
     </nav>
   </div>
   <!-- Advanced Search -->
@@ -286,7 +285,7 @@
   <!-- Advanced Search end -->
 
   <ng-container *ngIf="!isLoading && entityManagementService.relationshipDashboardRequest.filterType != 'HISTORY'">
-    <div class="mt-2 ms-4 me-4 border-1" [@listAnimation]="entityRelations.length">
+    <div class="mt-2 border-1" [@listAnimation]="entityRelations.length">
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
         entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'">
         <div *ngFor="let entityListData of entityRelations;let i=index"
@@ -358,7 +357,7 @@
                 <label>Relationship <span>:</span></label>
                 <span class="break-point-1200 ms-2 fs-14">
                   <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
-                      <em class="mt-3"
+                      <em class="mt-3 d-inline-block"
                           *ngFor="let relation of entityRelationTypePills(entityListData?.relationshipTypes)">
                               <span class="border px-3 py-1 rounded-4 me-2">
                                    <span class="fw-medium me-1">{{relation?.relationshipTypes}}
@@ -371,7 +370,7 @@
               </div>
               <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'">
                 <div class="col-4 text-secondary fs-14" tabindex="0">
-                  <label class="label-text ">Start Date of Involvement <span>:</span></label>
+                  <label>Start Date of Involvement <span>:</span></label>
                   <span class="break-point-1200">
                     <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
                       <span>
@@ -680,7 +679,7 @@
       </ng-container>
     </div>
 
-    <div class="m-4" *ngIf="!entityRelations.length">
+    <div *ngIf="!entityRelations.length">
       <app-no-information></app-no-information>
     </div>
 
@@ -694,13 +693,13 @@
   </ng-container>
   <app-entity-history *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'" [entityDetails] = "entityDetails"></app-entity-history>
 </div>
-<div #viewSFIDetailsOverlay [class.overlay]="showSlider">
-  <div class="slider-base" *ngIf="showSlider">
-    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-    <div class="slider-container">
+
+<ng-container *ngIf="showSlider">
+  <app-coi-slider (closeSlider)="hideSfiNavBar()" [elementId]="'view-entity-details'">
+    <ng-container content>
       <app-entity-details [entityId]="personEntityId" (closeAction)="hideSfiNavBar()"></app-entity-details>
-    </div>
-  </div>
-</div>
+    </ng-container>
+  </app-coi-slider>
+</ng-container>
 
 <app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

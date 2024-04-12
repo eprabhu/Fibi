@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { CommonService } from '../../../common/services/common.service';
@@ -9,6 +9,7 @@ import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utiliti
 import {HTTP_ERROR_STATUS} from '../../../../../../fibi/src/app/app-constants';
 import { listAnimation, slideInAnimation } from '../../../common/utilities/animations';
 import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
+import { CoiService } from '../../services/coi.service';
 
 @Component({
     selector: 'app-tool-kit',
@@ -30,18 +31,23 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     proposalIdLinkedInDisclosure: number = null;
 
     $subscriptions: Subscription[] = [];
-    isRelationshipCollapse = true;
+    isRelationshipCollapse = false;
+    activeNav = '';
+    activeSubNav = '';
+    subNavActive = '';
 
     constructor(
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         private _coiSummaryService: CoiSummaryService,
-        private _commonService: CommonService
+        private _commonService: CommonService,private _coiService: CoiService
     ) { }
 
     ngOnInit() {
         this.fetchCOIDetails();
         this.getProjectRelationshipList();
         this.getToolkitVisibility();
+        this.activeNav = 'COI801';
+        this.listenScreenSize();
     }
 
     getProjectRelationshipList() {
@@ -114,19 +120,51 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     }
 
     jumpToSection(section) {
-        const sectionHeight = document.getElementById(section).offsetTop - 265;
-        document.getElementById('COI_SCROLL').scrollTo({ top: sectionHeight, behavior: 'smooth' });
-    }
-
-    jumpToProjectSection(section) {
-        if(document.getElementById(section)) {
-           this.jumpToSection(section);
+        this.activeNav = section;
+        if (section !== 'COI803') {
+            this.activeSubNav = '';
+            this.subNavActive = '';
+            this.isRelationshipCollapse = false; 
         } else {
-            document.getElementById('relationship_collapse_btn').click();
-            setTimeout(() => {
-                this.jumpToSection(section);
-            });
+            this.isRelationshipCollapse = !this.isRelationshipCollapse;
         }
+        this.openCollapsedSection(section);
+        this.listenScreenSize();
+        this.windowScroll(section);
     }
 
+    jumpToProjectSection(parentSection: string, activeSubSection: string, subNavSection: string) {
+        this.openCollapsedSection(parentSection);
+        this.activeNav = parentSection;
+        this.activeSubNav = activeSubSection;
+        this.subNavActive = subNavSection;
+        setTimeout(() => {
+            this.windowScroll(subNavSection);
+        });
+    }
+
+    windowScroll(scrollTo: string) {
+        const ELEMENT: HTMLElement = document.getElementById(scrollTo);
+        const offsetFromHeader = document.getElementById('COI-DISCLOSURE-HEADER')?.clientHeight + 50;
+        const sectionHeight = ELEMENT.offsetTop - offsetFromHeader;
+        window.scrollTo({ behavior: 'smooth', top: sectionHeight });
+    }
+
+    private openCollapsedSection(section) {
+        this._coiService.$isExpandSection.next({ section: section, isExpand: true });
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        setTimeout(() => {
+            const WINDOW_HEIGHT = window.innerHeight;
+            const HEADER_HEIGHT = document.getElementById('COI-DISCLOSURE-HEADER')?.offsetHeight || 0;
+            const TOOL_KIT_HEIGHT = WINDOW_HEIGHT - (HEADER_HEIGHT + 60);
+            document.getElementById('disclosure-toolkit').style.maxHeight = TOOL_KIT_HEIGHT + 'px';
+            if (this.isRelationshipCollapse) {
+                const RELATIONSHIP_HEIGHT = TOOL_KIT_HEIGHT / 4;
+                document.getElementById('relationship-chid-section').style.maxHeight = RELATIONSHIP_HEIGHT + 'px';
+            }
+        });
+    }
 }

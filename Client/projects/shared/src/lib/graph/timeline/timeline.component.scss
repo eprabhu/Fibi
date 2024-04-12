@@ -34,8 +34,8 @@ ul li {
 }
 
 ul li .date {
-    --dateH: 3rem;
-    height: var(--dateH);
+    --dateH: 2rem;
+    min-height: var(--dateH);
     margin-inline: calc(var(--inlineP) * -1);
     text-align: center;
     background-color: var(--accent-color);
@@ -64,7 +64,7 @@ ul li .date::before {
 ul li .date::after {
     content: "";
     position: absolute;
-    width: 2rem;
+    width: 1rem;
     aspect-ratio: 1;
     background: var(--accent-color);
     border: 0.3rem solid var(--accent-color);

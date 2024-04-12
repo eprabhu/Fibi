@@ -1,68 +1,82 @@
-<div class="bg-light info-card-border rounded-3 mt-2">
-    <div class="mx-1 my-3 row d-flex">
-        <div class="col-9  d-flex justify-content-between  align-items-center" tabindex="0" [attr.aria-label]="'Entity Name' + (entityDetails?.entityName)">
-            <span class="fw-bold fs-16 me-3">{{entityDetails?.entityName}}</span>
-        </div>
-    </div>
-    <div class="mx-1 row pt-1 d-flex align-items-center mb-3">
-        <div class="col-3 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Country' + (entityDetails?.country?.countryName)">
-            <span class="fw-bold me-2"> Country :</span>
-            <span class="fs-14 fw-400">{{entityDetails?.country?.countryName}}</span>
-        </div>
-        <div class="col-6 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Entity Type' + (entityDetails?.entityType?.description)">
-          <span class="fw-bold me-2">Entity Type :</span>
-          <span class="fs-14 fw-400">{{entityDetails?.entityType?.description}}</span>
-      </div>
-      <div class="col text-secondary fs-14 d-flex align-items-center" tabindex="0" [attr.aria-label]="'Entity Status' + (entityDetails?.isActive ?'Active':'Inactive')">
-        <span class="fw-bold me-2">Entity Status :</span>
-        <span class="fs-14 fw-400"[ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive ?'Active':'Inactive'}}</span>
-    </div>
-        <!-- <div class="col-6 text-secondary fs-14">
-            <span class="fw-bold me-2"> Email Address :</span>
-            <span class="fs-14 fw-400">{{entityDetails?.emailAddress}}</span>
-        </div> -->
-        <div class="col-9 text-secondary fs-14" tabindex="0" [attr.aria-label]="'Address' + (entityDetails?.address)">
-          <span class="fw-bold me-2"> Address :</span>
-          <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.address">
-          <span *ngIf="!isReadMore && entityDetails?.address?.length > 110; else showFullInfo">
-            <span> {{(entityDetails?.address |
-              slice:0:110)}}</span>
-            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">...
-                <u>Read more</u>
-                <i aria-hidden="true"></i></span>
-            </span>
+
+<!-- Entity slider header card -->
+<ng-container content-sticky>
+  <div class="card card-scroll rounded-2 shadow-medium coi-box-red mt-3 p-0">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-9">
+          <span class="d-flex">
+            <h4 class="mb-0 d-flex label-text f-16">
+                <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
+            </h4>
           </span>
-          <ng-template #showFullInfo>
-            <span class="word-break-all">{{entityDetails?.address}}</span>
-            <span *ngIf="entityDetails?.address?.length > 110" (click)="isReadMore = !isReadMore" aria-hidden="true"
-              class="hand-cursor"><span class="fw-medium">. <u>Read
-                  Less</u>
-                <i aria-hidden="true"></i></span>
+        </div>
+        <div class="col-lg-3 d-flex align-items-start justify-content-end">
+          <div class="d-inline-flex align-items-center">
+            <label class="coi-text-light">Risk: </label>
+            <span class="ml-2 coi-text-light fw-normal">
+              <div class="text-color fs-14 d-flex align-items-center">
+                <span class="text-secondary fs-14">
+                  <mat-icon
+                    class="{{getWarningClass(entityDetails?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                </span>
+                <app-no-data-label [valueToShow]="entityDetails?.entityRiskCategory">
+                  <span class="ml-2 mt-1 fw-normal">{{entityDetails?.entityRiskCategory?.description}}</span>
+                </app-no-data-label>
+              </div>
             </span>
-          </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-lg" [attr.aria-label]="'Country' + (entityDetails?.country?.countryName)">
+          <label class="coi-text-light d-block">Country</label>
+          <app-no-data-label [valueToShow]="entityDetails?.country?.countryName">
+            <span class="coi-text-light fw-normal">{{entityDetails?.country?.countryName}}</span>
           </app-no-data-label>
         </div>
-      <div *ngIf="isShowRisk" class="col text-secondary fs-14 d-flex align-items-center" tabindex="0" [attr.aria-label]="'Risk' + (entityDetails?.entityRiskCategory?.description)">
-        <span class="fw-bold me-2">Risk : </span>
-        <span class="ml-2 grey-text fw-normal">
-          <div class="text-color fs-14 d-flex align-items-center">
-            <span class="text-secondary fs-14 mt-3">
-              <mat-icon
-                class="{{getWarningClass(entityDetails?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-            </span>
-            <app-no-data-label [valueToShow]="entityDetails?.entityRiskCategory">
-              <span class="ml-2 mt-1 fw-normal">{{entityDetails?.entityRiskCategory?.description}}</span>
+        <div class="col-lg mb-lg-0 mb-md-3 mb-3"
+          [attr.aria-label]="'Entity Type' + (entityDetails?.entityType?.description)">
+          <label class="coi-text-light d-block">Entity Type</label>
+          <span class="coi-text-light fw-normal">
+            <app-no-data-label [valueToShow]="entityDetails?.entityType?.description">
+              <span>{{entityDetails?.entityType?.description}}</span>
             </app-no-data-label>
-          </div>
-        </span>
+          </span>
+        </div>
+        <div class="col-lg" [attr.aria-label]="'Entity Status' + (entityDetails?.isActive ?'Active':'Inactive')">
+          <label class="coi-text-light d-block">Entity Status</label>
+          <span class="coi-text-light fw-normal">
+            <app-no-data-label [valueToShow]="entityDetails?.isActive">
+              <span [ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive
+                ?'Active':'Inactive'}}</span>
+            </app-no-data-label>
+          </span>
+        </div>
+        <div class="col-12 mt-3" [attr.aria-label]="'Address' + (entityDetails?.address)">
+          <label class="coi-text-light d-block">Address</label>
+          <span class="coi-text-light fw-normal">
+            <app-no-data-label [valueToShow]="entityDetails?.address">
+              <span *ngIf="!isReadMore && entityDetails?.address?.length > 150; else showFullInfo">
+                <span> {{(entityDetails?.address |
+                  slice:0:150)}}</span>
+                <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">...
+                    <u>Read more</u>
+                    <i aria-hidden="true"></i></span>
+                </span>
+              </span>
+              <ng-template #showFullInfo>
+                <span class="word-break-all">{{entityDetails?.address}}</span>
+                <span *ngIf="entityDetails?.address?.length > 150" (click)="isReadMore = !isReadMore" aria-hidden="true"
+                  class="hand-cursor"><span class="fw-medium">. <u>Read
+                      Less</u>
+                    <i aria-hidden="true"></i></span>
+                </span>
+              </ng-template>
+            </app-no-data-label>
+          </span>
+        </div>
       </div>
-          <div *ngIf="viewMore && commonServices.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')"
-            class="col-1 align-items-center d-flex justify-content-end text-secondary" title="Click to view entity details">
-            <button (click)="viewEntityDetails(entityDetails?.entityId)" tabindex="0" aria-label="View" role="button"
-              class="align-items-center btn btn-outline-primary d-flex fs-14">
-              <mat-icon class="me-1">visibility</mat-icon>
-              View
-            </button>
-          </div>
     </div>
-</div>
+  </div>
+</ng-container>

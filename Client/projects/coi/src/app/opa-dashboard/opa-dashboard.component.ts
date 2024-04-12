@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
 import { NameObject, OPADashboardRequest, OpaDashboardService, SortCountObj } from './opa-dashboard.service';
 import { Subject, Subscription } from 'rxjs';
@@ -62,11 +62,14 @@ export class OpaDashboardComponent implements OnInit {
     opaDisclosureStatusOptions = 'OPA_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#true#true';
     opaDispositionStatusOption = 'OPA_DISPOSITION_STATUS_TYPE#DISPOSITION_STATUS_CODE#true#true';
     opaEmployeeRoleTypeOption = 'EMPTY#EMPTY#true#true';
+    isShowOptions = false;
+
+    @ViewChild('mainHeaders', { static: true }) mainHeaders: ElementRef;
 
     constructor(public _opaDashboardService: OpaDashboardService,
         private _elasticConfigService: ElasticConfigService,
         private _router: Router, public commonService: CommonService, private _navigationService: NavigationService
-    ) { }
+    ) {  document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
         await this.getPermissions();
@@ -358,6 +361,7 @@ export class OpaDashboardComponent implements OnInit {
     }
 
     ngOnDestroy(): void {
+        document.removeEventListener('mouseup', null);
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -386,10 +390,22 @@ export class OpaDashboardComponent implements OnInit {
 
     getReviewerStatus(statusCode) {
         switch (statusCode) {
-            case '1': return 'info';
-            case '2': return 'success';
-            case '3': return 'warning';
+            case '2': return 'info';
+            case '3': return 'success';
+            case '1': return 'warning';
             default: return 'danger';
+        }
+    }
+
+    // The function is used for closing nav dropdown at mobile screen
+    offClickMainHeaderHandler(event: any) {
+        if (window.innerWidth < 1200) {
+            const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
+            if (document.getElementById('navbarResponsive').classList.contains('show')) {
+                document.getElementById('navbarResponsive').classList.remove('show');
+            }
+        } else {
+            this.isShowOptions = false;
         }
     }
 

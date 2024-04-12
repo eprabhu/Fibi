@@ -71,6 +71,7 @@ nav ul {
 
 nav ul li {
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .admin-main-navigation .fa {
@@ -134,8 +135,11 @@ nav ul li {
 .sort-div {
   background-color: #eeeeee;
   padding: 9px;
-  margin-top: 7px;
   margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 10px;
 }
 
 @media (max-width: 1201px) {
@@ -143,14 +147,15 @@ nav ul li {
     padding-top: 3px;
   }
 }
+@media (max-width: 1210px) {
+    nav ul li:not(.separator) {
+        padding: 16px 10px !important;
+    }
+}
 
 .filter-active {
   border: 2px solid #54BF5B !important;
   background: #F5FEF5 !important;
-}
-
-.list {
-  padding-left: 2px;
 }
 
 .coi-admin-dash li.active {
@@ -232,28 +237,28 @@ small {
     cursor: context-menu !important;
  }
 
- .entity-status {
-  color: white;
-  width: max-content;
-  height: 27px;
-  position: relative;
-  left: -5px;
-  top: -4px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 0 50px 50px 0;
-  padding: 10px 18px;
+.entity-status {
+    color: #fff;
+    width: max-content;
+    height: 27px;
+    position: relative;
+    left: -10px;
+    top: -5px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 10px;
 
-  &:before {
-    content: "";
-    position: absolute;
-    height: 0;
-    width: 0;
-    border-bottom: 6px solid #151515;
-    border-left: 6px solid transparent;
-    top: -6px;
-    left: 0;
-  }
+    &:before {
+        content: "";
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-bottom: 6px solid #151515;
+        border-left: 6px solid transparent;
+        top: -6px;
+        left: 0;
+    }
 }
 
 .col-custom-travel {
@@ -277,6 +282,7 @@ small {
   border-left: 2px solid #48647f82;
   padding-top: 2px;
   height: 18px;
+  display: inline-block;
 }
 
 .p-013 {
@@ -353,7 +359,7 @@ small {
 }
 
 .select-all-section {
-    min-height: 45px;
+    min-height: 54px;
     background-color: #e4ebf2;
 }
 
@@ -380,12 +386,6 @@ input[type='checkbox'] {
 
 .selected-active-background {
     border-color: #007dec !important;
-}
-
-.row {
-  div {
-    padding-top: .5rem;
-  }
 }
 
 .margin-top-3px{
@@ -424,7 +424,7 @@ input[type='checkbox'] {
   display: none;
 }
 
-@media (max-width: 1092.9px) {
+@media (max-width: 1200px) {
   #navbarResponsive {
     position: absolute;
     z-index: 99;
@@ -476,5 +476,17 @@ input[type='checkbox'] {
   }
 }
 
+.mat-icon {
+    font-size: 1.22rem !important;
+}
 
- 
+.complete-review-section {
+    top: 51px;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.zero-count-padding {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+}

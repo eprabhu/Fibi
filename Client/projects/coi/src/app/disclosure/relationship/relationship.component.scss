@@ -9,10 +9,6 @@
 .leftCard {
   background-color: rgb(255, 255, 255);
 }
-.outer-card{
-  margin-left: 6px;
-  margin-top: 0.5rem;
-}
 
 .inner-card {
   border:1px solid #dbdbdb !important;
@@ -68,24 +64,6 @@ label {
 }
 .left-Box-heading {
   padding-left: 113px;
-}
-.Conflict-badge{
-  background-color: #ffe6e7;
-  border-radius: 10px;
-  color: #ca4e4f;
-  margin-left: 35px;
-}
-.potentialConflict-badge {
-  border-radius: 10px;
-  background-color: #fff5e6;
-  color: #c59c59;
-  margin-left: 35px;
-}
-.noConflict-badge{
-  border-radius: 10px;
-  background-color: #e3ffe5;
-  color: #6cc974;
-  margin-left: 35px;
 }
 
 .label-text {
@@ -203,10 +181,6 @@ label {
 .tr-height {
   line-height: 35px;
 }
-// .btn-outline-secondary {
-//   font-size: 1.4rem;
-//   padding: .5rem 1rem;
-// }
 
 .btn-outline-primary {
   border-color:#6c757d;
@@ -234,38 +208,9 @@ label {
   color: #242424;
 }
 
-.count-margin {
-  margin-left: 35px;
-}
-
-.define-relation:hover {
-  .hover_img {
-    color: white;
-  }
-}
-
-.grey-info {
-  background : #EEEEEE;
-  color      : #202c2e;
-  font-size  : 16px;
-  font-weight: 400;
-  border     : 1px solid #caced2;
-}
-
 .info-text {
   margin-bottom: 5px;
   margin-left  : 27px;
-}
-
-.info-icon {
-  top: 7px;
-  height     : 22px;
-  width      : 22px;
-  font-size  : 16px;
-  position   : absolute;
-  margin-left: 2px;
-  color      : #6f7395;
-  cursor     : pointer;
 }
 
 .count {
@@ -274,14 +219,6 @@ label {
   border-radius   : 50%;
   background-color: #b5d6f3;
   color           : #007DEC;
-}
-
-.emptySfi {
-  display: flex;
-  justify-content: center;
-  color: #800202;
-  font-size: 14px;
-  font-weight: 400;
 }
 
 .sfi-card {

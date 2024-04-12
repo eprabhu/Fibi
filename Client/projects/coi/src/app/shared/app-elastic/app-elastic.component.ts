@@ -16,6 +16,7 @@ import { AppElasticService } from './app-elastic.service';
 export class AppElasticComponent implements OnChanges, OnInit {
 
 	@Input() options: any = {};
+    @Input() uniqueId = null;
 	@Input() placeHolder: string;
 	@Input() clearField: String;
 	@Input() isError: boolean;
@@ -33,12 +34,17 @@ export class AppElasticComponent implements OnChanges, OnInit {
 		sort: [{ _score: { order: 'desc' } }],
 		highlight: { pre_tags: ['<strong>'], post_tags: ['</strong>'] }
 	};
-	
+
 	constructor(private _appElasticService: AppElasticService, private _ref: ChangeDetectorRef) { }
 
-	ngOnInit() {
-		this.searchText = this.options && this.options.defaultValue || '';
-	}
+    ngOnInit() {
+        this.searchText = this.options && this.options.defaultValue || '';
+        this.setUniqueIdForSearchText();
+    }
+
+    setUniqueIdForSearchText() {
+        this.searchField.nativeElement.id = this.uniqueId ? this.uniqueId : new Date().getTime().toString();
+    }
 
 	ngOnChanges() {
 		if (!this.isError) {
@@ -139,7 +145,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
 			this.query.query.bool = {...this.query.query.bool, ...this.options.extraConditions};
 		}
 	}
-	
+
 	/**
 	 * @param  {} value emit results on key enter mouse click to parent components
 	 */

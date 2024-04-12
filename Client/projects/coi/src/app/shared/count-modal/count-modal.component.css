@@ -4,22 +4,15 @@
 }
 
 .btn-outline-secondary {
-    font-size: 1.4rem;
+    font-size: 0.875rem;
     min-width: 5em;
-    padding: .5rem 1rem;
     height: 35px;
 }
-
 
 .action-buttons {
     height: 24px;
     padding: 0.3px 1px;
     margin-top: 0px
-}
-
-.widget-container {
-    max-height: 400px;
-    overflow: auto;
 }
 
 .textUnderline {
@@ -37,13 +30,6 @@
     color: #7c7c7c;
 }
 
-.active {
-    color: #007DEC;
-    border-bottom: 3px solid #007DEC;
-    padding: 5px 11px;
-    font-size: 15px;
-    font-weight: bold;
-}
 
 .inActive {
     color: #48647f;
@@ -73,41 +59,13 @@
     cursor: pointer;
 }
 
-.title-width{
-    width: 20%;
-}
-
-.pi-width{
-    width: 10%;
-}
-
-.leadunit-width{
-    width: 9%;
-}
-
-.sponsor-width{
-    width: 13%;
-}
-
-.primesponsor-width{
-    width: 13%;
-}
-
-.conflictStatus-width{
-    width: 13%;
-}
-
-.action-width{
-    width: 1%;
-}
-
 .border-nav {
     width: max-content;
     position: relative;
     top: 0px;
     right: 15px;
   }
-  
+
   .navigation-title {
     .active {
       color: #007DEC;
@@ -117,7 +75,7 @@
       bottom: 5px;
     }
   }
-  
+
   .navigation-icons {
     .active {
       border-bottom: 3px solid #007DEC;
@@ -126,24 +84,50 @@
       box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
     }
   }
-  
+
   .nav-options:hover {
     background-color: #e6f3ff !important;
     box-shadow: 2px 3px 11px 1px rgba(0,0,0,.17);
   }
-  
+
   .user-dashboard-nav {
     min-height: 40px;
   }
-  
+
   .btn-position {
     position: relative;
     bottom: 5px;
   }
-  
+
   .border-nav {
     width: max-content;
     position: relative;
     top: 0px;
     right: 15px;
   }
+
+  .header-color {
+    background-color: white;
+  }
+
+  .tab-hover:hover {
+    background-color: #e2f1ff;
+}
+
+.table-responsive {
+  overflow: auto !important;
+  .sticky-top {
+    top:-1px;
+  }
+}
+
+@media (min-width: 576px) {
+  .table-responsive {
+    max-height: 300px;
+  }
+}
+@media (min-width: 991px) {
+  .table-responsive {
+    max-height: 335px;
+  }
+}

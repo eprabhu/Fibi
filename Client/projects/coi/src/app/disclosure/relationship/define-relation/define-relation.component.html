@@ -1,119 +1,108 @@
-
-<div #defineRelationOverlay class="overlay" >
-<div class="slider-base">
-  <app-slider-close-btn (closeAction)="validateProjectSfiSliderOnClose()"></app-slider-close-btn>
-  <div class="slider-container">
-      <div class="relationship-details-box card" id="relationship-details-box">
-        <div class="row">
-          <div class="col border-right">
-            <div class="d-flex">
-              <span class="active-ribbon shadow-sm align-items-center d-flex ps-2 {{getColorBadges(selectedProject?.moduleCode)}}">
-                <span class="px-2">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}</span></span>
-              <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 3">
-                  <span class="fw-600 fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </span>
-              </p>
-              <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 1">
-                <span class=" fw-600 fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </span>
-              </p>
-            </div>
-            <div class="row ml-2 mb-3">
-              <div class="col-4">
-                <label class="label-text">{{selectedProject?.reporterRole}} :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
-              </div>
-              <div class="col-4">
-                <label class="label-text">Project Role : </label>
-                <span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
-              </div>
-              <div class="col-4">
-                <label class="label-text">Period :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
-              </div>
-              <div class="col-4">
-                <label class="label-text">Sponsor :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
-              </div>
-              <div class="col-4">
-                <label class="label-text">Lead Unit :</label>
-                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
-                <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
-              </div>
-              <div class="col-3">
-                <label class="label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}} Status : </label>
-                <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
-              </div>
-              <div class="col-4">
-                <label class="label-text">Prime Sponsor :</label>
-              <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-auto align-items-center d-flex previous-nxt mr-8">
-            <div class="">
-              <span class="f-13 text-muted mr-2 fw-600 ml-2">{{currentRelation + 1}} of {{relationList?.length}}
-                <span class="ml-2">
-                  <span data-bs-toggle="tooltip" title="Navigate to previous or next projects." data-bs-placement="top" class="d-inline-block">
-                    <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color mt-1 ms-5" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+<ng-container>
+  <app-coi-slider (closeSlider)="validateProjectSfiSliderOnClose()" [elementId]="'relationship-details'">
+    <ng-container content>
+      <div class="card mb-2" id="relationship-details-body" tabindex="-1">
+        <div class="row mx-0 w-100">
+          <div class="col-lg px-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex">
+                  <span
+                  class="active-ribbon shadow-sm align-items-center d-flex {{getColorBadges(selectedProject?.moduleCode)}}"
+                  [attr.aria-label]="selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'">{{selectedProject?.moduleCode
+                  == 3 ? 'Proposal' : 'Award'}}</span>
+                <span class="mt-2">
+                  <span *ngIf="selectedProject?.moduleCode == 3" class="coi-text-darker fs-16">
+                    {{selectedProject?.moduleItemId}} - {{!isReadMore ? (selectedProject?.title?.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) :
+                    selectedProject?.title}}
+                    <span *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore" class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
+                      tabindex="0" role="link" [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
+                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'"
+                      [id]="'link-proposal-moduleItemId'">{{selectedProject?.title?.length > 60 && isReadMore ?'Read Less' : '...Read More'}}</span>
+                  </span>
+                  <span *ngIf="selectedProject?.moduleCode == 1" class="coi-text-darker fs-16">
+                    #{{selectedProject?.moduleItemKey}} - {{!isReadMore ? (selectedProject?.title.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) : selectedProject?.title }}
+                    <span tabindex="0" *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore" class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
+                      tabindex="0" role="link" [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
+                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'" 
+                      [id]="'link-award-moduleItemKey'">{{selectedProject?.title?.length > 60 && isReadMore ?'Read Less' : '...Read More'}}</span>
                   </span>
                 </span>
-              </span>
-              <button (click)="goBackStep()" [disabled]="currentRelation == 0"
-              class="mx-2 fs-14 w-92 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-2">
-              <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
-                  Previous
-              </button>
-              <button (click)="goToStep()" [disabled]="currentRelation == (relationList?.length - 1)"
-                  class="mx-2 fs-14 w-92 mt-2 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center mt-3">
-                  Next
-                  <mat-icon class="me-2 keyboard-backspace ml-15">keyboard_backspace</mat-icon>
-              </button>
+                </div>
+              </div>
+            </div>
+            <div class="row p-3 fs-14">
+              <div class="col-md-6 col-xl-3 mb-2">
+                <label for="" class="coi-text-dark d-block">{{selectedProject?.reporterRole}}</label>
+                <span class="coi-text-light">{{selectedProject?.principalInvestigator}}</span>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-2">
+                <label for="" class="coi-text-dark d-block">Project Role</label>
+                <span class="coi-text-light">{{selectedProject?.reporterRole}}</span>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-2">
+                <label for="" class="coi-text-dark d-block">Period</label>
+                <span class="coi-text-light">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+                  | dateFormatter}}</span>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-2">
+                <label for="" class="coi-text-dark d-block">Sponsor</label>
+                <span class="coi-text-light">{{selectedProject?.sponsor}}</span>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
+                <label for="" class="coi-text-dark d-block">Lead Unit</label>
+                <span [ngClass]="selectedProject?.unitName ? 'coi-text-light': 'noDataExists'">{{selectedProject?.unitName ?
+                  commonService.getPersonLeadUnitDetails(selectedProject): 'No Lead Unit exist'}}</span>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
+                <label for="" class="coi-text-dark d-block">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}
+                  Status</label>
+                <span class="coi-text-light">{{selectedProject?.moduleStatus}}</span>
+              </div>
+              <div class="col-md-6 col-xl-3">
+                <label for="" class="coi-text-dark d-block">Prime Sponsor</label>
+                <span
+                  [ngClass]="selectedProject?.primeSponsor ? 'coi-text-light': 'noDataExists'">{{selectedProject?.primeSponsor
+                  ?
+                  selectedProject?.primeSponsor :'--No Data--'}}</span>
+              </div>
+            </div>
           </div>
-        </div>
+          <div class="d-flex justify-content-xl-center align-items-center border-prev-nxt col-md-12 col-xl-2 p-md-2 p-xl-3">
+            <div class="row w-100 ps-md-3 ps-xl-0">
+              <div class="col-auto">
+                <span class="d-flex align-items-center mt-md-1 mt-xl-0 f-13 fw-600 text-gray-600">{{currentRelation + 1}}
+                  of {{relationList?.length}}
+                  <span class="ms-2" title="Navigate to previous or next projects." data-bs-toggle="tooltip"
+                    data-bs-placement="top">
+                    <mat-icon role="img" class="mat-icon info-icon mt-1" aria-hidden="true"
+                      data-mat-icon-type="font">info</mat-icon>
+                  </span>
+                </span>
+              </div>
+              <div class="d-md-flex d-xl-inline col fs-14 gap-3 px-md-0 px-xl-2">
+                <button (click)="goBackStep()" [disabled]="currentRelation == 0" aria-label="Click here to Go to previous"
+                  id="btn-perious"
+                  [title]="coiService.isRelationshipSaving ? 'Please wait for auto save to finish':'Go to previous'"
+                  class="d-flex justify-content-center col my-xl-2 btn btn-outline-secondary w-100 flex-shrink-0 gap-1">
+                  <mat-icon>keyboard_backspace</mat-icon>
+                  Previous
+                </button>
+                <button (click)="goToStep()" [disabled]="currentRelation == (relationList?.length - 1)" aria-label="Click here to Go to Next"
+                  id="btn-next"
+                  [title]="coiService.isRelationshipSaving ? 'Please wait for auto save to finish':'Go to Next'"
+                  class="d-flex justify-content-center col btn btn-outline-secondary w-100 flex-shrink-0 gap-1">
+                  Next
+                  <mat-icon class="keyboard-backspace">keyboard_backspace</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <app-SFI-conflict-relationship [(isSavingRelation)]="coiService.isRelationshipSaving" [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
-      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
+      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription" [isSlider]="true"
       [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
-  </div>
-</div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-clear-all-button" data-bs-toggle="modal" data-bs-target="#clearConfirmationModal"></button>
-<div class="modal fade" id="clearConfirmationModal" tabindex="-1" aria-labelledby="clearConfirmationModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Click to close Project -SFI slider"></button>
-      </div>
-      <div class="modal-body fs-14">
-        <p>Do you want to clear all the data entered?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-single-clear-button" data-bs-toggle="modal" data-bs-target="#singleClearConfirmationModal"></button>
-<div class="modal fade" id="singleClearConfirmationModal" tabindex="-1" aria-labelledby="singleClearConfirmationModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body fs-14">
-        <p>Do you want to clear the data of <span class="fw-600"> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.personEntity?.coiEntity?.entityName}} </span> values?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+    </ng-container>
+  </app-coi-slider>
+</ng-container>

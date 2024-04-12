@@ -3,16 +3,26 @@
 }
 
 .table {
-    border-collapse: separate;
-    border-spacing: 0 4px;
-    border-color: #ff000000;
+    // border-collapse: separate;
+    // border-spacing: 0 4px;
+    // border-color: #ff000000;
+    .table-head {
+        position: sticky;
+        background-color: #f4f4f4;
+        top: 0;
+/* for fixing fibi style issues across application */
+        th {
+            font-size: 0.875rem !important;
+        }
+    }
+    
+    tbody {
+        td {
+            font-size: 0.875rem !important;
+        } 
+    }
 }
 
-.table-head {
-    position: sticky;
-    background-color: #f4f4f4;
-    top: 0;
-}
 
 .pi-info-text {
     background-color: #F3F3F3;
@@ -20,10 +30,9 @@
 }
 
 .create-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 218px;
-    font-weight: 500;
-    font-size: 15px;
+}
+
+img.version-icon {
+    width: 24px;
 }

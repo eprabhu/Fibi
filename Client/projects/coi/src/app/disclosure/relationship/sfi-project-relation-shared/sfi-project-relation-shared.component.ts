@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {deepCloneObject, hideModal, openModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {interval, Subject} from 'rxjs';
 import {listAnimation} from '../../../common/utilities/animations';
@@ -20,6 +20,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     @Input() coiStatusList = [];
     @Input() projectIdTitleMap = {};
     @Input() isSaving = false;
+    @Input() isSlider = false;
     @Output() isSavingChange = new EventEmitter();
     @Output() relationshipChanged = new EventEmitter();
 
@@ -33,6 +34,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     focusableId = '';
     $debounceEvent = new Subject<any>();
     $subscriptions = [];
+    isApplyToAllModal = false;
 
     constructor(private _commonService: CommonService, private _relationShipService: RelationshipService) {
     }
@@ -46,6 +48,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
 
     ngOnInit() {
         this.triggerSingleSave();
+        this.listenScreenSize();
     }
 
     ngOnDestroy() {
@@ -56,6 +59,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         this.coiValidationMap.clear();
         this.coiStatusCode = null;
         this.coiDescription = '';
+        this.isApplyToAllModal = true;
         openModal('applyToAllConfirmationModal');
     }
 
@@ -113,7 +117,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....', 1250);
         this.$subscriptions.push(this._relationShipService.singleEntityProjectRelationSFI(element, element.personEntityId,
             element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
-            this._relationShipService.projectSFIDetails[index] = data.coiDisclEntProjDetail;
+            this._relationShipService.projectSFIDetails[element.personEntityId][index] = data.coiDisclEntProjDetail;
             this.coiValidationMap.clear();
             this.relationshipChanged.emit(true);
             this.updateIsSaving(false);
@@ -139,6 +143,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     clearValues() {
         this.coiDescription = '';
         this.coiStatusCode = null;
+        this.isApplyToAllModal = false;
     }
 
     applyToAll() {
@@ -184,6 +189,32 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     updateIsSaving(newValue: boolean): void {
         this.isSaving = newValue;
         this.isSavingChange.emit(this.isSaving);
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+	handleEscapeEvent(event: any): void {
+		if ((event.key === 'Escape' || event.key === 'Esc') && this.isApplyToAllModal) {
+			document.getElementById('claim-sumbit-no-btn').click();
+			this.clearValues();
+		}
+	}
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        setTimeout(() => {
+            if(this.isSlider) {
+                const INFO_CARD_HEIGHT = document.getElementById('info-card')?.offsetHeight || 0;
+                const HEADER_HEIGHT = document.getElementById('relationship-details')?.offsetHeight;
+                const TABLE_HEADER_HEIGHT = document.getElementById('sfi-relationship-table-header')?.offsetHeight;
+                document.getElementById('sfi-relationship-table-header').style.top ='-9px';
+                if(window.innerWidth >= 1200) {
+                    document.getElementById('sfi-relationship').style.maxHeight = (window.innerHeight - (INFO_CARD_HEIGHT + HEADER_HEIGHT + TABLE_HEADER_HEIGHT + 60)) + 'px';
+                } else {
+                    const HEADER_HEIGHT = document.getElementById('relationship-details-box-slider-header')?.offsetHeight;
+                    document.getElementById('sfi-relationship').style.maxHeight = (window.innerHeight - (HEADER_HEIGHT +10)) + 'px';
+                }
+            }
+        });
     }
 
 }

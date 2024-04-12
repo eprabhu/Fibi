@@ -46,10 +46,6 @@
     }
 }
 
-.info-text {
-    margin-left: 27px;
-}
-
 .ml-11 {
     margin: 11px;
 }
@@ -111,17 +107,9 @@
     height: 75px !important;
 }
 
-.w-14 {
-    width: 14%;
-}
-
 .area-position {
     position: relative;
     top: 9px;
-}
-
-.btn-primary {
-    height: 33px;
 }
 
 .tableSkin th {
@@ -271,4 +259,8 @@
     font-size: 16px;
     font-weight: 400;
     border: 1px solid #caced2;
+}
+
+.table-responsive {
+    overflow: auto !important;
 }

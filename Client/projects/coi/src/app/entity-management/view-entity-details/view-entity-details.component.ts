@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -51,6 +51,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isShowRiskHistory = false;
     isOpenSlider = false;
     isConcurrency = false;
+    isUserCollapse = false;
+    readMore: string;
 
     constructor(private _router: Router, private _route: ActivatedRoute,
         public entityManagementService: EntityManagementService,
@@ -97,12 +99,14 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     openConfirmationModal() {
+        this.readMore = 'false';
         $('#modifyEntityConfirmationModal').modal('show');
     }
 
     modifyEntity() {
         this.mandatoryList.clear();
         if (this.validationCheck()) {
+            this.readMore = '';
             $('#modifyEntityConfirmationModal').modal('hide');
             this.sfiService.isShowSfiNavBar = true;
             this.modifyType = this.valueOfModify;
@@ -128,6 +132,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.mandatoryList.clear();
         this.valueOfModify = '';
         this.modifyDescription = '';
+        this.readMore = '';
         $('#modifyEntityConfirmationModal').modal('hide');
     }
 
@@ -136,6 +141,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     activateInactivateEntity() {
+        this.readMore = 'false';
         document.getElementById('inactivate-confirm-message').click();
     }
 
@@ -159,6 +165,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             };
             this.$subscriptions.push(this.entityManagementService.activateInactivate(REQ_BODY).subscribe((res: any) => {
                 this.inactivateReason = '';
+                this.readMore = '';
                 document.getElementById('hide-inactivate-modal').click();
                 this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.entityDetails.isActive ? 'inactivated' : 'activated '} successfully`);
                 const entityId = Number(this.entityDetails.entityId);
@@ -166,6 +173,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                     this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: res.entityId } });
             }, error => {
                 if (error.status === 405) {
+                    this.readMore = '';
                     hideModal('inactivateConfirmationModal');
                     this.entityManagementService.concurrentUpdateAction = `${this.entityDetails.isActive ? 'Inactivate' : 'Activate '} Entity`;
                 } else {
@@ -283,5 +291,19 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
           this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
       }
+
+    /* Auto expand and collapse based on screen responsiveness */
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if (!this.isUserCollapse) {
+            this.isCardExpanded = !(window.innerWidth <= 992);
+        }
+    }
+
+    closeActiveInactiveModal() {
+        this.inactivateReason='';
+        this.readMore = '';
+        document.getElementById('hide-inactivate-modal').click();
+    }
 
 }

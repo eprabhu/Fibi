@@ -1,11 +1,9 @@
-<div class="ms-4 questionnaire-position me-3">
-    <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi"
-        class="justify-content-end d-flex">
-        <button class="btn-delete-position btn btn-tertiary mr-2" data-bs-toggle="modal"
-            data-bs-target="#deleteRelationModal">
-            <mat-icon class="pt-1">delete_outline</mat-icon>
-            <span class="fs-14 delete-content-position">Delete</span>
-        </button>
+<div class="questionnaire-position">
+    <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
+      <button class="btn-delete-position btn btn-tertiary mr-2 mt-1 d-inline-flex" data-bs-toggle="modal" data-bs-target="#deleteRelationModal">
+        <mat-icon>delete_outline</mat-icon>
+        <span class="fs-14">Delete</span>
+      </button>
     </div>
     <div class="custom-qustnr">
         <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length && hasPermissionToView"
@@ -25,12 +23,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete Relationship</h5>
+                <h5 class="modal-title fs-16">Delete Relationship</h5>
                 <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body fs-14">
                 <p>Are you sure you want to delete
                     <strong>{{currentRelationshipDetails?.validPersonEntityRelType?.description}}</strong>?</p>
             </div>

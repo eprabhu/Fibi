@@ -45,6 +45,7 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 1;
         this.configuration = Object.assign({}, this.configuration);
+        this.listenToolKitFocusSection();
     }
 
     ngDoCheck() {
@@ -72,6 +73,15 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
 
     setActiveQuestionnaire(event) {
         this.activeQuestionnaire = event;
+    }
+
+    //'COI801' parent element of ScreeningQuestionnaireSummaryComponent.
+    private listenToolKitFocusSection() {
+        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele => {
+            if (ele.section == 'COI801') {
+                this.isQuestionnaireCollapsed = !ele.isExpand;
+            }
+        }));
     }
 
 }

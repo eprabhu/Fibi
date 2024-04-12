@@ -1,29 +1,33 @@
 <app-left-nav-bar></app-left-nav-bar>
-<header class="align-items-center bg-white d-flex justify-content-between shadow-medium px-5">
+<header class="coi-header-top align-items-center d-flex justify-content-between px-3">
     <div class="d-flex align-items-center">
         <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
-        <ul *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
-            <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
+        <div *ngIf="isShowNavBarOverlay" class="nav-bar-custom-overlay d-block" (click)="onClickMenuBar()"></div>
+        <ul id="responsive-nav" *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+            <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures' : 'Go to My Disclosures'"
                 aria-description="Goto my home">My Disclosures
                 <span *ngIf="router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab"
+            <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/entities') ? 'My Entities' : 'Go to My Entities'"
                 aria-description="Goto my Disclosures">My Entities
                 <span *ngIf="router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab"
+            <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/notes') ? 'My Notes' : 'Go to My Notes'"
                 aria-description="Goto my Notes">My Notes
             </li>
-            <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']"
+            <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/attachments') ? 'My Attachments' : 'Go to My Attachments'"
                 aria-description="Goto my Attachments">My Attachments
             </li>
         </ul>
+        <span *ngIf="router.url.includes('/user-dashboard/')" class="menu-icon" (click)="onClickMenuBar()">
+            <mat-icon class="cursor-pointer">menu</mat-icon>
+        </span>
     </div>
     <div>
         <div class="d-flex align-items-center">
@@ -69,6 +73,10 @@
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
+                <mat-icon data-bs-target="#theme-selector-modal" data-bs-toggle="modal" [attr.title]="'Click to view accessibility'" [attr.aria-labelledby]="'Click to view accessibility'"
+                          class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
+                    accessibility
+                </mat-icon>
                 <mat-icon [attr.title]="'Click to view COI Notifications'"
                           [routerLink]="['/coi/expanded-widgets']"
                           [attr.aria-labelledby]="'Click to view all the notifications'"
@@ -84,10 +92,10 @@
                 </mat-icon>
             </div>
             <div class="align-items-center d-flex ml-5 profile">
-                <div class="d-flex mx-4 cursor-pointer" (click)="ispersondetailsmodal = true">
+                <div class="d-flex mx-2 cursor-pointer" (click)="ispersondetailsmodal = true">
                     <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
                 </div>
-                <div class="d-flex flex-column clickable-content" (click)="ispersondetailsmodal = true">
+                <div class="d-lg-flex flex-column clickable-content d-none " (click)="ispersondetailsmodal = true">
                     <b class="f-16">{{fullName}}</b>
                     <small class="f-16">{{loginPerson?.reviewerRights?.description}}</small>
                 </div>
@@ -115,13 +123,10 @@
     </div>
 </header>
 
-<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
+<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" data-bs-backdrop="static" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
-        <span class="btn-primary-icon btn-sm ms-auto mt-0 px-2" id="close-edit-home-unit" title="Return to main menu"
-            (click)="closeAddNote()" type="button">
-            <mat-icon class="pt-1">close</mat-icon>
-        </span>
+        <button type="button" class="btn-close ms-auto" title="Close" data-bs-dismiss="modal" aria-label="Close" (click)="closeAddNote()"></button>
     </div>
     <hr class="hr">
     <div>
@@ -129,9 +134,7 @@
             placeholder="Take a note..." [(ngModel)]="noteComment"></textarea>
     </div>
     <div>
-        <button type="button" aria-label="Close"
-            class="btn btn-primary float-end fs-14 h-41 mb-3 mr-15 mt-3"
-            (click)="saveOrUpdateNote()">Add Note</button>
+        <button type="button" aria-label="Close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" (click)="saveOrUpdateNote()">Add</button>
     </div>
 </div>
 
@@ -143,3 +146,48 @@
 <app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
                              [activeDisclosures]="headerService.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
 </app-disclosure-create-modal>
+
+<!-- theme selector -->
+<div class="modal modal-coi fade mySkinDialog" id="theme-selector-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pe-0">
+                <h4 class="modal-title">Choose a theme</h4>
+                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                    type="button">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3">
+                    <div class="col-3">
+                        <div class="form-check">
+                          <input type="radio" class="btn-check" name="options-theme" id="btn-check-default" checked autocomplete="off" (click)="changeTheme('default')">
+                        <label class="btn btn-outline-secondary" for="btn-check-default">Default</label>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="options-theme" id="btn-check-dark" autocomplete="off" (click)="changeTheme('dark')">
+                <label class="btn btn-outline-dark" for="btn-check-dark">Dark</label>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="options-theme" id="btn-check-blue" autocomplete="off" (click)="changeTheme('blue')">
+                <label class="btn btn-outline-primary" for="btn-check-blue">Blue</label>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-check">
+                            <input type="radio" class="btn-check" name="options-theme" id="btn-check-red" autocomplete="off" (click)="changeTheme('red')">
+                <label class="btn btn-outline-danger" for="btn-check-red">Red</label>
+                        </div>
+                      </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- theme selector ends -->

@@ -16,56 +16,76 @@
             <span class="fs-14 ml-15">Versions</span>
         </span>
     </mat-menu>
-
-    <div class="table-responsive" *ngIf="attachmentLists.length">
-        <table class="table">
-            <thead class="fs-14 grey-text table-head">
-                <tr>
-                    <th scope="col" style="width: 20%" class="pt-3 ps-3">Attachment Type</th>
-                    <th scope="col" style="width: 30%">Description</th>
-                    <th scope="col" style="width: 25%">File name</th>
-                    <th scope="col" style="width: 15%">Last Updated</th>
-                    <th scope="col" style="width: 5%" *ngIf="!coiPersonId">Action</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white">
-                <tr *ngFor="let attachment of attachmentLists ; let index = index;" class="fs-14 grey-text mt-2">
-                    <td class="pt-3 ps-3">{{attachment?.disclAttaTypeDetails?.description}}</td>
-                    <td class="pt-3">{{attachment.description}}</td>
-                    <td class="pt-3">{{attachment.fileName}}</td>
-                    <td class="pt-3">{{attachment.updateTimestamp |
-                        dateFormatterWithTimeZone:'long'}}</td>
-                    <td class="d-flex pt-3" *ngIf="!coiPersonId">
-                        <span class="mr-2 cursor-pointer" title="Click to edit attachment">
-                            <mat-icon class="fs-20">edit</mat-icon>
-                        </span>
-                        <span class="mr-2 cursor-pointer" title="Click to download attachment">
-                            <mat-icon class="fs-20">vertical_align_bottom</mat-icon>
-                        </span>
-                        <span class="mr-2 cursor-pointer" title="Click to open more options"
-                            [matMenuTriggerFor]="createActionMenu">
-                            <mat-icon class="fs-20">more_vert</mat-icon>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="card mt-2">
+        <div class="card-body">
+            <div class="table-responsive coi-table-striped" *ngIf="attachmentLists.length">
+                <table class="table table-bordered fs-14 table-striped">
+                    <thead class="grey-text table-head ">
+                        <tr>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 20%">Attachment Type</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 30%">Description</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 25%">File name</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 15%">Last Updated</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 10%" *ngIf="!coiPersonId">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        <tr *ngFor="let attachment of attachmentLists ; let index = index;" class="grey-text">
+                            <td>{{attachment?.disclAttaTypeDetails?.description}}</td>
+                            <td>{{attachment?.description?.length>75 && !collapseViewMore[attachment.attachmentId]?(attachment.description |
+                                slice:0:75) : attachment.description}}
+                                <ng-container *ngIf="attachment?.description?.length>75">
+                                    <span class="link-primary" tabindex="0" role="link"
+                                        (click)="collapseViewMoreOption(attachment.attachmentId,collapseViewMore[attachment.attachmentId])"
+                                        (keydown.enter)="collapseViewMoreOption(attachment.attachmentId,collapseViewMore[attachment.attachmentId])"
+                                        [attr.aria-label]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read Less' : 'Click here to  Read More'"
+                                        [title]="collapseViewMore[attachment.attachmentId] ? 'Click here to Read less' : 'Click here to  Read more'">
+                                        {{(attachment?.description?.length >75 && collapseViewMore[attachment.attachmentId]) ? 'Read Less':'...Read More'}}
+                                    </span>
+                                </ng-container>
+                            </td>
+                            <td>{{attachment.fileName}}</td>
+                            <td>{{attachment.updateTimestamp |
+                                dateFormatterWithTimeZone:'long'}}</td>
+                            <td *ngIf="!coiPersonId">
+                                <div class="d-inline-flex">
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to edit attachment">
+                                        <mat-icon>edit</mat-icon>
+                                    </span>
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to download attachment">
+                                        <mat-icon>vertical_align_bottom</mat-icon>
+                                    </span>
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to open more options"
+                                        [matMenuTriggerFor]="createActionMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    
+
     <ng-container *ngIf="isShowCreate && !attachmentLists.length">
         <div class="card">
-          <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
-            <p class="fs-14 m-0">
+            <div class="card-body">
+          <div class="border pi-info-text rounded-1 p-3">
+            <p class="m-0">
               <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
                 You do not have any attachments added. Click on <strong>Add Attachments</strong>
                 to add on attachments.
               </span>
             </p>
           </div>
-          <span class="create-button">
-            <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="_commonService.isOpenAttachmentModal = true">
+          <div class="create-button d-flex align-items-center justify-content-center">
+            <button class="btn btn-primary" (click)="_commonService.isOpenAttachmentModal = true">
               Add Attachments
             </button>
-          </span>
+          </div>
+          </div>
         </div>
       </ng-container>
 </ng-container>

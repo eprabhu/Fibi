@@ -1,95 +1,87 @@
-<div class="pt-3 margin-card-top row">
-	<div class="col-12">
-		<div class="card">
-			<div class="row">
-				<div class="col-xxl-9 col-xl-9 col-lg-8 col-md-7 col-sm-12 col-12 h-100 pe-0">
-					<div class="card shadow-0 border-0 border-r-0">
-						<div class="card-body">
-							<div class="row" tabindex="0"
-								[attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
+<div class="row mb-3 " [ngClass]="isSlider? 'sticky-top' : 'sticky-top-50'">
+    <div class="col-12">
+		<div class="card shadow-sm">
+			<div class="row mx-0">
+				<div class="col-xl-9 col-lg-9 col-md-12 px-0">
+					<div class="card-header bg-white px-3 border-bottom min-height-unset">
+						<div class="row flex-grow-1">
+							<div class="col-lg-12 d-flex align-items-center" tabindex="0" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
 								<span class="fs-18 fw-500">
-									{{entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName :
-									isEntityManagement ?
-									'--Entity Name--' : '-- SFI Name --'}}
+                                    <ng-container *ngIf="entityDetails.coiEntity.entityName">
+                                        <app-read-more [valueToShow]="entityDetails.coiEntity.entityName" [sliceCount]="50"></app-read-more>
+                                    </ng-container>
+                                    <ng-container *ngIf="!entityDetails.coiEntity.entityName">
+                                        {{isEntityManagement ? '--Entity Name--' : '-- SFI Name --'}}
+                                    </ng-container>
 								</span>
 							</div>
-							<hr *ngIf="!isEntityManagement">
-							<div class="row" *ngIf="!isEntityManagement">
-								<!-- Start Date Of Involvement -->
-								<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
-									[attr.aria-label]="'Start Date of Involvement' + (involvementDate.involvementStartDate | dateFormatterWithTimeZone)">
-									<div class="fw-bold me-2 fs-14 label-text">Start Date Of Involvement</div>
-									<app-no-data-label [classesToApply]="'fs-14'"
-										[valueToShow]="involvementDate.involvementStartDate">
-										<span class="fs-14">{{involvementDate.involvementStartDate |
-											dateFormatterWithTimeZone}}</span>
-									</app-no-data-label>
-								</div>
-								<!-- End Date Of Involvement -->
-								<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
-								[attr.aria-label]="'End Date of Involvement' + (involvementDate.involvementEndDate | dateFormatterWithTimeZone)">
-									<div class="fw-bold me-2 fs-14 label-text">End Date Of Involvement </div>
-									<app-no-data-label [classesToApply]="'fs-14'"
-										[valueToShow]="involvementDate.involvementEndDate">
-										<span class="fs-14">{{involvementDate.involvementEndDate |
-											dateFormatterWithTimeZone}}</span>
-									</app-no-data-label>
-								</div>
-								<!-- Sponsors Research -->
-								<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" tabindex="0"
-								[attr.aria-label]="'Sponsors Research' + (additionalDetails?.sponsorsResearch ? 'Yes' : 'No')">
-									<div class="fw-bold me-2 fs-14 label-text">Sponsors Research </div>
-									<span class="text-color fs-14">{{additionalDetails?.sponsorsResearch ? 'Yes' :
-										'No'}}</span>
-								</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row" *ngIf="!isEntityManagement">
+							<!-- Start Date Of Involvement -->
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
+								[attr.aria-label]="'Start Date of Involvement' + (involvementDate.involvementStartDate | dateFormatterWithTimeZone)">
+								<div class="fw-bold me-2 fs-14 label-text">Start Date Of Involvement</div>
+								<app-no-data-label [classesToApply]="'fs-14'"
+									[valueToShow]="involvementDate.involvementStartDate">
+									<span class="fs-14">{{involvementDate.involvementStartDate |
+										dateFormatterWithTimeZone}}</span>
+								</app-no-data-label>
+							</div>
+							<!-- End Date Of Involvement -->
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
+							[attr.aria-label]="'End Date of Involvement' + (involvementDate.involvementEndDate | dateFormatterWithTimeZone)">
+								<div class="fw-bold me-2 fs-14 label-text">End Date Of Involvement </div>
+								<app-no-data-label [classesToApply]="'fs-14'"
+									[valueToShow]="involvementDate.involvementEndDate">
+									<span class="fs-14">{{involvementDate.involvementEndDate |
+										dateFormatterWithTimeZone}}</span>
+								</app-no-data-label>
+							</div>
+							<!-- Sponsors Research -->
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
+							[attr.aria-label]="'Sponsors Research' + (additionalDetails?.sponsorsResearch ? 'Yes' : 'No')">
+								<div class="fw-bold me-2 fs-14 label-text">Sponsors Research </div>
+								<span class="text-color fs-14">{{additionalDetails?.sponsorsResearch ? 'Yes' :
+									'No'}}</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-xxl-3 col-xl-3 col-lg-4 col-md-5 col-sm-12 col-12 add-sfi-header-button-panel">
-					<div class="row pt-15 pe-3 pt-4">
-						<div class="col-6 d-flex pe-1">
-							<button class="btn btn-outline-grey col-6 pb-0 w-100" title="Go to COI home page" tabindex="0"
-								(click)="goToHome()" aria-label="Home" role="button">
-								<mat-icon>home</mat-icon>
-								<span class="fs-14 mx-1 btn-content-home d-lg-inline">Home</span>
-							</button>
-						</div>
-						<div class="col-6 ps-1">
-							<button class="btn btn-outline-grey col-6 h-41 w-100" (click)="navigateBack()" tabindex="0"
-								title="Click to go back to Entity list" aria-label="Back" role="button">
-								<i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
-								<span class="fs-14 mx-2 btn-content-back d-lg-inline">Back</span>
-							</button>
-						</div>
-						<div class="col-12 pt-10 mb-15">
-							<button tabindex="0" [attr.aria-label]="buttonName" role="button"
-							class="align-items-center btn btn-primary d-flex fs-14 h-41 justify-content-center mt-0 pt-1 py-1 w-100"
-							[title]="btnTitle" (click)="submitEntity();"
-							[disabled]="mandatoryList?.has('entityAlreadyAdded')">
-							<mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
-							{{buttonName}}
+				<div class="col-xl-3 col-lg-3 col-md-12 py-3 border-start">
+					<div class="d-grid gap-2 d-md-flex flex-md-wrap">
+						<button class="btn btn-outline-grey col pb-0 w-100" title="Go to COI home page" tabindex="0"
+							(click)="goToHome()" aria-label="Home" role="button">
+							<mat-icon>home</mat-icon>
 						</button>
-						</div>
-					</div>
+						<button class="btn btn-outline-grey col w-100" (click)="navigateBack()" tabindex="0"
+							title="Click to go back to Entity list" aria-label="Back" role="button">
+							<i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+							<span class="fs-14 mx-2 btn-content-back d-lg-inline">Back</span>
+						</button>
+						<button tabindex="0" [attr.aria-label]="buttonName" role="button"
+						class="align-items-center btn btn-primary d-flex fs-14 col-12 justify-content-center mt-0 w-100"
+						[title]="btnTitle" (click)="submitEntity();"
+						[disabled]="mandatoryList?.has('entityAlreadyAdded')">
+						<mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
+						{{buttonName}}
+					</button>
+				</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<nav class="border-nav rounded-2 bg-white border mx-3 br-bottom d-flex fs-15 fw-bold mb-1 shadow-lg user-dashboard-nav"
-	*ngIf="!isEntityManagement" tabindex="0" aria-label="Relationship Details" role="tab">
-	<div class="navigation-icons px-3 py-3" role="button">
+<div class="card">
+	<div class="card-header align-items-center border-bottom min-height-unset py-3 fw-500">
 		Relationship Details
 	</div>
-</nav>
-<div class="card-color mx-3 px-4">
 	<!-- Additional Details -->
-	<div class="card-body p-0 my-4">
-		<div class="mt-1">
-			<div class="row card mb-3 shadow-medium" tabindex="-1">
+	<div class="card-body">
+			<div class="row" tabindex="-1">
 				<!-- Entity Name -->
-				<div class="col-12 mb-3 mt-4 px-4" tabindex="0" aria-label="Entity Name Search Field" role="searchbox">
+				<div class="col-12 mb-3" tabindex="0" aria-label="Entity Name Search Field" role="searchbox">
 					<div class="d-flex position-relative">
 						<label class="d-block fs-14 fw-500 px-1 pb-1 label-text" for="Entity-Name">
 							<span class="mandatory">*</span>
@@ -108,7 +100,8 @@
 							<input type="text" class="form-control fs-13"
 								[(ngModel)]="entityDetails.coiEntity.entityName"
 								[ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
-								id="entity-name" (ngModelChange)="setHeader();">
+								id="entity-name" (ngModelChange)="setHeader();" appLengthValidator
+								[limit]=500 [styleList]="'mt-2 float-end word-count'">
 						</ng-template>
 						<div class="help-text" tabindex="0" aria-label="Entity Name Helptext" aria-describedby="entity-name-helptext">
 							<span id="entity-name-helptext">Type in the official name of the business or organization you need to report. Entities to
@@ -127,27 +120,26 @@
 				<div *ngIf="mandatoryList?.has('entityAlreadyAdded')" class="mx-1 px-4 mb-4">
 					<div class="bg-light info-card-border p-2 rounded-2 shadow-medium">
 						<div class="m-0 mb-2 pt-2 row">
-							<!-- Relationship -->
-							<div class="col-7 text-secondary fs-14" tabindex="0" aria-label="Relationship">
-								<span class="fw-bold me-3 label-text">Relationship :</span> 
-									<span *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships);else noRelation">
-										<ng-container>
-											<em
+								<!-- Relationship -->
+						<div class="col-7 text-secondary fs-14" tabindex="0" aria-label="Relationship">
+							<span class="fw-bold me-3 label-text">Relationship :</span>
+								<span *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships);else noRelation">
+									<ng-container>
+										<em
 												*ngFor="let subsection of existingEntityDetails.personEntityRelationships | keyvalue ;let isKeyFirst = first">
-												<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span> 
+											<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span class="fw-medium">{{subsection.key}} : </span>
 												<ng-container *ngFor="let relationship of subsection.value;let isFirst = first; let isLast = last;">
 													<span
-													*ngIf="!isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description
-													+'/'}}
+														*ngIf="!isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description+'/'}}
 													</span>
 													<span
 														*ngIf="isLast">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description}}
 													</span>
 												</ng-container>
-												</span>
-											</em>
-										</ng-container>
-									</span>
+											</span>
+										</em>
+									</ng-container>
+								</span>
 									<ng-template #noRelation>
 										<span>--</span>
 									</ng-template>
@@ -208,7 +200,7 @@
 					</div>
 				</div>
 				<ng-container *ngIf="canShowEntityFields">
-					<div class="mb-3 px-4 row">
+					<div class="mb-3 row mx-0 px-0">
 						<!-- Country -->
 						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Country Search Field" role="searchbox">
 							<div class="d-flex position-relative">
@@ -232,13 +224,13 @@
 							</div>
 						</div>
 					<!-- City -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="City">
+						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="0" aria-label="City">
 							<div class="d-flex fs-15 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="City">City</label>
 							</div>
 							<div class="col">
 								<input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.city"
-									[disabled]="isResultFromSearch || isViewMode">
+									[disabled]="isResultFromSearch || isViewMode" appTailingSpaceRemover>
 								<div class="help-text">
 									Type in the city of the business or organization you need to report.
 								</div>
@@ -246,28 +238,28 @@
 						</div>
 					</div>
 					<!-- Address -->
-					<div class="px-4 mb-3 row" tabindex="0" aria-label="Address">
+					<div class="px-0 mx-0 mb-3 row" tabindex="0" aria-label="Address">
 						<span>
 							<label class="fs-14 fw-500 pb-1 label-text">
 								<span class="mandatory">*</span>
-								Address							
+								Address
 							</label>
 							<textarea appAutoGrow class="form-control" rows="1"
 								[(ngModel)]="entityDetails.coiEntity.address"
-								(ngModelChange)="entityDetails.coiEntity.address = entityDetails.coiEntity.address.trim()"
+								appTailingSpaceRemover
 								[ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator
 								[limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
 							<div class="help-text">
 								Type in the address of the business or organization you want to report.
 							</div>
-							<div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13">
+							<div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13 position-absolute">
 								{{mandatoryList?.get('address')}}
 							</div>
 						</span>
 					</div>
 					<!-- Phone -->
-					<div class="px-4 mb-3 row">
+					<div class="px-0 mx-0 mb-3 row">
 						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Phone">
 							<div class="d-flex px-1 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="Phone">
@@ -276,7 +268,7 @@
 							</div>
 							<div class="col">
 									<input class="form-control" [(ngModel)]="entityDetails.coiEntity.phone"
-										(ngModelChange)="entityDetails.coiEntity.phone = entityDetails.coiEntity.phone.trim()"
+									    appTailingSpaceRemover
 										(keypress)="inputRestriction($event)"
 										[disabled]="isResultFromSearch || isViewMode"
 										(keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)" maxlength="15">
@@ -286,7 +278,7 @@
 							</div>
 						</div>
 						<!-- Zip Code -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Zip Code">
+						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="0" aria-label="Zip Code">
 							<div class="d-flex fs-15 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="Zip Code">
 									Zip Code
@@ -294,7 +286,7 @@
 							</div>
 							<div class="col pe-1">
 								<input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.zipCode"
-									(ngModelChange)="entityDetails.coiEntity.zipCode = entityDetails.coiEntity.zipCode.trim()"
+									appTailingSpaceRemover
 									(keypress)="inputRestriction($event)" maxlength="15"
 									[disabled]="isResultFromSearch || isViewMode">
 								<div class="help-text">
@@ -303,7 +295,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="px-4 mb-3 row">
+					<div class="px-0 mx-0 mb-3 row">
 						<!-- Website -->
 						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Website">
 							<div class="d-flex position-relative">
@@ -311,14 +303,15 @@
 							</div>
 							<div class="col">
 								<input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL"
-									id="website" [disabled]="isResultFromSearch || isViewMode">
+									id="website" [disabled]="isResultFromSearch || isViewMode"
+									appTailingSpaceRemover>
 								<div class="help-text">
 									Type in the website of the business or organization you want to report.
 								</div>
 							</div>
 						</div>
 						<!-- Email Address -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Email Address">
+						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="0" aria-label="Email Address">
 							<div class="d-flex fs-15 position-relative">
 								<label class="d-block fs-14 fw-500 pb-1 label-text" for="email"> Email Address
 								</label>
@@ -327,7 +320,8 @@
 								<input type="text" class="form-control"
 									[(ngModel)]="entityDetails.coiEntity.emailAddress"
 									[ngClass]="emailWarningMsg != null ? 'is-invalid d-block' : ''"
-									[disabled]="isResultFromSearch || isViewMode">
+									[disabled]="isResultFromSearch || isViewMode"
+									appTailingSpaceRemover>
 								<div class="help-text">Type the email address of the business or organization you want to report.
 								</div>
 								<div *ngIf="emailWarningMsg" class="invalid-feedback d-block fs-13">
@@ -336,7 +330,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="px-4 row" [ngClass]="isEntityManagement ? 'mb-4' : 'mb-3'">
+					<div class="px-0 mx-0 row" [ngClass]="isEntityManagement ? 'mb-4' : 'mb-3'">
 						<!-- Entity Type -->
 						<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" tabindex="0" aria-label="Entity Type Dropdown">
 							<div class="d-flex position-relative">
@@ -345,7 +339,7 @@
 								</label>
 							</div>
 							<div class="col">
-								<select class="form-control mt-2 form-select" id="entity-type"
+								<select class="form-control form-select" id="entity-type"
 									[(ngModel)]="entityDetails.coiEntity.entityTypeCode"
 									(ngModelChange)="setEntityTypeObj();"
 									[ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''"
@@ -363,13 +357,13 @@
 							</div>
 						</div>
 						<!-- Risk -->
-						<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="isEntityManagement"  tabindex="0" aria-label="Risk Dropdwon">
+						<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-3 mt-md-0" *ngIf="isEntityManagement"  tabindex="0" aria-label="Risk Dropdwon">
 							<div class="d-flex px-1 position-relative">
 								<label class="d-block fs-14 fw-500 px-1 pb-1 label-text" for="risk-level">Risk
 								</label>
 							</div>
 							<div class="col px-1">
-								<select class="form-select mt-2 form-control fs-14"
+								<select class="form-select form-control fs-14"
 									[(ngModel)]="entityDetails.coiEntity.riskCategoryCode"
 									[disabled]="modifyType ==='1'" (ngModelChange)="setEntityRiskCategoryObj()"
 									id="risk-level">
@@ -391,13 +385,13 @@
 							(emitEntityId)="viewEntityDetails($event)"></app-shared-entity-info-card>
 					</div>
 				</ng-container>
-				<div *ngIf="isExpandedAdditionalDetails && !isEntityManagement" class="card-body px-0 pt-2">
-					<div class="row d-flex px-4 mb-3">
+				<div *ngIf="isExpandedAdditionalDetails && !isEntityManagement" class="card-body">
+					<div class="row">
 						<!-- Start date of involvement -->
 						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Start Date of Involvement Date Field">
 							<div class="d-flex">
 								<label class="d-block fw-500 fs-14 pb-1 label-text"
-									for="Start date of involvement"><span class="mandatory">*</span>Start Date of
+									for="Start date of involvement"><span class="mandatory">*</span> Start Date of
 									Involvement
 								</label>
 							</div>
@@ -425,7 +419,7 @@
 							</div>
 						</div>
 						<!-- End Date of Involvement -->
-						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="End Date of Involvement Date Field">
+						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 mt-lg-2 mt-xl-0 mt-md-2 mt-2" tabindex="0" aria-label="End Date of Involvement Date Field">
 							<label class="d-block fs-14 fw-500 px-1 pb-1 label-text"
 								for="End date of involvement">End Date of Involvement
 							</label>
@@ -436,7 +430,7 @@
 										(click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
 										[(ngModel)]="involvementDate.involvementEndDate"
 										(ngModelChange)="endDateValidation()"
-										(keypress)="_commonService._keyPress($event, 'date')" 
+										(keypress)="_commonService._keyPress($event, 'date')"
 										[ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"/>
 									<i title="Click to select End date" (click)="endDate.open()"
 									[class.date-field-error]="mandatoryList?.has('endDate')"
@@ -452,7 +446,7 @@
 							</div>
 						</div>
 						<!-- Sponsors Research -->
-						<div class="col-xxl-2 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="0" aria-label="Sponsors Research Toggle Button">
+						<div class="col-xxl-2 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 mt-lg-2 mt-xl-0 mt-md-2 mt-2" tabindex="0" aria-label="Sponsors Research Toggle Button">
 							<div class="d-flex px-3">
 								<label class="d-block fs-14 fw-500 px-1 pb-1 row label-text">Sponsors Research</label>
 							</div>
@@ -476,35 +470,33 @@
 						</div>
 					</div>
 					<!-- Realtionship Details [Disclose financial details for the SFI] -->
-					<div class="px-4 mb-3 row" *ngIf="!isEntityManagement">
-						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 card custom-padding position-relative mt-3 mx-2 px-0"
+					<div class="mb-3 mx-0 row mt-4" *ngIf="!isEntityManagement">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-12 card custom-padding position-relative px-0"
 							tabindex="0" aria-label="Relationship Details Card" [class.invalid-border]="mandatoryList.has('relationRadio')">
 							<div class="color-black mb-2">
 								<label class="form-check-label colour-black relation-header px-2 fs-14 label-text"><span
-										class="mandatory">*</span>Relationship Details
+										class="mandatory">*</span> Relationship Details
 									[Disclose financial details for the SFI]
 								</label>
 							</div>
-							<div class="mt-3 mx-4 px-1">
-								<div *ngFor="let subsection of relationLookup | keyvalue;" class="mb-3 d-flex align-items-baseline">
-									<div class="col-5" tabindex="0" [attr.aria-label]="subsection?.key">
-										<label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}} : </label>
+							<div class="row mb-3 mt-2 mx-0 px-2">
+								<div *ngFor="let subsection of relationLookup | keyvalue;" class="col-lg-4 col-md-6 col-xl-4 col-xxl-4">
+									<div tabindex="0" [attr.aria-label]="subsection?.key">
+										<label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
 									</div>
-									<div class="col-7">
-										<div class="relation select-margin ml-09">
-											<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
-												class="form-check d-inline-block" [ngClass]="!isFirst ? 'ms-4' : ''" tabindex="0"
-												[attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
-												<input type="checkbox" name="relation"
-													class="form-check-input text-secondary border border-secondary"
-													[id]="'sfi-relation'+relation.validPersonEntityRelTypeCode"
-													[value]="relation?.validPersonEntityRelTypeCode"
-													[(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
-													title="Click to select {{relation?.description}} relation">
-												<label class="r-title fs-14">
-													{{relation?.personEntityRelType?.description}}
-												</label>
-											</div>
+									<div class="relation">
+										<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
+											class="form-check d-block mb-2" tabindex="0"
+											[attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
+											<input type="checkbox" name="relation"
+												class="form-check-input text-secondary border border-secondary"
+												[id]="'sfi-relation'+relation.validPersonEntityRelTypeCode"
+												[value]="relation?.validPersonEntityRelTypeCode"
+												[(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
+												title="Click to select {{relation?.description}} relation">
+											<label class="r-title fs-14">
+												{{relation?.personEntityRelType?.description}}
+											</label>
 										</div>
 									</div>
 								</div>
@@ -519,12 +511,12 @@
 							</div>
 						</div>
 					</div>
-					<div *ngIf="mandatoryList.has('relationRadio')" class="invalid-feedback d-block fs-13 px-4"
+					<div *ngIf="mandatoryList.has('relationRadio')" class="invalid-feedback d-block fs-13"
 						tabindex="0" aria-label="Relationship Details Validation" aria-describedby="relation-details-validation">
 						<span id="relation-details-validation">{{mandatoryList.get('relationRadio')}}</span>
 					</div>
 					<!-- Relationship with Entity -->
-					<div class="row px-4 mb-3" tabindex="0" aria-label="Relationship with Entity">
+					<div class="row mb-3" tabindex="0" aria-label="Relationship with Entity">
 						<span>
 							<label class="fs-14 fw-500 py-2 position-relative label-text">
 								<span class="mandatory">*</span>
@@ -532,7 +524,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.staffInvolvement"
-								(ngModelChange)="additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
+								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
 								[limit]=2000 [styleList]="'mt-2 float-end word-count'">
                                     </textarea>
@@ -549,7 +541,7 @@
 						</span>
 					</div>
 					<!-- Principle Business Area of Entity -->
-					<div class="row px-4 mb-3" tabindex="0" aria-label="Principle Business Area of Entity">
+					<div class="row mb-3" tabindex="0" aria-label="Principle Business Area of Entity">
 						<span>
 							<label class="fs-14 fw-500 py-2 position-relative label-text">
 								<span class="mandatory">*</span>
@@ -557,7 +549,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.studentInvolvement"
-								(ngModelChange)="additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
+								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'">
@@ -572,7 +564,7 @@
 						</span>
 					</div>
 					<!--  Relationship of Entity to your University responsibilities -->
-					<div class="row px-4 mb-3" tabindex="0" aria-label="Relationship of Entity to your University Responsibilities">
+					<div class="row mb-3" tabindex="0" aria-label="Relationship of Entity to your University Responsibilities">
 						<span>
 							<label class="fs-14 fw-500 py-2 position-relative label-text">
 								<span class="mandatory">*</span>
@@ -581,7 +573,7 @@
 							</label>
 							<textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
 								[(ngModel)]="additionalDetails.instituteResourceInvolvement"
-								(ngModelChange)="additionalDetails.instituteResourceInvolvement = additionalDetails.instituteResourceInvolvement.trim();"
+								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'">
@@ -599,23 +591,24 @@
 				</div>
 			</div>
 			<!-- Additional Details Ends -->
-		</div>
 	</div>
 </div>
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
-	<div class="modal-dialog">
+<!-- Update confirmation -->
+<div class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header ct-footer-padding">
+			<div class="modal-header">
 				<h4 class="modal-title">Confirmation</h4>
-				<button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" title="Close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
 			</div>
-			<div class="modal-body ct-modal-padding">
-				<div class="row ">
-					<div class="col-lg-12">
-						<div class="my-2 mx-0 row">
-							<div class="col-12 py-2 grey-info font">
-								<span class="fs-14 text-secondary">Would you like to make changes to the existing entity
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12">
+						<div class="row">
+							<div class="col-12 grey-info font">
+								<span class="fs-14">Would you like to make changes to the existing entity
 									details?
 									Please note that any modifications made will impact the existing SFIs.
 								</span>
@@ -624,12 +617,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer ct-footer-padding">
-				<button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal" title="Click to cancel"
-					type="button">Cancel
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button"
+				title="Click to cancel">Cancel
 				</button>
-				<button (click)="updateEntityDetails()" data-bs-dismiss="modal" title="Click to submit"
-					class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button">Submit</button>
+				<button class="btn btn-primary me-0" id="claim-sumbit-no-btn" type="button"
+					(click)="updateEntityDetails()" data-bs-dismiss="modal"  title="Click to submit">Submit
+				</button>
 			</div>
 		</div>
 	</div>
@@ -638,7 +632,7 @@
   <!-- Entity Details Modal -->
   <button class="d-none" data-bs-toggle="modal" data-bs-target="#entity-details" id="persondetailsTrigger">
   </button>
-  
+
   <div class="modal fade mySkinDialog modal-lg" id="entity-details" tabindex="0" aria-labelledby="exampleModalLabel"
     data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog">
@@ -664,7 +658,7 @@
                 ?'Active':'Inactive'}}</span>
             </div>
             <div class="text-secondary fs-14 col-8 mt-2" tabindex="0" [attr.aria-label]="'Address' + (addEntityConfirmation?.address)">
-              <div> 
+              <div>
 				<label class="grey-text me-2">Address</label></div>
 			  <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
 				<span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
@@ -678,7 +672,7 @@
 					<span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
 					  class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
 					</span>
-				  </ng-template>			
+				  </ng-template>
 				</app-no-data-label>
             </div>
             <div class="col text-secondary fs-14 align-items-center mt-2" tabindex="0" [attr.aria-label]="'Risk' + (addEntityConfirmation?.entityRiskCategory.description)">
@@ -707,7 +701,7 @@
   </div>
 
   <!-- Concurrency Modal -->
-  
+
   <div class="modal modal-coi fade mySkinDialog" id="sfi-concurrency-modal" role="dialog"
     aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">

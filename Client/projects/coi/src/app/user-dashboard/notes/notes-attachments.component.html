@@ -63,7 +63,7 @@
 
 <ng-container *ngIf="showSlider">
     <app-coi-slider (closeSlider)="closeEditNoteSlider()" [isStickyNeeded]="false" [slider_z_index]="1057"
-        [overlay_z_index]="1056" [sliderName]="'edit-note-slider'">
+        [overlay_z_index]="1056" [elementId]="'edit-note-slider'" [isHeaderNeeded]="true">
 
         <!-- slider header -->
         <ng-container header>
@@ -71,10 +71,8 @@
         </ng-container>
         <!-- modal content -->
         <ng-container content>
-
-            <div class="card-body">
-                <div>
-                    <div class="card shadow-sm mx-1">
+            <div class="card mt-3">
+                    <div class="card-body shadow-sm mx-1">
                         <div class="row ml-15 mt-4" *ngIf="isEditMode">
                             <div class="col mr-10 fs-14 rounded-1 mx-4 my-4">
                                 <ckeditor [(ngModel)]="currentSelectedNote.content" [editor]="Editor"
@@ -93,9 +91,7 @@
                                 (click)="updateContent()">Update</button>
                         </div>
                     </div>
-                </div>
             </div>
-
         </ng-container>
     </app-coi-slider>
 </ng-container>

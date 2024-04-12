@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
@@ -23,7 +23,7 @@ import {
     CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getPersonLeadUnitDetails, openCommonModal } from '../common/utilities/custom-utilities';
+import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
@@ -104,11 +104,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Specify the reason for the withdrawal of the disclosure.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
-    returnHelpTexts = [
-        `Return disclosures currently in the 'Review in progress' status.`,
-        `Specify the reason for the returning of the disclosure.`,
-        `Click on 'Return' button to return the disclosure for any modification.`
-    ];
+    returnHelpTexts = [];
     isOpenRiskSlider = false;
    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
@@ -116,6 +112,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
+    isUserCollapse = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -125,7 +122,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public coiService: CoiService,
         public location: Location,
         public dataStore: DataStoreService, public navigationService: NavigationService) {
-        document.getElementById('COI_SCROLL').scrollTo(0, 0);
+        window.scrollTo(0, 0);
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -136,6 +133,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.listenScreenSize();
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
@@ -207,6 +205,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.currentStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
             this.navigateToStep();
         }
+        this.setFocus('step_'+stepPosition);
     }
 
     leavePageClicked() {
@@ -360,6 +359,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiData = coiData;
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
+        this.returnHelpTexts = [ `Return disclosures currently in the '${this.coiData.coiDisclosure.coiReviewStatusType.description}' status.`,
+        `Specify the reason for the returning of the disclosure.`,
+        `Click on 'Return' button to return the disclosure for any modification.`];
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
     }
@@ -674,7 +676,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
         this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
         this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
-
+        this.personProjectDetails.homeUnit = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
+        this.personProjectDetails.homeUnitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
     }
 
     performDisclosureAction(event): void {
@@ -763,5 +766,39 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     closeHeaderSlider() {
         this.showSlider = false;
         this.selectedType = '';
+    }
+
+    getColorBadges() {
+        switch (this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = window.innerWidth > 1399;
+        }
+    }
+
+    setFocus(id) {
+        const focusedElement = document.getElementById(id);
+        if(focusedElement) {
+            setTimeout(() => {
+                focusedElement.focus();
+            },500)
+        }
+    }
+
+    collapseHeader() {
+        this.isCardExpanded = !this.isCardExpanded;
+        this.isUserCollapse = !this.isUserCollapse;
     }
 }

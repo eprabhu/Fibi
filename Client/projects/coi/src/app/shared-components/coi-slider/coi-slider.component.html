@@ -1,19 +1,56 @@
-<div id="{{sliderName}}-overlay">
-    <div class="slider-base" id="{{sliderName}}">
-        <app-slider-close-btn (closeAction)="emitCloseSlider()"></app-slider-close-btn>
-        <div class="slider-container p-0" (scroll)="onWindowScroll($event)">
-            <div class="sticky-0" *ngIf="isHeaderNeeded || isStickyNeeded">
-                <div class="card card-header bg-white px-4 py-2 pt-3" *ngIf="isHeaderNeeded">
-                    <h5 class="fs-16">
-                        <ng-content select="[header]"></ng-content>
-                    </h5>
-                </div>
-                <ng-container *ngIf="isStickyNeeded">
-                    <ng-content select="[content-sticky]"></ng-content>
-                </ng-container>
-            </div>
 
-            <ng-content select="[content]"></ng-content>
+<button type="button" class="btn btn-primary" hidden="true" data-bs-toggle="offcanvas" id="{{elementId}}-trigger-btn"
+    [attr.data-bs-target]="'#'+elementId" aria-controls="offcanvasRight">
+</button>
+<div #Backdrop class="offcanvas-backdrop fade"></div>
+<div #SliderParentElement class="offcanvas offcanvas-end" [id]="elementId"
+    aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false" data-bs-keyboard="false">
+    <div class="offcanvas-header" [class.border-bottom]="isHeaderNeeded" id="{{elementId}}-slider-header">
+        <h5 id="offcanvasRightLabel" class="fw-bold mb-0">
+            <!-- header -->
+            <ng-content select="[header]"></ng-content>
+        </h5>
+        <button type="button" class="btn-close text-reset" id="close-btn"
+            aria-label="Close" (click)="closeSliderWindow()"></button>
+        <button type="button" hidden="true" class="btn-close text-reset" [id]="elementId+'-close-btn'" data-bs-dismiss="offcanvas"
+            aria-label="Close" ></button>
+    </div>
+    <div class="offcanvas-body pt-0" id="{{elementId}}-slider-body">
+        <!-- sticky-content -->
+        <ng-container *ngIf="isStickyNeeded">
+            <div class="position-sticky top-0 z-2">
+                <ng-content select="[content-sticky]"></ng-content>
+            </div>
+        </ng-container>
+        <!--content -->
+        <ng-content select="[content]"></ng-content>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade mySkinDialog" [id]="elementId+'-confirmation-modal'" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Confirmation
+                </h5>
+                <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body title-descriptions">
+                <p><ng-content select="[confirmation-content]">
+                </ng-content></p>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                    (click)="leaveSlider()">
+                    Leave Page
+                </button>
+                <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
+                    Stay On Page
+                </button>
+            </div>
         </div>
     </div>
 </div>

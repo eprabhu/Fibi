@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import { DataStoreService } from '../../services/data-store.service';
 import { Subject, Subscription, interval } from 'rxjs';
 import { RelationshipService } from '../relationship.service';
@@ -21,6 +21,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   // @Input() coiValidationMap: any;
   @Input() entityProjectDetails: Array<any> = [];
   // @Input() coiTableValidation: any;
+  @Input() isSlider = false;
   @Input() coiDescription: any;
   @Input() selectedProject: any;
   @Input() coiData: any;
@@ -30,7 +31,10 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   @Output() isSavingRelationChange = new EventEmitter();
   $debounceEvent = new Subject<any>();
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
-
+  isApplyToAllModal = false;
+  @ViewChild('relationshipConflict', { static: false }) tableResponsive: ElementRef;
+  @ViewChild('conflictTableHeader', { static: false }) conflictTableHeader: ElementRef;
+  readMore = [];
 
   $subscriptions: Subscription[] = [];
   coiValidationMap: Map<string, string> = new Map();
@@ -53,6 +57,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
           ELEMENT.classList.remove('border-bottom');
           ELEMENT.classList.remove('border-top');
           ELEMENT.classList.add('error-highlight-card');
+          this._coiService.addTableBorder(this.entityProjectDetails,'table-header-tr');
       }
   });
     this.triggerSingleSave();
@@ -63,6 +68,9 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
       this.coiValidationMap.clear();
       this.coiTableValidation.clear();
     }
+	  if (this.entityProjectDetails.length) {
+		  this.listenScreenSize();
+	  }
   }
 
   openSaveAllConfirmationModal() {
@@ -70,7 +78,8 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
     this.coiStatusCode = null;
     this.coiDescription = '';
     openModal('applyToAllConfirmationModal');
-    this.changeCloseBtnZIndex('1000');
+	this.isApplyToAllModal = true
+    // this.changeCloseBtnZIndex('1000');
   }
 
   applyToAll() {
@@ -96,7 +105,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
             this.removeFocusId();
         }
         hideModal('applyToAllConfirmationModal');
-        this.changeCloseBtnZIndex(1500);
+        // this.changeCloseBtnZIndex(1500);
         this.coiDescription = '';
         this.coiStatusCode = null;
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
@@ -107,12 +116,12 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
       }));
   }
 
-  changeCloseBtnZIndex(zIndex) {
-    let close = document.getElementById('slider-close-button');
-    if (close) {
-      close.style.zIndex = zIndex;
-    }
-  }
+//   changeCloseBtnZIndex(zIndex) {
+//     let close = document.getElementById('slider-close-button');
+//     if (close) {
+//       close.style.zIndex = zIndex;
+//     }
+//   }
 
   prepareSaveObject() {
     const REQ_ARRAY = deepCloneObject(this.entityProjectDetails);
@@ -137,7 +146,8 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
   clearValues() {
     this.coiDescription = '';
     this.coiStatusCode = null;
-    this.changeCloseBtnZIndex('1000');
+	this.isApplyToAllModal = false;
+    // this.changeCloseBtnZIndex('1000');
   }
 
   // Function for saving the single entity
@@ -197,6 +207,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
 removeFocusId() {
     const ELEMENT = document.getElementById(this._coiService.focusModuleId);
     ELEMENT.classList.remove('error-highlight-card');
+	  this.removeBorder();
     this._coiService.focusModuleId = null;
     this._coiService.focusSFIRelationId = null;
 }
@@ -243,4 +254,48 @@ isShowWarning(data) {
         this.isSavingRelationChange.emit(this.isSavingRelation);
     }
 
+	@HostListener('document:keydown.escape', ['$event'])
+	handleEscapeEvent(event: any): void {
+		if ((event.key === 'Escape' || event.key === 'Esc') && this.isApplyToAllModal) {
+			document.getElementById('claim-sumbit-no-btn').click();
+			this.clearValues();
+		}
+	}
+
+  @HostListener('window:resize', ['$event'])
+  listenScreenSize() {
+    if (this.isSlider) {
+      const INFO_CARD_HEIGHT = document.getElementById('info-card')?.offsetHeight ||0 ;
+      const HEADER_HEIGHT = document.getElementById('relationship-details-body')?.offsetHeight ||0;
+      const Slider_height = this.conflictTableHeader.nativeElement.offsetHeight;
+
+      if (window.innerWidth >= 1200) {
+        this.tableResponsive.nativeElement.style.maxHeight = (window.innerHeight - (INFO_CARD_HEIGHT + HEADER_HEIGHT + Slider_height + 60)) + 'px';
+      } else {
+        const HEADER_HEIGHT = document.getElementById('relationship-details-slider-header')?.offsetHeight;
+        this.tableResponsive.nativeElement.style.maxHeight = (window.innerHeight - (HEADER_HEIGHT + 18)) + 'px';
+      }
+
+    }
+  }
+
+    readMoreOption(id: number, flag: boolean): void {
+        this.readMore[id] = !flag;
+    }
+
+  private removeBorder() {
+    if (this._coiService.focusSFIRelationId) {
+      const INDEX = this.entityProjectDetails.findIndex(ele => ele.disclosureDetailsId == this._coiService.focusSFIRelationId);
+      if (INDEX != -1) {
+        if (INDEX == 0) {
+          const ELEMENT = document.getElementById('table-header-tr');
+          ELEMENT.classList.remove('border-bottom-0');
+        } else {
+          const ELEMENT_ID = (this.entityProjectDetails[INDEX - 1].disclosureDetailsId).toString();
+          const ELEMENT = document.getElementById(ELEMENT_ID);
+          ELEMENT.classList.remove('border-bottom-0');
+        }
+      }
+    }
+  }
 }

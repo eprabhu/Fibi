@@ -1,4 +1,4 @@
-<app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'travel-conflict-slider'">
+<app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'travel-conflict-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
     <!-- slider header -->
     <ng-container header>
         <span>{{isEditMode ? 'Manage' : 'View'}} Travel Disclosure Status</span>
@@ -124,71 +124,54 @@
         </div>
 
         <!-- Conflict History -->
-        <div class="mb-4 main-title mt-15">
+        <div class="mb-4 main-title mt-15" tabindex="0">
             <h3 class="d-flex align-items-center mx-4"><strong>Conflict History</strong>
-                <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
-                    title="Click to view Travel Disclosure conflict history." data-bs-placement="top">
-                </span>
+                <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top"></span>
             </h3>
         </div>
 
-        <ng-container *ngIf="conflictHistory.length > 0; else noData">
-            <ng-container *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;">
-                <div class="row m-2">
-                    <div class="col-1 mr-15 position-relative" [class.time-line]="!last">
-                        <span
-                            class="badge rounded-pill badge-width h-auto {{commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
-                    </div>
-                    <div class="col pb-4 mx-auto comment-box-height">
-                        <span class="d-flex align-items-center text-muted">
-                            <!-- updateUserFullName -->
-                            <ng-container *ngIf="historyEntry?.updateUser">
-                                <i class="fa fa-user grey-text fs-16" aria-hidden="true"></i>
-                                <label class="fw-700 fs-14 ml-2 me-4">{{historyEntry?.updateUserFullName}}</label>
-                            </ng-container>
-
-                            <!-- updateTimestamp -->
-                            <span class="fs-12">{{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
-                        </span>
-
-                        <!-- comment -->
-                        <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
-                            <span [ngClass]="historyEntry?.updateUser ? '': 'fst-italic'">{{
-                                (!isReadMore[index] && historyEntry?.comment?.length > 230) ?
-                                (historyEntry?.comment | slice:0:230) : historyEntry?.comment }}
-            
-                                <!-- for read more and less -->
-                                <ng-container *ngIf="historyEntry?.comment?.length > 230">
-                                    <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium cursor-pointer">
-                                        <strong>
-                                            <span *ngIf="!isReadMore[index]">...<u title="Expand comment">Read More</u></span>
-                                            <u title="Collapse comment" *ngIf="isReadMore[index]">Read Less</u>
-                                        </strong>
-                                    </span>
-                                </ng-container>
-                            </span>
-                        </div>
-                    </div>
+        <div class="card" id="risk-history">
+            <div class="card-content">
+                <div class="card-body">
+                        <ng-container *ngIf="conflictHistory.length > 0; else noData">
+                            <ul class="timeline">
+                                <li *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;">
+                                    <div tabindex="0">
+                                        <span class="badge me-2 {{commonService.getDisclosureConflictBadgeForSlider(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
+                                        <i class="fa fa-user coi-text-light fs-16 me-1" aria-hidden="true"></i>
+                                        <span class="fw-700 fs-14">{{historyEntry?.updateUserFullName}}</span>
+                                        <span class="coi-text-lighter fs-13"> {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
+                                    </div>
+                                    <p class="coi-text-light pt-3 pb-4" tabindex="0">
+                                        <span class="fs-14 fst-italic">
+                                            <mat-icon class="format_quote">format_quote</mat-icon>
+                                            <span [ngClass]="historyEntry?.updateUser ? '': 'fst-italic'">{{
+                                                (!isReadMore[index] && historyEntry?.comment?.length > 230) ?
+                                                (historyEntry?.comment | slice:0:230) : historyEntry?.comment }}
+                            
+                                                <!-- for read more and less -->
+                                                <ng-container *ngIf="historyEntry?.comment?.length > 230">
+                                                    <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium cursor-pointer">
+                                                        <strong>
+                                                            <span *ngIf="!isReadMore[index]">...<u title="Expand comment">Read More</u></span>
+                                                            <u title="Collapse comment" *ngIf="isReadMore[index]">Read Less</u>
+                                                        </strong>
+                                                    </span>
+                                                </ng-container>
+                                            </span>
+                                        </span>
+                                    </p>
+                                </li>
+                            </ul>
+                        </ng-container>
                 </div>
-            </ng-container>
-        </ng-container>
-
+            </div>
+        </div>
         <ng-template #noData>
             <app-no-information></app-no-information>
         </ng-template>
     </ng-container>
-
-</app-coi-slider>
-
-<!--conflict confirmation Modal-->
-<app-confirmation-modal [modalName]="'travel-conflict-confirmation-modal'" (secondaryBtnAction)="leavePageClicked()"
-    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
-    <!-- modal header -->
-    <ng-container header>
-        <span>Confirmation</span>
-    </ng-container>
-    <!-- modal content -->
-    <p content class="fs-14 ms-2">
+    <ng-container confirmation-content>
         You have unsaved changes in the <strong>Manage Travel Disclosure Status</strong>, do you want to leave?
-    </p>
-</app-confirmation-modal>
+    </ng-container>
+</app-coi-slider>

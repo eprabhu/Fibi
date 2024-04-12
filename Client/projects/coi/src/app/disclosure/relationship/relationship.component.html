@@ -1,72 +1,77 @@
-<div class="row fs-14 m-0 py-2 switch-view-card">
-    <div class="col align-self-center">
+<div class="row fs-14 my-2 mx-0 px-3 py-2 alert alert-primary">
+    <div class="col align-self-center p-0">
         <ng-container *ngIf="!switchRelationView">For defining SFI against project use 'SFI - Project Relationship'</ng-container>
         <ng-container *ngIf="switchRelationView">For defining project against SFI use 'Project - SFI Relationship'</ng-container>.
     </div>
-    <div class="col-auto">
-        <button class="btn btn-primary fs-14" (click)="switchRelationViewMode(!switchRelationView)">{{switchRelationView?
-            'Project - SFI Relationship':'SFI - Project Relationship'}}</button>
+    <div class="col-auto p-0">
+        <button class="btn btn-primary fs-14" (click)="switchRelationViewMode(!switchRelationView)"
+        [attr.aria-label]="switchRelationView?'Click here to view Project - SFI Relationship':' Click here to view SFI - Project Relationship'"
+        [title]="switchRelationView?'Click here to view Project - SFI Relationship':' Click here to view SFI - Project Relationship'"
+        id="btn-view-Relationship">{{switchRelationView?'Project - SFI Relationship':'SFI - Project Relationship'}}</button>
     </div>
 </div>
 
-<div class="row align-items-end">
-    <div class="col">
-        <div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
-    <span data-bs-toggle="tooltip" title="Relationship Help Text." data-bs-placement="top" class="d-inline-block">
-      <mat-icon role="img"
-                class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
-                aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-    </span>
-            <div class="info-text fs-14">
-                <div class="mt-2">
-                    <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Projects will be displayed against
-                    your
-                    Active SFIs, allowing you to mark the relevant conflict status and provide a supporting description
-                    for
-                    your
-                    decision.
-                    <span *ngIf="!expandInfo" (click)="expandInfo = true" class="fw-700 cursor-pointer">...<u
-                        title="Expand Relationship help text" class="fw-700">Read More</u></span>
-                </div>
+<div *ngIf="isEditMode" class="row align-items-end">
+    <div class="col-12">
+        <div class="d-flex alert alert-primary mb-0 py-2">
+            <mat-icon role="img" class="mat-icon info-icon material-icons flex-shrink-0" aria-hidden="true"
+                data-mat-icon-type="font">info</mat-icon>
+            <p class="fs-14 mb-0 ms-2">
+                <span class="d-flex algin-items-start">
+                    <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                    <span>Projects will be displayed against your
+                        Active SFIs, allowing you to mark the relevant conflict status and provide a supporting
+                        description for
+                        your decision.
+                        <span *ngIf="!expandInfo" (click)="expandInfo = true" (keydown.enter)="expandInfo = true" class="fw-700 link-primary" aria-label="Expand Relationship help text" tabindex="0" role="link">...<span
+                            id="link-read-more-info" title="Expand Relationship help text" class="fw-700">Read More</span></span>
+                    </span>
+                </span>
                 <ng-container *ngIf="expandInfo">
-                    <div class="mt-2">
-                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>If any of the active SFIs are
+                    <span class="d-flex algin-items-start mt-2">
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>If any of the active SFIs are
                         missing
                         ,please cross-check and make necessary corrections to the SFI list in the SFI section.
-                    </div>
-                    <div class="mt-2">
-                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Before proceeding to the next
-                        step,
-                        ensure that all your Project-SFI relationships have been marked.
-                        <span *ngIf="expandInfo && !isShowCollapsedConflictRelationship" (click)="expandInfo = false"
-                              class="fw-700 cursor-pointer"><u
-                            title="Collapse Relationship help text">Read Less</u></span>
-                    </div>
-                    <div *ngIf="isShowCollapsedConflictRelationship">
-                        <div class="mt-2">
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>For marking all your SFI
+                    </span>
+                    <span class="d-flex algin-items-start mt-2">
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                        <span>
+                            Before proceeding to the next
+                            step,
+                            ensure that all your Project-SFI relationships have been marked.
+                            <span *ngIf="expandInfo && !isShowCollapsedConflictRelationship"
+                                (click)="expandInfo = false" (keydown.enter)="expandInfo = false" class="fw-700 link-primary" tabindex="0" role="link" id="link-read-less-info" 
+                                title="Collapse Relationship help text" aria-label="Collapse Relationship help text">Read Less</span>
+                        </span>
+                    </span>
+                    <ng-container *ngIf="isShowCollapsedConflictRelationship">
+                        <span class="d-flex algin-items-start mt-2">
+                            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>For marking all your SFI
                             conflict
                             status/ relationship description use "Apply and Save".
-                        </div>
-                        <div class="mt-2">
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>For marking individual SFI
-                            conflict
-                            status/ relationship description use "Save".
-                            <span *ngIf="expandInfo" (click)="expandInfo = false" class="fw-700 cursor-pointer"><u
-                                title="Collapse Relationship help text">Read Less</u></span>
-                        </div>
-                    </div>
+                        </span>
+                        <span class="d-flex algin-items-start mt-2">
+                            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                            <span>
+                                For marking individual SFI
+                                conflict
+                                status/ relationship description use "Save".
+                                <span *ngIf="expandInfo" (click)="expandInfo = false" (keydown.enter)="expandInfo = false" class="fw-700 link-primary"><span tabindex="0" role="link" id="link-read-less-info" 
+                                        title="Collapse Relationship help text" aria-label="Collapse Relationship help text">Read Less</span></span>
+                            </span>
+                        </span>
+                    </ng-container>
                 </ng-container>
-            </div>
+            </p>
         </div>
     </div>
 </div>
 
 
-  <div class="form-control col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1 && !switchRelationView">
+  <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="awardList.length>1 && !switchRelationView">
     <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
     <input type="text" placeholder="Search by Project Id, Project Name, PI, Project Status, Sponsor, Prime Sponsor  "
-    class="searchField  mt-2 ms-2 pb-2" [(ngModel)]="searchText">
+    class="searchField ms-2" [(ngModel)]="searchText">
 
   </div>
 
@@ -77,126 +82,141 @@
             <ng-container *ngIf="isShowNoDataCard">
                 <div *ngIf="searchResult.length">
                     <ng-container *ngFor="let relation of searchResult;let i = index">
-                        <div class="card outer-card shadow-medium" [id]="relation.moduleItemId">
-                            <div class="card-body">
+                        <div class="card mt-2 shadow-medium py-1" [id]="relation.moduleItemId">
+                            <div class="card-body mb-2">
                                 <div class="row">
-                                    <div class="col-md-8 col-12">
-                                        <div class="col-12 d-flex" *ngIf="relation.moduleCode == 3">
-                                            <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex" tabindex='0' aria-label="proposal">Proposal</span>
-                                            <p class="entity-title">
-                                                <strong title="Click to view project details" tabindex="0" class="fs-16" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
-                                                        data-bs-target="#moduleViewModal"[attr.aria-label]="relation?.moduleItemId + '_' + relation?.title ">#{{relation?.moduleItemId}} - {{relation?.title?.length >
-                                                75 && !collapseViewMore[relation?.moduleItemId] ? (relation?.title | slice:0:75)+'...' :
-                                                    relation?.title}}
-                                                </strong>
-                                                <span
-                                                    (click)="collapseViewMoreOption(relation?.moduleItemId, collapseViewMore[relation?.moduleItemId])"
-                                                    *ngIf="relation?.title?.length > 75" class="collapse-text fs-13">
-                                            {{collapseViewMore[relation?.moduleItemId] ? "Read Less" : "Read More"}}
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="col-12 d-flex" *ngIf="relation.moduleCode == 1">
-                                    <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex" tabindex='0' aria-label="Award">Award</span>
-                                    <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=relation" data-bs-toggle="modal"
-                                        data-bs-target="#moduleViewModal"tabindex='0' >
-                                        <strong class="fs-16"[attr.aria-label]="relation?.moduleItemKey + ' - ' + relation?.title">#{{relation?.moduleItemKey}} - {{relation?.title}} </strong>
-                                    </p>
-                                </div>
-                                <div class="row m-2">
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Principal Investigator :</label>
-                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.principalInvestigator">{{relation?.principalInvestigator}}</span>
+                                    <div class="col-12 mb-3">
+                                        <ng-container *ngIf="relation.moduleCode == 3">
+                                            <div class="d-flex">
+                                                <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex"
+                                                    aria-label="proposal">Proposal</span>
+                                                <span>
+                                                    <span title="Click to view project details" class="fs-6 link-primary fw-600"
+                                                        aria-label="'Click to view project details'" id="link-{{relation?.moduleItemId}}"
+                                                        (click)="selectedProjectForView=relation;"  data-bs-toggle="modal" data-bs-target="#moduleViewModal"
+                                                        [attr.aria-label]="relation?.moduleItemId + '_' + relation?.title ">#{{relation?.moduleItemId}}
+                                                        -
+                                                        {{relation?.title?.length >
+                                                        75 && !collapseViewMore[relation?.moduleItemId] ? (relation?.title | slice:0:75) :
+                                                        relation?.title}}
+                                                    </span>
+                                                    <span (click)="collapseViewMoreOption(relation?.moduleItemId, collapseViewMore[relation?.moduleItemId])"
+                                                        *ngIf="relation?.title?.length > 75" tabindex="0" role="link"  id="link-read-more-less"
+                                                        aria-label="Click here to {{collapseViewMore[relation?.moduleItemId] ? ' Read Less' : ' Read More'}}" title="Click here to {{collapseViewMore[relation?.moduleItemId] ? ' Read less' : ' Read more'}}"
+                                                        class="fs-14 fw-medium link-primary">
+                                                        {{collapseViewMore[relation?.moduleItemId] ? "Read Less" : "...Read More"}}</span>
+                                                </span>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="relation.moduleCode == 1">
+                                            <div class="d-flex">
+                                                <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex"
+                                                    aria-label="Award">Award</span>
+                                                <span>
+                                                    <span title="Click to view project details" class="fs-6 fw-600 link-primary"
+                                                        (click)="selectedProjectForView=relation;" aria-label="'Click to view project details'" tabindex="0" role="link"
+                                                        (keydown.enter)="selectedProjectForView=relation"
+                                                        id="link-{{relation?.moduleItemKey}}" data-bs-toggle="modal" data-bs-target="#moduleViewModal"
+                                                        [attr.aria-label]="relation?.moduleItemKey + '_' + relation?.title ">#{{relation?.moduleItemKey}}
+                                                        - {{relation?.title?.length > 75 && !collapseViewMore[relation?.moduleItemKey] ? (relation?.title | slice:0:75)
+                                                        : relation?.title}}
+                                                    </span>
+                                                    <span *ngIf="relation?.title?.length > 75" (click)="collapseViewMoreOption(relation?.moduleItemKey, collapseViewMore[relation?.moduleItemKey])"
+                                                         (keydown.enter)="collapseViewMoreOption(relation?.moduleItemKey, collapseViewMore[relation?.moduleItemKey])"
+                                                         [attr.aria-label]="collapseViewMore[relation?.moduleItemKey] ? 'Click here to Read less' : 'Click here to  Read more'" tabindex="0" role="link"
+                                                         [id]="'link-read-more-less'+relation?.moduleItemKey"
+                                                        class="fs-14 fw-medium link-primary">
+                                                        {{collapseViewMore[relation?.moduleItemKey] ? "Read Less" : "...Read More"}}</span>
+                                                </span>
+                                            </div>
+                                        </ng-container>
                                     </div>
-                                    <div class="col-3"tabindex="0">
-                                        <label class="label-text">Project Role : </label>
-                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
-                                    </div>
-                                    <div class="col-3"tabindex="0">
-                                        <label class="label-text">Period :</label>
-                                        <span class="ml-2 grey-text" [attr.aria-label]="relation?.startDate + ' - ' + relation?.endDate">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
-                                            dateFormatter}}</span>
-                                    </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Sponsor :</label>
-                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
-                                    </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Lead Unit :</label>
-                                        <span class="ml-2 grey-text" *ngIf="relation?.unitName"[attr.aria-label]="relation?.unitName">
-                                            {{_commonService.getPersonLeadUnitDetails(relation)}}</span>
-                                        <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4 p-10">
-                                <div>
-                                    <div class="border h-100 rounded-1 table-bg-color position-relative">
-                                        <span class="status-pill">Project/SFI Relationship</span>
-                                        <div class="emptySfi mt-5 pt-3" *ngIf=" !relation.isRelationShipExists">
-                                            <p class="fw-600">No SFI(s) Attached</p>
+                                    <div class="d-xl-flex px-3">
+                                        <div class="col-md-12 col-xl-8">
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-4 mb-2">
+                                                    <label class="coi-text-dark d-block" for="">Principal Investigator</label>
+                                                    <span class="coi-text-light">{{relation?.principalInvestigator}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-lg-4 mb-2">
+                                                    <label class="coi-text-dark d-block" for="">Project Role</label>
+                                                    <span class="coi-text-light">{{relation?.reporterRole}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-lg-4 mb-2">
+                                                    <label class="coi-text-dark d-block" for="">Period</label>
+                                                    <span class="coi-text-light">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
+                                                        dateFormatter}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-lg-4 mb-2">
+                                                    <label class="coi-text-dark d-block" for="">Sponsor</label>
+                                                    <span class="coi-text-light">{{relation?.sponsor}}</span>
+                                                </div>
+                                                <div class="col-md-6 col-lg-4 mb-2">
+                                                    <label class="coi-text-dark d-block" for="">Lead Unit</label>
+                                                    <app-no-data-label [valueToShow]="relation?.unitName">
+                                                        <span
+                                                            class="coi-text-light">{{_commonService.getPersonLeadUnitDetails(relation)}}</span>
+                                                    </app-no-data-label>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="row fs-14 m-2" style="text-align: right;" *ngIf="relation.isRelationShipExists">
-                                            <div class="col-6 mt-4">
-                                                <div class="row" tabindex="0"[attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, relation.disclosureStatusCount)" >
-                                                    <div class="col-6">
-                                                        <label class="count-label">No Conflict : </label>
-                                                    </div>
-                                                    <div class="col-6" style="text-align: center;">
-                                                        <span *ngIf="relation.sfiCompleted !== null"
-                                                              class="fs-12 badge badge-pill badge-primary noConflict-badge">
-                                                            <span>{{getDisclosureCount(1, relation.disclosureStatusCount)}}</span>
-                                                        </span>
-                                                                <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
+                                        <div class="col-md-12 col-xl-4">
+                                            <div class="border h-100 p-3 position-relative rounded-1 table-bg-color mt-md-3 mt-xl-0">
+                                                <span class="status-pill fs-13">Project/SFI Relationship</span>
+                                                <div *ngIf="!relation.isRelationShipExists" class="d-flex justify-content-center align-items-center h-100">
+                                                    <p class="fw-600 mb-0 text-gray-600">No SFI(s) Attached</p>
+                                                </div>
+                                                <div *ngIf="relation.isRelationShipExists" class="row">
+                                                    <div class="col-6 fs-14">
+                                                        <div class="gap-1 row">
+                                                            <div class="d-flex align-items-center col-12"
+                                                                [attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, relation.disclosureStatusCount)">
+                                                                <label class="count-label" for="">No Conflict : </label>
+                                                                <span class="fs-12"
+                                                                    [ngClass]="{'badge rounded-pill text-no-conflict-badge':relation.sfiCompleted != null}">
+                                                                    {{relation.sfiCompleted != null? getDisclosureCount(1,
+                                                                    relation.disclosureStatusCount) : '--'}}</span>
                                                             </div>
-                                                        </div>
-                                                        <div class="row"tabindex="0"[attr.aria-label]="'Potential Conflict count: ' + getDisclosureCount(2, relation.disclosureStatusCount)">
-                                                            <div class="col-6">
-                                                                <label class="count-label">Potential Conflict :
-                                                                </label>
+                                                            <div class="d-flex align-items-center col-12"
+                                                                [attr.aria-label]="'Potential Conflict count: ' + getDisclosureCount(2, relation.disclosureStatusCount)">
+                                                                <label class="count-label" for="">Potential Conflict :</label>
+                                                                <span class="fs-12"
+                                                                    [ngClass]="{'badge rounded-pill text-potential-conflict-badge':relation.sfiCompleted != null}">
+                                                                    {{relation.sfiCompleted != null ?
+                                                                    getDisclosureCount(2,relation.disclosureStatusCount):' --'}}</span>
                                                             </div>
-                                                            <div class="col-6" style="text-align: center;">
-                                                        <span *ngIf="relation.sfiCompleted !== null"
-                                                              class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
-                                                            <span>{{getDisclosureCount(2, relation.disclosureStatusCount)}}</span>
-                                                        </span>
-                                                                <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row" tabindex="0"[attr.aria-label]="'Conflict Identified count: ' + getDisclosureCount(3, relation.disclosureStatusCount)">
-                                                            <div class="col-6">
-                                                                <label class="count-label">Conflict Identified :</label>
-                                                            </div>
-                                                            <div class="col-6" style="text-align: center;">
-                                                        <span *ngIf="relation.sfiCompleted != null"
-                                                              class="fs-12 badge badge-pill badge-primary Conflict-badge">
-                                                            <span>{{getDisclosureCount(3, relation.disclosureStatusCount)}}</span>
-                                                        </span>
-                                                                <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
+                                                            <div class="d-flex align-items-center col-12"
+                                                                [attr.aria-label]="'Conflict Identified count: ' + getDisclosureCount(3, relation.disclosureStatusCount)">
+                                                                <label class="count-label" for="">Conflict Identified :</label>
+                                                                <span class="fs-12"
+                                                                    [ngClass]="{'badge rounded-pill text-conflict-badge':relation.sfiCompleted != null}">
+                                                                    {{ relation.sfiCompleted !=
+                                                                    null?getDisclosureCount(3,relation.disclosureStatusCount): '--'}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-6 mt-3" style="text-align: center;">
-                                                        <div class="row mt-2" *ngIf="!isShowCollapsedConflictRelationship">
-                                                            <div class="col-12">
+                                                    <div class="d-flex align-items-center justify-content-center col-6">
+                                                        <div class="row">
+                                                            <div *ngIf="!isShowCollapsedConflictRelationship"
+                                                                class="d-flex justify-content-center col-12">
                                                                 <button title="Click to {{isEditMode ? 'Define' : 'Manage'}} Project - SFI relationship"
-                                                                        class="align-items-center btn btn-primary d-flex define-relation fs-14"
-                                                                        (click)="openDefineRelationship(relation, i)" type="submit">
+                                                                    [attr.aria.label]="'Click to '+ isEditMode ? 'Define' : 'Manage' +' Project - SFI relationship'" id="btn-define-relationship-{{i}}"
+                                                                    class="align-items-center btn btn-primary d-flex fs-14 text-nowrap"
+                                                                    (click)="openDefineRelationship(relation, i)" type="submit">
                                                                     <img src="{{deployMap}}assets/images/define-relation-hover.svg"
-                                                                         class="mr-2 hover_img"
-                                                                         alt="{{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}">{{isEditMode
+                                                                        class="mr-2 hover_img"
+                                                                        alt="{{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}">{{isEditMode
                                                                     ? 'Define Relationship' : 'Manage Relationship'}}
                                                                 </button>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="disclosure-status-complete ml-15" *ngIf="relation.sfiCompleted == true" [class.mt-5]="isShowCollapsedConflictRelationship"><mat-icon
-                                                                    class="complete-icon">done</mat-icon><span class="complete">Completed</span>
+                                                            <div class="d-flex justify-content-center col-12"
+                                                                [class.mt-1]="!isShowCollapsedConflictRelationship">
+                                                                <div *ngIf="relation.sfiCompleted == true" class="d-flex fs-14 text-success">
+                                                                    <mat-icon class="fs-18 me-1">done</mat-icon><span class="">Completed</span>
                                                                 </div>
-                                                                <div class="disclosure-status-incomplete px-5" [class.count-margin]="!relation.sfiCompleted && !isEditMode" [class.mt-5]="isShowCollapsedConflictRelationship"
-                                                                     *ngIf="relation.sfiCompleted == false"><mat-icon class="in-complete-icon">not_interested</mat-icon><span
-                                                                    class="notComplete">Incomplete</span>
+                                                                <div *ngIf="relation.sfiCompleted == false" class="d-flex fs-14 text-danger">
+                                                                    <mat-icon class="fs-18 me-1">not_interested</mat-icon><span
+                                                                        class="">Incomplete</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -204,14 +224,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mx-3">
-                                <app-SFI-conflict-relationship [(isSavingRelation)]="coiService.isRelationshipSaving" [coiStatusList]="coiStatusList" [isEditMode]="isEditMode" *ngIf="isShowCollapsedConflictRelationship && entityProjectDetails?.length" [entityProjectDetails]="entityProjectDetails"
-                                                               [coiStatusCode]="coiStatusCode" [coiData]="coiData" [moduleCode]="moduleCode" [selectedProject]="relation" (closePage)="closePage()"></app-SFI-conflict-relationship>
+                                <app-SFI-conflict-relationship [(isSavingRelation)]="coiService.isRelationshipSaving"
+                                    [coiStatusList]="coiStatusList" [isEditMode]="isEditMode"
+                                    *ngIf="isShowCollapsedConflictRelationship && entityProjectDetails?.length"
+                                    [entityProjectDetails]="entityProjectDetails" [coiStatusCode]="coiStatusCode" [coiData]="coiData"
+                                    [moduleCode]="moduleCode" [selectedProject]="relation"
+                                    (closePage)="closePage()"></app-SFI-conflict-relationship>
                             </div>
                         </div>
                     </ng-container>
@@ -251,7 +273,7 @@
                         selectedProjectForView?.title }}
                     </strong>
                 </h4>
-                  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" aria-label="Click to close the popup" tabindex="0"></button>
               </div>
               <div class="modal-body">
                   <div class="row mx-0 mt-3">
@@ -300,9 +322,10 @@
                   </div>
               </div>
               <div class="modal-footer">
-                  <button title="Click to close the popup" type="button" (click)="selectedProjectForView= null"
+                  <button title="Click to close the popup" type="button" (click)="selectedProjectForView= null" aria-label="Click to close the popup"
+                  id="btn-close"
                       class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" title="Click to view project details page"
+                  <button type="button" title="Click to view project details page" aria-label="Click to view project details page" id="btn-more-details"
                       (click)="openProjectMoreDetails(selectedProjectForView.moduleItemId, selectedProjectForView.moduleCode);selectedProjectForView= null;"
                       class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
               </div>

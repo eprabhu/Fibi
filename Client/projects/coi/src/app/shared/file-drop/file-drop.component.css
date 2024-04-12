@@ -25,3 +25,7 @@
 	cursor: pointer;
 	color: hsl(211, 95%, 39%);
 }
+
+.info-border {
+	border: .1rem solid hsl(214, -30%, 88%);
+}

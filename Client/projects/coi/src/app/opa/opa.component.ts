@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit} from '@angular/core';
 import { FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
 import { Subject} from 'rxjs';
 import { OpaService} from './services/opa.service';
@@ -40,11 +40,7 @@ export class OpaComponent implements OnInit {
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
-    returnHelpTexts = [
-        `Return any disclosure in 'Review in progress' status.`,
-        `Describe the reason for returning  in the field provided.`,
-        `Click on 'Return' button to return the disclosure for any modification.`
-    ];
+    returnHelpTexts = [];
     description: any;
     showSlider = false;
     selectedType: string;
@@ -57,6 +53,7 @@ export class OpaComponent implements OnInit {
     };
     isHomeClicked = false;
     isSubmitClicked = false;
+    isUserCollapse = false;
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -71,6 +68,7 @@ export class OpaComponent implements OnInit {
         this.setPersonProjectDetails();
         this.listenDataChangeFromStore();
         this.subscribeSaveComplete();
+        this.setTopDynamically();
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_OPA_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_OPA_PRIVATE_COMMENTS']);
     }
@@ -206,6 +204,11 @@ export class OpaComponent implements OnInit {
 
     private getDataFromStore() {
         this.opa = this.dataStore.getData();
+        this.returnHelpTexts = [
+            `Return any disclosure in '${this.opa.opaDisclosure.reviewStatusType.description}' status.`,
+            `Describe the reason for returning  in the field provided.`,
+            `Click on 'Return' button to return the disclosure for any modification.`
+        ];
     }
 
     private listenDataChangeFromStore() {
@@ -227,6 +230,8 @@ export class OpaComponent implements OnInit {
         this.personProjectDetails.personFullName = this.opa.opaDisclosure.opaPerson.personName;
         this.personProjectDetails.unitNumber = this.opa.opaDisclosure.homeUnit;
         this.personProjectDetails.unitName = this.opa.opaDisclosure.homeUnitName;
+        this.personProjectDetails.homeUnit = this.opa.opaDisclosure.homeUnit;
+        this.personProjectDetails.homeUnitName = this.opa.opaDisclosure.homeUnitName;
     }
 
     completeDisclosureReview() {
@@ -307,6 +312,40 @@ export class OpaComponent implements OnInit {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    collapseHeader() {
+        this.isCardExpanded=!this.isCardExpanded;
+        this.isUserCollapse=!this.isUserCollapse;
+        this.setTopDynamically();
+    }
+
+    setTopDynamically() {
+        setTimeout(() => {
+            const STICKY_HEADER = document.querySelector<HTMLElement>('.header-sticky');
+            if(STICKY_HEADER) {
+                const elements = document.querySelectorAll('.form-builder-sticky-header');
+                if(elements.length) {
+                    elements.forEach((element: HTMLElement) => {
+                        element.style.top = STICKY_HEADER.offsetHeight + 50 + 'px';
+                    });
+                }
+                const TABLE_STICKY_HEADER = document.querySelectorAll('.form-builder-table-header');
+                if(TABLE_STICKY_HEADER.length) {
+                    TABLE_STICKY_HEADER.forEach((element: HTMLElement) => {
+                        element.style.top = STICKY_HEADER.offsetHeight + 101 + 'px';
+                    });
+                }
+            }
+        }, 1000)
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = window.innerWidth > 1399;
+        }
+        this.setTopDynamically();
     }
 
 }

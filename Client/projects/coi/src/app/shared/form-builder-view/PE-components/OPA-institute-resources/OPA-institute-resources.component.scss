@@ -3,7 +3,7 @@
     width: max-content;
     height: 22px;
     position: relative;
-    left: -18px;
+    left: -28px;
     top: 0;
     font-size: 12px;
     font-weight: 500;
@@ -99,7 +99,7 @@
 }
 
 .riskbadge {
-    top: -5px;
+    top: -7px;
     position: relative;
 }
 
@@ -116,11 +116,6 @@
 .low-risk {
     @extend .riskbadge;
     color: rgb(26, 172, 62);
-}
-
-.small-icon {
-    transform: scale(0.7);
-    cursor: pointer;
 }
 
 .table-background {
@@ -144,7 +139,7 @@
 
 .navigation-icons {
     .active {
-        border-bottom: 2px solid #007DEC;
+        border-bottom: 3px solid #007DEC;
         color: #007dec;
     }
 }
@@ -199,7 +194,7 @@
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
-    
+
     &::before {
         content: "";
         position: absolute;
@@ -291,13 +286,23 @@
 }
 
 .small-btn-height {
-    height: 25px;
+    height: 28px;
 }
 
 .entity-list-container {
-    max-height: 70vh;
+    max-height: 45vh;
     overflow-y: auto;
-    overflow-x: hidden;
+
+    // overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        width: 6px;
+        height: 6px;
+    }
 }
 
 .advance-search-area {
@@ -347,19 +352,19 @@
     border-radius: 12px;
     padding: 3px 9px 3px 9px;
   }
-  
+
   .status-complete {
     background-color: #4CB57D !important;
     color: #fff;
     @extend .statusPillPosition;
   }
-  
+
   .status-inactive {
     background-color: #949494;
     color: #fff;
     @extend .statusPillPosition;
   }
-  
+
   .status-incomplete {
     background-color: #ffc107 !important;
     color: #fff;
@@ -369,5 +374,8 @@
   .grey-text{
     color: #6A7980;
   }
-  
 
+  .filter-border {
+    border-top: solid 6px #ffff;
+  }
+  

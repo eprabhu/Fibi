@@ -113,10 +113,6 @@ article {
   width: 140px;
 }
 
-.grey-text {
-  color: #6A7980;
-}
-
 .start-date {
   width: 150px;
   left: 12.5px;
@@ -187,10 +183,6 @@ article {
 
 ul {
   list-style-type: none;
-}
-
-ul > li:nth-child(even) {
-  background: #f4f5f7;
 }
 
 .history-date {
