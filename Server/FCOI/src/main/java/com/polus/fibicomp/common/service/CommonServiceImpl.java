@@ -28,7 +28,6 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import javax.persistence.Column;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
@@ -73,10 +72,10 @@ import com.polus.fibicomp.notification.pojo.NotificationRecipient;
 import com.polus.fibicomp.notification.pojo.NotificationType;
 import com.polus.fibicomp.pojo.ArgValueLookup;
 import com.polus.fibicomp.pojo.Country;
-import com.polus.fibicomp.pojo.LetterTemplateType;
 import com.polus.fibicomp.pojo.ResearchTypeArea;
 import com.polus.fibicomp.pojo.ResearchTypeSubArea;
 import com.polus.fibicomp.pojo.WebSocketConfiguration;
+import com.polus.fibicomp.pojo.LetterTemplateType;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.proposal.service.ProposalService;
 import com.polus.fibicomp.proposal.vo.ProposalVO;
@@ -493,30 +492,10 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public Claims getLoginPersonDetailFromJWT(HttpServletRequest request) {
-    	String cookieToken = getTokenFromCookie(request);
-    	if(cookieToken!=null) {
-    		return Jwts.parser().setSigningKey(Constants.SECRET).parseClaimsJws(cookieToken).getBody();
-    	}
         return Jwts.parser().setSigningKey(Constants.SECRET).parseClaimsJws(getJwtFromRequest(request)).getBody();
     }
 
-    private String getTokenFromCookie(HttpServletRequest request) {
-    	Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("Cookie_Token")) {
-					return cookie.getValue();
-				}
-			}
-		}
-		return null;
-	}
-
-	public String getJwtFromRequest(HttpServletRequest request) {
-		String cookieToken = getTokenFromCookie(request);
-    	if(cookieToken!=null) {
-    		return cookieToken;
-    	}
+    public String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(Constants.HEADER_STRING);
         if (org.springframework.util.StringUtils.hasText(bearerToken) && bearerToken.startsWith(Constants.TOKEN_PREFIX)) {
             return bearerToken.substring(7, bearerToken.length());
