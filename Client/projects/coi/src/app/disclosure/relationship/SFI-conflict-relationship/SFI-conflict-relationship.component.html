@@ -69,7 +69,7 @@
 <!-- Apply to All modal -->
 
 <div class="modal fade mySkinDialog" data-bs-backdrop="static" id="applyToAllConfirmationModal" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header ct-footer-padding d-none">
@@ -117,10 +117,10 @@
         </div>
       </div>
       <div class="modal-footer ct-footer-padding">
-        <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal" aria-label="Click to cancel" title="Click to cancel"
+        <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" aria-label="Click to cancel" title="Click to cancel"
           (click)="clearValues()" type="button">Cancel
         </button>
-        <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all" aria-label="Click to Apply to All" title="Click to Apply to All">Apply to All</button>
+        <button class="btn btn-primary fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all" aria-label="Click to Apply to All" title="Click to Apply to All">Apply to All</button>
       </div>
     </div>
   </div>

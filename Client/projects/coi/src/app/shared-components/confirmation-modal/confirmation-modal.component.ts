@@ -30,7 +30,7 @@
  * </app-confirmation-modal>
  */
 
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { closeCommonModal } from '../../common/utilities/custom-utilities';
 
 @Component({
@@ -186,6 +186,13 @@ export class ConfirmationModalComponent implements OnDestroy {
             this.mandatoryList.set('description', `${this.descriptionErrorMsg}`);
         } else {
             this.mandatoryList.clear();
+        }
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal();
         }
     }
 

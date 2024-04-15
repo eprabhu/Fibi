@@ -14,7 +14,7 @@
                                     </span>
                                 </span>
                                 <h3 class="card-title align-items-start flex-column fs-16 mb-0">
-                                        <span class="link-primary cursor-pointer text-decoration-underline" tabindex="0" (click)="openDetailModal()"
+                                        <span class="link-primary cursor-pointer" tabindex="0" (click)="openDetailModal()"
                                             (keyup.enter)="openDetailModal()" (keyup.space)="openDetailModal()"
                                             [attr.aria-label]="opa?.opaDisclosure?.personName + opa?.opaDisclosure?.personPrimaryTitle + opa?.opaDisclosure?.homeUnitName + opa?.opaDisclosure?.personEmail"
                                             title="Click to view details of {{opa?.opaDisclosure?.personName}}">{{opa?.opaDisclosure?.personName}}
@@ -413,13 +413,13 @@
 </app-confirmation-modal>
 
 <!-- Complete review modal -->
-<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
-    <div class="modal-dialog">
+<div class="modal modal-coi fade mySkinDialog" data-bs-backdrop="static" id="completeReviewModalFromDashboard" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Complete Review
                 </h4>
-                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                         type="button">
                 </button>
             </div>
@@ -467,7 +467,7 @@
             <div class="modal-footer">
                 <ng-container>
                     <button class=" btn btn-outline-secondary" data-bs-dismiss="modal" id="opa-submit-dismiss-btn" title="Click to cancel">Cancel</button>
-                    <button (click)="saveAndSubmit()" class=" btn btn-primary btn-sm fs-14" data-bs-dismiss="modal"
+                    <button (click)="saveAndSubmit()" class=" btn btn-primary fs-14" data-bs-dismiss="modal"
                         id="opa-submit-btn" title="Click to submit">Submit</button>
                 </ng-container>
             </div>
