@@ -1,4 +1,4 @@
-import { Component, Output, Input, OnInit, EventEmitter } from '@angular/core';
+import { Component, Output, Input, OnInit, EventEmitter, HostListener } from '@angular/core';
 import { PersonDetailsModalService } from './person-details-modal.service';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
@@ -47,6 +47,13 @@ export class PersonalDetailsModalComponent implements OnInit {
     setPersonBtnRights() {
         const isLoggedInPerson = this.userdetails.personId == this._commonService.currentUserDetails.personId;
         this.canShowPersonDetails = (isLoggedInPerson || this._commonService.getAvailableRight('MAINTAIN_PERSON'));
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.addNewValue(false);
+        }
     }
 
 }

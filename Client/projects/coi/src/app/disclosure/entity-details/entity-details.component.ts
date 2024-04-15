@@ -145,6 +145,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
                 this.entityDetailService.globalSave$.next();
             }
+            this.relationValidationMap.clear();
             openModal('addRelationshipModal');
         }))
     }
