@@ -270,7 +270,7 @@
                   modification</span></label>
               </span>
             </div>
-            <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13 px-4">
+            <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13 mx-1">
               {{mandatoryList.get('change')}}
             </span>
             <div class="mx-1">
@@ -305,7 +305,7 @@
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hide-inactivate-modal" data-bs-toggle="modal"
   data-bs-target="#inactivateConfirmationModal"></button>
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="inactivateConfirmationModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" tabindex="-1" id="inactivateConfirmationModal" role="dialog">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">

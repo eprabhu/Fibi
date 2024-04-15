@@ -25,9 +25,9 @@ export const scrollIntoView = (elementId: string, position: scrollPositions  = '
 export const setFocusToElement = (id: string) => {
     setTimeout(() => {
         const ELEMENT: HTMLElement = document.getElementById(id);
-        return ELEMENT ? ELEMENT.focus() : false; 
+        return ELEMENT ? ELEMENT.focus() : false;
     },300);
-    
+
 };
 
 export function pageScroll(elementId) {
@@ -310,7 +310,7 @@ export function hideModal(elementId: string) {
 export function openModal(elementId: string, options = null) {
     options = options || {
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       focus: true
     }
     let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
