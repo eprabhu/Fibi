@@ -76,7 +76,7 @@
 <!-- Apply to All modal -->
 
 <div class="modal fade mySkinDialog" data-bs-backdrop="static" id="applyToAllConfirmationModal" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header ct-footer-padding d-none">
@@ -112,7 +112,7 @@
                             <span class="text-danger me-1 fw-600" id="description">*</span>
                             <span class="fw-600" tabindex="0" aria-label="Define Project - SFI Relation" role="field"
                                   aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
-                            <textarea class="form-control" id="coi_description" 
+                            <textarea class="form-control" id="coi_description"
                                       [(ngModel)]="coiDescription" title="Click here to Provide your description" aria-label="Provide your description here"
                                       (ngModelChange)="coiDescription = coiDescription.trim();" appAutoGrow
                                       appLengthValidator rows="1"
@@ -127,10 +127,10 @@
                 </div>
             </div>
             <div class="modal-footer ct-footer-padding">
-                <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+                <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
                         (click)="clearValues()" type="button" aria-label="Click here to Cancel" title="Click here to Cancel">Cancel
                 </button>
-                <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all" 
+                <button class="btn btn-primary fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all"
                     aria-label="Click here to Apply to all" title="Click here to Apply to all">
                     Apply to All
                 </button>

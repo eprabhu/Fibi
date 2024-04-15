@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { CompleterOptions } from '../../../../../fibi/src/app/service-request/service-request.interface';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
@@ -228,6 +228,13 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
                 this.isSaving = false;
                 this._commonService.showToast(HTTP_ERROR_STATUS, "Error in fetching group details");
             }));
+        }
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.clearData();
         }
     }
 }
