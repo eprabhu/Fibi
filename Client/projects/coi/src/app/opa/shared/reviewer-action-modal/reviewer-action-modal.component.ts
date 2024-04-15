@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
@@ -140,5 +140,12 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         return this.reviewerList.find(ele =>
             ele.assigneePersonId === this._commonService.currentUserDetails.personId
             && ele.reviewStatusTypeCode != 3);
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal();
+        }
     }
 }

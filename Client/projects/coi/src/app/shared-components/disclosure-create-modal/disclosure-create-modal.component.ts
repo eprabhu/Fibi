@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, Output, } from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
@@ -167,7 +167,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     });
                     this.clearModal();
                 }
-            }, err => { 
+            }, err => {
                 if (err.status === 405) {
                     this.isShowConcurrencyWarning = true;
                         this.setExistingDisclosureDetails('Project', err.error);
@@ -308,7 +308,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
     }
 
-    
+
 
     getDispositionStatusBadge(statusCode): string {
         switch (statusCode) {
@@ -391,7 +391,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                         } else {
                         this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                             err.error.errorMessage : 'Error in creating new version. Please try again.');
-                            
+
                     }}));
             } else {
                 this.isShowExistingDisclosure = true;
@@ -497,6 +497,13 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.title = 'Create Travel Disclosure help text';
         }
         return this.title;
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.clearModal();
+        }
     }
 
 }
