@@ -5,7 +5,7 @@
     *ngIf="!isFormEditable" id="add-opa-review-comments" (click)="setCommentDetails(sectionDetails.sectionName, sectionDetails.sectionId, null)" title="Comments" type="button">
       <mat-icon>rate_review</mat-icon>
     </button>
-    <span class="float-end"><mat-icon class="small-icon">info</mat-icon>
+    <span class="float-end mt-1"><mat-icon class="text-secondary">info</mat-icon>
     </span>
   </div>
   <div class="info" *ngIf="sectionDetails.sectionHeader" [innerHTML] = "sectionDetails.sectionHeader">

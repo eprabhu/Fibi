@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @ComponentScan
-@EnableScheduling
+//@EnableScheduling
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 @EnableFeignClients
 @ComponentScan(

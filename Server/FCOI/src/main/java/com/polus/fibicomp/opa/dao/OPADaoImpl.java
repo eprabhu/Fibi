@@ -41,7 +41,7 @@ import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
 import com.polus.fibicomp.opa.pojo.OPAPersonType;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
 
 import oracle.jdbc.OracleTypes;
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -50,6 +50,8 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     additionalDetails: any = {
         sponsorsResearch: false
     };
+    isCardExpanded = true;
+    isUserCollapse = false;
 
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
@@ -396,7 +398,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }));
     }
 
-    viewEntityDetails() {
+    viewEntityDetails(event) {
         if(this.showViewButton()) {
             this.closeEntityInfoCard.emit(false);
             document.body.removeAttribute("style");
@@ -493,6 +495,18 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }, _error => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
+    }
+
+    collapseHeader() {
+        this.isCardExpanded = !this.isCardExpanded;
+        this.isUserCollapse = !this.isUserCollapse;
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = window.innerWidth > 1399;
+        }
     }
 
 }

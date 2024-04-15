@@ -495,5 +495,11 @@ small {
 }
 
 .clickable-content:hover {
-   font-weight: 600 !important; 
+   font-weight: 600 !important;
+}
+
+.toggle-btn {
+    position: relative;
+    left:0;
+    top:0;
 }
