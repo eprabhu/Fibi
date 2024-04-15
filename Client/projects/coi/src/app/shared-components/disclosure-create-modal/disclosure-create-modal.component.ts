@@ -19,6 +19,7 @@ import {
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
 import { RevisionObject, Disclosure } from '../shared-interface';
+import { checkForVowelInFirstLetter } from 'projects/coi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -470,14 +471,14 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.projectDisclosureValidation.set('projectSelect', 'Please select any one of the given Project Type');
         }
         if (!this.manualProjectAddDetails || !this.manualProjectAddDetails.moduleItemId) {
-            this.projectDisclosureValidation.set('proposalSearch', 'Please select a ' + this.selectedProjectType + ' to create disclosure.');
+            this.projectDisclosureValidation.set('proposalSearch', 'Please select '+ checkForVowelInFirstLetter(this.selectedProjectType) + ' to create disclosure.');
         }
         if (!this.reviseObject.homeUnit) {
             this.mandatoryList.set('homeUnit', 'Please enter a valid unit to create a Project disclosure.');
         }
         return this.projectDisclosureValidation.size === 0 && this.mandatoryList.size === 0 ? true : false;
     }
-
+    
     private resetManualProjectAddFields(): void {
         this.clearSponsorField = new String('true');
         this.clearPIField = new String('true');
