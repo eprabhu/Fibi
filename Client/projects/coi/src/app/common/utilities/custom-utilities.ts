@@ -119,3 +119,7 @@ export function closeCoiSlider(element_id:string): void {
         }
     });
 }
+
+export function checkForVowelInFirstLetter(word) {
+    return ['a', 'e', 'i', 'o', 'u'].includes(word[0].toLowerCase()) ? `an ${word}` : `a ${word}`;
+}
