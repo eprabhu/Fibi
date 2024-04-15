@@ -100,6 +100,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     openConfirmationModal() {
         this.readMore = 'false';
+        this.mandatoryList.clear();
         $('#modifyEntityConfirmationModal').modal('show');
     }
 
@@ -142,6 +143,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     activateInactivateEntity() {
         this.readMore = 'false';
+        this.reasonValidateMapEntity.clear();
         document.getElementById('inactivate-confirm-message').click();
     }
 

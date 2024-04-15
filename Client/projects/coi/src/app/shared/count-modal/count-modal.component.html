@@ -1,7 +1,7 @@
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal"
     data-bs-target="#coiCountsViewModal"></button>
 
-    <div class="modal fade mySkinDialog modal-xl" data-bs-backdrop="static" id="coiCountsViewModal" role="dialog">
+    <div class="modal fade mySkinDialog modal-xl" id="coiCountsViewModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -77,14 +77,14 @@
             </div>
             <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
                 <nav class="d-flex fw-bold border-bottom mt-1 mb-2 nav nav-underline">
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Proposals" 
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Proposals"
                          aria-label="Click to view Proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
                          (click)='currentModalTab="Proposal"; switchTableData()' (keydown.enter)="currentModalTab='Proposal';switchTableData()">
                         <span  class="px-2 fw-500">
                             {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}
                         </span>
                     </div>
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()' 
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()'
                         (keydown.enter)="currentModalTab='Award';switchTableData()"
                          title="Click to view Awards" aria-label="Click to view Awards" role="button" [class.active]="currentModalTab == 'Award'">
                         <span class="px-2 fw-500">
@@ -131,7 +131,7 @@
                                     <app-no-data-label [valueToShow]="name.conflictStatus">
                                          <span *ngIf="name.conflictStatus">
                                             <span class="{{getDisclosureConflictBadge(name.conflictStatusCode)}}"></span>
-                                            <span class="badgeFont"> {{name.conflictStatus}} </span>
+                                            <span> {{name.conflictStatus}} </span>
                                         </span>
                                     </app-no-data-label>
                                 </td>
