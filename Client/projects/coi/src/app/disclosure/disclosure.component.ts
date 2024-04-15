@@ -284,6 +284,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     checkQuestionnaireCompletedBeforeCertify() {
+        this.coiService.submitResponseErrors = [];
         if (!this.isSaving) {
             this.isSaving = true;
             this.coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO())
@@ -575,6 +576,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             openModal('ValidatedModal');
         } else {
+            this.isSaving = false;
             openModal('confirmModal');
         }
     }

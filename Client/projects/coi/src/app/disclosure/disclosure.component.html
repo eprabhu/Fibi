@@ -492,13 +492,13 @@
 </ng-container>
 
 <!-- Complete review modal -->
-<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
-    <div class="modal-dialog">
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" data-bs-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Complete Review
                 </h4>
-                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>
@@ -667,8 +667,8 @@
 <!--Unsaved Changes confirmation Modal end-->
 
 <!--validation modal-->
-<div class="modal fade mySkinDialog modal-lg" tabindex="-1" id="ValidatedModal" tabindex="-1" role="dialog"
-    data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade mySkinDialog modal-lg" tabindex="-1" id="ValidatedModal" role="dialog"
+    data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -696,7 +696,7 @@
 </div>
 
 <!--disclosure submit confirmation modal-->
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="confirmModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" tabindex="-1" id="confirmModal" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
