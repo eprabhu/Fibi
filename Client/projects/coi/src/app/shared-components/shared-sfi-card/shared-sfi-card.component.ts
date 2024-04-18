@@ -67,8 +67,12 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   }
 
   openSfiDetails(entityId: number, mode: string): any {
-    this.isTriggeredFromSlider ? this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entityId, personEntityNumber: this.SFIObject.entityNumber } })
-                               : this.viewSlider.emit({flag: true, entityId: entityId});
+    if(this.isTriggeredFromSlider) {
+        document.body.removeAttribute("style");
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entityId, personEntityNumber: this.SFIObject.entityNumber } })
+    } else {
+        this.viewSlider.emit({flag: true, entityId: entityId});
+    }
   }
 
     modifySfiDetails(entityId: number, mode: string): void {
@@ -89,7 +93,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
     this.reviewSlider.emit({personEntityId: relationshipDetails.entityId, personEntityHeader :relationshipDetails.entityName});
   }
 
-  getMessage() { 
+  getMessage() {
     if (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE')
     return 'Entity modified';
     else if ((this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
@@ -106,7 +110,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
     else if (this.referredFrom != 'SFI_SUMMARY' && (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
     return 'Please use Inactivate button to inactivate SFI';
   }
-  
+
   groupBy(jsonData, key, innerKey) {
     return jsonData.reduce((relationsTypeGroup, item) => {
         (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);

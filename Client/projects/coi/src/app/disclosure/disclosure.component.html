@@ -262,7 +262,6 @@
                                         [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
                                         <mat-icon>home</mat-icon>
-                                        <span class="fs-14  ms-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
                                         </button>
 
                                         <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
