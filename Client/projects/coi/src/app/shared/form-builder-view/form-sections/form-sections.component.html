@@ -18,9 +18,7 @@
       (click)="setCommentDetails(null, sectionDetails.sectionId, component.componentId)" title="Comments" type="button">
         <mat-icon>rate_review</mat-icon>
       </button>
-
-<!-- Questionnaire, CE , already existing libreries -->
-      <div *ngIf="component.componentType === 'QN' || component.componentType === 'CE'">
+      <div *ngIf="(component.componentType === 'QN' || component.componentType === 'CE') && component.componentRefId != ''">
         <app-data-layer 
           [component]="component" 
           [fbConfiguration]="fbConfiguration" 
@@ -34,10 +32,7 @@
       <div *ngIf="component.componentType === 'RT'">
         <div [innerHTML] = "component.componentData"></div>
       </div>
-
-
-<!-- All new Forms -->
-      <div *ngIf="component.componentType === 'PE'">
+      <div *ngIf="component.componentType === 'PE' && component.componentRefId != ''">
         <app-PE-layer 
           [component]="component" 
           [fbConfiguration]="fbConfiguration" 
