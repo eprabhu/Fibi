@@ -7,6 +7,7 @@ import {OPA} from "../opa-interface";
 import { coiReviewComment } from '../../shared-components/shared-interface';
 import { CommonService } from '../../common/services/common.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-form',
@@ -20,8 +21,10 @@ export class FormComponent implements OnInit, AfterViewInit {
     isFormEditMode = this.dataStore.isFormEditable();
     opa: OPA = new OPA();
     $subscriptions: Subscription[] = [];
+    formBuilderId: any;
+    disclosureId: any;
 
-    constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService) {
+    constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService, private _route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -31,15 +34,15 @@ export class FormComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
-        this.fbConfiguration.moduleItemCode = '23';
-        this.fbConfiguration.moduleSubItemCode = '0';
-        this.fbConfiguration.moduleItemKey = this.opa.opaDisclosure.opaDisclosureId.toString();
-        this.fbConfiguration.moduleSubItemKey = '0';
-        this.fbConfiguration.documentOwnerPersonId = this.opa.opaDisclosure.personId;
-        this.fbConfiguration.formBuilderId = this.opa.opaDisclosure.opaFormBuilderDetails[0].formBuilderId;
-        this._opa.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
-        this.updateFormEditMode();
+            // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
+            this.fbConfiguration.moduleItemCode = '23';
+            this.fbConfiguration.moduleSubItemCode = '0';
+            this.fbConfiguration.moduleItemKey = this.opa.opaDisclosure.opaDisclosureId.toString();
+            this.fbConfiguration.moduleSubItemKey = '0';
+            this.fbConfiguration.documentOwnerPersonId = this.opa.opaDisclosure.personId;
+            this.fbConfiguration.formBuilderId = this.opa.opaDisclosure.opaFormBuilderDetails[0].formBuilderId;
+            this._opa.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
+            this.updateFormEditMode();
     }
 
     triggerSave() {
