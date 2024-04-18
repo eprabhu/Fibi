@@ -122,6 +122,10 @@ public class FormBuilderConfigurationService {
 		return dao.deleteFormComponent(formBuilderSectCompId);
 	}
 
+	public String deleteFormComponentBySectionId(int formBuilderSectId) {
+		return dao.deleteFormComponentBySectionId(formBuilderSectId);
+	}
+
 	public String updateComponentOrder(List<FormComponentRequestModel> request) {
 		return dao.updateComponentOrder(request);
 	}

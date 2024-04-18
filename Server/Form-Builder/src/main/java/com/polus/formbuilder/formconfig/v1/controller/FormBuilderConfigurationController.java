@@ -15,6 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
+import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
+import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.appcorelib.questionnaire.service.QuestionnaireService;
+import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
+import com.polus.formbuilder.formconfig.v1.model.DeleteResponseModel;
+import com.polus.formbuilder.formconfig.v1.model.FormBasicCommonModel;
+import com.polus.formbuilder.formconfig.v1.model.FormComponentRequestModel;
+import com.polus.formbuilder.formconfig.v1.model.FormDashboardResponseModel;
 import com.polus.formbuilder.formconfig.v1.model.FormDataResponseModel;
 import com.polus.formbuilder.formconfig.v1.model.FormHeaderCreateModel;
 import com.polus.formbuilder.formconfig.v1.model.FormHeaderModel;
@@ -22,14 +31,11 @@ import com.polus.formbuilder.formconfig.v1.model.FormHeaderUpdateModel;
 import com.polus.formbuilder.formconfig.v1.model.FormSectionComponentModel;
 import com.polus.formbuilder.formconfig.v1.model.FormSectionModel;
 import com.polus.formbuilder.formconfig.v1.model.FormSectionRequestModel;
+import com.polus.formbuilder.formconfig.v1.model.FormUsageModel;
 import com.polus.formbuilder.formconfig.v1.model.FormUsageRequestModel;
 import com.polus.formbuilder.formconfig.v1.model.OrderUpdateResponseModel;
-import com.polus.formbuilder.formconfig.v1.model.FormUsageModel;
-import com.polus.formbuilder.formconfig.v1.model.DeleteResponseModel;
-import com.polus.formbuilder.formconfig.v1.model.FormBasicCommonModel;
-import com.polus.formbuilder.formconfig.v1.model.FormComponentRequestModel;
-import com.polus.formbuilder.formconfig.v1.model.FormDashboardResponseModel;
 import com.polus.formbuilder.formconfig.v1.service.FormBuilderConfigurationService;
+import com.polus.formbuilder.programmedelement.ProgrammedElementService;
 
 @RestController
 @RequestMapping("/config/v1/")
@@ -37,7 +43,16 @@ public class FormBuilderConfigurationController {
 
 	@Autowired
 	FormBuilderConfigurationService service;
-	
+
+	@Autowired
+	private QuestionnaireService questionnaireService;
+
+	@Autowired
+	private ProgrammedElementService programmedElementService;
+
+	@Autowired
+	private CustomDataElementService customDataElementService;
+
  	@GetMapping("/formlist")
     public ResponseEntity<?> getFormList() {        
  		List<FormDashboardResponseModel> response = service.fetchFormList();
@@ -149,9 +164,9 @@ public class FormBuilderConfigurationController {
         return new ResponseEntity<FormSectionModel>(response,HttpStatus.OK);
     }
  	
- 	@DeleteMapping("/formsection")
-    public ResponseEntity<?> deleteFormSection(@RequestBody FormSectionRequestModel request) {
- 		String response = service.deleteFormSection(request.getFormBuilderSectionId());        
+ 	@DeleteMapping("/formsection/{formBuilderSectId}")
+    public ResponseEntity<?> deleteFormSection(@PathVariable("formBuilderSectId") Integer formBuilderSectId) {
+ 		String response = service.deleteFormSection(formBuilderSectId);        
         return new ResponseEntity<DeleteResponseModel>(new DeleteResponseModel(response),HttpStatus.OK);
     }
  	
@@ -189,9 +204,9 @@ public class FormBuilderConfigurationController {
         return new ResponseEntity<FormSectionComponentModel>(response,HttpStatus.OK);
     }
  	
- 	@DeleteMapping("/sectioncomponent")
-    public ResponseEntity<?> deleteFormComponent(@RequestBody FormComponentRequestModel request) {
- 		String response = service.deleteFormComponent(request.getFormBuilderSectCompId());        
+ 	@DeleteMapping("/sectioncomponent/{formBuilderSectCompId}")
+    public ResponseEntity<?> deleteFormComponent(@PathVariable("formBuilderSectCompId") Integer formBuilderSectCompId) {
+ 		String response = service.deleteFormComponent(formBuilderSectCompId);        
         return new ResponseEntity<DeleteResponseModel>(new DeleteResponseModel(response),HttpStatus.OK);
     }
  	
@@ -206,7 +221,29 @@ public class FormBuilderConfigurationController {
  		String response = service.updateComponentOrder(request);        
         return new ResponseEntity<OrderUpdateResponseModel>(new OrderUpdateResponseModel(response),HttpStatus.OK);
     }
- 	
- 	
- 	
+
+ // QUESTIONNAIRE CONFIG ---------------------------------------
+ 	@GetMapping("/questionnaireList")
+ 	public ResponseEntity<?> fetchquestionnaireList() {
+ 		QuestionnaireDataBus questionnaireDataBus = new QuestionnaireDataBus();
+ 		QuestionnaireDataBus response = questionnaireService.showAllQuestionnaire(questionnaireDataBus);
+//  			response.getQuestionnaireList().removeIf(questionnaire -> "N".equals(questionnaire.get("IS_FINAL")));
+ 		return new ResponseEntity<>(response, HttpStatus.OK);
+ 	}
+
+ 	// PE CONFIG ---------------------------------------
+ 	@GetMapping("/programmedElementList")
+ 	public ResponseEntity<?> fetchprogrammedElementListList() {
+ 		List<FormBuilderProgElementEntity> response = programmedElementService.getAllProgrammedElement();
+ 		return new ResponseEntity<>(response, HttpStatus.OK);
+ 	}
+
+ 	// CE CONFIG ---------------------------------------
+ 	@GetMapping("/customElementList")
+ 	public ResponseEntity<?> fetchCustomElementList() {
+ 		CustomDataElementVO vo = new CustomDataElementVO();
+ 		String response = customDataElementService.fetchAllCustomElement(vo);
+ 		return new ResponseEntity<>(response, HttpStatus.OK);
+ 	}
+
 }
