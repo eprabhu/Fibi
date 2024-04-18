@@ -1,5 +1,7 @@
 package com.polus.formbuilder.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -11,8 +13,10 @@ import com.polus.formbuilder.model.FormComponentFetchRequest;
 import com.polus.formbuilder.model.FormComponentFetchResponse;
 import com.polus.formbuilder.model.FormComponentSaveRequest;
 import com.polus.formbuilder.model.FormComponentSaveResponse;
+import com.polus.formbuilder.model.FormEvaluateValidationResponse;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
+import com.polus.formbuilder.model.FormValidationRequest;
 
 @Service("Module_0_FormBuilderServiceImpl")
 public class FormBuilderServiceDefaultImp implements FormBuilderService {
@@ -78,5 +82,20 @@ public class FormBuilderServiceDefaultImp implements FormBuilderService {
    	public FormComponentSaveResponse SaveProgrammedElementComponent(FormComponentSaveRequest request) {
    		return formBuilderProcessor.PerformSaveProgrammedElementComponent(request);
    	}
+
+   	@Override
+	public List<FormEvaluateValidationResponse> validateForm(FormValidationRequest formValidationRequest) {
+		return formBuilderProcessor.performFormValidation(formValidationRequest);
+	}
+
+	@Override
+	public List<FormEvaluateValidationResponse> validateSection(FormValidationRequest formValidationRequest) {
+		return formBuilderProcessor.performSectionValidation(formValidationRequest);
+	}
+
+	@Override
+	public List<FormEvaluateValidationResponse> validateComponent(FormValidationRequest formValidationRequest) {
+		return formBuilderProcessor.performComponentValidation(formValidationRequest);
+	}
 
 }

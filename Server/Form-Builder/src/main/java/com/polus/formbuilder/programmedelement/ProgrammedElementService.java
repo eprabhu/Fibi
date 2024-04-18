@@ -1,20 +1,22 @@
 package com.polus.formbuilder.programmedelement;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.polus.formbuilder.programmedelement.opa.compuncomp.OPACompUncompRequestModel;
+import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
+import com.polus.formbuilder.repository.FormBuilderProgElementEntityRepository;
 
 @Service
 public class ProgrammedElementService {
 
 	@Autowired
 	private Map<String, ProgrammedElement> programmedElements;
+
+	@Autowired
+    private FormBuilderProgElementEntityRepository progElementEntityRepository;
 
 	public ProgrammedElementModel getBlankResponse(String elementName) {
 		ProgrammedElement object = programmedElements.get(elementName);
@@ -44,5 +46,10 @@ public class ProgrammedElementService {
 
 		return object.save(moduleDetails, request);
 
-	}	
+	}
+
+	public List<FormBuilderProgElementEntity> getAllProgrammedElement() {
+        return progElementEntityRepository.findAll();
+    }
+
 }

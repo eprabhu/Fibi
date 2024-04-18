@@ -1,12 +1,18 @@
 package com.polus.formbuilder.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.polus.appcorelib.applicationexception.dto.ApplicationException;
+import com.polus.appcorelib.constants.CoreConstants;
 import com.polus.formbuilder.dto.FormBuilderSectionsComponentDTO;
 import com.polus.formbuilder.entity.FormBuilderUsageEntity;
+import com.polus.formbuilder.model.FormEvaluateValidationResponse;
+import com.polus.formbuilder.model.FormValidationRequest;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
@@ -80,7 +86,10 @@ public class FormBuilderServiceProcessorDAO {
 					t1.COMPONENT_ORDER_NUMBER,
 					t1.COMPONENT_DATA,
 					t1.HEADER_INSTRUCTION,
-					t1.FOOTER_INSTRUCTION
+					t1.FOOTER_INSTRUCTION,
+					t1.IS_MANDATORY,
+					t1.VALIDATION_MESSAGE,
+					t1.LABEL
 					FROM form_builder_section_component t1
 					inner join form_builder_section t2 on t1.FORM_BUILDER_SECTION_ID = t2.FORM_BUILDER_SECTION_ID
 					inner join form_builder_header t3 on t2.FORM_BUILDER_ID = t3.FORM_BUILDER_ID
@@ -108,6 +117,9 @@ public class FormBuilderServiceProcessorDAO {
 									.componentData((String) rowData[5])
 									.componentHeader((String) rowData[6])
 									.componentFooter((String) rowData[7])
+									.isMandatory(String.valueOf(rowData[8]))
+									.validationMessage((String) rowData[9])
+									.label((String) rowData[10])
 									.build();
 				
 				componentList.add(componentDto);
@@ -227,6 +239,124 @@ public class FormBuilderServiceProcessorDAO {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Transactional(value = TxType.SUPPORTS)
+	public List<FormEvaluateValidationResponse> evaluateFormCompValidation(FormValidationRequest formValidationRequest, String loginUser, String loginPersonId, Integer componentId, String ruleIds) {
+
+		List<FormEvaluateValidationResponse> formEvaluateValidationResponseList = new ArrayList<>();
+		try {
+			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("EVALUATE_FORM_VALIDATION")
+					.registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(3, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(4, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(5, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(6, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(7, String.class, ParameterMode.IN);
+			query.setParameter(1, formValidationRequest.getModuleItemCode());
+			query.setParameter(2, formValidationRequest.getModuleSubItemCode());
+			query.setParameter(3, formValidationRequest.getModuleItemKey());
+			query.setParameter(4, loginUser);
+			query.setParameter(5, loginPersonId);
+			query.setParameter(6, formValidationRequest.getModuleSubItemKey());
+			query.setParameter(7, ruleIds);
+			query.execute();
+			List<?> resultRows = query.getResultList();
+			for (Object row : resultRows) {
+				FormEvaluateValidationResponse formEvaluateValidationResponse = new FormEvaluateValidationResponse();
+				if (row instanceof Object[]) {
+					Object[] rowData = (Object[]) row;
+					formEvaluateValidationResponse.setValidationType((String) rowData[0]);
+					formEvaluateValidationResponse.setValidationMessage((String) rowData[1]);
+					formEvaluateValidationResponse.setComponentId(componentId);
+				}
+				formEvaluateValidationResponseList.add(formEvaluateValidationResponse);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("Error in evaluateFormCompValidation", e, CoreConstants.DB_PROC_ERROR);
+		}
+		return formEvaluateValidationResponseList;
+	}
+
+	@Transactional(value = TxType.SUPPORTS)
+	public Map<Integer, String> getComponentIdRuleIdMap(Integer formBuilderId, Integer sectionId, Integer componentId) {
+		Map<Integer, String> componentIdRuleIdMap = new HashMap<>();
+		try {
+			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("GET_COMPONENT_RULE_ID")
+					.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN);
+			query.setParameter(1, formBuilderId);
+			query.setParameter(2, sectionId);
+			query.setParameter(3, componentId);
+			query.execute();
+			List<?> resultRows = query.getResultList();
+		    for (Object row : resultRows) {
+		        if (row instanceof Object[]) {
+		            Object[] rowData = (Object[]) row;
+		            Integer formBuilderSectCompId = (Integer) rowData[0];
+		            String ruleIds = (String) rowData[1];
+		            componentIdRuleIdMap.put(formBuilderSectCompId, ruleIds);
+		        }
+		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("Error in getComponentIdRuleIdMap", e, CoreConstants.DB_PROC_ERROR);
+		}
+		return componentIdRuleIdMap;
+	}
+
+
+	public String getQuestionnairCompleteFlag(Integer questionnaireAnswerHeaderId) {
+		String sql = "SELECT t1.QUESTIONNAIRE_COMPLETED_FLAG FROM quest_answer_header t1 " +
+	             "WHERE t1.QUESTIONNAIRE_ANS_HEADER_ID = :questionnaireAnswerHeaderId";
+
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("questionnaireAnswerHeaderId", questionnaireAnswerHeaderId);
+		
+		List<?> resultRows = query.getResultList();
+		
+		return String.valueOf((Character) getSingleResultOrNull(resultRows));
+	}
+
+	@Transactional(value = TxType.SUPPORTS)
+	public List<FormEvaluateValidationResponse> evaluateFormCompMandatoryValidation(Integer formBuilderId, Integer sectionId, Integer componentId, FormValidationRequest formValidationRequest) {
+		List<FormEvaluateValidationResponse> formEvaluateValidationResponseList = new ArrayList<>();
+		try {
+			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("EVALUATE_FORM_MANDATORY_VALIDATION")
+					.registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(2, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(3, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(4, String.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(5, Integer.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(6, Integer.class, ParameterMode.IN)
+					.registerStoredProcedureParameter(7, Integer.class, ParameterMode.IN);
+			query.setParameter(1, formValidationRequest.getModuleItemCode());
+			query.setParameter(2, formValidationRequest.getModuleSubItemCode());
+			query.setParameter(3, formValidationRequest.getModuleItemKey());
+			query.setParameter(4, formValidationRequest.getModuleSubItemKey());
+			query.setParameter(5, formBuilderId);
+			query.setParameter(6, sectionId);
+			query.setParameter(7, componentId);
+			query.execute();
+			List<?> resultRows = query.getResultList();
+			for (Object row : resultRows) {
+				FormEvaluateValidationResponse formEvaluateValidationResponse = new FormEvaluateValidationResponse();
+				if (row instanceof Object[]) {
+					Object[] rowData = (Object[]) row;
+					formEvaluateValidationResponse.setValidationType(((String) rowData[0]));
+					formEvaluateValidationResponse.setValidationMessage((String) rowData[1]);
+					formEvaluateValidationResponse.setComponentId((Integer) rowData[2]);
+				}
+				formEvaluateValidationResponseList.add(formEvaluateValidationResponse);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("Error in evaluateFormCompMandatoryValidation", e, CoreConstants.DB_PROC_ERROR);
+		}
+		return formEvaluateValidationResponseList;
 	}
 	
 }
