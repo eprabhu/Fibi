@@ -128,7 +128,7 @@
                                                     title="Click to Renew FCOI Disclosure"
                                                     aria-describedby="Click to Renew FCOI Disclosure">
                                                     <mat-icon class="me-1">restart_alt</mat-icon>
-                                                    <span class="hyper-link fs-14">Revise</span>
+                                                    <span>Revise</span>
                                                 </a>
                                                 <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
                                                     [queryParams]={disclosureId:disclosure.disclosureId}
@@ -137,7 +137,7 @@
                                                     [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                                     area-describedby="Click to view FCOI Disclosure details">
                                                     <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                    <span class="hyper-link fs-14">View</span>
+                                                    <span>View</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@
                                                 [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                                 area-describedby="Click to view FCOI Disclosure details">
                                                     <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                    <span class="hyper-link fs-14">View</span>
+                                                    <span>View</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -497,7 +497,7 @@
                                                 area-describedby="Click to view OPA Disclosure details"
                                                 title="Click to view OPA Disclosure details">
                                             <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                <span class="hyper-link fs-14">View</span>
+                                                <span>View</span>
                                             </a>
                                         </div>
                                     </div>
@@ -619,7 +619,7 @@
                                                 title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details"
                                                 aria-label="Click to view OPA Disclosure details" role="button">
                                                 <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                <span class="hyper-link fs-14">View</span>
+                                                <span>View</span>
                                             </a>
                                         </div>
                                     </div>
@@ -736,9 +736,9 @@
                                                 <span>{{ disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType }}</span>
                                             </span></span>
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
-                                            class="mb-0 d-flex fs-14">
+                                            class="mb-0 d-flex">
                                             <span class="d-inline-flex">
-                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <mat-icon class="coi-text-light me-1">person</mat-icon>
                                                 <span class="coi-text-light text-nowrap fs-6" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
                                                     {{disclosure.disclosurePersonFullName}}</span>
@@ -749,8 +749,8 @@
                                                 <span class="d-inline-flex" tabindex="0"
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
-                                                    <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
-                                                    <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
+                                                    <mat-icon class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
+                                                    <mat-icon class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
                                                     <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">
@@ -966,7 +966,7 @@
                                         <h4 *ngIf="disclosure.travelDisclosureId" class="d-flex">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
-                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <mat-icon class="coi-text-light me-1">person</mat-icon>
                                                 <strong class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure Person' + (disclosure.travellerName)">
                                                     {{disclosure.travellerName}}
@@ -975,7 +975,7 @@
                                             <ng-container>
                                                 <span class="pipe mx-1"></span>
                                                 <span class="d-inline-flex">
-                                                    <mat-icon class="fs-18 me-1">apartment</mat-icon>
+                                                    <mat-icon class="me-1">apartment</mat-icon>
                                                     <span class="coi-text-light fs-6 text-nowrap me-1" tabindex="0"
                                                         [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity:</span>
                                                     <span class="coi-text-darker fs-6 hyper-link">
@@ -1159,10 +1159,10 @@
                                             </span>
                                         </span>
                                         <!-- OPA Card Reporting Cycle -->
-                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex fs-14">
+                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
-                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <mat-icon class="coi-text-light me-1">person</mat-icon>
                                                 <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
                                             </span>
@@ -1322,12 +1322,12 @@
                             <div class="col-lg-10">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
+                                            <div class="align-items-center cursor-pointer flex-column">
                                                 <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
                                                     <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                     <span class="col break-point-1200">
                                                         <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                                                                <span *ngIf="disclosure?.travelPurpose" class="fs-14">
+                                                                <span *ngIf="disclosure?.travelPurpose">
                                                                     <span class="word-break-all new-line-property"
                                                                         *ngIf="!isPurposeRead[disclosure?.travelDisclosureId] && disclosure?.travelPurpose?.length > 80; else showFullInfo">
                                                                         <span class="grey-text mt-2">{{(disclosure?.travelPurpose |
@@ -1358,7 +1358,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
+                                            <div class="align-items-center cursor-pointer flex-column">
                                                 <div
                                                     [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
                                                     <label for="start-date" class="coi-text-dark d-block">Start Date</label>
@@ -1372,7 +1372,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
+                                            <div class="align-items-center cursor-pointer flex-column">
                                                 <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
                                                     <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                     <span>

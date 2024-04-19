@@ -224,16 +224,17 @@
                                 <div class="col-lg-3 d-flex align-items-end justify-content-end">
                                     <button (click)="viewDetails(entityListData)" tabindex="0"
                                             aria-label="Click the button to the view Entity details"
-                                            class="align-items-center btn btn-outline-secondary d-flex fs-14">
+                                            class="align-items-center btn btn-outline-secondary d-flex fs-14"
+                                            title="Click to view entity details">
                                         <mat-icon class="me-1">visibility</mat-icon>
                                         View
                                     </button>
                                     <button *ngIf="isShowGraph"
                                             (click)="openGraph(entityListData.entityNumber, entityListData.entityName)"
                                             tabindex="0" aria-label="Click to view Entity graph database"
-                                            class="align-items-center btn btn-outline-primary d-flex fs-14 ml-2"
+                                            class="align-items-center btn btn-outline-secondary d-flex fs-14 ms-2"
                                             title="Click to view Entity Graph Database">
-                                        <mat-icon>hub</mat-icon>
+                                        <mat-icon class="me-1">hub</mat-icon>Graph
                                     </button>
                                 </div>
                             </div>
