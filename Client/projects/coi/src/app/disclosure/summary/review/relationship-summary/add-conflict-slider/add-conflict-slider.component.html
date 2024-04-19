@@ -25,7 +25,7 @@
                                     entityDetails?.title}}</strong>
                                 <span *ngIf="entityDetails?.title?.length>120" class="fw-500 ms-1 link-primary"
                                     (keydown.enter)="titleReadMore = !titleReadMore"
-                                    tabindex="0" role="link" aria-label="Click here to {{titleReadMore? 'Read less': 'Read more'}}" 
+                                    tabindex="0" role="link" aria-label="Click here to {{titleReadMore? 'Read less': 'Read more'}}"
                                     title="Click here to {{titleReadMore? 'Read less': 'Read more'}}"
                                     (click)="titleReadMore = !titleReadMore">{{titleReadMore? 'Read Less': '...Read More'}}
                                 </span>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12 px-0">
                     <label class="d-block coi-text-dark" for="">Prime Sponsor</label>
-            
+
                     <app-no-data-label [valueToShow]="entityDetails?.primeSponsor">
                         <span class="grey-text fw-500">{{entityDetails?.primeSponsor}}</span>
                     </app-no-data-label>
@@ -94,9 +94,9 @@
                         </div>
                     </div>
                     <div class="col-12 mt-2">
-                        <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
+                        <button type="button" class="btn btn-primary float-end fs-14"
                             (click)="updateProjectRelationship()">Save</button>
-                        <button type="button" class="btn btn-outline-secondary float-end mr-10" data-bs-dismiss="modal"
+                        <button type="button" class="btn btn-outline-secondary float-end mr-10"
                             (click)="clearConflictModal()">Clear</button>
                     </div>
                 </div>

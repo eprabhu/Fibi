@@ -136,8 +136,14 @@ public class FormBuilderConfigurationDAO {
 														  .map(this::mapEntityToModel)
 														  .collect(Collectors.toList());
 		
+		Map<String, String> componentTypeDescriptionMap = componentTypeEntity.stream()
+			    .collect(Collectors.toMap(FormBuilderComponentTypeEntity::getComponentTypeCode, FormBuilderComponentTypeEntity::getDescription));
+
 		List<FormSectionComponentModel> componentList = compnentEntity.stream()
-																	  .map((entity -> mapEntityToModel(entity,formBuilderId)))	
+																	  .map(entity -> {
+																	        entity.setComponentTypeDescription(componentTypeDescriptionMap.get(entity.getComponentTypeCode()));
+																	        return mapEntityToModel(entity, formBuilderId);
+																	    })
 																	  .collect(Collectors.toList());
 		
 		sectionList = setComponentToSection(sectionList,componentList);
@@ -341,6 +347,10 @@ public class FormBuilderConfigurationDAO {
 							         .isActive(entity.getIsActive())
 							         .updateUser(entity.getUpdateUser())
 							         .updateTimestamp(entity.getUpdateTimestamp())
+							         .isMandatory(entity.getIsMandatory())
+							         .validationMessage(entity.getValidationMessage())
+							         .label(entity.getLabel())
+							         .componentTypeDescription(entity.getComponentTypeDescription())
 									 .build();
 	}
 
@@ -434,7 +444,7 @@ public FormHeaderModel updateFormHeader(FormHeaderUpdateModel request) {
 		String loginUser = getLoggedInUser();
 				
 		Optional<FormBuilderHeaderEntity> entityOptional
-					= headerRespository.findById(request.formHeaderId());
+					= headerRespository.findById(request.formBuilderId());
 		
 		if(entityOptional.isEmpty()) {
 			return new FormHeaderModel();
@@ -681,7 +691,6 @@ public FormSectionModel updateFormSection(FormSectionRequestModel request) {
 
 		FormBuilderSectionEntity entity = entityOptional.get();
 
-		entity.setFormHeaderId(request.getFormBuilderId());								 
 		entity.setSectionName(request.getSectionName());
 		entity.setSectionOrderNumber(request.getSectionOrderNumber());									 
 		entity.setBusinessRuleId(request.getBusinessRuleId());
@@ -747,6 +756,8 @@ public String deleteFormSection(int formBuilderSectionId) {
 	if (entityOptional.isEmpty()) {
 		return "Requested Section Id not present!!";
 	}
+
+	deleteFormComponentBySectionId(formBuilderSectionId);
 
 	try {
 		FormBuilderSectionEntity entity = entityOptional.get();
@@ -835,10 +846,16 @@ public FormSectionComponentModel createFormComponent(FormComponentRequestModel r
 		newEntity.setIsActive(request.getIsActive());
 		newEntity.setUpdateUser(loginUser);
 		newEntity.setUpdateTimestamp(new Date());
+		newEntity.setValidationMessage(request.getValidationMessage());
+		newEntity.setLabel(request.getLabel());
 						
 		hibernateTemplate.saveOrUpdate(newEntity);
 
-		return mapEntityToModel(newEntity,null);
+		FormBuilderSectionComponentEntity entity = new FormBuilderSectionComponentEntity();
+		BeanUtils.copyProperties(newEntity,entity);
+		entity.setComponentTypeDescription(request.getComponentTypeDescription());
+
+		return mapEntityToModel(entity,null);
 
 	} catch (Exception e) {
 		e.printStackTrace();
@@ -891,6 +908,9 @@ public FormSectionComponentModel updateFormComponent(FormComponentRequestModel r
 		entity.setIsActive(request.getIsActive());
 		entity.setUpdateUser(loginUser);
 		entity.setUpdateTimestamp(new Date());
+		entity.setIsMandatory(request.getIsMandatory());
+		entity.setValidationMessage(request.getValidationMessage());
+		entity.setLabel(request.getLabel());
 		
 		hibernateTemplate.saveOrUpdate(entity);
 
@@ -906,40 +926,52 @@ public FormSectionComponentModel updateFormComponent(FormComponentRequestModel r
 @SuppressWarnings("deprecation")
 public String updateComponentOrder(List<FormComponentRequestModel> request) {
 	try {
-		 //intentionally commented to update timestamp and updateuser
-		 // Also, used native SQL for performance
-		//String loginUser = getLoggedInUser();
+		// intentionally commented to update timestamp and updateuser
+		// Also, used native SQL for performance
+		// String loginUser = getLoggedInUser();
 
-		for(FormComponentRequestModel req: request) {
-			
+		for (FormComponentRequestModel req : request) {
+
 			hibernateTemplate.execute(session -> {
-	            try {
-	                String component = " UPDATE FORM_BUILDER_SECTION_COMPONENT SET COMPONENT_ORDER_NUMBER = :orderNumber  "
-	                				 + " WHERE FORM_BUILDER_SECT_COMP_ID = :componentId "
-	                				 + " AND COMPONENT_ORDER_NUMBER <> :orderNumber";
-	                session.createNativeQuery(component)
-	                		.setParameter("componentId", req.getFormBuilderSectCompId())
-	                		.setParameter("orderNumber", req.getComponentOrderNumber())
-	                		.executeUpdate();
+				try {
+					String component = " UPDATE FORM_BUILDER_SECTION_COMPONENT SET COMPONENT_ORDER_NUMBER = :orderNumber, "
+							+ "  FORM_BUILDER_SECTION_ID = :sectionId  "
+							+ " WHERE FORM_BUILDER_SECT_COMP_ID = :componentId "
+							+ " AND ( COMPONENT_ORDER_NUMBER <> :orderNumber "
+							+ " OR FORM_BUILDER_SECTION_ID <> :sectionId)";
+					session.createNativeQuery(component).setParameter("componentId", req.getFormBuilderSectCompId())
+							.setParameter("orderNumber", req.getComponentOrderNumber())
+							.setParameter("sectionId", req.getFormBuilderSectionId()).executeUpdate();
 
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	                return e.getMessage();
-	            }
-	            return SUCCESS; // the return value is required for the execute method
-	        });				
-			
-		}		
-	
+				} catch (Exception e) {
+					e.printStackTrace();
+					return e.getMessage();
+				}
+				return SUCCESS; // the return value is required for the execute method
+			});
+
+		}
 
 	} catch (Exception e) {
 		e.printStackTrace();
 		return e.getMessage();
 	}
-return SUCCESS; 
+	return SUCCESS;
 }
 
-
-
+@SuppressWarnings("deprecation")
+public String deleteFormComponentBySectionId(int formBuilderSectId) {
+	return hibernateTemplate.execute(session -> {
+        try {
+            String component = "DELETE FROM FORM_BUILDER_SECTION_COMPONENT WHERE FORM_BUILDER_SECTION_ID = :formBuilderSectId";
+            session.createNativeQuery(component).setParameter("formBuilderSectId", formBuilderSectId).executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return SUCCESS;
+    });
+    
+}
 
 }
