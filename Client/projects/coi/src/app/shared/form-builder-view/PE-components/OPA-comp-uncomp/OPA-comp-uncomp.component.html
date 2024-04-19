@@ -102,9 +102,10 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
+                <h3 class="fs-16 m-0">{{sectionHeading}}</h3>
+                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-0">
                 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold py-1 shadow-sm user-dashboard-nav"
                     *ngIf="editIndex == -1">
                     <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' " title="My Entities">
