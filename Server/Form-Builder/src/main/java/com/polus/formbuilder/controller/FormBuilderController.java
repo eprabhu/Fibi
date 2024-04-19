@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -25,6 +24,7 @@ import com.polus.formbuilder.model.FormComponentFetchResponse;
 import com.polus.formbuilder.model.FormComponentSaveRequest;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
+import com.polus.formbuilder.model.FormValidationRequest;
 import com.polus.formbuilder.programmedelement.ProgrammedElementJSONObjectMapper;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.service.FormBuilderServiceCoordinator;
@@ -154,5 +154,20 @@ public class FormBuilderController {
 	        
 	return dto;
 }
-    
+
+    @PostMapping(value = "/validateForm", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<Object> validateForm(@RequestBody FormValidationRequest formValidationRequest) {
+		return service.validateForm(formValidationRequest);
+	}
+
+    @PostMapping(value = "/validateSection", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<Object> validateSection(@RequestBody FormValidationRequest formValidationRequest) {
+		return service.validateSection(formValidationRequest);
+	}
+
+    @PostMapping(value = "/validateComponent", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<Object> validateComponent(@RequestBody FormValidationRequest formValidationRequest) {
+		return service.validateComponent(formValidationRequest);
+	}
+
 }

@@ -17,22 +17,8 @@
   }
 
 
-  .info-icon {
-    margin-top : -7px;
-    height     : 22px;
-    width      : 22px;
-    font-size  : 16px;
-    position   : absolute;
-    margin-left: 2px;
-    color      : #6f7395;
-    cursor     : pointer;
-  }
-
 .add-collapse-button {
-    position: absolute;
-    top: 6px;
     z-index: 2;
-    right: 5px;
 }
 
 .adjust-margin-top {

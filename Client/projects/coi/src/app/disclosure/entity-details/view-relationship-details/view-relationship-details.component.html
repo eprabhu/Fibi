@@ -98,7 +98,7 @@
                     [class.custom-margin]="relationshipDetails?.isFormCompleted"
                     class="col-lg-3 border-left border-start">
                     <div class="h-100">
-                        <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-2 mb-2">
+                        <div class="d-grid gap-2 flex-md-wrap mt-2 mb-2" [class.d-md-flex]="canShowMoreActions()">
                             <ng-container *ngIf="canShowMoreActions() ;else noMangeRights"
                                 [class.px-1]="relationshipsDetails?.versionStatus !== 'ACTIVE'  && isEditMode">
                                 <button
@@ -147,9 +147,9 @@
                                 </button>
                         </ng-container>
                             <ng-template #noMangeRights>
-                                <div class="mt-3 mx-3 d-flex justify-content-around px-1">
+                                <div class="d-flex justify-content-around px-1">
                                     <button
-                                        class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                                        class="btn btn-outline-grey me-2 d-inline-flex align-items-center justify-content-center col"
                                         title="Go to COI home page" tabindex="0" (click)="goToHome()">
                                         <mat-icon>home</mat-icon>
                                     </button>
