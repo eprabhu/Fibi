@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,38 +78,46 @@ public class AuthController {
 		}
         String token;
         AuthResponse response = new AuthResponse();
+        HttpHeaders headers = new HttpHeaders();
 		if (authenticate.isAuthenticated()) {
-        	token = service.generateToken(userName);
-        	Optional<Person> optionalPerson = personService.loadUserByUsername(userName);
-        	response =   AuthResponse.builder()
-	        			.personId(optionalPerson.get().getPersonId())
-	        			.userName(optionalPerson.get().getPrincipalName())
-	        			.fullName(optionalPerson.get().getFullName())
-	        			.gender(optionalPerson.get().getGender())
-	        			.primaryTitle(optionalPerson.get().getPrimaryTitle())
-                        .isFaculty(optionalPerson.get().getIsFaculty())
-	        			.build();
-            if (optionalPerson.get().getUnit() == null) {
-                Unit unit = unitService.getRootUnit();
-                response.setHomeUnit(unit.getUnitNumber());
-                response.setHomeUnitName(unit.getUnitName());
-            } else {
-                response.setHomeUnit(optionalPerson.get().getUnit().getUnitNumber());
-                response.setHomeUnitName(optionalPerson.get().getUnit().getUnitName());
-            }
-        	LOGGER.info("Token generated succefully.");
-        } else {
+			Optional<Person> optionalPerson = personService.loadUserByUsername(userName);
+			if (optionalPerson != null && optionalPerson.get().getStatus() != null && optionalPerson.get().getStatus().equals("A")) {
+				token = service.generateToken(userName);
+				response = AuthResponse.builder()
+						.personId(optionalPerson.get().getPersonId())
+						.userName(optionalPerson.get().getPrincipalName())
+						.fullName(optionalPerson.get().getFullName())
+						.gender(optionalPerson.get().getGender())
+						.primaryTitle(optionalPerson.get().getPrimaryTitle())
+						.isFaculty(optionalPerson.get().getIsFaculty())
+						.build();
+				if (optionalPerson.get().getUnit() == null) {
+					Unit unit = unitService.getRootUnit();
+					response.setHomeUnit(unit.getUnitNumber());
+					response.setHomeUnitName(unit.getUnitName());
+				} else {
+					response.setHomeUnit(optionalPerson.get().getUnit().getUnitNumber());
+					response.setHomeUnitName(optionalPerson.get().getUnit().getUnitName());
+				}
+				LOGGER.info("Token generated succefully.");
+			    headers.setBearerAuth(token);
+			    headers.add(HttpHeaders.SET_COOKIE, "Cookie_Token="+token+"; Path=/; Max-Age=43200; HttpOnly");
+			} else {
+				return ResponseEntity
+				        .status(HttpStatus.FORBIDDEN)
+				        .headers(headers)
+				        .body(null);
+			}
+		  } else {
             throw new RuntimeException("invalid access");
         }
-        HttpHeaders headers = new HttpHeaders();
+      HttpHeaders headers = new HttpHeaders();
 	    headers.setBearerAuth(token);
-	    
 	    return ResponseEntity.ok()
 	            .headers(headers)
 	            .body((response));
-	    
     }
-        
+
     @GetMapping("/validate")
     public String validateToken(@RequestParam("token") String token) {
         service.validateToken(token);

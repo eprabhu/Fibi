@@ -17,9 +17,9 @@
 						</div>
 						<div (keyup)="OnCapsLockClick($event)">
 							<mat-form-field>
-								<input [(ngModel)]="credentials.password" [type]="showPassword ? 'text' : 'password'"
+								<input [(ngModel)]="credentials.password" (ngModelChange)="resetVisiblityIcon()" [type]="showPassword ? 'text' : 'password'"
                                        matInput name="password" placeholder="Password">
-								<mat-icon (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
+								<mat-icon *ngIf="credentials.password" (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
                                           matSuffix>
 									{{showPassword ? 'visibility_off' : 'visibility'}}
 								</mat-icon>
@@ -44,9 +44,9 @@
 						</div>
 						<div>
 							<mat-form-field>
-								<input [(ngModel)]="credentials.password" [type]="showPassword ? 'text' : 'password'"
+								<input [(ngModel)]="credentials.password" (ngModelChange)="resetVisiblityIcon()" [type]="showPassword ? 'text' : 'password'"
                                        matInput name="old password" placeholder="Old Password">
-								<mat-icon (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
+								<mat-icon *ngIf="credentials.password" (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
                                           matSuffix>
 									{{showPassword ? 'visibility_off' : 'visibility'}}
 								</mat-icon>
@@ -54,9 +54,9 @@
 						</div>
 						<div>
 							<mat-form-field>
-								<input [(ngModel)]="credentials.password" [type]="showPassword ? 'text' : 'password'"
+								<input [(ngModel)]="credentials.password" (ngModelChange)="resetVisiblityIcon()" [type]="showPassword ? 'text' : 'password'"
                                        matInput name="new password" placeholder="New Password">
-								<mat-icon (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
+								<mat-icon *ngIf="credentials.password" (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
                                           matSuffix>
 									{{showPassword ? 'visibility_off' : 'visibility'}}
 								</mat-icon>
@@ -64,9 +64,9 @@
 						</div>
 						<div>
 							<mat-form-field>
-								<input [(ngModel)]="credentials.password" [type]="showPassword ? 'text' : 'password'"
+								<input [(ngModel)]="credentials.password" (ngModelChange)="resetVisiblityIcon()" [type]="showPassword ? 'text' : 'password'"
                                        matInput name="confirm password" placeholder="Confirm Password">
-								<mat-icon (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
+								<mat-icon  *ngIf="credentials.password" (click)="showPassword=!showPassword" aria-hidden="false" aria-label="visibility"
                                           matSuffix>
 									{{showPassword ? 'visibility_off' : 'visibility'}}
 								</mat-icon>
@@ -76,10 +76,10 @@
 						</button>
 					</ng-template>
 				</form>
-				<div *ngIf="loginFail" class="position-absolute bottom-5px text-muted login-error" id="login-failure">
-					<div class="text-danger">
-						Incorrect username or password / User is currently Inactive. Please try again.
-					</div>
+				<div *ngIf="isLoggedInWithInactiveUser" class="text-muted mt-2" id="login-failure">
+					<div class="text-danger fs-16">
+                        User is currently Inactivated. Please reach out to the administrator for more information.
+                    </div>
 				</div>
                 <!--<hr class="my-4">
                 <div class="d-flex justify-content-center f-13">

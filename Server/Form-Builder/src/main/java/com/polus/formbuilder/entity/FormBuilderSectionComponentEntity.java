@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -65,5 +66,17 @@ public class FormBuilderSectionComponentEntity implements Serializable{
 
     @Column(name = "UPDATE_USER", nullable = false)
     private String updateUser;
+
+    @Column(name = "IS_MANDATORY")
+	private String isMandatory = "N";
+
+    @Column(name = "VALIDATION_MESSAGE")
+    private String validationMessage;
+
+    @Column(name = "LABEL")
+    private String label;
+
+    @Transient
+    private String componentTypeDescription;
 
 }

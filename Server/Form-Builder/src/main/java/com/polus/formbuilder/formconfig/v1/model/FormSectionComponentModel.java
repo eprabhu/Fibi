@@ -12,18 +12,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FormSectionComponentModel {
-		
-		private int formBuilderSectCompId;
-	    private int formBuilderSectionId;
-	    private Integer formBuilderId;
-	    private String componentTypeCode;
-	    private Integer componentOrderNumber;
-	    private String componentData;
-	    private String componentRefId;
-	    private String description;
-	    private String headerInstruction;
-	    private String footerInstruction;
-	    private String isActive;
-	    private Date updateTimestamp;
-	    private String updateUser;
+	
+	private int formBuilderSectCompId;
+    private int formBuilderSectionId;
+    private Integer formBuilderId;
+    private String componentTypeCode;
+    private String componentTypeDescription;
+    private Integer componentOrderNumber;
+    private String componentData;
+    private String componentRefId;
+    private String description;
+    private String headerInstruction;
+    private String footerInstruction;
+    private String isActive;
+    private Date updateTimestamp;
+    private String updateUser;
+    private String isMandatory;
+    private String validationMessage;
+    private String label;
 }
