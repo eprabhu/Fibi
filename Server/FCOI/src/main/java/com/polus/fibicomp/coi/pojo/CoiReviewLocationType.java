@@ -1,6 +1,6 @@
 package com.polus.fibicomp.coi.pojo;
 
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import com.polus.core.util.JpaCharBooleanConversion;
 import lombok.Getter;
 import lombok.Setter;
 

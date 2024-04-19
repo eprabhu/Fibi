@@ -2,9 +2,9 @@ package com.polus.fibicomp.coi.dto;
 
 import java.util.List;
 
+import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
-import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
