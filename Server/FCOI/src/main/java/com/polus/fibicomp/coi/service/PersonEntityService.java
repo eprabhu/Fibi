@@ -3,8 +3,8 @@ package com.polus.fibicomp.coi.service;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;

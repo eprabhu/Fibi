@@ -16,15 +16,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.polus.core.pojo.Country;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.polus.fibicomp.pojo.Country;
-import com.polus.fibicomp.pojo.States;
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
 @Table(name = "ENTITY")

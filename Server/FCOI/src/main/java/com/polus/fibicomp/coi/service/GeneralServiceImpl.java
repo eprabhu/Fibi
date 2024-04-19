@@ -7,19 +7,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.person.pojo.Person;
+import com.polus.core.roles.pojo.AdminGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dao.GeneralDao;
-import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.person.pojo.Person;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;;
 
 @Service
 @Transactional

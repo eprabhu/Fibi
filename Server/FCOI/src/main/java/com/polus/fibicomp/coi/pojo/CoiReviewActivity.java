@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
 @Table(name = "COI_REVIEW_ACTIVITY")

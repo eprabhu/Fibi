@@ -29,7 +29,15 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.pojo.Country;
+import com.polus.core.pojo.Unit;
+import com.polus.core.roles.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.COIValidateDataDto;
+import com.polus.fibicomp.coi.vo.DashBoardProfile;
+import com.polus.fibicomp.coi.vo.DisclosureView;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,8 +49,6 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
@@ -102,17 +108,10 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.inbox.pojo.Inbox;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.pojo.Country;
-import com.polus.fibicomp.pojo.DashBoardProfile;
-import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.security.AuthenticatedUser;
-import com.polus.fibicomp.view.DisclosureView;
-
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
+import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.security.AuthenticatedUser;;
 import oracle.jdbc.OracleTypes;
 
 @Service(value = "conflictOfInterestDao")
