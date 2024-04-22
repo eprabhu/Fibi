@@ -309,3 +309,35 @@
         height: 6px;
       }
 }
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: all .3s ease-in-out;
+}
+
+.rotate-0 {
+    transform: rotate(0deg);
+    transition: all .3s ease-in-out;
+}
+
+.slide_down {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideDown .3s ease-in-out forwards;
+}
+
+.transition-300ms {
+    transition: all .3s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -194,7 +194,7 @@
             </div>
         </nav>
         <!-- sorting for all disclosures -->
-        <div class="sort-div border mt-2" *ngIf="isShowOPAList && opaList.length">
+        <div class="sort-div border mt-2 px-3" *ngIf="isShowOPAList && opaList.length">
             <span class="fs-14 fw-medium me-2 text-secondary" tabindex="0" aria-label="Sort By">Sort By :</span>
             <button tabindex="0" *ngFor="let sortSection of sortSectionsList; let index = index"
                 title="Click to sort by {{sortSection?.fieldName}}"

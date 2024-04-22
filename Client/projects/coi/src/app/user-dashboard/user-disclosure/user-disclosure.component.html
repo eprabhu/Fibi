@@ -668,11 +668,10 @@
     </div>
 </nav>
 <!-- Search and filter -->
-<div class="advance-search coi-search-box mt-2 overflow-hide-nav" *ngIf="isShowFilterAndSearch">
+<div class="advance-search overflow-hide-nav coi-search-box mt-2" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
-        <div class="col-lg-auto p-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
-            <div class="fs-14 d-inline-block"
-                 [@leftSlideInOut]>
+        <div class="col-lg-auto px-3 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
+            <div class="fs-14 d-inline-block" [@leftSlideInOut]>
                 <label class="text-secondary" tabindex="0">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
                     tabindex="0"

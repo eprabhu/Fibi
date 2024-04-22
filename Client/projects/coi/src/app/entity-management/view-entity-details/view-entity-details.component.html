@@ -41,7 +41,8 @@
                             title="Click to {{isCardExpanded ? 'collapse' : 'expand'}} Entity"
                             class="toggle-btn border btn p-0 rounded-5 shadow-sm"
                             attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} Entity">
-                            <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'"
+                              aria-hidden="true">expand_more</mat-icon>
                           </button>
                       </div>
                     </div>
@@ -49,7 +50,7 @@
                 </div>
               </div>
               <!-- New Card design -->
-              <div class="card-body" *ngIf="isCardExpanded">
+              <div class="card-body" *ngIf="isCardExpanded" [@heightAnimation]>
                 <div class="row">
                   <div class="col-6 col-xxl-6 pe-xl-0 pe-xxl-0">
                     <div
@@ -120,10 +121,10 @@
           <!-- New design -->
           <div class="col-lg-3 border-prev-nxt">
             <div class="h-100 mb-md-3">
-              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center">
+              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center transition-300ms">
                 <!-- home -->
                 <button *ngIf="hasManageEntity"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                   title="Go to COI home page" (click)="goToHome()" aria-label="Go to COI home page">
                   <mat-icon>home</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
@@ -131,7 +132,7 @@
                 <!-- Modify Entity -->
                 <button *ngIf="hasManageEntity" [matMenuTriggerFor]="beforeMenu"
                   title="More Actions" aria-label="More Actions"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14 transition-300ms">
                   <mat-icon class="more-options-icon">more_vert</mat-icon>
                   <!-- <span class="mt-1 ms-2" *ngIf="isCardExpanded">More Actions</span> -->
                 </button>
@@ -152,7 +153,7 @@
                 <!-- Back -->
                 <button *ngIf="hasManageEntity" title="Click to go back to Entity list" (click)="navigateBack()"
                   id="btn-modify" aria-label="Click to go back to Entity list"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14 transition-300ms">
                   <mat-icon>reply</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Back</span> -->
                 </button>
@@ -161,8 +162,8 @@
                   <!-- inactivate -->
                   <ng-container *ngIf="entityDetails.isActive">
                     <button title="Click to Inactivate Entity" id="btn-inactivate"
-                      [ngClass]="isCardExpanded ? 'col-12' : 'col'" aria-label="Click to Inactivate Entity"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                      [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click to Inactivate Entity"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
                       <mat-icon>schedule</mat-icon>
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Inactivate</span>
@@ -172,8 +173,8 @@
                   <!-- Activate -->
                   <ng-container *ngIf="!entityDetails.isActive">
                     <button title="Click to activate Entity" id="btn-activate" tabindex="0" role="button"
-                      [ngClass]="isCardExpanded ? 'col-12' : 'col'" aria-label="Click to activate Entity"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                      [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click to activate Entity"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
                       <mat-icon>flash_on</mat-icon>
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Activate</span>
@@ -182,8 +183,8 @@
 
                   <!-- Approve Entity -->
                   <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
-                    <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12' : 'col'"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                    <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       title="Click to access entity verification" data-bs-toggle="modal"
                       data-bs-target="#approve-entity-modal" aria-label="Click to approve Entity">
                       <mat-icon class="mx-1 icon-approve-position">check_circle_outline</mat-icon>
@@ -192,11 +193,14 @@
                   </ng-container>
                 </ng-container>
                 <!-- last update date -->
-                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}" tabindex="0">
-                  <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'" aria-label="Last updated by">Last Updated By</label>
-                  <span class="coi-text-dark fs-13 fw-normal" [attr.aria-label]="entityDetails?.updatedUserFullName + ' on ' + (entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')">
-                    {{entityDetails?.updatedUserFullName}} On {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}} </span>
-              </div>
+                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} transition-300ms" tabindex="-1">
+                  <label for="entity-last-updateby" class="coi-text-lighter fs-13 fw-medium" [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'"
+                    aria-label="Last updated by">Last Updated By</label>
+                  <span class="coi-text-dark fs-13 fw-normal" id="entity-last-updateby"
+                    [attr.aria-label]="entityDetails?.updatedUserFullName + ' on ' + (entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')">
+                    {{entityDetails?.updatedUserFullName}} On {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
