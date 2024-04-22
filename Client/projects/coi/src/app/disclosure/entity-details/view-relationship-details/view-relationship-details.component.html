@@ -1,7 +1,7 @@
 <!-- SFI header card -->
 <div class="row" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
-    <div class="col-12">
-        <div class="card shadow-sm">
+    <div class="col-12" [class.bg-white]="isTriggeredFromSlider">
+        <div class="card shadow-sm overflow-hidden">
             <div class="row mx-0">
                 <div class="col-lg px-0">
                     <div class="card-header bg-white px-3 border-bottom">
@@ -37,12 +37,12 @@
                                 </div>
                                 <button (click)="collapseHeader()" title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
                                     class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                    <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                    <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" *ngIf="isCardExpanded">
+                    <div class="card-body" *ngIf="isCardExpanded" [@heightAnimation]>
                         <div class="row">
                             <div class="col-lg-4 col-md-6 mb-md-3 mb-lg-0 mb-3" tabindex="0">
                                 <label aria-label="Country" class="d-block coi-text-dark">Country</label>

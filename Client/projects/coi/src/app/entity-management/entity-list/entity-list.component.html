@@ -132,7 +132,7 @@
             </div>
         </div>
         <!-- Sorting pannel -->
-        <div class="sort-div border mt-2" *ngIf="isShowEntityList && isManageEntity && entityList.length">
+        <div class="sort-div border mt-2 px-3" *ngIf="isShowEntityList && isManageEntity && entityList.length">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
             <button tabindex="0" *ngFor="let sortSection of sortSectionsList"
                     aria-label="Click to sort by {{sortSection?.fieldName}}"
