@@ -190,7 +190,7 @@
     },
     "externalLinks": {
         "FIBI": "https://dev.fibiweb.com/fibi/",
-        "COI": "https://coi.fibiweb.com/fibicoi/"
+        "COI": "https://fibicoi.fibiweb.com/fibicoi/"
     },
     "additionalImages": [
         {"id": "ESponsor", "image":"/assets/images/g_entity_sponsor.png"}
