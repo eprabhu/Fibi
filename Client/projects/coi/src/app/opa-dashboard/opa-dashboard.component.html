@@ -4,7 +4,7 @@
             aria-label="OPA Disclosures Dashboard">OPA Disclosures</div>
         <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm bg-white">
             <div class="list navbar-toggleable-xs">
-                <div class="border-bottom d-flex justify-content-between">
+                <div class="d-flex justify-content-between">
                     <button #mainHeaders id="responsiveColapse" [ngClass]="isShowOptions ? 'd-none' : 'hamburger-display'"
                         class="navbar-toggler hidden-sm-up px-0 px-sm-3" (click)="isShowOptions = true" type="button"
                         data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
@@ -67,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="pb-3 px-3 pt-2" id="collapseExample" *ngIf="isViewAdvanceSearch"  [@topSlideInOut]>
+            <div class="pb-3 px-3 pt-2 border-top" id="collapseExample" *ngIf="isViewAdvanceSearch"  [@topSlideInOut]>
                 <div class="row g-3">
                     <!-- Person Name -->
                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click to search by Person Name" tabindex="0"

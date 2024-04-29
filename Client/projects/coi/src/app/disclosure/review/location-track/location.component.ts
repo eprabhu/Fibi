@@ -13,11 +13,13 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/s
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { PersonProjectOrEntity, coiReviewComment } from '../../../shared-components/shared-interface';
+import { heightAnimation } from '../../../common/utilities/animations';
 
 @Component({
     selector: 'app-coi-review-location',
     templateUrl: './location.component.html',
     styleUrls: ['./location.component.scss'],
+    animations: [heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class LocationComponent implements OnInit, OnDestroy {
 

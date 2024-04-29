@@ -4,36 +4,42 @@
     </div>
     <div class="card-body p-0">
         <ul class="nav flex-column">
-            <li class="nav-item" (click)="jumpToSection('COI801')" [ngClass]="{'active':activeNav == 'COI801'}"
-                title="Go to Screening Questionnaire Section" aria-label="Go to Screening Questionnaire Section">
-                <a class="nav-link" aria-current="page">Screening Questionnaire</a>
+            <li class="nav-item" [ngClass]="{'active':activeNav == 'COI801'}">
+                <a class="nav-link" role="link" tabindex="0"
+                    title="Go to Screening Questionnaire Section" aria-label="Go to Screening Questionnaire Section"
+                    (keyup.enter)="jumpToSection('COI801')" (click)="jumpToSection('COI801')">Screening Questionnaire</a>
             </li>
-            <li class="nav-item" (click)="jumpToSection('COI802')" [ngClass]="{'active':activeNav == 'COI802'}"
-                title="Go to SFI's section" aria-label="Go to SFI's section">
-                <a class="nav-link">Significant Financial Interest</a>
+            <li class="nav-item" [ngClass]="{'active':activeNav == 'COI802'}">
+                <a class="nav-link" role="link" tabindex="0"
+                    title="Go to SFI's section" aria-label="Go to SFI's section"
+                    (keyup.enter)="jumpToSection('COI802')" (click)="jumpToSection('COI802')">Significant Financial Interest</a>
             </li>
             <li class="nav-item" [ngClass]="{'active':activeNav == 'COI803'}">
-                <a class="nav-link d-flex align-items-center justify-content-between" title="Go to Relationships section" (click)="jumpToSection('COI803')"
-                aria-label="Go to Relationships section">Relationships
-                    <mat-icon aria-hidden="true"
-                        title="Click here to collapse / expand Relationships section"
-                        aria-label="Click here to collapse / expand Relationships section">{{isRelationshipCollapse ?
-                        'keyboard_arrow_up' :'keyboard_arrow_down'}}</mat-icon></a>
-                <ul *ngIf="isRelationshipCollapse" class="right-sub-nav fs-14" id="relationship-chid-section">
+                <a class="nav-link d-flex align-items-center justify-content-between" role="link" tabindex="0"
+                    title="Go to Relationships section" aria-label="Go to Relationships section"
+                    (keyup.enter)="jumpToSection('COI803')" (click)="jumpToSection('COI803')">Relationships
+                    <ng-container *ngIf="projectList?.awards?.length || projectList?.proposals?.length">
+                        <mat-icon title="Click here to collapse / expand Relationships section"
+                            aria-label="Click here to collapse / expand Relationships section"
+                            aria-hidden="true">{{isRelationshipCollapse ? 'keyboard_arrow_up' :'keyboard_arrow_down'}}</mat-icon>
+                    </ng-container>
+                </a>
+                <ul *ngIf="isRelationshipCollapse && (projectList?.awards?.length || projectList?.proposals?.length)" class="right-sub-nav fs-14" id="relationship-chid-section">
                     <li *ngIf="projectList?.awards?.length" class="fw-medium sub-nav-inner-list">
                         <span [ngClass]="{'active-sub-nav': activeSubNav == 'AWARD'}"
                             class="ps-active-nav">Awards</span>
                         <ul class="tree mt-2">
                             <ng-container *ngFor="let award of projectList?.awards; let i = index">
-                                <li (click)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
-                                    [title]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
-                                    [attr.aria-label]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'">
-                                    <a class="px-2 d-block"
+                                <li>
+                                    <a class="px-2 d-block" role="link" tabindex="0"
+                                        [title]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
+                                        [attr.aria-label]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
+                                        (keyup.enter)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
+                                        (click)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
                                         [ngClass]="{'sub-nav-active': subNavActive == award?.moduleItemId}">{{award?.moduleItemKey}}
                                         {{award?.title.length>51 ? (award?.title | slice:0: 51)+'...': award?.title}}</a>
                                 </li>
                             </ng-container>
-
                         </ul>
                     </li>
                     <li *ngIf="projectList?.proposals?.length" class="fw-medium sub-nav-inner-list">
@@ -41,10 +47,12 @@
                             class="ps-active-nav">Proposals</span>
                         <ul class="tree mt-2">
                             <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
-                                <li (click)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
-                                    [title]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
-                                    [attr.aria-label]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'">
-                                    <a class="px-2 d-block"
+                                <li>
+                                    <a class="px-2 d-block" role="link" tabindex="0"
+                                        [title]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
+                                        [attr.aria-label]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
+                                        (click)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
+                                        (keyup.enter)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
                                         [ngClass]="{'sub-nav-active': subNavActive == proposals?.moduleItemId}">{{proposals?.moduleItemId}}
                                         {{proposals?.title.length>51 ?(proposals?.title | slice:0:51)+'...' : proposals?.title}}</a>
                                 </li>
@@ -53,9 +61,10 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item" (click)="jumpToSection('COI804')" [ngClass]="{'active':activeNav == 'COI804'}"
-                title="Go to Certification section" aria-label="Go to Certification section">
-                <a class="nav-link" aria-disabled="true">Certification</a>
+            <li class="nav-item" [ngClass]="{'active':activeNav == 'COI804'}" >
+                <a class="nav-link" role="link" tabindex="0"
+                    title="Go to Certification section" aria-label="Go to Certification section"
+                    (keyup.enter)="jumpToSection('COI804')" (click)="jumpToSection('COI804')">Certification</a>
             </li>
         </ul>
     </div>
