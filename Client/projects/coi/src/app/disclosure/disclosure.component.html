@@ -378,7 +378,7 @@
                                             <mat-icon>done</mat-icon>
                                             <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                                         </button>
-                                        <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}">
+                                        <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
                                             <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
                                             <span class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}}
                                                 <span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>

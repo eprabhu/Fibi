@@ -17,9 +17,8 @@
                         <span *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" tabindex="0">
                           <span data-bs-toggle="tooltip" data-bs-placement="top"
                                 class="info-text pill f-14 me-2 px-3 py-1 rounded-5 py-0"
-                                title="{{entityDetails?.entityName}} is Unverified">
-                              <i aria-hidden="true" class="fa fa-times mr-2"></i>
-                              Unverified</span>
+                                title="{{entityDetails?.entityName}} is Unverified"><i aria-hidden="true"
+                                class="fa fa-times me-2"></i>Unverified</span>
                         </span>
                         <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="0"
                           [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'">
@@ -37,12 +36,11 @@
                             </div>
                           </div>
                         </div>
-                          <button (click)="isCardExpanded=!isCardExpanded; isUserCollapse=!isUserCollapse" tabindex="0"
+                          <button (click)="isCardExpanded=!isCardExpanded; isUserCollapse=!isUserCollapse"
                             title="Click to {{isCardExpanded ? 'collapse' : 'expand'}} Entity"
                             class="toggle-btn border btn p-0 rounded-5 shadow-sm"
-                            attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} Entity">
-                            <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'"
-                              aria-hidden="true">expand_more</mat-icon>
+                            [attr.aria-label]="isCardExpanded ? 'collapse' : 'view' + ' Entity'">
+                            <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
                           </button>
                       </div>
                     </div>

@@ -90,11 +90,6 @@
     margin-left: 0 !important;
 }
 
-.btn-primary-icon a:hover {
-    background-color: #E2F1FF;
-    color: #007DEC !important;
-}
-
 a {
     color: inherit;
 }
@@ -131,10 +126,6 @@ a {
     }
   }
 
-.more-options-icon {
-    transform: scale(.8);
-}
-
 .margin-person-card {
     margin-left: -11px;
     margin-right: -11px;
@@ -156,11 +147,6 @@ a {
     transform: translate(-50%, -50%);
     top: 50%;
     right: 0px;
-}
-
-.btn-primary-icon:focus {
-    background-color: #E2F1FF;
-    color: #007DEC !important;
 }
 
 @media(max-width: 991px) {

@@ -112,16 +112,11 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div tabindex="0"
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                    <button role="button"
-                        class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
-                        [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                                        'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                        <mat-icon class="me-1">visibility</mat-icon> View
-                    </button>
-                </div>
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content" (click)="redirectToDisclosure()"
+                    [title]="disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI Dashboard'"
+                    [attr.aria-label]="disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI Disclosure'">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
             </div>
         </div>
     </div>
@@ -140,10 +135,9 @@
                                 <span aria-label="Travel">Travel</span>
                             </span>
                         </span>
-                        <h4 *ngIf="disclosure.travelDisclosureId"
-                            class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
+                        <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
                             <span>
-                                <span>Entity  </span>
+                                <span class="text-nowrap coi-text-light fs-6">Entity:</span>
                                 <span [attr.aria-label]="disclosure.entityName"
                                     class="coi-text-darker fs-6 hyper-link ms-1">{{disclosure.entityName}}</span>
                             </span>
@@ -257,16 +251,10 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                    <button role="button"
-                        class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
-                        [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                                            'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                        <mat-icon class="me-1">visibility</mat-icon> View
-                    </button>
-                </div>
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content" (click)="redirectToDisclosure()"
+                    title="Click to view Travel Disclosure" [attr.aria-label]="'Click to view Travel Disclosure of' + disclosure.entityName">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
             </div>
         </div>
     </div>
@@ -345,16 +333,10 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div tabindex="0"
-                    aria-label="Click to view OPA disclosure details">
-                    <button role="button"
-                        class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
-                        [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                            'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                        <mat-icon class="me-1">visibility</mat-icon> View
-                    </button>
-                </div>
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
+                    (click)="redirectToDisclosure()" aria-label="Click to view OPA Disclosure" title="Click to view OPA Disclosure">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
             </div>
         </div>
     </div>

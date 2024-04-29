@@ -11,7 +11,7 @@
                             class="col-auto">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center me-5" data-bs-toggle="modal"
                                     title="Add Reviewers" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
-                                    <mat-icon class="me-2">person_add</mat-icon>
+                                    <mat-icon aria-hidden="true" class="me-2">person_add</mat-icon>
                                     Add Reviewer
                                 </button>
                             </div>
@@ -20,7 +20,7 @@
                                 title="Click to {{isExpanded ? 'collapse' : 'view'}} OPA Review Details"
                                 attr.aria-label="{{ isExpanded ? 'collapse' : 'view' }} O P A Review Details"
                                 class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                <mat-icon>{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
+                                <mat-icon aria-hidden="true">{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
                             </button>
                         </div>
                     </h4>
@@ -71,15 +71,15 @@
                             <span *ngIf="reviewer?.description">{{reviewer?.description.length >
                                 180 && !collapseViewMore[reviewer?.opaReviewId] ? (reviewer?.description | slice:0:75)+'...' : reviewer?.description}}
                                 <ng-container *ngIf="reviewer?.description.length > 180">
-                                    <span (click)="collapseViewMoreOption(reviewer?.opaReviewId, collapseViewMore[reviewer?.opaReviewId])"
-                                        tabindex="0"
+                                    <a (click)="collapseViewMoreOption(reviewer?.opaReviewId, collapseViewMore[reviewer?.opaReviewId])"
+                                        tabindex="0" role="link"
                                         attr.aria-label="Click to {{collapseViewMore[reviewer?.opaReviewId] ? 'Read Less' : 'Read More'}} Description of {{reviewer?.reviewLocationType?.description}}"
                                         title="{{collapseViewMore[reviewer?.opaReviewId] ? 'Read Less' : 'Read More'}}"
                                         (keyup.enter)="collapseViewMoreOption(reviewer?.opaReviewId, collapseViewMore[reviewer?.opaReviewId])"
                                         (keyup.space)="collapseViewMoreOption(reviewer?.opaReviewId, collapseViewMore[reviewer?.opaReviewId])"
                                         *ngIf="reviewer?.description.length > 180" class="link-primary fs-14 fw-medium">
                                         {{collapseViewMore[reviewer?.opaReviewId] ? "Read Less" : "Read More"}}
-                                    </span>
+                                    </a>
                                 </ng-container>
                             </span>
                         </app-no-data-label>
@@ -104,34 +104,33 @@
                                     (click)="updateCoiReviewStage(index,reviewer,'START')"
                                     (keyup.enter)="updateCoiReviewStage(index,reviewer,'START')"
                                     (keyup.space)="updateCoiReviewStage(index,reviewer,'START')"
-                                    class="btn btn-primary-icon d-flex align-items-center my-1">
-                                    <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">
+                                    <mat-icon aria-hidden="true" class="material-icons-outlined">play_circle_filled</mat-icon>
                                 </button>
                                 <button *ngIf="reviewer.reviewStatusTypeCode == '2'" id="opa_reviewer_complete_review_{{reviewer?.opaReviewId}}"
                                     title="Complete Review of {{reviewer?.reviewLocationType?.description}}"
                                     attr.aria-label="Complete Review of {{reviewer?.reviewLocationType?.description}}"
-                                    class="btn btn-primary-icon d-flex align-items-center my-1"
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     (keyup.enter)="updateCoiReviewStage(index,reviewer,'COMPLETE')"
                                     (keyup.space)="updateCoiReviewStage(index,reviewer,'COMPLETE')"
                                     (click)="updateCoiReviewStage(index,reviewer,'COMPLETE')">
-                                    <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
+                                    <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
                                 </button>
                             </ng-container>
-                                <button class="btn btn-primary-icon d-flex align-items-center my-1" id="opa_reviewer_review_comment_{{reviewer?.opaReviewId}}"
+                                <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" id="opa_reviewer_review_comment_{{reviewer?.opaReviewId}}"
                                 title ="Add Review Commnets for {{reviewer?.reviewLocationType?.description}}"
                                 attr.aria-label="Add Review Commnets for {{reviewer?.reviewLocationType?.description}}"
                                 [ngClass]="{'review-comment-position':(!isMangeReviewAction && isOPAEditMode)}" (click)="modifyReviewComment(reviewer)">
-                                    <mat-icon>rate_review</mat-icon>
+                                    <mat-icon aria-hidden="true">rate_review</mat-icon>
                                 </button>
                                 <ng-container *ngIf="isMangeReviewAction && !isOPAEditMode">
                                     <button  *ngIf="reviewer.reviewStatusTypeCode !== '3'" [matMenuTriggerFor]="beforeMenu"
-                                        class="btn btn-primary-icon d-flex align-items-center my-1"
+                                        class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                         id="opa_reviewer_more_actions_{{reviewer?.opaReviewId}}"
                                         attr.aria-label="More Actions of {{reviewer?.reviewLocationType?.description}}"
-                                        role = "button"
                                         type="button"
                                         title="More Actions of {{reviewer?.reviewLocationType?.description}}">
-                                        <mat-icon class="btn-color">more_vert</mat-icon>
+                                        <mat-icon aria-hidden="true">more_vert</mat-icon>
                                     </button>
                                 </ng-container>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
@@ -141,7 +140,7 @@
                                         title="Edit Review of {{reviewer?.reviewLocationType?.description}}"
                                         attr.aria-label="Edit Review of {{reviewer?.reviewLocationType?.description}}" data-bs-toggle="modal"
                                         data-bs-target="#add-coi-reviewer-modal" (click)="editReview(reviewer, index)">
-                                        <mat-icon class="me-2 more-options-icon">edit</mat-icon>
+                                        <mat-icon aria-hidden="true" class="me-2 coi-scale-9">edit</mat-icon>
                                         <span>Edit Review</span>
                                     </button>
                                     <button
@@ -150,7 +149,7 @@
                                         title="Delete Review of {{reviewer?.reviewLocationType?.description}}"
                                         attr.aria-label="Delete Review of {{reviewer?.reviewLocationType?.description}}" data-bs-toggle="modal"
                                         data-bs-target="#deleteReviewModal" (click)="modifyIndex = index;reviewActionConfirmation = reviewer">
-                                        <mat-icon class="me-2 more-options-icon">delete</mat-icon>
+                                        <mat-icon aria-hidden="true" class="me-2 coi-scale-9">delete</mat-icon>
                                         <span>Delete Review</span>
                                     </button>
                                 </mat-menu>
