@@ -49,6 +49,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
     this.fetchMyEntities();
     this.$fetchSFI.next();
     this.getSearchList();
+    window.scrollTo(0,0);
   }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);

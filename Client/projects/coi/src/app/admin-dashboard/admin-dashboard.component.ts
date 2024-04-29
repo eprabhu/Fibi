@@ -106,7 +106,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     showSlider = false;
     entityId: any;
     disclosureSortSections = [
-        { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
         { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
         { variableName: 'disclosureCategoryType', fieldName: 'Disclosure Type' },
         { variableName: 'disclosureStatus', fieldName: 'Disclosure Status' },

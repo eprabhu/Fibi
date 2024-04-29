@@ -180,11 +180,20 @@
                         <label class="d-block" for="adv-review-status">
                             <ng-container>Review Status</ng-container>
                         </label>
-                        <app-look-up (selectedResult)="onLookupSelect($event, 'property21')"
-                                     [options]="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' ? coiReviewStatusOptions : travelReviewStatusOptions"
-                                     [selectedLookUpList]="lookupValues['property21']"
-                                     [uniqueId]="'adv-review-status'">
-                        </app-look-up>
+                        <ng-container *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'">
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property21')"
+                                         [options]="coiReviewStatusOptions"
+                                         [selectedLookUpList]="lookupValues['property21']"
+                                         [uniqueId]="'adv-review-status'">
+                            </app-look-up>
+                        </ng-container>
+                        <ng-container *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'TRAVEL_DISCLOSURES'">
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property21')"
+                                         [options]="travelReviewStatusOptions"
+                                         [selectedLookUpList]="lookupValues['property21']"
+                                         [uniqueId]="'adv-review-status'">
+                            </app-look-up>
+                        </ng-container>
                     </div>
                     <!-- Certification Date -->
                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="0" aria-label="Certification Date"
