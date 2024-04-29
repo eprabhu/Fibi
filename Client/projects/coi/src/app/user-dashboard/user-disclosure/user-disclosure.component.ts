@@ -89,6 +89,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.loadDashboard();
         this.getDashboardBasedOnTab();
         this.loadDashboardCount();
+        window.scrollTo(0,0);
     }
 
     loadDashboard() {
