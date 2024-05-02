@@ -474,3 +474,9 @@ nav ul li {
     white-space: nowrap;
     font-weight: 500;
 }
+
+.coi-card-regular {
+  .card-body {
+    padding-bottom: 0 !important;
+  }  
+} 

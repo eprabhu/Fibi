@@ -10,7 +10,6 @@
                             <input type="text"id="adv-search-proposal-no"
                                 [(ngModel)]="answer.value" placeholder="{{ customElement.columnName }}"
                                 class="form-control mb-2" (keyup)="checkValidation(answer,$event,customElement,i)"
-                                [ngClass]="!isValueEmpty[i]&&validationId[i]==i ? 'is-invalid d-block' : ''"
                                 (ngModelChange)="emitDataChange()" [disabled]="isViewMode" /></span>
                 </div>
                 <div *ngIf="customElement.filterType == 'Text'">
@@ -25,22 +24,19 @@
                 </div>
                 <div *ngIf="customElement.filterType == 'Date' ">
                     <span *ngFor="let answer of customElement?.answers">
-                            <span class="dateField mr-1">
-                                <input type="text" placeholder="From ({{datePlaceHolder}})"
-                                    id="{{ customElement.columnName }}" [owlDateTime]="customDt"
-                                    class="d-inline-block form-control"
-                                    [ngModel]="answer.value ?  answer.value : customElement.defaultValue"
-                                    [(ngModel)]="answer.value" (ngModelChange)="answer.value = parseDateWithoutTimestamp(answer.value)"
-                                    [ngClass]="!isValueEmpty[i]&&validationId[i]==i ? 'is-invalid d-block' : '' "
-                                    (keypress)="_commonService._keyPress($event, 'date');"
-                                    (ngModelChange)="emitDataChange()"
-                                    [owlDateTimeTrigger]="customDt" [disabled]="isViewMode">
-                                <i class="fa fa-calendar fa-large insidePicker hand-cursor"
-                                    [owlDateTimeTrigger]="customDt" aria-hidden="true"></i>
-                                <owl-date-time #customDt [pickerType]="'calendar'"
-                                    (afterPickerOpen)="setFocusToElement( customElement.columnName )"></owl-date-time>
-                            </span>
+                        <span class="dateField mr-1">
+                            <input matInput [matDatepicker]="customDt" placeholder="From ({{datePlaceHolder}})"
+                                id="{{customElement.columnName}}" class="d-inline-block form-control" autocomplete="off"
+                                [ngModel]="answer.value ?  answer.value : customElement.defaultValue"
+                                [(ngModel)]="answer.value" (ngModelChange)="answer.value = parseDateWithoutTimestamp(answer.value)"
+                                (keypress)="_commonService._keyPress($event, 'date');"
+                                (ngModelChange)="emitDataChange()" [disabled]="isViewMode"
+                                (click)="customDt.open()">
+                            <i class="fa fa-calendar fa-large insidePicker hand-cursor"
+                                (click)="customDt.open()" aria-hidden="true"></i>
+                            <mat-datepicker #customDt (opened)="setFocusToElement(customElement.columnName)"></mat-datepicker>
                         </span>
+                    </span>
                 </div>
                 <div *ngIf="customElement.filterType == 'Check Box'" class="mt-3">
                         <div class="checkbox-inline col-12" *ngFor="let option of customElement.options;  let checkBoxIndex=index">
@@ -63,7 +59,6 @@
                     <span *ngFor="let answer of customElement?.answers" >
                         <span>
                             <app-look-up [options]='customElement.lookupArgument' [defaultValue]='customElement.answers[0].description'
-                                [isError]="(!isValueEmpty[i]&&validationId[i]==i) ? true : false"
                                 (selectedResult)="onLookupSelect($event,answer)"
                                 [isDisabled]="isViewMode">
                             </app-look-up>
@@ -75,7 +70,6 @@
                                 <app-elastic [options]="elasticSearchOptions[customElement.columnName]"
                                     [placeHolder]="'Type here for ' + customElement.columnName"
                                     (selectedResult)="setSearchFilterValue($event,answer,customElement)"
-                                    [isError]="(!isValueEmpty[i]&&validationId[i]==i) ? true : false"
                                     [isDisabled]="isViewMode">
                                 </app-elastic>
                             </div>
@@ -87,7 +81,6 @@
                                 <app-endpoint-search [httpOptions]="endPointSearchOptions[customElement.columnName]"
                                     [placeHolder]="'Type here for ' + customElement.columnName"
                                     (onSelect)="setSearchFilterValue($event,answer,customElement)"
-                                    [isError]="(!isValueEmpty[i]&&validationId[i]==i) ? true : false"
                                     [isDisabled]="isViewMode">
                                 </app-endpoint-search>
                             </div>

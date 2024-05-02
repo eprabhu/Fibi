@@ -118,7 +118,7 @@
                   <div class="answer-field p-0 ml-4">
                     <textarea name="name" [disabled]="isViewMode" rows="2" appLengthValidator appAutoGrow
                       [isShowLimiter]='!isViewMode' id="ans_{{question.QUESTION_ID}}"
-                      class="question-font mb-2 scheduleBoxes dateBox qst-input-width" [(ngModel)]="question.ANSWERS[1]"
+                      class="mb-2 scheduleBoxes dateBox qst-input-width" [(ngModel)]="question.ANSWERS[1]"
                       (ngModelChange)="showChildQuestions(question);"> </textarea>
                   </div>
                 </ng-container>
@@ -208,7 +208,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="tempFiles = [];">
         </button>
       </div>
       <div class="modal-body">

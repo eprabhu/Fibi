@@ -37,13 +37,13 @@
                 <em *ngIf="inboxTab == 'PROCESSED'">Processed list of last 6 months</em>
             </div>
             <button type="button" id="modal-close" class="close close-button border-0" data-dismiss="modal"
-                (click)="isInboxInfo = false" aria-label="Close">
+                (click)="isInboxInfo = false" aria-label="Click to close">
                 <span class="d-block" aria-hidden="true">&times;</span>
             </button>
         </div>
         <div *ngIf="viewInboxSearch" class="card inbox-card">
             <button type="button" id="modal-close" class="btn close-btn no-outline border-0" data-dismiss="modal"
-                (click)="viewInboxSearch = false" aria-label="Close">
+                (click)="viewInboxSearch = false" aria-label="Click to close">
                 <span class="d-block modal-close" aria-hidden="true">&times;</span>
             </button>
             <div class="card-content">
