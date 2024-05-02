@@ -1,7 +1,7 @@
 <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1">
         <div class="row">
         <!-- person name -->
-        <div class="col-lg col-md-6">
+        <div class="col-md-6">
             <div class="flex">
                 <i class="fa fa-user mt-sm-2 mt-2 coi-text-light flex-shrink-0" aria-hidden="true"></i>
                 <app-no-data-label [valueToShow]="personProjectOrEntity?.personFullName">
@@ -11,7 +11,7 @@
         </div>
 
         <!-- Primary title -->
-        <div class="col-lg col-md-6">
+        <div class="col-md-6">
             <div class="flex">
                 <i class="fa fa-briefcase mt-sm-2 mt-2 coi-text-light flex-shrink-0" aria-hidden="true"></i>
                 <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personPrimaryTitle">
@@ -20,22 +20,22 @@
             </div>
         </div>
 
+        <!-- department -->
+        <div class="col-md-12 col-lg-6">
+            <i class="fa fa-home mt-sm-2 mt-2 coi-text-light" aria-hidden="true"></i>
+            <app-no-data-label [valueToShow]="personUnitDetail">
+                <span class="ml-2 coi-text-light fs-14">{{personUnitDetail}}</span>
+            </app-no-data-label>
+        </div>
+
         <!-- Person email -->
-        <div class="col-lg col-md-6">
+        <div class="col-md-6">
             <div class="flex">
             <i class="fa fa-envelope mt-sm-2 mt-2 coi-text-light flex-shrink-0" aria-hidden="true"></i>
             <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personEmail">
                 <span class="ms-2 coi-text-light fs-14 word-break-all">{{disclosureHeaderDetails?.personEmail}}</span>
             </app-no-data-label>
             </div>
-        </div>
-
-        <!-- department -->
-        <div class="col-12">
-            <i class="fa fa-home mt-sm-2 mt-2 coi-text-light" aria-hidden="true"></i>
-            <app-no-data-label [valueToShow]="personUnitDetail">
-                <span class="ml-2 coi-text-light fs-14">{{personUnitDetail}}</span>
-            </app-no-data-label>
         </div>
 
         <!-- project  -->

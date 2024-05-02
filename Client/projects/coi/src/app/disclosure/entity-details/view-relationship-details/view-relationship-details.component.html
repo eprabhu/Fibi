@@ -8,8 +8,7 @@
                         <div class="row flex-grow-1 position-relative">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <div class="fw-bold d-flex align-items-center" tabindex="0">
-                                    <span tabindex="0" title="Click to view Disclosure"
-                                        area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure">
+                                    <span tabindex="0" title="Click to view Disclosure" aria-label="Click to view Disclosure">
                                         <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [clickableContent]="showViewButton() ? 'true' : 'false'" (emitClickEvent)="viewEntityDetails($event)"></app-read-more>
                                     </span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
@@ -288,6 +287,7 @@
                         title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}} Questionnaire"
                         class="relation-border-left r-title px-3 py-3">
                         <span class="fs-14" tabindex="0">
+                            {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
                             <span id="qnr-complete-msg"
                                 *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                                 class="fa fa-check me-2" title="Completed">
@@ -296,7 +296,6 @@
                                 *ngIf="!entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                                 class="fa fa-exclamation-circle me-2" title="Incomplete">
                             </span>
-                            {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
                         </span>
                     </span>
                 </div>

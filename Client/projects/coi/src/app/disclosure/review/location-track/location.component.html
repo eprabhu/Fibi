@@ -167,7 +167,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="coiDeleteModalTitle">Delete Review</h5>
-                <button aria-label="Click to close delete reviewer modal" title="Close" class="btn-close fs-12" data-bs-dismiss="modal"  id="delete_coi_reviewer_dissmiss_btn"
+                <button aria-label="Click to close delete reviewer modal" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal"  id="delete_coi_reviewer_dissmiss_btn"
                     type="button">
                 </button>
             </div>
@@ -191,7 +191,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="addEditReviewerModal">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }}
                 </h5>
-                <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" [attr.aria-label]="'Click to close ' + (modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer') + ' modal'"
+                <button type="button" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" [attr.aria-label]="'Click to close ' + (modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer') + ' modal'"
                     (click)="reviewDetails = {}">
                 </button>
             </div>
@@ -294,7 +294,7 @@
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="coi-add-reviewer-close"
                     [attr.aria-label]="'Click to cancel ' + (modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer') + 'and Close modal'"
-                    type="button" title="Close" (click)="clearReviewModal();">Close</button>
+                    type="button" title="Click to close" (click)="clearReviewModal();">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
                     [attr.aria-label]="'Click to ' + (modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer')"
                     (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer'">

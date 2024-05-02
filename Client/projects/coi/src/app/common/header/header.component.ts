@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {NavigationEnd, Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
@@ -281,6 +281,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Configure and start the OBSERVER
         const CONFIG = { attributes: true, childList: true, subtree: true };
         OBSERVER.observe(BODY_ELEMENT, CONFIG);
+    }
+
+    // for closing notes popup while clicking escape key
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            if (this.commonService.isShowCreateNoteModal) {
+                this.closeAddNote();
+            }
+        }
     }
     
 }

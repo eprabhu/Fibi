@@ -117,15 +117,14 @@
                         </app-look-up>
                     </div>
                     <div class="col d-flex justify-content-end mt-4 align-items-end">
-                        <button class="btn btn-outline-secondary  fs-14 py-2 mx-2" tabindex="0" aria-label="Clear"
-                                role="button"
-                                (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
-                                aria-label="Click here to clear all the fields">Clear
+                        <button class="btn btn-outline-secondary  fs-14 py-2 mx-2" aria-label="Clear"
+                            (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
+                            aria-label="Click here to clear all the fields">Clear
                         </button>
                         <button class="btn btn-primary fs-14" id="btn-search"
-                                (click)="entityManagementService.coiRequestObject.currentPage = 1;advancedSearch()"
-                                title="Click here to Initiate search" tabindex="0" aria-label="Search" role="button"
-                                aria-label="Click here to get the search results with/without fields">Search
+                            (click)="entityManagementService.coiRequestObject.currentPage = 1;advancedSearch()"
+                            title="Click here to Initiate search" aria-label="Search"
+                            aria-label="Click here to get the search results with/without fields">Search
                         </button>
                     </div>
                 </div>
@@ -134,27 +133,22 @@
         <!-- Sorting pannel -->
         <div class="sort-div border mt-2 px-3" *ngIf="isShowEntityList && isManageEntity && entityList.length">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
-            <button tabindex="0" *ngFor="let sortSection of sortSectionsList"
-                    aria-label="Click to sort by {{sortSection?.fieldName}}"
-                    (keydown.enter)="sortResult(sortSection?.variableName)"
+            <button *ngFor="let sortSection of sortSectionsList"
+                    attr.aria-labelledby="coi-entity-list-sort-{{index}}"
                     (click)="sortResult(sortSection?.variableName)"
                     [class.filter-active]="isActive(sortSection?.variableName)"
                     title="Click to sort by {{sortSection?.fieldName}}"
-                    aria-describedby="Click to sort by {{sortSection?.fieldName}}"
-                    class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white px-8" role="button">
+                    class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white px-8 coi-sort-filter-btn">
                 <div class="d-inline-flex align-items-center">
-                    <label class="offscreen">Click to Sort by {{sortSection?.fieldName}} in
-                        {{entityManagementService.coiRequestObject.sort[sortSection?.variableName] === 'asc' ?
-                            'Descending Order' : 'Ascending Order'}} </label>
-                    <label aria-hidden="true" class="cursor-pointer">{{sortSection?.fieldName}}</label>
-                    <mat-icon class="arrow selected-arrow" [@slideDown]
-                              *ngIf="entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'asc' ">
-                        arrow_downward
-                    </mat-icon>
-                    <mat-icon class="arrow selected-arrow" [@slideUp] [@scaleOut]
-                              *ngIf="entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'desc' ">
-                        arrow_upward
-                    </mat-icon>
+                    <span class="d-none" id="coi-entity-list-sort-{{index}}">Click to sort by {{ sortSection?.fieldName }} in
+                        {{entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'asc' ?
+                        'descending Order' : entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'desc' ?
+                        'normal Order' : 'ascending order'}}</span>
+                    <span>{{sortSection?.fieldName}}</span>
+                    <mat-icon aria-hidden="true" class="arrow selected-arrow" [@slideDown]
+                        *ngIf="entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'asc' ">arrow_downward</mat-icon>
+                    <mat-icon aria-hidden="true" class="arrow selected-arrow" [@slideUp] [@scaleOut]
+                        *ngIf="entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'desc' ">arrow_upward</mat-icon>
                 </div>
             </button>
         </div>
