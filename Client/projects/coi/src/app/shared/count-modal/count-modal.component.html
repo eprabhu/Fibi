@@ -6,7 +6,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title fs-16" title="{{ showFullTitle() }}">{{modalHeader()}}</h4>
-              <button type="button" class="btn-close" title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeCountModal()"></button>
+              <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="closeCountModal()"></button>
             </div>
             <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
                 <div *ngIf="coiFinancialEntityDetails.length > 0" class="coi-table-striped table-responsive border">

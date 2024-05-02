@@ -3,7 +3,7 @@
 	<span><i class="fa fa-info-circle mr-1 info-icon" title = "disclosure screening form" aria-hidden="true"></i>
 		<em class="ml-2" tabindex="0" [attr.aria-label]="result?.header?.QUESTIONNAIRE_DESCRIPTION">{{result?.header?.QUESTIONNAIRE_DESCRIPTION}}</em></span>
 	<button tabindex="0" (click)="isQuestionnaireInfo = false" type="button" id="modal-close" class="btn help-text-close fs-16 p-0 close-button"
-		aria-label="Close">
+		aria-label="Click to close">
 		<span class="d-block" aria-hidden="true">&times;</span>
 	</button>
 </div>
@@ -497,7 +497,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="tempFiles = [];">
 				</button>
 			</div>
 			<div class="modal-body">

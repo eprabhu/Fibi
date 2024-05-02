@@ -88,3 +88,21 @@
     background-color: var(--theme-primary-color-light);//#F1FAFF;//var(--bs-primary-light) !important;
   }
 }
+
+.coi-sort-filter-btn {
+  &:hover {
+    border: 2px solid #54BF5B !important;
+  }
+  &:focus {
+    border: 2px solid #54BF5B !important;
+  }
+}
+
+.btn-none {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  transition: transform 0.1s ease;
+}

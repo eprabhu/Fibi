@@ -1,11 +1,12 @@
 <!-- ADD ATTACHMENT MODAL -->
 
-<div class="modal fade mySkinDialog modal-xl" data-bs-backdrop="static" id="addAttachmentModal" role="dialog">
+<div class="modal fade mySkinDialog modal-xl" id="addAttachmentModal"
+    role="dialog" tabindex="-1" aria-label="Add Attachments">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Add Attachment(s)</h4>
-          <button type="button" class="btn-close" title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="clearAttachments()"></button>
+          <button id="coi-add-attachment-close-btn" type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="clearAttachments()"></button>
         </div>
         <div class="modal-body">
             <div>
@@ -57,9 +58,10 @@
             </div>
         </div>
         <div class="modal-footer" *ngIf="uploadedFiles.length > 0">
-          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
-           type="button" title="Cancel" (click)="clearAttachments()">Close</button>
-          <button class="btn btn-primary me-0" id="claim-sumbit-no-btn" type="button"(click)="saveAttachments()">Add</button>
+            <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+                type="button" title="Click to Cancel" aria-label="Click to Cancel" (click)="clearAttachments()">Close</button>
+            <button class="btn btn-primary me-0" id="claim-sumbit-no-btn" title="Click to Add" aria-label="Click to Add"
+                type="button"(click)="saveAttachments()">Add</button>
         </div>
       </div>
     </div>
