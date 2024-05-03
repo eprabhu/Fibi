@@ -80,7 +80,7 @@ header {
     top: 0;
     left: 0;
     bottom: 0;
-    transition: width ease-out 150ms;
+    transition: all .4s ease-in-out;
     background-color: var(--theme-sidebar-bg-color);
     border-right: var(--theme-sidebar-border);
     box-shadow: var(--theme-sidebar-box-shadow);

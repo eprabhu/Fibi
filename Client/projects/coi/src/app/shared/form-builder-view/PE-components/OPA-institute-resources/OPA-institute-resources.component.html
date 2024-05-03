@@ -86,10 +86,10 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h3 class="fs-14 m-0">{{sectionHeading}}</h3>
-                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
+                <h3 class="fs-16 m-0">{{sectionHeading}}</h3>
+                <button type="button" class="btn-close" title="Click to close" data-bs-dismiss="modal" aria-label="Click to close" (click)="clearData()"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-0">
                 <nav class="align-items-center bg-white d-flex fs-14 fw-bold pt-1 user-dashboard-nav border-bottom"
                     *ngIf="editIndex == -1">
                     <div class="navigation-icons px-2 pt-1 hand-cursor" tabindex="0" (click)="currentTab= 'MY_ENTITIES' " title="My Entities"
@@ -108,7 +108,7 @@
                             and Relationships
                         </div>
                         <div class="col-lg-auto filter-border sticky-top">
-                            <div class="advance-search">
+                            <div class="advance-search px-2">
                                 <label class="coi-text-dark ms-2" tabindex="0">Filter By Status :</label>
                                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentFilter=='ALL'" tabindex="0"
                                     [attr.aria-label]="currentFilter=='ALL' ? 'Selected filter type is all ' : 'All'"
@@ -360,7 +360,7 @@
       <div class="modal-content">
           <div class="modal-header">
               <h3>Confirmation</h3>
-              <button type="button" class="btn-close" id="comp-uncomp-modal-close" aria-label="Close" data-bs-dismiss="modal" title="Close" (click)="clearData()"></button>
+              <button type="button" class="btn-close" id="comp-uncomp-modal-close" aria-label="Click to close" data-bs-dismiss="modal" title="Click to close" (click)="clearData()"></button>
           </div>
         <div class="modal-body">
             Are you sure you want to unlink following relationship from this disclosure?

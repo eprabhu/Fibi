@@ -190,7 +190,9 @@ export class CountModalComponent implements OnInit {
 
     closeCountModal() {
         hideModal('coiCountsViewModal');
-        this.closeModal.emit(false);
+        setTimeout(() => {
+            this.closeModal.emit(false);
+        }, 200);
     }
 
     switchTableData() {

@@ -54,6 +54,7 @@ export class OpaComponent implements OnInit {
     isHomeClicked = false;
     isSubmitClicked = false;
     isUserCollapse = false;
+    validationList = [];
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -79,22 +80,23 @@ export class OpaComponent implements OnInit {
     }
 
     opaSubmissionModal() {
-        openModal('opa-submit-confirm-modal');
+        this.isSubmitClicked = true;
+        if (this.opaService.isFormBuilderDataChangePresent) {
+            this.opaService.formBuilderEvents.next({ eventType: 'SAVE' });
+        } else {
+            this.validationList = [];
+            this.validateForm();
+        }
     }
 
     saveAndSubmit() {
-        if(this.opaService.isFormBuilderDataChangePresent) {
-            this.isSubmitClicked = true;
-            this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
-        } else {
-            this.submitOPA();
-        }
+        this.submitOPA();
     }
 
     subscribeSaveComplete() {
         this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
-            if(data && this.isSubmitClicked) {
-                this.submitOPA();
+            if(data && this.validationList?.length) {
+                this.validateForm();
             }
         }))
     }
@@ -346,6 +348,23 @@ export class OpaComponent implements OnInit {
             this.isCardExpanded = window.innerWidth > 1399;
         }
         this.setTopDynamically();
+    }
+
+    private validateForm(): void {
+        this.opaService.validateForm({
+            formBuilderIds: this.opa.opaDisclosure.opaFormBuilderDetails.map(e => e.formBuilderId),
+            moduleItemCode: '23',
+            moduleSubItemCode: '0',
+            moduleItemKey: this.opa.opaDisclosure.opaDisclosureId.toString(),
+            moduleSubItemKey: '0',
+        }).subscribe((data: any) => {
+            this.validationList = data;
+            if (!this.validationList.length && this.isSubmitClicked) {
+                openModal('opa-submit-confirm-modal');
+            }
+        }, err => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, `Error occurred during from validation.`);
+        });
     }
 
 }

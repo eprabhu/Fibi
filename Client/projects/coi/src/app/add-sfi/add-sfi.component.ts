@@ -92,6 +92,7 @@ export class AddSfiComponent implements OnInit {
         }
         this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        window.scrollTo(0,0);
     }
 
     private checkIsEntityTypeInURL(): boolean {

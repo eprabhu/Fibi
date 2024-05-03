@@ -161,23 +161,22 @@
             </div>
         </div>
 
-        <div class="sort-div border mt-2" *ngIf="isShowDisclosureList && coiList.length">
+        <div class="sort-div border mt-2 px-3" *ngIf="isShowDisclosureList && coiList.length">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
-            <button tabindex="0" *ngFor="let sortSection of sortSectionsList; let index = index"
+            <button *ngFor="let sortSection of sortSectionsList; let index = index"
                 title="Click to sort by {{sortSection?.fieldName}}"
-                area-describedby="Click to sort by {{sortSection?.fieldName}}"
+                attr.aria-labelledby="coi-reviewer-dashboard-sort-{{index}}"
                 (click)="sortResult(sortSection?.variableName)"
-                (keydown.enter)="sortResult(sortSection?.variableName)"
                 [ngClass]="index == 0 ? 'ml-15' : 'mx-1'"
                 [class.px-8]="!reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]"
                 [class.filter-active]="isActive(sortSection?.variableName)"
-                class="shadow-sm fw-medium pr-05 py-2 px-3 fs-13 border rounded-5 bg-white" role="button">
+                class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white coi-sort-filter-btn">
                 <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">{{sortSection?.fieldName}}
-                        <ngContainer hidden="true">sorting in
-                            {{reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'asc'?
-                            'Ascending Order': 'Descending Order'}}</ngContainer>
-                    </label>
+                    <span class="d-none" id="coi-reviewer-dashboard-sort-{{index}}">Click to sort by {{ sortSection?.fieldName }} in
+                        {{reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'asc' ?
+                        'descending Order' : reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'desc' ?
+                        'normal Order' : 'ascending order'}}</span>
+                    <span>{{sortSection?.fieldName}}</span>
                     <mat-icon class="arrow selected-arrow" [@slideDown]
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'asc' ">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow" [@slideUp] [@scaleOut]

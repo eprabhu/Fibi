@@ -2,8 +2,8 @@
     <div class="col-12">
 		<div class="card shadow-sm">
 			<div class="row mx-0">
-				<div class="col-xl-9 col-lg-9 col-md-12 px-0">
-					<div class="card-header bg-white px-3 border-bottom min-height-unset">
+				<div class="col-xl-8 col-lg-9 col-md-12 px-0" [class.my-auto]="isSlider">
+					<div class="card-header bg-white px-3 min-height-unset" [ngClass]="isSlider ? 'border-none' : 'border-bottom'">
 						<div class="row flex-grow-1">
 							<div class="col-lg-12 d-flex align-items-center" tabindex="0" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
 								<span class="fs-18 fw-500">
@@ -17,8 +17,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="card-body">
-						<div class="row" *ngIf="!isEntityManagement">
+					<div *ngIf="!isEntityManagement" class="card-body">
+						<div class="row">
 							<!-- Start Date Of Involvement -->
 							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="0"
 								[attr.aria-label]="'Start Date of Involvement' + (involvementDate.involvementStartDate | dateFormatterWithTimeZone)">
@@ -49,24 +49,24 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xl-3 col-lg-3 col-md-12 py-3 border-start">
+				<div class="col-xl-4 col-lg-3 col-md-12 py-3 border-start">
 					<div class="d-grid gap-2 d-md-flex flex-md-wrap">
-						<button class="btn btn-outline-grey col pb-0 w-100" title="Go to COI home page" tabindex="0"
-							(click)="goToHome()" aria-label="Home" role="button">
-							<mat-icon>home</mat-icon>
+						<button class="btn btn-outline-grey pb-0 col" title="Go to COI home page"
+							(click)="goToHome()" aria-label="Click to go to C O I home page">
+							<mat-icon class="fs-4 w-auto h-auto material-icons" aria-hidden="true">home</mat-icon>
 						</button>
-						<button class="btn btn-outline-grey col w-100" (click)="navigateBack()" tabindex="0"
-							title="Click to go back to Entity list" aria-label="Back" role="button">
-							<i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+						<button *ngIf="!isSlider" class="btn btn-outline-grey col" (click)="navigateBack()"
+							title="Click to go back to Entity list" aria-label="Click to go back to Entity list">
+							<i class="fa fa-reply justify-content-center align-items-center fs-14" aria-hidden="true"></i>
 						</button>
-						<button tabindex="0" [attr.aria-label]="buttonName" role="button"
-						class="align-items-center btn btn-primary d-flex fs-14 col-12 justify-content-center mt-0 w-100"
-						[title]="btnTitle" (click)="submitEntity();"
-						[disabled]="mandatoryList?.has('entityAlreadyAdded')">
-						<mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
-						{{buttonName}}
-					</button>
-				</div>
+						<button [attr.aria-label]="'Click to ' + buttonName" [ngClass]="isSlider && isEntityManagement ? 'col col-lg-12 col-xxl' : 'col-12'"
+							class="align-items-center btn btn-primary d-flex fs-14 justify-content-center mt-0 flex-wrap"
+							[title]="btnTitle" (click)="submitEntity();"
+							[disabled]="mandatoryList?.has('entityAlreadyAdded')">
+							<mat-icon class="fs-4 w-auto h-auto me-2 material-icons" aria-hidden="true">save</mat-icon>
+							{{buttonName}}
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -599,8 +599,8 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">Confirmation</h4>
-				<button type="button" class="btn-close" title="Close" data-bs-dismiss="modal"
-					aria-label="Close"></button>
+				<button type="button" class="btn-close" title="Click to close" data-bs-dismiss="modal"
+					aria-label="Click to close"></button>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -638,7 +638,7 @@
       <div class="modal-content">
         <div class="modal-header headerStyle" tabindex="0" [attr.aria-label]="'Entity Name' + (addEntityConfirmation?.entityName)">
           <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearEntityDetails()"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="clearEntityDetails()"></button>
         </div>
         <div class="modal-body">
           <div class="mx-1 row pt-1 d-flex mb-3">

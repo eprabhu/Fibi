@@ -71,4 +71,9 @@ export class OpaService {
         return this._http.patch(`${this._commonService.opaUrl}/review/complete`, params);
     }
 
+
+    validateForm(configuration: any) {
+        return this._http.post(this._commonService.formUrl + '/formbuilder/validateForm', configuration);
+    }
+
 }

@@ -2,13 +2,19 @@
 <div [@fadeInOutHeight]>
   <div class="card" id="review-history">
     <div class="card-header">
-      <h4 class="fs-16">
-        <div class="row d-flex align-items-center justify-content-between" tabindex="0">
-          <div class="col mt-2 fw-bold">Review History</div>
+      <h4 class="mb-0">
+        <div class="d-flex align-items-center justify-content-between position-relative" tabindex="-1">
+          <div class="fs-16 fw-bold my-2">Review History</div>
+          <button *ngIf="!isEmptyObject(reviewHistoryLogs)" (click)="isExpanded = !isExpanded" id="coi_review_history_collapse"
+              title="Click to {{ isExpanded ? 'collapse' : 'view' }} review history"
+              [attr.aria-label]="(isExpanded ? 'collapse' : 'view') + ' review history'"
+              class="d-flex justify-content-center align-items-center btn toggle-btn border rounded-5 shadow-sm p-0">
+              <mat-icon [ngClass]="isExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
+          </button>
         </div>
       </h4>
     </div>
-      <div class="card-content">
+      <div *ngIf="isExpanded" class="card-content" [@heightAnimation]>
           <div class="card-body">
             <ul class="timeline">
               <ng-container *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fadeInOutHeight } from '../../../common/utilities/animations';
+import { fadeInOutHeight, heightAnimation } from '../../../common/utilities/animations';
 import { Subscription } from 'rxjs';
 import { ReviewService } from '../review.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -14,7 +14,7 @@ import { isEmptyObject } from '../../../../../../fibi/src/app/common/utilities/c
     selector: 'app-review-history',
     templateUrl: './review-history.component.html',
     styleUrls: ['./review-history.component.scss'],
-    animations: [fadeInOutHeight]
+    animations: [fadeInOutHeight, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ReviewHistoryComponent implements OnInit {
 
@@ -24,6 +24,7 @@ export class ReviewHistoryComponent implements OnInit {
     reviewHistoryLogs: any = {};
     dependencies = ['coiDisclosure', 'coiReviewerList'];
     isReadMore = false;
+    isExpanded = true;
 
     constructor( private _reviewService: ReviewService,
                  public _dataFormatPipe: DateFormatPipeWithTimeZone,

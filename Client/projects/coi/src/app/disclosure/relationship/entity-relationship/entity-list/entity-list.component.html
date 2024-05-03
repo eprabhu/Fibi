@@ -1,6 +1,6 @@
 <div class="mx-0 row" *ngIf="_coiService.isShowInfo">
   <div class="col-12 highlight-node font">
-    <button id="disclosure-info-close" type="button" class="btn-close" (click)="clearDisclosureInfo()" aria-label="Close">
+    <button id="disclosure-info-close" type="button" class="btn-close" (click)="clearDisclosureInfo()" aria-label="Click to close">
     </button>
     <p>Relate each of your SFIs to your active awards and pending funding proposals (e.g. proposals submitted to sponsors but not yet selected for award.)  You are required to describe how your work with the SFI relates to your university research and identify whether or not you believe there is a real or potential conflict of interest.</p>
   </div>
@@ -100,15 +100,9 @@
         </tr>
       </tbody>
     </table>
-    <div class="no-data-container w-100" *ngIf="newArray.length == 0">
-      <span class="no-data-icon-outer">
-          <div class="no-data-icon">
-              <i class="fa fa-file-o" aria-hidden="true"></i>
-              <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-          </div>
-      </span>
-      <h4>There is no information in this section.</h4>
-  </div>
+    <ng-container *ngIf="newArray.length == 0">
+      <app-no-information></app-no-information>
+    </ng-container>
     <button *ngIf="newArray.length > 0 && isEditMode" class="btn btn-primary mt-2 ml-auto" title="Save Relationship" tabindex="0" (click)="saveClick()">
       {{!_entityService.linkedProposalId && coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != 3 ? 'Save and Continue To New Project'  : 'Save'}}
     </button>
@@ -126,7 +120,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close">
         </button>
       </div>
       <div class="modal-body">
