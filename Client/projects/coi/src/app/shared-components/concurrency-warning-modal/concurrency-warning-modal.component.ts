@@ -14,7 +14,11 @@ export class ConcurrencyWarningModalComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        openModal('invalidActionModalCOI');
+        openModal('invalidActionModalCOI', {
+            backdrop: 'static',
+            keyboard: false,
+            focus: true
+          });
     }
 
     reload() {

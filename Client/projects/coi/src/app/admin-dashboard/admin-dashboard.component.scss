@@ -490,3 +490,9 @@ input[type='checkbox'] {
     padding-left: 0.6rem;
     padding-right: 0.6rem;
 }
+
+.coi-card-regular {
+  .card-body {
+    padding-bottom: 0 !important;
+  }  
+} 

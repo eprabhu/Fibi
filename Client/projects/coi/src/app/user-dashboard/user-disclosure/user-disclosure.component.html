@@ -113,7 +113,7 @@
                                             <h5 *ngIf="dateWarning" class="fs-15" id="dateWarning"
                                                 [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'"
                                                 tabindex="{{dateWarning ? 0 : -1}}">
-                                                <mat-icon class="me-1"
+                                                <mat-icon class="me-1" aria-hidden="true"
                                                     [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'">warning</mat-icon><span
                                                     *ngIf="disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span
                                                     *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year</span><span
@@ -127,17 +127,16 @@
                                                     *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" role="button"
                                                     title="Click to Renew FCOI Disclosure"
                                                     aria-describedby="Click to Renew FCOI Disclosure">
-                                                    <mat-icon class="me-1">restart_alt</mat-icon>
-                                                    <span class="hyper-link fs-14">Revise</span>
+                                                    <mat-icon aria-hidden="true" class="me-1">restart_alt</mat-icon>
+                                                    <span>Revise</span>
                                                 </a>
                                                 <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
-                                                    [queryParams]={disclosureId:disclosure.disclosureId}
+                                                    [queryParams]={disclosureId:disclosure.disclosureId} role="button"
                                                     [routerLink]="['/coi/disclosure/summary']" tabindex="0"
-                                                    aria-label="Click to view FCOI Disclosure details"
-                                                    [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                                    area-describedby="Click to view FCOI Disclosure details">
-                                                    <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                    <span class="hyper-link fs-14">View</span>
+                                                    [attr.aria-label]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                                    [title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'">
+                                                    <mat-icon aria-hidden="true" class="hyper-link me-1">visibility</mat-icon>
+                                                    <span>View</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -261,13 +260,12 @@
                                         <div class="d-flex flex-stack mt-auto bd-highlight">
                                             <div class="ms-auto">
                                                 <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
-                                                [queryParams]={disclosureId:disclosure.disclosureId}
-                                                [routerLink]="['/coi/disclosure/summary']" tabindex="0"
-                                                aria-label="Click to view FCOI Disclosure details"
-                                                [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                                area-describedby="Click to view FCOI Disclosure details">
-                                                    <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                    <span class="hyper-link fs-14">View</span>
+                                                    [queryParams]={disclosureId:disclosure.disclosureId} role="button"
+                                                    [routerLink]="['/coi/disclosure/summary']" tabindex="0"
+                                                    [attr.aria-label]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                                    [title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'">
+                                                    <mat-icon aria-hidden="true" class="hyper-link me-1">visibility</mat-icon>
+                                                    <span>View</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -319,7 +317,7 @@
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
                                             (click)="openFCOIModal('FCOI')" tabindex="0" aria-label="Create FCOI Disclosure"
                                             title="Click to create new FCOI disclosure">
-                                            <mat-icon class="hyper-link me-1">add</mat-icon>
+                                            <mat-icon aria-hidden="true" class="hyper-link me-1">add</mat-icon>
                                             <span class="hyper-link fs-14">Create FCOI Disclosure</span>
                                         </a>
                                     </div>
@@ -370,7 +368,7 @@
                                     <div class="ms-auto">
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex" (click)="createOPA()" tabindex="0"
                                             aria-label="Create OPA Disclosure" title="Click to create new OPA disclosure">
-                                            <mat-icon class="hyper-link me-1">add</mat-icon>
+                                            <mat-icon aria-hidden="true" class="hyper-link me-1">add</mat-icon>
                                             <span class="hyper-link fs-14">Create OPA Disclosure</span>
                                         </a>
                                     </div>
@@ -493,11 +491,9 @@
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId}
                                                 [routerLink]="['/coi/opa/form']" tabindex="0"
                                                 aria-label="Click to view OPA Disclosure details" role="button"
-                                                [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                                area-describedby="Click to view OPA Disclosure details"
                                                 title="Click to view OPA Disclosure details">
-                                            <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                <span class="hyper-link fs-14">View</span>
+                                                <mat-icon class="hyper-link me-1" aria-hidden="true">visibility</mat-icon>
+                                                <span>View</span>
                                             </a>
                                         </div>
                                     </div>
@@ -618,8 +614,8 @@
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
                                                 title="Click to view OPA Disclosure details" aria-describedby="Click to view OPA Disclosure details"
                                                 aria-label="Click to view OPA Disclosure details" role="button">
-                                                <mat-icon class="hyper-link me-1">visibility</mat-icon>
-                                                <span class="hyper-link fs-14">View</span>
+                                                <mat-icon aria-hidden="true" class="hyper-link me-1">visibility</mat-icon>
+                                                <span>View</span>
                                             </a>
                                         </div>
                                     </div>
@@ -637,30 +633,32 @@
     <!-- Dashboard tabs and counts -->
 <nav class="coi-nav-tab d-flex align-items-center fs-14 fw-bold mt-3 user-dashboard-nav d-inline-block overflow-hide-nav" *ngIf="!isShowCreate">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
-        aria-describedby="Click to view In Progress Disclosures"
-        [attr.title]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'In Progress Disclosures' : 'Click to view In Progress Disclosures'"
+        [attr.aria-label]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'In Progress Disclosures' : 'Click to view In Progress Disclosures'"
+        [title]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'In Progress Disclosures' : 'Click to view In Progress Disclosures'"
         tabindex="0">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="py-2 active"
         [attr.aria-label]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES' ? 'Selected tab is In Progress Disclosures with ' + (dashboardCount?.inProgressDisclosureCount || 0) + ' disclosures' : 'In Progress Disclosures with ' + (dashboardCount?.inProgressDisclosureCount || 0) + ' disclosures'">
             In Progress <span class="disclosures-text"></span> ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('APPROVED_DISCLOSURES', dashboardCount?.approvedDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
-         aria-describedby="Click to view Approved Disclosures"
          tabindex="0"
-         [attr.title]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Approved Disclosures' : 'Click to view Approved Disclosures'">
+         [attr.aria-label]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Approved Disclosures' : 'Click to view Approved Disclosures'"
+         [title]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Approved Disclosures' : 'Click to view Approved Disclosures'">
         <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="py-2"
         [attr.aria-label]="currentSelected.tab=='APPROVED_DISCLOSURES' ? 'Selected tab is Approved Disclosures with ' + (dashboardCount?.approvedDisclosureCount || 0) + ' disclosures' : 'Approved Disclosures with ' + (dashboardCount?.approvedDisclosureCount || 0) + ' disclosures'">
          Approved <span class="disclosures-text"></span> ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
-        [attr.title]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
+        [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
+        [title]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
         aria-describedby="Click to view Travel Disclosures" tabindex="0">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="py-2"
         [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures' : 'Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures'">
         Travel <span class="disclosures-text"></span> ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 hand-cursor" role="tab"
-        [attr.title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click to view Disclosure History'"
+        [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click to view Disclosure History'"
+        [title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click to view Disclosure History'"
         aria-describedby="Click to view Disclosure History" tabindex="0">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="py-2"
         [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Selected tab is Disclosure History' : 'Disclosure History'">
@@ -668,51 +666,51 @@
     </div>
 </nav>
 <!-- Search and filter -->
-<div class="advance-search coi-search-box mt-2 overflow-hide-nav" *ngIf="isShowFilterAndSearch">
+<div class="advance-search overflow-hide-nav coi-search-box mt-2" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
-        <div class="col-lg-auto p-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
-            <div class="fs-14 d-inline-block"
-                 [@leftSlideInOut]>
+        <div class="col-lg-auto px-3 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
+            <div class="fs-14 d-inline-block" [@leftSlideInOut]>
                 <label class="text-secondary" tabindex="0">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'"
                     tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
-                    title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+                    title="Click to filter by type: All"
                     class="filter-pills coi-text-light" role="button">All</span>
 
                 <span (click)="setFilter('FCOI')" [class.active-filter-pills]="currentSelected.filter=='FCOI'"
                     tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='FCOI' ? 'Selected filter type is fcoi ' : 'Fcoi'"
-                    title="Click to filter by type: FCOI" area-describedby="Click to filter by type: FCOI"
+                    title="Click to filter by type: FCOI"
                     class="filter-pills coi-text-light" role="button">FCOI</span>
 
                     <span (click)="setFilter('PROJECT')"
                     [class.active-filter-pills]="currentSelected.filter=='PROJECT'" tabindex="0"
                     [attr.aria-label]="currentSelected.filter=='PROJECT' ? 'Selected filter type is Project ' : 'Project'" tabindex="0"
-                    title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
-                     class="filter-pills coi-text-light" role="button">Project</span>
-
-                <span *ngIf="currentSelected.tab == 'TRAVEL'" (click)="setFilter('TRAVEL')"
-                    [class.active-filter-pills]="currentSelected.filter=='TRAVEL'" tabindex="0"
-                    [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'"
-                    tabindex="0" title="Click to filter by type: Travel"
-                    area-describedby="Click to filter by type: Travel" class="filter-pills coi-text-light" role="button">Travel</span>
+                    title="Click to filter by type: Project"
+                    class="filter-pills coi-text-light" role="button">Project</span>
 
                 <span (click)="setFilter('OPA')" [class.active-filter-pills]="currentSelected.filter=='OPA'"
                     tabindex="0" title="Click to filter by type: OPA"
                     [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
                     class="filter-pills coi-text-light" role="button">OPA</span>
+
+                <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'" (click)="setFilter('TRAVEL')"
+                    [class.active-filter-pills]="currentSelected.filter=='TRAVEL'" tabindex="0"
+                    [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'"
+                    tabindex="0" title="Click to filter by type: Travel"
+                    class="filter-pills coi-text-light" role="button">Travel</span>
             </div>
         </div>
         <div class="col-lg border-start d-flex align-items-center filter-s-outer search-area position-relative p-2"
             *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
             [ngClass]="currentSelected.tab == 'TRAVEL_DISCLOSURES' ? 'col-lg-12' : ''">
             <span class="filter-search">
-                <mat-icon class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
+                <mat-icon aria-hidden="true" class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
                 <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()" type="text"
                     [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
             </span>
-            <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
+            <mat-icon tabindex="0" role="button" class="closeButton" *ngIf="searchText"
+                (click)="resetDashboardAfterSearch()" (keyup.enter)="resetDashboardAfterSearch()">close</mat-icon>
         </div>
     </div>
 </div>
@@ -729,16 +727,16 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
-                                    <div class="col-12 d-inline-flex mb-2">
+                                    <div class="col-12 d-inline-flex mb-1">
                                         <span class="d-flex" tabindex="0"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
                                                 <span>{{ disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType }}</span>
                                             </span></span>
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
-                                            class="mb-0 d-flex fs-14">
+                                            class="mb-0 d-flex">
                                             <span class="d-inline-flex">
-                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <mat-icon class="coi-text-light me-1" aria-hidden="true">person</mat-icon>
                                                 <span class="coi-text-light text-nowrap fs-6" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
                                                     {{disclosure.disclosurePersonFullName}}</span>
@@ -749,8 +747,8 @@
                                                 <span class="d-inline-flex" tabindex="0"
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
-                                                    <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
-                                                    <mat-icon class="coi-text-light fs-18 me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
                                                     <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
                                                         {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">
@@ -952,7 +950,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
-                                    <div class="col-12 d-inline-flex align-items-center mb-2">
+                                    <div class="col-12 d-inline-flex align-items-center mb-1">
                                         <!-- Travel Card badge -->
                                         <span class="d-flex">
                                             <span
@@ -966,7 +964,7 @@
                                         <h4 *ngIf="disclosure.travelDisclosureId" class="d-flex">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
-                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
                                                 <strong class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure Person' + (disclosure.travellerName)">
                                                     {{disclosure.travellerName}}
@@ -975,7 +973,7 @@
                                             <ng-container>
                                                 <span class="pipe mx-1"></span>
                                                 <span class="d-inline-flex">
-                                                    <mat-icon class="fs-18 me-1">apartment</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
                                                     <span class="coi-text-light fs-6 text-nowrap me-1" tabindex="0"
                                                         [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity:</span>
                                                     <span class="coi-text-darker fs-6 hyper-link">
@@ -1145,7 +1143,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
-                                    <div class="col-12 d-inline-flex mb-2">
+                                    <div class="col-12 d-inline-flex mb-1">
                                         <!-- OPA Card badge -->
                                         <span class="d-flex">
                                             <span
@@ -1159,10 +1157,10 @@
                                             </span>
                                         </span>
                                         <!-- OPA Card Reporting Cycle -->
-                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex fs-14">
+                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
-                                                <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
                                                 <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
                                                     [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
                                             </span>
@@ -1266,14 +1264,14 @@
                                     <div class="col-md-6 col-lg-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId">
                                             <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="disclosure?.noOfSfi"
-                                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link" [ngClass]="disclosure?.noOfSfi > 0 ?'badge':'zero-count-padding'"
-                                                [attr.area-label]="disclosure?.noOfSfi > 0 ?'Click to view SFI list':''" [tabIndex]="disclosure?.noOfSfi > 0 ? 0 :-1"
+                                                [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link" [ngClass]="disclosure?.noOfSfi > 0 ?'badge':'zero-count-padding'"
+                                                [attr.aria-label]="disclosure?.noOfSfi > 0 ?'Click to view SFI list':''" [tabIndex]="disclosure?.noOfSfi > 0 ? 0 :-1"
                                                 (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
                                                 (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)">{{disclosure?.noOfSfi
                                                 || 0}}</span>
                                             <span class="fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'link-primary': 'coi-text-light' "
-                                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
-                                                [attr.area-label]="disclosure?.noOfSfi > 0 ?'Click to view SFI list':''" [tabIndex]="disclosure?.noOfSfi > 0 ? 0 :-1"
+                                                [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
+                                                [attr.aria-label]="disclosure?.noOfSfi > 0 ?'Click to view SFI list':''" [tabIndex]="disclosure?.noOfSfi > 0 ? 0 :-1"
                                                 (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
                                                 (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">Significant
                                                 Financial Interest</span>
@@ -1281,13 +1279,13 @@
                                     </div>
                                     <div class="col-md-3 col-lg-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
-                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                                 [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfProposal"
                                                 (keydown.enter)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal)"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</span>
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'link-primary' : 'coi-text-light' "
-                                                [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                                 [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " 
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
@@ -1300,11 +1298,11 @@
                                                 (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)" [ngClass]="disclosure?.noOfAward > 0 ?'badge':'zero-count-padding'"
                                                 (keydown.enter)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)"
                                                 [tabIndex]="disclosure?.noOfAward > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfAward"
-                                                [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' ">{{disclosure?.noOfAward}}</span>
+                                                [title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' ">{{disclosure?.noOfAward}}</span>
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'link-primary':'coi-text-light'"
                                                 (keydown.enter)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)"
                                                 [tabIndex]="disclosure?.noOfAward > 0 ? 0 : -1" role="link"
-                                                [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
+                                                [title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
                                                 (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
                                         </div>
                                     </div>
@@ -1322,12 +1320,12 @@
                             <div class="col-lg-10">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
+                                            <div class="align-items-center cursor-pointer flex-column">
                                                 <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
                                                     <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                     <span class="col break-point-1200">
                                                         <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                                                                <span *ngIf="disclosure?.travelPurpose" class="fs-14">
+                                                                <span *ngIf="disclosure?.travelPurpose">
                                                                     <span class="word-break-all new-line-property"
                                                                         *ngIf="!isPurposeRead[disclosure?.travelDisclosureId] && disclosure?.travelPurpose?.length > 80; else showFullInfo">
                                                                         <span class="grey-text mt-2">{{(disclosure?.travelPurpose |
@@ -1358,7 +1356,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
+                                            <div class="align-items-center cursor-pointer flex-column">
                                                 <div
                                                     [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
                                                     <label for="start-date" class="coi-text-dark d-block">Start Date</label>
@@ -1372,7 +1370,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="align-items-center cursor-pointer flex-column fs-14 link-heading">
+                                            <div class="align-items-center cursor-pointer flex-column">
                                                 <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
                                                     <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                     <span>
@@ -1392,11 +1390,11 @@
                                 <button (click)="redirectToDisclosure(disclosure)" role="button"
                                     aria-describedby="Click to view Disclosure"
                                     class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                                    [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
+                                    [title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
                                                             disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'"
                                     [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
                                                             disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'">
-                                    <mat-icon class="me-1">visibility</mat-icon>View
+                                    <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>View
                                 </button>
                             </div>
                         </div>

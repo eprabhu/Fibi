@@ -162,68 +162,68 @@
                     <div class="h-100" *ngIf="isCardExpanded">
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
                             <button title="Go to OPA home page" (click)="goToHomeUrl()" id="opa_home_btn" aria-label="GO TO O P A home"
-                                role="button" class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
                                 <mat-icon>home</mat-icon>
                             </button>
                             <button (click)="location.back()" title="Go to Back" id="opa_back_btn"
                                 class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
-                                aria-label="Go to Back" role="button">
+                                aria-label="Go to Back">
                                 <mat-icon class="me-2">reply</mat-icon>
                                 Back
                             </button>
                             <button *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode != '1'" [matMenuTriggerFor]="beforeMenu"
-                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14" role="button"
+                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
                                 title="Click for More Actions" id="opa_more_actions_btn" aria-label="More Actions">
                                 <mat-icon class="moreActionIcon">more_vert</mat-icon>
                             </button>
                             <button *ngIf="dataStore.isFormEditable()" title="Click to save your progress" id="opa_save_btn"
-                                (click)="triggerSave()" aria-label="Save" role="button"
+                                (click)="triggerSave()" aria-label="Save"
                                 class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12">
                                 <mat-icon class="me-2">save</mat-icon>
                                 Save
                             </button>
                             <button (click)="opaSubmissionModal()" *ngIf="dataStore.isFormEditable()" aria-label="Certify and Submit"
-                                role="button" class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
+                                class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
                                 title="Click to submit your disclosure" id="opa_submit_btn">
                                 <mat-icon class="me-2">done</mat-icon>
                                 Certify and Submit
                             </button>
-                            <button title="Click to Assign Administrator/Admin Group" aria-describedby="Click to assign administrator"
+                            <button title="Click to Assign Administrator/Admin Group"
                                 *ngIf="!opa?.opaDisclosure?.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode  =='2' && checkForOPAAdmin()"
                                 class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
-                                aria-label="Assign Admin" role="button" (click)="openAddAssignModal();" id="opa_assign_admin_btn">
+                                aria-label="Click to assign administrator or admin group" (click)="openAddAssignModal();" id="opa_assign_admin_btn">
                                 <mat-icon class="me-1">group_add</mat-icon>
                                 <span class="mt-1 ms-2"> Assign Admin </span>
                             </button>
                             <button *ngIf="!dataStore.isFormEditable()" title="Click here to add new comment"
-                                (click)="openReviewComment()" id="opa_add_comments_btn" aria-label="Comments" role="button"
+                                (click)="openReviewComment()" id="opa_add_comments_btn" aria-label="Comments"
                                 class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col-12">
                                 <mat-icon class="me-2">rate_review</mat-icon>
                                 <span>Comments</span>
                             </button>
                             <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col-12" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
-                                                    && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)"
-                                aria-label="Complete Review" role="button" id="opa_complete_review_btn" title="Click here to complete review"
+                                && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)"
+                                aria-label="Complete Review" id="opa_complete_review_btn" title="Click here to complete review"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                                 <mat-icon class="me-2">done</mat-icon>
                                 <span class="mt-1 ms-2"> Complete Review </span>
                             </button>
-                            <button title="Click to start review" id="opa_start_reviewer_review_btn" aria-describedby="Click to start review"
-                                (click)="updateOpaReview('START')" aria-label="Start Review" role="button"
+                            <button title="Click to start review" id="opa_start_reviewer_review_btn" aria-label="Click to start review"
+                                (click)="updateOpaReview('START')"
                                 *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                 <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
                                 <span class="mt-1 ms-2"> Start Review </span>
                             </button>
                             <button title="Click to complete review" id="opa_complete_reviewer_review_btn"
-                                aria-describedby="Click to complete review"
+                                aria-label="Click to complete review"
                                 *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
-                                (click)="updateOpaReview('COMPLETE')" aria-label="Complete Review" role="button"
+                                (click)="updateOpaReview('COMPLETE')"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                 <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                                 <span class="mt-1 ms-2"> Complete Review </span>
                             </button>
-                            <div class="fs-14 ash-text">
+                            <div class="fs-14 ash-text col-12">
                                 <label class="coi-text-lighter fs-13 fw-medium d-block">Last Updated By</label>
                                 <span class="coi-text-dark fs-13 fw-normal">{{opa?.opaDisclosure?.updateUserFullName}}<span class="coi-text-lighter fs-13 fw-medium"> On </span> {{opa?.opaDisclosure?.updateTimestamp |
                                     dateFormatterWithTimeZone:'long'}}</span>
@@ -242,15 +242,15 @@
                             </button>
                             <button *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode != '1'" [matMenuTriggerFor]="beforeMenu"
                                 class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col px-3 fit-height"
-                                role="button" title="Click for More Actions" aria-label="More Actions" id="opa_more_actions_btn">
+                                title="Click for More Actions" aria-label="More Actions" id="opa_more_actions_btn">
                                 <mat-icon class="moreActionIcon">more_vert</mat-icon>
                                 <span *ngIf="isCardExpanded">More Actions</span>
                             </button>
                             <button
                                 *ngIf="!opa?.opaDisclosure?.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode =='2' && checkForOPAAdmin()"
-                                title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                title="Click to Assign Administrator/Admin Group" aria-label="Click to assign administrator"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
-                                (click)="openAddAssignModal();" aria-label="Assign Admin" id="opa_assign_admin_btn">
+                                (click)="openAddAssignModal();" id="opa_assign_admin_btn">
                                 <mat-icon class="me-1">group_add</mat-icon>
                             </button>
                             <button title="Click here to add new comment"
@@ -275,19 +275,18 @@
                                 <mat-icon class="me-2">done</mat-icon>
                             </button>
                             <button *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
-                                title="Click to start review" aria-describedby="Click to start review" (click)="updateOpaReview('START')"
-                                aria-label="Start Review" id="opa_start_reviewer_review_btn"
+                                title="Click to start review" aria-label="Click to start review" (click)="updateOpaReview('START')" id="opa_start_reviewer_review_btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col">
                                 <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                             </button>
                             <button *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
-                                title="Click to complete review" aria-describedby="Click to complete review"
-                                (click)="updateOpaReview('COMPLETE')" aria-label="Complete Review" id="opa_complete_reviewer_review_btn"
+                                title="Click to complete review" aria-label="Click to complete review"
+                                (click)="updateOpaReview('COMPLETE')" id="opa_complete_reviewer_review_btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col">
                                 <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                             </button>
                         </div>
-                        <div class="fs-14 ash-text">
+                        <div class="fs-14 ash-text col-12">
                             <label class="coi-text-lighter fs-13 fw-medium me-1">Last Updated By</label>
                             <span class="coi-text-dark fs-13 fw-normal">{{opa?.opaDisclosure?.updateUserFullName}} On {{opa?.opaDisclosure?.updateTimestamp |
                                 dateFormatterWithTimeZone:'long'}}</span>
@@ -297,7 +296,7 @@
                         <ng-container
                             *ngIf="opa?.opaDisclosure?.adminPersonId && ['2','3', '7', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode) && checkForOPAAdmin()">
                             <button mat-menu-item title="Click to Reassign Administrator/Admin Group"
-                                    area-describedby="Click to assign administrator"
+                                    aria-label="Click to Reassign Administrator/Admin Group"
                                     tabindex="0"
                                     id="opa_reassign_admin"
                                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
@@ -313,7 +312,7 @@
                         <button mat-menu-item *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(opa?.opaDisclosure?.adminPersonId) &&
                             (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.personId)"
                                 title="Click to Withdraw"
-                                area-describedby="Click to Withdraw"
+                                aria-label="Click to Withdraw"
                                 tabindex="0"
                                 id="opa_withdraw"
                                 class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
@@ -353,14 +352,14 @@
             <div [routerLink]="['form']" (click)="setTopDynamically()" class="navigation-box border-end" queryParamsHandling='merge'
                  role="button">
                 <div class="navigation-box-content" routerLinkActive="active"
-                     title="Click to view the disclosure screening form"
-                     area-describedby="Click to view the disclosure screening form">OPA Report
+                     title="Click to view the OPA Report"
+                     aria-label="Click to view the OPA Report">OPA Report
                 </div>
             </div>
             <div *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode !== '1' && checkForOPAAdmin()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                  role="button">
                 <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
-                     area-describedby="Click to view the reviews">Reviews
+                     aria-label="Click to view the reviews">Reviews
                 </div>
             </div>
             <div *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode !== '1'" [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
@@ -419,7 +418,7 @@
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Complete Review
                 </h4>
-                <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                         type="button">
                 </button>
             </div>
@@ -447,14 +446,14 @@
 </div>
 
 <!--opa submit confirmation modal-->
-<div class="modal fade mySkinDialog" tabindex="-1" id="opa-submit-confirm-modal" tabindex="-1" role="dialog" data-backdrop="static"
+<div class="modal fade mySkinDialog" tabindex="-1" id="opa-submit-confirm-modal" role="dialog" data-backdrop="static"
     data-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" id="opa-submit-confirmation-header">
                 <h4 class="fs-16"><strong> OPA Disclosure </strong></h4>
                 <button type="button" id="opa-submit-close-btn" class="btn-close fs-12" data-bs-dismiss="modal"
-                    aria-label="Close">
+                    aria-label="Click to close">
                 </button>
             </div>
             <div class="modal-body">
@@ -490,3 +489,5 @@
     </div>
 </app-confirmation-modal>
 <!--Unsaved Changes confirmation Modal end-->
+
+<app-form-validator [validationList]="validationList"></app-form-validator>
