@@ -60,7 +60,6 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
           this._coiService.addTableBorder(this.entityProjectDetails,'table-header-tr');
       }
   });
-    this.triggerSingleSave();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -179,29 +178,35 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
     }
   }
 
-  singleSaveClick(element, index) {
-    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....',1250);
-      this.$subscriptions.push(this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode,
-        this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId,
-        this.coiData.coiDisclosure.personId).subscribe((data: any) => {
-        this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
-        this.clearIndex = null;
-        if(this._coiService.focusModuleId && this._coiService.focusSFIRelationId
-            && this._coiService.focusModuleId == this.selectedProject.moduleItemId
-            && this._coiService.focusSFIRelationId == data.coiDisclEntProjDetail.disclosureDetailsId) {
-            this.removeFocusId();
-        }
-        this.coiValidationMap.clear();
-        this.closePage.emit();
-        this.updateIsSavingRelation(false);
-        this.focusLastEditedInput();
-    }, err => {
-      setTimeout(() => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
-        this.updateIsSavingRelation(false);
-        this.focusLastEditedInput();
-      }, 1500);
-    }));
+  singleSaveClick(element:any, index:number) {
+    if (!this.entityProjectDetails[index].isSaved) {
+      this.entityProjectDetails[index].isSaved = true;
+      delete element.isSaved;
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....',1250);
+        this.$subscriptions.push(this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode,
+          this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId,
+          this.coiData.coiDisclosure.personId).subscribe((data: any) => {
+          this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
+          this.clearIndex = null;
+          if(this._coiService.focusModuleId && this._coiService.focusSFIRelationId
+              && this._coiService.focusModuleId == this.selectedProject.moduleItemId
+              && this._coiService.focusSFIRelationId == data.coiDisclEntProjDetail.disclosureDetailsId) {
+              this.removeFocusId();
+          }
+          this.coiValidationMap.clear();
+          this.closePage.emit();
+          this.updateIsSavingRelation(false);
+          this.focusLastEditedInput();
+          this.entityProjectDetails[index].isSaved = false;
+      }, err => {
+        setTimeout(() => {
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
+          this.updateIsSavingRelation(false);
+          this.focusLastEditedInput();
+          this.entityProjectDetails[index].isSaved = false;
+        }, 1500);
+      }));
+    }
 }
 
 removeFocusId() {
@@ -229,7 +234,7 @@ sliderDataChanges() {
 sfiSingleSave(index, sfi, focusableId: string) {
   this.focusableId = focusableId;
   this.updateIsSavingRelation(true);
-  this.$debounceEvent.next({index: index, SFI: sfi});
+  this.saveSingleEntity(index, sfi);
 }
 
 triggerSingleSave() {
