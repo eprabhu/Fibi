@@ -213,9 +213,10 @@ export class AddSfiComponent implements OnInit {
             }));
     }
 
-    validateRelationship() {
+    validateRelationship(elementIdList) {
         if (!this.getSelectedRelationTypeCodes().length) {
             this.mandatoryList.set('relationRadio', 'Please select atleast one relationship.');
+            elementIdList.push('relation-radio-btn');
         }
     }
 
@@ -264,45 +265,55 @@ export class AddSfiComponent implements OnInit {
 
     private checkMandatoryFilled(): boolean {
         this.mandatoryList.clear();
+        const ELEMENT_ID_LIST = [];
         if (!this.entityDetails.coiEntity.entityName) {
             this.mandatoryList.set('entityName', 'Please enter Entity Name.');
+            ELEMENT_ID_LIST.push('entity-name');
         }
         if (!this.isResultFromSearch) {
-            this.entityDetailsValidation();
+            this.entityDetailsValidation(ELEMENT_ID_LIST);
         }
         if (!this.isEntityManagement) {
             if (!this.involvementDate.involvementStartDate) {
                 this.mandatoryList.set('date', 'Please enter Start Date.');
+                ELEMENT_ID_LIST.push('start-date-involvement')
             }
+            this.endDateValidation(ELEMENT_ID_LIST);
+            this.validateRelationship(ELEMENT_ID_LIST);
             if (!this.additionalDetails.staffInvolvement) {
                 this.mandatoryList.set('staff', 'Please enter Relationship with Entity.');
+                ELEMENT_ID_LIST.push('releationship-entity')
             }
             if (!this.additionalDetails.studentInvolvement) {
                 this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity.');
+                ELEMENT_ID_LIST.push('student-entity')
             }
             if (!this.additionalDetails.instituteResourceInvolvement) {
                 this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities.');
+                ELEMENT_ID_LIST.push('resource-sfi');
             }
-            this.endDateValidation();
-            this.validateRelationship();
         }
+        this.focusValidationField(ELEMENT_ID_LIST)
         return this.mandatoryList.size !== 0 ? false : true;
     }
 
-    private entityDetailsValidation(): void {
+    private entityDetailsValidation(elementIdList): void {
         if (!this.entityDetails.coiEntity.countryCode) {
             this.mandatoryList.set('country', 'Please enter Country.');
-        }
-        if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
-            this.mandatoryList.set('entityType', 'Please enter Entity Type.');
+            elementIdList.push('country-search');
         }
         if (!this.entityDetails.coiEntity.address) {
             this.mandatoryList.set('address', 'Please enter Address.');
+            elementIdList.push('address-textarea');
         }
-        this.emailValidation();
+        this.emailValidation(elementIdList);
+        if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
+            this.mandatoryList.set('entityType', 'Please enter Entity Type.');
+            elementIdList.push('entity-type');
+        }  
     }
 
-    private emailValidation(): void {
+    private emailValidation(elementIdList): void {
         this.emailWarningMsg = null;
         if (this.entityDetails.coiEntity.emailAddress) {
             this.entityDetails.coiEntity.emailAddress = this.entityDetails.coiEntity.emailAddress.trim();
@@ -310,6 +321,7 @@ export class AddSfiComponent implements OnInit {
                 const email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!(email.test(String(this.entityDetails.coiEntity.emailAddress).toLowerCase()))) {
                     this.emailWarningMsg = 'Please select a valid email address.';
+                    elementIdList.push('email-input-box')
                 } else {
                     this.emailWarningMsg = null;
                 }
@@ -341,11 +353,12 @@ export class AddSfiComponent implements OnInit {
         }
     }
 
-    endDateValidation(): void {
+    endDateValidation(elementIdList): void {
         this.mandatoryList.delete('endDate');
         if (this.involvementDate.involvementStartDate && this.involvementDate.involvementEndDate &&
             (compareDates(this.involvementDate.involvementStartDate, this.involvementDate.involvementEndDate) === 1)) {
             this.mandatoryList.set('endDate', 'Please provide a valid end date.');
+            elementIdList.push('end-date-involvement')
         }
     }
 
@@ -483,6 +496,18 @@ export class AddSfiComponent implements OnInit {
 
     navigateBack() {
         this._router.navigateByUrl(this._navigationService.previousURL);
+    }
+
+    focusValidationField(elementList) {
+        if(elementList.length) {
+            const ELEMENT: HTMLElement = document.getElementById(elementList[0]);
+            const OFFSET_HEADER = document.getElementById('create-sfi-header')?.clientHeight;
+            const SECTION_HEIGHT = ELEMENT.offsetTop - OFFSET_HEADER;
+            if (document.activeElement.id != elementList[0]) {
+                this.isSlider ? document.getElementById('add-sfi').scrollTo({ behavior: 'smooth', top: SECTION_HEIGHT }) :window.scrollTo({ behavior: 'smooth', top: SECTION_HEIGHT });
+            }
+            ELEMENT.focus();
+        }
     }
 
 }

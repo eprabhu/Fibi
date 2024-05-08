@@ -49,7 +49,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     canDeactivate(): boolean {
-        const shouldShowUnsavedModal = (!this._service.isChildRouteTriggered && this.hasHomeAndPersonId())
+        const shouldShowUnsavedModal = (!this._service.isChildRouteTriggered && this.hasHomeAndPersonId() && this._dataStore.getEditModeForDisclosure())
                                         || this._service.travelDataChanged;
 
         if (shouldShowUnsavedModal) {
@@ -57,7 +57,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
             return false;
         }
 
-        this._service.isChildRouteTriggered = false;
+        this._service.isChildRouteTriggered = this._navigationService.navigationGuardUrl.includes('create');
         return true;
     }
 
