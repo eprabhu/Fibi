@@ -123,7 +123,7 @@
     </div>
 </header>
 
-<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" data-bs-backdrop="static" appDrag>
+<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
         <button type="button" class="btn-close ms-auto" title="Click to close" aria-label="Click to close" (click)="closeAddNote()"></button>

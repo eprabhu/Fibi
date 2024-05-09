@@ -27,4 +27,4 @@
     </mat-option>
   </mat-autocomplete>
 </div>
-<div class="invalid-feedback d-block" *ngIf="isError">{{httpOptions.errorMessage}}</div>
+<div class="invalid-feedback d-block" *ngIf="isError && httpOptions.errorMessage">{{httpOptions.errorMessage}}</div>
