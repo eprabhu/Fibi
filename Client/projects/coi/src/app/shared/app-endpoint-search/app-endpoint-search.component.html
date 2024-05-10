@@ -2,7 +2,7 @@
 <div class="search-outer">
   <label for="" class="d-none">hidden label to mislead chrome autocomplete</label>
   <input #searchField type="text" placeholder="{{placeHolder}}" [disabled]="isDisabled"
-    (focus)="getEndpointSearchResultOnfocus()" [(ngModel)]="searchText"
+    (focus)="getEndpointSearchResultOnfocus()" [(ngModel)]="searchText" [id]="uniqueId" [name]="uniqueId+'-name'"
     (keypress)="getEndpointSearchResult()" (keydown.backspace)="backSpaceEvent()"
     class="app-endpoint-search form-control pe-4" autocomplete="off"
     (paste)="getEndpointSearchResult()" [matAutocomplete]="endpoint"/>
@@ -27,4 +27,4 @@
     </mat-option>
   </mat-autocomplete>
 </div>
-<div class="invalid-feedback d-block" *ngIf="isError">{{httpOptions.errorMessage}}</div>
+<div class="invalid-feedback d-block" *ngIf="isError && httpOptions.errorMessage">{{httpOptions.errorMessage}}</div>

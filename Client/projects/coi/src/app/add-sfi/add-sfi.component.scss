@@ -280,3 +280,16 @@ small {
     z-index: 11;
     position: sticky;
   }
+
+  @media (min-width: 992px) {
+    .action-header-border {
+        border-left: 1px solid #0000002d;
+    }
+  }
+  
+  @media (max-width: 991px) {
+    .action-header-border {
+        border-top: 1px solid #0000002d;
+        border-left: 0 !important;
+    }
+  }

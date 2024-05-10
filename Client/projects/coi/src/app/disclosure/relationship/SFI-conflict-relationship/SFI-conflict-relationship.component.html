@@ -41,7 +41,7 @@
           <td>
             <select [(ngModel)]="test.projectConflictStatusCode" class="form-select form-control"
               [attr.aria-label]="getStatusDescriptionByCode(test.projectConflictStatusCode)"
-              (ngModelChange)="sfiSingleSave(i, test, 'conflict-status-select-'+i)" title="Click here to select Conflict Status"
+              (blur)="sfiSingleSave(i, test, 'conflict-status-select-'+i)" title="Click here to select Conflict Status"
               [ngClass]="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''" [disabled]="!isEditMode"
               [id]="'conflict-status-select-'+i">
               <option value=null>--Select--</option>
@@ -55,7 +55,7 @@
             <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt" appAutoGrow
               [(ngModel)]="test.disclComment.comment" [id]="'description-textarea-'+i" [disabled]="!isEditMode" rows="1"
               appLengthValidator [ngClass]="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''"
-              (ngModelChange)="sfiSingleSave(i, test, 'description-textarea-'+i);" title="Click here provide your description"
+              (blur)="sfiSingleSave(i, test, 'description-textarea-'+i);" title="Click here provide your description"
               placeholder="Provide your description here" [limit]=2000 spellcheck="false"
               [attr.aria-label]="test.disclComment.comment"></textarea>
             <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-description'+i)">

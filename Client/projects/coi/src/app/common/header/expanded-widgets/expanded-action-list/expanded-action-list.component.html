@@ -149,15 +149,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="no-data-container" *ngIf="actionListEntriesForBanner?.length  === 0">
-                    <span class="no-data-icon-outer">
-                        <div class="no-data-icon">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                        </div>
-                    </span>
-                    <h4>There is no information in this section.</h4>
-                </div>
+                    <div *ngIf="actionListEntriesForBanner?.length === 0" class="no-data-container w-100 coi-custom-shadow">
+                        <span class="no-data-icon-outer">
+                            <div class="no-data-icon">
+                                <mat-icon aria-hidden="true" class="no-file">folder_off</mat-icon>
+                            </div>
+                        </span>
+                        <h5 class="fs-16 mt-3">
+                            <span class="default-content">There is no information in this section.</span>
+                        </h5>
+                    </div>
             </div>
         </div>
     </div>

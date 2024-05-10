@@ -372,18 +372,20 @@
     </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Cancel" (click)="clearModal()">Cancel</button>
+          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Click to cancel" aria-label="Click to cancel" (click)="clearModal()">Cancel</button>
           <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn"
-          type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Create Revision' : 'Create FCOI'">
+            type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Click here to Create Revision' : 'Click here to Create FCOI'"
+            [attr.aria-label]="hasFCOI ? 'Click to Create Revision' : 'Click to Create FCOI'">
           <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
           <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container></button>
           <button  *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary" id="claim-sumbit-no-btn"
-          type="button" title="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();"
-          area-describedby="Click here to continue with creating the project disclosure">Create</button>
-          <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" type="button" title="Click here to continue with creating the travel disclosure"
-          area-describedby="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();"> Create </button>
-          <button class="btn btn-primary" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" id="claim-sumbit-no-btn" type="button"  title="View Disclosure"
-          area-describedby="Click here to view the disclosure" (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">View Disclosure</button>
+            type="button" title="Click here to continue with creating the project disclosure"
+            aria-label="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();">Create</button>
+          <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" type="button" title="Click to continue with creating the travel disclosure"
+            aria-label="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();"> Create </button>
+          <button class="btn btn-primary" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" id="claim-sumbit-no-btn" type="button"
+            title="Click here to view disclosure" aria-label="Click here to view disclosure"
+            (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">View Disclosure</button>
         </div>
       </div>
     </div>

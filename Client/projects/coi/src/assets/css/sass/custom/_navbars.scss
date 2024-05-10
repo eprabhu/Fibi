@@ -85,7 +85,7 @@ header {
     border-right: var(--theme-sidebar-border);
     box-shadow: var(--theme-sidebar-box-shadow);
     width: var(--theme-sidebar-width) !important;
-    z-index: 1031 !important;
+    z-index: 100 !important;
 
     ul {
         .menu-icon {
