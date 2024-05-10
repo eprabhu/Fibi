@@ -196,13 +196,13 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
           this.coiValidationMap.clear();
           this.closePage.emit();
           this.updateIsSavingRelation(false);
-          this.focusLastEditedInput();
+          // this.focusLastEditedInput();
           this.entityProjectDetails[index].isSaved = false;
       }, err => {
         setTimeout(() => {
           this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
           this.updateIsSavingRelation(false);
-          this.focusLastEditedInput();
+          // this.focusLastEditedInput();
           this.entityProjectDetails[index].isSaved = false;
         }, 1500);
       }));
