@@ -124,13 +124,13 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
                 this.coiValidationMap.clear();
                 this.relationshipChanged.emit(true);
                 this.updateIsSaving(false);
-                this.focusLastEditedInput();
+                // this.focusLastEditedInput();
                 this.projectSFIDetails[index].isSaved = false;
             }, err => {
                 setTimeout(() => {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
                     this.updateIsSaving(false);
-                    this.focusLastEditedInput();
+                    // this.focusLastEditedInput();
                     this.projectSFIDetails[index].isSaved = false;
                 }, 1500);
             }));
