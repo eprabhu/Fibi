@@ -62,6 +62,8 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
     private getFormBuilderData(): void {
         this._formBuilderService.getFormBuilderData(this.fbConfiguration).subscribe((data: any) => {
             this.formBuilderData = data;
+        }, (_error: any) => {
+            this.builderStatus.emit('ERROR');
         });
     }
 

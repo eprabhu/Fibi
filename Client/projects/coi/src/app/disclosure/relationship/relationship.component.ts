@@ -63,14 +63,16 @@ export class RelationshipComponent implements OnInit {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
-    if (this._relationShipService.isSliderDataUpdated) {
-      this.updateConflictStatus();
-    }
-    if (this.isShowCollapsedConflictRelationship) {
-      this.updateRelationStatus();
-    } else {
-      this.loadProjectRelations();
-    }
+    setTimeout(() => {
+      if (this._relationShipService.isSliderDataUpdated) {
+        this.updateConflictStatus();
+      }
+      if (this.isShowCollapsedConflictRelationship) {
+        this.updateRelationStatus();
+      } else {
+        this.loadProjectRelations();
+      }
+    });
   }
 
   ngOnInit() {

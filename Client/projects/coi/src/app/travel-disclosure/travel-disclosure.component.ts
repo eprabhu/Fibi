@@ -107,6 +107,11 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this._route.queryParams.subscribe(params => {
             const MODULE_ID = params['disclosureId'];
             const homeUnit = this.getHomeUnit();
+            if(!MODULE_ID) {
+                this.travelDisclosure = new TravelDisclosure();
+                this._dataStore.setStoreData(this.travelDisclosure);
+                this.service.setUnSavedChanges(false, '');             
+            }
             if (!homeUnit && !MODULE_ID) {
                 this.router.navigate([REPORTER_HOME_URL]);
             }
@@ -124,7 +129,9 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     private clearAllDetails(): void {
         this.travelDisclosure = new TravelDisclosure();
         this._dataStore.setStoreData(this.travelDisclosure);
-        this._dataStore.removeCreateModalDetails();
+        if(!this._navigationService.navigationGuardUrl.includes('create')) {
+            this._dataStore.removeCreateModalDetails();
+        }
         this.service.setUnSavedChanges(false, '');
         subscriptionHandler(this.$subscriptions);
     }

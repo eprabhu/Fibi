@@ -94,7 +94,8 @@ export class DefineRelationComponent implements OnInit {
 
     getEntityList() {
       this.$subscriptions.push(  this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
-        this.entityProjectDetails = data;
+        data = data.map(ele =>({...ele,isSaved: false}));
+        this.entityProjectDetails = data;        
         this.selectedProject = this.module;
         // this.calculateSize();
         this.showTaskNavBar();

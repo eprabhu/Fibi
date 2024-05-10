@@ -105,8 +105,8 @@
                     class="align-items-center col-1 d-flex text-secondary justify-content-end">
                     <button id="view-sfi" aria-label="view sfi details" title="View sfi details"  class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14"
                         (click)="openSfiDetails(SFIObject?.entityId, 'view')"><mat-icon>remove_red_eye</mat-icon></button>
-                    <button class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" tabindex="0" (click)="openReviewComment(SFIObject);" id="add-activity" title="Comments" type="button"
-                        role="button" aria-label="sfi comments"><mat-icon>rate_review</mat-icon></button></div>
+                    <button class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="openReviewComment(SFIObject);" id="add-activity" title="Comments" type="button"
+                        aria-label="sfi comments"><mat-icon>rate_review</mat-icon></button></div>
                 <div *ngIf="referredFrom !== 'SFI_SUMMARY'" class="align-items-center col-lg col-12 mt-2 d-flex text-secondary justify-content-end">
                     <button *ngIf="!isTriggeredFromSlider && SFIObject.isActive" class="align-items-center btn btn-outline-secondary d-flex ms-2 fs-14" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')" aria-label="Click to modify SFI" title="Click to modify SFI">
                         <mat-icon class="me-1">edit</mat-icon>Modify</button>

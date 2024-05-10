@@ -36,22 +36,28 @@
                                             [class.link-primary]="4">
                                             Trainings({{1}})
                                         </a> | -->
-                                        <span class="cursor-pointer ms-2 me-2"
-                                            tabindex="0"
+                                        <span class="ms-2 me-2"
+                                            tabindex="0" [title]="opa?.opaDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
+                                            [attr.aria-label]="opa?.opaDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
+                                            [class.link-primary]="opa?.opaDisclosure?.personEntitiesCount"
                                             (click)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
                                             (keyup.enter)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)" (keyup.space)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
                                             [class.link-primary]="opa?.opaDisclosure?.personEntitiesCount">
                                             Entities({{opa?.opaDisclosure?.personEntitiesCount}})
                                         </span> |
-                                        <span class="cursor-pointer ms-2 me-2"
-                                            tabindex="0"
+                                        <span class="ms-2 me-2"
+                                            tabindex="0" [title]="opa?.opaDisclosure?.personNotesCount ? 'Click to view notes' : ''"
+                                            [attr.aria-label]="opa?.opaDisclosure?.personNotesCount ? 'Click to view notes' : ''"
+                                            [class.link-primary]="opa?.opaDisclosure?.personNotesCount"
                                             (click)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)"
                                             (keyup.enter)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)" (keyup.space)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)"
                                             [class.link-primary]="opa?.opaDisclosure?.personNotesCount">
                                             Notes({{opa?.opaDisclosure?.personNotesCount}})
                                         </span> |
-                                        <span class="cursor-pointer ms-2 me-3"
-                                            tabindex="0"
+                                        <span class="ms-2 me-3"
+                                            tabindex="0" [title]="opa?.opaDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                            [attr.aria-label]="opa?.opaDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                            [class.link-primary]="opa?.opaDisclosure?.personAttachmentsCount"
                                             (click)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)"
                                             (keyup.enter)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)" (keyup.space)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)"
                                             [class.link-primary]="opa?.opaDisclosure?.personAttachmentsCount">
@@ -61,7 +67,7 @@
                                             title="Click to {{isCardExpanded ? 'collapse' : 'view'}} OPA Disclosure"
                                             attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} OPA Disclosure"
                                             class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                            <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                            <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
                                         </button>
                                     </div>
                                 </div>
@@ -163,56 +169,56 @@
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
                             <button title="Go to OPA home page" (click)="goToHomeUrl()" id="opa_home_btn" aria-label="GO TO O P A home"
                                 class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                <mat-icon>home</mat-icon>
+                                <mat-icon aria-hidden="true">home</mat-icon>
                             </button>
                             <button (click)="location.back()" title="Go to Back" id="opa_back_btn"
                                 class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
                                 aria-label="Go to Back">
-                                <mat-icon class="me-2">reply</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-2">reply</mat-icon>
                                 Back
                             </button>
                             <button *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode != '1'" [matMenuTriggerFor]="beforeMenu"
                                 class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
                                 title="Click for More Actions" id="opa_more_actions_btn" aria-label="More Actions">
-                                <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                                <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
                             </button>
                             <button *ngIf="dataStore.isFormEditable()" title="Click to save your progress" id="opa_save_btn"
                                 (click)="triggerSave()" aria-label="Save"
                                 class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12">
-                                <mat-icon class="me-2">save</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-2">save</mat-icon>
                                 Save
                             </button>
                             <button (click)="opaSubmissionModal()" *ngIf="dataStore.isFormEditable()" aria-label="Certify and Submit"
                                 class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
                                 title="Click to submit your disclosure" id="opa_submit_btn">
-                                <mat-icon class="me-2">done</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-2">done</mat-icon>
                                 Certify and Submit
                             </button>
                             <button title="Click to Assign Administrator/Admin Group"
                                 *ngIf="!opa?.opaDisclosure?.adminPersonId && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode  =='2' && checkForOPAAdmin()"
                                 class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
                                 aria-label="Click to assign administrator or admin group" (click)="openAddAssignModal();" id="opa_assign_admin_btn">
-                                <mat-icon class="me-1">group_add</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-1">group_add</mat-icon>
                                 <span class="mt-1 ms-2"> Assign Admin </span>
                             </button>
                             <button *ngIf="!dataStore.isFormEditable()" title="Click here to add new comment"
                                 (click)="openReviewComment()" id="opa_add_comments_btn" aria-label="Comments"
                                 class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col-12">
-                                <mat-icon class="me-2">rate_review</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-2">rate_review</mat-icon>
                                 <span>Comments</span>
                             </button>
                             <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col-12" *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
                                 && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)"
                                 aria-label="Complete Review" id="opa_complete_review_btn" title="Click here to complete review"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
-                                <mat-icon class="me-2">done</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-2">done</mat-icon>
                                 <span class="mt-1 ms-2"> Complete Review </span>
                             </button>
                             <button title="Click to start review" id="opa_start_reviewer_review_btn" aria-label="Click to start review"
                                 (click)="updateOpaReview('START')"
                                 *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
+                                <mat-icon aria-hidden="true" class="material-icons-outlined">play_circle_filled</mat-icon>
                                 <span class="mt-1 ms-2"> Start Review </span>
                             </button>
                             <button title="Click to complete review" id="opa_complete_reviewer_review_btn"
@@ -220,7 +226,7 @@
                                 *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 (click)="updateOpaReview('COMPLETE')"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
+                                <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
                                 <span class="mt-1 ms-2"> Complete Review </span>
                             </button>
                             <div class="fs-14 ash-text col-12">
@@ -234,16 +240,16 @@
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
                             <button title="Go to OPA home page" class="btn btn-outline-grey pb-0 fs-14 col fit-height" aria-label="GO TO O P A home"
                                 id="opa_home_btn" (click)="goToHomeUrl()">
-                                <mat-icon>home</mat-icon>
+                                <mat-icon aria-hidden="true">home</mat-icon>
                             </button>
                             <button title="Go to Back" class="btn btn-outline-grey pb-0 fs-14 col fit-height" (click)="location.back()"
                                 id="opa_back_btn" aria-label="Back">
-                                <mat-icon>reply</mat-icon>
+                                <mat-icon aria-hidden="true">reply</mat-icon>
                             </button>
                             <button *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode != '1'" [matMenuTriggerFor]="beforeMenu"
                                 class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col px-3 fit-height"
                                 title="Click for More Actions" aria-label="More Actions" id="opa_more_actions_btn">
-                                <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                                <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
                                 <span *ngIf="isCardExpanded">More Actions</span>
                             </button>
                             <button
@@ -251,39 +257,39 @@
                                 title="Click to Assign Administrator/Admin Group" aria-label="Click to assign administrator"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
                                 (click)="openAddAssignModal();" id="opa_assign_admin_btn">
-                                <mat-icon class="me-1">group_add</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-1">group_add</mat-icon>
                             </button>
                             <button title="Click here to add new comment"
                                 *ngIf="!['1', '5', '6'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)"
                                 (click)="openReviewComment()" id="opa_add_comments_btn"
                                 class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col" aria-label="Comments">
-                                <mat-icon>rate_review</mat-icon>
+                                <mat-icon aria-hidden="true">rate_review</mat-icon>
                             </button>
                             <button *ngIf="dataStore.isFormEditable()" (click)="triggerSave()" aria-label="Save"
                                 title="Click to save your progress" id="opa_save_btn" class="btn btn-primary pb-0 fs-14 col fit-height">
-                                <mat-icon>save</mat-icon>
+                                <mat-icon aria-hidden="true">save</mat-icon>
                             </button>
                             <button *ngIf="dataStore.isFormEditable()" (click)="opaSubmissionModal()" title="Click to submit your disclosure"
                                 id="opa_submit_btn" aria-label="Certify and Submit" class="btn btn-primary pb-0 fs-14 col fit-height">
-                                <mat-icon>done</mat-icon>
+                                <mat-icon aria-hidden="true">done</mat-icon>
                             </button>
                             <button *ngIf="['2','3', '8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode)
                                                                && checkForOPAAdmin() && isLoggedInUser(opa?.opaDisclosure?.adminPersonId)"
                                 title="Click to complete review" id="opa_complete_review_btn" aria-label="Complete Review"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col"
                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
-                                <mat-icon class="me-2">done</mat-icon>
+                                <mat-icon aria-hidden="true" class="me-2">done</mat-icon>
                             </button>
                             <button *ngIf="opaService.isStartReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 title="Click to start review" aria-label="Click to start review" (click)="updateOpaReview('START')" id="opa_start_reviewer_review_btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col">
-                                <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
+                                <mat-icon aria-hidden="true" class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                             </button>
                             <button *ngIf="opaService.isCompleteReview && opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
                                 title="Click to complete review" aria-label="Click to complete review"
                                 (click)="updateOpaReview('COMPLETE')" id="opa_complete_reviewer_review_btn"
                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col">
-                                <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
+                                <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
                             </button>
                         </div>
                         <div class="fs-14 ash-text col-12">
@@ -302,7 +308,7 @@
                                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                     (click)="openAddAssignModal();"
                                     [ngClass]="(opa?.opaDisclosure?.adminPersonId || opa?.opaDisclosure?.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
-                                <mat-icon>group_add</mat-icon>
+                                <mat-icon aria-hidden="true">group_add</mat-icon>
                                 <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                             </button>
                         </ng-container>
@@ -317,7 +323,7 @@
                                 id="opa_withdraw"
                                 class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                 (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg);">
-                            <mat-icon>logout</mat-icon>
+                            <mat-icon aria-hidden="true">logout</mat-icon>
                             <span class="ms-2 fw-medium fs-14">Withdraw</span>
                         </button>
 
@@ -331,14 +337,14 @@
                                 id="opa_return"
                                 (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
                                 class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon class="returnIcon">refresh</mat-icon>
+                            <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
                             <span class="ms-1 fw-medium fs-14">Return</span>
                         </button>
                         <button mat-menu-item title="Click to Notify"
                                 tabindex="0"
                                 id="opa_notify"
                                 class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon class="returnIcon">notifications</mat-icon>
+                            <mat-icon aria-hidden="true" class="returnIcon">notifications</mat-icon>
                             <span class="ms-1 fw-medium fs-14">Notify</span>
                         </button>
                     </mat-menu>

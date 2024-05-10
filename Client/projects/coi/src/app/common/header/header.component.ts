@@ -51,14 +51,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     // offClickSideBarHandler(event) {
-        
+
     // }
 
     onClickMenuBar() {
         const NAV_ELEMENT = document.getElementById('responsive-nav');
         const IS_MENU_SHOW = NAV_ELEMENT.classList.contains('show-menu');
         const IS_SCREEN = window.innerWidth <= 1300;
-    
+
         if (IS_MENU_SHOW) {
             NAV_ELEMENT.classList.remove('show-menu');
             if (IS_SCREEN) {
@@ -267,14 +267,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
         //  Get a reference to the body element
         const BODY_ELEMENT = this.elementRef.nativeElement.ownerDocument.body;
         //  Use MutationObserver to observe changes in the body element
+        const HEADER = document.getElementById('coi-header-card');
         const OBSERVER = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (document.body.style.overflowY === 'hidden') {
-                    document.getElementById('coi-header-card').style.marginRight = '12px';
-                    document.body.style.marginRight = '12px';
-                } else {
-                    document.getElementById('coi-header-card').style.marginRight = '0';
-                    document.body.style.marginRight = '0';
+                if(HEADER) {
+                    if (document.body.style.overflowY === 'hidden') {
+                        HEADER.style.marginRight = '12px';
+                        document.body.style.marginRight = '12px';
+                    } else {
+                        HEADER.style.marginRight = '0';
+                        document.body.style.marginRight = '0';
+                    }
                 }
             });
         });
@@ -292,5 +295,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
         }
     }
-    
+
 }
