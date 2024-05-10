@@ -1,7 +1,7 @@
 <div class="questionnaire-position">
     <div *ngIf="entityDetailsServices.definedRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="justify-content-end d-flex">
       <button class="btn-delete-position btn btn-tertiary mr-2 mt-1 d-inline-flex" data-bs-toggle="modal" data-bs-target="#deleteRelationModal">
-        <mat-icon>delete_outline</mat-icon>
+        <mat-icon aria-hidden="true">delete_outline</mat-icon>
         <span class="fs-14">Delete</span>
       </button>
     </div>
@@ -24,7 +24,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title fs-16">Delete Relationship</h5>
-                <button aria-label="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Click to close"  title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>
@@ -34,9 +34,9 @@
             </div>
             <div class="modal-footer">
                 <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal">Cancel</button>
-                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary fs-14"
-                    data-bs-dismiss="modal" (click)="deleteRelationship()">Delete</button>
+                    aria-label="Click to cancel" title="Click to cancel" data-bs-dismiss="modal">Cancel</button>
+                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal"
+                    aria-label="Click to delete" title="Click to delete" (click)="deleteRelationship()">Delete</button>
             </div>
         </div>
     </div>

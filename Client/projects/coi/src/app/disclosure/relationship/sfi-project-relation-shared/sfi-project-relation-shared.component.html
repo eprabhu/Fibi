@@ -41,7 +41,7 @@
                     <td>
                         <select [(ngModel)]="projectSfi.projectConflictStatusCode" class="form-select form-control"
                             [attr.aria-label]="getStatusDescriptionByCode(projectSfi.projectConflictStatusCode)"
-                            (ngModelChange)="sfiSingleSave(i, projectSfi, 'conflict-Status-select-'+i)" title="Click here to select Conflict Status"
+                            (blur)="sfiSingleSave(i, projectSfi, 'conflict-Status-select-'+i)" title="Click here to select Conflict Status"
                             [ngClass]="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''" [disabled]="!isEditMode"
                             [id]="'conflict-status-select-'+i">
                             <option value=null>--Select--</option>
@@ -60,7 +60,7 @@
                             [(ngModel)]="projectSfi.disclComment.comment" [disabled]="!isEditMode" rows="1" appLengthValidator
                             [id]="'description-textarea-'+i"
                             [ngClass]="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''"
-                            (ngModelChange)="sfiSingleSave(i, projectSfi, 'description-textarea-'+i);"
+                            (blur)="sfiSingleSave(i, projectSfi, 'description-textarea-'+i);"
                             placeholder="Provide your description here" [limit]=2000 spellcheck="false"
                             [attr.aria-label]="projectSfi.disclComment.comment"
                             title="Click here to Provide your description"></textarea>

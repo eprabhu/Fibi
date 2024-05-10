@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../../admin-dashboard/src/environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
@@ -52,7 +52,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     constructor(public commonService: CommonService,
         private _router: Router,
         private _service: TravelDisclosureService,
-        private _dataStore: TravelDataStoreService) {
+        private _dataStore: TravelDataStoreService,private _activatedRoute:ActivatedRoute) {
         window.scrollTo(0, 0);
     }
 
@@ -64,6 +64,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
         this.handleTravelDisclosureSave();
+        this.listenQueryParamsChanges();        
     }
 
     ngOnDestroy(): void {
@@ -302,8 +303,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this._router.navigate([], {
             queryParams: {
                 disclosureId: this.travelResObject.travelDisclosureId
-            },
-            queryParamsHandling: 'merge',
+            }
         });
     }
 
@@ -343,6 +343,22 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             default:
                 return;
         }
+    }
+
+    private listenQueryParamsChanges() {
+        this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+            const MODULE_ID = params['disclosureId'];
+            if (!MODULE_ID) {
+                this.travelDisclosureRO = new CoiTravelDisclosure();
+                this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ONLY_ACTIVE');
+                this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
+                this.loadTravellerTypesLookup();
+                this.loadTravelStatusTypesLookup();
+                this.destination = null;
+                this.getTravelCreateModalDetails();
+                this.clearEntity();
+            }
+        }));
     }
 
 }

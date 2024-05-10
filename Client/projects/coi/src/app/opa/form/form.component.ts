@@ -8,6 +8,7 @@ import { coiReviewComment } from '../../shared-components/shared-interface';
 import { CommonService } from '../../common/services/common.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { ActivatedRoute } from '@angular/router';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-form',
@@ -91,6 +92,11 @@ export class FormComponent implements OnInit, AfterViewInit {
             }
             case 'NEW_SFI':
                 this.loadOPA();
+                break;
+            case 'ERROR':
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                break;
+            default: break;
         }
     }
 
