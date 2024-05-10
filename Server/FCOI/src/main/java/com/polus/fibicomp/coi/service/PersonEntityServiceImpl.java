@@ -123,7 +123,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         personEntityDto.setPersonEntityId(personEntityId);
         personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
         personEntityDto.setEntityName(personEntity.getCoiEntity().getEntityName());
-        personEntityDto.setRelationshipName(String.join(",", relationshipNames));
+        personEntityDto.setRelationshipName(String.join(", ", relationshipNames));
         personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_REL_ADDED);
         actionLogService.savePersonEntityActionLog(personEntityDto);
         ResponseEntity<Map<String, Object>> response = updatePersonEntityCompleteFlag(personEntityId);

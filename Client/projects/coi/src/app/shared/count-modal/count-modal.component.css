@@ -1,3 +1,7 @@
+.modal .pt-0 {
+  padding-top: 0rem !important;
+}
+
 .separator {
     border: .5px solid #c7c7c7;
     margin: 1px 0;
@@ -36,10 +40,6 @@
     font-size: 15px;
     padding: 5px 11px;
     font-weight: bold;
-}
-
-.listMargin {
-    margin-top: -4px
 }
 
 .row-hover:hover {
@@ -131,3 +131,4 @@
     max-height: 335px;
   }
 }
+

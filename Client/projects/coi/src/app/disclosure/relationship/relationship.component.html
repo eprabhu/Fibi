@@ -70,7 +70,7 @@
 
   <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="awardList.length>1 && !switchRelationView">
     <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
-    <input type="text" placeholder="Search by Project Id, Project Name, PI, Project Status, Sponsor, Prime Sponsor  "
+    <input type="text" placeholder="Search by Project Id, Project Name, PI, Sponsor, Prime Sponsor  "
     class="searchField ms-2" [(ngModel)]="searchText">
 
   </div>
@@ -78,7 +78,7 @@
     <ng-container *ngIf="!switchRelationView">
         <ng-container
             *ngIf="(awardList| SearchFilter : searchText:
-  ['title', 'moduleItemId', 'moduleItemKey', 'moduleStatus', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
+  ['title', 'moduleItemId', 'moduleItemKey', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
             <ng-container *ngIf="isShowNoDataCard">
                 <div *ngIf="searchResult.length">
                     <ng-container *ngFor="let relation of searchResult;let i = index">
@@ -273,7 +273,7 @@
                         selectedProjectForView?.title }}
                     </strong>
                 </h4>
-                  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" aria-label="Click to close the popup" tabindex="0"></button>
+                  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" aria-label="Click to close the popup" tabindex="0"></button>
               </div>
               <div class="modal-body">
                   <div class="row mx-0 mt-3">

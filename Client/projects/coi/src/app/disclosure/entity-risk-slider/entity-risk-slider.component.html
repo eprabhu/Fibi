@@ -15,7 +15,7 @@
                                 class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails)}}">
                                 <span>{{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
                             </span>
-                            <h4 class="mb-0 d-flex label-text f-16">
+                            <h4 class="mb-0 d-flex label-text f-16 coi-ms-n-15px">
                                 <ng-container
                                     *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'"
                                     class="ms-1">
@@ -126,8 +126,10 @@
                 </div>
                 <div class="mt-2 text-end">
                     <button type="button" class="btn btn-outline-secondary fs-14 me-2"
+                        title="Click to Clear" aria-label="Click to clear the Risk level change."
                         (click)="clearRiskChanges()">Clear</button>
-                    <button type="button" class="btn btn-primary fs-14" (click)="checkForModification()">Save</button>
+                    <button type="button" class="btn btn-primary fs-14" (click)="checkForModification()"
+                        title="Click to Save" aria-label="Click to save Risk level change.">Save</button>
                 </div>
             </div>
         </div>

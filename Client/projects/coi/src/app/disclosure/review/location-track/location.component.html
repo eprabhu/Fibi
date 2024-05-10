@@ -6,26 +6,27 @@
                             <div class="col fs-16 fw-bold my-2">Reviewers</div>
                             <div *ngIf="coiService.isCOIAdministrator &&
                                                         ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
-                                class="col-auto me-5">
+                                class="col-auto" [class.me-5]="reviewerList?.length">
                                 <button (click)="clearReviewModal()"
+                                    aria-label="Click to Add Reviewer"
                                     class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center"
                                     data-bs-toggle="modal" title="Add Reviewer" data-bs-target="#add-coi-reviewer-modal" id="coi_add_reviewer_btn">
-                                    <mat-icon class="me-2">person_add</mat-icon>
+                                    <mat-icon class="me-2" aria-hidden="true">person_add</mat-icon>
                                     Add Reviewer
                                 </button>
                             </div>
-                            <button (click)="isExpanded = !isExpanded" id="coi_add_reviewer_collapse"
+                            <button *ngIf="reviewerList?.length" (click)="isExpanded = !isExpanded" id="coi_add_reviewer_collapse"
                                 title="Click to {{isExpanded ? 'collapse' : 'view'}} Review Details"
-                                attr.aria-label="{{ isExpanded ? 'collapse' : 'view' }} Review Details"
+                                [attr.aria-label]="(isExpanded ? 'collapse' : 'view') + ' Review Details'"
                                 class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                <mat-icon>{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
+                                <mat-icon [ngClass]="isExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
                             </button>
                         </div>
                     </h4>
     </div>
-    <div class="card-body fs-14" *ngIf="isExpanded">
+    <div class="card-body fs-14" *ngIf="isExpanded" [@heightAnimation]>
         <div *ngIf="!reviewerList?.length">
-            <app-no-information> </app-no-information>
+            <app-no-information [isBorderNeeded]="false"> </app-no-information>
         </div>
     <div class="table-responsive coi-table-striped">
         <table *ngIf="reviewerList?.length" class="table table-bordered table-striped">
@@ -69,15 +70,14 @@
                             <span *ngIf="reviewer?.description">{{reviewer?.description.length >
                                 180 && !collapseViewMore[reviewer?.coiReviewId] ? (reviewer?.description | slice:0:75)+'...' : reviewer?.description}}
                                 <ng-container *ngIf="reviewer?.description.length > 180">
-                                    <span (click)="collapseViewMoreOption(reviewer?.coiReviewId, collapseViewMore[reviewer?.coiReviewId])"
-                                        tabindex="0"
-                                        attr.aria-label="Click to {{collapseViewMore[reviewer?.coiReviewId] ? 'Read Less' : 'Read More'}} Description of {{reviewer?.reviewLocationType?.description}}"
-                                        title="{{collapseViewMore[reviewer?.coiReviewId] ? 'Read Less' : 'Read More'}}"
+                                    <a role="link" (click)="collapseViewMoreOption(reviewer?.coiReviewId, collapseViewMore[reviewer?.coiReviewId])"
+                                        tabindex="0" title="{{collapseViewMore[reviewer?.coiReviewId] ? 'Read Less' : 'Read More'}}"
+                                        [attr.aria-label]="'Click to ' + (collapseViewMore[reviewer?.coiReviewId] ? 'Read Less' : 'Read More') + ' Description of ' + reviewer?.reviewLocationType?.description"
                                         (keyup.enter)="collapseViewMoreOption(reviewer?.coiReviewId, collapseViewMore[reviewer?.coiReviewId])"
                                         (keyup.space)="collapseViewMoreOption(reviewer?.coiReviewId, collapseViewMore[reviewer?.coiReviewId])"
                                         *ngIf="reviewer?.description.length > 180" class="fs-14 fw-medium link-primary">
                                         {{collapseViewMore[reviewer?.coiReviewId] ? "Read Less" : "Read More"}}
-                                    </span>
+                                    </a>
                                 </ng-container>
                             </span>
                         </app-no-data-label>
@@ -98,37 +98,37 @@
                             <ng-container *ngIf="isMangeReviewAction">
                                 <button *ngIf="reviewer.reviewStatusTypeCode == '1'" id="coi_reviewer_start_review_{{reviewer?.coiReviewId}}"
                                     title="Start Review of {{reviewer?.reviewLocationType?.description}}"
-                                    attr.aria-label="Start Review of {{reviewer?.reviewLocationType?.description}}"
+                                    [attr.aria-label]="'Start Review of ' +reviewer?.reviewLocationType?.description"
                                     (click)="updateCoiReviewStage(index,reviewer,'START')" (keyup.enter)="updateCoiReviewStage(index,reviewer,'START')"
                                     (keyup.space)="updateCoiReviewStage(index,reviewer,'START')"
-                                    class="btn btn-primary-icon d-flex align-items-center my-1">
-                                    <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">
+                                    <mat-icon class="material-icons-outlined" aria-hidden="true">play_circle_filled</mat-icon>
                                 </button>
                                 <button *ngIf="reviewer.reviewStatusTypeCode == '3'" id="coi_reviewer_complete_review_{{reviewer?.coiReviewId}}"
                                     title="Complete Review of {{reviewer?.reviewLocationType?.description}}"
-                                    attr.aria-label="Complete Review of {{reviewer?.reviewLocationType?.description}}"
-                                    class="btn btn-primary-icon d-flex align-items-center my-1"
+                                    [attr.aria-label]="'Complete Review of ' + reviewer?.reviewLocationType?.description"
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     (keyup.enter)="updateCoiReviewStage(index,reviewer,'COMPLETE')"
                                     (keyup.space)="updateCoiReviewStage(index,reviewer,'COMPLETE')"
                                     (click)="updateCoiReviewStage(index,reviewer,'COMPLETE')">
-                                    <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
+                                    <mat-icon class="material-icons-outlined" aria-hidden="true">stop_circle</mat-icon>
                                 </button>
                             </ng-container>
-                            <button class="btn btn-primary-icon d-flex align-items-center my-1"
+                            <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                 id="coi_reviewer_review_comment_{{reviewer?.coiReviewId}}"
                                 title="Add Review Commnets for {{reviewer?.reviewLocationType?.description}}"
-                                attr.aria-label="Add Review Commnets for {{reviewer?.reviewLocationType?.description}}"
+                                [attr.aria-label]="'Add Review Commnets for ' + reviewer?.reviewLocationType?.description"
                                 [ngClass]="{'review-comment-position':(!isMangeReviewAction && isOPAEditMode)}"
                                 (click)="modifyReviewComment(reviewer)">
-                                <mat-icon>rate_review</mat-icon>
+                                <mat-icon aria-hidden="true">rate_review</mat-icon>
                             </button>
                                 <!-- more actions -->
                                 <ng-container *ngIf="isMangeReviewAction">
                                     <button *ngIf="reviewer.reviewStatusTypeCode !== '2'" [matMenuTriggerFor]="beforeMenu"
-                                        class="btn btn-primary-icon d-flex align-items-center my-1" id="coi_reviewer_more_actions_{{reviewer?.coiReviewId}}"
-                                        attr.aria-label="More Action of {{reviewer?.reviewLocationType?.description}}" role="button" type="button"
+                                        class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" id="coi_reviewer_more_actions_{{reviewer?.coiReviewId}}"
+                                        [attr.aria-label]="'More Action of ' + reviewer?.reviewLocationType?.description" type="button"
                                         title="More Action of {{reviewer?.reviewLocationType?.description}}">
-                                        <mat-icon class="btn-color">more_vert</mat-icon>
+                                        <mat-icon class="btn-color" aria-hidden="true">more_vert</mat-icon>
                                     </button>
                                 </ng-container>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
@@ -136,18 +136,18 @@
                                         class=" text-nowrap border-0 rounded-0 btn fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
                                         id="coi_reviewer_edit_review" mat-menu-item tabindex="0"
                                         title="Edit Review of {{reviewer?.reviewLocationType?.description}}"
-                                        attr.aria-label="Edit Review of {{reviewer?.reviewLocationType?.description}}" data-bs-toggle="modal"
+                                        [attr.aria-label]="'Edit Review of ' + reviewer?.reviewLocationType?.description" data-bs-toggle="modal"
                                         data-bs-target="#add-coi-reviewer-modal" (click)="editReview(reviewer, index)">
-                                        <mat-icon class="me-2 more-options-icon">edit</mat-icon>
+                                        <mat-icon class="me-2 coi-scale-9" aria-hidden="true">edit</mat-icon>
                                         <span>Edit Review</span>
                                     </button>
                                     <button
                                         class="text-nowrap border-0 rounded-0 btn fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
                                         id="coi_reviewer_delete_review" tabindex="0" mat-menu-item
                                         title="Delete Review of {{reviewer?.reviewLocationType?.description}}"
-                                        attr.aria-label="Delete Review of {{reviewer?.reviewLocationType?.description}}" data-bs-toggle="modal"
+                                        [attr.aria-label]="'Delete Review of ' + reviewer?.reviewLocationType?.description" data-bs-toggle="modal"
                                         data-bs-target="#deleteReviewModal" (click)="modifyIndex = index;reviewActionConfirmation = reviewer">
-                                        <mat-icon class="me-2 more-options-icon">delete</mat-icon>
+                                        <mat-icon class="me-2 coi-scale-9" aria-hidden="true">delete</mat-icon>
                                         <span>Delete Review</span>
                                     </button>
                                 </mat-menu>
@@ -167,7 +167,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="coiDeleteModalTitle">Delete Review</h5>
-                <button aria-label="Click to close delete reviewer modal" title="Close" class="btn-close fs-12" data-bs-dismiss="modal"  id="delete_coi_reviewer_dissmiss_btn"
+                <button aria-label="Click to close delete reviewer modal" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal"  id="delete_coi_reviewer_dissmiss_btn"
                     type="button">
                 </button>
             </div>
@@ -191,7 +191,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="addEditReviewerModal">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }}
                 </h5>
-                <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" attr.aria-label="Click to close {{modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer'}} modal"
+                <button type="button" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" [attr.aria-label]="'Click to close ' + (modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer') + ' modal'"
                     (click)="reviewDetails = {}">
                 </button>
             </div>
@@ -293,10 +293,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="coi-add-reviewer-close"
-                attr.aria-label="Click to cancel {{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }} and Close modal"
-                    type="button" title="Close" (click)="clearReviewModal();">Close</button>
+                    [attr.aria-label]="'Click to cancel ' + (modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer') + 'and Close modal'"
+                    type="button" title="Click to close" (click)="clearReviewModal();">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                    attr.aria-label="Click to {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}"
+                    [attr.aria-label]="'Click to ' + (modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer')"
                     (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer'">
                     {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}
                 </button>

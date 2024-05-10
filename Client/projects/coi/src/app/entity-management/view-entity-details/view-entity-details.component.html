@@ -17,9 +17,8 @@
                         <span *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" tabindex="0">
                           <span data-bs-toggle="tooltip" data-bs-placement="top"
                                 class="info-text pill f-14 me-2 px-3 py-1 rounded-5 py-0"
-                                title="{{entityDetails?.entityName}} is Unverified">
-                              <i aria-hidden="true" class="fa fa-times mr-2"></i>
-                              Unverified</span>
+                                title="{{entityDetails?.entityName}} is Unverified"><i aria-hidden="true"
+                                class="fa fa-times me-2"></i>Unverified</span>
                         </span>
                         <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="0"
                           [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'">
@@ -37,11 +36,11 @@
                             </div>
                           </div>
                         </div>
-                          <button (click)="isCardExpanded=!isCardExpanded; isUserCollapse=!isUserCollapse" tabindex="0"
+                          <button (click)="isCardExpanded=!isCardExpanded; isUserCollapse=!isUserCollapse"
                             title="Click to {{isCardExpanded ? 'collapse' : 'expand'}} Entity"
                             class="toggle-btn border btn p-0 rounded-5 shadow-sm"
-                            attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} Entity">
-                            <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            [attr.aria-label]="isCardExpanded ? 'collapse' : 'view' + ' Entity'">
+                            <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
                           </button>
                       </div>
                     </div>
@@ -49,7 +48,7 @@
                 </div>
               </div>
               <!-- New Card design -->
-              <div class="card-body" *ngIf="isCardExpanded">
+              <div class="card-body" *ngIf="isCardExpanded" [@heightAnimation]>
                 <div class="row">
                   <div class="col-6 col-xxl-6 pe-xl-0 pe-xxl-0">
                     <div
@@ -120,10 +119,10 @@
           <!-- New design -->
           <div class="col-lg-3 border-prev-nxt">
             <div class="h-100 mb-md-3">
-              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center">
+              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center transition-300ms">
                 <!-- home -->
                 <button *ngIf="hasManageEntity"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                   title="Go to COI home page" (click)="goToHome()" aria-label="Go to COI home page">
                   <mat-icon>home</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
@@ -131,7 +130,7 @@
                 <!-- Modify Entity -->
                 <button *ngIf="hasManageEntity" [matMenuTriggerFor]="beforeMenu"
                   title="More Actions" aria-label="More Actions"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14 transition-300ms">
                   <mat-icon class="more-options-icon">more_vert</mat-icon>
                   <!-- <span class="mt-1 ms-2" *ngIf="isCardExpanded">More Actions</span> -->
                 </button>
@@ -152,7 +151,7 @@
                 <!-- Back -->
                 <button *ngIf="hasManageEntity" title="Click to go back to Entity list" (click)="navigateBack()"
                   id="btn-modify" aria-label="Click to go back to Entity list"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14 transition-300ms">
                   <mat-icon>reply</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Back</span> -->
                 </button>
@@ -161,8 +160,8 @@
                   <!-- inactivate -->
                   <ng-container *ngIf="entityDetails.isActive">
                     <button title="Click to Inactivate Entity" id="btn-inactivate"
-                      [ngClass]="isCardExpanded ? 'col-12' : 'col'" aria-label="Click to Inactivate Entity"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                      [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click to Inactivate Entity"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
                       <mat-icon>schedule</mat-icon>
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Inactivate</span>
@@ -172,8 +171,8 @@
                   <!-- Activate -->
                   <ng-container *ngIf="!entityDetails.isActive">
                     <button title="Click to activate Entity" id="btn-activate" tabindex="0" role="button"
-                      [ngClass]="isCardExpanded ? 'col-12' : 'col'" aria-label="Click to activate Entity"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                      [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click to activate Entity"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
                       <mat-icon>flash_on</mat-icon>
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Activate</span>
@@ -182,8 +181,8 @@
 
                   <!-- Approve Entity -->
                   <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
-                    <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12' : 'col'"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                    <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       title="Click to access entity verification" data-bs-toggle="modal"
                       data-bs-target="#approve-entity-modal" aria-label="Click to approve Entity">
                       <mat-icon class="mx-1 icon-approve-position">check_circle_outline</mat-icon>
@@ -192,11 +191,14 @@
                   </ng-container>
                 </ng-container>
                 <!-- last update date -->
-                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}" tabindex="0">
-                  <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'" aria-label="Last updated by">Last Updated By</label>
-                  <span class="coi-text-dark fs-13 fw-normal" [attr.aria-label]="entityDetails?.updatedUserFullName + ' on ' + (entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')">
-                    {{entityDetails?.updatedUserFullName}} On {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}} </span>
-              </div>
+                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} transition-300ms col-12" tabindex="-1">
+                  <label for="entity-last-updateby" class="coi-text-lighter fs-13 fw-medium" [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'"
+                    aria-label="Last updated by">Last Updated By</label>
+                  <span class="coi-text-dark fs-13 fw-normal" id="entity-last-updateby"
+                    [attr.aria-label]="entityDetails?.updatedUserFullName + ' on ' + (entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')">
+                    {{entityDetails?.updatedUserFullName}} On {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -220,24 +222,23 @@
         <h4 class="modal-title">
             <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [readMore]="readMore"></app-read-more>
         </h4>
-        <button type="button" class="btn-close" title="Close" aria-label="Close" (click)="closeModal()"></button>
+        <button type="button" class="btn-close" title="Click to close" aria-label="Click to close" (click)="closeModal()"></button>
       </div>
       <div class="modal-body ct-footer-padding">
         <div class="row">
           <div class="col-12">
             <div class="alert alert-primary d-flex p-2" role="alert">
-              <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color col-auto" aria-hidden="true"
-                data-mat-icon-type="font">info</mat-icon>
+              <mat-icon class="mat-icon flex-shrink-0" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
                 <div class="fs-14 ms-2">
                     <div class="d-flex">
-                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
                         <div>
                             <strong class="fw-bold">Minor modification</strong> - Select for minor corrections like
                             typos.
                         </div>
                     </div>
                     <div class="d-flex mt-2">
-                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
                         <div>
                             <strong class="fw-bold">Major modification</strong> - Select for major corrections like
                             changes in the company name, ownership type,
@@ -245,7 +246,7 @@
                         </div>
                     </div>
                     <div class="d-flex mt-2">
-                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
                         <div>
                             <strong class="fw-bold">Description</strong> - Provide any description or comments on why
                             you want to modify the
@@ -288,7 +289,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary" id="view-entity-btn" data-bs-dismiss="modal" type="button"
-          title="Cancel" (click)="closeModal()">Cancel
+          title="Click to cancel" aria-label="Click to cancel" (click)="closeModal()">Cancel
         </button>
         <button class="btn btn-primary me-0" id="view-entity-btn" type="button" (click)="modifyEntity()">
           Submit
@@ -313,40 +314,38 @@
             <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [readMore]="readMore"></app-read-more>
             </span>
         </h4>
-        <button type="button" class="btn-close" title="Close" aria-label="Close" (click)="closeActiveInactiveModal()"></button>
+        <button type="button" class="btn-close" title="Click to close" aria-label="Click to close" (click)="closeActiveInactiveModal()"></button>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-12">
             <div class="alert alert-primary d-flex p-2" role="alert">
-              <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color" aria-hidden="true"
-                data-mat-icon-type="font">info</mat-icon>
+              <mat-icon class="mat-icon col-auto" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
               <div class="fs-14 ms-2" *ngIf="entityDetails?.isActive">
-                <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                Provide the reason for Inactivation in the field provided.
-                <br>
-                <div class="d-flex mt-2">
-                  <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                  <div>
-                    Click on Activate button to activate the entity.
-                  </div>
+                <div class="d-flex">
+                  <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                  <span>Provide the reason for Inactivation in the field provided.</span>
                 </div>
-                <div class="mt-1">
-                  <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                  If the entity is used in any of the Active SFIs (Financial or Travel), then a new version of the
-                  entity is created <span class="ms-4">in Inactive status and the previous version goes to Archive status.</span>
+                <div class="d-flex mt-1">
+                  <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                  <span>Click on Inactivate button to activate the entity.</span>
+                </div>
+                <div class="d-flex mt-1">
+                  <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                  <span>If the entity is used in any of the Active SFIs (Financial or Travel), then a new version of the
+                    entity is created in Inactive status and the previous version goes to Archive status.</span>
                 </div>
               </div>
-              <span class="fs-14" *ngIf="!entityDetails?.isActive">
-                <div class="ml-15">
-                  <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                  Provide the reason for Activation in the field provided.
+              <div class="fs-14 ms-2" *ngIf="!entityDetails?.isActive">
+                <div class="d-flex">
+                  <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                  <span>Provide the reason for Activation in the field provided.</span>
                 </div>
-                <div class="mt-1 ml-15">
-                  <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                  Click on Inactivate button to activate the entity.
+                <div class="d-flex mt-1">
+                  <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                  <span>Click on Activate button to activate the entity.</span>
                 </div>
-              </span>
+              </div>
             </div>
             <div class="row">
               <div class="col">
@@ -365,10 +364,11 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary" id="inactive-sfi" type="button" title="Cancel"
+        <button class="btn btn-outline-secondary" id="inactive-sfi" type="button" title="Click to cancel" aria-label="Click to cancel"
           (click)="closeActiveInactiveModal()">Cancel</button>
         <button class="btn btn-primary me-0" id="inactive-sfi" type="button"
-          [attr.title]="entityDetails?.isActive?'Click to inactivate entity':'Click to activate entity'"
+          [title]="entityDetails?.isActive?'Click to inactivate entity':'Click to activate entity'"
+          [attr.aria-label]="entityDetails?.isActive?'Click to inactivate entity':'Click to activate entity'"
           (click)="activateAndInactivateEntity()">
           {{entityDetails?.isActive?'Inactivate' : 'Activate'}}
         </button>
@@ -390,7 +390,7 @@
             <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
             </span>
           </h4>
-          <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
+          <button type="button" class="btn-close" title="Click to close" aria-label="Click to close" data-bs-dismiss="modal"
             (click)="clearApproveEntityFiled()"></button>
         </div>
         <div class="modal-body">
@@ -399,7 +399,7 @@
               <div class="alert alert-primary d-flex p-2" role="alert">
                 <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color" aria-hidden="true"
                   data-mat-icon-type="font">info</mat-icon>
-                <div class="fs-14" *ngIf="entityDetails?.isActive">
+                <div class="fs-14">
                   <i class="fa fa-angle-double-right me-1" aria-hidden="true"></i>
                   Mark any of the entity interrelations using the fields provided below.
                   <br>
@@ -449,9 +449,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Cancel"
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Click to cancel" aria-label="Click to cancel"
             (click)="clearApproveEntityFiled()">Cancel</button>
-          <button class="btn btn-primary me-0" type="button" title="Click here for approve entity"
+          <button class="btn btn-primary me-0" type="button" title="Click here for approve entity" aria-label="Click here for approve entity"
             (click)="approveEntity()">Approve Entity</button>
         </div>
       </div>

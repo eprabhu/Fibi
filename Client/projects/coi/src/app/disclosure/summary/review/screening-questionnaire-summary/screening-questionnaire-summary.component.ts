@@ -46,6 +46,9 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
         this.commentConfiguration.coiSectionsTypeCode = 1;
         this.configuration = Object.assign({}, this.configuration);
         this.listenToolKitFocusSection();
+        setTimeout(() => {
+            window.scrollTo(0,0);
+        });
     }
 
     ngDoCheck() {

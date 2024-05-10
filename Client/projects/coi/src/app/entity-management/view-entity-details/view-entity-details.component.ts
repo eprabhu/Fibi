@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { NavigationService } from '../../common/services/navigation.service';
@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
-import { fadeInOutHeight } from '../../common/utilities/animations';
+import { fadeInOutHeight, heightAnimation } from '../../common/utilities/animations';
 import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 declare const $: any;
@@ -18,7 +18,7 @@ declare const $: any;
     selector: 'app-view-entity-sfi-details',
     templateUrl: './view-entity-details.component.html',
     styleUrls: ['./view-entity-details.component.scss'],
-    animations: [fadeInOutHeight]
+    animations: [fadeInOutHeight, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 

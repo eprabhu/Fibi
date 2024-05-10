@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {NavigationEnd, Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
@@ -44,21 +44,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     reviseObject: any = { revisionComment: null, disclosureId: null };
     isShowNavBarOverlay = false;
 
-    constructor(public router: Router,
+    constructor(public router: Router,private elementRef: ElementRef,
                 public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
         // document.addEventListener('click', this.offClickSideBarHandler.bind(this));
     }
 
     // offClickSideBarHandler(event) {
-        
+
     // }
 
     onClickMenuBar() {
         const NAV_ELEMENT = document.getElementById('responsive-nav');
         const IS_MENU_SHOW = NAV_ELEMENT.classList.contains('show-menu');
         const IS_SCREEN = window.innerWidth <= 1300;
-    
+
         if (IS_MENU_SHOW) {
             NAV_ELEMENT.classList.remove('show-menu');
             if (IS_SCREEN) {
@@ -262,5 +262,38 @@ export class HeaderComponent implements OnInit, OnDestroy {
         $('#dissmiss-btn').click();
     }
 
-    
+
+    ngAfterViewInit() {
+        //  Get a reference to the body element
+        const BODY_ELEMENT = this.elementRef.nativeElement.ownerDocument.body;
+        //  Use MutationObserver to observe changes in the body element
+        const HEADER = document.getElementById('coi-header-card');
+        const OBSERVER = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if(HEADER) {
+                    if (document.body.style.overflowY === 'hidden') {
+                        HEADER.style.marginRight = '12px';
+                        document.body.style.marginRight = '12px';
+                    } else {
+                        HEADER.style.marginRight = '0';
+                        document.body.style.marginRight = '0';
+                    }
+                }
+            });
+        });
+        // Configure and start the OBSERVER
+        const CONFIG = { attributes: true, childList: true, subtree: true };
+        OBSERVER.observe(BODY_ELEMENT, CONFIG);
+    }
+
+    // for closing notes popup while clicking escape key
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            if (this.commonService.isShowCreateNoteModal) {
+                this.closeAddNote();
+            }
+        }
+    }
+
 }

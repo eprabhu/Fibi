@@ -10,28 +10,31 @@
             <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</ng-container>
         </h4>
         <h4 class="modal-title" *ngIf="isShowExistingDisclosure">Navigate to Disclosure </h4>
-          <button type="button" class="btn-close" title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="clearModal()"></button>
+          <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="clearModal()"></button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-12" *ngIf="!isShowExistingDisclosure">
               <div class="alert alert-primary d-flex p-2" role="alert" title="{{setHelpTextToolTip()}}" data-bs-placement="top">
-                  <mat-icon role="img" class="mat-icon material-icons mat-icon-no-color fs-16 flex-shrink-0" aria-hidden="true"
-                     data-mat-icon-type="font">info</mat-icon>
-
-                    <p class="fs-14 mb-0" *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
+                    <mat-icon class="mat-icon info-icon flex-shrink-0" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                    <p class="fs-14 mb-0 ms-2" *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
                         <span class="d-flex align-items-start">
-                        <mat-icon class="fs-16 flex-shrink-0">keyboard_double_arrow_right</mat-icon> To disclose at any other unit, please click on the 'Edit' icon near the unit field, and proceed to disclosure creation.
-                        <br>
-                    </span>
-                    <span class="d-flex align-items-start">
-                         <mat-icon class="fs-16">keyboard_double_arrow_right</mat-icon> To revert to the original unit, click on the 'Reset' icon.
-                        <br>
-                    </span>
-                        <span *ngIf="(triggeredFrom == 'TRAVEL_DISCLOSURE')">
+                            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                            <span>To disclose at any other unit, please click on the 'Edit' icon near the unit field,
+                                and proceed to disclosure creation.</span>
+                            <br>
+                        </span>
+                        <span class="d-flex align-items-start">
+                            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                            <span>To revert to the original unit, click on the 'Reset' icon.</span>
+                            <br>
+                        </span>
+                        <ng-container *ngIf="(triggeredFrom == 'TRAVEL_DISCLOSURE')">
                             <span class="d-flex align-items-start">
-                                <mat-icon class="fs-16"> keyboard_double_arrow_right</mat-icon> Add the purpose of the trip in the field provided.</span>
-                    </span>
+                                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                                <span>Add the purpose of the trip in the field provided.</span>
+                            </span>
+                        </ng-container>
                     </p>
               </div>
             </div>
@@ -66,23 +69,24 @@
           </div>
           <div class="row mb-2" *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
             <div class="col">
-                <label for="desc-award"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :</label>
-                <span class="d-flex mt-1 fs-14 align-items-center" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
+                <label for="desc-award" class="coi-text-dark"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :</label>
+                <button class="d-flex mt-1 fs-14 align-items-center btn-none" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
                     <span>{{commonService.getPersonLeadUnitDetails(commonService.currentUserDetails)}}</span>
-                    <span class="btn ms-2 px-2 py-0" id="close-edit-home-unit" title="Edit Unit" type="button">
-                        <mat-icon class="fs-16 close-line-height mt-1">edit</mat-icon>
+                    <span class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1 coi-scale-9"
+                        id="close-edit-home-unit" title="Click to edit unit" type="button">
+                        <mat-icon aria-hidden="true">edit</mat-icon>
                     </span>
-                </span>
+                </button>
                 <span *ngIf="!isHideEndpointSearch" class="d-flex">
                     <app-endpoint-search (onSelect)="selectedUnitEvent($event)" [clearField]="clearField"
-                        [httpOptions]="unitSearchOptions" placeHolder=""
+                        [httpOptions]="unitSearchOptions" placeHolder="Search by Unit"
                         [uniqueId]="'create-disclosure-home-unit-name'" autocomplete="off"
                         [isError]="(mandatoryList?.has('homeUnit'))? true: false" class="w-100">
                     </app-endpoint-search>
                     <button class="btn btn-primary-icon btn-sm mt-0 border fw-normal
                         margin-left-1 px-3 d-flex justify-content-center align-items-center"
                         *ngIf="!isHideEndpointSearch" (click)="resetHomeUnit()" id="edit-home-unit"
-                        title="Cancel edit unit" [class.reset-highlight]="!reviseObject.homeUnit">
+                        title="Click to Reset" aria-label="Click to Reset" [class.reset-highlight]="!reviseObject.homeUnit">
                         <span class="fa fa-rotate-left"></span>
                         <span class="ms-2">Reset</span>
                     </button>
@@ -95,8 +99,9 @@
           <div class="row"
           *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
           <div class="col-12">
-              <label for="desc-award" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE' || (hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE')">
-                  <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> {{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'Purpose of the Trip': 'Description'}}
+              <label for="desc-award" class="coi-text-dark"
+                    *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE' || (hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE')">
+                    <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> {{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'Purpose of the Trip': 'Description'}}
               </label>
               <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                         appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
@@ -115,47 +120,47 @@
                 </span>
             </div>
             <div class="col-8 mb-2">
-                <label class="f-14 pe-2">Department: </label>
+                <span class="coi-text-dark d-block">Department</span>
                 <span class="fs-14">
-                    <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit">
+                    <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit" classesToApply="ms-2 coi-text-light">
                         <span class="fs-14" [title]="existingDisclosureDetails?.homeUnitName">{{commonService.getPersonLeadUnitDetails(existingDisclosureDetails)}}</span>
                     </app-no-data-label>
                 </span>
             </div>
 
             <div class="col-4 mb-2">
-                <label class="f-14 pe-2">Create Date : </label>
-                <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
+                <span class="coi-text-dark d-block">Create Date</span>
+                <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp" classesToApply="ms-2 coi-text-light">
                     <span class="ml-2 fs-14">{{existingDisclosureDetails?.createTimestamp |
                         dateFormatter}}</span>
                 </app-no-data-label>
             </div>
             <div class="col-4 mb-2">
-                <label class="f-14 pe-2">Expiration Date : </label>
-                <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate ">
+                <span class="coi-text-dark d-block">Expiration Date</span>
+                <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate" classesToApply="ms-2 coi-text-light">
                     <span class="ml-2 fs-14">{{existingDisclosureDetails?.expirationDate |
                         dateFormatter}}</span>
                 </app-no-data-label>
             </div>
             <div class="col-4 mb-2">
-                <label class="f-14 pe-2">Certification Date : </label>
-                <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt">
+                <span class="coi-text-dark d-block">Certification Date</span>
+                <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt" classesToApply="ms-2 coi-text-light">
                     <span class="ml-2 fs-14">{{existingDisclosureDetails?.certifiedAt |
                         dateFormatter}}</span>
                 </app-no-data-label>
             </div>
 
             <div class="col-4">
-                <label class="f-14 pe-2">Review Status : </label>
-                <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
+                <span class="coi-text-dark d-block">Review Status</span>
+                <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode" classesToApply="ms-2 coi-text-light">
                     <span
                         class="badge {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
                 </app-no-data-label>
             </div>
 
             <div class="col-4">
-                <label class="f-14 pe-2">Disclosure Status : </label>
-                <app-no-data-label
+                <span class="coi-text-dark d-block">Disclosure Status</span>
+                <app-no-data-label classesToApply="ms-2 coi-text-light"
                     [valueToShow]="existingDisclosureDetails?.conflictStatusCode">
                     <span
                         class="{{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}">{{existingDisclosureDetails?.conflictStatus}}</span>
@@ -163,8 +168,8 @@
             </div>
 
             <div class="col-4">
-                <label class="f-14 pe-2">Disposition Status : </label>
-                <app-no-data-label
+                <span class="coi-text-dark d-block">Disposition Status</span>
+                <app-no-data-label classesToApply="ms-2 coi-text-light"
                     [valueToShow]="existingDisclosureDetails?.dispositionStatusCode">
                     <span
                         class="{{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}">{{existingDisclosureDetails?.dispositionStatus}}</span>
@@ -173,7 +178,7 @@
         </div>
     </div>
     <div *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [class.mt-0]="triggeredFrom == 'PROJECT_DISCLOSURE' && isShowExistingDisclosure">
-        <label class="project-types-label"><span class="mandatory fs-14 fw-600">*</span> Project Type : </label>
+        <span class="coi-text-dark d-block"><span class="mandatory fs-14 fw-600">*</span> Project Type : </span>
         <div class="mt-1">
             <ul class="mb-0 fs-14">
                 <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
@@ -190,7 +195,7 @@
         </div>
         <div *ngIf="selectedProjectType && !isSearchExternalProject" class="mt-3">
             <span class="mandatory fs-14 fw-600 me-1">*</span>
-            <label for="proposal-disclosure" class="f-14 mb-2 fw-500" *ngIf="!isShowExistingDisclosure">{{selectedProjectType}} Search</label>
+            <label for="proposal-disclosure" class="mb-2 coi-text-dark">{{selectedProjectType}} Search</label>
             <div class="form-row justify-content-center">
                 <div class="col-12 searchBox mb-0">
                     <app-endpoint-search id="proposal-search" [httpOptions]="projectSearchOptions"
@@ -206,23 +211,23 @@
             </div>
             <div *ngIf="isShowResultCard && !isShowExistingDisclosure"
                 class="col-lg-12 col-12 mt-3 resultCard px-0">
-                <div class="pt-2 py-2 row info-card-border rounded-2 shadow-medium bg-light">
+                <div class="py-2 row info-card-border rounded-2 shadow-medium bg-light">
                     <div class="col-12">
-                        <span class="fw-500 f-14">Title : </span>
-                        <span class="grey-text fs-14">#{{manualProjectAddDetails?.title}}</span>
+                        <span class="d-block coi-text-dark me-2">Title</span>
+                        <span class="coi-text-light">#{{manualProjectAddDetails?.title}}</span>
                     </div>
-                    <div class="col-6 pt-1 py-1">
-                        <span class="fw-500 f-14">Principal Investigator : </span>
-                        <span class="grey-text fs-14">{{manualProjectAddDetails?.principalInvestigator}}</span>
+                    <div class="col-6 col-lg-4 py-1">
+                        <span class="d-block coi-text-dark me-2">Principal Investigator</span>
+                        <span class="coi-text-light">{{manualProjectAddDetails?.principalInvestigator}}</span>
                     </div>
-                    <div class="col-6">
-                        <span class="fw-500 f-14">Project Role : </span>
-                        <span class="grey-text fs-14">{{manualProjectAddDetails?.reporterRole}}</span>
+                    <div class="col-6 col-lg-4 py-1">
+                        <span class="d-block coi-text-dark me-2">Project Role</span>
+                        <span class="coi-text-light">{{manualProjectAddDetails?.reporterRole}}</span>
                     </div>
-                    <div class="col-6">
-                        <span class="fw-500 f-14">Period : </span>
-                        <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails?.startDate">
-                            <span class="grey-text fs-14 date-block"
+                    <div class="col-6 col-lg-4 py-1">
+                        <span class="d-block coi-text-dark me-2">Period</span>
+                        <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails?.startDate" classesToApply="ms-2 coi-text-light">
+                            <span class="coi-text-light"
                                 *ngIf="manualProjectAddDetails?.startDate || manualProjectAddDetails?.endDate">{{manualProjectAddDetails?.startDate
                                 | dateFormatter}}
                                 <span *ngIf="manualProjectAddDetails?.startDate && manualProjectAddDetails?.endDate">-</span>
@@ -230,18 +235,18 @@
                             </span>
                         </app-no-data-label>
                     </div>
-                    <div class="col-6">
-                        <span class="fw-500 f-14">Sponsor : </span>
-                        <span class="grey-text fs-14">{{manualProjectAddDetails?.sponsor}}</span>
+                    <div class="col-6 col-lg-4 py-1">
+                        <span class="d-block coi-text-dark me-2">Sponsor</span>
+                        <span class="coi-text-light">{{manualProjectAddDetails?.sponsor}}</span>
                     </div>
-                    <div class="col-6 pt-1 py-1">
-                        <span class="fw-500 f-14">Lead Unit : </span>
-                        <span class="grey-text fs-14">{{manualProjectAddDetails?.unitName}}</span>
+                    <div class="col-6 col-lg-4 py-1">
+                        <span class="d-block coi-text-dark me-2">Lead Unit</span>
+                        <span class="coi-text-light">{{manualProjectAddDetails?.unitName}}</span>
                     </div>
-                    <div class="col-6">
-                        <span class="fw-500 f-14">Prime Sponsor : </span>
-                        <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails.primeSponsorName">
-                            <span class="grey-text fs-14 date-block"
+                    <div class="col-6 col-lg-4 py-1">
+                        <span class="d-block coi-text-dark me-2">Prime Sponsor</span>
+                        <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails.primeSponsorName" classesToApply="ms-2 coi-text-light">
+                            <span class="coi-text-light"
                                 *ngIf="manualProjectAddDetails.primeSponsorName ">{{manualProjectAddDetails.primeSponsorName}}
                             </span>
                         </app-no-data-label>
@@ -258,88 +263,66 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <span class="d-flex">
-                                            <span>
-                                                <strong> {{existingDisclosureDetails?.disclosureType}} Disclosure by
-                                                    {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
-                                            </span>
+                                            <strong>{{existingDisclosureDetails?.disclosureType}} Disclosure by
+                                                {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
                                         </span>
                                     </div>
                                     <div class="col-12 mt-2">
-                                        <span class="d-flex">
-                                            <label class="f-14 pe-2">Department : </label>
-                                            <span class="fs-14">
-                                                <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit">
-                                                    <span [title]="existingDisclosureDetails?.homeUnitName"
-                                                        class="grey-text fs-14">{{commonService.getPersonLeadUnitDetails(existingDisclosureDetails)}}</span>
-                                                </app-no-data-label>
+                                        <span class="coi-text-dark d-block">Department</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit" classesToApply="ms-2 coi-text-light">
+                                            <span [title]="existingDisclosureDetails?.homeUnitName"
+                                                class="coi-text-light">{{commonService.getPersonLeadUnitDetails(existingDisclosureDetails)}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-6 col-lg-4 py-1">
+                                        <span class="coi-text-dark d-block">Create Date</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp" classesToApply="ms-2 coi-text-light">
+                                            <span
+                                                class="coi-text-light">{{existingDisclosureDetails?.createTimestamp | dateFormatter}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-6 col-lg-4 py-1">
+                                        <span class="coi-text-dark d-block">Certification Date</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt" classesToApply="ms-2 coi-text-light">
+                                            <span class="coi-text-light">{{existingDisclosureDetails?.certifiedAt | dateFormatter}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-6 col-lg-4 py-1">
+                                        <span class="coi-text-dark d-block">Expiration Date</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate" classesToApply="ms-2 coi-text-light">
+                                            <span
+                                                class="coi-text-light">{{existingDisclosureDetails?.expirationDate | dateFormatter}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-6 col-lg-4 py-1">
+                                        <span class="coi-text-dark d-block">Disclosure Status</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.conflictStatusCode" classesToApply="ms-2 coi-text-light">
+                                            <span
+                                                class="{{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.conflictStatus}}
                                             </span>
-                                        </span>
+                                        </app-no-data-label>
                                     </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-lg-6 d-flex">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <label class="f-14 pe-2 col-lg-6">Create Date : </label>
-                                                <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
-                                                    <span
-                                                        class="ml-2 grey-text fs-14 col-lg-6">{{existingDisclosureDetails?.createTimestamp | dateFormatter}}</span>
-                                                </app-no-data-label>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <label class="f-14 pe-2 col-lg-6">Certification Date : </label>
-                                                <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt">
-                                                    <span class="ml-2 grey-text fs-14 col-lg-6">{{existingDisclosureDetails?.certifiedAt | dateFormatter}}</span>
-                                                </app-no-data-label>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <label class="f-14 pe-2 col-lg-6">Expiration Date : </label>
-                                                <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate ">
-                                                    <span
-                                                        class="ml-2 grey-text fs-14 col-lg-6">{{existingDisclosureDetails?.expirationDate | dateFormatter}}</span>
-                                                </app-no-data-label>
-                                            </div>
-                                        </div>
+                                    <div class="col-6 col-lg-4 py-1">
+                                        <span class="coi-text-dark d-block">Disposition Status</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.dispositionStatusCode" classesToApply="ms-2 coi-text-light">
+                                            <span
+                                                class="{{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.dispositionStatus}}
+                                            </span>
+                                        </app-no-data-label>
                                     </div>
-                                    <div class="col-lg-6 d-flex">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <label class="f-14 pe-2 col-lg-6">Disclosure Status : </label>
-                                                <span class="col-lg-6">
-                                                    <app-no-data-label [valueToShow]="existingDisclosureDetails?.conflictStatusCode">
-                                                        <span
-                                                            class="{{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}"></span>
-                                                        <span class="badgeFont">
-                                                            {{existingDisclosureDetails?.conflictStatus}}
-                                                        </span>
-                                                    </app-no-data-label>
-                                                </span>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <label class="f-14 pe-2 col-lg-6">Disposition Status : </label>
-                                                <span class="col-lg-6">
-                                                    <app-no-data-label [valueToShow]="existingDisclosureDetails?.dispositionStatusCode">
-                                                        <span
-                                                            class="{{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}"></span>
-                                                        <span class="badgeFont">
-                                                            {{existingDisclosureDetails?.dispositionStatus}}
-                                                        </span>
-                                                    </app-no-data-label>
-                                                </span>
-                                            </div>
-                                            <div class="col-lg-12 row">
-                                                <label class="f-14 pe-2 col-lg-6">Review Status : </label>
-                                                <span class="col-lg-6">
-                                                    <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
-                                                        <span
-                                                            class="{{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}"></span>
-                                                        <span class="badgeFont">
-                                                            {{existingDisclosureDetails?.reviewStatus}}
-                                                        </span>
-                                                    </app-no-data-label>
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <div class="col-6 col-lg-4 py-1">
+                                        <span class="coi-text-dark d-block">Review Status</span>
+                                        <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode" classesToApply="ms-2 coi-text-light">
+                                            <span
+                                                class="{{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.reviewStatus}}
+                                            </span>
+                                        </app-no-data-label>
                                     </div>
                                 </div>
                             </div>
@@ -389,18 +372,20 @@
     </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Cancel" (click)="clearModal()">Cancel</button>
+          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Click to cancel" aria-label="Click to cancel" (click)="clearModal()">Cancel</button>
           <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn"
-          type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Create Revision' : 'Create FCOI'">
+            type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Click here to Create Revision' : 'Click here to Create FCOI'"
+            [attr.aria-label]="hasFCOI ? 'Click to Create Revision' : 'Click to Create FCOI'">
           <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
           <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container></button>
           <button  *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary" id="claim-sumbit-no-btn"
-          type="button" title="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();"
-          area-describedby="Click here to continue with creating the project disclosure">Create</button>
-          <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" type="button" title="Click here to continue with creating the travel disclosure"
-          area-describedby="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();"> Create </button>
-          <button class="btn btn-primary" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" id="claim-sumbit-no-btn" type="button"  title="View Disclosure"
-          area-describedby="Click here to view the disclosure" (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">View Disclosure</button>
+            type="button" title="Click here to continue with creating the project disclosure"
+            aria-label="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();">Create</button>
+          <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" type="button" title="Click to continue with creating the travel disclosure"
+            aria-label="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();"> Create </button>
+          <button class="btn btn-primary" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" id="claim-sumbit-no-btn" type="button"
+            title="Click here to view disclosure" aria-label="Click here to view disclosure"
+            (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">View Disclosure</button>
         </div>
       </div>
     </div>

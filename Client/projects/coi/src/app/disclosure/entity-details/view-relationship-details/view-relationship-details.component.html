@@ -1,15 +1,14 @@
 <!-- SFI header card -->
 <div class="row" [ngClass]="!isTriggeredFromSlider ? 'sticky-top-50' : 'sticky-0'">
-    <div class="col-12">
-        <div class="card shadow-sm">
+    <div class="col-12" [class.bg-white]="isTriggeredFromSlider">
+        <div class="card shadow-sm overflow-hidden">
             <div class="row mx-0">
                 <div class="col-lg px-0">
                     <div class="card-header bg-white px-3 border-bottom">
                         <div class="row flex-grow-1 position-relative">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <div class="fw-bold d-flex align-items-center" tabindex="0">
-                                    <span tabindex="0" title="Click to view Disclosure"
-                                        area-describedby="Click to view Disclosure" aria-label="Click to view Disclosure">
+                                    <span tabindex="0" title="Click to view Disclosure" aria-label="Click to view Disclosure">
                                         <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [clickableContent]="showViewButton() ? 'true' : 'false'" (emitClickEvent)="viewEntityDetails($event)"></app-read-more>
                                     </span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
@@ -37,12 +36,12 @@
                                 </div>
                                 <button (click)="collapseHeader()" title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
                                     class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                    <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                    <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" *ngIf="isCardExpanded">
+                    <div class="card-body" *ngIf="isCardExpanded" [@heightAnimation]>
                         <div class="row">
                             <div class="col-lg-4 col-md-6 mb-md-3 mb-lg-0 mb-3" tabindex="0">
                                 <label aria-label="Country" class="d-block coi-text-dark">Country</label>
@@ -101,7 +100,7 @@
                         <div class="d-grid gap-2 flex-md-wrap mt-2 mb-2" [class.d-md-flex]="canShowMoreActions()">
                             <ng-container *ngIf="canShowMoreActions() ;else noMangeRights"
                                 [class.px-1]="relationshipsDetails?.versionStatus !== 'ACTIVE'  && isEditMode">
-                                <button
+                                <button title="Go to COI home page" aria-label="Click to go Go to COI home page"
                                     *ngIf="relationshipsDetails?.versionStatus =='ACTIVE' && !isEditMode;else noRightDesign2"
                                     class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                     type="button" (click)="goToHome()">
@@ -112,7 +111,7 @@
                                 <ng-template #noRightDesign2>
                                     <button
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                        type="button" title="Go to COI home page" (click)="goToHome()">
+                                        type="button" title="Go to COI home page" aria-label="Click to go Go to COI home page" (click)="goToHome()">
                                         <mat-icon role="img"
                                             class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color"
                                             aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
@@ -121,28 +120,29 @@
                                 <button
                                     *ngIf="relationshipsDetails?.versionStatus === 'ACTIVE' && !isEditMode;else noRightDesign3"
                                     class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                    type="button" (click)="navigateBack()" title="Back">
+                                    type="button" (click)="navigateBack()"
+                                    title="Click to go back to Entity list" aria-label="Click to go back to Entity list">
                                     <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
                                     <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                 </button>
                                 <ng-template #noRightDesign3>
                                     <button (click)="navigateBack()" tabindex="0"
-                                        title="Click to go back to Entity list"
+                                        title="Click to go back to Entity list" aria-label="Click to go back to Entity list"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                        type="button" title="Back">
+                                        type="button">
                                         <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
                                         <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                     </button>
                                 </ng-template>
                                 <button *ngIf="canShowMoreActions()" [matMenuTriggerFor]="beforeMenu"
                                     class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                    type="button" title="Click for More Actions">
-                                    <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                                    type="button" title="Click for More Actions" aria-label="Click for More Actions">
+                                    <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
                                 </button>
                                 <button (click)="saveRelationship()" tabindex="0" *ngIf="isEditMode && entityDetailsServices.canMangeSfi"
                                     class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-                                    title="Click to save" [ngClass]="isCardExpanded ? 'col-12 mt-2' : 'col'">
-                                    <mat-icon>save</mat-icon>
+                                    title="Click to save" aria-label="Click to save" [ngClass]="isCardExpanded ? 'col-12 mt-2' : 'col'">
+                                    <mat-icon aria-hidden="true">save</mat-icon>
                                     <span *ngIf="isCardExpanded" class="ms-2">Save</span>
                                 </button>
                         </ng-container>
@@ -151,18 +151,18 @@
                                     <button
                                         class="btn btn-outline-grey me-2 d-inline-flex align-items-center justify-content-center col"
                                         title="Go to COI home page" tabindex="0" (click)="goToHome()">
-                                        <mat-icon>home</mat-icon>
+                                        <mat-icon aria-hidden="true">home</mat-icon>
                                     </button>
                                     <button
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                        (click)="navigateBack()" tabindex="0" title="Click to go back to Entity list">
+                                        (click)="navigateBack()" tabindex="0" title="Click to go back to Entity list" aria-hidden="Click to go back to Entity list">
                                         <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
                                         <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                     </button>
                                     <button *ngIf="canShowMoreActions()" [matMenuTriggerFor]="beforeMenu"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         role="button" title="Click for More Actions">
-                                        <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                                        <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
                                     </button>
                                 </div>
                             </ng-template>
@@ -171,7 +171,7 @@
                                     *ngIf="relationshipsDetails?.versionStatus == 'ACTIVE' && !isEditMode && entityDetailsServices.canMangeSfi"
                                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                     title="Click to Modify SFI" (click)="modifySfi()">
-                                    <mat-icon>mode</mat-icon>
+                                    <mat-icon aria-hidden="true">mode</mat-icon>
                                     <span class="btn-sfi-position fs-14 fw-medium">Modify SFI</span>
                                 </button>
                                 <ng-container
@@ -192,7 +192,7 @@
                                     <button mat-menu-item id="btn-activate"
                                         class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                         title="Click to activate Sfi" (click)="activateInactivateSfi()">
-                                        <mat-icon>flash_on</mat-icon>
+                                        <mat-icon aria-hidden="true">flash_on</mat-icon>
                                         <span
                                             [ngClass]="isEditMode ?'btn-activate-edit-content':'btn-activate-content fs-14 fw-medium'">
                                             Activate
@@ -288,6 +288,7 @@
                         title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}} Questionnaire"
                         class="relation-border-left r-title px-3 py-3">
                         <span class="fs-14" tabindex="0">
+                            {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
                             <span id="qnr-complete-msg"
                                 *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                                 class="fa fa-check me-2" title="Completed">
@@ -296,7 +297,6 @@
                                 *ngIf="!entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                                 class="fa fa-exclamation-circle me-2" title="Incomplete">
                             </span>
-                            {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
                         </span>
                     </span>
                 </div>
@@ -308,7 +308,7 @@
         <div class="pt-3 px-3 btn-color" role="button"
             (click)="saveOrAddRelationshipModal()">
             <span class="d-flex align-items-center">
-                <mat-icon class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
+                <mat-icon aria-hidden="true" class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
                 <span>Add Relationship</span>
             </span>
         </div>
@@ -343,7 +343,7 @@
             <span class="create-button">
                 <button class="btn btn-primary btn-sm d-flex align-items-center mt-4 fs-15 mb-3 hand-cursor"
                     (click)="saveOrAddRelationshipModal()" title="Add Relationship">
-                    <mat-icon class="material-icons-outlined mr-2">add</mat-icon>
+                    <mat-icon aria-hidden="true" class="material-icons-outlined mr-2">add</mat-icon>
                     <span class="mr-2 fs-15">Add Relationship</span>
                 </button>
             </span>

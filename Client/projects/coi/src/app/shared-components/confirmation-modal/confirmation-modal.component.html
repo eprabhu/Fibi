@@ -1,14 +1,14 @@
 <button type="button" class="btn btn-primary btn-sm" hidden="true" id="{{modalName}}-trigger-btn"
     data-bs-toggle="modal" [attr.data-bs-target]="'#'+modalName"></button>
 
-<div class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName" role="dialog">
+<div tabindex="-1" class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName">
     <div class="modal-dialog modal-dialog-centered {{getModalSize()}}" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" tabindex="0" id="modal-header">
             <ng-content select="[header]"></ng-content>
           </h4>
-          <button type="button" class="btn-close" title="Close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+          <button type="button" class="btn-close" title="Click to close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Click to close" (click)="closeModal()"></button>
         </div>
         <ng-content select="[content-sticky]"></ng-content>
         <div class="modal-body">
@@ -39,13 +39,15 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" (click)="performSecondaryAction()"
-          [attr.aria-label]="'click to ' + secondaryBtnName" role="button" title="{{secondaryBtnTooltip}}">
-          {{secondaryBtnName}}
+          <button class="btn btn-outline-secondary" type="button"
+            [attr.aria-label]="'click to ' + secondaryBtnName" (click)="performSecondaryAction()"
+            title="{{secondaryBtnTooltip ? secondaryBtnTooltip : ('Click to ' + secondaryBtnName)}}">
+            {{secondaryBtnName}}
           </button>
-          <button class="btn btn-primary me-0" type="button" (click)="performPrimaryAction()"
-          [attr.aria-label]="'click to ' + primaryBtnName" role="button" title= "{{primaryBtnTooltip}}">
-          {{primaryBtnName}}
+          <button class="btn btn-primary me-0" type="button"
+            [attr.aria-label]="'click to ' + primaryBtnName" (click)="performPrimaryAction()"
+            title="{{primaryBtnTooltip ? primaryBtnTooltip : ('Click to ' + primaryBtnName)}}">
+            {{primaryBtnName}}
           </button>
         </div>
       </div>

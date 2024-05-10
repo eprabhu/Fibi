@@ -89,13 +89,13 @@
 </div>
 
 <ng-container *ngIf="isShowNoDatacard && questionnaireList.length == 0 && isShowQuestionnaire" class="no-data-container">
-    <div class="no-data-container w-100 text-secondary">
+    <div class="no-data-container w-100">
         <span class="no-data-icon-outer">
-            <div class="d-flex justify-content-center no-data-icon">
+            <div class="no-data-icon">
                 <mat-icon class="no-file form-builder-no-info-card-icon">folder_off</mat-icon>
             </div>
         </span>
-        <h5 class="d-flex justify-content-center fs-16 mt-3">There is no information in this section.</h5>
+        <h5 class="fs-16 mt-3">There is no information in this section.</h5>
     </div>
 </ng-container>
 
@@ -104,7 +104,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <!-- <button type="button" class="btn-close" (click)="openQuestionnaire(selectedIndex)" data-bs-dismiss="modal"
-                    aria-label="Close">
+                    aria-label="Click to close">
                 </button> -->
             </div>
             <div class="modal-body">
@@ -128,7 +128,7 @@
                 <h5 class="modal-title">
                     Are you sure you want to leave this page?
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close">
                 </button>
             </div>
             <div class="modal-body title-descriptions">

@@ -4,7 +4,7 @@
         the disclosure goes through review process following which your disclosure attains Conflict/No Conflict
         Status after reviewers determine whether conflict can be managed or eliminated.If a conflict of interest is
         identified the status will be updated accordingly.</p>
-      <button id="disclosure-info-close" type="button" class="btn-close" (click)="closeAttachmentInfo()" aria-label="Close">
+      <button id="disclosure-info-close" type="button" class="btn-close" (click)="closeAttachmentInfo()" aria-label="Click to close">
       </button>
     </div>
   </div>
@@ -69,13 +69,13 @@
 
 <!-- ADD ATTACHMENT  MODAL -->
 <div class="modal fade mySkinDialog" id="conflictManagementAttachment" tabindex="-1" role="dialog"
-  aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+  aria-label="Add Attachments">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Add Attachments</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" id="external-review-doc-popup-dismiss-btn"
-          aria-label="Close" (click)="clearAttachmentDetails()">
+          aria-label="Click to close" title="Click to close" (click)="clearAttachmentDetails()">
         </button>
       </div>
       <div class="modal-body">
@@ -114,7 +114,7 @@
                 <div class="col-lg-1 col text-right">
                   <ul class="actionButtonGroup mt-5">
                     <li>
-                      <a id="external-review-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor" title="Remove File"
+                      <a id="external-review-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor" aria-label="Click to Remove File" title="Click to Remove File"
                         (click)="deleteFromUploadedFileList(i)"></a>
                     </li>
                   </ul>
@@ -129,8 +129,8 @@
       </div>
       <div class="modal-footer float-right mt-3" *ngIf="uploadedFile.length > 0">
         <button type="button" class="btn btn-secondary" id="external-review-doc-popup-close-btn" data-bs-dismiss="modal"
-          (click)="clearAttachmentDetails()">Close</button>
-        <button type="button" class="btn btn-primary-sub" id="external-review-doc-popup-add-btn">Add</button>
+          (click)="clearAttachmentDetails()" aria-label="Click to close" title="Click to close">Close</button>
+        <button type="button" aria-label="Click to Add" title="Click to Add" class="btn btn-primary-sub" id="external-review-doc-popup-add-btn">Add</button>
       </div>
     </div>
   </div>

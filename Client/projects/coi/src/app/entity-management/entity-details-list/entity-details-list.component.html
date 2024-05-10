@@ -66,7 +66,7 @@
   </div> -->
   <!-- <div *ngIf="entityRelations.length > 0 && (entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
     entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES')
-    " class="sort-div border mt-2 py-3 mr-15 ml-15">
+    " class="sort-div border mt-2 py-3 px-3 mr-15 ml-15">
     <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
     <span (click)="sortResult('personName')" (keydown.enter)="sortResult('personName')"
       [class.filter-active]="isActive('personName')" tabindex="0" title="Click to sort by name"
@@ -413,7 +413,7 @@
                     <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
                 </div>
                 <div class="col" tabindex="0">
-                  <span class="fw-bold">#{{disclosureList?.coiDisclosureNumber}} : {{disclosureList?.fcoiTypeCode === '1'
+                  <span class="fw-bold">{{disclosureList?.fcoiTypeCode === '1'
                     ?'FCOI' : 'Project'}} Disclosure By
                     {{disclosureList?.disclosurePersonFullName}}</span>
                 </div>

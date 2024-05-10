@@ -201,7 +201,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (this.validateTravelDisclosure()) {
             this.getCreateTravelRequestObject();
             hideModal('reviseOrCreateDisclosureModal');
-            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL]);
+            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],{queryParams: {mode:'create'}});
             this.clearModal();
         }
     }

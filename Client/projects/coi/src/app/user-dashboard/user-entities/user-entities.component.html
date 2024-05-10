@@ -1,6 +1,6 @@
 <div class="advance-search coi-search-box sticky-top-51 sticky-top" *ngIf="!isHideFilterSearchAndShowCreate">
   <div class="row m-0">
-    <div class="col-lg-auto py-2">
+    <div class="col-lg-auto px-3 py-2">
       <div>
         <label class="text-secondary" tabindex="0">Filter By Status :</label>
         <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0"
@@ -24,10 +24,11 @@
   </div>
     <div class="col-lg py-2 border-start d-flex align-items-center filter-s-outer search-area position-relative">
     <span class="filter-search">
-        <mat-icon class="fs-25px searchButton">search</mat-icon>
+        <mat-icon aria-hidden="true" class="fs-25px searchButton">search</mat-icon>
         <input class="form-control pe-5" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
       </span>
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
+        <mat-icon class="closeButton" *ngIf="searchText" title="Click to clear" aria-label="Click to clear"
+          (click)="clearSearchText()" (keyup.enter)="clearSearchText()" aria-hidden="true">close</mat-icon>
     </div>
 </div>
 </div>
@@ -59,7 +60,7 @@
       </p>
     </div>
     <span class="create-button">
-      <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="addSFI()">
+      <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="addSFI()" title="Click to create entity" aria-label="Click to create entity">
         Create Entity
       </button>
     </span>
@@ -79,19 +80,19 @@
       [personEntityNumber]="personEntityNumber">
     </app-activate-inactivate-sfi-modal>
     <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-delete-button" data-bs-toggle="modal" data-bs-target="#deleteSFIConfirmationModal"></button>
-    <div class="modal fade" id="deleteSFIConfirmationModal" tabindex="-1" aria-labelledby="deleteSFIConfirmationModal" aria-hidden="true">
+    <div class="modal fade" id="deleteSFIConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-dismiss="static" data-bs-keyboard="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" title="Click to delete" aria-label="Click to close"></button>
           </div>
           <div class="modal-body fs-14">
             <p>Do you want to delete <strong>{{entityName}}</strong>?</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal">Delete</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Click to cancel" aria-label="Click to cancel">Cancel</button>
+            <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal" title="Click to delete" aria-label="Click to delete">Delete</button>
           </div>
         </div>
       </div>

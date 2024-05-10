@@ -7,6 +7,7 @@ import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/
 import {Toast} from 'bootstrap';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
+import { Router } from '@angular/router';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
@@ -70,7 +71,7 @@ export class CommonService {
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
 
-    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
+    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService,private _router: Router) {
     }
 
     /**
@@ -286,7 +287,7 @@ export class CommonService {
                 return 'yellow-badge';
         }
     }
-  
+
     getDisclosureConflictBadgeForSlider(statusCode: string) {
         switch (String(statusCode)) {
             case '1':
@@ -414,6 +415,15 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 
     getPersonLeadUnitDetails(unitData: any): string {
         return getPersonLeadUnitDetails(unitData);
+    }
+
+    redirectionBasedOnRights() {
+        this.fetchPermissions(true).then((res) => {
+			const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+				|| this.isCoiReviewer;
+			const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
+			this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
+		});
     }
 
 }

@@ -1,7 +1,7 @@
 <div [@fadeInOutHeight]>
     <app-help-text [helpTextList]="helpText" [tooltip]="'Travel Disclosure Form'" [isReadMoreLess]="true"></app-help-text>
 
-    <div class="card">
+    <div class="card mt-3">
         <div class="row p-4 m-3 shadow-sm bg-white">
             <!-- Entity Name -->
             <div class="row d-flex px-0" tabindex="-1">
@@ -74,7 +74,7 @@
 
             <!-- destination -->
             <div class="row d-flex mt-4 px-0">
-                <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom">Destination :</label>
+                <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom text-nowrap">Destination :</label>
                 <div class="divCenter ms-1 col">
                     <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                         id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
@@ -281,7 +281,7 @@
     <div class="modal-content">
       <div class="modal-header headerStyle">
         <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearEntityDetails()"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="clearEntityDetails()"></button>
       </div>
       <div class="modal-body">
         <div class="mx-1 row pt-1 d-flex mb-3">

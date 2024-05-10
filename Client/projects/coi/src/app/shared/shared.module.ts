@@ -69,6 +69,7 @@ import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover
 import { ReadMoreComponent } from './read-more/read-more.component';
 import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
 import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
+import { FormValidatorModule } from './form-validator/form-validator.module';
 
 @NgModule({
     imports: [
@@ -83,7 +84,8 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         MatMenuModule,
         MatSelectModule,
         MatInputModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        FormValidatorModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,
@@ -158,7 +160,8 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         TailingSpaceRemoverDirective,
         ReadMoreComponent,
         FormBuilderViewComponent,
-        FormSectionsComponent
+        FormSectionsComponent,
+        FormValidatorModule
     ],
 
     providers: [

@@ -10,12 +10,13 @@ import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } f
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
 import { isEmptyObject, scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { heightAnimation } from '../../../common/utilities/animations';
 
 @Component({
     selector: 'app-view-relationship-details',
     templateUrl: './view-relationship-details.component.html',
     styleUrls: ['./view-relationship-details.component.scss'],
-    animations: [slideInOut]
+    animations: [slideInOut, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ViewRelationshipDetailsComponent implements OnDestroy {
 
