@@ -233,6 +233,9 @@
         //     flex-wrap: wrap;
         // }
     }
+    .card-body {
+        padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x) !important;
+    }
     .card-footer {
         background-color: var(--theme-card-bg-color);
     }
