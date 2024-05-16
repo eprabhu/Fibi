@@ -50,7 +50,9 @@ export class TooltipComponent implements OnInit {
 }
 
 private hideBasicDetailsPopup(): void {
+  if (!document.querySelector('[data-bs-overflow]')) {
     document.body.style.overflowY = 'auto';
+  }
     const POPUP: HTMLElement = document.querySelector('#dynamic-tooltip');
     POPUP.style.display = 'none';
 }
@@ -59,16 +61,15 @@ private getLeftPosition(): string {
   // return this.tooltipPositionDetails.clientX  + 'px';
     let displayWidth = this.tooltipPositionDetails.containerWidth || screen.width;
     return  displayWidth > this.tooltipPositionDetails.popoverWidth + this.tooltipPositionDetails.clientX ?
-        this.tooltipPositionDetails.clientX  + window.scrollX + 'px' :
-        this.tooltipPositionDetails.clientX - this.tooltipPositionDetails.popoverWidth +  window.scrollX + 'px';
+        this.tooltipPositionDetails.clientX + 'px' :
+        this.tooltipPositionDetails.clientX - this.tooltipPositionDetails.popoverWidth + 'px';
 }
 
 private getTopPosition(): string {
   // return this.tooltipPositionDetails.clientY  + 'px';
-
     let displayHeight = this.tooltipPositionDetails.containerHeight || screen.height;
     return displayHeight > this.tooltipPositionDetails.popoverHeight + this.tooltipPositionDetails.clientY  ?
-        (this.tooltipPositionDetails.clientY - 35) + window.scrollY + 'px' :
-        (this.tooltipPositionDetails.clientY - 35) - this.tooltipPositionDetails.popoverHeight + window.scrollY + 'px';
+        (this.tooltipPositionDetails.clientY - 35) + 'px' :
+        (this.tooltipPositionDetails.clientY - 35) - this.tooltipPositionDetails.popoverHeight + 'px';
 }
 }
