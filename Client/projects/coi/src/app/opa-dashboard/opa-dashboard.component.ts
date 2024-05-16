@@ -222,9 +222,10 @@ export class OpaDashboardComponent implements OnInit {
                 if (data) {
                     this.result = data || [];
                     this.opaList = data.data;
-                    this.isLoading = false;
                 }
+                this.isLoading = false;
             }, _err => {
+                this.isLoading = false;
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
              }));
     }
