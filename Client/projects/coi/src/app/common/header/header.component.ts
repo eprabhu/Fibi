@@ -264,26 +264,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
     ngAfterViewInit() {
-        //  Get a reference to the body element
-        const BODY_ELEMENT = this.elementRef.nativeElement.ownerDocument.body;
-        //  Use MutationObserver to observe changes in the body element
-        const HEADER = document.getElementById('coi-header-card');
-        const OBSERVER = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if(HEADER) {
-                    if (document.body.style.overflowY === 'hidden') {
-                        HEADER.style.marginRight = '12px';
-                        document.body.style.marginRight = '12px';
-                    } else {
-                        HEADER.style.marginRight = '0';
-                        document.body.style.marginRight = '0';
-                    }
-                }
-            });
-        });
-        // Configure and start the OBSERVER
-        const CONFIG = { attributes: true, childList: true, subtree: true };
-        OBSERVER.observe(BODY_ELEMENT, CONFIG);
+        // //  Get a reference to the body element
+        // const BODY_ELEMENT = this.elementRef.nativeElement.ownerDocument.body;
+        // //  Use MutationObserver to observe changes in the body element
+        // const HEADER = document.getElementById('coi-header-card');
+        // const OBSERVER = new MutationObserver((mutations) => {
+        //     mutations.forEach((mutation) => {
+        //         if(HEADER) {
+        //             if (document.body.style.overflowY === 'hidden' ) {
+        //                 HEADER.style.marginRight = '12px';
+        //                 document.body.style.marginRight = '12px';
+        //             } else {
+        //                 HEADER.style.marginRight = '0';
+        //                 document.body.style.marginRight = '0';
+        //             }
+        //         }
+        //     });
+        // });
+        // // Configure and start the OBSERVER
+        // const CONFIG = { attributes: true, childList: true, subtree: true };
+        // OBSERVER.observe(BODY_ELEMENT, CONFIG);
     }
 
     // for closing notes popup while clicking escape key
