@@ -21,7 +21,7 @@ export const OPA_DASHBOARD_RIGHTS = new Set(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_
 
 export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'SFI Details';
 
-export const DATE_PLACEHOLDER = 'DD/MM/YYYY';
+export const DATE_PLACEHOLDER = 'MM/dd/YYYY';
 
 export const EDITOR_CONFIGURATION = {
     link: {

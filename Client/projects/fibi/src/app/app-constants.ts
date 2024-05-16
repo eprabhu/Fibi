@@ -27,8 +27,8 @@ export const SSO_LOGOUT_URL = '';
 /* KKI Specific Change (Don't Delete) in Month/Day/Year format for DEFAULT_DATE_FORMAT, LONG_DATE_FORMAT,
 parseInput, fullPickerInput, datePickerInput */
 
-export const DEFAULT_DATE_FORMAT = 'dd/MM/yyyy';
-export const LONG_DATE_FORMAT = 'dd/MM/yyyy h:mm:ss a';
+export const DEFAULT_DATE_FORMAT = 'MM/dd/yyyy';
+export const LONG_DATE_FORMAT = 'MM/dd/yyyy h:mm:ss a';
 export const TIME_FORMAT = 'h:mm:ss a';
 export const AWARD_LABEL = $localize`:@@COMMON_AWARD:Award`;
 export const KEY_PERSON_LABEL = $localize`:@@COMMON_KEY_PERSONNEL:Key Personnel`;
@@ -96,10 +96,10 @@ export const PROPOSAL_STATUS_FOR_FETCHING_ALL_QUESTIONNAIRE = [1, 3, 12, 9];
 //  Angular Material date picker
 export const DATE_PICKER_FORMAT_MATERIAL = {
   parse: {
-    dateInput: 'DD/MM/YYYY HH:mm:ss',
+    dateInput: 'MM/DD/YYYY HH:mm:ss',
   },
   display: {
-    dateInput: 'DD/MM/YYYY',
+    dateInput: 'MM/DD/YYYY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
