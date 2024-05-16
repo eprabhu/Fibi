@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.polus.entity.Unit;
+import com.polus.service.UnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.dto.AuthResponse;
 import com.polus.entity.Person;
-import com.polus.entity.Unit;
 import com.polus.service.AuthService;
 import com.polus.service.PersonService;
-import com.polus.service.UnitService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -108,9 +108,11 @@ public class AuthController {
 				        .headers(headers)
 				        .body(null);
 			}
-		} else {
+		  } else {
             throw new RuntimeException("invalid access");
         }
+      HttpHeaders headers = new HttpHeaders();
+	    headers.setBearerAuth(token);
 	    return ResponseEntity.ok()
 	            .headers(headers)
 	            .body((response));
