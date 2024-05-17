@@ -1,4 +1,5 @@
-input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
@@ -34,7 +35,8 @@ h1 span {
     background: white;
 }
 
-.time-picker .hour, .time-picker .minute {
+.time-picker .hour,
+.time-picker .minute {
     position: relative;
     min-width: 60px;
     text-align: center;
@@ -42,7 +44,8 @@ h1 span {
     align-items: stretch;
 }
 
-.time-picker .hour .hr, .time-picker .minute .min {
+.time-picker .hour .hr,
+.time-picker .minute .min {
     background: none;
     font-size: 20px;
     appearance: none;
@@ -53,11 +56,17 @@ h1 span {
     text-align: center;
 }
 
-.time-picker .hour .hr-up, .time-picker .hour .hr-down, .time-picker .minute .min-up, .time-picker .minute .min-down {
+.time-picker .hour .hr-up,
+.time-picker .hour .hr-down,
+.time-picker .minute .min-up,
+.time-picker .minute .min-down {
     cursor: pointer;
 }
 
-.time-picker .hour .hr-up:hover, .time-picker .hour .hr-down:hover, .time-picker .minute .min-up:hover, .time-picker .minute .min-down:hover {
+.time-picker .hour .hr-up:hover,
+.time-picker .hour .hr-down:hover,
+.time-picker .minute .min-up:hover,
+.time-picker .minute .min-down:hover {
     color: #2c77f4;
 }
 
@@ -107,11 +116,13 @@ h1 span {
     font-weight: 300;
 }
 
-.action-ok:hover, .action-cancel:hover {
+.action-ok:hover,
+.action-cancel:hover {
     background: #f1f1f1;
 }
 
-.action-ok:focus, .action-cancel:focus {
+.action-ok:focus,
+.action-cancel:focus {
     outline: 0;
 }
 
@@ -121,29 +132,40 @@ h1 span {
     align-items: center;
     padding: 15px;
 }
+
 .overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
+    position: fixed;
+    /* Sit on top of the page content */
+    display: none;
+    /* Hidden by default */
+    width: 100%;
+    /* Full width (cover the whole page) */
+    height: 100%;
+    /* Full height (cover the whole page) */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0); /* Black background with opacity */
-    z-index: 1003; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
-  }
-  .bck-color{
+    background-color: rgba(0, 0, 0, 0);
+    /* Black background with opacity */
+    z-index: 1003;
+    /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer;
+    /* Add a pointer on hover */
+}
+
+.bck-color {
     background: #ecf0f7;
     border-radius: 5px;
 }
-.pointer-disable{
+
+.pointer-disable {
     pointer-events: none;
     color: rgb(190, 190, 190);
     cursor: not-allowed !important;
 }
-.close-button{
+
+.close-button {
     outline: none;
     color: black;
     font-size: 23px !important

@@ -3,7 +3,7 @@ import { CommonService } from '../../common/services/common.service';
 @Component({
   selector: 'app-file-drop',
   templateUrl: './file-drop.component.html',
-  styleUrls: ['./file-drop.component.css']
+  styleUrls: ['./file-drop.component.scss']
 })
 export class FileDropComponent implements OnInit {
 

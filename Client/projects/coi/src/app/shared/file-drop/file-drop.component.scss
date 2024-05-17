@@ -4,22 +4,26 @@
 	margin: auto;
 	margin-bottom: 1.2rem;
 	padding-top: 1rem;
-    padding-bottom: 1rem;
+	padding-bottom: 1rem;
 }
+
 .file {
 	color: hsl(214, 8%, 35%);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
+
 .disp-none {
-	display:none;
+	display: none;
 }
+
 .fa-cloud-upload {
 	font-size: 4rem;
 	color: hsla(214, 8%, 35%, 0.22);
 	cursor: auto;
 }
+
 .file-chooser {
 	font-weight: 500;
 	cursor: pointer;

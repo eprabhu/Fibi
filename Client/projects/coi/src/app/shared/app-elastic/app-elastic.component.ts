@@ -10,7 +10,7 @@ import { AppElasticService } from './app-elastic.service';
 @Component({
 	selector: 'app-elastic',
 	templateUrl: './app-elastic.component.html',
-	styleUrls: ['./app-elastic.component.css'],
+	styleUrls: ['./app-elastic.component.scss'],
 	providers: [AppElasticService]
 })
 export class AppElasticComponent implements OnChanges, OnInit {
