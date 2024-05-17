@@ -97,24 +97,6 @@ table {
   color: #6A7980;
 }
 
-.btn-outline-grey {
-  color: #48647F;
-  border: 1px solid #48647F;
-  background-color: white;
-
-  &:hover {
-      background-color: #007DEC;
-      color: white;
-      border: 1px solid #007DEC;
-  }
-
-  &:focus {
-      background-color: #007DEC;
-      color: white;
-      border: 1px solid #007DEC;
-  }
-}
-
 .bg-color {
   background-color: white;
 }
@@ -134,10 +116,6 @@ table {
   position: relative;
   right: 7px;
 
-}
-
-.btn-outline-grey:hover img {
-  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
 }
 
 .pencil {

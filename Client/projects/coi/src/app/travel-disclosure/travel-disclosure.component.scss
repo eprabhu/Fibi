@@ -152,18 +152,6 @@
   min-height: 200px;
 }
 
-.btn-outline-grey {
-  color: #48647F;
-  border: 1px solid #48647F;
-  background-color: white;
-
-  &:hover {
-    background-color: #007DEC;
-    color: white;
-    border: 1px solid #007DEC;
-  }
-}
-
 .header-sticky {
   position: sticky;
   top: 0;
@@ -227,18 +215,6 @@
   position: relative;
   top: 2px;
   color: rgb(26, 172, 62);
-}
-
-.btn-outline-grey {
-  color: #48647F;
-  border: 1px solid #48647F;
-  background-color: white;
-
-  &:hover {
-    background-color: #007DEC;
-    color: white;
-    border: 1px solid #007DEC;
-  }
 }
 
 .ash-text {

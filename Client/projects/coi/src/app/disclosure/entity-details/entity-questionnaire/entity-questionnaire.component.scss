@@ -1,6 +1,8 @@
-::ng-deep .custom-qustnr {
-    .nav-tabs {
-        padding-right: 80px;
+::ng-deep {
+    .custom-qustnr {
+        .nav-tabs {
+            padding-right: 80px;
+        }
     }
 }
 
@@ -51,11 +53,11 @@
     cursor: pointer;
     background-color: rgba(44, 119, 244, .1);
     color: #2c77f4 !important;
-}
 
-.btn-tertiary:hover {
-    background-color: rgba(44, 119, 244, .27);
-    color: #043e9e !important;
+    &:hover {
+        background-color: rgba(44, 119, 244, .27);
+        color: #043e9e !important;
+    }
 }
 
 .no-data-card {

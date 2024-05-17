@@ -193,24 +193,6 @@ table {
     min-height: 101px;
 }
 
-.btn-outline-grey {
-    color: #48647F;
-    border: 1px solid #48647F;
-    background-color: white;
-
-    &:hover {
-        background-color: #007DEC;
-        color: white;
-        border: 1px solid #007DEC;
-    }
-
-    &:focus {
-        background-color: #007DEC;
-        color: white;
-        border: 1px solid #007DEC;
-    }
-}
-
 .ash-text {
     color: #48647F !important;
 }

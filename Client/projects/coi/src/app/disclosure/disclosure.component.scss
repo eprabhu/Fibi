@@ -203,21 +203,6 @@ table {
   min-height: 100.5px;
 }
 
-.btn-outline-grey {
-  color: #48647F;
-  border: 1px solid #48647F;
-  background-color: white;
-
-  &:hover, &:focus {
-    background-color: #007DEC;
-    color: white;
-    border: 1px solid #007DEC;
-    label {
-        color: white !important;
-    }
-  }
-}
-
 .btn-active {
     background-color: #007DEC !important;
     color: white !important;

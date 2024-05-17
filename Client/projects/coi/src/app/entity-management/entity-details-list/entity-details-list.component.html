@@ -357,14 +357,12 @@
                 <label>Relationship <span>:</span></label>
                 <span class="break-point-1200 ms-2 fs-14">
                   <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
-                      <em class="mt-3 d-inline-block"
-                          *ngFor="let relation of entityRelationTypePills(entityListData?.relationshipTypes)">
-                              <span class="border px-3 py-1 rounded-4 me-2">
-                                   <span class="fw-medium me-1">{{relation?.relationshipTypes}}
-                                    :</span>
-                                    <span class="fw-normal">{{relation?.description}}</span>
-                              </span>
-                      </em>
+                    <em class="mt-3 d-inline-block" *ngFor="let relation of entityListData?.relationshipTypeList">
+                      <span class="border px-3 py-1 rounded-4 me-2">
+                          <span class="fw-medium me-1">{{relation?.relationshipTypes}} :</span>
+                          <span class="fw-normal">{{relation?.description}}</span>
+                      </span>
+                    </em>
                   </app-no-data-label>
                 </span>
               </div>
@@ -412,7 +410,7 @@
                     [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'bg-fcoi-clip': (disclosureList?.fcoiTypeCode === '2'?'bg-proposal-clip':'bg-award-clip')">
                     <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
                 </div>
-                <div class="col" tabindex="0">
+                <div class="col coi-ms-n15px" tabindex="0">
                   <span class="fw-bold">{{disclosureList?.fcoiTypeCode === '1'
                     ?'FCOI' : 'Project'}} Disclosure By
                     {{disclosureList?.disclosurePersonFullName}}</span>

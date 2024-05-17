@@ -1,0 +1,76 @@
+.attachment {
+    text-decoration: underline;
+    color: #31BCD8;
+    margin-top: 2px;
+}
+
+.setBody {
+    padding: 10px;
+    z-index: 1;
+    position: relative;
+    border-radius: 3px;
+
+    span {
+        font-weight: 600;
+        font-size: 13px;
+    }
+}
+
+.setHeadedit {
+    right: 62px;
+}
+
+.setHeaddelete {
+    right: 34px;
+}
+
+.setHead {
+    padding: 0;
+    z-index: 1;
+    position: relative;
+
+    &>.setHeadDownload {
+        position: absolute;
+        right: 5px;
+        top: -2px;
+        line-height: normal;
+    }
+}
+
+.nego-bck {
+    display: inline-block;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.row {
+    &>div {
+        margin-bottom: 1.4rem;
+    }
+}
+
+.info-box-dashed {
+    a {
+        &>i {
+            margin-right: 1rem;
+
+            &:hover {
+                color: #1e847b;
+            }
+        }
+    }
+}
+
+.modal-scroll {
+    max-height: 65vh;
+    overflow: auto;
+}
+
+.active {
+    color: #007DEC !important;
+    border-bottom: 3px solid #007DEC !important;
+}
+
+.subLink {
+    color: #48647f;
+}
