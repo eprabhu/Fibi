@@ -26,8 +26,8 @@
                                                             aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                     </div>
                                                     <div class="m-0">
-                                                        <span class="coi-text-lighter fs-12 d-block">Department</span>
-                                                        <span class="coi-text-dark"
+                                                        <span class="coi-text-dark fs-12 d-block">Department</span>
+                                                        <span class="coi-text-light"
                                                             [attr.aria-label]="disclosure?.unit?.unitDetail"> {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                                     </div>
                                                 </div>
@@ -41,11 +41,11 @@
 
                                                     </div>
                                                     <div class="m-0">
-                                                        <span class="coi-text-lighter fs-12 d-block">Certification Date</span>
-                                                        <span class="coi-text-dark"
+                                                        <span class="coi-text-dark fs-12 d-block">Certification Date</span>
+                                                        <span class="coi-text-light"
                                                             [attr.aria-label]="disclosure?.certifiedAt |dateFormatterWithTimeZone">
                                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                                <span class="coi-text-dark">{{disclosure?.certifiedAt|dateFormatterWithTimeZone}}</span>
+                                                                <span class="coi-text-light">{{disclosure?.certifiedAt|dateFormatterWithTimeZone}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
@@ -58,11 +58,11 @@
                                                             aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                     </div>
                                                     <div class="m-0">
-                                                        <span class="coi-text-lighter fs-12 d-block">Expiration Date</span>
-                                                        <span class="coi-text-dark"
+                                                        <span class="coi-text-dark fs-12 d-block">Expiration Date</span>
+                                                        <span class="coi-text-light"
                                                             [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                                <span class="coi-text-dark">{{disclosure?.expirationDate |
+                                                                <span class="coi-text-light">{{disclosure?.expirationDate |
                                                                     dateFormatter}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
@@ -173,8 +173,8 @@
                                                             aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                     </div>
                                                     <div class="m-0">
-                                                        <span class="coi-text-lighter fs-12 d-block">Department</span>
-                                                        <span class="coi-text-dark" [attr.aria-label]="disclosure?.unit?.unitDetail">
+                                                        <span class="coi-text-dark fs-12 d-block">Department</span>
+                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.unit?.unitDetail">
                                                             {{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                                     </div>
                                                 </div>
@@ -188,10 +188,10 @@
 
                                                     </div>
                                                     <div class="m-0">
-                                                        <span class="coi-text-lighter fs-12 d-block">Certification Date</span>
-                                                        <span class="coi-text-dark" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                        <span class="coi-text-dark fs-12 d-block">Certification Date</span>
+                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                                <span class="coi-text-dark">{{disclosure?.certifiedAt |
+                                                                <span class="coi-text-light">{{disclosure?.certifiedAt |
                                                                     dateFormatter}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
@@ -205,10 +205,10 @@
                                                             aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                     </div>
                                                     <div class="m-0">
-                                                        <span class="coi-text-lighter fs-12 d-block">Expiration Date</span>
-                                                        <span class="coi-text-dark" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                                        <span class="coi-text-dark fs-12 d-block">Expiration Date</span>
+                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                                <span class="coi-text-dark">{{disclosure?.expirationDate |
+                                                                <span class="coi-text-light">{{disclosure?.expirationDate |
                                                                     dateFormatter}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
@@ -408,10 +408,10 @@
                                                         aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                 </div>
                                                 <div class="m-0">
-                                                    <span class="coi-text-lighter fs-12 d-block">Department</span>
-                                                    <span class="coi-text-dark" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
+                                                    <span class="coi-text-dark fs-12 d-block">Department</span>
+                                                    <span class="coi-text-light" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                            <span class="coi-text-dark">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
+                                                            <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
@@ -425,11 +425,11 @@
 
                                                 </div>
                                                 <div class="m-0">
-                                                    <span class="coi-text-lighter fs-12 d-block">Period</span>
-                                                    <span class="coi-text-dark" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                    <span class="coi-text-dark fs-12 d-block">Period</span>
+                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                                         <app-no-data-label
                                                             [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
-                                                            <span class="coi-text-dark">{{opaDisclosure?.opaCycles?.periodStartDate
+                                                            <span class="coi-text-light">{{opaDisclosure?.opaCycles?.periodStartDate
                                                                 | dateFormatterWithTimeZone}}
                                                                 -
                                                                 {{opaDisclosure?.opaCycles?.periodEndDate |
@@ -446,10 +446,10 @@
                                                         aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                 </div>
                                                 <div class="m-0">
-                                                    <span class="coi-text-lighter fs-12 d-block">Create Date</span>
-                                                    <span class="coi-text-dark" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                                    <span class="coi-text-dark fs-12 d-block">Create Date</span>
+                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
-                                                            <span class="coi-text-dark">{{opaDisclosure?.createTimestamp |
+                                                            <span class="coi-text-light">{{opaDisclosure?.createTimestamp |
                                                                 dateFormatterWithTimeZone}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
@@ -529,10 +529,10 @@
                                                         aria-hidden="true" data-mat-icon-type="font">home</mat-icon>
                                                 </div>
                                                 <div class="m-0">
-                                                    <span class="coi-text-lighter fs-12 d-block">Department</span>
-                                                    <span class="coi-text-dark" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
+                                                    <span class="coi-text-dark fs-12 d-block">Department</span>
+                                                    <span class="coi-text-light" [attr.aria-label]="opaDisclosure?.homeUnit + ' - ' + opaDisclosure?.homeUnitName">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.homeUnitName">
-                                                            <span class="coi-text-dark">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
+                                                            <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(opaDisclosure)}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
@@ -546,11 +546,11 @@
 
                                                 </div>
                                                 <div class="m-0">
-                                                    <span class="coi-text-lighter fs-12 d-block">Period</span>
-                                                    <span class="coi-text-dark" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                    <span class="coi-text-dark fs-12 d-block">Period</span>
+                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
                                                         <app-no-data-label
                                                             [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
-                                                            <span class="coi-text-dark">{{opaDisclosure?.opaCycles?.periodStartDate
+                                                            <span class="coi-text-light">{{opaDisclosure?.opaCycles?.periodStartDate
                                                                 | dateFormatterWithTimeZone}}
                                                                 -
                                                                 {{opaDisclosure?.opaCycles?.periodEndDate |
@@ -567,10 +567,10 @@
                                                         aria-hidden="true" data-mat-icon-type="font">calendar_month</mat-icon>
                                                 </div>
                                                 <div class="m-0">
-                                                    <span class="coi-text-lighter fs-12 d-block">Create Date</span>
-                                                    <span class="coi-text-dark">
+                                                    <span class="coi-text-dark fs-12 d-block">Create Date</span>
+                                                    <span class="coi-text-light">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
-                                                            <span class="coi-text-dark">{{opaDisclosure?.createTimestamp |
+                                                            <span class="coi-text-light">{{opaDisclosure?.createTimestamp |
                                                                 dateFormatterWithTimeZone}}</span>
                                                         </app-no-data-label></span>
                                                 </div>

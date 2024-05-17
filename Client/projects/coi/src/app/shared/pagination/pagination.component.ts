@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ChangeDetect
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.css'],
+  styleUrls: ['./pagination.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent implements OnInit, OnChanges {

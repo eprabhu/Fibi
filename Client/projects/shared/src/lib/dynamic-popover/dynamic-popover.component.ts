@@ -50,7 +50,9 @@ export class DynamicPopoverComponent implements OnInit, OnDestroy {
     }
 
     private hideBasicDetailsPopup(): void {
-        document.body.style.overflowY = 'auto';
+        if (!document.querySelector('[data-bs-overflow]')) {
+            document.body.style.overflowY = 'auto';
+        }
         const POPUP: HTMLElement = document.querySelector('#dynamic-popover');
         POPUP.style.display = 'none';
     }
@@ -58,15 +60,15 @@ export class DynamicPopoverComponent implements OnInit, OnDestroy {
     private getLeftPosition(): string {
         const displayWidth = this.positionDetails.containerWidth || screen.width;
         return  displayWidth > this.positionDetails.popoverWidth + this.positionDetails.clientX ?
-            this.positionDetails.clientX  + window.scrollX + 'px' :
-            this.positionDetails.clientX - this.positionDetails.popoverWidth +  window.scrollX + 'px';
+            this.positionDetails.clientX + 'px' :
+            this.positionDetails.clientX - this.positionDetails.popoverWidth + 'px';
     }
 
     private getTopPosition(): string {
         const displayHeight = this.positionDetails.containerHeight || screen.height;
-        return displayHeight > this.positionDetails.popoverHeight + this.positionDetails.clientY  ?
-            this.positionDetails.clientY + window.scrollY + 'px' :
-            this.positionDetails.clientY - this.positionDetails.popoverHeight + window.scrollY + 'px';
+        return displayHeight > this.positionDetails.popoverHeight + this.positionDetails.clientY ?
+            this.positionDetails.clientY + 'px' :
+            this.positionDetails.clientY - this.positionDetails.popoverHeight + 'px';
     }
 
 }

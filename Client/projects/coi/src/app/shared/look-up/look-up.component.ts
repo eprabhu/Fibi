@@ -30,7 +30,7 @@ interface LookUp {
 @Component({
   selector: 'app-look-up',
   templateUrl: './look-up.component.html',
-  styleUrls: ['./look-up.component.css'],
+  styleUrls: ['./look-up.component.scss'],
   providers: [LookUpService, LookupFilterPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

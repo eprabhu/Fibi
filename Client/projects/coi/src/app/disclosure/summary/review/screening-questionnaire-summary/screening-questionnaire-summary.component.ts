@@ -13,7 +13,7 @@ import { coiReviewComment } from '../../../../shared-components/shared-interface
 @Component({
     selector: 'app-screening-questionnaire-summary',
     templateUrl: './screening-questionnaire-summary.component.html',
-    styleUrls: ['./screening-questionnaire-summary.component.css']
+    styleUrls: ['./screening-questionnaire-summary.component.scss']
 })
 export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, OnDestroy {
 
