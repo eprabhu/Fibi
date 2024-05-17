@@ -5,7 +5,9 @@
     background: #eef7ff;
     box-shadow: 0px 3px 6px -5px #000000;
     padding-top: 5px;
-    padding-bottom: 5px;}
+    padding-bottom: 5px;
+}
+
 /* The custom-checkbox */
 
 .custom-checkbox {
@@ -22,20 +24,20 @@
 }
 
 .main-title {
-  border-bottom: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
     margin-bottom: 15px;
     margin-top: 10px;
 }
 
 
 .toggle-header-btn {
-  width: 30px;
-  color: #A64040;
-  height: 30px;
+    width: 30px;
+    color: #A64040;
+    height: 30px;
 
-  mat-icon {
-    transform: scale(1.2);
-  }
+    mat-icon {
+        transform: scale(1.2);
+    }
 }
 
 /* Hide the browser's default checkbox */
@@ -47,6 +49,7 @@
     height: 0;
     width: 0;
 }
+
 .nav-style {
     background: #cce5ff;
     padding: 5px;
@@ -54,47 +57,51 @@
     border-radius: 3px;
     /* border-bottom-left-radius: 5px; */
     color: #2a6fe7;
-  }
-  .nav-style:hover {
+}
+
+.nav-style:hover {
     border-radius: 3px !important;
     outline: none;
     color: white;
     background: #2a6fe7;
-  }
-  .deleted-data{
+}
+
+.deleted-data {
     color: #ffb6b6 !important;
-  }
-  .added-data{
+}
+
+.added-data {
     color: #d8f8bc !important;
-  }
-  .right-arrow{
+}
+
+.right-arrow {
     color: #1e847b;
-    font-size: 20px !important;
+    font-size: 1.25rem !important;
     font-weight: 600 !important;
-  }
-  .base-variant-text-color{
+}
+
+.base-variant-text-color {
     color: #48647f;
     font-weight: 500;
-  }
+}
 
-  .info-icon {
+.info-icon {
     color: #052c65;
     cursor: pointer;
-  }
+}
 
-  .updown-arrow-relation {
+.updown-arrow-relation {
     position: relative;
-  }
+}
 
-  .label-text {
+.label-text {
     color: #6A7980;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
-  }
+}
 
-  .grey-text {
-    font-size: 14px;
+.grey-text {
+    font-size: 0.875rem;
     color: #48647F;
     margin-left: 8px;
-  }
-  
+}

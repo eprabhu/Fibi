@@ -146,7 +146,7 @@
     top: 17px;
     height: 22px;
     width: 22px;
-    font-size: 16px;
+    font-size: 1rem;
     position: absolute;
     margin-left: 0px;
     color: #6f7395;
@@ -156,7 +156,7 @@
   .grey-info {
     background: #EEEEEE;
     color: #202c2e;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
     border: 1px solid #caced2;
   }
@@ -184,7 +184,7 @@
   .highlight-node {
     background-color:#EEEEEE;
     color: #202c2e;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
     border: 1px solid #ded8d8;
   }
@@ -215,6 +215,6 @@
 
   .noDataExists {
     color: #9e9e9e !important;
-    font-size: 13px;
+    font-size: 0.8125rem;
     margin-left: 8px;
   }

@@ -63,7 +63,7 @@ small {
         background: #FFFFFF 0% 0% no-repeat padding-box;
         border: 1px solid #E0E0E0;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 0.875rem;
         padding: 20px 30px 20px 15px;
     }
 }
@@ -81,7 +81,7 @@ small {
         display: flex;
         align-items: center;
         min-height: 40px;
-        font-size: 16px;
+        font-size: 1rem;
         cursor: pointer;
 
         * {
@@ -128,7 +128,7 @@ small {
     width: 93%;
     margin-left: 13px;
     border: none;
-    font-size: 14px;
+    font-size: 0.875rem;
 
     &:focus {
         outline: none !important;

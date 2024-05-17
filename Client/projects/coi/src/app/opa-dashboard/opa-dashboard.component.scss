@@ -48,7 +48,7 @@
 // .coi-card label {
 //   font-weight: 600;
 //   color: #333;
-//   font-size: 14px;
+//   font-size: 0.875rem;
 // }
 
 .coi-card span:not(.text-success,.text-warning,.text-info,.text-danger,.text-primary).badge-warning {
@@ -58,7 +58,7 @@
 .bold-blue-number {
   color: #2c77f4;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 1.125rem;
   margin-right: 4px;
 }
 
@@ -106,12 +106,12 @@ nav ul li {
   color: #046a71b8 !important;
   border: #046a715c 1px solid;
   padding: 0.4rem 1rem !important;
-  font-size: 11px !important;
+  font-size: 0.6875rem !important;
 }
 
 .comment-icon {
   opacity: .4;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .searchButton {
@@ -180,7 +180,7 @@ nav ul li {
 }
 
 .grey-text {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #48647f;
   font-weight: 400;
   margin-left: 5px;
@@ -191,7 +191,7 @@ nav ul li {
 }
 
 .arrow {
-  font-size: 18px;
+  font-size: 1.125rem;
   height: 18px;
   width: 16px;
   margin-left: 4px;
@@ -233,7 +233,7 @@ small {
   position: relative;
   left: -9px;
   top: -5px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
   padding: 10px 18px;
@@ -257,13 +257,13 @@ small {
 .title-text {
   font-weight: 400;
   color: #48647f;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .readMore {
   color: #41464B;
   text-decoration: underline;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
@@ -306,7 +306,7 @@ small {
   margin-right: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-size: 12px;
+  font-size: 0.75rem;
   padding: 3px 8px 3px 12px;
   border-radius: 15px;
   background: #f1f1f1;
@@ -419,7 +419,7 @@ small {
     .menu-responsive li {
       color: #fff !important;
       font-weight: 400 !important;
-      font-size: 14px !important;
+      font-size: 0.875rem !important;
     }
 
     .separator {

@@ -3,7 +3,7 @@
     margin-top: 4px;
 }
 .card .card-title label {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     margin-right: 12px;
 }
@@ -34,7 +34,7 @@
 }
 
 .text-font-size{
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .bgColor {
@@ -45,7 +45,7 @@
     color: #dc3545;
     background-color: #f9e3e5;
     padding: 5px 10px;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .negotiation-comment {
@@ -68,8 +68,8 @@
     width: 30px;
     color: #A64040;
     height: 30px;
-  
+
     mat-icon {
-      transform: scale(1.2);
-    }
-  }
+        transform: scale(1.2);
+      }
+}

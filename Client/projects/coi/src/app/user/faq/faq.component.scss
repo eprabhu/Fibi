@@ -209,7 +209,7 @@ color: #fff;
 
 .questions-mainsection  {
     @extend .question-commonstyle;
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 .top-section{
@@ -223,10 +223,10 @@ color: #fff;
 }
 
 .edit-icon{
-    font-size: 18px;
+    font-size: 1.125rem;
     cursor: pointer;
 }
 
 .toggle-icon {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
