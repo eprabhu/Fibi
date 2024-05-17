@@ -22,7 +22,7 @@ import {DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../..
 @Component({
   selector: 'app-custom-element',
   templateUrl: './custom-element.component.html',
-  styleUrls: ['./custom-element.component.css'],
+  styleUrls: ['./custom-element.component.scss'],
 })
 export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
 

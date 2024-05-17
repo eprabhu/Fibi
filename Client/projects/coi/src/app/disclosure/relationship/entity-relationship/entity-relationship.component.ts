@@ -7,7 +7,7 @@ import { EntityRelationshipService } from './entity-relationship.service';
 @Component({
   selector: 'app-entity-relationship',
   templateUrl: './entity-relationship.component.html',
-  styleUrls: ['./entity-relationship.component.css']
+  styleUrls: ['./entity-relationship.component.scss']
 })
 export class EntityRelationshipComponent implements OnInit {
   isOpenModal: any;

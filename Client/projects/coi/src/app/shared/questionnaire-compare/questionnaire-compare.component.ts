@@ -25,7 +25,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
 @Component({
     selector: 'app-questionnaire-compare',
     templateUrl: './questionnaire-compare.component.html',
-    styleUrls: ['./questionnaire-compare.component.css'],
+    styleUrls: ['./questionnaire-compare.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [QuestionnaireCompareService, DateFormatPipeWithTimeZone]
 })

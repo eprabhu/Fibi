@@ -55,7 +55,6 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   personEntityId = null;
   entityDetails: any = {};
 
-
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, public commonService: CommonService) { }
 
@@ -111,30 +110,15 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
       this.entityManagementService.getPersonEntityDashboard(this.entityManagementService.relationshipDashboardRequest)
         ))
         .subscribe((res: any) => {
-          this.entityRelations = res.data || [];
+          this.entityRelations = this.setEntityRelationTypeList(res.data || []);
           this.resultCount = res.count;
-          this.loadingComplete();
+          this.isLoading = false;
         }, error => {
-          this.loadingComplete();
+          this.isLoading = false;
           this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
   }
 
-  entityRelationTypePills(relationshipTypes: string) {
-    if (relationshipTypes) {
-      const entityType = relationshipTypes.split(':;:');
-      this.entityRelations[relationshipTypes] = entityType.map(entity => {
-        const relationshipType = entity.split(':');
-        return { relationshipTypes: relationshipType[0] || '', description: relationshipType[1] || '' };
-      });
-      return this.entityRelations[relationshipTypes];
-    }
-  }
-
-  private loadingComplete() {
-    this.isLoading = false;
-  }
-  
   currentTab(tab) {
     this.isLoading = true;
     this.resetAdvanceSearchFields();
@@ -270,6 +254,21 @@ convertDisclosureStatus(status): string {
 
     cancelConcurrency() {
       this.entityManagementService.concurrentUpdateAction = '';
+  }
+
+  private setEntityRelationTypeList(inputArray: any[]): any[] {
+    return inputArray.map((obj: any) => {
+      if (obj.relationshipTypes) {
+        const ENTITY_TYPE = obj.relationshipTypes.split(':;:');
+        const RELATIONSHIP_TYPE_LIST = ENTITY_TYPE.map((entity: any) => {
+          const RELATIONSHIP_TYPE = entity.split(':');
+          return { relationshipTypes: RELATIONSHIP_TYPE[0] || '', description: RELATIONSHIP_TYPE[1] || '' };
+        });
+        return { ...obj, relationshipTypeList: RELATIONSHIP_TYPE_LIST};
+      } else {
+        return obj;
+      }
+    });
   }
 
 }

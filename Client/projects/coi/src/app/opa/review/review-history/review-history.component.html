@@ -10,7 +10,7 @@
           </div>
         <div class="card-content">
             <div class="card-body">
-                <ul class="timeline">
+                <ul class="timeline list-unstyled">
                     <ng-container *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
                     <li *ngFor="let historyEntry of review.value;">
                         <span class="fs-14" [innerHTML]="historyEntry?.description" tabindex="0"></span>

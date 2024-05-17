@@ -9,7 +9,7 @@ declare var $: any;
 @Component({
   selector: 'app-incomplete-warning',
   templateUrl: './incomplete-warning.component.html',
-  styleUrls: ['./incomplete-warning.component.css']
+  styleUrls: ['./incomplete-warning.component.scss']
 })
 export class IncompleteWarningComponent implements OnInit {
 

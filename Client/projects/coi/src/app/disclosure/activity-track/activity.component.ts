@@ -14,7 +14,7 @@ declare let $: any;
 @Component({
     selector: 'app-coi-review-comment-modal',
     templateUrl: './activity.component.html',
-    styleUrls: ['./activity.component.css'],
+    styleUrls: ['./activity.component.scss'],
     providers: [ActivityService]
 })
 export class ActivityComponent implements OnInit, OnDestroy {

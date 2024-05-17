@@ -45,7 +45,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
  @Component({
      selector: 'app-view-questionnaire',
      templateUrl: './view-questionnaire.component.html',
-     styleUrls: ['./view-questionnaire.component.css'],
+     styleUrls: ['./view-questionnaire.component.scss'],
      animations: [easeIn],
      providers: [QuestionnaireService],
  })

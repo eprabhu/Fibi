@@ -9,7 +9,7 @@ import { RO } from '../../disclosure/coi-interface';
 @Component({
     selector: 'app-count-modal',
     templateUrl: './count-modal.component.html',
-    styleUrls: ['./count-modal.component.css'],
+    styleUrls: ['./count-modal.component.scss'],
     providers: [CountModalService]
 })
 export class CountModalComponent implements OnInit {

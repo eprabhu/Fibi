@@ -15,7 +15,7 @@ import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
 @Component({
   selector: 'app-grant-details-view',
   templateUrl: './grant-details-view.component.html',
-  styleUrls: ['./grant-details-view.component.css'],
+  styleUrls: ['./grant-details-view.component.scss'],
   providers: [GrantDetailsViewService]
 })
 export class GrantDetailsViewComponent implements OnInit, OnChanges, OnDestroy {

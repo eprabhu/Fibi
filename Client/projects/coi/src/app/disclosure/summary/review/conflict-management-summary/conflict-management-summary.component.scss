@@ -1,35 +1,39 @@
 .add-activity-button {
-  min-width: 4rem !important;
+    min-width: 4rem !important;
 }
+
 .activity-icon {
-  width: 20px;
+    width: 20px;
 }
+
 .comment-button {
-  padding: 5px 5px 5px 5px;
-  height: 31px;
-  width: 36px;
-  border: 1px solid #505050;
+    padding: 5px 5px 5px 5px;
+    height: 31px;
+    width: 36px;
+    border: 1px solid #505050;
 }
+
 .comment-button:hover {
-  background-color: #3b83ff !important;
+    background-color: #3b83ff !important;
 }
+
 .info-icon {
-  margin-top : -7px;
-  height     : 22px;
-  width      : 22px;
-  font-size  : 16px;
-  position   : absolute;
-  margin-left: 2px;
-  color      : #6f7395;
-  cursor     : pointer;
+    margin-top: -7px;
+    height: 22px;
+    width: 22px;
+    font-size: 1rem;
+    position: absolute;
+    margin-left: 2px;
+    color: #6f7395;
+    cursor: pointer;
 }
 
 .main-title {
-  border-bottom: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
     margin-bottom: 15px;
     margin-top: 10px;
 }
 
 .updown-arrow {
-  position: initial;
+    position: initial;
 }
