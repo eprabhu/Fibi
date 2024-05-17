@@ -48,8 +48,9 @@
           <label class="coi-text-light d-block">Entity Status</label>
           <span class="coi-text-light fw-normal">
             <app-no-data-label [valueToShow]="entityDetails?.isActive">
-              <span [ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive
-                ?'Active':'Inactive'}}</span>
+              <span class="badge f-14 px-3 py-2 rounded-pill"
+                [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'">
+                {{entityDetails?.isActive ? 'Active':'Inactive'}}</span>
             </app-no-data-label>
           </span>
         </div>

@@ -319,7 +319,7 @@ body {
   .label-text {
     // color: #6A7980;
     color: var(--theme-text-gray-800) !important;
-    font-size: 14px;
+    font-size: var(--theme-font-size);
     font-weight: 600;
 }
   
@@ -474,7 +474,7 @@ body {
   /* Applying form-row styles to row */
   .form-row label,
   .row label {
-    font-size: 14px;
+    font-size: var(--theme-font-size);
     margin-bottom: 0;
     color: #333;
     font-weight: 600;
@@ -501,7 +501,7 @@ body {
   position: relative;
   left: -6px;
   top: 2px;
-  font-size: 14px;
+  font-size: var(--theme-font-size);
   font-weight: 500;
   border-radius: 0 50px 50px 0;
   padding: 10px 10px;
@@ -537,7 +537,7 @@ body {
     border-radius: 20px;
     color: var(--bs-black);
     margin: 5px 5px;
-    font-size: 14px;
+    font-size: var(--theme-font-size);
     cursor: pointer;
 
     &:nth-last-child(1) {

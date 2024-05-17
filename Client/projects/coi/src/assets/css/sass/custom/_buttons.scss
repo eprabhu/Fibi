@@ -23,7 +23,7 @@
   
   .btn-primary-icon {
     letter-spacing: normal;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
     margin-top: -8px;
     letter-spacing: normal;
@@ -105,4 +105,30 @@
   outline: none;
   background: none;
   transition: transform 0.1s ease;
+}
+
+.btn-outline-grey {
+  color: #48647F;
+  border: 1px solid #48647F;
+  background-color: white;
+
+  &:hover {
+    background-color: #007DEC;
+    color: white;
+    border: 1px solid #007DEC;
+
+    img {
+      filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
+    }
+  }
+
+  &:focus {
+    background-color: #007DEC;
+    color: white;
+    border: 1px solid #007DEC;
+  }
+
+  label {
+    color: white !important;
+  }
 }

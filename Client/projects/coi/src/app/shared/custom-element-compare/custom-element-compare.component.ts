@@ -28,7 +28,7 @@ interface CompareType {
 @Component({
   selector: 'app-custom-element-compare',
   templateUrl: './custom-element-compare.component.html',
-  styleUrls: ['./custom-element-compare.component.css'],
+  styleUrls: ['./custom-element-compare.component.scss'],
   providers: [CustomElementCompareService]
 })
 export class CustomElementCompareComponent implements OnInit, OnDestroy {

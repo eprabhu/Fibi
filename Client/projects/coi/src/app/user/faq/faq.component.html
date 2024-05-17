@@ -37,45 +37,46 @@
                                 <!-- Middle side -->
                                 <div class="col-10 ps-4">
                                     <div class="row">
-                                        <div class="row">
+                                        <div class="row mb-2">
                                             <div class="col-6">
-                                              <div class="card-title d-flex justify-content-start pb-4">
-                                                <h1 class="fw-700">Frequently Asked Questions</h1>
+                                              <div class="card-title d-flex justify-content-start">
+                                                <h3 class="fs-20 fw-bold d-inline-block">Frequently Asked Questions</h3>
                                               </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-end pt-2 pe-5">
-                                              <button title="Add New Question" class="btn btn-lg btn-primary fs-14 d-flex justify-content-end pt-2" id="add-faq-btn"
-                                              data-bs-target="#add-new-faq" data-bs-toggle="modal" (click)="addNewQuestion()">
-                                              Add New Question
+                                            <div class="col-6 d-flex justify-content-end pe-5">
+                                              <button title="Add New Question" class="btn btn-lg btn-primary fs-14" id="add-faq-btn"
+                                                data-bs-target="#add-new-faq" data-bs-toggle="modal" (click)="addNewQuestion()">
+                                                Add New Question
                                               </button>
                                           </div>
-                                          </div>
+                                        </div>
                                         <div class="col-12 ">
                                             <div>
-                                                <h2 class="pb-2">{{ categoryName }}</h2>
+                                                <h4 class="pb-2 fs-18 fw-bold">{{ categoryName }}</h4>
                                             </div>
                                             <div class="qa-display " id="qa-tab" *ngIf="questionsList.length > 0">
                                                 <div *ngFor="let questions of tempQuestionList; let i=index" class="qa-flex mt-3 question-border"
                                                 [ngClass]="{'questionlist-active': i === selectedQuestion, 'question-list': i !== selectedQuestion}">
-                                                    <ul class="mb-0 pt-3">
+                                                    <ul class="mb-0 p-3">
                                                         <span class="pt-2 questions-mainsection fs-15 " id="question-title-{{i}}" value="{{ questions.question }}">
                                                             {{ questions.question }}
                                                         </span>
-                                                        <p class="fs-14">{{ questions.answer }}</p>
-                                                        <span *ngIf="questions.url != ''"><p><a href="" (click)="redirectUrl(questions?.url);">{{ questions.url }}</a></p></span>
+                                                        <p class="fs-14 mb-0">{{ questions.answer }}</p>
+                                                        <span *ngIf="questions.url != ''"><p class="mb-0"><a href="" (click)="redirectUrl(questions?.url);" class="fs-14">{{ questions.url }}</a></p></span>
                                                         <div class="fileChips hand-cursor d-flex justify-content-end" style="word-break: break-all;"
                                                             *ngFor="let question of questions.faqAttachment"
                                                             (click)="saveAttachment(question,question.faqAttachmentId)">
-                                                            <span>{{question.fileName}}
+                                                            <span class="fs-14">{{question.fileName}}
                                                                 <i aria-hidden="true" class="fa fa-download" title="Click here to download {{question.fileName}}"></i>
                                                             </span>
                                                         </div>
                                                     </ul>
                                                     <!-- Edit  -->
-                                                    <div class="ps-1">
-                                                        <mat-icon [attr.title]="'edit'" class="edit-icon" (click)="editdata(questions,i)">
-                                                            edit
-                                                        </mat-icon>
+                                                    <div class="px-3">
+                                                        <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1 coi-scale-9"
+                                                            id="edit-faq-coi" title="Click to edit" type="button" (click)="editdata(questions,i)">
+                                                            <mat-icon aria-hidden="true">edit</mat-icon>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

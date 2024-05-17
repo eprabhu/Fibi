@@ -1,201 +1,201 @@
-.navigation-icons{
-  span {
-    padding-top: 11px !important;
-    padding-bottom: 11px !important;
-  }
+.navigation-icons {
+    span {
+        padding-top: 11px !important;
+        padding-bottom: 11px !important;
+    }
 
-  .active {
-    color: #007DEC;
-    font-weight: bold;
-    border-bottom: 3px solid #007DEC;
-  }
+    .active {
+        color: #007DEC;
+        font-weight: bold;
+        border-bottom: 3px solid #007DEC;
+    }
 }
 
-.user-dashboard-nav span:focus{
-  border-bottom: 3px solid #007DEC;
-  color: #007DEC;
-  padding: 8px 16px;
+.user-dashboard-nav span:focus {
+    border-bottom: 3px solid #007DEC;
+    color: #007DEC;
+    padding: 8px 16px;
 
 }
 
 .user-dashboard-nav {
-  min-height: 42px;
-  background-color: white !important
+    min-height: 42px;
+    background-color: white !important
 }
 
 .status-active-pill {
-  background-color: #4CB57D;
-  color: white;
-  padding: 3px 9px;
-  font-weight: 500;
-  border-radius: 15px;
+    background-color: #4CB57D;
+    color: white;
+    padding: 3px 9px;
+    font-weight: 500;
+    border-radius: 15px;
 
 }
+
 .status-inactive-pill {
-  background-color: #5f6462;
-  color: white;
-  padding: 3px 9px;
-  font-weight: 500;
-  border-radius: 15px;
+    background-color: #5f6462;
+    color: white;
+    padding: 3px 9px;
+    font-weight: 500;
+    border-radius: 15px;
 }
+
 .active-color {
-  color: #007DEC;
-  position: relative;
-  right: calc(50% - 0px);
-  bottom: -1.8rem;
+    color: #007DEC;
+    position: relative;
+    right: calc(50% - 0px);
+    bottom: -1.8rem;
 }
 
-.active {
-  // background-color: #d4e6f7;
-  // padding: 5px
+.btn-clear-entity-coi {
+    width: 7rem;
+    height: 3.5rem;
 }
 
-
-#btn-clear {
-  width: 7rem;
-  height: 3.5rem;
-}
-.position{
-  position: relative;
-  right: 3.5rem;
-}
-#advanced-search{
-  width: 145px;
+.position {
+    position: relative;
+    right: 3.5rem;
 }
 
-th{
-  height:45px;
-}
-.add-icon{
-  position: relative;
-  top: 4px;
-  font-size: 18px;
-  right:2px;
+.advanced-search-entity-coi {
+    width: 145px;
 }
 
-.arrow{
-  font-size: 18px;
-  height: 18px;
-  margin-left: 4px;
+th {
+    height: 45px;
+}
+
+.add-icon {
+    position: relative;
+    top: 4px;
+    font-size: 1.125rem;
+    right: 2px;
+}
+
+.arrow {
+    font-size: 1.125rem;
+    height: 18px;
+    margin-left: 4px;
 }
 
 .sort-div {
-  background-color: #eeeeee;
-  padding: 9px;
-  margin-top: -10px;
+    background-color: #eeeeee;
+    padding: 9px;
+    margin-top: -10px;
 }
 
 .filter-active {
-  border: 2px solid #54BF5B !important;
-  background: #F5FEF5 !important;
+    border: 2px solid #54BF5B !important;
+    background: #F5FEF5 !important;
 }
 
 .selected-arrow {
-  color: #52bf5a;
+    color: #52bf5a;
 }
 
 .status-pill {
-  color: white;
-  width: max-content;
-  height: 27px;
-  background: #54BF5B;
-  position: relative;
-  left: -23px;
-  top: -27px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 0 50px 50px 0;
-  padding: 10px 18px;
+    color: white;
+    width: max-content;
+    height: 27px;
+    background: #54BF5B;
+    position: relative;
+    left: -23px;
+    top: -27px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 18px;
 
 
-  &:before {
-    content: "";
-    position: absolute;
-    height: 0;
-    width: 0;
-    border-bottom: 6px solid #151515;
-    border-left: 6px solid transparent;
-    top: -5px;
-    left: 0;
-  }
+    &:before {
+        content: "";
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-bottom: 6px solid #151515;
+        border-left: 6px solid transparent;
+        top: -5px;
+        left: 0;
+    }
 }
 
 .inactive {
-  background-color: #dbdbdb;
-  color: black;
+    background-color: #dbdbdb;
+    color: black;
 
-  &:before {
-    content: "";
-    border-bottom: 6px solid #949494;
-  }
+    &:before {
+        content: "";
+        border-bottom: 6px solid #949494;
+    }
 }
 
-.title-custom-position{
-  position: relative;
-  right: 4rem;
+.title-custom-position {
+    position: relative;
+    right: 4rem;
 }
-.col-height{
-  height: 22px;
+
+.col-height {
+    height: 22px;
 }
 
 .slider-base {
-  position: fixed;
-  z-index: 51;
-  top: 0;
-  right: -83%;
-  width: 80%;
-  height: 100%;
-  padding-left: 0;
-  background-color: #ffecec85;
-  box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
-  transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
+    position: fixed;
+    z-index: 51;
+    top: 0;
+    right: -83%;
+    width: 80%;
+    height: 100%;
+    padding-left: 0;
+    background-color: #ffecec85;
+    box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
+    transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
 }
 
 .slider-container {
-  background-color: #fff;
-  height: 100vh;
-  padding: 0px 10px 10px 10px;
-  overflow: auto;
+    background-color: #fff;
+    height: 100vh;
+    padding: 0px 10px 10px 10px;
+    overflow: auto;
 }
 
 .overlay {
-  position: fixed;
-  width: 100%;   
-  height: 100%; 
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:rgb(74 74 74 / 32%);
-  z-index: 50;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(74 74 74 / 32%);
+    z-index: 50;
 }
 
 .slider-opened {
-  right: 0 !important;
+    right: 0 !important;
 }
 
-.pr-31{
-  padding-right: 31px;
+.pr-31 {
+    padding-right: 31px;
 }
 
-.pr-10{
-  padding-right: 10px;
+.pr-10 {
+    padding-right: 10px;
 }
 
 /* For showing the word disclosure as (discl). for page responsive time*/
 .disclosure-text,
 .disclosures-text {
-  padding-left: 2px;
+    padding-left: 2px;
 }
 
 .disclosure-text:after {
-  content: "Disclosure";
+    content: "Disclosure";
 }
 
 @media (max-width: 992px) {
-  .disclosure-text:after {
-    content: "Discl.";
-  }
+    .disclosure-text:after {
+        content: "Discl.";
+    }
 }
 
 .disclosures-text:after {
@@ -209,13 +209,13 @@ th{
 }
 
 .person-name {
-  font-size: 16px;
-  color:black;
-  font-weight: 600;
+    font-size: 1rem;
+    color: black;
+    font-weight: 600;
 }
 
 .row label {
-  font-weight: 600;
-  color: #697a80;
-  font-size: 14px;
+    font-weight: 600;
+    color: #697a80;
+    font-size: 0.875rem;
 }

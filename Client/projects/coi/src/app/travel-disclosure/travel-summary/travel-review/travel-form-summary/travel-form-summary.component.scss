@@ -1,32 +1,32 @@
 .col-custom {
-  width: max-content;
+    width: max-content;
 }
 
 
 .info-icon {
-  margin-top: -7px;
-  height: 22px;
-  width: 22px;
-  position: absolute;
-  margin-left: 2px;
-  color: #6f7395;
-  cursor: pointer;
+    margin-top: -7px;
+    height: 22px;
+    width: 22px;
+    position: absolute;
+    margin-left: 2px;
+    color: #6f7395;
+    cursor: pointer;
 }
 
 .toggle-header-btn {
-  width: 30px;
-  color: #A64040;
-  height: 30px;
+    width: 30px;
+    color: #A64040;
+    height: 30px;
 
-  mat-icon {
-    transform: scale(1.2);
-  }
+    mat-icon {
+        transform: scale(1.2);
+    }
 }
 
 .main-title {
-  border-bottom: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
 }
 
 .grey-text {
-  color: #6A7980;
+    color: #6A7980;
 }

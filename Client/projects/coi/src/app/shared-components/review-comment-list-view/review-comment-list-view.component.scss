@@ -1,7 +1,3 @@
-
-
-
-
 select option {
     background-color: #fff;
 }
@@ -12,7 +8,7 @@ select option {
 }
 
 .custom-font-color {
-   color: #98989e;
+    color: #98989e;
 }
 
 .collapse-description {
@@ -43,7 +39,7 @@ select option {
     border-radius: 0px 20px 0px 20px;
     width: max-content;
 }
- 
+
 .badge {
     color: #5a5a5a !important;
 }
@@ -89,12 +85,13 @@ select option {
     position: relative;
     left: 20px;
 }
+
 .col-custom {
     flex: 0 0 auto;
     width: 4.7%;
 }
 
-.pl-0{
+.pl-0 {
     padding-left: 0 !important;
 }
 
@@ -104,35 +101,35 @@ select option {
     position: absolute;
     left: 18px;
     top: 0;
-  }
+}
 
-  .cmnt-background {
+.cmnt-background {
     border: 2px solid #dedede;
     border-radius: 4px;
-    }
+}
 
-    .person-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #027dec;
-        height: 32px;
-        width: 32px;
-        border-radius: 50%;
-        background-color: #E1E6EB;
-      }
+.person-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #027dec;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    background-color: #E1E6EB;
+}
 
-      .reply-comments {
-        border: 1px solid #DCDCDC;
-        border-radius: 5px;
-        background: #F1F1F1;
-      }
+.reply-comments {
+    border: 1px solid #DCDCDC;
+    border-radius: 5px;
+    background: #F1F1F1;
+}
 
 .section-margin {
     margin-bottom: 20px;
 }
 
-.sub-label{
+.sub-label {
     border-radius: 50px;
     color: #027dec;
     background-color: #E1E6EB;

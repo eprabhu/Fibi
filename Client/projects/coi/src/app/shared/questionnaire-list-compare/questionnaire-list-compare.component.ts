@@ -28,7 +28,7 @@ import {compareArray} from "../../../../../fibi/src/app/common/utilities/array-c
 @Component({
   selector: 'app-questionnaire-list-compare',
   templateUrl: './questionnaire-list-compare.component.html',
-  styleUrls: ['./questionnaire-list-compare.component.css'],
+  styleUrls: ['./questionnaire-list-compare.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [QuestionnaireListCompareService]
 })

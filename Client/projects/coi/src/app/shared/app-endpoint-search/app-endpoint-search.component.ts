@@ -10,7 +10,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 @Component({
     selector: 'app-endpoint-search',
     templateUrl: './app-endpoint-search.component.html',
-    styleUrls: ['./app-endpoint-search.component.css'],
+    styleUrls: ['./app-endpoint-search.component.scss'],
     providers: [AppEndpointSearchService]
 })
 export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy {
