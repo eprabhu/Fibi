@@ -1,7 +1,8 @@
-.select{
+.select {
     margin-right: 45px;
     margin-top: 4px;
 }
+
 .card .card-title label {
     font-size: 16px;
     font-weight: bold;
@@ -14,7 +15,7 @@
     margin-top: 2px;
 }
 
-.labelColor{
+.labelColor {
     background-color: #f7f7f7;
     margin-top: 9px;
 }
@@ -27,13 +28,13 @@
     line-height: 35px;
 }
 
-.label-font-size{
+.label-font-size {
     font-size: 1.4rem;
     font-weight: 600;
     color: #545050;
 }
 
-.text-font-size{
+.text-font-size {
     font-size: 12px;
 }
 
@@ -41,7 +42,7 @@
     background-color: #f1f5f8;
 }
 
-.notverified{
+.notverified {
     color: #dc3545;
     background-color: #f9e3e5;
     padding: 5px 10px;
@@ -53,23 +54,24 @@
 }
 
 .activity-list-card {
-    box-shadow: 0 0 4px 3px rgba(194,194,194,.35);
+    box-shadow: 0 0 4px 3px rgba(194, 194, 194, .35);
     border-left: 2px solid #a92034;
 }
 
 .time-font {
     font-size: 1.4rem;
 }
+
 .updown-arrow {
-  width: 32px;
+    width: 32px;
 }
 
 .toggle-header-btn {
     width: 30px;
     color: #A64040;
     height: 30px;
-  
+
     mat-icon {
-      transform: scale(1.2);
+        transform: scale(1.2);
     }
-  }
+}

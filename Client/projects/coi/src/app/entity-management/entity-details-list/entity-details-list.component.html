@@ -54,7 +54,7 @@
           [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
       </div>
       <div class="ml-15 justify-content-end d-flex">
-        <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
+        <button class="btn btn-primary fs-13 d-flex advanced-search-entity-coi" id="advanced-search" title="Advance search"
           (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
           aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon>
           <label class="fs-13 mt-1">
@@ -206,7 +206,7 @@
           </app-look-up>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear" (click)="clearAdvanceSearch()"
+          <button class="btn btn-outline-secondary btn-clear-entity-coi fs-14 py-2 px-4 mr-10" id="btn-clear" (click)="clearAdvanceSearch()"
             title="Clear">Clear</button>
           <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search"
             title="Search">Search</button>
@@ -273,7 +273,7 @@
             </mat-datepicker>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear" (click)="clearAdvanceSearch()"
+          <button class="btn btn-outline-secondary btn-clear-entity-coi fs-14 py-2 px-4 mr-10" id="btn-clear" (click)="clearAdvanceSearch()"
             title="Clear">Clear</button>
           <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search"
             title="Search">Search</button>

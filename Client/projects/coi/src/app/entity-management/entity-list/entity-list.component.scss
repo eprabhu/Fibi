@@ -125,12 +125,6 @@ input:checked+.slider:before {
     left: 95px;
 }
 
-// #add-new-entity,
-// #advanced-search {
-//     width: 145px;
-//     height: 33px;
-// }
-
 .border-nav {
     width: 26rem;
     border-radius: 1.5rem 1.5rem 0px 0px;
@@ -323,37 +317,38 @@ td {
     background: #F5FEF5 !important;
 }
 
-.offscreen
- {
+.offscreen {
     clip-path: inset(100%);
     clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
     overflow: hidden;
     position: absolute;
-    white-space: nowrap; /* added line */
+    white-space: nowrap;
+    /* added line */
     width: 1px;
- }
+}
 
- .nav-line-tabs .nav-item .nav-link {
+.nav-line-tabs .nav-item .nav-link {
     border: 0;
     border-bottom: 1px solid transparent;
     transition: color 0.2s ease;
     white-space: nowrap;
     font-weight: 500;
-     color: #7c7c7d;
+    color: #7c7c7d;
 }
 
- .nav-line-tabs .nav-item {
-     &.active {
-         border-bottom: 3px solid #007DEC;
-     }
-     cursor: pointer;
- }
+.nav-line-tabs .nav-item {
+    &.active {
+        border-bottom: 3px solid #007DEC;
+    }
 
- .nav-line-tabs .nav-item.active .nav-link {
-     color: #007DEC !important;
-     font-weight: bold;
-     white-space: nowrap;
+    cursor: pointer;
+}
+
+.nav-line-tabs .nav-item.active .nav-link {
+    color: #007DEC !important;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
 .nav-line-tabs.nav-line-tabs-2x .nav-item.active .nav-link {
@@ -365,7 +360,7 @@ td {
     position: relative;
     background-color: #2b3244;
     opacity: .95;
-    box-shadow: 0px 2px 5px -1px rgba(15,15,15,.5803921569);
+    box-shadow: 0px 2px 5px -1px rgba(15, 15, 15, .5803921569);
     padding: 16px 10px 16px 10px;
     border-radius: 4px;
     max-height: 320px;

@@ -80,16 +80,20 @@ a {
         transform: scaleY(1);
         background: #47e6d6;
     }
+
     25% {
         background: #26a69a;
     }
+
     50% {
         transform: scaleY(2);
         background: #59CD90;
     }
+
     75% {
         background: #87ece2;
     }
+
     100% {
         transform: scaleY(1);
         background: #1bebd6;
@@ -151,8 +155,6 @@ a {
     font-weight: 500;
     padding: 0 5px;
 }
-
-
 
 #coi-bootstrap-toast {
     font-size: 0.875rem;
