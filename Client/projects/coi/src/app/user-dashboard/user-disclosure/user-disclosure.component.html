@@ -706,7 +706,7 @@
             [ngClass]="currentSelected.tab == 'TRAVEL_DISCLOSURES' ? 'col-lg-12' : ''">
             <span class="filter-search">
                 <mat-icon aria-hidden="true" class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
-                <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()" type="text"
+                <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()"
                     [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
             </span>
             <mat-icon tabindex="0" role="button" class="closeButton" *ngIf="searchText"
@@ -741,9 +741,7 @@
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName">
                                                     {{disclosure.disclosurePersonFullName}}</span>
                                             </span>
-                                            <ng-container
-                                                *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'"
-                                                class="">
+                                            <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
                                                 <span class="d-inline-flex" tabindex="0"
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
@@ -769,14 +767,14 @@
                                 <div class="row mx-0">
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Department -->
-                                        <div tabindex="0" [attr.aria-label]="'Department' + disclosure?.unit?.unitDetail">
+                                        <div tabindex="0" [attr.aria-label]="'Department is ' + disclosure?.unit?.unitDetail">
                                             <label class="d-block coi-text-dark">Department</label>
                                             <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure?.unit)}}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Certification Date -->
-                                        <div tabindex="0" [attr.aria-label]="'Certification Date' + (disclosure?.certifiedAt | dateFormatter)">
+                                        <div tabindex="0" [attr.aria-label]="'Certification Date is ' + (disclosure?.certifiedAt | dateFormatter)">
                                             <label class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
@@ -799,7 +797,7 @@
                                     <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Description (FCOI)-->
                                         <div tabindex="0"
-                                            [attr.aria-label]="'Description' + disclosure?.reviseComment">
+                                            [attr.aria-label]="'Description is ' + disclosure?.reviseComment">
                                             <label for="id" class="d-block coi-text-dark">Description</label>
                                             <span>
                                                 <app-no-data-label [valueToShow]="disclosure?.reviseComment">
@@ -832,7 +830,7 @@
                                     <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Description(Not FCOI) -->
                                         <div tabindex="0"
-                                            [attr.aria-label]="'Description' + disclosure?.reviseComment">
+                                            [attr.aria-label]="'Description is ' + disclosure?.reviseComment">
                                             <label for="id" class="d-block coi-text-dark">Description</label>
                                             <span class="break-point-1200">
                                                 <app-no-data-label [valueToShow]="disclosure?.reviseComment">
@@ -865,7 +863,7 @@
                                     
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Administrator -->
-                                        <div tabindex="0" [attr.aria-label]="'Administrator' + (disclosure?.administrator)">
+                                        <div tabindex="0" [attr.aria-label]="'Administrator is ' + (disclosure?.administrator)">
                                             <label for="id" class="d-block coi-text-dark">Administrator</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="disclosure?.administrator">
@@ -876,7 +874,7 @@
                                     </div>                   
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Admin Group -->
-                                        <div tabindex="0" [attr.aria-label]="'Admin Group' + (disclosure?.adminGroupName)">
+                                        <div tabindex="0" [attr.aria-label]="'Admin Group is ' + (disclosure?.adminGroupName)">
                                             <label for="id" class="d-block coi-text-dark">Admin Group</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
@@ -891,7 +889,7 @@
                                 <!-- Coi card Disclosure Status -->
                                 <div tabindex="0" *ngIf="!disclosure?.opaDisclosureId"
                                     class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Disclosure Status' + (disclosure?.conflictStatus)">
+                                    [attr.aria-label]="'Disclosure Status is ' + (disclosure?.conflictStatus)">
                                     <label for="status" class="d-block coi-text-lighter">Disclosure Status</label>
                                     <span class="break-point-1200">
                                         <app-no-data-label [valueToShow]="disclosure?.conflictStatus"
@@ -918,7 +916,7 @@
                                 </div>
                                 <!-- Coi card Disposition Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Disposition Status' + (disclosure?.dispositionStatus)">
+                                    [attr.aria-label]="'Disposition Status is ' + (disclosure?.dispositionStatus)">
                                     <label class="d-block coi-text-lighter">Disposition Status</label>
                                     <span class="break-point-1200">
                                         <span class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}}"></span>
@@ -929,7 +927,7 @@
                                 </div>
                                 <!-- Coi card Review Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
+                                    [attr.aria-label]="'Review Status is ' + (disclosure?.reviewStatus)">
                                     <label for="id" class="d-block coi-text-lighter">Review Status</label>
                                     <span>
                                         <app-no-data-label [valueToShow]="disclosure?.reviewStatus">
@@ -998,7 +996,7 @@
                                 <div class="row mx-0">
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Department -->
-                                        <div tabindex="0" [attr.aria-label]="'Department Name' + (disclosure?.unitDetails?.unitDetail)">
+                                        <div tabindex="0" [attr.aria-label]="'Department Name is ' + (disclosure?.unitDetails?.unitDetail)">
                                             <label for="department-id" class="d-block coi-text-dark">Department</label>
                                             <span [attr.aria-label]="disclosure?.unitDetails?.unitDetail">
                                                 <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
@@ -1010,7 +1008,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Traveller -->
-                                        <div tabindex="0" [attr.aria-label]="'Traveller Type' + formatTravellerTypes(disclosure?.travellerTypeDescription)">
+                                        <div tabindex="0" [attr.aria-label]="'Traveller Type is ' + formatTravellerTypes(disclosure?.travellerTypeDescription)">
                                             <label for="traveller" class="d-block coi-text-dark">Traveller</label>
                                             <span>
                                                 <app-no-data-label id="traveller" [valueToShow]="disclosure?.travellerTypeDescription">
@@ -1022,7 +1020,7 @@
                                     <!-- Travel Card Destination -->
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <div *ngIf="disclosure?.fcoiTypeCode!= 1" tabindex="0"
-                                            [attr.aria-label]="'Destination' + (disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState)">
+                                            [attr.aria-label]="'Destination is ' + (disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState)">
                                             <label for="destination" class="d-block coi-text-dark">Destination</label>
                                             <span>
                                                 <app-no-data-label id="destination"
@@ -1039,7 +1037,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Certification Date -->
-                                        <div tabindex="0" [attr.aria-label]="'Certification Date' + (disclosure?.travelSubmissionDate | dateFormatter)">
+                                        <div tabindex="0" [attr.aria-label]="'Certification Date is ' + (disclosure?.travelSubmissionDate | dateFormatter)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.travelSubmissionDate">
@@ -1050,7 +1048,7 @@
                                     </div>
                                     <!-- Travel Card Actual Amount -->
                                     <div class="col-lg-4 col-md-6 mb-2">
-                                        <div tabindex="0" [attr.aria-label]="'Actual Amount' + (disclosure.travelAmount)">
+                                        <div tabindex="0" [attr.aria-label]="'Actual Amount is ' + (disclosure.travelAmount)">
                                             <label for="travel-amount" class="d-block coi-text-dark">Actual Amount</label>
                                             <span>
                                                 <app-no-data-label id="travel-amount" [valueToShow]="disclosure?.travelAmount">
@@ -1061,7 +1059,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Expiration Date -->
-                                        <div tabindex="0" [attr.aria-label]="'Expiration Date' + (disclosure.expirationDate | dateFormatter)">
+                                        <div tabindex="0" [attr.aria-label]="'Expiration Date is ' + (disclosure.expirationDate | dateFormatter)">
                                             <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
                                             <span>
                                                 <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
@@ -1077,7 +1075,7 @@
                                 <!-- Travel Card Disclosure Status -->
                                 <div tabindex="0" *ngIf="!disclosure?.opaDisclosureId"
                                     class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Disclosure Status' + (disclosure?.travelDisclosureStatusDescription)">
+                                    [attr.aria-label]="'Disclosure Status is ' + (disclosure?.travelDisclosureStatusDescription)">
                                     <label for="status" class="d-block coi-text-lighter">Disclosure Status</label>
                                     <span>
                                         <app-no-data-label [valueToShow]="disclosure?.conflictStatus"
@@ -1104,7 +1102,7 @@
                                 </div>
                                 <!-- Travel Card Document Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Document Status' + (disclosure?.documentStatusDescription)">
+                                    [attr.aria-label]="'Document Status is ' + (disclosure?.documentStatusDescription)">
                                     <label for="review-status" class="d-block coi-text-lighter">Document Status</label>
                                     <span>
                                         <app-no-data-label id="review-status"
@@ -1120,7 +1118,7 @@
                                 </div>
                                 <!-- Travel Card Review Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Review Status' + (disclosure?.reviewDescription)">
+                                    [attr.aria-label]="'Review Status is ' + (disclosure?.reviewDescription)">
                                     <label for="id" class="d-block coi-text-lighter">Review Status</label>
                                     <span>
                                         <app-no-data-label id="review-status"
@@ -1162,11 +1160,11 @@
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
                                                 <span class="coi-text-light fs-6 text-nowrap" tabindex="0"
-                                                    [attr.aria-label]="'Disclosure person' + disclosure.personName">{{disclosure.personName}}</span>
+                                                    [attr.aria-label]="'Disclosure person is ' + disclosure.personName">{{disclosure.personName}}</span>
                                             </span>
                                             <ng-container class="ms-1">
                                                 <div class="d-inline-flex" tabindex="0"
-                                                    [attr.aria-label]="'Reporting Cycle' + (disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate |dateFormatter)">
+                                                    [attr.aria-label]="'Reporting Cycle is ' + (disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate |dateFormatter)">
                                                     <span class="pipe mx-1"></span>
                                                     <span class="fs-6 text-nowrap">Reporting Cycle:</span>
                                                     <span class="coi-text-darker hyper-link fs-6 ms-1">
@@ -1181,14 +1179,14 @@
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Department -->
                                         <div tabindex="0"
-                                            [attr.aria-label]="'Department Name' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
+                                            [attr.aria-label]="'Department Name is ' + (disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName)">
                                             <label class="d-block coi-text-dark">Department</label>
                                              <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Certification Date -->
-                                        <div [attr.aria-label]="'Certification Date' + (disclosure?.submissionTimestamp | dateFormatter)">
+                                        <div [attr.aria-label]="'Certification Date is ' + (disclosure?.submissionTimestamp | dateFormatter)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
@@ -1199,7 +1197,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Administrator -->
-                                        <div tabindex="0" [attr.aria-label]="'Administrator' + (disclosure?.adminPersonName)">
+                                        <div tabindex="0" [attr.aria-label]="'Administrator is ' + (disclosure?.adminPersonName)">
                                             <label for="id" class="d-block coi-text-dark">Administrator</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
@@ -1211,7 +1209,7 @@
                                     </div>
                                         <div class="col-lg-4 col-md-6 mb-2">
                                             <!-- OPA Card Admin Group -->
-                                            <div tabindex="0" class="mb-3 mb-xl-0" [attr.aria-label]="'Admin Group' + (disclosure?.adminGroupName)">
+                                            <div tabindex="0" class="mb-3 mb-xl-0" [attr.aria-label]="'Admin Group is ' + (disclosure?.adminGroupName)">
                                                 <label for="id" class="d-block coi-text-dark">Admin Group</label>
                                                 <span class="coi-text-light">
                                                     <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
@@ -1225,7 +1223,7 @@
                             <div class="col-lg-2 d-flex d-lg-block">
                                 <!-- OPA Card Disposition Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Disposition Status' + (disclosure?.dispositionStatus)">
+                                    [attr.aria-label]="'Disposition Status is ' + (disclosure?.dispositionStatus)">
                                     <label class="d-block coi-text-lighter">Disposition Status</label>
                                     <span>
                                         <span
@@ -1237,7 +1235,7 @@
                                 </div>
                                 <!-- OPA Card Review Status -->
                                 <div tabindex="0" class="flex-grow-1 lh-sm mb-2"
-                                    [attr.aria-label]="'Review Status' + (disclosure?.reviewStatus)">
+                                    [attr.aria-label]="'Review Status is ' + (disclosure?.reviewStatus)">
                                     <label for="review-status" class="d-block coi-text-lighter">Review Status</label>
                                     <span>
                                         <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewStatus">
@@ -1321,7 +1319,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column">
-                                                <div [attr.aria-label]="'Purpose' + (disclosure?.travelPurpose)">
+                                                <div [attr.aria-label]="'Purpose is ' + (disclosure?.travelPurpose)">
                                                     <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                     <span class="col break-point-1200">
                                                         <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
@@ -1358,7 +1356,7 @@
                                         <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column">
                                                 <div
-                                                    [attr.aria-label]="'Start Date' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
+                                                    [attr.aria-label]="'Start Date is ' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
                                                     <label for="start-date" class="coi-text-dark d-block">Start Date</label>
                                                     <span>
                                                         <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
@@ -1371,7 +1369,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column">
-                                                <div [attr.aria-label]="'End Date' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
+                                                <div [attr.aria-label]="'End Date is ' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
                                                     <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                     <span>
                                                         <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
@@ -1418,7 +1416,8 @@
     <div [hidden]="isLoading" *ngIf="(paginationArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
         class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
         <nav aria-label="pagination section" class="pagination justify-content-end">
-            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="paginationArray.length"
+            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
+                [totalCount]="currentSelected.tab =='TRAVEL_DISCLOSURES' ? travelPaginationCount : paginationArray.length"
                 [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
         </nav>
     </div>
