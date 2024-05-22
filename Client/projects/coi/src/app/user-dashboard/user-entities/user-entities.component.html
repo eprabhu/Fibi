@@ -2,21 +2,21 @@
   <div class="row m-0">
     <div class="col-lg-auto px-3 py-2">
       <div>
-        <label class="text-secondary" tabindex="0">Filter By Status :</label>
-        <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0"
+        <label class="text-secondary" tabindex="-1">Filter By Status :</label>
+        <span (click)="setFilter('ALL')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='ALL'" tabindex="0" (keyup.enter)="setFilter('ALL')" (keyup.space)="setFilter('ALL')"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
               title="Click to filter by type: All"
               class="filter-pills coi-text-light"
               role="button">All</span>
-        <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='COMPLETE'" tabindex="0"
+        <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='COMPLETE'" tabindex="0" (keyup.enter)="setFilter('COMPLETE')" (keyup.space)="setFilter('COMPLETE')"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='COMPLETE' ? 'Selected filter type is Complete ' : 'Complete'"
               title="Click to filter by type: Complete"
               class="filter-pills coi-text-light" role="button">Complete</span>
-        <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INCOMPLETE'" tabindex="0"
+        <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INCOMPLETE'" tabindex="0" (keyup.enter)="setFilter('INCOMPLETE')" (keyup.space)="setFilter('INCOMPLETE')"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INCOMPLETE' ? 'Selected filter type is Incomplete' : 'Incomplete'"
               title="Click to filter by type: Incomplete"
               class="filter-pills coi-text-light" role="button">Incomplete</span>
-        <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0"
+        <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="sfiDashboardRequestObject.filterType=='INACTIVE'" tabindex="0" (keyup.enter)="setFilter('INACTIVE')" (keyup.space)="setFilter('INACTIVE')"
               [attr.aria-label]="sfiDashboardRequestObject.filterType=='INACTIVE' ? 'Selected filter type is Inactive ' : 'Inactive'"
               title="Click to filter by type: Inactive"
               class="filter-pills coi-text-light" role="button">Inactive</span>
@@ -85,14 +85,16 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" title="Click to delete" aria-label="Click to close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" title="Click here to delete" aria-label="Click here to close" id="coi-user-entities-conformation-modal-close-btn"></button>
           </div>
           <div class="modal-body fs-14">
             <p>Do you want to delete <strong>{{entityName}}</strong>?</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Click to cancel" aria-label="Click to cancel">Cancel</button>
-            <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal" title="Click to delete" aria-label="Click to delete">Delete</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Click here to cancel" aria-label="Click here to cancel"
+            id="coi-user-entities-conformation-modal-cancel-btn">Cancel</button>
+            <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal" title="Click here to delete" aria-label="Click here to delete"
+            id="coi-user-entities-conformation-modal-delete-btn">Delete</button>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@
             <div class="disclosure-heading px-3 d-flex">
                 <!-- disclosure heading -->
                 <div class="align-self-center flex-fill d-flex">
-                    <p class="m-0" tabindex="0">
+                    <p class="m-0" tabindex="-1">
                         <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong [attr.aria-label]="'Travel Disclosure By ' + userDetails?.fullName">Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
@@ -21,7 +21,7 @@
                             <strong [attr.aria-label]="'hash' + travelDisclosure?.travelDisclosureId + ' : Travel Disclosure By ' + userDetails?.fullName">
                                 #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0"
+                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="-1"
                                         (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
                                         [attr.aria-label]="'click to show the details of ' + userDetails?.fullName"
                                         title="click to show the details of {{userDetails?.fullName}}">
@@ -33,7 +33,7 @@
                     </p>
                 </div>
                 <!-- risk details -->
-                <div tabindex="0" class="d-flex ms-auto me-2" *ngIf="travelDisclosure?.riskLevel">
+                <div tabindex="-1" class="d-flex ms-auto me-2" *ngIf="travelDisclosure?.riskLevel">
                     <div class="align-items-center d-flex ml-15">
                         <label class="fw-500 fs-14 mr-2 mt-1" aria-label="Risk is">Risk :</label>
                         <div class="text-color fs-14 d-flex align-items-center">
@@ -59,11 +59,11 @@
                     </ng-container>
                 </div>
             </div>
-            <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="0" aria-label="Details of Travel Disclosure Document">
+            <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="-1" aria-label="Details of Travel Disclosure Document">
                 <!-- user details -->
                 <div class="col me-2">
                     <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Department is">
                                     <i aria-hidden="true" class="fa fa-home mr-2"></i>
@@ -78,7 +78,7 @@
                                 </app-no-data-label>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Administrator is">
                                     <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
@@ -91,7 +91,7 @@
                                 </app-no-data-label>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Admin Group is">
                                     <img aria-hidden="true" class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
@@ -110,8 +110,8 @@
                 <!-- for date box -->
                 <div class="col-auto me-2">
                     <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill" tabindex="0" aria-label="Important Dates Of Travel Disclosure">Date</span>
-                        <div class="row mt-2" tabindex="0">
+                        <span class="status-pill" tabindex="-1" aria-label="Important Dates Of Travel Disclosure">Date</span>
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14"
                                     aria-label="Create Date is">Create : </label>
@@ -122,7 +122,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14"
                                     aria-label="Certification Date is">Certification : </label>
@@ -133,7 +133,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14"
                                     aria-label="Approved Date is">Approved : </label>
@@ -149,8 +149,8 @@
                 <!-- for status box -->
                 <div class="col-auto status-card-width" >
                     <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill" tabindex="0" aria-label="Statuses Of Travel Disclosure">Status</span>
-                        <div class="row mt-2" tabindex="0">
+                        <span class="status-pill" tabindex="-1" aria-label="Statuses Of Travel Disclosure">Status</span>
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4"
                                     aria-label="Document status is">Document : </label>
@@ -165,7 +165,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4"
                                     aria-label="Review status is">Review : </label>
@@ -180,7 +180,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4"
                                 aria-label="Disclosure status is">Disclosure : </label>
@@ -199,7 +199,7 @@
             </div>
 
             <ng-container *ngIf="!isCreateMode">
-                <div class="navigation-tabs d-flex align-items-center" tabindex="0"  role="navigation" aria-label="travel disclosure">
+                <div class="navigation-tabs d-flex align-items-center" tabindex="-1"  role="navigation" aria-label="travel disclosure">
                      <!-- Disclosure -->
                     <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
                         [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'"
@@ -231,7 +231,7 @@
     <!-- right side options -->
     <div class="col-3 px-0">
         <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm h-100"
-            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : '' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
+            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : '' : 'collapse-right-tab'" tabindex="-1"  role="menu" aria-label="travel disclosure actions section">
             <div class="row m-0 py-3 px-3">
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home" aria-label="Go to home"
@@ -374,7 +374,7 @@
                 </button>
 
                 <!-- last update date -->
-                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : ''" tabindex="0">
+                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : ''" tabindex="-1">
                     <div class="fw-medium me-3">Last Updated By :</div>
                     <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
@@ -385,7 +385,7 @@
     <div class="mx-0 p-0 row">
         <ng-container *ngIf="isCreateMode">
             <div class="p-0">
-                <div class="nav-progress navigation-tabs row" tabindex="0" role="navigation" aria-label="travel disclosure">
+                <div class="nav-progress navigation-tabs row" tabindex="-1" role="navigation" aria-label="travel disclosure">
                     <!-- travel details -->
                     <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
                         [class.complete]="isRouteComplete(['travel-details', 'certification'])"

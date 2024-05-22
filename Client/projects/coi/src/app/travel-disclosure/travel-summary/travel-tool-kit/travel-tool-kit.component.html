@@ -4,11 +4,11 @@
             Navigate to
         </div>
         <div class="bg-white p-3 scrollable-section">
-            <div (click)="jumpToSection('travel-details');"
+            <div (click)="jumpToSection('travel-details');" tabindex="0" (keyup.enter)="jumpToSection('travel-details');" (keyup.space)="jumpToSection('travel-details');"
                 class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">
                 Travel Details
             </div>
-            <div (click)="jumpToSection('certify');"
+            <div (click)="jumpToSection('certify');" tabindex="0" (keyup.enter)="jumpToSection('certify');" (keyup.space)="jumpToSection('certify');"
                 class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">
                 Certification
             </div>

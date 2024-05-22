@@ -10,10 +10,10 @@
             </div>
             <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
                 <div *ngIf="coiFinancialEntityDetails.length > 0" class="coi-table-striped table-responsive border">
-                    <table class="table table-bordered table-striped fs-14 align-middle mb-0">
+                    <table class="table table-bordered table-striped fs-14 align-middle mb-0" id="coi-count-modal-listof-sfi-table">
                         <caption class="sr-only">List of SFIs</caption>
                         <thead class="sticky-top">
-                            <tr>
+                            <tr id="coi-count-modal-table-thead-row">
                                 <th>Entity Name</th>
                                 <th>Country</th>
                                 <th>Entity Type</th>
@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of coiFinancialEntityDetails">
+                            <tr *ngFor="let item of coiFinancialEntityDetails ; let i = index" id="coi-count-modal-table-tbody-row-{{i}}">
                                 <td>
                                     <span *ngIf="item?.coiEntity?.entityName">
                                         <span class="word-break-all new-line-property mx-2"
@@ -95,10 +95,10 @@
                     </div>
                 </nav>
                 <div *ngIf="tableArray.length>0" class="coi-table-striped table-responsive border">
-                    <table class="table table-bordered table-striped align-middle fs-14 mb-0">
+                    <table class="table table-bordered table-striped align-middle fs-14 mb-0" id="coi-count-modal-listofaward-table">
                         <caption class="sr-only">List of Awards/Proposal</caption>
                         <thead class="sticky-top">
-                            <tr>
+                            <tr id="coi-count-modal-listofaward-table-thead-row">
                                 <th style="width: 20%;" scope="col">Title</th>
                                 <th style="width: 12%;" scope="col">Principal Investigator</th>
                                 <th style="width: 12%;" scope="col">Lead Unit</th>
@@ -108,7 +108,7 @@
                                 <th style="width: 1%;" class="text-center" scope="col">Actions</th></tr>
                         </thead>
                         <tbody>
-                            <tr class="row-hover" *ngFor="let name of tableArray;let index = index">
+                            <tr class="row-hover" *ngFor="let name of tableArray;let index = index" id="coi-listofaward-table-row-{{index}}">
                                 <td>#{{name?.moduleItemId}}:
                                     <span *ngIf="!isReadMore[index] && name?.title?.length > 50; else showFullInfo">
                                         <span class="word-break-all new-line-property">{{(name?.title | slice:0:50)}}</span>

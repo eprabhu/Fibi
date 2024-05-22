@@ -30,10 +30,10 @@
             <app-no-information> </app-no-information>
         </div>
         <div class="table-responsive coi-table-striped">
-        <table *ngIf="reviewerList?.length" class="table table-bordered table-striped">
+        <table *ngIf="reviewerList?.length" class="table table-bordered table-striped" id="coi-location-component-table">
             <caption class="sr-only">Review</caption>
             <thead>
-                <tr>
+                <tr id="coi-location-component-table-thead-tr">
                     <th class="coi-text-dark">
                         Location
                     </th>
@@ -59,7 +59,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let reviewer of reviewerList; let index = index">
+                <tr *ngFor="let reviewer of reviewerList; let index = index" id="coi-location-component-table-tbody-tr-{{index}}">
                     <td class="coi-text-light fw-600" [class.align-middle]="!collapseViewMore[reviewer?.opaReviewId]">{{reviewer?.reviewLocationType?.description}}</td>
                     <td class="coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.opaReviewId]">
                         <app-no-data-label [classesToApply]="fs-14" [valueToShow]="reviewer?.assigneePersonName" [customNoDataFoundMessage]="'-- No Reviewer assigned --'">

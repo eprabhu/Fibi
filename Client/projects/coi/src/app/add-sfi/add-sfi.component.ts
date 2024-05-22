@@ -206,7 +206,7 @@ export class AddSfiComponent implements OnInit {
                 this.isSaving = false;
                     if (_err.status === 405) {
                         this.concurrencyPersonEntityId = _err.error.personEntityId;
-                        openModal('sfi-concurrency-modal');
+                        openModal('coi-add-sfi-concurrency-modal');
                     } else {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving SFI. Please try again.');
                     }
@@ -276,21 +276,21 @@ export class AddSfiComponent implements OnInit {
         if (!this.isEntityManagement) {
             if (!this.involvementDate.involvementStartDate) {
                 this.mandatoryList.set('date', 'Please enter Start Date.');
-                ELEMENT_ID_LIST.push('start-date-involvement')
+                ELEMENT_ID_LIST.push('coi-add-sfi-start-date-involvement')
             }
             this.endDateValidation(ELEMENT_ID_LIST);
             this.validateRelationship(ELEMENT_ID_LIST);
             if (!this.additionalDetails.staffInvolvement) {
                 this.mandatoryList.set('staff', 'Please enter Relationship with Entity.');
-                ELEMENT_ID_LIST.push('releationship-entity')
+                ELEMENT_ID_LIST.push('coi-add-sfi-releationship-entity')
             }
             if (!this.additionalDetails.studentInvolvement) {
                 this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity.');
-                ELEMENT_ID_LIST.push('student-entity')
+                ELEMENT_ID_LIST.push('coi-add-sfi-student-entity')
             }
             if (!this.additionalDetails.instituteResourceInvolvement) {
                 this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities.');
-                ELEMENT_ID_LIST.push('resource-sfi');
+                ELEMENT_ID_LIST.push('coi-add-sfi-resource-sfi');
             }
         }
         this.focusValidationField(ELEMENT_ID_LIST)
@@ -300,16 +300,16 @@ export class AddSfiComponent implements OnInit {
     private entityDetailsValidation(elementIdList): void {
         if (!this.entityDetails.coiEntity.countryCode) {
             this.mandatoryList.set('country', 'Please enter Country.');
-            elementIdList.push('country-search');
+            elementIdList.push('coi-add-sfi-country-search');
         }
         if (!this.entityDetails.coiEntity.address) {
             this.mandatoryList.set('address', 'Please enter Address.');
-            elementIdList.push('address-textarea');
+            elementIdList.push('coi-add-sfi-address-textarea');
         }
         this.emailValidation(elementIdList);
         if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
             this.mandatoryList.set('entityType', 'Please enter Entity Type.');
-            elementIdList.push('entity-type');
+            elementIdList.push('coi-add-sfi-entity-type');
         }  
     }
 
@@ -366,17 +366,17 @@ export class AddSfiComponent implements OnInit {
         if (this.isEntityManagement) {
             if (this.isEditEntity) {
                 this.buttonName = 'Update Entity';
-                this.btnTitle = 'Click to update entity';
+                this.btnTitle = 'Click here to update entity';
                 this.heading = `Entity ${this.entityDetails.coiEntity.entityName}`;
             } else {
                 this.heading = 'Add New Entity';
                 this.buttonName = 'Create Entity';
-                this.btnTitle = 'Click to create entity';
+                this.btnTitle = 'Click here to create entity';
             }
         } else {
             this.heading = 'Significant Financial Interest';
             this.buttonName = 'Save';
-            this.btnTitle = 'Click to Save SFI';
+            this.btnTitle = 'Click here to save SFI';
         }
     }
 

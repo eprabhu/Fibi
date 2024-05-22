@@ -13,10 +13,10 @@
   </div>
 </div>
 <div class="table-calendar">
-  <table class="table table-bordered">
+  <table class="table table-bordered" id="coi-calender-view-table">
     <caption class="sr-only">Calender List</caption>
     <thead>
-      <tr>
+      <tr id="coi-calender-view-table-thead-tr">
         <ng-container *ngFor="let key of arrayList;">
           <th scope="col" (click)="sortByHeader(key);isAscending =!isAscending">{{key}}
             <i aria-hidden="true" class="fa fa-sort-alpha-asc blrcolor" [ngClass]="activeHeader == key? 'd-none' : ''"></i>
@@ -39,7 +39,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of calendarList;let i = index">
+      <tr *ngFor="let data of calendarList;let i = index" id="coi-calender-view-table-tbody-tr-{{i}}">
         <ng-container *ngFor="let key of arrayList;">
           <td class="hand-cursor" style="height: 4%;" (click)="emitRowDetails(data.data)">{{data[key]}}</td>
         </ng-container>
