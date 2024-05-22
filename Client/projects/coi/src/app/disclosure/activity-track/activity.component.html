@@ -11,11 +11,11 @@
             <div class="modal-body pt-3">
                 <div class="mb-4">
                     <ul class="subTabs mb-0">
-                        <li (click)="commentTab = 'MODIFY'" tabindex="0" class="subLink fs-14 px-3 py-2 fw-bold"
+                        <li (click)="commentTab = 'MODIFY'" tabindex="-1" class="subLink fs-14 px-3 py-2 fw-bold"
                             [class.active]="commentTab == 'MODIFY'">
                             <span>{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</span>
                         </li>
-                        <li (click)="commentTab = 'VIEW'" tabindex="0" class="subLink fs-14 px-3 py-2 fw-bold"
+                        <li (click)="commentTab = 'VIEW'" tabindex="-1" class="subLink fs-14 px-3 py-2 fw-bold"
                             [class.active]="commentTab == 'VIEW'">
                             <span>View Comments</span>
                         </li>

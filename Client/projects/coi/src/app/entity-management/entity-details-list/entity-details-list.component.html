@@ -1,7 +1,7 @@
 <div [@fadeInOutHeight]>
   <app-view-entity-sfi-details [entityDetails]="entityDetails" (modifiedEntityId)="getUpdatedEntityId($event)"
   (approveEntityDetails)="updateApprovedEntityDetails($event)"></app-view-entity-sfi-details>
-  <div class="fw-bold mt-3 mb-2 px-1 fs-16" tabindex="0" aria-label="Relationships">Relationships</div>
+  <div class="fw-bold mt-3 mb-2 px-1 fs-16" tabindex="-1" aria-label="Relationships">Relationships</div>
   <div class="shadow-sm" >
     <nav
       class="d-flex align-items-center create-disclosure fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
@@ -25,21 +25,22 @@
           class="px-5">Other Entities</span>
       </div>-->
       <div (click)="currentTab('FINANCIAL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1 hand-cursor"
-       id="btn-disclosure" title="Click to view Financial Disclosures"
+       id="btn-disclosure" title="Click here to view Financial Disclosures"
         (keyup.enter)="currentTab('FINANCIAL_DISCLOSURES')" (keyup.space)="currentTab('FINANCIAL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'FINANCIAL_DISCLOSURES'"
           class="px-md-5 px-3" aria-label="Click to view Financial disclosures">Financial <span class="disclosures-text"></span></span>
       </div>
       <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1 hand-cursor"
-        id="btn-travel-disclosure" title="Click to view Travel Disclosures" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
+        id="btn-travel-disclosure" title="Click here to view Travel Disclosures" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
         (keyup.space)="currentTab('TRAVEL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'TRAVEL_DISCLOSURES'"
-          class="px-md-5 px-3" aria-label="Click to view Travel disclosures">Travel <span class="disclosures-text"></span></span>
+          class="px-md-5 px-3" aria-label="Click here to view Travel disclosures">Travel <span class="disclosures-text"></span></span>
       </div>
       <div (click)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'" class="navigation-icons text-secondary py-1 hand-cursor"
-        id="btn-history" title="Click to view History">
+        id="btn-history" title="Click here to view History" (keyup.enter)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'"
+        (keyup.space)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'"
           class="px-md-5 px-3" aria-label="Click to view History">History</span>
@@ -298,7 +299,7 @@
                     [ngClass]="entityListData?.isRelationshipActive ?'':'inactive'">
                     <span class="px-2">{{!entityListData?.isRelationshipActive?'Inactive':'Active'}}</span></span>
                 </div> -->
-              <div class="col-4 person-name" tabindex="0">
+              <div class="col-4 person-name" tabindex="-1">
                 <app-no-data-label [valueToShow]="entityListData?.personFullName" [classesToApply]="'fs-14'">
                   <!-- class="title-custom-position" -->
                   <span>
@@ -306,19 +307,19 @@
                   </span>
                 </app-no-data-label>
               </div>
-              <div class="col-4 text-secondary fs-14" tabindex="0">
-                <label>Department <span class="me-1">:</span></label>
+              <div class="col-4 text-secondary fs-14" tabindex="-1">
+                <label for="coi-entity-details-department">Department <span class="me-1">:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="entityListData?.unit?.unitName">
-                    <span>{{commonService?.getPersonLeadUnitDetails(entityListData?.unit)}}</span>
+                    <span id="coi-entity-details-department">{{commonService?.getPersonLeadUnitDetails(entityListData?.unit)}}</span>
                   </app-no-data-label>
                 </span>
               </div>
-              <div class="col-3 fs-14 text-secondary" tabindex="0">
-                <label>Designation <span>:</span> </label>
+              <div class="col-3 fs-14 text-secondary" tabindex="-1">
+                <label for="coi-entity-details-designation">Designation <span>:</span> </label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="entityListData?.designation">
-                    <span>
+                    <span id="coi-entity-details-designation">
                       {{entityListData?.designation}}
                     </span>
                   </app-no-data-label>
@@ -352,43 +353,43 @@
                   <span class="fw-bold ">Country :</span>
                 </div>
               </ng-container>
-              <div class="text-secondary fs-14" tabindex="0"
+              <div class="text-secondary fs-14" tabindex="-1"
                 [ngClass]="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'?'col':'col-4'">
-                <label>Relationship <span>:</span></label>
+                <label for="coi-entity-details-relationship-type">Relationship <span>:</span></label>
                 <span class="break-point-1200 ms-2 fs-14">
                   <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
                     <em class="mt-3 d-inline-block" *ngFor="let relation of entityListData?.relationshipTypeList">
                       <span class="border px-3 py-1 rounded-4 me-2">
-                          <span class="fw-medium me-1">{{relation?.relationshipTypes}} :</span>
-                          <span class="fw-normal">{{relation?.description}}</span>
+                          <span class="fw-medium me-1" id="coi-entity-details-relationship-type">{{relation?.relationshipTypes}} :</span>
+                          <span class="fw-normal" id="coi-entity-details-relationship-desc">{{relation?.description}}</span>
                       </span>
                     </em>
                   </app-no-data-label>
                 </span>
               </div>
               <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'">
-                <div class="col-4 text-secondary fs-14" tabindex="0">
-                  <label>Start Date of Involvement <span>:</span></label>
+                <div class="col-4 text-secondary fs-14" tabindex="-1">
+                  <label for="coi-entity-details-start-date">Start Date of Involvement <span>:</span></label>
                   <span class="break-point-1200">
                     <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
-                      <span>
+                      <span id="coi-entity-details-start-date">
                         {{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}
                       </span>
                     </app-no-data-label>
                   </span>
                 </div>
-                <div class="col-3 text-secondary fs-14" tabindex="0">
-                  <label>End Date of Involvement <span>:</span></label>
+                <div class="col-3 text-secondary fs-14" tabindex="-1">
+                  <label for="coi-entity-details-end-date">End Date of Involvement <span>:</span></label>
                   <span class="break-point-1200 ms-1">
                     <app-no-data-label [valueToShow]="entityListData?.involvementEndDate">
-                      <span>{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
+                      <span id="coi-entity-details-end-date">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
                     </app-no-data-label>
                   </span>
                 </div>
               </ng-container>
-              <div *ngIf="isViewPersonalEntities" class="col-12 ms-auto d-flex justify-content-end" tabindex="0" aria-label="Click to view details" role="button">
-                <button (click)="viewDetails(entityListData)" aria-describedby="Click to view details"
-                  class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click to view details">
+              <div *ngIf="isViewPersonalEntities" class="col-12 ms-auto d-flex justify-content-end" tabindex="-1" aria-label="Click here to view details" role="button">
+                <button (click)="viewDetails(entityListData)" aria-describedby="Click here to view details" id="coi-entity-details-view-btn"
+                  class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click here to view details">
                   <mat-icon class="me-1">visibility</mat-icon>
                   View
                 </button>
@@ -405,25 +406,25 @@
           <div class="p-3 text-break">
             <div class="row">
               <div class="col text-secondary fs-14 d-flex">
-                <div class="col-height" tabindex="0">
+                <div class="col-height" tabindex="-1">
                   <span class="shadow-sm d-flex align-items-center ps-2 mt-4 status-pill"
                     [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'bg-fcoi-clip': (disclosureList?.fcoiTypeCode === '2'?'bg-proposal-clip':'bg-award-clip')">
                     <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
                 </div>
-                <div class="col coi-ms-n15px" tabindex="0">
+                <div class="col coi-ms-n15px" tabindex="-1">
                   <span class="fw-bold">{{disclosureList?.fcoiTypeCode === '1'
                     ?'FCOI' : 'Project'}} Disclosure By
                     {{disclosureList?.disclosurePersonFullName}}</span>
                 </div>
               </div>
-              <div class="col-3 text-secondary fs-14" tabindex="0">
+              <div class="col-3 text-secondary fs-14" tabindex="1">
                 <label class="fw-bold  me-2 pr-10">
                   Disclosure Status <span>:</span></label>
                   <span class="break-point-1200">
                     <app-no-data-label [valueToShow]="disclosureList?.conflictStatusCode">
                       <span
                         class="{{commonService.getDisclosureConflictBadge(disclosureList?.conflictStatusCode)}}"></span>
-                        <span class="badgeFont">
+                        <span class="badgeFont" id="coi-entity-details-disc-status">
                           {{disclosureList?.conflictStatus}}
                       </span>
                     </app-no-data-label>
@@ -431,96 +432,96 @@
               </div>
             </div>
             <div class="row my-2">
-                  <div class="col-3 text-secondary fs-14" tabindex="0">
-                    <label class="fw-bold pr-05">
+                  <div class="col-3 text-secondary fs-14" tabindex="-1">
+                    <label for="coi-entity-details-dept" class="fw-bold pr-05">
                       Department <span>:</span></label>
                       <span class="break-point-1200">
                         <app-no-data-label [valueToShow]="disclosureList?.unit?.unitNumber">
                           <span *ngIf="disclosureList?.unit?.unitNumber" [title]="disclosureList?.unit?.unitDetail?.length>30?disclosureList?.unit?.unitDetail:''"
-                          [ngClass]="{'hand-cursor':disclosureList?.unit?.unitDetail.length>30}">{{(disclosureList?.unit?.unitDetail.length>30) ?
+                          [ngClass]="{'hand-cursor':disclosureList?.unit?.unitDetail.length>30}" id="coi-entity-details-dept">{{(disclosureList?.unit?.unitDetail.length>30) ?
                             (disclosureList?.unit?.unitDetail|slice:0:27)+'...':disclosureList?.unit?.unitDetail}}</span>
                         </app-no-data-label>
                       </span>
                   </div>
-                  <div class="col-3 text-secondary fs-14" tabindex="0">
-                    <label class="fw-bold me-2">Certification Date <span>:</span></label>
+                  <div class="col-3 text-secondary fs-14" tabindex="-1">
+                    <label for="coi-entity-details-certification-date" class="fw-bold me-2">Certification Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="disclosureList?.certifiedAt">
-                        <span>{{disclosureList?.certifiedAt | dateFormatterWithTimeZone}}</span>
+                        <span id="coi-entity-details-certification-date">{{disclosureList?.certifiedAt | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
-                  <div class="col-3 text-secondary fs-14" tabindex="0">
-                    <label class="fw-bold me-2">Expiration Date <span>:</span></label>
+                  <div class="col-3 text-secondary fs-14" tabindex="-1">
+                    <label for="coi-entity-details-exp-date" class="fw-bold me-2">Expiration Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
-                        <span>{{disclosureList?.expirationDate | dateFormatter}}</span>
+                        <span id="coi-entity-details-exp-date">{{disclosureList?.expirationDate | dateFormatter}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
-                  <div class="col-3 text-secondary fs-14" tabindex="0">
-                    <label class="fw-bold pr-05 me-2">
+                  <div class="col-3 text-secondary fs-14" tabindex="-1">
+                    <label for="coi-entity-details-disp-status" class="fw-bold pr-05 me-2">
                       Disposition Status <span>:</span></label>
                       <span class="break-point-1200">
                         <span *ngIf="disclosureList?.dispositionStatusCode"
                           class="{{commonService.getDispositionStatusBadge(disclosureList?.dispositionStatusCode)}}"></span>
-                          <span class="badgeFont">
+                          <span class="badgeFont" id="coi-entity-details-disp-status">
                             {{disclosureList?.dispositionStatus}}
                         </span>
                       </span>
                   </div>
             </div>
             <div class="row my-2">
-              <div *ngIf="disclosureList?.fcoiTypeCode === '1'" class="col-3 text-secondary fs-14" tabindex="0">
-                <label class="fw-bold">
+              <div *ngIf="disclosureList?.fcoiTypeCode === '1'" class="col-3 text-secondary fs-14" tabindex="-1">
+                <label for="coi-entity-details-description" class="fw-bold">
                   Description <span>:</span></label>
                   <span class="break-point-1200">
                     <app-no-data-label [valueToShow]="disclosureList?.description">
                       <span [title]="disclosureList?.description.length>30? disclosureList?.description:''"
-                        [ngClass]="{'hand-cursor':disclosureList?.description.length>30}">
+                        [ngClass]="{'hand-cursor':disclosureList?.description.length>30}" id="coi-entity-details-description">
                         {{(disclosureList?.description.length>30)?(disclosureList?.description|slice:0:27)+'...':disclosureList?.description}}
                       </span>
                     </app-no-data-label>
                   </span>
               </div>
-              <div *ngIf="disclosureList?.fcoiTypeCode === '2' || disclosureList?.fcoiTypeCode === '3'"  class="col-3 text-secondary fs-14" tabindex="0">
-                <label class="fw-bold">Project <span>:</span></label>
+              <div *ngIf="disclosureList?.fcoiTypeCode === '2' || disclosureList?.fcoiTypeCode === '3'"  class="col-3 text-secondary fs-14" tabindex="-1">
+                <label for="coi-entity-details-project" class="fw-bold">Project <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="disclosureList?.fcoiTypeCode === '2'? disclosureList?.proposalId : disclosureList?.awardId">
                     <span *ngIf="disclosureList?.fcoiTypeCode === '2'" [title]="disclosureList?.proposalTitle.length>30? disclosureList?.proposalTitle:''"
-                      [ngClass]="{'hand-cursor':disclosureList?.proposalTitle.length>30}">
+                      [ngClass]="{'hand-cursor':disclosureList?.proposalTitle.length>30}" id="coi-entity-details-project">
                      #{{disclosureList?.proposalId}} - {{(disclosureList?.proposalTitle.length>30) ? (disclosureList?.proposalTitle|slice:0:27)+'...':disclosureList?.proposalTitle}}
                     </span>
                     <span *ngIf="disclosureList?.fcoiTypeCode === '3'" [title]="disclosureList?.awardTitle.length>30? disclosureList?.awardTitle:''"
-                      [ngClass]="{'hand-cursor':disclosureList?.awardTitle.length>30}">
+                      [ngClass]="{'hand-cursor':disclosureList?.awardTitle.length>30}" id="coi-entity-details-award">
                       #{{disclosureList?.awardId}} - {{(disclosureList?.awardTitle.length>30)?(disclosureList?.awardTitle|slice:0:27)+'...':disclosureList?.awardTitle}}
                     </span>
                   </app-no-data-label>
                 </span>
               </div>
-              <div class="col-3 text-secondary fs-14" tabindex="0">
-                <label class="fw-bold me-2">Administrator <span>:</span></label>
+              <div class="col-3 text-secondary fs-14" tabindex="-1">
+                <label for="coi-entity-details-administrator" class="fw-bold me-2">Administrator <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="disclosureList?.administrator">
-                    <span>{{disclosureList?.administrator}}</span>
+                    <span id="coi-entity-details-administrator">{{disclosureList?.administrator}}</span>
                   </app-no-data-label>
                 </span>
               </div>
-              <div class="col-3 text-secondary fs-14" tabindex="0">
-                <label class="fw-bold me-2">Admin Group <span>:</span></label>
+              <div class="col-3 text-secondary fs-14" tabindex="-1">
+                <label for="coi-entity-details-admin-group" class="fw-bold me-2">Admin Group <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="disclosureList?.adminGroupName">
-                    <span>{{disclosureList?.adminGroupName}}</span>
+                    <span id="coi-entity-details-admin-group">{{disclosureList?.adminGroupName}}</span>
                   </app-no-data-label>
                 </span>
               </div>
-              <div class="col-3 text-secondary fs-14" tabindex="0">
-                <label class="fw-bold pr-05 me-2 pr-31">Review Status <span>:</span></label>
+              <div class="col-3 text-secondary fs-14" tabindex="-1">
+                <label for="coi-entity-details-review-status" class="fw-bold pr-05 me-2 pr-31">Review Status <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="disclosureList?.reviewStatusCode">
                     <span
                       class="{{commonService.getReviewStatusBadge(disclosureList?.reviewStatusCode)}}"></span>
-                      <span class="badgeFont">
+                      <span class="badgeFont" id="coi-entity-details-review-status">
                         {{disclosureList?.reviewStatus}}
                     </span>
                   </app-no-data-label>
@@ -528,7 +529,7 @@
               </div>
               <div *ngIf="isViewProjectDisclosure || isViewFcoiDisclosure"
                 class="col-12 ms-auto d-flex justify-content-end">
-                <button (click)="redirectToDisclosure(disclosureList)" aria-describedby="Click to view details" tabindex="0" aria-label="Click to view details" role="button"
+                <button (click)="redirectToDisclosure(disclosureList)" aria-describedby="Click to view details" aria-label="Click to view details" id="coi-entity-details-financial-view-btn"
                   class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click to view details">
                   <mat-icon class="me-1">visibility</mat-icon>
                   View
@@ -549,7 +550,7 @@
                   <span class="px-2">Travel</span></span>
               </div>
               <div class="col text-secondary fs-14">
-                <span class="fw-bold">#{{travelDisclosureList?.travelDisclosureNumber}} : Travel Disclosure By
+                <span class="fw-bold" id="coi-entity-details-travel">#{{travelDisclosureList?.travelDisclosureNumber}} : Travel Disclosure By
                   {{travelDisclosureList?.travellerName}}</span>
               </div>
               <div class="col-3 text-secondary fs-14">
@@ -557,7 +558,7 @@
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelDisclosurestatus">
                     <span
-                      class="{{commonService.getDisclosureConflictBadge('1')}}">{{convertDisclosureStatus(travelDisclosureList?.travelDisclosurestatus)}}</span>
+                      class="{{commonService.getDisclosureConflictBadge('1')}}" id="coi-entity-details-travel-disc-status">{{convertDisclosureStatus(travelDisclosureList?.travelDisclosurestatus)}}</span>
                   </app-no-data-label>
                 </span>
               </div>
@@ -566,35 +567,35 @@
               <div class="col text-secondary fs-14">
                 <div class="d-flex">
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05"> Department <span>:</span></label>
+                    <label for="coi-entity-details-travel-dept" class="fw-bold pr-05"> Department <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.unit">
-                        <span>{{travelDisclosureList?.unit?.unitDetail}}</span>
+                        <span id="coi-entity-details-travel-dept">{{travelDisclosureList?.unit?.unitDetail}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05">Entity <span>:</span></label>
+                    <label for="coi-entity-details-travel-entity" class="fw-bold pr-05">Entity <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.travelEntityName">
-                        <span>{{travelDisclosureList?.travelEntityName}}</span>
+                        <span id="coi-entity-details-travel-entity">{{travelDisclosureList?.travelEntityName}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05">Traveller <span>:</span></label>
+                    <label for="coi-entity-details-travel-traveller" class="fw-bold pr-05">Traveller <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.travellerName">
-                        <span>{{travelDisclosureList?.travellerName}}</span>
+                        <span id="coi-entity-details-travel-traveller">{{travelDisclosureList?.travellerName}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05 me-2">Review Status <span>:</span></label>
+                    <label for="coi-entity-details-travel-review-status" class="fw-bold pr-05 me-2">Review Status <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.reviewerStatus">
                         <span
-                          class="{{commonService.getReviewStatusBadge(travelDisclosureList?.reviewerStatusCode)}}">{{travelDisclosureList?.reviewerStatus}}</span>
+                          class="{{commonService.getReviewStatusBadge(travelDisclosureList?.reviewerStatusCode)}}" id="coi-entity-details-travel-review-status">{{travelDisclosureList?.reviewerStatus}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
@@ -605,34 +606,34 @@
               <div class="col text-secondary fs-14">
                 <div class="d-flex">
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05">Destination <span>:</span></label>
+                    <label for="coi-entity-details-travel-destination" class="fw-bold pr-05">Destination <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.destination">
-                        <span>{{travelDisclosureList?.destination}}</span>
+                        <span id="coi-entity-details-travel-destination">{{travelDisclosureList?.destination}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05">Certification Date <span>:</span></label>
+                    <label for="coi-entity-details-travel-cert-date" class="fw-bold pr-05">Certification Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.certificationDate">
-                        <span>{{travelDisclosureList?.certificationDate | dateFormatterWithTimeZone}}</span>
+                        <span id="coi-entity-details-travel-cert-date">{{travelDisclosureList?.certificationDate | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05"> Acknowledge Date <span>:</span></label>
+                    <label for="coi-entity-details-travel-ack-date" class="fw-bold pr-05"> Acknowledge Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.acknowledgeDate">
-                        <span>{{travelDisclosureList?.acknowledgeDate | dateFormatterWithTimeZone}}</span>
+                        <span id="coi-entity-details-travel-ack-date">{{travelDisclosureList?.acknowledgeDate | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                    <label class="fw-bold pr-05">Expiration Date <span>:</span></label>
+                    <label for="coi-entity-details-travel-exp-date" class="fw-bold pr-05">Expiration Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="travelDisclosureList?.expirationDate">
-                        <span>{{travelDisclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
+                        <span id="coi-entity-details-travel-exp-date">{{travelDisclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
@@ -641,31 +642,31 @@
             </div>
             <div class="row my-2">
               <div class="col-3 text-secondary fs-14">
-                <label class="fw-bold pr-05"> Purpose <span>:</span></label>
+                <label for="coi-entity-details-travel-purpose" class="fw-bold pr-05"> Purpose <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.purpose">
-                    <span>{{travelDisclosureList?.purpose}}</span>
+                    <span id="coi-entity-details-travel-purpose">{{travelDisclosureList?.purpose}}</span>
                   </app-no-data-label>
                 </span>
               </div>
               <div class="col-3 text-secondary fs-14 px-0 ms-1">
-                <label class="fw-bold pr-05">Start Date <span>:</span></label>
+                <label for="coi-entity-details-travel-strt-date" class="fw-bold pr-05">Start Date <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelStartDate">
-                    <span>{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
+                    <span id="coi-entity-details-travel-strt-date">{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
                   </app-no-data-label>
                 </span>
               </div>
               <div class="col-3 text-secondary fs-14 px-0">
-                <label class="fw-bold pr-05">End Date <span>:</span></label>
+                <label for="coi-entity-details-travel-end-date" class="fw-bold pr-05">End Date <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelEndDate">
-                    <span>{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
+                    <span id="coi-entity-details-travel-end-date">{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
                   </app-no-data-label>
                 </span>
               </div>
               <div *ngIf="isViewTravelDisclosure" class="col-12 ms-auto d-flex justify-content-end">
-                <button (click)="redirectToTravel(travelDisclosureList)" aria-describedby="Click to view details"
+                <button (click)="redirectToTravel(travelDisclosureList)" aria-describedby="Click to view details" id="coi-entity-details-travel-view-btn"
                   class="d-flex align-items-center btn btn-outline-primary fs-14" title="Click to view details">
                   <mat-icon class="me-1">visibility</mat-icon>
                   View
