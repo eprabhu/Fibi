@@ -5,13 +5,13 @@
                 <ul class="timeline">
                     <ng-container *ngFor="let entity of sfiHistoryLogs | keyvalue: sortNull">
                         <li *ngFor="let historyEntry of entity.value;">
-                            <div class="fs-14" tabindex="0">
+                            <div class="fs-14" tabindex="-1">
                             <span [innerHTML]="historyEntry?.description"></span> 
                             <span *ngIf="historyEntry?.updateUserFullName" class="ms-1">by </span>
                             <span class="fw-700"> {{historyEntry?.updateUserFullName}} </span>
                         </div>
-                            <p class="coi-text-lighter fs-13" tabindex="0">{{entity.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
-                            <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="0">
+                            <p class="coi-text-lighter fs-13" tabindex="-1">{{entity.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                            <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="-1">
                                 <span *ngIf="historyEntry?.comment" class="fs-14">
                                     <span class="fa fa-quote-left coi-text-light ml-2 fs-13"></span>
                                     <span *ngIf="!isReadMore[historyEntry?.updateTimestamp] && historyEntry?.comment?.length > 230; else showFullInfo" 

@@ -1,51 +1,51 @@
 <section>
-    <div class="fs-18 fw-bold mb-2" tabindex="0" aria-label="Manage Entity Dashboard">Entity Management</div>
+    <div class="fs-18 fw-bold mb-2" tabindex="-1" aria-label="Manage Entity Dashboard">Entity Management</div>
     <div [@fadeInOutHeight]>
         <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex align-items-center border shadow-sm">
             <nav class="d-flex justify-content-between align-items-center ps-0 border-bottom flex-wrap">
                 <!-- new tab design -->
                 <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fw-semibold mb-8"
                     role="tablist">
-                    <li *ngIf="isManageEntity" class="nav-item" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
+                    <li *ngIf="isManageEntity" class="nav-item" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" tabindex="0" id="coi-entity-management-all-entities"
                         role="tab" (keyup.enter)="entityTabName('ALL_ENTITIES')"
                         (keyup.space)="entityTabName('ALL_ENTITIES')"
-                        (click)="entityTabName('ALL_ENTITIES')" title="Click to view All Entities"
-                        aria-label="Click to view the list of all entities">
+                        (click)="entityTabName('ALL_ENTITIES')" title="Click here to view All Entities"
+                        aria-label="Click here to view the list of all entities">
                         <a class="nav-link p-3 fs-6 align-self-center"
-                           role="tab" tabindex="0">All Entities</a>
+                           role="tab">All Entities</a>
                     </li>
                     <li class="separator px-0"></li>
-                    <li *ngIf="isManageEntity" tabindex="0" class="nav-item"
+                    <li *ngIf="isManageEntity" tabindex="0" class="nav-item" id="coi-entity-management-unverified-entities"
                         [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="tab"
                         (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
-                        (click)="entityTabName('UNVERIFIED')" title="Click to view Unverified Entities"
-                        aria-label="Click to view the list of all unverified entities"
+                        (click)="entityTabName('UNVERIFIED')" title="Click here to view Unverified Entities"
+                        aria-label="Click here to view the list of all unverified entities"
                         role="presentation">
                         <a class="nav-link p-3 fs-6 align-self-center"
-                           role="tab" tabindex="-1">Unverified Entities</a>
+                           role="tab">Unverified Entities</a>
                     </li>
                     <li class="separator px-0"></li>
-                    <li *ngIf="isManageEntity" tabindex="0" class="nav-item"
+                    <li *ngIf="isManageEntity" tabindex="0" class="nav-item" id="coi-entity-management-entities"
                         [ngClass]="{'active': activeTabName === 'HIGH_RISK'}" role="tab"
                         (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
                         (click)="entityTabName('HIGH_RISK')"
-                        title="Click to view High Risk Entities"
-                        aria-label="Click to view the list of all high risk entities" role="presentation">
+                        title="Click here to view High Risk Entities"
+                        aria-label="Click here to view the list of all high risk entities" role="presentation">
                         <a class="nav-link p-3 fs-6 align-self-center" role="tab">High Risk
                             Entities</a>
                     </li>
                 </ul>
 
                 <div class="d-flex justify-content-end flex-grow-1 my-2">
-                    <button tabindex="0" aria-label="Toggle Advanced Search" role="button"
+                    <button  aria-label="Toggle Advanced Search" id="coi-entity-management-advance-search-btn"
                             class="btn btn-tertiary d-inline-flex fs-14 align-items-center mt-0  me-2"
                             (click)="toggleAdvanceSearch()" aria-controls="view-advance-search"
                             aria-expanded="false" title="Click here to expand / collapse Advanced Search fields">
                         <mat-icon class="me-3">tune</mat-icon>
                         Advanced Search
                     </button>
-                    <button tabindex="0" aria-label="Add new Entity" role="button"
-                            class="btn coi-icon-btn btn-outline-secondary" id="add-new-entity"
+                    <button aria-label="Add new Entity"
+                            class="btn coi-icon-btn btn-outline-secondary" id="coi-entity-management-add-new-entity-btn"
                             title="Click here to add an entity" aria-label="Click here to add a new entity"
                             (click)="addNewEntity()">
                         <mat-icon class="me-1">add</mat-icon>
@@ -58,7 +58,7 @@
             <div class="bg-white pb-3 px-3 pt-2" *ngIf="isViewAdvanceSearch" id="collapseExample" [@topSlideInOut]>
                 <div class="row g-3">
                     <!-- Entity search field -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity name" tabindex="0"
+                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity name" tabindex="-1"
                          aria-label="Entity search field" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity</label>
                         <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
@@ -68,7 +68,7 @@
                         </app-endpoint-search>
                     </div>
                     <!-- Entity type dropdown(lookup) -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity Type" tabindex="0"
+                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity Type" tabindex="-1"
                          aria-label="Entity type dropdown" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-type">Entity Type</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property21')"
@@ -77,7 +77,7 @@
                         </app-look-up>
                     </div>
                     <!-- Country search field -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Country" tabindex="0"
+                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Country" tabindex="-1"
                          aria-label="Country search field" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-country">Country</label>
                         <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
@@ -87,7 +87,7 @@
                         </app-endpoint-search>
                     </div>
                     <!-- Status dropdown(lookup) -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Status" tabindex="0"
+                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Status" tabindex="-1"
                          aria-label="Status dropdown" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-status">Status</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property20')"
@@ -97,7 +97,7 @@
                         </app-look-up>
                     </div>
                     <!-- Risk dropdown(lookup) -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Risk" tabindex="0"
+                    <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Risk" tabindex="-1"
                          aria-label="Risk Level dropdown" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-risk-type">Risk</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property22')"
@@ -107,7 +107,7 @@
                     </div>
 
                     <div *ngIf="activeTabName !== 'UNVERIFIED'" class="col-xl-3 col-lg-4 col-sm-6 col-12"
-                         title="Click to search by Verification Status" tabindex="0"
+                         title="Click to search by Verification Status" tabindex="-1"
                          aria-label="Verification Status dropdown" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-verification">Verification Status</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property24')"
@@ -117,11 +117,11 @@
                         </app-look-up>
                     </div>
                     <div class="col d-flex justify-content-end mt-4 align-items-end">
-                        <button class="btn btn-outline-secondary  fs-14 py-2 mx-2" aria-label="Clear"
+                        <button id="coi-entity-management-clear-btn" class="btn btn-outline-secondary  fs-14 py-2 mx-2" aria-label="Clear"
                             (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
                             aria-label="Click here to clear all the fields">Clear
                         </button>
-                        <button class="btn btn-primary fs-14" id="btn-search"
+                        <button class="btn btn-primary fs-14" id="coi-entity-management-search-btn"
                             (click)="entityManagementService.coiRequestObject.currentPage = 1;advancedSearch()"
                             title="Click here to Initiate search" aria-label="Search"
                             aria-label="Click here to get the search results with/without fields">Search
@@ -133,14 +133,14 @@
         <!-- Sorting pannel -->
         <div class="sort-div border mt-2 px-3" *ngIf="isShowEntityList && isManageEntity && entityList.length">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
-            <button *ngFor="let sortSection of sortSectionsList"
+            <button id="coi-entity-management-sort-btn" *ngFor="let sortSection of sortSectionsList"
                     attr.aria-labelledby="coi-entity-list-sort-{{index}}"
                     (click)="sortResult(sortSection?.variableName)"
                     [class.filter-active]="isActive(sortSection?.variableName)"
-                    title="Click to sort by {{sortSection?.fieldName}}"
+                    title="Click here to sort by {{sortSection?.fieldName}}"
                     class="shadow-sm fw-medium py-2 px-3 fs-13 border rounded-5 bg-white px-8 coi-sort-filter-btn">
                 <div class="d-inline-flex align-items-center">
-                    <span class="d-none" id="coi-entity-list-sort-{{index}}">Click to sort by {{ sortSection?.fieldName }} in
+                    <span class="d-none" id="coi-entity-list-sort-{{index}}">Click here to sort by {{ sortSection?.fieldName }} in
                         {{entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'asc' ?
                         'descending Order' : entityManagementService.coiRequestObject.sort[sortSection?.variableName]=== 'desc' ?
                         'normal Order' : 'ascending order'}}</span>
@@ -156,7 +156,7 @@
             <div *ngIf="entityList.length; else noData" [@listAnimation]="entityList.length">
                 <div *ngFor="let entityListData of entityList;let i=index">
                     <div class="card coi-card-regular">
-                        <div class="card-body">
+                        <div class="card-body" id="coi-entity-management-card-body">
                             <div class="row">
                                 <div class="col-12 mb-3">
                                     <div class="row">
@@ -215,18 +215,20 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 d-flex align-items-end justify-content-end">
-                                    <button (click)="viewDetails(entityListData)" tabindex="0"
+                                    <button id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
+                                    (keyup.enter)="viewDetails(entityListData)" (keyup.space)="viewDetails(entityListData)"
                                             aria-label="Click the button to the view Entity details"
                                             class="align-items-center btn btn-outline-secondary d-flex fs-14"
-                                            title="Click to view entity details">
+                                            title="Click here to view entity details">
                                         <mat-icon class="me-1">visibility</mat-icon>
                                         View
                                     </button>
-                                    <button *ngIf="isShowGraph"
+                                    <button id="coi-entity-management-graph-btn" *ngIf="isShowGraph"
                                             (click)="openGraph(entityListData.entityNumber, entityListData.entityName)"
-                                            tabindex="0" aria-label="Click to view Entity graph database"
+                                            (keyup.enter)="openGraph(entityListData.entityNumber, entityListData.entityName)" (keyup.space)="openGraph(entityListData.entityNumber, entityListData.entityName)"
+                                            aria-label="Click to view Entity graph database"
                                             class="align-items-center btn btn-outline-secondary d-flex fs-14 ms-2"
-                                            title="Click to view Entity Graph Database">
+                                            title="Click here to view Entity Graph Database">
                                         <mat-icon class="me-1">hub</mat-icon>Graph
                                     </button>
                                 </div>
@@ -237,7 +239,7 @@
             </div>
         </ng-container>
         <!-- pagination Pannel-->
-        <div [hidden]="isLoading" tabindex="0" *ngIf="entityList.length>0 && isShowEntityList"
+        <div [hidden]="isLoading" tabindex="-1" *ngIf="entityList.length>0 && isShowEntityList"
              class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
                 <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount"

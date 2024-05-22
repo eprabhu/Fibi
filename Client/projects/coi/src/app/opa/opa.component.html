@@ -7,7 +7,7 @@
                     <div class="card-header px-3">
                         <div class="row flex-grow-1 position-relative pe-3">
                             <div class="col-xl-8 d-flex align-items-center px-0 pe-3">
-                                <span class="d-flex" tabindex="0"
+                                <span class="d-flex" tabindex="-1"
                                     [attr.aria-label]="'OPA disclosure'">
                                     <span class="opa-badge shadow-sm d-flex align-items-center bg-opa-clip">
                                         <span>OPA</span>
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" *ngIf="isCardExpanded">
+                    <div class="card-body" *ngIf="isCardExpanded" id="coi-opa-card">
                         <div class="row gap-0">
                             <div class="col-6 col-xxl-5">
                                 <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
