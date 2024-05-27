@@ -432,10 +432,9 @@
                                                         <app-no-data-label
                                                             [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
                                                             <span class="coi-text-light" id="coi-user-disclosure-opa-pending-card-value-period">{{opaDisclosure?.opaCycles?.periodStartDate
-                                                                | dateFormatterWithTimeZone}}
+                                                                | dateFormatter}}
                                                                 -
-                                                                {{opaDisclosure?.opaCycles?.periodEndDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                                {{opaDisclosure?.opaCycles?.periodEndDate | dateFormatter}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
@@ -553,10 +552,9 @@
                                                         <app-no-data-label
                                                             [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
                                                             <span class="coi-text-light" id="coi-user-disclosure-opa-approved-card-value-period">{{opaDisclosure?.opaCycles?.periodStartDate
-                                                                | dateFormatterWithTimeZone}}
+                                                                | dateFormatter}}
                                                                 -
-                                                                {{opaDisclosure?.opaCycles?.periodEndDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                                {{opaDisclosure?.opaCycles?.periodEndDate | dateFormatter}}</span>
                                                         </app-no-data-label></span>
                                                 </div>
                                             </div>
@@ -747,7 +745,7 @@
                                             </span>
                                             <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
                                                 <span class="d-inline-flex" tabindex="-1"
-                                         
+
                                                     [attr.aria-label]="'Project ' + modalHeader(disclosure)">
                                                     <span class="pipe mx-1"></span>
                                                     <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
@@ -843,7 +841,7 @@
                                                         <span class="word-break-all new-line-property"
                                                             *ngIf="!isReadMore && disclosure?.reviseComment?.length > 60; else showFullInfo">
                                                             <span class="coi-text-light" id="coi-user-disclosure-not-fcoi-card-value-description-{{index}}">{{(disclosure?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore" 
+                                                            <span (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore"
                                                             tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                              class="link-primary"><span class="fw-500">...
                                                                     Read More
@@ -865,7 +863,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Administrator -->
                                         <div tabindex="-1" [attr.aria-label]="'Administrator is ' + (disclosure?.administrator)">
@@ -876,7 +874,7 @@
                                                 </app-no-data-label>
                                             </span>
                                         </div>
-                                    </div>                   
+                                    </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Admin Group -->
                                         <div tabindex="-1" [attr.aria-label]="'Admin Group is ' + (disclosure?.adminGroupName)">
@@ -1274,7 +1272,7 @@
                                                 id="coi-user-disclosure-noof-sfi">{{disclosure?.noOfSfi
                                                 || 0}}</span>
                                             <span class="fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'link-primary': 'coi-text-light' "
-                                                [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"  
+                                                [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
                                                 (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
                                                 (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">Significant
                                                 Financial Interest</span>
@@ -1290,7 +1288,7 @@
                                                 id="coi-user-disclosure-noof-proposal">{{disclosure?.noOfProposal}}</span>
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'link-primary' : 'coi-text-light' "
                                                 [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " 
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
                                         </div>
@@ -1335,7 +1333,7 @@
                                                                         *ngIf="!isPurposeRead[disclosure?.travelDisclosureId] && disclosure?.travelPurpose?.length > 80; else showFullInfo">
                                                                         <span class="grey-text mt-2">{{(disclosure?.travelPurpose |
                                                                             slice:0:80)}}</span>
-                                                                        <span (click)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])" 
+                                                                        <span (click)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
                                                                         (keydown.enter)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
                                                                         tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
                                                                             class="link-primary"><span class="fw-medium">...Read
