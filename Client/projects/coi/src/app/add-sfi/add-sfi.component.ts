@@ -11,6 +11,8 @@ import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { CoiEntity, EntityDetails } from '../entity-management/entity-details-interface';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
+import { setEntityObjectFromElasticResult } from '../common/utilities/elastic-utilities';
 
 
 declare const $: any;
@@ -66,6 +68,7 @@ export class AddSfiComponent implements OnInit {
         involvementStartDate: null,
         involvementEndDate: null
     }
+    isNewEntityFromSearch = false;
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -76,7 +79,8 @@ export class AddSfiComponent implements OnInit {
     @Input() revisionReason = '';
 
     constructor(public sfiService: SfiService, private _activatedRoute: ActivatedRoute,
-        public _commonService: CommonService, private _router: Router, public _navigationService: NavigationService) { }
+        public _commonService: CommonService, private _router: Router, public _navigationService: NavigationService,
+        private _elasticConfig: ElasticConfigService) { }
 
     ngOnInit(): void {
         this.isEntityManagement = this._router.url.includes('entity-management') || this.checkIsEntityTypeInURL();
@@ -90,7 +94,7 @@ export class AddSfiComponent implements OnInit {
         if (this.isEntityManagement) {
             this.canShowEntityFields = true;
         }
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
+        this.EntitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         window.scrollTo(0,0);
     }
@@ -119,7 +123,7 @@ export class AddSfiComponent implements OnInit {
     hideRelationshipModal(event): void {
         this.clearSFIFields();
         this.clearField = new String('true');
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
+        this.EntitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
     }
 
     private createOrUpdateEntitySFI(): void {
@@ -164,7 +168,7 @@ export class AddSfiComponent implements OnInit {
                 this.clearCountryField = new String('false');
             }
         }, err => {
-            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
+            this.EntitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
         }));
     }
@@ -200,6 +204,7 @@ export class AddSfiComponent implements OnInit {
                     this.additionalDetails = data.personEntity;
                     this.isSaving = false;
                     this.navigateToSFI(data.personEntityId);
+                    this.isNewEntityFromSearch = false;
                 }
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'SFI saved successfully.');
             }, _err => {
@@ -224,19 +229,12 @@ export class AddSfiComponent implements OnInit {
        return !isEmptyObject(val);
     }
 
-    selectNewEntity(event): void {
-        this.clearSFIFields();
-        this.EntitySearchOptions.defaultValue = event.searchString;
-        this.clearField = new String('false');
-        this.entityDetails.coiEntity.entityName = event.searchString;
-        this.canShowEntityFields = true;
-    }
-
     selectedEvent(event): void {
         this.canShowEntityFields = false;
         this.clearSFIFields();
         if (event) {
             this.clearField = new String('false');
+            event = setEntityObjectFromElasticResult(event);
             this.checkIfSFIAlreadyAdded(event.entityId, event);
         } else {
             this.sfiService.$addRelationService.next(null);
@@ -261,6 +259,7 @@ export class AddSfiComponent implements OnInit {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.isResultFromSearch = false;
         this.mandatoryList.clear();
+        this.isNewEntityFromSearch = false;
     }
 
     private checkMandatoryFilled(): boolean {
@@ -310,7 +309,7 @@ export class AddSfiComponent implements OnInit {
         if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
             this.mandatoryList.set('entityType', 'Please enter Entity Type.');
             elementIdList.push('coi-add-sfi-entity-type');
-        }  
+        }
     }
 
     private emailValidation(elementIdList): void {
@@ -508,6 +507,13 @@ export class AddSfiComponent implements OnInit {
             }
             ELEMENT.focus();
         }
+    }
+
+    addNewEntity(event: string) {
+        this.clearSFIFields();
+        this.isNewEntityFromSearch = true;
+        this.entityDetails.coiEntity.entityName = event;
+        this.canShowEntityFields = true;
     }
 
 }

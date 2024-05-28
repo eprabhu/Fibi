@@ -73,3 +73,9 @@ ul.sb-results-dropdown-menu>li:last-child {
 .search-icon-invalid {
     right: 28px;
 }
+.add-new-value-option {
+    position: sticky;
+    bottom: 0;
+    z-index: 1000;
+    background-color: #e9ecef !important;
+}

@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject, hideModal,
@@ -22,6 +21,7 @@ import {
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
 import {openSlider, closeSlider, closeCommonModal, openCoiSlider} from '../common/utilities/custom-utilities';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -243,7 +243,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
-        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ALL');
+        this.entitySearchOptions = this._elasticConfig.getElasticForEntity();
     }
 
     setAdvanceSearch() {
@@ -634,8 +634,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     selectedEvent(event) {
-        this.localCOIRequestObject.property8 = event ? event.entityId : null;
-        this.localSearchDefaultValues.entityName = event ? event.entityName : null;
+        this.localCOIRequestObject.property8 = event ? event.entity_id : null;
+        this.localSearchDefaultValues.entityName = event ? event.entity_name : null;
     }
 
     selectedCountryEvent(event) {
