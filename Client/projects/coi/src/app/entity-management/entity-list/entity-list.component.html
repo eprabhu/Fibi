@@ -61,11 +61,10 @@
                     <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity name" tabindex="-1"
                          aria-label="Entity search field" role="searchbox">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity</label>
-                        <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                                             [httpOptions]="EntitySearchOptions"
-                                             [placeHolder]="'Type here to search by Entity name'"
-                                             class=" text-secondary fs-13" [uniqueId]="'adv-entity-name'">
-                        </app-endpoint-search>
+                        <app-elastic [options]="EntitySearchOptions" [placeHolder]="'Type here to search by Entity name'" class="text-secondary fs-13"
+                            [clearField]="clearField" [uniqueId]="'adv-entity-name'"
+                            (selectedResult)="selectedEvent($event)">
+                        </app-elastic>
                     </div>
                     <!-- Entity type dropdown(lookup) -->
                     <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity Type" tabindex="-1"

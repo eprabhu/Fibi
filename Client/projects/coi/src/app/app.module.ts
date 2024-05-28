@@ -14,7 +14,6 @@ import {FooterComponent} from "./common/footer/footer.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from './common/services/dashboard-guard.service';
-import {ElasticConfigService} from '../../../fibi/src/app/common/services/elastic-config.service';
 import {NavigationService} from './common/services/navigation.service';
 import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
@@ -26,6 +25,7 @@ import { DragDirective } from './common/header/drag.directive';
 import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
 import {HeaderService} from "./common/header/header.service";
 import { LoginGuard } from './common/services/guards/login-guard.service';
+import { ElasticConfigService } from './common/services/elastic-config.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();

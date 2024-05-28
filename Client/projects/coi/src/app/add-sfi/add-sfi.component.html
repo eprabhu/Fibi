@@ -88,19 +88,20 @@
 					</label>
 				</div>
 				<div class="col">
-					<app-endpoint-search *ngIf="!isEntityManagement ;else textBox" [uniqueId]="'entity-name'"
-						(onSelect)="selectedEvent($event)" [clearField]="clearField"
-						[httpOptions]="EntitySearchOptions" class="w-100 mt-4" [addSearchText]="true"
-						(onNewValueSelect)="selectNewEntity($event)" [isDisabled]="isViewMode"
-						[placeHolder]="'Type here to search / add an Entity Name'"
-						[isError]="mandatoryList?.has('entityName') || mandatoryList?.has('entityAlreadyAdded')">
-					</app-endpoint-search>
+                    <app-elastic *ngIf="!isEntityManagement && !isNewEntityFromSearch ;else textBox" [uniqueId]="'entity-name'" class="w-100 mt-4"
+                        [options]="EntitySearchOptions" [placeHolder]="'Type here to search / add an Entity Name'"
+                        [clearField]="clearField" [isDisabled]="isViewMode"
+                        [isError]="mandatoryList?.has('entityName') || mandatoryList?.has('entityAlreadyAdded')"
+                        (selectedResult)="selectedEvent($event)" [addNewValue]="'ALLOW_UNIQUE'" (newValueSelect)="addNewEntity($event)">
+                    </app-elastic>
 					<ng-template #textBox>
-						<input type="text" class="form-control fs-13"
+						<input type="text" class="form-control fs-13"  [class.pr-6]="isNewEntityFromSearch"
 							[(ngModel)]="entityDetails.coiEntity.entityName"
 							[ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
 							id="coi-add-sfi-entity-name" (ngModelChange)="setHeader();" appLengthValidator
-							[limit]=500 [styleList]="'mt-2 float-end word-count'">		
+							[limit]=500 [styleList]="'mt-2 float-end word-count'">
+                        <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13"
+                            (click)="entityDetails.coiEntity.entityName = '';isNewEntityFromSearch = false"> Back to Search </a>
 					</ng-template>
 					<div class="help-text" tabindex="-1" aria-label="Entity Name Helptext" aria-describedby="entity-name-helptext">
 						<span id="coi-add-sfi-entity-name-helptext">Type in the official name of the business or organization you need to report. Entities to
@@ -415,7 +416,7 @@
 										(ngModelChange)="endDateValidation()"
 										(keypress)="_commonService._keyPress($event, 'date')"
 										[ngClass]="(mandatoryList?.has('endDate')) ? 'is-invalid d-block' : ''"/>
-									<i title="Click here to select End date" (click)="endDate.open()" (keyup.enter)="endDate.open()" (keyup.enter)="endDate.open()" 
+									<i title="Click here to select End date" (click)="endDate.open()" (keyup.enter)="endDate.open()" (keyup.enter)="endDate.open()"
 									[class.date-field-error]="mandatoryList?.has('endDate')"
 										class="fa fa-calendar fa-large insidePicker hand-cursor"
 										title="Click here to select end date"></i>
@@ -669,7 +670,7 @@
           <button id="coi-add-sfi-entity-modal-cancel-btn" (click)="clearEntityDetails()" class="btn btn-outline-secondary btn-sm"
             data-bs-dismiss="modal" type="button" aria-label="Click here to cancel" title="Click here to cancel">Cancel
           </button>
-          <button id="coi-add-sfi-entity-modal-confirm-btn" (click)="confirmEntityDetails()" data-bs-dismiss="modal" aria-label="Click here to confirm" title="Click here to confirm" 
+          <button id="coi-add-sfi-entity-modal-confirm-btn" (click)="confirmEntityDetails()" data-bs-dismiss="modal" aria-label="Click here to confirm" title="Click here to confirm"
 		   class="btn btn-primary btn-sm fs-14 height-35px" type="button">Confirm</button>
         </div>
       </div>

@@ -14,6 +14,9 @@ export const ADMIN_DASHBOARD_URL = '/coi/admin-dashboard';
 export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
 export const OPA_REDIRECT_URL = '/coi/opa/form';
 
+export const ELASTIC_FIBI_PERSON_OUTPUT_FORMAT = 'full_name | prncpl_nm';
+export const ELASTIC_ENTITY_FORMAT = 'entity_name | country_name | entity_type';
+
 export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
     'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE']);
 

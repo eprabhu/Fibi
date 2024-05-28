@@ -4,15 +4,20 @@
     [(ngModel)]="searchText" (keypress)="getElasticResult()" (paste)="getElasticResult()" (keydown.backspace)="backSpaceEvent()"
     (keydown.esc)="hideSearchResults();"
     class = "app-elastic-search form-control pe-4" autocomplete="off" [matAutocomplete]="elastic"/>
-  <a class="searchButton" >
+  <a class="searchButton" [title]="searchText == '' ? 'Search' : 'Clear search'">
     <i aria-hidden="true" *ngIf = "searchText == ''" class="fa fa-search fa-med"></i>
     <i aria-hidden="true"  *ngIf="searchText != '' && !isDisabled" class="fa fa-times fa-med" (click)="emitSelectedObject(null);"></i>
   </a>
-
   <mat-autocomplete #elastic="matAutocomplete" (closed)="hideSearchResults()"
-    (optionSelected)="emitSelectedObject($event.option.value ? $event.option.value.value : null)">
+    (optionSelected)="elasticOptionSelect($event)">
     <mat-option *ngFor="let result of results" [value]="result">
       <span [innerHTML]="result.label"></span>
+    </mat-option>
+    <mat-option *ngIf="isShowAddNewValueOption" class="px-3 add-new-value-option border-secondary-subtle border-top"
+        id="ADD_NEW_VALUE" (onKeyDown)="emitNewAdd()" [value]="searchText">
+        <i>Desired result not found? </i>
+        <span class="fw-500 text-primary">Add </span>
+        "<span class="fw-700" [innerHTML]="searchText"></span>"
     </mat-option>
   </mat-autocomplete>
 </div>
