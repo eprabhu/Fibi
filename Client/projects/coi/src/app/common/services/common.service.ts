@@ -147,7 +147,7 @@ export class CommonService {
     }
 
     loginWithCurrentUser() {
-        return this._http.post(this.baseUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
+        return this._http.post(this.formUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
     }
 
     /**
