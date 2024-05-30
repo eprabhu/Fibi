@@ -13,6 +13,8 @@ import { CommonService } from '../../common/services/common.service';
 import { convertToValidAmount, deepCloneObject, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { setEntityObjectFromElasticResult } from '../../common/utilities/elastic-utilities';
 
 @Component({
     selector: 'app-travel-disclosure-form',
@@ -24,7 +26,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     deployMap: string = environment.deployUrl;
     datePlaceHolder: string = DATE_PLACEHOLDER;
-    entitySearchOptions: EndpointOptions;
+    entitySearchOptions: any = {};
     countrySearchOptions: EndpointOptions;
     $subscriptions: Subscription[] = [];
     clearField = new String('true');
@@ -52,19 +54,21 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     constructor(public commonService: CommonService,
         private _router: Router,
         private _service: TravelDisclosureService,
-        private _dataStore: TravelDataStoreService,private _activatedRoute:ActivatedRoute) {
+        private _dataStore: TravelDataStoreService,private _activatedRoute:ActivatedRoute,
+        private _elasticConfig: ElasticConfigService
+    ) {
         window.scrollTo(0, 0);
     }
 
     ngOnInit(): void {
-        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ONLY_ACTIVE');
+        this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
         this.handleTravelDisclosureSave();
-        this.listenQueryParamsChanges();        
+        this.listenQueryParamsChanges();
     }
 
     ngOnDestroy(): void {
@@ -199,6 +203,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     selectedEntityEvent(event: any): void {
         if (event) {
+            event = setEntityObjectFromElasticResult(event);
             openModal('travel-entity-details');
         } else {
             this.clearEntity();
@@ -350,7 +355,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             const MODULE_ID = params['disclosureId'];
             if (!MODULE_ID) {
                 this.travelDisclosureRO = new CoiTravelDisclosure();
-                this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ONLY_ACTIVE');
+                this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
                 this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
                 this.loadTravellerTypesLookup();
                 this.loadTravelStatusTypesLookup();

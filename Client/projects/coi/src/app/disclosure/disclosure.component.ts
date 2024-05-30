@@ -13,7 +13,6 @@ import {
     isEmptyObject,
     openModal,
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
 import { CommonService } from '../common/services/common.service';
 import {
@@ -27,6 +26,7 @@ import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-disclosure',

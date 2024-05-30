@@ -12,5 +12,6 @@
   "elasticPassword": "Polsol_@#7889",
   "elasticAuthScheme": "Basic",
   "elasticIndexUrl": "https://fibicoi.fibiweb.com/elastic_8/",
+  "indexValue": "",
   "fibiApplicationUrl":"https://dev.fibiweb.com/fibi"
 }

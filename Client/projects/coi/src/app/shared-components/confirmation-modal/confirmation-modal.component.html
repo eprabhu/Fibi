@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-dialog-centered {{getModalSize()}}" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title" tabindex="0" id="modal-header">
+          <h4 class="modal-title" tabindex="-1" id="modal-header">
             <ng-content select="[header]"></ng-content>
           </h4>
           <button type="button" class="btn-close" title="Click to close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Click to close" (click)="closeModal()"></button>
@@ -39,12 +39,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" type="button"
+          <button class="btn btn-outline-secondary" type="button" id="coi-conformation-modal-secondary-btn"
             [attr.aria-label]="'click to ' + secondaryBtnName" (click)="performSecondaryAction()"
             title="{{secondaryBtnTooltip ? secondaryBtnTooltip : ('Click to ' + secondaryBtnName)}}">
             {{secondaryBtnName}}
           </button>
-          <button class="btn btn-primary me-0" type="button"
+          <button class="btn btn-primary me-0" type="button" id="coi-conformation-modal-primary-btn"
             [attr.aria-label]="'click to ' + primaryBtnName" (click)="performPrimaryAction()"
             title="{{primaryBtnTooltip ? primaryBtnTooltip : ('Click to ' + primaryBtnName)}}">
             {{primaryBtnName}}

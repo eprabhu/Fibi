@@ -5,7 +5,6 @@ import { QuestionnaireService } from '../view-questionnaire/questionnaire.servic
 import { CommonService } from '../../common/services/common.service';
 import { Subscription, Observable } from 'rxjs';
 import { easeIn } from '../../../../../fibi/src/app/common/utilities/animations';
-import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { scrollIntoView, setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Question, TableAnswer } from '../view-questionnaire/questionnaire.interface';
@@ -22,6 +21,7 @@ import {
 } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { compareDatesWithoutTimeZone } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { Questionnaire, QuestionnaireVO } from './questionnaire-interface';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-view-questionnaire-v2',

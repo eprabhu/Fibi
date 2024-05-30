@@ -9,7 +9,7 @@ import { CoiService } from '../../services/coi.service';
 @Component({
     selector: 'app-coi-review',
     templateUrl: './review.component.html',
-    styleUrls: ['./review.component.css']
+    styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent implements OnInit {
 

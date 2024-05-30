@@ -14,16 +14,16 @@
                   <div class="d-flex justify-content-end align-items-center col-xl-auto">
                     <div class="card-toolbar ms-auto">
                       <div class="d-flex align-items-center f-14">
-                        <span *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" tabindex="0">
+                        <span *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" tabindex="-1">
                           <span data-bs-toggle="tooltip" data-bs-placement="top"
                                 class="info-text pill f-14 me-2 px-3 py-1 rounded-5 py-0"
                                 title="{{entityDetails?.entityName}} is Unverified"><i aria-hidden="true"
                                 class="fa fa-times me-2"></i>Unverified</span>
                         </span>
-                        <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="0"
+                        <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="-1"
                           [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'">
                           {{entityDetails?.isActive ? 'Active' : 'Inactive'}}</span>
-                        <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-4 fs-14" tabindex="0">
+                        <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-4 fs-14" tabindex="-1">
                           <div class="d-flex align-items-center ml-15 col-12">
                             <label class="fw-500 me-2" aria-label="Risk">Risk :</label>
                             <div class="text-color d-flex">
@@ -48,36 +48,36 @@
                 </div>
               </div>
               <!-- New Card design -->
-              <div class="card-body" *ngIf="isCardExpanded" [@heightAnimation]>
+              <div class="card-body" id="coi-view-entity-details-card" *ngIf="isCardExpanded" [@heightAnimation]>
                 <div class="row">
                   <div class="col-6 col-xxl-6 pe-xl-0 pe-xxl-0">
                     <div
                       class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                       <div class="row">
                         <div class="col-12">
-                          <label class="coi-text-dark d-block">
+                          <label for="coi-view-entitydetails-type" class="coi-text-dark d-block">
                             Entity Type
                           </label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.entityType?.description">
-                              <span class="text-overflow">{{entityDetails?.entityType?.description}}</span>
+                              <span class="text-overflow" id="coi-view-entitydetails-type">{{entityDetails?.entityType?.description}}</span>
                             </app-no-data-label>
                           </span>
                         </div>
                         <div class="col-lg-6 mt-2 pe-0">
-                          <label class="coi-text-dark d-block"> Country
+                          <label for="coi-view-entitydetails-country" class="coi-text-dark d-block"> Country
                           </label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.country?.countryName">
-                              <span>{{entityDetails?.country?.countryName}}</span>
+                              <span id="coi-view-entitydetails-country">{{entityDetails?.country?.countryName}}</span>
                             </app-no-data-label></span>
                         </div>
                         <div class="col mt-2 pe-0">
-                          <label class="coi-text-dark d-block">City
+                          <label for="coi-view-entitydetails-city" class="coi-text-dark d-block">City
                           </label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.city">
-                              <span>{{entityDetails?.city}}</span>
+                              <span id="coi-view-entitydetails-city">{{entityDetails?.city}}</span>
                             </app-no-data-label>
                           </span>
                         </div>
@@ -89,25 +89,25 @@
                       class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative me-3">
                       <div class="row">
                         <div class="col-12">
-                          <label class="coi-text-dark d-block">Address</label>
+                          <label for="coi-view-entitydetails-address" class="coi-text-dark d-block">Address</label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.address">
-                              <span [title]="entityDetails?.address">{{entityDetails?.address?.length>70 ? (entityDetails?.address |slice:0:70) +'...'
+                              <span [title]="entityDetails?.address" id="coi-view-entitydetails-address">{{entityDetails?.address?.length>70 ? (entityDetails?.address |slice:0:70) +'...'
                                 :entityDetails?.address}}</span>
                             </app-no-data-label>
                           </span>
                         </div>
                         <div *ngIf="entityDetails?.emailAddress" class="col-lg-6 d-flex align-items-center mt-2 pe-0">
                             <mat-icon class="coi-text-lighter me-2 flex-shrink-0">mail</mat-icon>
-                              <span class="coi-text-light">{{entityDetails?.emailAddress}}</span>
+                              <span class="coi-text-light" id="coi-view-entitydetails-mail">{{entityDetails?.emailAddress}}</span>
                         </div>
                         <div *ngIf="entityDetails?.phone" class="col-lg-6 d-flex align-items-center mt-2 pe-0 me-md-2 me-xl-0">
                             <mat-icon class="coi-text-lighter flex-shrink-0 me-2">call</mat-icon>
-                              <span class="coi-text-light">{{entityDetails?.phone}}</span>
+                              <span class="coi-text-light" id="coi-view-entitydetails-call">{{entityDetails?.phone}}</span>
                         </div>
                         <div *ngIf="entityDetails?.webURL" class="col-12 d-flex align-items-center mt-2 pe-0">
                           <mat-icon class="coi-text-lighter me-2 flex-shrink-0">language</mat-icon>
-                              <a class="anchor-link fs-14 word-break-all" (click)="redirectUrl(entityDetails?.webURL)">
+                              <a class="anchor-link fs-14 word-break-all" (click)="redirectUrl(entityDetails?.webURL)" (keyup.enter)="redirectUrl(entityDetails?.webURL)" (keyup.space)="redirectUrl(entityDetails?.webURL)">
                                 {{entityDetails?.webURL}} </a>
                         </div>
                       </div>
@@ -170,7 +170,7 @@
 
                   <!-- Activate -->
                   <ng-container *ngIf="!entityDetails.isActive">
-                    <button title="Click to activate Entity" id="btn-activate" tabindex="0" role="button"
+                    <button title="Click to activate Entity" id="btn-activate"
                       [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click to activate Entity"
                       class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
@@ -181,7 +181,7 @@
 
                   <!-- Approve Entity -->
                   <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
-                    <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'"
+                    <button id="btn-approve-entity" [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'"
                       class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       title="Click to access entity verification" data-bs-toggle="modal"
                       data-bs-target="#approve-entity-modal" aria-label="Click to approve Entity">
@@ -433,11 +433,10 @@
                 <div *ngIf="entityRelationshipValue && entityRelationshipValue !== '1'" class="row fs-14 mt-2">
                   <div class="col pt-2">
                     <label class="fw-bold" for="search-entity-name"><span class="text-danger px-1">*</span>Entity Search</label>
-                    <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                      [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity'"
-                      class=" text-secondary fs-13" [uniqueId]="'search-entity-name'"
-                      [isError]="approveEntityValidateMap?.has('entityName')">
-                    </app-endpoint-search>
+                    <app-elastic [options]="EntitySearchOptions" [placeHolder]="'Type here for entity'" class="text-secondary fs-13"
+                            [clearField]="clearField" [uniqueId]="'search-entity-name'"
+                            (selectedResult)="selectedEvent($event)">
+                    </app-elastic>
                     <span *ngIf="approveEntityValidateMap?.has('entityName')" class="invalid-feedback d-block fs-13">
                       {{approveEntityValidateMap?.get('entityName')}}
                     </span>

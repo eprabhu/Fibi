@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { StudentSubordinateEmployee, StudentSubordinatePE } from './interface';
-import { ElasticConfigService } from 'projects/fibi/src/app/common/services/elastic-config.service';
 import { getEndPointForEntity, getEndPointOptionsForCountry } from '../../search-configurations';
 import { FormBuilderService } from '../../form-builder.service';
 import { CommonService } from 'projects/coi/src/app/common/services/common.service';
 import { OPAStudentSubordinateService } from './OPA-student-subordinate.service';
+import { ElasticConfigService } from 'projects/coi/src/app/common/services/elastic-config.service';
 
 @Component({
     selector: 'app-OPA-student-subordinate-employee',

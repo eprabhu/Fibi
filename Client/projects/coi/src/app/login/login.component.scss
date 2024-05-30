@@ -30,7 +30,7 @@ a {
 .loading-text {
     text-align: center;
     color: #47a69a;
-    font-size: 12px;
+    font-size: 0.75rem;
     margin-top: 10px;
 }
 
@@ -80,16 +80,20 @@ a {
         transform: scaleY(1);
         background: #47e6d6;
     }
+
     25% {
         background: #26a69a;
     }
+
     50% {
         transform: scaleY(2);
         background: #59CD90;
     }
+
     75% {
         background: #87ece2;
     }
+
     100% {
         transform: scaleY(1);
         background: #1bebd6;
@@ -152,10 +156,8 @@ a {
     padding: 0 5px;
 }
 
-
-
 #coi-bootstrap-toast {
-    font-size: 14px;
+    font-size: 0.875rem;
     bottom: 10px;
     right: 10px;
 }

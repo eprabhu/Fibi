@@ -12,6 +12,7 @@ import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { fadeInOutHeight, heightAnimation } from '../../common/utilities/animations';
 import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 declare const $: any;
 @Component({
@@ -58,7 +59,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         public entityManagementService: EntityManagementService,
         private _commonServices: CommonService,
         private _navigationService: NavigationService,
-        public entityDetailsServices: EntityDetailsService, public sfiService: SfiService) {
+        public entityDetailsServices: EntityDetailsService, public sfiService: SfiService,
+        private _elasticConfig: ElasticConfigService
+    ) {
     }
 
     ngOnInit() {
@@ -204,7 +207,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 this.entityRelationshipValue == ele.entityRelTypeCode).description;
         }
         if (this.entityRelationshipValue !== '1') {
-            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl, 'ALL');
+            this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
         }
     }
 
@@ -238,9 +241,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     selectedEvent(event) {
-        this.relationshipEntityName = event ? event.entityName : '';
-        this.relationshipEntityId = event ? event.entityId : null;
-        this.entityRelationshipNumber = event ? event.entityNumber : null;
+        this.relationshipEntityName = event ? event.entity_name : '';
+        this.relationshipEntityId = event ? event.entity_id : null;
+        this.entityRelationshipNumber = event ? event.entity_number : null;
     }
 
     validateApproveEntity(): boolean {
@@ -259,7 +262,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.clearField = new String('true');
         this.relationshipEntityId = null;
         this.relationshipEntityName = '';
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl, 'ALL');
+        this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
         this.entityRelationshipNumber = null;
     }
 
