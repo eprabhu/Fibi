@@ -49,7 +49,7 @@ const routes: Routes = [
   ],
   exports: [
   ],
-  providers: [ElasticConfigService, EntityDetailsService, EntityManagementGuardService, SfiService,
+  providers: [EntityDetailsService, EntityManagementGuardService, SfiService,
      EntityManagementGuardService, EntityManagementService]
 })
 export class EntityManagementModule {
