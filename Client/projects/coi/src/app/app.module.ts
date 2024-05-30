@@ -26,6 +26,7 @@ import { AddAttachmentModalModule } from './common/header/add-attachment-modal/a
 import {HeaderService} from "./common/header/header.service";
 import { LoginGuard } from './common/services/guards/login-guard.service';
 import { ElasticConfigService } from './common/services/elastic-config.service';
+import { InformationAndHelpTextService } from './common/services/informationAndHelpText.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -72,7 +73,8 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
             useClass: HashLocationStrategy
         }, NavigationService,
         AdminRouteGuardService,
-        LoginGuard],
+        LoginGuard,
+        InformationAndHelpTextService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

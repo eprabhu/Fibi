@@ -82,13 +82,14 @@
 			<!-- Entity Name -->
 			<div class="col-12" tabindex="-1" aria-label="Entity Name Search Field" [class.mb-2]="!isResultFromSearch && !isEntityManagement">
 				<div class="d-flex position-relative">
-					<label class="d-block fs-14 fw-500 px-1 pb-1 label-text" for="coi-add-sfi-entity-name">
+					<label class="d-block fs-14 fw-500 px-1 pb-1 label-text coi-label-help" for="coi-add-sfi-entity-name">
 						<span class="mandatory">*</span>
 						Entity Name
+						<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-entity-name'"></app-common-help-text>
 					</label>
 				</div>
 				<div class="col">
-                    <app-elastic *ngIf="!isEntityManagement && !isNewEntityFromSearch ;else textBox" [uniqueId]="'entity-name'" class="w-100 mt-4"
+                    <app-elastic *ngIf="!isEntityManagement && !isNewEntityFromSearch ;else textBox" [uniqueId]="'coi-add-sfi-entity-name'" class="w-100 mt-4"
                         [options]="EntitySearchOptions" [placeHolder]="'Type here to search / add an Entity Name'"
                         [clearField]="clearField" [isDisabled]="isViewMode"
                         [isError]="mandatoryList?.has('entityName') || mandatoryList?.has('entityAlreadyAdded')"
@@ -103,10 +104,7 @@
                         <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13"
                             (click)="entityDetails.coiEntity.entityName = '';isNewEntityFromSearch = false"> Back to Search </a>
 					</ng-template>
-					<div class="help-text" tabindex="-1" aria-label="Entity Name Helptext" aria-describedby="entity-name-helptext">
-						<span id="coi-add-sfi-entity-name-helptext">Type in the official name of the business or organization you need to report. Entities to
-							report include foreign, domestic, public or private entities, but not federal agencies.</span>
-					</div>
+					<app-common-information [elementId]="'coi-add-sfi-entity-name'" [subSectionId]="531"></app-common-information>
 					<div *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-block fs-13"
 						tabindex="-1" aria-label="Entity Name Validation" aria-describedby="entity-name-validation1">
 						<span id="coi-add-sfi-entity-name-validation1">{{mandatoryList?.get('entityName')}}</span>
@@ -194,9 +192,10 @@
 					<!-- Country -->
 					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Country Search Field">
 						<div class="d-flex position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="Country">
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-country-search">
 								<span class="mandatory">*</span>
 								Country
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-country-search'"></app-common-help-text>
 							</label>
 						</div>
 						<div class="col">
@@ -205,9 +204,7 @@
 								[isDisabled]="isResultFromSearch || isViewMode ||modifyType ==='1'"
 								class="w-100 mt-4" [isError]="mandatoryList?.has('country')">
 							</app-endpoint-search>
-							<div class="help-text">
-								Select country from search bar.
-							</div>
+							<app-common-information [elementId]="'coi-add-sfi-country-search'" [subSectionId]="531"></app-common-information>
 							<div id="coi-add-sfi-country-valiidation" *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block fs-13">
 								{{mandatoryList?.get('country')}}
 							</div>
@@ -216,32 +213,31 @@
 					<!-- City -->
 					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1" aria-label="City">
 						<div class="d-flex fs-15 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="coi-add-sfi-city-input-box">City</label>
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-city-input-box">City
+							<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-city-input-box'"></app-common-help-text>
+							</label>
 						</div>
 						<div class="col">
 							<input id="coi-add-sfi-city-input-box" type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.city"
 								[disabled]="isResultFromSearch || isViewMode" appTailingSpaceRemover>
-							<div class="help-text">
-								Type in the city of the business or organization you need to report.
-							</div>
+								<app-common-information [elementId]="'coi-add-sfi-city-input-box'" [subSectionId]="531"></app-common-information>
 						</div>
 					</div>
 					<!-- Address -->
 					<div class="col-12" tabindex="-1" aria-label="Address">
 						<span>
-							<label for="coi-add-sfi-address-textarea" class="fs-14 fw-500 pb-1 label-text">
+							<label for="coi-add-sfi-address-textarea" class="fs-14 fw-500 pb-1 label-text coi-label-help">
 								<span class="mandatory">*</span>
 								Address
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-address-textarea'"></app-common-help-text>
 							</label>
 							<textarea appAutoGrow class="form-control" rows="1"
 								[(ngModel)]="entityDetails.coiEntity.address"
 								appTailingSpaceRemover id="coi-add-sfi-address-textarea"
 								[ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator
 								[limit]=2000 [styleList]="'mt-2 float-end word-count'" title="Adress" aria-label="Adress">
-                                    </textarea>
-							<div class="help-text">
-								Type in the address of the business or organization you want to report.
-							</div>
+                            </textarea>
+							<app-common-information [elementId]="'coi-add-sfi-address-textarea'" [subSectionId]="531"></app-common-information>
 							<div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13 position-absolute">
 								{{mandatoryList?.get('address')}}
 							</div>
@@ -250,8 +246,9 @@
 					<!-- Phone -->
 					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Phone">
 						<div class="d-flex px-1 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="coi-add-sfi-phone-input-box">
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-phone-input-box">
 								Phone
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-phone-input-box'"></app-common-help-text>
 							</label>
 						</div>
 						<div class="col">
@@ -260,16 +257,15 @@
 									(keypress)="inputRestriction($event)"
 									[disabled]="isResultFromSearch || isViewMode"
 									(keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)" maxlength="15">
-								<div class="help-text">
-									Type in the phone number of the business or organization you want to report.
-								</div>
+									<app-common-information [elementId]="'coi-add-sfi-phone-input-box'" [subSectionId]="531"></app-common-information>
 						</div>
 					</div>
 					<!-- Zip Code -->
 					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1" aria-label="Zip Code">
 						<div class="d-flex fs-15 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="coi-add-sfi-zip-code">
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-zip-code">
 								Zip Code
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-zip-code'"></app-common-help-text>
 							</label>
 						</div>
 						<div class="col pe-1">
@@ -277,29 +273,28 @@
 								appTailingSpaceRemover
 								(keypress)="inputRestriction($event)" maxlength="15"
 								[disabled]="isResultFromSearch || isViewMode">
-							<div class="help-text">
-								Type in the zip code of the business or organization you need to report.
-							</div>
+								<app-common-information [elementId]="'coi-add-sfi-zip-code'" [subSectionId]="531"></app-common-information>
 						</div>
 					</div>
 					<!-- Website -->
 					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Website">
 						<div class="d-flex position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="coi-add-sfi-website">Website</label>
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-website">Website
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-website'"></app-common-help-text>
+							</label>
 						</div>
 						<div class="col">
 							<input id="coi-add-sfi-website" type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL"
 								 [disabled]="isResultFromSearch || isViewMode"
 								appTailingSpaceRemover>
-							<div class="help-text">
-								Type in the website of the business or organization you want to report.
-							</div>
+								<app-common-information [elementId]="'coi-add-sfi-website'" [subSectionId]="531"></app-common-information>
 						</div>
 					</div>
 					<!-- Email Address -->
 					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1" aria-label="Email Address">
 						<div class="d-flex fs-15 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="coi-add-sfi-email-input-box"> Email Address
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-email-input-box"> Email Address
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-email-input-box'"></app-common-help-text>
 							</label>
 						</div>
 						<div class="col">
@@ -308,8 +303,7 @@
 								[ngClass]="emailWarningMsg != null ? 'is-invalid d-block' : ''"
 								[disabled]="isResultFromSearch || isViewMode"
 								appTailingSpaceRemover>
-							<div class="help-text">Type the email address of the business or organization you want to report.
-							</div>
+								<app-common-information [elementId]="'coi-add-sfi-email-input-box'" [subSectionId]="531"></app-common-information>
 							<div *ngIf="emailWarningMsg" class="invalid-feedback d-block fs-13">
 								{{emailWarningMsg}}
 							</div>
@@ -318,8 +312,9 @@
 					<!-- Entity Type -->
 					<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" tabindex="-1" aria-label="Entity Type Dropdown">
 						<div class="d-flex position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text" for="coi-add-sfi-entity-type">
+							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-entity-type">
 								<span class="mandatory">*</span> Entity Type
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-entity-type'"></app-common-help-text>
 							</label>
 						</div>
 						<div class="col">
@@ -333,8 +328,7 @@
 									[value]="type?.entityTypeCode" [hidden]="type?.isActive != true">
 									{{type?.description}}</option>
 							</select>
-							<div class="help-text">Select type from the available options.
-							</div>
+							<app-common-information [elementId]="'coi-add-sfi-entity-type'" [subSectionId]="531"></app-common-information>
 							<div *ngIf="mandatoryList?.has('entityType')" class="invalid-feedback d-block fs-13">
 								{{mandatoryList?.get('entityType')}}
 							</div>
@@ -344,6 +338,7 @@
 					<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-3 mt-md-0" *ngIf="isEntityManagement"  tabindex="-1" aria-label="Risk Dropdwon">
 						<div class="d-flex px-1 position-relative">
 							<label class="d-block fs-14 fw-500 px-1 pb-1 label-text" for="coi-add-sfi-risk-level">Risk
+								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-risk-level'"></app-common-help-text>
 							</label>
 						</div>
 						<div class="col px-1">
@@ -356,8 +351,7 @@
 									</option>
 								</ng-container>
 							</select>
-							<div class="help-text">Select risk level from the available.
-							</div>
+							<app-common-information [elementId]="'coi-add-sfi-risk-level'" [subSectionId]="531"></app-common-information>
 						</div>
 					</div>
 				</ng-container>
@@ -374,14 +368,15 @@
 						<!-- Start date of involvement -->
 						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Start Date of Involvement Date Field">
 							<div class="d-flex">
-								<label class="d-block fw-500 fs-14 pb-1 label-text"
-									for="coi-add-sfi-start-date-involvement"><span class="mandatory">*</span> Start Date of
+								<label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+									for="coi-add-sfi-start-date"><span class="mandatory">*</span> Start Date of
 									Involvement
+									<app-common-help-text [subSectionId]="532" [elementId]="'coi-add-sfi-start-date'"></app-common-help-text>
 								</label>
 							</div>
 							<div>
 								<span class="dateField w-100">
-									<input matInput [matDatepicker]="startDate" id="coi-add-sfi-start-date-involvement"
+									<input matInput [matDatepicker]="startDate" id="coi-add-sfi-start-date"
 										placeholder="{{datePlaceHolder}}" style="width: 100% !important"
 										(click)="startDate.open()" autocomplete="off"
 										class="d-inline-block form-control"
@@ -404,12 +399,13 @@
 						</div>
 						<!-- End Date of Involvement -->
 						<div class="col-xxl-5 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 mt-lg-2 mt-xl-0 mt-md-2 mt-2"  aria-label="End Date of Involvement Date Field">
-							<label class="d-block fs-14 fw-500 px-1 pb-1 label-text"
-								for="coi-add-sfi-end-date-involvement">End Date of Involvement
+							<label class="d-block fs-14 fw-500 px-1 pb-1 label-text coi-label-help"
+								for="coi-add-sfi-end-date">End Date of Involvement
+								<app-common-help-text [subSectionId]="532" [elementId]="'coi-add-sfi-end-date'"></app-common-help-text>
 							</label>
 							<div>
 								<span class="dateField">
-									<input matInput [matDatepicker]="endDate" id="coi-add-sfi-end-date-involvement"
+									<input matInput [matDatepicker]="endDate" id="coi-add-sfi-end-date"
 										placeholder="{{datePlaceHolder}}" style="width: 100% !important"
 										(click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
 										[(ngModel)]="involvementDate.involvementEndDate"
@@ -431,8 +427,10 @@
 						</div>
 						<!-- Sponsors Research -->
 						<div class="col-xxl-2 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 mt-lg-2 mt-xl-0 mt-md-2 mt-2" tabindex="-1" aria-label="Sponsors Research Toggle Button">
-							<div class="d-flex px-3">
-								<label for="coi-add-sfi-sponsor-research-checked" class="d-block fs-14 fw-500 px-1 pb-1 row label-text" tabindex="-1">Sponsors Research</label>
+							<div class="d-flex">
+								<label for="coi-add-sfi-sponsor-research" class="d-block fs-14 fw-500 px-1 pb-1 label-text coi-label-help" tabindex="-1">Sponsors Research
+									<app-common-help-text [subSectionId]="532" [elementId]="'coi-add-sfi-sponsor-research'"></app-common-help-text>
+								</label>
 							</div>
 							<div class="px-2" title="Click to toggle Yes/No">
 								<span class="py-1" aria-label="Disclosures_has_sfi">
@@ -440,7 +438,7 @@
 										(keyup.enter)="additionalDetails.sponsorsResearch = false" (keyup.space)="additionalDetails.sponsorsResearch = false"
 										 aria-label="Click here to yes" title="Click here to yes">
 										<label class="switch">
-											<input id="coi-add-sfi-sponsor-research-checked" type="checkbox" checked>
+											<input id="coi-add-sfi-sponsor-research" type="checkbox" checked>
 											<span class="slider round"><small class="fs-12 mt-1">Yes</small></span>
 										</label>
 									</a>
@@ -462,9 +460,10 @@
 						<div class="col-lg-12 col-md-12 col-sm-12 col-12 card custom-padding position-relative px-0" id="relation-radio-btn"
 							tabindex="-1" aria-label="Relationship Details Card" [class.invalid-border]="mandatoryList.has('relationRadio')">
 							<div class="color-black mb-2">
-								<label for="Disclose financial details for the SFI" class="form-check-label colour-black relation-header px-2 fs-14 label-text"><span
+								<label for="Disclose financial details for the SFI" class="form-check-label colour-black relation-header px-2 fs-14 label-text coi-label-help"><span
 										class="mandatory">*</span> Relationship Details
 									[Disclose financial details for the SFI]
+									<app-common-help-text [subSectionId]="532" [elementId]="'sfi-relation'"></app-common-help-text>
 								</label>
 							</div>
 							<div class="row mb-3 mt-2 mx-0 px-2">
@@ -489,15 +488,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="help-text m-0 rounded-bottom" tabindex="-1" aria-label="Relationship Details Helptext"
-								aria-describedby="relationship-details-helptext">
-								<span id="coi-add-sfi-relationship-details-helptext">Relationship Details section, use this section to disclose
-									financial information related to the entity for your
-									Self, Spouse/Domestic Partner, and Dependents (children who are unemancipated and under 18 years of age
-									or who
-									receive more than one-­‐half support from you).</span>
-							</div>
-						</div>
+							<app-common-information [elementId]="'sfi-relation'" [subSectionId]="532"></app-common-information></div>
 						<div *ngIf="mandatoryList.has('relationRadio')" class="invalid-feedback d-block fs-13 col-12 px-0"
 							tabindex="-1" aria-label="Relationship Details Validation" aria-describedby="relation-details-validation">
 							<span id="coi-add-sfi-relation-details-validation">{{mandatoryList.get('relationRadio')}}</span>
@@ -506,22 +497,18 @@
 					<!-- Relationship with Entity -->
 					<div class="row" aria-label="Relationship with Entity">
 						<span>
-							<label for="coi-add-sfi-releationship-entity" class="fs-14 fw-500 pb-2 position-relative label-text">
+							<label for="coi-add-sfi-releationship" class="fs-14 fw-500 pb-2 position-relative label-text coi-label-help">
 								<span class="mandatory">*</span>
 								Relationship with Entity
+								<app-common-help-text [subSectionId]="532" [elementId]="'coi-add-sfi-releationship'"></app-common-help-text>
 							</label>
-							<textarea appAutoGrow class="form-control" id="coi-add-sfi-releationship-entity" rows="1"
+							<textarea appAutoGrow class="form-control" id="coi-add-sfi-releationship" rows="1"
 								[(ngModel)]="additionalDetails.staffInvolvement"
 								appTailingSpaceRemover
 								[ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
 								[limit]=2000 [styleList]="'mt-2 float-end word-count'" title="Relationship with entity" aria-label="Relationship with entity">
-                                    </textarea>
-							<div class="help-text" tabindex="-1" aria-label="Relationship with entity helptext" aria-describedby="relation-with-entity-helptext">
-								<span id="coi-add-sfi-relation-with-entity-helptext">This description is presented in the Relationship section to help you relate this entity
-								to your research projects. Please enter an adequate description of the organization, and
-								of your role with them,to aid both you, and a reviewers' understanding of the
-								association between the entity and work.</span>
-							</div>
+                          	</textarea>
+								<app-common-information [elementId]="'coi-add-sfi-releationship'" [subSectionId]="532"></app-common-information>
 							<div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block fs-13"
 								tabindex="-1" aria-label="Relationship with Entity Validation" aria-describedby="relation-with-entity-validation">
 								<span id="coi-add-sfi-relation-with-entity-validation">{{mandatoryList?.get('staff')}}</span>
@@ -531,20 +518,19 @@
 					<!-- Principle Business Area of Entity -->
 					<div class="row" aria-label="Principle Business Area of Entity">
 						<span>
-							<label for="coi-add-sfi-principle-business-area-helptext" class="fs-14 fw-500 pb-2 position-relative label-text">
+							<label for="coi-add-sfi-business-area" class="fs-14 fw-500 pb-2 position-relative label-text coi-label-help">
 								<span class="mandatory">*</span>
 								Principle Business Area of Entity
+								<app-common-help-text [subSectionId]="532" [elementId]="'coi-add-sfi-business-area'"></app-common-help-text>
 							</label>
 							<textarea appAutoGrow class="form-control" rows="1"
 								[(ngModel)]="additionalDetails.studentInvolvement"
-								appTailingSpaceRemover id="coi-add-sfi-student-entity"
+								appTailingSpaceRemover id="coi-add-sfi-business-area"
 								[ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'" title="Principle business area of entity" aria-label="Principle business area of entity">
-                                </textarea>
-							<div class="help-text" tabindex="-1" aria-label="Principle Business Area of Entity Helptext" aria-describedby="principle-business-area-helptext">
-								<span id="coi-add-sfi-principle-business-area-helptext">Please enter an adequate description of the entity's principal are of business.</span>
-							</div>
+                            </textarea>
+								<app-common-information [elementId]="'coi-add-sfi-business-area'" [subSectionId]="532"></app-common-information>
 							<div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block fs-13"
 								tabindex="-1" aria-label="Relationship with Entity Validation" aria-describedby="relation-with-entity-validation">
 								<span id="coi-add-sfi-principle-business-area-validation">{{mandatoryList?.get('student')}}</span>
@@ -554,10 +540,11 @@
 					<!--  Relationship of Entity to your University responsibilities -->
 					<div class="row" aria-label="Relationship of Entity to your University Responsibilities">
 						<span>
-							<label class="fs-14 fw-500 pb-2 position-relative label-text">
+							<label class="fs-14 fw-500 pb-2 position-relative label-text coi-label-help" for="coi-add-sfi-resource-sfi">
 								<span class="mandatory">*</span>
 								Relationship of Entity to your
 								University responsibilities
+								<app-common-help-text [subSectionId]="532" [elementId]="'coi-add-sfi-resource-sfi'"></app-common-help-text>
 							</label>
 							<textarea appAutoGrow class="form-control" rows="1"
 								[(ngModel)]="additionalDetails.instituteResourceInvolvement"
@@ -565,11 +552,8 @@
 								[ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''"
 								appLengthValidator [limit]=2000
 								[styleList]="'mt-2 float-end word-count'" title="Relationship of entity to your university responsibilities" aria-label="Relationship of entity to your university responsibilities">
-                                  </textarea>
-							<div class="help-text" tabindex="-1" aria-label="Relationship of Entity to your University responsibilities Helptext" aria-describedby="university-responsibility-helptext">
-								<span id="coi-add-sfi-university-responsibility-helptext">Please enter an adequate description of the entity's relationship to your University</span>
-								responsibilities.
-							</div>
+                            </textarea>
+								<app-common-information [elementId]="'coi-add-sfi-resource-sfi'" [subSectionId]="532"></app-common-information>
 							<div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block fs-13"
 								tabindex="-1" aria-label="Relationship of Entity to your University responsibilities validation" aria-describedby="university-responsibility-validation">
 								<span id="coi-add-sfi-university-responsibility-validation">{{mandatoryList?.get('resource')}}</span>

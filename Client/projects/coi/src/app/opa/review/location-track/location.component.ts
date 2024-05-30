@@ -4,7 +4,6 @@ import {ReviewService} from '../review.service';
 import {CommonService} from '../../../common/services/common.service';
 import {environment} from '../../../../environments/environment';
 import {DataStoreService, StoreData} from '../../services/data-store.service';
-import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../../../../fibi/src/app/app-constants';
@@ -19,6 +18,7 @@ import {PersonProjectOrEntity, coiReviewComment} from '../../../shared-component
 import {CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
 import {OPA, OpaDisclosure} from '../../opa-interface';
+import { ElasticConfigService } from '../../../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-coi-review-location',

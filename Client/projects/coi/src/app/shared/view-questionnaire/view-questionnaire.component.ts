@@ -24,7 +24,6 @@
  import { Subscription, Observable} from 'rxjs';
 import {easeIn} from "../../../../../fibi/src/app/common/utilities/animations";
 import {WafAttachmentService} from "../../../../../fibi/src/app/common/services/waf-attachment.service";
-import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import { scrollIntoView, setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {Question, TableAnswer} from "./questionnaire.interface";
@@ -41,6 +40,7 @@ import {
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/utilities/date-utilities";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
  @Component({
      selector: 'app-view-questionnaire',

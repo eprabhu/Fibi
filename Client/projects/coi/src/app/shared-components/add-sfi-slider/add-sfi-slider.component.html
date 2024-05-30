@@ -1,9 +1,9 @@
 <ng-container *ngIf="sfiService?.isShowSfiNavBar">
   <app-coi-slider (closeSlider)="hideSfiNavBar()" [elementId]="'add-sfi'">
     <ng-container content>
-      <app-add-sfi *ngIf="sfiService?.isShowSfiNavBar" [coiEntityManageId]="coiEntityManageId"
+      <app-add-sfi *ngIf="sfiService?.isShowSfiNavBar && isShowAddSfiPage" [coiEntityManageId]="coiEntityManageId"
         [isEditEntity]="isEditEntity" [isSlider]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
-        [disclosureDetails]="disclosureDetails" (emitUpdateEvent)="emitEvent($event)"></app-add-sfi>
+        [disclosureDetails]="disclosureDetails" [sfiSliderSectionConfig]="sfiSliderSectionConfig" (emitUpdateEvent)="emitEvent($event)"></app-add-sfi>
     </ng-container>
   </app-coi-slider>
 </ng-container>
