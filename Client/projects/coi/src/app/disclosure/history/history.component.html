@@ -2,7 +2,7 @@
     <div class="card border-0" id="disclosure-history">
         <div class="card-content">
             <div class="card-body">
-                <ul class="timeline list-unstyled">
+                <ul class="timeline">
                     <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
                     <li *ngFor="let historyEntry of disclosure.value;">
                         <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="0"></span>

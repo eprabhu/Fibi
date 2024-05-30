@@ -19,9 +19,9 @@
     <div class="card mt-2">
         <div class="card-body">
             <div class="table-responsive coi-table-striped" *ngIf="attachmentLists.length">
-                <table class="table table-bordered fs-14 table-striped">
+                <table class="table table-bordered fs-14 table-striped" id="coi-attachments-table">
                     <thead class="grey-text table-head ">
-                        <tr>
+                        <tr id="coi-attachments-table-thead-row">
                             <th class="bg-secondary-subtle" scope="col" style="width: 20%">Attachment Type</th>
                             <th class="bg-secondary-subtle" scope="col" style="width: 30%">Description</th>
                             <th class="bg-secondary-subtle" scope="col" style="width: 25%">File name</th>
@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white">
-                        <tr *ngFor="let attachment of attachmentLists ; let index = index;" class="grey-text">
+                        <tr *ngFor="let attachment of attachmentLists ; let index = index;" class="grey-text" id="coi-attachments-table-tbody-row-{{index}}">
                             <td>{{attachment?.disclAttaTypeDetails?.description}}</td>
                             <td>{{attachment?.description?.length>75 && !collapseViewMore[attachment.attachmentId]?(attachment.description |
                                 slice:0:75) : attachment.description}}
@@ -49,13 +49,13 @@
                                 dateFormatterWithTimeZone:'long'}}</td>
                             <td *ngIf="!coiPersonId">
                                 <div class="d-inline-flex">
-                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to edit attachment">
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click here to edit attachment" tabindex="0">
                                         <mat-icon aria-hidden="true">edit</mat-icon>
                                     </span>
-                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to download attachment">
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click here to download attachment" tabindex="0">
                                         <mat-icon aria-hidden="true">vertical_align_bottom</mat-icon>
                                     </span>
-                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click to open more options"
+                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click here to open more options" tabindex="0"
                                         [matMenuTriggerFor]="createActionMenu">
                                         <mat-icon aria-hidden="true">more_vert</mat-icon>
                                     </span>

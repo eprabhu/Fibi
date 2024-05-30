@@ -16,7 +16,7 @@
     </div>
       <div *ngIf="isExpanded" class="card-content" [@heightAnimation]>
           <div class="card-body">
-            <ul class="timeline list-unstyled">
+            <ul class="timeline">
               <ng-container *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
                 <li *ngFor="let historyEntry of review.value;">
                     <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="0"></span>
