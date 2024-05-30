@@ -98,7 +98,7 @@
 }
 
 .mat-mdc-select-trigger {
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .mat-mdc-option:hover {
@@ -330,6 +330,10 @@
     transition: all .3s ease-in-out;
 }
 
+.coi-ms-n15px {
+    margin-left: -15px;
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -340,4 +344,11 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+
+.coi-label-help {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
 }

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, HostListener, Input, OnInit, Output, } from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {
     getEndPointOptionsForDepartment,
     getEndPointOptionsForLeadUnit,
@@ -20,6 +19,7 @@ import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
 import { RevisionObject, Disclosure } from '../shared-interface';
 import { checkForVowelInFirstLetter } from 'projects/coi/src/app/common/utilities/custom-utilities';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-disclosure-create-modal',

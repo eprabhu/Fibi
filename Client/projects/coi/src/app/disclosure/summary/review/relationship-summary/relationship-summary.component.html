@@ -52,45 +52,45 @@
 				<div class="col">
 					<div class="row">
 						<div class="col-6 col-md-4 mb-2">
-							<label class="coi-text-dark d-block">Principal Investigator</label>
-							<span class="coi-text-light">{{selectedProject?.principalInvestigator}}</span>
+							<label for="coi-relationship-summary-principal-investigator" class="coi-text-dark d-block">Principal Investigator</label>
+							<span class="coi-text-light" id="coi-relationship-summary-principal-investigator">{{selectedProject?.principalInvestigator}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
-							<label class="coi-text-dark d-block">Project Role</label>
-							<span class="coi-text-light">{{selectedProject?.reporterRole}}</span>
+							<label for="coi-relationship-summar-project-role" class="coi-text-dark d-block">Project Role</label>
+							<span class="coi-text-light" id="coi-relationship-summar-project-role">{{selectedProject?.reporterRole}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
-							<label class="coi-text-dark d-block">Period</label>
-							<span class="coi-text-light">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+							<label for="coi-relationship-summar-period" class="coi-text-dark d-block">Period</label>
+							<span class="coi-text-light" id="coi-relationship-summar-period">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
 								|
 								dateFormatter}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
-							<label class="coi-text-dark d-block">Sponsor</label>
-							<span class="coi-text-light">{{selectedProject?.sponsor}}</span>
+							<label for="coi-relationship-sponsor" class="coi-text-dark d-block">Sponsor</label>
+							<span class="coi-text-light" id="coi-relationship-sponsor">{{selectedProject?.sponsor}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
-							<label class="coi-text-dark d-block">Lead Unit</label>
+							<label for="coi-relationship-lead-unit" class="coi-text-dark d-block">Lead Unit</label>
 							<app-no-data-label [valueToShow]="selectedProject?.unitName">
-								<span class="coi-text-light">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
+								<span class="coi-text-light" id="coi-relationship-lead-unit">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
 							</app-no-data-label>
 						</div>
 					</div>
 				</div>
         <div class="col-auto">
           <div *ngIf="projectRelations.length > 0" class="me-2">
-            <label class="coi-text-lighter d-block">Conflict Status</label>
+            <label for="coi-relationship-conflict-status" class="coi-text-lighter d-block">Conflict Status</label>
             <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
-            <span class="badgeFont">{{worstCaseStatus?.description}}</span>
+            <span class="badgeFont" id="coi-relationship-conflict-status">{{worstCaseStatus?.description}}</span>
           </div>
           <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
         </div>
 			</div>
       <div class="table-responsive coi-table-striped">
-      <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0">
+      <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0" id="coi-relationship-summary-table">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
-                    <tr class="header-border table-light">
+                    <tr class="header-border table-light" id="coi-relationship-summary-table-thead">
                       <th style="width: 40%;" class="px-3">Significant Financial Interest</th>
                       <th style="width: 26%;" class="px-3">Relationship between SFIs and Projects</th>
                         <th style="width: 14%;" class="px-3">Conflict Status

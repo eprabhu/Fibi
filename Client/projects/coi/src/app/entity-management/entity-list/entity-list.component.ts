@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EntityDashDefaultValues, EntityDashboardRequest, EntityManagementService, SortCountObj } from '../entity-management.service';
 import { Subject, Subscription } from 'rxjs';
-import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { CommonService } from '../../common/services/common.service';
 import { slideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation } from '../../common/utilities/animations';
@@ -14,6 +13,7 @@ import { deepCloneObject, isEmptyObject } from '../../../../../fibi/src/app/comm
 import { NavigationService } from '../../common/services/navigation.service';
 import { switchMap } from 'rxjs/operators';
 import { GraphDetail } from '../../../../../shared/src/lib/graph/interface';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 
 @Component({
@@ -69,11 +69,13 @@ export class EntityListComponent implements OnDestroy, OnInit {
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
     private _navigationService: NavigationService,
-    private _commonService: CommonService, public sfiService: SfiService) { }
+    private _commonService: CommonService, public sfiService: SfiService,
+    private _elasticConfig: ElasticConfigService
+) { }
 
   ngOnInit() {
     this.checkForSort();
-    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
+    this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.isViewAdvanceSearch = false;
     if (!this.entityManagementService.coiRequestObject.tabName) {
@@ -155,8 +157,8 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   selectedEvent(event) {
-    this.entityManagementService.coiRequestObject.property1 = event ? event.entityName : '';
-    this.entityManagementService.entityDashDefaultValues.entitySearch = event ? event.entityName : '';
+    this.entityManagementService.coiRequestObject.property1 = event ? event.entity_name : '';
+    this.entityManagementService.entityDashDefaultValues.entitySearch = event ? event.entity_name : '';
   }
   showEntities() {
     if (this.activeTabName !== 'ALL_ENTITIES' ) {
@@ -182,7 +184,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   resetAdvanceSearchFields() {
     this.entityManagementService.coiRequestObject = new EntityDashboardRequest();
     this.entityManagementService.entityDashDefaultValues = new EntityDashDefaultValues();
-    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
+    this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.lookupValues = [];
   }

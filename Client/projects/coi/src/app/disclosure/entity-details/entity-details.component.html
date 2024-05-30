@@ -98,7 +98,7 @@
         <button type="button" class="btn-close" title="Click to close" data-bs-dismiss="modal" aria-label="Click to close"
           id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button></div>
       <div class="modal-body">
-        <div class="row" tabindex="0">
+        <div class="row" tabindex="-1">
           <div class="col-12">
             <div class="alert alert-primary d-flex p-2" role="alert">
               <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
@@ -118,14 +118,14 @@
             </div>
             <div class="row mb-3 mt-2 mx-0 px-2">
                 <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="col-lg-4 col-md-6 col-xl-4 col-xxl-4">
-                    <div tabindex="0" [attr.aria-label]="subsection?.key">
+                    <div tabindex="-1" [attr.aria-label]="subsection?.key">
                         <label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
                     </div>
                     <div class="relation">
                         <div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
-                            class="form-check d-block mb-2" tabindex="0"
+                            class="form-check d-block mb-2"
                             [attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
-                            <input type="checkbox" name="relation"
+                            <input type="checkbox" name="relation" tabindex="0"
                             class="form-check-input text-secondary border border-secondary"
                             [value]="relation?.validPersonEntityRelTypeCode"
                             [id]="'modal-sfi-relation'+relation.validPersonEntityRelTypeCode"
@@ -145,9 +145,9 @@
         </ng-template>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary" id="add-relationship-btn" data-bs-dismiss="modal" type="button" aria-label="Click to cancel"
-          title="Click to cancel" (click)="clearModal()">Cancel</button>
-        <button class="btn btn-primary me-0" id="add-relationship-btn" type="button" title="Click to add relationship" aria-label="Click to add relationship"  (click)="addRelation()">Add</button>
+        <button class="btn btn-outline-secondary" id="coi-add-relationship-modal-cancel-btn" data-bs-dismiss="modal" type="button" aria-label="Click here to cancel"
+          title="Click here to cancel" (click)="clearModal()">Cancel</button>
+        <button class="btn btn-primary me-0" id="coi-add-relationship-modal-add-btn" type="button" title="Click to add relationship" aria-label="Click to add relationship"  (click)="addRelation()">Add</button>
       </div>
     </div>
   </div>

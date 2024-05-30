@@ -107,7 +107,7 @@
         </div>
 
         <!-- Conflict History -->
-        <div class="mt-2 main-title" tabindex="0">
+        <div class="mt-2 main-title" tabindex="-1">
             <h3 class="d-flex align-items-center fs-16"><strong>Conflict History</strong>
                 <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top"></span>
             </h3>
@@ -115,17 +115,17 @@
 
         <div class="card mt-2" id="risk-history">
             <div class="card-content">
-                <div class="card-body">
+                <div class="card-body" id="coi-travel-add-conflict-slider-card-body">
                         <ng-container *ngIf="conflictHistory.length > 0; else noData">
                             <ul class="timeline">
                                 <li *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;">
-                                    <div tabindex="0">
+                                    <div tabindex="-1">
                                         <span class="badge me-2 {{commonService.getDisclosureConflictBadgeForSlider(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
                                         <i class="fa fa-user coi-text-light fs-16 me-1" aria-hidden="true"></i>
                                         <span class="fw-700 fs-14">{{historyEntry?.updateUserFullName}}</span>
                                         <span class="coi-text-lighter fs-13"> {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                                     </div>
-                                    <p class="coi-text-light pt-3 pb-4" tabindex="0">
+                                    <p class="coi-text-light pt-3 pb-4" tabindex="-1">
                                         <span class="fs-14 fst-italic">
                                             <mat-icon class="format_quote">format_quote</mat-icon>
                                             <span [ngClass]="historyEntry?.updateUser ? '': 'fst-italic'">{{

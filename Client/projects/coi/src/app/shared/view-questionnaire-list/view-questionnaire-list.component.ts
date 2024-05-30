@@ -38,7 +38,7 @@ interface Configuration {
 @Component({
     selector: 'app-view-questionnaire-list',
     templateUrl: './view-questionnaire-list.component.html',
-    styleUrls: ['./view-questionnaire-list.component.css'],
+    styleUrls: ['./view-questionnaire-list.component.scss'],
     providers: [QuestionnaireListService]
 })
 export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {

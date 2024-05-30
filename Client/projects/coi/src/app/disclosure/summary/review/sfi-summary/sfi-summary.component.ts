@@ -16,7 +16,7 @@ import { openCoiSlider } from 'projects/coi/src/app/common/utilities/custom-util
 @Component({
     selector: 'app-sfi-summary',
     templateUrl: './sfi-summary.component.html',
-    styleUrls: ['./sfi-summary.component.css']
+    styleUrls: ['./sfi-summary.component.scss']
 })
 export class SfiSummaryComponent implements OnInit, OnDestroy {
 

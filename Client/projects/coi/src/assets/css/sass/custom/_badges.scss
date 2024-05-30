@@ -7,7 +7,7 @@
   .coi-badge {
     font-weight: 500;
     padding: 3px 9px;
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
     border-radius: 50rem !important;
   }
   
@@ -22,7 +22,7 @@
   .badgeFont{
     font-family: "Roboto", sans-serif;
       color: black;
-      font-size: 14px;
+      font-size: 0.875rem;
       font-weight: 600;
       padding: 5px;
   }
@@ -114,6 +114,6 @@
     height: 16px;
     width: 16px;
     &.material-icons{
-      font-size: 16px;
+      font-size: 1rem;
     }
   }

@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, OnInit, ChangeDetect
 @Component({
   selector: 'app-autocompleter',
   templateUrl: './app-autocompleter.component.html',
-  styleUrls: ['./app-autocompleter.component.css'],
+  styleUrls: ['./app-autocompleter.component.scss'],
 })
 export class AppAutocompleterComponent implements OnChanges, OnInit {
 

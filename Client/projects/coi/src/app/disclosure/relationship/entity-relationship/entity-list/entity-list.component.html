@@ -71,17 +71,17 @@
     </div>
   </div>
   <div class="row p-4">
-    <table class="tableSkin" *ngIf="newArray.length > 0">
+    <table class="tableSkin" *ngIf="newArray.length > 0" id="coi-entity-list-table">
       <caption class="sr-only">List of Awards/Proposal</caption>
       <thead>
-          <tr class="header-border">
+          <tr class="header-border" id="coi-entity-list-table-thead-tr">
             <th style="width: 30%;">Significant Financial Interest</th>
             <th style="width: 25%;">Conflict Status</th>
             <th>Define relationship between SFIs and Projects</th>
           </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let test of newArray; let i = index">
+        <tr *ngFor="let test of newArray; let i = index" id="coi-entity-list-table-tbody-tr-{{i}}">
           <td class="table-data fw-600">{{test?.coiEntity?.coiEntityName}}</td>
           <td>
             <select [(ngModel)]="test.discDetStatusCode"

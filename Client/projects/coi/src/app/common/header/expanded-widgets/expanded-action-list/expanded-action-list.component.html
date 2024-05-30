@@ -4,7 +4,7 @@
             <h4 class="card-title d-flex justify-content-between">
                 <span class="d-flex align-items-center">Action List</span>
                 <span>
-                    <ul class="nav nav-pills mb-0 hand-cursor">
+                    <ul class="nav nav-pills mb-0 hand-cursor fs-14">
                         <li class="nav-item pt-2"
                             (click)="inboxTab = 'PENDING';getActionList(false);isInboxInfo = true;">
                             <a class="nav-link nav-item " [ngClass]="{active:(inboxTab == 'PENDING')}">Pending</a>
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="actionListEntriesForBanner?.length === 0" class="no-data-container w-100 coi-custom-shadow">
+                    <div *ngIf="actionListEntriesForBanner?.length === 0" class="no-data-container w-100">
                         <span class="no-data-icon-outer">
                             <div class="no-data-icon">
                                 <mat-icon aria-hidden="true" class="no-file">folder_off</mat-icon>

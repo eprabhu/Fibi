@@ -10,20 +10,23 @@ import { AppElasticService } from './app-elastic.service';
 @Component({
 	selector: 'app-elastic',
 	templateUrl: './app-elastic.component.html',
-	styleUrls: ['./app-elastic.component.css'],
+	styleUrls: ['./app-elastic.component.scss'],
 	providers: [AppElasticService]
 })
 export class AppElasticComponent implements OnChanges, OnInit {
 
-	@Input() options: any = {};
+    @Input() options: any = {};
     @Input() uniqueId = null;
-	@Input() placeHolder: string;
-	@Input() clearField: String;
-	@Input() isError: boolean;
-	@Input() isDisabled: boolean;
-	@Output() selectedResult: EventEmitter<any> = new EventEmitter<any>();
-	@Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
-	@ViewChild('searchField', { static: true }) searchField: ElementRef;
+    @Input() placeHolder: string;
+    @Input() clearField: String;
+    @Input() isError: boolean;
+    @Input() isDisabled: boolean;
+    @Input() addNewValue: 'ALLOW_ALL' | 'ALLOW_UNIQUE' | 'OFF' = 'OFF';
+    @Input() duplicateFieldRestriction = [];
+    @Output() selectedResult: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
+    @Output() newValueSelect: EventEmitter<any> = new EventEmitter<any>();
+    @ViewChild('searchField', { static: true }) searchField: ElementRef;
 	searchText = '';
 	isResultSelected = true;
 	timer: any;
@@ -34,6 +37,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
 		sort: [{ _score: { order: 'desc' } }],
 		highlight: { pre_tags: ['<strong>'], post_tags: ['</strong>'] }
 	};
+    isShowAddNewValueOption = false;
 
 	constructor(private _appElasticService: AppElasticService, private _ref: ChangeDetectorRef) { }
 
@@ -68,6 +72,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
 	 */
 	getElasticResult(): void {
 		if (this.options) {
+            this.isShowAddNewValueOption = false;
 			clearTimeout(this.timer);
 			this.timer = setTimeout(() => {
 				this.isResultSelected = false;
@@ -80,6 +85,9 @@ export class AppElasticComponent implements OnChanges, OnInit {
 					this.counter = -1;
 					const src = ((rst.hits || {}).hits || []).map((hit) => hit._source);
 					const hgt = ((rst.hits || {}).hits || []).map((hit) => hit.highlight);
+                    if (this.addNewValue !== 'OFF') {
+                        this.setIsShowAddAction(this.duplicateFieldRestriction.length ? this.duplicateFieldRestriction : [this.options.contextField], src);
+                    }
 					if (this.options.formatString) {
 						let fieldsArray = [];
                         if (this.options.formatFields) {
@@ -109,9 +117,11 @@ export class AppElasticComponent implements OnChanges, OnInit {
 					}
 					if (!this.results.length) {
 						this.onEmpty.emit({ 'searchString': this.searchText });
+                        this.results = [];
 						this.results.push({ 'label': 'No results' });
 					}
 				}, error => {
+                    this.results = [];
 					this.results.push({ 'label': 'No results' });
 				});
 			}, this.options && this.options.debounceTime || 500);
@@ -187,5 +197,23 @@ export class AppElasticComponent implements OnChanges, OnInit {
 		this.searchText = this.isResultSelected ? this.searchText : '';
 		this.results = [];
 		this.counter = -1;
+        this.isShowAddNewValueOption = false;
 	}
+
+    private setIsShowAddAction(fieldsArray: any[], dataSource: any[]) {
+        let MATCH_FOUND = null;
+        for (const element of dataSource) {
+            if (!MATCH_FOUND) {
+                MATCH_FOUND = fieldsArray.find((field: any) => String(element[field]).toLowerCase() === this.searchText.toLowerCase());
+            }
+        }
+        if ((this.searchText && !MATCH_FOUND && this.addNewValue === 'ALLOW_UNIQUE') || (this.searchText && this.addNewValue === 'ALLOW_ALL')) {
+            this.isShowAddNewValueOption = true;
+        }
+    }
+
+    elasticOptionSelect(event: any): void {
+        event.option.id === 'ADD_NEW_VALUE' ? this.newValueSelect.emit(event.option.value) : this.emitSelectedObject(event.option.value ? event.option.value.value : null);
+    }
+
 }

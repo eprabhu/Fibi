@@ -4,7 +4,7 @@ import {CoiService} from "../services/coi.service";
 @Component({
   selector: 'app-attachment',
   templateUrl: './attachment.component.html',
-  styleUrls: ['./attachment.component.css']
+  styleUrls: ['./attachment.component.scss']
 })
 export class AttachmentComponent implements OnInit {
 
