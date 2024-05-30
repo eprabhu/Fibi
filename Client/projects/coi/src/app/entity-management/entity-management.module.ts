@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { EntityDetailsListComponent } from './entity-details-list/entity-details-list.component';
 import { SharedModule } from '../shared/shared.module';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { EntityManagementGuardService } from './entity-management-guard.service';
@@ -17,6 +16,7 @@ import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-de
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManagementService } from './entity-management.service';
 import { SharedLibraryModule } from '../../../../shared/src/lib/shared.module' ;
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 const routes: Routes = [
   {

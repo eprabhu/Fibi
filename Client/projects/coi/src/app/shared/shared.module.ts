@@ -70,6 +70,8 @@ import { ReadMoreComponent } from './read-more/read-more.component';
 import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
 import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
 import { FormValidatorModule } from './form-validator/form-validator.module';
+import { CommonHelpTextComponent } from './common-help-text/common-help-text.component';
+import { CommonInformationComponent } from './common-information/common-information.component';
 
 @NgModule({
     imports: [
@@ -102,7 +104,7 @@ import { FormValidatorModule } from './form-validator/form-validator.module';
         PELayerComponent,
         ReadMoreComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
-        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent ],
+        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -160,7 +162,9 @@ import { FormValidatorModule } from './form-validator/form-validator.module';
         ReadMoreComponent,
         FormBuilderViewComponent,
         FormSectionsComponent,
-        FormValidatorModule
+        FormValidatorModule,
+        CommonHelpTextComponent,
+        CommonInformationComponent
     ],
 
     providers: [

@@ -242,7 +242,7 @@
                                         <mat-icon aria-hidden="true" class="keyboard-backspace">keyboard_backspace</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded">Next</span>
                                     </button>
-                                    <button (click)="sfiService.isShowSfiNavBar = true" title="Click to add new SFI"
+                                    <button (click)="sfiService.isShowSfiNavBar = true" title="Click here to add new SFI"
                                         *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')"
                                         aria-label="Click to add new SFI"
                                         class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14"
@@ -252,7 +252,7 @@
                                     </button>
                                     <button (click)="triggerSave()"
                                         *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                                        title="Click to save your progress" aria-label="Click to save your progress"
+                                        title="Click here to save your progress" aria-label="Click to save your progress"
                                         class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
                                         <mat-icon aria-hidden="true">save</mat-icon>
@@ -260,7 +260,7 @@
                                     </button>
                                     <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
                                         *ngIf="router.url.includes('create-disclosure/certification')" title="Click to submit your disclosure"
-                                        aria-label="Click to submit your disclosure"
+                                        aria-label="Click here to submit your disclosure"
                                         class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
                                         <mat-icon aria-hidden="true">done</mat-icon>

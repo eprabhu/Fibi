@@ -4,7 +4,7 @@
     [(ngModel)]="searchText" (keypress)="getElasticResult()" (paste)="getElasticResult()" (keydown.backspace)="backSpaceEvent()"
     (keydown.esc)="hideSearchResults();"
     class = "app-elastic-search form-control pe-4" autocomplete="off" [matAutocomplete]="elastic"/>
-  <a class="searchButton" [title]="searchText == '' ? 'Search' : 'Clear search'">
+  <a class="searchButton" [title]="searchText == '' ? 'Search' : 'Clear search'" [class.pe-4]="isError" >
     <i aria-hidden="true" *ngIf = "searchText == ''" class="fa fa-search fa-med"></i>
     <i aria-hidden="true"  *ngIf="searchText != '' && !isDisabled" class="fa fa-times fa-med" (click)="emitSelectedObject(null);"></i>
   </a>

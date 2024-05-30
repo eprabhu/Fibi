@@ -590,5 +590,9 @@
     "/editQuestionnaire": {
         "target": "http://10.199.100.34:9090/",
         "secure": false
+    },
+    "/getModulesConfiguration": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
     }
 }

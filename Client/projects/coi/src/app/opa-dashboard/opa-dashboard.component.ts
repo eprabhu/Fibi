@@ -11,8 +11,8 @@ import { NavigationService } from '../common/services/navigation.service';
 import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DASHBOARD_RIGHTS } from '../app-constants';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-opa-dashboard',

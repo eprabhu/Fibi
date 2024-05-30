@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
@@ -13,6 +13,7 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
 import { CoiEntity, EntityDetails } from '../entity-management/entity-details-interface';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { setEntityObjectFromElasticResult } from '../common/utilities/elastic-utilities';
+import { InformationAndHelpTextService } from '../common/services/informationAndHelpText.service';
 
 
 declare const $: any;
@@ -77,12 +78,14 @@ export class AddSfiComponent implements OnInit {
     @Input() isEditEntity = false;
     @Input() isSlider = false;
     @Input() revisionReason = '';
+    @Input() sfiSliderSectionConfig: any;
 
     constructor(public sfiService: SfiService, private _activatedRoute: ActivatedRoute,
         public _commonService: CommonService, private _router: Router, public _navigationService: NavigationService,
-        private _elasticConfig: ElasticConfigService) { }
+        private _elasticConfig: ElasticConfigService, private _informationAndHelpTextService: InformationAndHelpTextService) { }
 
     ngOnInit(): void {
+        this.getSfiSliderSectionConfig();
         this.isEntityManagement = this._router.url.includes('entity-management') || this.checkIsEntityTypeInURL();
         this.setHeader();
         this.getSFILookup();
@@ -267,7 +270,7 @@ export class AddSfiComponent implements OnInit {
         const ELEMENT_ID_LIST = [];
         if (!this.entityDetails.coiEntity.entityName) {
             this.mandatoryList.set('entityName', 'Please enter Entity Name.');
-            ELEMENT_ID_LIST.push('entity-name');
+            ELEMENT_ID_LIST.push('coi-add-sfi-entity-name');
         }
         if (!this.isResultFromSearch) {
             this.entityDetailsValidation(ELEMENT_ID_LIST);
@@ -275,17 +278,17 @@ export class AddSfiComponent implements OnInit {
         if (!this.isEntityManagement) {
             if (!this.involvementDate.involvementStartDate) {
                 this.mandatoryList.set('date', 'Please enter Start Date.');
-                ELEMENT_ID_LIST.push('coi-add-sfi-start-date-involvement')
+                ELEMENT_ID_LIST.push('coi-add-sfi-start-date')
             }
             this.endDateValidation(ELEMENT_ID_LIST);
             this.validateRelationship(ELEMENT_ID_LIST);
             if (!this.additionalDetails.staffInvolvement) {
                 this.mandatoryList.set('staff', 'Please enter Relationship with Entity.');
-                ELEMENT_ID_LIST.push('coi-add-sfi-releationship-entity')
+                ELEMENT_ID_LIST.push('coi-add-sfi-releationship')
             }
             if (!this.additionalDetails.studentInvolvement) {
                 this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity.');
-                ELEMENT_ID_LIST.push('coi-add-sfi-student-entity')
+                ELEMENT_ID_LIST.push('coi-add-sfi-business-area')
             }
             if (!this.additionalDetails.instituteResourceInvolvement) {
                 this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities.');
@@ -516,4 +519,9 @@ export class AddSfiComponent implements OnInit {
         this.canShowEntityFields = true;
     }
 
+    getSfiSliderSectionConfig(){
+        this._informationAndHelpTextService.moduleConfiguration = this._commonService.getSectionCodeAsKeys(
+            this.isSlider ? this.sfiSliderSectionConfig : this._activatedRoute.snapshot.data.moduleConfig
+        );
+    }
 }
