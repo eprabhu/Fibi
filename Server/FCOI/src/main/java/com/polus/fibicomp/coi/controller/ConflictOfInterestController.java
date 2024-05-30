@@ -375,6 +375,9 @@ public class ConflictOfInterestController {
 	@GetMapping(value = "/loadTravelDisclosure/{travelDisclosureId}")
 	public ResponseEntity<Object> loadTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
 		logger.info("Request for loadTravelDisclosureById");
+		if (!documentAuthorization.isAuthorized(Constants.TRAVEL_MODULE_CODE, travelDisclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
+			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
+		}
 		return conflictOfInterestService.loadTravelDisclosure(travelDisclosureId);
 	}
 
@@ -514,6 +517,11 @@ public class ConflictOfInterestController {
     @PutMapping("/travelDisclosure/modifyRisk")
     public ResponseEntity<Object> modifyRisk(@RequestBody CoiTravelDisclosureDto travelDisclosureDto) {
         return conflictOfInterestService.modifyTravelDisclosureRisk(travelDisclosureDto);
+    }
+
+    @PostMapping("/travelDisclosure/riskStatus")
+    public ResponseEntity<Object> checkRiskStatus(@RequestBody CoiTravelDisclosureDto travelDisclosureDto) {
+        return conflictOfInterestService.checkTravelDisclosureRiskStatus(travelDisclosureDto);
     }
 
     @PostMapping("/travelDisclosure/history")

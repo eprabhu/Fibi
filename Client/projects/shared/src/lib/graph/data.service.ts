@@ -113,7 +113,7 @@ export class DataService {
         return svg;
     }
 
-    private getLinkForImage(node): string {
+    getLinkForImage(node): string {
         return window.location.origin + window.location.pathname + this.graphMetaData.nodes[node].image;
     }
 

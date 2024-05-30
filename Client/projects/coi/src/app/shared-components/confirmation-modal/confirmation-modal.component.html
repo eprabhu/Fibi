@@ -1,56 +1,55 @@
 <button type="button" class="btn btn-primary btn-sm" hidden="true" id="{{modalName}}-trigger-btn"
     data-bs-toggle="modal" [attr.data-bs-target]="'#'+modalName"></button>
-<div class="modal modal-coi fade mySkinDialog" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName"
-    aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog {{getModalSize()}}" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" tabindex="0" id="modal-header">
-                    <ng-content select="[header]"></ng-content>
-                </h5>
-                <button type="button" id="{{modalName}}-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="click to Close popup" role="button" (click)="closeModal()">
-                </button>
-            </div>
 
-            <ng-content select="[content-sticky]"></ng-content>
-
-            <div class="modal-body m-0 p-0">
-                <div class="p-2 m-2">
-                    <!-- content -->
-                    <ng-content select="[content]"></ng-content>
-
-                    <!-- description text area -->
-                    <ng-container *ngIf="needDescriptionField">
-                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12" 
-                            [attr.aria-label]="'please enter the' + textAreaLabelName + (isMandatory? '. It is mandatory' : '')">
-                            <span class="text-danger" *ngIf="isMandatory">*</span>
-                            {{textAreaLabelName}}
-                        </label>
-                        <div class="col-12">
-                            <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
-                                [isShowLimiter]='true' [limit]=2000 class="form-control fs-14" autocomplete="off"
-                                [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();description= description.trim()"
-                                [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
-                        </textarea>
-                            <span *ngIf="mandatoryList?.has('description')"
-                                class="fs-13 invalid-feedback d-block position-absolute">
-                                {{mandatoryList?.get('description')}}
-                            </span>
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction()"
-                    [attr.aria-label]="'click to ' + secondaryBtnName" role="button">
-                    {{secondaryBtnName}}
-                </button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()"
-                    [attr.aria-label]="'click to ' + primaryBtnName" role="button">
-                    {{primaryBtnName}}
-                </button>
-            </div>
+<div tabindex="-1" class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName">
+    <div class="modal-dialog modal-dialog-centered {{getModalSize()}}" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" tabindex="-1" id="modal-header">
+            <ng-content select="[header]"></ng-content>
+          </h4>
+          <button type="button" class="btn-close" title="Click to close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Click to close" (click)="closeModal()"></button>
         </div>
+        <ng-content select="[content-sticky]"></ng-content>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <!-- content -->
+              <ng-content select="[content]"></ng-content>
+              <!-- description text area -->
+              <ng-container *ngIf="needDescriptionField">
+                  <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12 mt-3" 
+                      [attr.aria-label]="'please enter the' + textAreaLabelName + (isMandatory? '. It is mandatory' : '')">
+                      <span class="text-danger" *ngIf="isMandatory">*</span>
+                      {{textAreaLabelName}}
+                  </label>
+                  <div class="col-12">
+                      <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
+                          [isShowLimiter]='true' [limit]=2000 class="form-control fs-14" autocomplete="off"
+                          [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();description= description.trim()"
+                          [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
+                  </textarea>
+                      <span *ngIf="mandatoryList?.has('description')"
+                          class="fs-13 invalid-feedback d-block position-absolute">
+                          {{mandatoryList?.get('description')}}
+                      </span>
+                  </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" type="button" id="coi-conformation-modal-secondary-btn"
+            [attr.aria-label]="'click to ' + secondaryBtnName" (click)="performSecondaryAction()"
+            title="{{secondaryBtnTooltip ? secondaryBtnTooltip : ('Click to ' + secondaryBtnName)}}">
+            {{secondaryBtnName}}
+          </button>
+          <button class="btn btn-primary me-0" type="button" id="coi-conformation-modal-primary-btn"
+            [attr.aria-label]="'click to ' + primaryBtnName" (click)="performPrimaryAction()"
+            title="{{primaryBtnTooltip ? primaryBtnTooltip : ('Click to ' + primaryBtnName)}}">
+            {{primaryBtnName}}
+          </button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>

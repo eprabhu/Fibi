@@ -1,17 +1,17 @@
 <div [@fadeInOutHeight]>
     <app-help-text [helpTextList]="helpText" [tooltip]="'Travel Disclosure Form'" [isReadMoreLess]="true"></app-help-text>
 
-    <div class="card">
+    <div class="card mt-3">
         <div class="row p-4 m-3 shadow-sm bg-white">
             <!-- Entity Name -->
             <div class="row d-flex px-0" tabindex="-1">
                 <label class="fw-500 fs-14 col-custom" for="travel-disclosure-entity-name">Entity Name :</label>
                 <div class="col">
-                    <app-endpoint-search (onSelect)="selectedEntityEvent($event)" [clearField]="clearField"
-                        [httpOptions]="entitySearchOptions" (change)="setUnSavedChangesTrue();"
-                        [isError]="(mandatoryList?.has('entity'))" class="w-100"
-                        [uniqueId]="'travel-disclosure-entity-name'" autocomplete="off">
-                    </app-endpoint-search>
+                    <app-elastic [options]="entitySearchOptions"
+                            [clearField]="clearField" [uniqueId]="'travel-disclosure-entity-name'"
+                            [isError]="(mandatoryList?.has('entity'))" class="w-100"
+                            (selectedResult)="selectedEntityEvent($event)">
+                    </app-elastic>
                     <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-msg d-block position-absolute">
                         {{mandatoryList?.get('entity')}}
                     </span>
@@ -74,7 +74,7 @@
 
             <!-- destination -->
             <div class="row d-flex mt-4 px-0">
-                <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom">Destination :</label>
+                <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom text-nowrap">Destination :</label>
                 <div class="divCenter ms-1 col">
                     <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                         id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
@@ -89,6 +89,12 @@
                         International
                     </label>
                 </div>
+                <span *ngIf="mandatoryList.has('destination')" class="fs-13 invalid-msg d-block destination-margin">
+                    {{mandatoryList.get('destination')}}
+                </span>
+                <span *ngIf="!mandatoryList?.has('destination')" class="fs-13 d-block text-secondary mb-0 destination-margin">
+                    Choose the destination of your trip.
+                </span>
             </div>
 
             <!-- country/state/city -->
@@ -105,11 +111,11 @@
                             {{mandatoryList?.get('city')}}
                         </span>
                         <span *ngIf="!mandatoryList?.has('city')" class="position-absolute fs-13 col text-secondary mb-0">
-                            Type city.
+                            Please enter the city.
                         </span>
                     </div>
                 </div>
-            
+
                 <!-- Country and State list -->
                 <div class="row col-6">
                     <ng-container *ngIf="destination === 'International'">
@@ -129,7 +135,7 @@
                             </span>
                         </div>
                     </ng-container>
-            
+
                     <ng-container *ngIf="destination !== 'International' && destination !== null">
                         <!-- State list -->
                         <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
@@ -142,7 +148,7 @@
                                 {{mandatoryList?.get('state')}}
                             </span>
                             <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
-                                Type the state you traveled to.
+                                Please enter the state.
                             </span>
                         </div>
                     </ng-container>
@@ -256,7 +262,7 @@
                         {{mandatoryList?.get('amount')}}
                     </span>
                     <span *ngIf="!mandatoryList?.has('amount')" class="position-absolute fs-13 col text-secondary mb-0">
-                        Type your travel amount.
+                        Please enter the amount.
                     </span>
                 </div>
             </div>
@@ -275,7 +281,7 @@
     <div class="modal-content">
       <div class="modal-header headerStyle">
         <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearEntityDetails()"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="clearEntityDetails()"></button>
       </div>
       <div class="modal-body">
         <div class="mx-1 row pt-1 d-flex mb-3">
@@ -294,13 +300,15 @@
               ?'Active':'Inactive'}}</span>
           </div>
           <div class="text-secondary fs-14 col-8 mt-2">
-            <label class="grey-text me-2"> Address</label>
-            <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
-              <span> {{(addEntityConfirmation?.address |
-                slice:0:55)}}
-              <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
-              </span></span>
-            </span>
+            <label class="grey-text me-2 d-flex"> Address</label>
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
+                <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
+                  <span> {{(addEntityConfirmation?.address |
+                    slice:0:55)}}
+                  <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+                  </span></span>
+                </span>
+              </app-no-data-label>
             <ng-template #showFullInfo>
               <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
               <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"

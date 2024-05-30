@@ -1,38 +1,29 @@
-<ng-container *ngIf="traniningDetails.length;else noData">
+<ng-container *ngIf="traniningDetails?.length;else noData">
     <div class="card-inner mx-0">
-        <div class="p-0 w-100 widget-container">
-            <table aria-describedby="Training Status Table" class="tableSkin">
-                <thead class="sticky-top">
-                    <tr class="header-border">
-                        <th scope="col" class="w-65">Description</th>
+        <div class="coi-table-striped table-responsive">
+            <table class="fs-14 table table-bordered table-striped">
+                <thead class="grey-text sticky-top table-head mb-0">
+                    <tr>
+                        <th scope="col" class="col-7">Description</th>
                         <th scope="col">Completion Date</th>
                         <th scope="col">Expiration Date</th>
-                        <th scope="col" class="text-center actionThStyle ">Action</th>
+                        <th scope="col" class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="row-hover" *ngFor="let training of traniningDetails">
+                    <tr *ngFor="let training of traniningDetails">
                         <td>{{training?.trainingDescription}}</td>
                         <td>{{training?.dateAcknowledged | dateFormatter}}</td>
                         <td>{{training?.followupDate | dateFormatter}}</td>
-                        <td class="actionStyle">
-                            <ul class="listStyle d-flex flex-center">
-                                <li>
-                                    <a class="btn-primary-icon fs-16">
-                                        <mat-icon (click)="openInFibi(training.personTrainingId)" aria-hidden="true"
-                                            class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color icon-color iconStyle">visibility</mat-icon></a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr *ngIf="traniningDetails?.length === 0">
-                        <span class="no-data-icon-outer">
-                            <div class="no-data-icon">
-                                <i class="fa fa-file-o" aria-hidden="true"></i>
-                                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <button class="btn-primary-icon mt-0 d-flex"
+                                title="Click here to view Training details" aria-label="Click here to view Training details"
+                                (click)="openInFibi(training.personTrainingId)">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
                             </div>
-                        </span>
-                        <h4>There is no information in this section.</h4>
+                        </td>
                     </tr>
                 </tbody>
             </table>

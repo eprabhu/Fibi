@@ -1,7 +1,7 @@
 .grey-info {
     background: #EEEEEE;
     color: #202c2e;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
     border: 1px solid #caced2;
 }
@@ -49,7 +49,7 @@
 }
 
 .close-line-height {
-    line-height: 3rem;
+    line-height: 1.5rem;
 }
 
 .margin-top-home-unit {
@@ -60,11 +60,6 @@
     display: flex;
     padding: 0;
     list-style-type: none;
-}
-
-.project-types-label {
-    font-weight: 600;
-    font-size: 14px;
 }
 
 .reset-highlight {
@@ -78,23 +73,19 @@
     font-weight: 500;
 }
 
-.info-icon {
-    width: 22px;
-    font-size: 1.6rem;
-    margin-left: 2px;
-    color: #6f7395;
-    cursor: pointer;
-}
-
 .label-text {
     font-weight: 600;
     color: #697a80;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .grey-text {
     font-size: 1.4rem;
     color: #48647f;
     font-weight: 400;
-    margin-left: 5px;
+}
+
+#close-edit-home-unit {
+    background-color: #E2F1FF;
+    color: #007DEC !important;
 }

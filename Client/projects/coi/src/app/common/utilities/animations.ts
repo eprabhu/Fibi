@@ -114,3 +114,24 @@ export function scaleInAnimation(translateXValue: string, translateYValue: strin
     ])
   ]);
 }
+
+export function heightAnimation(min_height: string, max_height: string, duration: number = 300, name: string = 'heightAnimation'): AnimationTriggerMetadata {
+  return trigger(`${name}`, [
+      transition(':enter', [
+          style({ height: min_height, opacity: 0, 'padding-top': '0', 'padding-bottom': '0', overflow: 'hidden' }),
+          group([
+              animate(duration, style({ height: max_height })),
+              animate(`${duration}ms ease-in-out`, style({ opacity: '1', 'padding-top': '*', 'padding-bottom': '*' }))
+          ])
+      ]),
+      transition(':leave', [
+          style({ height: max_height, opacity: 1, 'padding-top': '*', 'padding-bottom': '*', overflow: 'hidden' }),
+          group([
+              animate(duration, style({ height: min_height })),
+              animate(`${duration}ms ease-in-out`, style({ opacity: '0', 'padding-top': '0', 'padding-bottom': '0' }))
+          ])
+      ])
+  ]);
+}
+
+

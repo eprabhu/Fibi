@@ -33,7 +33,7 @@
   position: relative;
   left: -7px;
   top: 3px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
 
@@ -58,7 +58,7 @@
   left: -7px;
   top: 3px;
   top: -4px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
 
@@ -139,7 +139,6 @@
 .closeButton {
   position: absolute;
   right: 10px;
-  top: 10px;
   color: #9E9E9E;
   cursor: pointer;
 }
@@ -152,7 +151,7 @@ font-size: 25px;
 padding-left: 28px;
 }
 
-.search-area {
+.search-area:hover {
 background-color: white !important;
 }
 
@@ -171,5 +170,12 @@ background-color: white !important;
   align-items: center;
   height: 218px;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 0.9375rem;
+}
+.searchButton:hover{
+  color: #0a58ca !important;
+}
+.sticky-top-51{
+  top: 51px;
+  z-index: 2;
 }

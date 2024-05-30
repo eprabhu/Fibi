@@ -34,6 +34,7 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        window.scrollTo(0, 0);
     }
 
     ngOnDestroy(): void {

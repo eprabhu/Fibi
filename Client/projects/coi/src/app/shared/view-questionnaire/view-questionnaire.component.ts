@@ -24,7 +24,6 @@
  import { Subscription, Observable} from 'rxjs';
 import {easeIn} from "../../../../../fibi/src/app/common/utilities/animations";
 import {WafAttachmentService} from "../../../../../fibi/src/app/common/services/waf-attachment.service";
-import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import { scrollIntoView, setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {Question, TableAnswer} from "./questionnaire.interface";
@@ -40,11 +39,13 @@ import {
     getEndPointOptionsForSponsor
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/utilities/date-utilities";
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
  @Component({
      selector: 'app-view-questionnaire',
      templateUrl: './view-questionnaire.component.html',
-     styleUrls: ['./view-questionnaire.component.css'],
+     styleUrls: ['./view-questionnaire.component.scss'],
      animations: [easeIn],
      providers: [QuestionnaireService],
  })
@@ -960,6 +961,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
                              this.questionnaire = this.result.questionnaire;
                              this.isSaving = false;
                              this.questionnaireSaveEvent.emit({ status: 'ERROR', data: this.questionnaireDetails });
+                             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving questionnaire. Please try again.');
                          },
                          () => { }
                      )
@@ -1009,6 +1011,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
              this.questionnaireDetails.ANS_UPDATE_TIMESTAMP = this.result.header.ANS_UPDATE_TIMESTAMP;
              this.questionnaireSaveEvent.emit({ status: 'SUCCESS', data: this.questionnaireDetails });
          }
+         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Questionnaire saved successfully.');
      }
 
      /**checks whether the questionnaire is complete and sets the flag */

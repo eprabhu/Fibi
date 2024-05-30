@@ -1,30 +1,72 @@
-<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode && !isTriggeredFromSlider">
-    <span data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top" class="d-inline-block">
-      <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-    </span>
-    <div class="info-text fs-14">
-      <div class="mt-2">
-        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-        The current list of all your Completed,  In-completed and Inactive SFI(s) are displayed below. You may filter the SFI list according to your need.        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
-      </div>
-      <ng-container *ngIf= "expandInfo">
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          In-completed SFI should either be Completed or Inactivated prior to establishing the Project-SFI relationship(s).        
-        </div>
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections to an  SFI, navigate to the SFI page and amend the details.        
-        </div>
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          Please ensure that you have the updated list of Completed SFI(s) before you proceed to the next step.           
-          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Read Less</u></span>
-        </div>
-      </ng-container>
-    </div>
+<div *ngIf="isEditMode && !isTriggeredFromSlider" class="d-flex alert alert-primary mb-0 py-2 mt-2">
+    <mat-icon role="img" class="mat-icon material-icons flex-shrink-0" aria-hidden="true"
+        data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top"
+        data-mat-icon-type="font">info</mat-icon>
+    <p class="fs-14 mb-0 ms-2">
+        <span class="d-flex algin-items-start">
+            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+            <span>Below, you can see a list of your completed, Incomplete, and inactive SFIs. You may filter the SFI
+                list according to your needs.
+                <span *ngIf="!expandInfo" (click)="expandInfo = true" (keydown.enter)="expandInfo = true"
+                    class="fw-700 link-primary" aria-label="Expand SFI help text" tabindex="0" role="link">...<span
+                        id="link-read-more-info" title="Expand SFI help text" class="fw-700">Read More</span></span>
+            </span>
+        </span>
+        <ng-container *ngIf="expandInfo">
+            <span class="d-flex algin-items-start mt-2">
+                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                An incomplete SFI should either be Completed or Inactivated before establishing the Project-SFI
+                relationship(s).
+            </span>
+            <span class="d-flex algin-items-start mt-2">
+                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                <span>For making any changes to the SFI, click on the modify button.
+                </span>
+            </span>
+            <span class="d-flex algin-items-start mt-2">
+                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
+                <span>Please ensure you have the updated list of Completed SFI(s) before proceeding to the next step.
+                    <span *ngIf="expandInfo" (click)="expandInfo = false" (keydown.enter)="expandInfo = false"
+                        class="fw-700 link-primary"><span tabindex="0" role="link" id="link-read-less-info"
+                            title="Collapse SFI help text" aria-label="Collapse SFI help text">Read Less</span></span>
+                </span>
+            </span>
+        </ng-container>
+    </p>
 </div>
-<div class="advance-search-area border d-flex mt-2 rounded-1">
+<div class="advance-search mt-2 coi-search-box rounded" [class.sticky-top]="isTriggeredFromSlider">
+  <div class="row m-0">
+    <div class="col-lg-auto py-2 px-3">
+  <div  [@leftSlideInOut]>
+      <label class="text-secondary" for="" tabindex="0">Filter By Status :</label>
+      <span (click)="setFilter('ALL')" [class.active-filter-pills]="filterType=='ALL'" tabindex="0"
+          [attr.aria-label]="filterType=='ALL' ? 'Selected filter type is all ' : 'All'"
+          title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+          class="filter-pills coi-text-light" role="button">All</span>
+      <span (click)="setFilter('COMPLETE')" [class.active-filter-pills]="filterType=='COMPLETE'" tabindex="0"
+          [attr.aria-label]="filterType=='COMPLETE' ? 'Selected filter type is complete ' : 'Complete'"
+          title="Click to filter by type: Complete" area-describedby="Click to filter by type: Complete"
+          class="filter-pills coi-text-light" role="button">Complete</span>
+      <span (click)="setFilter('INCOMPLETE')" [class.active-filter-pills]="filterType=='INCOMPLETE'" tabindex="0"
+          [attr.aria-label]="filterType=='INCOMPLETE' ? 'Selected filter type is incomplete ' : 'Incomplete'"
+          title="Click to filter by type: Incomplete" area-describedby="Click to filter by type: Incomplete"
+          class="filter-pills coi-text-light" role="button">Incomplete</span>
+      <span (click)="setFilter('INACTIVE')" [class.active-filter-pills]="filterType=='INACTIVE'" tabindex="0"
+      [attr.aria-label]="filterType=='INACTIVE' ? 'Selected filter type is inactive ' : 'Inactive'"
+          title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
+          class="filter-pills coi-text-light" role="button">Inactive</span>
+  </div>
+  </div>
+  <div class="col-lg border-start d-flex align-items-center filter-s-outer search-area position-relative p-2">
+    <span class="filter-search">
+        <mat-icon class="fs-25px searchButton">search</mat-icon>
+        <input class="form-control pe-5" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+      </span>
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<!-- <div class="advance-search-area border d-flex mt-3 rounded-1">
     <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
@@ -46,11 +88,11 @@
       <input class="advance-search-input border-0 px-4" type="text" id="searchText"
       [class.search-area]="isSearchTextHover"
       placeholder="Search Entity Name" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
-      <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon> 
+      <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
     </div>
-</div>
+</div> -->
 <ng-container *ngIf="!isLoading">
-  <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
+  <div [@listAnimation]="coiFinancialEntityDetails.length">
     <div *ngFor="let item of coiFinancialEntityDetails ; let i =index">
       <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" [isTriggeredFromSlider]="isTriggeredFromSlider"></app-shared-sfi-card>
     </div>
@@ -69,14 +111,13 @@
   </nav>
 </div>
 
-<div #viewSFIDetailsOverlay [class.overlay]="showSlider">
-<div class="slider-base" *ngIf="showSlider">
-  <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-  <div class="slider-container" (scroll)="onWindowScroll($event)">
-       <app-entity-details [entityId]="entityId"></app-entity-details>
-    </div>
-</div>
-</div>
+<ng-container *ngIf="showSlider">
+	<app-coi-slider (closeSlider)="hideSfiNavBar()" [elementId]="sliderElementId">
+		<ng-container content>
+			<app-entity-details [entityId]="entityId"></app-entity-details>
+		</ng-container>
+	</app-coi-slider>
+</ng-container>
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
   [personEntityId]="personEntityId" [updatedRelationshipStatus]="updatedRelationshipStatus" (closeModal)="closeActivateInactivateSfiModal($event)"
@@ -89,14 +130,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click here to close" id="coi-sfi-deletesfi-conformation-modal-close-btn"></button>
       </div>
       <div class="modal-body fs-14">
         <p>Do you want to delete <strong>{{entityName}}</strong>?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="coi-sfi-deletesfi-conformation-modal-cancel-btn" title="Click here to cancel" aria-label="Click here to cancel">Cancel</button>
+        <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal" id="coi-sfi-deletesfi-conformation-modal-delete-btn"  title="Click here to delete" aria-label="Click here to delete">Delete</button>
       </div>
     </div>
   </div>

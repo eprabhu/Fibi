@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRouterComponent } from "./common/app-router/app-router.component";
 import { DashboardGuardService } from './common/services/dashboard-guard.service';
 import { AdminRouteGuardService } from './common/services/guards/admin-route-guard.service';
+import { LoginGuard } from './common/services/guards/login-guard.service';
 
 const routes: Routes = [
     {
@@ -77,9 +78,14 @@ const routes: Routes = [
                 path: 'opa-dashboard',
                 loadChildren: () => import('./opa-dashboard/opa-dashboard.module').then(m => m.OpaDashboardModule)
             },
+            {
+                path: 'form-builder-create',
+                loadChildren: () => import('./configuration/form-builder-create/form-builder-create.module').then(m => m.FormBuilderCreateModule)
+            },
           ]
     },
-{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
+    {path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)},
+    {path: 'error', loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)}
 ];
 
 @NgModule({

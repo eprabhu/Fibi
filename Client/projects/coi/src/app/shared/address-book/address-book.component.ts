@@ -14,7 +14,7 @@ import {getCurrentTimeStamp} from "../../../../../fibi/src/app/common/utilities/
 @Component({
   selector: 'app-address-book',
   templateUrl: './address-book.component.html',
-  styleUrls: ['./address-book.component.css']
+  styleUrls: ['./address-book.component.scss']
 })
 export class AddressBookComponent implements OnInit, OnDestroy {
   @Input() isAddNonEmployeeModal;

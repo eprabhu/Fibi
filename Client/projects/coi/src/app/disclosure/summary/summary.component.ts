@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['./summary.component.css']
+    styleUrls: ['./summary.component.scss']
 })
 export class SummaryComponent implements OnInit {
    
@@ -21,6 +21,7 @@ export class SummaryComponent implements OnInit {
     ngOnInit() {
         this.getCOIDetails();
         this.listenDataChangeFromStore();
+        window.scrollTo(0,0);
     }
     
     private listenDataChangeFromStore() {

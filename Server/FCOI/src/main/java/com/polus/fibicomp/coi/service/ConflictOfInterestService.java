@@ -486,4 +486,22 @@ public interface ConflictOfInterestService {
 	 */
 	void syncProjectPersonEntity(Integer disclosureId);
 
+	/**
+	 * This method is used to Check if the risk status of the disclosure has been modified
+	 * @return
+	 */
+	ResponseEntity<Object> checkDisclosureRiskStatus(CoiDisclosureDto disclosureDto);
+
+	/**
+	 * This method is used to Check if the risk status of the Entity has been modified
+	 * @return
+	 */
+	ResponseEntity<Object> checkEntityRiskStatus(CoiEntityDto entityDto);
+
+	/**
+	 * This method is used to Check if the risk status of the Travel Disclosure has been modified
+	 * @return
+	 */
+	ResponseEntity<Object> checkTravelDisclosureRiskStatus(CoiTravelDisclosureDto travelDisclosureDto);
+
 }

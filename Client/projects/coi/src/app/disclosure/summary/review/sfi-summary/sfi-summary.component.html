@@ -13,28 +13,28 @@
   </div>
 </div> -->
 
-<div class="main-title d-flex flex-end justify-content-between px-1 pb-2" id="COI802">
+<div class="main-title d-flex flex-end justify-content-between px-1 pb-2 position-relative" id="COI802">
   <h3 class="fs-16">
     <span class="d-flex align-items-center" >
     <strong tabindex="0" aria-label="Significant Financial Interest (SFI)">Significant Financial Interest (SFI)
     </strong>
     <span class="d-inline-block" data-bs-toggle="tooltip" title="View SFI details."
       data-bs-placement="top">
-      <mat-icon class="me-2 info-icon position-relative mt-3"  data-bs-toggle="tooltip">info</mat-icon>
+      <mat-icon class="ms-1 f-16 position-relative mt-1 text-secondary"  data-bs-toggle="tooltip">info</mat-icon>
     </span>
   </span>
   </h3>
-  <button class="toggle-header-btn mr-8 align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
-  [attr.aria-label]="'Click here to ' + (isCollapsed ? 'collapse' : 'expand') + ' Significant Financial Interest'"
-  [title]="isCollapsed ? 'Click here to collapse Significant Financial Interest (SFI)' : 'Click here to expand Significant Financial Interest (SFI)'"
-  (click)="isCollapsed = !isCollapsed">
+  <button class="d-flex justify-content-center align-items-center btn toggle-btn border rounded-5 shadow-sm p-0"
+    [attr.aria-label]="'Click here to ' + (isCollapsed ? 'collapse' : 'expand') + ' Significant Financial Interest'"
+    [title]="isCollapsed ? 'Click here to collapse Significant Financial Interest (SFI)' : 'Click here to expand Significant Financial Interest (SFI)'"
+    (click)="isCollapsed = !isCollapsed">
     <mat-icon>{{isCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
   </button>
 </div>
 <ng-container *ngIf="isCollapsed">
   <ng-container *ngIf="isShowNoDataCard">
     <ng-container *ngIf="coiFinancialEntityDetails?.length">
-      <div class="px-2 mb-2 mt-3 "
+      <div class="mb-2 mt-3 "
         *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
         <app-shared-sfi-card [reqObject]='item' [referredFrom]="'SFI_SUMMARY'" (viewSlider)="viewSlider($event)" (reviewSlider)="openReviewerComment($event)"></app-shared-sfi-card>
       </div>
@@ -43,11 +43,10 @@
   </ng-container>
 </ng-container>
 
-<div #viewSFISummaryDetailsOverlay [class.overlay]="showSlider">
-  <div class="slider-base" *ngIf="showSlider">
-    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-    <div class="slider-container" (scroll)="onWindowScroll($event)">
-         <app-entity-details [entityId]="entityId"></app-entity-details>
-      </div>
-  </div>
-  </div>
+  <ng-container *ngIf="showSlider">
+    <app-coi-slider (closeSlider)="hideSfiNavBar()" [elementId]="sliderElementId">
+      <ng-container content>
+        <app-entity-details [entityId]="entityId"></app-entity-details>
+      </ng-container>
+    </app-coi-slider>
+  </ng-container>

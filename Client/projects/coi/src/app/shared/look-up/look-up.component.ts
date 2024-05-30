@@ -30,7 +30,7 @@ interface LookUp {
 @Component({
   selector: 'app-look-up',
   templateUrl: './look-up.component.html',
-  styleUrls: ['./look-up.component.css'],
+  styleUrls: ['./look-up.component.scss'],
   providers: [LookUpService, LookupFilterPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -50,6 +50,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Input() selectedLookUpList: Array<LookUp> = [];
   @Input() defaultValue: any;
   @Input() isError;
+  @Input() title = '';
   @Input() options: string;
   @Input() isExternalArray = false;
   @Input() externalArray: any = [];
@@ -58,8 +59,13 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Input() customClass = '';
   @Output() selectedResult: EventEmitter<Array<LookUp>> = new EventEmitter<Array<LookUp>>();
   @ViewChild('lookupSelectAll') lookupSelectAll: MatOption;
+  @ViewChild('mySelect') mySelect;
 
   constructor(private _dropDownService: LookUpService, private _changeRef: ChangeDetectorRef, private lookupFilterPipe: LookupFilterPipe) { }
+
+  ngOnInit() {
+    this.setUniqueIdForSearchText();
+  }
 
   ngOnChanges() {
     this.searchText = '';
@@ -67,9 +73,13 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     if (this.selectedLookUpList?.length || this.defaultValue) {
       this.getLookUpValues();
     } else {
-      this.lookupTitle = '';
+      this.lookupTitle = this.title || '';
       this.selection = [];
     }
+  }
+
+  setUniqueIdForSearchText() {
+    this.uniqueId = this.uniqueId || new Date().getTime().toString();
   }
 
   ngOnDestroy() {
@@ -101,9 +111,14 @@ export class LookUpComponent implements OnChanges, OnDestroy {
           .subscribe((data: Array<LookUp>) => {
             this.lookUpList = data;
             this.setSelections();
+            if (!this.selectedLookUpList?.length && !this.defaultValue) {
+              this.mySelect.open();
+            }
             this._changeRef.markForCheck();
           }));
       }
+    } else {
+      this.setSelections();
     }
   }
 
@@ -116,9 +131,11 @@ export class LookUpComponent implements OnChanges, OnDestroy {
             const select = this.selectedLookUpList.find(e => e.code || e.description);
             if (select) {
                 this.selection = select.code || select.description;
+                this.setLookupTitle();
             }
         } else {
             this.selection = this.selectedLookUpList.map(e => e.code || e.description) || [];
+            this.setLookupTitle();
         }
         this.setSelectedLookUpList();
         this.checkIfAllOptionsSelected();
@@ -142,6 +159,8 @@ export class LookUpComponent implements OnChanges, OnDestroy {
       this.getLookupListForSelectAll().forEach((L: LookUp) => {
         this.selection.push(L.code || L.description);
       });
+    } else {
+        this.lookupTitle = this.title || '';
     }
   }
 
@@ -157,10 +176,14 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     }
 
     private selectedDescription() {
-        const EMIT_DATA = this.lookUpList.filter((ele: any) => {
+        if(this.selection) {
+          const EMIT_DATA = this.lookUpList.filter((ele: any) => {
             if (this.selection.includes(ele.code || ele.description)) return ele;
-        });
-        return EMIT_DATA;
+          });
+          return EMIT_DATA;
+        } else {
+          return this.selection;
+        }
     }
 
     showLookUpList() {

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-under-maintenance',
   templateUrl: './under-maintenance.component.html',
-  styleUrls: ['./under-maintenance.component.css']
+  styleUrls: ['./under-maintenance.component.scss']
 })
 export class UnderMaintenanceComponent implements OnInit {
 

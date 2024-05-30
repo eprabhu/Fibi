@@ -39,7 +39,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
     constructor(public _dataStore: DataStoreService, public router: Router, public _coiService: CoiService, public commonService: CommonService) { 
-        document.getElementById('COI_SCROLL').scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }
 
     ngOnInit() {

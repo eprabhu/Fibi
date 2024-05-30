@@ -15,7 +15,7 @@ class ProjectDetails {
 @Component({
   selector: 'app-entity-list',
   templateUrl: './entity-list.component.html',
-  styleUrls: ['./entity-list.component.css']
+  styleUrls: ['./entity-list.component.scss']
 })
 export class EntityListComponent implements OnInit {
 
@@ -136,7 +136,7 @@ saveClick() {
         this.setPreviousNext('N');
       }
   }, err => {
-    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relations');
+    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relations. Please try again.');
   }));
 }
 

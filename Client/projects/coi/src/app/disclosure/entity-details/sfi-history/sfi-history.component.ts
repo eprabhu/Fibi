@@ -20,14 +20,26 @@ export class SfiHistoryComponent implements OnChanges {
     $subscriptions: Subscription[] = [];
     sfiHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
-    isReadMore = false;
+    isReadMore: boolean[] = [];
 
     constructor( private _commonService: CommonService,
                  public entityDetailService: EntityDetailsService,
                  public dataFormatPipe: DateFormatPipeWithTimeZone ) { }
 
+    ngOnInit() {
+        this.triggerHistoryUpdate();
+    }
+
     ngOnChanges() {
         this.getSfiHistory();
+    }
+
+    triggerHistoryUpdate() {
+        this.$subscriptions.push(this.entityDetailService.$updateHistory.subscribe((data: any) => {
+            if (data) {
+                this.getSfiHistory();
+            }
+        }));
     }
 
     ngOnDestroy() {

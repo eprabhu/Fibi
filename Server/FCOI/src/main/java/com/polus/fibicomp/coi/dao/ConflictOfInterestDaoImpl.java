@@ -3475,15 +3475,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 
 	@Override
-	public void updateDisclosureUpdateDetails(Integer disclosureId) {
+	public Timestamp updateDisclosureUpdateDetails(Integer disclosureId) {
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE CoiDisclosure cd SET cd.updateTimestamp = :updateTimestamp, cd.updateUser = :updateUser where cd.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
-		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateTimestamp", updateTimestamp);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
+		return updateTimestamp;
 	}
 
 	@Override
@@ -3984,7 +3986,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean isReviewerReviewCompleted(Integer disclosureId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("SELECT COUNT(r.coiReviewId) FROM CoiReview r ");
 		hqlQuery.append("WHERE r.reviewStatusTypeCode <> 2 AND r.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
@@ -3996,7 +3998,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean isReviewerAssigned(Integer disclosureId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("SELECT COUNT(r.coiReviewId) FROM CoiReview r ");
 		hqlQuery.append("WHERE r.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
@@ -4244,7 +4246,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 
 	@Override
-	public boolean isAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
+	public boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then true else false end ");
@@ -4396,23 +4398,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("entityId", entityDto.getEntityId());
 		query.setParameter("riskCategoryCode", entityDto.getRiskCategoryCode());
 		return (boolean) query.getSingleResult();
-	}
-
-	@Override
-	public boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId) {
-		StringBuilder hqlQuery = new StringBuilder();
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT case when (count(c.travelDisclosureId) > 0) then true else false end ");
-		hqlQuery.append("FROM CoiTravelDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
-		if (adminGroupId != null)
-			hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
-		hqlQuery.append("AND c.travelDisclosureId = : travelDisclosureId");
-		Query query = session.createQuery(hqlQuery.toString());
-		if (adminGroupId != null)
-			query.setParameter("adminGroupId", adminGroupId);
-		query.setParameter("adminPersonId", adminPersonId);
-		query.setParameter("travelDisclosureId", travelDisclosureId);
-		return (boolean)query.getSingleResult();
 	}
 
 	@Override
@@ -4652,6 +4637,123 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		            .setParameter("disclosureId", disclosureId);
 		    return query.getResultList();
 		});
+	}
+
+	@Override
+	public Boolean isOpaReviewerReviewCompleted(Integer opaDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.opaReviewId) FROM OPAReview r ");
+		hqlQuery.append("WHERE r.reviewStatusTypeCode <> 3 AND r.opaDisclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", opaDisclosureId);
+		Long count = (Long) query.getSingleResult();
+		return (count <= 0);
+	}
+
+	@Override
+	public Boolean isOpaReviewerAssigned(Integer opaDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.opaReviewId) FROM OPAReview r ");
+		hqlQuery.append("WHERE r.opaDisclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", opaDisclosureId);
+		Long count = (Long) query.getSingleResult();
+		return count > 0;
+	}
+
+	@Override
+	public Boolean isDisclosureRiskStatusModified(String riskCategoryCode, Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(d.disclosureId) > 0) then false else true end FROM CoiDisclosure d WHERE ");
+        if (riskCategoryCode != null) {
+            hqlQuery.append(" d.riskCategoryCode = :riskCategoryCode AND ");
+        }
+        hqlQuery.append("d.disclosureId = :disclosureId ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("disclosureId",disclosureId);
+        if (riskCategoryCode != null) {
+            query.setParameter("riskCategoryCode", riskCategoryCode);
+        }
+        return (Boolean) query.getSingleResult();
+	}
+
+	@Override
+	public Boolean isEntityRiskStatusModified(String riskCategoryCode, Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(e.entityId) > 0) then false else true end FROM CoiEntity e WHERE ");
+        if (riskCategoryCode != null) {
+            hqlQuery.append(" e.riskCategoryCode = :riskCategoryCode AND ");
+        }
+        hqlQuery.append("e.entityId = :entityId ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("entityId",entityId);
+        if (riskCategoryCode != null) {
+            query.setParameter("riskCategoryCode", riskCategoryCode);
+        }
+        return (Boolean) query.getSingleResult();
+	}
+
+	@Override
+	public boolean isAdminPersonOrGroupAdded(Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then false else true end ");
+		hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId is null AND c.adminGroupId is null ");
+		hqlQuery.append("AND c.disclosureId = : disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		return (boolean)query.getSingleResult();
+	}
+
+	@Override
+	public boolean isSameAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId,
+			Integer travelDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.travelDisclosureId) > 0) then true else false end ");
+		hqlQuery.append("FROM CoiTravelDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
+		if (adminGroupId != null)
+			hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
+		hqlQuery.append("AND c.travelDisclosureId = : travelDisclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		if (adminGroupId != null)
+			query.setParameter("adminGroupId", adminGroupId);
+		query.setParameter("adminPersonId", adminPersonId);
+		query.setParameter("travelDisclosureId", travelDisclosureId);
+		return (boolean)query.getSingleResult();
+	}
+
+	@Override
+	public boolean isAdminPersonOrGroupAddedInTravel(Integer travelDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.travelDisclosureId) > 0) then false else true end ");
+		hqlQuery.append("FROM CoiTravelDisclosure c WHERE  c.adminPersonId is null AND c.adminGroupId is null ");
+		hqlQuery.append("AND c.travelDisclosureId = : travelDisclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("travelDisclosureId", travelDisclosureId);
+		return (boolean)query.getSingleResult();
+	}
+
+	@Override
+	public boolean isTravelDisclosureRiskStatusModified(String riskCategoryCode, Integer travelDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(d.travelDisclosureId) > 0) then false else true end FROM CoiTravelDisclosure d WHERE ");
+        if (riskCategoryCode != null) {
+            hqlQuery.append(" d.riskCategoryCode = :riskCategoryCode AND ");
+        }
+        hqlQuery.append("d.travelDisclosureId = :travelDisclosureId ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("travelDisclosureId",travelDisclosureId);
+        if (riskCategoryCode != null) {
+            query.setParameter("riskCategoryCode", riskCategoryCode);
+        }
+        return (Boolean) query.getSingleResult();
 	}
 
 }

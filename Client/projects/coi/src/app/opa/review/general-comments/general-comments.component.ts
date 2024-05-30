@@ -9,7 +9,7 @@ declare var $: any;
 @Component({
     selector: 'app-general-comments',
     templateUrl: './general-comments.component.html',
-    styleUrls: ['./general-comments.component.css']
+    styleUrls: ['./general-comments.component.scss']
 })
 export class GeneralCommentsComponent implements OnInit {
 

@@ -33,7 +33,7 @@ export class ElasticConfigService {
     getElasticForPerson() {
         const elasticSearchOption = new ElasticOption(this.url);
         elasticSearchOption.contextField = 'full_name';
-        elasticSearchOption.index = 'fibiperson';
+        elasticSearchOption.index = 'coiperson';
         elasticSearchOption.type = 'person';
         elasticSearchOption.formatString = ELASTIC_FIBI_PERSON_OUTPUT_FORMAT;
         elasticSearchOption.fields = {
@@ -191,7 +191,7 @@ export class ElasticConfigService {
         elasticSearchOption.contextField = 'agreement_request_id';
         elasticSearchOption.formatString = ELASTIC_AGREEMENT_OUTPUT_FORMAT;
         elasticSearchOption.fields = { agreement_request_id: {}, title: {}, agreement_type: {}, unit_name: {},
-										agreement_status: {}, principal_person_full_name: {}, aa_person_full_name: {}, 
+										agreement_status: {}, principal_person_full_name: {}, aa_person_full_name: {},
 										sponsor_name: {},  requestor_full_name: {}};
         return elasticSearchOption;
     }

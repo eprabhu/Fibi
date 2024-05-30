@@ -10,12 +10,13 @@ import { CommonService } from '../../../../../app/common/services/common.service
 import { CoiService } from '../../../services/coi.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
+import { openCoiSlider } from 'projects/coi/src/app/common/utilities/custom-utilities';
 
 
 @Component({
     selector: 'app-sfi-summary',
     templateUrl: './sfi-summary.component.html',
-    styleUrls: ['./sfi-summary.component.css']
+    styleUrls: ['./sfi-summary.component.scss']
 })
 export class SfiSummaryComponent implements OnInit, OnDestroy {
 
@@ -30,6 +31,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     showSlider = false;
     entityId: any;
     isShowNoDataCard = false;
+    sliderElementId = ''; 
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -42,6 +44,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this.getSfiDetails();
         this.commentConfiguration.coiSectionsTypeCode = 2;
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
+        this.listenToolKitFocusSection();
     }
 
     ngOnDestroy() {
@@ -97,25 +100,16 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
-        setTimeout(() => {
-            const slider = document.querySelector('.slider-base');
-            slider.classList.add('slider-opened');
-        });
+        this.sliderElementId = `sfi-summary-${this.entityId}`
+        openCoiSlider(this.sliderElementId)
     }
 
-    hideSfiNavBar() {
-        this.addBodyScroll();
-        let slider = document.querySelector('.slider-base');
-        slider.classList.remove('slider-opened');        
+    hideSfiNavBar() {      
         setTimeout(() => {
+            this.sliderElementId = '';
+            this.entityId = null;
             this.showSlider = false;
         },500);
-    }
-
-    addBodyScroll() {
-        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }
 
     openReviewerComment(event) {
@@ -130,8 +124,13 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this._coiService.isShowCommentNavBar = true;
     }
 
-    onWindowScroll(event) {
-        const pageYOffset = this.elementRef.nativeElement.querySelector('.slider-container').scrollTop;
-        this._commonService.$sliderScrollAction.next({event, pageYOffset});
+    //'COI802' parent element of SfiSummaryComponent.
+    private listenToolKitFocusSection() {
+        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele => {
+            if (ele.section == 'COI802') {
+                this.isCollapsed = ele.isExpand;
+            }
+        }));
     }
+
 }

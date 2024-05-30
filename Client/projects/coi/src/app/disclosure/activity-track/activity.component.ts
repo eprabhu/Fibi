@@ -5,16 +5,16 @@ import {ActivityService} from './activity.service';
 import {DataStoreService} from '../services/data-store.service';
 import {CoiService} from '../services/coi.service';
 import {CommentConfiguration, CommentRequest} from '../coi-interface';
-import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import bootstrap from "../../../assets/js/bootstrap.bundle.min.js";
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 declare let $: any;
 
 @Component({
     selector: 'app-coi-review-comment-modal',
     templateUrl: './activity.component.html',
-    styleUrls: ['./activity.component.css'],
+    styleUrls: ['./activity.component.scss'],
     providers: [ActivityService]
 })
 export class ActivityComponent implements OnInit, OnDestroy {
@@ -129,7 +129,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
                     coiParentCommentId: this.modalConfiguration.coiParentCommentId,
                     modifyIndex: this.modalConfiguration.modifyIndex
                 });
-                this._dataStore.updateTimestampEvent.next();
                 this.clearModal();
                 // this._commonService.showToast(HTTP_SUCCESS_STATUS,
                 //     `Review comment ${ this.modalConfiguration.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);

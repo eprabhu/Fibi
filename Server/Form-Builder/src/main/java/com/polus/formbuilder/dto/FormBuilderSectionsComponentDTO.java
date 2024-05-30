@@ -1,5 +1,7 @@
 package com.polus.formbuilder.dto;
 
+import java.util.List;
+
 import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
@@ -38,5 +40,13 @@ public class FormBuilderSectionsComponentDTO {
 	private QuestionnaireDataBus questionnaire;
 	
 	private CustomDataElementVO customElement;
-	
+
+	private String label;
+
+	private String isMandatory;
+
+	private String validationMessage;
+
+	private List<Integer> ruleIds;
+
 }

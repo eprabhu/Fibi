@@ -51,11 +51,14 @@ export class ResolveServiceService {
 
     }
 
+    // 1 - pending, 5 - withdrawn, 6 - reutrned
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
         if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId ) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
         } else if (!['1','5','6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
+            reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
+        } else if ((['5', '1', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure') && this._commonService.currentUserDetails.personId != personId)) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {
@@ -113,6 +116,7 @@ export class ResolveServiceService {
                     this._coiService.isCompleteReview = reviewerDetail.reviewStatusTypeCode === '3' ? true : false;
                     this._coiService.isDisclosureReviewer = true;
                     this._coiService.$SelectedReviewerDetails.next(reviewerDetail);
+                    this._coiService.currentReviewForAction = reviewerDetail;
                 }
                 observer.next(true);
                 observer.complete();
@@ -126,7 +130,7 @@ export class ResolveServiceService {
 
     getLoggedInReviewerInfo(coiReviewerList): any {
         const getReviewerDetail = coiReviewerList.find(item => item.assigneePersonId ===
-            this._commonService.currentUserDetails.personId);
+            this._commonService.currentUserDetails.personId && item.reviewStatusTypeCode != '2');
         return getReviewerDetail;
     }
 

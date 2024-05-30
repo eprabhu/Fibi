@@ -1,99 +1,107 @@
 .history-border {
-  box-shadow: 0px 0px 3px #00000029;
+    box-shadow: 0px 0px 3px #00000029;
 }
 
 .first-item::before {
-  height: 120px;
-  margin-top: -10px;
-  // top: 0px;
+    height: 120px;
+    margin-top: -10px;
+    // top: 0px;
 }
 
 .first-item::after {
-  height: 122px;
+    height: 122px;
 }
 
 .last-item::before {
-  height: 72px !important;
+    height: 72px !important;
 }
 
 .time-line {
-  max-width: 96%;
-  margin-left: 53px;
+    max-width: 96%;
+    margin-left: 53px;
 }
 
 .relative-position {
-  position: relative;
-  left: -123px;
+    position: relative;
+    left: -123px;
 }
 
 .highlight-node {
-  // background-color: #e9ffff;
-  background-color:#EEEEEE;
-  color: #202c2e;
-  font-size: 16px;
-  font-weight: 400;
-  border: 1px solid #ded8d8;
-  /* cursor: pointer; */
+    // background-color: #e9ffff;
+    background-color: #EEEEEE;
+    color: #202c2e;
+    font-size: 1rem;
+    font-weight: 400;
+    border: 1px solid #ded8d8;
+    /* cursor: pointer; */
 }
 
 .top-card {
-  background-color:rgba(210, 228, 248, 0.57);
+    background-color: rgba(210, 228, 248, 0.57);
 }
 
 .border {
-  border-radius: 15px;
+    border-radius: 15px;
 }
+
 .card {
-  background-color: none;
+    background-color: none;
 }
 
 .badge-warning {
-  color: black;
-  background-color: #ffc107 !important;
+    color: black;
+    background-color: #ffc107 !important;
 }
+
 article {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
+
 .previousFcoi-button {
-  border-color: #1e847b;
-  background-color: transparent;
-  color: #1e847b !important;
+    border-color: #1e847b;
+    background-color: transparent;
+    color: #1e847b !important;
 }
 
 .previousFcoi-button:hover {
-  background-color: #1e847b;
-  border-color: #1e847b;
-  color: #fff!important;
+    background-color: #1e847b;
+    border-color: #1e847b;
+    color: #fff !important;
 }
+
 .badge-pill {
-   padding: 5px 11px 5px 11px !important;
-  font-size: 14px  !important;
-  font-weight: 500;
-  font-family: "Roboto", sans-serif ;
-  color: white;
-   border-radius: 15px;
+    padding: 5px 11px 5px 11px !important;
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    font-family: "Roboto", sans-serif;
+    color: white;
+    border-radius: 15px;
 }
+
 .bg-success {
-  background-color: #4CB57D !important;
-  color: #fff;
+    background-color: #4CB57D !important;
+    color: #fff;
 }
+
 .bg-info {
-  background-color: #17a2b8 !important;
-  color: #fff;
+    background-color: #17a2b8 !important;
+    color: #fff;
 }
+
 .close-btn {
-  position: absolute;
-  right: 19px;
-  top: 287px; 
-  opacity: 0.5;
-  border: none;
-  // background-color: #e9ffff;
-  background-color:#EEEEEE;
-  margin-top: 10px;
+    position: absolute;
+    right: 19px;
+    top: 287px;
+    opacity: 0.5;
+    border: none;
+    // background-color: #e9ffff;
+    background-color: #EEEEEE;
+    margin-top: 10px;
 }
+
 .close-btn:hover {
-  color: #424242;
-  cursor: pointer;
+    color: #424242;
+    cursor: pointer;
 }
 
 $color: #278cbb;
@@ -108,10 +116,6 @@ $color: #278cbb;
 
 .col-custom {
     width: 140px;
-}
-
-.grey-text {
-    color: #6A7980;
 }
 
 .start-date {
@@ -170,31 +174,27 @@ $color: #278cbb;
 }
 
 .history-date {
-  background-color: #cbe8f6;
+    background-color: #cbe8f6;
 }
 
 
 .history-username {
-  color: black;
+    color: black;
 }
 
 .history-attachment {
-  color: black;
-  font-weight: 500;
+    color: black;
+    font-weight: 500;
 }
 
 ul {
-  list-style-type: none;
-}
-
-ul>li:nth-child(even) {
-  background: #f4f5f7;
+    list-style-type: none;
 }
 
 .history-date {
-  background-color: #E2F1FF;
+    background-color: #E2F1FF;
 }
 
 .border-left-line {
-  border-left:solid #007DEC; 
+    border-left: solid #007DEC;
 }

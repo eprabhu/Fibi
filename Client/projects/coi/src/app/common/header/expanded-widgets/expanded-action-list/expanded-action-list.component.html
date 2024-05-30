@@ -4,7 +4,7 @@
             <h4 class="card-title d-flex justify-content-between">
                 <span class="d-flex align-items-center">Action List</span>
                 <span>
-                    <ul class="nav nav-pills mb-0 hand-cursor">
+                    <ul class="nav nav-pills mb-0 hand-cursor fs-14">
                         <li class="nav-item pt-2"
                             (click)="inboxTab = 'PENDING';getActionList(false);isInboxInfo = true;">
                             <a class="nav-link nav-item " [ngClass]="{active:(inboxTab == 'PENDING')}">Pending</a>
@@ -37,13 +37,13 @@
                 <em *ngIf="inboxTab == 'PROCESSED'">Processed list of last 6 months</em>
             </div>
             <button type="button" id="modal-close" class="close close-button border-0" data-dismiss="modal"
-                (click)="isInboxInfo = false" aria-label="Close">
+                (click)="isInboxInfo = false" aria-label="Click to close">
                 <span class="d-block" aria-hidden="true">&times;</span>
             </button>
         </div>
         <div *ngIf="viewInboxSearch" class="card inbox-card">
             <button type="button" id="modal-close" class="btn close-btn no-outline border-0" data-dismiss="modal"
-                (click)="viewInboxSearch = false" aria-label="Close">
+                (click)="viewInboxSearch = false" aria-label="Click to close">
                 <span class="d-block modal-close" aria-hidden="true">&times;</span>
             </button>
             <div class="card-content">
@@ -149,15 +149,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="no-data-container" *ngIf="actionListEntriesForBanner?.length  === 0">
-                    <span class="no-data-icon-outer">
-                        <div class="no-data-icon">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                        </div>
-                    </span>
-                    <h4>There is no information in this section.</h4>
-                </div>
+                    <div *ngIf="actionListEntriesForBanner?.length === 0" class="no-data-container w-100">
+                        <span class="no-data-icon-outer">
+                            <div class="no-data-icon">
+                                <mat-icon aria-hidden="true" class="no-file">folder_off</mat-icon>
+                            </div>
+                        </span>
+                        <h5 class="fs-16 mt-3">
+                            <span class="default-content">There is no information in this section.</span>
+                        </h5>
+                    </div>
             </div>
         </div>
     </div>

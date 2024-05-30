@@ -30,7 +30,7 @@
  * </app-confirmation-modal>
  */
 
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { closeCommonModal } from '../../common/utilities/custom-utilities';
 
 @Component({
@@ -95,6 +95,13 @@ export class ConfirmationModalComponent implements OnDestroy {
      */
     @Input() primaryBtnName = 'Save';
 
+     /**
+     * The tooltip for the primary action button.
+     *
+     * Purpose: Sets the tooltip for the primary action button.
+     */
+    @Input() primaryBtnTooltip = '';
+
     /**
      * The label for the secondary action button.
      * Default value is 'Cancel'.
@@ -102,6 +109,14 @@ export class ConfirmationModalComponent implements OnDestroy {
      * Purpose: Sets the label for the secondary action button.
      */
     @Input() secondaryBtnName = 'Cancel';
+
+     /**
+     * The tooltip for the secondary action button.
+     * Default value is 'Cancel'.
+     *
+     * Purpose: Sets the tooltip for the secondary action button.
+     */
+    @Input() secondaryBtnTooltip = '';
 
     /**
      * The unique identifier for the modal.
@@ -171,6 +186,13 @@ export class ConfirmationModalComponent implements OnDestroy {
             this.mandatoryList.set('description', `${this.descriptionErrorMsg}`);
         } else {
             this.mandatoryList.clear();
+        }
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal();
         }
     }
 

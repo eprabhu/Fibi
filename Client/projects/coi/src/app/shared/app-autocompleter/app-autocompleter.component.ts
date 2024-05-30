@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, OnInit, ChangeDetect
 @Component({
   selector: 'app-autocompleter',
   templateUrl: './app-autocompleter.component.html',
-  styleUrls: ['./app-autocompleter.component.css'],
+  styleUrls: ['./app-autocompleter.component.scss'],
 })
 export class AppAutocompleterComponent implements OnChanges, OnInit {
 
@@ -24,7 +24,6 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
   timer: any;
   results = [];
   counter = -1;
-  isActive = false;
   arrayList: any[];
   tempResults: any[];
 
@@ -39,11 +38,14 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
     if (!this.isError) {
       this.searchText = this.completerOptions.defaultValue || this.defaultValue || '';
     }
-    this.clearField = '' + this.clearField;
-    if (this.clearField === 'true') {
-      this.searchText = '';
-      this.results = [];
-    }
+    setTimeout(() => {
+      this.clearField = '' + this.clearField;
+      if (this.clearField === 'true') {
+        this.searchText = '';
+        this.results = [];
+        this.clearField = new String('false');
+      }
+    });
     this.isError ? this.searchField.nativeElement.classList.add('is-invalid')
                  : this.searchField.nativeElement.classList.remove('is-invalid');
   }
@@ -60,7 +62,6 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
       this.results = [];
       searchText = searchText.toLowerCase();
       this.arrayList = this.getFilteredList(items, searchText);
-      this.isActive = true;
       this.counter = -1;
       if (this.arrayList.length > 0) {
         this.arrayList.forEach((el, i) => {
@@ -106,56 +107,33 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
     this.counter = -1;
     if (value) {
       this.onSelect.emit(value);
-      this.searchText = this.getSearchTextValue(value);
+      setTimeout(() => {
+        this.searchText = this.getSearchTextValue(value);
+      });
     } else {
-      this.searchText = '';
+      setTimeout(() => {
+        this.searchText = '';
+      });
       this.onSelect.emit(null);
     }
-    this.completerOptions.defaultValue = this.searchText;
+    setTimeout(() => {
+      this.completerOptions.defaultValue = this.searchText;
+    });
     this.results = [];
-    this.isActive = false;
   }
 
   getSearchTextValue(value): string {
-		let lbl = this.completerOptions.contextField;
-		Object.keys(value).forEach(k => { lbl = lbl.replace(new RegExp(k, 'g'), value[k]); });
-		return lbl || this.searchText;
-	}
-  /**
-   * @param  {} event used to update counter value for keyboard event listner
-   */
-  upArrowEvent(event) {
-    event.preventDefault();
-    this.removeHighlight();
-    this.counter >= 0 ? this.counter-- : this.counter = document.getElementsByClassName('search-result-item').length - 1;
-    this.addHighlight();
-    this.updateSearchFeild();
-  }
-  /**
-   * @param  {} event  used to update counter value for keyboard event listner and adds a highlight class
-   */
-  downArrowEvent(event) {
-    event.preventDefault();
-    this.removeHighlight();
-    this.counter < document.getElementsByClassName('search-result-item').length - 1 ? this.counter++ : this.counter = -1;
-    this.addHighlight();
-    this.updateSearchFeild();
+    let lbl = this.completerOptions.contextField;
+    Object.keys(value).forEach(k => { lbl = lbl.replace(new RegExp(k, 'g'), value[k]); });
+    return lbl || this.searchText;
   }
   /**
    * @param  {} event
    *  handles the click outside the result box updates counter and slear results
    */
   hideSearchResults() {
-    this.isActive = false;
     this.results = [];
     this.counter = -1;
-  }
-  /** listens for enter key event . triggers the click on selected li
-   */
-  enterKeyEvent() {
-    (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement).click();
-    (document.activeElement as HTMLInputElement).blur();
-    this.hideSearchResults();
   }
   /**
    * removes the highlight from the previous li node if true

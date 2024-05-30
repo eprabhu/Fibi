@@ -14,11 +14,15 @@ export function replaceFormatStringWithValue(formatString: string, object: any):
 }
 
 /**
- * returns "sponsorCode - sponsorName (acronym)" -> Endpoint format based default value
+ * returns a string format of "<unitNumber> - <unitName>
  * @param sponsor
  */
-export function getSponsorSearchDefaultValue(sponsor: any): string {
-    return replaceFormatStringWithValue(DEFAULT_UNIT_FORMAT, sponsor);
+export function getPersonLeadUnitDetails(unitData: any): string {
+    if (unitData && unitData.hasOwnProperty('homeUnit') && unitData.hasOwnProperty('homeUnitName')) {
+        unitData['unitNumber'] = unitData.homeUnit;
+        unitData['unitName'] = unitData.homeUnitName;
+    }
+    return replaceFormatStringWithValue(DEFAULT_UNIT_FORMAT, unitData);
 }
 
 /**
@@ -97,4 +101,25 @@ export function focusElementyById(element_id: string): void {
     const focusElement: HTMLElement | null = document.getElementById(element_id);
     focusElement?.blur();
     focusElement?.focus();
+}
+
+
+export function openCoiSlider(element_id:string): void {
+    setTimeout(() => {
+        if (element_id) {
+            document.getElementById(`${element_id}-trigger-btn`)?.click();
+        }
+    });
+}
+
+export function closeCoiSlider(element_id:string): void {
+    setTimeout(() => {
+        if (element_id) {
+            document.getElementById(`${element_id}-close-btn`)?.click();
+        }
+    });
+}
+
+export function checkForVowelInFirstLetter(word) {
+    return ['a', 'e', 'i', 'o', 'u'].includes(word[0].toLowerCase()) ? `an ${word}` : `a ${word}`;
 }

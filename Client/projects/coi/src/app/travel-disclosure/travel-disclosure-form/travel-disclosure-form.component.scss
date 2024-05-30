@@ -1,69 +1,73 @@
 .col-custom {
-  width: 100px !important;
+    width: 100px !important;
 }
 
 .col-custom-city {
-  width: 90px !important;
-  margin-left: 10px !important;
+    width: 90px !important;
+    margin-left: 10px !important;
 }
 
 .col-custom-endDate {
-  width: 90px !important;
-  margin-left: 10px !important;
+    width: 90px !important;
+    margin-left: 10px !important;
 }
 
 .invalid-msg {
-  color: rgb(176 42 55);
+    color: rgb(176 42 55);
 }
 
 .invalid-border {
-  border-color: #dc3545 !important;
+    border-color: #dc3545 !important;
 }
 
 .travelDisclosure-radio-checkbox {
-  accent-color: #0d6efd !important;
-  -ms-transform: scale(1.2);
-  -webkit-transform: scale(1.2);
-  transform: scale(1.2);
+    accent-color: #0d6efd !important;
+    -ms-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
 }
 
 .status-pill-position {
-  border-radius: 20px;
-  padding: 3px 9px 3px 9px;
+    border-radius: 20px;
+    padding: 3px 9px 3px 9px;
 }
 
 .active {
-  background-color: #4CB57D !important;
-  color: #fff;
-  @extend .status-pill-position;
+    background-color: #4CB57D !important;
+    color: #fff;
+    @extend .status-pill-position;
 }
 
 .inactive {
-  background-color: #949494;
-  color: #fff;
-  @extend .status-pill-position;
+    background-color: #949494;
+    color: #fff;
+    @extend .status-pill-position;
 }
 
 .risk-badge {
-  top: -5px;
-  position: relative;
+    top: -5px;
+    position: relative;
 }
 
 .invalid {
-  @extend .risk-badge;
-  color: #ff0000;
+    @extend .risk-badge;
+    color: #ff0000;
 }
 
 .medium-risk {
-  @extend .risk-badge;
-  color: #ff8c00;
+    @extend .risk-badge;
+    color: #ff8c00;
 }
 
 .low-risk {
-  @extend .risk-badge;
-  color: #4CB57D;
+    @extend .risk-badge;
+    color: #4CB57D;
 }
 
 .entity-risk-badge {
-  width: max-content !important;
+    width: max-content !important;
+}
+
+.destination-margin {
+    margin-left: 100px;
 }

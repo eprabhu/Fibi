@@ -10,48 +10,58 @@ import { AppElasticService } from './app-elastic.service';
 @Component({
 	selector: 'app-elastic',
 	templateUrl: './app-elastic.component.html',
-	styleUrls: ['./app-elastic.component.css'],
+	styleUrls: ['./app-elastic.component.scss'],
 	providers: [AppElasticService]
 })
 export class AppElasticComponent implements OnChanges, OnInit {
 
-	@Input() options: any = {};
-	@Input() placeHolder: string;
-	@Input() clearField: String;
-	@Input() isError: boolean;
-	@Input() isDisabled: boolean;
-  @Input() uniqueId: any;
-	@Output() selectedResult: EventEmitter<any> = new EventEmitter<any>();
-	@Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
-	@ViewChild('searchField', { static: true }) searchField: ElementRef;
+    @Input() options: any = {};
+    @Input() uniqueId = null;
+    @Input() placeHolder: string;
+    @Input() clearField: String;
+    @Input() isError: boolean;
+    @Input() isDisabled: boolean;
+    @Input() addNewValue: 'ALLOW_ALL' | 'ALLOW_UNIQUE' | 'OFF' = 'OFF';
+    @Input() duplicateFieldRestriction = [];
+    @Output() selectedResult: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
+    @Output() newValueSelect: EventEmitter<any> = new EventEmitter<any>();
+    @ViewChild('searchField', { static: true }) searchField: ElementRef;
 	searchText = '';
 	isResultSelected = true;
-	tempSearchText = '';
 	timer: any;
 	results = [];
 	counter = -1;
-	isActive = false;
 	query = {
 		query: { bool: { should: [] } },
 		sort: [{ _score: { order: 'desc' } }],
 		highlight: { pre_tags: ['<strong>'], post_tags: ['</strong>'] }
 	};
+    isShowAddNewValueOption = false;
+
 	constructor(private _appElasticService: AppElasticService, private _ref: ChangeDetectorRef) { }
 
-	ngOnInit() {
-		this.searchText = this.options && this.options.defaultValue || '';
-    this.setUnquieIdForSearchText();
-	}
+    ngOnInit() {
+        this.searchText = this.options && this.options.defaultValue || '';
+        this.setUniqueIdForSearchText();
+    }
+
+    setUniqueIdForSearchText() {
+        this.searchField.nativeElement.id = this.uniqueId ? this.uniqueId : new Date().getTime().toString();
+    }
 
 	ngOnChanges() {
 		if (!this.isError) {
 			this.searchText = this.options && this.options.defaultValue || '';
 		}
-		this.clearField = '' + this.clearField;
-		if (this.clearField === 'true') {
-			this.searchText = '';
-			this.results = [];
-		}
+		setTimeout(() => {
+			this.clearField = '' + this.clearField;
+			if (this.clearField === 'true') {
+				this.searchText = '';
+				this.results = [];
+				this.clearField = new String('false');
+			}
+		});
 		this.isError ? this.searchField.nativeElement.classList.add('is-invalid')
 			: this.searchField.nativeElement.classList.remove('is-invalid');
 	}
@@ -62,19 +72,22 @@ export class AppElasticComponent implements OnChanges, OnInit {
 	 */
 	getElasticResult(): void {
 		if (this.options) {
+            this.isShowAddNewValueOption = false;
 			clearTimeout(this.timer);
 			this.timer = setTimeout(() => {
 				this.isResultSelected = false;
 				const temporaryText = this.searchText.trim();
 				this.queryBuilder(temporaryText);
-				const url = this.options.url + this.options.index + '/' + this.options.type + '/' + '_search?size=' + (this.options.size || 20);
+				const url = this.options.url + this.options.index + '/' + '_search?size=' + (this.options.size || 20);
 				this._appElasticService.search(url, this.query).then((rst: any) => {
 					this._ref.markForCheck();
 					this.results = [];
-					this.isActive = true;
 					this.counter = -1;
 					const src = ((rst.hits || {}).hits || []).map((hit) => hit._source);
 					const hgt = ((rst.hits || {}).hits || []).map((hit) => hit.highlight);
+                    if (this.addNewValue !== 'OFF') {
+                        this.setIsShowAddAction(this.duplicateFieldRestriction.length ? this.duplicateFieldRestriction : [this.options.contextField], src);
+                    }
 					if (this.options.formatString) {
 						let fieldsArray = [];
                         if (this.options.formatFields) {
@@ -104,9 +117,11 @@ export class AppElasticComponent implements OnChanges, OnInit {
 					}
 					if (!this.results.length) {
 						this.onEmpty.emit({ 'searchString': this.searchText });
+                        this.results = [];
 						this.results.push({ 'label': 'No results' });
 					}
 				}, error => {
+                    this.results = [];
 					this.results.push({ 'label': 'No results' });
 				});
 			}, this.options && this.options.debounceTime || 500);
@@ -121,10 +136,6 @@ export class AppElasticComponent implements OnChanges, OnInit {
 			return '';
 		 }
 	}
-
-  setUnquieIdForSearchText() {
-    this.searchField.nativeElement.id = this.uniqueId ?  this.uniqueId : Math.random() + '';
-  }
 
 	checkForIcon(k) {
 		return this.options.icons && this.options.icons[k] ? this.options.icons[k] : '';
@@ -144,21 +155,28 @@ export class AppElasticComponent implements OnChanges, OnInit {
 			this.query.query.bool = {...this.query.query.bool, ...this.options.extraConditions};
 		}
 	}
+
 	/**
 	 * @param  {} value emit results on key enter mouse click to parent components
 	 */
 	emitSelectedObject(value: any): void {
+		this.isResultSelected = true;
 		this.counter = -1;
 		if (value) {
 			this.selectedResult.emit(value);
-			this.searchText = this.getSearchTextValue(value);
+			setTimeout(() => {
+				this.searchText = this.getSearchTextValue(value);
+			});
 		} else {
-			this.searchText = '';
+			setTimeout(() => {
+                this.searchText = '';
+            });
 			this.selectedResult.emit(null);
 		}
-		this.options.defaultValue = this.searchText;
+		setTimeout(() => {
+			this.options.defaultValue = this.searchText;
+		});
 		this.results = [];
-		this.isActive = false;
 	}
 
 	getSearchTextValue(value): string {
@@ -172,73 +190,30 @@ export class AppElasticComponent implements OnChanges, OnInit {
 		this.getElasticResult();
 	}
 	/**
-	 * @param  {} event used to update counter value for keyboard event listener
-	 */
-	upArrowEvent(event: Event): void {
-		event.preventDefault();
-		this.removeHighlight();
-		this.counter >= 0 ? this.counter-- : this.counter = document.getElementsByClassName('search-result-item').length - 1;
-		this.addHighlight();
-		this.updateSearchField();
-	}
-	/**
-	 * @param  {} event  used to update counter value for keyboard event listener and adds a highlight class
-	 */
-	downArrowEvent(event: Event): void {
-		event.preventDefault();
-		this.removeHighlight();
-		this.counter < document.getElementsByClassName('search-result-item').length - 1 ? this.counter++ : this.counter = -1;
-		this.addHighlight();
-		this.updateSearchField();
-	}
-	/**
 	 * @param  {} event
 	 *  handles the click outside the result box updates counter and clear results
 	 */
 	hideSearchResults(): void {
-		this.isActive = false;
 		this.searchText = this.isResultSelected ? this.searchText : '';
 		this.results = [];
 		this.counter = -1;
+        this.isShowAddNewValueOption = false;
 	}
-	/** listens for enter key event . triggers the click on selected li
-	 */
-	enterKeyEvent(): void {
-		if (this.counter > -1) {
-			this.isResultSelected = true;
-			(document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement).click();
-			(document.activeElement as HTMLInputElement).blur();
-			this.hideSearchResults();
-		}
-	}
-	/**
-	 * removes the highlight from the previous li node if true
-	 * updates the temp search value with user typed value for future reference
-	 */
-	removeHighlight(): void {
-		const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-		if (el) {
-			el.classList.remove('highlight');
-		} else {
-			this.tempSearchText = this.searchText;
-		}
-	}
-	/**
-	 * updates the li with 'highlight' class
-	 */
-	addHighlight(): void {
-		const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-		if (el) {
-			el.scrollIntoView({ block: 'nearest' });
-			el.classList.add('highlight');
-		}
-	}
-	/**
-	 * updates the search field with temp value once user reaches the bottom or top of the list
-	 */
-	updateSearchField(): void {
-		this.counter === -1 || this.counter === document.getElementsByClassName('search-result-item').length ?
-			this.searchText = this.tempSearchText :
-			this.searchText = this.results[this.counter].value[this.options.contextField];
-	}
+
+    private setIsShowAddAction(fieldsArray: any[], dataSource: any[]) {
+        let MATCH_FOUND = null;
+        for (const element of dataSource) {
+            if (!MATCH_FOUND) {
+                MATCH_FOUND = fieldsArray.find((field: any) => String(element[field]).toLowerCase() === this.searchText.toLowerCase());
+            }
+        }
+        if ((this.searchText && !MATCH_FOUND && this.addNewValue === 'ALLOW_UNIQUE') || (this.searchText && this.addNewValue === 'ALLOW_ALL')) {
+            this.isShowAddNewValueOption = true;
+        }
+    }
+
+    elasticOptionSelect(event: any): void {
+        event.option.id === 'ADD_NEW_VALUE' ? this.newValueSelect.emit(event.option.value) : this.emitSelectedObject(event.option.value ? event.option.value.value : null);
+    }
+
 }

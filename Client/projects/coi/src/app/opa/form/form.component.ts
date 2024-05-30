@@ -6,6 +6,9 @@ import {DataStoreService} from '../services/data-store.service';
 import {OPA} from "../opa-interface";
 import { coiReviewComment } from '../../shared-components/shared-interface';
 import { CommonService } from '../../common/services/common.service';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { ActivatedRoute } from '@angular/router';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-form',
@@ -16,28 +19,31 @@ export class FormComponent implements OnInit, AfterViewInit {
 
     formBuilderEvents = new Subject<FormBuilderEvent>();
     fbConfiguration = new FBConfiguration();
-    isFormEditMode = this.dataStore.getEditModeForOPA();
+    isFormEditMode = this.dataStore.isFormEditable();
     opa: OPA = new OPA();
     $subscriptions: Subscription[] = [];
+    formBuilderId: any;
+    disclosureId: any;
 
-    constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService) {
+    constructor(public _opa: OpaService, private dataStore: DataStoreService, private _commonService: CommonService, private _route: ActivatedRoute) {
     }
 
     ngOnInit() {
         this.getDataFromStore();
         this.listenToDataChange();
+        window.scrollTo(0,0);
     }
 
     ngAfterViewInit(): void {
-        // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
-        this.fbConfiguration.moduleItemCode = '23';
-        this.fbConfiguration.moduleSubItemCode = '0';
-        this.fbConfiguration.moduleItemKey = this.opa.opaDisclosure.opaDisclosureId.toString();
-        this.fbConfiguration.moduleSubItemKey = '0';
-        this.fbConfiguration.documentOwnerPersonId = this.opa.opaDisclosure.personId;
-        this.fbConfiguration.formBuilderId = this.opa.opaDisclosure.opaFormBuilderDetails[0].formBuilderId;
-        this._opa.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
-        this.updateFormEditMode();
+            // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
+            this.fbConfiguration.moduleItemCode = '23';
+            this.fbConfiguration.moduleSubItemCode = '0';
+            this.fbConfiguration.moduleItemKey = this.opa.opaDisclosure.opaDisclosureId.toString();
+            this.fbConfiguration.moduleSubItemKey = '0';
+            this.fbConfiguration.documentOwnerPersonId = this.opa.opaDisclosure.personId;
+            this.fbConfiguration.formBuilderId = this.opa.opaDisclosure.opaFormBuilderDetails[0].formBuilderId;
+            this._opa.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
+            this.updateFormEditMode();
     }
 
     triggerSave() {
@@ -52,7 +58,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     }
 
     updateFormEditMode() {
-        const latestIsFormEditMode = this.dataStore.getEditModeForOPA();
+        const latestIsFormEditMode = this.dataStore.isFormEditable();
         this._opa.formBuilderEvents.next({eventType: 'IS_EDIT_MODE', data: latestIsFormEditMode});
         this.isFormEditMode = latestIsFormEditMode;
     }
@@ -74,4 +80,33 @@ export class FormComponent implements OnInit, AfterViewInit {
         this._opa.isShowCommentNavBar = true;
     }
 
+    formBuilderDataChanged(formEvent: any) {
+        switch (formEvent) {
+            case 'CHANGED':
+                return this._opa.isFormBuilderDataChangePresent = true;
+            case 'SAVE_COMPLETE': {
+                if(this._opa.isFormBuilderDataChangePresent) {
+                    this._opa.triggerSaveComplete.next(true);
+                }
+                return this._opa.isFormBuilderDataChangePresent = false;
+            }
+            case 'NEW_SFI':
+                this.loadOPA();
+                break;
+            case 'ERROR':
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                break;
+            default: break;
+        }
+    }
+
+    loadOPA() {
+        this.$subscriptions.push(this._opa.loadOPA(this.opa.opaDisclosure.opaDisclosureId).subscribe((data) => {
+            this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: data});
+        }));
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+    }
 }

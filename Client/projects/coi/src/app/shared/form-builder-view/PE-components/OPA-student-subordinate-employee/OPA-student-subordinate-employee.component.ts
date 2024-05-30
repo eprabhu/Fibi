@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { StudentSubordinateEmployee, StudentSubordinatePE } from './interface';
-import { ElasticConfigService } from 'projects/fibi/src/app/common/services/elastic-config.service';
 import { getEndPointForEntity, getEndPointOptionsForCountry } from '../../search-configurations';
 import { FormBuilderService } from '../../form-builder.service';
 import { CommonService } from 'projects/coi/src/app/common/services/common.service';
 import { OPAStudentSubordinateService } from './OPA-student-subordinate.service';
+import { ElasticConfigService } from 'projects/coi/src/app/common/services/elastic-config.service';
 
 @Component({
     selector: 'app-OPA-student-subordinate-employee',
@@ -43,7 +43,7 @@ export class OPAStudentSubordinateEmployeeComponent implements OnInit {
     ngOnInit() {
         this.setSearchOptions();
         this.getOpaPersonType();
-        this.generateId(); 
+        this.generateId();
         this.listenForExternalEvents();
     }
 
@@ -63,7 +63,7 @@ export class OPAStudentSubordinateEmployeeComponent implements OnInit {
             this.opaPersonTypeList = response || [];
         }));
     }
-    
+
     private setSearchOptions() {
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
@@ -117,6 +117,7 @@ export class OPAStudentSubordinateEmployeeComponent implements OnInit {
         this.studentSubordinateData.actionType = this.editIndex == -1 ? 'SAVE' : 'UPDATE';
         try {
             this.childEvents.emit({action: 'ADD', data: this.studentSubordinateData});
+            this.emitEditOrSaveAction(this.editIndex == -1 ? 'ADD' : 'UPDATE', this.studentSubordinateData);
         } catch (err) {
             if ((err.status === 405)) {
                 this.childEvents.emit({action: 'ADD', data: this.studentSubordinateData});
@@ -128,6 +129,10 @@ export class OPAStudentSubordinateEmployeeComponent implements OnInit {
 
     onSelectEntity(event: any) {
         this.studentSubordinateData.personEntityId = event ? event.entityId : null;
+    }
+
+    emitEditOrSaveAction(actionPerformed, event) {
+        this._formBuilder.$formBuilderActionEvents.next({action: actionPerformed, actionResponse: event, component: this.componentData});
     }
 
 }

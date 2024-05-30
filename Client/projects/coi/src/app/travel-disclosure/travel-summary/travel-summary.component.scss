@@ -7,12 +7,8 @@
 .right-container{
     margin-top: 6px;
     display: inline-block;
-    width: 24%;
+    width: 25%;
     position: fixed;
     margin-left: 3px;
-}
-
-
-@media (min-width: 1600px) {
-  .right-container {width: 388px;}
+    padding-right: 2rem !important;
 }

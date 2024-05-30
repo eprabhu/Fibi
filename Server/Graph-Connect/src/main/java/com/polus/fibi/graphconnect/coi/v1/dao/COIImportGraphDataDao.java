@@ -28,6 +28,8 @@ import com.polus.fibi.graphconnect.repository.CountryRepository;
 import com.polus.fibi.graphconnect.repository.EntityRepository;
 import com.polus.fibi.graphconnect.repository.PersonRepository;
 
+
+
 @Repository
 public class COIImportGraphDataDao {
 
@@ -97,23 +99,30 @@ public class COIImportGraphDataDao {
 		var start = Instant.now();
 		logger.debug("--------- Import Entity: starts at ------------ " + start);
 
-		String query = "SELECT \r\n" + "CONCAT('ENT',t1.ENTITY_ID) as ID,\r\n" + "t1.ENTITY_NUMBER,\r\n"
-				+ "t1.ENTITY_NAME as NAME,\r\n" + "CASE \r\n"
-						+ "        WHEN t1.IS_ACTIVE = 'Y' THEN 'Active'\r\n"
-						+ "        WHEN t1.IS_ACTIVE = 'N' THEN 'Inactive' END as STATUS,\r\n" + "t3.DESCRIPTION as TYPE, t5.DESCRIPTION as RISK,\r\n"
-				+ "t1.COUNTRY_CODE,\r\n" + "t4.COUNTRY_NAME,\r\n" + "t1.WEB_URL\r\n" + "FROM entity t1\r\n"
+		String query = "SELECT  CONCAT('ENT',t1.ENTITY_ID) as ID, t1.ENTITY_NUMBER,\r\n"
+				+ "t1.ENTITY_NAME as NAME, CASE \r\n"
+				+ "        WHEN t1.IS_ACTIVE = 'Y' THEN 'Active'\r\n"
+				+ "        WHEN t1.IS_ACTIVE = 'N' THEN 'Inactive' END as STATUS, \r\n"
+				+ "t3.DESCRIPTION as TYPE, \r\n"
+				+ "t5.DESCRIPTION as RISK,\r\n"
+				+ "t1.COUNTRY_CODE, t4.COUNTRY_NAME, t1.WEB_URL,\r\n"
+				+ "CASE\r\n"
+				+ "    WHEN (select count(s1.ENTITY_NUMBER) from entity_relationship s1 where s1.ENTITY_NUMBER = t1.ENTITY_NUMBER and s1.NODE_TYPE_CODE = '2') > 0 THEN \"Y\"\r\n"
+				+ "    ELSE 'N'\r\n"
+				+ "END AS IS_SPONSOR\r\n"
+				+ "FROM entity t1\r\n"
 				+ "inner join entity_risk_category t5 on t1.RISK_CATEGORY_CODE = t5.RISK_CATEGORY_CODE\r\n"
 				+ "inner join entity_type t3 on t1.entity_type_code = t3.entity_type_code\r\n"
 				+ "left outer join country t4 on t1.COUNTRY_CODE = t4.COUNTRY_CODE\r\n"
 				+ "WHERE t1.VERSION_NUMBER IN  (select MAX(s1.VERSION_NUMBER) from entity s1 where s1.ENTITY_NUMBER = t1.ENTITY_NUMBER and s1.VERSION_STATUS = 'ACTIVE' )";
 
-		int pageSize = 1000; // Number of records to fetch in each batch
+		int pageSize = 4000; // Number of records to fetch in each batch
 
 		// Get the total count of records for pagination
 		int totalCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM entity", Integer.class);
 
 		// Create a thread pool for parallel processing
-		ExecutorService executorService = Executors.newFixedThreadPool(5);
+		ExecutorService executorService = Executors.newFixedThreadPool(8);
 
 		// Create batches using pagination and process them in parallel
 		List<CompletableFuture<Void>> futureList = Stream.iterate(0, i -> i + pageSize)
@@ -139,7 +148,9 @@ public class COIImportGraphDataDao {
 
 			COIEntity entity = COIEntity.builder().id(resultSet.getString("ID"))
 					.entityNumber(resultSet.getString("ENTITY_NUMBER")).entityName(resultSet.getString("NAME"))
-					.status(resultSet.getString("STATUS")).type(resultSet.getString("TYPE"))
+					.status(resultSet.getString("STATUS"))
+					.isSponsor(resultSet.getString("IS_SPONSOR"))
+					.type(resultSet.getString("TYPE"))
 					.risk(resultSet.getString("RISK"))
 					.countryName(resultSet.getString("COUNTRY_NAME")).countryCode(resultSet.getString("COUNTRY_CODE"))
 					.build();
@@ -221,7 +232,7 @@ public class COIImportGraphDataDao {
 	}
 
 	private void linkEntityCountry() {
-		String cypherQuery = "MATCH (a:Entity) , (b:Country) WHERE a.country_code = b.country_code MERGE (a)-[r:BELONGS_TO]->(b)  ";
+		String cypherQuery = "MATCH (a:Entity) , (b:Country) WHERE a.country_code = b.country_code MERGE (a)-[r:COUNTRY]->(b)  ";
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
 	}
@@ -333,12 +344,12 @@ public class COIImportGraphDataDao {
 	}
 
 	private void deleteCOIRelationships() {
-		String cypherQuery = "MATCH ()-[r:BELONGS_TO | CITIZEN_OF | ASSOCIATED_ENTITIES | AFFILIATED_ENTITIES]->() DELETE r";
+		String cypherQuery = "MATCH ()-[r:COUNTRY | CITIZEN_OF | ASSOCIATED_ENTITIES | AFFILIATED_ENTITIES]->() DELETE r";
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 	}
 
 	private void deleteCOINodes() {
-		String cypherQuery = "MATCH (n:Country:Person:COIEntity) DETACH DELETE n";
+		String cypherQuery = "MATCH (n) WHERE n:Country OR n:Person OR n:Entity DETACH DELETE n";
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 	}
 }

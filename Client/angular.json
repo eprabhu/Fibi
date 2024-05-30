@@ -163,8 +163,9 @@
               "projects/coi/src/assets"
             ],
             "styles": [
-              "projects/fibi/src/assets/css/style.css",
               "projects/coi/src/assets/css/bootstrap.min.css",
+              "projects/coi/src/assets/css/sass/styles.scss",
+              "projects/coi/src/assets/css/formBuilderStyle.scss",
               "projects/coi/src/styles.scss",
               "node_modules/material-icons/iconfont/material-icons.scss",
               "projects/fibi/src/assets/css/font-awesome.min.css",

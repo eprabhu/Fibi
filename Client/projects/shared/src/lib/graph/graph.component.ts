@@ -59,6 +59,7 @@ export class GraphComponent implements OnInit {
         type: ''
     };
     $debounceEventForTooltip = new Subject();
+    entitySponsorImage = '/assets/images/g_entity_sponsor.png';
 
     constructor(public graphDataService: DataService) { }
 
@@ -150,8 +151,8 @@ export class GraphComponent implements OnInit {
     }
 
     getImageURL(node) {
-        if (node.isGrantSponsor && node.isGrantSponsor === 1 ) {
-            return `url(#ESponsor)`;
+        if ( node.is_sponsor == 'Y') {
+            return 'url(#ESponsor)';
         }
         return `url(#${node.label})`;
     }
@@ -243,7 +244,6 @@ export class GraphComponent implements OnInit {
 
     addNodes(node) {
         if (!this.graph.nodes.find(N => N.elementId === node.elementId)) {
-            node['id'] = node['elementId'];
             this.graph.nodes.push(node);
             this.drawGraph();
         }
@@ -329,7 +329,6 @@ export class GraphComponent implements OnInit {
             this.graph = { nodes: [], links: [] };
             this.eventHistory.forEach(E => this.addNodesAndLinks(this.eventData[E.eventId].nodes, this.eventData[E.eventId].links));
         }
-        console.log(this.selectedRelations);
         this.selectedEventIndex = this.eventHistory.length - 1;
         this.hideBasicDetailsPopup();
     }

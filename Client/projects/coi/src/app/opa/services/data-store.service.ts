@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
 import {OpaDisclosure} from '../opa-interface';
+import {OPA_REVIEW_STATUS} from '../../app-constants';
+import {CommonService} from '../../common/services/common.service';
 
 export class StoreData {
     opaDisclosure = new OpaDisclosure();
@@ -9,14 +11,13 @@ export class StoreData {
 @Injectable()
 export class DataStoreService {
 
-    constructor() { }
+    constructor(private _commonService: CommonService) { }
 
     private storeData: StoreData = new StoreData();
     disclosureStatus: any;
     dataChanged = false;
 
     dataEvent = new Subject();
-    updateTimestampEvent  = new Subject();
 
     getData(keys?: Array<string>): any {
         if (!keys) {
@@ -54,12 +55,17 @@ export class DataStoreService {
         return (typeof nativeCloneFunction === 'function') ? nativeCloneFunction(obj) : JSON.parse(JSON.stringify(obj));
     }
 
-    getEditModeForOPA(): boolean {
+    isFormEditable(): boolean {
         if (this.storeData.opaDisclosure.opaDisclosureId) {
-          return ['1', '5', '6'].includes(this.storeData.opaDisclosure.reviewStatusType.reviewStatusCode);
+          return [OPA_REVIEW_STATUS.PENDING, OPA_REVIEW_STATUS.RETURNED, OPA_REVIEW_STATUS.WITHDRAWN]
+              .includes(this.storeData.opaDisclosure.reviewStatusType.reviewStatusCode)
+          && this.isLoggedInUser(this.storeData.opaDisclosure.personId);
         } else {
             return false;
         }
     }
 
+    isLoggedInUser(personId: string) {
+        return this._commonService?.getCurrentUserDetail('personId') === personId;
+    }
 }

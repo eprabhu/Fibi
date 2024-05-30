@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, 
 @Component({
   selector: 'app-time-picker',
   templateUrl: './app-time-picker.component.html',
-  styleUrls: ['./app-time-picker.component.css']
+  styleUrls: ['./app-time-picker.component.scss']
 })
 export class AppTimePickerComponent implements OnInit {
 

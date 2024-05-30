@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
 import {BehaviorSubject, of, Subject} from 'rxjs';
 import { FormBuilderEvent } from '../../shared/form-builder-view/form-builder-interface';
+import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 
 @Injectable()
 export class OpaService {
@@ -16,6 +17,10 @@ export class OpaService {
     isEnableReviewActionModal = false;
     formBuilderEvents = new Subject<FormBuilderEvent>();
     actionButtonId = null;
+    currentOPAReviewForAction: any;
+    concurrentUpdateAction = '';
+    isFormBuilderDataChangePresent = false;
+    triggerSaveComplete = new Subject<boolean>()
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) {
@@ -58,11 +63,17 @@ export class OpaService {
         return this._http.patch(`${this._commonService.opaUrl}/complete/${OPADisclosureID}/${OPADisclosureNumber}`, {});
     }
 
-    startReviewerReview(OPAReviewId) {
-        return this._http.patch(`${this._commonService.opaUrl}/review/start/${OPAReviewId}`, {});
+    startReviewerReview(params: any) {
+        return this._http.patch(`${this._commonService.opaUrl}/review/start`, params);
     }
-    completeReviewerReview(OPAReviewId) {
-        return this._http.patch(`${this._commonService.opaUrl}/review/complete/${OPAReviewId}`, {});
+
+    completeReviewerReview(params: any) {
+        return this._http.patch(`${this._commonService.opaUrl}/review/complete`, params);
+    }
+
+
+    validateForm(configuration: any) {
+        return this._http.post(this._commonService.formUrl + '/formbuilder/validateForm', configuration);
     }
 
 }

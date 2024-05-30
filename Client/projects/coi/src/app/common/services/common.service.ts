@@ -3,9 +3,11 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
-import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {Toast} from 'bootstrap';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
+import { Router } from '@angular/router';
+import { ElasticConfigService } from './elastic-config.service';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
@@ -69,7 +71,7 @@ export class CommonService {
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
 
-    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
+    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService,private _router: Router) {
     }
 
     /**
@@ -125,6 +127,7 @@ export class CommonService {
         this.elasticPassword = configurationData.elasticPassword;
         this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
+        this.elasticConfigService.indexValue = configurationData.indexValue;
         this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
         this.enableGraph = configurationData.enableGraph;
     }
@@ -144,7 +147,7 @@ export class CommonService {
     }
 
     loginWithCurrentUser() {
-        return this._http.post(this.baseUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
+        return this._http.post(this.formUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
     }
 
     /**
@@ -286,6 +289,23 @@ export class CommonService {
         }
     }
 
+    getDisclosureConflictBadgeForSlider(statusCode: string) {
+        switch (String(statusCode)) {
+            case '1':
+                return 'green-badge-for-slider';
+            case '2':
+            case '5':
+                return 'brown-badge-for-slider';
+            case '3':
+            case '6':
+                return 'red-badge-for-slider';
+            case '4':
+                return 'green-badge-for-slider';
+            default:
+                return 'yellow-badge-for-slider';
+        }
+    }
+
     getReviewStatusBadge(statusCode: string): string {
         switch (statusCode) {
             case '1':
@@ -392,6 +412,19 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
       } else {
         return rightsArray.some((right) => this.rightsArray.includes(right));
       }
+    }
+
+    getPersonLeadUnitDetails(unitData: any): string {
+        return getPersonLeadUnitDetails(unitData);
+    }
+
+    redirectionBasedOnRights() {
+        this.fetchPermissions(true).then((res) => {
+			const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+				|| this.isCoiReviewer;
+			const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
+			this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
+		});
     }
 
 }

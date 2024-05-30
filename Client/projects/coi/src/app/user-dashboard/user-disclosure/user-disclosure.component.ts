@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
@@ -12,9 +12,9 @@ import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
+import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -36,7 +36,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         isDownload: false,
         filterType: 'ALL',
         pageNumber: 20,
-        currentPage: 1
+        currentPage: 1,
+        property2: ''
     };
     completeDisclosureList: UserDisclosure[] = [];
     dashboardCount: any;
@@ -75,6 +76,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     completeDisclosureListCopy: any = []; /* Excat copy of original list which is to perform every array operations */
     DATA_PER_PAGE: number = 20; /* Number of data to be shown in single page */
     paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
+    sliderElementId: string = '';
+    isPurposeRead = {};
+    $debounceEventForTravelDashboard = new Subject();
+    travelPaginationCount: number;
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,
@@ -82,25 +87,33 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                 public headerService: HeaderService,
                 private _router: Router) {
     }
-
     ngOnInit() {
         this.loadDashboard();
+        this.getTravelSearchList();
         this.getDashboardBasedOnTab();
         this.loadDashboardCount();
+        window.scrollTo(0,0);
     }
 
-    loadDashboard() {
+    private getTravelSearchList(): void {
+        this.$subscriptions.push(this.$debounceEventForTravelDashboard.pipe(debounce(() => interval(800))).subscribe((data: any) => {
+            this.$fetchDisclosures.next();
+        }));
+    }
+
+    private loadDashboard(): void {
         this.isLoading = true;
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
             switchMap(() => {
                 this.isLoading = true;
+                this.dashboardRequestObject.property2 = this.currentSelected.tab === 'TRAVEL_DISCLOSURES' ? this.searchText?.trim() : '';
                 return this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject)
             })).subscribe((res: any) => {
                 this.result = res;
                 if (this.result) {
                     this.completeDisclosureList = this.getDashboardList();
                     this.completeDisclosureListCopy = this.paginationArray = JSON.parse(JSON.stringify(this.completeDisclosureList));
-                    this.getArrayListForPagination();
+                    this.currentSelected.tab === 'TRAVEL_DISCLOSURES' ? this.travelPaginationCount = this.result.totalServiceRequest : this.getArrayListForPagination();
                     this.loadingComplete();
                 }
             }), (err) => {
@@ -138,7 +151,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         return arrayList.sort((a, b) => b[sortByParam] - a[sortByParam]);
     }
 
-    getDashboardBasedOnTab() {
+    private getDashboardBasedOnTab(): void {
         if (this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
             this.getDisclosureHistory();
         } else {
@@ -152,8 +165,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      * @returns {any}
      * The function will trigger for the close button in the search field
      */
-    resetAndFetchDisclosure() {
+    private resetAndFetchDisclosure(): void {
         this.searchText = '';
+        this.travelPaginationCount = 0;
         this.completeDisclosureList = [];
         this.getDashboardBasedOnTab();
     }
@@ -167,13 +181,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      * For page 1 => data will shows from index 0 to index 19.
      * For page 2 => data will shows from index 20 to index 39 and so on
      */
-    actionsOnPageChange(event: number) {
+    actionsOnPageChange(event: number): void {
         if (this.dashboardRequestObject.currentPage != event) {
             this.dashboardRequestObject.currentPage = event;
-            this.getArrayListForPagination();
+            this.currentSelected.tab === 'TRAVEL_DISCLOSURES' ? this.$fetchDisclosures.next() : this.getArrayListForPagination();
         }
     }
-
 
     /**
      * Description
@@ -212,19 +225,37 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         return (this.DATA_PER_PAGE * this.dashboardRequestObject.currentPage) - 1;
     }
 
+    /**
+     * This function handles the filtering of disclosure lists based on the search word.
+     * 
+     * Note:
+     * - For the 'TRAVEL_DISCLOSURES' tab, pagination and search are managed by the backend,
+     *   so a debounce event is triggered to handle this.
+     * - For all other tabs, the search and pagination is performed on the frontend by filtering the local
+     *   completeDisclosureListCopy array.
+     * 
+     * The pagination is reset to the first page whenever a search is initiated.
+     */
     getFilteredDisclosureListForSearchWord(): any {
         this.dashboardRequestObject.currentPage = 1; /* To set the pagination while search */
-        this.completeDisclosureList = this.completeDisclosureListCopy.filter(disclosure => {
-            for (const value in disclosure) {
-                if (this.isExistSearchWord(disclosure, value)) { return true; }
-            }
-            return false;
-        });
-        this.resetDisclosureCopy();
+        if (this.currentSelected.tab === 'TRAVEL_DISCLOSURES') {
+            this.$debounceEventForTravelDashboard.next();
+        } else {
+            this.completeDisclosureList = this.completeDisclosureListCopy.filter(disclosure => {
+                for (const value in disclosure) {
+                    if (this.isExistSearchWord(disclosure, value)) { return true; }
+                }
+                return false;
+            });
+            this.resetDisclosureCopy();
+        }
     }
 
-    isExistSearchWord(disclosure: any, value: string): boolean {
-        return disclosure[value] && disclosure[value].toString().toLowerCase().includes(this.searchText.toLowerCase());
+    private isExistSearchWord(disclosure: any, value: string): boolean {
+        if (disclosure[value]?.unitDetail) {
+            return disclosure[value].unitDetail.toString().trim().toLowerCase().includes(this.searchText.trim().toLowerCase());
+        }
+        return disclosure[value] && disclosure[value].toString().trim().toLowerCase().includes(this.searchText.trim().toLowerCase());
     }
 
     resetDashboardAfterSearch(): void {
@@ -239,11 +270,11 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      * @returns {any}
      * The function is to set the pagination array separately while searching with a keyword
      */
-    resetDisclosureCopy(): void {
+    private resetDisclosureCopy(): void {
         this.paginationArray = this.completeDisclosureList;
     }
 
-    loadDashboardCount() {
+    private loadDashboardCount() {
         this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
             this.dashboardCount = res;
             this.isShowFilterAndSearch = !!res?.inProgressDisclosureCount;
@@ -251,7 +282,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         });
     }
 
-    setIsShowCreateFlag() {
+    private setIsShowCreateFlag() {
         if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount
             && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
             !this.completeDisclosureList.length &&
@@ -384,7 +415,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    getDisclosureHistory() {
+    private getDisclosureHistory() {
         this.isLoading = true;
         this.completeDisclosureList = [];
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({ 'filterType': this.currentSelected.filter }).subscribe((data: any) => {
@@ -393,7 +424,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }));
     }
 
-    getAllDisclosureHistories(data: any): any {
+    private getAllDisclosureHistories(data: any): any {
         const DISCLOSURE_HISTORY = data.disclosureHistoryDtos || [];
         const OPA_HISTORY = data.opaDashboardDtos || [];
         const MERGED_LIST = [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
@@ -407,15 +438,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
+        this.sliderElementId = `user-disclosure-entity-${this.entityId}`;
         setTimeout(() => {
-            openSlider('disclosure-entity-view-2-slider');
+            openCoiSlider(this.sliderElementId);
         });
     }
 
     validateSliderClose() {
-        closeSlider('disclosure-entity-view-2-slider');
         setTimeout(() => {
             this.showSlider = false;
+            this.entityId = null;
+            this.sliderElementId = ''; 
         }, 500);
     }
 
@@ -425,7 +458,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             disclosure?.fcoiTypeCode === '1');
     }
 
-    fcoiDatesRemaining() {
+    private fcoiDatesRemaining() {
         this.hasPendingFCOI = false;
         this.hasActiveFCOI = false;
         this.hasActiveOPA = false;
@@ -484,6 +517,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             default:
                 return '';
         }
+    }
+
+    readMorePurpose(id: number, flag: boolean): void {
+        this.isPurposeRead[id] = !flag;
     }
 
 }

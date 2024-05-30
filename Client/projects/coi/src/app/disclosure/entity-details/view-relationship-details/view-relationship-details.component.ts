@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -10,19 +10,19 @@ import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } f
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
 import { isEmptyObject, scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { heightAnimation } from '../../../common/utilities/animations';
 
 @Component({
     selector: 'app-view-relationship-details',
     templateUrl: './view-relationship-details.component.html',
     styleUrls: ['./view-relationship-details.component.scss'],
-    animations: [slideInOut]
+    animations: [slideInOut, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ViewRelationshipDetailsComponent implements OnDestroy {
 
     @Input() entityId: any;
     @Input() entityNumber: any;
     @Input() isTriggeredFromSlider = false;
-    @Input() entityDetails: any = {};
 
     @Output() closeEntityInfoCard: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -43,6 +43,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     entityVersionList: any = {};
     changedEntityId: any;
     selectedVersionEntityId: any;
+    entityDetails: any = {};
     involvementDate = {
         involvementStartDate: null,
         involvementEndDate: null
@@ -50,6 +51,8 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     additionalDetails: any = {
         sponsorsResearch: false
     };
+    isCardExpanded = true;
+    isUserCollapse = false;
 
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
@@ -71,7 +74,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     checkForEditMode() {
-        if(this._route.snapshot.queryParamMap.get('mode') == 'E') {
+        if(this._route.snapshot.queryParamMap.get('mode') == 'E' && this.entityDetailsServices.canMangeSfi) {
             return true;
         } else if (this.isTriggeredFromSlider) {
             return false;
@@ -156,6 +159,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
                 if(canLoadFirstRelation) {
                     this.triggerOpenQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
                 }
+                this.getSfiEntityDetails();
                 resolve(true);
             }, _error => {
                 if (_error.status != 403) {
@@ -263,6 +267,13 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         } else {
             this.isEnableActivateInactivateSfiModal = false;
         }
+        this.updateHistoryTab();
+    }
+
+    updateHistoryTab() {
+        if (this.entityDetailsServices.activeTab === 'HISTORY') {
+            this.entityDetailsServices.$updateHistory.next(true);
+        }
     }
 
     updateNewStatus(event) {
@@ -278,7 +289,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     updateEditMode() {
-        this.isEditMode = (this.entityDetailsServices.canMangeSfi && !this.relationshipsDetails.isFormCompleted && this.relationshipsDetails.versionStatus != 'INACTIVE');
+        this.isEditMode = !this.isTriggeredFromSlider && this.entityDetailsServices.canMangeSfi && !this.relationshipsDetails.isFormCompleted && !['INACTIVE', 'ARCHIVE'].includes(this.relationshipsDetails.versionStatus);
     }
 
     triggerOpenQuestionnaire(questionnaire) {
@@ -306,7 +317,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
             actionUserId: this.commonService.getCurrentUserDetail('personId'),
             actionPersonName: this.commonService.getCurrentUserDetail('fullName'),
             questionnaireNumbers: [],
-            questionnaireMode: this.isEditMode ? 'ACTIVE_ANSWERED_UNANSWERED' : 'ANSWERED'
+            questionnaireMode: this.isEditMode ? 'ACTIVE_ANSWERED_UNANSWERED' : this.relationshipsDetails.isFormCompleted ? 'ANSWERED' : 'ACTIVE_ANSWERED_UNANSWERED'
         }));
     }
 
@@ -383,14 +394,17 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
                 this.relationshipsDetails.updateTimestamp = params.ANS_UPDATE_TIMESTAMP;
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Relationship saved successfully `);
             } else {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in saving relationship`);
+                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in saving relationship. Please try again.`);
             }
         }));
     }
 
-    viewEntityDetails() {
-        this.closeEntityInfoCard.emit(false);
-        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.entityId } });
+    viewEntityDetails(event) {
+        if(this.showViewButton()) {
+            this.closeEntityInfoCard.emit(false);
+            document.body.removeAttribute("style");
+            this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.entityId } });
+        }
     }
 
     modifySfi() {
@@ -474,6 +488,26 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
 
     showViewButton() {
         return  this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY']) && !['entity-management/entity-details'].some(ele => this._router.url.includes(ele))
+    }
+
+    private getSfiEntityDetails(): void {
+        this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
+            this.entityDetails = res.coiEntity;
+        }, _error => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }));
+    }
+
+    collapseHeader() {
+        this.isCardExpanded = !this.isCardExpanded;
+        this.isUserCollapse = !this.isUserCollapse;
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = window.innerWidth > 1399;
+        }
     }
 
 }

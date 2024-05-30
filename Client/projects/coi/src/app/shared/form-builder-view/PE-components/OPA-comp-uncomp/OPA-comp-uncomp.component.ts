@@ -70,6 +70,7 @@ export class OPACompUncompComponent implements OnInit {
     currentFilter: 'ALL' | 'INCOMPLETE' | 'COMPLETE' | 'INACTIVE' = 'ALL';
     eventType: 'LINK'| 'NEW' =  'NEW';
     relationshipTypeCache = {};
+    isEntitySelected = false;
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
 
@@ -115,6 +116,7 @@ export class OPACompUncompComponent implements OnInit {
             this.setPersonEntityId(response);
             this.setEntityInfoForCompUnComp();
             this.childEvents.emit({action: 'ADD', data: this.compUnCompData});
+            this.emitEditOrSaveAction('ADD', this.compUnCompData);
         } catch (err) {
             if ((err.status === 405)) {
                 this.setEntityInfoForCompUnComp();
@@ -134,25 +136,34 @@ export class OPACompUncompComponent implements OnInit {
         delete this.compUnCompData.updateTimestamp;
         this.compUnCompData.actionType = 'SAVE';
         this.childEvents.emit({action: 'UPDATE', data: this.compUnCompData});
+        this.emitEditOrSaveAction('UPDATE', this.compUnCompData);
     }
 
     deleteEntity() {
         delete this.compUnCompData.updateTimestamp;
         this.compUnCompData.actionType = 'DELETE';
         this.childEvents.emit({action: 'DELETE', data: this.compUnCompData});
+        this.emitEditOrSaveAction('DELETE', this.compUnCompData);
     }
 
     entitySelected(entity: any): void {
         if (entity) {
             const index = this.checkDuplicate(entity.personEntityId);
-        this.isDuplicate = index === -1 || index === this.editIndex ?  false : true;
-        this.entityDetails = entity;
+            this.isDuplicate = index === -1 || index === this.editIndex ? false : true;
+            this.entityDetails = entity;
+            this.isEntitySelected = true;
+        } else {
+            this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
+            this.entityDetails = {};
+            this.isDuplicate = false;
+            this.isEntitySelected = false;
         }
     }
 
     private setPersonEntityId(response): void {
         if (!this.entityDetails.personEntityId) {
             this.entityDetails.personEntityId = response.personEntityId;
+            this.emitEditOrSaveAction('NEW_SFI', this.compUnCompData);
         }
     }
 
@@ -217,7 +228,7 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     getClassForStatus(versionStatus, isFormCompleted) {
-        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';         
+        return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 't-active-ribbon' : 't-incomplete-ribbon' : 't-inactive-ribbon';
     }
 
     getClassForStatusInModal(versionStatus, isFormCompleted) {
@@ -228,7 +239,7 @@ export class OPACompUncompComponent implements OnInit {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'status-complete' : 'status-incomplete' : 'status-inactive';
     }
 
-    getDescriptionForStatus(versionStatus, isFormCompleted) { 
+    getDescriptionForStatus(versionStatus, isFormCompleted) {
         return versionStatus === 'ACTIVE' || versionStatus == 'ARCHIVE' ? (isFormCompleted == 'Y' || isFormCompleted === true) ? 'Complete' : 'Incomplete' : 'Inactive';
     }
 
@@ -292,15 +303,21 @@ export class OPACompUncompComponent implements OnInit {
     }
 
     getEntityRelationTypePills(validPersonEntityRelType: string) {
-        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+        if(validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
+            });
             return this.relationshipTypeCache[validPersonEntityRelType];
         }
-        const entityRelTypes = validPersonEntityRelType.split(':;:');
-        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
-            const relationshipType = entity.split(':');
-            return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
-        });
-        return this.relationshipTypeCache[validPersonEntityRelType];
+    }
+
+    emitEditOrSaveAction(actionPerformed, event) {
+        this._formBuilder.$formBuilderActionEvents.next({action: actionPerformed, actionResponse: event, component: this.componentData});
     }
 
 }

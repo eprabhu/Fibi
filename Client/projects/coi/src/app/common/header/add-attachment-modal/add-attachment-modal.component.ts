@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { AddAttachmentModalService } from './add-attachment-modal.service';
 import { CommonService } from '../../services/common.service';
@@ -28,7 +28,11 @@ export class AddAttachmentModalComponent implements OnInit {
 
     ngOnInit() {
         this.getAttachmentType();
-        openModal('addAttachmentModal');
+        openModal('addAttachmentModal', {
+            backdrop: 'static',
+            keyboard: false,
+            focus: true
+          });
     }
 
     private getAttachmentType(): void {
@@ -123,4 +127,10 @@ export class AddAttachmentModalComponent implements OnInit {
         subscriptionHandler(this.$subscriptions);
     }
 
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.clearAttachments();
+        }
+    }
 }

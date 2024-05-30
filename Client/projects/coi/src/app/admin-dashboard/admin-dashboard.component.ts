@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject, hideModal,
@@ -21,7 +20,8 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
-import {openSlider, closeSlider, closeCommonModal} from '../common/utilities/custom-utilities';
+import {openSlider, closeSlider, closeCommonModal, openCoiSlider} from '../common/utilities/custom-utilities';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -90,7 +90,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     sortCountObj: SortCountObj;
     clearField: string;
     countryClearField: string;
-    isHover: [] = [];
+    isHover: boolean[] = [];
     isViewAdvanceSearch = true;
     adminData: any;
     fcoiTypeCode: any;
@@ -106,7 +106,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     showSlider = false;
     entityId: any;
     disclosureSortSections = [
-        { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
         { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
         { variableName: 'disclosureCategoryType', fieldName: 'Disclosure Type' },
         { variableName: 'disclosureStatus', fieldName: 'Disclosure Status' },
@@ -132,6 +131,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isFcoiReadMore = false;
     isPurposeRead = false;
     isShowOptions = false;
+    sliderElementId = '';
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -243,7 +243,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
-        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ALL');
+        this.entitySearchOptions = this._elasticConfig.getElasticForEntity();
     }
 
     setAdvanceSearch() {
@@ -445,6 +445,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
+    formatTravellerTypes(travellerTypes: string): string {
+        return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
+    }
+
     performAdvanceSearch() {
         this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
@@ -630,8 +634,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     selectedEvent(event) {
-        this.localCOIRequestObject.property8 = event ? event.entityId : null;
-        this.localSearchDefaultValues.entityName = event ? event.entityName : null;
+        this.localCOIRequestObject.property8 = event ? event.entity_id : null;
+        this.localSearchDefaultValues.entityName = event ? event.entity_name : null;
     }
 
     selectedCountryEvent(event) {
@@ -823,9 +827,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     getReviewerStatus(statusCode) {
         switch (statusCode) {
-            case '1': return 'info';
+            case '3': return 'info';
             case '2': return 'success';
-            case '3': return 'warning';
+            case '1': return 'warning';
             default: return 'danger';
         }
     }
@@ -833,15 +837,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
+        this.sliderElementId = `admin-dashboard-entity-slider-${this.entityId}`;
         setTimeout(() => {
-            openSlider('admin-dashboard-entity-slider');
+            openCoiSlider(this.sliderElementId);
         });
     }
 
     validateSliderClose() {
-        closeSlider('admin-dashboard-entity-slider');
         setTimeout(() => {
             this.showSlider = false;
+            this.entityId = null;
+            this.sliderElementId = '';
 		}, 500);
 	  }
 
@@ -884,7 +890,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     // The function is used for closing nav dropdown at mobile screen
     offClickMainHeaderHandler(event: any) {
-        if (window.innerWidth < 1093) {
+        if (window.innerWidth < 1200) {
             const ELEMENT = <HTMLInputElement>document.getElementById('navbarResponsive');
             if (document.getElementById('navbarResponsive').classList.contains('show')) {
                 document.getElementById('navbarResponsive').classList.remove('show');
@@ -902,5 +908,5 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     selectedItemCount() {
        return this.selectedDisclosures.filter(e => e).length;
     }
-    
+
 }

@@ -1,7 +1,7 @@
 import { subscriptionHandler } from './../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormBuilderEvent, FBConfiguration } from './form-builder-interface';
+import { FormBuilder, FormBuilderEvent, FBConfiguration, FBActionEvent } from './form-builder-interface';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilderService } from './form-builder.service';
 
@@ -32,6 +32,7 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
         this.builderStatus.emit('READY');
+        this.listenToFormActions();
     }
 
     ngOnDestroy(): void {
@@ -50,6 +51,9 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
                     this.saveEventForChildComponent.next({eventType: 'CHANGE_FLAG', data: false});
                 } else if (E.eventType === 'IS_EDIT_MODE') {
                     this.isFormEditable = E.data;
+                }else if(E.eventType === 'BLANK_FORM'){
+                    this.fbConfiguration = E.data;
+                    this.getFormBuilderDataForBlankForm();
                 }
             }));
         }
@@ -58,6 +62,14 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
     private getFormBuilderData(): void {
         this._formBuilderService.getFormBuilderData(this.fbConfiguration).subscribe((data: any) => {
             this.formBuilderData = data;
+        }, (_error: any) => {
+            this.builderStatus.emit('ERROR');
+        });
+    }
+
+    private getFormBuilderDataForBlankForm(): void {
+        this._formBuilderService.getFormBuilderDataForBlankForm(this.fbConfiguration).subscribe((data: any) => {
+            this.formBuilderData = data;
         });
     }
 
@@ -65,5 +77,10 @@ export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
         this.commentSlider.emit(event);
     }
 
+    listenToFormActions() {
+        this.subscription$.push(this._formBuilderService.$formBuilderActionEvents.subscribe((data: FBActionEvent) => {
+            this.builderStatus.emit(data.action);
+        }));
+    }
 
 }

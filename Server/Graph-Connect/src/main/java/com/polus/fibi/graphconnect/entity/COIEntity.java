@@ -41,6 +41,9 @@ public class COIEntity {
 	@Property(name="status")
 	private String status;
 
+	@Property(name="is_sponsor")
+	private String isSponsor;
+
 	@Property(name="type")
 	private String type;
 

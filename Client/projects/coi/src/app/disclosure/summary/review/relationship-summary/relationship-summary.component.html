@@ -1,94 +1,101 @@
 
-<div [id]= selectedProject?.moduleItemId class="left-margin card border shadow mt-2" *ngIf="selectedProject?.moduleCode">
-    <div class="card-header px-4 d-flex align-items-center justify-content-between">
-      <span class="d-flex mt-3 mb-3">
+<div [id]= selectedProject?.moduleItemId class="card coi-card-regular border shadow ms-2 mt-2" *ngIf="selectedProject?.moduleCode">
+    <div class="card-header px-4 py-2 d-flex align-items-start justify-content-between border-bottom-0 flex-nowrap">
+      <span class="d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
           <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
-          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</strong></u>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
-              <span *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
+          <span class="word-break-all new-line-property badge-margin coi-text-darker fs-16 mt-1">
+            <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
+              aria-label="Click here to view project details" title="Click here to view project details">
+              #{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}
               </span>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more" 
+                title="Click here to Read more" (keydown.enter)="readMoreOrLess= true">
+                <span class="link-primary fw-medium fs-14">...Read More</span>
             </span>
-            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
-              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false" (keydown.enter)="readMoreOrLess= false"
+            tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less">
+              <span class="link-primary fw-medium fs-14">Read Less</span>
             </span>
           </span>
         </ng-container>
 
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
-          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</strong></u>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
-              <span *ngIf="!redivdMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
-              </span>
+          <span class="mt-1 fs-16 word-break-all new-line-property badge-margin coi-text-dark">
+            <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
+             aria-label="Click here to view project details" title="Click here to view project details">
+            #{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</span>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" class="link-primary fs-14 fw-medium" 
+              tabindex="0" role="link" aria-label="Click here to Read more" title="Click here to Read more"
+              (click)="readMoreOrLess=true" (keydown.enter)="readMoreOrLess= true">...Read More
             </span>
-            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
-              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false" (keydown.enter)="readMoreOrLess= false"
+             tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"
+            class="link-primary fs-14 fw-medium">
+              Read Less
             </span>
           </span>
         </ng-container>
       </span>
 
       <span class="align-items-center d-flex">
-        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
       </button>
       </span>
     </div>
       <div *ngIf="isCollapsed" class="card-body">
 			<div class="row">
-				<div class="col ms-3 my-3">
+				<div class="col">
 					<div class="row">
-						<div class="col-5">
-							<label class="label-text">Principal Investigator :</label>
-							<span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+						<div class="col-6 col-md-4 mb-2">
+							<label for="coi-relationship-summary-principal-investigator" class="coi-text-dark d-block">Principal Investigator</label>
+							<span class="coi-text-light" id="coi-relationship-summary-principal-investigator">{{selectedProject?.principalInvestigator}}</span>
 						</div>
-						<div class="col-4">
-							<label class="label-text">Project Role : </label>
-							<span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
+						<div class="col-6 col-md-4 mb-2">
+							<label for="coi-relationship-summar-project-role" class="coi-text-dark d-block">Project Role</label>
+							<span class="coi-text-light" id="coi-relationship-summar-project-role">{{selectedProject?.reporterRole}}</span>
 						</div>
-						<div class="col-3">
-							<label class="label-text">Period :</label>
-							<span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+						<div class="col-6 col-md-4 mb-2">
+							<label for="coi-relationship-summar-period" class="coi-text-dark d-block">Period</label>
+							<span class="coi-text-light" id="coi-relationship-summar-period">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
 								|
 								dateFormatter}}</span>
 						</div>
-						<div class="col-5">
-							<label class="label-text">Sponsor :</label>
-							<span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
+						<div class="col-6 col-md-4 mb-2">
+							<label for="coi-relationship-sponsor" class="coi-text-dark d-block">Sponsor</label>
+							<span class="coi-text-light" id="coi-relationship-sponsor">{{selectedProject?.sponsor}}</span>
 						</div>
-						<div class="col-7">
-							<label class="label-text">Lead Unit :</label>
+						<div class="col-6 col-md-4 mb-2">
+							<label for="coi-relationship-lead-unit" class="coi-text-dark d-block">Lead Unit</label>
 							<app-no-data-label [valueToShow]="selectedProject?.unitName">
-								<span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+								<span class="coi-text-light" id="coi-relationship-lead-unit">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
 							</app-no-data-label>
 						</div>
 					</div>
 				</div>
-				<div class="border-start col-auto p-10 d-flex align-items-center">
-                    <div *ngIf="projectRelations.length > 0" class="me-2">
-                        <span class="{{_commonService
-                        .getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
-                        <span class="badgeFont">{{worstCaseStatus?.description}}</span>
-                    </div>
-                    <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
-				</div>
+        <div class="col-auto">
+          <div *ngIf="projectRelations.length > 0" class="me-2">
+            <label for="coi-relationship-conflict-status" class="coi-text-lighter d-block">Conflict Status</label>
+            <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
+            <span class="badgeFont" id="coi-relationship-conflict-status">{{worstCaseStatus?.description}}</span>
+          </div>
+          <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
+        </div>
 			</div>
-              <table class="table table-bordered fs-14 fw-medium" *ngIf="projectRelations.length > 0">
+      <div class="table-responsive coi-table-striped">
+      <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0" id="coi-relationship-summary-table">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
-                    <tr class="header-border table-light">
-                      <th style="width: 40%;" class="border-end px-3">Significant Financial Interest</th>
-                      <th style="width: 26%;" class="border-end px-3">Relationship between SFIs and Projects</th>
-                        <th style="width: 14%;" class="border-end px-3">Conflict Status
+                    <tr class="header-border table-light" id="coi-relationship-summary-table-thead">
+                      <th style="width: 40%;" class="px-3">Significant Financial Interest</th>
+                      <th style="width: 26%;" class="px-3">Relationship between SFIs and Projects</th>
+                        <th style="width: 14%;" class="px-3">Conflict Status
                             <button title="Sort conflict Status in ascending order" class="sortable-icon btn p-0"
-                                    aria-label=""
+                                    aria-label="click to sort conflict Status"
                                     *ngIf="isDesc" (click)="sortConflictStatus(true)">
                                 <mat-icon>arrow_upward</mat-icon>
                             </button>
@@ -97,61 +104,63 @@
                                 <mat-icon>arrow_downward</mat-icon>
                             </button>
                         </th>
-                      <th style="width: 8%;" class="border-end px-3">Actions</th>
+                      <th style="width: 8%;" class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="white-bg">
                   <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
-                    <td class="table-data border-end border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">
+                    <td class="table-data fw-600 px-3">
                         <div class="m-0 mb-2 row py-1">
-                            <span class="align-items-center d-flex">
-                                <span class="entity-title mr-2 cursor-pointer clickable-content" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)">
-                                    <strong tabindex="0" [attr.aria-label]="'entity name'">
-                                        <u>{{relation?.coiEntity?.entityName.length > 100 ?
+                            <span class="align-items-center d-flex px-0">
+                                <span class="link-primary" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
+                                (keydown.enter)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
+                                tabindex="0" [attr.aria-label]="'Click here to view SFI details'" role="link" title="Click here to view SFI details">
+                                        {{relation?.coiEntity?.entityName.length > 100 ?
                                             (relation?.coiEntity?.entityName | slice:0:100)+'...' : relation?.coiEntity?.entityName}}
-                                        </u></strong>
                                 </span>
                             </span>
                         </div>
                         <div class="d-flex flex-wrap fw-medium fs-13">
-                            <em class="mt-3" *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                    <span class="border px-3 py-1 rounded-4 me-2">
+                            <em class="mt-2" *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                                    <span class="border px-3 py-1 rounded-4 me-2 d-inline-block">
                                         <span class="fw-medium">{{relation?.relationshipType}} :</span>
                                         <span class="fw-normal">{{relation?.description}}</span>
                                     </span>
                             </em>
                         </div>
-                        <div class="row mt-3 fw-medium fs-13">
+                        <div class="row mt-2 fw-medium fs-13">
                             <span class="d-flex align-items-center">
-                                <span class="fs-13 mx-3">
+                                <span class="fs-13 me-3">
                                     <span>Country:</span>&nbsp;{{relation?.personEntityRelationshipDto?.countryName}}</span>
-                                <span class="fs-13 mx-3"> <span>Type:</span> &nbsp;{{relation?.personEntityRelationshipDto?.entityType}}
+                                <span class="fs-13"> <span>Type:</span> &nbsp;{{relation?.personEntityRelationshipDto?.entityType}}
                                 </span>
                             </span>
                         </div>
                     </td>
-                    <td class="border-end border-top-0 px-3" [class.border-0]="i != projectRelations?.length-1">
-                      <div class="p-3 person-card fs-13 grey-text word-break-all new-line-property">
+                    <td class="px-3">
+                      <div class="person-card fs-13 grey-text word-break-all new-line-property">
                         <span *ngIf="!isReadMore[i] && relation?.disclComment?.comment?.length > 60; else showFullInfo">
                           <span> {{(relation?.disclComment?.comment | slice:0:60)}}</span>
-                          <span (click)="isReadMore[i] = !isReadMore[i]" class="hand-cursor">... <strong><u>Read more</u></strong>
+                          <span (click)="isReadMore[i] = !isReadMore[i]" tabindex="0" (keydown.enter)="isReadMore[i] = !isReadMore[i]" role="link"
+                            aria-label="Click here Read more" title="Click here Read more" class="link-primary">...Read more
                           </span>
                         </span>
                         <ng-template #showFullInfo>
                           <span>{{relation?.disclComment?.comment}}</span>
                           <span *ngIf="relation?.disclComment?.comment?.length > 60" (click)="isReadMore[i] = !isReadMore[i]"
-                            aria-hidden="true" class="hand-cursor"> <strong><u>Read Less</u></strong>
+                            (keydown.enter)="isReadMore[i] = !isReadMore[i]" tabindex="0" role="link" aria-label="Click here Read less"
+                            title="Click here Read less" class="link-primary ms-1">Read Less
                           </span>
                         </ng-template>
                       </div>
                     </td>
-                    <td class="border-end border-top-0 px-3 text-center text-nowrap" [class.border-0]="i != projectRelations?.length-1">
+                    <td class="px-3 text-nowrap">
                       <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}"></span>
-                      <span class="badgeFont">
+                      <span>
                         {{relation?.coiProjConflictStatusType?.description}}
                     </span>
                     </td>
-                    <td class="border-0  border-top-0 pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
+                    <td class="pt-4 px-3">
                       <div class="d-flex">
                         <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned review completed, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
                         <button *ngIf="(['3', '7', '8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
@@ -168,6 +177,7 @@
                   </tr>
                 </tbody>
               </table>
+      </div>
               <div *ngIf="!projectRelations.length">
                 <app-no-information> </app-no-information>
               </div>

@@ -32,7 +32,7 @@
         class="noDataExists px-2"><ng-container i18n="@@AWARD_NO_PROJECT_TEAM_ADDED_ERR">There are no project
         team members added in this Award</ng-container></div>
       <div class="table-responsive" *ngIf="result?.awardProjectTeams?.length > 0 && isShowCollapse">
-        <table class="table tableSkin grid2">
+        <table class="table tableSkin grid2" id="coi-project-team-table">
           <caption class="sr-only">Project Team Details</caption>
           <thead class="thead-light">
             <th scope="col">Name</th>
@@ -44,7 +44,7 @@
             <th scope="col" class="w-10">Actions</th>
           </thead>
           <tbody>
-            <tr *ngFor="let team of result?.awardProjectTeams; let i = index">
+            <tr *ngFor="let team of result?.awardProjectTeams; let i = index" id="coi-project-team-table-row">
               <td><i class="mr-2" aria-hidden="true"
                   [ngClass]="team?.nonEmployeeFlag == true?'fa fa-user-circle text-danger':'fa fa-user-o'"></i>{{team?.fullName}}
               </td>
@@ -99,9 +99,9 @@
         <p>Are you sure you want to delete this member?</p>
       </div>
       <div class="modal-footer">
-        <button id="prop-project-close-btn" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
+        <button id="coi-project-team-delete-team-modal-cancel-btn" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
           data-toggle="modal">Cancel</button>
-        <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary-sub btn-sm"
+        <button id="coi-project-team-delete-team-modal-delete-btn" type="button" class="btn btn-primary-sub btn-sm"
           (click)="deleteTeam(deleteindex)" data-dismiss="modal">Delete</button>
       </div>
     </div>

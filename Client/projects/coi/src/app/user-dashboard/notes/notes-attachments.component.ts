@@ -3,7 +3,7 @@ import { NotesAttachmentsService } from './notes-attachments.service';
 import { Subscription } from 'rxjs';
 import { listAnimation } from '../../common/utilities/animations';
 import { CommonService } from '../../common/services/common.service';
-import { openSlider, closeSlider } from '../../common/utilities/custom-utilities';
+import { openSlider, closeSlider, openCoiSlider } from '../../common/utilities/custom-utilities';
 import { EDITOR_CONFIGURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -86,7 +86,7 @@ export class NotesAttachmentsComponent implements OnInit {
                     this.isEditMode = this.currentSelectedNote.personId == this._commonService.getCurrentUserDetail('personId');
                     this.isOpenMoreMenu = [];
                     setTimeout(() => {
-                        openSlider('edit-note-slider');
+                        openCoiSlider('edit-note-slider');
                     });
                 }
             }, error => {

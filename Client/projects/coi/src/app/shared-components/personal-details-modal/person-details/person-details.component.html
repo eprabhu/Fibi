@@ -1,119 +1,119 @@
 <div class="row mx-0 mt-2">
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle">First Name</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-firstname" class="d-block coi-text-dark">First Name</label>
             <app-no-data-label [valueToShow]="personValues?.person?.firstName" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.firstName}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-firstname"> {{personValues?.person?.firstName}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle   ">Middle Name </label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-middlename" class="d-block coi-text-dark">Middle Name </label>
             <app-no-data-label [valueToShow]="personValues?.person?.middleName" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.middleName}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-middlename"> {{personValues?.person?.middleName}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">Last Name</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-lastname" class="d-block coi-text-dark">Last Name</label>
             <app-no-data-label [valueToShow]="personValues?.person?.lastName" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.lastName}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-lastname"> {{personValues?.person?.lastName}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">Full Name</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-fullname" class="d-block coi-text-dark">Full Name</label>
             <app-no-data-label [valueToShow]="personValues?.person?.fullName" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.fullName}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-fullname"> {{personValues?.person?.fullName}}</span>
             </app-no-data-label>
     </div>
-    <div *ngIf="personValues?.person?.rolodexId" class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">Organization</label>
+    <div *ngIf="personValues?.person?.rolodexId" class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-is-organization" class="d-block coi-text-dark">Organization</label>
         <app-no-data-label *ngIf="personValues?.person?.organizationName !== null" [valueToShow]="personValues?.person?.organizationName" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.organizationName}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-is-organization"> {{personValues?.person?.organizationName}}</span>
         </app-no-data-label>
         <app-no-data-label *ngIf="personValues?.person?.organizationName == null" [valueToShow]="personValues?.person?.organizationName" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.organizationName}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-isnot-organization"> {{personValues?.person?.organizationName}}</span>
         </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">Designation</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-designation-primarytitle" class="d-block coi-text-dark">Designation</label>
         <app-no-data-label *ngIf="personValues?.person?.personId" [valueToShow]="personValues?.person?.primaryTitle" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.primaryTitle}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-designation-primarytitle"> {{personValues?.person?.primaryTitle}}</span>
         </app-no-data-label>
         <app-no-data-label *ngIf="personValues?.person?.rolodexId" [valueToShow]="personValues?.person?.designation" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.designation}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-designation"> {{personValues?.person?.designation}}</span>
         </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">Address Line 1</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-address-line1" class="d-block coi-text-dark">Address Line 1</label>
             <app-no-data-label [valueToShow]="personValues?.person?.addressLine1" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.addressLine1}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-address-line1"> {{personValues?.person?.addressLine1}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle   ">Address Line 2</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-address-line2" class="d-block coi-text-dark">Address Line 2</label>
             <app-no-data-label [valueToShow]="personValues?.person?.addressLine2" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.addressLine2}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-address-line2"> {{personValues?.person?.addressLine2}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">Address Line 3</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-address-line3" class="d-block coi-text-dark">Address Line 3</label>
             <app-no-data-label [valueToShow]="personValues?.person?.addressLine3" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.addressLine3}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-address-line3"> {{personValues?.person?.addressLine3}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle  ">City</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-city" class="d-block coi-text-dark">City</label>
             <app-no-data-label [valueToShow]="personValues?.person?.city" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.city}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-city"> {{personValues?.person?.city}}</span>
             </app-no-data-label>   
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">PostalCode</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-postal-code" class="d-block coi-text-dark">PostalCode</label>
             <app-no-data-label [valueToShow]="personValues?.person?.postalCode" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.postalCode}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-postal-code"> {{personValues?.person?.postalCode}}</span>
             </app-no-data-label>   
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">State</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-state" class="d-block coi-text-dark">State</label>
             <app-no-data-label [valueToShow]="personValues?.person?.state" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.state}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-state"> {{personValues?.person?.state}}</span>
             </app-no-data-label>           
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">Country</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-country" class="d-block coi-text-dark">Country</label>
             <app-no-data-label [valueToShow]="personValues?.person?.countryDetails?.countryCode" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.countryDetails?.countryCode}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-country"> {{personValues?.person?.countryDetails?.countryCode}}</span>
             </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">Email Address</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-email-address" class="d-block coi-text-dark">Email Address</label>
         <app-no-data-label [valueToShow]="personValues?.person?.emailAddress" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.emailAddress}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-email-address"> {{personValues?.person?.emailAddress}}</span>
         </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">Phone Number</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-phone-number" class="d-block coi-text-dark">Phone Number</label>
         <app-no-data-label *ngIf="personValues?.person?.rolodexId == null" [valueToShow]="personValues?.person?.mobileNumber" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.mobileNumber}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-phone-number"> {{personValues?.person?.mobileNumber}}</span>
         </app-no-data-label>
         <app-no-data-label *ngIf="personValues?.person?.rolodexId != null" [valueToShow]="personValues?.person?.phoneNumber" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.phoneNumber}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-phone-number-2"> {{personValues?.person?.phoneNumber}}</span>
         </app-no-data-label>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">Fax</label>
+    <div class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-fax" class="d-block coi-text-dark">Fax</label>
             <app-no-data-label [valueToShow]="personValues?.person?.faxNumber" [classesToApply]="'fs-14'">
-                <span class="fs-14"> {{personValues?.person?.faxNumber}}</span>
+                <span class="fs-14 coi-text-light" id="coi-person-details-fax"> {{personValues?.person?.faxNumber}}</span>
             </app-no-data-label> 
     </div>
-    <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">Home Unit</label>
+    <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-2">
+        <label for="coi-person-details-home-unit" class="d-block coi-text-dark">Home Unit</label>
         <app-no-data-label [valueToShow]="personValues?.person?.unit?.unitName" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.unit?.unitName}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-home-unit"> {{personValues?.person?.unit?.unitName}}</span>
         </app-no-data-label> 
     </div>
-    <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
-        <label class="d-block labelStyle ">Directory Title</label>
+    <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12">
+        <label for="coi-person-details-directory-title" class="d-block coi-text-dark">Directory Title</label>
         <app-no-data-label [valueToShow]="personValues?.person?.directoryTitle" [classesToApply]="'fs-14'">
-            <span class="fs-14"> {{personValues?.person?.directoryTitle}}</span>
+            <span class="fs-14 coi-text-light" id="coi-person-details-directory-title"> {{personValues?.person?.directoryTitle}}</span>
         </app-no-data-label> 
     </div>
 </div>

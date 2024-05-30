@@ -4,7 +4,7 @@ import { EntityDetailsService } from '../../disclosure/entity-details/entity-det
 import { CoiEntity, EntityDetails, RiskHistoryRO } from '../../entity-management/entity-details-interface';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
-import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCoiSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 @Component({
@@ -22,7 +22,7 @@ export class EntityRiskSliderComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     riskLevelChanges = [];
     coiConflictStatusType = [];
-    isReadMore = false;
+    isReadMore: boolean[] = [];
     riskValidationMap = new Map();
     entityRiskRO: RiskHistoryRO = new RiskHistoryRO;
     isStatusEdited = false;
@@ -48,16 +48,11 @@ export class EntityRiskSliderComponent implements OnInit {
         this.getSFILookup();
         this.riskHistory();
         setTimeout(() => {
-            openSlider('risk-conflict-slider');
+            openCoiSlider('risk-conflict-slider');
         });
     }
 
-    validateSliderClose() {
-        (this.isStatusEdited || this.revisionComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
-    }
-
     closeConflictSlider() {
-        closeSlider('risk-conflict-slider');
         setTimeout(() => {
             this.closePage.emit();
         }, 500);
@@ -97,6 +92,21 @@ export class EntityRiskSliderComponent implements OnInit {
         return this.entityRiskRO;
     }
 
+    checkForModification() {
+        this.$subscriptions.push(this.entityDetailsService.riskAlreadyModified({
+            'riskCategoryCode': this.entityDetails.riskCategoryCode,
+            'entityId': this.entityDetails.entityId
+        }).subscribe((data: any) => {
+            this.updateProjectRelationship();
+        }, err => {
+            if (err.status === 405) {
+                this.isConcurrency = true;
+            } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+            }
+        }))
+    }
+    
     updateProjectRelationship() {
         if (this.checkForMandatory()) {
             this.$subscriptions.push(
@@ -109,12 +119,12 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.entityDetails.entityRiskCategory.riskCategoryCode = this.currentRiskCategorycode;
                         this.clearConflictModal();
                         this.riskHistory();
-                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict modified successfully.');
                     }, _err => {
                         if (_err.status === 405) {
                           this.isConcurrency = true;
                         } else {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying conflict status. Please try again.');
                         }
                     }));
         }
@@ -163,6 +173,10 @@ export class EntityRiskSliderComponent implements OnInit {
             this.riskValidationMap.delete('riskLevelCode');
         }
         return this.riskValidationMap.size === 0 ? true : false;
+    }
+
+    isFieldValueChanges(): boolean {
+        return !!((this.isStatusEdited || this.revisionComment));
     }
 }
 

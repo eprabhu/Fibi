@@ -4,7 +4,7 @@ import {CoiService} from "../services/coi.service";
 @Component({
   selector: 'app-attachment',
   templateUrl: './attachment.component.html',
-  styleUrls: ['./attachment.component.css']
+  styleUrls: ['./attachment.component.scss']
 })
 export class AttachmentComponent implements OnInit {
 
@@ -16,6 +16,7 @@ export class AttachmentComponent implements OnInit {
 
   ngOnInit() {
     this._coiService.isShowAttachmentInfo = true;
+    window.scrollTo(0, 0);
   }
 
   closeAttachmentInfo() {

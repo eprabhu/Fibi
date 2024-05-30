@@ -3,6 +3,8 @@ package com.polus.formbuilder.service;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -16,6 +18,7 @@ import com.polus.formbuilder.model.FormComponentSaveRequest;
 import com.polus.formbuilder.model.FormComponentSaveResponse;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
+import com.polus.formbuilder.model.FormValidationRequest;
 
 @Service
 public class FormBuilderServiceCoordinator {
@@ -97,6 +100,30 @@ public class FormBuilderServiceCoordinator {
 		default:
 			return "Module_0_FormBuilderServiceImpl";
 		}
+	}
+
+	public ResponseEntity<Object> validateForm(FormValidationRequest formValidationRequest) {
+		if (formValidationRequest.getFormBuilderIds() == null || formValidationRequest.getFormBuilderIds().isEmpty()) {
+			return new ResponseEntity<>("Form Id not present!!", HttpStatus.OK);
+		}
+		FormBuilderService formBuilderService = getImplementationClass(formValidationRequest.getModuleItemCode());
+		return new ResponseEntity<>(formBuilderService.validateForm(formValidationRequest), HttpStatus.OK);
+	}
+
+	public ResponseEntity<Object> validateSection(FormValidationRequest formValidationRequest) {
+		if (formValidationRequest.getFormBuilderSectionId() == null) {
+			return new ResponseEntity<>("Section Id not present!!", HttpStatus.OK);
+		}
+		FormBuilderService formBuilderService = getImplementationClass(formValidationRequest.getModuleItemCode());
+		return new ResponseEntity<>(formBuilderService.validateSection(formValidationRequest), HttpStatus.OK);
+	}
+
+	public ResponseEntity<Object> validateComponent(FormValidationRequest formValidationRequest) {
+		if (formValidationRequest.getFormBuilderSectCompId() == null) {
+			return new ResponseEntity<>("Component Id not present!!", HttpStatus.OK);
+		}
+		FormBuilderService formBuilderService = getImplementationClass(formValidationRequest.getModuleItemCode());
+		return new ResponseEntity<>(formBuilderService.validateComponent(formValidationRequest), HttpStatus.OK);
 	}
 
 }

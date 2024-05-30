@@ -13,7 +13,7 @@ import { coiReviewComment } from '../../../../shared-components/shared-interface
 @Component({
     selector: 'app-screening-questionnaire-summary',
     templateUrl: './screening-questionnaire-summary.component.html',
-    styleUrls: ['./screening-questionnaire-summary.component.css']
+    styleUrls: ['./screening-questionnaire-summary.component.scss']
 })
 export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, OnDestroy {
 
@@ -45,6 +45,10 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 1;
         this.configuration = Object.assign({}, this.configuration);
+        this.listenToolKitFocusSection();
+        setTimeout(() => {
+            window.scrollTo(0,0);
+        });
     }
 
     ngDoCheck() {
@@ -72,6 +76,15 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
 
     setActiveQuestionnaire(event) {
         this.activeQuestionnaire = event;
+    }
+
+    //'COI801' parent element of ScreeningQuestionnaireSummaryComponent.
+    private listenToolKitFocusSection() {
+        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele => {
+            if (ele.section == 'COI801') {
+                this.isQuestionnaireCollapsed = !ele.isExpand;
+            }
+        }));
     }
 
 }

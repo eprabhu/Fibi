@@ -3,9 +3,9 @@
     width: max-content;
     height: 22px;
     position: relative;
-    left: -18px;
+    left: -28px;
     top: 0;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
@@ -99,7 +99,7 @@
 }
 
 .riskbadge {
-    top: -5px;
+    top: -7px;
     position: relative;
 }
 
@@ -118,23 +118,18 @@
     color: rgb(26, 172, 62);
 }
 
-.small-icon {
-    transform: scale(0.7);
-    cursor: pointer;
-}
-
 .table-background {
     background: #E9ECEF;
 }
 
 .label-text {
     color: #2a2a2a;
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
     font-weight: 500 !important;
 }
 
 .help-text {
-    font-size: 13px;
+    font-size: 0.8125rem;
     padding: 7px;
     color: #606060;
     background-color: #EEF0FC;
@@ -144,7 +139,7 @@
 
 .navigation-icons {
     .active {
-        border-bottom: 2px solid #007DEC;
+        border-bottom: 3px solid #007DEC;
         color: #007dec;
     }
 }
@@ -170,7 +165,7 @@
     position: relative;
     left: -10px;
     top: 0;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
@@ -195,11 +190,11 @@
     position: relative;
     left: -10px;
     top: 0;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
-    
+
     &::before {
         content: "";
         position: absolute;
@@ -220,7 +215,7 @@
     position: relative;
     left: -10px;
     top: 0;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
@@ -245,7 +240,7 @@
     position: relative;
     left: -10px;
     top: 0;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
@@ -291,13 +286,23 @@
 }
 
 .small-btn-height {
-    height: 25px;
+    height: 28px;
 }
 
 .entity-list-container {
-    max-height: 70vh;
+    max-height: 45vh;
     overflow-y: auto;
-    overflow-x: hidden;
+
+    // overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        width: 6px;
+        height: 6px;
+    }
 }
 
 .advance-search-area {
@@ -342,3 +347,39 @@
     color: #fff;
     @extend .statusPillPosition;
 }
+
+.statusPillPosition {
+    border-radius: 12px;
+    padding: 3px 9px 3px 9px;
+  }
+
+  .status-complete {
+    background-color: #4CB57D !important;
+    color: #fff;
+    @extend .statusPillPosition;
+  }
+
+  .status-inactive {
+    background-color: #949494;
+    color: #fff;
+    @extend .statusPillPosition;
+  }
+
+  .status-incomplete {
+    background-color: #ffc107 !important;
+    color: #fff;
+    @extend .statusPillPosition;
+  }
+
+  .grey-text{
+    color: #6A7980;
+  }
+
+  .filter-border {
+    border-top: solid 6px #ffff;
+  }
+  
+  .pt-0 {
+    padding-top: 0 !important;
+  }
+  

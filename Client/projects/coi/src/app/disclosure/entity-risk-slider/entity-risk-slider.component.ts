@@ -8,7 +8,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
+import { openCoiSlider, openCommonModal } from '../../common/utilities/custom-utilities';
 import { CoiService } from '../services/coi.service';
 
 @Component({
@@ -40,7 +40,7 @@ export class EntityRiskSliderComponent implements OnInit {
 
 	constructor(private _entityRiskSliderService: EntityRiskSliderService,
 		public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-		public commonService: CommonService, 
+		public commonService: CommonService,
 		public _dataFormatPipe: DateFormatPipeWithTimeZone,
         public coiService: CoiService) { }
 
@@ -59,6 +59,21 @@ export class EntityRiskSliderComponent implements OnInit {
 		}))
 	}
 
+    checkForModification() {
+        this.$subscriptions.push(this.coiService.riskAlreadyModified({
+            'riskCategoryCode': this.disclosureDetails.riskCategoryCode,
+            'disclosureId': this.disclosureDetails.disclosureId
+        }).subscribe((data: any) => {
+            this.saveRisk();
+        }, err => {
+            if (err.status === 405) {
+                this.coiService.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }
+        }))
+    }
+
 	saveRisk(): void {
 		if (this.checkForMandatory()) {
 			this.$subscriptions.push(this._entityRiskSliderService.saveRisk(this.getRequestObject()).subscribe((data: any) => {
@@ -66,7 +81,7 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.riskCategoryCode = null;
 				this.riskComment = null;
 				this.emitRiskChange(data);
-				this.getDisclosureRiskHistory();
+				this.getDisclosureRiskHistory(false);
 				this.isStatusEdited = false;
 			}, err => {
 				if (err.status === 405) {
@@ -114,7 +129,7 @@ export class EntityRiskSliderComponent implements OnInit {
 		}
 	}
 
-	private  getDisclosureRiskHistory(): void {
+	private  getDisclosureRiskHistory(flag = true): void {
 		this.$subscriptions.push(this._entityRiskSliderService.getDisclosureRiskHistory(
 			{
 				'disclosureId': this.disclosureDetails.disclosureId,
@@ -123,9 +138,9 @@ export class EntityRiskSliderComponent implements OnInit {
 			}).subscribe((data: any) => {
 				this.updateHistoryLogs(data);
 				this.isReadMore = [];
-				setTimeout(() => {
-					openSlider('disclosure-entity-risk-slider');
-				});			
+				if (flag) {
+						openCoiSlider('disclosure-entity-risk-slider');		
+				}
 			}));
 	}
 
@@ -199,17 +214,20 @@ export class EntityRiskSliderComponent implements OnInit {
 	validateSliderClose() {
 		(this.isStatusEdited || this.riskComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
 	}
-	
+
 	closeConflictSlider() {
-		closeSlider('disclosure-entity-risk-slider');
 		setTimeout(() => {
 			this.closePage.emit();
 		}, 500);
 	}
-	
+
 	leavePageClicked() {
 		setTimeout(() => {
 			this.closeConflictSlider();
 		}, 100);
 	}
+
+	isFieldValueChanges(): boolean {
+		return !!((this.isStatusEdited || this.riskComment));
+	 }
 }

@@ -1,13 +1,11 @@
-<div [@fadeInOutHeight]>
-  <div class="no-data-container w-100" [class.shadow-sm]= "isBorderNeeded">
+<div class="no-data-container w-100" [class.coi-custom-shadow]= "isBorderNeeded">
     <span class="no-data-icon-outer">
         <div class="no-data-icon">
-          <mat-icon class="no-file">folder_off</mat-icon>
+          <mat-icon aria-hidden="true" class="no-file">folder_off</mat-icon>
         </div>
     </span>
       <h5 class="fs-16 mt-3">
           <ng-content></ng-content>
           <span class="default-content">There is no information in this section.</span>
       </h5>
-  </div>
 </div>

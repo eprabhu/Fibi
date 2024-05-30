@@ -1,37 +1,39 @@
 package com.polus.fibicomp.opa.service;
 
-import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.coi.repository.ActionLogDao;
-import com.polus.fibicomp.coi.service.ActionLogService;
-import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
-import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.opa.dto.OPAActionLogDto;
-import com.polus.fibicomp.opa.dto.OPACommonDto;
-import com.polus.fibicomp.opa.dto.OPAReviewRequestDto;
-import com.polus.fibicomp.opa.dao.OPADao;
-import com.polus.fibicomp.opa.dao.OPAReviewDao;
-import com.polus.fibicomp.opa.dto.OPAReviewDto;
-import com.polus.fibicomp.opa.pojo.OPAReview;
-import com.polus.fibicomp.opa.pojo.OPAActionLog;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
-import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
-import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
+import com.polus.fibicomp.coi.repository.ActionLogDao;
+import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.coi.service.ConflictOfInterestService;
+import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.dao.OPADao;
+import com.polus.fibicomp.opa.dao.OPAReviewDao;
+import com.polus.fibicomp.opa.dto.OPAActionLogDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.dto.OPAReviewDto;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
+import com.polus.fibicomp.opa.pojo.OPAReview;
+import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
+import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
+import com.polus.fibicomp.reviewcomments.service.ReviewCommentService;
+import com.polus.fibicomp.security.AuthenticatedUser;
 
 @Service
 @Transactional
@@ -78,6 +80,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
             }
             opaReview.setCreateUser(AuthenticatedUser.getLoginUserName());
             opaReview.setUpdateTimestamp(updateTimestamp);
+            opaReview.setUpdateUser(AuthenticatedUser.getLoginUserName());
             reviewDao.saveOrUpdate(opaReview);
             opaReview.setOpaReviewId(opaReview.getOpaReviewId());
             opaReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
@@ -115,6 +118,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
         opaReviewObj.setOpaDisclosure(opaDao.getOPADisclosure(opaReview.getOpaDisclosureId()));
         saveActionLog(opaReviewObj, actionTypeCode, reviewerName);
         opaReviewObj.setAssigneePersonName(reviewerName);
+        opaReviewObj.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
         return new ResponseEntity<>(opaReviewObj, HttpStatus.OK);
     }
 
@@ -131,12 +135,16 @@ public class OPAReviewServiceImpl implements OPAReviewService {
     }
 
     @Override
-    public ResponseEntity<Object> startOPAReview(Integer opaReviewId) {
+    public ResponseEntity<Object> startOPAReview(Integer opaReviewId, Integer opaDisclsoureId) {
         if (reviewDao.isOPAReviewExistsOfStatus(opaReviewId, Arrays.asList(Constants.OPA_REVIEW_IN_PROGRESS,
                 Constants.OPA_REVIEW_COMPLETED))) {
             return new ResponseEntity<>("Review already started/completed", HttpStatus.METHOD_NOT_ALLOWED);
         }
-        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_IN_PROGRESS);
+        List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaDisclsoureId)) {
+			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_IN_PROGRESS, null);
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         opaDao.updateOPADisclosureUpDetails(opaReview.getOpaDisclosureId(), timestamp);
         OPAReview opaReviewObj = reviewDao.getOPAReview(opaReview.getOpaReviewId());
@@ -153,15 +161,21 @@ public class OPAReviewServiceImpl implements OPAReviewService {
             actionTypeCode = Constants.OPA_DIS_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER;
         }
         saveActionLog(opaReview, actionTypeCode, reviewerName);
+        opaReviewObj.setUpdateTimestamp(timestamp);
+        opaReviewObj.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
         return new ResponseEntity<>(opaReviewObj, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Object> completeOPAReview(Integer opaReviewId) {
+    public ResponseEntity<Object> completeOPAReview(Integer opaReviewId, Date opaReviewEndDate, Integer opaDisclosureId) {
         if (reviewDao.isOPAReviewExistsOfStatus(opaReviewId, Arrays.asList(Constants.OPA_REVIEW_COMPLETED))) {
             return new ResponseEntity<>("Review already completed", HttpStatus.METHOD_NOT_ALLOWED);
         }
-        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_COMPLETED);
+        List<String> opaDisclosureStatus = Arrays.asList(Constants.OPA_DISCLOSURE_STATUS_RETURN);
+		if (opaDao.isOPAWithStatuses(opaDisclosureStatus, null, opaDisclosureId)) {
+			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+        Timestamp timestamp = reviewDao.updateReviewStatus(opaReviewId, Constants.OPA_REVIEW_COMPLETED, opaReviewEndDate);
         OPAReview opaReview = reviewDao.getOPAReview(opaReviewId);
         if (reviewDao.numberOfReviewOfStatuesIn(opaReview.getOpaDisclosureId(), Arrays.asList(Constants.OPA_REVIEW_ASSIGNED,
                 Constants.OPA_REVIEW_IN_PROGRESS)) == 0) {
@@ -181,6 +195,8 @@ public class OPAReviewServiceImpl implements OPAReviewService {
             actionTypeCode = Constants.OPA_DIS_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER;
         }
         saveActionLog(opaReview, actionTypeCode, reviewerName);
+        opaReview.setUpdateTimestamp(timestamp);
+        opaReview.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
         return new ResponseEntity<>(opaReview, HttpStatus.OK);
     }
 
@@ -232,12 +248,12 @@ public class OPAReviewServiceImpl implements OPAReviewService {
             reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
         });
         reviewDao.deleteOPAReview(opaReviewId);
-        reviewDto.setOpaDisclosure(opaDao.getOPADisclosure(opaReview.getOpaDisclosureId()));
-
+        Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
         if (reviewDao.numberOfReviewOfStatuesIn(opaReview.getOpaDisclosureId(), Arrays.asList(Constants.OPA_REVIEW_ASSIGNED,
                 Constants.OPA_REVIEW_IN_PROGRESS)) == 0) {
-            opaDao.updateOPADisclosureStatuses(opaReview.getOpaDisclosureId(), commonDao.getCurrentTimestamp() , Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED, null);
-            reviewDto.getOpaDisclosure().setReviewStatusType(opaDao.getOPADisclosureStatusType(Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED));
+            opaDao.updateOPADisclosureStatuses(opaReview.getOpaDisclosureId(), updateTimestamp, Constants.OPA_DISCLOSURE_STATUS_REVIEW_COMPLETED, null);
+        } else {
+            opaDao.updateOPADisclosureUpDetails(opaReview.getOpaDisclosureId(), updateTimestamp);
         }
         String actionTypeCode;
         String reviewerName = "";
@@ -248,9 +264,11 @@ public class OPAReviewServiceImpl implements OPAReviewService {
             actionTypeCode = Constants.OPA_DIS_ACTION_LOG_ADMIN_REMOVED_REVIEW_WITHOUT_REVIEWER;
         }
         saveActionLog(opaReview, actionTypeCode, reviewerName);
-
+        OPADisclosure opaDisclosure = opaDao.getOPADisclosure(opaReview.getOpaDisclosureId());
+        reviewDto.setOpaDisclosure(opaDisclosure);
+        reviewDto.setUpdateTimestamp(updateTimestamp);
+        reviewDto.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
         return new ResponseEntity<>(reviewDto, HttpStatus.OK);
     }
-
 
 }

@@ -5,13 +5,14 @@ import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/ani
 import { fadeInOutHeight, listAnimation } from '../../common/utilities/animations';
 import { Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { switchMap } from 'rxjs/operators';
-import { CREATE_DISCLOSURE_ROUTE_URL, HTTP_ERROR_STATUS, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { CREATE_DISCLOSURE_ROUTE_URL, HTTP_ERROR_STATUS, POST_CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
+import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -54,7 +55,6 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   personEntityId = null;
   entityDetails: any = {};
 
-
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, public commonService: CommonService) { }
 
@@ -93,11 +93,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
     viewDetails(data) {
         this.showSlider = true;
         this.personEntityId = data.personEntityId;
-        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
-        setTimeout(() => {
-            const slider = document.querySelector('.slider-base');
-            slider.classList.add('slider-opened');
-        });
+        openCoiSlider('view-entity-details');
     }
 
   redirectToEntity(event) {
@@ -114,18 +110,15 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
       this.entityManagementService.getPersonEntityDashboard(this.entityManagementService.relationshipDashboardRequest)
         ))
         .subscribe((res: any) => {
-          this.entityRelations = res.data || [];
+          this.entityRelations = this.setEntityRelationTypeList(res.data || []);
           this.resultCount = res.count;
-          this.loadingComplete();
+          this.isLoading = false;
         }, error => {
-          this.loadingComplete();
+          this.isLoading = false;
           this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
   }
 
-  private loadingComplete() {
-    this.isLoading = false;
-}
   currentTab(tab) {
     this.isLoading = true;
     this.resetAdvanceSearchFields();
@@ -228,7 +221,14 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
       this._router.navigate([redirectUrl],
           { queryParams: { disclosureId: disclosure.coiDisclosureId } });
     }
-}
+} 
+
+redirectToTravel(coi) {
+    if (coi.travelDisclosureId) {
+      this._router.navigate([POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
+        { queryParams: { disclosureId: coi.travelDisclosureId } });
+    }
+  }
 
 convertDisclosureStatus(status): string {
   if (status) {
@@ -238,17 +238,9 @@ convertDisclosureStatus(status): string {
 }
 
     hideSfiNavBar() {
-        this.addBodyScroll();
-        let slider = document.querySelector('.slider-base');
-        slider.classList.remove('slider-opened');
         setTimeout(() => {
             this.showSlider = false;
         }, 500);
-    }
-
-    addBodyScroll() {
-        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }
 
     getUpdatedEntityId(data) {
@@ -262,6 +254,21 @@ convertDisclosureStatus(status): string {
 
     cancelConcurrency() {
       this.entityManagementService.concurrentUpdateAction = '';
+  }
+
+  private setEntityRelationTypeList(inputArray: any[]): any[] {
+    return inputArray.map((obj: any) => {
+      if (obj.relationshipTypes) {
+        const ENTITY_TYPE = obj.relationshipTypes.split(':;:');
+        const RELATIONSHIP_TYPE_LIST = ENTITY_TYPE.map((entity: any) => {
+          const RELATIONSHIP_TYPE = entity.split(':');
+          return { relationshipTypes: RELATIONSHIP_TYPE[0] || '', description: RELATIONSHIP_TYPE[1] || '' };
+        });
+        return { ...obj, relationshipTypeList: RELATIONSHIP_TYPE_LIST};
+      } else {
+        return obj;
+      }
+    });
   }
 
 }

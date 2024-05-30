@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivateInactivateSfiModalService } from './activate-inactivate-sfi-modal.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -17,7 +17,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
 
     constructor(private _activateInactivateSfiService: ActivateInactivateSfiModalService, private _commonServices: CommonService,
         private _router: Router, private _activatedRoute: ActivatedRoute) { }
-        
+
     @Input() entityName: any = {};
     reasonValidateMapSfi = new Map();
     activateInactivateReason = '';
@@ -53,7 +53,11 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
             if (err.status === 405) {
                 document.getElementById('activate-inactivate-show-btn').click();
                 this.concurrentActionName = this.updatedRelationshipStatus == 'INACTIVE' ? 'Inactivate SFI' : 'Activate SFI';
-                openModal('sfiConcurrentActionModalCOI');
+                openModal('sfiConcurrentActionModalCOI',{
+                    backdrop: 'static',
+                    keyboard: false,
+                    focus: true
+                  });
             } else {
                 this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 this.activateOrInactivateFailed();
@@ -96,5 +100,12 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
         }
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'view' } });
         hideModal('sfiConcurrentActionModalCOI');
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal.emit(false);
+        }
     }
 }

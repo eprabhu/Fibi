@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CoiService } from '../../services/coi.service';
 import { DataStoreService } from '../../services/data-store.service';
@@ -17,14 +17,17 @@ import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utiliti
 export class ReviewerActionModalComponent implements OnInit, OnDestroy {
 
     currentReviewer: any = {};
+    reviewerList: any = [];
     $subscriptions: Subscription[] = [];
 
-    constructor( private _coiService: CoiService, 
-                 private _dataStore: DataStoreService,
-                 private _commonService: CommonService ) { }
+    constructor(private _coiService: CoiService,
+        private _dataStore: DataStoreService,
+        private _commonService: CommonService) { }
 
     ngOnInit() {
         this.getReviewerDetails();
+        const DATA = this._dataStore.getData();
+        this.reviewerList = DATA.coiReviewerList || [];
         document.getElementById(this._coiService.actionButtonId).click();
     }
 
@@ -41,20 +44,20 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     startCOIReview() {
         this.$subscriptions.push(this._coiService.startCOIReview({
             coiReviewId: this.currentReviewer.coiReviewId,
-            assigneePersonName: this.currentReviewer.assigneePersonName
+            assigneePersonName: this.currentReviewer.assigneePersonName,
+            disclosureId: this.currentReviewer.disclosureId
         }).subscribe((res: any) => {
             this.updateDataStore(res);
             this.currentReviewer = {};
-            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review started successfully.`);
-        }, _err => {
-                if (_err.status === 405) {
-                this.closeModal();
+        }, err => {
+            this.closeModal();
+            if (err.status === 405) {
                 this._coiService.concurrentUpdateAction = 'Start Review';
-              } else {
-            this.currentReviewer = {};
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
-              }
+            } else {
+                this.currentReviewer = {};
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
+            }
         }));
     }
 
@@ -64,20 +67,21 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._coiService.completeReview({
             coiReviewId: this.currentReviewer.coiReviewId,
             assigneePersonName: this.currentReviewer.assigneePersonName,
-            endDate: parseDateWithoutTimestamp(currentDate)
+            endDate: parseDateWithoutTimestamp(currentDate),
+            disclosureId: this.currentReviewer.disclosureId
         }).subscribe((res: any) => {
             this.updateDataStore(res);
+            this.startOrCompleteReview();
             this.currentReviewer = {};
-            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
-        }, _err => {
-                if (_err.status === 405) {
-                hideModal('coi-complete-review-modal');
+        }, err => {
+            hideModal('coi-complete-review-modal');
+            if (err.status === 405) {
                 this._coiService.concurrentUpdateAction = 'Complete Review';
-              } else {
-            this.currentReviewer = {};
-            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
-              }
+            } else {
+                this.currentReviewer = {};
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+            }
         }));
     }
 
@@ -88,24 +92,53 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     updateDataStore(reviewer) {
         this._coiService.$SelectedReviewerDetails.next(reviewer);
         const DATA = this._dataStore.getData();
-        const reviewerList = DATA.coiReviewerList || [];
-        const index = reviewerList.findIndex(ele => ele.coiReviewId === reviewer.coiReviewId);
-        reviewerList[index] = reviewer;
+        this.reviewerList = DATA.coiReviewerList || [];
+        const index = this.reviewerList.findIndex(ele => ele.coiReviewId === reviewer.coiReviewId);
+        this.reviewerList[index] = reviewer;
         DATA.coiDisclosure.coiReviewStatusType = reviewer.coiDisclosure.coiReviewStatusType;
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: reviewerList, coiDisclosure: DATA.coiDisclosure });
-        this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(reviewerList);
+        DATA.coiDisclosure.updateTimestamp = reviewer.updateTimestamp;
+        DATA.coiDisclosure.updateUserFullName = reviewer.updateUserFullName;
+        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: DATA.coiDisclosure });
+        this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(this.reviewerList);
         this.updateReviewActions(reviewer);
         this._coiService.isEnableReviewActionModal = false;
     }
 
     updateReviewActions(reviewer) {
-        this._coiService.isDisclosureReviewer = reviewer.assigneePersonId === this._commonService.currentUserDetails.personId;
+        this._coiService.isDisclosureReviewer = (reviewer.assigneePersonId === this._commonService.currentUserDetails.personId && reviewer.coiReviewId == this._coiService.currentReviewForAction.coiReviewId);
         if (reviewer.reviewStatusTypeCode === '3' && this._coiService.isDisclosureReviewer) {
             this._coiService.isStartReview = false;
             this._coiService.isCompleteReview = true;
         } else if (reviewer.reviewStatusTypeCode === '2' && this._coiService.isDisclosureReviewer) {
             this._coiService.isStartReview = false;
             this._coiService.isCompleteReview = false;
+        }
+    }
+
+    startOrCompleteReview() {
+        this._coiService.isStartReview = false;
+        this._coiService.isCompleteReview = false;
+        let nextAssignedReview = this.getNextAssignedReview();
+        if (nextAssignedReview) {
+            this._coiService.currentReviewForAction = nextAssignedReview;
+            if (nextAssignedReview.reviewStatusTypeCode == 1)
+                this._coiService.isStartReview = true;
+            else if (nextAssignedReview.reviewStatusTypeCode == 3)
+                this._coiService.isCompleteReview = true;
+        }
+
+    }
+
+    private getNextAssignedReview(): any {
+        return this.reviewerList.find(ele =>
+            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            && ele.reviewStatusTypeCode !== '2');
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal();
         }
     }
 

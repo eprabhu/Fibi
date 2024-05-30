@@ -51,12 +51,12 @@ public interface OPADao {
 
 	/**
 	 * This method is used to check the disclosure is with statues @params
-	 * @param opaDisclosureStatus
+	 * @param opaDisclosureStatuses
 	 * @param dispositionStatus
 	 * @param opaDisclosureId
 	 * @return boolean true/false, true if exists else false
 	 */
-	boolean isOPAWithStatuses(String opaDisclosureStatus, String dispositionStatus, Integer opaDisclosureId);
+	boolean isOPAWithStatuses(List<String> opaDisclosureStatuses, String dispositionStatus, Integer opaDisclosureId);
 
 	/**
 	 * This method is used to check admin assigned to the disclosure
@@ -144,5 +144,17 @@ public interface OPADao {
 	 * @return
 	 */
 	List<OPAPersonType> getOpaPersonType();
+
+	/**
+	 * This method is used to check if same admin is added
+	 * @return
+	 */
+	boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer opaDisclosureId);
+
+	/**
+	 * This method is used to check if admin is added
+	 * @return
+	 */
+	boolean isAdminPersonOrGroupAdded(Integer opaDisclosureId);
 
 }

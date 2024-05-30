@@ -1,0 +1,25 @@
+.dateField {
+    position: relative;
+    display: flex;
+}
+
+.insidePicker {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 0;
+}
+
+.hand-cursor {
+    cursor: pointer;
+}
+
+.word-count {
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: #757575;
+}
+
+.mandatory {
+    color: var(--bs-form-invalid-color) !important;
+}

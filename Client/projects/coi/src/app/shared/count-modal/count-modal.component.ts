@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
-import { getSponsorSearchDefaultValue } from '../../common/utilities/custom-utilities';
+import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilities';
 import { RO } from '../../disclosure/coi-interface';
 
 @Component({
     selector: 'app-count-modal',
     templateUrl: './count-modal.component.html',
-    styleUrls: ['./count-modal.component.css'],
+    styleUrls: ['./count-modal.component.scss'],
     providers: [CountModalService]
 })
 export class CountModalComponent implements OnInit {
@@ -180,17 +180,19 @@ export class CountModalComponent implements OnInit {
     // FCOI Unit Name
     getFcoiUnitName() {
         if (this.disfullData?.coiDisclosure?.person?.unit) {
-            return getSponsorSearchDefaultValue(this.disfullData?.coiDisclosure?.person?.unit);
+            return getPersonLeadUnitDetails(this.disfullData?.coiDisclosure?.person?.unit);
         } else if (this.adminData?.unit) {
-            return getSponsorSearchDefaultValue(this.adminData?.unit);
+            return getPersonLeadUnitDetails(this.adminData?.unit);
         } else if (this.disclosures?.unit) {
-            return getSponsorSearchDefaultValue(this.disclosures?.unit);
+            return getPersonLeadUnitDetails(this.disclosures?.unit);
         }
     }
 
     closeCountModal() {
         hideModal('coiCountsViewModal');
-        this.closeModal.emit(false);
+        setTimeout(() => {
+            this.closeModal.emit(false);
+        }, 200);
     }
 
     switchTableData() {
@@ -254,4 +256,10 @@ export class CountModalComponent implements OnInit {
         }
     }
 
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal.emit(false);
+        }
+    }
 }

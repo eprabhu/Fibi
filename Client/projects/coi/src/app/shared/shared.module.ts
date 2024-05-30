@@ -62,8 +62,16 @@ import { OPAInstituteResourceUseComponent } from './form-builder-view/PE-compone
 import { OPAStudentSubordinateEmployeeComponent } from './form-builder-view/PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
 import { OPACompUncompService } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.service';
 import { FormBuilderService } from './form-builder-view/form-builder.service';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover.directive';
+import { ReadMoreComponent } from './read-more/read-more.component';
+import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
+import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
+import { FormValidatorModule } from './form-validator/form-validator.module';
+import { CommonHelpTextComponent } from './common-help-text/common-help-text.component';
+import { CommonInformationComponent } from './common-information/common-information.component';
 
 @NgModule({
     imports: [
@@ -77,7 +85,9 @@ import {MatInputModule} from '@angular/material/input';
         CdkMenuModule,
         MatMenuModule,
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        MatAutocompleteModule,
+        FormValidatorModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,
@@ -92,7 +102,9 @@ import {MatInputModule} from '@angular/material/input';
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
-        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent ],
+        ReadMoreComponent,
+        OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
+        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -144,7 +156,15 @@ import {MatInputModule} from '@angular/material/input';
         OPACompUncompComponent,
         OPAOutsideFinancialRelationComponent,
         OPAInstituteResourceUseComponent,
-        OPAStudentSubordinateEmployeeComponent
+        OPAStudentSubordinateEmployeeComponent,
+        MatAutocompleteModule,
+        TailingSpaceRemoverDirective,
+        ReadMoreComponent,
+        FormBuilderViewComponent,
+        FormSectionsComponent,
+        FormValidatorModule,
+        CommonHelpTextComponent,
+        CommonInformationComponent
     ],
 
     providers: [

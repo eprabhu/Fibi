@@ -7,6 +7,8 @@ import { FormBuilderService } from '../form-builder.service';
 import { Subject } from 'rxjs';
 import { OPAInstituteResourceUseComponent } from '../PE-components/OPA-institute-resources/OPA-institute-resources.component';
 import { OPAStudentSubordinateEmployeeComponent } from '../PE-components/OPA-student-subordinate-employee/OPA-student-subordinate-employee.component';
+import { CommonService } from '../../../common/services/common.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 
 @Component({
     selector: 'app-PE-layer',
@@ -23,7 +25,7 @@ export class PELayerComponent implements OnInit, OnChanges {
     @Input() sectionName = '';
     saveEventForChildComponent = new Subject<any>();
 
-    constructor(private _formBuilder: FormBuilderService) { }
+    constructor(private _formBuilder: FormBuilderService, private _commonService: CommonService) { }
 
     ngOnInit() {
     }
@@ -86,8 +88,19 @@ export class PELayerComponent implements OnInit, OnChanges {
         const RO: FormBuilderSaveRO = this.prepareROForSave(data);
         this._formBuilder.saveFormComponent(RO).subscribe((res: SectionComponent) => {
             this.saveEventForChildComponent.next({ eventType: 'SAVE_COMPLETE', data: res.programmedElement });
+            switch (data.action) {
+                case 'ADD': this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity added successfully.'); break;
+                case 'UPDATE': this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity updated successfully.'); break;
+                case 'DELETE': this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity removed successfully.'); break;
+                default: break;
+            }
         }, err => {
-            // Do something
+            switch (data.action) {
+                case 'ADD': this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding entity. Please try again.'); break;
+                case 'UPDATE': this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating entity. Please try again.'); break;
+                case 'DELETE': this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in deleting entity. Please try again.'); break;
+                default: break;
+            }
         });
     }
 

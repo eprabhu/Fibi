@@ -1,13 +1,13 @@
 <div class="success-banner px-3 mb-2 d-flex justify-content-between align-items-center"
 	*ngIf="result?.header?.QUESTIONNAIRE_DESCRIPTION && isQuestionnaireInfo">
 	<span><i class="fa fa-info-circle mr-1 info-icon" title = "disclosure screening form" aria-hidden="true"></i>
-		<em class="ml-2" tabindex="0" [attr.aria-label]="result?.header?.QUESTIONNAIRE_DESCRIPTION">{{result?.header?.QUESTIONNAIRE_DESCRIPTION}}</em></span>
-	<button tabindex="0" (click)="isQuestionnaireInfo = false" type="button" id="modal-close" class="btn help-text-close fs-16 p-0 close-button"
-		aria-label="Close">
+		<em class="ml-2" tabindex="-1" [attr.aria-label]="result?.header?.QUESTIONNAIRE_DESCRIPTION">{{result?.header?.QUESTIONNAIRE_DESCRIPTION}}</em></span>
+	<button (click)="isQuestionnaireInfo = false" type="button" id="modal-close" class="btn help-text-close fs-16 p-0 close-button"
+		aria-label="Click to close">
 		<span class="d-block" aria-hidden="true">&times;</span>
 	</button>
 </div>
-<div class="d-flex justify-content-end fs-12 p-1"tabindex="0" [attr.aria-label]="'last updated by' + result?.header?.ANS_PERSON_FULL_NAME + 'On' + (result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long')">
+<div class="d-flex justify-content-end fs-12 p-1 mt-3"tabindex="-1" [attr.aria-label]="'last updated by' + result?.header?.ANS_PERSON_FULL_NAME + 'On' + (result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long')">
 	<span *ngIf="result?.header?.ANS_PERSON_FULL_NAME"><em> Last Updated By {{result?.header?.ANS_PERSON_FULL_NAME}} On
 		{{result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long'}}</em></span>
 </div>
@@ -15,7 +15,7 @@
 	*ngIf="questionnaire?.questions != undefined && questionnaire?.questions != null">
 	<div class="qst-list-padding">
 		<ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index; let isLast = last'>
-			<div class="card questionnaire-card p-4" [class.mb-4]="!isLast" tabindex="0" aria-label="questionnaire" tabindex="0" [attr.aria-label]="question.GROUP_LABEL"
+			<div class="card questionnaire-card p-4" [class.mb-4]="!isLast" tabindex="-1" aria-label="questionnaire" tabindex="-1" [attr.aria-label]="question.GROUP_LABEL"
 				[ngClass]="{'card-active-line': highlight == question.QUESTION_ID}"
 				(click)="highlight = question.QUESTION_ID" *ngIf="question.SHOW_QUESTION == true">
 				<ul [ngSwitch]="true" class="qst-list m-0 p-0">
@@ -25,7 +25,7 @@
 								<p class="qst-category">{{question.GROUP_LABEL}}</p>
 							</div>
 						</div>
-						<span tabindex="0" [attr.aria-label]="question.QUESTION" class="question-font mb-0">{{question.QUESTION}}</span>
+						<span tabindex="-1" [attr.aria-label]="question.QUESTION" class="question-font mb-0">{{question.QUESTION}}</span>
 						<a (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 							class="tooltip"><i aria-hidden="true" class="fa fa-info-circle ct-icon-right hand-cursor"></i>
 						</a>
@@ -497,7 +497,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="tempFiles = [];">
 				</button>
 			</div>
 			<div class="modal-body">

@@ -1,63 +1,68 @@
 <button id="activate-inactivate-show-btn" data-bs-target="#activateInactivateSfiModal" data-bs-toggle="modal"
   class="d-none"></button>
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="activateInactivateSfiModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header ct-footer-padding">
-        <h4 class="modal-title">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} {{entityName}}</h4>
-        <button type="button" class="btn-close fs-12 " title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
-      </div>
-      <div class="modal-body ct-modal-padding">
-        <div class="help-text">
-          <div class="col-12 grey-info font px-3">
-            <span class="fs-13 text-secondary d-flex mt-1 pt-1">
-              <mat-icon role="img" class="mat-icon me-2 info-icon material-icons mat-icon-no-color mt-1" aria-hidden="true"
-                data-mat-icon-type="font">info</mat-icon>
-              <p *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="fs-14 pb-0 mb-0">
-                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                Please provide a reason for inactivation in the field provided.
-                <br>
-              </p>
-              <p *ngIf="updatedRelationshipStatus == 'ACTIVE'" class="fs-14 pb-0 mb-0">
-                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                Provide the reason for Activation in the field provided.
-                <br>
-                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                Click on Activate button to activate the entity.
-                <br>
-              </p>
-            </span>
+  <!-- Activate Inactivate Confirmation Modal -->
+
+  <div class="modal fade mySkinDialog modal-lg" tabindex="-1" data-bs-backdrop="static" id="activateInactivateSfiModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} -
+           <span class="fw-normal">  <app-read-more [valueToShow]="entityName" [sliceCount]="100"></app-read-more> </span>
+          </h4>
+          <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="alert alert-primary align-items-start d-flex p-2" role="alert">
+                  <mat-icon role="img" class="flex-shrink-0" aria-hidden="true"
+                    data-mat-icon-type="font">info</mat-icon>
+                  <p *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="fs-14 mb-0 ms-2">
+                    <span class="d-flex algin-items-start">
+                      <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                      Please provide a reason for inactivation in the field provided.
+                    </span>
+                  </p>
+                  <p *ngIf="updatedRelationshipStatus == 'ACTIVE'" class="fs-14 mb-0 ms-2">
+                    <span class="d-flex algin-items-start">
+                      <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                      Provide the reason for Activation in the field provided.
+                    </span>
+                    <span class="d-flex algin-items-start">
+                      <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
+                      Click on Activate button to activate the entity.
+                    </span>
+                  </p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <span class="block-display fw-bold fs-14"><span *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="text-danger px-1">*</span>Reason for {{updatedRelationshipStatus == 'INACTIVE' ? 'Inactivation' :'Activation'}} :</span>
+              <textarea placeholder="Please enter the reason." [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="3" class="form-control"
+                appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
+              <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
+                {{reasonValidateMapSfi.get('reason')}}
+              </span>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <span class="block-display fw-bold fs-14"><span *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="mandatory px-1">*</span>Reason for {{updatedRelationshipStatus == 'INACTIVE' ?'Inactivation' :'Activation'}} :</span>
-            <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
-              appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
-            <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
-              {{reasonValidateMapSfi.get('reason')}}
-            </span>
-          </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" id="activate-inactivate-btn"  data-bs-dismiss="modal"
+           type="button" title="Cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
+          </button>
+          <button class="btn btn-primary me-0" id="activate-inactivate-btn" type="button" [attr.title]="updatedRelationshipStatus == 'INACTIVE' ? 'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
+            {{updatedRelationshipStatus == 'INACTIVE' ? 'Inactivate' : 'Activate'}}
+          </button>
         </div>
-      </div>
-      <div class="modal-footer ct-footer-padding">
-        <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
-         type="button" title="Cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
-        </button>
-        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" [attr.title]="updatedRelationshipStatus == 'INACTIVE' ?'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
-          {{updatedRelationshipStatus == 'INACTIVE' ?'Inactivate' : 'Activate'}}
-        </button>
       </div>
     </div>
   </div>
-</div>
-
 
 <!-- Concurrency Modal -->
 
-<div class="modal modal-coi fade mySkinDialog" id="sfiConcurrentActionModalCOI" role="dialog"
-    aria-hidden="true" data-bs-backdrop="static">
+<div class="modal modal-coi fade mySkinDialog" id="sfiConcurrentActionModalCOI" role="dialog" tabindex="-1" aria-label="Invalid Action">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -65,28 +70,27 @@
                   Invalid Action
                 </h5>
                 <button type="button" id="sfiConcurrentActionModalCOI-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="click to Close popup" role="button" (click)="closeSfiActivateAndInactivateModal()">
+                    data-bs-dismiss="modal" aria-label="click to Close popup"  title="click to close" (click)="closeSfiActivateAndInactivateModal()">
                 </button>
             </div>
-            <div class="modal-body m-0 p-0">
-              <div class="form-row mb-20">
-                <div class="col-1 mt-20">
-                    <i class="fa fa-2x fa-exclamation-triangle text-warning px-3"
-                        aria-hidden="true"></i>
+            <div class="modal-body">
+              <div class="row align-items-center m-0">
+                <div class="col-auto ps-0 pe-1">
+                    <i class="fa fa-2x fa-exclamation-triangle text-warning" aria-hidden="true"></i>
                 </div>
-                <div class="col-11 font-align">
-                    <p>
-                        You have tried to perform an action that is not valid for the current state of this {{concurrentActionName}}. The
-                        likely cause is that
-                        some changes have been made to the {{concurrentActionName}} recently. Please click the Refresh button to proceed further.
+                <div class="col pe-0">
+                    <p class="fs-14 mb-0">
+                        You have tried to perform an action that is not valid for the current state of this {{concurrentActionName}}.
+                        The likely cause is that some changes have been made to the {{concurrentActionName}} recently.
+                        Please click the Refresh button to proceed further.
                     </p>
                 </div>
             </div>
            </div>
             <div class="modal-footer">
                 <button type="button" class="align-items-center btn btn-outline-primary d-flex fs-14 me-3" (click)="navigateConcurrency()"
-                    attr.aria-label="click to Refresh" role="button">
-                    <mat-icon class="me-1">refresh</mat-icon>
+                    attr.aria-label="click to refresh" title="click to refresh">
+                    <mat-icon class="me-1" aria-hidden="true">refresh</mat-icon>
                     Refresh
                 </button>
             </div>

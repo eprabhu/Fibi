@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,10 @@ import com.polus.formbuilder.model.FormComponentFetchRequest;
 import com.polus.formbuilder.model.FormComponentFetchResponse;
 import com.polus.formbuilder.model.FormComponentSaveRequest;
 import com.polus.formbuilder.model.FormComponentSaveResponse;
+import com.polus.formbuilder.model.FormEvaluateValidationResponse;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
+import com.polus.formbuilder.model.FormValidationRequest;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModuleDetails;
 import com.polus.formbuilder.programmedelement.ProgrammedElementService;
@@ -251,6 +254,7 @@ public class FormBuilderServiceProcessor {
 		questionnaireBus.setModuleSubItemCode(Integer.parseInt(request.getModuleSubItemCode()));
 		questionnaireBus.setModuleItemKey(request.getModuleItemKey());
 		questionnaireBus.setModuleSubItemKey(request.getComponentId().toString());
+		questionnaireBus.setQuestionnaireCompleteFlag(request.getQuestionnaire().getQuestionnaireCompleteFlag());
 		
 		questionnaireBus = questionnaireService.saveQuestionnaireAnswers(questionnaireBus, multipartRequest);		
 		var response = initialComponentSaveReponse(request);
@@ -452,30 +456,32 @@ public class FormBuilderServiceProcessor {
 		// component Id is saved as moduleSubItemKey in the Form Builder module
 		// for Questionnaire Engine and Custom Element Engine
 		
-		componentList.parallelStream()
+		componentList.stream()
 					.forEach(component -> {
 						
 							if (component.getComponentType().equals(FormBuilderConstants.QUESTIONNAIR_COMPONENT)) {
-								
+									if(component.getComponentRefId()!=null && !component.getComponentRefId().trim().isEmpty()) {
 									component.setQuestionnaire(
 															getQuestionnaireComponent(moduleItemCode,
 																					  moduleSubItemCode, 
 																					  moduleItemKey,
 																					  component.getComponentId().toString(), 
 																					  component.getComponentRefId()));
+									}
 									
 									
 							} else if (component.getComponentType().equals(FormBuilderConstants.CUSTOM_ELEMENT_COMPONENT)) {
-								
+								if(component.getComponentRefId()!=null && !component.getComponentRefId().trim().isEmpty()) {
 									component.setCustomElement(
 															getCustomElementComponent(moduleItemCode,
 																					  moduleSubItemCode,
 																					  moduleItemKey,
 																					  component.getComponentId().toString(),
 																					  component.getComponentRefId()));
+								}
 							}else if (component.getComponentType().equals(FormBuilderConstants.PROGRAMMED_ELEMENT_COMPONENT)) {
 								
-								
+								if(component.getComponentRefId()!=null && !component.getComponentRefId().trim().isEmpty()) {
 									component.setProgrammedElement(
 															getProgrammedElementComponent(moduleItemCode,
 																					  moduleSubItemCode,
@@ -484,6 +490,7 @@ public class FormBuilderServiceProcessor {
 																					  component.getComponentRefId(),
 																					  component.getProgrammedElement()
 																					  ));
+								}
 								
 								
 							}
@@ -588,7 +595,8 @@ public class FormBuilderServiceProcessor {
 																		  moduleSubItemCode,
 																		  moduleItemKey,
 																		  moduleSubItemKey)		
-											  );	
+											  );
+			bus.setQuestionnaireCompleteFlag(formDAO.getQuestionnairCompleteFlag(bus.getQuestionnaireAnswerHeaderId()));
 		}
 		
 		return bus;
@@ -691,4 +699,105 @@ public class FormBuilderServiceProcessor {
 			return "nouser";
 		}
 	}
+
+	public List<FormEvaluateValidationResponse> performFormValidation(FormValidationRequest formValidationRequest) {
+		List<Integer> formBuilderIds = formValidationRequest.getFormBuilderIds();
+		List<FormEvaluateValidationResponse> formEvaluateValidationResponseList = new ArrayList<>();
+		formBuilderIds.forEach(formBuilderId -> {
+			List<FormBuilderSectionsComponentDTO> components = formDAO.getComponentsForFormId(formBuilderId);
+			Map<Integer, FormBuilderSectionsComponentDTO> componentMap = components.stream().collect(Collectors.toMap(FormBuilderSectionsComponentDTO::getComponentId, Function.identity()));
+			Map<Integer, String> componentIdRuleIdMap = formDAO.getComponentIdRuleIdMap(formBuilderId, null, null);
+			// Create a CompletableFuture for each entry in componentIdRuleIdMap
+			List<CompletableFuture<List<FormEvaluateValidationResponse>>> futures = componentIdRuleIdMap.entrySet().stream()
+			    .map(entry -> {
+			        Integer componentId = entry.getKey();
+			        String ruleIds = entry.getValue();
+			        return CompletableFuture.supplyAsync(() -> formDAO.evaluateFormCompValidation(formValidationRequest, getLoggedInUser(), AuthenticatedUser.getLoginPersonId(), componentId, ruleIds));
+			    })
+			    .toList();
+			// Combine all futures into a single CompletableFuture
+			CompletableFuture<Void> allOfFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+			// Wait for all futures to complete
+			allOfFutures.join();
+			// Retrieve the results from each future and add them to formEvaluateValidationResponseList
+			futures.forEach(future -> formEvaluateValidationResponseList.addAll(future.join()));
+			// Asynchronously execute formDAO.evaluateFormCompMandatoryValidation
+			CompletableFuture<List<FormEvaluateValidationResponse>> mandatoryValidationFuture = CompletableFuture.supplyAsync(() ->
+			        formDAO.evaluateFormCompMandatoryValidation(formBuilderId, null, null, formValidationRequest));
+			// Wait for the mandatoryValidationFuture to complete and add its result to formEvaluateValidationResponseList
+			formEvaluateValidationResponseList.addAll(mandatoryValidationFuture.join());
+			formEvaluateValidationResponseList.parallelStream().forEach(response -> {
+			    response.setFormBuilderId(formBuilderId);
+			    FormBuilderSectionsComponentDTO component = componentMap.get(response.getComponentId());
+			    response.setLabel(component.getLabel());
+			    response.setSectionId(component.getSectionId());
+			});
+		});
+		return formEvaluateValidationResponseList;
+	}
+
+	public List<FormEvaluateValidationResponse> performSectionValidation(FormValidationRequest formValidationRequest) {
+		List<FormBuilderSectionComponentEntity> components = componentRepository.getAllComponentBySection(formValidationRequest.getFormBuilderSectionId());
+		Map<Integer, FormBuilderSectionComponentEntity> componentMap = components.stream().collect(Collectors.toMap(FormBuilderSectionComponentEntity::getFormBuilderSectCompId, Function.identity()));
+		List<FormEvaluateValidationResponse> processedResponses = new ArrayList<>();
+
+		List<CompletableFuture<List<FormEvaluateValidationResponse>>> futures = new ArrayList<>();
+
+		Map<Integer, String> componentIdRuleIdMap = formDAO.getComponentIdRuleIdMap(null, formValidationRequest.getFormBuilderSectionId(), null);
+
+		for (Map.Entry<Integer, String> entry : componentIdRuleIdMap.entrySet()) {
+		    Integer componentId = entry.getKey();
+		    String ruleIds = entry.getValue();
+		    
+		    CompletableFuture<List<FormEvaluateValidationResponse>> future = CompletableFuture.supplyAsync(() ->
+		            formDAO.evaluateFormCompValidation(formValidationRequest,
+		                    getLoggedInUser(), AuthenticatedUser.getLoginPersonId(), componentId, ruleIds));
+		    
+		    futures.add(future);
+		}
+
+		CompletableFuture<Void> allOfFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+
+		CompletableFuture<List<FormEvaluateValidationResponse>> mandatoryValidationFuture = CompletableFuture.supplyAsync(() ->
+		        formDAO.evaluateFormCompMandatoryValidation(null, formValidationRequest.getFormBuilderSectionId(), null, formValidationRequest));
+
+		allOfFutures.thenCombine(mandatoryValidationFuture, (unused, mandatoryValidationResponses) -> {
+		    processedResponses.addAll(mandatoryValidationResponses);
+
+		    processedResponses.parallelStream().forEach(response -> {
+		        FormBuilderSectionComponentEntity component = componentMap.get(response.getComponentId());
+		        response.setLabel(component.getLabel());
+		        response.setSectionId(component.getSectionId());
+		    });
+
+		    return processedResponses;
+		}).join();
+
+		return processedResponses;
+	}
+
+	public List<FormEvaluateValidationResponse> performComponentValidation(FormValidationRequest formValidationRequest) {
+		List<FormEvaluateValidationResponse> formEvaluateValidationResponseList = new ArrayList<>();
+		Map<Integer, String> componentIdRuleIdMap = formDAO.getComponentIdRuleIdMap(null, null, formValidationRequest.getFormBuilderSectCompId());
+		List<CompletableFuture<List<FormEvaluateValidationResponse>>> futures = componentIdRuleIdMap.entrySet().stream()
+			    .map(entry -> {
+			        Integer componentId = entry.getKey();
+			        String ruleIds = entry.getValue();
+			        return CompletableFuture.supplyAsync(() -> formDAO.evaluateFormCompValidation(formValidationRequest, getLoggedInUser(), AuthenticatedUser.getLoginPersonId(), componentId, ruleIds));
+			    })
+			    .toList();
+			// Combine all futures into a single CompletableFuture
+			CompletableFuture<Void> allOfFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+			// Wait for all futures to complete
+			allOfFutures.join();
+			// Retrieve the results from each future and add them to formEvaluateValidationResponseList
+			futures.forEach(future -> formEvaluateValidationResponseList.addAll(future.join()));
+			// Asynchronously execute formDAO.evaluateFormCompMandatoryValidation
+			CompletableFuture<List<FormEvaluateValidationResponse>> mandatoryValidationFuture = CompletableFuture.supplyAsync(() ->
+			        formDAO.evaluateFormCompMandatoryValidation(null, null, formValidationRequest.getFormBuilderSectCompId(), formValidationRequest));
+			// Wait for the mandatoryValidationFuture to complete and add its result to formEvaluateValidationResponseList
+			formEvaluateValidationResponseList.addAll(mandatoryValidationFuture.join());
+			return formEvaluateValidationResponseList;
+	}
+
 }

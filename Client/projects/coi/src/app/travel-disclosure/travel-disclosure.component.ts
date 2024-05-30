@@ -13,11 +13,11 @@ import {
     TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
     REPORTER_HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
-    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, TRAVEL_REVIEW_STATUS
+} from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { closeCommonModal, openCommonModal } from '../common/utilities/custom-utilities';
-import {TravelReviewStatus} from '../shared/coi-enum';
 
 type Method = 'SOME' | 'EVERY';
 
@@ -64,7 +64,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     };
     helpTexts = [];
     withdrawHelpTexts = [
-        `Withdraw any disclosure in 'Submitted' status.`,
+        `Withdraw disclosures currently in the 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
@@ -74,7 +74,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
-    TravelReviewStatus = TravelReviewStatus;
+    TRAVEL_REVIEW_STATUS = TRAVEL_REVIEW_STATUS;
 
     constructor(
         public router: Router,
@@ -107,6 +107,11 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this._route.queryParams.subscribe(params => {
             const MODULE_ID = params['disclosureId'];
             const homeUnit = this.getHomeUnit();
+            if(!MODULE_ID) {
+                this.travelDisclosure = new TravelDisclosure();
+                this._dataStore.setStoreData(this.travelDisclosure);
+                this.service.setUnSavedChanges(false, '');             
+            }
             if (!homeUnit && !MODULE_ID) {
                 this.router.navigate([REPORTER_HOME_URL]);
             }
@@ -124,7 +129,9 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     private clearAllDetails(): void {
         this.travelDisclosure = new TravelDisclosure();
         this._dataStore.setStoreData(this.travelDisclosure);
-        this._dataStore.removeCreateModalDetails();
+        if(!this._navigationService.navigationGuardUrl.includes('create')) {
+            this._dataStore.removeCreateModalDetails();
+        }
         this.service.setUnSavedChanges(false, '');
         subscriptionHandler(this.$subscriptions);
     }
@@ -137,6 +144,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.userDetails.homeUnit = this.travelDisclosure.homeUnitNumber;
             this.userDetails.homeUnitName = this.travelDisclosure.homeUnitName;
             this.entityDetails = this._dataStore.getEntityDetails();
+            this.setPersonEntityDetails();
         } else {
             this.setUserDetails();
         }
@@ -233,7 +241,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showReturnOrApproveButton(): boolean {
-        return this.checkAdministratorRight() && this.checkReviewStatusCode([TravelReviewStatus.REVIEW_IN_PROGRESS]);
+        return this.checkAdministratorRight() && this.checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]);
     }
 
     showHomeButton(): boolean {
@@ -270,7 +278,6 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.helpTexts = helpTexts;
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Approve' ? 'Approval' : actionBtnName;
         this.modalSize = 'lg';
-        this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);
         this.descriptionErrorMsg = descriptionErrorMsg;
         openCommonModal('travel-confirmation-modal');
@@ -280,6 +287,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.personEntityDetails.personFullName = this.travelDisclosure?.personFullName;
         this.personEntityDetails.entityName = this.travelDisclosure?.travelEntityName;
         this.personEntityDetails.unitDetails = `${this.travelDisclosure?.homeUnitNumber} - ${this.travelDisclosure?.homeUnitName}`;
+        this.personEntityDetails.homeUnitName = this.travelDisclosure?.homeUnitName;
+        this.personEntityDetails.homeUnit = this.travelDisclosure?.homeUnitNumber;
     }
 
     openConflictSlider(): void {
@@ -408,7 +417,18 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     openRiskSlider() {
-        this.isOpenRiskSlider = true;
+        this.$subscriptions.push(this.service.riskAlreadyModified({
+            'riskCategoryCode': this.travelDisclosure.riskCategoryCode,
+            'travelDisclosureId': this.travelDisclosure.travelDisclosureId
+        }).subscribe((data: any) => {
+            this.isOpenRiskSlider = true;
+        }, err => {
+            if (err.status === 405) {
+                this.service.concurrentUpdateAction = 'Disclosure Risk Status';
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk. Please try again.');
+            }
+        }))
     }
 
     closeSlider(event) {

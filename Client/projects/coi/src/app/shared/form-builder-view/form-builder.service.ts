@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
-import { FBConfiguration, FormBuilderSaveRO } from './form-builder-interface';
+import { FBActionEvent, FBConfiguration, FormBuilderSaveRO } from './form-builder-interface';
 
 @Injectable()
 
 export class FormBuilderService {
-    
+
     baseURL = '';
+    $formBuilderActionEvents = new Subject<FBActionEvent>();
+
     constructor(private _http: HttpClient, private _commonService: CommonService) {
         this.baseURL = this._commonService.formUrl;
      }
@@ -19,6 +21,9 @@ export class FormBuilderService {
 
     getOpaPersonType(): any {
         return this._http.get(this.baseURL + '/opa' + '/getOpaPersonType');
+    }
+    getFormBuilderDataForBlankForm(configuration: FBConfiguration) {
+        return this._http.post(this.baseURL + '/formbuilder/getBlankForm', configuration);
     }
 
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {

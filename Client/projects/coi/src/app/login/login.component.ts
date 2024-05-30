@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         username: '',
         password: ''
     };
-    loginFail = false;
+    isLoggedInWithInactiveUser = false;
     $subscriptions: Subscription[] = [];
 
     @ViewChildren('input') usernameInput: any;
@@ -63,26 +63,29 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isSaving = false;
                 if (data.body != null) {
                     if (data.body) {
-                        this.commonService.updateLocalStorageWithUserDetails(data);
-                        // this.commonService.getRequiredParameters().then(systemParameters => {
-                        //     this.commonService.assignSystemParameters(systemParameters);
-                        // });
-                        this.commonService.fetchPermissions(true).then((res) => {
-                            const isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-                                || this.commonService.isCoiReviewer;
-                            const isOPAAdmin = this.commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
-                            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
-                        });
+                            this.commonService.updateLocalStorageWithUserDetails(data);
+                            // this.commonService.getRequiredParameters().then(systemParameters => {
+                            //     this.commonService.assignSystemParameters(systemParameters);
+                            // });
+                            this.commonService.redirectionBasedOnRights();
                     }
                 }
             }, (err: HttpErrorResponse) => {
                 this.isSaving = false;
-                if (err.status == 403) {
+                if (err.status == 401) {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');
+                } else if (err.status == 403){
+                    this.isLoggedInWithInactiveUser = true;
                 } else {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 }
             }));
+        }
+    }
+
+    resetVisiblityIcon() {
+        if(!this.credentials.password) {
+            this.showPassword = false;
         }
     }
 

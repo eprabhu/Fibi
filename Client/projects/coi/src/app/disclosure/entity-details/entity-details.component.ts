@@ -25,10 +25,10 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     questionnaireSection: any = '';
     relationValidationMap = new Map();
-    entityDetails = {};
     entityNumber: any;
     isSaving = false;
     checkedRelationships = {};
+    SFI_ADDITIONAL_DETAILS_SECTION_NAME = SFI_ADDITIONAL_DETAILS_SECTION_NAME;
 
     constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
         private _commonService: CommonService, private _navigationService: NavigationService) {}
@@ -38,15 +38,14 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.activeTab = 'QUESTIONNAIRE';
         this.isTriggeredFromSlider = this.checkForSFIOpenedFromSlider();
         this.getQueryParams();
-        this.getSfiEntityDetails();
         await this.getDefinedRelationships();
-        this.getAvailableRelationship(); 
+        this.getAvailableRelationship();
         this.listenToAddRelationModal();
         this.listenToLeaveConfirmationModal();
     }
 
     getQueryParams() {
-        this.$subscriptions.push(this._route.queryParams.subscribe(params => { 
+        this.$subscriptions.push(this._route.queryParams.subscribe(params => {
             this.entityId = params['personEntityId'] || this.entityId;
             this.entityNumber = params['personEntityNumber'] || null;
         }));
@@ -113,14 +112,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         hideModal('hiddenUnsavedChanges');
     }
 
-    getSfiEntityDetails() {
-        this.$subscriptions.push(this.entityDetailService.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
-            this.entityDetails = res.coiEntity;
-        }, _error => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-        }));
-    }
-
     listenToLeaveConfirmationModal() {
         this.$subscriptions.push(this.entityDetailService.$emitUnsavedChangesModal.subscribe((data: any) => {
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
@@ -154,6 +145,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
                 this.entityDetailService.globalSave$.next();
             }
+            this.relationValidationMap.clear();
             openModal('addRelationshipModal');
         }))
     }
@@ -190,11 +182,11 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         } else if (this.entityDetailService.toBeActiveTab === 'QUESTIONNAIRE') {
             this.openQuestionnaire(!isEmptyObject(this.entityDetailService.currentRelationshipQuestionnaire) ? this.entityDetailService.currentRelationshipQuestionnaire : this.entityDetailService.definedRelationships[0]);
         } else if (this.entityDetailService.isVersionChange) {
-            this.viewRelationComponent.loadCurrentVersion();        
+            this.viewRelationComponent.loadCurrentVersion();
         }
         this.entityDetailService.isVersionChange = false;
     }
-    
+
     questionnaireChangeModalLeaveTab() {
         this.entityDetailService.isRelationshipQuestionnaireChanged = false;
         let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));

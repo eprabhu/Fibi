@@ -13,7 +13,7 @@ import { coiReviewComment } from '../../../../shared-components/shared-interface
 @Component({
     selector: 'app-certify-summary',
     templateUrl: './certify-summary.component.html',
-    styleUrls: ['./certify-summary.component.css']
+    styleUrls: ['./certify-summary.component.scss']
 })
 export class CertifySummaryComponent implements OnInit,OnDestroy {
 
