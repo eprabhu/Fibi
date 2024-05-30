@@ -171,7 +171,7 @@ export class CommonService {
     }
 
     getDashboardActiveModules(moduleCode = '') {
-        return this._http.get(this.baseUrl + '/getModulesConfiguration' + (moduleCode ? '/' + moduleCode : ''));
+        return this._http.get(this.fibiUrl + '/getModulesConfiguration' + (moduleCode ? '/' + moduleCode : ''));
     }
 
     /**
