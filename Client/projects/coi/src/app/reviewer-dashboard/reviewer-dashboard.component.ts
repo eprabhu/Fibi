@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForEntity, getEndPointOptionsForLeadUnit } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
@@ -10,6 +9,7 @@ import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation} from '../common/utilities/animations';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-reviewer-dashboard',

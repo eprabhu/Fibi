@@ -7,11 +7,11 @@
             <div class="row d-flex px-0" tabindex="-1">
                 <label class="fw-500 fs-14 col-custom" for="travel-disclosure-entity-name">Entity Name :</label>
                 <div class="col">
-                    <app-endpoint-search (onSelect)="selectedEntityEvent($event)" [clearField]="clearField"
-                        [httpOptions]="entitySearchOptions" (change)="setUnSavedChangesTrue();"
-                        [isError]="(mandatoryList?.has('entity'))" class="w-100"
-                        [uniqueId]="'travel-disclosure-entity-name'" autocomplete="off">
-                    </app-endpoint-search>
+                    <app-elastic [options]="entitySearchOptions"
+                            [clearField]="clearField" [uniqueId]="'travel-disclosure-entity-name'"
+                            [isError]="(mandatoryList?.has('entity'))" class="w-100"
+                            (selectedResult)="selectedEntityEvent($event)">
+                    </app-elastic>
                     <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-msg d-block position-absolute">
                         {{mandatoryList?.get('entity')}}
                     </span>

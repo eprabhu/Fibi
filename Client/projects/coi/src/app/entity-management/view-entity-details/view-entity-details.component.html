@@ -433,11 +433,10 @@
                 <div *ngIf="entityRelationshipValue && entityRelationshipValue !== '1'" class="row fs-14 mt-2">
                   <div class="col pt-2">
                     <label class="fw-bold" for="search-entity-name"><span class="text-danger px-1">*</span>Entity Search</label>
-                    <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                      [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity'"
-                      class=" text-secondary fs-13" [uniqueId]="'search-entity-name'"
-                      [isError]="approveEntityValidateMap?.has('entityName')">
-                    </app-endpoint-search>
+                    <app-elastic [options]="EntitySearchOptions" [placeHolder]="'Type here for entity'" class="text-secondary fs-13"
+                            [clearField]="clearField" [uniqueId]="'search-entity-name'"
+                            (selectedResult)="selectedEvent($event)">
+                    </app-elastic>
                     <span *ngIf="approveEntityValidateMap?.has('entityName')" class="invalid-feedback d-block fs-13">
                       {{approveEntityValidateMap?.get('entityName')}}
                     </span>
