@@ -6,7 +6,6 @@ import {AppComponent} from './app.component';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {CommonService} from "./common/services/common.service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {SharedModule} from "../../../fibi/src/app/shared/shared.module";
 import {HeaderComponent} from "./common/header/header.component";
 import {MatIconModule} from "@angular/material/icon";
 import {AppRouterComponent} from "./common/app-router/app-router.component";
@@ -27,6 +26,7 @@ import {HeaderService} from "./common/header/header.service";
 import { LoginGuard } from './common/services/guards/login-guard.service';
 import { ElasticConfigService } from './common/services/elastic-config.service';
 import { InformationAndHelpTextService } from './common/services/informationAndHelpText.service';
+import { SharedModule } from './shared/shared.module';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();

@@ -19,6 +19,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     currentReviewer: any = {};
     reviewerList: any = [];
     $subscriptions: Subscription[] = [];
+    completeReviewHelpText = 'You are about to complete the review.';
+    startReviewHelpText = 'You are about to start the review.';
 
     constructor(private _coiService: CoiService,
         private _dataStore: DataStoreService,

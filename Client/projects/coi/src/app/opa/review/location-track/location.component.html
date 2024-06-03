@@ -164,12 +164,15 @@
 <!-- Review Ends-->
 <!-- DELETE MEMBER WARNING MODAL -->
 <div class="modal modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteReviewModal"
-   role="dialog" aria-labelledby="opaDeleteModalTitle" aria-hidden="true">
+   role="dialog" aria-labelledby="opaDeleteModalTitle" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="opaDeleteModalTitle">Delete Review</h5>
-                <button aria-label="Click to close delete reviewer modal" class="btn-close fs-12" title="Click to close" data-bs-dismiss="modal" id="delete_reviewer_dissmiss_btn"
+                <h5 class="modal-title" id="opaDeleteModalTitle">
+                    <span>Delete Review at {{reviewActionConfirmation?.reviewLocationType?.description}}</span>
+                    <app-common-help-text [helpTextHardCoded]="deleteReviewHelpText"></app-common-help-text>
+                </h5>
+                <button aria-label="Click here to close delete reviewer modal" class="btn-close fs-12" title="Click here to close" data-bs-dismiss="modal" id="delete_reviewer_dissmiss_btn"
                     type="button">
                 </button>
             </div>
@@ -177,10 +180,10 @@
                 <p>Are you sure you want to delete this review?</p>
             </div>
             <div class="modal-footer">
-                <button id="delete_reviewer_cancel_btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Cancel"
-                    data-bs-toggle="modal" aria-label="Click to close delete Reviewer modal">Cancel</button>
-                <button id="delete_reviewer_delete_btn" type="button" class="btn btn-primary fs-14" title="Delete Review"
-                    (click)="deleteReview()" data-bs-dismiss="modal" aria-label="Click to delete reviewer">Delete</button>
+                <button id="delete_reviewer_cancel_btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Click here to cancel"
+                    aria-label="Click here to cancel delete reviewer">Cancel</button>
+                <button id="delete_reviewer_delete_btn" type="button" class="btn btn-primary fs-14" title="Click here to delete review"
+                    (click)="deleteReview()" data-bs-dismiss="modal" aria-label="Click here to delete reviewer">Delete</button>
             </div>
         </div>
     </div>
@@ -191,9 +194,15 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="opa-addedit-review">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }}
+                <h5 class="modal-title" id="opa-addedit-review" *ngIf="modifyIndex != -1">
+                    <span>Edit Reviewer at {{reviewDetails?.reviewLocationType?.description}}</span>
+                    <app-common-help-text [helpTextHardCoded]="editReviewerHelpText"></app-common-help-text>
                 </h5>
-                <button type="button" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="add-reviewer-cancel" attr.aria-label="Click to close {{modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer'}} modal"
+                <h5 class="modal-title" id="opa-addedit-review" *ngIf="modifyIndex == -1">
+                    <span>Add Reviewer</span>
+                    <app-common-help-text [helpTextHardCoded]="addReviewerHelpText"></app-common-help-text>
+                </h5>
+                <button type="button" title="Click here to close" class="btn-close fs-12" data-bs-dismiss="modal" id="add-reviewer-cancel" attr.aria-label="Click to close {{modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer'}} modal"
                     (click)="reviewDetails = {}">
                 </button>
             </div>
@@ -317,11 +326,11 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="add-reviewer-close"
-                    attr.aria-label="Click to cancel {{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }} and Close modal"
-                    type="button" title="Cancel" (click)="clearReviewModal();" title="Click to close">Close</button>
+                    attr.aria-label="Click here to cancel {{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }} and Close modal"
+                    type="button" title="Cancel" (click)="clearReviewModal();" title="Click here to cancel">Cancel</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                    attr.aria-label="Click to {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}"
-                    (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer'">
+                    attr.aria-label="Click here to {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}"
+                    (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Click here to update reviewer' : 'Click here to add reviewer'">
                     {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}
                 </button>
             </div>

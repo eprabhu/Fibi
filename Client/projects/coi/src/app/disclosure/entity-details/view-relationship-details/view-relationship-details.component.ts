@@ -471,7 +471,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     saveOrAddRelationshipModal() {
-        this.entityDetailsServices.$triggerAddRelationModal.next(true);
+        this.entityDetailsServices.$triggerAddRelationModal.next({'openModal': true, 'entityDetails': this.entityDetails});
     }
 
     canAddRelationship() {
@@ -507,6 +507,25 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     listenScreenSize() {
         if(!this.isUserCollapse) {
             this.isCardExpanded = window.innerWidth > 1399;
+        }
+    }
+
+    getRelationshipDetails() { //change to ervice
+        const  a= [];
+        if(this.entityDetailsServices.definedRelationships.length) {
+            this.entityDetailsServices.definedRelationships.forEach((ele) => {
+                a.push(ele.validPersonEntityRelType);
+            })
+        }
+        return a;
+    }
+
+    getIcon(key): string {
+        switch(key) {
+            case '2': return 'handshake';
+            case '3': return 'flight';
+            case '1': return 'paid';
+            default: return;
         }
     }
 
