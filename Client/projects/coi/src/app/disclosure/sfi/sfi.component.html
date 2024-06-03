@@ -121,7 +121,7 @@
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
   [personEntityId]="personEntityId" [updatedRelationshipStatus]="updatedRelationshipStatus" (closeModal)="closeActivateInactivateSfiModal($event)"
-  [personEntityNumber]="personEntityNumber">
+  [personEntityNumber]="personEntityNumber" [entityDetails]="entityDetails" [relationshipDetails]="relationshipDetails">
 </app-activate-inactivate-sfi-modal>
 
   <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-delete-button" data-bs-toggle="modal" data-bs-target="#deleteSFIConfirmationModal"></button>

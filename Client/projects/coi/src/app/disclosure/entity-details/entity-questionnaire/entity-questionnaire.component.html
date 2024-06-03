@@ -18,13 +18,16 @@
 </div>
 
 <!-- DELETE RELATIONSHIP MODAL -->
-<div class="modal modal-coi modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteRelationModal"
+<div class="modal modal-coi fade mySkinDialog" id="deleteRelationModal"
     tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fs-16">Delete Relationship</h5>
-                <button aria-label="Click to close"  title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <h5 class="modal-title fs-16">
+                    <span>Delete Relationship</span>
+                    <app-common-help-text *ngIf="deleteHelpText" [helpTextHardCoded]="deleteHelpText"></app-common-help-text>
+                </h5>
+                <button aria-label="Click here to close"  title="Click here to close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>
@@ -36,7 +39,7 @@
                 <button id="coi-delete-relationship-modal-cancle-btn" type="button" class="btn btn-outline-secondary"
                     aria-label="Click here to cancel" title="Click here to cancel" data-bs-dismiss="modal">Cancel</button>
                 <button id="coi-delete-relationship-modal-delete-btn" type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal"
-                    aria-label="Click to delete" title="Click to delete" (click)="deleteRelationship()">Delete</button>
+                    aria-label="Click to delete entity relationship" title="Click here to delete entity relationship" (click)="deleteRelationship()">Delete</button>
             </div>
         </div>
     </div>

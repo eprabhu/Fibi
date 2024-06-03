@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { fadeInOutHeight, heightAnimation } from '../../common/utilities/animations';
-import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 declare const $: any;
@@ -55,13 +55,14 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isConcurrency = false;
     isUserCollapse = false;
     readMore: string;
-    modifyTypeHelpText = `Select "Minor Modifications" for typos. Select "Major Modifications" for changing the company name,
+    modifyTypeHelpText = `Select 'Minor Modifications' for typos. Select 'Major Modifications' for changing the company name,
                           ownership type, and permanent change in entity address that reflects in entity country.`;
-    inactivateHeaderHelpText = `You are about to inactivate the entity. If the entity is used in any of the "Active" SFIs (financial or travel), then a new version of the
-                                entity is created in "Inactive" status and the previous version goes to "Archive" status.`;
     entitySliderSectionConfig : any = {};
 
-    constructor(private _router: Router, private _route: ActivatedRoute,
+    inactivateHeaderHelpText = `You are about to inactivate the entity. If the entity is used in any of the 'Active' SFIs (financial or travel), then a new version of the
+                                entity is created in 'Inactive' status and the previous version goes to 'Archive' status.`;
+
+    constructor(private _router: Router,
         public entityManagementService: EntityManagementService,
         private _commonServices: CommonService,
         private _navigationService: NavigationService,
@@ -134,7 +135,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             this.mandatoryList.set('change', 'Please choose a modification type.');
         }
         if (!this.modifyDescription) {
-            this.mandatoryList.set('description', 'Please provide a reason for modifying the entity.');
+            this.mandatoryList.set('description', 'Please provide the reason for modifying the entity.');
         }
         return this.mandatoryList.size === 0 ? true : false;
     }
@@ -271,6 +272,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.relationshipEntityName = '';
         this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
         this.entityRelationshipNumber = null;
+        this.approveEntityValidateMap.clear();
     }
 
     toggleSlider() {
@@ -326,4 +328,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 this._commonServices.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
             })
     }
+
+    isEntityDetailsAvailable(): boolean {
+        return !isEmptyObject(this.entityDetails);
+    }
+
 }
