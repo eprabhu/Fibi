@@ -56,6 +56,9 @@ export class LocationComponent implements OnInit, OnDestroy {
     collapseViewMore = {};
     isCOIAdministrator = false;
     isOPAEditMode = false;
+    editReviewerHelpText = 'You are about to edit the review.';
+    addReviewerHelpText = 'You are about to add a review.';
+    deleteReviewHelpText = 'You are about to delete the review.'
 
     constructor(
         private _elasticConfigService: ElasticConfigService,

@@ -2,23 +2,28 @@ package com.polus.fibicomp.general.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "DYN_SUBSECTION_CONFIG")
 public class DynamicSubSectionConfig implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -45,6 +50,16 @@ public class DynamicSubSectionConfig implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "DYN_SUBSECTION_CONFIG_FK1"), name = "SECTION_CODE", referencedColumnName = "SECTION_CODE")
 	private DynamicSectionConfig sectionConfig;
+
+	@Column(name = "HELP")
+	private String help;
+
+	@Column(name = "INSTRUCTION")
+	private String instruction;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "subSectionConfig", orphanRemoval = true, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	private List<DynElementConfig> elementConfig;
 
 	public String getSubSectionCode() {
 		return subSectionCode;
@@ -102,4 +117,19 @@ public class DynamicSubSectionConfig implements Serializable {
 		this.sectionConfig = sectionConfig;
 	}
 
+	public String getHelp() {
+		return help;
+	}
+
+	public void setHelp(String help) {
+		this.help = help;
+	}
+
+	public String getInstruction() {
+		return instruction;
+	}
+
+	public void setInstruction(String instruction) {
+		this.instruction = instruction;
+	}
 }

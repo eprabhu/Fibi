@@ -33,6 +33,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     $externalSaveEvent = new BehaviorSubject<Boolean>(null);
     currentRelationshipDetails: any = {};
     hasPermissionToView = true;
+    deleteHelpText = 'You are about to delete entity relationship.';
 
     constructor(private _commonService: CommonService, public entityDetailsServices: EntityDetailsService) { }
 
@@ -124,7 +125,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
     async updateDefinedRelationships(res) {
         await this.addToAvailableRelation();
-        this.removeUnsavedDetailsChanges();       
+        this.removeUnsavedDetailsChanges();
         if (this.currentRelationshipDetails.validPersonEntityRelTypeCode in this.entityDetailsServices.relationshipCompletedObject) {
             delete this.entityDetailsServices.relationshipCompletedObject[this.currentRelationshipDetails.validPersonEntityRelTypeCode];
         }

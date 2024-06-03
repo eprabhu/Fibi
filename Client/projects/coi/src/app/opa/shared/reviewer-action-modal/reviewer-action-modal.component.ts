@@ -20,6 +20,8 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     currentReviewer: any = {};
     $subscriptions: Subscription[] = [];
     reviewerList: any = [];
+    completeReviewHelpText = 'You are about to complete the review.';
+    startReviewHelpText = 'You are about to start the review.';
 
     constructor( private _opaService: OpaService,
                  private _dataStore: DataStoreService,

@@ -29,18 +29,19 @@ export class OpaComponent implements OnInit {
     isAddAssignModalOpen = false;
     defaultAdminDetails = new DefaultAssignAdminDetails();
     personProjectDetails = new PersonProjectOrEntity();
-    helpTexts = [];
+    helpTexts = '';
     primaryBtnName = '';
     descriptionErrorMsg = '';
     textAreaLabelName = '';
-    withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
-    returnErrorMsg = 'Describe the reason for returning the disclosure';
-    withdrawHelpTexts = [
-        `Withdraw disclosures currently in the 'Submitted' status.`,
-        `Describe the reason for withdrawal in the field provided.`,
-        `Click on 'Withdraw' button to recall your disclosure for any modification.`
-    ];
-    returnHelpTexts = [];
+    withdrawErrorMsg = 'Please provide the reason for withdrawing the disclosure.';
+    returnErrorMsg = 'Please provide the reason for returning the disclosure.';
+    completeReviewHelpText = 'You are about to complete the disclosure\'s final review.'
+    confirmationHelpTexts = '';
+    returnHelpTexts = 'Please provide the reason for return.';
+    withdrawHelpTexts = 'Please provide the reason for withdrawal.';
+    submitHelpTexts = 'You are about to submit the OPA disclosure.';
+    returnModalHelpText = 'You are about to return the OPA disclosure.';
+    withdrawModalHelpText = 'You are about to withdraw the OPA disclosure.';
     description: any;
     showSlider = false;
     selectedType: string;
@@ -95,7 +96,7 @@ export class OpaComponent implements OnInit {
 
     subscribeSaveComplete() {
         this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
-            if(data && this.validationList?.length) {
+            if(data && (this.validationList?.length || this.isSubmitClicked)) {
                 this.validateForm();
             }
         }))
@@ -128,13 +129,18 @@ export class OpaComponent implements OnInit {
         this.isAddAssignModalOpen = false;
     }
 
-    openConfirmationModal(actionBtnName: string, helpTexts: string [] = [], descriptionErrorMsg: string = ''): void {
-        this.helpTexts = helpTexts;
+    openConfirmationModal(actionBtnName: string, helpTexts: string = '', descriptionErrorMsg: string = '', modalHelpText: string = ''): void {
         this.primaryBtnName = actionBtnName;
         this.descriptionErrorMsg = descriptionErrorMsg;
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
         this.setPersonProjectDetails();
-        document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+        this.confirmationHelpTexts = '';
+        this.helpTexts = '';
+        setTimeout(() => {
+            this.confirmationHelpTexts = modalHelpText;
+            this.helpTexts = helpTexts;
+            document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+        });
     }
 
     performDisclosureAction(event): void {
@@ -206,11 +212,6 @@ export class OpaComponent implements OnInit {
 
     private getDataFromStore() {
         this.opa = this.dataStore.getData();
-        this.returnHelpTexts = [
-            `Return any disclosure in '${this.opa.opaDisclosure.reviewStatusType.description}' status.`,
-            `Describe the reason for returning  in the field provided.`,
-            `Click on 'Return' button to return the disclosure for any modification.`
-        ];
     }
 
     private listenDataChangeFromStore() {

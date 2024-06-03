@@ -96,15 +96,18 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-4 align-items-center">
-                        <label class="fs-14 fw-500">Risk</label>
+                        <label class="fs-14 fw-500" for="coi-disclosure-risk">Risk
+                             <app-common-help-text [subSectionId]="802" [elementId]="'coi-disclosure-risk'"></app-common-help-text>
+                        </label>
                         <span>
-                            <select class="form-control form-select" [(ngModel)]="riskCategoryCode"
+                            <select class="form-control form-select" [(ngModel)]="riskCategoryCode" id="coi-disclosure-risk"
                                 [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"
                                 (ngModelChange)="clearValidationOnValueChange('LEVEL')">
                                 <option [value]=null>--Select--</option>
                                 <option *ngFor="let status of riskLookup" [value]="status.riskCategoryCode">
                                     {{status?.description}}</option>
                             </select>
+                            <app-common-information [elementId]="'coi-disclosure-risk'" [subSectionId]="802"></app-common-information>
                             <div *ngIf="riskValidationMap?.has('riskLevelCode')" class="invalid-feedback d-block fs-12">
                                 {{riskValidationMap?.get('riskLevelCode')}}
                             </div>
@@ -114,11 +117,15 @@
                         </span>
                     </div>
                     <div class="col-12 mt-3">
-                        <label class="fs-14 fw-500">Describe the reason for Risk level change</label>
-                        <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
+                        <label class="fs-14 fw-500"  for="coi-disclosure-risk-desc">Describe the reason for Risk level change
+                            <app-common-help-text [subSectionId]="802" [elementId]="'coi-disclosure-risk-desc'"></app-common-help-text>
+                        </label>
+                        <textarea id="coi-disclosure-risk-desc" class="form-control fs-14" placeholder="Description" row="1"
                             [(ngModel)]="riskComment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
                             [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
-                            (ngModelChange)="clearValidationOnValueChange('COMMENT'); riskComment = riskComment.trim()"></textarea>
+                            (ngModelChange)="clearValidationOnValueChange('COMMENT'); riskComment = riskComment.trim()">
+                        </textarea>
+                            <app-common-information [elementId]="'coi-disclosure-risk-desc'" [subSectionId]="802"></app-common-information>
                         <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
                             {{riskValidationMap?.get('comment')}}
                         </div>

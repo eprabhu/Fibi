@@ -64,7 +64,9 @@
             <div *ngIf="isEditMode" class="card shadow-sm p-3">
                 <div class="row">
                     <div class="col-md-12 col-xl-4">
-                        <label class="fs-14 fw-500" for="select-conflict-status">Conflict Status</label>
+                        <label class="fs-14 fw-500" for="select-conflict-status">Conflict Status
+                            <app-common-help-text [subSectionId]="803" [elementId]="'select-conflict-status'"></app-common-help-text>
+                        </label>
                         <span>
                             <select class="form-control form-select" [(ngModel)]="conflictStatus" id="select-conflict-status"
                                 [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') || projectConflictValidationMap?.has('duplicateStatus')  ? 'is-invalid d-block' : ''"
@@ -73,6 +75,7 @@
                                 <option *ngFor="let status of conflictLookUpList" [value]="status.projectConflictStatusCode">
                                     {{status?.description}}</option>
                             </select>
+                            <app-common-information [elementId]="'select-conflict-status'" [subSectionId]="803"></app-common-information>
                             <div *ngIf="projectConflictValidationMap?.has('coiConflictStatusCode')"
                                 class="invalid-feedback d-block fs-12">
                                 {{projectConflictValidationMap?.get('coiConflictStatusCode')}}
@@ -84,11 +87,15 @@
                         </span>
                     </div>
                     <div class="col-md-12 col-xl-8">
-                        <label class="fs-14 fw-500" for="main-panel-comnt">Describe the reason for Conflict status change</label>
-                        <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
+                        <label class="fs-14 fw-500" for="coi-conflict-status-change">Describe the reason for Conflict status change
+                            <app-common-help-text [subSectionId]="803" [elementId]="'coi-conflict-status-change'"></app-common-help-text>
+                        </label>
+                        <textarea id="coi-conflict-status-change" class="form-control fs-14" placeholder="Description" row="1"
                             [(ngModel)]="comment" appAutoGrow rows="1" appLengthValidator [limit]="2000" [isShowLimiter]="true"
                             (ngModelChange)="comment = comment.trim()"
-                            [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
+                            [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''">
+                        </textarea>
+                        <app-common-information [elementId]="'coi-conflict-status-change'" [subSectionId]="803"></app-common-information>
                         <div *ngIf="projectConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
                             {{projectConflictValidationMap?.get('comment')}}
                         </div>

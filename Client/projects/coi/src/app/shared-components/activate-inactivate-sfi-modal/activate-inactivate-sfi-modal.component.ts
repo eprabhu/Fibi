@@ -24,12 +24,18 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
     @Input() entityDetails: any;
+    @Input() relationshipDetails: any;
     @Input() personEntityId: number = null;
     @Input() updatedRelationshipStatus: string;
     @Input() personEntityNumber: any;
+    modalHelpTexts = ''
     concurrentActionName = '';
+    helpTexts: string;
 
     ngOnInit() {
+        this.helpTexts = this.updatedRelationshipStatus == 'INACTIVE' ? 'Please provide the reason for inactivation.' :
+                         'Please provide the reason for activation.'
+        this.modalHelpTexts = this.updatedRelationshipStatus == 'INACTIVE' ? 'You are about to inactivate your relationship with entity.': 'You are about to activate your relationship with entity.'
         document.getElementById('activate-inactivate-show-btn').click();
     }
 
@@ -73,7 +79,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     validForActivateAndInactivate(): boolean {
         this.reasonValidateMapSfi.clear();
         if (!this.activateInactivateReason && this.updatedRelationshipStatus == 'INACTIVE') {
-            this.reasonValidateMapSfi.set('reason', `* Please provide a reason for inactivation.`);
+            this.reasonValidateMapSfi.set('reason', `Please provide the reason for inactivation.`);
         }
         return this.reasonValidateMapSfi.size === 0 ? true : false;
     }

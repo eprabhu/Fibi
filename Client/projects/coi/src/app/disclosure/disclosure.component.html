@@ -336,7 +336,7 @@
                                             (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
                                                 area-describedby="Click to Withdraw"
                                                 class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
-                                                (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg);">
+                                                (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
                                                 <mat-icon aria-hidden="true">logout</mat-icon>
                                                 <span class="ms-2 fw-medium fs-14">Withdraw</span>
                                             </button>
@@ -346,7 +346,7 @@
                                            <!-- Check logged person and administrator are same -->
                                         <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
                                         (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
-                                            (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
+                                            (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
                                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                             <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
                                             <span class="ms-1 fw-medium fs-14">Return</span>
@@ -385,10 +385,10 @@
                                                      (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
                                                      && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"
                                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                                                [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click to complete review"
+                                                [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click here to complete final review"
                                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                                             <mat-icon aria-hidden="true">done</mat-icon>
-                                            <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
+                                            <span class="ms-2" *ngIf="isCardExpanded"> Complete Final Review </span>
                                         </button>
                                         <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
                                             <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
@@ -505,28 +505,31 @@
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard"
     data-bs-backdrop="static" aria-label="Complete Review" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header pe-0">
-                <h4 class="modal-title">Complete Review</h4>
-                <button aria-label="Click to close" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
-                    type="button">
+                <h4 class="modal-title">
+                    <span>Complete Final Review</span>
+                    <app-common-help-text [helpTextHardCoded]="completeReviewHelpText"></app-common-help-text>
+                </h4>
+                <button class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                    type="button" id="opa-complete-final-review-close-btn" title="Click here to close" aria-label="Click here to close" >
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row mt-2 mb-0">
-                    <div class="col-lg-12">
-                        <p class="fs-14">Are you sure you want to complete the review of this disclosure?</p>
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+                    <div class="col-lg-12 mt-3">
+                        <p class="fs-14">Are you sure you want to complete the final review of this disclosure?</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" aria-label="Click to Cancel" title="Click to Cancel"
-                    data-bs-dismiss="modal" type="button">Cancel
+                <button class="btn btn-outline-secondary fs-14"
+                    data-bs-dismiss="modal" type="button" id="opa-complete-final-review-cancel-btn" title="Click here to cancel" aria-label="Click here to cancel" >Cancel
                 </button>
                 <button (click)="completeDisclosureReview()" class="btn btn-primary fs-14" data-bs-dismiss="modal"
-                    aria-label="Click to Complete Review" title="Click to Complete Review"
-                    type="button">Complete Review
+                    type="button" id="coi-complete-final-review-cancel-btn" title="Click here to complete final review" aria-label="Click here to compelete final review" >Complete Final Review
                 </button>
             </div>
         </div>
@@ -694,12 +697,11 @@
             <div class="modal-body">
                 <div class="row">
                     <ng-container *ngIf="this.coiService.submitResponseErrors.length > 0">
-                        <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
-                            <p role="alert"
-                                class="fa validation-Message-box fa-exclamation-circle icon alert ps-4"
-                                [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'"
-                                role="alert"><span class="ms-2 fw-400 me-3 fs-14"> {{error.validationMessage}}</span></p>
-                        </div>
+                        <ng-container *ngFor="let error of coiService.submitResponseErrors">
+                            <div role="alert" class="alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
+                                <i class="fa fa-exclamation-circle icon me-2 fs-14" aria-hidden="true"></i>
+                            <span class="fs-14">{{error.validationMessage}}</span></div>
+                        </ng-container>
                     </ng-container>
                 </div>
             </div>
@@ -719,37 +721,21 @@
             <div class="modal-header">
                     <strong id="coi-disclosure-submit-confirm-modal-header" title="{{coiData?.projectDetail?.title}}">
                         <div class="new-line-property word-break-all">
-                            {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
-                            Disclosure
-                            <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                                - [
-                                <ng-container
-                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
-                                    #{{ coiData?.projectDetail?.moduleItemId }} :
-                                </ng-container>
-                                <ng-container
-                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
-                                    #{{ coiData?.projectDetail?.moduleItemKey }} :
-                                </ng-container>
-                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title |
-                                slice:0: 40)+'...' :
-                                coiData?.projectDetail?.title }}
-                                ] By
-                                <strong class="ms-1"
-                                    title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
-                            </ng-container>
+                            <span>Submit {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }} Disclosure</span>
+                            <app-common-help-text [helpTextHardCoded]="submitHelpTexts"></app-common-help-text>
                         </div>
                     </strong>
-                <button type="button" class="btn-close" title="Click to close" data-bs-dismiss="modal" aria-label="Click to close"
+                <button type="button" class="btn-close" title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close"
                     (click)="isSaving = false; coiService.submitResponseErrors = [];"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12">
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+                    <div class="col-12 mt-2">
                         <ng-container *ngIf="this.coiService.submitResponseErrors.length > 0">
                             <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
-                                <div *ngIf="error.validationType == 'VW'"
-                                    class="validation-Message-box alert alert-warning ps-4 fs-14" role="alert">
+                                <div *ngIf="error.validationType == 'VW'" role="alert"
+                                    class="alert alert-warning fs-14" role="alert">
                                     <i class="fa fa-exclamation-circle mr-2"></i>{{error.validationMessage}}
                                 </div>
                             </div>
@@ -757,11 +743,11 @@
                         <ng-container *ngIf="count > 0">
                             <div>
                                 <p class="fs-14">Are you sure you want to submit the
-                                    <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
+                                    <strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} </strong> disclosure?</p>
                             </div>
                         </ng-container>
                         <div *ngIf="count == 0">
-                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}}
+                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
                                 </strong> disclosure.</p>
                         </div>
                     </div>
@@ -769,10 +755,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary" id="prop-saveExit-dismiss-btn" data-bs-dismiss="modal"
-                    type="button" aria-label="Click to Cancel" title="Click to Cancel" (click)="isSaving = false; coiService.submitResponseErrors = [];">Cancel
+                    type="button" aria-label="Click here to cancel" title="Click here to cancel" (click)="isSaving = false; coiService.submitResponseErrors = [];">Cancel
                 </button>
                 <button class="btn btn-primary me-0" id="prop-saveExit-dismiss-btn" type="button"
-                    aria-label="Click to Submit" title="Click to Submit" data-bs-dismiss="modal" (click)="certifyDisclosure()">
+                    aria-label="Click here to submit" title="Click here to submit" data-bs-dismiss="modal" (click)="certifyDisclosure()">
                     Submit
                 </button>
             </div>
@@ -802,18 +788,16 @@
 <!--Disclosure Withdraw/Return Confirmation Modal-->
 <app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="primaryBtnName" [modalSize]="'lg'" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
+    [helpText] = "helpTexts"
     [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
-    [primaryBtnTooltip]= "'Click to'+' '+ primaryBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
+    [primaryBtnTooltip]= "'Click here to '+ primaryBtnName.toLowerCase() +' the disclosure.'" [secondaryBtnTooltip]= "'Click here to cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{primaryBtnName}} {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure</span>
+        <app-common-help-text *ngIf="confirmationHelpTexts" [helpTextHardCoded]="confirmationHelpTexts"></app-common-help-text>
     </ng-container>
     <!-- modal content -->
     <ng-container content>
-        <!-- help text -->
-        <div>
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" [rowLimit]="2"></app-help-text>
-        </div>
         <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>

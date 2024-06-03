@@ -23,6 +23,7 @@ import { PersonProjectEntityCardComponent } from './person-project-entity-card/p
 import { ReviewCommentListViewComponent } from './review-comment-list-view/review-comment-list-view.component';
 import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ConcurrencyWarningModalComponent } from './concurrency-warning-modal/concurrency-warning-modal.component';
+import { EntityDetailsCardComponent } from './entity-details-card/entity-details-card.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { ConcurrencyWarningModalComponent } from './concurrency-warning-modal/co
     EntityRiskSliderComponent,
     ReviewCommentListViewComponent,
     CoiReviewCommentsComponent,
-    ConcurrencyWarningModalComponent
+    ConcurrencyWarningModalComponent,
+    EntityDetailsCardComponent
   ],
   exports: [
     NoInformationComponent,
@@ -72,7 +74,8 @@ import { ConcurrencyWarningModalComponent } from './concurrency-warning-modal/co
     EntityRiskSliderComponent,
     ReviewCommentListViewComponent,
     CoiReviewCommentsComponent,
-    ConcurrencyWarningModalComponent
+    ConcurrencyWarningModalComponent,
+    EntityDetailsCardComponent
   ]
 })
 export class SharedComponentModule { }
