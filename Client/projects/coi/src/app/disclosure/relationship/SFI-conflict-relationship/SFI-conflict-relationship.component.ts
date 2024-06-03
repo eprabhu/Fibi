@@ -133,6 +133,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
       ele.projectConflictStatusCode = this.coiStatusCode;
       ele.disclComment.comment = this.coiDescription;
       ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
+      delete ele.isSaved;
       return ele;
     });
   }
