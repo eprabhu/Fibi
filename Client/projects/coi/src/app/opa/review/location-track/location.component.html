@@ -205,7 +205,9 @@
                     <div class="col-4" role="listbox"
                     aria-label="Review Location dropdown">
                         <label class="block-display" for="opa_review_location">
-                            <span class="mandatory text-danger me-1">*</span>Location</label>
+                            <span class="mandatory text-danger me-1">*</span>Location
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_location'"></app-common-help-text>
+                        </label>
                         <app-look-up (selectedResult)="onLocationSelect($event)"
                         [options]="disReviewLocation"
                         [selectedLookUpList]="locationType"
@@ -214,31 +216,38 @@
                         [title]="'Review Location'"
                         [uniqueId]="'opa_review_location'">
                         </app-look-up>
+                        <app-common-information [elementId]="'opa_review_location'" [subSectionId]="231"></app-common-information>
                         <div *ngIf="validationMap.has('location')">
                             <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('location')}}</span>
                         </div>
                     </div>
                     <div class="col-4" title="Reviewer">
-                        <label class="block-display" for="opa_reviewer">Reviewer</label>
+                        <label class="block-display" for="opa_reviewer">Reviewer
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_reviewer'"></app-common-help-text>
+                        </label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
                                      [isError]="validationMap.has('reviewer')" [uniqueId]="'opa_reviewer'"
                                      [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
+                        <app-common-information [elementId]="'opa_reviewer'" [subSectionId]="231"></app-common-information>
                         <div *ngIf="validationMap?.has('reviewer')">
                            <span class="mandatory d-inline-block text-danger fs-14">{{validationMap?.get('reviewer')}}</span>
                         </div>
                     </div>
                     <div class="col-4" role="listbox"
                          aria-label="Review Status dropdown">
-                        <label class="block-display" for="opa_review_location">
-                            <span class="mandatory text-danger me-1">*</span>Status</label>
+                        <label class="block-display" for="opa_review_status">
+                            <span class="mandatory text-danger me-1">*</span>Status
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_status'"></app-common-help-text>
+                        </label>
                             <app-look-up (selectedResult)="onStatusSelect($event)"
                             [options]="disReviewStatus" [isError]="validationMap.has('reviewStatus')"
                             [selectedLookUpList]="reviewStatusType"
                             [title]="'Review Status'"
                             [defaultValue]="reviewDetails.reviewStatusType ? reviewDetails.reviewStatusType.description : ''"
-                            [uniqueId]="'opa_review_location'">
+                            [uniqueId]="'opa_review_status'">
                             </app-look-up>
+                            <app-common-information [elementId]="'opa_review_status'" [subSectionId]="231"></app-common-information>
                             <div *ngIf="validationMap?.has('reviewStatus')">
                                 <span class="mandatory d-inline-block text-danger fs-14">{{validationMap?.get('reviewStatus')}}</span>
                             </div>
@@ -247,7 +256,9 @@
                 <div class="row mt-2">
                     <div class="col-4">
                         <label class="block-display" for="opa_review_start_date">
-                            <span class="mandatory text-danger me-1">*</span>Assigned On</label>
+                            <span class="mandatory text-danger me-1">*</span>Assigned On
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_start_date'"></app-common-help-text>
+                        </label>
                             <div>
                                 <span class="dateField w-100">
                                   <input matInput [matDatepicker]="startDate" id="opa_review_start_date" placeholder="{{datePlaceHolder}}"
@@ -260,13 +271,16 @@
                                   <mat-datepicker #startDate>
                                   </mat-datepicker>
                                 </span>
+                                <app-common-information [elementId]="'opa_review_start_date'" [subSectionId]="231"></app-common-information>
                                 <div *ngIf="validationMap.has('reviewStartDate')">
                                     <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('reviewStartDate')}}</span>
                                 </div>
                               </div>
                     </div>
                     <div class="col-4" *ngIf="reviewDetails?.reviewStatusTypeCode == '3'">
-                        <label class="d-block" for="opa_review_end_date"><span class="mandatory text-danger me-1">*</span>Review End Date </label>
+                        <label class="d-block" for="opa_review_end_date"><span class="mandatory text-danger me-1">*</span>Review End Date 
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_end_date'"></app-common-help-text>
+                        </label>
                         <div>
                             <span class="dateField w-100">
                               <input matInput [matDatepicker]="endDate" id="opa_review_end_date" placeholder="{{datePlaceHolder}}"
@@ -279,6 +293,7 @@
                               <mat-datepicker #endDate>
                               </mat-datepicker>
                             </span>
+                            <app-common-information [elementId]="'opa_review_end_date'" [subSectionId]="231"></app-common-information>
                             <div *ngIf="validationMap.has('reviewEndDate')">
                                 <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('reviewEndDate')}}</span>
                             </div>
@@ -291,9 +306,12 @@
                 <div class="row mt-2">
                     <div class="col-12">
                         <label class="block-display" for="opa_review_description">
-                            Description</label>
+                            Description
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_description'"></app-common-help-text>
+                        </label>
                         <textarea [(ngModel)]="reviewDetails.description" appLengthValidator [isShowLimiter]="true" title="Description"
                             [limit]="2000" rows="3" class="form-control" id="opa_review_description"></textarea>
+                            <app-common-information [elementId]="'opa_review_description'" [subSectionId]="231"></app-common-information>
                     </div>
                 </div>
             </div>

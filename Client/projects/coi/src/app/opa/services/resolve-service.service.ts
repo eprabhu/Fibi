@@ -12,9 +12,12 @@ import {
 } from '../../app-constants';
 import {NavigationService} from '../../common/services/navigation.service';
 import {OpaService} from './opa.service';
+import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
 
 @Injectable()
 export class ResolveServiceService {
+
+    private readonly _moduleCode = 'OPA23';
 
     $subscriptions: Subscription[] = [];
 
@@ -23,7 +26,8 @@ export class ResolveServiceService {
         private _dataStore: DataStoreService,
         private _opaService: OpaService,
         private _router: Router,
-        private _navigationService: NavigationService
+        private _navigationService: NavigationService,
+        private _informationAndHelpTextService : InformationAndHelpTextService
     ) {
     }
 
@@ -32,6 +36,7 @@ export class ResolveServiceService {
         return new Observable<boolean>((observer: Subscriber<boolean>) => {
             forkJoin(this.getHttpRequests(route)).subscribe((res: any[]) => {
                 if (res.length > 1) {
+                    this.updateSectionConfig(res[1]);
                     this.hideManualLoader();
                 }
                 if (res[0]) {
@@ -108,6 +113,11 @@ export class ResolveServiceService {
         if (MODULE_ID) {
             HTTP_REQUESTS.push(this.loadDisclosure(MODULE_ID));
         }
+        if (!this.isSectionConfigAlreadyFetched()) {
+            HTTP_REQUESTS.push(this.getDisclosureSectionConfig());
+        } else {
+            this.setModuleConfiguration();
+        }
         return HTTP_REQUESTS;
     }
 
@@ -133,6 +143,23 @@ export class ResolveServiceService {
             //     error.error !== 'DISCLOSURE_EXISTS' ? 'Please try again later.' : 'Disclosure already exists.');
             return new Observable(null);
         }
+    }
+
+    isSectionConfigAlreadyFetched() {
+        return Object.keys(this._dataStore.opaDisclosureSectionConfig).length;
+    }
+
+    getDisclosureSectionConfig() {
+        return this._commonService.getDashboardActiveModules(this._moduleCode)
+    }
+
+    updateSectionConfig(sectionData: any): void {
+        this._dataStore.opaDisclosureSectionConfig = this._commonService.getSectionCodeAsKeys(sectionData);
+        this.setModuleConfiguration();
+    }
+
+    setModuleConfiguration() {
+        this._informationAndHelpTextService.moduleConfiguration = this._dataStore.opaDisclosureSectionConfig;
     }
 
 }

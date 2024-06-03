@@ -22,6 +22,8 @@ declare const $: any;
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
+    private readonly _moduleCode = 'GE26';
+
     @Input() entityDetails: any;
     entityId: any;
     $subscriptions: Subscription[] = [];
@@ -55,9 +57,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     readMore: string;
     modifyTypeHelpText = `Select "Minor Modifications" for typos. Select "Major Modifications" for changing the company name,
                           ownership type, and permanent change in entity address that reflects in entity country.`;
-
     inactivateHeaderHelpText = `You are about to inactivate the entity. If the entity is used in any of the "Active" SFIs (financial or travel), then a new version of the
                                 entity is created in "Inactive" status and the previous version goes to "Archive" status.`;
+    entitySliderSectionConfig : any = {};
 
     constructor(private _router: Router, private _route: ActivatedRoute,
         public entityManagementService: EntityManagementService,
@@ -69,6 +71,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.getEntitySectionConfig();
         this.hasManageEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
         this.getRelationshipTypes();
     }
@@ -315,4 +318,12 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         document.getElementById('hide-inactivate-modal').click();
     }
 
+    getEntitySectionConfig(): void {
+        this._commonServices.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
+            this.entitySliderSectionConfig = data;
+        },
+            _err => {
+                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
+            })
+    }
 }
