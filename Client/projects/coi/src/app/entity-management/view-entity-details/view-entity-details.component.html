@@ -391,6 +391,6 @@
   </div>
 
 <app-entity-risk-slider *ngIf="isOpenSlider" [isOpenSlider]="isOpenSlider"
-(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails"  ></app-entity-risk-slider>
+(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails" [entitySliderSectionConfig]="entitySliderSectionConfig"></app-entity-risk-slider>
 
 <app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
