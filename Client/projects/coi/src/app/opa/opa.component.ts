@@ -95,7 +95,7 @@ export class OpaComponent implements OnInit {
 
     subscribeSaveComplete() {
         this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
-            if(data && this.validationList?.length) {
+            if(data && (this.validationList?.length || this.isSubmitClicked)) {
                 this.validateForm();
             }
         }))
