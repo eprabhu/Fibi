@@ -16,6 +16,7 @@ export class DataStoreService {
     private storeData: StoreData = new StoreData();
     disclosureStatus: any;
     dataChanged = false;
+    opaDisclosureSectionConfig : any = {};
 
     dataEvent = new Subject();
 
