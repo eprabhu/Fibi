@@ -9,7 +9,6 @@ import { NavigationService } from '../../common/services/navigation.service';
 import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
-import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { fadeInOutHeight, heightAnimation } from '../../common/utilities/animations';
 import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
@@ -54,6 +53,11 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isConcurrency = false;
     isUserCollapse = false;
     readMore: string;
+    modifyTypeHelpText = `Select "Minor Modifications" for typos. Select "Major Modifications" for changing the company name,
+                          ownership type, and permanent change in entity address that reflects in entity country.`;
+
+    inactivateHeaderHelpText = `You are about to inactivate the entity. If the entity is used in any of the "Active" SFIs (financial or travel), then a new version of the
+                                entity is created in "Inactive" status and the previous version goes to "Archive" status.`;
 
     constructor(private _router: Router, private _route: ActivatedRoute,
         public entityManagementService: EntityManagementService,
@@ -190,7 +194,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     validForActivateAndInactivateEntity(): boolean {
         if (!this.inactivateReason && this.entityDetails.isActive) {
-            this.reasonValidateMapEntity.set('reason', '*Please enter the reason for inactivation.');
+            this.reasonValidateMapEntity.set('reason', 'Please provide the reason for inactivation.');
         }
         return this.reasonValidateMapEntity.size === 0 ? true : false;
     }
@@ -248,10 +252,10 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     validateApproveEntity(): boolean {
         if (!this.entityRelationshipValue) {
-            this.approveEntityValidateMap.set('relationship', '*Please select entity relationship.');
+            this.approveEntityValidateMap.set('relationship', 'Please select the entity association details.');
         }
         if (this.entityRelationshipValue && this.entityRelationshipValue !== '1' && !this.relationshipEntityName) {
-            this.approveEntityValidateMap.set('entityName', '*Please choose an entity name.');
+            this.approveEntityValidateMap.set('entityName', 'Please choose an entity name.');
         }
         return this.approveEntityValidateMap.size === 0 ? true : false;
     }
