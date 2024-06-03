@@ -8,7 +8,7 @@
           <h4 class="modal-title" tabindex="-1" id="modal-header">
             <ng-content select="[header]"></ng-content>
           </h4>
-          <button type="button" class="btn-close" title="Click to close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Click to close" (click)="closeModal()"></button>
+          <button type="button" class="btn-close" title="Click here to close"  id="{{modalName}}-dismiss-btn" data-bs-dismiss="modal" aria-label="Click here to close" (click)="closeModal()"></button>
         </div>
         <ng-content select="[content-sticky]"></ng-content>
         <div class="modal-body">
@@ -18,17 +18,18 @@
               <ng-content select="[content]"></ng-content>
               <!-- description text area -->
               <ng-container *ngIf="needDescriptionField">
-                  <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12 mt-3" 
+                  <label for="common-modal-confirm-reason" class="fw-600 fs-14 col-12 mt-3"
                       [attr.aria-label]="'please enter the' + textAreaLabelName + (isMandatory? '. It is mandatory' : '')">
                       <span class="text-danger" *ngIf="isMandatory">*</span>
-                      {{textAreaLabelName}}
+                      <span>{{textAreaLabelName}}</span>
+                      <app-common-help-text *ngIf="helpText" [helpTextHardCoded]="helpText"></app-common-help-text>
                   </label>
                   <div class="col-12">
-                      <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
-                          [isShowLimiter]='true' [limit]=2000 class="form-control fs-14" autocomplete="off"
-                          [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();description= description.trim()"
-                          [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
-                  </textarea>
+                      <textarea id="common-modal-confirm-reason" appAutoGrow rows="1" appLengthValidator
+                        [isShowLimiter]='true' [limit]=2000 class="form-control fs-14" autocomplete="off"
+                        [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty(); description= description.trim()"
+                        [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''" [placeholder]="textAreaPlaceholder">
+                      </textarea>
                       <span *ngIf="mandatoryList?.has('description')"
                           class="fs-13 invalid-feedback d-block position-absolute">
                           {{mandatoryList?.get('description')}}
@@ -52,4 +53,4 @@
         </div>
       </div>
     </div>
-  </div>
+</div>

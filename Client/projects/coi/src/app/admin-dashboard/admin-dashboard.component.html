@@ -961,13 +961,13 @@
 </div>
 
 <app-confirmation-modal [modalName] = "'complete-review-confirmation-modal'" (primaryBtnAction)="performCompleteReview()"
-                        [primaryBtnName]="'Complete Review'" >
+                        [primaryBtnName]="'Complete Final Review'" >
     <!-- modal header -->
     <ng-container header>
-        <span class="fs-15">Confirm Complete Review</span>
+        <span class="fs-15">Confirm Complete Final Review</span>
     </ng-container>
     <!-- modal content -->
     <ng-container content>
-        <span class="fs-14 px-2">Do you want to complete selected review(s)?</span>
+        <span class="fs-14 px-2">Do you want to complete the review of selected({{selectedItemCount()}}) disclosures?</span>
     </ng-container>
 </app-confirmation-modal>
