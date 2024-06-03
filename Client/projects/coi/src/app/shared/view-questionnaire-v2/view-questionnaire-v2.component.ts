@@ -209,6 +209,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     }
 
     deleteAnswer(question: Question, answer: TableAnswer, answerIndex: number): void {
+        this.markQuestionnaireAsChanged(true);
         if (answer.QUEST_TABLE_ANSWER_ID === null) {
             question.ANSWERS['1'].splice(answerIndex, 1);
             this.addOrderNumber(question);
