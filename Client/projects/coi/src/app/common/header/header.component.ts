@@ -1,6 +1,6 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -43,8 +43,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     triggeredFrom = '';
     reviseObject: any = { revisionComment: null, disclosureId: null };
     isShowNavBarOverlay = false;
+    notesHelpTexts = `You can view and edit notes under the 'My Notes' tab.`;
 
-    constructor(public router: Router,private elementRef: ElementRef,
+    constructor(public router: Router,
                 public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
         // document.addEventListener('click', this.offClickSideBarHandler.bind(this));

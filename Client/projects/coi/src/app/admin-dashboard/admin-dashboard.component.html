@@ -203,7 +203,7 @@
                             Certification Date
                         </label>
                         <span class="dateField">
-                            <input id="coi-admin-dashboard-adv-disclosure-certification-date" matInput [matDatepicker]="certificationDate" 
+                            <input id="coi-admin-dashboard-adv-disclosure-certification-date" matInput [matDatepicker]="certificationDate"
                                    (click)="certificationDate.open()"  (keyup.enter)="certificationDate.open()" (keyup.space)="certificationDate.open()"
                                    class="form-control d-inline-block"
                                    [(ngModel)]="advanceSearchDates.certificationDate"
@@ -326,8 +326,9 @@
                     </div>
                     <div>
                         <button [@topSlideInOut] class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()"
-                         (click)="confirmCompleteReview()" (keyup.enter)="confirmCompleteReview()" (keyup.space)="confirmCompleteReview()">
-                            <mat-icon aria-hidden="true" class="me-2">done</mat-icon> Complete Review</button>
+                         (click)="confirmCompleteReview()" (keyup.enter)="confirmCompleteReview()" (keyup.space)="confirmCompleteReview()"
+                         title="Click here to complete final review" aria-label="Click here to complete final review">
+                            <mat-icon aria-hidden="true" class="me-2">done</mat-icon> Complete Final Review</button>
                     </div>
                 </section>
 

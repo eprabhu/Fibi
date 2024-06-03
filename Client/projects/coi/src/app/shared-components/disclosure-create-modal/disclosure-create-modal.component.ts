@@ -64,6 +64,11 @@ export class DisclosureCreateModalComponent implements OnInit {
     homeUnitName: null;
     title = '';
     isShowConcurrencyWarning = false;
+    searchHelpText = '';
+    unitHelpText = `To disclose at any other unit, please click on the 'Edit' icon near the unit field, and proceed to disclosure creation.
+                    To revert to the original unit, click on the 'Reset' icon.`
+    travelDescHelpText = 'Please provide the purpose of the trip.';
+    projectTypeHelpText = 'Please select a project type to proceed with disclosure creation.';
 
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
@@ -261,12 +266,23 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.clearProjectDisclosure();
         this.clearProjectField = new String('true');
         switch (this.selectedProjectType) {
-            case 'Award':
+            case 'Award': {
+                this.searchHelpText = '';
+                setTimeout(() => {
+                    this.searchHelpText = 'Please search and link an award.';
+                });
                 return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.baseUrl);
-            case 'Development Proposal':
+            }
+            case 'Development Proposal': {
+                this.searchHelpText = '';
+                setTimeout(() => {
+                    this.searchHelpText = 'Please search and link a development proposal.';
+                });
                 return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this.commonService.baseUrl);
+            }
             default:
                 this.selectedProjectType = null;
+                break;
         }
     }
 
@@ -478,7 +494,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
         return this.projectDisclosureValidation.size === 0 && this.mandatoryList.size === 0 ? true : false;
     }
-    
+
     private resetManualProjectAddFields(): void {
         this.clearSponsorField = new String('true');
         this.clearPIField = new String('true');
