@@ -5,19 +5,22 @@
           <h4 class="modal-title" *ngIf="!isShowExistingDisclosure">
             <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
                 <span>Revise Disclosure</span>
-                <app-common-help-text [helpTextHardCoded]="'You are about to revise disclosure'"></app-common-help-text>
+                <app-common-help-text [helpTextHardCoded]="'You are about to revise disclosure.'"></app-common-help-text>
             </ng-container>
             <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
                 <span>Create FCOI Disclosure</span>
-                <app-common-help-text [helpTextHardCoded]="'You are about to create FCOI disclosure'"></app-common-help-text>
+                <app-common-help-text [helpTextHardCoded]="'You are about to create FCOI disclosure.'"></app-common-help-text>
             </ng-container>
             <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">
                 <span>Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</span>
-                <app-common-help-text *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create project disclosure'"></app-common-help-text>
-                <app-common-help-text *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create travel disclosure'"></app-common-help-text>
+                <app-common-help-text *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create project disclosure.'"></app-common-help-text>
+                <app-common-help-text *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create travel disclosure.'"></app-common-help-text>
             </ng-container>
         </h4>
-        <h4 class="modal-title" *ngIf="isShowExistingDisclosure">Navigate to Disclosure </h4>
+        <h4 class="modal-title" *ngIf="isShowExistingDisclosure">
+            <span>Navigate to Disclosure</span>
+            <app-common-help-text [helpTextHardCoded]="'Navigate to existing disclosure.'"></app-common-help-text>
+        </h4>
           <button type="button" class="btn-close" title="Click here to close"  data-bs-dismiss="modal" aria-label="Click here to close" (click)="clearModal()"></button>
         </div>
         <div class="modal-body">
