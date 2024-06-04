@@ -126,4 +126,13 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
             return isModified ? true : false;
         }
     }
+
+    getIcon(key): string {
+        switch(key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            default: return;
+        }
+    }
 }

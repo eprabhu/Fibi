@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { Component, Input, OnChanges } from '@angular/core';
+import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 class CardDetails {
     entityName: string = '';
@@ -13,14 +13,14 @@ class CardDetails {
     templateUrl: './entity-details-card.component.html',
     styleUrls: ['./entity-details-card.component.scss']
 })
-export class EntityDetailsCardComponent implements OnInit {
+export class EntityDetailsCardComponent implements OnChanges {
 
     @Input() entityDetails: any;
     @Input() relationshipDetails: any = {};
 
     cardDetails: CardDetails = new CardDetails();
 
-    ngOnInit() {
+    ngOnChanges() {
         this.setEntityCardDetails();
     }
 

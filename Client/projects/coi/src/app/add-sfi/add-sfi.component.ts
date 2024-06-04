@@ -524,4 +524,13 @@ export class AddSfiComponent implements OnInit {
             this.isSlider ? this.sfiSliderSectionConfig : this._activatedRoute.snapshot.data.moduleConfig
         );
     }
+
+    getIcon(key): string {
+        switch(key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            default: return;
+        }
+    }
 }

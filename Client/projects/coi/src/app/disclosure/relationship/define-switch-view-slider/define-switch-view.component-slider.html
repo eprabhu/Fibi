@@ -66,17 +66,21 @@
                                 </app-no-data-label>
                             </div>
                             <div class="col-lg-12">
-                                <label class="coi-text-dark me-2" for="">Relationship : </label>
+                                <label class="coi-text-dark me-2" for="">Relationship</label>
                                 <span>
                                     <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.validPersonEntityRelType">
                                         <span class="pill-container">
-                                            <em
+                                            <ng-container
                                                 *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                                <span class="relationship-pill border px-3 py-1 rounded-4 me-2 fs-14 d-inline-block">
-                                                    <span>{{relation?.relationshipType}} :</span>
+                                                <span class="relationship-pill border px-2 py-1 rounded-4 me-2 fs-14 d-inline-block">
+                                                    <span class="d-flex coi-purple-text">
+                                                        <mat-icon aria-hidden="true"
+                                                        class="flex-shrink-0 me-1">{{getIcon(relation.relationshipType)}}</mat-icon>
+                                                    <span class="fw-bold me-1">{{relation?.relationshipType}}:</span>
                                                     <span>{{relation?.description}}</span>
+                                                 </span>
                                                 </span>
-                                            </em>
+                                            </ng-container>
                                         </span>
                                     </app-no-data-label>
                                 </span>
