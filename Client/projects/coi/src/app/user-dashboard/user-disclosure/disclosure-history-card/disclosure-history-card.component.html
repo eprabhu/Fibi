@@ -28,7 +28,7 @@
                                     tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" class="link-primary fw-500"><span>...Read
                                             More</span></a>
                                 </span>
-                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500" 
+                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500"
                                 tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"><span>Read
                                         Less</span></a>
                             </span>
@@ -148,18 +148,16 @@
                     <div class="col-md-6 col-lg-3 mb-2" tabindex="0">
                         <div>
                             <label class="coi-text-dark d-block">Destination</label>
-                            <span class="coi-text-light">
                                 <app-no-data-label
                                     [valueToShow]="disclosure?.destinationCity || disclosure?.destinationCountry || disclosure?.travelState">
-                                    <span class="coi-text-light text-slice ms-0"
+                                    <span class="fw-bold text-slice ms-0"
                                         [attr.aria-label]="disclosure?.destinationCity + (disclosure?.destinationCountry || disclosure?.travelState)"
                                         title="{{disclosure?.destinationCity}}, {{disclosure?.destinationCountry || disclosure?.travelState}}">
-                                        {{disclosure?.destinationCity}}<span
-                                            *ngIf="disclosure?.destinationCity && (disclosure?.destinationCountry || disclosure?.travelState)">,</span>
-                                        {{disclosure?.destinationCountry || disclosure?.travelState}}
+                                       <span class="coi-text-light">{{disclosure?.destinationCity}}</span>
+                                       <span class="coi-text-light" *ngIf="disclosure?.destinationCity && (disclosure?.destinationCountry || disclosure?.travelState)">, </span>
+                                       <span class="coi-text-light">{{disclosure?.destinationCountry || disclosure?.travelState}}</span>
                                     </span>
                                 </app-no-data-label>
-                            </span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3 mb-2">
