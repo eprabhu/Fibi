@@ -108,11 +108,9 @@ public class AuthController {
 				        .headers(headers)
 				        .body(null);
 			}
-		  } else {
+		} else {
             throw new RuntimeException("invalid access");
         }
-      HttpHeaders headers = new HttpHeaders();
-	    headers.setBearerAuth(token);
 	    return ResponseEntity.ok()
 	            .headers(headers)
 	            .body((response));
