@@ -25,7 +25,7 @@ public class JwtService {
 	private static final String LOGIN_PERSON_UNIT = "unitNumber";
 	private static final String LOGIN_USER_FULL_NAME = "fullName";
 
-	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+	public static final String SECRET = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJt6Aa8aOs06KyiBZ3pwiKdfgmdbosVuNPpxO9hUd6gsKk3lxTx+pBpkaONP/WHWkv5g/GvgOt9R+aItSxf3LEcCAwEAAQ==";
 	
 	private static final long EXPIRATION_TIME = 43_200_000; // 12 hour
 
@@ -51,7 +51,7 @@ public class JwtService {
                 .setClaims(claims)                
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+                .signWith(getSignKey(), SignatureAlgorithm.HS512).compact();
     }
 
     private Key getSignKey() {
