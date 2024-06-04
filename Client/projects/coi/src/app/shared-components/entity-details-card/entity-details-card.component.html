@@ -5,7 +5,7 @@
             <div class="align-items-center d-inline-flex">
                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
                 <app-no-data-label [valueToShow]="cardDetails?.entityType">
-                    <span class="ms-1 coi-text-light fs-14 word-break-all">{{cardDetails?.entityName}}</span>
+                    <span class="ms-1 text-slice fw-bold" [title]="cardDetails?.entityName"><span class="coi-text-light">{{cardDetails?.entityName}}</span></span>
                 </app-no-data-label>
             </div>
         </div>
@@ -14,7 +14,7 @@
                 <div class="align-items-center d-inline-flex">
                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">domain</mat-icon>
                     <app-no-data-label [valueToShow]="cardDetails?.entityType">
-                        <span class="ms-1 coi-text-light fs-14 word-break-all">{{cardDetails?.entityType}}</span>
+                        <span class="ms-1 text-slice fw-bold" [title]="cardDetails?.entityType"><span class="coi-text-light">{{cardDetails?.entityType}}</span></span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="align-items-center d-inline-flex">
                     <mat-icon aria-hidden="true" class=" coi-text-light flex-shrink-0">flag_circle</mat-icon>
                     <app-no-data-label [valueToShow]="cardDetails?.countryName">
-                        <span class="ms-1 coi-text-light fs-14 word-break-all">{{cardDetails?.countryName}}</span>
+                        <span class="ms-1 text-slice fw-bold" [title]="cardDetails?.countryName"><span class="coi-text-light">{{cardDetails?.countryName}}</span></span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">
                         radio_button_checked</mat-icon>
                     <app-no-data-label [valueToShow]="cardDetails?.entityStatus">
-                        <span class="ms-1 coi-text-light fs-14">{{cardDetails?.entityStatus}}</span>
+                        <span class="ms-1 text-slice fw-bold" [title]="cardDetails?.entityStatus"><span class="coi-text-light">{{cardDetails?.entityStatus}}</span></span>
                     </app-no-data-label>
                 </div>
             </div>
