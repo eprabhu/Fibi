@@ -3,42 +3,25 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" *ngIf="!isShowExistingDisclosure">
-            <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Revise
-                Disclosure</ng-container>
-            <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Create FCOI
-                Disclosure</ng-container>
-            <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</ng-container>
+            <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
+                <span>Revise Disclosure</span>
+                <app-common-help-text [helpTextHardCoded]="'You are about to revise disclosure'"></app-common-help-text>
+            </ng-container>
+            <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
+                <span>Create FCOI Disclosure</span>
+                <app-common-help-text [helpTextHardCoded]="'You are about to create FCOI disclosure'"></app-common-help-text>
+            </ng-container>
+            <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">
+                <span>Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</span>
+                <app-common-help-text *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create project disclosure'"></app-common-help-text>
+                <app-common-help-text *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create travel disclosure'"></app-common-help-text>
+            </ng-container>
         </h4>
         <h4 class="modal-title" *ngIf="isShowExistingDisclosure">Navigate to Disclosure </h4>
-          <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="clearModal()"></button>
+          <button type="button" class="btn-close" title="Click here to close"  data-bs-dismiss="modal" aria-label="Click here to close" (click)="clearModal()"></button>
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-12" *ngIf="!isShowExistingDisclosure">
-              <div class="alert alert-primary d-flex p-2" role="alert" title="{{setHelpTextToolTip()}}" data-bs-placement="top">
-                    <mat-icon class="mat-icon info-icon flex-shrink-0" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-                    <p class="fs-14 mb-0 ms-2" *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
-                        <span class="d-flex align-items-start">
-                            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
-                            <span>To disclose at any other unit, please click on the 'Edit' icon near the unit field,
-                                and proceed to disclosure creation.</span>
-                            <br>
-                        </span>
-                        <span class="d-flex align-items-start">
-                            <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
-                            <span>To revert to the original unit, click on the 'Reset' icon.</span>
-                            <br>
-                        </span>
-                        <ng-container *ngIf="(triggeredFrom == 'TRAVEL_DISCLOSURE')">
-                            <span class="d-flex align-items-start">
-                                <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
-                                <span>Add the purpose of the trip in the field provided.</span>
-                            </span>
-                        </ng-container>
-                    </p>
-              </div>
-            </div>
-
               <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">
                 <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
                     The {{selectedProjectType}} you are trying to add is already listed in the
@@ -69,7 +52,10 @@
           </div>
           <div class="row mb-2" *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
             <div class="col">
-                <label for="desc-award" class="coi-text-dark"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :</label>
+                <label for="desc-award" class="coi-text-dark"><span class="mandatory fs-14 fw-600 me-1">*</span>
+                    <span>Disclose at Unit</span>
+                    <app-common-help-text [helpTextHardCoded]="unitHelpText"></app-common-help-text>
+                </label>
                 <button class="d-flex mt-1 fs-14 align-items-center btn-none" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
                     <span>{{commonService.getPersonLeadUnitDetails(commonService.currentUserDetails)}}</span>
                     <span class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1 coi-scale-9"
@@ -101,10 +87,15 @@
           <div class="col-12">
               <label for="desc-award" class="coi-text-dark"
                     *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE' || (hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE')">
-                    <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> {{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'Purpose of the Trip': 'Description'}}
+                    <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory me-1">*</span>
+                    <span>{{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'Purpose of the Trip' : 'Description'}}</span>
+                    <ng-container *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'">
+                        <app-common-help-text [helpTextHardCoded]="travelDescHelpText"></app-common-help-text>
+                    </ng-container>
               </label>
               <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                         appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
+                        placeholder = "Please provide the purpose of the trip."
                         [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
               </textarea>
               <span *ngIf="mandatoryList?.has('reviseComment')" class="fs-13 invalid-feedback d-block">
@@ -178,13 +169,16 @@
         </div>
     </div>
     <div *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [class.mt-0]="triggeredFrom == 'PROJECT_DISCLOSURE' && isShowExistingDisclosure">
-        <span class="coi-text-dark d-block"><span class="mandatory fs-14 fw-600">*</span> Project Type : </span>
+        <span class="coi-text-dark d-block"><span class="mandatory fs-14 fw-600 me-1">*</span>
+        <span>Project Type</span>
+        <app-common-help-text [helpTextHardCoded]="projectTypeHelpText"></app-common-help-text>
+    </span>
         <div class="mt-1">
             <ul class="mb-0 fs-14">
                 <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
                     <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
                         [value]="type.description" class="me-2 cursor-pointer" type="radio"
-                        name="project-type" id="{{type?.description}}">
+                        name="project-type" id="{{type?.description}}" [disabled]="['4', '5'].includes(type?.coiProjectTypeCode)">
                     <label class="cursor-pointer fw-normal"
                         for="{{type?.description}}">{{type?.description}}</label>
                 </li>
@@ -195,7 +189,10 @@
         </div>
         <div *ngIf="selectedProjectType && !isSearchExternalProject" class="mt-3">
             <span class="mandatory fs-14 fw-600 me-1">*</span>
-            <label for="proposal-disclosure" class="mb-2 coi-text-dark">{{selectedProjectType}} Search</label>
+            <label for="proposal-disclosure" class="mb-2 coi-text-dark">
+                <span>{{selectedProjectType}} Search</span>
+                <app-common-help-text *ngIf="searchHelpText" [helpTextHardCoded]="searchHelpText"></app-common-help-text>
+            </label>
             <div class="form-row justify-content-center">
                 <div class="col-12 searchBox mb-0">
                     <app-endpoint-search id="proposal-search" [httpOptions]="projectSearchOptions"
@@ -372,7 +369,7 @@
     </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Click to cancel" aria-label="Click to cancel" (click)="clearModal()">Cancel</button>
+          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Click here to cancel" aria-label="Click here to cancel" (click)="clearModal()">Cancel</button>
           <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn"
             type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Click here to Create Revision' : 'Click here to Create FCOI'"
             [attr.aria-label]="hasFCOI ? 'Click to Create Revision' : 'Click to Create FCOI'">

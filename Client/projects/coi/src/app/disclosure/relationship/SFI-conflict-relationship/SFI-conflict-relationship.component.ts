@@ -85,7 +85,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
     this.coiValidationMap.clear();
     this.coiTableValidation.clear();
     if (!this.coiStatusCode || this.coiStatusCode == 'null') {
-      this.coiValidationMap.set('coiStatus', 'Please select Conflict Status');
+      this.coiValidationMap.set('coiStatus', 'Please select conflict status');
     }
     if (!this.coiDescription) {
       this.coiValidationMap.set('coiDescription', 'Please enter description');
@@ -133,6 +133,7 @@ export class SFIConflictRelationshipComponent implements OnInit, OnChanges {
       ele.projectConflictStatusCode = this.coiStatusCode;
       ele.disclComment.comment = this.coiDescription;
       ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
+      delete ele.isSaved;
       return ele;
     });
   }

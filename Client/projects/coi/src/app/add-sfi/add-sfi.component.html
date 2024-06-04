@@ -391,6 +391,7 @@
 									<mat-datepicker #startDate [pickerType]="'calendar'">
 									</mat-datepicker>
 								</span>
+								<app-common-information [elementId]="'coi-add-sfi-start-date'" [subSectionId]="532"></app-common-information>
 								<div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block fs-13"
 								 aria-label="Start Date of Involvement Validation" aria-describedby="start-date-validation">
 									<span id="coi-add-sfi-start-date-validation">{{mandatoryList?.get('date')}}</span>
@@ -419,6 +420,7 @@
 									<mat-datepicker #endDate [pickerType]="'calendar'">
 									</mat-datepicker>
 								</span>
+								<app-common-information [elementId]="'coi-add-sfi-end-date'" [subSectionId]="532"></app-common-information>
 								<div *ngIf="(mandatoryList.get('endDate'))" class="fs-13 invalid-feedback d-block"
 									 aria-label="End Date of Involvement Validation" aria-describedby="end-date-validation">
 									<span id="coi-add-sfi-end-date-validation">{{mandatoryList.get('endDate')}}</span>
@@ -453,6 +455,7 @@
 									</a>
 								</span>
 							</div>
+							<app-common-information [elementId]="'coi-add-sfi-sponsor-research'" [subSectionId]="532"></app-common-information>
 						</div>
 					</div>
 					<!-- Realtionship Details [Disclose financial details for the SFI] -->

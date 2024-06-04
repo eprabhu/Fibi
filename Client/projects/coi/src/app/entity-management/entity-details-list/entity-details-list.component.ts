@@ -54,6 +54,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
   personEntityId = null;
   entityDetails: any = {};
+  entityId: number;
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, public commonService: CommonService) { }
@@ -73,13 +74,13 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
 
   getEntityID() {
     this.$subscriptions.push(this._route.queryParams.subscribe(params => {
-      this.entityDetails.entityId = params.entityManageId;
+      this.entityId = params.entityManageId;
       this.viewEntityDetails();
     }));
   }
 
   viewEntityDetails() {
-    this.$subscriptions.push(this.entityManagementService.getEntityDetails(this.entityDetails.entityId).subscribe((res: any) => {
+    this.$subscriptions.push(this.entityManagementService.getEntityDetails(this.entityId).subscribe((res: any) => {
       this.entityDetails = res.coiEntity;
     }, _error => {
       this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -221,7 +222,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
       this._router.navigate([redirectUrl],
           { queryParams: { disclosureId: disclosure.coiDisclosureId } });
     }
-} 
+}
 
 redirectToTravel(coi) {
     if (coi.travelDisclosureId) {
