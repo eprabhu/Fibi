@@ -1,6 +1,6 @@
 package com.polus.fibicomp.opa.pojo;
 
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
+import com.polus.core.roles.pojo.AdminGroup;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

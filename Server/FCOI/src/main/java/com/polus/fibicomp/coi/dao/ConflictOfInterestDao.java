@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.pojo.Country;
+import com.polus.core.pojo.Unit;
+import com.polus.fibicomp.coi.vo.DashBoardProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,11 +69,7 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.inbox.pojo.Inbox;
-import com.polus.fibicomp.pojo.Country;
-import com.polus.fibicomp.pojo.DashBoardProfile;
-import com.polus.fibicomp.pojo.Unit;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 
 @Transactional
 @Service
