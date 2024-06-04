@@ -39,7 +39,7 @@
            type="button" title="Click here to cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
           </button>
           <button class="btn btn-primary me-0" id="activate-inactivate-btn" type="button"
-           [attr.title]="updatedRelationshipStatus == 'INACTIVE' ? 'Click here to inactivate entity relationship':'Click here to activate relationship'" (click)="activateAndInactivateSfi()">
+           [attr.title]="updatedRelationshipStatus == 'INACTIVE' ? 'Click here to inactivate entity relationship':'Click here to activate entity relationship'" (click)="activateAndInactivateSfi()">
             {{updatedRelationshipStatus == 'INACTIVE' ? 'Inactivate' : 'Activate'}}
           </button>
         </div>
