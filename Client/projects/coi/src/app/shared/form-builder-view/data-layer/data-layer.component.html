@@ -6,7 +6,7 @@
   (questionnaireSaveEvent) ="saveEventsFromChild($event, component)"
   ></app-view-questionnaire-v2>
 </ng-container>
-<ng-container *ngIf="component.componentType === 'CE'">
+<ng-container *ngIf="['CE','SE','NE','DE','CB','RB','ES','AS','SD','UD','TE'].includes(component.componentType)">
   <app-custom-element-v2 [customElementVO] = "component.customElement"
   [externalEvent]="saveEventForChildComponent"
   [isViewMode]="!isFormEditable"

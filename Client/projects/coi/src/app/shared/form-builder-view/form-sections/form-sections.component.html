@@ -18,10 +18,10 @@
       (click)="setCommentDetails(null, sectionDetails.sectionId, component.componentId)" title="Comments" type="button">
         <mat-icon>rate_review</mat-icon>
       </button>
-      <div *ngIf="(component.componentType === 'QN' || component.componentType === 'CE') && component.componentRefId != ''" [id]="component.componentId">
-        <app-data-layer
-          [component]="component"
-          [fbConfiguration]="fbConfiguration"
+      <div *ngIf="(component.componentType === 'QN' || ['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE'].includes(component.componentType)) && component.componentRefId != ''">
+        <app-data-layer 
+          [component]="component" 
+          [fbConfiguration]="fbConfiguration" 
           [formBuilderId]="formBuilderId"
           [isFormEditable]="isFormEditable"
           [saveEventForChildComponent]="saveEventForChildComponent"
