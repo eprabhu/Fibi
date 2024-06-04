@@ -90,4 +90,13 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
         }
     }
 
+    getIcon(key): string {
+        switch(key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            default: return;
+        }
+    }
+
 }
