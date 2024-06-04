@@ -52,8 +52,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     modalActionBtnName = '';
     descriptionErrorMsg = '';
     textAreaLabelName = '';
-    withdrawErrorMsg = 'Please provide the reason for withdrawing the disclosure';
-    returnErrorMsg = 'Please provide the reason for returning the disclosure';
+    withdrawErrorMsg = 'Please provide the reason for withdrawing the disclosure.';
+    returnErrorMsg = 'Please provide the reason for returning the disclosure.';
     confirmationModalDescription = '';
     confirmationModalHelpText = '';
     reasonHelpText = '';
