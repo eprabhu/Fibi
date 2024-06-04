@@ -20,7 +20,6 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
 
 class CustomAnswer {
-    columnId = null;
     customDataElementsId = null;
     customDataId = null;
     description = null;
@@ -31,7 +30,6 @@ class CustomAnswer {
     updateTimestamp = null;
     updateUser = null;
     value = null;
-    versionNumber = null;
   }
 @Component({
     selector: 'app-custom-element-v2',

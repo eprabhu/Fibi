@@ -45,8 +45,8 @@ $nav-bar-background: white;
   }
 
   .field-box-element-tree {
-    margin: 15px 0;
-    border: solid 1px #ccc;
+    margin: 10px 0;
+    border: solid 1px #e1e1e1;
     color: rgba(0, 0, 0, 0.87);
     display: flex;
     flex-direction: row;
@@ -56,7 +56,7 @@ $nav-bar-background: white;
     font-size: 14px;
     border-radius: 3.5px;
     font-weight: 500;
-    box-shadow: -1px 2px 7px rgb(0 0 0 / 12%);
+    box-shadow: -1px 2px 7px rgb(0 0 0 / 4%);
       &:nth-child(1) {
         margin-top: 0;
       }
@@ -70,7 +70,7 @@ $nav-bar-background: white;
       color: #929b9a;
     }
     i{
-      color: #c6d5d4;
+      color: #b5b9b8;
     }
 
   }
@@ -145,6 +145,8 @@ $nav-bar-background: white;
   padding: 1rem;
   text-align: left;
   font-weight: 600;
+  font-size: 1rem;
+  background: #f9f9f9;
 }
 
 .structure {
@@ -162,7 +164,10 @@ $nav-bar-background: white;
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .drop-Element::-webkit-scrollbar {
-  display: none;
+  // display: none;
+  width: 7px;
+  // height: 100px;
+
 }
 
 .dropContainer::-webkit-scrollbar {
@@ -201,9 +206,14 @@ scrollbar-width: none;  /* Firefox */
   width: 35%;
   height: calc(100vh - 188px);
   background-color: white;
-  margin: 0 0 0 10px;
+  // margin: 0 0 0 10px;
   overflow-y: auto;
 }
+
+.addition-info::-webkit-scrollbar{
+  width: 7px;
+}
+
 .nav-options{
   list-style: none;
   flex-grow: 2;
@@ -343,8 +353,8 @@ scrollbar-width: none;  /* Firefox */
   box-shadow: 0px 5px 9px 0px rgb(0 0 0 / 15%);
 }
 
-.label-font-size{
-  font-size: 1rem;
+.fb-label-font-size{
+  font-size: 14px;
 }
 
 .btns {
@@ -415,7 +425,7 @@ scrollbar-width: none;  /* Firefox */
 
 .move-icon-container{
   display: flex;
-  border-right: solid 1px #ccc;
+  border-right: solid 1px #e1e1e1;
   align-items: center;
 }
 
@@ -442,4 +452,102 @@ scrollbar-width: none;  /* Firefox */
 .fb-right-div{
   width: 50%;
   overflow-y: auto;
+}
+
+.form-list-height{
+  height: calc(100vh - 222px);
+  overflow-y: scroll;
+}
+
+.form-list-height::-webkit-scrollbar{
+  width: 7px;
+}
+
+.fb-modal{
+    z-index:101;
+}
+
+.fb-mandatory{
+    color: red;
+}
+
+.fb-modal{
+    z-index:101;
+}
+
+
+.fb-card-text{
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+.formInfo{
+    font-size: 13px;
+}
+.fb-card-text{
+    color:#555555;
+}
+
+.fb-fs-14{
+    font-size: 14px;
+}
+
+.fb-fs-16{
+    font-size: 16px;
+}
+
+.fb-no-data-container {
+  margin-top: 7px;
+  background: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.fb-no-data-container .fb-no-data-icon-outer {
+display      : inline-block;
+margin-bottom: 4px;
+width        : 85px;
+height       : 85px;
+background   : #eff0f5;
+border-radius: 50%
+}
+
+.fb-no-data-container .fb-no-data-icon-outer .fb-no-data-icon {
+display   : inline-block;
+position  : relative;
+margin-top: 18px
+}
+
+.fb-no-data-container .fb-no-data-icon-outer .fb-no-data-icon i:nth-child(1) {
+font-size: 50px;
+color    : #d0d0d0 !important
+}
+
+.fb-no-data-container .fb-no-data-icon-outer .fb-no-data-icon i:nth-child(2) {
+position     : absolute;
+left         : -5px;
+bottom       : -4px;
+font-size    : 25px;
+background   : #eff0f5;
+border-radius: 50%;
+padding      : 2px;
+color        : #d0d0d0 !important
+}
+
+.fb-no-data-container h5 {
+color: #a4a4a4
+}
+
+.fb-no-file {
+margin-top: 11px;
+color: gray;
+}
+
+
+.fb-default-content:not(:only-child) {
+  display: none;
+}
+
+.fb-icon-size{
+  font-size: 16px !important;
 }
