@@ -164,12 +164,15 @@
 <!-- Review Ends-->
 <!-- DELETE MEMBER WARNING MODAL -->
 <div class="modal modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteReviewModal"
-   role="dialog" aria-labelledby="opaDeleteModalTitle" aria-hidden="true">
+   role="dialog" aria-labelledby="opaDeleteModalTitle" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="opaDeleteModalTitle">Delete Review</h5>
-                <button aria-label="Click to close delete reviewer modal" class="btn-close fs-12" title="Click to close" data-bs-dismiss="modal" id="delete_reviewer_dissmiss_btn"
+                <h5 class="modal-title" id="opaDeleteModalTitle">
+                    <span>Delete Review at {{reviewActionConfirmation?.reviewLocationType?.description}}</span>
+                    <app-common-help-text [helpTextHardCoded]="deleteReviewHelpText"></app-common-help-text>
+                </h5>
+                <button aria-label="Click here to close delete reviewer modal" class="btn-close fs-12" title="Click here to close" data-bs-dismiss="modal" id="delete_reviewer_dissmiss_btn"
                     type="button">
                 </button>
             </div>
@@ -177,10 +180,10 @@
                 <p>Are you sure you want to delete this review?</p>
             </div>
             <div class="modal-footer">
-                <button id="delete_reviewer_cancel_btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Cancel"
-                    data-bs-toggle="modal" aria-label="Click to close delete Reviewer modal">Cancel</button>
-                <button id="delete_reviewer_delete_btn" type="button" class="btn btn-primary fs-14" title="Delete Review"
-                    (click)="deleteReview()" data-bs-dismiss="modal" aria-label="Click to delete reviewer">Delete</button>
+                <button id="delete_reviewer_cancel_btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" title="Click here to cancel"
+                    aria-label="Click here to cancel delete reviewer">Cancel</button>
+                <button id="delete_reviewer_delete_btn" type="button" class="btn btn-primary fs-14" title="Click here to delete review"
+                    (click)="deleteReview()" data-bs-dismiss="modal" aria-label="Click here to delete reviewer">Delete</button>
             </div>
         </div>
     </div>
@@ -191,9 +194,15 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="opa-addedit-review">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }}
+                <h5 class="modal-title" id="opa-addedit-review" *ngIf="modifyIndex != -1">
+                    <span>Edit Reviewer at {{reviewDetails?.reviewLocationType?.description}}</span>
+                    <app-common-help-text [helpTextHardCoded]="editReviewerHelpText"></app-common-help-text>
                 </h5>
-                <button type="button" title="Click to close" class="btn-close fs-12" data-bs-dismiss="modal" id="add-reviewer-cancel" attr.aria-label="Click to close {{modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer'}} modal"
+                <h5 class="modal-title" id="opa-addedit-review" *ngIf="modifyIndex == -1">
+                    <span>Add Reviewer</span>
+                    <app-common-help-text [helpTextHardCoded]="addReviewerHelpText"></app-common-help-text>
+                </h5>
+                <button type="button" title="Click here to close" class="btn-close fs-12" data-bs-dismiss="modal" id="add-reviewer-cancel" attr.aria-label="Click to close {{modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer'}} modal"
                     (click)="reviewDetails = {}">
                 </button>
             </div>
@@ -205,7 +214,9 @@
                     <div class="col-4" role="listbox"
                     aria-label="Review Location dropdown">
                         <label class="block-display" for="opa_review_location">
-                            <span class="mandatory text-danger me-1">*</span>Location</label>
+                            <span class="mandatory text-danger me-1">*</span>Location
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_location'"></app-common-help-text>
+                        </label>
                         <app-look-up (selectedResult)="onLocationSelect($event)"
                         [options]="disReviewLocation"
                         [selectedLookUpList]="locationType"
@@ -214,31 +225,38 @@
                         [title]="'Review Location'"
                         [uniqueId]="'opa_review_location'">
                         </app-look-up>
+                        <app-common-information [elementId]="'opa_review_location'" [subSectionId]="231"></app-common-information>
                         <div *ngIf="validationMap.has('location')">
                             <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('location')}}</span>
                         </div>
                     </div>
                     <div class="col-4" title="Reviewer">
-                        <label class="block-display" for="opa_reviewer">Reviewer</label>
+                        <label class="block-display" for="opa_reviewer">Reviewer
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_reviewer'"></app-common-help-text>
+                        </label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
                                      [isError]="validationMap.has('reviewer')" [uniqueId]="'opa_reviewer'"
                                      [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
+                        <app-common-information [elementId]="'opa_reviewer'" [subSectionId]="231"></app-common-information>
                         <div *ngIf="validationMap?.has('reviewer')">
                            <span class="mandatory d-inline-block text-danger fs-14">{{validationMap?.get('reviewer')}}</span>
                         </div>
                     </div>
                     <div class="col-4" role="listbox"
                          aria-label="Review Status dropdown">
-                        <label class="block-display" for="opa_review_location">
-                            <span class="mandatory text-danger me-1">*</span>Status</label>
+                        <label class="block-display" for="opa_review_status">
+                            <span class="mandatory text-danger me-1">*</span>Status
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_status'"></app-common-help-text>
+                        </label>
                             <app-look-up (selectedResult)="onStatusSelect($event)"
                             [options]="disReviewStatus" [isError]="validationMap.has('reviewStatus')"
                             [selectedLookUpList]="reviewStatusType"
                             [title]="'Review Status'"
                             [defaultValue]="reviewDetails.reviewStatusType ? reviewDetails.reviewStatusType.description : ''"
-                            [uniqueId]="'opa_review_location'">
+                            [uniqueId]="'opa_review_status'">
                             </app-look-up>
+                            <app-common-information [elementId]="'opa_review_status'" [subSectionId]="231"></app-common-information>
                             <div *ngIf="validationMap?.has('reviewStatus')">
                                 <span class="mandatory d-inline-block text-danger fs-14">{{validationMap?.get('reviewStatus')}}</span>
                             </div>
@@ -247,7 +265,9 @@
                 <div class="row mt-2">
                     <div class="col-4">
                         <label class="block-display" for="opa_review_start_date">
-                            <span class="mandatory text-danger me-1">*</span>Assigned On</label>
+                            <span class="mandatory text-danger me-1">*</span>Assigned On
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_start_date'"></app-common-help-text>
+                        </label>
                             <div>
                                 <span class="dateField w-100">
                                   <input matInput [matDatepicker]="startDate" id="opa_review_start_date" placeholder="{{datePlaceHolder}}"
@@ -260,13 +280,16 @@
                                   <mat-datepicker #startDate>
                                   </mat-datepicker>
                                 </span>
+                                <app-common-information [elementId]="'opa_review_start_date'" [subSectionId]="231"></app-common-information>
                                 <div *ngIf="validationMap.has('reviewStartDate')">
                                     <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('reviewStartDate')}}</span>
                                 </div>
                               </div>
                     </div>
                     <div class="col-4" *ngIf="reviewDetails?.reviewStatusTypeCode == '3'">
-                        <label class="d-block" for="opa_review_end_date"><span class="mandatory text-danger me-1">*</span>Review End Date </label>
+                        <label class="d-block" for="opa_review_end_date"><span class="mandatory text-danger me-1">*</span>Review End Date 
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_end_date'"></app-common-help-text>
+                        </label>
                         <div>
                             <span class="dateField w-100">
                               <input matInput [matDatepicker]="endDate" id="opa_review_end_date" placeholder="{{datePlaceHolder}}"
@@ -279,6 +302,7 @@
                               <mat-datepicker #endDate>
                               </mat-datepicker>
                             </span>
+                            <app-common-information [elementId]="'opa_review_end_date'" [subSectionId]="231"></app-common-information>
                             <div *ngIf="validationMap.has('reviewEndDate')">
                                 <span class="mandatory d-inline-block text-danger fs-14">{{validationMap.get('reviewEndDate')}}</span>
                             </div>
@@ -291,19 +315,22 @@
                 <div class="row mt-2">
                     <div class="col-12">
                         <label class="block-display" for="opa_review_description">
-                            Description</label>
+                            Description
+                            <app-common-help-text [subSectionId]="231" [elementId]="'opa_review_description'"></app-common-help-text>
+                        </label>
                         <textarea [(ngModel)]="reviewDetails.description" appLengthValidator [isShowLimiter]="true" title="Description"
                             [limit]="2000" rows="3" class="form-control" id="opa_review_description"></textarea>
+                            <app-common-information [elementId]="'opa_review_description'" [subSectionId]="231"></app-common-information>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="add-reviewer-close"
-                    attr.aria-label="Click to cancel {{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }} and Close modal"
-                    type="button" title="Cancel" (click)="clearReviewModal();" title="Click to close">Close</button>
+                    attr.aria-label="Click here to cancel {{ modifyIndex != -1 ? 'Edit Reviewer' : 'Add Reviewer' }} and Close modal"
+                    type="button" title="Cancel" (click)="clearReviewModal();" title="Click here to cancel">Cancel</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                    attr.aria-label="Click to {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}"
-                    (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer'">
+                    attr.aria-label="Click here to {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}"
+                    (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Click here to update reviewer' : 'Click here to add reviewer'">
                     {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}
                 </button>
             </div>

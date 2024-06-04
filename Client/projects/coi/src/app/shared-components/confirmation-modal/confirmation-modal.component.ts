@@ -125,6 +125,20 @@ export class ConfirmationModalComponent implements OnDestroy {
      */
     @Input() modalName = 'confirmation-modal';
 
+    /**
+     * Input field help text.
+     *
+     * Purpose: Provides a helptext for text area.
+     */
+      @Input() helpText = '';
+
+    /**
+    * textarea field placeholder.
+    *
+    * Purpose: Provides a placeholder for textarea.
+    */
+    @Input() textAreaPlaceholder = 'Please provide the reason';
+
     // Outputs
     /**
      * An event emitted when the primary action button is clicked.

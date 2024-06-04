@@ -126,7 +126,8 @@
 <div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
-        <button type="button" class="btn-close ms-auto" title="Click to close" aria-label="Click to close" (click)="closeAddNote()"></button>
+        <app-common-help-text *ngIf="notesHelpTexts" [helpTextHardCoded]="notesHelpTexts"></app-common-help-text>
+        <button type="button" class="btn-close ms-auto" title="Click here to close" aria-label="Click here to close" (click)="closeAddNote()"></button>
     </div>
     <hr class="hr">
     <div>
@@ -134,7 +135,7 @@
             placeholder="Take a note..." [(ngModel)]="noteComment"></textarea>
     </div>
     <div>
-        <button type="button" aria-label="Click to close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" (click)="saveOrUpdateNote()">Add</button>
+        <button type="button" aria-label="Click to close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" title="Click here to add note"  aria-label="Click here to add note" (click)="saveOrUpdateNote()">Add</button>
     </div>
 </div>
 

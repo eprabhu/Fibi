@@ -117,4 +117,14 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
         return relationsTypeGroup;
     }, {});
   }
+
+
+  getIcon(key) {
+    switch(key) {
+        case 'Commitment': return 'handshake';
+        case 'Travel': return 'flight';
+        case 'Financial': return 'paid';
+        default: return;
+    }
+    }
 }

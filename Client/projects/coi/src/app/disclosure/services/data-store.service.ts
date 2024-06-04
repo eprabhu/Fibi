@@ -11,6 +11,7 @@ export class DataStoreService {
     private storeData: COI = new COI();
     disclosureStatus: any;
     dataChanged = false;
+    disclosureSectionConfig: any = {};
 
     dataEvent = new Subject();
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
 import * as bootstrap from 'bootstrap';
 
@@ -11,6 +11,7 @@ export class CommonHelpTextComponent implements OnInit {
 
     @Input() elementId: any = '';
     @Input() subSectionId: any = '';
+    @Input() helpTextHardCoded: string = '';
     @Input() placement: 'left' | 'right' | 'top' | 'bottom' = 'right';
 
     helpText: string = '';
@@ -23,11 +24,11 @@ export class CommonHelpTextComponent implements OnInit {
 
     ngAfterViewInit() {
         const tooltipTriggerList: any = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     }
 
     getInformation() {
-        this.helpText = this._informationAndHelpText.getHelpText(this.subSectionId, this.elementId);
+        this.helpText = this.helpTextHardCoded != '' ? this.helpTextHardCoded : this._informationAndHelpText.getHelpText(this.subSectionId, this.elementId);
     }
 
 }

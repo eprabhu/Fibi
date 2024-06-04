@@ -7,6 +7,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { closeSlider, openCoiSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
 @Component({
     selector: 'app-entity-risk-slider',
     templateUrl: './entity-risk-slider.component.html',
@@ -18,6 +19,7 @@ export class EntityRiskSliderComponent implements OnInit {
     @Input() entityDetails: CoiEntity = new CoiEntity();
     @Input() Risk: any;
     @Output() closePage: EventEmitter<any> = new EventEmitter;
+    @Input() entitySliderSectionConfig : any = {};
     riskLevelLookup = [];
     $subscriptions: Subscription[] = [];
     riskLevelChanges = [];
@@ -41,10 +43,11 @@ export class EntityRiskSliderComponent implements OnInit {
 
     constructor(public entityDetailsService: EntityDetailsService,
         private _commonService: CommonService,
-        public dataFormatPipe: DateFormatPipeWithTimeZone) { }
+        public dataFormatPipe: DateFormatPipeWithTimeZone, private _informationAndHelpTextService: InformationAndHelpTextService) { }
 
 
     ngOnInit() {
+        this.getEntitySliderSectionConfig();
         this.getSFILookup();
         this.riskHistory();
         setTimeout(() => {
@@ -177,6 +180,10 @@ export class EntityRiskSliderComponent implements OnInit {
 
     isFieldValueChanges(): boolean {
         return !!((this.isStatusEdited || this.revisionComment));
+    }
+
+    getEntitySliderSectionConfig(){
+        this._informationAndHelpTextService.moduleConfiguration = this._commonService.getSectionCodeAsKeys(this.entitySliderSectionConfig);    
     }
 }
 

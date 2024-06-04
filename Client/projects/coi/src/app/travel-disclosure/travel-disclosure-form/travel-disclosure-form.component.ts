@@ -15,6 +15,7 @@ import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { setEntityObjectFromElasticResult } from '../../common/utilities/elastic-utilities';
+import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
 
 @Component({
     selector: 'app-travel-disclosure-form',
@@ -40,6 +41,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination = null;
+    travelSectionconfig: any = {};
 
     helpText = [
         'All the fields of travel disclosure form are mandatory.',
@@ -55,12 +57,14 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _service: TravelDisclosureService,
         private _dataStore: TravelDataStoreService,private _activatedRoute:ActivatedRoute,
-        private _elasticConfig: ElasticConfigService
+        private _elasticConfig: ElasticConfigService,
+        private _informationAndHelpTextService: InformationAndHelpTextService
     ) {
         window.scrollTo(0, 0);
     }
 
     ngOnInit(): void {
+        this.getTravelSectionConfig();
         this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.getDataFromStore();
@@ -364,6 +368,11 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
                 this.clearEntity();
             }
         }));
+    }
+
+    getTravelSectionConfig(){
+        this.travelSectionconfig = this._activatedRoute.snapshot.data.moduleConfig;
+        this._informationAndHelpTextService.moduleConfiguration = this.commonService.getSectionCodeAsKeys(this.travelSectionconfig);   
     }
 
 }

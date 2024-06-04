@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AddSfiModule } from '../../add-sfi/add-sfi.module';
+import { TravelDataFormResolveService } from './services/travel-data-form-resolve.service';
 
 const routes: Routes = [
     {
-        path: '', component: TravelDisclosureFormComponent,
+        path: '', component: TravelDisclosureFormComponent, resolve: {moduleConfig: TravelDataFormResolveService}
     }
 ];
 @NgModule({
@@ -24,7 +25,7 @@ const routes: Routes = [
         SharedComponentModule,
         AddSfiModule
     ],
-    providers: [],
+    providers: [TravelDataFormResolveService],
     exports: []
 })
 export class TravelDisclosureFormModule { }
