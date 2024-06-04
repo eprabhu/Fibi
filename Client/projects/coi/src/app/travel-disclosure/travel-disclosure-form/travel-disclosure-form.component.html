@@ -46,11 +46,11 @@
                             </label>
                         </span>
                     </div>
+                    <app-common-information [elementId]="'travel-disclosure-traveller'" [subSectionId]="2401"></app-common-information>
                     <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-msg d-block position-absolute col">
                         {{mandatoryList?.get('traveller')}}
                     </span>
-                    <app-common-information [elementId]="'travel-disclosure-traveller'" [subSectionId]="2401"></app-common-information>
-                </div>
+                </div>   
             </div>
 
             <!-- title -->

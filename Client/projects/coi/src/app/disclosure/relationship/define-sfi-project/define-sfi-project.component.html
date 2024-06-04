@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body pt-0">
+                    <div class="card-body py-0">
                         <div class="row">
                             <div class="col-md-6 col-xl-3 mb-2 ps-1">
                                 <label aria-label="Relationship" class="d-block fw-500 fs-14 coi-text-dark" for=""
@@ -64,16 +64,21 @@
                                 </app-no-data-label>
                             </div>
                             <div class="col-lg-12 ps-1">
-                                <label class="fw-500 fs-14 coi-text-dark me-2" for="">Relationship : </label>
+                                <label class="fw-500 fs-14 coi-text-dark me-2" for="">Relationship</label>
                                 <span>
                                     <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.validPersonEntityRelType">
                                         <span class="pill-container">
-                                            <em *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                                <span class="relationship-pill border px-3 py-1 rounded-4 me-2 fs-14 d-inline-block coi-text-light" [attr.aria-label]="'Relationship in ' + relation?.relationshipType +' are' + relation?.description">
-                                                    <span>{{relation?.relationshipType}} :</span>
+                                            <ng-container *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                                                <span class="relationship-pill border px-2 py-1 rounded-4 me-2 fs-14 d-inline-block coi-text-light"
+                                                [attr.aria-label]="'Relationship in ' + relation?.relationshipType +' are ' + relation?.description">
+                                                    <span class="d-flex coi-purple-text">
+                                                        <mat-icon aria-hidden="true"
+                                                        class="flex-shrink-0 me-1">{{getIcon(relation.relationshipType)}}</mat-icon>
+                                                    <span class="fw-bold me-1">{{relation?.relationshipType}}:</span>
                                                     <span>{{relation?.description}}</span>
+                                                    </span>
                                                 </span>
-                                            </em>
+                                            </ng-container>
                                         </span>
                                     </app-no-data-label>
                                 </span>
