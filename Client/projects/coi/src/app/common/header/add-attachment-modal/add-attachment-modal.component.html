@@ -20,7 +20,7 @@
                         <div class="row mb-2 mt-3">
                             <div class="col-lg-3 col-12">
                                 <label for="coi-add-attachment-type{{i}}" class="d-block"><span class="text-danger me-1">*</span>Attachment Type</label>
-                                <select id="coi-add-attachment-type{{i}}" class="form-control dateBox doc-type"
+                                <select id="coi-add-attachment-type{{i}}" class="form-select form-control cursor-pointer dateBox doc-type"
                                     [ngClass]=" attachmentErrorMsg && !selectedAttachmentTypeCodes[i] ? 'is-invalid d-block' : ''"
                                     [(ngModel)]="selectedAttachmentTypeCodes[i]"
                                     (ngModelChange)="clearValidation(index)">
