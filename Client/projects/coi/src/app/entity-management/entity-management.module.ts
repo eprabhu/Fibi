@@ -16,7 +16,6 @@ import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-de
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManagementService } from './entity-management.service';
 import { SharedLibraryModule } from '../../../../shared/src/lib/shared.module' ;
-import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 const routes: Routes = [
   {
