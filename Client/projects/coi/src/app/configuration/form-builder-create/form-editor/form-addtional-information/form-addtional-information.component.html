@@ -1,60 +1,206 @@
-<div class="d-flex justify-content-end update-configuration" *ngIf="showSelectedSection && selectedSection.sectionId">
-    <button class="btn btn-primary fs-14 preview-button mt-2" tabindex="0" (click)="updateForSection();"> Update
-        Configurations</button>
+<div class="d-flex justify-content-end update-configuration d-flex align-items-center" *ngIf="showSelectedSection && selectedSection.sectionId">
+    <button class="btn btn-primary fs-14  mt-2 d-flex align-items-center" tabindex="0" id="update-configuration"
+        aria-label="Click here to update Configurations" (click)="updateForSection();"
+        (keyup.enter)="updateForSection();" (keyup.space)="updateForSection();" title="Update Configuration">
+        <mat-icon class="fb-icon-size mr-2">save</mat-icon>Update Configurations</button>
 </div>
 <div class="section-edit" title="" tabindex="0" aria-label="" *ngIf="showSelectedSection && selectedSection.sectionId">
-    <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">Section name</label>
-    <input id="section-name" type="text" class="form-control"
+    <label class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="section-name">Section name</label>
+    <input id="section-name" type="text" class="form-control" id="section-name"
         (ngModelChange)="this.formBuilderService.unSavedChange = true;" [(ngModel)]="selectedSection.sectionName">
-    <label class="d-block fw-600 mt-5 mb-2 label-font-size" for="">
+    <label class="d-block fw-600 mt-3 mt-1 fb-label-font-size" for="section-header">
         Section Header
     </label>
-    <ckeditor (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+    <ckeditor id="section-header" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
         [(ngModel)]="selectedSection.sectionHeader" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
         placeholder="Comment" row="1" maxlength="2000"></ckeditor>
-    <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">
+    <label class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="section-footer">
         Section Footer
     </label>
-    <ckeditor (ngModelChange)="this.formBuilderService.unSavedChange = true;"
+    <ckeditor id="section-footer" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
         [(ngModel)]="selectedSection.sectionFooter" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
         placeholder="Comment" row="1" maxlength="2000"></ckeditor>
 </div>
 
 <div class="d-flex justify-content-end update-configuration"
-    *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE' || selectedComponent.componentType == 'RT' ">
-    <button type="button" tabindex="0" class="btn btn-primary fs-14 preview-button mt-2"
-        (click)="updateForComponent();"> Update Configurations</button>
+    *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE','QN','PE','RT'].includes(selectedComponent.componentType)">
+    <button *ngIf="isInitialSave" type="button" tabindex="0" class="btn btn-primary fs-14  mt-2 d-flex align-items-center"
+        (click)="saveForComponents();" aria-label="click here to save configuration" id="save-configuration-btn"
+        title="Save Configurations"><mat-icon class="fb-icon-size mr-2">save</mat-icon> Save Configurations</button>
+    <button *ngIf="!isInitialSave" type="button" tabindex="0" class="btn btn-primary fs-14  mt-2 d-flex align-items-center"
+        (click)="updateForComponents();" aria-label="click here to Update configuration" id="update-configuration-btn"
+        title="Update Configurations"><mat-icon class="fb-icon-size mr-2">save</mat-icon> Update Configurations</button>
 </div>
 <div class="section-edit" title="" tabindex="0" aria-label=""
-    *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE' || selectedComponent.componentType == 'RT' ">
-    <div
+    *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE','QN','PE','RT'].includes(selectedComponent.componentType)">
+    <div id="element-Name"
         *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE' ">
-        <label class="mt-5 fw-600 mb-2 label-font-size" *ngIf="selectedComponent.componentType == 'CE'" for="">Custom
-            Element</label>
-        <label class="mt-5 fw-600 mb-2 label-font-size" *ngIf="selectedComponent.componentType == 'QN'"
-            for="">Questionnaire Element</label>
-        <label class="mt-5 fw-600 mb-2 label-font-size" *ngIf="selectedComponent.componentType == 'PE'" for="">Program
-            Element</label>
-        <app-autocompleter [completerOptions]="autoCompleterOption"
+        <label class="mt-3 fw-600 mt-1 fb-label-font-size" *ngIf="selectedComponent.componentType == 'CE'"
+            for="custom-element">
+            <span class="fb-mandatory">*</span>
+            Custom Element</label>
+        <label class="mt-3 fw-600 mt-1 fb-label-font-size" *ngIf="selectedComponent.componentType == 'QN'"
+            for="questionnaire-element"><span class="fb-mandatory">*</span>
+            Questionnaire Element</label>
+        <label class="mt-3 fw-600 mt-1 fb-label-font-size" *ngIf="selectedComponent.componentType == 'PE'"
+            for="program-element">
+            <span class="fb-mandatory">*</span>
+            Program Element</label>
+        <app-autocompleter *ngIf="selectedComponent.componentType == 'CE'" [completerOptions]="autoCompleterOption"
             (ngModelChange)="this.formBuilderService.unSavedChange = true;" [clearField]="clearField" [placeHolder]=""
-            (onSelect)="refrenceId($event)">
+            (onSelect)="refrenceId($event)"
+            [isError]="(formValidation?.has('componentRefIDValidation')) ? 'is-invalid d-block' : ''">
         </app-autocompleter>
+        <app-autocompleter *ngIf="selectedComponent.componentType == 'QN'" [completerOptions]="autoCompleterOption"
+            (ngModelChange)="this.formBuilderService.unSavedChange = true;" [clearField]="clearField" [placeHolder]=""
+            (onSelect)="refrenceId($event)"
+            [isError]="(formValidation?.has('componentRefIDValidation')) ? 'is-invalid d-block' : ''">
+        </app-autocompleter>
+        <app-autocompleter *ngIf="selectedComponent.componentType == 'PE'" [completerOptions]="autoCompleterOption"
+            (ngModelChange)="this.formBuilderService.unSavedChange = true;" [clearField]="clearField" [placeHolder]=""
+            (onSelect)="refrenceId($event)"
+            [isError]="(formValidation?.has('componentRefIDValidation')) ? 'is-invalid d-block' : ''">
+        </app-autocompleter>
+        <div *ngIf="formValidation?.has('componentRefIDValidation')">
+            <span class="mandatory text-danger fs-14 d-inline-block">*Please select an element form the list</span>
+        </div>
     </div>
-    <ng-container *ngIf="selectedComponent.componentType != 'BR' && selectedComponent.componentType != 'HL' ">
-        <label class="d-block mt-5 fw-600 label-font-size" for="">Label</label>
+
+    <div *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE'].includes(selectedComponent.componentType)">
+
+        <!-- For custom-element creation -->
+        <ng-container>
+            <label for="Custom-label" class="mt-3 fw-600 mt-1 fb-label-font-size">
+                <span class="fb-mandatory">*</span>
+                Column Label
+            </label>
+            <input id="Custom-label" [ngClass]="(formValidation?.has('labelValidation')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="selectedComponent.label" type="text" class="form-control">
+            <div *ngIf="formValidation?.has('labelValidation')">
+                <span class="mandatory text-danger fs-14 d-inline-block">*Please enter a label</span>
+            </div>
+        </ng-container>
+
+        <!-- For custom-element creation -->
+        <ng-container *ngIf="['SE','NE'].includes(selectedComponent.componentType)">
+            <label class="mt-3 fw-600 mt-1 fb-label-font-size" for="data-Length">
+                <span class="fb-mandatory">*</span>
+                Data Length
+            </label>
+            <input id="data-Length"
+                [ngClass]="(formValidation?.has('dataLengthValidation')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="customDataElement.dataLength" (keypress)="numberValidation($event)"
+                (paste)="numberValidation($event)" class="form-control">
+            <div *ngIf="formValidation?.has('dataLengthValidation')">
+                <span class="mandatory text-danger fs-14 d-inline-block">*Please enter a label</span>
+            </div>
+            <label class="mt-3 fw-600 mt-1 fb-label-font-size" for="default-value">
+                Default Value
+            </label>
+            <input type="text" id="default-value" [(ngModel)]="customDataElement.defaultValue" class="form-control">
+
+        </ng-container>
+        <!--common lookup for all -->
+        <ng-container *ngIf="['ES','AS','SD','UD'].includes(selectedComponent.componentType)">
+            <label class="mt-3 fw-600 mt-1 fb-label-font-size">
+                Lookup Type
+            </label>
+            <select [(ngModel)]="customDataElement.lookupArgument" (ngModelChange)="selectedCustomDataLookup()"
+                class="form-select">
+                <option [ngValue]=null>--Select--</option>
+                <option [ngValue]="option.code" *ngFor=" let option of customDatalookUpArray">{{option.description}}
+                </option>
+            </select>
+            <!--common lookup for all  End-->
+            <!--common Default value lookup for all -->
+            <ng-container *ngIf="['AS','ES'].includes(selectedComponent.componentType)">
+                <label class="mt-3 fw-600 mt-1 fb-label-font-size">
+                    Default Value
+                </label>
+                <select [(ngModel)]="customDataElement.defaultValue" class="form-select">
+                    <option [ngValue]=null>--Select--</option>
+                    <option [ngValue]="option.value" *ngFor=" let option of customDataDefaultValueArray">{{option.key}}
+                    </option>
+                </select>
+            </ng-container>
+        </ng-container>
+        <!--common Default value lookup for all  End-->
+
+        <!--common option for all-->
+        <ng-container *ngIf="['CB','RB'].includes(selectedComponent.componentType)">
+            <label class="mt-3 fw-600 mt-1 fb-label-font-size">
+                Options
+            </label>
+            <div>
+                <div class="row mb-3" *ngFor="let option of customDataOptions let index = index;">
+                    <div class="col-6 d-flex">
+                        <i class="fa fa-circle align-content-center mr-2 fs-12"></i>
+                        <input class="form-control" [(ngModel)]="option.optionName" type="text" id="option-{{index}}">
+                        <i (click)="deleteOptions(index)"
+                            class="fa fa-close align-content-center text-muted ml-2 hand-cursor"></i>
+                    </div>
+                </div>
+                <div *ngIf="formValidation?.has('Optionvalidation')">
+                    <span class="mandatory text-danger fs-14 d-inline-block">*Options cannot be empty</span>
+                </div>
+                <small class="p-3 hand-cursor" id="add-radio-opt" (click)="addCustomDataOptions()">Add new
+                    option</small>
+            </div>
+        </ng-container>
+        <!--common option for all  End-->
+        <!--common multi-select toggel-->
+        <ng-container *ngIf="['SD','UD'].includes(selectedComponent.componentType)">
+
+            <label tabindex="0" class="d-block mt-3 fw-600 mt-1 fb-label-font-size">
+                Is Multiple?
+            </label>
+            <span class="py-1" aria-label="" role="switch">
+                <a *ngIf="customDataElement.isMultiSelectLookup == 'Y' " class="pl-2">
+                    <label class="switch" tabindex="0" (click)="customDataElement.isMultiSelectLookup = 'N'"
+                        (keyup.enter)="customDataElement.isMultiSelectLookup = 'N'">
+                        <input type="checkbox" checked>
+                        <span class="slider round"><small (keyup.enter)="customDataElement.isMultiSelectLookup = 'N'"
+                                class="fs-12 mt-1 activate-text">Yes</small></span>
+                    </label>
+                </a>
+                <a *ngIf="customDataElement.isMultiSelectLookup == 'N' " class="pl-2">
+                    <label class="switch" tabindex="0" (click)="customDataElement.isMultiSelectLookup = 'Y'"
+                        (keyup.enter)="customDataElement.isMultiSelectLookup = 'Y'">
+                        <input type="checkbox">
+                        <span class="slider round"><small (keyup.enter)="customDataElement.isMultiSelectLookup = 'Y'"
+                                class="deactivate-text deactivate-text-color  fs-12 mt-1">No</small></span>
+                    </label>
+                </a>
+            </span>
+        </ng-container>
+        <!--common multi-select toggel end-->
+
+
+        <!-- custom-element creation end -->
+    </div>
+
+    <ng-container
+        *ngIf="!['HL','BR','SE','NE','DE','CB','RB','ES','AS','SD','UD','TE'].includes(selectedComponent.componentType)">
+        <label class="d-block mt-3 fw-600 fb-label-font-size" for="label">
+            <span class="fb-mandatory">*</span>
+            Label</label>
         <input type="text" id="label" class="form-control "
-            (ngModelChange)="this.formBuilderService.unSavedChange = true;" [(ngModel)]="selectedComponent.label">
+            (ngModelChange)="this.formBuilderService.unSavedChange = true;" [(ngModel)]="selectedComponent.label"
+            [ngClass]="(formValidation?.has('labelValidation')) ? 'is-invalid d-block' : ''">
+        <div *ngIf="formValidation?.has('labelValidation')">
+            <span class="mandatory text-danger fs-14 d-inline-block">*Please enter a label</span>
+        </div>
     </ng-container>
 
     <ng-container
-        *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN' || selectedComponent.componentType == 'PE'">
-        <label class="d-block fw-600 mt-5 mb-2 label-font-size" for="">
+        *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE','QN','PE'].includes(selectedComponent.componentType)">
+        <label class="d-block fw-600 mt-3 mt-1 fb-label-font-size" for="">
             Component Header
         </label>
         <ckeditor tabindex="0" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
             [(ngModel)]="selectedComponent.componentHeader" [editor]="Editor" [config]="editorConfig"
             (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
-        <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">
+        <label class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="">
             Component Footer
         </label>
         <ckeditor tabindex="0" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
@@ -63,14 +209,15 @@
     </ng-container>
 
     <ng-container *ngIf="selectedComponent.componentType == 'PE' || selectedComponent.componentType == 'RT'">
-        <label class="d-block mt-5 fw-600 mb-2 label-font-size" for="">Component data</label>
+        <label class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="">Component data</label>
         <ckeditor tabindex="0" (ngModelChange)="this.formBuilderService.unSavedChange = true;"
             [(ngModel)]="selectedComponent.componentData" [editor]="Editor" [config]="editorConfig"
             (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
     </ng-container>
 
-    <div *ngIf="selectedComponent.componentType == 'CE' || selectedComponent.componentType == 'QN'">
-        <label tabindex="0" class="d-block mt-5 fw-600 mb-2 label-font-size" for="">
+    <div
+        *ngIf="['CE','QN','HL','BR','SE','NE','DE','CB','RB','ES','AS','SD','UD','TE'].includes(selectedComponent.componentType)">
+        <label tabindex="0" class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="">
             Is this component mandatory?
         </label>
         <span class="py-1" aria-label="" role="switch">
@@ -92,8 +239,9 @@
             </a>
         </span>
         <ng-container *ngIf="selectedComponent.isMandatory == 'Y'">
-            <label class="d-block mt-5 fw-600 mb-2 label-font-size" for=""> Provide a validation Message</label>
-            <input type="text" tabindex="0" class="form-control "
+            <label class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="validation-Message"> Provide a validation
+                Message</label>
+            <input id="validation-Message" type="text" tabindex="0" class="form-control "
                 (ngModelChange)="this.formBuilderService.unSavedChange = true;"
                 [(ngModel)]="selectedComponent.validationMessage">
         </ng-container>

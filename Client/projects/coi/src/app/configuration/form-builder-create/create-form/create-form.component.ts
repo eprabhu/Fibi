@@ -1,7 +1,7 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilderCreateService } from '../form-builder-create.service';
 import { Router } from '@angular/router';
-import { formHeader } from '../../../shared/form-builder-view/form-builder-interface';
+import { formHeader } from '../form-builder-create-interface';
 
 @Component({
     selector: 'app-create-form',
@@ -9,15 +9,32 @@ import { formHeader } from '../../../shared/form-builder-view/form-builder-inter
     styleUrls: ['./create-form.component.scss']
 })
 export class CreateFormComponent {
-    title: string;
-    description: string;
+    title: string = "";
+    description: string = "";
+    formValidation = new Map()
 
     constructor(private _formBuilderService: FormBuilderCreateService, private _router: Router,) { }
-    
-    createFormHeader() {
-        this._formBuilderService.createFormHeader({ "title": this.title, "description": this.description }).subscribe((data: formHeader) => {
-            this._router.navigate(['/coi/form-builder-create/form-editor'], { queryParams: { formBuilderId: data.formBuilderId } });
-        })
+
+    createFormHeader(): void {
+        if (this.isFormFieldValid()) {
+            this._formBuilderService.createFormHeader({ "title": this.title, "description": this.description }).subscribe((data: formHeader) => {
+                this._router.navigate(['/coi/form-builder-create/form-editor'], { queryParams: { formBuilderId: data.formBuilderId } });
+            })
+        }
+    }
+
+    isFormFieldValid(): boolean {
+        this.formValidation.clear();
+        if (this.title == "") {
+            this.formValidation.set("titleValidation", true)
+        }
+        if (this.description == "") {
+            this.formValidation.set("descriptionValidation", true)
+        }
+        if (this.formValidation.size > 0) {
+            return false;
+        }
+        return true;
     }
 
 }
