@@ -1,5 +1,5 @@
 <app-left-nav-bar></app-left-nav-bar>
-<header class="coi-header-top align-items-center d-flex justify-content-between px-3">
+<header class="coi-header-top align-items-center d-flex justify-content-between px-3" id="coi-header-card">
     <div class="d-flex align-items-center">
         <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
@@ -123,10 +123,11 @@
     </div>
 </header>
 
-<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" data-bs-backdrop="static" appDrag>
-    <div class="d-flex add-notes pt-2">
+<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
+    <div class="d-flex add-notes pt-2 align-items-baseline">
         <span class="fs-16 pt-1">Add Note</span>
-        <button type="button" class="btn-close ms-auto" title="Close" data-bs-dismiss="modal" aria-label="Close" (click)="closeAddNote()"></button>
+        <app-common-help-text *ngIf="notesHelpTexts" [helpTextHardCoded]="notesHelpTexts"></app-common-help-text>
+        <button type="button" class="btn-close ms-auto" title="Click here to close" aria-label="Click here to close" (click)="closeAddNote()"></button>
     </div>
     <hr class="hr">
     <div>
@@ -134,7 +135,7 @@
             placeholder="Take a note..." [(ngModel)]="noteComment"></textarea>
     </div>
     <div>
-        <button type="button" aria-label="Close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" (click)="saveOrUpdateNote()">Add</button>
+        <button type="button" aria-label="Click to close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" title="Click here to add note"  aria-label="Click here to add note" (click)="saveOrUpdateNote()">Add</button>
     </div>
 </div>
 
@@ -153,7 +154,7 @@
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Choose a theme</h4>
-                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Click to close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>

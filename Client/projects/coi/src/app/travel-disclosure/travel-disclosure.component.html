@@ -4,7 +4,7 @@
             <div class="disclosure-heading px-3 d-flex">
                 <!-- disclosure heading -->
                 <div class="align-self-center flex-fill d-flex">
-                    <p class="m-0" tabindex="0">
+                    <p class="m-0" tabindex="-1">
                         <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong [attr.aria-label]="'Travel Disclosure By ' + userDetails?.fullName">Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
@@ -21,7 +21,7 @@
                             <strong [attr.aria-label]="'hash' + travelDisclosure?.travelDisclosureId + ' : Travel Disclosure By ' + userDetails?.fullName">
                                 #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0"
+                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="-1"
                                         (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
                                         [attr.aria-label]="'click to show the details of ' + userDetails?.fullName"
                                         title="click to show the details of {{userDetails?.fullName}}">
@@ -33,12 +33,12 @@
                     </p>
                 </div>
                 <!-- risk details -->
-                <div tabindex="0" class="d-flex ms-auto me-2" *ngIf="travelDisclosure?.riskLevel">
+                <div tabindex="-1" class="d-flex ms-auto me-2" *ngIf="travelDisclosure?.riskLevel">
                     <div class="align-items-center d-flex ml-15">
                         <label class="fw-500 fs-14 mr-2 mt-1" aria-label="Risk is">Risk :</label>
                         <div class="text-color fs-14 d-flex align-items-center">
                         <span class="text-secondary fs-14">
-                            <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                            <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round" aria-hidden="true">warning</mat-icon>
                         </span>
                         <span class="ml-2 mt-1">
                             {{travelDisclosure?.riskLevel}}
@@ -53,17 +53,17 @@
                             <button (click)="isCardExpanded=!isCardExpanded;" role="button" type="button" aria-expanded="isCardExpanded"
                                 [attr.aria-label]="'Click here to ' + (isCardExpanded ? 'collapse' : 'expand') + ' Details of Travel Disclosure Document'"
                                 class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                <mat-icon aria-hidden="true">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
                             </button>
                         </div>
                     </ng-container>
                 </div>
             </div>
-            <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="0" aria-label="Details of Travel Disclosure Document">
+            <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="-1" aria-label="Details of Travel Disclosure Document">
                 <!-- user details -->
                 <div class="col me-2">
                     <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Department is">
                                     <i aria-hidden="true" class="fa fa-home mr-2"></i>
@@ -78,7 +78,7 @@
                                 </app-no-data-label>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Administrator is">
                                     <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
@@ -91,7 +91,7 @@
                                 </app-no-data-label>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Admin Group is">
                                     <img aria-hidden="true" class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
@@ -110,8 +110,8 @@
                 <!-- for date box -->
                 <div class="col-auto me-2">
                     <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill" tabindex="0" aria-label="Important Dates Of Travel Disclosure">Date</span>
-                        <div class="row mt-2" tabindex="0">
+                        <span class="status-pill" tabindex="-1" aria-label="Important Dates Of Travel Disclosure">Date</span>
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14"
                                     aria-label="Create Date is">Create : </label>
@@ -122,7 +122,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14"
                                     aria-label="Certification Date is">Certification : </label>
@@ -133,7 +133,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14"
                                     aria-label="Approved Date is">Approved : </label>
@@ -149,8 +149,8 @@
                 <!-- for status box -->
                 <div class="col-auto status-card-width" >
                     <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill" tabindex="0" aria-label="Statuses Of Travel Disclosure">Status</span>
-                        <div class="row mt-2" tabindex="0">
+                        <span class="status-pill" tabindex="-1" aria-label="Statuses Of Travel Disclosure">Status</span>
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4"
                                     aria-label="Document status is">Document : </label>
@@ -165,7 +165,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4"
                                     aria-label="Review status is">Review : </label>
@@ -180,7 +180,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="row mt-2" tabindex="0">
+                        <div class="row mt-2" tabindex="-1">
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4"
                                 aria-label="Disclosure status is">Disclosure : </label>
@@ -199,7 +199,7 @@
             </div>
 
             <ng-container *ngIf="!isCreateMode">
-                <div class="navigation-tabs d-flex align-items-center" tabindex="0"  role="navigation" aria-label="travel disclosure">
+                <div class="navigation-tabs d-flex align-items-center" tabindex="-1"  role="navigation" aria-label="travel disclosure">
                      <!-- Disclosure -->
                     <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
                         [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'"
@@ -231,29 +231,29 @@
     <!-- right side options -->
     <div class="col-3 px-0">
         <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm h-100"
-            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : '' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
+            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : '' : 'collapse-right-tab'" tabindex="-1"  role="menu" aria-label="travel disclosure actions section">
             <div class="row m-0 py-3 px-3">
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home" aria-label="Go to home"
                     [ngClass]="(travelDisclosure?.reviewStatusCode != '2' && !isCreateMode && travelDisclosure?.reviewStatusCode != '7') ? 'col-2' : 'col'"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 mx-1 mb-2">
-                    <mat-icon>home</mat-icon>
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14" [class.mb-2]="isCardExpanded" [class.me-1]="!isCreateMode">
+                    <mat-icon aria-hidden="true">home</mat-icon>
                     <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
                 </button>
 
                 <!-- Comments -->
-                <button title="Click to add new review comments" aria-label="Click to add new review comments"
-                    *ngIf="!isCreateMode"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col mx-1 mb-2">
-                    <mat-icon>rate_review</mat-icon>
+                <button title="Click here to add new review comments" aria-label="Click here to add new review comments"
+                    *ngIf="!isCreateMode" [class.mb-2]="isCardExpanded"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col mx-1">
+                    <mat-icon aria-hidden="true">rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
                 </button>
 
                 <!-- more option button for expanded card-->
                 <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && isCardExpanded"
-                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1 mb-2"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-2"
                     role="menu" title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
-                    <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                    <mat-icon class="moreActionIcon" aria-hidden="true">more_vert</mat-icon>
                     <span>More Actions</span>
                 </button>
 
@@ -262,49 +262,49 @@
                     <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
                     <ng-container *ngIf="isTravelAdministrator">
                         <!-- reassigned admin -->
-                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]) && isTravelAdministrator" aria-label="Click to Reassign administrator"
-                            title="Click to Reassign Administrator/Admin Group" role="menuitems"
+                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]) && isTravelAdministrator" aria-label="Click here to Reassign administrator"
+                            title="Click here to Reassign Administrator/Admin Group" role="menuitems"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openAddAssignModal()">
-                            <mat-icon>group_add</mat-icon>
+                            <mat-icon aria-hidden="true">group_add</mat-icon>
                             <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                         </button>
                     </ng-container>
                     <ng-container *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS, TRAVEL_REVIEW_STATUS.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
                         <!-- manage /view disclosure status -->
                         <button mat-menu-item (click)="openConflictSlider()" role="menuitems"
-                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
-                            title="Click to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
+                            [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
+                            title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon>{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
+                            <mat-icon aria-hidden="true">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
                             <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure
                                 Status</span>
                         </button>
 
                         <!-- manage /view travel risk status -->
                         <button mat-menu-item (click)="openRiskSlider()" role="menuitems"
-                            [attr.aria-label]="'Click to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
-                            title="Click to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
+                            [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
+                            title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon class="material-icons-round">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
+                            <mat-icon class="material-icons-round" aria-hidden="true">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
                                 'visibility'}}</mat-icon>
                             <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk</span>
                         </button>
                     </ng-container>
 
                     <!-- Withdraw disclosure -->
-                    <button mat-menu-item title="Click to Withdraw Travel Disclosure" aria-label="Click to Withdraw Travel Disclosure"
-                        (click)="openConfirmationModal('Withdraw', true, withdrawHelpTexts, true, withdrawErrorMsg);"
+                    <button mat-menu-item title="Click here to Withdraw Travel Disclosure" aria-label="Click here to Withdraw Travel Disclosure"
+                        (click)="openConfirmationModal('Withdraw', true, true, withdrawErrorMsg);"
                         class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action" role="menuitems"
                         *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && travelDisclosure?.personId == currentPersonId">
-                        <mat-icon>logout</mat-icon>
+                        <mat-icon aria-hidden="true">logout</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Withdraw</span>
                     </button>
 
                     <!-- notify -->
-                    <button mat-menu-item title="Click to Notify" aria-label="Click to Notify" role="menuitems"
+                    <button mat-menu-item title="Click here to Notify" aria-label="Click here to Notify" role="menuitems"
                         class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                        <mat-icon>notifications</mat-icon>
+                        <mat-icon aria-hidden="true">notifications</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Notify</span>
                     </button>
                 </mat-menu>
@@ -312,12 +312,12 @@
                 <ng-container *ngIf="!isCreateMode">
                     <!-- assign admin -->
                     <ng-container *ngIf="!travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && isTravelAdministrator">
-                        <button title="Click to Assign Administrator/Admin Group"
-                            aria-label="Click to assign administrator"
+                        <button title="Click here to Assign Administrator/Admin Group"
+                            aria-label="Click here to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
                             (click)="openAddAssignModal()">
-                            <mat-icon>group_add</mat-icon>
+                            <mat-icon aria-hidden="true">group_add</mat-icon>
                             <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
                         </button>
                     </ng-container>
@@ -325,23 +325,23 @@
 
                     <!-- return to pi -->
                     <button *ngIf="showReturnOrApproveButton()"
-                            title="Click to Return Travel Disclosure" aria-label="Click to Return Travel Disclosure"
-                        (click)="openConfirmationModal('Return', true, returnHelpTexts, true, returnErrorMsg);"
-                        [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                            title="Click here to Return Travel Disclosure" aria-label="Click here to Return Travel Disclosure"
+                        (click)="openConfirmationModal('Return', true, true, returnErrorMsg);"
+                        [ngClass]="isCardExpanded? 'col-12 mb-2' : 'col ms-2'"
                         class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
-                        <mat-icon class="returnIcon">refresh</mat-icon>
+                        <mat-icon class="returnIcon" aria-hidden="true">refresh</mat-icon>
                         <span class="ms-1" *ngIf="isCardExpanded">Return</span>
                     </button>
 
                     <!-- approve disclosure -->
                     <button *ngIf="(isTravelAdministrator && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]))
                                    || (showReturnOrApproveButton())"
-                        title="Click to Approve Travel Disclosure"
-                        aria-label="Click to Approve Travel Disclosure"
+                        title="Click here to Approve Travel Disclosure"
+                        aria-label="Click here to Approve Travel Disclosure"
                         (click)="openConfirmationModal('Approve', true);"
                         [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                         class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
-                        <mat-icon>check_circle_outline</mat-icon>
+                        <mat-icon aria-hidden="true">check_circle_outline</mat-icon>
                         <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
                     </button>
                 </ng-container>
@@ -349,32 +349,32 @@
                 <ng-container *ngIf="isCreateMode">
                     <!-- save -->
                     <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
-                        aria-label="Click to Save Travel Disclosure"
+                        aria-label="Click here to Save Travel Disclosure"
                         class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="saveTravelDisclosure()" title="Click to Save Travel Disclosure">
-                        <mat-icon class="me-2">save</mat-icon>
+                        (click)="saveTravelDisclosure()" title="Click here to Save Travel Disclosure">
+                        <mat-icon class="me-2" aria-hidden="true">save</mat-icon>
                         Save
                     </button>
 
                     <!-- submit -->
                     <button class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        aria-label="Click to Submit Travel Disclosure"
+                        aria-label="Click here to Submit Travel Disclosure"
                         (click)="openConfirmationModal('Submit', false);" *ngIf="isRouteComplete(['certification'])"
-                        [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
-                        <mat-icon class="me-2">done</mat-icon>
+                        [disabled]="!service.isTravelCertified" title="Click here to Submit Travel Disclosure">
+                        <mat-icon class="me-2" aria-hidden="true">done</mat-icon>
                         Submit
                     </button>
                 </ng-container>
 
                 <!-- more option for collapse card-->
                 <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && !isCardExpanded"
-                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1 mb-2"
-                    role="menu" title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
-                    <mat-icon>more_vert</mat-icon>
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1"
+                    role="menu" title="Click here for More Actions" aria-label="Click here for More Actions" aria-expanded="false" aria-haspopup= "true">
+                    <mat-icon aria-hidden="true">more_vert</mat-icon>
                 </button>
 
                 <!-- last update date -->
-                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : ''" tabindex="0">
+                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'mt-2' : ''" tabindex="-1">
                     <div class="fw-medium me-3">Last Updated By :</div>
                     <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
@@ -385,7 +385,7 @@
     <div class="mx-0 p-0 row">
         <ng-container *ngIf="isCreateMode">
             <div class="p-0">
-                <div class="nav-progress navigation-tabs row" tabindex="0" role="navigation" aria-label="travel disclosure">
+                <div class="nav-progress navigation-tabs row" tabindex="-1" role="navigation" aria-label="travel disclosure">
                     <!-- travel details -->
                     <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
                         [class.complete]="isRouteComplete(['travel-details', 'certification'])"
@@ -452,23 +452,21 @@
 <app-confirmation-modal [modalName] = "'travel-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="modalActionBtnName" [modalSize]="modalSize" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
     [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionErrorMsg]="descriptionErrorMsg"
-    [primaryBtnTooltip]= "'Click to'+' '+ modalActionBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
+    [helpText]="reasonHelpText" [secondaryBtnTooltip]= "'Click here to cancel'" [textAreaPlaceholder]="'Please provide the reason'"
+    [primaryBtnTooltip]="'Click here to '+ modalActionBtnName?.toLowerCase() +' the disclosure.'">
     <!-- modal header -->
     <ng-container header>
         <span>{{modalActionBtnName}} Travel Disclosure</span>
+        <app-common-help-text *ngIf="confirmationModalHelpText" [helpTextHardCoded]="confirmationModalHelpText"></app-common-help-text>
     </ng-container>
 
     <ng-container content>
-        <!-- help text -->
-        <div>
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "modalActionBtnName" [rowLimit]="2"></app-help-text>
-        </div>
         <app-person-project-entity-card [personProjectOrEntity]="personEntityDetails" [disclosureHeaderDetails]="travelDisclosure"></app-person-project-entity-card>
     </ng-container>
 
     <!-- modal content -->
     <ng-container content>
-        <p *ngIf="modalActionBtnName == 'Submit'" class="fs-14 ms-2">
+        <p *ngIf="modalActionBtnName == 'Submit'" class="fs-14 mb-0 mt-2">
             Are you sure you want to <strong class="text-lowercase">{{modalActionBtnName}}</strong> this disclosure?
         </p>
     </ng-container>

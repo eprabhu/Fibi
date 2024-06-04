@@ -1,5 +1,5 @@
 <div class="modal modal-coi fade mySkinDialog" id="invalidActionModalCOI" role="dialog"
-    aria-hidden="true" data-bs-backdrop="static">
+    tabindex="-1" aria-label="Invalid Action">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,24 +7,23 @@
                   Invalid Action
                 </h5>
             </div>
-            <div class="modal-body m-0 p-0">
-              <div class="form-row mb-20">
-                <div class="col-1 mt-20">
-                    <i class="fa fa-2x fa-exclamation-triangle text-warning px-3"
-                        aria-hidden="true"></i>
+            <div class="modal-body">
+              <div class="row align-items-center m-0">
+                <div class="col-auto ps-0 pe-1">
+                    <i class="fa fa-2x fa-exclamation-triangle text-warning" aria-hidden="true"></i>
                 </div>
-                <div class="col-11 font-align">
-                    <p>
-                        You have tried to perform an action that is not valid for the current state of this {{sectionName}}. The
-                        likely cause is that
-                        some changes have been made to the {{sectionName}} recently. Please click the Refresh button to proceed further.
+                <div class="col pe-0">
+                    <p class="fs-14 mb-0">
+                        You have tried to perform an action that is not valid for the current state of this {{sectionName}}.
+                        The likely cause is that some changes have been made to the {{sectionName}} recently.
+                        Please click the Refresh button to proceed further.
                     </p>
                 </div>
             </div>
            </div>
             <div class="modal-footer">
                 <button type="button" class="align-items-center btn btn-outline-primary d-flex fs-14 me-3" (click)="reload()"
-                    attr.aria-label="click to Refresh" role="button">
+                    attr.aria-label="Click to refresh" title="Click to refresh">
                     <mat-icon class="me-1">refresh</mat-icon>
                     Refresh
                 </button>

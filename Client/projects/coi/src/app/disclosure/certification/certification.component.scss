@@ -1,16 +1,17 @@
 .certify-box {
-  width: 17px;
-  height: 17px;
+    width: 17px;
+    height: 17px;
 }
 
 .clickable {
-  color:#007DEC;
-  cursor: pointer;
-  &:hover {
-    font-weight: 800;
-  }
+    color: #007DEC;
+    cursor: pointer;
+
+    &:hover {
+        font-weight: 800;
+    }
 }
 
 .mat-icon {
-  font-size: 1.22rem !important;
+    font-size: 1.22rem !important;
 }

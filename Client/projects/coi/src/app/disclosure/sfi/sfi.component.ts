@@ -42,6 +42,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     entityName: any;
     updatedRelationshipStatus: string;
     entityDetails: any;
+    relationshipDetails: any;
     expandInfo = false;
     isEnableActivateInactivateSfiModal: boolean;
     $debounceEvent = new Subject();
@@ -168,6 +169,8 @@ export class SfiComponent implements OnInit, OnDestroy {
       }
 
       activateDeactivateEvent(event) {
+        this.entityDetails = event.coiEntity;
+        this.relationshipDetails = event.validPersonEntityRelTypes;
         this.isEnableActivateInactivateSfiModal = true;
         this.personEntityId = event.personEntityId;
         this.entityName = event.coiEntity.entityName;
@@ -186,7 +189,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.currentPage = 1;
         this.$debounceEvent.next('');
       }
-    
+
       getSearchList() {
         this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(1000))).subscribe((data: any) => {
           this.$fetchSFIList.next();
@@ -196,6 +199,6 @@ export class SfiComponent implements OnInit, OnDestroy {
 
       clearSearchText() {
         this.searchText = '';
-        this.$fetchSFIList.next(); 
+        this.$fetchSFIList.next();
       }
 }

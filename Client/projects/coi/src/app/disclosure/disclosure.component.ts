@@ -13,7 +13,6 @@ import {
     isEmptyObject,
     openModal,
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
 import { CommonService } from '../common/services/common.service';
 import {
@@ -27,6 +26,7 @@ import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-disclosure',
@@ -93,18 +93,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     primaryBtnName = '';
     descriptionErrorMsg = '';
     textAreaLabelName = '';
-    withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
-    returnErrorMsg = 'Describe the reason for returning the disclosure';
-    helpTexts = [];
+    withdrawErrorMsg = 'Please provide the reason for withdrawing the disclosure.';
+    returnErrorMsg = 'Please provide the reason for returning the disclosure.';
+    helpTexts = '';
+    confirmationHelpTexts = '';
     isHomePageClicked = false;
     showSlider = false;
     selectedType: '';
-    withdrawHelpTexts = [
-        `Withdraw disclosures currently in the 'Submitted' status.`,
-        `Specify the reason for the withdrawal of the disclosure.`,
-        `Click on 'Withdraw' button to recall your disclosure for any modification.`
-    ];
-    returnHelpTexts = [];
+    withdrawHelpTexts = 'Please provide the reason for withdrawal.';
+    returnHelpTexts = 'Please provide the reason for return.';
+    completeReviewHelpText = 'You are about to complete the disclosure\'s final review.'
+    returnModalHelpText = '';
+    withdrawModalHelpText = '';
     isOpenRiskSlider = false;
    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
@@ -113,6 +113,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
     isUserCollapse = false;
+    submitHelpTexts = '';
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -238,14 +239,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
     }
 
-    getDisclosureTitleName(fcoiTypeCode: any) {
+    getDisclosureTitleName(fcoiTypeCode: any, isLowerCase = false) {
         switch (fcoiTypeCode) {
             case '1':
                 return 'FCOI';
             case '2':
-                return 'Proposal';
+                return isLowerCase ?  'proposal' : 'Proposal';
             case '3':
-                return 'Award';
+                return isLowerCase ? 'award' : 'Award';
             case '4':
                 return 'FCOI';
         }
@@ -284,6 +285,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     checkQuestionnaireCompletedBeforeCertify() {
+        this.coiService.submitResponseErrors = [];
         if (!this.isSaving) {
             this.isSaving = true;
             this.coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO())
@@ -359,11 +361,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiData = coiData;
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
-        this.returnHelpTexts = [ `Return disclosures currently in the '${this.coiData.coiDisclosure.coiReviewStatusType.description}' status.`,
-        `Specify the reason for the returning of the disclosure.`,
-        `Click on 'Return' button to return the disclosure for any modification.`];
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
+        if(this.coiData.coiDisclosure) {
+            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true) + ' disclosure.';
+            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true)+ ' disclosure.';
+            this.withdrawModalHelpText = 'You are about to withdraw the '+ this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true) + ' disclosure.';
+        }
     }
 
     changeDataStoreRisk(event) {
@@ -575,6 +579,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             openModal('ValidatedModal');
         } else {
+            this.isSaving = false;
             openModal('confirmModal');
         }
     }
@@ -662,13 +667,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             }));
     }
 
-    openConfirmationModal(actionBtnName: string, helpTexts: string [] = [], descriptionErrorMsg: string = ''): void {
-        this.helpTexts = helpTexts;
+    openConfirmationModal(actionBtnName: string, helpTexts: string = '', descriptionErrorMsg: string = '', modalHelpText: string = ''): void {
         this.primaryBtnName = actionBtnName;
         this.descriptionErrorMsg = descriptionErrorMsg;
+        this.confirmationHelpTexts = '';
+        this.helpTexts = '';
+        setTimeout(() => {
+            this.confirmationHelpTexts = modalHelpText;
+            this.helpTexts = helpTexts;
+            document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+        });
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
         this.setPersonProjectDetails();
-        document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
     }
 
     private setPersonProjectDetails(): void {

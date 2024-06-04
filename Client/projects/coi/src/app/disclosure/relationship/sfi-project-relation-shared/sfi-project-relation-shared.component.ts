@@ -44,10 +44,10 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             this.coiValidationMap.clear();
             this.coiTableValidation.clear();
         }
+        this.projectSFIDetails = this.projectSFIDetails.map(ele =>({...ele,isSaved: false}));
     }
 
     ngOnInit() {
-        this.triggerSingleSave();
         this.listenScreenSize();
     }
 
@@ -72,10 +72,10 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         return STATUS ? STATUS.description : '';
     }
 
-    sfiSingleSave(index, sfi, focusableId: string) {
+    sfiSingleSave(index:number, sfi:any, focusableId: string) {
         this.focusableId = focusableId;
         this.updateIsSaving(true);
-        this.$debounceEvent.next({index: index, SFI: sfi});
+        this.saveSingleEntity(index,sfi)
     }
 
     triggerSingleSave() {
@@ -114,21 +114,27 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
 
 
     singleSaveClick(element, index) {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....', 1250);
-        this.$subscriptions.push(this._relationShipService.singleEntityProjectRelationSFI(element, element.personEntityId,
-            element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
-            this._relationShipService.projectSFIDetails[element.personEntityId][index] = data.coiDisclEntProjDetail;
-            this.coiValidationMap.clear();
-            this.relationshipChanged.emit(true);
-            this.updateIsSaving(false);
-            this.focusLastEditedInput();
-        }, err => {
-            setTimeout(() => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
+        if (!this.projectSFIDetails[index].isSaved) {
+            this.projectSFIDetails[index].isSaved = true;
+            delete element.isSaved;
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....', 1250);
+            this.$subscriptions.push(this._relationShipService.singleEntityProjectRelationSFI(element, element.personEntityId,
+                element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
+                this._relationShipService.projectSFIDetails[element.personEntityId][index] = data.coiDisclEntProjDetail;
+                this.coiValidationMap.clear();
+                this.relationshipChanged.emit(true);
                 this.updateIsSaving(false);
-                this.focusLastEditedInput();
-            }, 1500);
-        }));
+                // this.focusLastEditedInput();
+                this.projectSFIDetails[index].isSaved = false;
+            }, err => {
+                setTimeout(() => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship. Please try again.');
+                    this.updateIsSaving(false);
+                    // this.focusLastEditedInput();
+                    this.projectSFIDetails[index].isSaved = false;
+                }, 1500);
+            }));
+        }
     }
 
     focusLastEditedInput() {
@@ -150,10 +156,10 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         this.coiValidationMap.clear();
         this.coiTableValidation.clear();
         if (!this.coiStatusCode || (this.coiStatusCode == 'null')) {
-            this.coiValidationMap.set('coiStatus', 'Please select Conflict Status');
+            this.coiValidationMap.set('coiStatus', 'Please select conflict status.');
         }
         if (!this.coiDescription) {
-            this.coiValidationMap.set('coiDescription', 'Please enter description');
+            this.coiValidationMap.set('coiDescription', 'Please enter description.');
         }
         if (this.coiValidationMap.size === 0) {
             this.saveClick();
@@ -182,6 +188,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             ele.projectConflictStatusCode = this.coiStatusCode;
             ele.disclComment.comment = this.coiDescription;
             ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
+            delete ele.isSaved;
             return ele;
         });
     }

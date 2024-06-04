@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, Output, } from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {
     getEndPointOptionsForDepartment,
     getEndPointOptionsForLeadUnit,
@@ -19,6 +18,8 @@ import {
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
 import { RevisionObject, Disclosure } from '../shared-interface';
+import { checkForVowelInFirstLetter } from 'projects/coi/src/app/common/utilities/custom-utilities';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -63,6 +64,11 @@ export class DisclosureCreateModalComponent implements OnInit {
     homeUnitName: null;
     title = '';
     isShowConcurrencyWarning = false;
+    searchHelpText = '';
+    unitHelpText = `To disclose at any other unit, please click on the 'Edit' icon near the unit field, and proceed to disclosure creation.
+                    To revert to the original unit, click on the 'Reset' icon.`
+    travelDescHelpText = 'Please provide the purpose of the trip.';
+    projectTypeHelpText = 'Please select a project type to proceed with disclosure creation.';
 
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
@@ -166,7 +172,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     });
                     this.clearModal();
                 }
-            }, err => { 
+            }, err => {
                 if (err.status === 405) {
                     this.isShowConcurrencyWarning = true;
                         this.setExistingDisclosureDetails('Project', err.error);
@@ -200,7 +206,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (this.validateTravelDisclosure()) {
             this.getCreateTravelRequestObject();
             hideModal('reviseOrCreateDisclosureModal');
-            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL]);
+            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],{queryParams: {mode:'create'}});
             this.clearModal();
         }
     }
@@ -260,12 +266,23 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.clearProjectDisclosure();
         this.clearProjectField = new String('true');
         switch (this.selectedProjectType) {
-            case 'Award':
+            case 'Award': {
+                this.searchHelpText = '';
+                setTimeout(() => {
+                    this.searchHelpText = 'Please search and link an award.';
+                });
                 return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.baseUrl);
-            case 'Development Proposal':
+            }
+            case 'Development Proposal': {
+                this.searchHelpText = '';
+                setTimeout(() => {
+                    this.searchHelpText = 'Please search and link a development proposal.';
+                });
                 return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this.commonService.baseUrl);
+            }
             default:
                 this.selectedProjectType = null;
+                break;
         }
     }
 
@@ -307,7 +324,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
     }
 
-    
+
 
     getDispositionStatusBadge(statusCode): string {
         switch (statusCode) {
@@ -390,7 +407,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                         } else {
                         this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                             err.error.errorMessage : 'Error in creating new version. Please try again.');
-                            
+
                     }}));
             } else {
                 this.isShowExistingDisclosure = true;
@@ -470,7 +487,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.projectDisclosureValidation.set('projectSelect', 'Please select any one of the given Project Type');
         }
         if (!this.manualProjectAddDetails || !this.manualProjectAddDetails.moduleItemId) {
-            this.projectDisclosureValidation.set('proposalSearch', 'Please select a ' + this.selectedProjectType + ' to create disclosure.');
+            this.projectDisclosureValidation.set('proposalSearch', 'Please select '+ checkForVowelInFirstLetter(this.selectedProjectType) + ' to create disclosure.');
         }
         if (!this.reviseObject.homeUnit) {
             this.mandatoryList.set('homeUnit', 'Please enter a valid unit to create a Project disclosure.');
@@ -496,6 +513,13 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.title = 'Create Travel Disclosure help text';
         }
         return this.title;
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.clearModal();
+        }
     }
 
 }

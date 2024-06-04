@@ -329,7 +329,6 @@ export class GraphComponent implements OnInit {
             this.graph = { nodes: [], links: [] };
             this.eventHistory.forEach(E => this.addNodesAndLinks(this.eventData[E.eventId].nodes, this.eventData[E.eventId].links));
         }
-        console.log(this.selectedRelations);
         this.selectedEventIndex = this.eventHistory.length - 1;
         this.hideBasicDetailsPopup();
     }

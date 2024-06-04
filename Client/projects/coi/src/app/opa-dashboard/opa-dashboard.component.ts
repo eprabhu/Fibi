@@ -11,8 +11,8 @@ import { NavigationService } from '../common/services/navigation.service';
 import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DASHBOARD_RIGHTS } from '../app-constants';
-import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
+import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-opa-dashboard',
@@ -222,9 +222,10 @@ export class OpaDashboardComponent implements OnInit {
                 if (data) {
                     this.result = data || [];
                     this.opaList = data.data;
-                    this.isLoading = false;
                 }
+                this.isLoading = false;
             }, _err => {
+                this.isLoading = false;
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
              }));
     }
@@ -390,9 +391,9 @@ export class OpaDashboardComponent implements OnInit {
 
     getReviewerStatus(statusCode) {
         switch (statusCode) {
-            case '1': return 'info';
-            case '2': return 'success';
-            case '3': return 'warning';
+            case '2': return 'info';
+            case '3': return 'success';
+            case '1': return 'warning';
             default: return 'danger';
         }
     }

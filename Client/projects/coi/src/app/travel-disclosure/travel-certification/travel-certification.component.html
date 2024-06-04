@@ -1,15 +1,6 @@
 <div [@fadeInOutHeight]>
-    <div class="border pi-info-text p-3 rounded-1">
-        <p class="fs-14 m-0">
-            <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
-                {{headerInfoText | slice:0:650}}...
-                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
-            </span>
-            <ng-template #showFullInfo>
-                {{headerInfoText}}
-                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read Less</u></span>
-            </ng-template>
-        </p>
+    <div class="alert alert-primary mb-3">
+        <app-read-more [valueToShow]="headerInfoText" [sliceCount]="650" [classesToApply]="'fs-14'"></app-read-more>
     </div>
     <div class="card mt-1">
 
@@ -27,7 +18,7 @@
             <div class="gridSkin p-15 text-center d-flex justify-content-center m-5">
                 <div class="me-3">
                     <input type="checkbox" (change)="certify();" [checked]="travelService.isTravelCertified"
-                    [disabled]="!isCheckBoxDisable" class="certify-box mt-1">
+                    [disabled]="!isCheckBoxDisable" class="certify-box mt-1 cursor-pointer">
                 </div>
                 <p>
                     I agree to abide by the University COI policy guidelines and certify that the information provided for

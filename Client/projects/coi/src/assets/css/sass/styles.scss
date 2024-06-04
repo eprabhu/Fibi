@@ -37,26 +37,23 @@ body,
 html {
     height: 100%;
     margin: 0;
-    padding: 0;
+    padding: 0 !important;
     font-family: 'Roboto', sans-serif !important;
 }
 
-html {
-  height: 100.001%;
-  overflow-y: scroll;
-}
 
 body {
     background: var(--theme-body-bg-color) !important;
     color: var(--theme-text-color);
     outline: 0;
+    overflow-y: scroll;
 }
 
 .canvas {
     padding-top: var(--theme-topbar-height);
     padding-left: var(--theme-sidebar-width);
     outline: 0;
-    
+
     .container-fluid {
       min-height: calc(100vh - (var(--theme-topbar-height) + 2.5rem));
 
@@ -78,40 +75,40 @@ body {
     stroke: #3d2cff;
     stroke-width: 1.5px;
   }
-  
+
   // scroll design
   ::-webkit-scrollbar {
     width: 12px;
     height: 10px;
   }
-  
+
   ::-webkit-scrollbar-track {
     width: 12px;
     background-color: #e7e7e7;
     border-radius: 5px;
   }
-  
+
   ::-webkit-scrollbar-thumb {
       background: #b8b7b6;
       border-radius: 12px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: #979797;
   }
   // scroll design ends
-  
+
   .cursor-pointer {
     cursor: pointer;
   }
-  
+
   .cdk-overlay-container {
     position: fixed;
     z-index: 10613 !important;
   }
-  
+
   // .modal-footer {
-  
+
   //   .btn-outline-secondary,
   //   .btn-outline-primary,
   //   .btn-danger {
@@ -121,50 +118,50 @@ body {
   //     height: 35px;
   //   }
   // }
-  
+
   .mr-2 {
     margin-right: 0.5rem !important;
   }
-  
+
   .ml-2 {
     margin-left: 0.5rem !important;
   }
-  
+
   .font-weight-normal {
     font-weight: 100 !important;
   }
-  
+
   // header ul li,
   // nav ul li {
   //   font-size: 1.5rem !important;
   //   color: #7c7c7c !important;
   //   font-weight: 600 !important;
   // }
-  
+
   // header ul li.active,
   // nav ul li.active {
   //   color: #007DEC !important
   // }
-  
+
   @media (min-width: 576px) {
-  
+
     .container,
     .container-sm {
       max-width: 100%
     }
   }
-  
+
   @media (min-width: 768px) {
-  
+
     .container,
     .container-md,
     .container-sm {
       max-width: 100%
     }
   }
-  
+
   @media (min-width: 992px) {
-  
+
     .container,
     .container-lg,
     .container-md,
@@ -172,9 +169,9 @@ body {
       max-width: 100%
     }
   }
-  
+
   @media (min-width: 1200px) {
-  
+
     .container,
     .container-lg,
     .container-md,
@@ -183,9 +180,9 @@ body {
       max-width: 100%
     }
   }
-  
+
   @media (min-width: 1400px) {
-  
+
     .container,
     .container-lg,
     .container-md,
@@ -195,80 +192,80 @@ body {
       max-width: 1600px
     }
   }
-  
+
   .pl-5 {
     padding-left: 3rem !important;
   }
-  
+
   .bg-success {
     background-color: #4CB57D !important;
     color: #fff;
   }
-  
+
   .bg-info {
     background-color: #17a2b8 !important;
     color: #fff;
   }
-  
+
   .modal-backdrop {
     height: 0 !important;
   }
-  
+
   // .modal {
   //   background: #00000066 !important;
   // }
-  
+
   .wrapping-text {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
-  
+
   .hovering-card:hover {
     .btn-outline-secondary:not(.no-hover) {
       color: #fff;
       background-color: #007dec;
       border-color: #007dec;
     }
-  
+
     .btn-outline-primary {
       color: #fff;
       background-color: #007dec;
       border-color: #007dec;
     }
   }
-  
+
   .success-banner {
     color: #151313;
     background-color: #F3F3F3;
     // font-size: 1.4rem;
     @extend .fs-14;
   }
-  
+
   .bg-fcoi-clip {
     background: #5897bc !important;
   }
-  
+
   .bg-proposal-clip {
     background: #7d9e33 !important;
   }
-  
+
   .bg-opa-clip {
     background: #1192d1 !important;
   }
-  
+
   .bg-award-clip {
     background: #c9a742 !important;
   }
-  
+
   .bg-opa-clip {
     background: #1192d1 !important;
   }
-  
+
   .bg-travel-clip {
     background: #bf975a !important;
   }
-  
+
   // for slicing text in single line
   .text-slice {
     display: -webkit-box;
@@ -276,9 +273,8 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    word-break: break-all;
   }
-  
+
   // for help text card
   .help-text-card {
     background: #EEEEEE;
@@ -287,30 +283,33 @@ body {
     font-size: 1.4rem;
     font-weight: 400;
   }
-  
+
   .invalid-border {
     border-color: #dc3545 !important;
+    &:focus{
+      box-shadow: 0 0 0 .25rem rgba(var(--bs-danger-rgb), .25);
+    }
   }
-  
+
   .info-card-border {
     margin: 0;
     padding: 5px;
     background: #f3f2fb !important;
     border: solid 1px #b8d1e5 !important;
 }
-  
+
   .mr-8 {
     margin-right: 8px;
   }
-  
+
   .mt-65 {
     margin-top: 6.5px;
   }
-  
+
   .ash-text {
     color: #48647f!important;
   }
-  
+
   .grey-text {
     // color: #6A7980;
     color: var(--theme-text-gray-600);
@@ -319,38 +318,38 @@ body {
   .label-text {
     // color: #6A7980;
     color: var(--theme-text-gray-800) !important;
-    font-size: 14px;
+    font-size: var(--theme-font-size);
     font-weight: 600;
 }
-  
+
   .word-break-all {
     word-break: break-all;
   }
-  
+
   .sb-seachresults label {
     font-weight: 400;
   }
-  
+
   .cursor-default {
       cursor: default;
   }
-  
+
   .clickable-content:hover {
     color: #007DEC !important;
     text-decoration: underline;
   }
-  
+
   .clickable-content {
     letter-spacing: normal;
     cursor: pointer;
     border: none;
     border-radius: 4px;
   }
-  
+
   .entity-down-arrow {
     color:#848484;
   }
-  
+
   .error-highlight-card {
     border: 1px solid red !important;
     box-shadow:4px 4px 4px #efa6a6;
@@ -363,25 +362,25 @@ body {
       box-shadow:4px 4px 4px #fff;
     }
   }
-  
+
   .grid-back {
     background-size: 90px 90px;
     background-image: linear-gradient(to right, #dad3d3 1px, transparent 1px), linear-gradient(to bottom, #cdc4c4 1px, transparent 1px);
   }
-  
+
   @media (max-width : 2000px) {
       .form-row label,
       .adjust-margin-top {
           margin-top: 1rem !important;
       }
   }
-  
+
   @media (max-width : 991px) {
     .dashboard-card-margin {
       margin-left: 0!important;
     }
   }
-  
+
   /* This class will remove the colon symbol from the label and value till the resolution = XL(1200px).
       i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
   */
@@ -390,14 +389,14 @@ body {
       display: none !important;
     }
   }
-  
+
   /* This class will add the colon symbol to the label and value from resolution = XL(1200px) */
   @media (min-width : 1200px) {
     .disclosure-card div label span  {
       display: inline-block !important;
     }
   }
-  
+
   /* Added this class as common for all the disclosure dashboard cards like Coi reporter dashboard card,
      travel disclosure card and OPA dashboard card
   */
@@ -410,7 +409,7 @@ body {
     border-radius: var(--bs-border-radius-sm)!important;
     box-shadow: 0 0.125rem 0.25rem rgba(var(--bs-body-color-rgb),.075)!important;
   }
-  
+
   /* This class is specifically for Entity Dashboard in the Manage Entity Page */
   .disclosure-entity-card {
     --bs-bg-opacity: 1;
@@ -422,12 +421,12 @@ body {
     box-shadow: 0 0.125rem 0.25rem rgba(var(--bs-body-color-rgb),.075)!important;
     padding: 5px;
   }
-  
+
   /* This class applies box shadow to all the dashboard cards while on hover */
   .disclosure-card:hover, .disclosure-entity-card:hover {
     box-shadow: 0px 2px 8px -4px black !important;
   }
-  
+
   /** Responsive page: For breaking labels and values at (1200 and < 1200) breakpoint in dashboard cards during page responsiveness */
   @media (max-width: 1200px) {
     .break-point-1200 {
@@ -436,55 +435,55 @@ body {
         display: block !important;
     }
   }
-  
+
   /* color changes for the 'View' button within all dashboard cards */
   .btn-primary-outline {
     color: #007dec;
     border-color: #007dec;
   }
-  
+
   .btn-primary-outline:hover {
     color: #fff;
     background-color: #007dec;
     border-color: #007dec;
   }
-  
+
   /* color code for SFI and Project count within the dashboard cards */
   .project-sfi-count {
     color: #007dec;
   }
-  
+
   /* color code for Active Filter By Type within the dashboard cards */
   .filter-type-active {
     border: 2px solid #54BF5B !important;
     background: #f5fef5 !important;
   }
-  
+
   /* Alignment for the breakpoints(767px - 930px) in SFI & Project count in dashboard cards */
   .link-heading {
     display: inline-flex !important;
   }
-  
+
   @media (min-width: 767px) and (max-width: 930px) {
     .link-heading {
       display: block !important;
     }
   }
-  
+
   /* Applying form-row styles to row */
   .form-row label,
   .row label {
-    font-size: 14px;
+    font-size: var(--theme-font-size);
     margin-bottom: 0;
     color: #333;
     font-weight: 600;
   }
-  
+
   .form-builder-no-info-card-icon {
     margin-top: 12px;
   }
-  
-  
+
+
 
 .pt-7 {
     padding-top: 1.75rem !important;
@@ -501,7 +500,7 @@ body {
   position: relative;
   left: -6px;
   top: 2px;
-  font-size: 14px;
+  font-size: var(--theme-font-size);
   font-weight: 500;
   border-radius: 0 50px 50px 0;
   padding: 10px 10px;
@@ -537,7 +536,7 @@ body {
     border-radius: 20px;
     color: var(--bs-black);
     margin: 5px 5px;
-    font-size: 14px;
+    font-size: var(--theme-font-size);
     cursor: pointer;
 
     &:nth-last-child(1) {
@@ -699,10 +698,18 @@ ul.timeline>li:nth-child(1) {
 .coi-nav-tab,
 .coi-search-box,
 .coi-admin-dash,
-.sort-div,
-.no-data-container {
+.sort-div {
   background-color: var(--theme-card-bg-color) !important;
   border: var(--theme-card-border) !important;
+  box-shadow: var(--theme-card-box-shadow);
+}
+
+.no-data-container {
+  background-color: var(--theme-card-bg-color) !important;
+}
+
+.coi-custom-shadow {
+  border: var(--theme-card-border);
   box-shadow: var(--theme-card-box-shadow);
 }
 
@@ -721,6 +728,11 @@ ul.timeline>li:nth-child(1) {
   fill: currentColor;
   height: auto !important;
   width: max-content !important;
+  font-size: 1.25rem !important;
+}
+
+.coi-scale-9 {
+  transform: scale(0.9);
 }
 
 .coi-flex-1 {
@@ -729,10 +741,6 @@ ul.timeline>li:nth-child(1) {
 
 .format_quote {
   transform: rotateY(180deg);
-}
-
-.mat-icon {
-  font-size: 1.25rem !important;
 }
 
 .fs-25px {
@@ -756,7 +764,7 @@ ul.timeline>li:nth-child(1) {
   p {
     @extend .fs-14;
   }
-  } 
+  }
 }
 
 .action-button {

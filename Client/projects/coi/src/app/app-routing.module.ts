@@ -84,7 +84,8 @@ const routes: Routes = [
             },
           ]
     },
-{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginGuard] }
+    {path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)},
+    {path: 'error', loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)}
 ];
 
 @NgModule({

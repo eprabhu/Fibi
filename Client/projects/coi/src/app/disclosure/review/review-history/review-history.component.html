@@ -2,92 +2,52 @@
 <div [@fadeInOutHeight]>
   <div class="card" id="review-history">
     <div class="card-header">
-      <h4 class="fs-16">
-        <div class="row d-flex align-items-center justify-content-between" tabindex="0">
-          <div class="col mt-2 fw-bold">Review History</div>
+      <h4 class="mb-0">
+        <div class="d-flex align-items-center justify-content-between position-relative" tabindex="-1">
+          <div class="fs-16 fw-bold my-2">Review History</div>
+          <button *ngIf="!isEmptyObject(reviewHistoryLogs)" (click)="isExpanded = !isExpanded" id="coi_review_history_collapse"
+              title="Click to {{ isExpanded ? 'collapse' : 'view' }} review history"
+              [attr.aria-label]="(isExpanded ? 'collapse' : 'view') + ' review history'"
+              class="d-flex justify-content-center align-items-center btn toggle-btn border rounded-5 shadow-sm p-0">
+              <mat-icon [ngClass]="isExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
+          </button>
         </div>
       </h4>
     </div>
-      <div class="card-content">
+      <div *ngIf="isExpanded" class="card-content" [@heightAnimation]>
           <div class="card-body">
             <ul class="timeline">
               <ng-container *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
-              <li *ngFor="let historyEntry of review.value;">
-                  <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="0"></span>
-                  <p class="coi-text-lighter fs-13" [attr.aria-label]="historyEntry?.updateTimestamp| dateFormatterWithTimeZone:'time'" tabindex="0">
-                    {{review.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
-                  <p *ngIf="historyEntry?.comment" class="coi-text-light" tabindex="0">
-                      <span class="fs-14">
-                        <mat-icon class="format_quote">format_quote</mat-icon>
-                        <span *ngIf="!isReadMore && historyEntry?.comment?.length > 460; else showFullInfo" class="fst-italic mx-2" tabindex="0">
-                            <span class="coi-text-light mt-2">{{(historyEntry?.comment | slice:0:460)}}</span>
-                            <span (click)="isReadMore = !isReadMore" class="hand-cursor" title="Read More"><span class="fw-medium">... <u>Read
-                                        more</u>
-                                    <i aria-hidden="true"></i></span>
+                <li *ngFor="let historyEntry of review.value;">
+                    <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="0"></span>
+                    <p class="coi-text-lighter fs-13" [attr.aria-label]="historyEntry?.updateTimestamp| dateFormatterWithTimeZone:'time'" tabindex="0">
+                        {{review.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                    <p *ngIf="historyEntry?.comment" class="coi-text-light" tabindex="0">
+                        <span class="fs-14">
+                            <mat-icon class="format_quote">format_quote</mat-icon>
+                            <span *ngIf="!isReadMore && historyEntry?.comment?.length > 460; else showFullInfo" class="fst-italic mx-2" tabindex="0">
+                                <span class="coi-text-light mt-2">{{(historyEntry?.comment | slice:0:460)}}</span>
+                                <span (click)="isReadMore = !isReadMore" class="hand-cursor" title="Read More"><span class="fw-medium">... <u>Read
+                                            more</u>
+                                        <i aria-hidden="true"></i></span>
+                                </span>
                             </span>
+                            <ng-template #showFullInfo>
+                                <span class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
+                                <span *ngIf="historyEntry?.comment?.length > 460" class="hand-cursor mt-2 fw-medium" title="Read Less"
+                                    (click)="isReadMore = !isReadMore" aria-hidden="true">
+                                    <span class="fw-medium"><u>Read Less</u>
+                                        <i aria-hidden="true"></i></span>
+                                </span>
+                            </ng-template>
                         </span>
-                        <ng-template #showFullInfo>
-                            <span class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
-                            <span *ngIf="historyEntry?.comment?.length > 460" class="hand-cursor mt-2 fw-medium" title="Read Less"
-                                (click)="isReadMore = !isReadMore" aria-hidden="true">
-                                <span class="fw-medium"><u>Read Less</u>
-                                    <i aria-hidden="true"></i></span>
-                            </span>
-                        </ng-template>
-                    </span>
-                  </p>
-              </li>
+                    </p>
+                </li>
           </ng-container>
-          </ul>
-
-                  <!-- <div class="table-responsive">
-                      <table class="table mb-0">
-                          <thead class="sr-none"></thead>
-                          <tbody>
-                              <tr *ngFor="let review of reviewHistoryLogs | keyvalue: sortNull">
-                                  <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3 mt-2 fs-16"tabindex="0"[attr.aria-label]="review.key">{{review.key}}
-                                  </h4>
-                                  <ul class="pl-4 pr-3 mb-0">
-                                      <li *ngFor="let historyEntry of review.value;" class="p-3">
-                                          <div class="row">
-                                              <div class="col">
-                                                  <p class="fs-14 mb-0" tabindex="0">
-                                                      <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                      <label class="fw-700 mx-3 mt-0"[attr.aria-label]="historyEntry?.updateTimestamp|
-                                                      dateFormatterWithTimeZone:'time'">{{historyEntry?.updateTimestamp|
-                                                          dateFormatterWithTimeZone:'time'}}</label>
-                                                      <span  [innerHTML]="historyEntry?.message"></span>
-                                                  </p>
-                                                  <span *ngIf="historyEntry?.comment" class="px-4 fs-14">
-                                                    <span class="fa fa-quote-left comment-icon grey-text ml-2 fs-13"></span>
-                                                    <span class="word-break-all new-line-property fst-italic mx-2"
-                                                        *ngIf="!isReadMore && historyEntry?.comment?.length > 460; else showFullInfo">
-                                                        <span class="grey-text mt-2">{{(historyEntry?.comment | slice:0:460)}}</span>
-                                                        <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">... <u>Read
-                                                                    more</u>
-                                                                <i aria-hidden="true"></i></span>
-                                                        </span>
-                                                    </span>
-                                                    <ng-template #showFullInfo>
-                                                        <span class="word-break-all new-line-property fst-italic mx-2 grey-text">{{historyEntry?.comment}}</span>
-                                                        <span class="hand-cursor mt-2 fw-medium" *ngIf="historyEntry?.comment?.length > 460"
-                                                            (click)="isReadMore = !isReadMore" aria-hidden="true">
-                                                            <span class="fw-medium"><u>Read Less</u>
-                                                                <i aria-hidden="true"></i></span>
-                                                        </span>
-                                                    </ng-template>
-                                                </span>
-                                              </div>
-                                          </div>
-                                      </li>
-                                  </ul>
-                              </tr>
-                          </tbody>
-                      </table>
-                    </div> -->
-                  <div *ngIf="isEmptyObject(reviewHistoryLogs)">
-                    <app-no-information [isBorderNeeded]="false"> </app-no-information>
-                </div>
+            </ul>
+            <div *ngIf="isEmptyObject(reviewHistoryLogs)">
+                <app-no-information [isBorderNeeded]="false"> </app-no-information>
+            </div>
           </div>
       </div>
   </div>

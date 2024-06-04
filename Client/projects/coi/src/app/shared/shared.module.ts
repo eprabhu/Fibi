@@ -66,8 +66,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TailingSpaceRemoverDirective } from './directives/tailing-space-remover.directive';
+import { ReadMoreComponent } from './read-more/read-more.component';
 import { FormBuilderViewComponent } from './form-builder-view/form-builder-view.component';
 import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
+import { FormValidatorModule } from './form-validator/form-validator.module';
+import { CommonHelpTextComponent } from './common-help-text/common-help-text.component';
+import { CommonInformationComponent } from './common-information/common-information.component';
 
 @NgModule({
     imports: [
@@ -82,7 +86,8 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         MatMenuModule,
         MatSelectModule,
         MatInputModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        FormValidatorModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,
@@ -97,8 +102,9 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
         HostContainerDirective,
         PELayerComponent,
+        ReadMoreComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
-        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent ],
+        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -153,8 +159,12 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
         OPAStudentSubordinateEmployeeComponent,
         MatAutocompleteModule,
         TailingSpaceRemoverDirective,
+        ReadMoreComponent,
         FormBuilderViewComponent,
-        FormSectionsComponent
+        FormSectionsComponent,
+        FormValidatorModule,
+        CommonHelpTextComponent,
+        CommonInformationComponent
     ],
 
     providers: [

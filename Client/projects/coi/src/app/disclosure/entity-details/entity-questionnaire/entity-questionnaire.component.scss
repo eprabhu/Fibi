@@ -1,17 +1,14 @@
-::ng-deep .custom-qustnr {
-    .nav-tabs {
-        padding-right: 80px;
+::ng-deep {
+    .custom-qustnr {
+        .nav-tabs {
+            padding-right: 80px;
+        }
     }
 }
 
 .btn-position {
     position: relative;
     bottom: 5px;
-}
-
-.modal {
-    z-index: 10612 !important;
-    background: #00000066;
 }
 
 .btn-close {
@@ -43,7 +40,7 @@
 }
 
 .btn-tertiary {
-    font-size: 14px;
+    font-size: 0.875rem;
     min-width: 5em;
     font-weight: 600;
     margin-top: -8px;
@@ -51,11 +48,11 @@
     cursor: pointer;
     background-color: rgba(44, 119, 244, .1);
     color: #2c77f4 !important;
-}
 
-.btn-tertiary:hover {
-    background-color: rgba(44, 119, 244, .27);
-    color: #043e9e !important;
+    &:hover {
+        background-color: rgba(44, 119, 244, .27);
+        color: #043e9e !important;
+    }
 }
 
 .no-data-card {

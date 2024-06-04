@@ -6,7 +6,6 @@ import {AppComponent} from './app.component';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {CommonService} from "./common/services/common.service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {SharedModule} from "../../../fibi/src/app/shared/shared.module";
 import {HeaderComponent} from "./common/header/header.component";
 import {MatIconModule} from "@angular/material/icon";
 import {AppRouterComponent} from "./common/app-router/app-router.component";
@@ -14,7 +13,6 @@ import {FooterComponent} from "./common/footer/footer.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from './common/services/dashboard-guard.service';
-import {ElasticConfigService} from '../../../fibi/src/app/common/services/elastic-config.service';
 import {NavigationService} from './common/services/navigation.service';
 import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
@@ -26,6 +24,9 @@ import { DragDirective } from './common/header/drag.directive';
 import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
 import {HeaderService} from "./common/header/header.service";
 import { LoginGuard } from './common/services/guards/login-guard.service';
+import { ElasticConfigService } from './common/services/elastic-config.service';
+import { InformationAndHelpTextService } from './common/services/informationAndHelpText.service';
+import { SharedModule } from './shared/shared.module';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -72,7 +73,8 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
             useClass: HashLocationStrategy
         }, NavigationService,
         AdminRouteGuardService,
-        LoginGuard],
+        LoginGuard,
+        InformationAndHelpTextService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

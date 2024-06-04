@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivateInactivateSfiModalService } from './activate-inactivate-sfi-modal.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -17,19 +17,25 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
 
     constructor(private _activateInactivateSfiService: ActivateInactivateSfiModalService, private _commonServices: CommonService,
         private _router: Router, private _activatedRoute: ActivatedRoute) { }
-        
+
     @Input() entityName: any = {};
     reasonValidateMapSfi = new Map();
     activateInactivateReason = '';
     $subscriptions: Subscription[] = [];
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
     @Input() entityDetails: any;
+    @Input() relationshipDetails: any;
     @Input() personEntityId: number = null;
     @Input() updatedRelationshipStatus: string;
     @Input() personEntityNumber: any;
+    modalHelpTexts = ''
     concurrentActionName = '';
+    helpTexts: string;
 
     ngOnInit() {
+        this.helpTexts = this.updatedRelationshipStatus == 'INACTIVE' ? 'Please provide the reason for inactivation.' :
+                         'Please provide the reason for activation.'
+        this.modalHelpTexts = this.updatedRelationshipStatus == 'INACTIVE' ? 'You are about to inactivate your relationship with entity.': 'You are about to activate your relationship with entity.'
         document.getElementById('activate-inactivate-show-btn').click();
     }
 
@@ -53,7 +59,11 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
             if (err.status === 405) {
                 document.getElementById('activate-inactivate-show-btn').click();
                 this.concurrentActionName = this.updatedRelationshipStatus == 'INACTIVE' ? 'Inactivate SFI' : 'Activate SFI';
-                openModal('sfiConcurrentActionModalCOI');
+                openModal('sfiConcurrentActionModalCOI',{
+                    backdrop: 'static',
+                    keyboard: false,
+                    focus: true
+                  });
             } else {
                 this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 this.activateOrInactivateFailed();
@@ -69,7 +79,7 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     validForActivateAndInactivate(): boolean {
         this.reasonValidateMapSfi.clear();
         if (!this.activateInactivateReason && this.updatedRelationshipStatus == 'INACTIVE') {
-            this.reasonValidateMapSfi.set('reason', `* Please provide a reason for inactivation.`);
+            this.reasonValidateMapSfi.set('reason', `Please provide the reason for inactivation.`);
         }
         return this.reasonValidateMapSfi.size === 0 ? true : false;
     }
@@ -96,5 +106,12 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
         }
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'view' } });
         hideModal('sfiConcurrentActionModalCOI');
+    }
+
+    @HostListener('document:keydown.escape', ['$event'])
+    handleEscapeEvent(event: any): void {
+        if ((event.key === 'Escape' || event.key === 'Esc')) {
+            this.closeModal.emit(false);
+        }
     }
 }

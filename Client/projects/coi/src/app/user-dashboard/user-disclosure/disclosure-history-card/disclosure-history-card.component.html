@@ -28,7 +28,7 @@
                                     tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" class="link-primary fw-500"><span>...Read
                                             More</span></a>
                                 </span>
-                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500" 
+                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500"
                                 tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"><span>Read
                                         Less</span></a>
                             </span>
@@ -112,16 +112,11 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div tabindex="0"
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                    <button role="button"
-                        class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
-                        [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                                        'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                        <mat-icon class="me-1">visibility</mat-icon> View
-                    </button>
-                </div>
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content" (click)="redirectToDisclosure()"
+                    [title]="disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI Dashboard'"
+                    [attr.aria-label]="disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI Disclosure'">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
             </div>
         </div>
     </div>
@@ -140,10 +135,9 @@
                                 <span aria-label="Travel">Travel</span>
                             </span>
                         </span>
-                        <h4 *ngIf="disclosure.travelDisclosureId"
-                            class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
+                        <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
                             <span>
-                                <span>Entity  </span>
+                                <span class="text-nowrap coi-text-light fs-6">Entity:</span>
                                 <span [attr.aria-label]="disclosure.entityName"
                                     class="coi-text-darker fs-6 hyper-link ms-1">{{disclosure.entityName}}</span>
                             </span>
@@ -154,18 +148,16 @@
                     <div class="col-md-6 col-lg-3 mb-2" tabindex="0">
                         <div>
                             <label class="coi-text-dark d-block">Destination</label>
-                            <span class="coi-text-light">
                                 <app-no-data-label
                                     [valueToShow]="disclosure?.destinationCity || disclosure?.destinationCountry || disclosure?.travelState">
-                                    <span class="coi-text-light text-slice ms-0"
+                                    <span class="fw-bold text-slice ms-0"
                                         [attr.aria-label]="disclosure?.destinationCity + (disclosure?.destinationCountry || disclosure?.travelState)"
                                         title="{{disclosure?.destinationCity}}, {{disclosure?.destinationCountry || disclosure?.travelState}}">
-                                        {{disclosure?.destinationCity}}<span
-                                            *ngIf="disclosure?.destinationCity && (disclosure?.destinationCountry || disclosure?.travelState)">,</span>
-                                        {{disclosure?.destinationCountry || disclosure?.travelState}}
+                                       <span class="coi-text-light">{{disclosure?.destinationCity}}</span>
+                                       <span class="coi-text-light" *ngIf="disclosure?.destinationCity && (disclosure?.destinationCountry || disclosure?.travelState)">, </span>
+                                       <span class="coi-text-light">{{disclosure?.destinationCountry || disclosure?.travelState}}</span>
                                     </span>
                                 </app-no-data-label>
-                            </span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3 mb-2">
@@ -257,16 +249,10 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div
-                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                    <button role="button"
-                        class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
-                        [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                                            'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                        <mat-icon class="me-1">visibility</mat-icon> View
-                    </button>
-                </div>
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content" (click)="redirectToDisclosure()"
+                    title="Click to view Travel Disclosure" [attr.aria-label]="'Click to view Travel Disclosure of' + disclosure.entityName">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
             </div>
         </div>
     </div>
@@ -336,8 +322,8 @@
                     <span>
                         <app-no-data-label [valueToShow]="disclosure?.reviewStatus">
                             <span
-                                [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
-                                class="{{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                                [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
+                                class="{{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
                             <span class="coi-text-dark" [attr.aria-label]="disclosure?.reviewStatus">
                                 {{disclosure?.reviewStatus}}</span>
                         </app-no-data-label>
@@ -345,16 +331,10 @@
                 </div>
             </div>
             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                <div tabindex="0"
-                    aria-label="Click to view OPA disclosure details">
-                    <button role="button"
-                        class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                        (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details" role="button"
-                        [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 
-                            'Click to view Project Disclosure details' : 'Click to view FCOI disclosure details'">
-                        <mat-icon class="me-1">visibility</mat-icon> View
-                    </button>
-                </div>
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
+                    (click)="redirectToDisclosure()" aria-label="Click to view OPA Disclosure" title="Click to view OPA Disclosure">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
             </div>
         </div>
     </div>

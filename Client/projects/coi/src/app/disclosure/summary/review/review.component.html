@@ -21,17 +21,17 @@
 
 <app-screening-questionnaire-summary></app-screening-questionnaire-summary>
 <app-sfi-summary></app-sfi-summary>
-<div class="main-title d-flex flex-end justify-content-between px-1 pb-2" id="COI803">
+<div class="main-title d-flex flex-end justify-content-between px-1 pb-2 position-relative" id="COI803">
 	<h3 class="fs-16">
 	  <span class="d-flex align-items-center">
 	  <strong tabindex="0" aria-label="Relationships">Relationships</strong>
-	  <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships."
+	  <span class="d-inline-block" tabindex="-1" data-bs-toggle="tooltip" title="View entity relationships."
 		data-bs-placement="top">
-		<mat-icon aria-label="info" class="ms-1 f-16 info-icon position-relative mt-1" data-bs-toggle="tooltip">info</mat-icon>
+		<mat-icon aria-label="info" class="ms-1 f-16 text-secondary position-relative mt-1" data-bs-toggle="tooltip">info</mat-icon>
 	  </span>
 	</span>
 	</h3>
-	<button [attr.aria-label]="'Click here to ' + (isRelationCollapsed ? 'collapse' : 'expand') + ' Details of relationship'" id="relationship_collapse_btn" class="mr-8 toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
+	<button [attr.aria-label]="'Click here to ' + (isRelationCollapsed ? 'collapse' : 'expand') + ' Details of relationship'" id="relationship_collapse_btn" class="align-items-center border btn d-flex justify-content-center p-0 position-absolute rounded-5 shadow-sm toggle-btn"
 	(click)="isRelationCollapsed = !isRelationCollapsed" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
 	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
@@ -51,7 +51,7 @@
 
 <!-- Project Details Modal -->
 <div class="modal fade" id="projectViewModal" tabindex="-1" aria-labelledby="projectViewModal" aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
   <div class="modal-content">
 	<div class="modal-header">
 	<h4 class="modal-title"><strong title="{{ selectedProject?.title }}">
@@ -61,50 +61,50 @@
 		</strong>
 	</h4>
 	  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal"
-		aria-label="Close" (click)="openModuleSummaryDetails()"></button>
+		aria-label="Click to close" (click)="openModuleSummaryDetails()"></button>
 	</div>
 	<div class="modal-body">
 	  <div class="row mx-0 mt-3">
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label class="d-block label-text">Principal Investigator</label>
+		  <label for="coi-review-project-detail-pi" class="d-block label-text">Principal Investigator</label>
 		  <app-no-data-label [valueToShow]="selectedProject?.principalInvestigator">
-			<span class="grey-text m-0">{{selectedProject?.principalInvestigator}}</span>
+			<span class="grey-text m-0" id="coi-review-project-detail-pi">{{selectedProject?.principalInvestigator}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label class="d-block label-text">Project Role</label>
+		  <label for="coi-review-project-detail-project-role" class="d-block label-text">Project Role</label>
 		  <app-no-data-label [valueToShow]="selectedProject?.reporterRole">
-			<span class="grey-text m-0">{{selectedProject?.reporterRole}}</span>
+			<span class="grey-text m-0" id="coi-review-project-detail-project-role">{{selectedProject?.reporterRole}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label class="d-block label-text">Period</label>
-		  <span class="grey-text m-0">
+		  <label for="coi-review-project-detail-period" class="d-block label-text">Period</label>
+		  <span class="grey-text m-0" id="coi-review-project-detail-period">
 			{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate |
 			dateFormatter}}</span>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label class="d-block label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' :
+		  <label for="coi-review-project-detail-status" class="d-block label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' :
 			'Award'}} Status</label>
 		  <app-no-data-label [valueToShow]="selectedProject?.moduleStatus">
-			<span class="grey-text m-0">{{selectedProject?.moduleStatus}}</span>
+			<span class="grey-text m-0" id="coi-review-project-detail-status">{{selectedProject?.moduleStatus}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label class="d-block label-text">Sponsor</label>
+		  <label for="coi-review-project-detail-sponsor" class="d-block label-text">Sponsor</label>
 		  <app-no-data-label [valueToShow]="selectedProject?.sponsor">
-			<span class="grey-text m-0">{{selectedProject?.sponsor}}</span>
+			<span class="grey-text m-0" id="coi-review-project-detail-sponsor">{{selectedProject?.sponsor}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label class="d-block label-text">Prime Sponsor</label>
+		  <label for="coi-review-project-detail-prime-sponosr" class="d-block label-text">Prime Sponsor</label>
 		  <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
-			<span class="grey-text m-0">{{selectedProject?.primeSponsor}}</span>
+			<span class="grey-text m-0" id="coi-review-project-detail-prime-sponosr">{{selectedProject?.primeSponsor}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-12 mb-3">
-		  <label class="d-block label-text">Lead Unit</label>
-		  <span class="grey-text m-0">
+		  <label for="coi-review-project-lead-unit" class="d-block label-text">Lead Unit</label>
+		  <span class="grey-text m-0" id="coi-review-project-lead-unit">
 			{{commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
 		</div>
 	  </div>

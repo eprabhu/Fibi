@@ -8,22 +8,22 @@
                 <div class="row flex-grow-1 position-relative">
                   <div class="col-xl d-flex align-items-center">
                     <h1 class="fw-bold mt-3 px-3 fs-18" [attr.aria-label]="entityDetails?.entityName">
-                      {{entityDetails?.entityName}}</h1>
+                      <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
+                    </h1>
                   </div>
                   <div class="d-flex justify-content-end align-items-center col-xl-auto">
                     <div class="card-toolbar ms-auto">
                       <div class="d-flex align-items-center f-14">
-                        <span *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" tabindex="0">
+                        <span *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" tabindex="-1">
                           <span data-bs-toggle="tooltip" data-bs-placement="top"
                                 class="info-text pill f-14 me-2 px-3 py-1 rounded-5 py-0"
-                                title="{{entityDetails?.entityName}} is Unverified">
-                              <i aria-hidden="true" class="fa fa-times mr-2"></i>
-                              Unverified</span>
+                                title="{{entityDetails?.entityName}} is Unverified"><i aria-hidden="true"
+                                class="fa fa-times me-2"></i>Unverified</span>
                         </span>
-                        <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="0"
+                        <span class="badge f-14 py-2 px-3 h-100 rounded-pill me-3" tabindex="-1"
                           [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'">
                           {{entityDetails?.isActive ? 'Active' : 'Inactive'}}</span>
-                        <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-4 fs-14" tabindex="0">
+                        <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-4 fs-14" tabindex="-1">
                           <div class="d-flex align-items-center ml-15 col-12">
                             <label class="fw-500 me-2" aria-label="Risk">Risk :</label>
                             <div class="text-color d-flex">
@@ -36,11 +36,11 @@
                             </div>
                           </div>
                         </div>
-                          <button (click)="isCardExpanded=!isCardExpanded; isUserCollapse=!isUserCollapse" tabindex="0"
-                            title="Click to {{isCardExpanded ? 'collapse' : 'expand'}} Entity"
+                          <button (click)="isCardExpanded=!isCardExpanded; isUserCollapse=!isUserCollapse"
+                            title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}} Entity"
                             class="toggle-btn border btn p-0 rounded-5 shadow-sm"
-                            attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} Entity">
-                            <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            [attr.aria-label]="isCardExpanded ? 'collapse' : 'view' + ' Entity'">
+                            <mat-icon [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'" aria-hidden="true">expand_more</mat-icon>
                           </button>
                       </div>
                     </div>
@@ -48,36 +48,36 @@
                 </div>
               </div>
               <!-- New Card design -->
-              <div class="card-body" *ngIf="isCardExpanded">
+              <div class="card-body" id="coi-view-entity-details-card" *ngIf="isCardExpanded" [@heightAnimation]>
                 <div class="row">
                   <div class="col-6 col-xxl-6 pe-xl-0 pe-xxl-0">
                     <div
                       class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                       <div class="row">
                         <div class="col-12">
-                          <label class="coi-text-dark d-block">
+                          <label for="coi-view-entitydetails-type" class="coi-text-dark d-block">
                             Entity Type
                           </label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.entityType?.description">
-                              <span class="text-overflow">{{entityDetails?.entityType?.description}}</span>
+                              <span class="text-overflow" id="coi-view-entitydetails-type">{{entityDetails?.entityType?.description}}</span>
                             </app-no-data-label>
                           </span>
                         </div>
                         <div class="col-lg-6 mt-2 pe-0">
-                          <label class="coi-text-dark d-block"> Country
+                          <label for="coi-view-entitydetails-country" class="coi-text-dark d-block"> Country
                           </label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.country?.countryName">
-                              <span>{{entityDetails?.country?.countryName}}</span>
+                              <span id="coi-view-entitydetails-country">{{entityDetails?.country?.countryName}}</span>
                             </app-no-data-label></span>
                         </div>
                         <div class="col mt-2 pe-0">
-                          <label class="coi-text-dark d-block">City
+                          <label for="coi-view-entitydetails-city" class="coi-text-dark d-block">City
                           </label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.city">
-                              <span>{{entityDetails?.city}}</span>
+                              <span id="coi-view-entitydetails-city">{{entityDetails?.city}}</span>
                             </app-no-data-label>
                           </span>
                         </div>
@@ -89,25 +89,25 @@
                       class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative me-3">
                       <div class="row">
                         <div class="col-12">
-                          <label class="coi-text-dark d-block">Address</label>
+                          <label for="coi-view-entitydetails-address" class="coi-text-dark d-block">Address</label>
                           <span class="coi-text-light">
                             <app-no-data-label [valueToShow]="entityDetails?.address">
-                              <span [title]="entityDetails?.address">{{entityDetails?.address?.length>70 ? (entityDetails?.address |slice:0:70) +'...'
+                              <span [title]="entityDetails?.address" id="coi-view-entitydetails-address">{{entityDetails?.address?.length>70 ? (entityDetails?.address |slice:0:70) +'...'
                                 :entityDetails?.address}}</span>
                             </app-no-data-label>
                           </span>
                         </div>
                         <div *ngIf="entityDetails?.emailAddress" class="col-lg-6 d-flex align-items-center mt-2 pe-0">
                             <mat-icon class="coi-text-lighter me-2 flex-shrink-0">mail</mat-icon>
-                              <span class="coi-text-light">{{entityDetails?.emailAddress}}</span>
+                              <span class="coi-text-light" id="coi-view-entitydetails-mail">{{entityDetails?.emailAddress}}</span>
                         </div>
                         <div *ngIf="entityDetails?.phone" class="col-lg-6 d-flex align-items-center mt-2 pe-0 me-md-2 me-xl-0">
                             <mat-icon class="coi-text-lighter flex-shrink-0 me-2">call</mat-icon>
-                              <span class="coi-text-light">{{entityDetails?.phone}}</span>
+                              <span class="coi-text-light" id="coi-view-entitydetails-call">{{entityDetails?.phone}}</span>
                         </div>
                         <div *ngIf="entityDetails?.webURL" class="col-12 d-flex align-items-center mt-2 pe-0">
                           <mat-icon class="coi-text-lighter me-2 flex-shrink-0">language</mat-icon>
-                              <a class="anchor-link fs-14 word-break-all" (click)="redirectUrl(entityDetails?.webURL)">
+                              <a class="anchor-link fs-14 word-break-all" (click)="redirectUrl(entityDetails?.webURL)" (keyup.enter)="redirectUrl(entityDetails?.webURL)" (keyup.space)="redirectUrl(entityDetails?.webURL)">
                                 {{entityDetails?.webURL}} </a>
                         </div>
                       </div>
@@ -119,29 +119,29 @@
           <!-- New design -->
           <div class="col-lg-3 border-prev-nxt">
             <div class="h-100 mb-md-3">
-              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center">
+              <div class="d-grid gap-2 d-md-flex flex-md-wrap mt-3 align-items-center transition-300ms">
                 <!-- home -->
                 <button *ngIf="hasManageEntity"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                   title="Go to COI home page" (click)="goToHome()" aria-label="Go to COI home page">
                   <mat-icon>home</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
                 </button>
                 <!-- Modify Entity -->
-                <button *ngIf="hasManageEntity" (click)="goBackStep();" [matMenuTriggerFor]="beforeMenu"
+                <button *ngIf="hasManageEntity" [matMenuTriggerFor]="beforeMenu"
                   title="More Actions" aria-label="More Actions"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14 transition-300ms">
                   <mat-icon class="more-options-icon">more_vert</mat-icon>
                   <!-- <span class="mt-1 ms-2" *ngIf="isCardExpanded">More Actions</span> -->
                 </button>
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                  <button mat-menu-item *ngIf="hasManageEntity" id="btn-modify-entity" title="Click to Modify Entity"
+                  <button mat-menu-item *ngIf="hasManageEntity" id="btn-modify-entity" title="Click here to Modify Entity"
                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
-                    (click)="openConfirmationModal()" aria-label="Click to Modify Entity">
+                    (click)="openConfirmationModal()" aria-label="Click here to Modify Entity">
                     <mat-icon>edit</mat-icon>
                     <span class="pt-2 fw-medium fs-14">Modify Entity</span>
                   </button>
-                  <button mat-menu-item title="Click to Manage Risk" id="btn-manage-risk" aria-label="Click to Manage Risk"
+                  <button mat-menu-item title="Click here to Manage Risk" id="btn-manage-risk" aria-label="Click here to Manage Risk"
                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                     (click)="toggleSlider()">
                     <mat-icon>warning</mat-icon>
@@ -149,9 +149,9 @@
                   </button>
                 </mat-menu>
                 <!-- Back -->
-                <button *ngIf="hasManageEntity" title="Click to go back to Entity list" (click)="navigateBack()"
-                  id="btn-modify" aria-label="Click to go back to Entity list"
-                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                <button *ngIf="hasManageEntity" title="Click here to go back to Entity list" (click)="navigateBack()"
+                  id="btn-modify" aria-label="Click here to go back to Entity list"
+                  class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14 transition-300ms">
                   <mat-icon>reply</mat-icon>
                   <!-- <span class="ms-2" *ngIf="isCardExpanded">Back</span> -->
                 </button>
@@ -159,9 +159,9 @@
                 <ng-container *ngIf="hasManageEntity">
                   <!-- inactivate -->
                   <ng-container *ngIf="entityDetails.isActive">
-                    <button title="Click to Inactivate Entity" id="btn-inactivate"
-                      [ngClass]="isCardExpanded ? 'col-12' : 'col'" aria-label="Click to Inactivate Entity"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                    <button title="Click here to Inactivate Entity" id="btn-inactivate"
+                      [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click here to Inactivate Entity"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
                       <mat-icon>schedule</mat-icon>
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Inactivate</span>
@@ -170,9 +170,9 @@
 
                   <!-- Activate -->
                   <ng-container *ngIf="!entityDetails.isActive">
-                    <button title="Click to activate Entity" id="btn-activate" tabindex="0" role="button"
-                      [ngClass]="isCardExpanded ? 'col-12' : 'col'" aria-label="Click to activate Entity"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                    <button title="Click here to activate Entity" id="btn-activate"
+                      [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'" aria-label="Click here to activate Entity"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
                       (click)="activateInactivateEntity()">
                       <mat-icon>flash_on</mat-icon>
                       <span class="ms-2 fs-14" *ngIf="isCardExpanded">Activate</span>
@@ -181,21 +181,24 @@
 
                   <!-- Approve Entity -->
                   <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
-                    <button id="btn-approve-entity" tabindex="0" role="button" [ngClass]="isCardExpanded ? 'col-12' : 'col'"
-                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                      title="Click to access entity verification" data-bs-toggle="modal"
-                      data-bs-target="#approve-entity-modal" aria-label="Click to approve Entity">
+                    <button id="btn-approve-entity" [ngClass]="isCardExpanded ? 'col-12 slide_down' : 'col'"
+                      class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col transition-300ms"
+                      title="Click here to access entity verification" data-bs-toggle="modal"
+                      data-bs-target="#approve-entity-modal" aria-label="Click here to approve Entity">
                       <mat-icon class="mx-1 icon-approve-position">check_circle_outline</mat-icon>
                       <span *ngIf="isCardExpanded" class="fs-14">Approve Entity</span>
                     </button>
                   </ng-container>
                 </ng-container>
                 <!-- last update date -->
-                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}" tabindex="0">
-                  <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'" aria-label="Last updated by">Last Updated By</label>
-                  <span class="coi-text-dark fs-13 fw-normal" [attr.aria-label]="entityDetails?.updatedUserFullName + ' on ' + (entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')">
-                    {{entityDetails?.updatedUserFullName}} On {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}} </span>
-              </div>
+                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} transition-300ms col-12" tabindex="-1">
+                  <label for="entity-last-updateby" class="coi-text-lighter fs-13 fw-medium" [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'"
+                    aria-label="Last updated by">Last Updated By</label>
+                  <span class="coi-text-dark fs-13 fw-normal" id="entity-last-updateby"
+                    [attr.aria-label]="entityDetails?.updatedUserFullName + ' on ' + (entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')">
+                    {{entityDetails?.updatedUserFullName}} On {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -210,70 +213,47 @@
     (updatedDataStore)="updatedEntityDetails($event)" [isSlider]="true"></app-add-sfi-slider>
 </div>
 
-<!-- Active-Inactive SFI Modal -->
+<!--Modify Entity Modal -->
 <div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="modifyEntityConfirmationModal" role="dialog"
   tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header ct-footer-padding">
-        <h4 class="modal-title">{{entityDetails?.entityName}}</h4>
-        <button type="button" class="btn-close" title="Close" aria-label="Close" (click)="closeModal()"></button>
+        <h4 class="modal-title d-flex">
+          <span class="fw-bolder">Modify Entity</span>
+          <app-common-help-text [helpTextHardCoded]="'You are about to modify the entity.'"></app-common-help-text>
+        </h4>
+        <button type="button" class="btn-close" title="Click here to close" aria-label="Click here to close" (click)="closeModal()"></button>
       </div>
       <div class="modal-body ct-footer-padding">
         <div class="row">
-          <div class="col-12">
-            <div class="alert alert-primary d-flex p-2" role="alert">
-              <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color col-auto" aria-hidden="true"
-                data-mat-icon-type="font">info</mat-icon>
-                <div class="fs-14 ms-2">
-                    <div class="d-flex">
-                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                        <div>
-                            <strong class="fw-bold">Minor modification</strong> - Select for minor corrections like
-                            typos.
-                        </div>
-                    </div>
-                    <div class="d-flex mt-2">
-                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                        <div>
-                            <strong class="fw-bold">Major modification</strong> - Select for major corrections like
-                            changes in the company name, ownership type,
-                            and permanent change in entity address that reflects in entity country.
-                        </div>
-                    </div>
-                    <div class="d-flex mt-2">
-                        <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                        <div>
-                            <strong class="fw-bold">Description</strong> - Provide any description or comments on why
-                            you want to modify the
-                            entity.
-                        </div>
-                    </div>
-                </div>
+        <app-entity-details-card *ngIf="isEntityDetailsAvailable()" [entityDetails]="entityDetails"></app-entity-details-card>
+          <div class="col-12 mt-3">
+            <div class="fs-14 fw-bold ">
+              <span class="text-danger pe-1">*</span>
+              <span>Modification Type</span>
+              <app-common-help-text [helpTextHardCoded]="modifyTypeHelpText"></app-common-help-text>
             </div>
-            <div class="fs-14 fw-bold mx-1"><span class="text-danger px-1">*</span>Modify Type :
-            </div>
-            <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-1">
+            <div class="fs-14 text-secondary d-flex justify-content-start mt-2 mb-1">
               <span class="pr-25 d-flex">
                 <input id="minor-modification" type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="1">
                   <label for="minor-modification" class="cursor-pointer"><span
-                      class="ps-2 pe-3 text-secondary fw-500">Minor
-                  modification</span></label>
+                      class="ps-2 pe-3 text-secondary fw-500">Minor modification</span></label>
               </span>
               <span class="d-flex">
-                <input id="major-modification" type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="2"> <label
-                  for="major-modification" class="cursor-pointer"><span
-                  class="ps-2 pe-3 text-secondary fw-500">Major
-                  modification</span></label>
+                <input id="major-modification" type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="2">
+                <label for="major-modification" class="cursor-pointer"><span
+                  class="ps-2 pe-3 text-secondary fw-500">Major modification</span></label>
               </span>
             </div>
-            <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13 px-4">
+            <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13">
               {{mandatoryList.get('change')}}
             </span>
-            <div class="mx-1">
-              <span class="fs-14 fw-bold "><span class="text-danger px-1">*</span> Description :</span>
+            <div class="mt-3">
+              <span class="fs-14 fw-bold "><span class="text-danger pe-1">*</span>Reason for Modification</span>
+              <app-common-help-text [helpTextHardCoded]="'Please provide the reason for modifying the entity.'"></app-common-help-text>
               <textarea [(ngModel)]="modifyDescription" (ngModelChange)="modifyDescription = modifyDescription.trim()"
-                placeholder="Please enter a description" [isShowLimiter]='true' [limit]=500
+                placeholder="Please provide the reason" [isShowLimiter]='true' [limit]=500
                 [ngClass]="mandatoryList.has('description')?'invalid-border':'' " appLengthValidator appAutoGrow
                 class="form-control mt-1" id="description" rows="1"></textarea>
               <span class="invalid-feedback d-block fs-13" *ngIf="mandatoryList.has('description')">
@@ -285,9 +265,10 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary" id="view-entity-btn" data-bs-dismiss="modal" type="button"
-          title="Cancel" (click)="closeModal()">Cancel
+          title="Click here to cancel" aria-label="Click here to cancel" (click)="closeModal()">Cancel
         </button>
-        <button class="btn btn-primary me-0" id="view-entity-btn" type="button" (click)="modifyEntity()">
+        <button class="btn btn-primary me-0" id="view-entity-btn" type="button"
+          title="Click here to submit" aria-label="Click here to submit"(click)="modifyEntity()">
           Submit
         </button>
       </div>
@@ -295,75 +276,50 @@
   </div>
 </div>
 
-<!-- inactivate-entity-sfi-error-modal  -->
+<!-- active or inactivate modal  -->
 
-<button id="inactivate-confirm-message" data-bs-target="#inactivateConfirmationModal" data-bs-toggle="modal"
-  class="d-none"></button>
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hide-inactivate-modal" data-bs-toggle="modal"
-  data-bs-target="#inactivateConfirmationModal"></button>
+<button tabindex="-1" id="inactivate-confirm-message" data-bs-target="#inactivateConfirmationModal" data-bs-toggle="modal"
+  class="d-none" aria-hidden="true"></button>
+<button tabindex="-1" type="button" class="btn btn-primary btn-sm" hidden=true id="hide-inactivate-modal" data-bs-toggle="modal"
+  data-bs-target="#inactivateConfirmationModal" aria-hidden="true"></button>
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="inactivateConfirmationModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" tabindex="-1" id="inactivateConfirmationModal"
+  role="dialog" aria-labelledby="inactivateConfirmationModal-header">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title me-1">{{entityDetails?.isActive?'Inactivate':'Activate'}} - <span class="fw-normal">{{entityDetails?.entityName}}</span></h4>
-        <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
-          (click)="inactivateReason=''"></button>
+        <h4 class="modal-title me-1" id="inactivateConfirmationModal-header">
+          <span>{{entityDetails?.isActive?'Inactivate':'Activate'}} Entity</span>
+          <app-common-help-text *ngIf="entityDetails?.isActive" [helpTextHardCoded]="inactivateHeaderHelpText"></app-common-help-text>
+          <app-common-help-text *ngIf="!entityDetails?.isActive" [helpTextHardCoded]="'You are about to activate the entity.'"></app-common-help-text>
+        </h4>
+        <button type="button" class="btn-close" title="Click here to close" aria-label="Click here to close" (click)="closeActiveInactiveModal()"></button>
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-12">
-            <div class="alert alert-primary d-flex p-2" role="alert">
-              <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color" aria-hidden="true"
-                data-mat-icon-type="font">info</mat-icon>
-              <div class="fs-14 ms-2" *ngIf="entityDetails?.isActive">
-                <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                Provide the reason for Inactivation in the field provided.
-                <br>
-                <div class="d-flex mt-2">
-                  <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                  <div>
-                    Click on Activate button to activate the entity.
-                  </div>
-                </div>
-                <div class="mt-1">
-                  <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
-                  If the entity is used in any of the Active SFIs (Financial or Travel), then a new version of the
-                  entity is created <span class="ms-4">in Inactive status and the previous version goes to Archive status.</span>
-                </div>
-              </div>
-              <span class="fs-14" *ngIf="!entityDetails?.isActive">
-                <div class="ml-15">
-                  <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                  Provide the reason for Activation in the field provided.
-                </div>
-                <div class="mt-1 ml-15">
-                  <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                  Click on Inactivate button to activate the entity.
-                </div>
-              </span>
+        <app-entity-details-card *ngIf="isEntityDetailsAvailable()" [entityDetails]="entityDetails"></app-entity-details-card>
+          <div class="col mt-3">
+            <div class="block-display fw-bold fs-14">
+              <span *ngIf="entityDetails?.isActive" class="text-danger pe-1">*</span>
+              <span>Reason for {{ entityDetails?.isActive ? 'Inactivation' : 'Activation' }}</span>
+              <app-common-help-text *ngIf="entityDetails?.isActive" [helpTextHardCoded]="'Please provide the reason for inactivation.'"></app-common-help-text>
+              <app-common-help-text *ngIf="!entityDetails?.isActive" [helpTextHardCoded]="'Please provide the reason for activation.'"></app-common-help-text>
             </div>
-            <div class="row">
-              <div class="col">
-                <span class="block-display fw-bold fs-14"><span *ngIf="entityDetails?.isActive"
-                    class="text-danger px-1">*</span>Reason for {{entityDetails?.isActive?'Inactivation' :'Activation'}}
-                  :</span>
-                <textarea placeholder="Please enter the reason." [(ngModel)]="inactivateReason" [isShowLimiter]="true"
-                  [limit]="500" rows="1" class="form-control" appAutoGrow appLengthValidator
-                  [ngClass]="{'invalid-border':reasonValidateMapEntity.has('reason')}"></textarea>
-                <span *ngIf="reasonValidateMapEntity.has('reason')" class="invalid-feedback d-block fs-13">
-                  {{reasonValidateMapEntity.get('reason')}}
-                </span>
-              </div>
-            </div>
+            <textarea placeholder="Please enter the reason" [(ngModel)]="inactivateReason" [isShowLimiter]="true"
+              [limit]="500" rows="1" class="form-control" appAutoGrow appLengthValidator
+              [ngClass]="{'invalid-border':reasonValidateMapEntity.has('reason')}"></textarea>
+            <span *ngIf="reasonValidateMapEntity.has('reason')" class="invalid-feedback d-block fs-13">
+              {{reasonValidateMapEntity.get('reason')}}
+            </span>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary" id="inactive-sfi" data-bs-dismiss="modal" type="button" title="Cancel"
-          (click)="inactivateReason=''">Cancel</button>
+        <button class="btn btn-outline-secondary" id="inactive-sfi" type="button" title="Click here to cancel" aria-label="Click here to cancel"
+          (click)="closeActiveInactiveModal()">Cancel</button>
         <button class="btn btn-primary me-0" id="inactive-sfi" type="button"
-          [attr.title]="entityDetails?.isActive?'Click to inactivate entity':'Click to activate entity'"
+          [title]="entityDetails?.isActive?'Click here to inactivate entity':'Click here to activate entity'"
+          [attr.aria-label]="entityDetails?.isActive?'Click here to inactivate entity':'Click here to activate entity'"
           (click)="activateAndInactivateEntity()">
           {{entityDetails?.isActive?'Inactivate' : 'Activate'}}
         </button>
@@ -381,69 +337,56 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title me-1">Approve Entity - <span class="fw-normal">{{entityDetails?.entityName}}</span></h4>
-          <button type="button" class="btn-close" title="Close" aria-label="Close" data-bs-dismiss="modal"
+          <h4 class="modal-title me-1">
+            <span>Approve Entity</span>
+            <app-common-help-text [helpTextHardCoded]="'You are about to approve the entity.'"></app-common-help-text>
+          </h4>
+          <button type="button" class="btn-close" title="Click here to close" aria-label="Click here to close" data-bs-dismiss="modal"
             (click)="clearApproveEntityFiled()"></button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-12">
-              <div class="alert alert-primary d-flex p-2" role="alert">
-                <mat-icon role="img" class="mat-icon info-icon material-icons mat-icon-no-color" aria-hidden="true"
-                  data-mat-icon-type="font">info</mat-icon>
-                <div class="fs-14" *ngIf="entityDetails?.isActive">
-                  <i class="fa fa-angle-double-right me-1" aria-hidden="true"></i>
-                  Mark any of the entity interrelations using the fields provided below.
-                  <br>
-                  <div class="mt-2">
-                    <i class="fa fa-angle-double-right me-1" aria-hidden="true"></i>
-                    You can mark entity relations from the dropdown.
-                  </div>
-                  <div class="mt-1">
-                    <i class="fa fa-angle-double-right me-1" aria-hidden="true"></i>
-                    Complete entity verification by marking any relationships and clicking on Approve Entity button.
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div class="row fs-14">
-                  <div class="col-5 pt-2">
-                    <label class="fw-bold" for="select-entity-relationship"><span class="text-danger px-1">*</span>Entity Relationship</label>
-                    <select id="select-entity-relationship" class="form-control form-select"
-                      [(ngModel)]="entityRelationshipValue" (ngModelChange)="selectEntityRelationship()"
-                      [ngClass]="(approveEntityValidateMap?.has('relationship')) ? 'is-invalid d-block' : ''">
-                      <option [value]="null"> --Select-- </option>
-                      <option *ngFor="let relationship of relationshipLookUpList"
-                        [value]="relationship?.entityRelTypeCode">
-                        {{relationship?.description}}</option>
-                    </select>
-                    <span *ngIf="approveEntityValidateMap?.has('relationship')" class="invalid-feedback d-block fs-13">
-                      {{approveEntityValidateMap?.get('relationship')}}
-                    </span>
-                  </div>
-                </div>
-                <div *ngIf="entityRelationshipValue && entityRelationshipValue !== '1'" class="row fs-14 mt-2">
-                  <div class="col pt-2">
-                    <label class="fw-bold" for="search-entity-name"><span class="text-danger px-1">*</span>Entity Search</label>
-                    <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                      [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity'"
-                      class=" text-secondary fs-13" [uniqueId]="'search-entity-name'"
-                      [isError]="approveEntityValidateMap?.has('entityName')">
-                    </app-endpoint-search>
-                    <span *ngIf="approveEntityValidateMap?.has('entityName')" class="invalid-feedback d-block fs-13">
-                      {{approveEntityValidateMap?.get('entityName')}}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
+          <div class="row fs-14">
+            <app-entity-details-card *ngIf="isEntityDetailsAvailable()" [entityDetails]="entityDetails"></app-entity-details-card>
+            <div class="col-5 mt-3">
+              <label class="fw-bold" for="select-entity-relationship">
+                <span class="text-danger pe-1">*</span>
+                <span>Entity Association</span>
+                <app-common-help-text [helpTextHardCoded]="'Please select the entity association details.'"></app-common-help-text>
+              </label>
+              <select id="select-entity-relationship" class="form-control form-select"
+                [(ngModel)]="entityRelationshipValue" (ngModelChange)="selectEntityRelationship()"
+                [ngClass]="(approveEntityValidateMap?.has('relationship')) ? 'is-invalid d-block' : ''">
+                <option [value]="null"> --Select-- </option>
+                <option *ngFor="let relationship of relationshipLookUpList"
+                  [value]="relationship?.entityRelTypeCode">
+                  {{relationship?.description}}</option>
+              </select>
+              <span *ngIf="approveEntityValidateMap?.has('relationship')" class="invalid-feedback d-block fs-13">
+                {{approveEntityValidateMap?.get('relationship')}}
+              </span>
+            </div>
+          </div>
+          <div *ngIf="entityRelationshipValue && entityRelationshipValue !== '1'" class="row fs-14 mt-2">
+            <div class="col pt-2">
+              <label class="fw-bold" for="search-entity-name">
+                <span class="text-danger pe-1">*</span>
+                <span>Entity Search</span>
+                <app-common-help-text [helpTextHardCoded]="'Please provide an entity.'"></app-common-help-text>
+              </label>
+              <app-elastic [options]="EntitySearchOptions" [placeHolder]="'Type here for entity'" class="text-secondary fs-13"
+                      [clearField]="clearField" [uniqueId]="'search-entity-name'"
+                      (selectedResult)="selectedEvent($event)">
+              </app-elastic>
+              <span *ngIf="approveEntityValidateMap?.has('entityName')" class="invalid-feedback d-block fs-13">
+                {{approveEntityValidateMap?.get('entityName')}}
+              </span>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Cancel"
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Click here to cancel" aria-label="Click here to cancel"
             (click)="clearApproveEntityFiled()">Cancel</button>
-          <button class="btn btn-primary me-0" type="button" title="Click here for approve entity"
+          <button class="btn btn-primary me-0" type="button" title="Click here to approve entity" aria-label="Click here to approve entity"
             (click)="approveEntity()">Approve Entity</button>
         </div>
       </div>
@@ -451,6 +394,6 @@
   </div>
 
 <app-entity-risk-slider *ngIf="isOpenSlider" [isOpenSlider]="isOpenSlider"
-(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails"  ></app-entity-risk-slider>
+(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails" [entitySliderSectionConfig]="entitySliderSectionConfig"></app-entity-risk-slider>
 
 <app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

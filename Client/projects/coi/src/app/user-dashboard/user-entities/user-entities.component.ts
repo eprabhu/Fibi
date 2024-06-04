@@ -40,6 +40,8 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   isHideFilterSearchAndShowCreate = false;
   isConcurrency = false;
   sliderElementId = '';
+  relationshipDetails: any = {};
+  entityDetails: any = {};
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService, private elementRef: ElementRef) {
@@ -49,6 +51,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
     this.fetchMyEntities();
     this.$fetchSFI.next();
     this.getSearchList();
+    window.scrollTo(0,0);
   }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
@@ -127,6 +130,8 @@ removeEntityId() {
   }
 
   activateDeactivateEvent(event) {
+    this.entityDetails = event.coiEntity;
+    this.relationshipDetails = event.validPersonEntityRelTypes;
     this.isEnableActivateInactivateSfiModal = true;
     this.personEntityId = event.personEntityId;
     this.entityName = event.coiEntity.entityName;
@@ -160,7 +165,7 @@ removeEntityId() {
     ));
   }
 
-  hideSfiNavBar() {       
+  hideSfiNavBar() {
     setTimeout(() => {
         this.showSlider = false;
         this.entityId = null;

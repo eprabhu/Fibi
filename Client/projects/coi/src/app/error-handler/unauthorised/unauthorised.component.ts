@@ -4,7 +4,7 @@ import { CommonService } from '../../common/services/common.service';
 @Component({
   selector: 'app-unauthorised',
   templateUrl: './unauthorised.component.html',
-  styleUrls: ['./unauthorised.component.css']
+  styleUrls: ['./unauthorised.component.scss']
 })
 export class UnauthorisedComponent implements OnInit {
 

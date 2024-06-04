@@ -1,26 +1,28 @@
 import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { NavigationService } from '../../common/services/navigation.service';
 import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
-import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
-import { fadeInOutHeight } from '../../common/utilities/animations';
-import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { fadeInOutHeight, heightAnimation } from '../../common/utilities/animations';
+import { hideModal, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 declare const $: any;
 @Component({
     selector: 'app-view-entity-sfi-details',
     templateUrl: './view-entity-details.component.html',
     styleUrls: ['./view-entity-details.component.scss'],
-    animations: [fadeInOutHeight]
+    animations: [fadeInOutHeight, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
+
+    private readonly _moduleCode = 'GE26';
 
     @Input() entityDetails: any;
     entityId: any;
@@ -52,15 +54,25 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isOpenSlider = false;
     isConcurrency = false;
     isUserCollapse = false;
+    readMore: string;
+    modifyTypeHelpText = `Select 'Minor Modifications' for typos. Select 'Major Modifications' for changing the company name,
+                          ownership type, and permanent change in entity address that reflects in entity country.`;
+    entitySliderSectionConfig : any = {};
 
-    constructor(private _router: Router, private _route: ActivatedRoute,
+    inactivateHeaderHelpText = `You are about to inactivate the entity. If the entity is used in any of the 'Active' SFIs (financial or travel), then a new version of the
+                                entity is created in 'Inactive' status and the previous version goes to 'Archive' status.`;
+
+    constructor(private _router: Router,
         public entityManagementService: EntityManagementService,
         private _commonServices: CommonService,
         private _navigationService: NavigationService,
-        public entityDetailsServices: EntityDetailsService, public sfiService: SfiService) {
+        public entityDetailsServices: EntityDetailsService, public sfiService: SfiService,
+        private _elasticConfig: ElasticConfigService
+    ) {
     }
 
     ngOnInit() {
+        this.getEntitySectionConfig();
         this.hasManageEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
         this.getRelationshipTypes();
     }
@@ -98,12 +110,15 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     openConfirmationModal() {
+        this.readMore = 'false';
+        this.mandatoryList.clear();
         $('#modifyEntityConfirmationModal').modal('show');
     }
 
     modifyEntity() {
         this.mandatoryList.clear();
         if (this.validationCheck()) {
+            this.readMore = '';
             $('#modifyEntityConfirmationModal').modal('hide');
             this.sfiService.isShowSfiNavBar = true;
             this.modifyType = this.valueOfModify;
@@ -120,7 +135,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             this.mandatoryList.set('change', 'Please choose a modification type.');
         }
         if (!this.modifyDescription) {
-            this.mandatoryList.set('description', 'Please provide a reason for modifying the entity.');
+            this.mandatoryList.set('description', 'Please provide the reason for modifying the entity.');
         }
         return this.mandatoryList.size === 0 ? true : false;
     }
@@ -129,6 +144,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.mandatoryList.clear();
         this.valueOfModify = '';
         this.modifyDescription = '';
+        this.readMore = '';
         $('#modifyEntityConfirmationModal').modal('hide');
     }
 
@@ -137,6 +153,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     activateInactivateEntity() {
+        this.readMore = 'false';
+        this.reasonValidateMapEntity.clear();
         document.getElementById('inactivate-confirm-message').click();
     }
 
@@ -160,6 +178,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             };
             this.$subscriptions.push(this.entityManagementService.activateInactivate(REQ_BODY).subscribe((res: any) => {
                 this.inactivateReason = '';
+                this.readMore = '';
                 document.getElementById('hide-inactivate-modal').click();
                 this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.entityDetails.isActive ? 'inactivated' : 'activated '} successfully`);
                 const entityId = Number(this.entityDetails.entityId);
@@ -167,6 +186,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                     this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: res.entityId } });
             }, error => {
                 if (error.status === 405) {
+                    this.readMore = '';
                     hideModal('inactivateConfirmationModal');
                     this.entityManagementService.concurrentUpdateAction = `${this.entityDetails.isActive ? 'Inactivate' : 'Activate '} Entity`;
                 } else {
@@ -178,7 +198,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     validForActivateAndInactivateEntity(): boolean {
         if (!this.inactivateReason && this.entityDetails.isActive) {
-            this.reasonValidateMapEntity.set('reason', '*Please enter the reason for inactivation.');
+            this.reasonValidateMapEntity.set('reason', 'Please provide the reason for inactivation.');
         }
         return this.reasonValidateMapEntity.size === 0 ? true : false;
     }
@@ -195,7 +215,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 this.entityRelationshipValue == ele.entityRelTypeCode).description;
         }
         if (this.entityRelationshipValue !== '1') {
-            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl, 'ALL');
+            this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
         }
     }
 
@@ -229,17 +249,17 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     selectedEvent(event) {
-        this.relationshipEntityName = event ? event.entityName : '';
-        this.relationshipEntityId = event ? event.entityId : null;
-        this.entityRelationshipNumber = event ? event.entityNumber : null;
+        this.relationshipEntityName = event ? event.entity_name : '';
+        this.relationshipEntityId = event ? event.entity_id : null;
+        this.entityRelationshipNumber = event ? event.entity_number : null;
     }
 
     validateApproveEntity(): boolean {
         if (!this.entityRelationshipValue) {
-            this.approveEntityValidateMap.set('relationship', '*Please select entity relationship.');
+            this.approveEntityValidateMap.set('relationship', 'Please select the entity association details.');
         }
         if (this.entityRelationshipValue && this.entityRelationshipValue !== '1' && !this.relationshipEntityName) {
-            this.approveEntityValidateMap.set('entityName', '*Please choose an entity name.');
+            this.approveEntityValidateMap.set('entityName', 'Please choose an entity name.');
         }
         return this.approveEntityValidateMap.size === 0 ? true : false;
     }
@@ -250,8 +270,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.clearField = new String('true');
         this.relationshipEntityId = null;
         this.relationshipEntityName = '';
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl, 'ALL');
+        this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
         this.entityRelationshipNumber = null;
+        this.approveEntityValidateMap.clear();
     }
 
     toggleSlider() {
@@ -291,6 +312,25 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         if (!this.isUserCollapse) {
             this.isCardExpanded = !(window.innerWidth <= 992);
         }
+    }
+
+    closeActiveInactiveModal() {
+        this.inactivateReason='';
+        this.readMore = '';
+        document.getElementById('hide-inactivate-modal').click();
+    }
+
+    getEntitySectionConfig(): void {
+        this._commonServices.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
+            this.entitySliderSectionConfig = data;
+        },
+            _err => {
+                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
+            })
+    }
+
+    isEntityDetailsAvailable(): boolean {
+        return !isEmptyObject(this.entityDetails);
     }
 
 }

@@ -1,11 +1,11 @@
 <div class="section">
   <div class="section-header form-builder-sticky-header">
     <span>{{sectionDetails.sectionName}}</span>
-    <button class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex" 
+    <button class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex"
     *ngIf="!isFormEditable" id="add-opa-review-comments" (click)="setCommentDetails(sectionDetails.sectionName, sectionDetails.sectionId, null)" title="Comments" type="button">
       <mat-icon>rate_review</mat-icon>
     </button>
-    <span class="float-end"><mat-icon class="small-icon">info</mat-icon>
+    <span class="float-end mt-1"><mat-icon class="text-secondary">info</mat-icon>
     </span>
   </div>
   <div class="info" *ngIf="sectionDetails.sectionHeader" [innerHTML] = "sectionDetails.sectionHeader">
@@ -14,7 +14,7 @@
     <ng-container *ngFor="let component of sectionDetails.sectionComponent">
       <div class="side-info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
       </div>
-      <button *ngIf="!isFormEditable && component.componentId && canShowComments(component)" class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex pt-2" id="add-opa-review-comments" 
+      <button *ngIf="!isFormEditable && component.componentId && canShowComments(component)" class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex pt-2" id="add-opa-review-comments"
       (click)="setCommentDetails(null, sectionDetails.sectionId, component.componentId)" title="Comments" type="button">
         <mat-icon>rate_review</mat-icon>
       </button>
@@ -32,10 +32,10 @@
       <div *ngIf="component.componentType === 'RT'">
         <div [innerHTML] = "component.componentData"></div>
       </div>
-      <div *ngIf="component.componentType === 'PE' && component.componentRefId != ''">
-        <app-PE-layer 
-          [component]="component" 
-          [fbConfiguration]="fbConfiguration" 
+      <div *ngIf="component.componentType === 'PE' && component.componentRefId != ''" [id]="component.componentId">
+        <app-PE-layer
+          [component]="component"
+          [fbConfiguration]="fbConfiguration"
           [formBuilderId]="formBuilderId"
           [isFormEditable]="isFormEditable"
           [saveEventForChildComponent]="saveEventForChildComponent"
@@ -47,7 +47,7 @@
       <div *ngIf="component.componentType === 'HL'">
          <div class="line" [style]="component.componentData"></div>
       </div>
-      
+
       <!-- Break Line -->
       <div *ngIf="component.componentType === 'BR'">
          <!-- to be developed -->

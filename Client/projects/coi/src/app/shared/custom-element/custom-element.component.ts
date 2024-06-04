@@ -4,7 +4,6 @@ import { CommonService } from '../../common/services/common.service';
 import { Observable, Subscription } from 'rxjs';
 import { setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
-import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import {
   getEndPointOptionsForCostCentre,
   getEndPointOptionsForCountry,
@@ -18,11 +17,12 @@ import {
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {AutoSaveService} from "../../../../../fibi/src/app/common/services/auto-save.service";
 import {DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 @Component({
   selector: 'app-custom-element',
   templateUrl: './custom-element.component.html',
-  styleUrls: ['./custom-element.component.css'],
+  styleUrls: ['./custom-element.component.scss'],
 })
 export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
 

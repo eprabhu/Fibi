@@ -1,55 +1,58 @@
 .navigation-to-tabs {
     background-color: #F8F8F8;
     color: #606060;
-  
+
     &:hover {
-      background-color: #48647F;
-      color: white;
-    }
-  }
-  
-  .sub-navigation-to-tabs {
-    color: #606060;
-    .bg-sub-goto {
-      background-color: #F2F6FE;
-    }
-    .sub-goto {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      &:hover {
-        background-color: #48647F !important;
+        background-color: #48647F;
         color: white;
-        cursor: pointer;
-      }
     }
-  }
-  
-  .side-bar-title {
+}
+
+.sub-navigation-to-tabs {
+    color: #606060;
+
+    .bg-sub-goto {
+        background-color: #F2F6FE;
+    }
+
+    .sub-goto {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: #48647F !important;
+            color: white;
+            cursor: pointer;
+        }
+    }
+}
+
+.side-bar-title {
     min-height: 55px;
     background-color: #E8E8E8;
-  }
-  .scrollable-section {
+}
+
+.scrollable-section {
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 40vh;
     max-height: 51vh;
-  }
-  
-  ::-webkit-scrollbar {
+}
+
+::-webkit-scrollbar {
     width: .4em;
     height: 4em;
-  }
-  
-  ::-webkit-scrollbar-button {
+}
+
+::-webkit-scrollbar-button {
     display: none;
-  }
-  
-  ::-webkit-scrollbar-track-piece {
+}
+
+::-webkit-scrollbar-track-piece {
     background: #eee
-  }
-  
-  ::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb {
     background: #ccc
-  }
-  
+}

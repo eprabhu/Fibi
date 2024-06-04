@@ -1,19 +1,19 @@
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal"
     data-bs-target="#coiCountsViewModal"></button>
 
-    <div class="modal fade mySkinDialog modal-xl" data-bs-backdrop="static" id="coiCountsViewModal" role="dialog">
+    <div class="modal fade mySkinDialog modal-xl" id="coiCountsViewModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title fs-16" title="{{ showFullTitle() }}">{{modalHeader()}}</h4>
-              <button type="button" class="btn-close" title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeCountModal()"></button>
+              <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="closeCountModal()"></button>
             </div>
             <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
-                <div *ngIf="coiFinancialEntityDetails.length > 0" class="coi-table-striped table-responsive">
-                    <table class="table table-bordered table-striped fs-14 align-middle mb-0">
+                <div *ngIf="coiFinancialEntityDetails.length > 0" class="coi-table-striped table-responsive border">
+                    <table class="table table-bordered table-striped fs-14 align-middle mb-0" id="coi-count-modal-listof-sfi-table">
                         <caption class="sr-only">List of SFIs</caption>
                         <thead class="sticky-top">
-                            <tr>
+                            <tr id="coi-count-modal-table-thead-row">
                                 <th>Entity Name</th>
                                 <th>Country</th>
                                 <th>Entity Type</th>
@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of coiFinancialEntityDetails">
+                            <tr *ngFor="let item of coiFinancialEntityDetails ; let i = index" id="coi-count-modal-table-tbody-row-{{i}}">
                                 <td>
                                     <span *ngIf="item?.coiEntity?.entityName">
                                         <span class="word-break-all new-line-property mx-2"
@@ -57,7 +57,7 @@
                                             <button
                                                 class="align-items-center justify-content-center btn-primary-icon d-flex fs-16 m-0 py-1 px-2 action-icons"
                                                 title="Click to view SFI details" aria-label="Click to view SFI details" (click)="viewSliderEmit(true, item?.personEntityId)">
-                                                <mat-icon>visibility</mat-icon>
+                                                <mat-icon aria-hidden="true">visibility</mat-icon>
                                             </button>
                                         </div>
                                     </td>
@@ -65,26 +65,27 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="no-data-container" *ngIf="coiFinancialEntityDetails.length == 0">
+                <div *ngIf="!coiFinancialEntityDetails.length" class="no-data-container w-100 coi-custom-shadow">
                     <span class="no-data-icon-outer">
                         <div class="no-data-icon">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            <mat-icon aria-hidden="true" class="no-file">folder_off</mat-icon>
                         </div>
                     </span>
-                    <h4>There is no information in this section.</h4>
+                    <h5 class="fs-16 mt-3">
+                        <span class="default-content">There is no information in this section.</span>
+                    </h5>
                 </div>
             </div>
-            <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
-                <nav class="d-flex fw-bold border-bottom mt-1 mb-2 nav nav-underline">
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Proposals" 
+            <div class="modal-body pt-0" *ngIf="moduleCode === 3 || moduleCode === 1">
+                <nav class="d-flex fw-bold border-bottom mb-2 nav nav-underline">
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Proposals"
                          aria-label="Click to view Proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
                          (click)='currentModalTab="Proposal"; switchTableData()' (keydown.enter)="currentModalTab='Proposal';switchTableData()">
                         <span  class="px-2 fw-500">
                             {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}
                         </span>
                     </div>
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()' 
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()'
                         (keydown.enter)="currentModalTab='Award';switchTableData()"
                          title="Click to view Awards" aria-label="Click to view Awards" role="button" [class.active]="currentModalTab == 'Award'">
                         <span class="px-2 fw-500">
@@ -93,11 +94,11 @@
                         </span>
                     </div>
                 </nav>
-                <div *ngIf="tableArray.length>0" class="coi-table-striped table-responsive">
-                    <table class="table table-bordered table-striped align-middle fs-14 mb-0">
+                <div *ngIf="tableArray.length>0" class="coi-table-striped table-responsive border">
+                    <table class="table table-bordered table-striped align-middle fs-14 mb-0" id="coi-count-modal-listofaward-table">
                         <caption class="sr-only">List of Awards/Proposal</caption>
                         <thead class="sticky-top">
-                            <tr>
+                            <tr id="coi-count-modal-listofaward-table-thead-row">
                                 <th style="width: 20%;" scope="col">Title</th>
                                 <th style="width: 12%;" scope="col">Principal Investigator</th>
                                 <th style="width: 12%;" scope="col">Lead Unit</th>
@@ -107,7 +108,7 @@
                                 <th style="width: 1%;" class="text-center" scope="col">Actions</th></tr>
                         </thead>
                         <tbody>
-                            <tr class="row-hover" *ngFor="let name of tableArray;let index = index">
+                            <tr class="row-hover" *ngFor="let name of tableArray;let index = index" id="coi-listofaward-table-row-{{index}}">
                                 <td>#{{name?.moduleItemId}}:
                                     <span *ngIf="!isReadMore[index] && name?.title?.length > 50; else showFullInfo">
                                         <span class="word-break-all new-line-property">{{(name?.title | slice:0:50)}}</span>
@@ -131,7 +132,7 @@
                                     <app-no-data-label [valueToShow]="name.conflictStatus">
                                          <span *ngIf="name.conflictStatus">
                                             <span class="{{getDisclosureConflictBadge(name.conflictStatusCode)}}"></span>
-                                            <span class="badgeFont"> {{name.conflictStatus}} </span>
+                                            <span> {{name.conflictStatus}} </span>
                                         </span>
                                     </app-no-data-label>
                                 </td>
@@ -139,7 +140,7 @@
                                     <div class="d-flex justify-content-center">
                                         <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons" title="Click to view proposal details"
                                             aria-label="Click to view proposal details" (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId)">
-                                            <mat-icon>visibility</mat-icon>
+                                            <mat-icon aria-hidden="true">visibility</mat-icon>
                                         </button>
                                     </div>
                                 </td>
@@ -148,7 +149,7 @@
                                         <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons"
                                          aria-label="Click to view award details" title="Click to view award details"
                                             (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);">
-                                            <mat-icon>visibility</mat-icon>
+                                            <mat-icon aria-hidden="true">visibility</mat-icon>
                                         </button>
                                     </div>
                                 </td>
@@ -156,16 +157,18 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="no-data-container" *ngIf="tableArray.length == 0">
+                <div *ngIf="!tableArray.length" class="no-data-container w-100 coi-custom-shadow">
                     <span class="no-data-icon-outer">
                         <div class="no-data-icon">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            <mat-icon aria-hidden="true" class="no-file">folder_off</mat-icon>
                         </div>
                     </span>
-                    <h4>There is no information in this section.</h4>
+                    <h5 class="fs-16 mt-3">
+                        <span class="default-content">There is no information in this section.</span>
+                    </h5>
                 </div>
             </div>
+            
             <div class="modal-footer">
               <button class="btn btn-outline-secondary" id="count-modal-close-btn" data-bs-dismiss="modal"
                type="button" title="Cancel"(click)="closeCountModal()">Close</button>

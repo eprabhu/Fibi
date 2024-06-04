@@ -5,6 +5,9 @@ import { CommonService } from '../../common/services/common.service';
 import { ActivityService } from '../../disclosure/activity-track/activity.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { Subscription } from 'rxjs';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-add-sfi-slider',
@@ -13,6 +16,8 @@ import { openCoiSlider } from '../../common/utilities/custom-utilities';
     providers: [ActivityService]
 })
 export class AddSfiSliderComponent implements OnInit {
+
+    private readonly _moduleCode = 'SFI53';
 
     @Input() disclosureDetails: { disclosureId: any, disclosureNumber: any } = { disclosureId: null, disclosureNumber: null };
     @ViewChild('sfiNavOverlay', { static: true }) sfiNavOverlay: ElementRef;
@@ -23,10 +28,18 @@ export class AddSfiSliderComponent implements OnInit {
     @Output() updatedDataStore = new EventEmitter<number>();
     @Input() revisionReason = '';
 
+    sfiSliderSectionConfig: any;
+    isShowAddSfiPage: boolean = false;
+    $subscriptions: Subscription[] = [];
+
     constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
-        this.showSfiNavBar();
+        this.getSfiSectionConfig();    
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
     hideSfiNavBar() {       
@@ -53,6 +66,19 @@ export class AddSfiSliderComponent implements OnInit {
         hideModal(event);
     }
 
-    ngOnDestroy() {
+    getSfiSectionConfig() : void {
+        this._commonService.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
+            this.sfiSliderSectionConfig = data;
+            this.openSlider();
+        },
+            _err => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
+                this.openSlider();
+            })
+    }
+
+    openSlider() : void {
+        this.isShowAddSfiPage = true;
+        this.showSfiNavBar();
     }
 }

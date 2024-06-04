@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 @Component({
   selector: 'app-file-drop',
   templateUrl: './file-drop.component.html',
-  styleUrls: ['./file-drop.component.css']
+  styleUrls: ['./file-drop.component.scss']
 })
 export class FileDropComponent implements OnInit {
 
@@ -22,7 +23,7 @@ export class FileDropComponent implements OnInit {
     }
   }
 
-  onFileDrop(files) { 
+  onFileDrop(files) {
     const fileList = this.checkFileExtensionSize(files);
     this.filesDropEvent.emit(fileList);
     (this.fileSelector.nativeElement as HTMLInputElement).value = '';
@@ -59,7 +60,7 @@ export class FileDropComponent implements OnInit {
   private showAttachmentsErrorMsg(inValidErrorMsg: string) {
     const errorMessage = this.setErrorMsg(inValidErrorMsg);
     if (errorMessage) {
-      // this._commonService.showToast(HTTP_ERROR_STATUS, errorMessage, 2500);
+      this._commonService.showToast(HTTP_ERROR_STATUS, errorMessage, 2500);
     }
   }
 
@@ -93,8 +94,8 @@ export class FileDropComponent implements OnInit {
   setErrorMsg(inValidErrorMsg: string) {
     switch (inValidErrorMsg) {
       case 'BOTH': return 'File format is not supported. File size cannot exceed 50MB.';
-      case 'SIZE_ERROR': return 'File size cannot exceed 50MB.';
-      case 'TYPE_ERROR': return 'File format is not supported. RISE supports '+this.fileAccept+'.';
+      case 'SIZE_ERROR': return 'File size cannot exceed 50MB, please make necessary changes.';
+      case 'TYPE_ERROR': return 'File format is not supported. System supports only '+this.fileAccept+'.';
       default: break;
     }
   }

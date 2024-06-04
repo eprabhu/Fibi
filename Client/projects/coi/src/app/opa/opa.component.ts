@@ -29,18 +29,19 @@ export class OpaComponent implements OnInit {
     isAddAssignModalOpen = false;
     defaultAdminDetails = new DefaultAssignAdminDetails();
     personProjectDetails = new PersonProjectOrEntity();
-    helpTexts = [];
+    helpTexts = '';
     primaryBtnName = '';
     descriptionErrorMsg = '';
     textAreaLabelName = '';
-    withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
-    returnErrorMsg = 'Describe the reason for returning the disclosure';
-    withdrawHelpTexts = [
-        `Withdraw disclosures currently in the 'Submitted' status.`,
-        `Describe the reason for withdrawal in the field provided.`,
-        `Click on 'Withdraw' button to recall your disclosure for any modification.`
-    ];
-    returnHelpTexts = [];
+    withdrawErrorMsg = 'Please provide the reason for withdrawing the disclosure.';
+    returnErrorMsg = 'Please provide the reason for returning the disclosure.';
+    completeReviewHelpText = 'You are about to complete the disclosure\'s final review.'
+    confirmationHelpTexts = '';
+    returnHelpTexts = 'Please provide the reason for return.';
+    withdrawHelpTexts = 'Please provide the reason for withdrawal.';
+    submitHelpTexts = 'You are about to submit the OPA disclosure.';
+    returnModalHelpText = 'You are about to return the OPA disclosure.';
+    withdrawModalHelpText = 'You are about to withdraw the OPA disclosure.';
     description: any;
     showSlider = false;
     selectedType: string;
@@ -54,6 +55,7 @@ export class OpaComponent implements OnInit {
     isHomeClicked = false;
     isSubmitClicked = false;
     isUserCollapse = false;
+    validationList = [];
 
     constructor(public opaService: OpaService,
                 private _router: Router,
@@ -79,22 +81,23 @@ export class OpaComponent implements OnInit {
     }
 
     opaSubmissionModal() {
-        openModal('opa-submit-confirm-modal');
+        this.isSubmitClicked = true;
+        if (this.opaService.isFormBuilderDataChangePresent) {
+            this.opaService.formBuilderEvents.next({ eventType: 'SAVE' });
+        } else {
+            this.validationList = [];
+            this.validateForm();
+        }
     }
 
     saveAndSubmit() {
-        if(this.opaService.isFormBuilderDataChangePresent) {
-            this.isSubmitClicked = true;
-            this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
-        } else {
-            this.submitOPA();
-        }
+        this.submitOPA();
     }
 
     subscribeSaveComplete() {
         this.$subscriptions.push(this.opaService.triggerSaveComplete.subscribe((data: any) => {
-            if(data && this.isSubmitClicked) {
-                this.submitOPA();
+            if(data && (this.validationList?.length || this.isSubmitClicked)) {
+                this.validateForm();
             }
         }))
     }
@@ -126,13 +129,18 @@ export class OpaComponent implements OnInit {
         this.isAddAssignModalOpen = false;
     }
 
-    openConfirmationModal(actionBtnName: string, helpTexts: string [] = [], descriptionErrorMsg: string = ''): void {
-        this.helpTexts = helpTexts;
+    openConfirmationModal(actionBtnName: string, helpTexts: string = '', descriptionErrorMsg: string = '', modalHelpText: string = ''): void {
         this.primaryBtnName = actionBtnName;
         this.descriptionErrorMsg = descriptionErrorMsg;
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
         this.setPersonProjectDetails();
-        document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+        this.confirmationHelpTexts = '';
+        this.helpTexts = '';
+        setTimeout(() => {
+            this.confirmationHelpTexts = modalHelpText;
+            this.helpTexts = helpTexts;
+            document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+        });
     }
 
     performDisclosureAction(event): void {
@@ -204,11 +212,6 @@ export class OpaComponent implements OnInit {
 
     private getDataFromStore() {
         this.opa = this.dataStore.getData();
-        this.returnHelpTexts = [
-            `Return any disclosure in '${this.opa.opaDisclosure.reviewStatusType.description}' status.`,
-            `Describe the reason for returning  in the field provided.`,
-            `Click on 'Return' button to return the disclosure for any modification.`
-        ];
     }
 
     private listenDataChangeFromStore() {
@@ -346,6 +349,23 @@ export class OpaComponent implements OnInit {
             this.isCardExpanded = window.innerWidth > 1399;
         }
         this.setTopDynamically();
+    }
+
+    private validateForm(): void {
+        this.opaService.validateForm({
+            formBuilderIds: this.opa.opaDisclosure.opaFormBuilderDetails.map(e => e.formBuilderId),
+            moduleItemCode: '23',
+            moduleSubItemCode: '0',
+            moduleItemKey: this.opa.opaDisclosure.opaDisclosureId.toString(),
+            moduleSubItemKey: '0',
+        }).subscribe((data: any) => {
+            this.validationList = data;
+            if (!this.validationList.length && this.isSubmitClicked) {
+                openModal('opa-submit-confirm-modal');
+            }
+        }, err => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, `Error occurred during from validation.`);
+        });
     }
 
 }

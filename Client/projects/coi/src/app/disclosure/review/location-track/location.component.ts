@@ -6,18 +6,20 @@ import {environment} from '../../../../environments/environment';
 import {DataStoreService} from '../../services/data-store.service';
 import {CoiDisclosure, CommentConfiguration, ModalType} from '../../coi-interface';
 import {CoiService} from '../../services/coi.service';
-import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject, hideModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { PersonProjectOrEntity, coiReviewComment } from '../../../shared-components/shared-interface';
+import { heightAnimation } from '../../../common/utilities/animations';
+import { ElasticConfigService } from '../../../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-coi-review-location',
     templateUrl: './location.component.html',
     styleUrls: ['./location.component.scss'],
+    animations: [heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class LocationComponent implements OnInit, OnDestroy {
 
@@ -50,6 +52,9 @@ export class LocationComponent implements OnInit, OnDestroy {
     reviewStartDate: any;
     reviewEndDate: any;
     collapseViewMore = {};
+    editReviewerHelpText = 'You are about to edit the review.';
+    addReviewerHelpText = 'You are about to add a review.';
+    deleteReviewHelpText = 'You are about to delete the review.'
 
     constructor(
         private _elasticConfigService: ElasticConfigService,

@@ -98,7 +98,7 @@
 }
 
 .mat-mdc-select-trigger {
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .mat-mdc-option:hover {
@@ -308,4 +308,72 @@
         width: 6px;
         height: 6px;
       }
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: all .3s ease-in-out;
+}
+
+.rotate-0 {
+    transform: rotate(0deg);
+    transition: all .3s ease-in-out;
+}
+
+.slide_down {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideDown .3s ease-in-out forwards;
+}
+
+.transition-300ms {
+    transition: all .3s ease-in-out;
+}
+
+.coi-ms-n15px {
+    margin-left: -15px;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.coi-label-help {
+    display: inline-flex !important;
+    align-items: center;
+}
+
+.tooltip-inner {
+    max-width: 350px !important;
+    text-align: left;
+}
+
+.coi-details-card-mat-icon-size {
+    font-size: 1.4rem !important;
+}
+
+.tooltip-inner {
+    max-width: 350px !important;
+    text-align: left;
+}
+
+.coi-details-card-mat-icon-size {
+    font-size: 1.4rem !important;
+}
+
+.relationship-pill {
+    background-color: #F9F8FF !important;
+    border-color: #5E4FB8 !important;
+}
+
+.coi-purple-text {
+    color: #5E4FB8 !important;
 }

@@ -53,7 +53,7 @@
             </p>
           </div>
           <span class="create-button">
-            <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="showNotes()">
+            <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="showNotes()" id="coi-notes-attachment-add-notes-btn">
               Add Notes
             </button>
           </span>
@@ -72,7 +72,7 @@
         <!-- modal content -->
         <ng-container content>
             <div class="card mt-3">
-                    <div class="card-body shadow-sm mx-1">
+                    <div class="card-body shadow-sm mx-1" id="coi-notes-attachment-card">
                         <div class="row ml-15 mt-4" *ngIf="isEditMode">
                             <div class="col mr-10 fs-14 rounded-1 mx-4 my-4">
                                 <ckeditor [(ngModel)]="currentSelectedNote.content" [editor]="Editor"

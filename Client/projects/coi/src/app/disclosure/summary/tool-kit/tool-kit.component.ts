@@ -161,7 +161,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
             const HEADER_HEIGHT = document.getElementById('COI-DISCLOSURE-HEADER')?.offsetHeight || 0;
             const TOOL_KIT_HEIGHT = WINDOW_HEIGHT - (HEADER_HEIGHT + 60);
             document.getElementById('disclosure-toolkit').style.maxHeight = TOOL_KIT_HEIGHT + 'px';
-            if (this.isRelationshipCollapse) {
+            if (this.isRelationshipCollapse && document.getElementById('relationship-chid-section')) {
                 const RELATIONSHIP_HEIGHT = TOOL_KIT_HEIGHT / 4;
                 document.getElementById('relationship-chid-section').style.maxHeight = RELATIONSHIP_HEIGHT + 'px';
             }

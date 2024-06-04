@@ -9,7 +9,7 @@
                             <div class="card-header px-3">
                                 <div class="row flex-grow-1 position-relative">
                                     <div class="col-xl-8 d-flex px-0">
-                                        <span class="d-flex" tabindex="0"
+                                        <span class="d-flex" tabindex="-1"
                                             [attr.aria-label]="(coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId? 'OPA' :  coiData?.coiDisclosure?.coiDisclosureFcoiType?.description) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges()}}">
                                                 <span>{{ coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId ?
@@ -56,7 +56,7 @@
                                                 class="d-flex justify-content-end align-items-center pe-md-0 pe-xxl-4">
                                                 <label class="coi-text-dark me-2" for="badge-risk">Risk :</label>
                                                 <span class="d-flex pe-xl-1" id="badge-risk">
-                                                    <mat-icon
+                                                    <mat-icon aria-hidden="true"
                                                         class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1">warning</mat-icon>
                                                     <span class="coi-text-light">
                                                         {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
@@ -66,33 +66,45 @@
 
                                             <div class="d-flex justify-content-end align-items-center f-14 pe-md-0" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ? 'py-xxl-2':'pe-xxl-4'"
                                             [class.py-1]="!coiData?.coiDisclosure?.riskCategoryCode">
-                                                <span class="cursor-pointer ms-2 me-2" tabindex="0" role="link">
+                                                <span class="ms-2 me-2"  role="link"
+                                                    [title]="0 ? 'Click to view trainings' : ''"
+                                                    [attr.aria-label]="0 ? 'Click to view trainings' : ''"
+                                                    [ngClass]="0 ? 'link-primary cursor-pointer' : ''" tabindex="-1">
                                                     Trainings({{0}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
+                                                <span class="ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
                                                     role="link" (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)"
                                                     (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    [class.link-primary]="coiData.personEntitiesCount" tabindex="0">
+                                                    [title]="coiData.personEntitiesCount ? 'Click to view entities' : ''"
+                                                    [attr.aria-label]="coiData.personEntitiesCount ? 'Click to view entities' : ''"
+                                                    [ngClass]="coiData.personEntitiesCount ? 'link-primary cursor-pointer' : ''"
+                                                    [tabIndex]="coiData?.personEntitiesCount > 0 ? 0 : -1">
                                                     Entities({{coiData.personEntitiesCount}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" role="link"
+                                                <span class="ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" role="link"
                                                     (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)"
                                                     (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    [class.link-primary]="coiData.personNotesCount" tabindex="0">
+                                                    [title]="coiData.personNotesCount ? 'Click to view notes' : ''"
+                                                    [attr.aria-label]="coiData.personNotesCount ? 'Click to view notes' : ''"
+                                                    [ngClass]="coiData.personNotesCount ? 'link-primary cursor-pointer' : ''" tabindex="0"
+                                                    [tabIndex]="coiData?.personNotesCount > 0 ? 0 : -1" >
                                                     Notes({{coiData.personNotesCount}})
                                                 </span> |
-                                                <span class="cursor-pointer ms-2" [class.me-xl-2]="!coiData?.coiDisclosure?.riskCategoryCode"
+                                                <span class="ms-2" [class.me-xl-2]="!coiData?.coiDisclosure?.riskCategoryCode"
                                                     (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" role="link"
                                                     (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
                                                     (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    [class.link-primary]="coiData.personAttachmentsCount" tabindex="0">
+                                                    [title]="coiData.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                                    [attr.aria-label]="coiData.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                                    [ngClass]="coiData.personAttachmentsCount ? 'link-primary cursor-pointer' : ''"
+                                                    [tabIndex]="coiData?.personAttachmentsCount > 0 ? 0 : -1">
                                                     Attachments({{coiData.personAttachmentsCount}})
                                                 </span>
                                             </div>
                                             <button (click)="collapseHeader()"
                                                 title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
                                                 class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                                <mat-icon class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                                <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
                                             </button>
                                         </div>
                                     </div>
@@ -216,42 +228,42 @@
                                 <div class="d-grid gap-2 d-md-flex flex-md-wrap">
                                     <button class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         title="Go to COI home page" aria-label="Go to home page" (click)="goBackInEditMode()">
-                                        <mat-icon>home</mat-icon>
+                                        <mat-icon aria-hidden="true">home</mat-icon>
                                     </button>
                                     <button (click)="goBackStep(); clickedOption = 'previous'" [disabled]="currentStepNumber==1"
                                         title="Go to previous page" aria-label="Go to previous page"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                        <mat-icon class="mr-15">keyboard_backspace</mat-icon>
+                                        <mat-icon aria-hidden="true" class="mr-15">keyboard_backspace</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
                                     </button>
                                     <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
                                         title="Go to next page" aria-label="Go to next page"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                        <mat-icon class="keyboard-backspace">keyboard_backspace</mat-icon>
+                                        <mat-icon aria-hidden="true" class="keyboard-backspace">keyboard_backspace</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded">Next</span>
                                     </button>
-                                    <button (click)="sfiService.isShowSfiNavBar = true" title="Click to add new SFI"
+                                    <button (click)="sfiService.isShowSfiNavBar = true" title="Click here to add new SFI"
                                         *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')"
                                         aria-label="Click to add new SFI"
                                         class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                        <mat-icon class="me-2">add</mat-icon>
+                                        <mat-icon aria-hidden="true" class="me-2">add</mat-icon>
                                         <span class="mt-1 ms-2" *ngIf="isCardExpanded">Add Significant Financial Interest</span>
                                     </button>
                                     <button (click)="triggerSave()"
                                         *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                                        title="Click to save your progress" aria-label="Click to save your progress"
+                                        title="Click here to save your progress" aria-label="Click to save your progress"
                                         class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                        <mat-icon>save</mat-icon>
+                                        <mat-icon aria-hidden="true">save</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded">Save</span>
                                     </button>
                                     <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
                                         *ngIf="router.url.includes('create-disclosure/certification')" title="Click to submit your disclosure"
-                                        aria-label="Click to submit your disclosure"
+                                        aria-label="Click here to submit your disclosure"
                                         class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                         [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                        <mat-icon>done</mat-icon>
+                                        <mat-icon aria-hidden="true">done</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded">Submit</span>
                                     </button>
                                 </div>
@@ -261,15 +273,14 @@
                                         <button title="Go to COI home page" (click)="goToHomeUrl()" aria-label="Go to COI home page"
                                         [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
-                                        <mat-icon>home</mat-icon>
-                                        <span class="fs-14  ms-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
+                                        <mat-icon aria-hidden="true">home</mat-icon>
                                         </button>
 
                                         <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
                                         [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col'" title="Go to previous page" aria-label="Go to previous page"
                                         class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center col">
-                                        <mat-icon>undo</mat-icon>
+                                        <mat-icon aria-hidden="true">undo</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
                                         </button>
 
@@ -277,7 +288,7 @@
                                             title="Click here to add new review comment"
                                             (click)="openReviewComment()"
                                             class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
-                                            <mat-icon>rate_review</mat-icon>
+                                            <mat-icon aria-hidden="true">rate_review</mat-icon>
                                             <span class="fs-14 ms-2" *ngIf="isCardExpanded">Comments</span>
                                         </button>
                                         <!-- more option button for expanded & collapsed card -->
@@ -286,14 +297,14 @@
                                         [matMenuTriggerFor]="beforeMenu"
                                             class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                             role="button" title="Click for More Actions" aria-label="Click for More Actions">
-                                            <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                                            <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
                                         </button>
 
                                         <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
                                             <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" aria-label="Click to Assign Administrator/Admin Group"
                                                 class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col'}}"
                                                 (click)="openAddAssignModal();">
-                                                <mat-icon>group_add</mat-icon>
+                                                <mat-icon aria-hidden="true">group_add</mat-icon>
                                                 <span class="ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
                                             </button>
                                         </ng-container>
@@ -305,7 +316,7 @@
                                                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                                     (click)="openAddAssignModal();"
                                                     [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
-                                                    <mat-icon>group_add</mat-icon>
+                                                    <mat-icon aria-hidden="true">group_add</mat-icon>
                                                     <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                                                 </button>
                                             </ng-container>
@@ -314,7 +325,7 @@
                                                 <button mat-menu-item title="Click to Modify Risk" area-describedby="Click to Modify Risk"
                                                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                                     (click)="openRiskSlider();">
-                                                    <mat-icon class="material-icons-round">warning</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="material-icons-round">warning</mat-icon>
                                                     <span class="ms-2 mt-1 fw-medium fs-14">Modify Risk</span>
                                                 </button>
                                             </ng-container>
@@ -325,8 +336,8 @@
                                             (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
                                                 area-describedby="Click to Withdraw"
                                                 class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
-                                                (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg);">
-                                                <mat-icon>logout</mat-icon>
+                                                (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
+                                                <mat-icon aria-hidden="true">logout</mat-icon>
                                                 <span class="ms-2 fw-medium fs-14">Withdraw</span>
                                             </button>
 
@@ -335,15 +346,15 @@
                                            <!-- Check logged person and administrator are same -->
                                         <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
                                         (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
-                                            (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
+                                            (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
                                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                                            <mat-icon class="returnIcon">refresh</mat-icon>
+                                            <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
                                             <span class="ms-1 fw-medium fs-14">Return</span>
                                         </button>
 
                                         <button mat-menu-item title="Click to Notify"
                                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                                            <mat-icon class="returnIcon">notifications</mat-icon>
+                                            <mat-icon aria-hidden="true" class="returnIcon">notifications</mat-icon>
                                             <span class="ms-1 fw-medium fs-14">Notify</span>
                                         </button>
                                     </mat-menu>
@@ -354,7 +365,7 @@
                                         id="start-review-btn"
                                         [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                        <mat-icon class="material-icons-outlined">play_circle_filled</mat-icon>
+                                        <mat-icon aria-hidden="true" class="material-icons-outlined">play_circle_filled</mat-icon>
                                         <span class="ms-2" *ngIf="isCardExpanded"> Start Review </span>
                                     </button>
 
@@ -363,7 +374,7 @@
                                       id="complete-review-btn"
                                       [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                       class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                      <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
+                                      <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
                                       <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                                       </button>
                                         <button *ngIf="coiService.isCOIAdministrator &&
@@ -374,12 +385,12 @@
                                                      (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
                                                      && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"
                                                 class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                                                [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click to complete review"
+                                                [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click here to complete final review"
                                                 data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
-                                            <mat-icon>done</mat-icon>
-                                            <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
+                                            <mat-icon aria-hidden="true">done</mat-icon>
+                                            <span class="ms-2" *ngIf="isCardExpanded"> Complete Final Review </span>
                                         </button>
-                                        <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}}">
+                                        <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
                                             <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
                                             <span class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}}
                                                 <span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
@@ -422,7 +433,7 @@
                                 [class.active-step]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
                                 tabindex="0" (click)="goToStep(1);" (keyup.enter)="goToStep(1);" (keyup.space)="goToStep(1);"
                                 id="step_1" attr.aria-label="Screening Questionnaire">
-                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">
                                         question_mark</mat-icon></span>
                                 <label class="plls-text" title="Screening Questionnaire">Screening Questionnaire</label>
                             </div>
@@ -436,7 +447,7 @@
                                 [class.active-step]="isRouteComplete(['sfi', 'relationship', 'certification'])" tabindex="0"
                                 id="step_2" (click)="goToStep(2);" (keyup.enter)="goToStep(2);" (keyup.space)="goToStep(2);"
                                 attr.aria-label="Significant Financial Interest(SFIs)">
-                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">
                                         apartment</mat-icon></span>
                                 <label class="plls-text" title="Significant Financial Interest(SFIs)">Significant Financial
                                     Interest(SFIs)</label>
@@ -450,7 +461,7 @@
                             <div class="step-pills" [class.active-step]="isRouteComplete(['relationship', 'certification'])"
                                 tabindex="0" id="step_3" attr.aria-label="Relationships" (click)="goToStep(3);"
                                 (keyup.enter)="goToStep(3);" (keyup.space)="goToStep(3);">
-                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">
                                         handshake</mat-icon></span>
                                 <label class="plls-text" title="Relationships">Relationships</label>
                             </div>
@@ -463,14 +474,14 @@
                             <div class="step-pills" [class.active-step]="isRouteComplete(['certification'])" tabindex="0"
                                 id="step_4" attr.aria-label="Certification" (click)="goToStep(4);" (keyup.enter)="goToStep(4);"
                                 (keyup.space)="goToStep(4);">
-                                <span class="plls-icon me-1"><mat-icon class="mat-step-icon">military_tech</mat-icon></span>
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">military_tech</mat-icon></span>
                                 <label class="plls-text" title="Certification">Certification</label>
                             </div>
                         </li>
                     </ul>
                     <span class="d-inline-block ms-auto ps-3" *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
-                        <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" tabindex="0"  id="history"
-                        [class.btn-active]="isRouteComplete(['history'])" [routerLink]="['history']" (click)="setFocus('history')"><mat-icon
+                        <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" id="history"
+                        [class.btn-active]="isRouteComplete(['history'])" [routerLink]="['history']" (click)="setFocus('history')"><mat-icon aria-hidden="true"
                                 class="mat-step-icon mr-2">update</mat-icon><label>History</label></button>
                     </span>
                 </div>
@@ -492,28 +503,33 @@
 </ng-container>
 
 <!-- Complete review modal -->
-<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
-    <div class="modal-dialog">
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard"
+    data-bs-backdrop="static" aria-label="Complete Review" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header pe-0">
-                <h4 class="modal-title">Complete Review
+                <h4 class="modal-title">
+                    <span>Complete Final Review</span>
+                    <app-common-help-text [helpTextHardCoded]="completeReviewHelpText"></app-common-help-text>
                 </h4>
-                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
-                    type="button">
+                <button class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                    type="button" id="opa-complete-final-review-close-btn" title="Click here to close" aria-label="Click here to close" >
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row mt-2 mb-0">
-                    <div class="col-lg-12">
-                        <p class="fs-14">Are you sure you want to complete the review of this disclosure?</p>
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+                    <div class="col-lg-12 mt-3">
+                        <p class="fs-14">Are you sure you want to complete the final review of this disclosure?</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Cancel
+                <button class="btn btn-outline-secondary fs-14"
+                    data-bs-dismiss="modal" type="button" id="opa-complete-final-review-cancel-btn" title="Click here to cancel" aria-label="Click here to cancel" >Cancel
                 </button>
                 <button (click)="completeDisclosureReview()" class="btn btn-primary fs-14" data-bs-dismiss="modal"
-                    type="button">Complete Review
+                    type="button" id="coi-complete-final-review-cancel-btn" title="Click here to complete final review" aria-label="Click here to compelete final review" >Complete Final Review
                 </button>
             </div>
         </div>
@@ -522,12 +538,12 @@
 <span class="d-none" id="reviewPendingCompleteReviewErrorModalTrigger"
     data-bs-target="#completeReviewModalFromDashboardErrorModal" data-bs-toggle="modal"></span>
 <!-- Complete review modal -->
-<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboardErrorModal" role="dialog">
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboardErrorModal" role="dialog" aria-label="Warning" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Warning!</h4>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
+                <button aria-label="Click to close" title="Click to close" class="btn-close" data-bs-dismiss="modal" type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -542,7 +558,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Close
+                <button class="btn btn-outline-secondary fs-14" aria-label="Click to close" title="Click to close"
+                    data-bs-dismiss="modal" type="button">Close
                 </button>
             </div>
         </div>
@@ -555,14 +572,14 @@
 
 <!--assign reviewer modal start-->
 <div class="modal modal-coi fade mySkinDialog" id="assign-reviewer-modal" role="dialog"
-    aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+    aria-labelledby="coi-add-review-modal-header" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Review for
+                <h5 class="modal-title" id="coi-add-review-modal-header">Add Review for
                     {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by
                     {{coiData?.coiDisclosure?.person?.fullName}}</h5>
-                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
+                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Click to close" title="Click to close"
                     (click)="assignReviewerActionDetails = {}">
                 </button>
             </div>
@@ -589,9 +606,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close"
-                    type="button" (click)="assignReviewerActionDetails = {}">Close</button>
+                    type="button" aria-label="Click to close" title="Click to close" (click)="assignReviewerActionDetails = {}">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                    (click)="saveOrUpdateCoiReview();" type="button">Add</button>
+                    (click)="saveOrUpdateCoiReview();" type="button" aria-label="Click to Add" title="Click to Add">Add</button>
             </div>
         </div>
     </div>
@@ -603,12 +620,13 @@
 <!--questionnaire evalution messge start-->
 <span class="d-none" id="questionnaireEvaluationMessageModalTrigger"
     data-bs-target="#questionnaireEvaluationMessageModal" data-bs-toggle="modal"></span>
-<div class="modal modal-coi fade mySkinDialog" id="questionnaireEvaluationMessageModal" role="dialog">
+<div class="modal modal-coi fade mySkinDialog" id="questionnaireEvaluationMessageModal"
+    role="dialog" aria-label="Screening Questionnaire" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Screening Questionnaire</h4>
-                <button aria-label="Close" class="btn-close mx-3" data-bs-dismiss="modal" type="button">
+                <button aria-label="Click to close" title="Click to close" class="btn-close mx-3" data-bs-dismiss="modal" type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -637,7 +655,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Close
+                <button aria-label="Click to close" title="Click to close"
+                    class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Close
                 </button>
             </div>
         </div>
@@ -667,23 +686,22 @@
 <!--Unsaved Changes confirmation Modal end-->
 
 <!--validation modal-->
-<div class="modal fade mySkinDialog modal-lg" tabindex="-1" id="ValidatedModal" tabindex="-1" role="dialog"
-    data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade mySkinDialog modal-lg" tabindex="-1" id="ValidatedModal" role="dialog"
+    data-bs-backdrop="static" aria-label="Validation">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Validation</h5>
-                <button type="button" (click)="coiService.submitResponseErrors = [];" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" (click)="coiService.submitResponseErrors = [];" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <ng-container *ngIf="this.coiService.submitResponseErrors.length > 0">
-                        <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
-                            <p role="alert"
-                                class="fa validation-Message-box fa-exclamation-circle icon alert ps-4"
-                                [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'"
-                                role="alert"><span class="ms-2 fw-400 me-3 fs-14"> {{error.validationMessage}}</span></p>
-                        </div>
+                        <ng-container *ngFor="let error of coiService.submitResponseErrors">
+                            <div role="alert" class="alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
+                                <i class="fa fa-exclamation-circle icon me-2 fs-14" aria-hidden="true"></i>
+                            <span class="fs-14">{{error.validationMessage}}</span></div>
+                        </ng-container>
                     </ng-container>
                 </div>
             </div>
@@ -696,43 +714,28 @@
 </div>
 
 <!--disclosure submit confirmation modal-->
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="confirmModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" tabindex="-1" id="confirmModal"
+    role="dialog" aria-labelledby="coi-disclosure-submit-confirm-modal-header">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                    <strong title="{{coiData?.projectDetail?.title}}">
+                    <strong id="coi-disclosure-submit-confirm-modal-header" title="{{coiData?.projectDetail?.title}}">
                         <div class="new-line-property word-break-all">
-                            {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
-                            Disclosure
-                            <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                                - [
-                                <ng-container
-                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
-                                    #{{ coiData?.projectDetail?.moduleItemId }} :
-                                </ng-container>
-                                <ng-container
-                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
-                                    #{{ coiData?.projectDetail?.moduleItemKey }} :
-                                </ng-container>
-                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title |
-                                slice:0: 40)+'...' :
-                                coiData?.projectDetail?.title }}
-                                ] By
-                                <strong class="ms-1"
-                                    title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
-                            </ng-container>
+                            <span>Submit {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }} Disclosure</span>
+                            <app-common-help-text [helpTextHardCoded]="submitHelpTexts"></app-common-help-text>
                         </div>
                     </strong>
-                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close"
+                <button type="button" class="btn-close" title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close"
                     (click)="isSaving = false; coiService.submitResponseErrors = [];"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12">
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+                    <div class="col-12 mt-2">
                         <ng-container *ngIf="this.coiService.submitResponseErrors.length > 0">
                             <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
-                                <div *ngIf="error.validationType == 'VW'"
-                                    class="validation-Message-box alert alert-warning ps-4 fs-14" role="alert">
+                                <div *ngIf="error.validationType == 'VW'" role="alert"
+                                    class="alert alert-warning fs-14" role="alert">
                                     <i class="fa fa-exclamation-circle mr-2"></i>{{error.validationMessage}}
                                 </div>
                             </div>
@@ -740,11 +743,11 @@
                         <ng-container *ngIf="count > 0">
                             <div>
                                 <p class="fs-14">Are you sure you want to submit the
-                                    <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
+                                    <strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} </strong> disclosure?</p>
                             </div>
                         </ng-container>
                         <div *ngIf="count == 0">
-                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}}
+                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
                                 </strong> disclosure.</p>
                         </div>
                     </div>
@@ -752,10 +755,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary" id="prop-saveExit-dismiss-btn" data-bs-dismiss="modal"
-                    type="button" title="Cancel" (click)="isSaving = false; coiService.submitResponseErrors = [];">Cancel
+                    type="button" aria-label="Click here to cancel" title="Click here to cancel" (click)="isSaving = false; coiService.submitResponseErrors = [];">Cancel
                 </button>
                 <button class="btn btn-primary me-0" id="prop-saveExit-dismiss-btn" type="button"
-                    data-bs-dismiss="modal" (click)="certifyDisclosure()">
+                    aria-label="Click here to submit" title="Click here to submit" data-bs-dismiss="modal" (click)="certifyDisclosure()">
                     Submit
                 </button>
             </div>
@@ -785,18 +788,16 @@
 <!--Disclosure Withdraw/Return Confirmation Modal-->
 <app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="primaryBtnName" [modalSize]="'lg'" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
+    [helpText] = "helpTexts"
     [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
-    [primaryBtnTooltip]= "'Click to'+' '+ primaryBtnName +' '+'the disclosure.'" [secondaryBtnTooltip]= "'Click to Cancel'">
+    [primaryBtnTooltip]= "'Click here to '+ primaryBtnName.toLowerCase() +' the disclosure.'" [secondaryBtnTooltip]= "'Click here to cancel'">
     <!-- modal header -->
     <ng-container header>
         <span>{{primaryBtnName}} {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure</span>
+        <app-common-help-text *ngIf="confirmationHelpTexts" [helpTextHardCoded]="confirmationHelpTexts"></app-common-help-text>
     </ng-container>
     <!-- modal content -->
     <ng-container content>
-        <!-- help text -->
-        <div>
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" [rowLimit]="2"></app-help-text>
-        </div>
         <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>

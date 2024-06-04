@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -10,12 +10,13 @@ import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } f
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
 import { isEmptyObject, scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { heightAnimation } from '../../../common/utilities/animations';
 
 @Component({
     selector: 'app-view-relationship-details',
     templateUrl: './view-relationship-details.component.html',
     styleUrls: ['./view-relationship-details.component.scss'],
-    animations: [slideInOut]
+    animations: [slideInOut, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ViewRelationshipDetailsComponent implements OnDestroy {
 
@@ -50,6 +51,8 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     additionalDetails: any = {
         sponsorsResearch: false
     };
+    isCardExpanded = true;
+    isUserCollapse = false;
 
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
@@ -396,7 +399,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }));
     }
 
-    viewEntityDetails() {
+    viewEntityDetails(event) {
         if(this.showViewButton()) {
             this.closeEntityInfoCard.emit(false);
             document.body.removeAttribute("style");
@@ -468,7 +471,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     saveOrAddRelationshipModal() {
-        this.entityDetailsServices.$triggerAddRelationModal.next(true);
+        this.entityDetailsServices.$triggerAddRelationModal.next({'openModal': true, 'entityDetails': this.entityDetails});
     }
 
     canAddRelationship() {
@@ -493,6 +496,37 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }, _error => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
+    }
+
+    collapseHeader() {
+        this.isCardExpanded = !this.isCardExpanded;
+        this.isUserCollapse = !this.isUserCollapse;
+    }
+
+    @HostListener('window:resize', ['$event'])
+    listenScreenSize() {
+        if(!this.isUserCollapse) {
+            this.isCardExpanded = window.innerWidth > 1399;
+        }
+    }
+
+    getRelationshipDetails() { //change to ervice
+        const  a= [];
+        if(this.entityDetailsServices.definedRelationships.length) {
+            this.entityDetailsServices.definedRelationships.forEach((ele) => {
+                a.push(ele.validPersonEntityRelType);
+            })
+        }
+        return a;
+    }
+
+    getIcon(key): string {
+        switch(key) {
+            case '2': return 'handshake';
+            case '3': return 'flight';
+            case '1': return 'paid';
+            default: return;
+        }
     }
 
 }

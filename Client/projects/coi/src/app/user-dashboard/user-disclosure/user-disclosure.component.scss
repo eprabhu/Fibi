@@ -1,84 +1,89 @@
 .disclosure-card-heading-blue {
-  background-color: #e8fffd;
+    background-color: #e8fffd;
 }
 
 .disclosure-card-body-blue {
-  background-color: #f0fffe !important;
+    background-color: #f0fffe !important;
 }
 
 .disclosure-card-heading-green {
-  background-color: #e7f9e8;
+    background-color: #e7f9e8;
 }
 
 .disclosure-card-body-green {
-  background-color: #f0fff1;
+    background-color: #f0fff1;
 }
 
 .disclosure-active-pill {
-  padding: 3px 12px;
-  border-radius: 15px;
-  font-weight: 500;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-weight: 500;
 }
 
 .span-data-color {
-  color: #728b9e;
+    color: #728b9e;
 }
 
 .navigation-icons {
-  .active {
-    border-bottom: 2px solid #007DEC;
-    color: #007dec;
-  }
+    .active {
+        border-bottom: 2px solid #007DEC;
+        color: #007dec;
+    }
 }
+
 .advance-search-area {
-  min-height: 45px;
-  display: flex;
-  align-items: center;
-  input {
-    background-color: #f5f5f5;
-  }
-  label {
-    position: absolute;
-    color: #747474;
+    min-height: 45px;
     display: flex;
     align-items: center;
-  }
-  span:not(:first-child) {
-    padding: 6px 20px !important;
-  }
+
+    input {
+        background-color: #f5f5f5;
+    }
+
+    label {
+        position: absolute;
+        color: #747474;
+        display: flex;
+        align-items: center;
+    }
+
+    span:not(:first-child) {
+        padding: 6px 20px !important;
+    }
 }
 
 .chin {
-  min-height: 46px;
-  margin-left: 20px;
+    min-height: 46px;
+    margin-left: 20px;
 }
 
 .advance-search-input {
-  width: 100%;
-  height: 43px;
+    width: 100%;
+    height: 43px;
 }
 
 .user-dashboard-nav {
-  min-height: 42px;
-  &:before {
-    height: 125% !important;
-  }
+    min-height: 42px;
+
+    &:before {
+        height: 125% !important;
+    }
 }
 
 .mb-4px {
-  margin-bottom: 4px;
+    margin-bottom: 4px;
 }
 
 .light-dark-text-color {
-  color: #6a7980;
+    color: #6a7980;
 }
 
 .badge {
-  font-family: "Roboto", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
-.bg-success{
-  background-color: #4cb57d !important;
+.bg-success {
+    background-color: #4cb57d !important;
 }
 
 // h4 {
@@ -88,68 +93,68 @@
 // }
 
 .cursor {
-  cursor: context-menu !important;
+    cursor: context-menu !important;
 }
 
-margin-top-3px{
-  margin-top: 3px;
+margin-top-3px {
+    margin-top: 3px;
 }
 
 .label-text {
-  font-weight: 600;
-  color      : #697a80;
-  font-size  : 14px;
+    font-weight: 600;
+    color: #697a80;
+    font-size: 14px;
 }
 
 .grey-text {
-  font-size: 0.875rem;
-  color: #48647f;
-  font-weight: 400;
-  margin-left: 5px;
+    font-size: 0.875rem;
+    color: #48647f;
+    font-weight: 400;
+    margin-left: 5px;
 }
 
 .update-details {
-  padding-left: 9px;
+    padding-left: 9px;
 }
 
 .entity-status {
-  color: #fff;
-  width: max-content;
-  height: 27px;
-  position: relative;
-  left: -10px;
-  top: -5px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 0 50px 50px 0;
-  padding: 10px 10px;
+    color: #fff;
+    width: max-content;
+    height: 27px;
+    position: relative;
+    left: -10px;
+    top: -5px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 10px;
 
-  &:before {
-    content: "";
-    position: absolute;
-    height: 0;
-    width: 0;
-    border-bottom: 6px solid #151515;
-    border-left: 6px solid transparent;
-    top: -6px;
-    left: 0;
-  }
+    &:before {
+        content: "";
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-bottom: 6px solid #151515;
+        border-left: 6px solid transparent;
+        top: -6px;
+        left: 0;
+    }
 }
 
-.mr-7{
-  margin-right: 7px;
+.mr-7 {
+    margin-right: 7px;
 }
 
-.mr-21{
-  margin-right: 21px;
+.mr-21 {
+    margin-right: 21px;
 }
 
 .col-custom-travel {
-  width: max-content;
+    width: max-content;
 }
 
 .searchButton {
-    left:10px;
+    left: 10px;
     position: absolute;
     top: 10px;
     color: #9E9E9E;
@@ -163,241 +168,227 @@ margin-top-3px{
     cursor: pointer;
 }
 
-// .fs-25px {
-//   font-size: 25px;
-// }
-
 .pl-28 {
-  padding-left: 28px;
+    padding-left: 28px;
 }
 
 .search-area:hover {
-  background-color: white !important;
+    background-color: white !important;
 }
 
 .title-text {
-  font-weight: 400;
-  color: #48647f;
-  font-size: 14px;
+    font-weight: 400;
+    color: #48647f;
+    font-size: 0.875rem;
 }
 
 .readMore {
-  color: #41464B;
-  text-decoration: underline;
-  font-size: 14px;
-  cursor: pointer;
+    color: #41464B;
+    text-decoration: underline;
+    font-size: 0.875rem;
+    cursor: pointer;
 }
 
 .pipe {
-  border-left: 2px solid #48647f82;
-  padding-top: 2px;
-  height: 18px;
-  display: inline-block;
+    border-left: 2px solid #48647f82;
+    padding-top: 2px;
+    height: 18px;
+    display: inline-block;
 }
 
 .award-icon {
-  width: 18px;
-  color: grey;
-  height: 18px;
+    width: 18px;
+    color: grey;
+    height: 18px;
 }
 
 .p-013 {
-  padding-left: 1.3rem;
-  padding-right: 1rem;
+    padding-left: 1.3rem;
+    padding-right: 1rem;
 }
 
 .entity-icon {
-  width: 21px;
-  margin-right: -1px;
-  color: grey;
-  height: 24px;
+    width: 21px;
+    margin-right: -1px;
+    color: grey;
+    height: 24px;
 }
 
 .proposal-icon {
-  width: 16px;
-  color: grey;
-  height: 17px;
+    width: 16px;
+    color: grey;
+    height: 17px;
 }
 
 .peron-icon {
-  width: 14px;
-  margin-right: 3px;
-  color: grey;
-  height: 14px;
+    width: 14px;
+    margin-right: 3px;
+    color: grey;
+    height: 14px;
 }
 
 .pi-info-text {
-  background-color: #F3F3F3;
-  color: #41464B;
+    background-color: #F3F3F3;
+    color: #41464B;
 }
 
 .create-buttons {
-  margin-bottom: 15px;
-  justify-content: center;
-  align-items: center;
-  height: 350px;
-  font-weight: 500;
-  font-size: 15px;
+    margin-bottom: 15px;
+    justify-content: center;
+    align-items: center;
+    height: 350px;
+    font-weight: 500;
+    font-size: 0.9375rem;
 }
 
 .info-icon {
-  top: 7px;
-  height: 22px;
-  width: 22px;
-  font-size: 16px;
-  position: absolute;
-  margin-left: 2px;
-  color: #6f7395;
-  cursor: pointer;
+    top: 7px;
+    height: 22px;
+    width: 22px;
+    font-size: 1rem;
+    position: absolute;
+    margin-left: 2px;
+    color: #6f7395;
+    cursor: pointer;
 }
 
 .info-text {
-  margin-bottom: 5px;
-  margin-left: 27px;
+    margin-bottom: 5px;
+    margin-left: 27px;
 }
 
 .create-card {
-  height: 350px;
+    height: 350px;
 }
 
-.pos{
+.pos {
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-
-.alignment{
-// padding-left: 120PX;
-display: flex;
-align-items: center;
-justify-content: end;
-}
-
-.p19{
-  padding-right: 19px;
-}
-
-.p17{
-padding-right: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
 
-.p-4{
-  padding-right: 4px;
+.alignment {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.p19 {
+    padding-right: 19px;
+}
+
+.p17 {
+    padding-right: 17px;
+
+}
+
+.p-4 {
+    padding-right: 4px;
 }
 
 .disclosure-master-header-bg {
-  background-color: #E7F9E8;
-  border-bottom: 1px solid #c1d9c2;
-  height:  49px;
+    background-color: #E7F9E8;
+    border-bottom: 1px solid #c1d9c2;
+    height: 49px;
 }
 
 .disclosure-master-body-bg {
-  background-color: #F0FFF1;
+    background-color: #F0FFF1;
 }
 
-.disclosure-master-footer-bg{
-  background-color: #f7f7f7;
-  border-top: 1px solid #c1d9c2;
-  height: 55px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.disclosure-master-footer-bg {
+    background-color: #f7f7f7;
+    border-top: 1px solid #c1d9c2;
+    height: 55px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.view-button{
-  text-decoration: none;
-  color: #8c97a9;
-}
-.p-26{
-  padding-right: 26px;
-}
-.pl{
-  padding-left: 2px;
+.view-button {
+    text-decoration: none;
+    color: #8c97a9;
 }
 
-.card-footer-pending-fcoi{
-  border-top: 1px solid #00000017;
-  height: 55px;
+.p-26 {
+    padding-right: 26px;
 }
 
-.dateWarningColor{
-  color: #9F0909;
+.pl {
+    padding-left: 2px;
 }
 
-.medium-Warning-color{
-  color: #D28B00;
+.card-footer-pending-fcoi {
+    border-top: 1px solid #00000017;
+    height: 55px;
+}
+
+.dateWarningColor {
+    color: #9F0909;
+}
+
+.medium-Warning-color {
+    color: #D28B00;
 }
 
 .medium-risk {
-  position: relative;
-  top: 5px;
-  color: #ff8c00;
+    position: relative;
+    top: 5px;
+    color: #ff8c00;
 }
 
 .high-risk {
-  position: relative;
-  top: 5px;
-  color: red;
+    position: relative;
+    top: 5px;
+    color: red;
 }
 
-.min-card-height{
+.min-card-height {
     min-height: 94px;
 }
 
 @media (max-width: 1500px) {
-  .min-card-height {
-    min-height: 135px;
-  }
+    .min-card-height {
+        min-height: 135px;
+    }
 }
 
 @media (max-width: 1025px) {
-  .min-card-height {
-    min-height: 170px;
-  }
+    .min-card-height {
+        min-height: 170px;
+    }
 }
 
 .ml-25 {
-  margin-left: 25px!important;
+    margin-left: 25px !important;
 }
 
-.grey-text{
-  margin-left: 0px !important;
+.grey-text {
+    margin-left: 0px !important;
 }
-
-/* Adjusting the height for FCOI, OPA disclosures creation card.
- - My COI Dashboard green, yellow cards */
-// .card {
-//   display: flex;
-//   height: 100%;
-//   margin: 0 5px;
-//   .card-content {
-//     flex-grow: 1;
-//   }
-// }
 
 @media (max-width: 1025px) {
-  .min-card-height {
-    min-height: 170px;
-  }
+    .min-card-height {
+        min-height: 170px;
+    }
 }
 
 /* For showing the word disclosure as (discl). for page responsive time*/
 .disclosure-text,
 .disclosures-text {
-  padding-left: 2px;
+    padding-left: 2px;
 }
 
 .disclosure-text:after {
-  content: "Disclosure";
+    content: "Disclosure";
 }
 
 @media (max-width: 1201px) {
-  .disclosure-text:after {
-    content: "Discl.";
-  }
+    .disclosure-text:after {
+        content: "Discl.";
+    }
 }
 
 .disclosures-text:after {
@@ -412,99 +403,55 @@ padding-right: 17px;
 
 /* Adjust the height of view button (only for this dashboard)*/
 .height-fit-content {
-  height: fit-content !important;
+    height: fit-content !important;
 }
 
 /* Responsive page: For breaking labels and values at breakpoint(1560) in FCOI and OPA creation cards */
 @media (max-width: 1560px) {
-  .break-point-1560 {
-      padding: 0 !important;
-      margin: 0 !important;
-      display: block !important;
-  }
+    .break-point-1560 {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+    }
 }
 
-/* This class will remove the colon symbol from the label and value till the resolution = Medium(1560px).
-    i.e., we dont follow the structure of showing the colon symbol when the label is in top and its value is in bottom.
-*/
-// @media (max-width : 1560px) {
-//   .create-disclosure div label span  {
-//     display: none !important;
-//   }
-// }
-/* This class will add the colon symbol to the label and value from resolution = Medium(1560px) */
-// @media (min-width : 1560px) {
-//   .create-disclosure div label span  {
-//     display: inline-block !important;
-//   }
-// }
-
-.searchButton:hover{
-  color: #0a58ca !important;
+.searchButton:hover {
+    color: #0a58ca !important;
 }
-
-// .symbol-circle {
-//   width: 42px;
-//   height: 42px;
-//   border-radius: 50%;
-//   background: #d6ebe0;
-
-//   .mat-icon {
-//     -webkit-user-select: none;
-//     user-select: none;
-//     background-repeat: no-repeat;
-//     display: inline-block;
-//     fill: currentColor;
-//      height: auto !important;
-//      width: auto !important;
-//      overflow: auto !important;
-//      color: #19834a;
-//   }
-// }
-
-// .mat-icon {
-//   -webkit-user-select: none;
-//   user-select: none;
-//   background-repeat: no-repeat;
-//   display: inline-block;
-//   fill: currentColor;
-//    height: auto !important;
-//    width: auto !important;
-//    overflow: auto !important;
-// }
-// .coi-card-regular {
-//   .mat-icon {
-//     font-size: 1.22rem !important;
-//   }
-// }
-
 
 .nav-filter-card-sticky {
-  position: sticky;
-  top: 50px;
-  z-index: 2;
-  background-color: #f1f1f1;;
+    position: sticky;
+    top: 50px;
+    z-index: 2;
+    background-color: #f1f1f1;
 }
 
 .overflow-hide-nav {
-  position: relative;
-  border: 0px;
-  box-shadow: none!important;
-  &:before {
-      content: "";
-      position: absolute;
-      background: #f1f1f1;;
-      left: -10px;
-      height: 101%;
-      width: 10px;
-      top: 0px;
+    position: relative;
+    border: 0px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        background: #f1f1f1;
+        ;
+        left: -10px;
+        height: 101%;
+        width: 10px;
+        top: 0px;
     }
 }
 
 @media (min-width:1200px) {
-  .overflow-hide-nav {
-    &:before{
-      height: 102%;
+    .overflow-hide-nav {
+        &:before {
+            height: 102%;
+        }
     }
-  }
+}
+
+.coi-card-regular {
+    .card-body {
+        padding-bottom: 0 !important;
+    }
 }

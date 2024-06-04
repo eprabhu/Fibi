@@ -29,6 +29,11 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     isSaving = false;
     checkedRelationships = {};
     SFI_ADDITIONAL_DETAILS_SECTION_NAME = SFI_ADDITIONAL_DETAILS_SECTION_NAME;
+    helpTexts=`Relationship Details section, use this section to disclose financial information
+    related to the entity for your Self, Spouse/Domestic Partner, and Dependents
+    (children who are unemancipated and under 18 years of age or who receive more than one-­‐half support
+    from you).`
+    entityDetails: any;
 
     constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
         private _commonService: CommonService, private _navigationService: NavigationService) {}
@@ -145,6 +150,8 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
             if (this.entityDetailService.isRelationshipQuestionnaireChanged) {
                 this.entityDetailService.globalSave$.next();
             }
+            this.relationValidationMap.clear();
+            this.entityDetails = data.entityDetails;
             openModal('addRelationshipModal');
         }))
     }
@@ -222,10 +229,12 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 this.isSaving = false;
                 this.checkedRelationships = {};
                 hideModal('addRelationshipModal');
+                this.entityDetails = {};
             }, error => {
                 this.isSaving = false;
                 if (error.status === 405) {
                     hideModal('addRelationshipModal');
+                    this.entityDetails = {};
                     this.entityDetailService.concurrentUpdateAction = 'Add Relationship';
                 } else {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -275,5 +284,16 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.currentVersionDetails = {};
         this.entityDetailService.groupedRelations = {};
     }
+
+    getRelationshipDetails(): any[] {
+        const RELATION_DETAILS = [];
+        if(this.entityDetailService.definedRelationships.length) {
+            this.entityDetailService.definedRelationships.forEach((ele) => {
+                RELATION_DETAILS.push(ele.validPersonEntityRelType);
+            });
+        }
+        return RELATION_DETAILS;
+    }
+
 
 }

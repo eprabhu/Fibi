@@ -36,7 +36,7 @@
 </div>
 <div class="advance-search mt-2 coi-search-box rounded" [class.sticky-top]="isTriggeredFromSlider">
   <div class="row m-0">
-    <div class="col-lg-auto p-2">
+    <div class="col-lg-auto py-2 px-3">
   <div  [@leftSlideInOut]>
       <label class="text-secondary" for="" tabindex="0">Filter By Status :</label>
       <span (click)="setFilter('ALL')" [class.active-filter-pills]="filterType=='ALL'" tabindex="0"
@@ -121,7 +121,7 @@
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
   [personEntityId]="personEntityId" [updatedRelationshipStatus]="updatedRelationshipStatus" (closeModal)="closeActivateInactivateSfiModal($event)"
-  [personEntityNumber]="personEntityNumber">
+  [personEntityNumber]="personEntityNumber" [entityDetails]="entityDetails" [relationshipDetails]="relationshipDetails">
 </app-activate-inactivate-sfi-modal>
 
   <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-delete-button" data-bs-toggle="modal" data-bs-target="#deleteSFIConfirmationModal"></button>
@@ -130,14 +130,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click here to close" id="coi-sfi-deletesfi-conformation-modal-close-btn"></button>
       </div>
       <div class="modal-body fs-14">
         <p>Do you want to delete <strong>{{entityName}}</strong>?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="coi-sfi-deletesfi-conformation-modal-cancel-btn" title="Click here to cancel" aria-label="Click here to cancel">Cancel</button>
+        <button type="button" class="btn btn-primary fs-14" (click)="deleteSFI()" data-bs-dismiss="modal" id="coi-sfi-deletesfi-conformation-modal-delete-btn"  title="Click here to delete" aria-label="Click here to delete">Delete</button>
       </div>
     </div>
   </div>

@@ -5,7 +5,6 @@ import { QuestionnaireService } from '../view-questionnaire/questionnaire.servic
 import { CommonService } from '../../common/services/common.service';
 import { Subscription, Observable } from 'rxjs';
 import { easeIn } from '../../../../../fibi/src/app/common/utilities/animations';
-import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { scrollIntoView, setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Question, TableAnswer } from '../view-questionnaire/questionnaire.interface';
@@ -22,6 +21,7 @@ import {
 } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { compareDatesWithoutTimeZone } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { Questionnaire, QuestionnaireVO } from './questionnaire-interface';
+import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 @Component({
     selector: 'app-view-questionnaire-v2',
@@ -209,6 +209,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     }
 
     deleteAnswer(question: Question, answer: TableAnswer, answerIndex: number): void {
+        this.markQuestionnaireAsChanged(true);
         if (answer.QUEST_TABLE_ANSWER_ID === null) {
             question.ANSWERS['1'].splice(answerIndex, 1);
             this.addOrderNumber(question);
@@ -842,6 +843,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
 
     saveQuestionnaire() {
         this.deleteUnAnsweredTableRows();
+        this.findUnAnsweredQuestions();
         this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
         if (this.isSaving === false) {
             this.isSaving = true;
@@ -865,6 +867,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     saveQuestionnaireExternal() {
         if (this.isDataChanged) {
             this.deleteUnAnsweredTableRows();
+            this.findUnAnsweredQuestions();
             this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
             this.questionnaireVO.files = this.filesArray;
             this.questionnaireSaveEvent.emit({ status: 'EXTERNAL_SAVE', data: this.questionnaireVO});

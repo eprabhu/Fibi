@@ -55,10 +55,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
                     this._commonService.enableSSO ? localStorage.clear() :
                     this._commonService.removeUserDetailsFromLocalStorage();
                     this._commonService.currentUserDetails = {};
-                    this._commonService.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
+                    this._commonService.enableSSO ?  this._router.navigate(['error/401']) : this._router.navigate(['/login']);
                 }
 
-                if (error.status === 403) {
+                if (error.status === 403 && !window.location.href.includes('/login')) {
                     this._router.navigate(['/coi/error-handler/403']);
                 }
 

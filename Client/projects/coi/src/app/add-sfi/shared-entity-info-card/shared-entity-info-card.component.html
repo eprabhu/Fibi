@@ -1,13 +1,13 @@
 
 <!-- Entity slider header card -->
 <ng-container content-sticky>
-  <div class="card card-scroll rounded-2 shadow-medium coi-box-red mt-3 p-0">
-    <div class="card-body">
+  <div class="card card-scroll rounded-2 info-card-border mt-3 p-0">
+    <div class="card-body p-3" id="coi-shared-entity-info-card">
       <div class="row">
         <div class="col-lg-9">
           <span class="d-flex">
             <h4 class="mb-0 d-flex label-text f-16">
-              {{entityDetails?.entityName}}
+                <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
             </h4>
           </span>
         </div>
@@ -30,37 +30,38 @@
       </div>
       <div class="row mt-3">
         <div class="col-lg" [attr.aria-label]="'Country' + (entityDetails?.country?.countryName)">
-          <label class="coi-text-light d-block">Country</label>
+          <label for="coi-shared-entity-info-country" class="coi-text-light d-block">Country</label>
           <app-no-data-label [valueToShow]="entityDetails?.country?.countryName">
-            <span class="coi-text-light fw-normal">{{entityDetails?.country?.countryName}}</span>
+            <span class="coi-text-light fw-normal" id="coi-shared-entity-info-country">{{entityDetails?.country?.countryName}}</span>
           </app-no-data-label>
         </div>
         <div class="col-lg mb-lg-0 mb-md-3 mb-3"
           [attr.aria-label]="'Entity Type' + (entityDetails?.entityType?.description)">
-          <label class="coi-text-light d-block">Entity Type</label>
+          <label for="coi-shared-entity-type" class="coi-text-light d-block">Entity Type</label>
           <span class="coi-text-light fw-normal">
             <app-no-data-label [valueToShow]="entityDetails?.entityType?.description">
-              <span>{{entityDetails?.entityType?.description}}</span>
+              <span id="coi-shared-entity-type">{{entityDetails?.entityType?.description}}</span>
             </app-no-data-label>
           </span>
         </div>
         <div class="col-lg" [attr.aria-label]="'Entity Status' + (entityDetails?.isActive ?'Active':'Inactive')">
-          <label class="coi-text-light d-block">Entity Status</label>
+          <label for="coi-shared-entity-status" class="coi-text-light d-block">Entity Status</label>
           <span class="coi-text-light fw-normal">
             <app-no-data-label [valueToShow]="entityDetails?.isActive">
-              <span [ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive
-                ?'Active':'Inactive'}}</span>
+              <span class="badge f-14 px-3 py-2 rounded-pill"
+                [ngClass]="entityDetails?.isActive ? 'text-bg-success' : 'text-bg-secondary'" id="coi-shared-entity-status">
+                {{entityDetails?.isActive ? 'Active':'Inactive'}}</span>
             </app-no-data-label>
           </span>
         </div>
         <div class="col-12 mt-3" [attr.aria-label]="'Address' + (entityDetails?.address)">
-          <label class="coi-text-light d-block">Address</label>
+          <label for="coi-shared-entity-address" class="coi-text-light d-block">Address</label>
           <span class="coi-text-light fw-normal">
-            <app-no-data-label [valueToShow]="entityDetails?.address">
+            <app-no-data-label [valueToShow]="entityDetails?.address">  
               <span *ngIf="!isReadMore && entityDetails?.address?.length > 150; else showFullInfo">
-                <span> {{(entityDetails?.address |
+                <span id="coi-shared-entity-address"> {{(entityDetails?.address |
                   slice:0:150)}}</span>
-                <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">...
+                <span (click)="isReadMore = !isReadMore" class="hand-cursor" (keyup.enter)="isReadMore = !isReadMore" (keyup.space)="isReadMore = !isReadMore"><span class="fw-medium">...
                     <u>Read more</u>
                     <i aria-hidden="true"></i></span>
                 </span>
@@ -68,7 +69,7 @@
               <ng-template #showFullInfo>
                 <span class="word-break-all">{{entityDetails?.address}}</span>
                 <span *ngIf="entityDetails?.address?.length > 150" (click)="isReadMore = !isReadMore" aria-hidden="true"
-                  class="hand-cursor"><span class="fw-medium">. <u>Read
+                  class="hand-cursor" (keyup.enter)="isReadMore = !isReadMore" (keyup.space)="isReadMore = !isReadMore"><span class="fw-medium">. <u>Read
                       Less</u>
                     <i aria-hidden="true"></i></span>
                 </span>
