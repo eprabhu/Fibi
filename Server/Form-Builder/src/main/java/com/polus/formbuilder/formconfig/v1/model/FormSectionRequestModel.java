@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FormSectionRequestModel {
 
- 	private int formBuilderSectionId;
+ 	private int sectionId;
     private int formBuilderId;
     private String sectionName;
-    private Integer sectionOrderNumber;
-    private Integer businessRuleId;
-    private String description;
-    private String helpText;
-    private String headerInstruction;
-    private String footerInstruction;
+    private Integer sectionOrder;
+    private Integer sectionBusinessRule;
+    private String sectionDescription;
+    private String sectionHelpText;
+    private String sectionHeader;
+    private String sectionFooter;
     private String isActive;
-          
+
 }

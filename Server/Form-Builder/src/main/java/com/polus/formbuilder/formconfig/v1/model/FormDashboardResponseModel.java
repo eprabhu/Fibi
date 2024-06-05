@@ -22,4 +22,5 @@ public class FormDashboardResponseModel {
     private String isActive;
     private String updateUser;
     private Date updateTimestamp;
+    private String createUser;
 }

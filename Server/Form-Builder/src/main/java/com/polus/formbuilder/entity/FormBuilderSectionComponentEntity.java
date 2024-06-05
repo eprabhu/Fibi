@@ -40,7 +40,7 @@ public class FormBuilderSectionComponentEntity implements Serializable{
     private String componentTypeCode;
 
     @Column(name = "COMPONENT_ORDER_NUMBER", nullable = false)
-    private int componentOrderNumber;
+    private Integer componentOrderNumber;
 
     @Column(name = "COMPONENT_DATA")
     private String componentData;
@@ -75,8 +75,5 @@ public class FormBuilderSectionComponentEntity implements Serializable{
 
     @Column(name = "LABEL")
     private String label;
-
-    @Transient
-    private String componentTypeDescription;
 
 }

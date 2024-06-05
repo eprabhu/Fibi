@@ -131,7 +131,7 @@ public class FormConfigControllerTest {
 
 		// UPDATE -- USAGE
 
-		FormUsageRequestModel updRequest = new FormUsageRequestModel(Integer.parseInt(formUsageId), 10, 1, "23", "0",
+		FormUsageRequestModel updRequest = new FormUsageRequestModel(Integer.parseInt(formUsageId), 10, "10", 1, "23", "0",
 				9990, "updated usage description", "Y");
 		String updRequestJson = objectMapper.writeValueAsString(updRequest);
 		mockMvc.perform(put("/config/v1/formusage").contentType(MediaType.APPLICATION_JSON).content(updRequestJson))
@@ -143,7 +143,7 @@ public class FormConfigControllerTest {
 				.andExpect(jsonPath("$.[0].description", is("updated usage description"))).andReturn();
 
 		// PATCH - USAGE
-		FormUsageRequestModel patchRequest = new FormUsageRequestModel(Integer.parseInt(formUsageId), 10, 5, null, null,
+		FormUsageRequestModel patchRequest = new FormUsageRequestModel(Integer.parseInt(formUsageId), 10, "10", 5, null, null,
 				null, null, null);
 		List<FormUsageRequestModel> patchRequestls = List.of(patchRequest);
 
@@ -155,7 +155,7 @@ public class FormConfigControllerTest {
 
 		// DELETE
 
-		FormUsageRequestModel delRequest = new FormUsageRequestModel(Integer.parseInt(formUsageId), 0, 0, null, null,
+		FormUsageRequestModel delRequest = new FormUsageRequestModel(Integer.parseInt(formUsageId), 0, "0", 0, null, null,
 				null, null, null);
 		String delrequestJson = objectMapper.writeValueAsString(delRequest);
 
@@ -171,12 +171,12 @@ public class FormConfigControllerTest {
 		FormSectionRequestModel model = new FormSectionRequestModel();
 		model.setFormBuilderId(10);
 		model.setSectionName("New Test Section");
-		model.setSectionOrderNumber(1);
-		model.setHelpText("Help Text for Test");
-		model.setHeaderInstruction("Test Header");
-		model.setFooterInstruction("Test Footer");
-		model.setBusinessRuleId(null);
-		model.setDescription("Sample Description");
+		model.setSectionOrder(1);
+		model.setSectionHelpText("Help Text for Test");
+		model.setSectionHeader("Test Header");
+		model.setSectionFooter("Test Footer");
+		model.setSectionBusinessRule(null);
+		model.setSectionDescription("Sample Description");
 		model.setIsActive("Y");
 
 		String requestJson = objectMapper.writeValueAsString(model);
@@ -193,15 +193,15 @@ public class FormConfigControllerTest {
 		// UPDATE -- SECTION
 
 		FormSectionRequestModel updatemodel = new FormSectionRequestModel();
-		updatemodel.setFormBuilderSectionId(Integer.parseInt(formSectionId));
+		updatemodel.setSectionId(Integer.parseInt(formSectionId));
 		updatemodel.setFormBuilderId(10);
 		updatemodel.setSectionName("New Test Section");
-		updatemodel.setSectionOrderNumber(1);
-		updatemodel.setHelpText("Updated Help Text for Test");
-		updatemodel.setHeaderInstruction("Test Header");
-		updatemodel.setFooterInstruction("Test Footer");
-		updatemodel.setBusinessRuleId(null);
-		updatemodel.setDescription("Updated Sample Description");
+		updatemodel.setSectionOrder(1);
+		updatemodel.setSectionHelpText("Updated Help Text for Test");
+		updatemodel.setSectionHeader("Test Header");
+		updatemodel.setSectionFooter("Test Footer");
+		updatemodel.setSectionBusinessRule(null);
+		updatemodel.setSectionDescription("Updated Sample Description");
 		updatemodel.setIsActive("Y");
 
 		String updRequestJson = objectMapper.writeValueAsString(updatemodel);
@@ -218,9 +218,9 @@ public class FormConfigControllerTest {
 
 		// PATCH - SECTION
 		FormSectionRequestModel patchRequest = new FormSectionRequestModel();
-		patchRequest.setFormBuilderSectionId(Integer.parseInt(formSectionId));
+		patchRequest.setSectionId(Integer.parseInt(formSectionId));
 		patchRequest.setFormBuilderId(10);
-		patchRequest.setSectionOrderNumber(1);
+		patchRequest.setSectionOrder(1);
 		List<FormSectionRequestModel> patchRequestls = List.of(patchRequest);
 
 		String patchRequestJson = objectMapper.writeValueAsString(patchRequestls);
@@ -232,7 +232,7 @@ public class FormConfigControllerTest {
 		// DELETE
 
 		FormSectionRequestModel delRequest = new FormSectionRequestModel();
-		delRequest.setFormBuilderSectionId(Integer.parseInt(formSectionId));
+		delRequest.setSectionId(Integer.parseInt(formSectionId));
 		String delrequestJson = objectMapper.writeValueAsString(delRequest);
 
 		mockMvc.perform(
@@ -248,12 +248,12 @@ public class FormConfigControllerTest {
 		FormSectionRequestModel model = new FormSectionRequestModel();
 		model.setFormBuilderId(10);
 		model.setSectionName("New Test Section");
-		model.setSectionOrderNumber(1);
-		model.setHelpText("Help Text for Test");
-		model.setHeaderInstruction("Test Header");
-		model.setFooterInstruction("Test Footer");
-		model.setBusinessRuleId(null);
-		model.setDescription("Sample Description");
+		model.setSectionOrder(1);
+		model.setSectionHelpText("Help Text for Test");
+		model.setSectionHeader("Test Header");
+		model.setSectionFooter("Test Footer");
+		model.setSectionBusinessRule(null);
+		model.setSectionDescription("Sample Description");
 		model.setIsActive("Y");
 
 		String requestJson = objectMapper.writeValueAsString(model);
@@ -269,14 +269,14 @@ public class FormConfigControllerTest {
 
 		// CREATE
 		FormComponentRequestModel cmodel = new FormComponentRequestModel();
-		cmodel.setFormBuilderSectionId(Integer.parseInt(formSectionId));
+		cmodel.setSectionId(Integer.parseInt(formSectionId));
 		cmodel.setFormBuilderId(10);
-		cmodel.setComponentTypeCode("RT");
-		cmodel.setComponentOrderNumber(1);
+		cmodel.setComponentType("RT");
+		cmodel.setComponentOrder(1);
 		cmodel.setComponentData(null);
 		cmodel.setComponentRefId(null);
-		cmodel.setHeaderInstruction("Test Header");
-		cmodel.setFooterInstruction("Test Footer");
+		cmodel.setComponentHeader("Test Header");
+		cmodel.setComponentFooter("Test Footer");
 		cmodel.setDescription("Sample Description");
 		cmodel.setIsActive("Y");
 
@@ -294,15 +294,15 @@ public class FormConfigControllerTest {
 
 		// UPDATE -- COMPONENT
 		FormComponentRequestModel updatemodel = new FormComponentRequestModel();
-		updatemodel.setFormBuilderSectCompId(Integer.parseInt(componentId));
-		updatemodel.setFormBuilderSectionId(Integer.parseInt(formSectionId));
+		updatemodel.setComponentId(Integer.parseInt(componentId));
+		updatemodel.setSectionId(Integer.parseInt(formSectionId));
 		updatemodel.setFormBuilderId(10);
-		updatemodel.setComponentTypeCode("RT");
-		updatemodel.setComponentOrderNumber(1);
+		updatemodel.setComponentType("RT");
+		updatemodel.setComponentOrder(1);
 		updatemodel.setComponentData(null);
 		updatemodel.setComponentRefId(null);
-		updatemodel.setHeaderInstruction("Udated Header");
-		updatemodel.setFooterInstruction("Test Footer");
+		updatemodel.setComponentHeader("Udated Header");
+		updatemodel.setComponentFooter("Test Footer");
 		updatemodel.setDescription("Sample Description");
 		updatemodel.setIsActive("Y");
 
@@ -321,9 +321,9 @@ public class FormConfigControllerTest {
 		// PATCH - COMPONENT
 
 		FormComponentRequestModel patchRequest = new FormComponentRequestModel();
-		patchRequest.setFormBuilderSectCompId(Integer.parseInt(componentId));
-		patchRequest.setFormBuilderSectionId(Integer.parseInt(formSectionId));
-		patchRequest.setComponentOrderNumber(1);
+		patchRequest.setComponentId(Integer.parseInt(componentId));
+		patchRequest.setSectionId(Integer.parseInt(formSectionId));
+		patchRequest.setComponentOrder(1);
 		List<FormComponentRequestModel> patchRequestls = List.of(patchRequest);
 
 		String patchRequestJson = objectMapper.writeValueAsString(patchRequestls);
@@ -335,7 +335,7 @@ public class FormConfigControllerTest {
 		// DELETE
 
 		FormComponentRequestModel delRequest = new FormComponentRequestModel();
-		delRequest.setFormBuilderSectCompId(Integer.parseInt(componentId));
+		delRequest.setComponentId(Integer.parseInt(componentId));
 
 		String delrequestJson = objectMapper.writeValueAsString(delRequest);
 
