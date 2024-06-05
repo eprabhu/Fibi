@@ -77,12 +77,11 @@ public class FormBuilderServiceCoordinator {
 		if(request.getComponentType().equals(FormBuilderConstants.QUESTIONNAIR_COMPONENT)) {
 			return formBuilderService.SaveQuestionnaireComponent(request,multipartRequest);
 				
-		}else if(request.getComponentType().equals(FormBuilderConstants.CUSTOM_ELEMENT_COMPONENT)) {
+		} else if (FormBuilderConstants.CUSTOM_ELEMENT_COMPONENT_LIST.contains(request.getComponentType())) {
 			return formBuilderService.SaveCustomElementComponent(request);
 			
-		}else if(request.getComponentType().equals(FormBuilderConstants.PROGRAMMED_ELEMENT_COMPONENT)) {
-			return formBuilderService.SaveProgrammedElementComponent(request);
-			
+		} else if (request.getComponentType().equals(FormBuilderConstants.PROGRAMMED_ELEMENT_COMPONENT)) {
+			return formBuilderService.SaveProgrammedElementComponent(request);	
 		}	
 		
 		return null;
@@ -93,14 +92,15 @@ public class FormBuilderServiceCoordinator {
 	}
 	
 	private String getFormBuilderServiceImpKey(String moduleCode) {
-		switch (moduleCode) {
-		case FormBuilderConstants.OPA_MODULE:
-			return "Module_".concat(moduleCode).concat("_FormBuilderServiceImpl");
-
-		default:
-			return "Module_0_FormBuilderServiceImpl";
-		}
+	    switch (moduleCode) {
+	        case FormBuilderConstants.OPA_MODULE,
+	             FormBuilderConstants.CONSULTING_DISCLOSURE_MODULE:
+	            return "Module_".concat(moduleCode).concat("_FormBuilderServiceImpl");
+	        default:
+	            return "Module_0_FormBuilderServiceImpl";
+	    }
 	}
+
 
 	public ResponseEntity<Object> validateForm(FormValidationRequest formValidationRequest) {
 		if (formValidationRequest.getFormBuilderIds() == null || formValidationRequest.getFormBuilderIds().isEmpty()) {
