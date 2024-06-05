@@ -45,4 +45,10 @@ CREATE TABLE `fb_comp_custom_element_options` (
   PRIMARY KEY (`CUSTOM_DATA_OPTION_ID`)
 );
 
+CREATE TABLE `form_builder_counter` (
+  `COUNTER_NAME` varchar(255) NOT NULL,
+  `COUNTER_VALUE` int DEFAULT NULL,
+  PRIMARY KEY (`COUNTER_NAME`)
+);
+
 SET FOREIGN_KEY_CHECKS=1;

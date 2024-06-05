@@ -1,0 +1,1 @@
+INSERT INTO `form_builder_counter` (`COUNTER_NAME`, `COUNTER_VALUE`) VALUES ('FORM_BUILDER_NUMBER', '1');
