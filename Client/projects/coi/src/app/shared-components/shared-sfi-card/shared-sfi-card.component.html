@@ -90,7 +90,7 @@
                             <mat-icon aria-hidden="true"
                             class="flex-shrink-0 me-1">{{getIcon(relationship.key)}}</mat-icon>
                             <span class="fw-bold"
-                                [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-key">{{relationship.key}} : </span>
+                                [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-key">{{relationship.key}}:</span>
                             <ng-container *ngFor="let relation of relationship.value; let last = last">
                                 <span class="r-title ms-1" *ngIf="!last"
                                     [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-type-notlast">{{relation?.personEntityRelType?.description

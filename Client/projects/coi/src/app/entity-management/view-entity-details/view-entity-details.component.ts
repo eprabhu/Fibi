@@ -321,12 +321,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     getEntitySectionConfig(): void {
+        this.$subscriptions.push(
         this._commonServices.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
             this.entitySliderSectionConfig = data;
         },
             _err => {
                 this._commonServices.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
-            })
+            }));
     }
 
     isEntityDetailsAvailable(): boolean {

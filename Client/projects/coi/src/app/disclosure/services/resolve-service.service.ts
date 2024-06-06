@@ -13,7 +13,6 @@ import {
 } from '../../app-constants';
 import {NavigationService} from '../../common/services/navigation.service';
 import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ResolveServiceService {
