@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.formbuilder.customdataelement.VO.CustomDataElementVO;
+import com.polus.formbuilder.customdataelement.service.CustomDataElementService;
 import com.polus.formbuilder.model.ApplicableFormRequest;
 import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
@@ -27,6 +28,7 @@ import com.polus.formbuilder.model.FormResponse;
 import com.polus.formbuilder.model.FormValidationRequest;
 import com.polus.formbuilder.programmedelement.ProgrammedElementJSONObjectMapper;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
+import com.polus.formbuilder.service.FormBuilderConstants;
 import com.polus.formbuilder.service.FormBuilderServiceCoordinator;
 
 @RestController
@@ -37,6 +39,9 @@ public class FormBuilderController {
 	
 	@Autowired
 	ProgrammedElementJSONObjectMapper PEObjectMapper;
+
+	@Autowired
+	CustomDataElementService customDataElementService;
 	
 	@GetMapping("/ping")
 	String greetings() {
@@ -87,7 +92,6 @@ public class FormBuilderController {
 
     @PostMapping(value ="saveFormComponent", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	ResponseEntity<Object> saveFormComponent(MultipartHttpServletRequest multiRequest ){	
-    	
     	FormComponentSaveRequest request;
 		try {
 			request = mapFormDataToFormComponentSaveReq(multiRequest);
@@ -95,12 +99,10 @@ public class FormBuilderController {
 			return ResponseEntity
 					.status(HttpStatus.BAD_REQUEST)
 					.body("Invalid JSON format in /saveFormComponent request."+"\n"+e.getMessage());
-			
 		}
 		try {
 			var response = service.saveFormComponent(request,multiRequest);			
 			return new ResponseEntity<Object>(response,HttpStatus.OK);	
-			
 		}catch(Exception e) {
 			 e.printStackTrace();
 			 String errorMessage = "An error occurred in /saveFormComponent save action. Exception --> "+e.getMessage();
@@ -126,30 +128,24 @@ public class FormBuilderController {
         dto.setComponentData(multiRequest.getParameter("componentData"));
       
         ObjectMapper objectMapper = new ObjectMapper();       
-	       
 	        if(dto.getComponentType().equals("QN")) {
 	        	 String questionnaireJson = multiRequest.getParameter("questionnaire");
 	        	 QuestionnaireDataBus questionnaire = objectMapper.readValue(questionnaireJson, QuestionnaireDataBus.class);
 	        	 dto.setQuestionnaire(questionnaire);
 	        	 dto.setCustomElement(null);
 	        	 dto.setProgrammedElement(null);
-	        	 
-	        } else if(dto.getComponentType().equals("CE")) {
+	        } else if(FormBuilderConstants.CUSTOM_ELEMENT_COMPONENT_LIST.contains(dto.getComponentType())){
 	        	String customElementJson = multiRequest.getParameter("customElement");
 	        	CustomDataElementVO customElement = objectMapper.readValue(customElementJson, CustomDataElementVO.class);
 	        	dto.setCustomElement(customElement);
 	        	dto.setProgrammedElement(null);
 	        	dto.setQuestionnaire(null);
-	        	
 	        }else if(dto.getComponentType().equals("PE")) {
-	        	
-	        	
 	        	String programmedElementJson = multiRequest.getParameter("programmedElement");	        	
 	        	ProgrammedElementModel programmedElement = PEObjectMapper.jsonObjectMapper(dto.getComponentData(),"SAVE_COMPONENT",programmedElementJson);
 	        	dto.setProgrammedElement(programmedElement);
 	        	dto.setCustomElement(null);
 	        	dto.setQuestionnaire(null);
-	        	
 	        }
 	        
 	return dto;
@@ -168,6 +164,16 @@ public class FormBuilderController {
     @PostMapping(value = "/validateComponent", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<Object> validateComponent(@RequestBody FormValidationRequest formValidationRequest) {
 		return service.validateComponent(formValidationRequest);
+	}
+
+    @PostMapping(value = "/saveFormCustomResponse", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> saveCustomResponse(@RequestBody CustomDataElementVO vo) {
+		return new ResponseEntity<> (customDataElementService.saveCustomResponse(vo), HttpStatus.OK) ;
+	}
+
+    @PostMapping(value = "/fetchFormCustomElementById", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> fetchCustomElementById(@RequestBody CustomDataElementVO vo) {
+		return new ResponseEntity<> (customDataElementService.fetchCustomElementById(vo), HttpStatus.OK) ;
 	}
 
 }

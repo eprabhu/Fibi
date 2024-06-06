@@ -14,17 +14,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FormSectionModel {
 	
-	 	private int formBuilderSectionId;
+	 	private int sectionId;
 	    private int formBuilderId;
 	    private String sectionName;
-	    private Integer sectionOrderNumber;
-	    private Integer businessRuleId;
-	    private String description;
-	    private String helpText;
-	    private String headerInstruction;
-	    private String footerInstruction;
+	    private Integer sectionOrder;
+	    private Integer sectionBusinessRule;
+	    private String sectionDescription;
+	    private String sectionHelpText;
+	    private String sectionHeader;
+	    private String sectionFooter;
 	    private String isActive;
 	    private Date updateTimestamp;
 	    private String updateUser;
-	    private List<FormSectionComponentModel> sectionComponents;
+	    private List<FormSectionComponentModel> sectionComponent;
+
 }

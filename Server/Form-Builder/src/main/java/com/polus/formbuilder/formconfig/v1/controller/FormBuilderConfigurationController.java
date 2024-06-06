@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
-import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.appcorelib.questionnaire.service.QuestionnaireService;
+import com.polus.formbuilder.customdataelement.VO.CustomDataElementVO;
+import com.polus.formbuilder.customdataelement.service.CustomDataElementService;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
 import com.polus.formbuilder.formconfig.v1.model.DeleteResponseModel;
 import com.polus.formbuilder.formconfig.v1.model.FormBasicCommonModel;
@@ -124,9 +124,9 @@ public class FormBuilderConfigurationController {
         return new ResponseEntity<FormUsageModel>(response,HttpStatus.OK);
     }
  	
- 	@DeleteMapping("/formusage")
-    public ResponseEntity<?> deleteFormUsage(@RequestBody FormUsageRequestModel request) {
- 		String response = service.deleteFormUsage(request.getFormUsageId());        
+ 	@DeleteMapping("/formusage/{formUsageId}")
+    public ResponseEntity<?> deleteFormUsage(@PathVariable("formUsageId") Integer formUsageId) {
+ 		String response = service.deleteFormUsage(formUsageId);        
         return new ResponseEntity<DeleteResponseModel>(new DeleteResponseModel(response),HttpStatus.OK);
     }
  	
@@ -242,8 +242,17 @@ public class FormBuilderConfigurationController {
  	@GetMapping("/customElementList")
  	public ResponseEntity<?> fetchCustomElementList() {
  		CustomDataElementVO vo = new CustomDataElementVO();
- 		String response = customDataElementService.fetchAllCustomElement(vo);
- 		return new ResponseEntity<>(response, HttpStatus.OK);
+ 		return customDataElementService.fetchAllCustomElement(vo);
  	}
+
+ 	@PostMapping(value = "/getSystemLookupByCustomType")
+	public ResponseEntity<?> getSystemLookupByCustomType(@RequestBody CustomDataElementVO vo) {
+		return customDataElementService.getSystemLookupByCustomType(vo);
+	}
+
+ 	@PostMapping(value = "/configureCustomElement")
+	public ResponseEntity<?> configureCustomElement(@RequestBody CustomDataElementVO vo) {
+		return customDataElementService.configureCustomElement(vo);
+	}
 
 }
