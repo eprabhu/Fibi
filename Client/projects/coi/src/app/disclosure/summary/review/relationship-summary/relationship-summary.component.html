@@ -1,5 +1,6 @@
 
-<div [id]= selectedProject?.moduleItemId class="card coi-card-regular border shadow ms-2 mt-2" *ngIf="selectedProject?.moduleCode">
+<div [id]="'coi-card-' + selectedProject?.moduleItemId" class="card coi-card-regular border shadow me-2 mt-2 ms-2"
+  [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject?.moduleItemId}" *ngIf="selectedProject?.moduleCode">
     <div class="card-header px-4 py-2 d-flex align-items-start justify-content-between border-bottom-0 flex-nowrap">
       <span class="d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
@@ -47,7 +48,7 @@
       </button>
       </span>
     </div>
-      <div *ngIf="isCollapsed" class="card-body">
+      <div *ngIf="isCollapsed" class="card-body" id="coi-relationship">
 			<div class="row">
 				<div class="col">
 					<div class="row">

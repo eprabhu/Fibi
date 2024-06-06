@@ -38,9 +38,9 @@
   </div>
 <div [hidden]="!isRelationCollapsed">
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
-		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
+		<div [id]="award.moduleItemId" *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
 			<app-relationship-summary [selectedProject]="award" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
-		</ng-container>
+		</div>
 	</ng-container>
 	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<app-no-information> </app-no-information>

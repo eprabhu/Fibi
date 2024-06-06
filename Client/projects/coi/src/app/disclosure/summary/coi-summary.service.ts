@@ -7,6 +7,8 @@ import { RO } from '../coi-interface';
 @Injectable()
 export class CoiSummaryService {
 
+  activeSubNavItemId = '';
+
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService
@@ -48,5 +50,4 @@ export class CoiSummaryService {
     loadProjectConflictHistory(disclosureDetailsId: any) {
         return this._http.get(`${this._commonService.baseUrl}/loadProjectConflictHistory/${disclosureDetailsId}`);
     }
-
 }
