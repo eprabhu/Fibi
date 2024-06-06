@@ -34,11 +34,10 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     isRelationshipCollapse = false;
     activeNav = '';
     activeSubNav = '';
-    subNavActive = '';
 
     constructor(
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _coiSummaryService: CoiSummaryService,
+        public coiSummaryService: CoiSummaryService,
         private _commonService: CommonService,private _coiService: CoiService
     ) { }
 
@@ -97,7 +96,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     }
 
     getProjectRelationships() {
-        this._coiSummaryService.getProjectRelationships({
+        this.coiSummaryService.getProjectRelationships({
             disclosureId: Number(this.coiDetails.disclosureId),
             disclosureStatusCode: this.coiDetails.disclosureStatusCode,
             personId: this.coiDetails.personId,
@@ -123,10 +122,11 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         this.activeNav = section;
         if (section !== 'COI803') {
             this.activeSubNav = '';
-            this.subNavActive = '';
+            this.coiSummaryService.activeSubNavItemId = '';
             this.isRelationshipCollapse = false; 
         } else {
             this.isRelationshipCollapse = !this.isRelationshipCollapse;
+            this.coiSummaryService.activeSubNavItemId = '';
         }
         this.openCollapsedSection(section);
         this.listenScreenSize();
@@ -137,7 +137,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         this.openCollapsedSection(parentSection);
         this.activeNav = parentSection;
         this.activeSubNav = activeSubSection;
-        this.subNavActive = subNavSection;
+        this.coiSummaryService.activeSubNavItemId = subNavSection;
         setTimeout(() => {
             this.windowScroll(subNavSection);
         });

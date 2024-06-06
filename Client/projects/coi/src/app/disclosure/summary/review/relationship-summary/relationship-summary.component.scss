@@ -345,3 +345,23 @@ label {
         color: #0d6efd
     }
 }
+
+.coi-card-highlight{
+    background-color: #fff8dd !important;
+    border: 1px dashed #ffc700 !important;
+    position: relative !important;
+}
+
+.coi-card-highlight::after {
+        content: "";
+        position: absolute;
+        right: -10px;
+        top: 20px;
+        width: 17px;
+        height: 17px;
+        border: 1px dashed #ffc700 ;
+        transform: rotate(44deg);
+        border-left: 0;
+        border-bottom: 0;
+        background: #fffdf6;
+}

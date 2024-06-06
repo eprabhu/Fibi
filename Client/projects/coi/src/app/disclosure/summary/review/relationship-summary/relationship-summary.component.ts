@@ -47,9 +47,10 @@ export class RelationshipSummaryComponent implements OnInit {
     isDesc = true;
     worstCaseStatus = null;
     relationshipTypeCache = {};
+    activeCard: string;
 
     constructor(
-        private _coiSummaryService: CoiSummaryService,
+        public coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         public _commonService: CommonService,
         private _dataStore: DataStoreService,
@@ -94,7 +95,7 @@ export class RelationshipSummaryComponent implements OnInit {
 
 getEntityProjectRelations() {
         this.$subscriptions.push(
-            this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
+            this.coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
                Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
                 .subscribe((data: any) => {
                 if (data && data.length > 0) {
@@ -168,7 +169,7 @@ getEntityProjectRelations() {
       }
 
       getSfiDetails() {
-        this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
+        this.$subscriptions.push(this.coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
             if (data) {
                 this.count = data.count;
             }

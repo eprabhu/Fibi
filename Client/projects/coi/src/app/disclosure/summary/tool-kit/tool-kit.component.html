@@ -36,7 +36,7 @@
                                         [attr.aria-label]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
                                         (keyup.enter)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
                                         (click)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
-                                        [ngClass]="{'sub-nav-active': subNavActive == award?.moduleItemId}">{{award?.moduleItemKey}}
+                                        [ngClass]="{'sub-nav-active': coiSummaryService.activeSubNavItemId == award?.moduleItemId}">{{award?.moduleItemKey}}
                                         {{award?.title.length>51 ? (award?.title | slice:0: 51)+'...': award?.title}}</a>
                                 </li>
                             </ng-container>
@@ -53,7 +53,7 @@
                                         [attr.aria-label]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
                                         (click)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
                                         (keyup.enter)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
-                                        [ngClass]="{'sub-nav-active': subNavActive == proposals?.moduleItemId}">{{proposals?.moduleItemId}}
+                                        [ngClass]="{'sub-nav-active': coiSummaryService.activeSubNavItemId == proposals?.moduleItemId}">{{proposals?.moduleItemId}}
                                         {{proposals?.title.length>51 ?(proposals?.title | slice:0:51)+'...' : proposals?.title}}</a>
                                 </li>
                             </ng-container>
