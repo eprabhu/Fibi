@@ -33,6 +33,9 @@ public class FormBuilderUsageEntity implements Serializable{
     @Column(name = "FORM_BUILDER_ID", nullable = false)
     private int formBuilderId;
 
+    @Column(name = "FORM_BUILDER_NUMBER", nullable = false)
+    private String formBuilderNumber;
+
     @Column(name = "FORM_ORDER_NUMBER", nullable = false)
     private int formOrderNumber;
 
