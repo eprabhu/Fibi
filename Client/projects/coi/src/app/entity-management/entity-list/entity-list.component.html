@@ -19,8 +19,7 @@
                         [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="tab"
                         (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
                         (click)="entityTabName('UNVERIFIED')" title="Click here to view Unverified Entities"
-                        aria-label="Click here to view the list of all unverified entities"
-                        role="presentation">
+                        aria-label="Click here to view the list of all unverified entities">
                         <a class="nav-link p-3 fs-6 align-self-center"
                            role="tab">Unverified Entities</a>
                     </li>
@@ -30,7 +29,7 @@
                         (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
                         (click)="entityTabName('HIGH_RISK')"
                         title="Click here to view High Risk Entities"
-                        aria-label="Click here to view the list of all high risk entities" role="presentation">
+                        aria-label="Click here to view the list of all high risk entities">
                         <a class="nav-link p-3 fs-6 align-self-center" role="tab">High Risk
                             Entities</a>
                     </li>

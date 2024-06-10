@@ -2,10 +2,10 @@
         [entityId]="entityId" [entityNumber]="entityNumber"
         [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
 
-<button type="button" class="btn btn-primary" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
+<button tabindex="-1" type="button" class="btn btn-primary" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal" aria-hidden="true"
     data-bs-target="#hiddenUnsavedChanges"></button>
 
-<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="hiddenUnsavedChanges" role="dialog">
+<div tabindex="-1" class="modal fade mySkinDialog" data-bs-backdrop="static" id="hiddenUnsavedChanges" role="dialog" aria-label="Confirmation">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="questionnaireUnsavedChanges" role="dialog">
+<div tabindex="-1" class="modal fade mySkinDialog" data-bs-backdrop="static" id="questionnaireUnsavedChanges" role="dialog" aria-label="Confirmation">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<div class="modal fade mySkinDialog" data-bs-backdrop="static" tabindex="-1" id="relationDetailsUnSavedChanges" role="dialog">
+<div tabindex="-1" class="modal fade mySkinDialog" data-bs-backdrop="static" id="relationDetailsUnSavedChanges" role="dialog" aria-label="Confirmation">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -114,12 +114,12 @@
             <div class="row mb-3 mt-2 mx-0 px-2">
                 <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="col-lg-4 col-md-6 col-xl-4 col-xxl-4">
                     <div tabindex="-1" [attr.aria-label]="subsection?.key">
-                        <label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
+                        <label for="coi-entity-sfi-relation" class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
                     </div>
-                    <div class="relation">
+                    <div id="coi-entity-sfi-relation" class="relation">
                         <div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
                             class="form-check d-block mb-2"
-                            [attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
+                            [attr.aria-label]="relation?.personEntityRelType?.description">
                             <input type="checkbox" name="relation" tabindex="0"
                             class="form-check-input text-secondary border border-secondary"
                             [value]="relation?.validPersonEntityRelTypeCode"
