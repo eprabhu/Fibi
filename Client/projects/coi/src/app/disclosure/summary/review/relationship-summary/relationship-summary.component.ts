@@ -65,6 +65,7 @@ export class RelationshipSummaryComponent implements OnInit {
         this.getSfiDetails();
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 3;
+        this.coiSummaryService.activeSubNavItemId = '';
     }
 
     private fetchCOIDetails(): void {

@@ -5,6 +5,7 @@ import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
 import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CoiService } from '../../services/coi.service';
+import { CoiSummaryService } from '../coi-summary.service';
 
 @Component({
     selector: 'app-coi-review',
@@ -21,7 +22,8 @@ export class ReviewComponent implements OnInit {
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _dataStore: DataStoreService, public commonService: CommonService, private _coiService: CoiService
+        private _dataStore: DataStoreService, public commonService: CommonService, private _coiService: CoiService,
+        public coiSummaryService: CoiSummaryService
     ) { }
 
     ngOnInit() {
@@ -75,5 +77,10 @@ export class ReviewComponent implements OnInit {
             }
         }));
     }
-    
+
+    clearHighlightOnRelationshipCollapse() {
+        this.isRelationCollapsed = !this.isRelationCollapsed;
+        this.coiSummaryService.activeSubNavItemId = '';
+    }
+
 }
