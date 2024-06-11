@@ -32,15 +32,15 @@
 	</span>
 	</h3>
 	<button [attr.aria-label]="'Click here to ' + (isRelationCollapsed ? 'collapse' : 'expand') + ' Details of relationship'" id="relationship_collapse_btn" class="align-items-center border btn d-flex justify-content-center p-0 position-absolute rounded-5 shadow-sm toggle-btn"
-	(click)="isRelationCollapsed = !isRelationCollapsed" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
+	(click)="clearHighlightOnRelationshipCollapse()" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
 	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
   </div>
 <div [hidden]="!isRelationCollapsed">
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
-		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
+		<div [id]="award.moduleItemId" *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
 			<app-relationship-summary [selectedProject]="award" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
-		</ng-container>
+		</div>
 	</ng-container>
 	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<app-no-information> </app-no-information>

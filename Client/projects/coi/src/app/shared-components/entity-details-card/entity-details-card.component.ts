@@ -6,7 +6,7 @@ class CardDetails {
     entityType: string = '';
     countryName: string = '';
     entityStatus: string = '';
-    relationship: any = {};
+    relationship: any = [];
 }
 @Component({
     selector: 'app-entity-details-card',
@@ -16,7 +16,7 @@ class CardDetails {
 export class EntityDetailsCardComponent implements OnChanges {
 
     @Input() entityDetails: any;
-    @Input() relationshipDetails: any = {};
+    @Input() relationshipDetails: any = [];
 
     cardDetails: CardDetails = new CardDetails();
 
@@ -42,7 +42,7 @@ export class EntityDetailsCardComponent implements OnChanges {
     }
 
     checkForRelationShipDetails() {
-        return !isEmptyObject(this.relationshipDetails);
+        return this.relationshipDetails && this.relationshipDetails.length > 0;
     }
 
     getIcon(key: string): string {
