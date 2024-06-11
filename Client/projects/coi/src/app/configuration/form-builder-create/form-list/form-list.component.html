@@ -24,7 +24,7 @@
                     </p>
                     <div class="formInfo fb-fs-14" id="formInfo">
                         <small class="mr-2">Created by: {{item.createUser}}</small>
-                        <small>Published on: {{item.updateTimestamp |dateFormatterWithTimeZone:'long'}}</small>
+                        <small *ngIf="item.isActive==='Y'">Published on: {{item.updateTimestamp |dateFormatterWithTimeZone:'long'}}</small>
                     </div>
                 </div>
                 <div class="col-2 d-flex justify-content-end">
