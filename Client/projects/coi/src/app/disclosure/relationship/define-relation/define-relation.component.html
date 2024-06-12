@@ -33,36 +33,36 @@
             </div>
             <div class="row p-3 fs-14">
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">{{selectedProject?.reporterRole}}</label>
-                <span class="coi-text-light">{{selectedProject?.principalInvestigator}}</span>
+                <label for="coi-define-relation-pi" class="coi-text-dark d-block">{{selectedProject?.reporterRole}}</label>
+                <span class="coi-text-light" id="coi-define-relation-pi">{{selectedProject?.principalInvestigator}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">Project Role</label>
-                <span class="coi-text-light">{{selectedProject?.reporterRole}}</span>
+                <label for="coi-define-relation-projectrole" class="coi-text-dark d-block">Project Role</label>
+                <span class="coi-text-light" id="coi-define-relation-projectrole">{{selectedProject?.reporterRole}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">Period</label>
-                <span class="coi-text-light">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+                <label for="coi-define-relation-period" class="coi-text-dark d-block">Period</label>
+                <span class="coi-text-light" id="coi-define-relation-period">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
                   | dateFormatter}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">Sponsor</label>
-                <span class="coi-text-light">{{selectedProject?.sponsor}}</span>
+                <label for="coi-define-relation-sponsor" class="coi-text-dark d-block">Sponsor</label>
+                <span class="coi-text-light" id="coi-define-relation-sponsor">{{selectedProject?.sponsor}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
-                <label for="" class="coi-text-dark d-block">Lead Unit</label>
-                <span [ngClass]="selectedProject?.unitName ? 'coi-text-light': 'noDataExists'">{{selectedProject?.unitName ?
+                <label for="coi-define-relation-leadunit" class="coi-text-dark d-block">Lead Unit</label>
+                <span [ngClass]="selectedProject?.unitName ? 'coi-text-light': 'noDataExists'" id="coi-define-relation-leadunit">{{selectedProject?.unitName ?
                   commonService.getPersonLeadUnitDetails(selectedProject): 'No Lead Unit exist'}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
-                <label for="" class="coi-text-dark d-block">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}
+                <label for="coi-define-relation-status" class="coi-text-dark d-block">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}
                   Status</label>
-                <span class="coi-text-light">{{selectedProject?.moduleStatus}}</span>
+                <span class="coi-text-light" id="coi-define-relation-status">{{selectedProject?.moduleStatus}}</span>
               </div>
               <div class="col-md-6 col-xl-3">
                 <label for="" class="coi-text-dark d-block">Prime Sponsor</label>
                 <span
-                  [ngClass]="selectedProject?.primeSponsor ? 'coi-text-light': 'noDataExists'">{{selectedProject?.primeSponsor
+                  [ngClass]="selectedProject?.primeSponsor ? 'coi-text-light': 'noDataExists'" id="coi-define-relation-prime-sponsor">{{selectedProject?.primeSponsor
                   ?
                   selectedProject?.primeSponsor :'--No Data--'}}</span>
               </div>

@@ -135,27 +135,27 @@
                                         <div class="col-md-12 col-xl-8">
                                             <div class="row">
                                                 <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="">Principal Investigator</label>
-                                                    <span class="coi-text-light">{{relation?.principalInvestigator}}</span>
+                                                    <label class="coi-text-dark d-block" for="coi-relationship-pi-{{i}}">Principal Investigator</label>
+                                                    <span class="coi-text-light" id="coi-relationship-pi-{{i}}">{{relation?.principalInvestigator}}</span>
                                                 </div>
                                                 <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="">Project Role</label>
-                                                    <span class="coi-text-light">{{relation?.reporterRole}}</span>
+                                                    <label class="coi-text-dark d-block" for="coi-relationship-role-{{i}}">Project Role</label>
+                                                    <span class="coi-text-light" id="coi-relationship-role-{{i}}">{{relation?.reporterRole}}</span>
                                                 </div>
                                                 <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="">Period</label>
-                                                    <span class="coi-text-light">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
+                                                    <label class="coi-text-dark d-block" for="coi-relationship-period-{{i}}">Period</label>
+                                                    <span class="coi-text-light" id="coi-relationship-period-{{i}}">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
                                                         dateFormatter}}</span>
                                                 </div>
                                                 <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="">Sponsor</label>
-                                                    <span class="coi-text-light">{{relation?.sponsor}}</span>
+                                                    <label class="coi-text-dark d-block" for="coi-relationship-sponsor-{{i}}">Sponsor</label>
+                                                    <span class="coi-text-light" id="coi-relationship-sponsor-{{i}}">{{relation?.sponsor}}</span>
                                                 </div>
                                                 <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="">Lead Unit</label>
+                                                    <label class="coi-text-dark d-block" for="coi-relationship-unit-{{i}}">Lead Unit</label>
                                                     <app-no-data-label [valueToShow]="relation?.unitName">
                                                         <span
-                                                            class="coi-text-light">{{_commonService.getPersonLeadUnitDetails(relation)}}</span>
+                                                            class="coi-text-light" id="coi-relationship-unit-{{i}}">{{_commonService.getPersonLeadUnitDetails(relation)}}</span>
                                                     </app-no-data-label>
                                                 </div>
                                             </div>
