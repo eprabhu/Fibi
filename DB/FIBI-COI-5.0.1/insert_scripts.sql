@@ -28,3 +28,6 @@ INSERT INTO `consulting_discl_review_status_type` (`REVIEW_STATUS_CODE`, `DESCRI
 INSERT INTO `consulting_discl_disposition_status_type` (`DISPOSITION_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `SORT_ORDER`) VALUES ('1', 'Pending', 'Y', now(), 'quickstart', '1');
 INSERT INTO `consulting_discl_disposition_status_type` (`DISPOSITION_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `SORT_ORDER`) VALUES ('2', 'Approved', 'Y', now(), 'quickstart', '2');
 INSERT INTO `consulting_discl_disposition_status_type` (`DISPOSITION_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `SORT_ORDER`) VALUES ('3', 'Void', 'Y', now(), 'quickstart', '3');
+
+INSERT INTO DYN_ELEMENT_CONFIG (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, HELP, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-disclosure-risk-header', 'Entity Name', '802', 'COI802', 'You are about to change disclosure risk', 'admin', now());
+INSERT INTO DYN_ELEMENT_CONFIG (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, HELP, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-entity-risk-header', 'Entity Name', '2601', 'GE2601', 'You are about to change entity risk', 'admin', now());

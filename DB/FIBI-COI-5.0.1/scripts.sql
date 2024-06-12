@@ -22,4 +22,9 @@ INSERT INTO `form_section_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`,
 INSERT INTO `form_section_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `SORT_ORDER`) VALUES ('TE', 'Text', 'Y', now(), 'quickstart', '15');
 INSERT INTO `form_section_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `SORT_ORDER`) VALUES ('UD', 'User Dropdown', 'N', now(), 'quickstart', '16');
 
+UPDATE DYN_ELEMENT_CONFIG SET `HELP` = 'Please select the Risk', `UPDATE_TIMESTAMP` = now() WHERE (`ELEMENT_ID` = '1538');
+UPDATE DYN_ELEMENT_CONFIG SET `HELP` = 'Please provide the reason for your risk change', `UPDATE_TIMESTAMP` = now() WHERE (`ELEMENT_ID` = '1539');
+UPDATE DYN_ELEMENT_CONFIG SET `HELP` = 'Please select the Risk', `UPDATE_TIMESTAMP` = now() WHERE (`ELEMENT_ID` = '1542');
+UPDATE DYN_ELEMENT_CONFIG SET `HELP` = 'Please provide the reason for your risk change', `UPDATE_TIMESTAMP` = now() WHERE (`ELEMENT_ID` = '1543');
+
 SET FOREIGN_KEY_CHECKS=1;
