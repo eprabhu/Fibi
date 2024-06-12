@@ -1,19 +1,15 @@
-package com.polus.fibicomp.opa.clients.model;
+package com.polus.fibicomp.coi.clients.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class FormRequest {
+public class ApplicableFormRequest {
 	
 	private Integer formBuilderId;
 
@@ -25,6 +21,5 @@ public class FormRequest {
 	
 	private String moduleSubItemKey;
 	
-	private String documentOwnerPersonId;	
-	
+	private String documentOwnerPersonId;
 }

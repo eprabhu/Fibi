@@ -1,10 +1,16 @@
-package com.polus.fibicomp.opa.clients;
+package com.polus.fibicomp.coi.clients;
 
-import com.polus.fibicomp.opa.clients.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import com.polus.fibicomp.coi.clients.model.ApplicableFormRequest;
+import com.polus.fibicomp.coi.clients.model.ApplicableFormResponse;
+import com.polus.fibicomp.coi.clients.model.BlankFormRequest;
+import com.polus.fibicomp.coi.clients.model.BlankFormResponse;
+import com.polus.fibicomp.coi.clients.model.FormRequest;
+import com.polus.fibicomp.coi.clients.model.FormResponse;
 
 /**
  * We can customize here if need

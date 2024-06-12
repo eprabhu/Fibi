@@ -9,11 +9,13 @@ import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
+import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLog;
+import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLogType;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLogType;
-import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
-import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
 
 public interface ActionLogDao {
 
@@ -99,4 +101,19 @@ public interface ActionLogDao {
      * @return
      */
     List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId, List<String> actionTypeCodes, boolean isStatusIn);
+
+    /**
+     * This method is used to fetch Consulting disclosure Action Log Type
+     * @param actionLogTypeCode
+     * @return ConsultingDisclActionLogType
+     */
+	ConsultingDisclActionLogType getConsultDisclActionType(String actionLogTypeCode);
+
+	/**
+     * This method is used to fetch Consulting disclosure action logs based on id
+     * @param disclosureId
+     * @return list of ConsultingDisclActionLog
+     */
+	List<ConsultingDisclActionLog> fetchConsultDisclActionLogsBasedOnId(Integer disclosureId);
+
 }

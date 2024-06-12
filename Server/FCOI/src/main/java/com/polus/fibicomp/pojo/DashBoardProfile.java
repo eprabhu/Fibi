@@ -9,6 +9,7 @@ import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.agreements.pojo.AgreementHeader;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
+import com.polus.fibicomp.coi.dto.ConsultDisclDashboardDto;
 import com.polus.fibicomp.common.vo.ProposalView;
 import com.polus.fibicomp.dashboard.pojo.QuickLink;
 import com.polus.fibicomp.dashboard.pojo.UserSelectedWidget;
@@ -131,9 +132,13 @@ public class DashBoardProfile {
 	
 	private Integer travelDisclosureCount;
 
+	private Integer consultDisclCount;
+
 	private List<Object> data;
 	
 	List<CoiTravelDashboardDto> travelDashboardViews;
+
+	List<ConsultDisclDashboardDto> consultingDisclDashboardViews;
 
 	List<OPADashboardDto> opaDashboardDto;
 
@@ -567,6 +572,22 @@ public class DashBoardProfile {
 
 	public void setOpaDashboardDto(List<OPADashboardDto> opaDashboardDto) {
 		this.opaDashboardDto = opaDashboardDto;
+	}
+
+	public List<ConsultDisclDashboardDto> getConsultingDisclDashboardViews() {
+		return consultingDisclDashboardViews;
+	}
+
+	public void setConsultingDisclDashboardViews(List<ConsultDisclDashboardDto> consultingDisclDashboardViews) {
+		this.consultingDisclDashboardViews = consultingDisclDashboardViews;
+	}
+
+	public Integer getConsultDisclCount() {
+		return consultDisclCount;
+	}
+
+	public void setConsultDisclCount(Integer consultDisclCount) {
+		this.consultDisclCount = consultDisclCount;
 	}
 
 }

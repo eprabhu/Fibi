@@ -273,10 +273,10 @@ public interface ConflictOfInterestService {
 	/**
 	 * This method is used to check a enitity is added againt a person or not
 	 *
-	 * @param entityId Entity Id
+	 * @param entityNumber entityNumber
 	 * @return
 	 */
-	ResponseEntity<Object> checkEntityAdded(Integer entityId);
+	ResponseEntity<Object> checkEntityAdded(Integer entityNumber);
 
 	/**
 	 * Validate
