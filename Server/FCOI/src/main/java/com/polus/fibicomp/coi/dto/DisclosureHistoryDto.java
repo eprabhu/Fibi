@@ -12,6 +12,7 @@ public class DisclosureHistoryDto {
 
     private Integer disclosureId;
     private Integer travelDisclosureId;
+    private Integer consultDisclId;
     private String homeUnit;
     private String homeUnitName;
     private String versionStatus;
@@ -37,4 +38,5 @@ public class DisclosureHistoryDto {
     private Timestamp updateTimeStamp;
     private String projectNumber;
     private String projectTitle;
+
 }

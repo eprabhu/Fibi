@@ -1,4 +1,4 @@
-package com.polus.fibicomp.opa.clients.model;
+package com.polus.fibicomp.disclosures.consultingdisclosure.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FormResponse {
+public class ConsultDisclCreatetDto {
 
-	private FormResponseDTO form;
-	
+	private String personId;
+
+	private String homeUnit;
+
 }

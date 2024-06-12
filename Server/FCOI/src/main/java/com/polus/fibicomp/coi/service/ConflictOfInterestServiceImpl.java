@@ -182,6 +182,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String FILTER_TYPE_ALL = "ALL";
 	private static final String FILTER_TYPE_OPA = "OPA";
 	private static final String TAB_TYPE_TRAVEL_DISCLOSURES = "TRAVEL_DISCLOSURES";
+	private static final String TAB_TYPE_CONSULTING_DISCLOSURES = "CONSULTING_DISCLOSURES";
 	private static final String TAB_TYPE_MY_DASHBOARD = "MY_DASHBOARD";
 	private static final String TAB_TYPE_IN_PROGRESS_DISCLOSURES = "IN_PROGRESS_DISCLOSURES";
 	private static final String TAB_TYPE_APPROVED_DISCLOSURES = "APPROVED_DISCLOSURES";
@@ -991,7 +992,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if(!vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) {
 			dashBoardProfile = conflictOfInterestDao.getCOIDashboard(vo);
 		}
-		if ((vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_ALL) || vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) && (!vo.getTabName().equalsIgnoreCase(TAB_TYPE_TRAVEL_DISCLOSURES))) {
+		if ((vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_ALL) || vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA))
+				&& (!(vo.getTabName().equalsIgnoreCase(TAB_TYPE_TRAVEL_DISCLOSURES) || vo.getTabName().equalsIgnoreCase(TAB_TYPE_CONSULTING_DISCLOSURES)))) {
 			OPADashboardRequestDto opaDashboardRequestDto = new OPADashboardRequestDto();
 			opaDashboardRequestDto.setFetchAllRecords(true);
 			opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
@@ -1030,8 +1032,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setTabName("APPROVED_DISCLOSURES");
 		Integer approvedDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
 		vo.setTabName("TRAVEL_DISCLOSURES");
-		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-		conflictOfInterestVO.setTravelDisclosureCount(travelDisclosureCount);
+		conflictOfInterestVO.setTravelDisclosureCount(conflictOfInterestDao.getCOIDashboardCount(vo));
+		vo.setTabName("CONSULTING_DISCLOSURES");
+		conflictOfInterestVO.setConsultDisclCount(conflictOfInterestDao.getCOIDashboardCount(vo));
 		vo.setTabName("DISCLOSURE_HISTORY");
 		vo.setFilterType("ALL");
 		Integer disclosureHistoryCount = conflictOfInterestDao.getDisclosureHistoryCount(vo);
@@ -1678,8 +1681,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> checkEntityAdded(Integer entityId) {
-		PersonEntity personEntity = conflictOfInterestDao.fetchPersonEntityById(entityId, AuthenticatedUser.getLoginPersonId());
+	public ResponseEntity<Object> checkEntityAdded(Integer entityNumber) {
+		PersonEntity personEntity = conflictOfInterestDao.fetchPersonEntityByEntityNumber(entityNumber, AuthenticatedUser.getLoginPersonId());
 		if (personEntity != null) {
 			PersonEntityDto personEntityDto = new PersonEntityDto();
 			BeanUtils.copyProperties(personEntity, personEntityDto);

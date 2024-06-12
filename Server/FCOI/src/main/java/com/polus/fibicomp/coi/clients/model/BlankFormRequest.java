@@ -1,4 +1,4 @@
-package com.polus.fibicomp.opa.clients.model;
+package com.polus.fibicomp.coi.clients.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
