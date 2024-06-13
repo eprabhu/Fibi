@@ -75,6 +75,10 @@ const routes: Routes = [
                 loadChildren: () => import('./opa/opa.module').then(m => m.OpaModule)
             },
             {
+                path: 'consulting',
+                loadChildren: () => import('./consulting-form/consulting-form.module').then(m => m.ConsultingFormModule)
+            },
+            {
                 path: 'opa-dashboard',
                 loadChildren: () => import('./opa-dashboard/opa-dashboard.module').then(m => m.OpaDashboardModule)
             },

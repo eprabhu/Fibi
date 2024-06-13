@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
+import {CONSULTING_REDIRECT_URL, DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject, hideModal,
@@ -101,7 +101,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
     isLoading = false;
-    assignAdminPath: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
+    assignAdminPath: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' | 'CONSULTING_DISCLOSURES' = 'DISCLOSURES';
     sortSectionsList = [];
     showSlider = false;
     entityId: any;
@@ -122,6 +122,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         { variableName: 'reviewDescription', fieldName: 'Review Status' },
         { variableName: 'certifiedAt', fieldName: 'Certification Date' },
         { variableName: 'travelExpirationDate', fieldName: 'Expiration Date' },
+        { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+    ];
+    consultingFormSortSection = [
+        { variableName: 'fullName', fieldName: 'Person' },
+        { variableName: 'entityName', fieldName: 'Entity' },
+        { variableName: 'dispositionStatusDescription', fieldName: 'Disposition Status' },
+        { variableName: 'reviewStatusDescription', fieldName: 'Review Status' },
+        { variableName: 'certifiedAt', fieldName: 'Certification Date' },
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
     readMoreOrLess = [];
@@ -294,7 +302,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private getAdminDashboardList(): any {
         const disclosureViews = this.result.disclosureViews || [];
         const travelDashboardViews = this.result.travelDashboardViews || [];
-        return disclosureViews.concat(travelDashboardViews);
+        const consultingDisclosureView = this.result.consultingDisclDashboardViews || [];
+        return [...disclosureViews, ...travelDashboardViews, ...consultingDisclosureView];
     }
 
     setEventTypeFlag() {
@@ -340,18 +349,21 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     private checkForTravelDisclosureTabChange(tabName: string): void {
-        if (tabName !== 'TRAVEL_DISCLOSURES') {
+        if (!['TRAVEL_DISCLOSURES', 'CONSULTING_DISCLOSURES'].includes(tabName)) {
             this.assignAdminPath = 'DISCLOSURES';
             this.sortSectionsList = this.disclosureSortSections;
-        } else {
+        } else if(tabName == 'TRAVEL_DISCLOSURES') {
             this.assignAdminPath = tabName;
             this.sortSectionsList = this.travelDisclosureSortSections;
+        } else if(tabName == 'CONSULTING_DISCLOSURES'){
+            this.assignAdminPath = tabName;
+            this.sortSectionsList = this.consultingFormSortSection;
         }
     }
 
     isAdvanceSearchTab(tabName): boolean {
         return [ 'ALL_DISCLOSURES', 'NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI',
-                 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES' ].includes(tabName);
+                 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES', 'CONSULTING_DISCLOSURES' ].includes(tabName);
     }
 
     fetchMentionedComments() {
@@ -666,6 +678,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         if (disclosure?.travelDisclosureId) {
             return 'bg-travel-clip';
         }
+        if (disclosure?.disclosureId) {
+            return 'bg-consulting-clip';
+        }
         switch (disclosure.fcoiTypeCode) {
             case '1':
                 return 'bg-fcoi-clip';
@@ -693,9 +708,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     redirectToDisclosure(coi) {
-        const redirectUrl = coi.travelDisclosureId ? POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
+        const redirectUrl = coi.travelDisclosureId ? POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : coi.disclosureId ? CONSULTING_REDIRECT_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         this._router.navigate([redirectUrl],
-            { queryParams: { disclosureId: coi.travelDisclosureId || coi.coiDisclosureId } });
+            { queryParams: { disclosureId: coi.travelDisclosureId || coi.coiDisclosureId || coi.disclosureId } });
     }
     fetchLocalObjectFromServiceObject() {
         this.localCOIRequestObject.property1 = this.coiAdminDashboardService.coiRequestObject.property1 ?
@@ -777,7 +792,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         const tabName = this.coiAdminDashboardService.coiRequestObject.tabName;
         const IS_TAB_FOR_NEW_SUBMISSION = ['NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI'].includes(tabName);
         const IS_TRAVEL_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_TRAVEL_DISCLOSURE');
+        const IS_CONSULTING_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_CONSULTING_DISCLOSURE');
         if (tabName === 'TRAVEL_DISCLOSURES' && coi.reviewStatusCode === '2' && IS_TRAVEL_ADMINISTRATOR) {
+            return true;
+        } else if (tabName === 'CONSULTING_DISCLOSURES' && coi.reviewStatusCode === '2' && IS_CONSULTING_ADMINISTRATOR) {
             return true;
         } else if (IS_TAB_FOR_NEW_SUBMISSION && this.getManageDisclosureRight(coi.fcoiTypeCode)) {
             return true;
@@ -813,7 +831,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     openAssignAdminModal(coi): void {
-        this.addAdmin.disclosureId = coi.coiDisclosureId || coi.travelDisclosureId;
+        this.addAdmin.disclosureId = coi.coiDisclosureId || coi.travelDisclosureId || coi.disclosureId;
         this.isAssignAdminModalOpen = true;
     }
 

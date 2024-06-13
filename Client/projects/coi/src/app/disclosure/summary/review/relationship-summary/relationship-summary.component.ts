@@ -151,7 +151,7 @@ getEntityProjectRelations() {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
                 componentTypeCode: '6',
                 subModuleItemKey: section === 'SFI' ? childSubSection.disclosureDetailsId : details.moduleItemId,
-                subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null, 
+                subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null,
                 coiSubSectionsTitle: `#${details.projectNumber}: ${details.title}`,
                 selectedProject: details,
                 sfiStatus: childSubSection?.coiProjConflictStatusType,
@@ -253,6 +253,16 @@ getEntityProjectRelations() {
                 return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
             });
             return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+    }
+
+    getIcon(key): string {
+        switch(key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            case 'Consulting' : return 'supervisor_account';
+            default: return;
         }
     }
 }
