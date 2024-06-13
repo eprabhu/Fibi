@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -1367,4 +1369,17 @@ public interface ConflictOfInterestDao {
 	 */
 	public boolean isTravelDisclosureRiskStatusModified(String riskCategoryCode, Integer travelDisclosureId);
 
+	/**
+	 *
+	 * @param disclosureId
+	 * @return
+	 */
+    List<DisclosureProjectDto> getDisclosureProjects(Integer disclosureId);
+
+	/**
+	 *
+	 * @param vo
+	 * @return
+	 */
+	List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo);
 }
