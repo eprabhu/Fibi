@@ -252,7 +252,7 @@
                 <!-- more option button for expanded card-->
                 <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && isCardExpanded"
                     class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-2"
-                    role="menu" title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
+                    title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
                     <mat-icon class="moreActionIcon" aria-hidden="true">more_vert</mat-icon>
                     <span>More Actions</span>
                 </button>
@@ -263,7 +263,7 @@
                     <ng-container *ngIf="isTravelAdministrator">
                         <!-- reassigned admin -->
                         <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]) && isTravelAdministrator" aria-label="Click here to Reassign administrator"
-                            title="Click here to Reassign Administrator/Admin Group" role="menuitems"
+                            title="Click here to Reassign Administrator/Admin Group"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openAddAssignModal()">
                             <mat-icon aria-hidden="true">group_add</mat-icon>
@@ -272,7 +272,7 @@
                     </ng-container>
                     <ng-container *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS, TRAVEL_REVIEW_STATUS.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
                         <!-- manage /view disclosure status -->
-                        <button mat-menu-item (click)="openConflictSlider()" role="menuitems"
+                        <button mat-menu-item (click)="openConflictSlider()"
                             [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
                             title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
@@ -282,7 +282,7 @@
                         </button>
 
                         <!-- manage /view travel risk status -->
-                        <button mat-menu-item (click)="openRiskSlider()" role="menuitems"
+                        <button mat-menu-item (click)="openRiskSlider()"
                             [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
                             title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
                             class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
@@ -295,14 +295,14 @@
                     <!-- Withdraw disclosure -->
                     <button mat-menu-item title="Click here to Withdraw Travel Disclosure" aria-label="Click here to Withdraw Travel Disclosure"
                         (click)="openConfirmationModal('Withdraw', true, true, withdrawErrorMsg);"
-                        class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action" role="menuitems"
+                        class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                         *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon aria-hidden="true">logout</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Withdraw</span>
                     </button>
 
                     <!-- notify -->
-                    <button mat-menu-item title="Click here to Notify" aria-label="Click here to Notify" role="menuitems"
+                    <button mat-menu-item title="Click here to Notify" aria-label="Click here to Notify"
                         class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon aria-hidden="true">notifications</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Notify</span>
@@ -369,7 +369,7 @@
                 <!-- more option for collapse card-->
                 <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && !isCardExpanded"
                     class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1"
-                    role="menu" title="Click here for More Actions" aria-label="Click here for More Actions" aria-expanded="false" aria-haspopup= "true">
+                    title="Click here for More Actions" aria-label="Click here for More Actions" aria-expanded="false" aria-haspopup= "true">
                     <mat-icon aria-hidden="true">more_vert</mat-icon>
                 </button>
 

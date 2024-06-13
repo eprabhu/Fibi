@@ -27,14 +27,13 @@
                 <tr *ngFor="let projectSfi of projectSFIDetails; let i = index" id="coi-sfi-project-relation-tbody-tr-{{i}}">
                     <td class="pt-2">
                     <div class="d-flex">
-                        <div class="d-flex align-items-center entity-status shadow-sm mt-2"
-                            [ngClass]="projectSfi?.moduleCode == 1 ? 'bg-award-clip' : 'bg-proposal-clip'">
-                            {{ projectSfi?.moduleCode == 1 ? 'Award' : 'Proposal' }}
+                        <div class="d-flex align-items-center entity-status shadow-sm mt-2" [style.background-color]="projectSfi?.projectBadgeColour">
+                            {{ projectSfi.projectType }}
                         </div>
-                        <div [attr.aria-label]="projectIdTitleMap[projectSfi?.moduleItemKey]" [title]="projectIdTitleMap[projectSfi?.moduleItemKey]">
-                            {{projectIdTitleMap[projectSfi?.moduleItemKey] && projectIdTitleMap[projectSfi?.moduleItemKey].length > 100 ?
-                            (projectIdTitleMap[projectSfi?.moduleItemKey] | slice:0:100) + '...' :
-                            projectIdTitleMap[projectSfi?.moduleItemKey]}}
+                        <div [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
+                            {{projectSfi?.projectTitle && projectSfi?.projectTitle.length > 100 ?
+                            (projectSfi?.projectTitle | slice:0:100) + '...' :
+                            projectSfi?.projectTitle}}
                         </div>
                     </div>
                     </td>

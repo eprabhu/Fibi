@@ -95,7 +95,7 @@ export class DefineRelationComponent implements OnInit {
     getEntityList() {
       this.$subscriptions.push(  this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
         data = data.map(ele =>({...ele,isSaved: false}));
-        this.entityProjectDetails = data;        
+        this.entityProjectDetails = data;
         this.selectedProject = this.module;
         // this.calculateSize();
         this.showTaskNavBar();
@@ -278,7 +278,7 @@ validateProjectSfiSliderOnClose() {
 
   navigateToStep(relation) {
     this.moduleCode = relation.moduleCode;
-    this.moduleItemId = relation.moduleItemId;
+    this.moduleItemId = relation.projectId;
     this.module = relation;
     this.isReadMore = false;
     this.getEntityList();

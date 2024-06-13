@@ -5,17 +5,16 @@ import lombok.Data;
 @Data
 public class FormComponentRequestModel {
 	
-	private int formBuilderSectCompId;
-    private int formBuilderSectionId;
+	private int componentId;
+    private int sectionId;
     private int formBuilderId;
-    private String componentTypeCode;
-    private String componentTypeDescription;
-    private Integer componentOrderNumber;
+    private String componentType;
+    private Integer componentOrder;
     private String componentData;
     private String componentRefId;
     private String description;
-    private String headerInstruction;
-    private String footerInstruction;
+    private String componentHeader;
+    private String componentFooter;
     private String isActive;
     private String isMandatory;
     private String validationMessage;

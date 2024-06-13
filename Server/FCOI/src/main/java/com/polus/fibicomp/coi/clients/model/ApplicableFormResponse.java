@@ -1,4 +1,4 @@
-package com.polus.fibicomp.opa.clients.model;
+package com.polus.fibicomp.coi.clients.model;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ public class ApplicableFormResponse {
 
 	private List<Integer> applicableFormsBuilderIds;
 	private Integer formsBuilderId;
-	private Integer opaDisclosureId;
+	private Integer disclosureId;
 
 }

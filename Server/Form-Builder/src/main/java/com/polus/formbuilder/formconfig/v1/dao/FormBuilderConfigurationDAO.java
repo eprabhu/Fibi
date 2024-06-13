@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.polus.appcorelib.authentication.AuthenticatedUser;
 import com.polus.formbuilder.entity.FormBuilderComponentTypeEntity;
 import com.polus.formbuilder.entity.FormBuilderHeaderEntity;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
@@ -69,7 +70,7 @@ public class FormBuilderConfigurationDAO {
 	
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
-	
+
 	private static final String ACTIVE_FLAG_DEFAULT = "N";
 	
 	private static final String SUCCESS = "1";
@@ -94,6 +95,7 @@ public class FormBuilderConfigurationDAO {
 	            .isActive(entity.getIsActive())
 	            .updateUser(entity.getUpdateUser())
 	            .updateTimestamp(entity.getUpdateTimestamp())
+	            .createUser(entity.getCreateUser())
 	            .build();
 	}
 
@@ -105,7 +107,7 @@ public class FormBuilderConfigurationDAO {
 		CompletableFuture<List<FormBuilderSectionEntity>> f3 = CompletableFuture.supplyAsync(() -> sectionRepository.getSectionDetailsByFormId(formBuilderId));
 		CompletableFuture<List<FormBuilderSectionComponentEntity>> f4 = CompletableFuture.supplyAsync(() -> componentRepository.fetchByFormId(formBuilderId));
 		CompletableFuture<List<FormBuilderProgElementEntity>> f5 = CompletableFuture.supplyAsync(() -> programmedElementRepository.findAll());
-		CompletableFuture<List<FormBuilderComponentTypeEntity>> f6 = CompletableFuture.supplyAsync(() -> componentTypeRepository.findAll());
+		CompletableFuture<List<FormBuilderComponentTypeEntity>> f6 = CompletableFuture.supplyAsync(() -> componentTypeRepository.getAllActiveComponentTypes());
 		
 		CompletableFuture<Void> allOf = CompletableFuture.allOf(f1, f2, f3, f4, f5, f6);
 		
@@ -135,15 +137,9 @@ public class FormBuilderConfigurationDAO {
 		List<FormSectionModel> sectionList = sectionEntity.stream()
 														  .map(this::mapEntityToModel)
 														  .collect(Collectors.toList());
-		
-		Map<String, String> componentTypeDescriptionMap = componentTypeEntity.stream()
-			    .collect(Collectors.toMap(FormBuilderComponentTypeEntity::getComponentTypeCode, FormBuilderComponentTypeEntity::getDescription));
 
 		List<FormSectionComponentModel> componentList = compnentEntity.stream()
-																	  .map(entity -> {
-																	        entity.setComponentTypeDescription(componentTypeDescriptionMap.get(entity.getComponentTypeCode()));
-																	        return mapEntityToModel(entity, formBuilderId);
-																	    })
+																	  .map(entity -> mapEntityToModel(entity, formBuilderId))
 																	  .collect(Collectors.toList());
 		
 		sectionList = setComponentToSection(sectionList,componentList);
@@ -163,10 +159,11 @@ public class FormBuilderConfigurationDAO {
 														 List<FormSectionComponentModel> componentList) {
 
 		Map<Integer, List<FormSectionComponentModel>> componentBySectionId = componentList.stream()
-																				          .collect(Collectors.groupingBy(FormSectionComponentModel:: getFormBuilderSectionId));
+																				          .collect(Collectors.groupingBy(FormSectionComponentModel:: getSectionId));
 				
 		sectionList
-			.forEach( section -> section.setSectionComponents(componentBySectionId.get(section.getFormBuilderSectionId())));
+				.forEach(section -> section.setSectionComponent(
+						componentBySectionId.get(section.getSectionId()) == null ? new ArrayList<>() : componentBySectionId.get(section.getSectionId())));
 		
 		return sectionList;
 	}
@@ -300,7 +297,8 @@ public class FormBuilderConfigurationDAO {
 
 		return FormUsageModel.builder()
 									 .formUsageId(entity.getFormUsageId())
-									 .formBuilderId(entity.getFormBuilderId())									 
+									 .formBuilderId(entity.getFormBuilderId())	
+									 .formOrderNumber(entity.getFormOrderNumber())
 									 .moduleCode(entity.getModuleCode())
 									 .subModuleCode(entity.getSubModuleCode())									 
 									 .businessRuleId(entity.getBusinessRuleId())
@@ -316,15 +314,15 @@ public class FormBuilderConfigurationDAO {
 	public FormSectionModel mapEntityToModel(FormBuilderSectionEntity entity) {
 
 		return FormSectionModel.builder()
-									 .formBuilderSectionId(entity.getFormBuilderSectionId())
+									 .sectionId(entity.getFormBuilderSectionId())
 									 .formBuilderId(entity.getFormHeaderId())									 
 									 .sectionName(entity.getSectionName())
-									 .sectionOrderNumber(entity.getSectionOrderNumber())									 
-									 .businessRuleId(entity.getBusinessRuleId())
-									 .description(entity.getDescription())
-									 .helpText(entity.getHelpText())
-									 .headerInstruction(entity.getHeaderInstruction())									 
-									 .footerInstruction(entity.getFooterInstruction())
+									 .sectionOrder(entity.getSectionOrderNumber())									 
+									 .sectionBusinessRule(entity.getBusinessRuleId())
+									 .sectionDescription(entity.getDescription())
+									 .sectionHelpText(entity.getHelpText())
+									 .sectionHeader(entity.getHeaderInstruction())									 
+									 .sectionFooter(entity.getFooterInstruction())
 							         .isActive(entity.getIsActive())
 							         .updateUser(entity.getUpdateUser())
 							         .updateTimestamp(entity.getUpdateTimestamp())
@@ -334,31 +332,29 @@ public class FormBuilderConfigurationDAO {
 	public FormSectionComponentModel mapEntityToModel(FormBuilderSectionComponentEntity entity, Integer formBuilderId) {
 
 		return FormSectionComponentModel.builder()
-									 .formBuilderSectCompId(entity.getFormBuilderSectCompId())
-									 .formBuilderSectionId(entity.getSectionId())
+									 .componentId(entity.getFormBuilderSectCompId())
+									 .sectionId(entity.getSectionId())
 									 .formBuilderId(formBuilderId)
-									 .componentTypeCode(entity.getComponentTypeCode())
-									 .componentOrderNumber(entity.getComponentOrderNumber())									 
+									 .componentType(entity.getComponentTypeCode())
+									 .componentOrder(entity.getComponentOrderNumber())									 
 									 .componentData(entity.getComponentData())
 									 .componentRefId(entity.getComponentRefId())
 									 .description(entity.getDescription())
-									 .headerInstruction(entity.getHeaderInstruction())									 
-									 .footerInstruction(entity.getFooterInstruction())
+									 .componentHeader(entity.getHeaderInstruction())									 
+									 .componentFooter(entity.getFooterInstruction())
 							         .isActive(entity.getIsActive())
 							         .updateUser(entity.getUpdateUser())
 							         .updateTimestamp(entity.getUpdateTimestamp())
 							         .isMandatory(entity.getIsMandatory())
 							         .validationMessage(entity.getValidationMessage())
 							         .label(entity.getLabel())
-							         .componentTypeDescription(entity.getComponentTypeDescription())
 									 .build();
 	}
 
 
 	private String getLoggedInUser() {		
 		try {
-			return "admin";//AuthenticatedUser.getLoginUserName();
-			
+			return AuthenticatedUser.getLoginUserName();
 		}catch(Exception e) {
 			return "nouser";
 		}
@@ -515,7 +511,8 @@ public FormUsageModel createFormUsage(FormUsageRequestModel request) {
 		String loginUser = getLoggedInUser();
 		FormBuilderUsageEntity newEntity = new FormBuilderUsageEntity();		
 		newEntity.setFormBuilderId(request.getFormBuilderId());
-		newEntity.setFormOrderNumber(request.getFormOrderNumber());
+		newEntity.setFormBuilderNumber(request.getFormBuilderNumber());
+		newEntity.setFormOrderNumber(fetchFormOrderNumber(request.getModuleCode(), request.getSubModuleCode()));
 		newEntity.setModuleCode(request.getModuleCode());
 		newEntity.setSubModuleCode(request.getSubModuleCode());
 		newEntity.setBusinessRuleId(request.getBusinessRuleId());
@@ -536,6 +533,10 @@ public FormUsageModel createFormUsage(FormUsageRequestModel request) {
 
 }
 
+private int fetchFormOrderNumber(String moduleCode, String subModuleCode) {
+	Integer maxFormOrderNumber = usageRepository.fetchFormOrderNumber(moduleCode, subModuleCode);
+	return (maxFormOrderNumber == null ? 1 : (maxFormOrderNumber + 1));
+}
 
 public FormUsageModel updateFormUsage(FormUsageRequestModel request) {
 	try {
@@ -656,12 +657,12 @@ public FormSectionModel createFormSection(FormSectionRequestModel request) {
 		
 		newEntity.setFormHeaderId(request.getFormBuilderId());								 
 		newEntity.setSectionName(request.getSectionName());
-		newEntity.setSectionOrderNumber(request.getSectionOrderNumber());									 
-		newEntity.setBusinessRuleId(request.getBusinessRuleId());
-		newEntity.setDescription(request.getDescription());
-		newEntity.setHelpText(request.getHelpText());
-		newEntity.setHeaderInstruction(request.getHeaderInstruction());									 
-		newEntity.setFooterInstruction(request.getFooterInstruction());
+		newEntity.setSectionOrderNumber(request.getSectionOrder());									 
+		newEntity.setBusinessRuleId(request.getSectionBusinessRule());
+		newEntity.setDescription(request.getSectionDescription());
+		newEntity.setHelpText(request.getSectionHelpText());
+		newEntity.setHeaderInstruction(request.getSectionHeader());									 
+		newEntity.setFooterInstruction(request.getSectionFooter());
 		newEntity.setIsActive(request.getIsActive());
 		newEntity.setUpdateUser(loginUser);
 		newEntity.setUpdateTimestamp(new Date());
@@ -683,7 +684,7 @@ public FormSectionModel updateFormSection(FormSectionRequestModel request) {
 
 		String loginUser = getLoggedInUser();
 
-		Optional<FormBuilderSectionEntity> entityOptional = sectionRepository.findById(request.getFormBuilderSectionId());
+		Optional<FormBuilderSectionEntity> entityOptional = sectionRepository.findById(request.getSectionId());
 
 		if (entityOptional.isEmpty()) {
 			return new FormSectionModel();
@@ -692,12 +693,12 @@ public FormSectionModel updateFormSection(FormSectionRequestModel request) {
 		FormBuilderSectionEntity entity = entityOptional.get();
 
 		entity.setSectionName(request.getSectionName());
-		entity.setSectionOrderNumber(request.getSectionOrderNumber());									 
-		entity.setBusinessRuleId(request.getBusinessRuleId());
-		entity.setDescription(request.getDescription());
-		entity.setHelpText(request.getHelpText());
-		entity.setHeaderInstruction(request.getHeaderInstruction());									 
-		entity.setFooterInstruction(request.getFooterInstruction());
+		entity.setSectionOrderNumber(request.getSectionOrder());									 
+		entity.setBusinessRuleId(request.getSectionBusinessRule());
+		entity.setDescription(request.getSectionDescription());
+		entity.setHelpText(request.getSectionHelpText());
+		entity.setHeaderInstruction(request.getSectionHeader());									 
+		entity.setFooterInstruction(request.getSectionFooter());
 		entity.setIsActive(request.getIsActive());
 		entity.setUpdateUser(loginUser);
 		entity.setUpdateTimestamp(new Date());
@@ -727,8 +728,8 @@ public String updateSectionOrder(List<FormSectionRequestModel> request) {
 	                				 + " WHERE FORM_BUILDER_SECTION_ID = :sectionId "
 	                				 + " AND SECTION_ORDER_NUMBER <> :orderNumber";
 	                session.createNativeQuery(section)
-	                		.setParameter("sectionId", req.getFormBuilderSectionId())
-	                		.setParameter("orderNumber", req.getSectionOrderNumber())
+	                		.setParameter("sectionId", req.getSectionId())
+	                		.setParameter("orderNumber", req.getSectionOrder())
 	                		.executeUpdate();
 
 	            } catch (Exception e) {
@@ -835,17 +836,18 @@ public FormSectionComponentModel createFormComponent(FormComponentRequestModel r
 		
 		FormBuilderSectionComponentEntity newEntity = new FormBuilderSectionComponentEntity();	
 		
-		newEntity.setSectionId(request.getFormBuilderSectionId());
-		newEntity.setComponentTypeCode(request.getComponentTypeCode());
-		newEntity.setComponentOrderNumber(request.getComponentOrderNumber());									 
+		newEntity.setSectionId(request.getSectionId());
+		newEntity.setComponentTypeCode(request.getComponentType());
+		newEntity.setComponentOrderNumber(request.getComponentOrder());									 
 		newEntity.setComponentData(request.getComponentData());
 		newEntity.setComponentRefId(request.getComponentRefId());
 		newEntity.setDescription(request.getDescription());
-		newEntity.setHeaderInstruction(request.getHeaderInstruction());								 
-		newEntity.setFooterInstruction(request.getFooterInstruction());
+		newEntity.setHeaderInstruction(request.getComponentHeader());								 
+		newEntity.setFooterInstruction(request.getComponentFooter());
 		newEntity.setIsActive(request.getIsActive());
 		newEntity.setUpdateUser(loginUser);
 		newEntity.setUpdateTimestamp(new Date());
+		newEntity.setIsMandatory(request.getIsMandatory());
 		newEntity.setValidationMessage(request.getValidationMessage());
 		newEntity.setLabel(request.getLabel());
 						
@@ -853,7 +855,6 @@ public FormSectionComponentModel createFormComponent(FormComponentRequestModel r
 
 		FormBuilderSectionComponentEntity entity = new FormBuilderSectionComponentEntity();
 		BeanUtils.copyProperties(newEntity,entity);
-		entity.setComponentTypeDescription(request.getComponentTypeDescription());
 
 		return mapEntityToModel(entity,null);
 
@@ -890,7 +891,7 @@ public FormSectionComponentModel updateFormComponent(FormComponentRequestModel r
 
 		String loginUser = getLoggedInUser();
 
-		Optional<FormBuilderSectionComponentEntity> entityOptional = componentRepository.findById(request.getFormBuilderSectCompId());
+		Optional<FormBuilderSectionComponentEntity> entityOptional = componentRepository.findById(request.getComponentId());
 
 		if (entityOptional.isEmpty()) {
 			return new FormSectionComponentModel();
@@ -898,13 +899,13 @@ public FormSectionComponentModel updateFormComponent(FormComponentRequestModel r
 
 		FormBuilderSectionComponentEntity entity = entityOptional.get();
 
-		entity.setComponentTypeCode(request.getComponentTypeCode());
-		entity.setComponentOrderNumber(request.getComponentOrderNumber());									 
+		entity.setComponentTypeCode(request.getComponentType());
+		entity.setComponentOrderNumber(entity.getComponentOrderNumber() != null ? entity.getComponentOrderNumber() : request.getComponentOrder());
 		entity.setComponentData(request.getComponentData());
 		entity.setComponentRefId(request.getComponentRefId());
 		entity.setDescription(request.getDescription());
-		entity.setHeaderInstruction(request.getHeaderInstruction());								 
-		entity.setFooterInstruction(request.getFooterInstruction());
+		entity.setHeaderInstruction(request.getComponentHeader());								 
+		entity.setFooterInstruction(request.getComponentFooter());
 		entity.setIsActive(request.getIsActive());
 		entity.setUpdateUser(loginUser);
 		entity.setUpdateTimestamp(new Date());
@@ -939,9 +940,9 @@ public String updateComponentOrder(List<FormComponentRequestModel> request) {
 							+ " WHERE FORM_BUILDER_SECT_COMP_ID = :componentId "
 							+ " AND ( COMPONENT_ORDER_NUMBER <> :orderNumber "
 							+ " OR FORM_BUILDER_SECTION_ID <> :sectionId)";
-					session.createNativeQuery(component).setParameter("componentId", req.getFormBuilderSectCompId())
-							.setParameter("orderNumber", req.getComponentOrderNumber())
-							.setParameter("sectionId", req.getFormBuilderSectionId()).executeUpdate();
+					session.createNativeQuery(component).setParameter("componentId", req.getComponentId())
+							.setParameter("orderNumber", req.getComponentOrder())
+							.setParameter("sectionId", req.getSectionId()).executeUpdate();
 
 				} catch (Exception e) {
 					e.printStackTrace();

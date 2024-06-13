@@ -78,11 +78,11 @@
             </div>
             <div class="modal-body pt-0" *ngIf="moduleCode === 3 || moduleCode === 1">
                 <nav class="d-flex fw-bold border-bottom mb-2 nav nav-underline">
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Proposals"
-                         aria-label="Click to view Proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Development Proposals"
+                         aria-label="Click to view Development Proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
                          (click)='currentModalTab="Proposal"; switchTableData()' (keydown.enter)="currentModalTab='Proposal';switchTableData()">
                         <span  class="px-2 fw-500">
-                            {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}
+                            {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Development Proposals'}}
                         </span>
                     </div>
                     <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()'
@@ -168,7 +168,7 @@
                     </h5>
                 </div>
             </div>
-            
+
             <div class="modal-footer">
               <button class="btn btn-outline-secondary" id="count-modal-close-btn" data-bs-dismiss="modal"
                type="button" title="Cancel"(click)="closeCountModal()">Close</button>

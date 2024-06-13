@@ -373,7 +373,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     changeDataStoreRisk(event) {
         this.coiData.coiDisclosure.riskCategoryCode = event.riskCategoryCode;
         this.coiData.coiDisclosure.coiRiskCategory = event.riskCategory;
-        this.dataStore.setStoreData(this.coiData);
+        this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: this.coiData.coiDisclosure });
     }
 
     openAddAssignModal(): void {

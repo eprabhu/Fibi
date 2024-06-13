@@ -28,5 +28,11 @@ public class CoiDisclEntProjDetailsDto {
 	private PersonEntityRelationshipDto personEntityRelationshipDto;
 	private Integer prePersonEntityId;
 	private Integer personEntityNumber;
+	private String projectNumber;
+	private String projectId;
+	private String projectTitle;
+	private String projectTypeCode;
+	private String projectType;
+	private String projectBadgeColour;
 
 }

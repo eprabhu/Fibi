@@ -25,7 +25,7 @@ export class DataLayerComponent {
         this._formBuilderService.saveFormComponent(RO).subscribe((res: SectionComponent) => {
             if (this.component.componentType === 'QN') {
                 this.component.questionnaire = res.questionnaire;
-            } else if (this.component.componentType === 'CE') {
+            } else if (['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE'].includes(this.component.componentType)) {
                 this.component.customElement.customDataElements = res.customElement.customDataElements;
             }
             this.saveEventForChildComponent.next({ eventType: 'SAVE_COMPLETE', data: res });
@@ -50,7 +50,17 @@ export class DataLayerComponent {
             case 'QN': RO.questionnaire = data.data;
                 RO.files = data.files;
                 delete RO.questionnaire.files; break;
-            case 'CE': RO.customElement = data.data; break;
+            case 'CE':
+            case 'SE': 
+            case 'NE': 
+            case 'DE': 
+            case 'CB': 
+            case 'RB': 
+            case 'ES': 
+            case 'AS': 
+            case 'SD': 
+            case 'UD': 
+            case 'TE':  RO.customElement = data.data; break;
             case 'PE': RO.programmedElement = data.data; break;
         }
         return RO;
