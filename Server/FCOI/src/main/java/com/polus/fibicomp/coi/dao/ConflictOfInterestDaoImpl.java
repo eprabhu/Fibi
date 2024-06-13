@@ -28,6 +28,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.polus.fibicomp.coi.dto.COIValidateDataDto;
+import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -4862,4 +4869,187 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
         return (Boolean) query.getSingleResult();
 	}
 
+	@Override
+	public List<DisclosureProjectDto> getDisclosureProjects(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		List<DisclosureProjectDto> disclosureProjects = new ArrayList<>();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement;
+		ResultSet rset = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_DISCLOSURE_PROJECTS(?)}");
+				if (disclosureId == null) {
+					statement.setNull(1, Types.INTEGER);
+				} else {
+					statement.setInt(1, disclosureId);
+				}
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String procedureName = "GET_DISCLOSURE_PROJECTS";
+				String functionCall = "{call " + procedureName + "(?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				if (disclosureId == null) {
+					statement.setNull(2, Types.INTEGER);
+				} else {
+					statement.setInt(2, disclosureId);
+				}
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset != null && rset.next()) {
+				disclosureProjects.add(DisclosureProjectDto.builder()
+						.moduleCode(rset.getInt("MODULE_CODE"))
+						.projectId(rset.getString("PROJECT_ID"))
+						.projectNumber(rset.getString("PROJECT_NUMBER"))
+						.title(rset.getString("TITLE"))
+						.projectStatus(rset.getString("STATUS"))
+						.projectStartDate(rset.getTimestamp("START_DATE"))
+						.projectEndDate(rset.getTimestamp("END_DATE"))
+						.homeUnitNumber(rset.getString("HOME_UNIT_NUMBER"))
+						.homeUnitName(rset.getString("HOME_UNIT_NAME"))
+						.sponsorName(rset.getString("SPONSOR_NAME"))
+						.primeSponsorName(rset.getString("PRIME_SPONSOR_NAME"))
+						.piName(rset.getString("PI"))
+						.keyPersonId(rset.getString("KEY_PERSON_ID"))
+						.keyPersonName(rset.getString("KEY_PERSON"))
+						.reporterRole(rset.getString("REPORTER_ROLE"))
+						.conflictStatus(rset.getString("CONFLICT_DESCRIPTION"))
+						.conflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"))
+						.relationShipExists(rset.getBoolean("RELATIONSHIP_EXISTS"))
+						.sfiCompleted(rset.getBoolean("IS_PROJECT_COMPLETED"))
+						.disclosureStatusCount(rset.getString("CONFLICT_STATUS_COUNT") != null ? convertJsonStringToListMap(rset.getString("CONFLICT_STATUS_COUNT")) : null)
+						.projectType(rset.getString("COI_PROJECT_TYPE"))
+						.projectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"))
+						.projectBadgeColour(rset.getString("BADGE_COLOR"))
+						.build());
+			}
+		} catch (SQLException e) {
+			logger.error("Exception in getDisclosureProjects: {} ", e.getMessage());
+			throw new ApplicationException("Exception in getDisclosureProjects", e, Constants.DB_PROC_ERROR);
+		}
+		return disclosureProjects;
+	}
+
+	public static List<Map<Object, Object>> convertJsonStringToListMap(String jsonString) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			CollectionType listType = mapper.getTypeFactory().constructCollectionType(List.class, Map.class);
+			return mapper.readValue(jsonString, listType);
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new ApplicationException("Exception in convertJsonStringToListMap", e, Constants.DB_PROC_ERROR);
+		}
+	}
+
+	@Override
+	public List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		List<CoiDisclEntProjDetailsDto> disclosureProjects = new ArrayList<>();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement;
+		ResultSet rset = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call COI_DISCL_ENT_PROJ_DETAILS(?, ?, ?, ?)}");
+				statement.setInt(1, vo.getDisclosureId());
+				if (vo.getPersonEntityId() == null) {
+					statement.setNull(2, Types.INTEGER);
+				}
+				else {
+					statement.setInt(2, vo.getPersonEntityId());
+				}
+				if (vo.getModuleCode() == null) {
+					statement.setNull(3, Types.INTEGER);
+				}
+				else {
+					statement.setInt(3, vo.getModuleCode());
+				}
+				if (vo.getModuleItemId() == null) {
+					statement.setNull(4, Types.VARCHAR);
+				}
+				else {
+					statement.setInt(4, vo.getModuleItemId());
+				}
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String procedureName = "COI_DISCL_ENT_PROJ_DETAILS";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setNull(2, vo.getDisclosureId());
+				if (vo.getPersonEntity() == null) {
+					statement.setNull(3, Types.INTEGER);
+				}
+				else {
+					statement.setInt(3, vo.getPersonEntityId());
+				}
+				if (vo.getModuleCode() == null) {
+					statement.setNull(4, Types.INTEGER);
+				}
+				else {
+					statement.setInt(4, vo.getModuleCode());
+				}
+				if (vo.getModuleItemId() == null) {
+					statement.setNull(5, Types.INTEGER);
+				}
+				else {
+					statement.setInt(5, vo.getModuleItemId());
+				}
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset != null && rset.next()) {
+				CoiDisclEntProjDetailsDto entProjDetailsDto = new CoiDisclEntProjDetailsDto();
+				entProjDetailsDto.setDisclosureDetailsId(rset.getInt("DISCLOSURE_DETAILS_ID"));
+				entProjDetailsDto.setDisclosureId(rset.getInt("DISCLOSURE_ID"));
+				entProjDetailsDto.setDisclosureNumber(rset.getInt("DISCLOSURE_NUMBER"));
+				entProjDetailsDto.setPersonEntityId(rset.getInt("PERSON_ENTITY_ID"));
+				entProjDetailsDto.setPersonEntityNumber(rset.getInt("PERSON_ENTITY_NUMBER"));
+				entProjDetailsDto.setPrePersonEntityId(rset.getInt("PREVIOUS_PERSON_ENTITY_ID"));
+				entProjDetailsDto.setEntityId(rset.getInt("ENTITY_ID"));
+				entProjDetailsDto.setEntityNumber(rset.getInt("ENTITY_NUMBER"));
+				entProjDetailsDto.setModuleCode(rset.getInt("MODULE_CODE"));
+				entProjDetailsDto.setModuleItemKey(rset.getString("MODULE_ITEM_KEY"));
+				entProjDetailsDto.setProjectConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
+				entProjDetailsDto.setUpdateUser(rset.getString("UPDATE_USER"));
+				entProjDetailsDto.setUpdateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"));
+				entProjDetailsDto.setProjectId(rset.getString("PROJECT_ID"));
+				entProjDetailsDto.setProjectNumber(rset.getString("PROJECT_NUMBER"));
+				entProjDetailsDto.setProjectTitle(rset.getString("PROJECT_TITLE"));
+				entProjDetailsDto.setProjectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"));
+				entProjDetailsDto.setProjectType(rset.getString("COI_PROJECT_TYPE"));
+				entProjDetailsDto.setProjectBadgeColour(rset.getString("BADGE_COLOR"));
+				CoiProjConflictStatusType coiProjConflictStatusType = new CoiProjConflictStatusType();
+				coiProjConflictStatusType.setDescription(rset.getString("PROJECT_CONFLICT_STATUS"));
+				coiProjConflictStatusType.setProjectConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
+				entProjDetailsDto.setCoiProjConflictStatusType(coiProjConflictStatusType);
+				CoiEntityDto coiEntityDto = new CoiEntityDto();
+				coiEntityDto.setEntityId(rset.getInt("ENTITY_ID"));
+				coiEntityDto.setEntityNumber(rset.getInt("ENTITY_NUMBER"));
+				coiEntityDto.setEntityName(rset.getString("ENTITY_NAME"));
+				coiEntityDto.setVersionNumber(rset.getInt("VERSION_NUMBER"));
+				coiEntityDto.setVersionStatus(rset.getString("VERSION_STATUS"));
+				coiEntityDto.setEntityStatusCode(rset.getString("ENTITY_STATUS_CODE"));
+				coiEntityDto.setCreateUser(rset.getString("ENTITY_CREATE_USER"));
+				coiEntityDto.setCreateTimestamp(rset.getTimestamp("ENTITY_CREATE_TIMESTAMP"));
+				coiEntityDto.setUpdateUser(rset.getString("ENTITY_UPDATE_USER"));
+				coiEntityDto.setUpdateTimestamp(rset.getTimestamp("ENTITY_UPDATE_TIMESTAMP"));
+				coiEntityDto.setRiskCategoryCode(rset.getString("RISK_CATEGORY_CODE"));
+				entProjDetailsDto.setCoiEntity(coiEntityDto);
+				disclosureProjects.add(entProjDetailsDto);
+			}
+		} catch (SQLException e) {
+			logger.error("Exception in getDisclEntProjDetails: {} ", e.getMessage());
+			throw new ApplicationException("Exception in getDisclEntProjDetails", e, Constants.DB_PROC_ERROR);
+		}
+		return disclosureProjects;
+	}
 }

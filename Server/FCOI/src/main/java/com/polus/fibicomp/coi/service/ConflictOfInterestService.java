@@ -504,4 +504,16 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> checkTravelDisclosureRiskStatus(CoiTravelDisclosureDto travelDisclosureDto);
 
+	/**
+	 * This method returns projects of a disclosure
+	 * @param disclosureId
+	 * @return
+	 */
+	ResponseEntity<Object> getDisclosureProjects(Integer disclosureId);
+
+	/**
+	 * This method fetches dislocsure lookups
+	 * @return
+	 */
+	ResponseEntity<Object> getDisclosureLookups();
 }

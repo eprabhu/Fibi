@@ -404,29 +404,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getDisclosureProjectRelations(ConflictOfInterestVO vo) {
 		List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
-		List<CoiDisclEntProjDetails> entProjDetails;
 		List<PersonEntityRelationshipDto> personEntityRelationshipDto =  conflictOfInterestDao.getRelatedEntityInfo(vo.getDisclosureId(), null, null);
-		if(vo.getPersonEntityId()!=null) {
-			entProjDetails = conflictOfInterestDao.getProjectRelationshipBySFI(vo.getPersonEntityId(), vo.getDisclosureId());
-		}
-		else {
-			entProjDetails = conflictOfInterestDao.getProjectRelationshipByParam(vo.getModuleCode(), vo.getModuleItemId(), vo.getPersonId(), vo.getDisclosureId());
-		}
-		entProjDetails.forEach(disclosureDetail -> {
-			CoiDisclEntProjDetailsDto coiDisclEntProjDetails = new CoiDisclEntProjDetailsDto();
-			BeanUtils.copyProperties(disclosureDetail, coiDisclEntProjDetails, "coiDisclosure", "coiEntity", "personEntity");
-			if (disclosureDetail.getCoiEntity() != null) {
-				CoiEntityDto coiEntityDto = new CoiEntityDto();
-				BeanUtils.copyProperties(disclosureDetail.getCoiEntity(), coiEntityDto, "entityStatus", "entityType", "coiProjConflictStatusType");
-				coiDisclEntProjDetails.setCoiEntity(coiEntityDto);
-			}
-			DisclComment commentObj = getDisclProjectConflictComment(vo.getDisclosureId(), disclosureDetail.getDisclosureDetailsId());
+		disclosureDetails = conflictOfInterestDao.getDisclEntProjDetails(vo);
+		for (CoiDisclEntProjDetailsDto coiDisclEntProjDetails : disclosureDetails) {
+			DisclComment commentObj = getDisclProjectConflictComment(vo.getDisclosureId(), coiDisclEntProjDetails.getDisclosureDetailsId());
 			coiDisclEntProjDetails.setDisclComment(commentObj != null ? commentObj : new DisclComment());
 			coiDisclEntProjDetails.setPersonEntityRelationshipDto(personEntityRelationshipDto.stream()
 					.filter(dto -> coiDisclEntProjDetails.getEntityNumber().equals(dto.getEntityNumber()))
 					.findFirst().orElse(null));
-			disclosureDetails.add(coiDisclEntProjDetails);
-		});
+		}
 		return new ResponseEntity<>(disclosureDetails, HttpStatus.OK);
 	}
 
@@ -435,6 +421,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		List<CoiDisclEntProjDetails> entityProjectRelations = vo.getCoiDisclEntProjDetails();
 		entityProjectRelations.forEach(entityProjectRelation -> {
 			entityProjectRelation.setPrePersonEntityId(entityProjectRelation.getPersonEntityId());
+			entityProjectRelation.setModuleItemKey(entityProjectRelation.getProjectId());
 			conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(entityProjectRelation);
 			saveDisclProjRelationComment(entityProjectRelation);
 		});
@@ -902,6 +889,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		try {
 			CoiDisclEntProjDetails entityProjectRelation = vo.getCoiDisclEntProjDetail();
 			entityProjectRelation.setPrePersonEntityId(entityProjectRelation.getPersonEntityId());
+			entityProjectRelation.setModuleItemKey(entityProjectRelation.getProjectId());
 			conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(entityProjectRelation);
 			saveDisclProjRelationComment(entityProjectRelation);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(entityProjectRelation.getDisclosureId());
@@ -2472,4 +2460,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<Object> getDisclosureProjects(Integer disclosureId) {
+		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
+				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
+		return new ResponseEntity<>(conflictOfInterestDao.getDisclosureProjects(disclosureId),HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> getDisclosureLookups() {
+		ConflictOfInterestVO vo = new ConflictOfInterestVO();
+		vo.setCoiConflictStatusTypes(conflictOfInterestDao.getCoiConflictStatusTypes());
+		vo.setCoiProjConflictStatusTypes(conflictOfInterestDao.getProjConflictStatusTypes());
+		return new ResponseEntity<>(vo,HttpStatus.OK);
+	}
 }

@@ -28,3 +28,15 @@ UPDATE DYN_ELEMENT_CONFIG SET `HELP` = 'Please select the Risk', `UPDATE_TIMESTA
 UPDATE DYN_ELEMENT_CONFIG SET `HELP` = 'Please provide the reason for your risk change', `UPDATE_TIMESTAMP` = now() WHERE (`ELEMENT_ID` = '1543');
 
 SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO `coi_project_type` (`COI_PROJECT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+VALUES ('2', 'Institute Proposal', 'Y', now(), 'quickstart');
+
+ALTER TABLE `coi_project_type`
+ADD COLUMN `BADGE_COLOR` VARCHAR(100) NULL AFTER `UPDATE_USER`;
+
+UPDATE `coi_project_type` SET `BADGE_COLOR` = '#c9a742' WHERE (`COI_PROJECT_TYPE_CODE` = '1');
+UPDATE `coi_project_type` SET `BADGE_COLOR` = '#148582' WHERE (`COI_PROJECT_TYPE_CODE` = '2');
+UPDATE `coi_project_type` SET `BADGE_COLOR` = '#7d9e32' WHERE (`COI_PROJECT_TYPE_CODE` = '3');
+UPDATE `COI_DISCLOSURE_FCOI_TYPE` SET `DESCRIPTION` = 'Development Proposal' WHERE (`FCOI_TYPE_CODE` = '2');
+
