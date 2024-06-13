@@ -1280,17 +1280,17 @@
                                     </div>
                                     <div class="col-md-3 col-lg-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
-                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [title]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfProposal"
                                                 (keydown.enter)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal)"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);"
                                                 id="coi-user-disclosure-noof-proposal">{{disclosure?.noOfProposal}}</span>
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'link-primary' : 'coi-text-light' "
-                                                [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                [title]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link"
-                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
+                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Development Proposal</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-lg-2">

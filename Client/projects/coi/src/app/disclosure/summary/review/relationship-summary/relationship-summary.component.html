@@ -2,14 +2,14 @@
   [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject.projectTypeCode+'-'+selectedProject?.projectId}">
     <div class="card-header px-4 py-2 d-flex align-items-start justify-content-between border-bottom-0 flex-nowrap">
       <span class="d-flex">
-          <span class="active-ribbon shadow-sm align-items-center d-flex" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
+          <span class="active-ribbon shadow-sm align-items-center d-flex text-nowrap" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
           <span class="word-break-all new-line-property badge-margin coi-text-darker fs-16 mt-1">
             <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
               aria-label="Click here to view project details" title="Click here to view project details">
               #{{selectedProject?.projectNumber}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
               selectedProject?.title}}
               </span>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more" 
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more"
                 title="Click here to Read more" (keydown.enter)="readMoreOrLess= true">
                 <span class="link-primary fw-medium fs-14">...Read More</span>
             </span>
