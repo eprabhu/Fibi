@@ -101,6 +101,10 @@ export class SortCountObj {
   travelExpirationDate = 0;
   travelDisclosureStatusDescription = 0;
   updateTimeStamp = 2;
+  dispositionStatusDescription = 0;
+  entityName = 0;
+  fullName = 0;
+  reviewStatusDescription = 0;
 }
 
 export class NameObject {

@@ -13,6 +13,8 @@ export const REPORTER_HOME_URL = '/coi/user-dashboard';
 export const ADMIN_DASHBOARD_URL = '/coi/admin-dashboard';
 export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
 export const OPA_REDIRECT_URL = '/coi/opa/form';
+export const CONSULTING_REDIRECT_URL = '/coi/consulting/form';
+
 
 export const ELASTIC_FIBI_PERSON_OUTPUT_FORMAT = 'full_name | prncpl_nm';
 export const ELASTIC_ENTITY_FORMAT = 'entity_name | country_name | entity_type';
@@ -53,6 +55,7 @@ export const EDITOR_CONFIGURATION = {
 export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
 export const TRAVEL_MODULE_CODE = 24;
+export const CONSULTING_MODULE_CODE = 27;
 
 export const COI_REVIEW_STATUS_TYPE = {
     SUBMITTED: '2'
@@ -73,6 +76,12 @@ export const OPA_REVIEW_STATUS = {
     RETURNED: '5',
     WITHDRAWN: '6'
 };
+
+export const CONSULTING_REVIEW_STATUS = {
+    PENDING: '1',
+    RETURNED: '8',
+    WITHDRAWN: '7'
+}
 
 // sso timeout related variables
 export const SSO_TIMEOUT_ERROR_MESSAGE = 'Your session has been expired.';

@@ -74,6 +74,15 @@
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Click to view Travel Disclosures'">
                             Travel Disclosures
                         </li>
+                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
+                        <li (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
+                            (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
+                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
+                            class="p-3 fs-6 align-self-center"
+                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click to view Consulting Disclosures'"
+                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Selected tab is Consulting Disclosures' : 'Click to view Consulting Disclosures'">
+                            Consulting Disclosures
+                        </li>
                     </ul>
                     <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
                         <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0" tabindex="0"
@@ -118,7 +127,7 @@
                         </app-elastic>
                     </div>
                     <!-- Expiration Date -->
-                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by expiration date"
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by expiration date" *ngIf="coiAdminDashboardService.coiRequestObject.tabName !='CONSULTING_DISCLOSURES' "
                          tabindex="-1"
                          aria-label="Expiration Date">
                         <label class="d-block" for="coi-admin-dashboard-adv-disclosure-expiration-date">
@@ -135,7 +144,7 @@
                         </span>
                     </div>
                     <!-- Disclosure Status -->
-                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="-1" role="listbox"
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="-1" role="listbox" *ngIf="coiAdminDashboardService.coiRequestObject.tabName !='CONSULTING_DISCLOSURES' "
                          aria-label="Disclosure Status dropdown"
                          title="Click here to search by Disclosure Status">
                         <label class="d-block" for="adv-disclosure-status">
@@ -231,7 +240,7 @@
                     <!-- Disclosure Type -->
                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by Disclosure Type"
                          tabindex="-1" aria-label="Disclosure Type dropdown" role="listbox"
-                         *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'">
+                         *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' && coiAdminDashboardService.coiRequestObject.tabName !='CONSULTING_DISCLOSURES' ">
                         <label class="d-block" for="adv-disclosure-type">
                             Disclosure Type
                         </label>
@@ -336,15 +345,15 @@
                     <div class="card coi-card-regular" [class.selected-active-background]="selectedDisclosures[index]" (mouseover)="isHover[index] = true"
                          (mouseout)="isHover[index] = false">
                         <div class="card-body px-3 py-2" id="coi-admin-dashboard-card-body">
-                            <div class="row" *ngIf="!coi?.travelDisclosureId">
+                            <div class="row" *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
                                 <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                     <div class="row">
                                         <div class="col-12 d-inline-flex mb-2">
                                             <!-- Coi card badge -->
                                             <span class="d-flex" tabindex="-1"
-                                                  [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' :  coi?.fcoiType) + ' disclosure'">
+                                                  [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' : coi?.disclosureId ? 'Consulting' :  coi?.fcoiType) + ' disclosure'">
                                             <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}">
-                                                <span>{{ coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.fcoiType }}</span>
+                                                <span>{{ coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.disclosureId ? 'Consulting' : coi?.fcoiType }}</span>
                                             </span></span>
                                             <!-- Coi card header -->
                                             <h4 *ngIf="!coi.travelDisclosureId && !coi.opaDisclosureId"
@@ -404,7 +413,7 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-6 mb-2">
+                                            <div class="col-lg-4 col-md-6 mb-2" *ngIf="!coi?.disclosureId">
                                                 <!-- Coi card Expiration Date -->
                                                 <div tabindex="-1">
                                                     <label class="d-block coi-text-dark">Expiration Date</label>
@@ -578,7 +587,7 @@
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                         <div class="row">
-                                            <div class="col-12 d-inline-flex align-items-center mb-2">
+                                            <div class="col-12 d-inline-flex mb-2">
                                                 <!-- Travel Card badge -->
                                                 <span class="d-flex">
                                             <span
@@ -589,8 +598,8 @@
                                             </span>
                                         </span>
                                                 <!-- Travel Card Entity -->
-                                                <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex align-items-center">
-                                            <span class="d-inline-flex align-items-center">
+                                                <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex">
+                                            <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
                                                 <strong class="coi-text-light fs-6 text-nowrap me-2" tabindex="-1"
@@ -602,8 +611,6 @@
                                                     <span class="pipe mx-1"></span>
                                                     <span class="d-inline-flex">
                                                         <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
-                                                        <span class="coi-text-light fs-6 text-nowrap" tabindex="-1"
-                                                              [attr.aria-label]="'Entity Name' + (coi.travelEntityName)">Entity:&nbsp;</span>
                                                         <span class="coi-text-darker fs-6 hyper-link">
                                                         {{(readMoreOrLess[index] ? coi.travelEntityName : coi.travelEntityName | slice:0:120)}}
                                                         <span
@@ -763,16 +770,144 @@
                                     </div>
                                 </div>
                             </ng-container>
+
+                            <ng-container *ngIf="coi?.disclosureId">
+                                <div class="row">
+                                    <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
+                                        <div class="row">
+                                            <div class="col-12 d-inline-flex mb-2">
+                                                <!-- Consulting Card badge -->
+                                                <span>
+                                                    <span class="d-flex" tabindex="-1" attr.aria-label="Consulting disclosure">
+                                                        <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}">
+                                                            <span>Consulting</span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <!-- Consulting Entity Name -->
+                                                <h4 class="mb-0 d-flex">
+                                                    <ng-container>
+                                                        <span class="d-inline-flex">
+                                                            <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
+                                                            <span class="coi-text-light text-nowrap fs-6" tabindex="-1" id="coi-admin-dashboard-card-value-personinfo-{{index}}"
+                                                                  [attr.aria-label]="'Disclosure person ' + coi.fullName">
+                                                                {{coi.fullName}}</span>
+                                                        </span>
+                                                        <ng-container *ngIf="coi?.entityName">
+                                                            <span class="pipe mx-1"></span>
+                                                            <span class="d-inline-flex">
+                                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
+                                                                    <span class="d-flex">
+                                                                        <span class="coi-text-darker fs-6 hyper-link">
+                                                                            {{(readMoreOrLess[index] ? coi?.entityName : coi?.entityName | slice:0:120)}}
+                                                                            <span *ngIf="!readMoreOrLess[index] && coi?.entityName?.length>120">...
+                                                                                <span *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
+                                                                                    (keyup.enter)="readMoreOrLess[index]=true" (keyup.space)="readMoreOrLess[index]=true"
+                                                                                    class="link-primary fs-14">Read
+                                                                                    More</span>
+                                                                            </span>
+                                                                            <span *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
+                                                                                (keyup.enter)="readMoreOrLess[index]=false" (keyup.space)="readMoreOrLess[index]=false"
+                                                                                class="link-primary ms-1 fs-14">Read
+                                                                                Less</span>
+                                                                        </span>
+                                                                    </span>
+                                                            </span>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <div class="row mx-0">
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Consulting card Department -->
+                                                <div tabindex="-1"
+                                                    [attr.aria-label]="'Department' + coi?.unitDetails?.unitDetail">
+                                                    <label class="d-block coi-text-dark">Department</label>
+                                                    <span class="coi-text-light"
+                                                        id="coi-admin-dashboard-card-value-department-{{index}}">{{commonService.getPersonLeadUnitDetails(coi?.unitDetails)}}</span>
+                                                </div>
+                                            </div>
+                                            <!-- Certification Date -->
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
+                                                    <label class="d-block coi-text-dark">Certification Date</label>
+                                                    <span class="coi-text-light">
+                                                        <app-no-data-label [valueToShow]="coi?.certifiedAt">
+                                                            <span class="coi-text-light"
+                                                                id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt
+                                                                | dateFormatter}}</span>
+                                                        </app-no-data-label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Administrator -->
+                                                <div tabindex="-1" [attr.aria-label]="'Administrator' + (coi?.administrator)">
+                                                    <label for="id" class="d-block coi-text-dark">Administrator</label>
+                                                    <span class="coi-text-light">
+                                                        <app-no-data-label [valueToShow]="coi?.administrator">
+                                                            <span id="coi-admin-dashboard-card-value-administrator-{{index}}"
+                                                                class="coi-text-light">{{coi?.administrator}}</span>
+                                                        </app-no-data-label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 mb-2">
+                                                <!-- Admin Group -->
+                                                <div tabindex="-1" [attr.aria-label]="'Admin Group' + (coi?.adminGroupName)">
+                                                    <label for="coi-admin-dashboard-admin-group-span" class="d-block coi-text-dark">Admin
+                                                        Group</label>
+                                                    <span class="coi-text-light">
+                                                        <app-no-data-label [valueToShow]="coi?.adminGroupName">
+                                                            <span id="coi-admin-dashboard-card-value-admin-group-{{index}}"
+                                                                class="coi-text-light">{{coi?.adminGroupName}}</span>
+                                                        </app-no-data-label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 d-flex d-lg-block">
+                                        <!-- Disposition Status For Consulting card only -->
+                                        <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                            [attr.aria-label]="'Disposition Status' + (coi?.dispositionStatusDescription)">
+                                            <label class="d-block coi-text-lighter">Disposition Status</label>
+                                            <span class="break-point-1200">
+                                                <span class="{{commonService.getConsultingDispositionStatusBadge(coi?.dispositionStatusCode)}}"></span>
+                                                <span class="coi-text-dark" id="coi-admin-dashboard-card-value-disposition-status-{{index}}">
+                                                    {{coi?.dispositionStatusDescription}}
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <!-- Review Status For Consulting card only -->
+                                        <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                            [attr.aria-label]="'Review Status' + (coi?.reviewStatusDescription)">
+                                            <label for="id" class="d-block coi-text-lighter">Review Status</label>
+                                            <span>
+                                                <app-no-data-label [valueToShow]="coi?.reviewStatusDescription">
+                                                    <span class="{{commonService.getConsultingReviewStatusBadge(coi?.reviewStatusCode)}}"
+                                                        id="review-status"></span>
+                                                    <span class="coi-text-dark" id="coi-admin-dashboard-card-value-review-status-{{index}}">
+                                                        {{coi?.reviewStatusDescription}}
+                                                    </span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
                         </div>
 
                         <!-- Footer section -->
                         <div class="card-footer">
                             <div class="row">
-                                <ng-container *ngIf="!coi?.travelDisclosureId">
+                                <ng-container *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
                                     <div class="col-lg-10">
                                         <div class="row align-items-center">
                                             <div class="col-md-6 col-lg-4">
-                                                <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId">
+                                                <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && !coi.disclosureId">
                                                     <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfiInActive"
                                                         tabindex="{{coi?.noOfSfiInActive > 0 ? 0 : -1}}" role="link"
                                                         [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
@@ -830,7 +965,16 @@
                                         </div>
                                     </div>
                                 </ng-container>
-                                <ng-container *ngIf="coi?.travelDisclosureId">
+                                <ng-container *ngIf="coi?.disclosureId">
+                                    <div class="col-lg-10" tabindex="-1">
+                                        <label class="coi-text-lighter  d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
+                                        <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
+                                              [attr.aria-label]="coi?.updateUserFullName + ' on ' +
+                                              (coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
+                                    {{coi?.updateUserFullName}}<span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="coi?.travelDisclosureId && !coi?.disclosureId">
                                     <div class="col-lg-10">
                                         <div class="row">
                                             <div class="col-md-4 text-lg-start">
@@ -880,8 +1024,10 @@
                                         <button id="coi-admin-dashboard-view-btn" (click)="redirectToDisclosure(coi)"
                                                 class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
                                                 [title]="coi?.travelDisclosureId ? 'Click here to view travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
+                                                            coi?.disclosureId ? 'Click here to view consulting disclosure' :
                                                             coi?.fcoiTypeCode!= 1 ? 'Click here to view Project Disclosure' : 'Click here to view FCOI disclosure'"
                                                 [attr.aria-label]="coi?.travelDisclosureId ? 'Click here to view Travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
+                                                            coi?.disclosureId ? 'Click here to view consulting disclosure' :
                                                             coi?.fcoiTypeCode!= 1 ? 'Click here to view Project Disclosure' : 'Click to view FCOI disclosure'">
                                             <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>View
                                         </button>
