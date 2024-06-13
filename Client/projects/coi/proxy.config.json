@@ -272,7 +272,7 @@
         "secure": false
     },
     "/getPersonGroup": {
-        "target": "http://10.199.100.34:9090/coi/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/disclosure/*": {
@@ -599,6 +599,42 @@
         "secure": false
     },
     "/getModulesConfiguration": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/create": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/getDisclosureHeader/*": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/savePersonEntityDetails": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/submit": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/withdraw": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/return": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/assignAdmin": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/complete/*" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/consultingDisclosure/history/*" : {
         "target": "http://10.199.100.34:9090/",
         "secure": false
     }
