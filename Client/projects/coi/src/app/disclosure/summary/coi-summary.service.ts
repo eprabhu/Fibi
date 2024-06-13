@@ -50,4 +50,8 @@ export class CoiSummaryService {
     loadProjectConflictHistory(disclosureDetailsId: any) {
         return this._http.get(`${this._commonService.baseUrl}/loadProjectConflictHistory/${disclosureDetailsId}`);
     }
+
+    getProjectRelationship(disclosureId: number) {
+      return this._http.get(`${this._commonService.baseUrl}/disclosure/projects/${disclosureId}`);
+    }
 }
