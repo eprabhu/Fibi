@@ -26,6 +26,11 @@ export class PersonProjectOrEntity {
     homeUnitName? = '';
 }
 
+export class DisclsoureHeaderDetails {
+    personEmail = '';
+    personPrimaryTitle = '';
+}
+
 export class Disclosure {
     adminGroupId: any;
     adminPersonId: any;

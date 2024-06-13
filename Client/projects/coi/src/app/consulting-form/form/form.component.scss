@@ -1,0 +1,37 @@
+.section-header {
+    background-color: #eaeef2 !important;
+    border-bottom: 1px solid #d0d0d0 !important;
+    padding: 1rem 1.5rem !important;
+    font-weight: bold !important;
+}
+
+.section {
+    border: 1px solid #e1e1e1;
+    box-shadow: 0px 0px 4px 0px #0000001c;
+    transition: box-shadow 250ms ease-in-out;
+    &:hover {
+        box-shadow: 0px 2px 5px 1px #00000059;
+    }
+}
+
+.content {
+    margin: 1.5rem;
+    font-size: 1rem;
+}
+
+.section-container {
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.invalid {
+    color: #ff0000;
+}
+
+.medium-risk {
+    color: #ff8c00;
+}
+
+.low-risk {
+    color: rgb(26, 172, 62);
+}

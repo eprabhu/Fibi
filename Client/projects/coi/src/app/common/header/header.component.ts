@@ -253,8 +253,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
-            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
+                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.disclosureId}});
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')));
+    }
+
+    createConsultingDisclosure() {
+        this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this.router.navigate(['/coi/consulting/form'], {queryParams: {disclosureId: res.disclosureId}});
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')
+        ));
     }
 
     changeTheme(themename: string) {

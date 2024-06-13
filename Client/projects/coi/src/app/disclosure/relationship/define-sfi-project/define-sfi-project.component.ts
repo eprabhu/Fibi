@@ -123,6 +123,7 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
             case 'Commitment': return 'handshake';
             case 'Travel': return 'flight';
             case 'Financial': return 'paid';
+            case 'Consulting' : return 'supervisor_account';
             default: return;
         }
     }

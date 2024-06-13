@@ -107,7 +107,7 @@ export class NavigationService {
      * check whether the current url has 'coi' or 'coiList'
      */
      coiPermissionList(event) {
-        return event.url.split(/[/?]/).includes('disclosure') || event.url.split(/[/?]/).includes('travel-disclosure') || event.url.split('/').includes('admin-dashboard') ? true : false;
+        return event.url.split(/[/?]/).includes('disclosure') || event.url.split(/[/?]/).includes('travel-disclosure') || event.url.split(/[/?]/).includes('consulting') || event.url.split('/').includes('admin-dashboard') ? true : false;
     }
     /**
      * @param  {} event
