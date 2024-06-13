@@ -55,18 +55,9 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
                 .subscribe((res: DisclosureSFIs) => {
                     this.disclosureSfi = res;
                     this.isShowCollapsedConflictRelationship = this.disclosureSfi.personEntities.length === 1;
-                    this.getProjectRelations();
                     this.getProjectsForEntity();
                 }));
         }
-    }
-
-    getProjectRelations() {
-        this.$subscriptions.push(this.relationshipService
-            .getProjectRelations(this.disclosureId, this.disclosureStatusCode).subscribe((res: any) => {
-                res.awards.forEach(award => this.projectIdTitleMap[award.moduleItemId] = `#${award.moduleItemKey} - ${award.title}`);
-                res.proposals.forEach(proposal => this.projectIdTitleMap[proposal.moduleItemId] = `#${proposal.moduleItemId} - ${proposal.title}`);
-            }));
     }
 
     getProjectsForEntity() {

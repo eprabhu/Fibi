@@ -21,6 +21,10 @@ export class RelationshipService {
         });
     }
 
+    getReporterProjects(disclosureId) {
+        return this._http.get(this._commonService.baseUrl + '/disclosure/projects/' + disclosureId);
+    }
+
     getEntityList(moduleCode, moduleId, id, status, personId) {
         if (moduleCode == 3) {
             return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
