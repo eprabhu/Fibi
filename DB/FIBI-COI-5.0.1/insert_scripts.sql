@@ -31,3 +31,12 @@ INSERT INTO `consulting_discl_disposition_status_type` (`DISPOSITION_STATUS_CODE
 
 INSERT INTO DYN_ELEMENT_CONFIG (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, HELP, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-disclosure-risk-header', 'Entity Name', '802', 'COI802', 'You are about to change disclosure risk', 'admin', now());
 INSERT INTO DYN_ELEMENT_CONFIG (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, HELP, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-entity-risk-header', 'Entity Name', '2601', 'GE2601', 'You are about to change entity risk', 'admin', now());
+
+set foreign_key_checks = 0;
+
+INSERT INTO `valid_person_entity_rel_type` (`VALID_PERS_ENTITY_REL_TYP_CODE`, `DISCLOSURE_TYPE_CODE`, `RELATIONSHIP_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('7', '4', '1', 'Consulting : Self', 'Y', now(), 'quickstart');
+INSERT INTO `coi_disclosure_type` (`DISCLOSURE_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('4', 'Consulting', 'Y', now(), 'quickstart');
+
+set foreign_key_checks = 1;
