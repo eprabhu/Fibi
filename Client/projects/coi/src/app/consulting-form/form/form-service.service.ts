@@ -27,7 +27,7 @@ export class FormService {
   }
 
   savePersonEntity(params) {
-    return this._http.post(this._commonService.baseUrl + '/coi/personEntity', params);
+    return this._http.post(this._commonService.baseUrl + '/personEntity', params);
   }
 
   saveFormPersonEntityDetails(params) {
