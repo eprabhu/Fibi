@@ -100,7 +100,21 @@ export class RelationshipComponent implements OnInit {
             .getReporterProjects(this.coiData.coiDisclosure.disclosureId)
             .subscribe((res: any) => {
                 this.projectList = res || [];
+                this.highlightProjectValidation();
             }));
+    }
+
+
+    highlightProjectValidation() {
+        if (!this.isShowCollapsedConflictRelationship) {
+            setTimeout(() => {
+                if (this.coiService.focusModuleId) {
+                    scrollIntoView(this.coiService.focusModuleId);
+                    const ELEMENT = document.getElementById(this.coiService.focusModuleId);
+                    ELEMENT.classList.add('error-highlight-card');
+                }
+            }, 100);
+        }
     }
 
 getDisclosureCount(typeCode, disclosureStatus) {
