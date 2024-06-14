@@ -26,8 +26,8 @@
             <tbody>
                 <tr *ngFor="let projectSfi of projectSFIDetails; let i = index" id="coi-sfi-project-relation-tbody-tr-{{i}}">
                     <td class="pt-2">
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center entity-status shadow-sm mt-2" [style.background-color]="projectSfi?.projectBadgeColour">
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-nowrap align-items-center entity-status shadow-sm mt-2" [style.background-color]="projectSfi?.projectBadgeColour">
                             {{ projectSfi.projectType }}
                         </div>
                         <div [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
