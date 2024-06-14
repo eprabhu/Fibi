@@ -145,7 +145,7 @@
                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                     (click)="toggleSlider()">
                     <mat-icon>warning</mat-icon>
-                    <span class="fw-medium pt-2 fs-14">Manage Risk</span>
+                    <span class="fw-medium pt-2 fs-14">Modify Risk</span>
                   </button>
                 </mat-menu>
                 <!-- Back -->
@@ -214,8 +214,7 @@
 </div>
 
 <!--Modify Entity Modal -->
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="modifyEntityConfirmationModal" role="dialog"
-  tabindex="-1">
+<div  tabindex="-1" class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="modifyEntityConfirmationModal" role="dialog" aria-label="Modify Entity">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header ct-footer-padding">
@@ -330,10 +329,10 @@
 
 <!-- Approve Entity modal -->
 
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hide-approve-entity-modal" data-bs-toggle="modal"
-  data-bs-target="#approve-entity-modal"></button>
+<button tabIndex="-1" type="button" class="btn btn-primary btn-sm" hidden=true id="hide-approve-entity-modal" data-bs-toggle="modal"
+  data-bs-target="#approve-entity-modal" aria-hidden="true"></button>
 
-  <div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="approve-entity-modal" role="dialog">
+  <div tabIndex="-1" class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="approve-entity-modal" role="dialog" aria-label="Approve Entity">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">

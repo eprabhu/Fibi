@@ -56,6 +56,8 @@ public class GeneralDaoImpl implements GeneralDao {
 		List<String> rights = new ArrayList<>();
 		rights.addAll(fetchRightsByModule(loginPersonId, Constants.COI_MODULE_CODE));
 		rights.addAll(fetchRightsByModule(loginPersonId, Constants.OPA_MODULE_CODE));
+		rights.addAll(fetchRightsByModule(loginPersonId, Constants.TRAVEL_MODULE_CODE));
+		rights.addAll(fetchRightsByModule(loginPersonId, Constants.CONSULT_DISCL_MODULE_CODE));
 		return rights;
 	}
 

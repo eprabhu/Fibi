@@ -16,7 +16,7 @@ const routes: Routes = [
         children: [
             { path: '', redirectTo: 'editor', pathMatch: 'full' },
             { path: 'editor', component: FormEditorComponent },
-            { path: 'preview', component:FormPreviewComponent  },
+            { path: 'preview', component: FormPreviewComponent },
             { path: 'integration', component: FormIntegrationComponent },
         ]
     }]

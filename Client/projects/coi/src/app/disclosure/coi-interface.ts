@@ -416,3 +416,30 @@ export interface CoiReviewStatus {
 }
 
 export type ModalType = 'COMPLETE' | 'START';
+
+export interface ProjectRelationshipDetails {
+    moduleCode: number;
+    projectId: string;
+    projectNumber: string;
+    title: string;
+    projectStatus: string;
+    projectStartDate: number;
+    projectEndDate: number;
+    homeUnitNumber: string;
+    homeUnitName: string;
+    sponsorName: string;
+    primeSponsorName: any;
+    piName: string;
+    keyPersonId: string;
+    keyPersonName: string;
+    reporterRole: string;
+    conflictStatus: string;
+    conflictStatusCode: string;
+    entityCount: any;
+    relationShipExists: boolean;
+    sfiCompleted: boolean;
+    disclosureStatusCount: any[];
+    projectTypeCode: string;
+    projectType: string;
+    projectBadgeColour: string;
+  }

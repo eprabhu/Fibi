@@ -657,6 +657,15 @@
         [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures' : 'Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures'">
         Travel <span class="disclosures-text"></span> ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
+    <div (click)="setTab('CONSULTING_DISCLOSURES', dashboardCount?.consultDisclCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
+        [attr.aria-label]="currentSelected.tab=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click here to view Consulting Disclosures'"
+        [title]="currentSelected.tab=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click here to view Consulting Disclosures'"
+        aria-describedby="Click to view Consulting Disclosures" tabindex="0"
+        (keyup.enter)="setTab('CONSULTING_DISCLOSURES', dashboardCount?.consultDisclCount)" (keyup.space)="setTab('CONSULTING_DISCLOSURES', dashboardCount?.consultDisclCount)">
+        <span [class.active]="currentSelected.tab=='CONSULTING_DISCLOSURES'" class="py-2" id="coi-user-disclosure-dashboard-consulting-disclosure"
+        [attr.aria-label]="currentSelected.tab=='CONSULTING_DISCLOSURES' ? 'Selected tab is consulting Disclosures with ' + (dashboardCount?.consultDisclCount || 0) + ' disclosures' : 'Consulting Disclosures with ' + (dashboardCount?.consultDisclCount || 0) + ' disclosures'">
+        Consulting <span class="disclosures-text"></span> ({{dashboardCount?.consultDisclCount || 0}})</span>
+    </div>
     <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 hand-cursor" role="tab"
         [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click here to view Disclosure History'"
         [title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click here to view Disclosure History'"
@@ -670,7 +679,7 @@
 <!-- Search and filter -->
 <div class="advance-search overflow-hide-nav coi-search-box mt-2" *ngIf="isShowFilterAndSearch">
     <div class="row m-0">
-        <div class="col-lg-auto px-3 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
+        <div class="col-lg-auto px-3 py-2" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES' && currentSelected.tab != 'CONSULTING_DISCLOSURES'">
             <div class="fs-14 d-inline-block" [@leftSlideInOut]>
                 <label class="text-secondary" tabindex="-1">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'" id="coi-user-disclosure-dashboard-filterby-type"
@@ -701,6 +710,12 @@
                     [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'"
                     tabindex="0" title="Click to filter by type: Travel"
                     class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-travel">Travel</span>
+
+                <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'" (click)="setFilter('CONSULTING')"
+                [class.active-filter-pills]="currentSelected.filter=='CONSULTING'" tabindex="0" (keyup.enter)="setFilter('CONSULTING')" (keyup.space)="setFilter('CONSULTING')"
+                [attr.aria-label]="currentSelected.filter=='CONSULTING' ? 'Selected filter type is Consulting ' : 'Consulting'"
+                tabindex="0" title="Click to filter by type: Consulting"
+                class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-travel">Consulting</span>
             </div>
         </div>
         <div class="col-lg border-start d-flex align-items-center filter-s-outer search-area position-relative p-2"
@@ -725,7 +740,7 @@
             <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="card coi-card-regular">
                 <div class="card-body px-3 py-2" id="coi-user-disclosure-dashboard-cards-card">
                     <!-- For Coi disclosures card -->
-                    <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId">
+                    <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId && !disclosure?.disclosureId">
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row">
@@ -975,8 +990,6 @@
                                                 <span class="pipe mx-1"></span>
                                                 <span class="d-inline-flex">
                                                     <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
-                                                    <span class="coi-text-light fs-6 text-nowrap me-1" tabindex="-1"
-                                                        [attr.aria-label]="'Entity Name' + (disclosure.travelEntityName)">Entity:</span>
                                                     <span class="coi-text-darker fs-6 hyper-link" id="coi-user-disclosure-travel-card-value-apartment-{{index}}">
                                                         {{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
                                                         <span
@@ -1254,12 +1267,144 @@
                             </div>
                         </div>
                     </ng-container>
+
+                    <!-- For Consulting disclosures card-->
+                    <ng-container *ngIf="disclosure?.disclosureId">
+                        <div class="row">
+                            <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
+                                <div class="row">
+                                    <div class="col-12 d-inline-flex mb-1">
+                                        <!-- Consulting Card badge -->
+                                        <span class="d-flex">
+                                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
+                                                tabindex="-1" attr.aria-label="Consulting disclosure">
+                                                <span id="coi-user-disclosure-opa-card-value-heading-{{index}}">Consulting</span>
+                                            </span>
+                                        </span>
+                                        <!-- Consulting Card Reporting Cycle -->
+                                        <h4 *ngIf="disclosure.disclosureId" class="d-flex">
+                                            <span class="d-inline-flex">
+                                                <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
+                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
+                                                <span class="coi-text-light fs-6 text-nowrap" tabindex="-1"
+                                                    [attr.aria-label]="'Disclosure person is ' + disclosure.fullName">{{disclosure.fullName}}</span>
+                                            </span>
+                                            <ng-container *ngIf="disclosure.entityName">
+                                                <span class="pipe mx-1"></span>
+                                                <span class="d-inline-flex">
+                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
+                                                        <span  class="d-flex">
+                                                            <span class="coi-text-darker fs-6 hyper-link"
+                                                        id="coi-user-disclosure-travel-card-value-apartment-{{index}}">
+                                                        {{(readMoreOrLess[index] ? disclosure.entityName : disclosure.entityName |
+                                                        slice:0:120)}}
+                                                        <span *ngIf="!readMoreOrLess[index] && disclosure.entityName?.length>120">
+                                                            <a *ngIf="!readMoreOrLess[index]" class="link-primary"
+                                                                (click)="readMoreOrLess[index]=true"
+                                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
+                                                                aria-label="Click here to read more" title="Click here to Read more"><span
+                                                                    class="fw-500">...Read More</span></a>
+                                                        </span>
+                                                        <a *ngIf="readMoreOrLess[index]" class="link-primary"
+                                                            (click)="readMoreOrLess[index]=false"
+                                                            (keydown.enter)="readMoreOrLess[index]=false" tabindex="0" role="link"
+                                                            aria-label="Click here to read less" title="Click here to Read less"><span
+                                                                class="fw-500">Read Less</span></a>
+                                                        </span>
+                                                        </span>
+                                                </span>
+                                            </ng-container>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-lg-4 col-md-6 mb-2">
+                                        <!-- Consulting Card Department -->
+                                        <div tabindex="-1"
+                                            [attr.aria-label]="'Department Name is ' + (disclosure?.unitDetails?.unitNumber + ' - ' + disclosure?.unitDetails?.unitName)">
+                                            <label class="d-block coi-text-dark">Department</label>
+                                            <span class="coi-text-light"
+                                                id="coi-user-disclosure-opa-card-value-department-{{index}}">{{commonService.getPersonLeadUnitDetails(disclosure?.unitDetails)}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 mb-2">
+                                        <!-- Consulting Card Certification Date -->
+                                        <div
+                                            [attr.aria-label]="'Certification Date is ' + (disclosure?.certifiedAt | dateFormatter)">
+                                            <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label id="certify-date" [valueToShow]="disclosure?.certifiedAt">
+                                                    <span class="coi-text-light"
+                                                        id="coi-user-disclosure-opa-card-value-cert-date-{{index}}">{{disclosure?.certifiedAt
+                                                        | dateFormatter}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 mb-2">
+                                        <!-- Consulting Card Administrator -->
+                                        <div tabindex="-1" [attr.aria-label]="'Administrator is ' + (disclosure?.administrator)">
+                                            <label for="id" class="d-block coi-text-dark">Administrator</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="disclosure?.administrator">
+                                                    <span id="id" class="coi-text-light"
+                                                        id="coi-user-disclosure-opa-card-value-adminstrator-{{index}}">
+                                                        {{disclosure?.administrator}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 mb-2">
+                                        <!-- Consulting Card Admin Group -->
+                                        <div tabindex="-1" class="mb-3 mb-xl-0"
+                                            [attr.aria-label]="'Admin Group is ' + (disclosure?.adminGroupName)">
+                                            <label for="id" class="d-block coi-text-dark">Admin Group</label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
+                                                    <span id="id" class="coi-text-light"
+                                                        id="coi-user-disclosure-opa-card-value-admin-group-{{index}}">{{disclosure?.adminGroupName}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 d-flex d-lg-block">
+                                <!-- Consulting Card Disposition Status -->
+                                <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                    [attr.aria-label]="'Disposition Status is ' + (disclosure?.dispositionStatus)">
+                                    <label class="d-block coi-text-lighter">Disposition Status</label>
+                                    <span>
+                                        <span class="{{commonService.getConsultingDispositionStatusBadge(disclosure?.dispositionStatusCode)}}"></span>
+                                        <span class="coi-text-dark" id="coi-user-disclosure-opa-card-value-disp-status-{{index}}">
+                                            {{disclosure?.dispositionStatusDescription}}
+                                        </span>
+                                    </span>
+                                </div>
+                                <!-- Consulting Card Review Status -->
+                                <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                    [attr.aria-label]="'Review Status is ' + (disclosure?.reviewStatus)">
+                                    <label for="review-status" class="d-block coi-text-lighter">Review Status</label>
+                                    <span>
+                                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewStatusCode">
+                                            <span
+                                                [class.text-dark]="commonService.getConsultingReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
+                                                class="{{commonService.getConsultingReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
+                                            <span class="coi-text-dark" id="coi-user-disclosure-opa-card-value-review-status-{{index}}">
+                                                {{disclosure?.reviewStatusDescription}}
+                                            </span>
+                                        </app-no-data-label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
 
             <!-- Footer section -->
                 <div class="card-footer">
                     <div class="row">
-                        <ng-container *ngIf="!disclosure?.travelDisclosureId">
+                        <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.disclosureId">
                             <div class="col-lg-10">
                                 <div class="row align-items-center">
                                     <div class="col-md-6 col-lg-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
@@ -1280,17 +1425,17 @@
                                     </div>
                                     <div class="col-md-3 col-lg-2">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
-                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [title]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfProposal"
                                                 (keydown.enter)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal)"
                                                 (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);"
                                                 id="coi-user-disclosure-noof-proposal">{{disclosure?.noOfProposal}}</span>
                                             <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'link-primary' : 'coi-text-light' "
-                                                [title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                                [title]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
+                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
                                                 [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link"
-                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Proposals</span>
+                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Development Proposal</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-lg-2">
@@ -1310,7 +1455,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-lg-4" tabindex="-1">
-                                        <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
+                                        <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By
+                                        </label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                             [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
                                                                                                 (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
@@ -1385,6 +1531,18 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="disclosure?.disclosureId">
+                            <div class="col-lg-10">
+                                    <div class="col-md-12 col-lg-4" tabindex="-1">
+                                        <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By
+                                        </label>
+                                        <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
+                                            [attr.aria-label]="disclosure?.updateUserFullName + ' on ' +
+                                                                                                (disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long')">
+                                            {{disclosure?.updateUserFullName}} <span class="coi-text-lighter fs-13 fw-medium"> On </span> {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                                     </div>
                             </div>
                         </ng-container>

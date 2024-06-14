@@ -28,7 +28,18 @@ export class FormSectionsComponent {
         DATA.componentType = component.componentType;
         switch (component.componentType) {
             case 'QN': DATA.questionnaire = data.data; break;
-            case 'CE': DATA.customElement = data.data; break;
+            case 'CE':
+            case 'SE':
+            case 'NE':
+            case 'DE':
+            case 'CB':
+            case 'RB':
+            case 'ES':
+            case 'AS':
+            case 'SD':
+            case 'UD':
+            case 'TE':
+            DATA.customElement = data.data; break;
             case 'PE': DATA.programmedElement = data.data; break;
         }
         this.saveEventFromChildComponents.emit(DATA);

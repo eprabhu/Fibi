@@ -19,4 +19,7 @@ public interface FormBuilderUsageEntityRepository extends  JpaRepository<FormBui
 	@Query(value = "SELECT * FROM FORM_BUILDER_USAGE WHERE MODULE_CODE = ?1 AND SUB_MODULE_CODE = ?2 AND IS_ACTIVE = 'Y' ORDER BY FORM_ORDER_NUMBER", nativeQuery = true)
     List<FormBuilderUsageEntity> fetchByModuleAndSubModule(String moduleCode, String subModuleCode);
 
+	@Query(value = "SELECT MAX(FORM_ORDER_NUMBER) FROM FORM_BUILDER_USAGE WHERE MODULE_CODE = ?1 AND SUB_MODULE_CODE = ?2", nativeQuery = true)
+    Integer fetchFormOrderNumber(String moduleCode, String subModuleCode);
+
 }

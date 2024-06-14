@@ -3,7 +3,7 @@ import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import {
-    CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL,
+    CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL, CONSULTING_REDIRECT_URL,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL
 } from '../../app-constants';
 import { Router } from '@angular/router';
@@ -132,7 +132,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         const DISCLOSURE_VIEWS = this.result.disclosureViews || [];
         const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
         const OPA_DETAILS = this.result.opaDashboardDto || [];
-        const MERGED_LIST = [...DISCLOSURE_VIEWS, ...TRAVEL_DASHBOARD_VIEWS, ...OPA_DETAILS];
+        const CONSULTING_DISCLOSURE = this.result.consultingDisclDashboardViews || [];
+        const MERGED_LIST = [...DISCLOSURE_VIEWS, ...TRAVEL_DASHBOARD_VIEWS, ...OPA_DETAILS, ...CONSULTING_DISCLOSURE];
         return this.getSortedListForParam(MERGED_LIST, 'updateTimeStamp');
     }
 
@@ -227,13 +228,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     /**
      * This function handles the filtering of disclosure lists based on the search word.
-     * 
+     *
      * Note:
      * - For the 'TRAVEL_DISCLOSURES' tab, pagination and search are managed by the backend,
      *   so a debounce event is triggered to handle this.
      * - For all other tabs, the search and pagination is performed on the frontend by filtering the local
      *   completeDisclosureListCopy array.
-     * 
+     *
      * The pagination is reset to the first page whenever a search is initiated.
      */
     getFilteredDisclosureListForSearchWord(): any {
@@ -364,12 +365,15 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             redirectUrl = isTravelDisclosureEditPage ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
         } else if (disclosure.opaDisclosureId) {
             redirectUrl = OPA_REDIRECT_URL;
-        } else {
+        } else if(disclosure.disclosureId) {
+            redirectUrl = CONSULTING_REDIRECT_URL;
+        }
+        else {
             const isDisclosureEditPage = ['1', '5', '6'].includes(disclosure.reviewStatusCode);
             redirectUrl = isDisclosureEditPage ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         this._router.navigate([redirectUrl],
-            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId } });
+            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId || disclosure.disclosureId} });
     }
 
     getColorBadges(disclosure: UserDisclosure) {
@@ -378,6 +382,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
         if (disclosure?.opaDisclosureId) {
             return 'bg-opa-clip';
+        }
+        if (disclosure.disclosureId){
+            return 'bg-consulting-clip';
         }
         switch (disclosure.fcoiTypeCode) {
             case '1':
@@ -408,10 +415,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     getSearchPlaceHolder() {
-        if (this.currentSelected.tab !== 'TRAVEL_DISCLOSURES') {
-            return 'Search by Project Title, Department, Disclosure Status, Disposition Status, Review Status';
-        } else {
+        if (this.currentSelected.tab === 'TRAVEL_DISCLOSURES') {
             return 'Search by Entity Name, Department, Traveller Type, Destination, Review Status, Document Status, Purpose';
+        } else if(this.currentSelected.tab === 'CONSULTING_DISCLOSURES') {
+            return 'Search by Entity Name, Department, Disposition Status, Review Status';
+        } else {
+            return 'Search by Project Title, Department, Disclosure Status, Disposition Status, Review Status';
         }
     }
 
@@ -448,7 +457,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.showSlider = false;
             this.entityId = null;
-            this.sliderElementId = ''; 
+            this.sliderElementId = '';
         }, 500);
     }
 

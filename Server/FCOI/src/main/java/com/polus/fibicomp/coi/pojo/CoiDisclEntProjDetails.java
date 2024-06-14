@@ -94,6 +94,19 @@ public class CoiDisclEntProjDetails implements Serializable {
 	@Transient
 	private PersonEntityRelationshipDto personEntityRelationshipDto;
 
+	@Transient
+	private String projectTypeCode;
+	@Transient
+	private String projectType;
+	@Transient
+	private String projectBadgeColour;
+	@Transient
+	private String projectId;
+	@Transient
+	private String projectNumber;
+	@Transient
+	private String projectTitle;
+
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
 	}
@@ -244,5 +257,53 @@ public class CoiDisclEntProjDetails implements Serializable {
 
 	public void setPrePersonEntityId(Integer prePersonEntityId) {
 		this.prePersonEntityId = prePersonEntityId;
+	}
+
+	public String getProjectTypeCode() {
+		return projectTypeCode;
+	}
+
+	public void setProjectTypeCode(String projectTypeCode) {
+		this.projectTypeCode = projectTypeCode;
+	}
+
+	public String getProjectType() {
+		return projectType;
+	}
+
+	public void setProjectType(String projectType) {
+		this.projectType = projectType;
+	}
+
+	public String getProjectBadgeColour() {
+		return projectBadgeColour;
+	}
+
+	public void setProjectBadgeColour(String projectBadgeColour) {
+		this.projectBadgeColour = projectBadgeColour;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectNumber() {
+		return projectNumber;
+	}
+
+	public void setProjectNumber(String projectNumber) {
+		this.projectNumber = projectNumber;
+	}
+
+	public String getProjectTitle() {
+		return projectTitle;
+	}
+
+	public void setProjectTitle(String projectTitle) {
+		this.projectTitle = projectTitle;
 	}
 }

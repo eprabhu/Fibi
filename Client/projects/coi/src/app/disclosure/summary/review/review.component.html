@@ -32,15 +32,15 @@
 	</span>
 	</h3>
 	<button [attr.aria-label]="'Click here to ' + (isRelationCollapsed ? 'collapse' : 'expand') + ' Details of relationship'" id="relationship_collapse_btn" class="align-items-center border btn d-flex justify-content-center p-0 position-absolute rounded-5 shadow-sm toggle-btn"
-	(click)="isRelationCollapsed = !isRelationCollapsed" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
+	(click)="clearHighlightOnRelationshipCollapse()" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
 	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
   </div>
 <div [hidden]="!isRelationCollapsed">
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
-		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
-			<app-relationship-summary [selectedProject]="award" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
-		</ng-container>
+		<div *ngFor="let projectDetails of _dataStoreAndEventsService.concatenatedProjectList; let i =index" [id]="projectDetails.projectTypeCode+'-'+projectDetails.projectId">
+			<app-relationship-summary [selectedProject]="projectDetails" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
+		</div>
 	</ng-container>
 	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<app-no-information> </app-no-information>
@@ -55,7 +55,7 @@
   <div class="modal-content">
 	<div class="modal-header">
 	<h4 class="modal-title"><strong title="{{ selectedProject?.title }}">
-			#{{selectedProject?.moduleCode == 3 ? selectedProject?.moduleItemId : selectedProject?.moduleItemKey}} -
+			#{{selectedProject?.projectNumber}} -
 			{{ (selectedProject?.title)?.length > 80 ? (selectedProject?.title | slice:0: 80)+'...' :
 			selectedProject?.title }}
 		</strong>
@@ -67,8 +67,8 @@
 	  <div class="row mx-0 mt-3">
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
 		  <label for="coi-review-project-detail-pi" class="d-block label-text">Principal Investigator</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.principalInvestigator">
-			<span class="grey-text m-0" id="coi-review-project-detail-pi">{{selectedProject?.principalInvestigator}}</span>
+		  <app-no-data-label [valueToShow]="selectedProject?.piName">
+			<span class="grey-text m-0" id="coi-review-project-detail-pi">{{selectedProject?.piName}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
@@ -80,26 +80,25 @@
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
 		  <label for="coi-review-project-detail-period" class="d-block label-text">Period</label>
 		  <span class="grey-text m-0" id="coi-review-project-detail-period">
-			{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate |
+			{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate |
 			dateFormatter}}</span>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-status" class="d-block label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' :
-			'Award'}} Status</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.moduleStatus">
-			<span class="grey-text m-0" id="coi-review-project-detail-status">{{selectedProject?.moduleStatus}}</span>
+		  <label for="coi-review-project-detail-status" class="d-block label-text">{{selectedProject?.projectType}} Status</label>
+		  <app-no-data-label [valueToShow]="selectedProject?.projectStatus">
+			<span class="grey-text m-0" id="coi-review-project-detail-status">{{selectedProject?.projectStatus}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
 		  <label for="coi-review-project-detail-sponsor" class="d-block label-text">Sponsor</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.sponsor">
-			<span class="grey-text m-0" id="coi-review-project-detail-sponsor">{{selectedProject?.sponsor}}</span>
+		  <app-no-data-label [valueToShow]="selectedProject?.sponsorName">
+			<span class="grey-text m-0" id="coi-review-project-detail-sponsorName">{{selectedProject?.sponsorName}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
 		  <label for="coi-review-project-detail-prime-sponosr" class="d-block label-text">Prime Sponsor</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
-			<span class="grey-text m-0" id="coi-review-project-detail-prime-sponosr">{{selectedProject?.primeSponsor}}</span>
+		  <app-no-data-label [valueToShow]="selectedProject?.primeSponsorName">
+			<span class="grey-text m-0" id="coi-review-project-detail-prime-sponosr">{{selectedProject?.primeSponsorName}}</span>
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-12 mb-3">
@@ -113,7 +112,7 @@
 	  <button title="Click to close the popup" type="button"
 		class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="openModuleSummaryDetails()">Close</button>
 	  <button type="button" title="Click to view project details page"
-		(click)="openProjectMoreDetails(selectedProject.moduleItemId);"
+		(click)="coiService.openProjectMoreDetails(selectedProject.projectId,selectedProject.projectTypeCode);"
 		class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
 	</div>
   </div>
