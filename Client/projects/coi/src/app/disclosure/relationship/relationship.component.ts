@@ -84,9 +84,16 @@ export class RelationshipComponent implements OnInit {
   ngOnInit() {
     this.getDataFromStore();
     this.getReporterProjects();
+    this.getLookups();
     this.getDependencyDetails();
     window.scrollTo(0, 0);
   }
+
+    getLookups() {
+      this.$subscriptions.push(this._relationShipService.lookups().subscribe((res: any) => {
+          this.coiStatusList = res.coiProjConflictStatusTypes;
+      }));
+    }
 
     getReporterProjects() {
         this.$subscriptions.push(this._relationShipService
