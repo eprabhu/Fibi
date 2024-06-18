@@ -62,7 +62,7 @@ CREATE VIEW `coi_project_award_v` AS
         `coi_project_award`.`KEY_PERSON_ID` AS `KEY_PERSON_ID`,
         `coi_project_award`.`KEY_PERSON_NAME` AS `KEY_PERSON_NAME`,
         `coi_project_award`.`KEY_PERSON_ROLE_CODE` AS `KEY_PERSON_ROLE_CODE`,
-        NULL AS `AWARD_STATUS`,
+        'Active' AS `AWARD_STATUS`,
         `coi_project_award`.`SPONSOR_NAME` AS `SPONSOR_NAME`,
         `coi_project_award`.`PRIME_SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,
         `coi_project_award`.`AWARD_START_DATE` AS `AWARD_START_DATE`,
@@ -73,6 +73,6 @@ CREATE VIEW `coi_project_award_v` AS
     FROM
         `coi_project_award`
     WHERE
-        (`coi_project_award`.`COI_PROJECT_TYPE_CODE` = 2);
+        (`coi_project_award`.`COI_PROJECT_TYPE_CODE` = 1)
 
 //
