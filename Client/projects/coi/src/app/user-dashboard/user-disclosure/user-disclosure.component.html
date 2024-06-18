@@ -1581,7 +1581,7 @@
         class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
         <nav aria-label="pagination section" class="pagination justify-content-end">
             <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
-                [totalCount]="currentSelected.tab =='TRAVEL_DISCLOSURES' ? travelPaginationCount : paginationArray.length"
+                [totalCount]="isCurrentTabTravelOrConsulting() ? pageCountFromAPI : paginationArray.length"
                 [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
         </nav>
     </div>
