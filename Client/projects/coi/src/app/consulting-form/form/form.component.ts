@@ -31,7 +31,7 @@ export class FormComponent {
     canShowEntityFields = false;
     clearCountryField: any = false;
     countrySearchOptions: EndpointOptions;
-    entityDetails: any = {};
+    entityDetails: EntityDetails = new EntityDetails();
     sfiLookUpList: any = {};
     $subscriptions: Subscription[] = [];
     exisitngSFIForEntity: ExistingEntityDetails = new ExistingEntityDetails();
@@ -40,9 +40,9 @@ export class FormComponent {
     consultingForm: any = {};
     fbConfiguration = new FBConfiguration();
     isFormEditMode = this.dataStore.isFormEditable();
-    riskLevelLookup = [];
     emailWarningMsg = '';
     entityDetailsAlreadySave: any;
+    showTextAreaLimiter: boolean;
 
     constructor(private _elasticConfig: ElasticConfigService, private _commonService: CommonService, private _formService: FormService,
         private _router: Router, public consultingService: ConsultingService, public dataStore: DataStoreService
@@ -65,7 +65,10 @@ export class FormComponent {
             this.clearField = new String('false');
             event = setEntityObjectFromElasticResult(event);
             this.checkIfSFIAlreadyAdded(event.entityNumber, event);
+            this.mandatoryList.clear();
         } else {
+            this.isResultFromSearch = false;
+            this.entityDetails = new EntityDetails();
             this.checkForSubmitDisable();
         }
     }
@@ -77,6 +80,8 @@ export class FormComponent {
         this.entitySearchOptions.defaultValue = event;
         this.consultingService.isDataChangeAvailableInEntity = true;
         this.canShowEntityFields = true;
+        this.showTextAreaLimiter = true;
+        this.consultingService.canDisableSubmit = true;
     }
 
     selectedCountryEvent(event: any): void {
@@ -91,13 +96,7 @@ export class FormComponent {
     private getSFILookup(): void {
         this.$subscriptions.push(this._formService.addSFILookUp().subscribe((res: any) => {
             this.sfiLookUpList = res;
-            this.riskLevelLookup = res.entityRiskCategories;
         }));
-    }
-
-    setEntityRiskCategoryObj(): void {
-        this.entityDetails.coiEntity.entityRiskCategory = this.riskLevelLookup.find(ele =>
-            this.entityDetails.coiEntity.riskCategoryCode === ele.riskCategoryCode);
     }
 
     setEntityTypeObj(): void {
@@ -152,9 +151,13 @@ export class FormComponent {
         if (this.entityDetailsAlreadySave && !isEmptyObject(this.entityDetailsAlreadySave)) {
             this.entityDetails = deepCloneObject(this.entityDetailsAlreadySave);
             this.isResultFromSearch = true;
-            this.clearField = new String('false');
-            this.entitySearchOptions.defaultValue = this.entityDetailsAlreadySave.coiEntity.entityName;
+            this.resetEntityDefaultValue(this.entityDetailsAlreadySave.coiEntity.entityName);
         }
+    }
+
+    resetEntityDefaultValue(entityName) {
+        this.clearField = new String('false');
+        this.entitySearchOptions.defaultValue = entityName;
     }
 
     private clearSFIFields(): void {
@@ -172,22 +175,30 @@ export class FormComponent {
         this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityId } });
     }
 
-    //add comments for four scenarios
+    /**four scenarios for form entity save
+     * 1. If new entity, save entity details, create sFI with entity, then consulting form entity will be saved.
+     * 2. If entity is already available, but no SFI is available, then SFI will created and then consulting form entity will be saved.
+     * 3. If SFI is already avalilable for Entity, and no Consulting relation, first relation is added then consulting form entity will be saved.
+     * 4. If SFI is already avalilable for Entity, with Consulting relation, just consulting form entity will be saved.
+     **/
     private saveSubscribe(): void {
         this.$subscriptions.push(this.consultingService.globalSave$.subscribe((data: any) => {
-            if (this.consultingService.isDataChangeAvailableInEntity){
-                if(!this.entityDetails.coiEntity.entityName) {
-                    this.mandatoryList.set('entityName', 'Please add entity name');
-                } else if (this.canShowEntityFields) {
-                    this.addNewEntityInitally();
-                } else {
-                    this.saveFormForExistingSFI();
+            this.mandatoryList.clear();
+            if (!this.entityDetails.coiEntity.entityName) {
+                this.mandatoryList.set('entityName', 'Please add entity name');
+            }
+            if(!this.mandatoryList.size) {
+                if (this.consultingService.isDataChangeAvailableInEntity) {
+                    if (this.canShowEntityFields) {
+                        this.addNewEntityInitally();
+                    } else {
+                        this.saveFormForExistingSFI();
+                    }
                 }
             }
-        }))
+        }));
     }
 
-    //add comments
     private saveFormForExistingSFI(): void {
         this.mandatoryList.clear();
         if (!this.mandatoryList.size) {
@@ -276,17 +287,21 @@ export class FormComponent {
     }
 
     ngAfterViewInit(): void {
-        this.updateFormConfiguration();
+        if (this.consultingForm.consultingFormDisclosure) {
+            this.updateFormConfiguration(this.consultingForm.consultingFormDisclosure.disclosureId.toString(),
+                                        this.consultingForm.consultingFormDisclosure.personId,
+                                        this.consultingForm.consultingFormDisclosure.consultingDisclFormBuilderDetails[0].formBuilderId);
+        }
         this.updateFormEditMode();
     }
 
-    private updateFormConfiguration(): void {
+    private updateFormConfiguration(disclId, personId, formBuilderId): void {
         this.fbConfiguration.moduleItemCode = '27';
         this.fbConfiguration.moduleSubItemCode = '0';
-        this.fbConfiguration.moduleItemKey = this.consultingForm.consultingFormDisclosure.disclosureId.toString();
+        this.fbConfiguration.moduleItemKey = disclId;
         this.fbConfiguration.moduleSubItemKey = '0';
-        this.fbConfiguration.documentOwnerPersonId = this.consultingForm.consultingFormDisclosure.personId;
-        this.fbConfiguration.formBuilderId = this.consultingForm.consultingFormDisclosure.consultingDisclFormBuilderDetails[0].formBuilderId;
+        this.fbConfiguration.documentOwnerPersonId = personId;
+        this.fbConfiguration.formBuilderId = formBuilderId;
         this.consultingService.formBuilderEvents.next({ eventType: 'CONFIGURATION', data: this.fbConfiguration });
     }
 
@@ -304,16 +319,21 @@ export class FormComponent {
     }
 
     private getDataFromStore(): void {
-        this.consultingForm = this.dataStore.getData();
+        const DATA = this.dataStore.getData();
+        if(this.consultingForm.consultingFormDisclosure && (DATA.consultingFormDisclosure.disclosureId != this.consultingForm.consultingFormDisclosure.disclosureId)) {
+            this.updateFormConfiguration(DATA.consultingFormDisclosure.disclosureId.toString(),
+                                         DATA.consultingFormDisclosure.personId,
+                                         DATA.consultingFormDisclosure.consultingDisclFormBuilderDetails[0].formBuilderId);
+        }
+        this.consultingForm = DATA;
         this.setEntityDetails();
-        this.updateFormConfiguration();
     }
 
     private setEntityDetails(): void {
         if (this.consultingForm.consultingFormDisclosure.personEntity) {
             this.entityDetails = deepCloneObject(this.consultingForm.consultingFormDisclosure.personEntity);
             this.entityDetailsAlreadySave = deepCloneObject(this.consultingForm.consultingFormDisclosure.personEntity);
-            this.entitySearchOptions.defaultValue = this.entityDetails.coiEntity.entityName;
+            this.resetEntityDefaultValue(this.entityDetailsAlreadySave.coiEntity.entityName);
             this.isResultFromSearch = true;
             this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
         } else {
@@ -368,8 +388,12 @@ export class FormComponent {
         }).subscribe((data) => {
             this.dataStore.updateStore(['consultingFormDisclosure'], { consultingFormDisclosure: data });
             this.canShowEntityFields = false;
+            this.showTextAreaLimiter = false;
             this.consultingService.isDataChangeAvailableInEntity = false;
-            this.isNewEntityFromSearch = false;
+            this.resetEntityDefaultValue(this.entityDetailsAlreadySave.coiEntity.entityName);
+            setTimeout(() => {
+                this.isNewEntityFromSearch = false;
+            });
         }));
     }
 
@@ -378,9 +402,11 @@ export class FormComponent {
     }
 
     backToSearch(): void {
-        // this.entityDetails.coiEntity.entityName = '';
-        this.isNewEntityFromSearch = false;
+        this.showTextAreaLimiter = false;
         this.canShowEntityFields = false;
+        setTimeout(() => {
+            this.isNewEntityFromSearch = false;
+        });
     }
 
     phoneNumberValidation(input: any): void{ //common functions for validation
