@@ -14,7 +14,7 @@ CREATE VIEW `coi_project_institute_proposal_v` AS
                 ((`proposal_persons`.`PROP_PERSON_ROLE_ID` = 3)
                     AND (`proposal_persons`.`PI_FLAG` = 'Y')
                     AND (`proposal_persons`.`PROPOSAL_ID` = `t1`.`PROPOSAL_ID`)
-                    AND (`t1`.`STATUS_CODE` IN (9 , 8, 3, 5, 6)))
+                    AND (`t1`.`STATUS_CODE` IN (1 , 8, 3, 5, 6, 11)))
             LIMIT 1) AS `PI_PERSON_ID`,
         (SELECT 
                 `proposal_persons`.`FULL_NAME`
@@ -40,7 +40,7 @@ CREATE VIEW `coi_project_institute_proposal_v` AS
         LEFT JOIN `sponsor` `t5` ON ((`t5`.`SPONSOR_CODE` = `t1`.`PRIME_SPONSOR_CODE`)))
         JOIN `proposal_persons` `t6` ON ((`t6`.`PROPOSAL_ID` = `t1`.`PROPOSAL_ID`)))
         JOIN `person` `t7` ON ((`t6`.`PERSON_ID` = `t7`.`PERSON_ID`)))
-    WHERE `t1`.`STATUS_CODE` IN (9 , 8, 3, 5, 6)
+    WHERE `t1`.`STATUS_CODE` IN (1 , 8, 3, 5, 6, 11)
 
     UNION ALL SELECT
         `ID` AS `ID`,
