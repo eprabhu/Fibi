@@ -126,22 +126,22 @@ export class CountModalComponent implements OnInit {
 
     // title
     getTitle(): string {
-        if (this.disclosures?.fcoiType) {
-            if (this.disclosures?.fcoiType === 'Proposal') {
+        if (this.disclosures?.fcoiTypeCode) {
+            if (this.disclosures?.fcoiTypeCode === '2') {
                 return this.reduceTitleLength(this.disclosures?.proposalTitle);
             } else {
                 return this.reduceTitleLength(this.disclosures?.awardTitle);
             }
         } else if (this.disfullData?.projectDetail?.title) {
             return this.reduceTitleLength(this.disfullData?.projectDetail?.title);
-        } else if (this.adminData?.fcoiType) {
-            if (this.adminData?.fcoiType === 'Award') {
+        } else if (this.adminData?.fcoiTypeCode) {
+            if (this.adminData?.fcoiTypeCode === '3') {
                 return this.reduceTitleLength(this.adminData.awardTitle);
             } else {
                 return this.reduceTitleLength(this.adminData.proposalTitle);
             }
-        } else if (this.reviewerData?.fcoiType) {
-            if (this.reviewerData?.fcoiType === 'Award') {
+        } else if (this.reviewerData?.fcoiTypeCode) {
+            if (this.reviewerData?.fcoiTypeCode === '3') {
                 return this.reduceTitleLength(this.reviewerData.awardTitle);
             } else {
                 return this.reduceTitleLength(this.reviewerData?.proposalTitle);
@@ -233,22 +233,22 @@ export class CountModalComponent implements OnInit {
     }
 
     showFullTitle(): string {
-        if (this.disclosures?.fcoiType) {
-            if (this.disclosures?.fcoiType === 'Proposal') {
+        if (this.disclosures?.fcoiTypeCode) {
+            if (this.disclosures?.fcoiTypeCode === '2') {
                 return this.disclosures?.proposalTitle;
             } else {
                 return this.disclosures?.awardTitle;
             }
         } else if (this.disfullData?.projectDetail?.title) {
             return this.disfullData?.projectDetail?.title;
-        } else if (this.adminData?.fcoiType) {
-            if (this.adminData?.fcoiType === 'Award') {
+        } else if (this.adminData?.fcoiTypeCode) {
+            if (this.adminData?.fcoiTypeCode === '3') {
                 return this.adminData.awardTitle;
             } else {
                 return this.adminData.proposalTitle;
             }
-        } else if (this.reviewerData?.fcoiType) {
-            if (this.reviewerData?.fcoiType === 'Award') {
+        } else if (this.reviewerData?.fcoiTypeCode) {
+            if (this.reviewerData?.fcoiTypeCode === '3') {
                 return this.reviewerData.awardTitle;
             } else {
                 return this.reviewerData?.proposalTitle;
