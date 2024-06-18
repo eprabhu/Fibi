@@ -1,17 +1,15 @@
-
-<div [id]="'coi-card-' + selectedProject?.moduleItemId" class="card coi-card-regular border shadow me-2 mt-2 ms-2"
-  [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject?.moduleItemId}" *ngIf="selectedProject?.moduleCode">
+<div *ngIf="selectedProject?.moduleCode" [id]="'coi-card-' + selectedProject?.projectId" class="card coi-card-regular border shadow me-2 mt-2 ms-2"
+  [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject.projectTypeCode+'-'+selectedProject?.projectId}">
     <div class="card-header px-4 py-2 d-flex align-items-start justify-content-between border-bottom-0 flex-nowrap">
       <span class="d-flex">
-        <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
-          <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
+          <span class="active-ribbon shadow-sm align-items-center d-flex text-nowrap" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
           <span class="word-break-all new-line-property badge-margin coi-text-darker fs-16 mt-1">
             <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
               aria-label="Click here to view project details" title="Click here to view project details">
-              #{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              #{{selectedProject?.projectNumber}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
               selectedProject?.title}}
               </span>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more" 
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more"
                 title="Click here to Read more" (keydown.enter)="readMoreOrLess= true">
                 <span class="link-primary fw-medium fs-14">...Read More</span>
             </span>
@@ -20,26 +18,6 @@
               <span class="link-primary fw-medium fs-14">Read Less</span>
             </span>
           </span>
-        </ng-container>
-
-        <ng-container *ngIf="selectedProject?.moduleCode == 1">
-          <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
-          <span class="mt-1 fs-16 word-break-all new-line-property badge-margin coi-text-dark">
-            <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
-             aria-label="Click here to view project details" title="Click here to view project details">
-            #{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</span>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" class="link-primary fs-14 fw-medium" 
-              tabindex="0" role="link" aria-label="Click here to Read more" title="Click here to Read more"
-              (click)="readMoreOrLess=true" (keydown.enter)="readMoreOrLess= true">...Read More
-            </span>
-            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false" (keydown.enter)="readMoreOrLess= false"
-             tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"
-            class="link-primary fs-14 fw-medium">
-              Read Less
-            </span>
-          </span>
-        </ng-container>
       </span>
 
       <span class="align-items-center d-flex">
@@ -54,7 +32,7 @@
 					<div class="row">
 						<div class="col-6 col-md-4 mb-2">
 							<label for="coi-relationship-summary-principal-investigator" class="coi-text-dark d-block">Principal Investigator</label>
-							<span class="coi-text-light" id="coi-relationship-summary-principal-investigator">{{selectedProject?.principalInvestigator}}</span>
+							<span class="coi-text-light" id="coi-relationship-summary-principal-investigator">{{selectedProject?.piName}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
 							<label for="coi-relationship-summar-project-role" class="coi-text-dark d-block">Project Role</label>
@@ -62,17 +40,17 @@
 						</div>
 						<div class="col-6 col-md-4 mb-2">
 							<label for="coi-relationship-summar-period" class="coi-text-dark d-block">Period</label>
-							<span class="coi-text-light" id="coi-relationship-summar-period">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+							<span class="coi-text-light" id="coi-relationship-summar-period">{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate
 								|
 								dateFormatter}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
 							<label for="coi-relationship-sponsor" class="coi-text-dark d-block">Sponsor</label>
-							<span class="coi-text-light" id="coi-relationship-sponsor">{{selectedProject?.sponsor}}</span>
+							<span class="coi-text-light" id="coi-relationship-sponsor">{{selectedProject?.sponsorName}}</span>
 						</div>
 						<div class="col-6 col-md-4 mb-2">
 							<label for="coi-relationship-lead-unit" class="coi-text-dark d-block">Lead Unit</label>
-							<app-no-data-label [valueToShow]="selectedProject?.unitName">
+							<app-no-data-label [valueToShow]="selectedProject?.homeUnitName">
 								<span class="coi-text-light" id="coi-relationship-lead-unit">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
 							</app-no-data-label>
 						</div>
@@ -122,12 +100,16 @@
                             </span>
                         </div>
                         <div class="d-flex flex-wrap fw-medium fs-13">
-                            <em class="mt-2" *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                    <span class="border px-3 py-1 rounded-4 me-2 d-inline-block">
-                                        <span class="fw-medium">{{relation?.relationshipType}} :</span>
-                                        <span class="fw-normal">{{relation?.description}}</span>
+                            <ng-container class="mt-2" *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                                    <span class="relationship-pill border px-3 py-1 rounded-4 me-2 d-inline-block">
+                                        <span class="d-flex coi-purple-text">
+                                            <mat-icon aria-hidden="true"
+                                            class="flex-shrink-0 me-1">{{getIcon(relation?.relationshipType)}}</mat-icon>
+                                            <span class="fw-bold">{{relation?.relationshipType}} :</span>
+                                            <span class="fw-normal">{{relation?.description}}</span>
                                     </span>
-                            </em>
+                                </span>
+                            </ng-container>
                         </div>
                         <div class="row mt-2 fw-medium fs-13">
                             <span class="d-flex align-items-center">

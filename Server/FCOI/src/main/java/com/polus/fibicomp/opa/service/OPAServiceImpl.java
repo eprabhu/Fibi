@@ -17,9 +17,9 @@ import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.opa.clients.FormBuilderClient;
-import com.polus.fibicomp.opa.clients.model.ApplicableFormRequest;
-import com.polus.fibicomp.opa.clients.model.ApplicableFormResponse;
+import com.polus.fibicomp.coi.clients.FormBuilderClient;
+import com.polus.fibicomp.coi.clients.model.ApplicableFormRequest;
+import com.polus.fibicomp.coi.clients.model.ApplicableFormResponse;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
@@ -92,7 +92,7 @@ public class OPAServiceImpl implements OPAService {
 			}
 		}
 		if (formResponse != null) {
-		    formResponse.setOpaDisclosureId(opaDisclosure.getOpaDisclosureId());
+		    formResponse.setDisclosureId(opaDisclosure.getOpaDisclosureId());
 		}		
 		return new ResponseEntity<>(formResponse, HttpStatus.OK);
 	}

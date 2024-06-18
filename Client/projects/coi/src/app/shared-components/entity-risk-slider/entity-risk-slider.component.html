@@ -1,7 +1,7 @@
 <app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'risk-conflict-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
     <!-- slider header -->
     <ng-container header>
-        <span>Manage Entity Risk</span>
+        <span id="coi-entity-risk-header">Modify Entity Risk</span><app-common-help-text [subSectionId]="2601" [elementId]="'coi-entity-risk-header'"></app-common-help-text>
     </ng-container>
 
     <!-- slider header card -->
@@ -13,18 +13,13 @@
 
     <!-- modal content -->
     <ng-container content>
-        <!-- help text -->
-        <div class="mt-3">
-            <app-help-text [helpTextList]="helpText" [tooltip]="'Entity Risk History'"></app-help-text>
-        </div>
 
          <!-- risk edit section -->
-        <div class="card">
+        <div class="card mt-2">
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-4 align-items-center">
-                        <label class="fs-14 fw-500">Risk
-                            <app-common-help-text [subSectionId]="2601" [elementId]="'coi-manage-entity-risk'"></app-common-help-text>
+                        <label class="fs-14 fw-500">Risk<app-common-help-text [subSectionId]="2601" [elementId]="'coi-manage-entity-risk'"></app-common-help-text>
                         </label>
                         <span>
                             <select class="form-control form-select" [(ngModel)]="currentRiskCategorycode" id="coi-manage-entity-risk"
@@ -44,8 +39,7 @@
                         <app-common-information [elementId]="'coi-manage-entity-risk'" [subSectionId]="2601"></app-common-information>
                     </div>
                     <div class="col-12 mt-3">
-                        <label for="coi-manage-entity-risk-desc" class="fs-14 fw-500">Describe the reason for Risk level change
-                            <app-common-help-text [subSectionId]="2601" [elementId]="'coi-manage-entity-risk-desc'"></app-common-help-text>
+                        <label for="coi-manage-entity-risk-desc" class="fs-14 fw-500">Describe the reason for Risk level change<app-common-help-text [subSectionId]="2601" [elementId]="'coi-manage-entity-risk-desc'"></app-common-help-text>
                         </label>
                         <textarea id="coi-manage-entity-risk-desc" class="form-control fs-14" placeholder="Description" row="1" id="coi-manage-entity-reason"
                             [(ngModel)]="revisionComment" appAutoGrow appLengthValidator rows="1" [limit]="2000"

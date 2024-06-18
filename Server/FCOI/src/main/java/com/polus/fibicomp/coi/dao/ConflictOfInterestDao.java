@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -935,12 +937,12 @@ public interface ConflictOfInterestDao {
 	 */
 	void deletePersonEntityRelationship(Integer personEntityRelId);
 	/**
-	 * This method is used to get person entity by entity id and person id
-	 * @param entityId
+	 * This method is used to get person entity by entityNumber and person id
+	 * @param entityNumber
 	 * @param personId
 	 * @return
 	 */
-	PersonEntity fetchPersonEntityById(Integer entityId, String personId);
+	PersonEntity fetchPersonEntityByEntityNumber(Integer entityNumber, String personId);
 
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
@@ -1367,4 +1369,17 @@ public interface ConflictOfInterestDao {
 	 */
 	public boolean isTravelDisclosureRiskStatusModified(String riskCategoryCode, Integer travelDisclosureId);
 
+	/**
+	 *
+	 * @param disclosureId
+	 * @return
+	 */
+    List<DisclosureProjectDto> getDisclosureProjects(Integer disclosureId);
+
+	/**
+	 *
+	 * @param vo
+	 * @return
+	 */
+	List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo);
 }

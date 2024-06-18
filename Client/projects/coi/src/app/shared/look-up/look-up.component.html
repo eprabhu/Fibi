@@ -1,6 +1,6 @@
 <mat-select class="form-control input-height {{customClass}}" [id]="uniqueId" #mySelect [(ngModel)]="selection" name="lookupFilter" (focus)="showLookUpList()" placeholder="--select--"
   [multiple]="isMultiple" [class.is-invalid]="isError" (closed)="emitDataToParentComponent()" (selectionChange)="checkIfAllOptionsSelected()"
-  [title]="lookupTitle">
+  [title]="lookupTitle" [disabled]="isDisabled">
   <mat-select-trigger>
     {{selectedLookUpList?.length > 0 ? selectedLookUpList[0]?.description : ''}}
     <span *ngIf="(selectedLookUpList?.length || 0) > 1" class="additional-selection">

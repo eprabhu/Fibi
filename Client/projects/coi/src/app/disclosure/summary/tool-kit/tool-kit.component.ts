@@ -10,6 +10,7 @@ import {HTTP_ERROR_STATUS} from '../../../../../../fibi/src/app/app-constants';
 import { listAnimation, slideInAnimation } from '../../../common/utilities/animations';
 import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { CoiService } from '../../services/coi.service';
+import { ProjectRelationshipDetails } from '../../coi-interface';
 
 @Component({
     selector: 'app-tool-kit',
@@ -25,7 +26,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     isCurrentReviewTab = 'SECTION';
     isToolkitVisible = true;
     sections: Array<Section> = COISection;
-    projectList: any = [];
+    projectList: ProjectRelationshipDetails[] = [];
     activeProject = 1;
     coiDetails: any = {};
     proposalIdLinkedInDisclosure: number = null;
@@ -34,6 +35,9 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     isRelationshipCollapse = false;
     activeNav = '';
     activeSubNav = '';
+    awardList: ProjectRelationshipDetails[] = [];
+    proposalList: ProjectRelationshipDetails[] = [];
+    IPList: ProjectRelationshipDetails[] = [];
 
     constructor(
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
@@ -63,7 +67,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         // } else {
             RELATION_SECTION.isShowProjectList = true;
             RELATION_SECTION.isExpanded = true;
-            this.getProjectRelationships();
+            this.getProjectRelationshipDetails();
         // }
     }
 
@@ -95,23 +99,6 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         this._dataStoreAndEventsService.$isToolkitVisible.next(this.isToolkitVisible);
     }
 
-    getProjectRelationships() {
-        this.coiSummaryService.getProjectRelationships({
-            disclosureId: Number(this.coiDetails.disclosureId),
-            disclosureStatusCode: this.coiDetails.disclosureStatusCode,
-            personId: this.coiDetails.personId,
-        }).subscribe((data: any) => {
-            this.projectList = data;
-            this._dataStoreAndEventsService.conflictStatusList = data.coiDisclosureDetailStatuses;
-            this._dataStoreAndEventsService.concatenatedProjectList = [...data.awards, ...data.proposals];
-            if (this.projectList.proposals.length || this.projectList.awards.length) {
-                this.openProjectRelationships(this.projectList.awards[0] ?
-                  this.projectList.awards[0] : this.projectList.proposals[0], 0);
-            }
-        }, _err => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project list');
-        });
-    }
 
     openProjectRelationships(projectDetails: any, index) {
         this.activeProject = index;
@@ -133,13 +120,13 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         this.windowScroll(section);
     }
 
-    jumpToProjectSection(parentSection: string, activeSubSection: string, subNavSection: string) {
+    jumpToProjectSection(parentSection: string, activeSubSection: string, projectTypeCode: string, projectId: string) {
         this.openCollapsedSection(parentSection);
         this.activeNav = parentSection;
-        this.activeSubNav = activeSubSection;
-        this.coiSummaryService.activeSubNavItemId = subNavSection;
+        this.activeSubNav = activeSubSection.toUpperCase();
+        this.coiSummaryService.activeSubNavItemId = projectTypeCode + '-' + projectId;
         setTimeout(() => {
-            this.windowScroll(subNavSection);
+            this.windowScroll(this.coiSummaryService.activeSubNavItemId);
         });
     }
 
@@ -166,5 +153,17 @@ export class ToolKitComponent implements OnInit, OnDestroy {
                 document.getElementById('relationship-chid-section').style.maxHeight = RELATIONSHIP_HEIGHT + 'px';
             }
         });
+    }
+
+    private getProjectRelationshipDetails() {
+        this.$subscriptions.push(this.coiSummaryService.getProjectRelationship(this.coiDetails.disclosureId).subscribe((res: ProjectRelationshipDetails[]) => {
+            this.projectList = res || [];
+            this._dataStoreAndEventsService.concatenatedProjectList = res;
+            this.awardList = this.projectList.filter(ele => ele.projectTypeCode == '1');
+            this.proposalList = this.projectList.filter(ele => ele.projectTypeCode == '3');
+            this.IPList = this.projectList.filter(ele => ele.projectTypeCode == '2');
+        }, _err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project list');
+        }));
     }
 }
