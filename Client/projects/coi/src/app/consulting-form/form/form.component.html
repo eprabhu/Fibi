@@ -19,9 +19,10 @@
                             [(ngModel)]="entityDetails.coiEntity.entityName"
                             (ngModelChange)="onEntityChanges()"
                             [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
-                            id="consultingForm-add-sfi-entity-name" appLengthValidator [limit]=500
+                            id="consultingForm-add-sfi-entity-name" appLengthValidator
+                            [isShowLimiter]="showTextAreaLimiter" [limit]=500
                             [styleList]="'mt-2 float-end word-count'">
-                        <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13" (click)="backToSearch()">
+                        <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13 cursor-pointer" (click)="backToSearch()">
                             Back to Search </a>
                     </ng-template>
                     <div *ngIf="mandatoryList?.has('entityName')"
@@ -33,6 +34,9 @@
                     <app-shared-entity-info-card [entityDetails]="entityDetails?.coiEntity" [viewMore]="true"
                         (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
                 </div>
+                <ng-container *ngIf="!isFormEditMode && !isResultFromSearch">
+                    <app-no-information></app-no-information>
+                </ng-container>
                 <ng-container *ngIf="canShowEntityFields">
                     <!-- Country -->
                     <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1"
@@ -40,7 +44,7 @@
                         <div class="d-flex position-relative">
                             <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
                                 for="consultingForm-add-sfi-country-search">
-                                <span class="mandatory">*</span>
+                                <span class="mandatory me-1">*</span>
                                 Country
                                 <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-country-search'"></app-common-help-text> -->
                             </label>
@@ -81,7 +85,7 @@
                         <span>
                             <label for="consultingForm-add-sfi-address-textarea"
                                 class="fs-14 fw-500 pb-1 label-text coi-label-help">
-                                <span class="mandatory">*</span>
+                                <span class="mandatory me-1">*</span>
                                 Address
                                 <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-address-textarea'"></app-common-help-text> -->
                             </label>
@@ -177,7 +181,7 @@
                         <div class="d-flex position-relative">
                             <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
                                 for="consultingForm-add-sfi-entity-type">
-                                <span class="mandatory">*</span> Entity Type
+                                <span class="mandatory me-1">*</span> Entity Type
                                 <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-entity-type'"></app-common-help-text> -->
                             </label>
                         </div>
@@ -196,28 +200,6 @@
                             <div *ngIf="mandatoryList?.has('entityType')" class="invalid-feedback d-block fs-13">
                                 {{mandatoryList?.get('entityType')}}
                             </div>
-                        </div>
-                    </div>
-                    <!-- Risk Type -->
-                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-3" tabindex="-1"
-                        aria-label="Risk Dropdwon">
-                        <div class="d-flex position-relative">
-                            <label class="d-block fs-14 fw-500 pb-1 label-text"
-                                for="consultingForm-add-sfi-risk-level">Risk
-                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-risk-level'"></app-common-help-text> -->
-                            </label>
-                        </div>
-                        <div class="col">
-                            <select class="form-select form-control fs-14"
-                                [(ngModel)]="entityDetails.coiEntity.riskCategoryCode" [disabled]="modifyType ==='1'"
-                                (ngModelChange)="setEntityRiskCategoryObj()" id="consultingForm-add-sfi-risk-level">
-                                <option [value]="null">--Select Type--</option>
-                                <ng-container *ngFor="let riskLevel of riskLevelLookup">
-                                    <option [value]="riskLevel?.riskCategoryCode">{{riskLevel?.description}}
-                                    </option>
-                                </ng-container>
-                            </select>
-                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-risk-level'" [subSectionId]="531"></app-common-information> -->
                         </div>
                     </div>
                 </ng-container>
