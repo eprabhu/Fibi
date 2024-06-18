@@ -96,6 +96,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     fcoiTypeCode: any;
     isShowAdminDashboard = false;
     hasTravelDisclosureRights = false;
+    hasConsultingDisclosureRights = false;
     disclosureTypes: any;
     addAdmin: any = {};
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
@@ -158,6 +159,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.checkForPagination();
         this.checkForAdvanceSearch();
         this.checkTravelDisclosureRights();
+        this.checkForConsultingDisclosureRight();
     }
 
     checkForPreviousURL() {
@@ -672,6 +674,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         const rightsArray = await this.commonService.fetchPermissions();
         this.hasTravelDisclosureRights = rightsArray.some((right) =>
             ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
+    }
+
+    async checkForConsultingDisclosureRight() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.hasConsultingDisclosureRights = rightsArray.some((right) =>
+            ['MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE'].includes(right));
     }
 
     getColorBadges(disclosure) {

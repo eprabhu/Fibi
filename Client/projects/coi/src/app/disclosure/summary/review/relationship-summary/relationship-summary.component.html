@@ -57,7 +57,7 @@
 					</div>
 				</div>
         <div class="col-auto">
-          <div *ngIf="projectRelations.length > 0" class="me-2">
+        <div *ngIf="projectRelations.length > 0 && projectRelations[0]?.coiEntity?.entityName != null" class="me-2">
             <label for="coi-relationship-conflict-status" class="coi-text-lighter d-block">Conflict Status</label>
             <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
             <span class="badgeFont" id="coi-relationship-conflict-status">{{worstCaseStatus?.description}}</span>
@@ -66,7 +66,7 @@
         </div>
 			</div>
       <div class="table-responsive coi-table-striped">
-      <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0" id="coi-relationship-summary-table">
+      <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0  && projectRelations[0]?.coiEntity?.entityName != null" id="coi-relationship-summary-table">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light" id="coi-relationship-summary-table-thead">
@@ -161,7 +161,7 @@
                 </tbody>
               </table>
       </div>
-              <div *ngIf="!projectRelations.length">
+              <div *ngIf="!projectRelations.length  || projectRelations[0]?.coiEntity?.entityName == null">
                 <app-no-information> </app-no-information>
               </div>
       </div>
