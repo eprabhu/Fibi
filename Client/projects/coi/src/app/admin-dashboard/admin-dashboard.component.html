@@ -1054,7 +1054,7 @@
          <div [hidden]="isLoading" *ngIf="coiList.length > 0 && isShowDisclosureList" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
                 <app-pagination  (pageChangeEvent)="actionsOnPageChange($event)"
-                    [totalCount]="result.travelDisclosureCount ? result.travelDisclosureCount : result.disclosureCount"
+                    [totalCount]="result.travelDisclosureCount ? result.travelDisclosureCount : result.consultDisclCount ?  result.consultDisclCount : result.disclosureCount"
                     [defaultCurrentPage]="coiAdminDashboardService.coiRequestObject.currentPage">
                 </app-pagination>
             </nav>
