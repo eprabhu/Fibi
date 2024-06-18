@@ -78,8 +78,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
     sliderElementId: string = '';
     isPurposeRead = {};
-    $debounceEventForTravelDashboard = new Subject();
-    travelPaginationCount: number;
+    $debounceEventForAPISearch = new Subject();
+    pageCountFromAPI: number;
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,
@@ -96,7 +96,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private getTravelSearchList(): void {
-        this.$subscriptions.push(this.$debounceEventForTravelDashboard.pipe(debounce(() => interval(800))).subscribe((data: any) => {
+        this.$subscriptions.push(this.$debounceEventForAPISearch.pipe(debounce(() => interval(800))).subscribe((data: any) => {
             this.$fetchDisclosures.next();
         }));
     }
@@ -106,14 +106,14 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
             switchMap(() => {
                 this.isLoading = true;
-                this.dashboardRequestObject.property2 = this.currentSelected.tab === 'TRAVEL_DISCLOSURES' ? this.searchText?.trim() : '';
+                this.dashboardRequestObject.property2 = this.isCurrentTabTravelOrConsulting() ? this.searchText?.trim() : '';
                 return this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject)
             })).subscribe((res: any) => {
                 this.result = res;
                 if (this.result) {
                     this.completeDisclosureList = this.getDashboardList();
                     this.completeDisclosureListCopy = this.paginationArray = JSON.parse(JSON.stringify(this.completeDisclosureList));
-                    this.currentSelected.tab === 'TRAVEL_DISCLOSURES' ? this.travelPaginationCount = this.result.totalServiceRequest : this.getArrayListForPagination();
+                    this.isCurrentTabTravelOrConsulting() ? this.pageCountFromAPI = this.result.totalServiceRequest : this.getArrayListForPagination();
                     this.loadingComplete();
                 }
             }), (err) => {
@@ -168,7 +168,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      */
     private resetAndFetchDisclosure(): void {
         this.searchText = '';
-        this.travelPaginationCount = 0;
+        this.pageCountFromAPI = 0;
         this.completeDisclosureList = [];
         this.getDashboardBasedOnTab();
     }
@@ -185,7 +185,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     actionsOnPageChange(event: number): void {
         if (this.dashboardRequestObject.currentPage != event) {
             this.dashboardRequestObject.currentPage = event;
-            this.currentSelected.tab === 'TRAVEL_DISCLOSURES' ? this.$fetchDisclosures.next() : this.getArrayListForPagination();
+            this.isCurrentTabTravelOrConsulting() ? this.$fetchDisclosures.next() : this.getArrayListForPagination();
         }
     }
 
@@ -239,8 +239,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      */
     getFilteredDisclosureListForSearchWord(): any {
         this.dashboardRequestObject.currentPage = 1; /* To set the pagination while search */
-        if (this.currentSelected.tab === 'TRAVEL_DISCLOSURES') {
-            this.$debounceEventForTravelDashboard.next();
+        if (this.isCurrentTabTravelOrConsulting()) {
+            this.$debounceEventForAPISearch.next();
         } else {
             this.completeDisclosureList = this.completeDisclosureListCopy.filter(disclosure => {
                 for (const value in disclosure) {
@@ -261,9 +261,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     resetDashboardAfterSearch(): void {
         this.searchText = '';
-        this.completeDisclosureList = this.getDashboardList();
-        this.resetDisclosureCopy();
-        this.getArrayListForPagination();
+        if(this.isCurrentTabTravelOrConsulting()) {
+            this.$fetchDisclosures.next();
+        } else {
+            this.completeDisclosureList = this.getDashboardList();
+            this.resetDisclosureCopy();
+            this.getArrayListForPagination();
+        }
+    }
+
+    isCurrentTabTravelOrConsulting() {
+        return ['TRAVEL_DISCLOSURES', 'CONSULTING_DISCLOSURES'].includes(this.currentSelected.tab);
     }
 
     /**

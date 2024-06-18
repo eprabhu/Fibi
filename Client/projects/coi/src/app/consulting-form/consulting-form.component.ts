@@ -62,7 +62,7 @@ export class ConsultingFormComponent {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.setTopDynamically();
-        this.subscribeFormSaveComplete(); //change name
+        this.subscibeFormCompletion();
         this.listenQueryParamsChanges();
     }
 
@@ -78,8 +78,14 @@ export class ConsultingFormComponent {
                this.consultingService.headerEntityName = '';
                this.validationList = [];
                this.loadNewFormAndUpdateStore(MODULE_ID);
+               this.resetChangeFlags();
             }
         }));
+    }
+
+    resetChangeFlags() {
+        this.consultingService.isFormBuilderDataChangePresent = false;
+        this.consultingService.isDataChangeAvailableInEntity = false;
     }
 
     loadNewFormAndUpdateStore(MODULE_ID: number) {
@@ -194,7 +200,7 @@ export class ConsultingFormComponent {
         }));
     }
 
-    private subscribeFormSaveComplete(): void {
+    private subscibeFormCompletion(): void {
         this.$subscriptions.push(this.consultingService.triggerSaveComplete.subscribe((data: any) => {
             if(this.isSubmitClicked) {
                 this.validationList = [];
@@ -251,6 +257,7 @@ export class ConsultingFormComponent {
                 this.consultingForm.consultingFormDisclosure = res;
                 this.isSubmitClicked = false;
                 this.dataStore.updateStore(['consultingFormDisclosure'], { consultingFormDisclosure: this.consultingForm.consultingFormDisclosure });
+                this.resetChangeFlags();
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclsousre submitted successfully.`);
             }, err => {
                 this.isSubmitClicked = false;
