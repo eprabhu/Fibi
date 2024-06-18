@@ -5,7 +5,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
+import com.polus.core.person.pojo.Person;
+import com.polus.core.pojo.Unit;
+import com.polus.core.roles.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -32,8 +34,6 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
-import com.polus.fibicomp.person.pojo.Person;
-import com.polus.fibicomp.pojo.Unit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
