@@ -75,7 +75,7 @@
                             Travel Disclosures
                         </li>
                         <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
-                        <li (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
+                        <li *ngIf="hasConsultingDisclosureRights"  (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
                             (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
                             class="p-3 fs-6 align-self-center"
