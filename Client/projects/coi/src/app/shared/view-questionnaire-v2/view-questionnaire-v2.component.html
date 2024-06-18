@@ -46,7 +46,7 @@
                                     (focus)="isShowLimiterInTable[answerIndex + '_' + columnHeaderIndex] = true"
                                     [(ngModel)]="answer['COLUMN_' + (columnHeaderIndex + 1)]"
                                     [id]="'answer'+question.QUESTION_ID+answerIndex+columnHeaderIndex" appAutoGrow
-                                    class="border-0 form-control table-answers" rows="1" appLengthValidator
+                                    class="border-0 form-control table-answers w-100" rows="1" appLengthValidator
                                     [isShowLimiter]="isShowLimiterInTable[answerIndex + '_' + columnHeaderIndex]"
                                     [limit]=250></textarea>
                                   <p *ngIf="isViewMode" class="mb-0 p-2 new-line-property"
@@ -118,7 +118,7 @@
                   <div class="answer-field p-0 ml-4">
                     <textarea name="name" [disabled]="isViewMode" rows="2" appLengthValidator appAutoGrow
                       [isShowLimiter]='!isViewMode' id="ans_{{question.QUESTION_ID}}"
-                      class="mb-2 scheduleBoxes dateBox qst-input-width" [(ngModel)]="question.ANSWERS[1]"
+                      class="mb-2 scheduleBoxes dateBox qst-input-width form-control w-100" [(ngModel)]="question.ANSWERS[1]"
                       (ngModelChange)="showChildQuestions(question);"> </textarea>
                   </div>
                 </ng-container>
@@ -150,13 +150,7 @@
                   (onSelect)="onSearchSelectEvent($event, question)">
                 </app-endpoint-search>
                 </ng-container>
-                <ng-container *ngIf="question.ANSWER_TYPE == 'SystemLookup' || question.ANSWER_TYPE == 'UserLookup'">\
-
-                  <div *ngIf="question.SHOW_QUESTION == true" @items>
-                    <span class="question-font">{{question.QUESTION}}</span>
-                    <a class="tooltip" (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)">
-                      <i class="fa fa-info-circle ct-icon-right" aria-hidden="true"></i>
-                    </a>
+                <ng-container *ngIf="question.ANSWER_TYPE == 'SystemLookup' || question.ANSWER_TYPE == 'UserLookup'">
                     <div class="ml-4" *ngIf="question.ANSWER_LENGTH === 1; else singleValueSelect">
                       <ng-container *ngIf="!isViewMode">
                         <app-look-up [options]='lookUpOptions[question.QUESTION_ID]' [isDisabled]="isViewMode"
@@ -180,7 +174,6 @@
                         </app-look-up>
                       </div>
                     </ng-template>
-                  </div>
                 </ng-container>
             </div>
           </li>

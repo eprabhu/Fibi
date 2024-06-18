@@ -1,4 +1,5 @@
 export interface UserDisclosure {
+        consultDisclId: any;
         coiDisclosureId: any;
         documentNumber: any;
         coiDisclosureNumber: any;
@@ -81,6 +82,7 @@ export interface UserDisclosure {
         travelDisclosureStatusCode: string;
         travelDisclosureStatusDescription: string;
         opaDisclosureId: any;
+        disclosureId: any;
       }
 
       export interface UnitDetails {

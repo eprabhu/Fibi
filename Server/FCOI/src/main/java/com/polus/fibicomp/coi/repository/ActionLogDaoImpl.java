@@ -21,13 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
-import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
-import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
 import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
+import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLog;
+import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLogType;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 
@@ -209,4 +212,26 @@ public class ActionLogDaoImpl implements ActionLogDao {
         query.setParameter("actionTypeCode", actionTypeCodes);
         return query.getResultList();
     }
+
+    @Override
+	public ConsultingDisclActionLogType getConsultDisclActionType(String actionLogTypeCode) {
+		StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT d FROM ConsultingDisclActionLogType d WHERE d.actionTypeCode = :actionTypeCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionLogTypeCode);
+        return (ConsultingDisclActionLogType) query.getResultList().get(0);
+	}
+
+	@Override
+	public List<ConsultingDisclActionLog> fetchConsultDisclActionLogsBasedOnId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ConsultingDisclActionLog> query = builder.createQuery(ConsultingDisclActionLog.class);
+		Root<ConsultingDisclActionLog> root = query.from(ConsultingDisclActionLog.class);
+		query.where(builder.equal(root.get("disclosureId"), disclosureId));
+        query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
 }

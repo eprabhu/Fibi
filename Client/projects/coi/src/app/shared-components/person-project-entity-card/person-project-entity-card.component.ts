@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { PersonProjectOrEntity } from '../shared-interface';
+import { DisclsoureHeaderDetails, PersonProjectOrEntity } from '../shared-interface';
 import { CommonService } from '../../common/services/common.service';
 import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilities';
 
@@ -12,7 +12,7 @@ import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilitie
 export class PersonProjectEntityCardComponent implements OnChanges {
 
     @Input() personProjectOrEntity: PersonProjectOrEntity = new PersonProjectOrEntity();
-    @Input() disclosureHeaderDetails;
+    @Input() disclosureHeaderDetails: DisclsoureHeaderDetails = new DisclsoureHeaderDetails();
 
     isReadMore = false;
     personUnitDetail = '';
@@ -21,9 +21,8 @@ export class PersonProjectEntityCardComponent implements OnChanges {
 
     ngOnChanges(): void {
         this.personUnitDetail = this.commonService.getPersonLeadUnitDetails(this.personProjectOrEntity);
-        
     }
-    
+
     getPersonLeadUnitDetail() {
         return getPersonLeadUnitDetails(this.personProjectOrEntity);
     }

@@ -101,7 +101,7 @@ public class ConflictOfInterestVO {
 	private Integer reviewCommentsCount;
 
 	private String revisionComment;
-	
+
 	private Integer submoduleCode;
 
 	private String disclosureSequenceStatusCode;
@@ -109,15 +109,15 @@ public class ConflictOfInterestVO {
 	private List<CoiDisclosure> coiDisclosures;
 
 	private Integer coiFinancialEntityId;
-	
+
     private List<CoiSectionsType> coiSectionsType;
-	
+
 	private CoiReview coiReview;
-	
+
 	private List<CoiReview> coiReviews;
-	
+
 	private List<AdminGroup> adminGroup;
-	
+
 	private List<CoiReviewActivity> coiReviewActivitys;
 
 	private List<CoiReviewCommentAttachment> coiReviewCommentAttachment;
@@ -127,15 +127,15 @@ public class ConflictOfInterestVO {
 	private Integer numberOfProposal;
 
 	private Integer numberOfAward;
-	
+
 	private Integer coiSubSectionsId;
-	
+
 	private  String coiSectionsTypeCode;
-	
+
 	private long commentCount;
-	
+
 	private List<Integer> tagGroupId;
-	
+
 	private String sort;
 
 	private CoiDisclEntProjDetails coiDisclEntProjDetail;
@@ -147,27 +147,29 @@ public class ConflictOfInterestVO {
 	private Integer disclosureNumber;
 
 	private Boolean proposalDisclosureWithNoSfi;
-	
+
 	private Integer coiEntityId;
-	
+
 	private String entityStatusCode;
-	
+
 	private Integer inProgressDisclosureCount;
-	
+
 	private Integer approvedDisclosureCount;
-	
+
 	private Integer travelDisclosureCount;
-	
+
+	private Integer consultDisclCount;
+
 	private Integer disclosureHistoryCount;
-	
+
 	private String filterType;
-	
+
 	private List<CoiEntity> coiEntityList;
-	
+
 	private Boolean isActive;
-	
+
 	private CoiTravelDisclosure coiTravelDisclosure;
-	
+
 	private List<CoiTravelDisclosure> coiTravelDisclosureList;
 
 	private List<PersonEntity> personEntityList;
@@ -177,101 +179,101 @@ public class ConflictOfInterestVO {
 	private List<PersonEntityRelType> personEntityRelType;
 
 	private Integer personEntityId;
-	
+
 	private CoiProjectProposal coiProjectProposal;
-	
+
 	private CoiProjectAward coiProjectAward;
-	
+
 	private String tabName;
-	
+
 	private String disclosureTypeCode;
-	
+
 	private Integer travelDisclosureId;
-	
+
 	private Integer travelNumber;
-    
+
 	private Integer versionNumber;
-	
+
 	private String versionStatus;
-	
+
 	private Integer entityId;
-	
+
 	private Integer entityNumber;
 
 	private String travelStatusCode;
-	
+
 	private Boolean isSponsoredTravel;
-	
+
 	private String travelTitle;
-	
+
 	private String purposeOfTheTrip;
-	
+
 	private BigDecimal travelAmount;
-	
+
 	private Date travelStartDate;
-	
+
 	private Date travelEndDate;
-	
+
 	private Integer noOfDays;
-	
+
 	private String destinationCity;
-	
+
 	private String destinationCountry;
-	
+
 	private String relationshipToYourResearch;
-	
+
 	private String acknowledgeBy;
-	
+
 	private String acknowledgeAt;
-	
+
 	private Timestamp updateTimeStamp;
-	
+
 	private String updateUser;
-	
+
 	private String createUser;
-	
+
 	private Timestamp createTimeStamp;
 
 	private String travelState;
-	
+
 	private Boolean isInternationalTravel;
-	
+
 	private List<CoiTravelerType> CoiTravelerType;
 
 	private Integer travelTravellerId;
-	
+
 	private Integer travellerDisclosureId;
-	
+
 	private List<String> travellerTypeCode;
-	
+
 	private String reviewStatus;
-	
+
 	private Integer entityCount;
 
 	private String homeUnit;
-	
+
 	private List<CoiProjConflictStatusType> coiProjConflictStatusTypes;
-	
+
 	private Date travelSubmissionDate;
 
 	private List<EntityRiskCategory> entityRiskCategories;
 
 	private String description;
-	
+
 	private Unit travellerUnitDetails;
-	
+
 	private String disclosureStatus;
-	
+
 	private String dispositionStatus;
-	
+
 	private String reviewStatusCode;
-	
+
 	private String versionStatusCode;
-	
+
 	private String dispositionStatusCode;
-	
+
 	private CoiReviewStatusType coiReviewStatusTypeDetalis;
-	
+
 	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusDetails;
 
 	private String conflictStatusCode;

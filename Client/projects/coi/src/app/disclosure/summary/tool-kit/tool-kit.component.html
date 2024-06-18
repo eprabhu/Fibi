@@ -18,43 +18,60 @@
                 <a class="nav-link d-flex align-items-center justify-content-between" role="link" tabindex="0"
                     title="Go to Relationships section" aria-label="Go to Relationships section"
                     (keyup.enter)="jumpToSection('COI803')" (click)="jumpToSection('COI803')">Relationships
-                    <ng-container *ngIf="projectList?.awards?.length || projectList?.proposals?.length">
+                    <ng-container *ngIf="projectList?.length">
                         <mat-icon title="Click here to collapse / expand Relationships section"
                             aria-label="Click here to collapse / expand Relationships section"
                             aria-hidden="true">{{isRelationshipCollapse ? 'keyboard_arrow_up' :'keyboard_arrow_down'}}</mat-icon>
                     </ng-container>
                 </a>
-                <ul *ngIf="isRelationshipCollapse && (projectList?.awards?.length || projectList?.proposals?.length)" class="right-sub-nav fs-14" id="relationship-chid-section">
-                    <li *ngIf="projectList?.awards?.length" class="fw-medium sub-nav-inner-list">
-                        <span [ngClass]="{'active-sub-nav': activeSubNav == 'AWARD'}"
-                            class="ps-active-nav">Awards</span>
+                <ul *ngIf="isRelationshipCollapse && projectList?.length" class="right-sub-nav fs-14" id="relationship-chid-section">
+                    <li *ngIf="awardList?.length" class="fw-medium sub-nav-inner-list">
+                        <span [ngClass]="{'active-sub-nav': activeSubNav === 'AWARD'}"
+                            class="ps-active-nav">{{awardList[0]?.projectType}}s</span>
                         <ul class="tree mt-2">
-                            <ng-container *ngFor="let award of projectList?.awards; let i = index">
+                            <ng-container *ngFor="let award of awardList; let i = index">
                                 <li>
                                     <a class="px-2 d-block" role="link" tabindex="0"
                                         [title]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
                                         [attr.aria-label]="'Go to '+ award?.moduleItemKey +' '+ award?.title +' award'"
-                                        (keyup.enter)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
-                                        (click)="jumpToProjectSection('COI803','AWARD',award?.moduleItemId); openProjectRelationships(award, i)"
-                                        [ngClass]="{'sub-nav-active': subNavActive == award?.moduleItemId}">{{award?.moduleItemKey}}
+                                        (keyup.enter)="jumpToProjectSection('COI803',award?.projectType,award.projectTypeCode,award?.projectId); openProjectRelationships(award, i)"
+                                        (click)="jumpToProjectSection('COI803',award?.projectType,award.projectTypeCode,award?.projectId); openProjectRelationships(award, i)"
+                                        [ngClass]="{'sub-nav-active': coiSummaryService.activeSubNavItemId === award.projectTypeCode+'-'+award?.projectId}">{{award?.projectNumber}}
                                         {{award?.title.length>51 ? (award?.title | slice:0: 51)+'...': award?.title}}</a>
                                 </li>
                             </ng-container>
                         </ul>
                     </li>
-                    <li *ngIf="projectList?.proposals?.length" class="fw-medium sub-nav-inner-list">
-                        <span [ngClass]="{'active-sub-nav': activeSubNav == 'PROPOSAL'}"
-                            class="ps-active-nav">Proposals</span>
+                    <li *ngIf="proposalList?.length" class="fw-medium sub-nav-inner-list">
+                        <span [ngClass]="{'active-sub-nav': activeSubNav === 'PROPOSAL'}"
+                            class="ps-active-nav">{{proposalList[0].projectType}}s</span>
                         <ul class="tree mt-2">
-                            <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
+                            <ng-container *ngFor="let proposals of proposalList; let i = index">
                                 <li>
                                     <a class="px-2 d-block" role="link" tabindex="0"
-                                        [title]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
-                                        [attr.aria-label]="'Go to '+ proposals?.moduleItemId +' '+ proposals?.title +' proposal'"
-                                        (click)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
-                                        (keyup.enter)="jumpToProjectSection('COI803','PROPOSAL',proposals?.moduleItemId); openProjectRelationships(proposals, i)"
-                                        [ngClass]="{'sub-nav-active': subNavActive == proposals?.moduleItemId}">{{proposals?.moduleItemId}}
+                                        [title]="'Go to '+ proposals?.projectNumber +' '+ proposals?.title +' proposal'"
+                                        [attr.aria-label]="'Go to '+ proposals?.projectNumber +' '+ proposals?.title +' proposal'"
+                                        (click)="jumpToProjectSection('COI803',proposals?.projectType,proposals.projectTypeCode,proposals?.projectId); openProjectRelationships(proposals, i)"
+                                        (keyup.enter)="jumpToProjectSection('COI803',proposals?.projectType,proposals.projectTypeCode,proposals?.projectId); openProjectRelationships(proposals, i)"
+                                        [ngClass]="{'sub-nav-active': coiSummaryService.activeSubNavItemId === proposals.projectTypeCode+'-'+proposals?.projectId}">{{proposals?.projectNumber}}
                                         {{proposals?.title.length>51 ?(proposals?.title | slice:0:51)+'...' : proposals?.title}}</a>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </li>
+                    <li *ngIf="IPList?.length" class="fw-medium sub-nav-inner-list">
+                        <span [ngClass]="{'active-sub-nav': activeSubNav === 'IP'}"
+                            class="ps-active-nav">{{IPList[0].projectType}}s</span>
+                        <ul class="tree mt-2">
+                            <ng-container *ngFor="let ipDetails of IPList; let i = index">
+                                <li>
+                                    <a class="px-2 d-block" role="link" tabindex="0"
+                                        [title]="'Go to '+ ipDetails?.projectNumber +' '+ ipDetails?.title +' '+ipDetails?.projectType"
+                                        [attr.aria-label]="'Go to '+ ipDetails?.projectNumber +' '+ ipDetails?.title +' '+ipDetails?.projectType"
+                                        (click)="jumpToProjectSection('COI803','IP',ipDetails.projectTypeCode,ipDetails?.projectId); openProjectRelationships(ipDetails, i)"
+                                        (keyup.enter)="jumpToProjectSection('COI803','IP',ipDetails.projectTypeCode,ipDetails?.projectId); openProjectRelationships(ipDetails, i)"
+                                        [ngClass]="{'sub-nav-active': coiSummaryService.activeSubNavItemId === ipDetails.projectTypeCode+'-'+ipDetails?.projectId}">{{ipDetails?.projectNumber}}
+                                        {{ipDetails?.title.length>51 ?(ipDetails?.title | slice:0:51)+'...' : ipDetails?.title}}</a>
                                 </li>
                             </ng-container>
                         </ul>
