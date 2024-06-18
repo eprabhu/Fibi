@@ -24,6 +24,9 @@ public class CoiProjectType implements Serializable {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
+	@Column(name = "BADGE_COLOR")
+	private String badgeColor;
+
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
@@ -74,4 +77,11 @@ public class CoiProjectType implements Serializable {
 		this.isActive = isActive;
 	}
 
+	public String getBadgeColor() {
+		return badgeColor;
+	}
+
+	public void setBadgeColor(String badgeColor) {
+		this.badgeColor = badgeColor;
+	}
 }

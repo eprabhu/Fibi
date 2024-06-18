@@ -272,4 +272,15 @@ convertDisclosureStatus(status): string {
     });
   }
 
+
+  getIcon(key): string {
+    switch(key) {
+        case 'Commitment': return 'handshake';
+        case 'Travel': return 'flight';
+        case 'Financial': return 'paid';
+        case 'Consulting' : return 'supervisor_account';
+        default: return;
+    }
+}
+
 }

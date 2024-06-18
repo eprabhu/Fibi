@@ -8,63 +8,58 @@
               <div class="col-12">
                 <div class="d-flex">
                   <span
-                  class="active-ribbon shadow-sm align-items-center d-flex {{getColorBadges(selectedProject?.moduleCode)}}"
-                  [attr.aria-label]="selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'">{{selectedProject?.moduleCode
-                  == 3 ? 'Proposal' : 'Award'}}</span>
-                <span class="mt-2">
-                  <span *ngIf="selectedProject?.moduleCode == 3" class="coi-text-darker fs-16">
-                    {{selectedProject?.moduleItemId}} - {{!isReadMore ? (selectedProject?.title?.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) :
-                    selectedProject?.title}}
-                    <span *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore" class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
-                      tabindex="0" role="link" [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
-                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'"
-                      [id]="'link-proposal-moduleItemId'">{{selectedProject?.title?.length > 60 && isReadMore ?'Read Less' : '...Read More'}}</span>
-                  </span>
-                  <span *ngIf="selectedProject?.moduleCode == 1" class="coi-text-darker fs-16">
-                    #{{selectedProject?.moduleItemKey}} - {{!isReadMore ? (selectedProject?.title.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) : selectedProject?.title }}
-                    <span tabindex="0" *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore" class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
-                      tabindex="0" role="link" [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
-                      [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'" 
-                      [id]="'link-award-moduleItemKey'">{{selectedProject?.title?.length > 60 && isReadMore ?'Read Less' : '...Read More'}}</span>
-                  </span>
-                </span>
+                  class="active-ribbon text-nowrap shadow-sm align-items-center d-flex" [style.background-color]="selectedProject?.projectBadgeColour"
+                  [attr.aria-label]="selectedProject?.projectType">{{selectedProject?.projectType}}</span>
+                    <span class="mt-2">
+                      <span class="coi-text-darker fs-16">
+                        {{selectedProject?.projectNumber}}
+                          - {{!isReadMore ? (selectedProject?.title?.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) :
+                          selectedProject?.title}}
+                          <span *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore"
+                                class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
+                                tabindex="0" role="link"
+                                [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
+                                [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'"
+                                [id]="'link-proposal-moduleItemId'">{{selectedProject?.title?.length > 60 && isReadMore ? 'Read Less' : '...Read More'}}</span>
+                      </span>
+                    </span>
                 </div>
               </div>
             </div>
             <div class="row p-3 fs-14">
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">{{selectedProject?.reporterRole}}</label>
-                <span class="coi-text-light">{{selectedProject?.principalInvestigator}}</span>
+                <label for="coi-define-relation-pi" class="coi-text-dark d-block">{{selectedProject?.reporterRole}}</label>
+                <span class="coi-text-light" id="coi-define-relation-pi">{{selectedProject?.piName}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">Project Role</label>
-                <span class="coi-text-light">{{selectedProject?.reporterRole}}</span>
+                <label for="coi-define-relation-projectrole" class="coi-text-dark d-block">Project Role</label>
+                <span class="coi-text-light" id="coi-define-relation-projectrole">{{selectedProject?.reporterRole}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">Period</label>
-                <span class="coi-text-light">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+                <label for="coi-define-relation-period" class="coi-text-dark d-block">Period</label>
+                <span class="coi-text-light" id="coi-define-relation-period">{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate
                   | dateFormatter}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-2">
-                <label for="" class="coi-text-dark d-block">Sponsor</label>
-                <span class="coi-text-light">{{selectedProject?.sponsor}}</span>
+                <label for="coi-define-relation-sponsor" class="coi-text-dark d-block">Sponsor</label>
+                <span class="coi-text-light" id="coi-define-relation-sponsor">{{selectedProject?.sponsorName}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
-                <label for="" class="coi-text-dark d-block">Lead Unit</label>
-                <span [ngClass]="selectedProject?.unitName ? 'coi-text-light': 'noDataExists'">{{selectedProject?.unitName ?
+                <label for="coi-define-relation-leadunit" class="coi-text-dark d-block">Lead Unit</label>
+                <span [ngClass]="selectedProject?.homeUnitName ? 'coi-text-light': 'noDataExists'" id="coi-define-relation-leadunit">{{selectedProject?.homeUnitName ?
                   commonService.getPersonLeadUnitDetails(selectedProject): 'No Lead Unit exist'}}</span>
               </div>
               <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
-                <label for="" class="coi-text-dark d-block">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}
+                <label for="coi-define-relation-status" class="coi-text-dark d-block">{{selectedProject?.projectType}}
                   Status</label>
-                <span class="coi-text-light">{{selectedProject?.moduleStatus}}</span>
+                <span class="coi-text-light" id="coi-define-relation-status">{{selectedProject?.projectStatus}}</span>
               </div>
               <div class="col-md-6 col-xl-3">
-                <label for="" class="coi-text-dark d-block">Prime Sponsor</label>
+                <label for="coi-define-relation-prime-sponsor" class="coi-text-dark d-block">Prime Sponsor</label>
                 <span
-                  [ngClass]="selectedProject?.primeSponsor ? 'coi-text-light': 'noDataExists'">{{selectedProject?.primeSponsor
+                  [ngClass]="selectedProject?.primeSponsorName ? 'coi-text-light': 'noDataExists'" id="coi-define-relation-prime-sponsor">{{selectedProject?.primeSponsorName
                   ?
-                  selectedProject?.primeSponsor :'--No Data--'}}</span>
+                  selectedProject?.primeSponsorName :'--No Data--'}}</span>
               </div>
             </div>
           </div>

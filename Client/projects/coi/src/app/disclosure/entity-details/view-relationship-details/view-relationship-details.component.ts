@@ -525,6 +525,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
             case '2': return 'handshake';
             case '3': return 'flight';
             case '1': return 'paid';
+            case '4' : return 'supervisor_account';
             default: return;
         }
     }

@@ -1,0 +1,580 @@
+<div class="row header-sticky mb-2">
+    <div class="col-12">
+        <!-- new top card -->
+        <div class="card coi-card-expanded">
+            <div class="row mx-0">
+                <div class="col-lg px-0">
+                    <div class="row pt-2">
+                        <div class="col-auto">
+                            <span class="d-flex" tabindex="-1" [attr.aria-label]="'Consulting disclosure'">
+                                <span
+                                    class="consulting-badge shadow-sm d-flex align-items-center bg-consulting-clip">
+                                    <span>Consulting</span>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <div class="row position-relative pe-3">
+                                <div class="col d-flex px-0 pe-3">
+                                    <div class="card-title align-items-start flex-column mb-0" *ngIf="consultingService?.headerEntityName">
+                                        <div class="fs-16 d-flex align-items-center">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1 mb-1">apartment</mat-icon>
+                                            <span class="text-slice" [attr.aria-label]="consultingService?.headerEntityName"
+                                                title="{{consultingService?.headerEntityName}}">{{consultingService?.headerEntityName}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="card-toolbar ms-auto me-2">
+                                        <div class="align-items-center d-flex f-14">
+                                            <!-- <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover me-2"
+                                                [class.link-primary]="4">
+                                                Trainings({{1}})
+                                            </a> | -->
+                                            <span class="ms-2 me-2" tabindex="0"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
+                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personEntitiesCount"
+                                                (click)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
+                                                (keyup.enter)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
+                                                (keyup.space)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
+                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personEntitiesCount">
+                                                Entities({{consultingForm?.consultingFormDisclosure?.personEntitiesCount}})
+                                            </span> |
+                                            <span class="ms-2 me-2" tabindex="0"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click to view notes' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click to view notes' : ''"
+                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personNotesCount"
+                                                (click)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
+                                                (keyup.enter)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
+                                                (keyup.space)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
+                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personNotesCount">
+                                                Notes({{consultingForm?.consultingFormDisclosure?.personNotesCount}})
+                                            </span> |
+                                            <span class="ms-2 me-3" tabindex="0"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount"
+                                                (click)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
+                                                (keyup.enter)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
+                                                (keyup.space)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
+                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount">
+                                                Attachments({{consultingForm?.consultingFormDisclosure?.personAttachmentsCount}})
+                                            </span>
+                                            <button (click)="collapseHeader()"
+                                                title="Click to {{isCardExpanded ? 'collapse' : 'view'}} Consulting Disclosure"
+                                                attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} Consulting Disclosure"
+                                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                                <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ?
+                                                    'expand_less' : 'expand_more'}}</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row position-relative pe-3">
+                                <div class="fs-14 d-flex align-items-center px-0">
+                                    <span class="coi-text-light d-flex align-items-center fs-14 flex-wrap">
+                                        <span class="d-flex align-items-center me-3 mt-1">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                            <span class="link-primary cursor-pointer" tabindex="0" (click)="openPersonDetailsModal()"
+                                                (keyup.enter)="openPersonDetailsModal()" (keyup.space)="openPersonDetailsModal()"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.person?.fullName + consultingForm?.consultingFormDisclosure?.person?.primaryTitle + consultingForm?.consultingFormDisclosure?.person?.homeUnitName + consultingForm?.consultingFormDisclosure?.person?.personEmail"
+                                                title="Click to view details of {{consultingForm?.consultingFormDisclosure?.person?.fullName}}">{{consultingForm?.consultingFormDisclosure?.person?.fullName}}
+                                            </span>
+                                        </span>
+                                        <span class="d-flex align-items-center me-3 mt-1" *ngIf="consultingForm?.consultingFormDisclosure?.person?.primaryTitle">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                            <span>{{consultingForm?.consultingFormDisclosure?.person?.primaryTitle}}</span>
+                                        </span>
+                                        <span class="d-flex align-items-center me-3 mt-1">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1 mb-1">home</mat-icon>
+                                            <span>{{commonService.getPersonLeadUnitDetails(consultingForm?.consultingFormDisclosure?.person?.unit)}}</span>
+                                        </span>
+                                        <span class="d-flex align-items-center mt-1">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                            <span>{{consultingForm?.consultingFormDisclosure?.person?.emailAddress}}</span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" *ngIf="isCardExpanded"
+                        id="coi-consultingForm?.consultingFormDisclosure-card">
+                        <div class="row gap-0">
+                            <div class="col-6 col-xxl-5">
+                                <div
+                                    class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                    <span class="coi-text-darker fs-6 coi-field-set">Details</span>
+                                    <div class="row">
+                                        <div class="col-lg-6 mt-3 pe-0">
+                                            <label class="coi-text-dark d-block">
+                                                <i aria-hidden="true" class="fa fa-user-o fw-700 me-1"></i>Administrator
+                                            </label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label
+                                                    [valueToShow]="consultingForm?.consultingFormDisclosure?.adminPersonName">
+                                                    <span>{{consultingForm?.consultingFormDisclosure?.adminPersonName}}</span>
+                                                </app-no-data-label></span>
+                                        </div>
+                                        <div class="col mt-3 pe-0">
+                                            <label class="coi-text-dark d-block">
+                                                <img alt="add-adminGroup icon" class="activity-icon"
+                                                    src="assets/images/multiple-admin-1.svg">Admin Group
+                                            </label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label
+                                                    [valueToShow]="consultingForm?.consultingFormDisclosure?.adminGroupId">
+                                                    <span>{{consultingForm?.consultingFormDisclosure?.adminGroupName}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-6 col-xxl-3">
+                                <div
+                                    class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                    <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
+                                    <div class="row">
+                                        <div class="col-lg-6 mt-3 pe-0">
+                                            <label class="coi-text-dark d-block"> Create
+                                            </label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label
+                                                    [valueToShow]="consultingForm?.consultingFormDisclosure?.createTimestamp">
+                                                    <span>{{consultingForm?.consultingFormDisclosure?.createTimestamp |
+                                                        dateFormatterWithTimeZone}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-lg-6 mt-3 pe-0">
+                                            <label class="coi-text-dark d-block"> Certification
+                                            </label>
+                                            <span class="coi-text-light">
+                                                <app-no-data-label
+                                                    [valueToShow]="consultingForm?.consultingFormDisclosure?.certifiedAt">
+                                                    <span>{{consultingForm?.consultingFormDisclosure?.certifiedAt |
+                                                        dateFormatterWithTimeZone}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xxl-4 mt-4 mt-xxl-0">
+                                <div
+                                    class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                    <span class="coi-text-darker fs-6 coi-field-set">Status</span>
+                                    <div class="row">
+                                        <div class="col-4 col-lg-4 col-xl-6 mt-3 pe-0">
+                                            <label class="coi-text-lighter d-block">Disposition
+                                            </label>
+                                            <app-no-data-label
+                                                [valueToShow]="consultingForm?.consultingFormDisclosure?.dispositionStatusType?.description">
+                                                <span
+                                                    class="{{commonService.getConsultingDispositionStatusBadge(consultingForm?.consultingFormDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                                <span class="coi-text-dark">
+                                                    {{consultingForm?.consultingFormDisclosure?.dispositionStatusType?.description}}
+                                                </span>
+                                            </app-no-data-label>
+                                        </div>
+                                        <div class="col-4 col-lg-4 col-xl-6 mt-3 pe-0">
+                                            <label class="coi-text-lighter d-block">Review
+                                            </label>
+                                            <app-no-data-label
+                                                [valueToShow]="consultingForm?.consultingFormDisclosure?.reviewStatusType?.description">
+                                                <span
+                                                    class="{{commonService.getConsultingReviewStatusBadge(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode)}}"></span>
+                                                <span class="coi-text-dark">
+                                                    {{consultingForm?.consultingFormDisclosure?.reviewStatusType?.description}}
+                                                </span>
+                                            </app-no-data-label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 border-prev-nxt ng-tns-c246-40 ng-star-inserted" ng-reflect-ng-class="">
+                    <div class="h-100" *ngIf="isCardExpanded">
+                        <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
+                            <button title="Go to Consulting home page" (click)="goToHomeUrl()" id="opa_home_btn"
+                                aria-label="GO TO O P A home"
+                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                                <mat-icon aria-hidden="true">home</mat-icon>
+                            </button>
+                            <button (click)="location.back()" title="Go to Back" id="opa_back_btn"
+                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
+                                aria-label="Go to Back">
+                                <mat-icon aria-hidden="true" class="me-2">reply</mat-icon>
+                                Back
+                            </button>
+                            <button
+                                *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode != '1'"
+                                [matMenuTriggerFor]="beforeMenu"
+                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
+                                title="Click for More Actions" id="opa_more_actions_btn" aria-label="More Actions">
+                                <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                            </button>
+                            <button *ngIf="dataStore.isFormEditable()" title="Click to save your progress"
+                                id="opa_save_btn" (click)="triggerSave()" aria-label="Save"
+                                class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12">
+                                <mat-icon aria-hidden="true" class="me-2">save</mat-icon>
+                                Save
+                            </button>
+                            <button (click)="consultingSubmissionModal()" [disabled]="consultingService.canDisableSubmit" *ngIf="dataStore.isFormEditable()"
+                                aria-label="Certify and Submit"
+                                class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
+                                title="Click to submit your disclosure" id="opa_submit_btn">
+                                <mat-icon aria-hidden="true" class="me-2">done</mat-icon>
+                                Certify and Submit
+                            </button>
+                            <button title="Click to Assign Administrator/Admin Group"
+                                *ngIf="!consultingForm?.consultingFormDisclosure?.adminPersonId && consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode  =='2' && checkForConsultingAdmin()"
+                                class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14 col-12"
+                                aria-label="Click to assign administrator or admin group"
+                                (click)="openAddAssignModal();" id="opa_assign_admin_btn">
+                                <mat-icon aria-hidden="true" class="me-1">group_add</mat-icon>
+                                <span class="mt-1 ms-2"> Assign Admin </span>
+                            </button>
+                            <!-- <button *ngIf="!dataStore.isFormEditable()" title="Click here to add new comment"
+                                (click)="openReviewComment()" id="opa_add_comments_btn" aria-label="Comments"
+                                class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col-12">
+                                <mat-icon aria-hidden="true" class="me-2">rate_review</mat-icon>
+                                <span>Comments</span>
+                            </button> -->
+                            <button
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col-12"
+                                *ngIf="['3', '5'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode)
+                                && checkForConsultingAdmin() && isLoggedInUser(consultingForm?.consultingFormDisclosure?.adminPersonId)"
+                                aria-label="Complete Final Review" id="opa_complete_review_btn"
+                                title="Click here to complete final review"
+                                data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
+                                <mat-icon aria-hidden="true" class="me-2">done</mat-icon>
+                                <span class="mt-1 ms-2"> Complete Final Review </span>
+                            </button>
+                            <!--<button title="Click to start review" id="opa_start_reviewer_review_btn" aria-label="Click to start review"
+                                (click)="updateOpaReview('START')"
+                                *ngIf="opaService.isStartReview && consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                                <mat-icon aria-hidden="true" class="material-icons-outlined">play_circle_filled</mat-icon>
+                                <span class="mt-1 ms-2"> Start Review </span>
+                            </button>
+                            <button title="Click to complete review" id="opa_complete_reviewer_review_btn"
+                                aria-label="Click to complete review"
+                                *ngIf="opaService.isCompleteReview && consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
+                                (click)="updateOpaReview('COMPLETE')"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                                <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
+                                <span class="mt-1 ms-2"> Complete Review </span>
+                            </button> -->
+                            <div class="fs-14 ash-text col-12">
+                                <label class="coi-text-lighter fs-13 fw-medium d-block">Last Updated By</label>
+                                <span
+                                    class="coi-text-dark fs-13 fw-normal">{{consultingForm?.consultingFormDisclosure?.updateUserFullName}}<span
+                                        class="coi-text-lighter fs-13 fw-medium"> On </span>
+                                    {{consultingForm?.consultingFormDisclosure?.updateTimeStamp |
+                                    dateFormatterWithTimeZone:'long'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-100" *ngIf="!isCardExpanded">
+                        <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
+                            <button title="Go to Consulting home page"
+                                class="btn btn-outline-grey pb-0 fs-14 col fit-height" aria-label="GO TO O P A home"
+                                id="opa_home_btn" (click)="goToHomeUrl()">
+                                <mat-icon aria-hidden="true">home</mat-icon>
+                            </button>
+                            <button title="Go to Back" class="btn btn-outline-grey pb-0 fs-14 col fit-height"
+                                (click)="location.back()" id="opa_back_btn" aria-label="Back">
+                                <mat-icon aria-hidden="true">reply</mat-icon>
+                            </button>
+                            <button
+                                *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode != '1'"
+                                [matMenuTriggerFor]="beforeMenu"
+                                class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col px-3 fit-height"
+                                title="Click for More Actions" aria-label="More Actions" id="opa_more_actions_btn">
+                                <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                                <span *ngIf="isCardExpanded">More Actions</span>
+                            </button>
+                            <button
+                                *ngIf="!consultingForm?.consultingFormDisclosure?.adminPersonId && consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode =='2' && checkForConsultingAdmin()"
+                                title="Click to Assign Administrator/Admin Group"
+                                aria-label="Click to assign administrator"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 col align-items-center"
+                                (click)="openAddAssignModal();" id="opa_assign_admin_btn">
+                                <mat-icon aria-hidden="true" class="me-1">group_add</mat-icon>
+                            </button>
+                            <!-- <button title="Click here to add new comment"
+                                *ngIf="!['1', '5', '6'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode)"
+                                (click)="openReviewComment()" id="opa_add_comments_btn"
+                                class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col"
+                                aria-label="Comments">
+                                <mat-icon aria-hidden="true">rate_review</mat-icon>
+                            </button> -->
+                            <button *ngIf="dataStore.isFormEditable()" (click)="triggerSave()" aria-label="Save"
+                                title="Click to save your progress" id="opa_save_btn"
+                                class="btn btn-primary pb-0 fs-14 col fit-height">
+                                <mat-icon aria-hidden="true">save</mat-icon>
+                            </button>
+                            <button *ngIf="dataStore.isFormEditable()" (click)="consultingSubmissionModal()" [disabled]="consultingService.canDisableSubmit"
+                                title="Click to submit your disclosure" id="opa_submit_btn"
+                                aria-label="Certify and Submit" class="btn btn-primary pb-0 fs-14 col fit-height">
+                                <mat-icon aria-hidden="true">done</mat-icon>
+                            </button>
+                            <button
+                                *ngIf="['3','5'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode)
+                                                               && checkForConsultingAdmin() && isLoggedInUser(consultingForm?.consultingFormDisclosure?.adminPersonId)"
+                                title="Click to complete review" id="opa_complete_review_btn"
+                                aria-label="Complete Review"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col"
+                                data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
+                                <mat-icon aria-hidden="true" class="me-2">done</mat-icon>
+                            </button>
+                            <!--
+                            <button *ngIf="opaService.isStartReview && consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
+                                title="Click to start review" aria-label="Click to start review" (click)="updateOpaReview('START')" id="opa_start_reviewer_review_btn"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col">
+                                <mat-icon aria-hidden="true" class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
+                            </button>
+                            <button *ngIf="opaService.isCompleteReview && consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode === '7'"
+                                title="Click to complete review" aria-label="Click to complete review"
+                                (click)="updateOpaReview('COMPLETE')" id="opa_complete_reviewer_review_btn"
+                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center col">
+                                <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
+                            </button> -->
+                        </div>
+                        <div class="fs-14 ash-text col-12">
+                            <label class="coi-text-lighter fs-13 fw-medium me-1">Last Updated By</label>
+                            <span
+                                class="coi-text-dark fs-13 fw-normal">{{consultingForm?.consultingFormDisclosure?.updateUserFullName}}
+                                On {{consultingForm?.consultingFormDisclosure?.updateTimeStamp |
+                                dateFormatterWithTimeZone:'long'}}</span>
+                        </div>
+                    </div>
+                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                        <!-- reviewStatusCode-(3-Review In Progress, 4-Review Assigned, 5-Assigned Review Completed) -->
+                        <ng-container
+                            *ngIf="consultingForm?.consultingFormDisclosure?.adminPersonId && ['3', '4', '5'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode) && checkForConsultingAdmin()">
+                            <button mat-menu-item title="Click to Reassign Administrator/Admin Group"
+                                aria-label="Click to Reassign Administrator/Admin Group" tabindex="0"
+                                id="opa_reassign_admin"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                                (click)="openAddAssignModal();"
+                                [ngClass]="(consultingForm?.consultingFormDisclosure?.adminPersonId || consultingForm?.consultingFormDisclosure?.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
+                                <mat-icon aria-hidden="true">group_add</mat-icon>
+                                <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
+                            </button>
+                        </ng-container>
+
+                        <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
+                        <!-- check logged person & disclosure created person is same -->
+                        <button mat-menu-item
+                            *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(consultingForm?.consultingFormDisclosure?.adminPersonId) &&
+                            (commonService?.getCurrentUserDetail('personId') == consultingForm?.consultingFormDisclosure?.personId)"
+                            title="Click to Withdraw" aria-label="Click to Withdraw" tabindex="0"
+                            id="consulting_withdraw"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                            (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
+                            <mat-icon aria-hidden="true">logout</mat-icon>
+                            <span class="ms-2 fw-medium fs-14">Withdraw</span>
+                        </button>
+
+                        <!-- return to pi -->
+                        <!-- reviewStatusCode-(3-Review In Progress, 4-Review Assigned, 5-Assigned Review Completed) -->
+                        <!-- Check logged person and administrator are same -->
+                        <button mat-menu-item
+                            *ngIf="consultingForm?.consultingFormDisclosure?.adminPersonId && ['3','4','5'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode) &&
+                                    (commonService?.getCurrentUserDetail('personId') == consultingForm?.consultingFormDisclosure?.adminPersonId)"
+                            title="Click to Return Disclosure" tabindex="0" id="consulting_return"
+                            (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
+                            <span class="ms-1 fw-medium fs-14">Return</span>
+                        </button>
+                        <button mat-menu-item title="Click to Notify" tabindex="0" id="opa_notify"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <mat-icon aria-hidden="true" class="returnIcon">notifications</mat-icon>
+                            <span class="ms-1 fw-medium fs-14">Notify</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </div>
+        </div>
+        <!-- new top card ends -->
+    </div>
+    <div class="col-lg-12">
+        <div class="navigation-tabs d-flex align-items-center">
+            <div [routerLink]="['form']" (click)="setTopDynamically()" class="navigation-box border-end"
+                queryParamsHandling='merge' role="button">
+                <div class="navigation-box-content" routerLinkActive="active" title="Click to view the Consulting Form"
+                    aria-label="Click to view the Consulting Form">Consulting Form
+                </div>
+            </div>
+            <!-- <div *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode !== '1' && checkForConsultingAdmin()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                 role="button">
+                <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
+                     aria-label="Click to view the reviews">Reviews
+                </div>
+            </div> -->
+            <div *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode !== '1'"
+                [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
+                title="click to view history" role="button">
+                <div class="navigation-box-content" routerLinkActive="active">History</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showSlider">
+    <app-header-slider (closePage)="closeHeaderSlider($event)"
+        [consultingPersonId]="consultingForm?.consultingFormDisclosure?.personId" [sliderType]="selectedType"
+        [consultingPersonName]="consultingForm?.consultingFormDisclosure?.person?.fullName"></app-header-slider>
+</ng-container>
+
+<div>
+    <router-outlet></router-outlet>
+</div>
+
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
+    [actionType]="consultingForm?.consultingFormDisclosure?.adminPersonId ? 'R' : 'A'" [path]="'CONSULTING_DISCLOSURES'"
+    [disclosureId]="consultingForm?.consultingFormDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails">
+</app-assign-administrator-modal>
+
+<app-personal-details-modal *ngIf="showPersonDetailsModal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
+    [userdetails]="personDetailsModalVO"></app-personal-details-modal>
+
+<!-- Disclosure Withdraw/Return Confirmation Modal-->
+<app-confirmation-modal [modalName]="'consulting-confirmation-modal'"
+    (primaryBtnAction)="performDisclosureAction($event)" [primaryBtnName]="primaryBtnName" [modalSize]="'lg'"
+    [textAreaLabelName]="'Reason for ' + textAreaLabelName" [helpText]="helpTexts" [needDescriptionField]="true"
+    [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg"
+    [primaryBtnTooltip]="'Click here to '+ primaryBtnName.toLowerCase() +' the disclosure.'"
+    [secondaryBtnTooltip]="'Click here to cancel'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>{{primaryBtnName}} Consulting Disclosure</span>
+        <app-common-help-text *ngIf="confirmationHelpTexts"
+            [helpTextHardCoded]="confirmationHelpTexts"></app-common-help-text>
+
+    </ng-container>
+    <!-- modal content -->
+    <ng-container content>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"
+            [disclosureHeaderDetails]="disclosureHeaderDetails"></app-person-project-entity-card>
+    </ng-container>
+</app-confirmation-modal>
+
+<!-- Complete review modal -->
+<div class="modal modal-coi fade mySkinDialog" data-bs-backdrop="static" id="completeReviewModalFromDashboard"
+    role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header pe-0">
+                <h4 class="modal-title">
+                    <span>Complete Final Review</span>
+                    <app-common-help-text [helpTextHardCoded]="completeReviewHelpText"></app-common-help-text>
+                </h4>
+                <button aria-label="Click here to close" class="btn-close fs-12" data-bs-dismiss="modal"
+                    id="consultingForm?.consultingFormDisclosure-complete-final-review-close-btn"
+                    title="Click here to close" type="button">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-2 mb-0">
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"
+                        [disclosureHeaderDetails]="disclosureHeaderDetails"></app-person-project-entity-card>
+                    <div class="col-lg-12 mt-3">
+                        <p class="fs-14">Are you sure you want to complete the final review of this consulting
+                            disclosure?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                    id="consultingForm?.consultingFormDisclosure-complete-final-review-cancel-btn"
+                    title="Click here to cancel" aria-label="Click here to cancel" type="button">Cancel
+                </button>
+                <button (click)="completeDisclosureReview()" class="btn btn-primary fs-14"
+                    id="consultingForm?.consultingFormDisclosure-complete-final-review-compelete-btn"
+                    title="Click here to complete final review" aria-label="Click here to complete final review"
+                    data-bs-dismiss="modal" type="button">Complete Final Review
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<app-reviewer-action-modal *ngIf="opaService.isEnableReviewActionModal"></app-reviewer-action-modal> -->
+
+<!-- <div *ngIf="opaService.isShowCommentNavBar">
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="consultingForm?.consultingFormDisclosure.opaDisclosure" [disclosureType]="'OPA'"></app-review-comments-slider>
+</div> -->
+
+<!--consultingForm?.consultingFormDisclosure submit confirmation modal-->
+<div class="modal fade mySkinDialog" tabindex="-1" id="consulting-submit-confirm-modal" role="dialog"
+    data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="consultingForm?.consultingFormDisclosure-submit-confirmation-header">
+                <h4 class="fs-16">
+                    <span>Submit Consulting Disclosure</span>
+                    <app-common-help-text [helpTextHardCoded]="submitHelpTexts"></app-common-help-text>
+                </h4>
+                <button type="button" id="consultingForm?.consultingFormDisclosure-submit-close-btn"
+                    class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Click here to close"
+                    title="Click here to close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"
+                        [disclosureHeaderDetails]="disclosureHeaderDetails"></app-person-project-entity-card>
+                    <div class="col-12 mt-2">
+                        <p class="fs-14">Are you sure you want to submit the <strong>Consulting</strong> disclosure?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <ng-container>
+                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal"
+                        id="consultingForm?.consultingFormDisclosure-submit-dismiss-btn"
+                        aria-label="Click here to cancel" title="Click here to cancel">Cancel</button>
+                    <button (click)="submitConsultingForm()" class=" btn btn-primary fs-14" data-bs-dismiss="modal"
+                        id="consultingForm?.consultingFormDisclosure-submit-btn"
+                        title="Click here to submit">Submit</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-concurrency-warning-modal *ngIf="consultingService.concurrentUpdateAction"
+    [sectionName]="consultingService.concurrentUpdateAction"
+    (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
+
+<!-- Unsaved Changes confirmation Modal -->
+<app-confirmation-modal [modalName]="'consultingForm-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
+    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    modal header
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    modal content
+    <div content class="ms-2">
+        <p class="fs-14">Do you want to leave the page without saving?</p>
+    </div>
+</app-confirmation-modal>
+<!-- Unsaved Changes confirmation Modal end -->
+
+<app-form-validator [validationList]="validationList"></app-form-validator>

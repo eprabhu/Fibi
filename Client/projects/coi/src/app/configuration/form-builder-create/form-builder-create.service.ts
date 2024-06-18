@@ -70,106 +70,106 @@ export class FormBuilderCreateService {
     }
 
     getFormList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + '/formbuilder/config/v1/formlist');
+        return this._http.get(this._commonService.formUrl + '/formbuilder/config/v1/formlist');
     }
 
     getFormDeatails(formBuilderId: string): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + `/formbuilder/config/v1/form/${formBuilderId}`);
+        return this._http.get(this._commonService.formUrl + `/formbuilder/config/v1/form/${formBuilderId}`);
     }
 
     createFormHeader(formDetails: CreateFormHeader): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/formheader", formDetails);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/formheader", formDetails);
     }
 
     publishForm(formDetails: CreateFormHeader): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formheader", formDetails);
+        return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formheader", formDetails);
     }
 
     createFormSection(formSection: FormSectionObject): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/formsection", formSection);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/formsection", formSection);
     }
 
     createComponent(formComponent: CreateComponentObject): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/sectioncomponent", formComponent);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/sectioncomponent", formComponent);
     }
 
     deleteComponent(componentId: number): Observable<any> {
-        return this._http.delete(this._commonService.baseUrl + `/formbuilder/config/v1/sectioncomponent/${componentId}`);
+        return this._http.delete(this._commonService.formUrl + `/formbuilder/config/v1/sectioncomponent/${componentId}`);
     }
 
     componentOrder(formOrder: Array<ComponentOrder>): Observable<any> {
-        return this._http.patch(this._commonService.baseUrl + "/formbuilder/config/v1/sectioncomponent/order", formOrder);
+        return this._http.patch(this._commonService.formUrl + "/formbuilder/config/v1/sectioncomponent/order", formOrder);
     }
 
     updateComponent(formComponent: ComponentObjects): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/sectioncomponent", formComponent);
+        return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/sectioncomponent", formComponent);
     }
 
     getProgramElementList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + "/formbuilder/config/v1/programmedElementList");
+        return this._http.get(this._commonService.formUrl + "/formbuilder/config/v1/programmedElementList");
     }
 
     getQuestionnaireList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + "/formbuilder/config/v1/questionnaireList");
+        return this._http.get(this._commonService.formUrl + "/formbuilder/config/v1/questionnaireList");
     }
 
     getCustomElementList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + "/formbuilder/config/v1/customElementList");
+        return this._http.get(this._commonService.formUrl + "/formbuilder/config/v1/customElementList");
     }
 
     readComponent(formBuilderSectCompId: number): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + `/formbuilder/config/v1/sectioncomponent/${formBuilderSectCompId}`);
+        return this._http.get(this._commonService.formUrl + `/formbuilder/config/v1/sectioncomponent/${formBuilderSectCompId}`);
     }
 
     sectionOrder(sectionOrder: Array<SectionOrder>): Observable<any> {
-        return this._http.patch(this._commonService.baseUrl + "/formbuilder/config/v1/formsection/order", sectionOrder);
+        return this._http.patch(this._commonService.formUrl + "/formbuilder/config/v1/formsection/order", sectionOrder);
     }
 
     updateSection(formSection: UpdateSectionObject): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formsection", formSection);
+        return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formsection", formSection);
     }
 
     readSection(formbuilderSectionId: number): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + `/formbuilder/config/v1/formsection/${formbuilderSectionId}`);
+        return this._http.get(this._commonService.formUrl + `/formbuilder/config/v1/formsection/${formbuilderSectionId}`);
     }
 
     deleteSection(sectionId: number): Observable<any> {
-        return this._http.delete(this._commonService.baseUrl + `/formbuilder/config/v1/formsection/${sectionId}`);
+        return this._http.delete(this._commonService.formUrl + `/formbuilder/config/v1/formsection/${sectionId}`);
     }
 
     updateFormHeader(formDetails: UpdateFormHeaderObject): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formheader", formDetails);
+        return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formheader", formDetails);
     }
     getSystemLookupByCustomType(dataTypeCode:{dataTypeCode:string}): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/getSystemLookupByCustomType", dataTypeCode);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/getSystemLookupByCustomType", dataTypeCode);
     }
 
     configureCustomElement(customData: configureCustomElement): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/configureCustomElement", customData);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/configureCustomElement", customData);
     }
 
     fetchCustomData(customDataId:{customDataElementId:string}): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/fetchFormCustomElementById", customDataId);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/fetchFormCustomElementById", customDataId);
     }
 
     getModuleList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + "/getModuleList");
+        return this._http.get(this._commonService.fibiUrl + "/getModuleList");
     }
 
     saveFormUsage(integationObj: saveFormUsage): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/formusage", integationObj);
+        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/formusage", integationObj);
     }
 
     updateFormUsage(integationObj: UpdateFormUsage): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formusage", integationObj);
+        return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formusage", integationObj);
     }
 
     getAllFormUsage(formBuilderId: string): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + `/formbuilder/config/v1/formusage/${formBuilderId}`);
+        return this._http.get(this._commonService.formUrl + `/formbuilder/config/v1/formusage/${formBuilderId}`);
     }
 
     deleteusage(usageID: number): Observable<any> {
-        return this._http.delete(this._commonService.baseUrl + `/formbuilder/config/v1/formusage/${usageID}`);
+        return this._http.delete(this._commonService.formUrl + `/formbuilder/config/v1/formusage/${usageID}`);
     }
 
 }
