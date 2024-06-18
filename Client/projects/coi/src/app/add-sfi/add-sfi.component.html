@@ -161,15 +161,19 @@
 								<div class="col-10">
 									<span aria-label="Relationship" class="coi-text-dark me-3">Relationship</span>
 									<ng-container *ngIf="checkForNotEmpty(existingEntityDetails.personEntityRelationships); else noRelation">
-										<span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color fst-italic d-inline-block"
+										<span class="relationship-pill border px-2 py-1 rounded-4 me-2 pill-color d-inline-block fs-14"
 											*ngFor="let relationship of existingEntityDetails.personEntityRelationships | keyvalue; let isFirst = first">
-											<span class="coi-text-light me-1 fw-500">{{relationship.key}} : </span>
+                                            <span class="d-flex coi-purple-text">
+                                                <mat-icon aria-hidden="true"
+                                                class="flex-shrink-0 me-1">{{getIcon(relationship.key)}}</mat-icon>
+											<span class="me-1 fw-bold">{{relationship.key}}:</span>
 											<ng-container *ngFor="let relation of relationship.value; let last = last">
-												<span class="r-title coi-text-lighter" *ngIf="!last"
+												<span *ngIf="!last"
 													[attr.aria-label]="relation?.validPersonEntityRelType?.personEntityRelType?.description">{{relation?.validPersonEntityRelType?.personEntityRelType?.description + '/'}}</span>
-												<span class="r-title coi-text-lighter" *ngIf="last"
+												<span *ngIf="last"
 													[attr.aria-label]="relation?.validPersonEntityRelType?.personEntityRelType?.description">{{relation?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
 											</ng-container>
+                                        </span>
 										</span>
 									</ng-container>
 									<ng-template #noRelation>
@@ -391,6 +395,7 @@
 									<mat-datepicker #startDate [pickerType]="'calendar'">
 									</mat-datepicker>
 								</span>
+								<app-common-information [elementId]="'coi-add-sfi-start-date'" [subSectionId]="532"></app-common-information>
 								<div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block fs-13"
 								 aria-label="Start Date of Involvement Validation" aria-describedby="start-date-validation">
 									<span id="coi-add-sfi-start-date-validation">{{mandatoryList?.get('date')}}</span>
@@ -419,6 +424,7 @@
 									<mat-datepicker #endDate [pickerType]="'calendar'">
 									</mat-datepicker>
 								</span>
+								<app-common-information [elementId]="'coi-add-sfi-end-date'" [subSectionId]="532"></app-common-information>
 								<div *ngIf="(mandatoryList.get('endDate'))" class="fs-13 invalid-feedback d-block"
 									 aria-label="End Date of Involvement Validation" aria-describedby="end-date-validation">
 									<span id="coi-add-sfi-end-date-validation">{{mandatoryList.get('endDate')}}</span>
@@ -453,6 +459,7 @@
 									</a>
 								</span>
 							</div>
+							<app-common-information [elementId]="'coi-add-sfi-sponsor-research'" [subSectionId]="532"></app-common-information>
 						</div>
 					</div>
 					<!-- Realtionship Details [Disclose financial details for the SFI] -->

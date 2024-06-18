@@ -20,23 +20,26 @@ import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.HistoryDto;
-import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
-import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
-import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
 import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.repository.ActionLogDao;
 import com.polus.fibicomp.coi.repository.DisclosureActionLogRepository;
 import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
 import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCommonDto;
+import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLog;
+import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLogType;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLogType;
@@ -441,4 +444,48 @@ public class ActionLogServiceImpl implements ActionLogService {
 		});
 		return new ResponseEntity<>(actionLogs, HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Object> getConsultingDisclosureHistoryById(Integer disclosureId) {
+		List<ConsultingDisclActionLog> consultingDisclActionLogs = actionLogDao.fetchConsultDisclActionLogsBasedOnId(disclosureId);
+		List<HistoryDto> consultDisclHistories = new ArrayList<>();
+		consultingDisclActionLogs.forEach(actionLog -> {
+			HistoryDto historyDto = new HistoryDto();
+			historyDto.setUpdateTimestamp(actionLog.getUpdateTimestamp());
+			if (actionLog.getUpdateUser() != null) {
+				historyDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+			}
+			historyDto.setActionTypeCode(actionLog.getActionTypeCode());
+			historyDto.setMessage(actionLog.getDescription());
+			historyDto.setComment(actionLog.getComment());
+			consultDisclHistories.add(historyDto);
+		});
+		return new ResponseEntity<>(consultDisclHistories, HttpStatus.OK);
+	}
+
+	@Override
+	public void saveConsultingDisclActionLog(String actionLogTypeCode, ConsultDisclCommonDto consultDisclCommonDto) {
+		ConsultingDisclActionLogType consultDisclActionLogType = actionLogDao.getConsultDisclActionType(actionLogTypeCode);
+		if (consultDisclActionLogType != null) {
+			String message = buildConsultDisclLogMessage(consultDisclActionLogType.getMessage(), consultDisclCommonDto);
+			ConsultingDisclActionLog consultingDisclActionLog = ConsultingDisclActionLog.builder()
+					.actionTypeCode(actionLogTypeCode)
+					.comment(consultDisclCommonDto.getComment())
+					.description(message)
+					.disclosureId(consultDisclCommonDto.getDisclosureId())
+					.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
+					.build();
+			actionLogDao.saveObject(consultingDisclActionLog);
+		}
+	}
+
+	private String buildConsultDisclLogMessage(String message, ConsultDisclCommonDto consultDisclCommonDto) {
+		Map<String, String> placeholdersAndValues = new HashMap<>();
+		placeholdersAndValues.put("{REPORTER}", consultDisclCommonDto.getUpdateUserFullName());
+		placeholdersAndValues.put("{ADMIN_NAME}", consultDisclCommonDto.getUpdateUserFullName());
+		placeholdersAndValues.put("{ASSIGNED_ADMIN}", consultDisclCommonDto.getAdminPersonName());
+		placeholdersAndValues.put("{REASSIGNED_ADMIN}", consultDisclCommonDto.getReassignedAdminPersonName());
+		return renderPlaceholders(message, placeholdersAndValues);
+	}
+
 }

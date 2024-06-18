@@ -12,7 +12,7 @@
 </ng-container>
   <div #relationshipConflict class="table-responsive coi-table-striped">
     <table class="table table-bordered fs-14 table-striped" id="coi-sfi-conflict-relationship-table">
-      <thead #conflictTableHeader [ngClass]="{'sticky-top':isSlider}">
+      <thead #conflictTableHeader [ngClass]="{'sticky-top z-0':isSlider}">
         <tr class="fw-600" id="table-header-tr">
           <th scope="col" class="col-xl-3" tabindex="0" aria-label="Significant Financial Interest">Significant Financial Interest</th>
           <th scope="col" class="col-xl-2" tabindex="0" aria-label="conflict status"><span class="d-inline-block text-danger fw-600">*</span> Conflict Status</th>
@@ -82,8 +82,9 @@
         <div *ngIf="entityProjectDetails.length">
           <div class="row">
             <div class="col-12 fs-14">
-              <span class="mandatory fw-600">*</span>
+              <span class="mandatory fw-600 me-1">*</span>
               <span title="List of Conflict status" tabindex="0" aria-label="conflict status" class="fw-600">Conflict Status</span>
+              <app-common-help-text [helpTextHardCoded]="'Please select a conflict status.'"></app-common-help-text>
               <div>
                 <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode"
                   class="form-select form-control cursor-pointer"
@@ -100,15 +101,16 @@
               </div>
             </div>
             <div class="fs-14 mt-3">
-              <span class="mandatory fw-600" id="description">*</span>
+              <span class="mandatory fw-600 me-1" id="description">*</span>
               <span class="fw-600" aria-label="Define Project - SFI Relation"
                 aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
+                <app-common-help-text [helpTextHardCoded]="'Please enter the description.'"></app-common-help-text>
               <textarea class="form-control" id="coi_description"  tabindex="0" aria-label="Please Provide your description for define Project - SFI Relation"
                 [(ngModel)]="coiDescription"
                 (ngModelChange)="coiDescription = coiDescription.trim();" appAutoGrow
                 appLengthValidator rows="1"
                 [ngClass]="coiValidationMap.has('coiDescription') ? 'is-invalid d-block' : ''"
-                placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
+                placeholder="Please provide your description" [limit]=2000 spellcheck="false"></textarea>
               <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiDescription')">
                 {{coiValidationMap.get('coiDescription')}}
               </span>
@@ -117,10 +119,10 @@
         </div>
       </div>
       <div class="modal-footer ct-footer-padding">
-        <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" aria-label="Click to cancel" title="Click to cancel"
+        <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" aria-label="Click here to cancel" title="Click here to cancel"
           (click)="clearValues()" type="button">Cancel
         </button>
-        <button class="btn btn-primary fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all" aria-label="Click to Apply to All" title="Click to Apply to All">Apply to All</button>
+        <button class="btn btn-primary fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all" aria-label="Click here to Apply to All" title="Click here to apply to all">Apply to All</button>
       </div>
     </div>
   </div>

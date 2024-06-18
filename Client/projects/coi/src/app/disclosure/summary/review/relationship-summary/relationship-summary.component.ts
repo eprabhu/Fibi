@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
 import { CommonService } from '../../../../common/services/common.service';
-import { CommentConfiguration, RO } from '../../../coi-interface';
+import { CommentConfiguration, ProjectRelationshipDetails, RO } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { HTTP_ERROR_STATUS } from '../../../../../../../fibi/src/app/app-constants';
@@ -21,7 +21,7 @@ declare var $: any;
 })
 export class RelationshipSummaryComponent implements OnInit {
 
-    @Input() selectedProject: any;
+    @Input() selectedProject: ProjectRelationshipDetails;
     @Output() openModuleDetails: EventEmitter<any> = new EventEmitter<any>();
     $subscriptions: Subscription[] = [];
     projectRelations: any = [];
@@ -47,9 +47,10 @@ export class RelationshipSummaryComponent implements OnInit {
     isDesc = true;
     worstCaseStatus = null;
     relationshipTypeCache = {};
+    activeCard: string;
 
     constructor(
-        private _coiSummaryService: CoiSummaryService,
+        public coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         public _commonService: CommonService,
         private _dataStore: DataStoreService,
@@ -64,6 +65,7 @@ export class RelationshipSummaryComponent implements OnInit {
         this.getSfiDetails();
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 3;
+        this.coiSummaryService.activeSubNavItemId = '';
     }
 
     private fetchCOIDetails(): void {
@@ -94,7 +96,7 @@ export class RelationshipSummaryComponent implements OnInit {
 
 getEntityProjectRelations() {
         this.$subscriptions.push(
-            this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
+            this.coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.projectId,
                Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
                 .subscribe((data: any) => {
                 if (data && data.length > 0) {
@@ -125,15 +127,15 @@ getEntityProjectRelations() {
             entityName: entity?.coiEntity?.entityName,
             index: index,
             personId: this.coiDetails.personId,
-            moduleItemKey: this.selectedProject.moduleItemKey,
-            moduleItemId: this.selectedProject.moduleItemId,
+            moduleItemKey: this.selectedProject.projectNumber,
+            moduleItemId: this.selectedProject.projectId,
             moduleCode: this.selectedProject.moduleCode,
             title: this.selectedProject.title,
             coiProjConflictStatusType: entity.coiProjConflictStatusType,
             disclosureId: this.coiDetails.disclosureId,
             comment:entity.disclComment.comment,
-            sponsor: this.selectedProject.sponsor,
-            primeSponsor: this.selectedProject.primeSponsor
+            sponsor: this.selectedProject.sponsorName,
+            primeSponsor: this.selectedProject.primeSponsorName
         }
     }
 
@@ -149,8 +151,8 @@ getEntityProjectRelations() {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
                 componentTypeCode: '6',
                 subModuleItemKey: section === 'SFI' ? childSubSection.disclosureDetailsId : details.moduleItemId,
-                subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null, 
-                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`,
+                subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null,
+                coiSubSectionsTitle: `#${details.projectNumber}: ${details.title}`,
                 selectedProject: details,
                 sfiStatus: childSubSection?.coiProjConflictStatusType,
                 subSectionTitle: childSubSection?.personEntityRelationshipDto.entityName,
@@ -168,7 +170,7 @@ getEntityProjectRelations() {
       }
 
       getSfiDetails() {
-        this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
+        this.$subscriptions.push(this.coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
             if (data) {
                 this.count = data.count;
             }
@@ -251,6 +253,16 @@ getEntityProjectRelations() {
                 return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
             });
             return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+    }
+
+    getIcon(key): string {
+        switch(key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            case 'Consulting' : return 'supervisor_account';
+            default: return;
         }
     }
 }

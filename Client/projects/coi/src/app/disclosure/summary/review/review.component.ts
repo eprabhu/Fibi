@@ -5,6 +5,8 @@ import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
 import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CoiService } from '../../services/coi.service';
+import { CoiSummaryService } from '../coi-summary.service';
+import { ProjectRelationshipDetails } from '../../coi-interface';
 
 @Component({
     selector: 'app-coi-review',
@@ -17,11 +19,12 @@ export class ReviewComponent implements OnInit {
     coiDetails: any = {};
     isRelationCollapsed = true;
     $subscriptions: Subscription[] = [];
-    selectedProject: any = {};
+    selectedProject: ProjectRelationshipDetails;
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _dataStore: DataStoreService, public commonService: CommonService, private _coiService: CoiService
+        private _dataStore: DataStoreService, public commonService: CommonService, public coiService: CoiService,
+        public coiSummaryService: CoiSummaryService
     ) { }
 
     ngOnInit() {
@@ -57,23 +60,18 @@ export class ReviewComponent implements OnInit {
         }
     }
 
-    openProjectMoreDetails(moduleId) {
-        let redirectUrl = '';
-        if (this.selectedProject.moduleCode == 3) {
-            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
-        } else {
-            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
-        }
-        window.open(redirectUrl);
-    }
-
     // 'COI803' parent element of Relationships header.
     private listenToolKitFocusSection() {
-        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele =>{
+        this.$subscriptions.push(this.coiService.$isExpandSection.subscribe(ele =>{
             if (ele.section == 'COI803') {
                 this.isRelationCollapsed = ele.isExpand;
             }
         }));
     }
-    
+
+    clearHighlightOnRelationshipCollapse() {
+        this.isRelationCollapsed = !this.isRelationCollapsed;
+        this.coiSummaryService.activeSubNavItemId = '';
+    }
+
 }

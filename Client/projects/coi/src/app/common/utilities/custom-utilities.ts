@@ -18,8 +18,8 @@ export function replaceFormatStringWithValue(formatString: string, object: any):
  * @param sponsor
  */
 export function getPersonLeadUnitDetails(unitData: any): string {
-    if (unitData && unitData.hasOwnProperty('homeUnit') && unitData.hasOwnProperty('homeUnitName')) {
-        unitData['unitNumber'] = unitData.homeUnit;
+    if (unitData && (unitData.hasOwnProperty('homeUnit') || unitData.hasOwnProperty('homeUnitNumber')) && unitData.hasOwnProperty('homeUnitName')) {
+        unitData['unitNumber'] = unitData.homeUnit || unitData.homeUnitNumber;
         unitData['unitName'] = unitData.homeUnitName;
     }
     return replaceFormatStringWithValue(DEFAULT_UNIT_FORMAT, unitData);

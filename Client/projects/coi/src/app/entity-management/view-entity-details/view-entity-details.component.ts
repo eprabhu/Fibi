@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
@@ -9,9 +9,8 @@ import { NavigationService } from '../../common/services/navigation.service';
 import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
-import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { fadeInOutHeight, heightAnimation } from '../../common/utilities/animations';
-import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 
 declare const $: any;
@@ -22,6 +21,8 @@ declare const $: any;
     animations: [fadeInOutHeight, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
+
+    private readonly _moduleCode = 'GE26';
 
     @Input() entityDetails: any;
     entityId: any;
@@ -54,8 +55,14 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isConcurrency = false;
     isUserCollapse = false;
     readMore: string;
+    modifyTypeHelpText = `Select 'Minor Modifications' for typos. Select 'Major Modifications' for changing the company name,
+                          ownership type, and permanent change in entity address that reflects in entity country.`;
+    entitySliderSectionConfig : any = {};
 
-    constructor(private _router: Router, private _route: ActivatedRoute,
+    inactivateHeaderHelpText = `You are about to inactivate the entity. If the entity is used in any of the 'Active' SFIs (financial or travel), then a new version of the
+                                entity is created in 'Inactive' status and the previous version goes to 'Archive' status.`;
+
+    constructor(private _router: Router,
         public entityManagementService: EntityManagementService,
         private _commonServices: CommonService,
         private _navigationService: NavigationService,
@@ -65,6 +72,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.getEntitySectionConfig();
         this.hasManageEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
         this.getRelationshipTypes();
     }
@@ -127,7 +135,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             this.mandatoryList.set('change', 'Please choose a modification type.');
         }
         if (!this.modifyDescription) {
-            this.mandatoryList.set('description', 'Please provide a reason for modifying the entity.');
+            this.mandatoryList.set('description', 'Please provide the reason for modifying the entity.');
         }
         return this.mandatoryList.size === 0 ? true : false;
     }
@@ -190,7 +198,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     validForActivateAndInactivateEntity(): boolean {
         if (!this.inactivateReason && this.entityDetails.isActive) {
-            this.reasonValidateMapEntity.set('reason', '*Please enter the reason for inactivation.');
+            this.reasonValidateMapEntity.set('reason', 'Please provide the reason for inactivation.');
         }
         return this.reasonValidateMapEntity.size === 0 ? true : false;
     }
@@ -248,10 +256,10 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
     validateApproveEntity(): boolean {
         if (!this.entityRelationshipValue) {
-            this.approveEntityValidateMap.set('relationship', '*Please select entity relationship.');
+            this.approveEntityValidateMap.set('relationship', 'Please select the entity association details.');
         }
         if (this.entityRelationshipValue && this.entityRelationshipValue !== '1' && !this.relationshipEntityName) {
-            this.approveEntityValidateMap.set('entityName', '*Please choose an entity name.');
+            this.approveEntityValidateMap.set('entityName', 'Please choose an entity name.');
         }
         return this.approveEntityValidateMap.size === 0 ? true : false;
     }
@@ -264,6 +272,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.relationshipEntityName = '';
         this.EntitySearchOptions = this._elasticConfig.getElasticForEntity();
         this.entityRelationshipNumber = null;
+        this.approveEntityValidateMap.clear();
     }
 
     toggleSlider() {
@@ -309,6 +318,20 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.inactivateReason='';
         this.readMore = '';
         document.getElementById('hide-inactivate-modal').click();
+    }
+
+    getEntitySectionConfig(): void {
+        this.$subscriptions.push(
+        this._commonServices.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
+            this.entitySliderSectionConfig = data;
+        },
+            _err => {
+                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
+            }));
+    }
+
+    isEntityDetailsAvailable(): boolean {
+        return !isEmptyObject(this.entityDetails);
     }
 
 }

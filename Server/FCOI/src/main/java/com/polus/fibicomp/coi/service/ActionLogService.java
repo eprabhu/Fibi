@@ -2,17 +2,18 @@ package com.polus.fibicomp.coi.service;
 
 import java.util.List;
 
-import com.polus.fibicomp.opa.dto.OPACommonDto;
 import org.springframework.http.ResponseEntity;
 
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
-import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
+import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCommonDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
 
 public interface ActionLogService {
 
@@ -97,5 +98,18 @@ public interface ActionLogService {
      * @return List<PersonEntityActionLog>
      */
     ResponseEntity<Object> getAllPersonEntityActionLog(PersonEntityDto personEntityDto);
+
+    /**
+     * This method is used to get consulting disclosure history
+     * @param disclosureId
+     */
+	ResponseEntity<Object> getConsultingDisclosureHistoryById(Integer disclosureId);
+
+	/**
+     * This method is used to save Consulting disclosure action log
+     * @param actionLogTypeCode
+     * @param consultDisclCommonDto
+     */
+	void saveConsultingDisclActionLog(String actionLogTypeCode, ConsultDisclCommonDto consultDisclCommonDto);
 
 }

@@ -209,6 +209,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     }
 
     deleteAnswer(question: Question, answer: TableAnswer, answerIndex: number): void {
+        this.markQuestionnaireAsChanged(true);
         if (answer.QUEST_TABLE_ANSWER_ID === null) {
             question.ANSWERS['1'].splice(answerIndex, 1);
             this.addOrderNumber(question);
@@ -842,6 +843,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
 
     saveQuestionnaire() {
         this.deleteUnAnsweredTableRows();
+        this.findUnAnsweredQuestions();
         this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
         if (this.isSaving === false) {
             this.isSaving = true;
@@ -865,6 +867,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     saveQuestionnaireExternal() {
         if (this.isDataChanged) {
             this.deleteUnAnsweredTableRows();
+            this.findUnAnsweredQuestions();
             this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
             this.questionnaireVO.files = this.filesArray;
             this.questionnaireSaveEvent.emit({ status: 'EXTERNAL_SAVE', data: this.questionnaireVO});

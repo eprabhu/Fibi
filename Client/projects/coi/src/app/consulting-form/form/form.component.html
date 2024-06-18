@@ -1,0 +1,284 @@
+<div class="section-container">
+    <div class="section">
+        <div class="section-header form-builder-sticky-header">
+            <span>Entity Details</span>
+        </div>
+        <div class="content" id="ENTITY_SECTION">
+            <div class="row mb-3">
+                <div class="col-12" *ngIf="isFormEditMode">
+                    <label for="consulting-entity-name">Entity Name</label>
+                    <app-elastic *ngIf="!isNewEntityFromSearch ;else textBox" [uniqueId]="'consulting-entity-name'"
+                        class="w-100 mt-4" [options]="entitySearchOptions"
+                        [isError]="mandatoryList?.has('entityName')"
+                        [placeHolder]="'Type here to search / add an Entity Name'" [clearField]="clearField"
+                        [isDisabled]="!isFormEditMode" (selectedResult)="selectedEvent($event)"
+                        [addNewValue]="'ALLOW_UNIQUE'" (newValueSelect)="addNewEntity($event)">
+                    </app-elastic>
+                    <ng-template #textBox>
+                        <input type="text" class="form-control fs-13" [class.pr-6]="isNewEntityFromSearch"
+                            [(ngModel)]="entityDetails.coiEntity.entityName"
+                            (ngModelChange)="onEntityChanges()"
+                            [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
+                            id="consultingForm-add-sfi-entity-name" appLengthValidator
+                            [isShowLimiter]="showTextAreaLimiter" [limit]=500
+                            [styleList]="'mt-2 float-end word-count'">
+                        <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13 cursor-pointer" (click)="backToSearch()">
+                            Back to Search </a>
+                    </ng-template>
+                    <div *ngIf="mandatoryList?.has('entityName')"
+                    class="invalid-feedback d-block fs-13 position-absolute">
+                    {{mandatoryList?.get('entityName')}}
+                </div>
+                </div>
+                <div class="col-12" *ngIf="isResultFromSearch">
+                    <app-shared-entity-info-card [entityDetails]="entityDetails?.coiEntity" [viewMore]="true"
+                        (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
+                </div>
+                <ng-container *ngIf="!isFormEditMode && !isResultFromSearch">
+                    <app-no-information></app-no-information>
+                </ng-container>
+                <ng-container *ngIf="canShowEntityFields">
+                    <!-- Country -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1"
+                        aria-label="Country Search Field">
+                        <div class="d-flex position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-country-search">
+                                <span class="mandatory me-1">*</span>
+                                Country
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-country-search'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col">
+                            <app-endpoint-search [clearField]="clearCountryField"
+                                [uniqueId]="'consultingForm-add-sfi-country-search'"
+                                [httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
+                                class="w-100 mt-4" [isError]="mandatoryList?.has('country')"
+                                [isDisabled]="!isFormEditMode">
+                                <!-- [isDisabled]="isResultFromSearch || isFormEditMode ||modifyType ==='1'" -->
+                            </app-endpoint-search>
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-country-search'" [subSectionId]="531"></app-common-information> -->
+                            <div id="consultingForm-add-sfi-country-valiidation" *ngIf="mandatoryList?.has('country')"
+                                class="invalid-feedback d-block fs-13">
+                                {{mandatoryList?.get('country')}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- City -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1"
+                        aria-label="City">
+                        <div class="d-flex fs-15 position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-city-input-box">City
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-city-input-box'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input id="consultingForm-add-sfi-city-input-box" type="text" class="form-control"
+                                [(ngModel)]="entityDetails.coiEntity.city"
+                                [disabled]="isResultFromSearch || !isFormEditMode" appTailingSpaceRemover>
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-city-input-box'" [subSectionId]="531"></app-common-information> -->
+                        </div>
+                    </div>
+                    <!-- Address -->
+                    <div class="col-12 mt-3" tabindex="-1" aria-label="Address">
+                        <span>
+                            <label for="consultingForm-add-sfi-address-textarea"
+                                class="fs-14 fw-500 pb-1 label-text coi-label-help">
+                                <span class="mandatory me-1">*</span>
+                                Address
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-address-textarea'"></app-common-help-text> -->
+                            </label>
+                            <textarea appAutoGrow class="form-control" rows="1"
+                                [(ngModel)]="entityDetails.coiEntity.address" appTailingSpaceRemover
+                                id="consultingForm-add-sfi-address-textarea"
+                                [ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator
+                                [limit]=2000 [styleList]="'mt-2 float-end word-count'" title="Adress"
+                                aria-label="Adress">
+                        </textarea>
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-address-textarea'" [subSectionId]="531"></app-common-information> -->
+                            <div *ngIf="mandatoryList?.has('address')"
+                                class="invalid-feedback d-block fs-13 position-absolute">
+                                {{mandatoryList?.get('address')}}
+                            </div>
+                        </span>
+                    </div>
+                    <!-- Phone -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-1" tabindex="-1"
+                        aria-label="Phone">
+                        <div class="d-flex px-1 position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-phone-input-box">
+                                Phone
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-phone-input-box'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input id="consultingForm-add-sfi-phone-input-box" class="form-control"
+                                [(ngModel)]="entityDetails.coiEntity.phone" appTailingSpaceRemover
+                                (keypress)="inputRestriction($event)" [disabled]="isResultFromSearch || !isFormEditMode"
+                                (keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)" maxlength="15">
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-phone-input-box'" [subSectionId]="531"></app-common-information> -->
+                        </div>
+                    </div>
+                    <!-- Zip Code -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-1" tabindex="-1"
+                        aria-label="Zip Code">
+                        <div class="d-flex fs-15 position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-zip-code">
+                                Zip Code
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-zip-code'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col pe-1">
+                            <input id="consultingForm-add-sfi-zip-code" type="text" class="form-control"
+                                [(ngModel)]="entityDetails.coiEntity.zipCode" appTailingSpaceRemover
+                                (keypress)="inputRestriction($event)" maxlength="15"
+                                [disabled]="isResultFromSearch || !isFormEditMode">
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-zip-code'" [subSectionId]="531"></app-common-information> -->
+                        </div>
+                    </div>
+                    <!-- Website -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12  mt-3" tabindex="-1"
+                        aria-label="Website">
+                        <div class="d-flex position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-website">Website
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-website'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input id="consultingForm-add-sfi-website" type="text" class="form-control"
+                                [(ngModel)]="entityDetails.coiEntity.webURL"
+                                [disabled]="isResultFromSearch || !isFormEditMode" appTailingSpaceRemover>
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-website'" [subSectionId]="531"></app-common-information> -->
+                        </div>
+                    </div>
+                    <!-- Email Address -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3" tabindex="-1"
+                        aria-label="Email Address">
+                        <div class="d-flex fs-15 position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-email-input-box"> Email Address
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-email-input-box'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" id="consultingForm-add-sfi-email-input-box"
+                                [(ngModel)]="entityDetails.coiEntity.emailAddress"
+                                [ngClass]="emailWarningMsg ? 'is-invalid d-block' : ''"
+                                [disabled]="isResultFromSearch || !isFormEditMode" appTailingSpaceRemover>
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-email-input-box'" [subSectionId]="531"></app-common-information> -->
+                            <div *ngIf="emailWarningMsg" class="invalid-feedback d-block fs-13">
+                                {{emailWarningMsg}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Entity Type -->
+                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  mt-3" tabindex="-1"
+                        aria-label="Entity Type Dropdown">
+                        <div class="d-flex position-relative">
+                            <label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help"
+                                for="consultingForm-add-sfi-entity-type">
+                                <span class="mandatory me-1">*</span> Entity Type
+                                <!-- <app-common-help-text [subSectionId]="531" [elementId]="'consultingForm-add-sfi-entity-type'"></app-common-help-text> -->
+                            </label>
+                        </div>
+                        <div class="col">
+                            <select class="form-control form-select" id="consultingForm-add-sfi-entity-type"
+                                [(ngModel)]="entityDetails.coiEntity.entityTypeCode"
+                                (ngModelChange)="setEntityTypeObj();" [disabled]="isResultFromSearch || !isFormEditMode"
+                                [ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''">
+                                <option [value]="null">--Select Type--</option>
+                                <option *ngFor="let type of sfiLookUpList?.entityType" [value]="type?.entityTypeCode"
+                                    [hidden]="type?.isActive != true">
+                                    {{type?.description}}</option>
+                            </select>
+                            <!-- [disabled]="isResultFromSearch || isFormEditMode || modifyType ==='1'" -->
+                            <!-- <app-common-information [elementId]="'consultingForm-add-sfi-entity-type'" [subSectionId]="531"></app-common-information> -->
+                            <div *ngIf="mandatoryList?.has('entityType')" class="invalid-feedback d-block fs-13">
+                                {{mandatoryList?.get('entityType')}}
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-form-builder-view [externalEvents]="consultingService.formBuilderEvents"
+(builderStatus)="formBuilderDataChanged($event)"></app-form-builder-view>
+
+<!-- Entity Details Modal -->
+<button class="d-none" data-bs-toggle="modal" data-bs-target="#entity-details" id="coi-add-sfi-persondetailsTrigger">
+</button>
+
+<div class="modal fade mySkinDialog modal-lg" id="entity-details" tabindex="-1" aria-labelledby="exampleModalLabel"
+    data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header headerStyle" tabindex="-1"
+                [attr.aria-label]="'Entity Name' + (addEntityConfirmation?.entityName)">
+                <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
+                <button type="button" class="btn-close" id="coi-add-sfi-entity-modal-dismiss-btn"
+                    data-bs-dismiss="modal" aria-label="Click here to close" title="Click here to close"
+                    (click)="clearEntityDetails()" (keyup.enter)="clearEntityDetails()"
+                    (keyup.space)="clearEntityDetails()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row pt-1 d-flex">
+                    <div class="text-secondary fs-14 col-3 mb-15" tabindex="-1"
+                        [attr.aria-label]="'Country' + (addEntityConfirmation?.country?.countryName)">
+                        <label for="country" class="grey-text me-2"> Country</label>
+                        <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-country">
+                            {{addEntityConfirmation?.country?.countryName}}</span>
+                    </div>
+                    <div class="text-secondary fs-14 col-4 mb-15" tabindex="-1"
+                        [attr.aria-label]="'Entity Type' + (addEntityConfirmation?.entityType?.description)">
+                        <label for="Entity Type" class="grey-text me-2">Entity Type</label>
+                        <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-entitytype">
+                            {{addEntityConfirmation?.entityType?.description}}</span>
+                    </div>
+                    <div class="col text-secondary fs-14 align-items-center col-2"
+                        [attr.aria-label]="'Risk' + (addEntityConfirmation?.entityRiskCategory.description)">
+                        <label for="Risk" class="fw-bold me-2">Risk</label>
+                        <span class="fw-normal">
+                            <div class="text-color fs-14 d-flex align-items-center">
+                                <span>
+                                    <mat-icon
+                                        class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                                </span>
+                                <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="text-secondary fs-14 col-3 text-end" tabindex="-1"
+                    [attr.aria-label]="'Entity Status' + (addEntityConfirmation?.isActive ? 'Active' : 'Inactive')">
+                    <span class="badge f-14 px-3 py-2 rounded-pill mt-2"
+                        [ngClass]="addEntityConfirmation?.isActive ? 'text-bg-success' : 'text-bg-secondary'"
+                        id="coi-add-sfi-entity-details-modal-value-entity-status">
+                        {{addEntityConfirmation?.isActive ? 'Active':'Inactive'}}</span>
+                </div>
+                    <div class="text-secondary fs-14 col-12 mt-2" tabindex="-1"
+                        [attr.aria-label]="'Address' + (addEntityConfirmation?.address)">
+                        <div>
+                            <label for="Address" class="grey-text me-2">Address</label>
+                        </div>
+                        <app-read-more [valueToShow]="addEntityConfirmation?.address" [sliceCount]="80"></app-read-more>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer ct-footer-padding">
+                <button id="coi-add-sfi-entity-modal-cancel-btn" (click)="clearEntityDetails()"
+                    class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button"
+                    aria-label="Click here to cancel" title="Click here to cancel">Cancel
+                </button>
+                <button id="coi-add-sfi-entity-modal-confirm-btn" (click)="confirmEntityDetails()"
+                    data-bs-dismiss="modal" aria-label="Click here to confirm" title="Click here to confirm"
+                    class="btn btn-primary fs-14 height-35px" type="button">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

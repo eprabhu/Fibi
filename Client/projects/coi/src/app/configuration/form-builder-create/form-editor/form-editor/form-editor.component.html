@@ -4,8 +4,9 @@
             <div class="element-box">
                 <div class="text-center">
                     <h4 class="components py-2">Form Elements</h4>
-                    <div cdkDropList #originList="cdkDropList" [cdkDropListData]="origin" class="field-list p-3">
-                        <div class="field-box-element-tree" *ngFor="let item of origin" cdkDrag><span
+                    <div cdkDropList #originList="cdkDropList" [cdkDropListData]="lookUpTree"
+                        class="form-list-height field-list p-3">
+                        <div class="field-box-element-tree" *ngFor="let item of lookUpTree" cdkDrag><span
                                 class="move-icon-container px-2"><i class="fa fa-ellipsis-v move-icon"
                                     aria-hidden="true"></i><i class="fa fa-ellipsis-v"
                                     aria-hidden="true"></i></span><label class="px-2 py-2">{{item.description}}</label>
@@ -20,9 +21,10 @@
                     <ng-container *ngFor="let section of sectionArray let sectionArrayIndex = index">
                         <div id="section-card-{{section.sectionId}}" class="card mt-5">
                             <div class="d-flex card-header justify-content-between align-items-center px-3">
-                                <h5 class="mb-0 label-font-size col-8">{{section.sectionName}}</h5>
+                                <h5 class="mb-0 fb-fs-14 col-8">{{section.sectionName}}</h5>
                                 <span>
-                                    <button id="first-Section" class="btns edit-section cursor-pointer"
+                                    <button id="emit-Section-{{section.sectionId}}" aria-label="Click here to edit section {{section.sectionName}}"
+                                    title="Edit {{section.sectionName}}" class="btns edit-section cursor-pointer"
                                         (click)="emitSectionData(section);"><i aria-hidden="true"
                                             class="fa fa-pencil"></i></button>
                                     <button class="btns delete-section cursor-pointer ms-2"
@@ -33,18 +35,17 @@
                             <div id="{{section.sectionId}}" cdkDropList #destinationList="cdkDropList"
                                 [cdkDropListData]="section.sectionComponent" class="field-list dropContainer"
                                 (cdkDropListDropped)="drop($event)">
-                                <div id="field-box-{{item.componentId}}" tabindex="0" class="drag-box field-box"
+                                <div id="field-box-{{(item.componentId)?item.componentId:item.tempId}}" tabindex="0"
+                                    class="drag-box field-box"
                                     *ngFor="let item of section.sectionComponent let index = index" cdkDrag
                                     (click)="emitComponentData(item)" (keydown.enter)="emitComponentData(item)">
                                     <span>
-                                        {{(item.componentType == 'HL' || item.componentType == 'BR')?
-                                        item.componentTypeDescription:(item.label ?
-                                        item.label:(item.componentTypeDescription))}}
-                                        <span class="not-configured-status"
-                                            *ngIf="!(item.componentType == 'HL' || item.componentType == 'BR') && !item.label">(Not
+                                        {{item?.label}}
+                                        <span class="not-configured-status" *ngIf="!item.label">
+                                            <B>{{item.description}}</B>(Not
                                             Configured)</span>
                                     </span>
-                                    <i tabindex="0" (click)="confirmComponentDelete(index,section)"
+                                    <i tabindex="0" (click)="confirmComponentDelete(index,section,$event)"
                                         (keydown.enter)="confirmComponentDelete(index,section)"
                                         class="fa fa-trash cursor-pointer component-delete"></i>
                                 </div>
@@ -54,53 +55,56 @@
                 </div>
             </div>
             <div class="px-4 d-flex justify-content-end mt-2">
-                <button type="button" class="btn btn-primary fs-14 preview-button" (click)="createNewSection() ;">Add
-                    New Section</button>
-                <button id="Sort-Section" class="btn btn-primary fs-14 ms-2 preview-button" role="button"
-                    title="Rearrange Section" (click)="sectionSort()">Rearrange Section</button>
+                <button type="button" class="btn btn-primary fs-14 d-flex align-items-center" id="add-new-section" aria-label="Click here to add new section" title="Add New Section" (click)="createNewSection() ;">
+                    <mat-icon role="img" class="fb-icon-size mr-2 mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">add</mat-icon>
+                    Add New Section</button>
+                <button id="Sort-Section" class="btn btn-primary fs-14 ms-2 d-flex align-items-center" aria-label="Click here to rearrange section" role="button" title="Rearrange Section"
+                    (click)="sectionSort()"><mat-icon class="fb-icon-size mr-2">autorenew</mat-icon> Rearrange Section</button>
             </div>
         </div>
-        <div class="addition-info">
+        <div class="addition-info overflow-x-hidden">
             <app-form-addtional-information [additionInfoComponentEvent]="additionInfoComponentEvent"
                 [additionalInfoSectionEvent]="additionalInfoSectionEvent"
                 (additionalInformation)="sectionUpdate($event)"
-                (additionalInformationComponent)="componentUpdate($event)"></app-form-addtional-information>
+                (additionalInformationComponent)="componentUpdate($event)"
+                (additionalInformationInitialComponentSave)="initialComponentSave($event)"></app-form-addtional-information>
         </div>
     </div>
 </div>
 
 <!-- Sort Modal -->
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="rearrange-section-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header ct-footer-padding">
-                <h4 class="modal-title">Rearrange Section </h4>
-                <button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Click to close"></button>
+                <h4 class="fb-fs-16 ">Rearrange Section </h4>
+                <button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body ct-modal-padding">
                 <div cdkDropList class="sort-list" (cdkDropListDropped)="dropForSort($event)">
-                    <div class="sort-box" *ngFor="let movie of sectionSortArray" cdkDrag>{{movie.sectionName}}</div>
+                    <div class="sort-box" *ngFor="let section of sectionSortArray" cdkDrag>{{section.sectionName}}</div>
                 </div>
             </div>
             <div class="modal-footer ct-footer-padding">
-                <button class="btn btn-primary fs-14 preview-button" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+                <button class="btn btn-outline-secondary fs-14 " id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+                aria-label="Click here to cancel"   id="cancel-rearrange-section-modal-btn" title="Cancel"
                     type="button" (click)="cancelSectionSort()">Cancel
                 </button>
-                <button data-bs-dismiss="modal" class="btn btn-primary fs-14 preview-button ms-2" type="button"
-                    (click)="sectionSortService()">Rearrange</button>
+                <button data-bs-dismiss="modal" class="btn btn-primary fs-14  ms-2" type="button"
+                aria-label="Click here to rearrange"   id="rearrange-section-modal-btn" title="Rearrange" (click)="sectionSortService()">Rearrange</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- delete component -->
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="deleteConfirmationModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="delete-Confirmation-Modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header ct-footer-padding">
-                <h4 class="modal-title">Confirmation </h4>
-                <button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Click to close"></button>
+                <h4 class="fb-fs-16">Confirmation </h4>
+                <button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body ct-modal-padding">
                 <div class="row ">
@@ -116,13 +120,13 @@
                 </div>
             </div>
             <div class="modal-footer ct-footer-padding">
-                <button class="btn btn-primary fs-14 preview-button" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+                <button class="btn btn-outline-secondary fs-14" aria-label="Click here to cancel"   id="cancel-delete-Modal" title="Cancel" data-bs-dismiss="modal"
                     type="button">Cancel
                 </button>
-                <button *ngIf="!sectionDelete" data-bs-dismiss="modal" (click)="deleteComponent()"
-                    class="btn btn-primary fs-14 preview-button" type="button">Yes</button>
-                <button *ngIf="sectionDelete" data-bs-dismiss="modal" (click)="deleteSection()"
-                    class="btn btn-primary fs-14 preview-button" type="button">Yes</button>
+                <button *ngIf="!sectionDelete" data-bs-dismiss="modal" id="confirm-delete-component" aria-label="Click here to delete component" (click)="deleteComponent()"
+                    class="btn btn-primary fs-14" title="Yes" type="button">Yes</button>
+                <button *ngIf="sectionDelete" data-bs-dismiss="modal" id="confirm-delete-section" aria-label="Click here to delete section" (click)="deleteSection()"
+                    class="btn btn-primary fs-14" title="Yes" type="button">Yes</button>
             </div>
         </div>
     </div>

@@ -7,40 +7,26 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} -
-           <span class="fw-normal">  <app-read-more [valueToShow]="entityName" [sliceCount]="100"></app-read-more> </span>
+          <h4 class="modal-title d-flex">
+            <span class="fw-bolder">{{updatedRelationshipStatus == 'INACTIVE'?'Inactivate':'Activate'}} Entity Relationship</span>
+            <app-common-help-text [helpTextHardCoded]="modalHelpTexts"></app-common-help-text>
           </h4>
-          <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
+          <button type="button" id="activate-inactivate-header-close-btn" class="btn-close" title="Click here to close"  data-bs-dismiss="modal" aria-label="Click here to close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-12">
-              <div class="alert alert-primary align-items-start d-flex p-2" role="alert">
-                  <mat-icon role="img" class="flex-shrink-0" aria-hidden="true"
-                    data-mat-icon-type="font">info</mat-icon>
-                  <p *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="fs-14 mb-0 ms-2">
-                    <span class="d-flex algin-items-start">
-                      <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
-                      Please provide a reason for inactivation in the field provided.
-                    </span>
-                  </p>
-                  <p *ngIf="updatedRelationshipStatus == 'ACTIVE'" class="fs-14 mb-0 ms-2">
-                    <span class="d-flex algin-items-start">
-                      <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
-                      Provide the reason for Activation in the field provided.
-                    </span>
-                    <span class="d-flex algin-items-start">
-                      <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0" aria-hidden="true">keyboard_double_arrow_right</mat-icon>
-                      Click on Activate button to activate the entity.
-                    </span>
-                  </p>
-              </div>
+             <app-entity-details-card [entityDetails]="entityDetails" [relationshipDetails]="relationshipDetails"></app-entity-details-card>
             </div>
           </div>
-          <div class="row">
+          <div class="row mt-2">
             <div class="col">
-              <span class="block-display fw-bold fs-14"><span *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="text-danger px-1">*</span>Reason for {{updatedRelationshipStatus == 'INACTIVE' ? 'Inactivation' :'Activation'}} :</span>
-              <textarea placeholder="Please enter the reason." [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="3" class="form-control"
+              <div class="fw-bold fs-14">
+                <span *ngIf="updatedRelationshipStatus == 'INACTIVE'" class="text-danger pe-1">*</span>
+                <span>Reason for {{updatedRelationshipStatus == 'INACTIVE' ? 'Inactivation' :'Activation'}}</span>
+                <app-common-help-text [helpTextHardCoded]="helpTexts"></app-common-help-text>
+              </div>
+              <textarea placeholder="Please provide the reason" id="activate-inactivate-sfi-reason" [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
                 appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
               <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
                 {{reasonValidateMapSfi.get('reason')}}
@@ -49,10 +35,11 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" id="activate-inactivate-btn"  data-bs-dismiss="modal"
-           type="button" title="Cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
+          <button class="btn btn-outline-secondary" id="activate-inactivate-close-btn"  data-bs-dismiss="modal"
+           type="button" title="Click here to cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
           </button>
-          <button class="btn btn-primary me-0" id="activate-inactivate-btn" type="button" [attr.title]="updatedRelationshipStatus == 'INACTIVE' ? 'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
+          <button class="btn btn-primary me-0" id="activate-inactivate-btn" type="button"
+           [attr.title]="updatedRelationshipStatus == 'INACTIVE' ? 'Click here to inactivate entity relationship':'Click here to activate entity relationship'" (click)="activateAndInactivateSfi()">
             {{updatedRelationshipStatus == 'INACTIVE' ? 'Inactivate' : 'Activate'}}
           </button>
         </div>

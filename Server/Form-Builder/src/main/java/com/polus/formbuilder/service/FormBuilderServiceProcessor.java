@@ -15,11 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.polus.appcorelib.authentication.AuthenticatedUser;
-import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
-import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
-import com.polus.appcorelib.customdataelement.vo.CustomDataResponse;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.appcorelib.questionnaire.service.QuestionnaireService;
+import com.polus.formbuilder.customdataelement.VO.CustomDataElementVO;
+import com.polus.formbuilder.customdataelement.service.CustomDataElementService;
 import com.polus.formbuilder.dao.FormBuilderServiceProcessorDAO;
 import com.polus.formbuilder.dto.FormBuilderSectionsComponentDTO;
 import com.polus.formbuilder.dto.FormBuilderSectionsDTO;
@@ -271,11 +270,11 @@ public class FormBuilderServiceProcessor {
 		// for Questionnaire Engine and Custom Element Engine
 		customElement.setModuleCode(Integer.parseInt(request.getModuleItemCode()));
 		customElement.setSubModuleCode(Integer.parseInt(request.getModuleSubItemCode()));
-		customElement.setModuleItemKey(Integer.parseInt(request.getModuleItemKey()));
-		customElement.setSubModuleItemKey(request.getComponentId().toString());
+		customElement.setModuleItemKey(request.getModuleItemKey());
+		customElement.setModuleSubItemKey(String.valueOf(request.getComponentId()));
 		
 		customElement = customDataElementService.saveCustomResponse(customElement);
-		//FormBuilderSectionsComponentDTO componentDTO = getComponentInfoById(request.getComponentId());
+		FormBuilderSectionsComponentDTO componentDTO = getComponentInfoById(request.getComponentId());
 		var response = initialComponentSaveReponse(request);
 		response.setCustomElement(customElement);
 		
@@ -470,7 +469,7 @@ public class FormBuilderServiceProcessor {
 									}
 									
 									
-							} else if (component.getComponentType().equals(FormBuilderConstants.CUSTOM_ELEMENT_COMPONENT)) {
+							} else if (FormBuilderConstants.CUSTOM_ELEMENT_COMPONENT_LIST.contains(component.getComponentType())) {
 								if(component.getComponentRefId()!=null && !component.getComponentRefId().trim().isEmpty()) {
 									component.setCustomElement(
 															getCustomElementComponent(moduleItemCode,
@@ -479,7 +478,7 @@ public class FormBuilderServiceProcessor {
 																					  component.getComponentId().toString(),
 																					  component.getComponentRefId()));
 								}
-							}else if (component.getComponentType().equals(FormBuilderConstants.PROGRAMMED_ELEMENT_COMPONENT)) {
+							} else if (component.getComponentType().equals(FormBuilderConstants.PROGRAMMED_ELEMENT_COMPONENT)) {
 								
 								if(component.getComponentRefId()!=null && !component.getComponentRefId().trim().isEmpty()) {
 									component.setProgrammedElement(
@@ -506,32 +505,16 @@ public class FormBuilderServiceProcessor {
 														  String moduleItemKey,
 														  String moduleSubItemKey,
 														  String customElementId) {
-		
-//		if(moduleItemKey == null) {
-//			return customDataElementService.fetchCustomElementById(
-//					intialCustomDataElementVO(Integer.parseInt(customElementId),
-//											 moduleItemCode,
-//											 moduleSubItemCode,
-//											 moduleItemKey,
-//											 moduleSubItemKey));
-//		}
-		
-		
-		CustomDataElementVO vo = customDataElementService
-										.getApplicableCustomElement(Integer.parseInt(moduleItemCode),
-																	Integer.parseInt(moduleSubItemCode),
-																	moduleItemKey,
-																	moduleSubItemKey);
-		
-		List<CustomDataResponse> customElements = vo.getCustomElements();
-		List<CustomDataResponse> selectedCustomElement = customElements.stream()
-					   .filter( x -> x.getCustomDataElementId() == Integer.parseInt(customElementId))
-					   .collect(Collectors.toList());
-		vo.setCustomElements(selectedCustomElement);
-		
-		return vo;
-		
-		
+
+		CustomDataElementVO customDataElementVO = new CustomDataElementVO();
+		customDataElementVO.setModuleCode(Integer.parseInt(moduleItemCode));
+		customDataElementVO.setModuleItemKey(moduleItemKey);
+		customDataElementVO.setModuleSubItemKey(moduleSubItemKey);
+		customDataElementVO.setSubModuleCode(Integer.parseInt(moduleSubItemCode));
+		customDataElementVO.setCustomDataElementId(Integer.parseInt(customElementId));
+		customDataElementVO = customDataElementService.fetchCustomElementById(customDataElementVO);
+		return customDataElementVO;
+
 	}
 
 	private ProgrammedElementModel getProgrammedElementComponent(String moduleItemCode,

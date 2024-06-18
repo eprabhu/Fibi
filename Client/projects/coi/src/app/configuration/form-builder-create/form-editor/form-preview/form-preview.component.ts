@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FBConfiguration } from '../../../../shared/form-builder-view/form-builder-interface';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilderCreateService } from '../../form-builder-create.service'
-import {CommonService} from '../../../../common/services/common.service';
+import { FormBuilderCreateService } from '../../form-builder-create.service';
+import { CommonService } from '../../../../common/services/common.service';
 
 
 @Component({
@@ -15,12 +15,12 @@ export class FormPreviewComponent implements OnInit, AfterViewInit {
     fbConfiguration = new FBConfiguration();
     formBuilderId: any;
 
-    constructor(private _route: ActivatedRoute, 
+    constructor(private _route: ActivatedRoute,
         public _formBuilderService: FormBuilderCreateService,
         private _commonService: CommonService) { }
 
     ngOnInit() {
-        this.formBuilderId = this._route.snapshot.queryParamMap.get('formBuilderId')
+        this.formBuilderId = this._route.snapshot.queryParamMap.get('formBuilderId');
     }
 
     ngAfterViewInit(): void {

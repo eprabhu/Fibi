@@ -52,27 +52,17 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     modalActionBtnName = '';
     descriptionErrorMsg = '';
     textAreaLabelName = '';
-    withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
-    returnErrorMsg = 'Describe the reason for returning the disclosure';
+    withdrawErrorMsg = 'Please provide the reason for withdrawing the disclosure.';
+    returnErrorMsg = 'Please provide the reason for returning the disclosure.';
     confirmationModalDescription = '';
-
+    confirmationModalHelpText = '';
+    reasonHelpText = '';
     userDetails = {
         fullName: '',
         personId: '',
         homeUnit: null,
         homeUnitName: null
     };
-    helpTexts = [];
-    withdrawHelpTexts = [
-        `Withdraw disclosures currently in the 'Submitted' status.`,
-        `Describe the reason for withdrawal in the field provided.`,
-        `Click on 'Withdraw' button to recall your disclosure for any modification.`
-    ];
-    returnHelpTexts = [
-        `Return any disclosure in 'Review In Progress' status.`,
-        `Describe the reason for returning  in the field provided.`,
-        `Click on 'Return' button to return the disclosure for any modification.`
-    ];
     isOpenRiskSlider = false;
     TRAVEL_REVIEW_STATUS = TRAVEL_REVIEW_STATUS;
 
@@ -270,16 +260,20 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.isAddAssignModalOpen = false;
     }
 
-    openConfirmationModal(actionBtnName: string, needDescriptionField: boolean,
-            helpTexts: string [] = [], isMandatory: boolean = false, descriptionErrorMsg: string = ''): void {
+    openConfirmationModal(actionBtnName: string, needDescriptionField: boolean, isMandatory: boolean = false, descriptionErrorMsg: string = ''): void {
         this.modalActionBtnName = actionBtnName;
         this.needDescriptionField = needDescriptionField;
         this.isMandatory = isMandatory;
-        this.helpTexts = helpTexts;
-        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Approve' ? 'Approval' : actionBtnName;
+        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : (actionBtnName === 'Approve' ? 'Approval' : actionBtnName);
         this.modalSize = 'lg';
         this.setModalHeaderTitle(actionBtnName);
         this.descriptionErrorMsg = descriptionErrorMsg;
+        this.confirmationModalHelpText = '';
+        this.reasonHelpText = '';
+        setTimeout(() => {
+            this.reasonHelpText = `Please provide the reason for ${this.textAreaLabelName.toLowerCase()}.`;
+            this.confirmationModalHelpText = `You are about to ${actionBtnName.toLowerCase()} the travel disclosure.`;
+        });
         openCommonModal('travel-confirmation-modal');
     }
 

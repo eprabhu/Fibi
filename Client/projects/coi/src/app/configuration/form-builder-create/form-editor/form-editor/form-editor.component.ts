@@ -1,11 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Form, FormSection, NewSection, SectionComponent, component, ElementTree, CreateComponentObject, FormSectionObject } from '../../../../shared/form-builder-view/form-builder-interface'
-import { FormBuilderCreateService } from '../../form-builder-create.service'
+import { Form, FormSection, SectionComponent } from '../../../../shared/form-builder-view/form-builder-interface';
+import { FormBuilderCreateService } from '../../form-builder-create.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { deepCloneObject, scrollIntoView } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { NewSection, component, ElementTree, CreateComponentObject, FormSectionObject } from '../../form-builder-create-interface';
 
 declare const $: any;
 @Component({
@@ -15,10 +16,10 @@ declare const $: any;
 })
 export class FormEditorComponent implements OnInit, OnDestroy {
     @Output() additionalInformation: EventEmitter<any> = new EventEmitter();
-    origin: Array<ElementTree> = [];
+    lookUpTree: Array<ElementTree> = [];
     form = new Form();
-    formSection = new FormSection
-    sectionComponent = new SectionComponent
+    formSection = new FormSection();
+    sectionComponent = new SectionComponent();
     formBuilderId: string;
     sectionArray: Array<FormSection> = [];
     additionInfoComponentEvent: Subject<any> = new Subject<any>();
@@ -40,7 +41,7 @@ export class FormEditorComponent implements OnInit, OnDestroy {
         this._route.queryParamMap.subscribe(queryParams => {
             this.formBuilderId = queryParams.get('formBuilderId');
             if (this.formBuilderId) {
-                this.serviceForLoadingForm(this.formBuilderId);
+                this.initialFormLoad(this.formBuilderId);
             }
         });
     }
@@ -49,10 +50,6 @@ export class FormEditorComponent implements OnInit, OnDestroy {
     }
 
     drop(event: CdkDragDrop<string[]>): void {
-        // make it false to prevent drag
-        if (this._formBuilderService.unSavedChange) {
-            this._formBuilderService.initiateAutoSave("COMPONENT")
-        }
         if (event.previousContainer === event.container) {
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
@@ -62,7 +59,11 @@ export class FormEditorComponent implements OnInit, OnDestroy {
                 event.currentIndex);
         }
         this.setComponent(event)
-        this.origin = deepCloneObject(this.lookupSectionComponentType);
+        this.lookUpTree = deepCloneObject(this.lookupSectionComponentType);
+        this.setFocusOnActiveComponent();
+    }
+
+    setFocusOnActiveComponent() {
         setTimeout(() => {
             if (this.currentlyActiveComponentId) {
                 this.componentBorder(this.currentlyActiveComponentId);
@@ -71,63 +72,45 @@ export class FormEditorComponent implements OnInit, OnDestroy {
     }
 
     // Emit component related data to Additional information Component
-    emitComponentData(item: SectionComponent): void {
-        this.currentlyActiveComponentId = item.componentId;
-        if (this._formBuilderService.unSavedChange) {
-            this._formBuilderService.initiateAutoSave("COMPONENT");
-            setTimeout(() => {
-                this.componentBorder(this.currentlyActiveComponentId);
-                this.additionInfoComponentEvent.next(item);
-            }, 1000);
-        } else {
-            this.componentBorder(this.currentlyActiveComponentId);
-            this.additionInfoComponentEvent.next(item);
-        }
+    emitComponentData(item): void {
+        this.currentlyActiveComponentId = item.componentId || item.tempId;
+        this.componentBorder(this.currentlyActiveComponentId);
+        this.additionInfoComponentEvent.next(item);
     }
 
     createNewSection(): void {
         this.$subscriptions.push(
             this._formBuilderService.createFormSection(this.createNewSectionObject()).subscribe((data: NewSection) => {
-                this.formSection.sectionId = data.formBuilderSectionId;
+                this.formSection.sectionId = data.sectionId;
                 this.formSection.sectionName = data.sectionName;
-                this.formSection.sectionDescription = data.description;
-                this.formSection.sectionHeader = data.headerInstruction;
-                this.formSection.sectionFooter = data.footerInstruction;
-                this.formSection.sectionHelpText = data.helpText;
-                this.formSection.sectionBusinessRule = data.businessRuleId;
-                this.formSection.sectionOrder = data.sectionOrderNumber
+                this.formSection.sectionDescription = data.sectionDescription;
+                this.formSection.sectionHeader = data.sectionHeader;
+                this.formSection.sectionFooter = data.sectionFooter;
+                this.formSection.sectionHelpText = data.sectionHelpText;
+                this.formSection.sectionBusinessRule = data.sectionBusinessRule;
+                this.formSection.sectionOrder = data.sectionOrder;
                 this.formSection.sectionComponent = []
                 const formSection = deepCloneObject(this.formSection);
                 this.sectionArray.push(formSection);
+                this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
+                this.scrollToNewSection();
             })
         )
+    }
+
+    scrollToNewSection() {
         setTimeout(() => {
-            this.scrollIdIntoView(this.formSection.sectionId);
+            scrollIntoView(String(this.formSection.sectionId));
         }, 1000);
     }
 
-    serviceForLoadingForm(formBuilderId: string): void {
+    initialFormLoad(formBuilderId: string): void {
         this.$subscriptions.push(
             this._formBuilderService.getFormDeatails(formBuilderId).subscribe((data: any) => {
                 this.lookupSectionComponentType = data.lookupSectionComponentType;
-                this.origin = deepCloneObject(this.lookupSectionComponentType);
-                const sections = data.formHeader.sections;
-                sections.forEach(ele => {
-                    this.formSection.sectionId = ele.formBuilderSectionId;
-                    this.formSection.sectionName = ele.sectionName;
-                    this.formSection.sectionDescription = ele.description;
-                    this.formSection.sectionHeader = ele.headerInstruction;
-                    this.formSection.sectionFooter = ele.footerInstruction;
-                    this.formSection.sectionHelpText = ele.helpText;
-                    this.formSection.sectionBusinessRule = ele.businessRuleId;
-                    this.formSection.sectionOrder = ele.sectionOrderNumber;
-                    this.formSection.sectionComponent = (ele.sectionComponents === null) ? [] : this.SetSectionComponentOnLoad(ele.sectionComponents);
-                    const formSection = deepCloneObject(this.formSection);
-                    this.sectionArray.push(formSection)
-                    // deepCloneObject is used because while adding section obj to array all obj  will have same refernce and this 
-                    // will cause them to misbehave.
-
-                });
+                this.lookUpTree = deepCloneObject(this.lookupSectionComponentType);
+                this.sectionArray = data.formHeader.sections;
+                this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
                 if (!this.sectionArray.length) {
                     this.createNewSection();
                     setTimeout(() => {
@@ -138,44 +121,20 @@ export class FormEditorComponent implements OnInit, OnDestroy {
         )
     }
 
-    // For loading section components
-    SetSectionComponentOnLoad(sectionComponents: Array<component>) {
-        const sectionComponent = [];
-        sectionComponents.forEach(element => {
-            this.sectionComponent.componentData = element.componentData;
-            this.sectionComponent.componentDescription = element.description;
-            this.sectionComponent.componentFooter = element.footerInstruction;
-            this.sectionComponent.componentHeader = element.headerInstruction;
-            this.sectionComponent.componentId = element.formBuilderSectCompId;
-            this.sectionComponent.componentOrder = element.componentOrderNumber
-            this.sectionComponent.componentRefId = element.componentRefId;
-            this.sectionComponent.componentType = element.componentTypeCode
-            this.sectionComponent.sectionId = element.formBuilderSectionId
-            this.sectionComponent.label = element.label;
-            this.sectionComponent.isMandatory = element.isMandatory;
-            this.sectionComponent.validationMessage = element.validationMessage;
-            this.sectionComponent.componentTypeDescription = element.componentTypeDescription;
-            sectionComponent.push(deepCloneObject(this.sectionComponent));
-        });
-        return sectionComponent;
-    }
-
     createNewSectionObject(): FormSectionObject {
         if (this.sectionArray.length) {
             this.formSectionOrderNo = this.sectionArray[this.sectionArray.length - 1].sectionOrder + 1;
         }
-        const formSectionObject =
-        {
-            "formBuilderId": this.formBuilderId,
-            "sectionName": "New Section",
-            "sectionOrderNumber": this.formSectionOrderNo,
-            "businessRuleId": null,
-            "description": "Test",
-            "helpText": "Help Text 1",
-            "headerInstruction": "",
-            "footerInstruction": "",
-            "isActive": "y"
-        }
+        const formSectionObject = new FormSectionObject();
+        formSectionObject.formBuilderId = this.formBuilderId;
+        formSectionObject.sectionName = "New Section";
+        formSectionObject.sectionOrder = this.formSectionOrderNo;
+        formSectionObject.sectionBusinessRule = null;
+        formSectionObject.sectionDescription = "";
+        formSectionObject.sectionHelpText = "Help Text 1";
+        formSectionObject.sectionHeader = "";
+        formSectionObject.sectionFooter = "";
+        formSectionObject.isActive = "Y"
         return formSectionObject;
     }
 
@@ -190,89 +149,118 @@ export class FormEditorComponent implements OnInit, OnDestroy {
         const previousContainer = event.previousContainer;
         // dropContainer is the Section that  receives the dragged component
         const dropContainer = this.sectionArray.find(obj => obj['sectionId'] == formSectionId);
-        this.createcomponents(formSectionId, containerindex, container, dropContainer, previousContainer);
+        this.createcomponent(formSectionId, containerindex, container, dropContainer, previousContainer);
 
     }
 
-    createcomponents(formSectionId: string, containerindex: number, container, dropContainer, previousContainer): void {
+    createcomponent(formSectionId: string, containerindex: number, container, dropContainer, previousContainer): void {
         if (previousContainer.id.includes("cdk-drop-list-")) {
             //  if condition is satisfied for an element dragged from form-element tree,
             //  and not satisfied for interdragged components ie, components dragged b/w sections or  with in the section.
-            this.$subscriptions.push(
-                this._formBuilderService.createComponent(this.prepareComponentObject(formSectionId, containerindex, container)).subscribe((data: component) => {
-                    this.sectionComponent.componentData = data.componentData;
-                    this.sectionComponent.componentDescription = data.description;
-                    this.sectionComponent.componentFooter = data.footerInstruction;
-                    this.sectionComponent.componentHeader = data.headerInstruction;
-                    this.sectionComponent.componentId = data.formBuilderSectCompId;
-                    this.sectionComponent.componentOrder = data.componentOrderNumber
-                    this.sectionComponent.componentRefId = data.componentRefId;
-                    this.sectionComponent.componentType = data.componentTypeCode
-                    this.sectionComponent.sectionId = data.formBuilderSectionId
-                    this.sectionComponent.label = data.label;
-                    this.sectionComponent.isMandatory = data.isMandatory;
-                    this.sectionComponent.validationMessage = data.validationMessage;
-                    this.sectionComponent.componentTypeDescription = data.componentTypeDescription;
-                    const sectionComponent = deepCloneObject(this.sectionComponent);
-                    dropContainer.sectionComponent[containerindex] = sectionComponent;
-                    this.updatePositionOfAllComponentsInSection(container, dropContainer)
-                })
-            )
+            if (["BR", "HL"].includes(container[containerindex].componentTypeCode)) {
+                this.onDropSaveForNonConfigurableComponents(formSectionId, containerindex, container, dropContainer)
+                return;
+            }
+            let sectionComponent;
+            const uniqueID = "tempId_" + this.getTimeStamp();
+            sectionComponent = dropContainer.sectionComponent[containerindex];
+            sectionComponent.tempId = uniqueID;
+            sectionComponent.sectionId = dropContainer.sectionId;
+            this.getTempOrderNumberForComponents(dropContainer.sectionComponent)
+            sectionComponent.formBuilderId = this.formBuilderId;
+            this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
         } else {
-            this.updatePositionOfAllComponentsInSection(container, dropContainer)
+            let sectionComponent;
+            sectionComponent = dropContainer.sectionComponent[containerindex];
+            sectionComponent.sectionId = dropContainer.sectionId;
+            this.getTempOrderNumberForComponents(dropContainer.sectionComponent)
+            this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
+            this.updatePositionOfAllComponentsInSection(container, dropContainer);
+
         }
     }
 
+    onDropSaveForNonConfigurableComponents(formSectionId: string, containerindex: number, container, dropContainer): void {
+        this.$subscriptions.push(
+            this._formBuilderService.createComponent(this.prepareComponentObject(formSectionId, containerindex, container)).subscribe((data: component) => {
+                this.sectionComponent.componentDescription = data.componentDescription;
+                this.sectionComponent.componentId = data.componentId;
+                this.sectionComponent.componentOrder = data.componentOrder;
+                this.sectionComponent.componentType = data.componentType;
+                this.sectionComponent.sectionId = data.sectionId;
+                this.sectionComponent.label = data.label;
+                this.sectionComponent.componentTypeDescription = data.componentTypeDescription;
+                const sectionComponent = deepCloneObject(this.sectionComponent);
+                dropContainer.sectionComponent[containerindex] = sectionComponent;
+                this.updatePositionOfAllComponentsInSection(container, dropContainer);
+                this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
+            })
+        )
+    }
+
     prepareComponentObject(formSectionId: string, containerindex: number, container, componentRefId = ""): CreateComponentObject {
-        const createComponentObject = {
-            "formBuilderSectionId": formSectionId,
-            "formBuilderId": this.formBuilderId,
-            "componentTypeCode": container[containerindex].componentTypeCode,
-            "componentOrderNumber": containerindex,
-            "componentData": "",
-            "componentRefId": componentRefId,
-            "description": "",
-            "headerInstruction": "",
-            "footerInstruction": "",
-            "isActive": "Y",
-            "componentTypeDescription": container[containerindex].description
+        let label = '';
+        if (container[containerindex].componentTypeCode == 'BR') {
+            label = 'Context Break';
+        } else {
+            label = 'Horizontal Line';
         }
+        const createComponentObject = new CreateComponentObject()
+        createComponentObject.sectionId = formSectionId;
+        createComponentObject.formBuilderId = this.formBuilderId;
+        createComponentObject.componentType = container[containerindex].componentTypeCode;
+        createComponentObject.componentOrder = containerindex;
+        createComponentObject.componentData = "";
+        createComponentObject.componentRefId = componentRefId;
+        createComponentObject.description = "test";
+        createComponentObject.componentFooter = "";
+        createComponentObject.componentHeader = "";
+        createComponentObject.isActive = "Y";
+        createComponentObject.componentTypeDescription = container[containerindex].description;
+        createComponentObject.label = label;
         return createComponentObject;
     }
 
     updatePositionOfAllComponentsInSection(container, dropContainer): void {
-        container.forEach((element, index) => {
+        const componets = container.filter(ele => ele.componentId)
+        componets.forEach((element, index) => {
             this.$subscriptions.push(
                 this._formBuilderService.componentOrder([{
-                    "formBuilderSectCompId": element.componentId,
-                    "formBuilderSectionId": dropContainer.sectionId,
-                    "componentOrderNumber": index
-                }]).subscribe((data) => {
-                })
+                    "componentId": element.componentId,
+                    "sectionId": dropContainer.sectionId,
+                    "componentOrder": index
+                }]).subscribe((data) => { })
             )
-        }
-        );
+        });
     }
 
-    confirmComponentDelete(index: number, deleteObject: FormSection): void {
+    confirmComponentDelete(index: number, deleteObject: FormSection, event): void {
+        event.stopPropagation();
         this.sectionDelete = false;
-        $('#deleteConfirmationModal').modal('show');
+        $('#delete-Confirmation-Modal').modal('show');
         this.deleteIndex = index;
         this.deleteObject = deleteObject;
     }
 
     deleteComponent(): void {
         const indexTobeDeleted = this.deleteObject.sectionComponent[this.deleteIndex].componentId;
-        this.$subscriptions.push(
-            this._formBuilderService.deleteComponent(indexTobeDeleted).subscribe((data) => {
-                this.deleteObject.sectionComponent.splice(this.deleteIndex, 1);
-                this.additionInfoComponentEvent.next({})
-            })
-        )
+        if (!indexTobeDeleted) {
+            this.deleteObject.sectionComponent.splice(this.deleteIndex, 1);
+            this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
+            this.additionInfoComponentEvent.next({});
+        } else {
+            this.$subscriptions.push(
+                this._formBuilderService.deleteComponent(indexTobeDeleted).subscribe((data) => {
+                    this.deleteObject.sectionComponent.splice(this.deleteIndex, 1);
+                    this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
+                    this.additionInfoComponentEvent.next({});
+                })
+            )
+        }
     }
 
     sectionSort(): void {
-        $('#actionConfirmationModal').modal('show');
+        $('#rearrange-section-modal').modal('show');
         this.sectionSortArray = deepCloneObject(this.sectionArray);
     }
 
@@ -284,10 +272,10 @@ export class FormEditorComponent implements OnInit, OnDestroy {
         this.sectionSortArray.forEach((element, index) => {
             this.$subscriptions.push(
                 this._formBuilderService.sectionOrder([{
-                    "formBuilderSectionId": element.sectionId,
+                    "sectionId": element.sectionId,
                     "formBuilderId": this.formBuilderId,
-                    "sectionOrderNumber": index + 1,
-                }]).subscribe((data) => {
+                    "sectionOrder": index + 1,
+                }]).subscribe((data: Array<FormSection>) => {
                     this.sectionArray = this.sectionSortArray;
                 })
             )
@@ -306,14 +294,14 @@ export class FormEditorComponent implements OnInit, OnDestroy {
 
     sectionUpdate(event): void {
         let selectedSection: any;
-        selectedSection = this.sectionArray.filter(ele => ele.sectionId == event.formBuilderSectionId);
+        selectedSection = this.sectionArray.filter(ele => ele.sectionId == event.sectionId);
         selectedSection[0].sectionName = event.sectionName;
     }
 
     componentUpdate(event): void {
         let selectedComponent: any;
         for (const element of this.sectionArray) {
-            selectedComponent = element.sectionComponent.find(ele => ele.componentId === event.componentData.formBuilderSectCompId);
+            selectedComponent = element.sectionComponent.find(ele => ele.componentId === event.componentData.componentId);
             if (selectedComponent) {
                 selectedComponent.label = event.componentData.label;
                 selectedComponent.isMandatory = event.componentData.isMandatory;
@@ -326,7 +314,7 @@ export class FormEditorComponent implements OnInit, OnDestroy {
 
     deleteSectionConfirmation(deleteObject: FormSection, sectionArrayIndex: number): void {
         this.sectionDelete = true;
-        $('#deleteConfirmationModal').modal('show');
+        $('#delete-Confirmation-Modal').modal('show');
         this.deleteObject = deleteObject;
         this.deleteIndex = sectionArrayIndex;
     }
@@ -336,13 +324,10 @@ export class FormEditorComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this._formBuilderService.deleteSection(this.deleteObject.sectionId).subscribe((data) => {
                 this.sectionArray.splice(this.deleteIndex, 1);
+                this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
                 this.additionalInfoSectionEvent.next({});
             })
         );
-    }
-
-    scrollIdIntoView(id): void {
-        scrollIntoView(id);
     }
 
     sectionBorder(selectionId: number): void {
@@ -357,12 +342,38 @@ export class FormEditorComponent implements OnInit, OnDestroy {
 
     componentBorder(componentId: number): void {
         if (document.getElementsByClassName('clicked')[0]) {
-            document.getElementsByClassName('clicked')[0].classList.remove('clicked');
+            document.getElementsByClassName('clicked')[0]?.classList.remove('clicked');
         }
         if (document.getElementsByClassName('border-for-section-selection')[0]) {
-            document.getElementsByClassName('border-for-section-selection')[0].classList.remove('border-for-section-selection');
+            document.getElementsByClassName('border-for-section-selection')[0]?.classList.remove('border-for-section-selection');
         }
         const backgroundColor = document.getElementById(`field-box-${componentId}`).classList.add('clicked');
     }
 
+    getTimeStamp(): number {
+        return new Date().getTime();
+    }
+
+    getTempOrderNumberForComponents(sectionComponent): void {
+        sectionComponent.forEach((component, index) => {
+            component.componentOrderNumber = index;
+        })
+    }
+
+    initialComponentSave(event): void {
+        let selectedComponent;
+        for (let ele of this.sectionArray) {
+            selectedComponent = ele.sectionComponent.find(ele => ele.tempId == this._formBuilderService.currentComponentPosition.tempId)
+            if (selectedComponent) {
+                delete selectedComponent.tempId;
+                this.currentlyActiveComponentId = event.componentId;
+                selectedComponent.componentId = event.componentId;
+                selectedComponent.label = event.label;
+                const selectedSection = this.sectionArray.find(ele => ele.sectionId == event.sectionId);
+                this.updatePositionOfAllComponentsInSection(selectedSection.sectionComponent, selectedSection);
+                this._formBuilderService.formEditorState = deepCloneObject(this.sectionArray);
+                return;
+            }
+        }
+    }
 }

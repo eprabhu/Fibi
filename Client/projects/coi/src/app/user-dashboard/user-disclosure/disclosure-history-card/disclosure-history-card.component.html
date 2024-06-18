@@ -3,7 +3,7 @@
     *ngIf="disclosure?.updateTimeStamp">{{disclosure?.updateTimeStamp | date : 'dd MMM yyyy'}}</span>
 
 <!-- Project history card  -->
-<div *ngIf="!disclosure?.travelDisclosureId && !disclosure.opaDisclosureId"
+<div *ngIf="!disclosure?.travelDisclosureId && !disclosure.opaDisclosureId && !disclosure.consultDisclId"
     class="card coi-card-regular position-relative m-06">
     <div class="card-body">
         <div class="row">
@@ -16,21 +16,32 @@
                                 <span>{{disclosure?.fcoiType}}</span>
                             </span>
                         </span>
-                        <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0"
+                        <h4 class="d-flex align-items-baseline fs-14 mb-0 title-color" tabindex="0"
                             *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
                             <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'"
                                 tabindex="0" [attr.aria-label]="getProjectTitle(disclosure)">
-                                <span class="coi-text-darker fs-6 hyper-link ms-1"> {{(readMoreOrLess ?
-                                    getProjectTitle(disclosure) :
-                                    getProjectTitle(disclosure) | slice:0:150)}}</span>
-                                <span *ngIf="!readMoreOrLess && getProjectTitle(disclosure)?.length>150">
-                                    <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true" (keydown.enter)="readMoreOrLess=true"
-                                    tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more" class="link-primary fw-500"><span>...Read
-                                            More</span></a>
+                                <span class="d-flex">
+                                    <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
+                                        *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
+                                    <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
+                                        *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
+                                    <span>
+                                        <span class="coi-text-darker fs-6 hyper-link"> {{(readMoreOrLess[index] ?
+                                            getProjectTitle(disclosure) :
+                                            getProjectTitle(disclosure) | slice:0:120)}}</span>
+                                        <span *ngIf="!readMoreOrLess[index] && getProjectTitle(disclosure)?.length>120">
+                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
+                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
+                                                aria-label="Click here to read more" title="Click here to Read more"
+                                                class="link-primary fw-500"><span>...Read
+                                                    More</span></a>
+                                        </span>
+                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
+                                            (keydown.enter)="readMoreOrLess[index]=false" class="link-primary fw-500" tabindex="0" role="link"
+                                            aria-label="Click here to Read less" title="Click here to Read less"><span>Read
+                                                Less</span></a>
+                                    </span>
                                 </span>
-                                <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false" (keydown.enter)="readMoreOrLess=false" class="link-primary fw-500" 
-                                tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less"><span>Read
-                                        Less</span></a>
                             </span>
                         </h4>
                     </div>
@@ -137,9 +148,25 @@
                         </span>
                         <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
                             <span>
-                                <span class="text-nowrap coi-text-light fs-6">Entity:</span>
-                                <span [attr.aria-label]="disclosure.entityName"
-                                    class="coi-text-darker fs-6 hyper-link ms-1">{{disclosure.entityName}}</span>
+                                <span class="d-flex">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
+                                    <span>
+                                        <span class="coi-text-darker fs-6 hyper-link me-1"> {{(readMoreOrLess[index] ?
+                                           disclosure?.entityName :
+                                            disclosure?.entityName | slice:0:120)}}</span>
+                                        <span *ngIf="!readMoreOrLess[index] && disclosure.entityName.length>120">
+                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
+                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
+                                                aria-label="Click here to read more" title="Click here to Read more"
+                                                class="link-primary fw-500"><span>...Read
+                                                    More</span></a>
+                                        </span>
+                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
+                                            (keydown.enter)="readMoreOrLess[index]=false" class="link-primary fw-500" tabindex="0" role="link"
+                                            aria-label="Click here to Read less" title="Click here to Read less"><span>Read
+                                                Less</span></a>
+                                    </span>
+                                </span>
                             </span>
                         </h4>
                     </div>
@@ -148,18 +175,16 @@
                     <div class="col-md-6 col-lg-3 mb-2" tabindex="0">
                         <div>
                             <label class="coi-text-dark d-block">Destination</label>
-                            <span class="coi-text-light">
                                 <app-no-data-label
                                     [valueToShow]="disclosure?.destinationCity || disclosure?.destinationCountry || disclosure?.travelState">
-                                    <span class="coi-text-light text-slice ms-0"
+                                    <span class="fw-bold text-slice ms-0"
                                         [attr.aria-label]="disclosure?.destinationCity + (disclosure?.destinationCountry || disclosure?.travelState)"
                                         title="{{disclosure?.destinationCity}}, {{disclosure?.destinationCountry || disclosure?.travelState}}">
-                                        {{disclosure?.destinationCity}}<span
-                                            *ngIf="disclosure?.destinationCity && (disclosure?.destinationCountry || disclosure?.travelState)">,</span>
-                                        {{disclosure?.destinationCountry || disclosure?.travelState}}
+                                       <span class="coi-text-light">{{disclosure?.destinationCity}}</span>
+                                       <span class="coi-text-light" *ngIf="disclosure?.destinationCity && (disclosure?.destinationCountry || disclosure?.travelState)">, </span>
+                                       <span class="coi-text-light">{{disclosure?.destinationCountry || disclosure?.travelState}}</span>
                                     </span>
                                 </app-no-data-label>
-                            </span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3 mb-2">
@@ -326,6 +351,101 @@
                             <span
                                 [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
                                 class="{{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
+                            <span class="coi-text-dark" [attr.aria-label]="disclosure?.reviewStatus">
+                                {{disclosure?.reviewStatus}}</span>
+                        </app-no-data-label>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-1 d-flex align-items-center justify-content-end">
+                <button class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
+                    (click)="redirectToDisclosure()" aria-label="Click to view OPA Disclosure" title="Click to view OPA Disclosure">
+                    <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon> View
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Consulting history card  -->
+<div *ngIf="disclosure?.consultDisclId" class="card coi-card-regular position-relative m-06">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
+                <div class="row">
+                    <div class="col-12 d-inline-flex align-items-center mb-2">
+                        <span class="d-flex" tabindex="0">
+                            <span
+                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                                <span aria-label="Consulting">Consulting</span>
+                            </span>
+                        </span>
+                        <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0" *ngIf="disclosure.entityName">
+                            <span>
+                                <span class="d-flex">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
+                                    <span>
+                                        <span class="coi-text-darker fs-6 hyper-link me-1"> {{(readMoreOrLess[index] ?
+                                           disclosure?.entityName :
+                                            disclosure?.entityName | slice:0:120)}}</span>
+                                        <span *ngIf="!readMoreOrLess[index] && disclosure.entityName.length>120">
+                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
+                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
+                                                aria-label="Click here to read more" title="Click here to Read more"
+                                                class="link-primary fw-500"><span>...Read
+                                                    More</span></a>
+                                        </span>
+                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
+                                            (keydown.enter)="readMoreOrLess[index]=false" class="link-primary fw-500" tabindex="0" role="link"
+                                            aria-label="Click here to Read less" title="Click here to Read less"><span>Read
+                                                Less</span></a>
+                                    </span>
+                                </span>
+                            </span>
+                        </h4>
+                    </div>
+                </div>
+                <div class="row mx-0">
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <div>
+                            <label class="coi-text-dark d-block">Certification Date</label>
+                            <span>
+                                <app-no-data-label [valueToShow]="disclosure?.submissionTimestamp">
+                                    <span class="coi-text-light"
+                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
+                                        | dateFormatter}}</span>
+                                </app-no-data-label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <div>
+                            <label class="coi-text-dark d-block">Department</label>
+                            <span class="coi-text-light"
+                                [attr.aria.label]="disclosure?.homeUnit + ' - ' + disclosure?.homeUnitName">
+                                {{commonService.getPersonLeadUnitDetails(disclosure)}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 d-flex d-lg-block mb-3 mb-lg-0">
+                <div class="flex-grow-1 lh-sm mb-2">
+                    <label class="coi-text-lighter d-block">Disposition Status</label>
+                    <span>
+                        <span
+                            class="{{commonService.getConsultingDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
+                        <span class="coi-text-dark" [attr.aria-label]="disclosure?.dispositionStatus">
+                            {{disclosure?.dispositionStatus}}
+                        </span>
+                    </span>
+                </div>
+                <div class="flex-grow-1 lh-sm mb-2">
+                    <label class="coi-text-lighter d-block">Review Status</label>
+                    <span>
+                        <app-no-data-label [valueToShow]="disclosure?.reviewStatus">
+                            <span
+                                [class.text-dark]="commonService.getConsultingReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
+                                class="{{commonService.getConsultingReviewStatusBadge(disclosure?.reviewStatusCode)}}"></span>
                             <span class="coi-text-dark" [attr.aria-label]="disclosure?.reviewStatus">
                                 {{disclosure?.reviewStatus}}</span>
                         </app-no-data-label>

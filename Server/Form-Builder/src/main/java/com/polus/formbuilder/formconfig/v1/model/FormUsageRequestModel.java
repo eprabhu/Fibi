@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FormUsageRequestModel {
+
     private int formUsageId;
     private int formBuilderId;
+    private String formBuilderNumber;
     private Integer formOrderNumber;
     private String moduleCode;
     private String subModuleCode;
     private Integer businessRuleId;
     private String description;
     private String isActive;
+
 }

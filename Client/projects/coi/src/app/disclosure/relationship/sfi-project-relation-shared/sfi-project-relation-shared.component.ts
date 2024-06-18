@@ -44,7 +44,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             this.coiValidationMap.clear();
             this.coiTableValidation.clear();
         }
-        this.projectSFIDetails = this.projectSFIDetails.map(ele =>({...ele,isSaved: false})); 
+        this.projectSFIDetails = this.projectSFIDetails.map(ele =>({...ele,isSaved: false}));
     }
 
     ngOnInit() {
@@ -156,10 +156,10 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
         this.coiValidationMap.clear();
         this.coiTableValidation.clear();
         if (!this.coiStatusCode || (this.coiStatusCode == 'null')) {
-            this.coiValidationMap.set('coiStatus', 'Please select Conflict Status');
+            this.coiValidationMap.set('coiStatus', 'Please select conflict status.');
         }
         if (!this.coiDescription) {
-            this.coiValidationMap.set('coiDescription', 'Please enter description');
+            this.coiValidationMap.set('coiDescription', 'Please enter description.');
         }
         if (this.coiValidationMap.size === 0) {
             this.saveClick();
@@ -188,6 +188,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             ele.projectConflictStatusCode = this.coiStatusCode;
             ele.disclComment.comment = this.coiDescription;
             ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
+            delete ele.isSaved;
             return ele;
         });
     }

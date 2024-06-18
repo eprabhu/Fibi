@@ -1,24 +1,37 @@
-<div class="fs-18 fw-bold mt-3 d-flex justify-content-between">
-    Form List
-    <button [routerLink]="['/coi/form-builder-create/create-form']" class="btn btn-primary"><span
-            class="px-2 fs-15">Create Form </span></button>
+<div class="fb-header d-flex  justify-content-between align-items-center">
+    <div class="fw-bold fb-form-list-title">Form List</div>
+    <button title="Create Form" aria-label="Click here to create form" class="btn btn-primary fb-fs-14"
+        [routerLink]="['/coi/form-builder-create/create-form']">Create Form</button>
 </div>
-<hr class="mt-1">
-<div *ngFor="let item of formList;">
-    <div class="card card-shadow mb-3">
-        <div class="card-header">
-            {{item.title}}
-        </div>
+
+<div *ngFor="let item of formList; let i = index" class="mt-2">
+    <div class="card" id="card">
         <div class="card-body">
-            <h5 class="card-title">{{item.description}}</h5>
-            <div class="d-flex justify-content-end">
-                <button [routerLink]="['/coi/form-builder-create/form-editor']"
-                    [queryParams]={formBuilderId:item.formBuilderId} role="button"
-                    aria-describedby="Click to view {{item.name}}"
-                    class="d-flex align-items-center btn btn-primary-outline fs-14 height-fit-content"
-                    title="Click to view {{item.description}}" aria-label="Click to view {{item.description}}"><mat-icon
-                        role="img" class="mat-icon notranslate me-1  material-icons mat-ligature-font mat-icon-no-color"
-                        aria-hidden="true" data-mat-icon-type="font">visibility</mat-icon> View </button>
+            <div class="row align-items-center">
+                <div class="col-10">
+                    <h5 class="fb-card-title fb-fs-16">{{item?.title}}</h5>
+                    <p class="fb-card-text fb-fs-14">
+                        <span *ngIf="!isReadMore[i] && item?.description?.length > 40; else Readmore">
+                            {{item?.description|slice:0:40}}...
+                            <span (click)="isReadMore[i]=!isReadMore[i];" class="hand-cursor fw-bold fb-fs-14">Read More</span>
+                        </span>
+
+                        <ng-template #Readmore>
+                            {{item?.description}}
+                            <span *ngIf="item?.description?.length > 40;" (click)="isReadMore[i]=!isReadMore[i];"
+                                class="hand-cursor fw-bold fb-fs-14">Read Less</span>
+                        </ng-template>
+                    </p>
+                    <div class="formInfo fb-fs-14" id="formInfo">
+                        <small class="mr-2">Created by: {{item.createUser}}</small>
+                        <small *ngIf="item.isActive==='Y'">Published on: {{item.updateTimestamp |dateFormatterWithTimeZone:'long'}}</small>
+                    </div>
+                </div>
+                <div class="col-2 d-flex justify-content-end">
+                    <button [routerLink]="['/coi/form-builder-create/form-editor']"
+                        [queryParams]={formBuilderId:item.formBuilderId} class="btn fw-bold btn-outline-primary fb-fs-14"
+                        id="View" aria-label="Click here to view form in editor" title="View">View</button>
+                </div>
             </div>
         </div>
     </div>

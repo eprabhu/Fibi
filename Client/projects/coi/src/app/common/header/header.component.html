@@ -41,45 +41,50 @@
                     </div>
                     <mat-menu #createActionMenu="matMenu" xPosition="before">
                             <button (click)="openCreateSFI()" mat-menu-item
-                                title="Click to Create Significant Financial Interest"
-                                    aria-describedby="Click to Create Significant Financial Interest"
+                                title="Click here to Create Significant Financial Interest"
+                                    aria-label="Click here to Create Significant Financial Interest"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Significant Financial Interest</span>
                             </button>
-                            <button mat-menu-item title="Click to Add Notes" area-describedby="Click to Add Notes" (click)="showNotes()"
+                            <button mat-menu-item title="Click here to Add Notes" aria-label="Click here to Add Notes" (click)="showNotes()"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Notes</span>
                             </button>
-                            <button mat-menu-item title="Click to Add Attachments" area-describedby="Click to add attachments"
+                            <button mat-menu-item title="Click here to Add Attachments" aria-label="Click here to add attachments"
                             (click)="commonService.isOpenAttachmentModal = true" class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Attachments</span>
                             </button>
-                            <button (click)="openProjectDisclosure()" mat-menu-item title="Click to Create Project Disclosure"
-                                    aria-describedby="Click to Create Project Disclosure"
+                            <button (click)="openProjectDisclosure()" mat-menu-item title="Click here to Create Project Disclosure"
+                                    aria-label="Click here to Create Project Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Project Disclosure</span>
                             </button>
-                        <button (click)="openTravelDisclosure()" mat-menu-item title="Click to Create Travel Disclosure" area-describedby="Click to Create Travel Disclosure"
+                        <button (click)="openTravelDisclosure()" mat-menu-item title="Click here to Create Travel Disclosure" aria-label="Click here to Create Travel Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                             <span class="ms-2 fw-medium fs-14">Travel Disclosure</span>
                         </button>
-                        <button (click)="createOPA()" mat-menu-item title="Click to Create OPA Disclosure" area-describedby="Click to Create OPA Disclosure"
+                        <button (click)="createOPA()" mat-menu-item title="Click here to Create OPA Disclosure" aria-label="Click here to Create OPA Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                             <span class="ms-2 fw-medium fs-14">OPA Disclosure</span>
                         </button>
+                        <button (click)="createConsultingDisclosure()" mat-menu-item title="Click here to create consulting disclosure"
+                            aria-label="Click here to create consulting disclosure"
+                            class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">Consulting Disclosure</span>
+                        </button>
                     </mat-menu>
                 </ng-container>
-                <mat-icon [attr.title]="'Click to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
+                <mat-icon [attr.title]="'Click here to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click here to view all the frequently asked questions'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
-                <mat-icon data-bs-target="#theme-selector-modal" data-bs-toggle="modal" [attr.title]="'Click to view accessibility'" [attr.aria-labelledby]="'Click to view accessibility'"
+                <mat-icon data-bs-target="#theme-selector-modal" data-bs-toggle="modal" [attr.title]="'Click here to view accessibility'" [attr.aria-labelledby]="'Click here to view accessibility'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     accessibility
                 </mat-icon>
-                <mat-icon [attr.title]="'Click to view COI Notifications'"
+                <mat-icon [attr.title]="'Click here to view COI Notifications'"
                           [routerLink]="['/coi/expanded-widgets']"
-                          [attr.aria-labelledby]="'Click to view all the notifications'"
+                          [attr.aria-labelledby]="'Click here to view all the notifications'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     notifications
                 </mat-icon>
@@ -126,7 +131,8 @@
 <div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
-        <button type="button" class="btn-close ms-auto" title="Click to close" aria-label="Click to close" (click)="closeAddNote()"></button>
+        <app-common-help-text *ngIf="notesHelpTexts" [helpTextHardCoded]="notesHelpTexts"></app-common-help-text>
+        <button type="button" class="btn-close ms-auto" title="Click here to close" aria-label="Click here to close" (click)="closeAddNote()"></button>
     </div>
     <hr class="hr">
     <div>
@@ -134,7 +140,7 @@
             placeholder="Take a note..." [(ngModel)]="noteComment"></textarea>
     </div>
     <div>
-        <button type="button" aria-label="Click to close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" (click)="saveOrUpdateNote()">Add</button>
+        <button type="button" aria-label="Click here to close" class="btn btn-primary float-end fs-14 me-4 mb-3 mr-15 mt-3" title="Click here to add note"  aria-label="Click here to add note" (click)="saveOrUpdateNote()">Add</button>
     </div>
 </div>
 
@@ -153,7 +159,7 @@
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Choose a theme</h4>
-                <button aria-label="Click to close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Click here to close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>

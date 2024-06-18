@@ -48,7 +48,7 @@
                                 <app-no-data-label [classesToApply]="'fs-14'"
                                     [valueToShow]="entityDetails?.country?.countryName">
                                     <span class="text-color fs-14"
-                                        aria-label="entityDetails?.country?.countryName" id="coi-view-relationship-details-card-value-countyr">{{entityDetails?.country?.countryName}}</span>
+                                        aria-label="entityDetails?.country?.countryName" id="coi-view-relationship-details-card-value-country">{{entityDetails?.country?.countryName}}</span>
                                 </app-no-data-label>
                             </div>
                             <div tabindex="-1" class="col-lg-4 col-md-6 mb-md-3 mb-lg-0 mb-3">
@@ -63,16 +63,19 @@
                                     <span class="text-color fs-14" id="coi-view-relationship-details-card-value-phone">{{entityDetails?.phone}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div tabindex="-1" class="col-lg-12">
-                                <label class="coi-text-dark mt-3 me-2">Relationship </label>
+                            <div tabindex="-1" class="col-lg-12 mt-3">
+                                <label class="coi-text-dark me-2">Relationship </label>
                             <span>
                                 <app-no-data-label [valueToShow]="entityDetailsServices.definedRelationships">
                                     <span class="pill-container">
-                                        <em
+                                        <ng-container
                                             *ngFor="let coiFinancialEntityDetail of entityDetailsServices.definedRelationships;let isLast = last">
-                                            <span class="relationship-pill border px-3 py-1 rounded-4 me-2 fs-14 d-inline-block mb-2">
-                                                <span>
-                                                    {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
+                                            <span class="relationship-pill border px-2 py-1 rounded-4 me-2 fs-14 d-inline-block mb-2">
+                                                <span class="d-flex align-items-center coi-purple-text">
+                                                    <mat-icon aria-hidden="true"
+                                                    class="flex-shrink-0 me-1">{{getIcon(coiFinancialEntityDetail?.validPersonEntityRelType?.disclosureTypeCode)}}</mat-icon>
+                                                    <span class="fw-bold">{{coiFinancialEntityDetail?.validPersonEntityRelType?.coiDisclosureType?.description}}:</span>
+                                                    <span class="ms-1">{{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
                                                     <span id="qnr-complete-msg"
                                                         *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
                                                         class="fa fa-check" title="Completed">
@@ -83,7 +86,7 @@
                                                     </span>
                                                 </span>
                                             </span>
-                                        </em>
+                                        </ng-container>
                                     </span>
                                 </app-no-data-label>
                             </span>
@@ -126,7 +129,7 @@
                                     <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                 </button>
                                 <ng-template #noRightDesign3>
-                                    <button (click)="navigateBack()" 
+                                    <button (click)="navigateBack()"
                                         title="Click to go back to Entity list" aria-label="Click to go back to Entity list" id="coi-view-relationship-details-back-btn2"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
                                         type="button">
@@ -168,7 +171,7 @@
                             </ng-template>
                             <mat-menu #beforeMenu="matMenu" xPosition="before">
                                 <button mat-menu-item id="btn-sfi-modify"
-                                    *ngIf="relationshipsDetails?.versionStatus == 'ACTIVE' && !isEditMode && entityDetailsServices.canMangeSfi" 
+                                    *ngIf="relationshipsDetails?.versionStatus == 'ACTIVE' && !isEditMode && entityDetailsServices.canMangeSfi"
                                     class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                     title="Click to Modify SFI" (click)="modifySfi()">
                                     <mat-icon aria-hidden="true">mode</mat-icon>
@@ -235,7 +238,7 @@
             </a>
     </li>
     <li tabindex="0"  (click)="openHistorySection();" (keyup.enter)="openHistorySection();" (keyup.space)="openHistorySection();">
-            <a class="nav-link px-3 py-3" title="Click here to view History"   [class.active]="entityDetailsServices.activeTab === 'HISTORY'" 
+            <a class="nav-link px-3 py-3" title="Click here to view History"   [class.active]="entityDetailsServices.activeTab === 'HISTORY'"
                 [attr.aria-label]="entityDetailsServices.activeTab === 'HISTORY' ? 'Selected tab is SFI History' : 'Click to view SFI History'" id="coi-view-relationship-details-history">
                 History
             </a>
@@ -288,7 +291,9 @@
                     <span
                         title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}} Questionnaire"
                         class="relation-border-left r-title px-3 py-3">
-                        <span class="fs-14" tabindex="-1">
+                        <span class="fs-14 d-flex align-items-center" tabindex="-1">
+                            <mat-icon aria-hidden="true"
+                            class="flex-shrink-0 me-1">{{getIcon(coiFinancialEntityDetail?.validPersonEntityRelType?.disclosureTypeCode)}}</mat-icon>
                             {{coiFinancialEntityDetail?.validPersonEntityRelType?.description}}
                             <span id="qnr-complete-msg"
                                 *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.validPersonEntityRelTypeCode]"
@@ -610,6 +615,7 @@
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityDetails.entityName"
     [personEntityId]="entityId" [updatedRelationshipStatus]="updatedRelationshipStatus"
     (closeModal)="closeActivateInactivateSfiModal($event)"
-    [personEntityNumber]="relationshipsDetails?.personEntityNumber">
+    [personEntityNumber]="relationshipsDetails?.personEntityNumber" [entityDetails]="entityDetails"
+    [relationshipDetails]="getRelationshipDetails()">
 </app-activate-inactivate-sfi-modal>
 </div>

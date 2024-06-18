@@ -67,6 +67,7 @@ export class AddSfiSliderComponent implements OnInit {
     }
 
     getSfiSectionConfig() : void {
+        this.$subscriptions.push(
         this._commonService.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
             this.sfiSliderSectionConfig = data;
             this.openSlider();
@@ -74,7 +75,7 @@ export class AddSfiSliderComponent implements OnInit {
             _err => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');
                 this.openSlider();
-            })
+            }));
     }
 
     openSlider() : void {

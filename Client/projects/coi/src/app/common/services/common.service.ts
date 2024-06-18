@@ -20,6 +20,7 @@ export class CommonService {
     fibiUrl = '';
     authUrl = '';
     opaUrl = '';
+    consultingUrl = '';
     formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
@@ -120,6 +121,7 @@ export class CommonService {
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
         this.formUrl = configurationData.formUrl;
+        this.consultingUrl = configurationData.consultingUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -171,7 +173,7 @@ export class CommonService {
     }
 
     getDashboardActiveModules(moduleCode = '') {
-        return this._http.get(this.baseUrl + '/getModulesConfiguration' + (moduleCode ? '/' + moduleCode : ''));
+        return this._http.get(this.fibiUrl + '/getModulesConfiguration' + (moduleCode ? '/' + moduleCode : ''));
     }
 
     /**
@@ -342,6 +344,40 @@ export class CommonService {
                 return 'green-badge';
             default:
                 return 'yellow-badge';
+        }
+    }
+
+    getConsultingDispositionStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+                return 'green-badge';
+            default:
+                return '';
+        }
+    }
+
+    getConsultingReviewStatusBadge(statusCode: string): string {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+                return 'blue-badge';
+            case '3':
+                return 'yellow-badge';
+            case '5':
+                return 'green-badge';
+            case '8':
+                return 'red-badge';
+            case '7':
+                return 'red-badge';
+            case '4':
+                return 'blue-badge';
+            case '6':
+                return 'green-badge';
+            default:
+                return '';
         }
     }
 

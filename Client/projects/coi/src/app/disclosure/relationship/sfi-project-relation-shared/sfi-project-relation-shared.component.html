@@ -14,7 +14,7 @@
 <section>
     <div class="table-responsive coi-table-striped mt-2 p-2" id="sfi-relationship">
         <table class="table table-bordered fs-14 table-striped mb-0">
-            <thead [ngClass]="{'sticky-top':isSlider}" id="sfi-relationship-table-header">
+            <thead [ngClass]="{'sticky-top z-0':isSlider}" id="sfi-relationship-table-header">
                 <tr class="fw-600">
                     <th scope="col" class="col-md-3 col-xl-3 th-border-left" tabindex="0" aria-label="Project(s)">Project(s)</th>
                     <th scope="col" class="col-md-4 col-lg-3 col-xl-2" tabindex="0" aria-label="conflict status"><span
@@ -26,15 +26,14 @@
             <tbody>
                 <tr *ngFor="let projectSfi of projectSFIDetails; let i = index" id="coi-sfi-project-relation-tbody-tr-{{i}}">
                     <td class="pt-2">
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center entity-status shadow-sm mt-2"
-                            [ngClass]="projectSfi?.moduleCode == 1 ? 'bg-award-clip' : 'bg-proposal-clip'">
-                            {{ projectSfi?.moduleCode == 1 ? 'Award' : 'Proposal' }}
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-nowrap align-items-center entity-status shadow-sm mt-2" [style.background-color]="projectSfi?.projectBadgeColour">
+                            {{ projectSfi.projectType }}
                         </div>
-                        <div [attr.aria-label]="projectIdTitleMap[projectSfi?.moduleItemKey]" [title]="projectIdTitleMap[projectSfi?.moduleItemKey]">
-                            {{projectIdTitleMap[projectSfi?.moduleItemKey] && projectIdTitleMap[projectSfi?.moduleItemKey].length > 100 ?
-                            (projectIdTitleMap[projectSfi?.moduleItemKey] | slice:0:100) + '...' :
-                            projectIdTitleMap[projectSfi?.moduleItemKey]}}
+                        <div [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
+                            {{projectSfi?.projectTitle && projectSfi?.projectTitle.length > 100 ?
+                            (projectSfi?.projectTitle | slice:0:100) + '...' :
+                            projectSfi?.projectTitle}}
                         </div>
                     </div>
                     </td>
@@ -92,6 +91,7 @@
                             <span class="text-danger me-1 fw-600">*</span>
                             <span title="List of Conflict status" tabindex="0" aria-label="conflict status"
                                   class="fw-600">Conflict Status</span>
+                                  <app-common-help-text [helpTextHardCoded]="'Please select a conflict status.'"></app-common-help-text>
                             <div>
                                 <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode" title="Click here to select Conflict Status" aria-label="Click here to select Conflict Status"
                                         class="form-select form-control cursor-pointer"
@@ -101,23 +101,22 @@
                                             *ngFor="let status of coiStatusList">
                                         {{status?.description}}</option>
                                 </select>
-                            </div>
-                            <div>
                                 <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiStatus')">
-                                  {{coiValidationMap.get('coiStatus')}}
-                                </span>
-                            </div>
+                                    {{coiValidationMap.get('coiStatus')}}
+                                  </span>
+                                </div>
                         </div>
                         <div class="fs-14 mt-3">
                             <span class="text-danger me-1 fw-600" id="description">*</span>
                             <span class="fw-600" tabindex="0" aria-label="Define Project - SFI Relation" role="field"
                                   aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
+                                  <app-common-help-text [helpTextHardCoded]="'Please enter the description.'"></app-common-help-text>
                             <textarea class="form-control" id="coi_description"
                                       [(ngModel)]="coiDescription" title="Click here to Provide your description" aria-label="Provide your description here"
                                       (ngModelChange)="coiDescription = coiDescription.trim();" appAutoGrow
                                       appLengthValidator rows="1"
                                       [ngClass]="coiValidationMap.has('coiDescription') ? 'is-invalid d-block' : ''"
-                                      placeholder="Provide your description here" [limit]=2000
+                                      placeholder="Please provide your description" [limit]=2000
                                       spellcheck="false"></textarea>
                             <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiDescription')">
                                 {{coiValidationMap.get('coiDescription')}}
@@ -131,7 +130,7 @@
                         (click)="clearValues()" type="button" aria-label="Click here to Cancel" title="Click here to Cancel">Cancel
                 </button>
                 <button class="btn btn-primary fs-14 btn-primary-submit" type="button" (click)="applyToAll()" id="btn-apply-all"
-                    aria-label="Click here to Apply to all" title="Click here to Apply to all">
+                    aria-label="Click here to Apply to all" title="Click here to apply to all">
                     Apply to All
                 </button>
             </div>

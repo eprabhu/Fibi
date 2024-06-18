@@ -83,18 +83,22 @@
                     class="coi-text-dark me-3">Relationship</label>
                 <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
                     <ng-container *ngIf="reqObject.validPersonEntityRelTypes?.length">
-                        <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color fst-italic d-inline-block"
+                        <span class="relationship-pill border px-2 py-1 rounded-4 me-2 pill-color d-inline-flex"
                             *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue; let isFirst = first"
                             [class.pill-spacing]="!isFirst">
-                            <label class="coi-text-light me-1"
-                                [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-key">{{relationship.key}} : </label>
+                            <span class="d-flex coi-purple-text">
+                            <mat-icon aria-hidden="true"
+                            class="flex-shrink-0 me-1">{{getIcon(relationship.key)}}</mat-icon>
+                            <span class="fw-bold"
+                                [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-key">{{relationship.key}}:</span>
                             <ng-container *ngFor="let relation of relationship.value; let last = last">
-                                <span class="r-title coi-text-lighter" *ngIf="!last"
+                                <span class="r-title ms-1" *ngIf="!last"
                                     [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-type-notlast">{{relation?.personEntityRelType?.description
                                     +'/'}}</span>
-                                <span class="r-title coi-text-lighter" *ngIf="last"
+                                <span class="r-title ms-1" *ngIf="last"
                                     [attr.aria-label]="relation?.personEntityRelType?.description" id="coi-shared-sfi-card-value-relation-type-last">{{relation?.personEntityRelType?.description}}</span>
                             </ng-container>
+                        </span>
                         </span>
                     </ng-container>
                 </app-no-data-label>
