@@ -67,5 +67,5 @@ CREATE VIEW `coi_project_proposal_v` AS
     FROM
         `coi_project_proposal`
     WHERE
-        (`coi_project_proposal`.`COI_PROJECT_TYPE_CODE` = 4));
+        (`coi_project_proposal`.`COI_PROJECT_TYPE_CODE` = 4);
 //
