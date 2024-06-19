@@ -15,7 +15,7 @@ CREATE VIEW `coi_project_proposal_v` AS
                     AND (`eps_proposal_persons`.`PI_FLAG` = 'Y')
                     AND (`eps_proposal_persons`.`PROPOSAL_ID` = `t1`.`PROPOSAL_ID`)
                     AND (`t1`.`DOCUMENT_STATUS_CODE` <> 3)
-                    AND (`t1`.`STATUS_CODE` NOT IN (1 , 29, 35, 9, 22, 20, 24, 30, 3, 12, 11))
+                    AND (`t1`.`STATUS_CODE` NOT IN (1 , 29, 35, 9, 22, 20, 24, 30, 3, 12))
                     AND (`t1`.`DOCUMENT_STATUS_CODE` <> 3))
             LIMIT 1) AS `PI_PERSON_ID`,
         (SELECT 
@@ -44,7 +44,7 @@ CREATE VIEW `coi_project_proposal_v` AS
         JOIN `person` `t7` ON ((`t6`.`PERSON_ID` = `t7`.`PERSON_ID`)))
     WHERE
         ((`t1`.`DOCUMENT_STATUS_CODE` <> 3)
-            AND (`t1`.`STATUS_CODE` NOT IN (1 , 29, 35, 9, 22, 20, 24, 30, 3, 12, 11))
+            AND (`t1`.`STATUS_CODE` NOT IN (1 , 29, 35, 9, 22, 20, 24, 30, 3, 12))
             AND (`t1`.`DOCUMENT_STATUS_CODE` <> 3)) 
     UNION ALL SELECT 
         `coi_project_proposal`.`ID` AS `ID`,
@@ -57,7 +57,7 @@ CREATE VIEW `coi_project_proposal_v` AS
         `coi_project_proposal`.`KEY_PERSON_ID` AS `KEY_PERSON_ID`,
         `coi_project_proposal`.`KEY_PERSON_NAME` AS `KEY_PERSON_NAME`,
         `coi_project_proposal`.`KEY_PERSON_ROLE_CODE` AS `KEY_PERSON_ROLE_CODE`,
-        'Approval In Progress' AS `PROPOSAL_STATUS`,
+        NULL AS `PROPOSAL_STATUS`,
         `coi_project_proposal`.`SPONSOR_NAME` AS `SPONSOR_NAME`,
         `coi_project_proposal`.`PRIME_SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,
         `coi_project_proposal`.`PROPOSAL_START_DATE` AS `PROPOSAL_START_DATE`,
