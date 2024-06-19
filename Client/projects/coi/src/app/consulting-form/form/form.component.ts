@@ -259,6 +259,7 @@ export class FormComponent {
         this.mandatoryList.clear();
         this.entityDetailsValidation();
         if (!this.mandatoryList.size && !this.emailWarningMsg) {
+            this.entityDetails.coiEntity.entityStatusCode = '2';
             this.$subscriptions.push(this._formService.saveOrUpdateCoiEntity(this.entityDetails).subscribe((data: any) => {
                 if (data) {
                     this.entityDetails.coiEntity = data;
