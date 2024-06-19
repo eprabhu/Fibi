@@ -57,7 +57,7 @@ CREATE VIEW `coi_project_proposal_v` AS
         `coi_project_proposal`.`KEY_PERSON_ID` AS `KEY_PERSON_ID`,
         `coi_project_proposal`.`KEY_PERSON_NAME` AS `KEY_PERSON_NAME`,
         `coi_project_proposal`.`KEY_PERSON_ROLE_CODE` AS `KEY_PERSON_ROLE_CODE`,
-        NULL AS `PROPOSAL_STATUS`,
+        'Approval In Progress' AS `PROPOSAL_STATUS`,
         `coi_project_proposal`.`SPONSOR_NAME` AS `SPONSOR_NAME`,
         `coi_project_proposal`.`PRIME_SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,
         `coi_project_proposal`.`PROPOSAL_START_DATE` AS `PROPOSAL_START_DATE`,
@@ -67,5 +67,6 @@ CREATE VIEW `coi_project_proposal_v` AS
     FROM
         `coi_project_proposal`
     WHERE
-        (`coi_project_proposal`.`COI_PROJECT_TYPE_CODE` = 4);
+        (`coi_project_proposal`.`COI_PROJECT_TYPE_CODE` = 3)
+
 //
