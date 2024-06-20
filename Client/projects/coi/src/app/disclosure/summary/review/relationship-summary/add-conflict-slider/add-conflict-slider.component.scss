@@ -171,3 +171,31 @@
     font-weight: 400;
     border: 1px solid #caced2;
 }
+
+.entity-status {
+    color: white;
+    width: max-content;
+    height: 27px;
+    position: relative;
+    left: -22px;
+    top: 2px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 18px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-bottom: 6px solid #151515;
+        border-left: 6px solid transparent;
+        top: -6px;
+        left: 0;
+    }
+}
+
+.custom-stickytop{
+    top: -16px;
+}
