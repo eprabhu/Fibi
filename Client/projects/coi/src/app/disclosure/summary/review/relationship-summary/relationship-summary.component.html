@@ -100,15 +100,15 @@
                             </span>
                         </div>
                         <div class="d-flex flex-wrap fw-medium fs-13">
-                            <ng-container class="mt-2" *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                    <span class="relationship-pill border px-3 py-1 rounded-4 me-2 d-inline-block">
-                                        <span class="d-flex coi-purple-text">
-                                            <mat-icon aria-hidden="true"
-                                            class="flex-shrink-0 me-1">{{getIcon(relation?.relationshipType)}}</mat-icon>
-                                            <span class="fw-bold">{{relation?.relationshipType}} :</span>
-                                            <span class="fw-normal">{{relation?.description}}</span>
-                                    </span>
-                                </span>
+                            <ng-container class="mt-2" *ngFor="let relation of coiSummaryService.getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                              <span class="relationship-pill border px-3 py-1 rounded-4 me-2 d-inline-block">
+                                  <span class="d-flex coi-purple-text">
+                                      <mat-icon aria-hidden="true"
+                                      class="flex-shrink-0 me-1">{{coiSummaryService.getIcon(relation?.relationshipType)}}</mat-icon>
+                                      <span class="fw-bold">{{relation?.relationshipType}} :</span>
+                                      <span class="fw-normal">{{relation?.description}}</span>
+                                  </span>
+                              </span>
                             </ng-container>
                         </div>
                         <div class="row mt-2 fw-medium fs-13">
@@ -167,5 +167,6 @@
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
+  [relationshipType]="relationshipType"></app-add-conflict-slider>
 
