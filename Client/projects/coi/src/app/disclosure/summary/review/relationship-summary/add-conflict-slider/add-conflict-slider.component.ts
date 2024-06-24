@@ -8,7 +8,7 @@ import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common
 import { CoiService } from '../../../../services/coi.service';
 import { openCoiSlider } from '../../../../../common/utilities/custom-utilities';
 import { DataStoreService } from '../../../../services/data-store.service';
-import { COI } from '../../../../coi-interface';
+import { COI, ProjectRelationshipDetails } from '../../../../coi-interface';
 import { CoiSummaryService } from '../../../coi-summary.service';
 
 @Component({
@@ -24,6 +24,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     @Input() isEditMode: any = null;
     @Input() disclosureMetaData: any = null;
     @Input() relationshipType : any[] = [];
+    @Input() selectedProject: ProjectRelationshipDetails;
     @ViewChild('addCommentOverlay', { static: true }) addCommentOverlay: ElementRef;
 
     conflictHistory = [];

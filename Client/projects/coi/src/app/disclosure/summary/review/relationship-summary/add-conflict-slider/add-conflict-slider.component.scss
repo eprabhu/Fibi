@@ -199,3 +199,31 @@
 .custom-stickytop{
     top: -16px;
 }
+
+.left-spacing {
+    padding-left: 2rem;
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        width: 30px;
+        top: 56%;
+        left: -8px;
+        right: 89%;
+        border-top: 1px solid #828485;
+        transform: translate(30%, -50%);
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        width: 22px;
+        top: 14%;
+        left: -10px;
+        right: 89%;
+        border-top: 1px solid #828485;
+        transform: translate(30%, -50%);
+        transform: rotate(90deg);
+    }
+}
