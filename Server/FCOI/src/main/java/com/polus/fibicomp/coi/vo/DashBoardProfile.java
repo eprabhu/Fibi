@@ -2,6 +2,7 @@ package com.polus.fibicomp.coi.vo;
 
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
+import com.polus.fibicomp.coi.dto.ConsultDisclDashboardDto;
 import com.polus.fibicomp.opa.dto.OPADashboardDto;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,6 +115,10 @@ public class DashBoardProfile {
 	List<CoiTravelDashboardDto> travelDashboardViews;
 
 	List<OPADashboardDto> opaDashboardDto;
+
+	List<ConsultDisclDashboardDto> consultingDisclDashboardViews;
+
+	private Integer consultDisclCount;
 
 	public List<CoiTravelDashboardDto> getTravelDashboardViews() {
 		return travelDashboardViews;
@@ -340,4 +345,19 @@ public class DashBoardProfile {
 		this.opaDashboardDto = opaDashboardDto;
 	}
 
+	public List<ConsultDisclDashboardDto> getConsultingDisclDashboardViews() {
+		return consultingDisclDashboardViews;
+	}
+
+	public void setConsultingDisclDashboardViews(List<ConsultDisclDashboardDto> consultingDisclDashboardViews) {
+		this.consultingDisclDashboardViews = consultingDisclDashboardViews;
+	}
+
+	public Integer getConsultDisclCount() {
+		return consultDisclCount;
+	}
+
+	public void setConsultDisclCount(Integer consultDisclCount) {
+		this.consultDisclCount = consultDisclCount;
+	}
 }

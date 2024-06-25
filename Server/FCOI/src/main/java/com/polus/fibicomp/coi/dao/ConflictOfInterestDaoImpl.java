@@ -120,7 +120,6 @@ import com.polus.core.inbox.pojo.Inbox;
 import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.core.security.AuthenticatedUser;
-import com.polus.fibicomp.view.DisclosureView;
 
 import oracle.jdbc.OracleTypes;
 
