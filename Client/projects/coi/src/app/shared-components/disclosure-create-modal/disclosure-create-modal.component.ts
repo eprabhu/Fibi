@@ -69,6 +69,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     To revert to the original unit, click on the 'Reset' icon.`
     travelDescHelpText = 'Please provide the purpose of the trip.';
     projectTypeHelpText = 'Please select a project type to proceed with disclosure creation.';
+    projectTitle: string = '';
 
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
@@ -120,14 +121,15 @@ export class DisclosureCreateModalComponent implements OnInit {
             const selectedModuleCode = this.selectedProjectType === 'Award' ? '1' : '3';
             // const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.awardId : event.moduleItemId : null;
             const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.moduleItemId : event.moduleItemId : null;
+            const projectTitle = event ? `${event.moduleItemKey} ${event.title}` : '';
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
                     if (data.pendingProject != null) {
                         this.isShowExistingDisclosure = true;
-                        this.setExistingDisclosureDetails('Project', data.pendingProject);
+                        this.setExistingDisclosureDetails('Project', data.pendingProject, projectTitle);
                     } else if (data.fcoiProject != null) {
                         this.isShowExistingDisclosure = true;
-                        this.setExistingDisclosureDetails('FCOI', data.fcoiProject);
+                        this.setExistingDisclosureDetails('FCOI', data.fcoiProject, projectTitle);
                     } else {
                         this.assignSelectedProject(event);
                     }
@@ -139,7 +141,6 @@ export class DisclosureCreateModalComponent implements OnInit {
             });
         } else {
             this.clearProjectDisclosure();
-
         }
     }
 
@@ -442,12 +443,13 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.existingDisclosureDetails.disclosurePersonFullName = this.canReviseFCOI.disclosurePersonFullName;
     }
 
-    private setExistingDisclosureDetails(type: string, data: any): void {
+    private setExistingDisclosureDetails(type: string, data: any, projectTitle: string = ''): void {
         this.disclosureNumber = data.disclosureNumber;
         this.existingDisclosureDetails = deepCloneObject(data);
         this.existingDisclosureDetails['disclosureType'] = type;
         if (type == 'Project') {
             this.existingDisclosureDetails['type'] = this.selectedProjectType;
+            this.projectTitle = projectTitle;
         }
         this.isShowResultCard = true;
     }

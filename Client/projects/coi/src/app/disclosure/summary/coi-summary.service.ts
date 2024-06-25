@@ -8,6 +8,7 @@ import { RO } from '../coi-interface';
 export class CoiSummaryService {
 
   activeSubNavItemId = '';
+  relationshipTypeCache = {};
 
     constructor(
         private _http: HttpClient,
@@ -53,5 +54,29 @@ export class CoiSummaryService {
 
     getProjectRelationship(disclosureId: number) {
       return this._http.get(`${this._commonService.baseUrl}/disclosure/projects/${disclosureId}`);
+    }
+
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return { relationshipType: relationshipType[0] || '', description: relationshipType[1] || '' };
+            });
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+    }
+
+    getIcon(key): string {
+        switch (key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            case 'Consulting': return 'supervisor_account';
+            default: return;
+        }
     }
 }
