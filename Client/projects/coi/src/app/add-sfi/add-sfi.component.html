@@ -5,7 +5,7 @@
 				<div class="col-xl-8 col-lg-9 col-md-12 px-0" [class.my-auto]="isSlider">
 					<div class="card-header bg-white px-3 min-height-unset" [ngClass]="isSlider ? 'border-none' : 'border-bottom'">
 						<div class="row flex-grow-1">
-							<div class="col-lg-12 d-flex align-items-center" tabindex="-1" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
+							<div class="col-lg-12 d-flex align-items-center text-break" tabindex="-1" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
 								<span class="fs-18 fw-500">
                                     <ng-container *ngIf="entityDetails.coiEntity.entityName">
                                         <app-read-more [valueToShow]="entityDetails.coiEntity.entityName" [sliceCount]="50"></app-read-more>
