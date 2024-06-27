@@ -610,18 +610,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         }
     }
 
-    openProjectMoreDetails(moduleId) {
-        let redirectUrl = '';
-        if (this.selectedProjectDetails.moduleCode == 3) {
-            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
-        } else {
-            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
-        }
-        window.open(redirectUrl);
-    }
-
     showTaskNavBar() {
-        // document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         const slider = document.querySelector('.slider-base');
         slider.classList.add('slider-opened');
     }
