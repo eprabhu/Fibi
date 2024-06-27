@@ -6,29 +6,21 @@
                 <div class="col-lg-6 col-md-12 px-0 mb-2">
                     <label class="d-block coi-text-dark" for="">Person Associated with Disclosure</label>
                     <app-no-data-label [valueToShow]="disclosureMetaData?.coiPersonFullName">
-                        <span class="grey-text fw-500">{{disclosureMetaData?.coiPersonFullName}}</span>
+                        <span class="grey-text fw-500 text-slice" [title]="disclosureMetaData?.coiPersonFullNam">{{disclosureMetaData?.coiPersonFullName}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col-lg-6 col-md-12 px-0 mb-2">
                     <label class="d-block coi-text-dark" for="">Significant Financial Interest</label>
                     <app-no-data-label [valueToShow]="entityDetails?.entityName">
-                        <span class="grey-text fw-500">{{entityDetails?.entityName}}</span>
+                        <span class="grey-text fw-500 text-slice" [title]="entityDetails?.entityName">{{entityDetails?.entityName}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col-12 px-0 mb-2">
                     <label class="d-block coi-text-dark" for="">Project</label>
                     <ng-container *ngIf="entityDetails?.moduleCode == 3 || entityDetails?.moduleCode == 1">
                         <app-no-data-label [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
-                            <span class="grey-text fw-500">
-                                <strong>#{{entityDetails?.moduleItemId}} - {{!titleReadMore ? (entityDetails?.title |
-                                    slice:0:120) :
-                                    entityDetails?.title}}</strong>
-                                <span *ngIf="entityDetails?.title?.length>120" class="fw-500 ms-1 link-primary"
-                                    (keydown.enter)="titleReadMore = !titleReadMore"
-                                    tabindex="0" role="link" aria-label="Click here to {{titleReadMore? 'Read less': 'Read more'}}"
-                                    title="Click here to {{titleReadMore? 'Read less': 'Read more'}}"
-                                    (click)="titleReadMore = !titleReadMore">{{titleReadMore? 'Read Less': '...Read More'}}
-                                </span>
+                            <span class="grey-text fw-500 text-slice" title="#{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}">
+                                <strong>#{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}</strong>
                             </span>
                         </app-no-data-label>
                     </ng-container>
@@ -36,14 +28,14 @@
                 <div class="col-lg-6 col-md-12 px-0 mb-md-2 mb-lg-0">
                     <label class="d-block coi-text-dark" for="">Sponsor</label>
                     <app-no-data-label [valueToShow]="entityDetails?.sponsor">
-                        <span class="grey-text fw-500">{{entityDetails?.sponsor}}</span>
+                        <span class="grey-text fw-500 text-slice" [title]="entityDetails?.sponsor">{{entityDetails?.sponsor}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col-lg-6 col-md-12 px-0">
                     <label class="d-block coi-text-dark" for="">Prime Sponsor</label>
 
                     <app-no-data-label [valueToShow]="entityDetails?.primeSponsor">
-                        <span class="grey-text fw-500">{{entityDetails?.primeSponsor}}</span>
+                        <span class="grey-text fw-500 text-slice" [title]="entityDetails?.primeSponsor">{{entityDetails?.primeSponsor}}</span>
                     </app-no-data-label>
                 </div>
             </div>

@@ -476,13 +476,13 @@
 </app-confirmation-modal>
 
 <!-- Complete review modal -->
-<div class="modal modal-coi fade mySkinDialog" data-bs-backdrop="static" id="completeReviewModalFromDashboard"
-    role="dialog">
+<div tabindex="-1" class="modal modal-coi fade mySkinDialog" data-bs-backdrop="static" id="completeReviewModalFromDashboard"
+    role="dialog" aria-labelledBy="completeReviewModalFromDashboard-header">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">
-                    <span>Complete Final Review</span>
+                    <span id="completeReviewModalFromDashboard-header">Complete Final Review</span>
                     <app-common-help-text [helpTextHardCoded]="completeReviewHelpText"></app-common-help-text>
                 </h4>
                 <button aria-label="Click here to close" class="btn-close fs-12" data-bs-dismiss="modal"
