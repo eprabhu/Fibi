@@ -469,8 +469,9 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
             2: IP_EXTERNAL_RESOURCE_URL.replace('{instituteProposalId}', projectId),
             3: PROPOSAL_EXTERNAL_RESOURCE_URL.replace('{developmentProposalId}', projectId),
         };
+        const EXTERNAL_APPLICATION_URL = this.fibiApplicationUrl;
         if (RESOURCE_URLS[projectTypeCode]) {
-            window.open(`${RESOURCE_URLS[projectTypeCode]}`, '_blank');
+            window.open(`${EXTERNAL_APPLICATION_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
         }
     }
 
