@@ -40,11 +40,6 @@
     margin-right: 30px;
 }
 
-label {
-    color: #48647f;
-    font-weight: 500;
-}
-
 .left-Box-heading {
     padding-left: 113px;
 }
@@ -66,9 +61,7 @@ label {
     width: max-content;
     height: 27px;
     position: relative;
-    left: -19px;
-    ;
-    top: -1px;
+    margin-left: -19px;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: 0 50px 50px 0;
@@ -188,6 +181,8 @@ label {
 .count-label {
     display: inline-block;
     width: 150px;
+    color: #48647f;
+    font-weight: 500;
 }
 
 .entity-title {

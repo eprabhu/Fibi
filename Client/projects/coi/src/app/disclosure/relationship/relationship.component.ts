@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {  Router} from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
-import {
-    AWARD_EXTERNAL_RESOURCE_URL,
-    HTTP_ERROR_STATUS,
-    IP_EXTERNAL_RESOURCE_URL,
-    PROPOSAL_EXTERNAL_RESOURCE_URL
-} from '../../app-constants';
+import { HTTP_ERROR_STATUS} from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';

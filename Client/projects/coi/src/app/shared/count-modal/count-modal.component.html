@@ -1,5 +1,5 @@
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal"
-    data-bs-target="#coiCountsViewModal"></button>
+<button tabindex="-1" type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal"
+    data-bs-target="#coiCountsViewModal" aria-hidden="true"></button>
 
     <div class="modal fade mySkinDialog modal-xl" id="coiCountsViewModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -139,7 +139,7 @@
                                 <td *ngIf="currentModalTab == 'Proposal'">
                                     <div class="d-flex justify-content-center">
                                         <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons" title="Click to view proposal details"
-                                            aria-label="Click to view proposal details" (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId)">
+                                            aria-label="Click to view proposal details" (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode)">
                                             <mat-icon aria-hidden="true">visibility</mat-icon>
                                         </button>
                                     </div>
@@ -148,7 +148,7 @@
                                     <div class="d-flex justify-content-center">
                                         <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons"
                                          aria-label="Click to view award details" title="Click to view award details"
-                                            (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);">
+                                            (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode);">
                                             <mat-icon aria-hidden="true">visibility</mat-icon>
                                         </button>
                                     </div>
