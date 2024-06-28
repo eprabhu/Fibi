@@ -251,6 +251,7 @@
 }
 
 .link-primary {
+    text-decoration: none !important;
     cursor: pointer;
     &:hover,
     &:focus {
@@ -334,6 +335,10 @@
     margin-left: -15px;
 }
 
+.coi-ms-n5px {
+    margin-left: -5px;
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -376,4 +381,12 @@
 
 .coi-purple-text {
     color: #5E4FB8 !important;
+}
+
+.fs-24 {
+    font-size: 1.5rem !important;
+}
+
+.top-5px {
+    top: 5px;
 }
