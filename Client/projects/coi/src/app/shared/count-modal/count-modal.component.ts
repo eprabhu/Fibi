@@ -37,7 +37,7 @@ export class CountModalComponent implements OnInit {
     isEntityNameRead = false;
     isReadMore = [];
 
-    constructor(private _countModalService: CountModalService, private _commonService: CommonService) {
+    constructor(private _countModalService: CountModalService, public commonService: CommonService) {
     }
 
     ngOnInit() {
@@ -198,17 +198,6 @@ export class CountModalComponent implements OnInit {
     switchTableData() {
         this.tableArray = this.currentModalTab === 'Proposal' ? this.projectDatas.proposals : this.projectDatas.awards;
         this.isReadMore = [];
-    }
-
-
-    openProjectMoreDetails(currentModalTab, moduleId) {
-        if (currentModalTab === 'Proposal') {
-            const proposalLink = this._commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
-            window.open(proposalLink, '_blank');
-        } else {
-            const awardLink = this._commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
-            window.open(awardLink, '_blank');
-        }
     }
 
     viewSliderEmit(flag: boolean, entityId) {

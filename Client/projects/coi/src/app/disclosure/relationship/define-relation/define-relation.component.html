@@ -6,60 +6,99 @@
           <div class="col-lg px-0">
             <div class="row">
               <div class="col-12">
-                <div class="d-flex">
-                  <span
-                  class="active-ribbon text-nowrap shadow-sm align-items-center d-flex" [style.background-color]="selectedProject?.projectBadgeColour"
-                  [attr.aria-label]="selectedProject?.projectType">{{selectedProject?.projectType}}</span>
-                    <span class="mt-2">
-                      <span class="coi-text-darker fs-16">
-                        {{selectedProject?.projectNumber}}
-                          - {{!isReadMore ? (selectedProject?.title?.length > 60 ? (selectedProject?.title | slice:0:59) : selectedProject?.title) :
-                          selectedProject?.title}}
-                          <span *ngIf="selectedProject?.title?.length > 60" (click)="isReadMore = !isReadMore"
-                                class="link-primary fs-14 fw-600" (keydown.enter)="isReadMore = !isReadMore"
-                                tabindex="0" role="link"
-                                [attr.aria-label]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read Less' : 'Click here to Read More'"
-                                [title]="selectedProject?.title?.length > 60 && isReadMore ?'Click here to Read less' : 'Click here to Read more'"
-                                [id]="'link-proposal-moduleItemId'">{{selectedProject?.title?.length > 60 && isReadMore ? 'Read Less' : '...Read More'}}</span>
-                      </span>
-                    </span>
+                <div tabindex="-1" class="d-flex"
+                  [attr.aria-label]="selectedProject?.projectType + ': number, ' + selectedProject?.projectNumber + ' - ' + selectedProject?.title">
+                  <span class="active-ribbon text-nowrap shadow-sm align-items-center d-flex"
+                    [style.background-color]="selectedProject?.projectBadgeColour">{{selectedProject?.projectType}}</span>
+                    <span class="mt-2 d-inline-flex">
+                      <mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
+                      <mat-icon *ngIf="selectedProject?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
+                      <a tabindex="0" class="fs-6 link-primary cursor-pointer fw-600 text-slice"
+                        title="Click here to navigate to project details of #{{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
+                        attr.aria-label="Click here to navigate to project details of {{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
+                        (click)="commonService.redirectToProjectDetails(selectedProject.projectId, selectedProject.projectTypeCode)"
+                        (keyup.enter)="commonService.redirectToProjectDetails(selectedProject.projectId, selectedProject.projectTypeCode)"
+                        (keyup.space)="commonService.redirectToProjectDetails(selectedProject.projectId, selectedProject.projectTypeCode)">
+                        #{{selectedProject?.projectNumber}} - {{selectedProject?.title}}
+                      </a>
+                    </span> 
                 </div>
               </div>
             </div>
-            <div class="row p-3 fs-14">
-              <div class="col-md-6 col-xl-3 mb-2">
+            <div class="row fs-14 px-3 pb-1 pt-3">
+              <!-- Principal Investigator -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Principal investigator is ' + (selectedProject?.piName ? selectedProject?.piName : 'empty')">
                 <label for="coi-define-relation-pi" class="coi-text-dark d-block">Principal Investigator</label>
-                <span class="coi-text-light" id="coi-define-relation-pi">{{selectedProject?.piName}}</span>
+                <div id="coi-define-relation-pi" class="text-slice">
+                  <app-no-data-label [valueToShow]="selectedProject?.piName">
+                      <span [title]="selectedProject?.piName" class="coi-text-light">{{selectedProject?.piName}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
-              <div class="col-md-6 col-xl-3 mb-2">
-                <label for="coi-define-relation-projectrole" class="coi-text-dark d-block">Project Role</label>
-                <span class="coi-text-light" id="coi-define-relation-projectrole">{{selectedProject?.reporterRole}}</span>
+              <!-- Reporter's Project Role -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Reporters project role is ' + (selectedProject?.reporterRole ? selectedProject?.reporterRole : 'empty')">
+                <label for="coi-define-relation-project-role" class="coi-text-dark d-block">Reporter's Project Role</label>
+                <div id="coi-define-relation-project-role" class="text-slice">
+                  <app-no-data-label [valueToShow]="selectedProject?.reporterRole">
+                    <span [title]="selectedProject?.reporterRole" class="coi-text-light">{{selectedProject?.reporterRole}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
-              <div class="col-md-6 col-xl-3 mb-2">
+              <!-- Period -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Period is ' + ((selectedProject?.projectStartDate || selectedProject?.projectEndDate) ?
+                ((selectedProject?.projectStartDate | dateFormatter) + ' - ' + (selectedProject?.projectEndDate | dateFormatter))  : 'empty')">
                 <label for="coi-define-relation-period" class="coi-text-dark d-block">Period</label>
-                <span class="coi-text-light" id="coi-define-relation-period">{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate
-                  | dateFormatter}}</span>
+                <div id="coi-define-relation-period" class="text-slice">
+                  <app-no-data-label [valueToShow]="selectedProject?.projectStartDate || selectedProject?.projectEndDate">
+                    <span [title]="(selectedProject?.projectStartDate | dateFormatter) + ' - ' + (selectedProject?.projectEndDate | dateFormatter)"
+                      class="coi-text-light">{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate | dateFormatter}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
-              <div class="col-md-6 col-xl-3 mb-2">
-                <label for="coi-define-relation-sponsor" class="coi-text-dark d-block">Sponsor</label>
-                <span class="coi-text-light" id="coi-define-relation-sponsor">{{selectedProject?.sponsorName}}</span>
+              <!-- Project Status -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Project status is ' + (selectedProject?.projectStatus ? selectedProject?.projectStatus : 'empty')">
+                <label for="coi-define-relation-status" class="coi-text-dark d-block">Project Status</label>
+                <div id="coi-define-relation-status" class="text-slice">
+                  <app-no-data-label [valueToShow]="selectedProject?.projectStatus">
+                    <span class="coi-text-light" [title]="selectedProject?.projectStatus">{{selectedProject?.projectStatus}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
-              <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
+              <!-- Lead Unit -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Lead unit is ' + (commonService.getPersonLeadUnitDetails(selectedProject) ?
+                commonService.getPersonLeadUnitDetails(selectedProject) : 'empty')">
                 <label for="coi-define-relation-leadunit" class="coi-text-dark d-block">Lead Unit</label>
-                <span [ngClass]="selectedProject?.homeUnitName ? 'coi-text-light': 'noDataExists'" id="coi-define-relation-leadunit">{{selectedProject?.homeUnitName ?
-                  commonService.getPersonLeadUnitDetails(selectedProject): 'No Lead Unit exist'}}</span>
+                <div id="coi-define-relation-leadunit" class="text-slice">
+                  <app-no-data-label [valueToShow]="commonService.getPersonLeadUnitDetails(selectedProject)">
+                    <span [title]="commonService.getPersonLeadUnitDetails(selectedProject)"
+                      class="coi-text-light">{{commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
-              <div class="col-md-6 col-xl-3 mb-md-2 mb-xl-0">
-                <label for="coi-define-relation-status" class="coi-text-dark d-block">{{selectedProject?.projectType}}
-                  Status</label>
-                <span class="coi-text-light" id="coi-define-relation-status">{{selectedProject?.projectStatus}}</span>
+              <!-- Sponsor -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Sponsor is ' + (selectedProject?.sponsorName ? selectedProject?.sponsorName : 'empty')">
+                <label for="coi-define-relation-sponsor" class="coi-text-dark d-block">Sponsor</label>
+                <div id="coi-define-relation-sponsor" class="text-slice">
+                  <app-no-data-label [valueToShow]="selectedProject?.sponsorName">
+                    <span class="coi-text-light" [title]="selectedProject?.sponsorName">{{selectedProject?.sponsorName}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
-              <div class="col-md-6 col-xl-3">
+              <!-- Prime Sponsor -->
+              <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
+                [attr.aria-label]="'Prime sponsor is ' + (selectedProject?.primeSponsorName ? selectedProject?.primeSponsorName : 'empty')">
                 <label for="coi-define-relation-prime-sponsor" class="coi-text-dark d-block">Prime Sponsor</label>
-                <span
-                  [ngClass]="selectedProject?.primeSponsorName ? 'coi-text-light': 'noDataExists'" id="coi-define-relation-prime-sponsor">{{selectedProject?.primeSponsorName
-                  ?
-                  selectedProject?.primeSponsorName :'--No Data--'}}</span>
+                <div id="coi-define-relation-prime-sponsor" class="text-slice">
+                  <app-no-data-label [valueToShow]="selectedProject?.primeSponsorName">
+                    <span class="coi-text-light" [title]="selectedProject?.primeSponsorName">{{selectedProject?.primeSponsorName}}</span>
+                  </app-no-data-label>
+                </div>
               </div>
             </div>
           </div>

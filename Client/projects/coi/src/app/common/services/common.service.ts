@@ -4,7 +4,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {Toast} from 'bootstrap';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
@@ -461,6 +461,18 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 			const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
 			this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
 		});
+    }
+
+    redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
+        const RESOURCE_URLS = {
+            1: AWARD_EXTERNAL_RESOURCE_URL.replace('{awardId}', projectId),
+            2: IP_EXTERNAL_RESOURCE_URL.replace('{instituteProposalId}', projectId),
+            3: PROPOSAL_EXTERNAL_RESOURCE_URL.replace('{developmentProposalId}', projectId),
+        };
+        const EXTERNAL_APPLICATION_URL = this.fibiApplicationUrl;
+        if (RESOURCE_URLS[projectTypeCode]) {
+            window.open(`${EXTERNAL_APPLICATION_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
+        }
     }
 
 }

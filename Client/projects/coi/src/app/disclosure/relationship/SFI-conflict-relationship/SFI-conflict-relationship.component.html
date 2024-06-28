@@ -22,21 +22,8 @@
       <tbody>
         <tr *ngFor="let test of entityProjectDetails; let i = index" [id]="test.disclosureDetailsId">
           <td [attr.aria-label]="test?.coiEntity?.entityName" [id]="'sfi_name_'+test?.disclosureDetailsId" class="pt-2">
-                <span
-                    [attr.aria-label]="test?.coiEntity?.entityName">{{test?.coiEntity?.entityName?.length > 70 && !readMore[test?.personEntityId] ? (test?.coiEntity?.entityName | slice:0:70) + '...' :
-                   test?.coiEntity?.entityName}}
-                </span>
-                <span *ngIf="test?.coiEntity?.entityName?.length > 70" (keydown.enter)="readMoreOption(test?.personEntityId, readMore[test?.personEntityId])"
-                (click)="readMoreOption(test?.personEntityId, readMore[test?.personEntityId])" tabindex="0" role="link"
-                [attr.aria-label]="readMore[test?.personEntityId] ?'Click here to Read Less' : 'Click here to Read More'"
-                [title]="readMore[test?.personEntityId] ?'Click here to Read less' : 'Click here to Read more'" id="btn-read-action-{{test?.personEntityId}}"
-                class="link-primary fs-13">
-                {{readMore[test?.personEntityId] ? "Read Less" : "Read More"}}
-                </span>
-                <span *ngIf="isShowWarning(test)" class="fs-12 sfi-info-text px-2 rounded-5 rounded-pill"
-                title="Modified">
-                Modified
-                </span>
+            <span [title]="test?.coiEntity?.entityName" class="text-slice">{{test?.coiEntity?.entityName}}</span>
+            <span *ngIf="isShowWarning(test)" class="fs-12 sfi-info-text px-2 rounded-5 rounded-pill">Modified</span>
           </td>
           <td>
             <select [(ngModel)]="test.projectConflictStatusCode" class="form-select form-control"
