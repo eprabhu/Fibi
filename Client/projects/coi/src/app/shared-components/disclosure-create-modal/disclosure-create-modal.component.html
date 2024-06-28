@@ -25,19 +25,6 @@
         </div>
         <div class="modal-body">
           <div class="row">
-              <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">
-                <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
-                    The {{selectedProjectType}} you are trying to add is already listed in the
-                    {{this.existingDisclosureDetails?.type
-                    ? 'below-mentioned Project Disclosure' : 'FCOI disclosure mentioned below' }}.
-                    You may proceed to the disclosure by clicking on ‘View Disclosure’.
-                </ng-container>
-                <ng-container *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
-                    You already have an existing revision version for the FCOI disclosure ,
-                    mentioned below .You can have only one revision version at a time.
-                    You may proceed to the disclosure by clicking on ‘View Disclosure’.
-                </ng-container>
-            </p>
             <p class="fs-14 alert alert-danger" *ngIf="isShowConcurrencyWarning">
                 <ng-container *ngIf="!hasFCOI">
                     <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
@@ -205,6 +192,7 @@
                     </app-endpoint-search>
                 </div>
             </div>
+            
             <div *ngIf="projectDisclosureValidation?.has('proposalSearch')"
                 class="invalid-feedback d-block">
                 {{projectDisclosureValidation?.get('proposalSearch')}}
@@ -258,13 +246,45 @@
             <!-- New header card design -->
                 <div class="mt-1 col-lg-12 col-12 mt-3 resultCard px-0" *ngIf="isShowResultCard && isShowExistingDisclosure">
                     <div class="fs-14 info-card-border rounded-2 shadow-medium bg-light p-3">
+                        <div *ngIf="isShowExistingDisclosure" class="alert alert-danger fs-14 shadow-sm" role="alert">
+                            <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
+                                <div class="alert-heading d-flex align-items-center mb-2">
+                                    <mat-icon class="fs-4 w-auto h-auto material-icons text-danger me-1" aria-hidden="true">error</mat-icon>
+                                    <strong>Error: Disclosure Already Exists</strong>
+                                </div>
+                                <p class="mb-0">
+                                    A disclosure has already been created for the {{selectedProjectType}} you are attempting to add. Please review the existing disclosures or select a different {{selectedProjectType}}.                                                                        
+                                    To see the details, 
+                                    <span *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" class="link-primary"
+                                    (click)="navigateToDisclosure(existingDisclosureDetails?.disclosureId);" id="coi-view-disclosure"
+                                    aria-label="Click here to view disclosure" title="Click here to view disclosure" role="link" tabindex="0">
+                                    View disclosure</span>
+                                </p>
+                            </ng-container>
+                            <ng-container *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
+                                <div class="alert-heading d-flex align-items-center mb-2">
+                                    <mat-icon class="fs-4 w-auto h-auto material-icons text-danger me-1" aria-hidden="true">error</mat-icon>
+                                    <strong>Error: Already Exists</strong>
+                                </div>
+                                <p>
+                                    You already have an existing revision version for the FCOI disclosure ,
+                                    mentioned below .You can have only one revision version at a time.
+                                    You may proceed to the disclosure by clicking on 'View Disclosure'.
+                                    <span *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" class="link-primary"
+                                        (click)="navigateToDisclosure(existingDisclosureDetails?.disclosureId);" id="coi-view-disclosure"
+                                        aria-label="Click here to view disclosure" title="Click here to view disclosure" role="link" tabindex="0">
+                                        View disclosure</span>
+                                </p>
+                            </ng-container>                            
+                        </div>
+
                         <div class="row">
                             <div class="position-relative fs-14 fw-500">
                                 <div class="row">
                                     <div class="col-12">
+                                        <span class="coi-text-dark d-block">{{existingDisclosureDetails?.type}} Title</span>
                                         <span class="d-flex">
-                                            <strong>{{existingDisclosureDetails?.disclosureType}} Disclosure by
-                                                {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
+                                            <strong>#{{projectTitle}}</strong>
                                         </span>
                                     </div>
                                     <div class="col-12 mt-2">
@@ -383,7 +403,7 @@
             aria-label="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();">Create</button>
           <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" type="button" title="Click to continue with creating the travel disclosure"
             aria-label="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();"> Create </button>
-          <button class="btn btn-primary" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" id="claim-sumbit-no-btn" type="button"
+          <button *ngIf="isShowConcurrencyWarning" class="btn btn-primary" id="coi-view-disclosure" type="button"
             title="Click here to view disclosure" aria-label="Click here to view disclosure"
             (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">View Disclosure</button>
         </div>

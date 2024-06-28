@@ -40,3 +40,5 @@ INSERT INTO `coi_disclosure_type` (`DISCLOSURE_TYPE_CODE`, `DESCRIPTION`, `IS_AC
 VALUES ('4', 'Consulting', 'Y', now(), 'quickstart');
 
 set foreign_key_checks = 1;
+
+INSERT INTO DYN_ELEMENT_CONFIG (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, HELP, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-conflict-slider-header', 'Entity Name', '803', 'COI803', 'You are about to change disclosure status', 'admin', now());
