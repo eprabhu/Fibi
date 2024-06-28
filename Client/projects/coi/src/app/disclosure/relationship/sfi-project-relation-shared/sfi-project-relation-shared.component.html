@@ -30,10 +30,8 @@
                         <div class="d-flex flex-nowrap align-items-center entity-status shadow-sm mt-2" [style.background-color]="projectSfi?.projectBadgeColour">
                             {{ projectSfi.projectType }}
                         </div>
-                        <div [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
-                            {{projectSfi?.projectTitle && projectSfi?.projectTitle.length > 100 ?
-                            (projectSfi?.projectTitle | slice:0:100) + '...' :
-                            projectSfi?.projectTitle}}
+                        <div class="text-slice" [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
+                            {{projectSfi?.projectTitle}}
                         </div>
                     </div>
                     </td>
@@ -74,12 +72,12 @@
 
 <!-- Apply to All modal -->
 
-<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="applyToAllConfirmationModal" role="dialog">
+<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="applyToAllConfirmationModal" role="dialog" tabindex="-1" aria-labelledby="applyToAllConfirmationModal-header">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header ct-footer-padding d-none">
-                <h4 class="modal-title">Bulk update Project SFI relationships</h4>
+                <h4 class="modal-title" id="applyToAllConfirmationModal-header">Bulk update Project SFI relationships</h4>
                 <button type="button" data-bs-dismiss="modal" aria-label="Click to close" class="btn-close fs-12"
                         (click)="clearValues()">
                 </button>

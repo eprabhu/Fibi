@@ -77,9 +77,9 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
         if (this.relationshipTypeCache[validPersonEntityRelType]) {
             return this.relationshipTypeCache[validPersonEntityRelType];
         }
-        const entityRelTypes = validPersonEntityRelType.split(':;:');
-        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
-            const relationshipType = entity.split(':');
+        const entityRelTypes = validPersonEntityRelType?.split(':;:');
+        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes?.map(entity => {
+            const relationshipType = entity?.split(':');
             return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
         });
         return this.relationshipTypeCache[validPersonEntityRelType];

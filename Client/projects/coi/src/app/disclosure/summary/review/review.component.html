@@ -50,71 +50,111 @@
 <app-certify-summary></app-certify-summary>
 
 <!-- Project Details Modal -->
-<div class="modal fade" id="projectViewModal" tabindex="-1" aria-labelledby="projectViewModal" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-  <div class="modal-content">
-	<div class="modal-header">
-	<h4 class="modal-title"><strong title="{{ selectedProject?.title }}">
-			#{{selectedProject?.projectNumber}} -
-			{{ (selectedProject?.title)?.length > 80 ? (selectedProject?.title | slice:0: 80)+'...' :
-			selectedProject?.title }}
-		</strong>
-	</h4>
-	  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal"
-		aria-label="Click to close" (click)="openModuleSummaryDetails()"></button>
-	</div>
-	<div class="modal-body">
-	  <div class="row mx-0 mt-3">
-		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-pi" class="d-block label-text">Principal Investigator</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.piName">
-			<span class="grey-text m-0" id="coi-review-project-detail-pi">{{selectedProject?.piName}}</span>
-		  </app-no-data-label>
-		</div>
-		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-project-role" class="d-block label-text">Project Role</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.reporterRole">
-			<span class="grey-text m-0" id="coi-review-project-detail-project-role">{{selectedProject?.reporterRole}}</span>
-		  </app-no-data-label>
-		</div>
-		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-period" class="d-block label-text">Period</label>
-		  <span class="grey-text m-0" id="coi-review-project-detail-period">
-			{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate |
-			dateFormatter}}</span>
-		</div>
-		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-status" class="d-block label-text">{{selectedProject?.projectType}} Status</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.projectStatus">
-			<span class="grey-text m-0" id="coi-review-project-detail-status">{{selectedProject?.projectStatus}}</span>
-		  </app-no-data-label>
-		</div>
-		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-sponsor" class="d-block label-text">Sponsor</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.sponsorName">
-			<span class="grey-text m-0" id="coi-review-project-detail-sponsorName">{{selectedProject?.sponsorName}}</span>
-		  </app-no-data-label>
-		</div>
-		<div class="col-lg-4 col-sm-6 col-6 mb-3">
-		  <label for="coi-review-project-detail-prime-sponosr" class="d-block label-text">Prime Sponsor</label>
-		  <app-no-data-label [valueToShow]="selectedProject?.primeSponsorName">
-			<span class="grey-text m-0" id="coi-review-project-detail-prime-sponosr">{{selectedProject?.primeSponsorName}}</span>
-		  </app-no-data-label>
-		</div>
-		<div class="col-lg-4 col-sm-6 col-12 mb-3">
-		  <label for="coi-review-project-lead-unit" class="d-block label-text">Lead Unit</label>
-		  <span class="grey-text m-0" id="coi-review-project-lead-unit">
-			{{commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
-		</div>
+<button tabindex="-1" class="btn btn-primary btn-sm" hidden="true" id="projectViewModal-trigger-button"
+	data-bs-toggle="modal" data-bs-target="#projectViewModal" aria-hidden="true"></button>
+<div class="modal fade" id="projectViewModal" tabindex="-1" role="dialog" aria-labelledby="projectViewModal-header" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+	  <div class="modal-content">
+		  <div class="modal-header flex-wrap">
+			<!-- project pill -->
+			<div class="coi-notch-ribbon" [style.background-color]="selectedProject?.projectBadgeColour">{{selectedProject?.projectType}}</div>
+			<!-- close -->
+			<button title="Click here to close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click here to close"></button>
+			<!-- header -->
+			<h4 class="modal-title col-12 coi-ms-n5px position-relative top-5px">
+				<div class="d-flex" id="projectViewModal-header">
+					<mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0 fs-24">article</mat-icon>
+					<mat-icon *ngIf="selectedProject?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0 fs-24">workspace_premium</mat-icon>
+					<span [title]="'#' + selectedProject?.projectNumber + ' -' + selectedProject?.title"
+						class="text-slice">#{{selectedProject?.projectNumber}} - {{selectedProject?.title}}</span>
+				</div>
+			</h4>
+		  </div>
+		  <div class="modal-body">
+			<div class="row">
+				<!-- Principal Investigator -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
+					[attr.aria-label]="'Principal investigator is ' + (selectedProject?.piName ? selectedProject?.piName : 'empty')">
+					<label for="coi-relationship-pi-modal" class="coi-text-dark d-block">Principal Investigator</label>
+					<div id="coi-relationship-pi-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="selectedProject?.piName">
+							<span class="coi-text-light" [title]="selectedProject?.piName">{{selectedProject?.piName}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+				<!-- Reporter's Project Role -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
+					[attr.aria-label]="'Reporters project role is ' + (selectedProject?.reporterRole ? selectedProject?.reporterRole : 'empty')">
+					<label for="coi-relationship-role-modal" class="coi-text-dark d-block">Reporter's Project Role</label>
+					<div id="coi-relationship-role-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="selectedProject?.reporterRole">
+							<span class="coi-text-light" [title]="selectedProject?.reporterRole">{{selectedProject?.reporterRole}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+				<!-- Period -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
+					[attr.aria-label]="'Period is ' + ((selectedProject?.projectStartDate || selectedProject?.projectEndDate) ?
+					((selectedProject?.projectStartDate | dateFormatter) + ' - ' + (selectedProject?.projectEndDate | dateFormatter))  : 'empty')">
+					<label for="coi-relationship-period-modal" class="coi-text-dark d-block">Period</label>
+					<div id="coi-relationship-period-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="selectedProject?.projectStartDate || selectedProject?.projectEndDate">
+							<span [title]="((selectedProject?.projectStartDate | dateFormatter) + ' - ' + (selectedProject?.projectEndDate | dateFormatter))"
+								class="coi-text-light">{{selectedProject?.projectStartDate | dateFormatter}} -
+								{{selectedProject?.projectEndDate | dateFormatter}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+				<!-- Project Status -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
+					[attr.aria-label]="'Project status is ' + (selectedProject?.projectStatus ? selectedProject?.projectStatus : 'empty')">
+					<label for="coi-relationship-status-modal" class="coi-text-dark d-block">Project Status</label>
+					<div id="coi-relationship-status-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="selectedProject?.projectStatus">
+							<span class="coi-text-light" [title]="selectedProject?.projectStatus">{{selectedProject?.projectStatus}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+				<!-- Lead Unit -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
+					[attr.aria-label]="'Lead unit is ' + (commonService.getPersonLeadUnitDetails(selectedProject) ?
+					commonService.getPersonLeadUnitDetails(selectedProject) : 'empty')">
+					<label for="coi-relationship-unit-modal" class="coi-text-dark d-block">Lead Unit</label>
+					<div id="coi-relationship-unit-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="commonService.getPersonLeadUnitDetails(selectedProject)">
+							<span class="coi-text-light" [title]="commonService.getPersonLeadUnitDetails(selectedProject)">{{commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+				<!-- Sponsor -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
+					[attr.aria-label]="'Sponsor is ' + (selectedProject?.sponsorName ? selectedProject?.sponsorName : 'empty')">
+					<label for="coi-relationship-sponsor-modal" class="coi-text-dark d-block">Sponsor</label>
+					<div id="coi-relationship-sponsor-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="selectedProject?.sponsorName">
+							<span class="coi-text-light" [title]="selectedProject?.sponsorName">{{selectedProject?.sponsorName}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+				<!-- Prime Sponsor -->
+				<div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4"
+					[attr.aria-label]="'Prime sponsor is ' + (selectedProject?.primeSponsorName ? selectedProject?.primeSponsorName : 'empty')">
+					<label for="coi-relationship-prime-sponsor-modal" class="coi-text-dark d-block">Prime Sponsor</label>
+					<div id="coi-relationship-prime-sponsor-modal" class="text-slice">
+						<app-no-data-label [valueToShow]="selectedProject?.primeSponsorName">
+							<span class="coi-text-light" [title]="selectedProject?.primeSponsorName">{{selectedProject?.primeSponsorName}}</span>
+						</app-no-data-label>
+					</div>
+				</div>
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			  <button title="Click here to close the popup" type="button" (click)="selectedProject= null" aria-label="Click here to close the popup"
+				id="btn-close" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+			  <button type="button" title="Click here to view project details page" aria-label="Click here to view project details page" id="btn-more-details"
+				  (click)="commonService.redirectToProjectDetails(selectedProject.projectId, selectedProject.projectTypeCode);selectedProject= null;"
+				  class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
+		  </div>
 	  </div>
-	</div>
-	<div class="modal-footer">
-	  <button title="Click to close the popup" type="button"
-		class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="openModuleSummaryDetails()">Close</button>
-	  <button type="button" title="Click to view project details page"
-		(click)="coiService.openProjectMoreDetails(selectedProject.projectId,selectedProject.projectTypeCode);"
-		class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
-	</div>
   </div>
-</div>
 </div>
