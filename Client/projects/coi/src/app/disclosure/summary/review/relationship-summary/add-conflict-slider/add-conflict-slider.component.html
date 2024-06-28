@@ -52,7 +52,7 @@
                                 <ng-container
                                     *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode== '2' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode === '1'"
                                     class="ms-1">
-                                    <span class="title-text word-break-all new-line-property text-slice d-inline-flex mt-2"
+                                    <span class="title-text word-break-all new-line-property text-slice mt-2"
                                         [title]="entityDetails?.title">
                                         <span>
                                             <mat-icon aria-hidden="true" class="coi-text-light"
@@ -65,7 +65,7 @@
                                 </ng-container>
                             </h4>
                         </div>
-                        <div class="col-7 mb-2 left-spacing">
+                        <div class="mb-2 left-spacing">
                             <app-no-data-label [valueToShow]="entityDetails?.entityName">
                                 <span class="grey-text fw-500 text-slice" id="coi-conflict-card-sfi" [title]="entityDetails?.entityName">
                                     <mat-icon aria-hidden="true"
@@ -162,14 +162,11 @@
                             <ng-container *ngIf="conflictHistory.length > 0;else noData">
                                 <ul class="timeline">
                                     <li *ngFor="let historyEntry of conflictHistory;let index = index; let last = last;">
+                                        <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="-1"></span>
                                         <div tabindex="-1">
-                                            <span class="badge me-2 {{_commonService.getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(historyEntry?.conflictStatusCode)}}">
-                                            {{historyEntry?.conflictStatusDescription}}</span>
-                                            <i class="fa fa-user coi-text-light fs-16 me-1" aria-hidden="true"></i>
-                                            <span class="fw-700 fs-14">{{historyEntry?.updateUserFullName}}</span>
                                             <span class="coi-text-lighter fs-13"> {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                                         </div>
-                                        <p class="coi-text-light pt-3 pb-4" tabindex="-1">
+                                        <p class="coi-text-light pb-4" tabindex="-1">
                                             <span class="fs-14">
                                                 <mat-icon class="format_quote">format_quote</mat-icon>
                                                 <span *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo" class="fst-italic">
