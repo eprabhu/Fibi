@@ -46,8 +46,8 @@ export class RelationshipSummaryComponent implements OnInit {
     entityId: any;
     isDesc = true;
     worstCaseStatus = null;
-    relationshipTypeCache = {};
     activeCard: string;
+    relationshipType: {};
 
     constructor(
         public coiSummaryService: CoiSummaryService,
@@ -137,6 +137,7 @@ getEntityProjectRelations() {
             sponsor: this.selectedProject.sponsorName,
             primeSponsor: this.selectedProject.primeSponsorName
         }
+        this.relationshipType = entity?.personEntityRelationshipDto?.validPersonEntityRelType;
     }
 
     private updateDisclosureConflictStatus(status): void {
@@ -242,27 +243,5 @@ getEntityProjectRelations() {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
     }
 
-    getEntityRelationTypePills(validPersonEntityRelType: string) {
-        if(validPersonEntityRelType) {
-            if (this.relationshipTypeCache[validPersonEntityRelType]) {
-                return this.relationshipTypeCache[validPersonEntityRelType];
-            }
-            const entityRelTypes = validPersonEntityRelType.split(':;:');
-            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
-                const relationshipType = entity.split(':');
-                return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
-            });
-            return this.relationshipTypeCache[validPersonEntityRelType];
-        }
-    }
-
-    getIcon(key): string {
-        switch(key) {
-            case 'Commitment': return 'handshake';
-            case 'Travel': return 'flight';
-            case 'Financial': return 'paid';
-            case 'Consulting' : return 'supervisor_account';
-            default: return;
-        }
-    }
+   
 }

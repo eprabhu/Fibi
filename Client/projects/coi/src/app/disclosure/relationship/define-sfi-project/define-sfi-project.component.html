@@ -61,7 +61,7 @@
                                                 [attr.aria-label]="'Relationship in ' + relation?.relationshipType +' are ' + relation?.description">
                                                     <span class="d-flex coi-purple-text">
                                                         <mat-icon aria-hidden="true"
-                                                        class="flex-shrink-0 me-1">{{getIcon(relation.relationshipType)}}</mat-icon>
+                                                        class="flex-shrink-0 me-1">{{getIcon(relation?.relationshipType)}}</mat-icon>
                                                     <span class="fw-bold me-1">{{relation?.relationshipType}}:</span>
                                                     <span>{{relation?.description}}</span>
                                                     </span>

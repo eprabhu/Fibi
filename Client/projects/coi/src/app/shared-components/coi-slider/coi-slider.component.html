@@ -15,10 +15,10 @@
         <button type="button" hidden="true" class="btn-close text-reset" [id]="elementId+'-close-btn'" data-bs-dismiss="offcanvas"
             aria-label="Click to close" ></button>
     </div>
-    <div class="offcanvas-body pt-0" id="{{elementId}}-slider-body">
+    <div class="offcanvas-body" id="{{elementId}}-slider-body">
         <!-- sticky-content -->
         <ng-container *ngIf="isStickyNeeded">
-            <div class="position-sticky top-0 z-2">
+            <div class="position-sticky z-2 custom-stickytop">
                 <ng-content select="[content-sticky]"></ng-content>
             </div>
         </ng-container>
