@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
-import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
+import { getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, isEmptyObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { compareDates, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';

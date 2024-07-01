@@ -14,8 +14,6 @@ type Method = 'SOME' | 'EVERY';
 export class CommonService {
 
     isShowLoader = new BehaviorSubject<boolean>(true);
-    isManualLoaderOn = false;
-    isShowOverlay = false;
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
@@ -475,4 +473,11 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }
     }
 
+    setLoaderRestriction(): void {
+        this.isPreventDefaultLoader = true;
+    }
+
+    removeLoaderRestriction(): void {
+        this.isPreventDefaultLoader = false;
+    }
 }
