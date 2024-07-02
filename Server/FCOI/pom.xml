@@ -399,19 +399,19 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
-		
-	    <dependency>
-		  <groupId>org.springframework.cloud</groupId>
-		  <artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-	 			
+ 			
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>7.2</version>
 		</dependency>
- -->		    
- 
+ -->
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -423,8 +423,8 @@
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 			<version>4.0.4</version>
 		</dependency>
-		
-   <!-- END dependency for Microservice -->   
+
+		<!-- END dependency for Microservice -->   
     </dependencies>
     
 	<dependencyManagement>
