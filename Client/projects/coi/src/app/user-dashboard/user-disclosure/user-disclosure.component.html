@@ -135,7 +135,7 @@
                                                     [routerLink]="['/coi/disclosure/summary']"
                                                     [attr.aria-label]="headerService?.activeDisclosures ? 'Click here to view FCOI Disclosure details' : 'Click here to view Disclosure details'"
                                                     [title]="headerService?.activeDisclosures ? 'Click here to view FCOI Disclosure details' : 'Click here to view Disclosure details'">
-                                                    <mat-icon aria-hidden="true" class="hyper-link me-1">visibility</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                     <span>View</span>
                                                 </a>
                                             </div>
@@ -265,7 +265,7 @@
                                                     [routerLink]="['/coi/disclosure/summary']"
                                                     [attr.aria-label]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                                     [title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'">
-                                                    <mat-icon aria-hidden="true" class="hyper-link me-1">visibility</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                     <span>View</span>
                                                 </a>
                                             </div>
@@ -318,8 +318,8 @@
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex" id="coi-user-disclosure-fcoi-create-card-add-btn"
                                             (click)="openFCOIModal('FCOI')" aria-label="Create FCOI Disclosure" (keyup.enter)="openFCOIModal('FCOI')" (keyup.space)="openFCOIModal('FCOI')"
                                             title="Click here to create new FCOI disclosure">
-                                            <mat-icon aria-hidden="true" class="hyper-link me-1">add</mat-icon>
-                                            <span class="hyper-link fs-14">Create FCOI Disclosure</span>
+                                            <mat-icon aria-hidden="true" class="me-1">add</mat-icon>
+                                            <span class="fs-14">Create FCOI Disclosure</span>
                                         </a>
                                     </div>
                                 </div>
@@ -370,8 +370,8 @@
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex" id="coi-user-disclosure-opa-create-card-add-btn" (click)="createOPA()"
                                         (keyup.enter)="createOPA()" (keyup.space)="createOPA()" tabindex="0"
                                             aria-label="Create OPA Disclosure" title="Click to create new OPA disclosure">
-                                            <mat-icon aria-hidden="true" class="hyper-link me-1">add</mat-icon>
-                                            <span class="hyper-link fs-14">Create OPA Disclosure</span>
+                                            <mat-icon aria-hidden="true" class="me-1">add</mat-icon>
+                                            <span class="fs-14">Create OPA Disclosure</span>
                                         </a>
                                     </div>
                                 </div>
@@ -493,7 +493,7 @@
                                                 [routerLink]="['/coi/opa/form']" tabindex="0"
                                                 aria-label="Click here to view OPA disclosure details" role="button"
                                                 title="Click to view OPA disclosure details">
-                                                <mat-icon class="hyper-link me-1" aria-hidden="true">visibility</mat-icon>
+                                                <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon>
                                                 <span>View</span>
                                             </a>
                                         </div>
@@ -614,7 +614,7 @@
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
                                                 title="Click here to view OPA disclosure details" aria-describedby="Click here to view OPA disclosure details"
                                                 aria-label="Click here to view OPA disclosure details" role="button">
-                                                <mat-icon aria-hidden="true" class="hyper-link me-1">visibility</mat-icon>
+                                                <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                 <span>View</span>
                                             </a>
                                         </div>
@@ -759,24 +759,17 @@
                                                     {{disclosure.disclosurePersonFullName}}</span>
                                             </span>
                                             <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
-                                                <span class="d-inline-flex" tabindex="-1"
-                                                    [attr.aria-label]="'Project ' + modalHeader(disclosure)">
-                                                    <span class="pipe mx-1"></span>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
-                                                    <span class="hyper-link coi-text-darker fs-6 coi-flex-1">
-                                                        {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
-                                                        <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">
-                                                            <span *ngIf="!readMoreOrLess[index]" tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                                                (click)="readMoreOrLess[index]=true" (keydown.enter)="readMoreOrLess[index]=true" class="link-primary fs-14">
-                                                                <span class="fw-500">...Read More</span></span>
-                                                        </span>
-                                                        <span *ngIf="readMoreOrLess[index]" class="link-primary fs-14 ms-1"
-                                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
-                                                            (click)="readMoreOrLess[index]=false" (keydown.enter)="readMoreOrLess[index]=false">
-                                                            <span class="fw-500">Read Less</span></span>
-                                                    </span>
-                                                </span>
+                                                <span class="pipe mx-1"></span>
+                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="disclosure?.fcoiTypeCode==='2'">article</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="disclosure?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
+                                                <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
+                                                    (click)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
+                                                    (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
+                                                    (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
+                                                    [title]="'Click here to view details of ' + disclosure?.projectHeader" 
+                                                    [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
+                                                    <span class="text-slice">{{disclosure?.projectHeader}}</span>
+                                                </a>
                                             </ng-container>
                                         </h4>
                                     </div>
@@ -811,68 +804,14 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-lg-4 col-md-6 mb-2">
+                                    <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Description (FCOI)-->
                                         <div tabindex="-1"
                                             [attr.aria-label]="'Description is ' + disclosure?.reviseComment">
-                                            <label for="id" class="d-block coi-text-dark">Description</label>
-                                            <span>
+                                            <label for="coi-rvise-comment-disclodure-{{index}}" class="d-block coi-text-dark">Description</label>
+                                            <span id="coi-rvise-comment-disclodure-{{index}}">
                                                 <app-no-data-label [valueToShow]="disclosure?.reviseComment">
-                                                    <span *ngIf="disclosure?.reviseComment" class="fs-14">
-                                                        <span class="word-break-all new-line-property"
-                                                            *ngIf="!isReadMore && disclosure?.reviseComment?.length > 60; else showFullInfo">
-                                                            <span class="coi-text-light" id="coi-user-disclosure-coi-card-value-description-{{index}}">{{(disclosure?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore"  class="link-primary"
-                                                            tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                                            (keydown.enter)="isReadMore = !isReadMore"><span class="fw-500">...Read
-                                                                        More
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </span>
-                                                        <ng-template #showFullInfo>
-                                                            <span
-                                                                class="word-break-all new-line-property coi-text-light">{{disclosure?.reviseComment}}</span>
-                                                            <span class="link-primary mt-2 fw-medium" *ngIf="disclosure?.reviseComment?.length > 60"
-                                                                (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore"
-                                                                tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less">
-                                                                <span><span class="fw-500"> Read Less</span>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </ng-template>
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-lg-4 col-md-6 mb-2">
-                                        <!-- Coi card Description(Not FCOI) -->
-                                        <div tabindex="-1"
-                                            [attr.aria-label]="'Description is ' + disclosure?.reviseComment">
-                                            <label for="id" class="d-block coi-text-dark">Description</label>
-                                            <span class="break-point-1200">
-                                                <app-no-data-label [valueToShow]="disclosure?.reviseComment">
-                                                    <span *ngIf="disclosure?.reviseComment" class="fs-14">
-                                                        <span class="word-break-all new-line-property"
-                                                            *ngIf="!isReadMore && disclosure?.reviseComment?.length > 60; else showFullInfo">
-                                                            <span class="coi-text-light" id="coi-user-disclosure-not-fcoi-card-value-description-{{index}}">{{(disclosure?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore"
-                                                            tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                                             class="link-primary"><span class="fw-500">...
-                                                                    Read More
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </span>
-                                                        <ng-template #showFullInfo>
-                                                            <span
-                                                                class="word-break-all new-line-property coi-text-light">{{disclosure?.reviseComment}}</span>
-                                                            <span class="link-primary mt-2 fw-medium" *ngIf="disclosure?.reviseComment?.length > 60"
-                                                                (click)="isReadMore = !isReadMore" (keydown.enter)="isReadMore = !isReadMore"
-                                                                tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less">
-                                                                <span class="fw-500"> Read Less
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </ng-template>
-                                                    </span>
+                                                    <span class="text-slice coi-text-light" [title]="disclosure?.reviseComment">{{disclosure?.reviseComment}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -989,20 +928,7 @@
                                                 <span class="pipe mx-1"></span>
                                                 <span class="d-inline-flex">
                                                     <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
-                                                    <span class="coi-text-darker fs-6 hyper-link" id="coi-user-disclosure-travel-card-value-apartment-{{index}}">
-                                                        {{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
-                                                        <span
-                                                            *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">
-                                                            <a *ngIf="!readMoreOrLess[index]" class="link-primary"
-                                                                (click)="readMoreOrLess[index]=true" (keydown.enter)="readMoreOrLess[index]=true"
-                                                                tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"><span
-                                                                    class="fw-500">...Read More</span></a>
-                                                        </span>
-                                                        <a *ngIf="readMoreOrLess[index]" class="link-primary"
-                                                            (click)="readMoreOrLess[index]=false" (keydown.enter)="readMoreOrLess[index]=false"
-                                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"><span
-                                                                class="fw-500">Read Less</span></a>
-                                                    </span>
+                                                    <span class="coi-text-darker fs-6 text-slice" [title]="disclosure?.travelEntityName">{{disclosure?.travelEntityName}}</span>
                                                 </span>
                                             </ng-container>
                                         </h4>
@@ -1182,7 +1108,7 @@
                                                     [attr.aria-label]="'Reporting Cycle is ' + (disclosure?.periodStartDate | dateFormatter) + 'to' + (disclosure?.periodEndDate |dateFormatter)">
                                                     <span class="pipe mx-1"></span>
                                                     <span class="fs-6 text-nowrap">Reporting Cycle:</span>
-                                                    <span class="coi-text-darker hyper-link fs-6 ms-1">
+                                                    <span class="coi-text-darker fs-6 ms-1">
                                                         <span id="coi-user-disclosure-opa-card-value-reporting-cycle-{{index}}">{{disclosure?.periodStartDate | dateFormatter}} - {{disclosure?.periodEndDate | dateFormatter}}</span>
                                                     </span>
                                                 </div>
@@ -1292,25 +1218,7 @@
                                                 <span class="pipe mx-1"></span>
                                                 <span class="d-inline-flex">
                                                     <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
-                                                        <span  class="d-flex">
-                                                            <span class="coi-text-darker fs-6 hyper-link"
-                                                        id="coi-user-disclosure-travel-card-value-apartment-{{index}}">
-                                                        {{(readMoreOrLess[index] ? disclosure.entityName : disclosure.entityName |
-                                                        slice:0:120)}}
-                                                        <span *ngIf="!readMoreOrLess[index] && disclosure.entityName?.length>120">
-                                                            <a *ngIf="!readMoreOrLess[index]" class="link-primary"
-                                                                (click)="readMoreOrLess[index]=true"
-                                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
-                                                                aria-label="Click here to read more" title="Click here to Read more"><span
-                                                                    class="fw-500">...Read More</span></a>
-                                                        </span>
-                                                        <a *ngIf="readMoreOrLess[index]" class="link-primary"
-                                                            (click)="readMoreOrLess[index]=false"
-                                                            (keydown.enter)="readMoreOrLess[index]=false" tabindex="0" role="link"
-                                                            aria-label="Click here to read less" title="Click here to Read less"><span
-                                                                class="fw-500">Read Less</span></a>
-                                                        </span>
-                                                        </span>
+                                                    <span class="coi-text-darker fs-6 text-slice" [title]="disclosure.entityName">{{disclosure.entityName}}</span>
                                                 </span>
                                             </ng-container>
                                         </h4>
@@ -1471,33 +1379,9 @@
                                             <div class="align-items-center cursor-pointer flex-column">
                                                 <div [attr.aria-label]="'Purpose is ' + (disclosure?.travelPurpose)">
                                                     <label for="purpose" class="coi-text-dark d-block">Purpose</label>
-                                                    <span class="col break-point-1200">
+                                                    <span class="col">
                                                         <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                                                                <span *ngIf="disclosure?.travelPurpose">
-                                                                    <span class="word-break-all new-line-property"
-                                                                        *ngIf="!isPurposeRead[disclosure?.travelDisclosureId] && disclosure?.travelPurpose?.length > 80; else showFullInfo">
-                                                                        <span class="grey-text mt-2">{{(disclosure?.travelPurpose |
-                                                                            slice:0:80)}}</span>
-                                                                        <span (click)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
-                                                                        (keydown.enter)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
-                                                                        tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                                                            class="link-primary"><span class="fw-medium">...Read
-                                                                                    More
-                                                                                <i aria-hidden="true"></i></span>
-                                                                        </span>
-                                                                    </span>
-                                                                    <ng-template #showFullInfo>
-                                                                        <span
-                                                                            class="word-break-all new-line-property grey-text">{{disclosure?.travelPurpose}}</span>
-                                                                        <span class="mt-2 fw-medium link-primary"
-                                                                            *ngIf="disclosure?.travelPurpose?.length > 80 && isPurposeRead[disclosure?.travelDisclosureId]" (keydown.enter)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])"
-                                                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
-                                                                            (click)="readMorePurpose(disclosure?.travelDisclosureId,isPurposeRead[disclosure?.travelDisclosureId])">
-                                                                            <span class="fw-500"><span> Read Less</span>
-                                                                                <i aria-hidden="true"></i></span>
-                                                                        </span>
-                                                                    </ng-template>
-                                                                </span>
+                                                            <span class="coi-text-light text-slice" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
