@@ -28,13 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.polus.fibicomp.coi.dto.COIValidateDataDto;
-import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
-import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,12 +39,17 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.COIValidateDataDto;
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
@@ -60,6 +58,7 @@ import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.ConsultDisclDashboardDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
@@ -178,7 +177,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	private static final String ADMINISTRATOR = "ADMINISTRATOR";
 	private static final String REVISION_COMMENT = "REVISION_COMMENT";
 	private static final String PROJECT_SFI_REL_MSG = "You have undefined Project-SFI relationships. Kindly complete the Relationships section to certify the disclosure.";
-
+	private static final String DISCLOSURE_DETAILS_ID = "disclosureDetailsId";
+	
 	@Override
 	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
 		hibernateTemplate.saveOrUpdate(coiDisclosure);
@@ -5052,4 +5052,31 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		}
 		return disclosureProjects;
 	}
+
+	@Override
+	public List<Integer> getDisclDetailsIdByDisclId(Integer disclosureId) {
+	    Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+	    CriteriaBuilder builder = session.getCriteriaBuilder();
+	    CriteriaQuery<Integer> disclDetailsIdQuery = builder.createQuery(Integer.class);
+	    Root<CoiDisclEntProjDetails> root = disclDetailsIdQuery.from(CoiDisclEntProjDetails.class);
+	    disclDetailsIdQuery.select(root.get(DISCLOSURE_DETAILS_ID));
+	    Predicate predicate1 = builder.equal(root.get("disclosureId"), disclosureId);
+	    Predicate predicate2 = builder.isNotNull(root.get("projectConflictStatusCode"));
+	    disclDetailsIdQuery.where(builder.and(predicate1, predicate2));
+	    return session.createQuery(disclDetailsIdQuery).getResultList();
+	}
+
+	@Override
+	public String getConflictHistoryStatusCodeByDisclId(Integer disclosureDetailsId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<String> query = builder.createQuery(String.class);
+		Root<CoiConflictHistory> root = query.from(CoiConflictHistory.class);
+		query.select(root.get("conflictStatusCode"));
+		query.where(root.get(DISCLOSURE_DETAILS_ID).in(disclosureDetailsId));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		List<String> resultList = session.createQuery(query).setMaxResults(1).getResultList();
+		return resultList.isEmpty() ? null : resultList.get(0);
+	}
+
 }

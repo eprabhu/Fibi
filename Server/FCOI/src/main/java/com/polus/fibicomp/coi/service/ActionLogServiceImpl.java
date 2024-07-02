@@ -125,19 +125,18 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 	@Override
 	public void saveDisclosureActionLog(DisclosureActionLogDto actionLogDto) {
-//		Optional<DisclosureActionType> disclosureActionType = disclosureActionTypeRepository.findById(actionLogDto.getActionTypeCode());
-		DisclosureActionType disclosureActionType = conflictOfInterestDao.fetchDisclosureActionTypeById(actionLogDto.getActionTypeCode());
-//		if (disclosureActionType.isPresent()) {
-//            String message = buildDisclosureLogMessage(actionLogDto,disclosureActionType.get().getMessage());
-		String message = buildDisclosureLogMessage(actionLogDto, disclosureActionType.getMessage());
 		DisclosureActionLog actionLog = DisclosureActionLog.builder().actionTypeCode(actionLogDto.getActionTypeCode())
 				.disclosureId(actionLogDto.getDisclosureId()).disclosureNumber(actionLogDto.getDisclosureNumber())
-				.description(message).comment(actionLogDto.getRevisionComment())
+				.description(getFormattedMessageByActionType(actionLogDto)).comment(actionLogDto.getRevisionComment())
 				.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
 				.build();
 		conflictOfInterestDao.saveOrUpdateDisclosureActionLog(actionLog);
-//            disclosureActionLogRepository.save(actionLog);
-//        }
+	}
+
+	@Override
+	public String getFormattedMessageByActionType(DisclosureActionLogDto actionLogDto) {
+		DisclosureActionType disclosureActionType = conflictOfInterestDao.fetchDisclosureActionTypeById(actionLogDto.getActionTypeCode());
+		return buildDisclosureLogMessage(actionLogDto, disclosureActionType.getMessage());
 	}
 
 	private String buildDisclosureLogMessage(DisclosureActionLogDto actionLogDto, String message) {
@@ -157,6 +156,10 @@ public class ActionLogServiceImpl implements ActionLogService {
         }
         if(actionLogDto.getReviewername()!=null) {
         	placeholdersAndValues.put("{REVIEWER_NAME}", actionLogDto.getReviewername());
+        }
+        if (actionLogDto.getConflictStatus() != null || actionLogDto.getNewConflictStatus() != null) {
+            placeholdersAndValues.put("{OLD}", actionLogDto.getConflictStatus());
+            placeholdersAndValues.put("{NEW}", actionLogDto.getNewConflictStatus());
         }
         if (actionLogDto.getRiskCategory() != null) {
             placeholdersAndValues.put("{LOW}", actionLogDto.getRiskCategory());
