@@ -17,23 +17,9 @@
                                 class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails)}}">
                                 <span>{{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
                             </span>
-                            <h4 class="mb-0 d-flex label-text f-16 coi-ms-n15px">
-                                <ng-container
-                                    *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'"
-                                    class="ms-1">
-                                    <span class="title-text word-break-all new-line-property">
-                                        {{(readMoreOrLess ? modalHeader(projectDetails) :
-                                        modalHeader(projectDetails) | slice:0:180)}}
-                                        <span *ngIf="!readMoreOrLess && modalHeader(projectDetails)?.length>180">...
-                                            <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                                                <span class="readMore fw-500">Read More
-                                                </span>
-                                            </a>
-                                        </span>
-                                        <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false">
-                                            <span class="readMore ms-1 fw-500">Read Less</span>
-                                        </a>
-                                    </span>
+                            <h4 class="mb-0 label-text f-16 coi-ms-n15px me-5">
+                                <ng-container *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'">
+                                    <span class="title-text text-slice" [title]="modalHeader(projectDetails)">{{modalHeader(projectDetails)}}</span>
                                 </ng-container>
                             </h4>
                         </div>
