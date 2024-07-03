@@ -217,7 +217,6 @@ export class CommonService {
         const {fibiRights, coiRights} = await this.getAllSystemRights();
         this.assignFibiBasedRights(fibiRights);
         this.assignCOIBasedRights(coiRights);
-        return this.rightsArray;
     }
 
     assignCOIBasedRights(coiRights) {
