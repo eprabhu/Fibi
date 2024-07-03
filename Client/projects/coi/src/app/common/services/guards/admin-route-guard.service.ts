@@ -11,20 +11,14 @@ export class AdminRouteGuardService {
 
     async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
         localStorage.setItem('currentUrl', state.url);
-        const authToken = this._commonService.getCurrentUserDetail('Authorization');
-        if (authToken) {
-            return await this.isPathRightAccessible();
-        } else {
-            this._router.navigate(['/login']);
-            return false;
-        }
+        return await this.isPathRightAccessible();
     }
 
     private async isPathRightAccessible(): Promise<boolean> {
         if (await this.isPathAllowed()) {
             return true;
         } else {
-            this._router.navigate(['/fibi/error/403']);
+            this._router.navigate(['/coi/error-handler/403']);
             return false;
         }
     }
@@ -35,7 +29,7 @@ export class AdminRouteGuardService {
 
     private async hasPathRights(): Promise<boolean> {
         const isAdmin = await this.checkIfRightsPresent(ADMIN_DASHBOARD_RIGHTS) ||
-            this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
+                    this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
         return isAdmin || this._commonService.isCoiReviewer;
     }
 

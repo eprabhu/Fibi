@@ -45,9 +45,9 @@ export class NotesAttachmentsComponent implements OnInit {
         this.getNotesViaSubject();
         this.getNotesList();
     }
- 
+
     getPersonId() {
-        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personId');
+        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personID');
     }
 
     private getNotesViaSubject(): void {
@@ -83,7 +83,7 @@ export class NotesAttachmentsComponent implements OnInit {
                 if (data) {
                     this.currentSelectedNote = data;
                     this.showSlider = true;
-                    this.isEditMode = this.currentSelectedNote.personId == this._commonService.getCurrentUserDetail('personId');
+                    this.isEditMode = this.currentSelectedNote.personId == this._commonService.getCurrentUserDetail('personID');
                     this.isOpenMoreMenu = [];
                     setTimeout(() => {
                         openCoiSlider('edit-note-slider');
@@ -107,7 +107,7 @@ export class NotesAttachmentsComponent implements OnInit {
         if (this.currentSelectedNote.content.trim() && !this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(this._noteAndAttachmentService.saveOrUpdatePersonNote({
-                personId: this._commonService.getCurrentUserDetail('personId'),
+                personId: this._commonService.getCurrentUserDetail('personID'),
                 content: this.currentSelectedNote.content.trim(),
                 noteId: this.currentSelectedNote.noteId
             }).subscribe((data: any) => {

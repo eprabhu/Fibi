@@ -24,7 +24,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         moduleSubitemCodes: [801], //801 - COI sfi code
         moduleItemKey: '',
         moduleSubItemKey: '',
-        actionUserId: this._commonService.getCurrentUserDetail('personId'),
+        actionUserId: this._commonService.getCurrentUserDetail('personID'),
         actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
         enableViewMode: false,
         isChangeWarning: true,
@@ -60,7 +60,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
             this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.validPersonEntityRelTypeCode;
             this.entityDetailsServices.toBeActiveTab = 'QUESTIONNAIRE';
             this.currentRelationshipDetails = data;
-            if ((this.relationshipDetails && this.relationshipDetails.personId === this._commonService.getCurrentUserDetail('personId')) || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
+            if ((this.relationshipDetails && this.relationshipDetails.personId === this._commonService.getCurrentUserDetail('personID')) || this.hasRightToView(data.validPersonEntityRelType.disclosureTypeCode)) {
                 this.hasPermissionToView = true;
                 this.configuration.moduleItemKey = this.entityId;
                 this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;

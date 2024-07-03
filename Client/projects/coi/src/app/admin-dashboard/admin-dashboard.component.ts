@@ -370,7 +370,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     fetchMentionedComments() {
         this.$subscriptions.push(this.coiAdminDashboardService.loadCoiReviewComments({
-            personId: this.commonService.getCurrentUserDetail('personId'),
+            personId: this.commonService.getCurrentUserDetail('personID'),
             disclosureId: null,
             coiSubSectionsId: null,
             coiSectionsTypeCode: null,
