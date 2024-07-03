@@ -197,7 +197,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             {
                 homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
                 description: this.reviseObject.revisionComment,
-                personId: this.commonService.getCurrentUserDetail('personId'),
+                personId: this.commonService.getCurrentUserDetail('personID'),
                 homeUnitName: this.homeUnitName
             }
         ));
@@ -220,7 +220,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     revisionComment: this.reviseObject.revisionComment,
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this.commonService.getCurrentUserDetail('personId'),
+                    personId: this.commonService.getCurrentUserDetail('personID'),
                 },
                 [this.selectedProjectType == 'Award' ? 'coiProjectAward' : 'coiProjectProposal']: {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(), ...this.getCreateDisclosureRO()
@@ -233,7 +233,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     revisionComment: this.reviseObject.revisionComment,
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this.commonService.getCurrentUserDetail('personId')
+                    personId: this.commonService.getCurrentUserDetail('personID')
                 }
             };
         }
@@ -244,7 +244,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             fcoiTypeCode: '1',
             homeUnit: this.reviseObject.homeUnit,
             revisionComment: this.reviseObject.revisionComment,
-            personId: this.commonService.getCurrentUserDetail('personId')
+            personId: this.commonService.getCurrentUserDetail('personID')
         };
         if (this.validateForm()) {
             this._disclosureCreateModalService.createDisclosure({'coiDisclosure': fcoiDisclosureObj}).subscribe((data: any) => {

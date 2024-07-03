@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
         this.userDetails = {
-            personId: this.commonService.getCurrentUserDetail('personId'),
+            personId: this.commonService.getCurrentUserDetail('personID'),
             fullName: this.commonService.getCurrentUserDetail('fullName')
         };
         this.openModalTriggeredFromChild();
@@ -99,11 +99,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
+        this.$subscriptions.push(this.commonService.signOut().subscribe(
+            null,
+            null,
+            () => {
+                this.clearCurrentUserAndGotoLogin();
+        }));
+    }
+
+    clearCurrentUserAndGotoLogin() {
         if (!this.commonService.enableSSO) {
             ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
             this.commonService.currentUserDetails = {};
           }
-          this.commonService.rightsArray = [];
+          this.router.navigate(['/logout']);
     }
 
     changePassword() {
@@ -175,7 +184,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     saveOrUpdateNote() {
         if (this.noteComment.trim()) {
             this.$subscriptions.push(this.headerService.saveOrUpdatePersonNote({
-                'personId': this.commonService.getCurrentUserDetail('personId'),
+                'personId': this.commonService.getCurrentUserDetail('personID'),
                 'content': this.noteComment.trim()
             }).subscribe((ele: any) => {
                 this.commonService.isShowCreateNoteModal = false;
@@ -250,7 +259,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personID'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
                 this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.disclosureId}});
@@ -258,7 +267,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     createConsultingDisclosure() {
-        this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personId'),
+        this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personID'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
                 this.router.navigate(['/coi/consulting/form'], {queryParams: {disclosureId: res.disclosureId}});
