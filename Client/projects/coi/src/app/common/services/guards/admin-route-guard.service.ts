@@ -28,14 +28,10 @@ export class AdminRouteGuardService {
     }
 
     private async hasPathRights(): Promise<boolean> {
-        const isAdmin = await this.checkIfRightsPresent(ADMIN_DASHBOARD_RIGHTS) ||
-                    this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
+        const isAdmin = this._commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
+        'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'])||
+        this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
         return isAdmin || this._commonService.isCoiReviewer;
-    }
-
-    async checkIfRightsPresent(adminDashboardRights: Set<string>): Promise<boolean> {
-        const rightsArray = await this._commonService.fetchPermissions();
-        return rightsArray.some((right) => adminDashboardRights.has(right));
     }
 
 }
