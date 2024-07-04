@@ -306,4 +306,6 @@ public class ConflictOfInterestVO {
 
 	private Boolean isSfiProjectMapping;
 
+	private String reporterFullName;
+
 }

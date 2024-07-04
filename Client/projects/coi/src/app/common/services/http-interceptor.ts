@@ -28,14 +28,22 @@ import { openCommonModal } from '../utilities/custom-utilities';
  */
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
-    constructor(private _router: Router, private _commonService: CommonService) { }
+    
     AuthToken: string;
     currentActiveAPICount = 0;
+    loaderRestrictedUrls: any[] = [];
+
+    constructor(private _router: Router, private _commonService: CommonService) { }
+    
     /**catches every request and adds the authentication token from local storage
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.currentActiveAPICount++;
+        if (this._commonService.isPreventDefaultLoader) {
+            this.loaderRestrictedUrls.push(req.urlWithParams);
+        } else {
+            this.currentActiveAPICount++;
+        }
         if (!this._commonService.isPreventDefaultLoader) {
             this._commonService.isShowLoader.next(true);
         }
@@ -73,11 +81,14 @@ export class AppHttpInterceptor implements HttpInterceptor {
             }),
 
             finalize(() => {
-                this.currentActiveAPICount--;
-                if (!this._commonService.isManualLoaderOn && this.currentActiveAPICount <= 0) {
+                if (this.loaderRestrictedUrls.includes(req.urlWithParams)){
+                    this.loaderRestrictedUrls = this.loaderRestrictedUrls.filter(url => url !== req.urlWithParams);
+                } else {
+                    this.currentActiveAPICount--;
+                }
+                if (this.currentActiveAPICount <= 0) {
                     this._commonService.isShowLoader.next(false);
                     this._commonService.appLoaderContent = 'Loading...';
-                    this._commonService.isShowOverlay = false;
                 }
             })) as any;
     }

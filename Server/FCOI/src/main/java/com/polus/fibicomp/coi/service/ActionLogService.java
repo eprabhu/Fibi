@@ -112,4 +112,11 @@ public interface ActionLogService {
      */
 	void saveConsultingDisclActionLog(String actionLogTypeCode, ConsultDisclCommonDto consultDisclCommonDto);
 
+	/**
+     * This method is used to replace placeholders in the message template for the specified action type.
+     * @param actionLogDto
+     * @return String
+     */
+	String getFormattedMessageByActionType(DisclosureActionLogDto actionLogDto);
+
 }

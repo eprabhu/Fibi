@@ -8,14 +8,13 @@ import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RES
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
+import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
 export class CommonService {
 
     isShowLoader = new BehaviorSubject<boolean>(true);
-    isManualLoaderOn = false;
-    isShowOverlay = false;
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
@@ -70,6 +69,7 @@ export class CommonService {
     $updateLatestAttachment = new Subject();
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
+    projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -463,7 +463,30 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }
     }
 
-        //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
+
+    setLoaderRestriction(): void {
+        this.isPreventDefaultLoader = true;
+    }
+
+    removeLoaderRestriction(): void {
+        this.isPreventDefaultLoader = false;
+    }
+
+    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null): void {
+        this.projectDetailsModalInfo.projectDetails = projectDetails;
+        this.projectDetailsModalInfo.coiDisclosureId = coiDisclosureId;
+    }
+
+    closeProjectDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-project-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.projectDetailsModalInfo = new DisclosureProjectModalData();
+        }, 200);
+    }
+
+    //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
     //when we are in login page itself , or logout page we have to refresh and navigate to page based on rights.
     //during 403, 401 also need right based navigation.
     refreshAfterLogin() {
@@ -494,4 +517,5 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     removeUserDetailsFromLocalStorage() {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
+
 }

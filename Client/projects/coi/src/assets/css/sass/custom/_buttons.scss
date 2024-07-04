@@ -53,7 +53,8 @@
   }
   
   .btn-outline-secondary {
-    &:hover {
+    &:hover,
+    &:focus {
       color: #fff;
       border-color: #007DEC;
       background-color: #007DEC;

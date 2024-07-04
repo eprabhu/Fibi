@@ -295,6 +295,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
+                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `# ${ele.proposalId} - ${ele.proposalTitle}` : `# ${ele.awardId} - ${ele.awardTitle}`);
                     });
                 }
                 this.setEventTypeFlag();

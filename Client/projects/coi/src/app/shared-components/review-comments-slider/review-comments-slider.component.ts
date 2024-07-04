@@ -606,7 +606,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     openProjectDetails() {
         if (this.selectedProjectDetails) {
-            openModal('projectDetailsViewModal');
+           this.commonService.openProjectDetailsModal(this.selectedProjectDetails, null)
         }
     }
 

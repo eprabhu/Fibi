@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { CommonService } from '../../common/services/common.service';
 import { RO } from '../coi-interface';
+import { URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
 
 @Injectable()
 export class CoiSummaryService {
@@ -53,7 +54,7 @@ export class CoiSummaryService {
     }
 
     getProjectRelationship(disclosureId: number) {
-      return this._http.get(`${this._commonService.baseUrl}/disclosure/projects/${disclosureId}`);
+      return this._http.get(this._commonService.baseUrl + URL_FOR_DISCLOSURE_PROJECT.replace('{disclosureId}', disclosureId.toString()));
     }
 
     getEntityRelationTypePills(validPersonEntityRelType: string) {

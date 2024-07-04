@@ -19,28 +19,20 @@
                         <h4 class="d-flex align-items-baseline fs-14 mb-0 title-color" tabindex="0"
                             *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
                             <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'"
-                                tabindex="0" [attr.aria-label]="getProjectTitle(disclosure)">
+                                tabindex="0" [attr.aria-label]="disclosure?.projectHeader">
                                 <span class="d-flex">
                                     <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
                                         *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
                                     <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
                                         *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
-                                    <span>
-                                        <span class="coi-text-darker fs-6 hyper-link"> {{(readMoreOrLess[index] ?
-                                            getProjectTitle(disclosure) :
-                                            getProjectTitle(disclosure) | slice:0:120)}}</span>
-                                        <span *ngIf="!readMoreOrLess[index] && getProjectTitle(disclosure)?.length>120">
-                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
-                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
-                                                aria-label="Click here to read more" title="Click here to Read more"
-                                                class="link-primary fw-500"><span>...Read
-                                                    More</span></a>
-                                        </span>
-                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
-                                            (keydown.enter)="readMoreOrLess[index]=false" class="link-primary fw-500" tabindex="0" role="link"
-                                            aria-label="Click here to Read less" title="Click here to Read less"><span>Read
-                                                Less</span></a>
-                                    </span>
+                                    <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
+                                        (click)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
+                                        (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
+                                        (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
+                                        [title]="'Click here to view details of ' + disclosure?.projectHeader" 
+                                        [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
+                                        <span class="text-slice">{{disclosure?.projectHeader}}</span>
+                                    </a>
                                 </span>
                             </span>
                         </h4>
@@ -150,22 +142,7 @@
                             <span>
                                 <span class="d-flex">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
-                                    <span>
-                                        <span class="coi-text-darker fs-6 hyper-link me-1"> {{(readMoreOrLess[index] ?
-                                           disclosure?.entityName :
-                                            disclosure?.entityName | slice:0:120)}}</span>
-                                        <span *ngIf="!readMoreOrLess[index] && disclosure.entityName.length>120">
-                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
-                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
-                                                aria-label="Click here to read more" title="Click here to Read more"
-                                                class="link-primary fw-500"><span>...Read
-                                                    More</span></a>
-                                        </span>
-                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
-                                            (keydown.enter)="readMoreOrLess[index]=false" class="link-primary fw-500" tabindex="0" role="link"
-                                            aria-label="Click here to Read less" title="Click here to Read less"><span>Read
-                                                Less</span></a>
-                                    </span>
+                                    <span class="coi-text-darker fs-6 text-slice" [title]="disclosure?.entityName">{{disclosure?.entityName}}</span>
                                 </span>
                             </span>
                         </h4>
@@ -221,26 +198,9 @@
                                 <app-no-data-label [classesToApply]="'fs-14'"
                                     [valueToShow]="disclosure?.purposeOfTheTrip">
                                     <span class="d-flex coi-text-light ms-0"
-                                        [attr.aria-label]="disclosure?.purposeOfTheTrip"
-                                        *ngIf="!isPurposeReadMore && disclosure?.purposeOfTheTrip?.length > 55; else showFullInfo">
-                                        <span> {{(disclosure?.purposeOfTheTrip |
-                                            slice:0:55)}}
-                                            <span (click)="isPurposeReadMore = !isPurposeReadMore" (keydown.enter)="isPurposeReadMore = !isPurposeReadMore"
-                                            tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                                class="link-primary"><span class="fw-500">...Read more</span>
-                                            </span>
-                                        </span>
+                                        [attr.aria-label]="disclosure?.purposeOfTheTrip">
+                                        <span class="text-slice" [title]="disclosure?.purposeOfTheTrip">{{disclosure?.purposeOfTheTrip}}</span>
                                     </span>
-                                    <ng-template #showFullInfo>
-                                        <span
-                                            class="word-break-all d-flex coi-text-light ms-0">{{disclosure?.purposeOfTheTrip}}</span>
-                                        <span *ngIf="disclosure?.purposeOfTheTrip?.length > 55"
-                                            (click)="isPurposeReadMore = !isPurposeReadMore" (keydown.enter)="isPurposeReadMore = !isPurposeReadMore"
-                                            tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less"
-                                            class="d-flex link-primary"><span
-                                                class="fw-500 fs-14">Read Less</span>
-                                        </span>
-                                    </ng-template>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -384,22 +344,7 @@
                             <span>
                                 <span class="d-flex">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
-                                    <span>
-                                        <span class="coi-text-darker fs-6 hyper-link me-1"> {{(readMoreOrLess[index] ?
-                                           disclosure?.entityName :
-                                            disclosure?.entityName | slice:0:120)}}</span>
-                                        <span *ngIf="!readMoreOrLess[index] && disclosure.entityName.length>120">
-                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
-                                                (keydown.enter)="readMoreOrLess[index]=true" tabindex="0" role="link"
-                                                aria-label="Click here to read more" title="Click here to Read more"
-                                                class="link-primary fw-500"><span>...Read
-                                                    More</span></a>
-                                        </span>
-                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
-                                            (keydown.enter)="readMoreOrLess[index]=false" class="link-primary fw-500" tabindex="0" role="link"
-                                            aria-label="Click here to Read less" title="Click here to Read less"><span>Read
-                                                Less</span></a>
-                                    </span>
+                                    <span class="coi-text-darker fs-6 text-slice" [title]="disclosure?.entityName">{{disclosure?.entityName}}</span>
                                 </span>
                             </span>
                         </h4>
