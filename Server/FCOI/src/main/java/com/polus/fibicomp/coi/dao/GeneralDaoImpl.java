@@ -9,7 +9,9 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.security.AuthenticatedUser;;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -20,8 +22,6 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 
 import oracle.jdbc.OracleTypes;

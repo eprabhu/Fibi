@@ -16,12 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.coi.clients.FormBuilderClient;
 import com.polus.fibicomp.coi.clients.model.BlankFormRequest;
 import com.polus.fibicomp.coi.clients.model.BlankFormResponse;
 import com.polus.fibicomp.coi.clients.model.FormBuilderSectionsComponentDTO;
 import com.polus.fibicomp.coi.clients.model.FormBuilderSectionsDTO;
+
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.core.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
@@ -30,19 +35,29 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.service.COIFileAttachmentService;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dao.OPAReviewDao;
 import com.polus.fibicomp.opa.pojo.OPAReview;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
-import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ModuleSectionDetailsDto;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service("reviewCommentService")
 @Transactional

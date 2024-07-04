@@ -34,8 +34,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.commonService.removeUserDetailsFromLocalStorage();
-        this.commonService.currentUserDetails = {};
         this.$subscriptions.push(this.commonService.isShowLoader.subscribe(data =>
             setTimeout(() => {
                 this.isShowLoader = data;

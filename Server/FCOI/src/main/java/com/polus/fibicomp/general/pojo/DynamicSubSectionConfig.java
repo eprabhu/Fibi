@@ -17,11 +17,12 @@ import javax.persistence.Table;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.polus.core.general.pojo.DynamicSectionConfig;
+import com.polus.core.util.JpaCharBooleanConversion;
 
-@Entity
-@Table(name = "DYN_SUBSECTION_CONFIG")
+//@Entity
+//@Table(name = "DYN_SUBSECTION_CONFIG")
 public class DynamicSubSectionConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;

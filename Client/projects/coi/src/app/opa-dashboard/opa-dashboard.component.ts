@@ -72,7 +72,7 @@ export class OpaDashboardComponent implements OnInit {
     ) {  document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
-        await this.getPermissions();
+        this.isShowAdminDashboard = this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -228,11 +228,6 @@ export class OpaDashboardComponent implements OnInit {
                 this.isLoading = false;
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
              }));
-    }
-
-    async getPermissions() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.isShowAdminDashboard = rightsArray.some((right) => OPA_DASHBOARD_RIGHTS.has(right));
     }
 
     sortResult(sortFieldBy) {
