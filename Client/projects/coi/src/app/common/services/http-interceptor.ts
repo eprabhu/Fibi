@@ -44,7 +44,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
         } else {
             this.currentActiveAPICount++;
         }
-        if (!this._commonService.isPreventDefaultLoader) {
+        if (this._commonService.isPreventDefaultLoader) {
+            this.loaderRestrictedUrls.push(req.urlWithParams);
+        } else {
+            this.currentActiveAPICount++;
             this._commonService.isShowLoader.next(true);
         }
         return next.handle(req).pipe(
