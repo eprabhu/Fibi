@@ -89,7 +89,7 @@
                             id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
                             (click)="toggleAdvanceSearch();" (keyup.enter)="toggleAdvanceSearch()" (keyup.space)="toggleAdvanceSearch()" aria-label="Toggle Advanced Search"
                             title="Click here to expand / collapse Advanced Search fields">
-                            <mat-icon aria-hidden="true" class="me-3">tune</mat-icon>Advanced Search</span>
+                            <mat-icon aria-hidden="true" class="me-3 flex-shrink-0">tune</mat-icon>Advanced Search</span>
                     </div>
                 </div>
             </div>
@@ -311,9 +311,9 @@
                             'descending Order' : coiAdminDashboardService.coiRequestObject.sort[sortSection?.variableName]=== 'desc' ?
                             'normal Order' : 'ascending order'}}</span>
                     <span>{{sortSection?.fieldName}}</span>
-                    <mat-icon aria-hidden="true" class="arrow selected-arrow" [@slideDown]
+                    <mat-icon aria-hidden="true" class="arrow selected-arrow flex-shrink-0" [@slideDown]
                         *ngIf="coiAdminDashboardService.coiRequestObject.sort[sortSection?.variableName]=== 'asc' ">arrow_downward</mat-icon>
-                    <mat-icon aria-hidden="true" class="arrow selected-arrow" [@slideUp] [@scaleOut]
+                    <mat-icon aria-hidden="true" class="arrow selected-arrow flex-shrink-0" [@slideUp] [@scaleOut]
                         *ngIf="coiAdminDashboardService.coiRequestObject.sort[sortSection?.variableName]=== 'desc' ">arrow_upward</mat-icon>
                 </div>
             </button>
@@ -337,7 +337,7 @@
                         <button [@topSlideInOut] class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()"
                          (click)="confirmCompleteReview()" (keyup.enter)="confirmCompleteReview()" (keyup.space)="confirmCompleteReview()"
                          title="Click here to complete final review" aria-label="Click here to complete final review">
-                            <mat-icon aria-hidden="true" class="me-2">done</mat-icon> Complete Final Review</button>
+                            <mat-icon aria-hidden="true" class="me-2 flex-shrink-0">done</mat-icon> Complete Final Review</button>
                     </div>
                 </section>
 
@@ -360,7 +360,7 @@
                                                 class="mb-0 d-flex align-items-baseline">
                                             <span class="d-inline-flex align-items-center">
                                                 <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
-                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
                                                 <span class="coi-text-light text-nowrap fs-6" tabindex="-1" id="coi-admin-dashboard-card-value-personinfo-{{index}}"
                                                       [attr.aria-label]="'Disclosure person ' + coi.disclosurePersonFullName">
                                                     {{coi.disclosurePersonFullName}}</span>
@@ -369,21 +369,19 @@
                                                     *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'"
                                                     class="">
                                                 <span class="d-inline-flex" tabindex="-1"
-                                                      [attr.aria-label]="'Project ' + modalHeader(coi)">
+                                                      [attr.aria-label]="'Project is #, ' + coi?.projectHeader">
                                                     <span class="pipe mx-1"></span>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="coi?.fcoiTypeCode==2">article</mat-icon>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light me-1" *ngIf="coi?.fcoiTypeCode==3">workspace_premium</mat-icon>
-                                                   <span class="hyper-link coi-text-darker fs-6 coi-flex-1" id="coi-admin-dashboard-card-value-article-{{index}}">
-                                                        {{(readMoreOrLess[index] ? modalHeader(coi) : modalHeader(coi) | slice:0:120)}}
-                                                        <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>120">...
-                                                            <span *ngIf="!readMoreOrLess[index]"
-                                                                (click)="readMoreOrLess[index]=true" (keyup.enter)="readMoreOrLess[index]=true" (keyup.space)="readMoreOrLess[index]=true"
-                                                                class="link-primary fs-14">Read More</span>
-                                                        </span>
-                                                        <span *ngIf="readMoreOrLess[index]"
-                                                        (click)="readMoreOrLess[index]=false" (keyup.enter)="readMoreOrLess[index]=false" (keyup.space)="readMoreOrLess[index]=false"
-                                                        class="link-primary fs-14 ms-1">Read Less</span>
-                                                    </span>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="coi?.fcoiTypeCode==='2'">article</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="coi?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
+                                                    <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
+                                                        id="coi-admin-dashboard-card-value-article-{{index}}"
+                                                        (click)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                        (keyup.enter)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                        (keyup.space)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                        [title]="'Click here to view details of ' + coi?.projectHeader" 
+                                                        [attr.aria-label]="'Click here to view details of ' + coi?.projectHeader">
+                                                        <span class="text-slice">{{coi?.projectHeader}}</span>
+                                                    </a>
                                                 </span>
                                                 </ng-container>
                                             </h4>
@@ -424,66 +422,16 @@
                                             </span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-6 mb-2" *ngIf="coi?.fcoiTypeCode== 1" >
-                                                <!-- Coi card Description (FCOI)-->
+                                            <div class="col-lg-4 col-md-6 mb-2">
+                                                <!-- Coi card Description -->
                                                 <div tabindex="-1"
                                                      [attr.aria-label]="'Description' + coi?.reviseComment">
                                                     <label for="coi-admin-dashboard-description-span" class="d-block coi-text-dark">Description</label>
-                                                    <span>
-                                                <app-no-data-label [valueToShow]="coi?.reviseComment">
-                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
-                                                        <span class="word-break-all new-line-property"
-                                                              *ngIf="!isReadMore && coi?.reviseComment?.length > 60; else showFullInfo">
-                                                            <span class="coi-text-light" id="coi-admin-dashboard-card-value-description-{{index}}">{{(coi?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"
-                                                            (keyup.enter)="isReadMore = !isReadMore" (keyup.space)="isReadMore = !isReadMore"><span>...<span class="link-primary fs-14">Read
-                                                                        More</span>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </span>
-                                                        <ng-template #showFullInfo>
-                                                            <span
-                                                                class="word-break-all new-line-property coi-text-light">{{coi?.reviseComment}}</span>
-                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 60"
-                                                                  (click)="isReadMore = !isReadMore" aria-hidden="true">
-                                                                <span><span class="link-primary fs-14"> Read Less</span>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </ng-template>
+                                                    <span id="coi-admin-dashboard-description-span">
+                                                        <app-no-data-label [valueToShow]="coi?.reviseComment">
+                                                            <span class="text-slice coi-text-light" [title]="coi?.reviseComment">{{coi?.reviseComment}}</span>
+                                                        </app-no-data-label>
                                                     </span>
-                                                </app-no-data-label>
-                                            </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 mb-2" *ngIf="coi?.fcoiTypeCode!= 1">
-                                                <!-- Coi card Description(Not FCOI) -->
-                                                <div tabindex="-1"
-                                                     [attr.aria-label]="'Description' + coi?.reviseComment">
-                                                    <label for="coi-admin-dashboard-description-else-span" class="d-block coi-text-dark">Description</label>
-                                                    <span class="break-point-1200">
-                                                <app-no-data-label [valueToShow]="coi?.reviseComment">
-                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
-                                                        <span class="word-break-all new-line-property"
-                                                              *ngIf="!isReadMore && coi?.reviseComment?.length > 60; else showFullInfo">
-                                                            <span class="coi-text-light" id="coi-admin-dashboard-card-value-description-else-{{index}}">{{(coi?.reviseComment | slice:0:60)}}</span>
-                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"
-                                                            (keyup.enter)="isReadMore = !isReadMore" (keyup.space)="isReadMore = !isReadMore"><span>...
-                                                                    <span class="link-primary fs-14">Read More</span>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </span>
-                                                        <ng-template #showFullInfo>
-                                                            <span
-                                                                class="word-break-all new-line-property coi-text-light">{{coi?.reviseComment}}</span>
-                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 60"
-                                                                  (click)="isReadMore = !isReadMore" aria-hidden="true" (keyup.enter)="isReadMore = !isReadMore" (keyup.space)="isReadMore = !isReadMore">
-                                                                <span><span class="link-primary fs-14"> Read Less</span>
-                                                                    <i aria-hidden="true"></i></span>
-                                                            </span>
-                                                        </ng-template>
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6 mb-2">
@@ -601,7 +549,7 @@
                                                 <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
-                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
                                                 <strong class="coi-text-light fs-6 text-nowrap me-2" tabindex="-1"
                                                         [attr.aria-label]="'Disclosure Person' + (coi.travellerName)">
                                                     {{coi.travellerName}}
@@ -610,19 +558,8 @@
                                                 <ng-container>
                                                     <span class="pipe mx-1"></span>
                                                     <span class="d-inline-flex">
-                                                        <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
-                                                        <span class="coi-text-darker fs-6 hyper-link">
-                                                        {{(readMoreOrLess[index] ? coi.travelEntityName : coi.travelEntityName | slice:0:120)}}
-                                                        <span
-                                                            *ngIf="!readMoreOrLess[index] && coi.travelEntityName?.length>120">...
-                                                            <span *ngIf="!readMoreOrLess[index]"
-                                                            (click)="readMoreOrLess[index]=true" (keyup.enter)="readMoreOrLess[index]=true" (keyup.space)="readMoreOrLess[index]=true"
-                                                                class="link-primary fs-14">Read More</span>
-                                                        </span>
-                                                        <span *ngIf="readMoreOrLess[index]"
-                                                        (click)="readMoreOrLess[index]=false" (keyup.enter)="readMoreOrLess[index]=false" (keyup.space)="readMoreOrLess[index]=false"
-                                                            class="link-primary ms-1 fs-14">Read Less</span>
-                                                        </span>
+                                                        <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">apartment</mat-icon>
+                                                        <span class="coi-text-darker fs-6 text-slice" [title]="coi?.travelEntityName">{{coi?.travelEntityName}}</span>
                                                     </span>
                                                 </ng-container>
                                                 </h4>
@@ -788,7 +725,7 @@
                                                 <h4 class="mb-0 d-flex">
                                                     <ng-container>
                                                         <span class="d-inline-flex">
-                                                            <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
+                                                            <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
                                                             <span class="coi-text-light text-nowrap fs-6" tabindex="-1" id="coi-admin-dashboard-card-value-personinfo-{{index}}"
                                                                   [attr.aria-label]="'Disclosure person ' + coi.fullName">
                                                                 {{coi.fullName}}</span>
@@ -796,22 +733,8 @@
                                                         <ng-container *ngIf="coi?.entityName">
                                                             <span class="pipe mx-1"></span>
                                                             <span class="d-inline-flex">
-                                                                <mat-icon aria-hidden="true" class="coi-text-light me-1">apartment</mat-icon>
-                                                                    <span class="d-flex">
-                                                                        <span class="coi-text-darker fs-6 hyper-link">
-                                                                            {{(readMoreOrLess[index] ? coi?.entityName : coi?.entityName | slice:0:120)}}
-                                                                            <span *ngIf="!readMoreOrLess[index] && coi?.entityName?.length>120">...
-                                                                                <span *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"
-                                                                                    (keyup.enter)="readMoreOrLess[index]=true" (keyup.space)="readMoreOrLess[index]=true"
-                                                                                    class="link-primary fs-14">Read
-                                                                                    More</span>
-                                                                            </span>
-                                                                            <span *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"
-                                                                                (keyup.enter)="readMoreOrLess[index]=false" (keyup.space)="readMoreOrLess[index]=false"
-                                                                                class="link-primary ms-1 fs-14">Read
-                                                                                Less</span>
-                                                                        </span>
-                                                                    </span>
+                                                                <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">apartment</mat-icon>
+                                                                <span class="coi-text-darker fs-6 text-slice" [title]="coi?.entityName">{{coi?.entityName}}</span>
                                                             </span>
                                                         </ng-container>
                                                     </ng-container>
@@ -1029,13 +952,13 @@
                                                 [attr.aria-label]="coi?.travelDisclosureId ? 'Click here to view Travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
                                                             coi?.disclosureId ? 'Click here to view consulting disclosure' :
                                                             coi?.fcoiTypeCode!= 1 ? 'Click here to view Project Disclosure' : 'Click to view FCOI disclosure'">
-                                            <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>View
+                                            <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">visibility</mat-icon>View
                                         </button>
                                         <button id="coi-admin-dashboard-assign-admin-btn" *ngIf="showAssignAdminButton(coi)" (click)="openAssignAdminModal(coi);"
                                             class="d-flex flex-shrink-0 align-items-center btn btn-outline-secondary fs-14 height-fit-content ms-2"
                                             title="Click here to Assign Administrator/Admin Group"
                                             aria-label="Click here to assign administrator">
-                                            <mat-icon aria-hidden="true" class="me-1">group_add</mat-icon>
+                                            <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">group_add</mat-icon>
                                             Assign Admin
                                         </button>
                                     </div>
@@ -1078,7 +1001,7 @@
         </app-coi-slider>
     </ng-container>
     <!-- Confirmation Modal -->
-    <div class="modal fade mySkinDialog" id="ReviewModal" role="dialog">
+    <div class="modal fade mySkinDialog" id="ReviewModal" role="dialog" tabindex="-1" aria-label="Confirmation">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">

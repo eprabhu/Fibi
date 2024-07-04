@@ -67,10 +67,6 @@ export class DefineSwitchViewComponentSlider implements OnInit, OnChanges {
         }
     }
 
-    readMoreOption(id: number, flag: boolean): void {
-        this.readMore[id] = !flag;
-    }
-
     validateProjectSfiSliderOnClose() {
         this.hideSlider();
     }

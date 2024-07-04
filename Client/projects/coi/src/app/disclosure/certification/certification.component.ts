@@ -38,14 +38,13 @@ export class CertificationComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
-    constructor(public _dataStore: DataStoreService, public router: Router, public _coiService: CoiService, public commonService: CommonService) { 
-        window.scrollTo(0, 0);
-    }
+    constructor(public _dataStore: DataStoreService, public router: Router, public _coiService: CoiService, public commonService: CommonService) { }
 
     ngOnInit() {
         this._coiService.isShowCertifyInfo = true;
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        window.scrollTo(0, 0);
     }
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);

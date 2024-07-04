@@ -399,7 +399,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }));
     }
 
-    viewEntityDetails(event) {
+    viewEntityDetails() {
         if(this.showViewButton()) {
             this.closeEntityInfoCard.emit(false);
             document.body.removeAttribute("style");

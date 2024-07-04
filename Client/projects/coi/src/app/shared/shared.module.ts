@@ -72,6 +72,8 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
 import { FormValidatorModule } from './form-validator/form-validator.module';
 import { CommonHelpTextComponent } from './common-help-text/common-help-text.component';
 import { CommonInformationComponent } from './common-information/common-information.component';
+import { VisibleInViewportDirective } from './directives/visibleInViewport.directive';
+import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
 
 @NgModule({
     imports: [
@@ -104,7 +106,7 @@ import { CommonInformationComponent } from './common-information/common-informat
         PELayerComponent,
         ReadMoreComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
-        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent],
+        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -164,7 +166,9 @@ import { CommonInformationComponent } from './common-information/common-informat
         FormSectionsComponent,
         FormValidatorModule,
         CommonHelpTextComponent,
-        CommonInformationComponent
+        CommonInformationComponent,
+        VisibleInViewportDirective,
+        SkeletonLoaderComponent
     ],
 
     providers: [

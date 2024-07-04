@@ -46,3 +46,9 @@
     </div>
 </app-confirmation-modal>
 <!--Unsaved Changes confirmation Modal end-->
+
+<!-- shared project deatils modal starts -->
+ <ng-container *ngIf="commonService.projectDetailsModalInfo.coiDisclosureId || commonService.projectDetailsModalInfo.projectDetails?.projectId">
+    <app-shared-project-details-modal [selectedProject]="commonService.projectDetailsModalInfo"></app-shared-project-details-modal>
+ </ng-container>
+<!-- shared project deatils modal end -->
