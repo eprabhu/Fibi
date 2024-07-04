@@ -1,8 +1,8 @@
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" tabindex="-1" id="reviseOrCreateDisclosureModal" role="dialog">
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" tabindex="-1" id="reviseOrCreateDisclosureModal" role="dialog" aria-labelledby="reviseOrCreateDisclosureModal-header">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title" *ngIf="!isShowExistingDisclosure">
+          <h4 id="reviseOrCreateDisclosureModal-header" class="modal-title" *ngIf="!isShowExistingDisclosure">
             <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
                 <span>Revise Disclosure</span>
                 <app-common-help-text [helpTextHardCoded]="'You are about to revise disclosure.'"></app-common-help-text>
@@ -17,7 +17,7 @@
                 <app-common-help-text *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'" [helpTextHardCoded]="'You are about to create travel disclosure.'"></app-common-help-text>
             </ng-container>
         </h4>
-        <h4 class="modal-title" *ngIf="isShowExistingDisclosure">
+        <h4 id="reviseOrCreateDisclosureModal-header" class="modal-title" *ngIf="isShowExistingDisclosure">
             <span>Navigate to Disclosure</span>
             <app-common-help-text [helpTextHardCoded]="'Navigate to existing disclosure.'"></app-common-help-text>
         </h4>
@@ -411,5 +411,4 @@
     </div>
   </div>
 
-<button id="open-create-or-revise-modal" data-bs-toggle="modal" data-bs-target="#reviseOrCreateDisclosureModal"
-    [hidden]="true"></button>
+<button tabindex="-1" id="open-create-or-revise-modal" data-bs-toggle="modal" data-bs-target="#reviseOrCreateDisclosureModal" [hidden]="true" aria-hidden="true"></button>

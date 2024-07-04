@@ -1,0 +1,134 @@
+$light-gray-lightest: #f1f1f1;
+$light-gray-lighter: #f0f0f0;
+$light-gray-medium: #c0c0c0;
+$light-gray-light: #e0e0e0;
+$light-blue-gray: #E0E6F0;
+$blue-gray: #3E4C63;
+
+.coi-skeleton {
+
+    .coi-skeleton-cell,
+    .coi-skeleton-card,
+    .coi-skeleton-line,
+    .coi-skeleton-circle,
+    .coi-skeleton-square,
+    .coi-skeleton-rectangle {
+        background-color: $light-gray-light;
+    }
+
+    .coi-skeleton-table {
+
+        .coi-skeleton-cell {
+            min-height: 10px;
+            border-radius: 4px;
+        }
+
+        .coi-skeleton-header-cell {
+            min-height: 12px;
+            border-radius: 4px;
+            background-color: $light-gray-medium;
+        }
+
+    }
+
+
+    .coi-skeleton-card {
+        min-width: 100%;
+        min-height: 200px;
+        margin-bottom: 20px;
+        background-color: $light-gray-lighter;
+    }
+
+    .coi-skeleton-title,
+    .coi-skeleton-text,
+    .coi-skeleton-line {
+        min-height: 20px;
+        border-radius: 4px;
+    }
+
+    .coi-skeleton-title {
+        height: 25px;
+        background-color: $light-gray-medium;
+    }
+
+    .coi-skeleton-profile-card {
+        min-height: 100px;
+        background-color: $light-gray-lighter;
+    }
+
+    .coi-skeleton-circle {
+        min-width: 50px;
+        min-height: 50px;
+        border-radius: 50%;
+    }
+
+    .coi-skeleton-rectangle {
+        min-width: 100%;
+        min-height: 20px;
+    }
+
+    .coi-skeleton-square {
+        min-width: 50px;
+        min-height: 50px;
+    }
+
+    /* Animation Classes */
+    .coi-skelton-animate-shimmer {
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.2) 10%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            animation: shimmer 2s infinite ease-in-out;
+        }
+    }
+
+}
+
+.coi-retry-container {
+    min-height: 100px;
+    transform: translateY(100%);
+    opacity: 0;
+    border: 1px dotted hsl(214, 15%, 81%);
+    background-color: $light-gray-lightest;
+    animation: slideUp .4s ease-in-out forwards;
+
+    .coi-retry-error-icon-container {
+        background-color: $light-blue-gray;
+
+        .file-error-icon {
+            font-size: 1.6rem !important;
+            color: $blue-gray !important;
+        }
+
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}

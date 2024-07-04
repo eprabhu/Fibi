@@ -28,19 +28,26 @@ import { openCommonModal } from '../utilities/custom-utilities';
  */
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
-    constructor(private _router: Router, private _commonService: CommonService) { }
+    
     AuthToken: string;
     currentActiveAPICount = 0;
+    loaderRestrictedUrls: any[] = [];
+
+    constructor(private _router: Router, private _commonService: CommonService) { }
+    
     /**catches every request and adds the authentication token from local storage
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
-        this.currentActiveAPICount++;
-        if (this.AuthToken) {
-            req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
+        if (this._commonService.isPreventDefaultLoader) {
+            this.loaderRestrictedUrls.push(req.urlWithParams);
+        } else {
+            this.currentActiveAPICount++;
         }
-        if (!this._commonService.isPreventDefaultLoader) {
+        if (this._commonService.isPreventDefaultLoader) {
+            this.loaderRestrictedUrls.push(req.urlWithParams);
+        } else {
+            this.currentActiveAPICount++;
             this._commonService.isShowLoader.next(true);
         }
         return next.handle(req).pipe(
@@ -50,12 +57,14 @@ export class AppHttpInterceptor implements HttpInterceptor {
                     this._commonService.appLoaderContent = 'Loading...';
                     this._commonService.isShowOverlay = false;
                 }
-
-                if (error.status === 401 || this.isUnAuthorized(error)) {
-                    this._commonService.enableSSO ? localStorage.clear() :
-                    this._commonService.removeUserDetailsFromLocalStorage();
+                if (error.status === 401 ) {
                     this._commonService.currentUserDetails = {};
-                    this._commonService.enableSSO ?  this._router.navigate(['error/401']) : this._router.navigate(['/login']);
+                    if(this._commonService.enableSSO) {
+                        window.location.reload();
+                    } else {
+                        this._commonService.removeUserDetailsFromLocalStorage();
+                        this._router.navigate(['/login']);
+                    }
                 }
 
                 if (error.status === 403 && !window.location.href.includes('/login')) {
@@ -75,16 +84,16 @@ export class AppHttpInterceptor implements HttpInterceptor {
             }),
 
             finalize(() => {
-                this.currentActiveAPICount--;
-                if (!this._commonService.isManualLoaderOn && this.currentActiveAPICount <= 0) {
+                if (this.loaderRestrictedUrls.includes(req.urlWithParams)){
+                    this.loaderRestrictedUrls = this.loaderRestrictedUrls.filter(url => url !== req.urlWithParams);
+                } else {
+                    this.currentActiveAPICount--;
+                }
+                if (this.currentActiveAPICount <= 0) {
                     this._commonService.isShowLoader.next(false);
                     this._commonService.appLoaderContent = 'Loading...';
-                    this._commonService.isShowOverlay = false;
                 }
             })) as any;
     }
 
-    isUnAuthorized(error: HttpErrorResponse) {
-        return error && error.error && error.error.message == "missing authorization header";
-    }
 }

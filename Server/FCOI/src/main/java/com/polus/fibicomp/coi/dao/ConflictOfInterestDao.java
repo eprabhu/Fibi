@@ -1382,4 +1382,19 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo);
+
+	/**
+     * This method is used to fetch disclosure details id by dislcosure id
+    *
+    * @return List of disclosure details id
+    */
+	public List<Integer> getDisclDetailsIdByDisclId(Integer disclosureId);
+
+	/**
+     * This method is used to fetch conflict status code from conflict history table using disclosure details id
+    *
+    * @return conflict status
+    */
+	public String getConflictHistoryStatusCodeByDisclId(Integer disclosureDetailsId);
+
 }

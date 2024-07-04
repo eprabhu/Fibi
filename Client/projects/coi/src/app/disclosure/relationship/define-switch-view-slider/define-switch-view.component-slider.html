@@ -7,16 +7,7 @@
                         <div class="row flex-grow-1">
                             <div class="col d-flex align-items-center">
                                 <div class="fw-bold d-flex align-items-center">
-                                    <span [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName?.length > 75
-                                        && !readMore[sfi?.personEntityId] ? (sfi?.personEntityRelationshipDto?.entityName | slice:0:75) :
-                                        sfi?.personEntityRelationshipDto?.entityName}}
-                                    </span>
-                                    <span *ngIf="sfi?.personEntityRelationshipDto?.entityName > 75" (click)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"
-                                        (keydown.enter)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"  role="link" tabindex="0"
-                                        [title]="readMore[sfi?.personEntityId] ? 'Click here to Read less' : 'Click here to Read more'"
-                                        [attr.aria-label]="readMore[sfi?.personEntityId] ? 'Click here to Read Less' : 'Click here to Read More'"
-                                        id="link-read-more-less"  class="collapse-text fs-13">
-                                        {{readMore[sfi?.personEntityId] ? 'Read Less' : '...Read More'}}
+                                    <span [title]="sfi?.personEntityRelationshipDto?.entityName" class="text-slice">{{sfi?.personEntityRelationshipDto?.entityName}}
                                     </span>
                                     <span *ngIf="isShowWarning(sfi)" class="ms-1 fs-12 sfi-info-text px-2 rounded-5 rounded-pill" title="Modified">
                                     Modified

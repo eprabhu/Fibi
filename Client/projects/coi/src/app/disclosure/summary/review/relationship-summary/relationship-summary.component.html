@@ -9,7 +9,7 @@
             <a tabindex="0" class="fs-6 link-primary fw-600 text-slice" id="link-{{selectedProject?.projectId}}"
                 title="Click here to view project details of #{{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
                 attr.aria-label="Click here to view project details of {{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
-                (click)="openModule()" (keyup.enter)="openModule()" (keyup.space)="openModule()" data-bs-toggle="modal" data-bs-target="#moduleViewModal">
+                (click)="openModule()" (keyup.enter)="openModule()" (keyup.space)="openModule()">
                 #{{selectedProject?.projectNumber}}- {{selectedProject?.title}}
             </a>
         </span>
@@ -23,7 +23,7 @@
         </div>
         <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
         <!-- comments -->
-        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity"
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', null)" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity"
           title="Click here to open comments" aria-label="Click here to open comments" type="button">
           <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
         </button>
@@ -188,7 +188,7 @@
                       <div class="d-flex">
                         <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned review completed, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
                         <button *ngIf="(['3', '7', '8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
-                        && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
+                        && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personID') == coiDetails?.adminPersonId)"
                         class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                         <span class="btn-secondary-svg"></span>

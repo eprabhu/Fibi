@@ -24,6 +24,7 @@ import { ReviewCommentListViewComponent } from './review-comment-list-view/revie
 import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ConcurrencyWarningModalComponent } from './concurrency-warning-modal/concurrency-warning-modal.component';
 import { EntityDetailsCardComponent } from './entity-details-card/entity-details-card.component';
+import { SharedProjectDetailsModalComponent } from './shared-project-details-modal/shared-project-details-modal.component';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { EntityDetailsCardComponent } from './entity-details-card/entity-details
     ReviewCommentListViewComponent,
     CoiReviewCommentsComponent,
     ConcurrencyWarningModalComponent,
-    EntityDetailsCardComponent
+    EntityDetailsCardComponent,
+    SharedProjectDetailsModalComponent
   ],
   exports: [
     NoInformationComponent,
@@ -66,7 +68,6 @@ import { EntityDetailsCardComponent } from './entity-details-card/entity-details
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
-
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
     HelpTextComponent,
@@ -75,7 +76,8 @@ import { EntityDetailsCardComponent } from './entity-details-card/entity-details
     ReviewCommentListViewComponent,
     CoiReviewCommentsComponent,
     ConcurrencyWarningModalComponent,
-    EntityDetailsCardComponent
+    EntityDetailsCardComponent,
+    SharedProjectDetailsModalComponent
   ]
 })
 export class SharedComponentModule { }

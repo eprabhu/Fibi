@@ -151,7 +151,7 @@ getEntityProjectRelations() {
             const disclosureDetails:coiReviewComment = {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
                 componentTypeCode: '6',
-                subModuleItemKey: section === 'SFI' ? childSubSection.disclosureDetailsId : details.moduleItemId,
+                subModuleItemKey: section === 'SFI' ? childSubSection?.disclosureDetailsId : details.moduleItemId,
                 subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null,
                 coiSubSectionsTitle: `#${details.projectNumber}: ${details.title}`,
                 selectedProject: details,

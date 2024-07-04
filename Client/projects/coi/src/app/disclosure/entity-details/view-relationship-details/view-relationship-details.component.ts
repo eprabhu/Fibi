@@ -314,7 +314,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
             moduleSubItemCode: 801,
             moduleSubItemKey: subItemCode,
             moduleItemKey: this.entityId,
-            actionUserId: this.commonService.getCurrentUserDetail('personId'),
+            actionUserId: this.commonService.getCurrentUserDetail('personID'),
             actionPersonName: this.commonService.getCurrentUserDetail('fullName'),
             questionnaireNumbers: [],
             questionnaireMode: this.isEditMode ? 'ACTIVE_ANSWERED_UNANSWERED' : this.relationshipsDetails.isFormCompleted ? 'ANSWERED' : 'ACTIVE_ANSWERED_UNANSWERED'
@@ -399,7 +399,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }));
     }
 
-    viewEntityDetails(event) {
+    viewEntityDetails() {
         if(this.showViewButton()) {
             this.closeEntityInfoCard.emit(false);
             document.body.removeAttribute("style");

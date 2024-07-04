@@ -270,7 +270,7 @@ export class OpaComponent implements OnInit {
     }
 
     isLoggedInUser(personId: string) {
-        return this.commonService?.getCurrentUserDetail('personId') === personId;
+        return this.commonService?.getCurrentUserDetail('personID') === personId;
     }
 
     openSlider(type, count) {

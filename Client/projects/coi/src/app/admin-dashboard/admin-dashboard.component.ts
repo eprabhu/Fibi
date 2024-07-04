@@ -150,7 +150,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     ) { document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
-        await this.getPermissions();
+        this.getPermissions();
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -295,6 +295,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
+                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `# ${ele.proposalId} - ${ele.proposalTitle}` : `# ${ele.awardId} - ${ele.awardTitle}`);
                     });
                 }
                 this.setEventTypeFlag();
@@ -370,7 +371,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     fetchMentionedComments() {
         this.$subscriptions.push(this.coiAdminDashboardService.loadCoiReviewComments({
-            personId: this.commonService.getCurrentUserDetail('personId'),
+            personId: this.commonService.getCurrentUserDetail('personID'),
             disclosureId: null,
             coiSubSectionsId: null,
             coiSectionsTypeCode: null,
@@ -665,20 +666,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    async getPermissions() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+    getPermissions() {
+        this.isShowAdminDashboard = this.commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
     }
 
-    async checkTravelDisclosureRights() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.hasTravelDisclosureRights = rightsArray.some((right) =>
+    checkTravelDisclosureRights() {
+        this.hasTravelDisclosureRights = this.commonService.rightsArray.some((right) =>
             ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
     }
 
-    async checkForConsultingDisclosureRight() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.hasConsultingDisclosureRights = rightsArray.some((right) =>
+    checkForConsultingDisclosureRight() {
+        this.hasConsultingDisclosureRights = this.commonService.rightsArray.some((right) =>
             ['MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE'].includes(right));
     }
 
