@@ -22,6 +22,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.polus.core.util.JpaCharBooleanConversion;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.reviewcomments.dto.ModuleSectionDetailsDto;
 import lombok.Getter;
@@ -29,8 +30,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -30,9 +30,9 @@ export class UnauthorisedComponent implements OnInit {
    */
   checkExternalUserStatus() {
     const user = this._commonService.currentUserDetails;
-    if (!user.isExternalUser && user.userName) {
+    if (user && !user.isExternalUser && user.userName) {
       this.navigateToExternalUserRegn(user.userName, user.email, user.fullName);
-    } else if (user.isExternalUser && user.userName) {
+    } else if (user && user.isExternalUser && user.userName) {
       this.isShowApprovalMessage = true;
       this.message = 'You are yet to be approved by Fibi Admin.Please contact your university for further details'
     } else {

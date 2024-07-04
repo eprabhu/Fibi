@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "DYN_ELEMENT_CONFIG")
+//@Entity
+//@Table(name = "DYN_ELEMENT_CONFIG")
 public class DynElementConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
