@@ -5,7 +5,7 @@ import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { CONSULTING_REDIRECT_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
 
 declare const $: any;
 class ChangePassword {
@@ -83,11 +83,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             fullName: this.commonService.getCurrentUserDetail('fullName')
         };
         this.openModalTriggeredFromChild();
-    }
-
-    redirectToOpa() {
-        this.router.navigate(['/coi/opa/form'],
-            {queryParams: {disclosureId: 2}});
     }
 
     navigateForHomeIcon(): void {
@@ -253,7 +248,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.disclosureId}});
+                if(res) {
+                    this.router.navigate([OPA_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                }
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')));
     }
 
@@ -261,7 +260,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this.router.navigate(['/coi/consulting/form'], {queryParams: {disclosureId: res.disclosureId}});
+                if(res) {
+                    this.router.navigate([CONSULTING_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                }
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')
         ));
     }
