@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 
 import com.polus.kcintegration.dao.KCIntegrationDao;
 import com.polus.kcintegration.dto.ProposalRequest;
+import com.polus.kcintegration.exception.custom.IntegrationCustomException;
 import com.polus.kcintegration.dto.FibiCOIConnectDummyDTO;
 
 import reactor.core.publisher.Mono;
@@ -43,7 +45,7 @@ public class KCIntegrationController {
 		logger.info("ModuleItemKey {}", proposalRequest.getModuleItemKey());
 		logger.info("PersonId {}", proposalRequest.getPersonId());
 		try {
-			rabbitTemplate.convertAndSend("FIBI.DIRECT.EXCHANGE","INTEGRATION_PROPOSAL_TRIAL_Q", new Message(kcIntegrationDao.convertObjectToJSON(proposalRequest).getBytes()));
+			rabbitTemplate.convertAndSend("FIBI.DIRECT.EXCHANGE", "INTEGRATION_PROPOSAL_TRIAL_Q", new Message(kcIntegrationDao.convertObjectToJSON(proposalRequest).getBytes()));
 		} catch (Exception e) {
 			logger.error("Unexpected error occurred: {}", e.getMessage());
 			e.printStackTrace();
@@ -51,22 +53,30 @@ public class KCIntegrationController {
 	}
 
 	@PostMapping("/recieveProposalDetailsUsingWC")
-	public void recieveProposalDetailsUsingWC(@RequestBody ProposalRequest proposalRequest) {
+	public Mono<Void> recieveProposalDetailsUsingWC(@RequestBody ProposalRequest proposalRequest) {
 		logger.info("Request for receive proposal details");
 		logger.info("Inside kc connect {}");
-		Mono<FibiCOIConnectDummyDTO> response = webClient.post().uri(fibiIntegrationClient + "/saveProposalDetails")
-				.body(Mono.just(proposalRequest), ProposalRequest.class).retrieve().bodyToMono(FibiCOIConnectDummyDTO.class);
-		response.subscribe(responseObj -> {
-			logger.info("Success {}", responseObj);
-			processProposalResponse(responseObj);
-		}, error -> {
-			logger.error("Error during WebClient call in KC connect application", error);
-		});
+
+		return webClient.post().uri(fibiIntegrationClient + "/saveProposalDetails")
+				.body(Mono.just(proposalRequest), ProposalRequest.class).retrieve()
+				.bodyToMono(FibiCOIConnectDummyDTO.class)
+				.doOnNext(responseObj -> {
+					logger.info("Success {}", responseObj);
+					processProposalResponse(responseObj);
+				})
+				.doOnError(error -> {
+					if (error instanceof WebClientRequestException) {
+						throw new IntegrationCustomException("WebClient request failed", error);
+					} else {
+						logger.error("Error during WebClient call in KC connect application", error);
+					}
+				}).then();
 	}
-	
+
 	private void processProposalResponse(FibiCOIConnectDummyDTO response) {
-        logger.info("Parsed ProposalResponse - DummyId: {}, TypeCode: {}, ProposalId: {}, PersonId: {}, UnitNumber: {}",
-                response.getDummyId(), response.getTypeCode(), response.getProposalId(), response.getPersonId(), response.getUnitNumber());
-    }
+		logger.info("Parsed ProposalResponse - DummyId: {}, TypeCode: {}, ProposalId: {}, PersonId: {}, UnitNumber: {}",
+				response.getDummyId(), response.getTypeCode(), response.getProposalId(), response.getPersonId(),
+				response.getUnitNumber());
+	}
 
 }
