@@ -14,11 +14,11 @@
                                     </span>
                                 </span>
                                 <h3 class="card-title align-items-start flex-column fs-16 mb-0">
-                                        <span class="link-primary cursor-pointer" tabindex="0" (click)="openDetailModal()"
-                                            (keyup.enter)="openDetailModal()" (keyup.space)="openDetailModal()"
-                                            [attr.aria-label]="opa?.opaDisclosure?.personName + opa?.opaDisclosure?.personPrimaryTitle + opa?.opaDisclosure?.homeUnitName + opa?.opaDisclosure?.personEmail"
-                                            title="Click to view details of {{opa?.opaDisclosure?.personName}}">{{opa?.opaDisclosure?.personName}}
-                                        </span>
+                                    <a class="link-primary cursor-pointer" tabindex="0" (click)="openDetailModal()"
+                                        (keyup.enter)="openDetailModal()" (keyup.space)="openDetailModal()"
+                                        [attr.aria-label]="opa?.opaDisclosure?.personName + opa?.opaDisclosure?.personPrimaryTitle + opa?.opaDisclosure?.homeUnitName + opa?.opaDisclosure?.personEmail"
+                                        title="Click here to view details of {{opa?.opaDisclosure?.personName}}">{{opa?.opaDisclosure?.personName}}
+                                    </a>
                                     <div class="m-0">
                                         <span class="coi-text-light">
                                             {{opa?.opaDisclosure?.personPrimaryTitle}} |
@@ -391,9 +391,6 @@
                                 [path]="'OPA_DISCLOSURES'" [disclosureId]="opa?.opaDisclosure?.opaDisclosureId"
                                 [defaultAdminDetails]="defaultAdminDetails">
 </app-assign-administrator-modal>
-
-<app-personal-details-modal *ngIf="showPersonDetailsModal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
-                            [userdetails]="personDetailsModalVO"></app-personal-details-modal>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->
 <app-confirmation-modal [modalName]="'disclosure-confirmation-modal'"

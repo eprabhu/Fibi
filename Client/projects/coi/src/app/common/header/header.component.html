@@ -96,10 +96,10 @@
                 </mat-icon>
             </div>
             <div class="align-items-center d-flex ml-5 profile">
-                <div class="d-flex mx-2 cursor-pointer" (click)="ispersondetailsmodal = true">
+                <div class="d-flex mx-2 cursor-pointer" (click)="openPersonDetailsModal()">
                     <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
                 </div>
-                <div class="d-lg-flex flex-column clickable-content d-none " (click)="ispersondetailsmodal = true">
+                <div class="d-lg-flex flex-column clickable-content d-none " (click)="openPersonDetailsModal()">
                     <b class="f-16">{{fullName}}</b>
                     <small class="f-16">{{loginPerson?.reviewerRights?.description}}</small>
                 </div>
@@ -145,15 +145,13 @@
 
 <app-add-attachment-modal *ngIf="commonService.isOpenAttachmentModal" (closeModal)="closeModal($event)">
 </app-add-attachment-modal>
-<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
-    [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
 <app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
                              [activeDisclosures]="headerService.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
 </app-disclosure-create-modal>
 
 <!-- theme selector -->
-<div class="modal modal-coi fade mySkinDialog" id="theme-selector-modal" role="dialog">
+<div class="modal modal-coi fade mySkinDialog" id="theme-selector-modal" role="dialog" tabindex="-1" aria-label="Choose a theme">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header pe-0">

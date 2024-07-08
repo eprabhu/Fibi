@@ -25,7 +25,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
-import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, DisclosureProjectData, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
@@ -66,9 +66,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureType: string;
     coiList = [];
     prevURL = '';
-    userDetails: any;
     userId: any;
-    ispersondetailsmodal = false;
     disclosureId: number;
     disclosureNumber: number;
     disclosureStatusCode: string;
@@ -515,12 +513,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     openDetailModal(coiData: any): void {
-        this.userDetails = coiData.coiDisclosure.person;
-        this.ispersondetailsmodal = true;
-    }
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
-
+        this.commonService.openPersonDetailsModal(coiData.coiDisclosure.person.personId)
     }
 
     goToHomeUrl() {
@@ -811,4 +804,27 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isCardExpanded = !this.isCardExpanded;
         this.isUserCollapse = !this.isUserCollapse;
     }
+
+    openProjectDetailsModal(): void {
+        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = {
+            title: this.coiData.projectDetail?.title,
+            sponsorName: this.coiData.projectDetail?.sponsor,
+            homeUnitName: this.coiData.projectDetail?.unitName,
+            projectEndDate: this.coiData.projectDetail?.endDate,
+            projectId: this.coiData.projectDetail?.moduleItemId,
+            homeUnitNumber: this.coiData.projectDetail?.unitNumber,
+            reporterRole: this.coiData.projectDetail?.reporterRole,
+            projectStartDate: this.coiData.projectDetail?.startDate,
+            projectStatus: this.coiData.projectDetail?.moduleStatus,
+            projectTypeCode: this.coiData.projectDetail?.moduleCode,
+            piName: this.coiData.projectDetail?.principalInvestigator,
+            primeSponsorName: this.coiData.projectDetail?.primeSponsor,
+            projectType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.description,
+            projectBadgeColour: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ? '#7d9e33' : '#c9a742',
+            projectNumber: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ?
+                this.coiData?.projectDetail?.moduleItemId : this.coiData?.projectDetail?.moduleItemKey
+        }
+        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
+    }
+    
 }

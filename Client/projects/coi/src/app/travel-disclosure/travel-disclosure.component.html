@@ -7,27 +7,27 @@
                     <p class="m-0" tabindex="-1">
                         <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong [attr.aria-label]="'Travel Disclosure By ' + userDetails?.fullName">Travel Disclosure By
-                                <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0"
-                                        (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
-                                        [attr.aria-label]="'click to show the details of' + userDetails?.fullName"
-                                        title="click to show the details of {{userDetails?.fullName}}">
-                                        {{userDetails?.fullName}}
-                                    </u>
-                                </span>
+                                <a class="link-primary cursor-pointer"
+                                    (click)="commonService.openPersonDetailsModal(userDetails?.personId)" tabindex="0"
+                                    (keydown.enter)="commonService.openPersonDetailsModal(userDetails?.personId)"
+                                    (keydown.space)="commonService.openPersonDetailsModal(userDetails?.personId)"
+                                    [attr.aria-label]="'Click here to show the details of' + userDetails?.fullName"
+                                    title="Click here to show the details of {{userDetails?.fullName}}">
+                                    {{userDetails?.fullName}}
+                                </a>
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="travelDisclosure?.travelDisclosureId">
                             <strong [attr.aria-label]="'hash' + travelDisclosure?.travelDisclosureId + ' : Travel Disclosure By ' + userDetails?.fullName">
                                 #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
-                                <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="-1"
-                                        (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
-                                        [attr.aria-label]="'click to show the details of ' + userDetails?.fullName"
-                                        title="click to show the details of {{userDetails?.fullName}}">
-                                        {{userDetails?.fullName}}
-                                    </u>
-                                </span>
+                                <a class="link-primary cursor-pointer"
+                                    (click)="commonService.openPersonDetailsModal(userDetails?.personId)" tabindex="0"
+                                    (keydown.enter)="commonService.openPersonDetailsModal(userDetails?.personId)"
+                                    (keydown.space)="commonService.openPersonDetailsModal(userDetails?.personId)"
+                                    [attr.aria-label]="'Click here to show the details of ' + userDetails?.fullName"
+                                    title="Click here to show the details of {{userDetails?.fullName}}">
+                                    {{userDetails?.fullName}}
+                                </a>
                             </strong>
                         </ng-container>
                     </p>
@@ -471,11 +471,6 @@
         </p>
     </ng-container>
 </app-confirmation-modal>
-
-<!-- personal details Modal-->
-<app-personal-details-modal *ngIf="isPersonDetailsModalOpen"
-    (closeModalPersonDetails)="closePersonDetailsModal($event)" [userdetails]="userDetails">
-</app-personal-details-modal>
 
 <!-- assign admin modal -->
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen"

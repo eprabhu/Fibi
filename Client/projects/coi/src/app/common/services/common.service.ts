@@ -70,6 +70,7 @@ export class CommonService {
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
     projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
+    modalPersonId: string = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -485,6 +486,18 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }, 200);
     }
 
+    openPersonDetailsModal(personId: string): void {
+        this.modalPersonId = personId;
+    }
+
+    closePersonDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-person-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.modalPersonId ='';
+        }, 200);
+    }
 
     //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
     //when we are in login page itself , or logout page we have to refresh and navigate to page based on rights.
