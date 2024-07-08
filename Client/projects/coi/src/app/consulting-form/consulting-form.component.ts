@@ -3,7 +3,7 @@ import { DataStoreService } from './services/data-store.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
 import { ConsultingService } from './services/consulting-service.service';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, REPORTER_HOME_URL } from '../app-constants';
+import { CONSULTING_REDIRECT_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, REPORTER_HOME_URL } from '../app-constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultAssignAdminDetails, DisclsoureHeaderDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { Subject } from 'rxjs';
@@ -190,7 +190,7 @@ export class ConsultingFormComponent {
         }).subscribe((data: any) => {
             this.validationList = data;
             if (this.validationList.length) {
-                this.validationList.map(ele => ele.navigationURL = '/coi/consulting/form');
+                this.validationList.map(ele => ele.navigationURL = CONSULTING_REDIRECT_URL);
             }
             if (!this.validationList.length && this.isSubmitClicked) {
                 openModal('consulting-submit-confirm-modal');
