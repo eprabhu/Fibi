@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.polus</groupId>
-	<artifactId>fibi-coi-Connect</artifactId>
+	<artifactId>fibi-coi-connect</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>fibi-coi-Connect</name>
+	<name>fibi-coi-connect</name>
 	<description>This project is used to read and post data from KC and Fibi COI application.</description>
 	<properties>
 		<java.version>17</java.version>
