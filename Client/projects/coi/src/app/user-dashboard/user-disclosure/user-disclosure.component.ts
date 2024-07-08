@@ -4,7 +4,8 @@ import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL, CONSULTING_REDIRECT_URL,
-    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL,
+    HTTP_ERROR_STATUS
 } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
@@ -448,6 +449,23 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         return this.getSortedListForParam(MERGED_LIST, 'updateTimeStamp');
     }
 
+    private getDisclosureHistoryProjectHeader(disclosureHistory: any): any[] {
+        return disclosureHistory?.map((ele: any) => {
+            ele.projectHeader = (ele.fcoiTypeCode === '2' || ele.fcoiTypeCode === '3') ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
+            return ele;
+        }) || [];
+    }
+
+    private getDisclosureProjectHeader(disclosures: UserDisclosure[]) {
+        return disclosures?.map((ele: any) => {
+            ele.projectHeader =
+                ele.fcoiTypeCode === '2' ? `#${ele.proposalId} - ${ele.proposalTitle}` :
+                ele.fcoiTypeCode === '3' ? `#${ele.awardId} - ${ele.awardTitle}` :
+                '';
+            return ele;
+        }) || [];
+    }
+
     openFCOIModal(type) {
         this.headerService.$openModal.next(type);
     }
@@ -516,8 +534,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
-            }));
+                if(res) {
+                    this._router.navigate([OPA_REDIRECT_URL], { queryParams: { disclosureId: res.disclosureId } });
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                }
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')));
     }
 
     selectedTabLabel(): string {
