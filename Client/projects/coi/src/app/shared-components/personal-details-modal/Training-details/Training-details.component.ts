@@ -11,7 +11,7 @@ import { HTTP_ERROR_STATUS } from '../../../app-constants';
     styleUrls: ['./Training-details.component.scss']
 })
 export class TrainingDetailsComponent implements OnInit {
-    @Input() userdetails: any;
+    @Input() personId: string = '';
     $subscriptions: Subscription[] = [];
     traniningDetails: [];
 
@@ -22,8 +22,8 @@ export class TrainingDetailsComponent implements OnInit {
     }
 
     loadTrainigDetails(): void {
-        const requestObject = new TrainingDashboardRequest(this.userdetails.personId);
-        this.$subscriptions.push(this._personDetailService.loadPersonTrainingList(requestObject).subscribe((res: any) => {
+        const REQUEST_OBJECT = new TrainingDashboardRequest(this.personId);
+        this.$subscriptions.push(this._personDetailService.loadPersonTrainingList(REQUEST_OBJECT).subscribe((res: any) => {
             this.traniningDetails = res.trainings;
         },
         error => this._commonservice.showToast(HTTP_ERROR_STATUS, 'Fetching training details failed. Please try again.')));

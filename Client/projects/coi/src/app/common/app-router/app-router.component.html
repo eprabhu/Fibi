@@ -52,3 +52,10 @@
     <app-shared-project-details-modal [selectedProject]="commonService.projectDetailsModalInfo"></app-shared-project-details-modal>
  </ng-container>
 <!-- shared project deatils modal end -->
+
+
+<!-- shared person details modal starts -->
+ <ng-container *ngIf="commonService.modalPersonId">
+    <app-personal-details-modal [personId]="commonService.modalPersonId"></app-personal-details-modal>
+ </ng-container>
+<!-- shared person details modal end -->

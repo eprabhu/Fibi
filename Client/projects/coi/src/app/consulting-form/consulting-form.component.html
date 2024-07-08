@@ -34,8 +34,8 @@
                                                 Trainings({{1}})
                                             </a> | -->
                                             <span class="ms-2 me-2" tabindex="0"
-                                                [title]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
                                                 [class.link-primary]="consultingForm?.consultingFormDisclosure?.personEntitiesCount"
                                                 (click)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
                                                 (keyup.enter)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
@@ -44,8 +44,8 @@
                                                 Entities({{consultingForm?.consultingFormDisclosure?.personEntitiesCount}})
                                             </span> |
                                             <span class="ms-2 me-2" tabindex="0"
-                                                [title]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click to view notes' : ''"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click to view notes' : ''"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
                                                 [class.link-primary]="consultingForm?.consultingFormDisclosure?.personNotesCount"
                                                 (click)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
                                                 (keyup.enter)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
@@ -54,8 +54,8 @@
                                                 Notes({{consultingForm?.consultingFormDisclosure?.personNotesCount}})
                                             </span> |
                                             <span class="ms-2 me-3" tabindex="0"
-                                                [title]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
                                                 [class.link-primary]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount"
                                                 (click)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
                                                 (keyup.enter)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
@@ -83,7 +83,7 @@
                                             <span class="link-primary cursor-pointer" tabindex="0" (click)="openPersonDetailsModal()"
                                                 (keyup.enter)="openPersonDetailsModal()" (keyup.space)="openPersonDetailsModal()"
                                                 [attr.aria-label]="consultingForm?.consultingFormDisclosure?.person?.fullName + consultingForm?.consultingFormDisclosure?.person?.primaryTitle + consultingForm?.consultingFormDisclosure?.person?.homeUnitName + consultingForm?.consultingFormDisclosure?.person?.personEmail"
-                                                title="Click to view details of {{consultingForm?.consultingFormDisclosure?.person?.fullName}}">{{consultingForm?.consultingFormDisclosure?.person?.fullName}}
+                                                title="Click here to view details of {{consultingForm?.consultingFormDisclosure?.person?.fullName}}">{{consultingForm?.consultingFormDisclosure?.person?.fullName}}
                                             </span>
                                         </span>
                                         <span class="d-flex align-items-center me-3 mt-1" *ngIf="consultingForm?.consultingFormDisclosure?.person?.primaryTitle">
@@ -450,9 +450,6 @@
     [actionType]="consultingForm?.consultingFormDisclosure?.adminPersonId ? 'R' : 'A'" [path]="'CONSULTING_DISCLOSURES'"
     [disclosureId]="consultingForm?.consultingFormDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails">
 </app-assign-administrator-modal>
-
-<app-personal-details-modal *ngIf="showPersonDetailsModal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
-    [userdetails]="personDetailsModalVO"></app-personal-details-modal>
 
 <!-- Disclosure Withdraw/Return Confirmation Modal-->
 <app-confirmation-modal [modalName]="'consulting-confirmation-modal'"
