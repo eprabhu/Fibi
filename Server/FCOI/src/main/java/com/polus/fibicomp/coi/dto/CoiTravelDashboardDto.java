@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.polus.fibicomp.pojo.Unit;
+import com.polus.core.pojo.Unit;
 
 public class CoiTravelDashboardDto {
 

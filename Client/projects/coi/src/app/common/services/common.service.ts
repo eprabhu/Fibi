@@ -31,7 +31,6 @@ export class CommonService {
     enableSSO = false;
     rightsArray: any = [];
     isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
-    isValidUser = false;
     extension: any = [];
     currentUserDetails: any = {};
     isWafEnabled: boolean;
@@ -73,7 +72,7 @@ export class CommonService {
     projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
     modalPersonId: string = '';
 
-    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService,private _router: Router) {
+    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
 
     /**
@@ -83,22 +82,12 @@ export class CommonService {
         return new Promise(async (resolve, reject) => {
             const CONFIG_DATA: any = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
-            if (this.enableSSO) {
-                const USER_DATA = await this.loginWithCurrentUser();
-                this.isValidUser = USER_DATA.body['login'];
-                this.updateLocalStorageWithUserDetails(USER_DATA);
-            }
-            if (this.currentUserDetails && this.currentUserDetails.Authorization) {
-                try {
-                    // const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
-                    // this.assignSystemParameters(SYSTEM_PARAMETERS);
-                    await this.fetchPermissions();
-                    resolve(true);
-                } catch (e) {
-                    console.error(e);
-                    resolve(true);
-                }
-            } else {
+            try {
+                const loginUserDetails: any = await this.authLogin();
+                this.onSuccessFullLogin(loginUserDetails);
+                resolve(true);
+            } catch (e) {
+                this.onFailedLogin(e);
                 resolve(true);
             }
         });
@@ -153,12 +142,19 @@ export class CommonService {
         return this._http.post(this.formUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
     }
 
+    authLogin() {
+        return this._http.post(this.authUrl + '/login', {}, {observe: 'response'}).toPromise();
+    }
+
+    signOut() {
+        return this._http.get(this.authUrl + '/logout');
+    }
+
     /**
      * @param  {} details update the local storage with application constant values
      *  will be moved to application context once SSO is stable
      */
     updateLocalStorageWithUserDetails(details) {
-        details.body['Authorization'] = details.headers.get('authorization');
         this.currentUserDetails = details.body;
         setIntoLocalStorage(details.body);
     }
@@ -222,10 +218,9 @@ export class CommonService {
         const {fibiRights, coiRights} = await this.getAllSystemRights();
         this.assignFibiBasedRights(fibiRights);
         this.assignCOIBasedRights(coiRights);
-        return this.rightsArray;
     }
 
-    private assignCOIBasedRights(coiRights) {
+    assignCOIBasedRights(coiRights) {
         if (coiRights) {
             if ('IS_REVIEW_MEMBER' in coiRights) {
                 this.isCoiReviewer = coiRights.IS_REVIEW_MEMBER;
@@ -239,7 +234,7 @@ export class CommonService {
         }
     }
 
-    private assignFibiBasedRights(fibiRights) {
+    assignFibiBasedRights(fibiRights) {
         if (fibiRights.length) {
             this.rightsArray = fibiRights;
         }
@@ -438,9 +433,6 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
             return 'green-badge-for-slider';
     }
 }
-    removeUserDetailsFromLocalStorage() {
-        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
-    }
 
     getAvailableRight(rights: string | string[], method: Method = 'SOME'): boolean {
       const rightsArray = Array.isArray(rights) ? rights : [rights];
@@ -455,13 +447,9 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         return getPersonLeadUnitDetails(unitData);
     }
 
-    redirectionBasedOnRights() {
-        this.fetchPermissions(true).then((res) => {
-			const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-				|| this.isCoiReviewer;
-			const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
-			this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
-		});
+    onSuccessFullLogin(userData) {
+        this.updateLocalStorageWithUserDetails(userData);
+        this.refreshAfterLogin();
     }
 
     redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
@@ -509,6 +497,38 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         setTimeout(() => {
             this.modalPersonId ='';
         }, 200);
+    }
+
+    //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
+    //when we are in login page itself , or logout page we have to refresh and navigate to page based on rights.
+    //during 403, 401 also need right based navigation.
+    refreshAfterLogin() {
+        const currentUrl = window.location.href;
+        let PATH_STR = ['login', 'logout', '401', '403'];
+        if (PATH_STR.some((str) => currentUrl.includes(str))) {
+            this.redirectionBasedOnRights();
+        }
+    }
+
+    onFailedLogin(err): void {
+        if (err.status == 401) {
+            this.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
+        } else if (err.status === 403) {
+            this._router.navigate(['/error-handler/403']);
+        }
+    }
+
+    redirectionBasedOnRights() {
+        this.fetchPermissions(true).then((res) => {
+            const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+                || this.isCoiReviewer;
+            const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
+            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
+        });
+    }
+
+    removeUserDetailsFromLocalStorage() {
+        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
 }

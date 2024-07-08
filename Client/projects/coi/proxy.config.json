@@ -231,6 +231,10 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
+    "/auth/logout": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
     "/fetchFaqDetails": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false

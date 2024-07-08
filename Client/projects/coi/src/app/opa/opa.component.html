@@ -316,7 +316,7 @@
                         <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                         <!-- check logged person & disclosure created person is same -->
                         <button mat-menu-item *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(opa?.opaDisclosure?.adminPersonId) &&
-                            (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.personId)"
+                            (commonService?.getCurrentUserDetail('personID') == opa?.opaDisclosure?.personId)"
                                 title="Click to Withdraw"
                                 aria-label="Click to Withdraw"
                                 tabindex="0"
@@ -331,7 +331,7 @@
                         <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                         <!-- Check logged person and administrator are same -->
                         <button mat-menu-item *ngIf="opa?.opaDisclosure?.adminPersonId && ['3','7','8'].includes(opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode) &&
-                                    (commonService?.getCurrentUserDetail('personId') == opa?.opaDisclosure?.adminPersonId)"
+                                    (commonService?.getCurrentUserDetail('personID') == opa?.opaDisclosure?.adminPersonId)"
                                 title="Click to Return Disclosure"
                                 tabindex="0"
                                 id="opa_return"

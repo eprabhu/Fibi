@@ -7,6 +7,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.polus.core.common.dao.CommonDao;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -27,7 +29,6 @@ import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
 import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLog;
 import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLogType;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;

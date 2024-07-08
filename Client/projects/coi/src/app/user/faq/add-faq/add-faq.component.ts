@@ -138,7 +138,7 @@ export class AddFaqComponent implements OnInit, OnChanges {
   async submitFaqWaf() {
     const requestForWaf: any = {
       faqdtls: this.faqList,
-      personId: this._commonService.getCurrentUserDetail('personId'),
+      personId: this._commonService.getCurrentUserDetail('personID'),
     };
     const requestSetAtRemaining = {
       newFaqAttachment: this.fileList

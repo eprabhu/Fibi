@@ -138,7 +138,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personId');
+    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personID');
     this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode) && IS_CREATE_USER;
   }
 

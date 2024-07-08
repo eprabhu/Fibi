@@ -58,7 +58,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
  fetchMyEntities() {
-    this.sfiDashboardRequestObject.personId = this._commonService.getCurrentUserDetail('personId');
+    this.sfiDashboardRequestObject.personId = this._commonService.getCurrentUserDetail('personID');
     this.$subscriptions.push(this.$fetchSFI.pipe(
       switchMap(() => {
         this.isLoading = true;
