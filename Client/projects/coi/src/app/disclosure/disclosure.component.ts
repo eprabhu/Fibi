@@ -66,9 +66,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureType: string;
     coiList = [];
     prevURL = '';
-    userDetails: any;
     userId: any;
-    ispersondetailsmodal = false;
     disclosureId: number;
     disclosureNumber: number;
     disclosureStatusCode: string;
@@ -515,12 +513,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     openDetailModal(coiData: any): void {
-        this.userDetails = coiData.coiDisclosure.person;
-        this.ispersondetailsmodal = true;
-    }
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
-
+        this.commonService.openPersonDetailsModal(coiData.coiDisclosure.person.personId)
     }
 
     goToHomeUrl() {

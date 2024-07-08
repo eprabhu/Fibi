@@ -760,8 +760,8 @@
                                             </span>
                                             <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
                                                 <span class="pipe mx-1"></span>
-                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="disclosure?.fcoiTypeCode==='2'">article</mat-icon>
-                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="disclosure?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="disclosure?.fcoiTypeCode==='2'">article</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="disclosure?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
                                                 <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
                                                     (click)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
                                                     (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"

@@ -23,8 +23,6 @@ export class ConsultingFormComponent {
 
     consultingForm: ConsultingForm = new ConsultingForm();
     $subscriptions = [];
-    showPersonDetailsModal = false;
-    personDetailsModalVO = { personId: '', fullName: '' };
     showSlider = false;
     selectedType: string;
     isCardExpanded = true;
@@ -103,9 +101,7 @@ export class ConsultingFormComponent {
     }
 
     openPersonDetailsModal(): void {
-        this.personDetailsModalVO.personId = this.consultingForm.consultingFormDisclosure.person.personId;
-        this.personDetailsModalVO.fullName = this.consultingForm.consultingFormDisclosure.person.fullName;
-        this.showPersonDetailsModal = true;
+        this.commonService.openPersonDetailsModal(this.consultingForm.consultingFormDisclosure.person.personId)
     }
 
     openSlider(type: string, count: number): void {
@@ -362,10 +358,6 @@ export class ConsultingFormComponent {
         } else {
             this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
         }
-    }
-
-    closePersonDetailsModal(event: any): void {
-        this.showPersonDetailsModal = event;
     }
 
     ngOnDestroy(): void {

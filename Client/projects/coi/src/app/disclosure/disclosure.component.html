@@ -20,7 +20,7 @@
                                             <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                                                 <span class="link-primary" tabindex="0" (click)="openDetailModal(coiData)"
                                                     (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
-                                                    title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</span>
+                                                    title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</span>
                                             </ng-container>
                                             <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
                                                 <span class="coi-text-darker fs-6" title="{{ coiData?.projectDetail?.title }}">[
@@ -34,9 +34,9 @@
                                                     coiData?.projectDetail?.title }}
                                                     ] By
                                                     <span class="link-primary fw-lighter fs-14" tabindex="0" role="link"
-                                                        (click)="openDetailModal(coiData)" [attr.aria-label]="'click to view person details of '+ coiData?.coiDisclosure?.person?.fullName"
+                                                        (click)="openDetailModal(coiData)" [attr.aria-label]="'Click here to view person details of '+ coiData?.coiDisclosure?.person?.fullName"
                                                         (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
-                                                        title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
+                                                        title="Click here to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
                                                         {{ coiData?.coiDisclosure?.person?.fullName }}</span>
                                                 </span>
                                             </ng-container>
@@ -770,9 +770,6 @@
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
     [disfullData]="coiData" [fcoiTypeCode]="fcoiTypeCode"></app-count-modal>
-
-<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
-    [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
     [disclosureId]="coiData?.coiDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails" [actionType]="coiData?.coiDisclosure?.adminPersonId ? 'R' : 'A'">

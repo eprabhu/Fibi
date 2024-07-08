@@ -44,7 +44,6 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     isAddAssignModalOpen = false;
     needDescriptionField = false;
     isTravelAdministrator = false;
-    isPersonDetailsModalOpen = false;
 
     modalSize: ModalSize;
     currentPersonId = '';
@@ -211,10 +210,6 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     isRouteComplete(possibleActiveRoutes: string[] = []): boolean {
         return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
-    }
-
-    closePersonDetailsModal(event: any): void {
-        this.isPersonDetailsModalOpen = event;
     }
 
     checkReviewStatusCode(statusCode: string[] | string, method: Method = 'EVERY'): boolean {
