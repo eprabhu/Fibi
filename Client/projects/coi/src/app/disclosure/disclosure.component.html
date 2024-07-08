@@ -24,15 +24,17 @@
                                             </ng-container>
                                             <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
                                                 <span class="coi-text-darker fs-6" title="{{ coiData?.projectDetail?.title }}">[
-                                                    <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
-                                                        {{ coiData?.projectDetail?.moduleItemId }} :
-                                                    </ng-container>
-                                                    <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
-                                                        {{ coiData?.projectDetail?.moduleItemKey }} :
-                                                    </ng-container>
-                                                    {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
-                                                    coiData?.projectDetail?.title }}
-                                                    ] By
+                                                    <span class="link-primary fs-6" (click)="openProjectDetailsModal()"
+                                                        (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
+                                                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                                                            {{ coiData?.projectDetail?.moduleItemId }} :
+                                                        </ng-container>
+                                                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
+                                                            {{ coiData?.projectDetail?.moduleItemKey }} :
+                                                        </ng-container>
+                                                        {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
+                                                        coiData?.projectDetail?.title }}
+                                                    </span>] By
                                                     <span class="link-primary fw-lighter fs-14" tabindex="0" role="link"
                                                         (click)="openDetailModal(coiData)" [attr.aria-label]="'Click here to view person details of '+ coiData?.coiDisclosure?.person?.fullName"
                                                         (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
