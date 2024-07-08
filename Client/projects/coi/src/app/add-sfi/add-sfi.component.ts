@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, isEmptyObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { compareDates, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
@@ -14,6 +13,7 @@ import { CoiEntity, EntityDetails } from '../entity-management/entity-details-in
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { setEntityObjectFromElasticResult } from '../common/utilities/elastic-utilities';
 import { InformationAndHelpTextService } from '../common/services/informationAndHelpText.service';
+import { compareDates, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 
 
 declare const $: any;
@@ -190,12 +190,11 @@ export class AddSfiComponent implements OnInit {
     }
 
     setDateValues() {
-        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementDate.involvementStartDate);
-        this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementDate.involvementEndDate);
+        this.additionalDetails.involvementStartDate = this.involvementDate.involvementStartDate ? parseDateWithoutTimestamp(this.involvementDate.involvementStartDate) : '';
+        this.additionalDetails.involvementEndDate = this.involvementDate.involvementEndDate ? parseDateWithoutTimestamp(this.involvementDate.involvementEndDate) : '';
     }
 
     private saveAdditionalDetails(): void {
-        this.setDateValues();
         this.$subscriptions.push(this.sfiService.createSFI(
             {
                 entityId: this.entityDetails.coiEntity.entityId,
@@ -258,11 +257,20 @@ export class AddSfiComponent implements OnInit {
         this.additionalDetails = {
             sponsorsResearch: false
         };
+        this.clearDates();
+        this.isChecked = {};
         this.clearCountryField = new String('true');
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.isResultFromSearch = false;
         this.mandatoryList.clear();
         this.isNewEntityFromSearch = false;
+    }
+
+    clearDates() {
+        this.involvementDate = {
+            involvementStartDate: null,
+            involvementEndDate: null
+        }
     }
 
     private checkMandatoryFilled(): boolean {
@@ -355,13 +363,18 @@ export class AddSfiComponent implements OnInit {
         }
     }
 
-    endDateValidation(elementIdList): void {
+    endDateValidation(elementIdList = []): void {
         this.mandatoryList.delete('endDate');
         if (this.involvementDate.involvementStartDate && this.involvementDate.involvementEndDate &&
             (compareDates(this.involvementDate.involvementStartDate, this.involvementDate.involvementEndDate) === 1)) {
             this.mandatoryList.set('endDate', 'Please provide a valid end date.');
             elementIdList.push('end-date-involvement')
         }
+    }
+
+    onDateSelect() {
+        this.endDateValidation();
+        this.setDateValues();
     }
 
     setHeader(): void {

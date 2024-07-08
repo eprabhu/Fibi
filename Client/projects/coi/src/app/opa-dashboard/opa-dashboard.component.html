@@ -186,7 +186,7 @@
                         <button class="btn btn-outline-secondary fs-14 mx-2 px-3" id="coi-opa-dashboard-clear-btn"
                          (click)="resetAndPerformAdvanceSearch()" title="Click here to clear all the fields" aria-label="Click here to clear all the fields">Clear
                         </button>
-                        <button class="btn btn-primary fs-14" id="coi-opa-dashboard-search-btn" (click)="performAdvanceSearch()" title="Click here to Initiate search" tabindex="0" 
+                        <button class="btn btn-primary fs-14" id="coi-opa-dashboard-search-btn" (click)="performAdvanceSearch()" title="Click here to Initiate search" tabindex="0"
                                 aria-label="Click here to get the search results with/without fields">Search
                         </button>
                     </div>
@@ -269,12 +269,12 @@
                                             <span class="coi-text-light" id="coi-opa-dashboard-card-value-department-{{index}}"> {{commonService.getPersonLeadUnitDetails(coi)}}</span>
                                         </div>
                                         <div class="col-lg-3 col-md-6 mb-2" tabindex="-1"
-                                        [attr.aria-label]="'Certification Date ' + (coi?.submissionTimestamp | dateFormatter)">
+                                        [attr.aria-label]="'Certification Date ' + (coi?.submissionTimestamp | dateFormatterWithTimeZone)">
                                             <!-- Coi card Certification Date -->
                                             <label for="certification date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="coi?.submissionTimestamp">
-                                                    <span class="coi-text-light" id="coi-opa-dashboard-card-value-certification-date-{{index}}">{{coi?.submissionTimestamp | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-opa-dashboard-card-value-certification-date-{{index}}">{{coi?.submissionTimestamp | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>

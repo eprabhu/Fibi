@@ -4,7 +4,7 @@ import { FormBuilderService } from '../../form-builder.service';
 import { OPACompUncompService } from '../OPA-comp-uncomp/OPA-comp-uncomp.service';
 import { getEndPointForEntity } from '../../search-configurations';
 import { EntitySaveRO, OutsideFinRelation, OutsideFinRelationPE, RelationShipSaveRO } from './interface';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
+import { parseDateWithoutTimestamp } from '../../../../common/utilities/date-utilities';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
 import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';

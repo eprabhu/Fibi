@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilderService } from '../../form-builder.service';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { getEndPointForEntity } from '../../search-configurations';
 import { Subject, Subscription } from 'rxjs';
 import { OPAInstituteResourcesService } from './OPA-institute-resources.service';
 import { leftSlideInOut, listAnimation } from '../OPA-comp-uncomp/OPA-comp-uncomp.component';
 import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDetails, EntitySaveRO, OPAInstituteResources, OPAInstituteResourcesPE, RelationShipSaveRO } from './OPA-institute-resources.interface';
+import { parseDateWithoutTimestamp } from '../../../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-OPA-institute-resources',

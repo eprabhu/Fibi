@@ -60,10 +60,10 @@
                                                     <div class="m-0">
                                                         <span class="coi-text-dark fs-12 d-block">Expiration Date</span>
                                                         <span class="coi-text-light"
-                                                            [attr.aria-label]="disclosure?.expirationDate |dateFormatter">
+                                                            [attr.aria-label]="disclosure?.expirationDate |dateFormatterWithTimeZone">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                                                 <span class="coi-text-light" id="coi-user-disclosure-fcoi-notpending-card-value-exp-date">{{disclosure?.expirationDate |
-                                                                    dateFormatter}}</span>
+                                                                    dateFormatterWithTimeZone}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
@@ -190,10 +190,10 @@
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-dark fs-12 d-block">Certification Date</span>
-                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatterWithTimeZone">
                                                             <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                                                 <span class="coi-text-light" id="coi-user-disclosure-fcoi-pending-card-value-cert-date">{{disclosure?.certifiedAt |
-                                                                    dateFormatter}}</span>
+                                                                    dateFormatterWithTimeZone}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
@@ -207,10 +207,10 @@
                                                     </div>
                                                     <div class="m-0">
                                                         <span class="coi-text-dark fs-12 d-block">Expiration Date</span>
-                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                                        <span class="coi-text-light" [attr.aria-label]="disclosure?.expirationDate | dateFormatterWithTimeZone">
                                                             <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                                                 <span class="coi-text-light" id="coi-user-disclosure-fcoi-pending-card-value-exp-date">{{disclosure?.expirationDate |
-                                                                    dateFormatter}}</span>
+                                                                    dateFormatterWithTimeZone}}</span>
                                                             </app-no-data-label></span>
                                                     </div>
                                                 </div>
@@ -428,7 +428,8 @@
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-dark fs-12 d-block">Period</span>
-                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
+                                                    <span class="coi-text-light"
+                                                    [attr.aria-label]="(opaDisclosure?.opaCycles?.periodStartDate | dateFormatter) + ' - ' + (opaDisclosure?.opaCycles?.periodEndDate | dateFormatter)">
                                                         <app-no-data-label
                                                             [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
                                                             <span class="coi-text-light" id="coi-user-disclosure-opa-pending-card-value-period">{{opaDisclosure?.opaCycles?.periodStartDate
@@ -448,7 +449,7 @@
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-dark fs-12 d-block">Create Date</span>
-                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.expirationDate | dateFormatter">
+                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.createTimestamp | dateFormatterWithTimeZone">
                                                         <app-no-data-label [valueToShow]="opaDisclosure?.createTimestamp">
                                                             <span class="coi-text-light" id="coi-user-disclosure-opa-pending-card-value-create-date">{{opaDisclosure?.createTimestamp |
                                                                 dateFormatterWithTimeZone}}</span>
@@ -548,8 +549,9 @@
                                                 </div>
                                                 <div class="m-0">
                                                     <span class="coi-text-dark fs-12 d-block">Period</span>
-                                                    <span class="coi-text-light" [attr.aria-label]="disclosure?.certifiedAt | dateFormatter">
-                                                        <app-no-data-label
+                                                    <span class="coi-text-light"
+                                                    [attr.aria-label]="(opaDisclosure?.opaCycles?.periodStartDate | dateFormatter) + ' - ' + (opaDisclosure?.opaCycles?.periodEndDate | dateFormatter)">
+                                                      <app-no-data-label
                                                             [valueToShow]="opaDisclosure?.opaCycles?.periodStartDate && opaDisclosure?.opaCycles?.periodEndDate">
                                                             <span class="coi-text-light" id="coi-user-disclosure-opa-approved-card-value-period">{{opaDisclosure?.opaCycles?.periodStartDate
                                                                 | dateFormatter}}
@@ -766,7 +768,7 @@
                                                     (click)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
                                                     (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
                                                     (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
-                                                    [title]="'Click here to view details of ' + disclosure?.projectHeader" 
+                                                    [title]="'Click here to view details of ' + disclosure?.projectHeader"
                                                     [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
                                                     <span class="text-slice">{{disclosure?.projectHeader}}</span>
                                                 </a>
@@ -784,11 +786,11 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Coi card Certification Date -->
-                                        <div tabindex="-1" [attr.aria-label]="'Certification Date is ' + (disclosure?.certifiedAt | dateFormatter)">
+                                        <div tabindex="-1" [attr.aria-label]="'Certification Date is ' + (disclosure?.certifiedAt | dateFormatterWithTimeZone)">
                                             <label class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                                                    <span class="coi-text-light" id="coi-user-disclosure-coi-card-value-cert-date-{{index}}">{{disclosure?.certifiedAt | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-user-disclosure-coi-card-value-cert-date-{{index}}">{{disclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -799,7 +801,7 @@
                                             <label class="d-block coi-text-dark">Expiration Date</label>
                                             <span>
                                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                                                    <span class="coi-text-light" id="coi-user-disclosure-coi-card-value-expiration-date-{{index}}">{{disclosure?.expirationDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-user-disclosure-coi-card-value-expiration-date-{{index}}">{{disclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -978,11 +980,11 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Certification Date -->
-                                        <div tabindex="-1" [attr.aria-label]="'Certification Date is ' + (disclosure?.travelSubmissionDate | dateFormatter)">
+                                        <div tabindex="-1" [attr.aria-label]="'Certification Date is ' + (disclosure?.travelSubmissionDate | dateFormatterWithTimeZone)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.travelSubmissionDate">
-                                                    <span class="coi-text-light" id="coi-user-disclosure-travel-card-value-cert-date-{{index}}">{{disclosure?.travelSubmissionDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-user-disclosure-travel-card-value-cert-date-{{index}}">{{disclosure?.travelSubmissionDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1000,11 +1002,11 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Travel Card Expiration Date -->
-                                        <div tabindex="-1" [attr.aria-label]="'Expiration Date is ' + (disclosure.expirationDate | dateFormatter)">
+                                        <div tabindex="-1" [attr.aria-label]="'Expiration Date is ' + (disclosure.expirationDate | dateFormatterWithTimeZone)">
                                             <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
                                             <span>
                                                 <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
-                                                    <span class="coi-text-light" id="coi-user-disclosure-travel-card-value-exp-date-{{index}}">{{disclosure?.expirationDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-user-disclosure-travel-card-value-exp-date-{{index}}">{{disclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1127,11 +1129,11 @@
                                     </div>
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- OPA Card Certification Date -->
-                                        <div [attr.aria-label]="'Certification Date is ' + (disclosure?.submissionTimestamp | dateFormatter)">
+                                        <div [attr.aria-label]="'Certification Date is ' + (disclosure?.submissionTimestamp | dateFormatterWithTimeZone)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
-                                                    <span class="coi-text-light" id="coi-user-disclosure-opa-card-value-cert-date-{{index}}">{{disclosure?.submissionTimestamp | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-user-disclosure-opa-card-value-cert-date-{{index}}">{{disclosure?.submissionTimestamp | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1237,13 +1239,13 @@
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <!-- Consulting Card Certification Date -->
                                         <div
-                                            [attr.aria-label]="'Certification Date is ' + (disclosure?.certifiedAt | dateFormatter)">
+                                            [attr.aria-label]="'Certification Date is ' + (disclosure?.certifiedAt | dateFormatterWithTimeZone)">
                                             <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                             <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.certifiedAt">
                                                     <span class="coi-text-light"
                                                         id="coi-user-disclosure-opa-card-value-cert-date-{{index}}">{{disclosure?.certifiedAt
-                                                        | dateFormatter}}</span>
+                                                        | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -1390,12 +1392,12 @@
                                         <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column">
                                                 <div
-                                                    [attr.aria-label]="'Start Date is ' + (disclosure.travelStartDate | dateFormatterWithTimeZone)">
+                                                    [attr.aria-label]="'Start Date is ' + (disclosure.travelStartDate | dateFormatter)">
                                                     <label for="start-date" class="coi-text-dark d-block">Start Date</label>
                                                     <span>
                                                         <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
                                                             <span class="coi-text-light">{{disclosure?.travelStartDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                                dateFormatter}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
@@ -1403,12 +1405,13 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="align-items-center cursor-pointer flex-column">
-                                                <div [attr.aria-label]="'End Date is ' + (disclosure?.travelEndDate | dateFormatterWithTimeZone)">
+                                                <!-- need to check with thejas akka for with or without time zone -->
+                                                <div [attr.aria-label]="'End Date is ' + (disclosure?.travelEndDate | dateFormatter)">
                                                     <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                     <span>
                                                         <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
                                                             <span class="coi-text-light">{{disclosure?.travelEndDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                                dateFormatter}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>

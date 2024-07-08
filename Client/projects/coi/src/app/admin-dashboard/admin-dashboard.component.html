@@ -378,7 +378,7 @@
                                                         (click)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
                                                         (keyup.enter)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
                                                         (keyup.space)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                        [title]="'Click here to view details of ' + coi?.projectHeader" 
+                                                        [title]="'Click here to view details of ' + coi?.projectHeader"
                                                         [attr.aria-label]="'Click here to view details of ' + coi?.projectHeader">
                                                         <span class="text-slice">{{coi?.projectHeader}}</span>
                                                     </a>
@@ -402,11 +402,11 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Coi card Certification Date -->
-                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
+                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatterWithTimeZone)">
                                                     <label class="d-block coi-text-dark">Certification Date</label>
                                                     <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="coi?.certifiedAt">
-                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -417,7 +417,7 @@
                                                     <label class="d-block coi-text-dark">Expiration Date</label>
                                                     <span>
                                                 <app-no-data-label [valueToShow]="coi?.expirationDate">
-                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-expiration-date-{{index}}">{{coi?.expirationDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-expiration-date-{{index}}">{{coi?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -624,7 +624,7 @@
                                                     <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                                     <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="coi?.travelSubmissionDate">
-                                                    <span class="coi-text-light">{{coi?.travelSubmissionDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light">{{coi?.travelSubmissionDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -635,7 +635,7 @@
                                                     <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
                                                     <span>
                                                 <app-no-data-label id="expiration-date" [valueToShow]="coi?.expirationDate">
-                                                    <span class="coi-text-light">{{coi?.expirationDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light">{{coi?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -753,13 +753,13 @@
                                             </div>
                                             <!-- Certification Date -->
                                             <div class="col-lg-3 col-md-6 mb-2">
-                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
+                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatterWithTimeZone)">
                                                     <label class="d-block coi-text-dark">Certification Date</label>
                                                     <span class="coi-text-light">
                                                         <app-no-data-label [valueToShow]="coi?.certifiedAt">
                                                             <span class="coi-text-light"
                                                                 id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt
-                                                                | dateFormatter}}</span>
+                                                                | dateFormatterWithTimeZone}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
@@ -915,12 +915,11 @@
                                             <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column" tabindex="-1">
                                                     <div
-                                                        [attr.aria-label]="'Start Date' + (coi.travelStartDate | dateFormatterWithTimeZone)">
+                                                        [attr.aria-label]="'Start Date' + (coi.travelStartDate | dateFormatter)">
                                                         <label for="start-date" class="coi-text-dark d-block">Start Date</label>
                                                         <span>
                                                         <app-no-data-label id="start-date" [valueToShow]="coi?.travelStartDate">
-                                                            <span class="coi-text-light">{{coi?.travelStartDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                            <span class="coi-text-light">{{coi?.travelStartDate | dateFormatter}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                     </div>
@@ -928,12 +927,11 @@
                                             </div>
                                             <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column" tabindex="-1">
-                                                    <div [attr.aria-label]="'End Date' + (coi?.travelEndDate | dateFormatterWithTimeZone)">
+                                                    <div [attr.aria-label]="'End Date' + (coi?.travelEndDate | dateFormatter)">
                                                         <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                         <span>
                                                         <app-no-data-label id="end-date" [valueToShow]="coi?.travelEndDate">
-                                                            <span class="coi-text-light">{{coi?.travelEndDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                            <span class="coi-text-light">{{coi?.travelEndDate | dateFormatter}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                     </div>

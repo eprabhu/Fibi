@@ -182,7 +182,7 @@
                                                     </label>
                                                     <span class="coi-text-light">
                                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                                            <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
+                                                            <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>

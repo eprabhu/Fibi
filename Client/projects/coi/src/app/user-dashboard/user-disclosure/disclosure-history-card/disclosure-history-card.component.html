@@ -29,7 +29,7 @@
                                         (click)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
                                         (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
                                         (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
-                                        [title]="'Click here to view details of ' + disclosure?.projectHeader" 
+                                        [title]="'Click here to view details of ' + disclosure?.projectHeader"
                                         [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
                                         <span class="text-slice">{{disclosure?.projectHeader}}</span>
                                     </a>
@@ -65,8 +65,8 @@
                             <span class="break-point-1200">
                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                     <span class="coi-text-light"
-                                        aria.label="{{disclosure?.expirationDate | dateFormatter}}">{{disclosure?.expirationDate
-                                        | dateFormatter}}</span>
+                                        aria.label="{{disclosure?.expirationDate | dateFormatterWithTimeZone}}">{{disclosure?.expirationDate
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -185,8 +185,8 @@
                             <span class="coi-text-light">
                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                     <span class="coi-text-light ms-0"
-                                        aria-label="{{disclosure?.expirationDate | dateFormatter}}">{{disclosure?.expirationDate
-                                        | dateFormatter}}</span>
+                                        aria-label="{{disclosure?.expirationDate | dateFormatterWithTimeZone}}">{{disclosure?.expirationDate
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -277,8 +277,8 @@
                             <span>
                                 <app-no-data-label [valueToShow]="disclosure?.submissionTimestamp">
                                     <span class="coi-text-light"
-                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
-                                        | dateFormatter}}</span>
+                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatterWithTimeZone">{{disclosure?.submissionTimestamp
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -355,10 +355,10 @@
                         <div>
                             <label class="coi-text-dark d-block">Certification Date</label>
                             <span>
-                                <app-no-data-label [valueToShow]="disclosure?.submissionTimestamp">
+                                <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                     <span class="coi-text-light"
-                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
-                                        | dateFormatter}}</span>
+                                        [attr.aria-label]="disclosure?.certifiedAt | dateFormatterWithTimeZone">{{disclosure?.certifiedAt
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>

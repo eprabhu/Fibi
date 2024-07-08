@@ -40,7 +40,7 @@
                             <input class="travelDisclosure-radio-checkbox ms-1 me-3 hand-cursor border-secondary"
                                 type="checkbox" value={{details.description}} id="traveller-checkbox{{i}}"
                                 [(ngModel)]=details.isChecked
-                                (ngModelChange)="getTravellerTypeCode(); setUnSavedChangesTrue();">  
+                                (ngModelChange)="getTravellerTypeCode(); setUnSavedChangesTrue();">
                             <label class="form-check-label fs-14 fw-normal hand-cursor" for="traveller-checkbox{{i}}">
                                 {{details.description}}
                             </label>
@@ -50,7 +50,7 @@
                     <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-msg d-block position-absolute col">
                         {{mandatoryList?.get('traveller')}}
                     </span>
-                </div>   
+                </div>
             </div>
 
             <!-- title -->
@@ -64,7 +64,7 @@
                         (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.travelTitle = travelDisclosureRO.travelTitle.trim()"
                         [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
                     </textarea>
-                    <app-common-information [elementId]="'travelDisclosure-title'" [subSectionId]="2401"></app-common-information>   
+                    <app-common-information [elementId]="'travelDisclosure-title'" [subSectionId]="2401"></app-common-information>
                     <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-msg d-block position-absolute">
                         {{mandatoryList?.get('title')}}
                     </span>
@@ -165,10 +165,10 @@
                         <span class="dateField w-100">
                             <input matInput [matDatepicker]="startDate" id="travelDisclosure-startDate"
                                 placeholder={{datePlaceHolder}} (click)="startDate.open()" autocomplete="off"
-                                class="d-inline-block form-control w-100" [(ngModel)]="travelDisclosureRO.travelStartDate"
+                                class="d-inline-block form-control w-100" [(ngModel)]="travelDates.startDate"
                                 (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
                                 (keypress)="commonService._keyPress($event, 'date')"
-                                [ngClass]="(dateValidationList?.get('startDate')) ? 'invalid-border':''" />  
+                                [ngClass]="(dateValidationList?.get('startDate')) ? 'invalid-border':''" />
                                 <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
                             <mat-datepicker #startDate></mat-datepicker>
                         </span>
@@ -189,10 +189,10 @@
                         <span class="dateField">
                             <input matInput [matDatepicker]="endDate" id="travelDisclosure-endDate"
                                 placeholder="{{datePlaceHolder}}" (click)="endDate.open()" autocomplete="off"
-                                class="d-inline-block form-control w-100" [(ngModel)]="travelDisclosureRO.travelEndDate"
+                                class="d-inline-block form-control w-100" [(ngModel)]="travelDates.endDate"
                                 (keypress)="commonService._keyPress($event, 'date')"
                                 (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
-                                [ngClass]="(dateValidationList?.get('endDate')) ? 'invalid-border':''" />  
+                                [ngClass]="(dateValidationList?.get('endDate')) ? 'invalid-border':''" />
                             <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
                             <mat-datepicker #endDate></mat-datepicker>
                         </span>
