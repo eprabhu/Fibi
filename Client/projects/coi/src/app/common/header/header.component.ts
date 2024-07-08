@@ -36,8 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     homeNavigation: string = '';
     isAdministrator: boolean = false;
-    ispersondetailsmodal = false;
-    userDetails = null;
     noteComment: any;
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
@@ -78,10 +76,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
             || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
-        this.userDetails = {
-            personId: this.commonService.getCurrentUserDetail('personId'),
-            fullName: this.commonService.getCurrentUserDetail('fullName')
-        };
         this.openModalTriggeredFromChild();
     }
 
@@ -149,10 +143,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (modalId) {
             document.getElementById(modalId).click();
         }
-    }
-
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
     }
 
     private passwordAtleast7Characters() {
@@ -273,6 +263,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.querySelector("html").className = '';
         document.querySelector("html").classList.add(themename);
         $('#dissmiss-btn').click();
+    }
+
+    openPersonDetailsModal(): void {
+        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personId'));
     }
 
 
