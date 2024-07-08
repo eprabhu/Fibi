@@ -361,7 +361,7 @@
                   <span class="break-point-1200">
                     <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
                       <span id="coi-entity-details-start-date">
-                        {{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}
+                        {{entityListData?.involvementStartDate | dateFormatter}}
                       </span>
                     </app-no-data-label>
                   </span>
@@ -370,7 +370,7 @@
                   <label for="coi-entity-details-end-date">End Date of Involvement <span>:</span></label>
                   <span class="break-point-1200 ms-1">
                     <app-no-data-label [valueToShow]="entityListData?.involvementEndDate">
-                      <span id="coi-entity-details-end-date">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
+                      <span id="coi-entity-details-end-date">{{entityListData?.involvementEndDate | dateFormatter}}</span>
                     </app-no-data-label>
                   </span>
                 </div>
@@ -461,7 +461,7 @@
                     <label for="coi-entity-details-exp-date" class="fw-bold me-2">Expiration Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
-                        <span id="coi-entity-details-exp-date">{{disclosureList?.expirationDate | dateFormatter}}</span>
+                        <span id="coi-entity-details-exp-date">{{disclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
@@ -659,7 +659,7 @@
                 <label for="coi-entity-details-travel-strt-date" class="fw-bold pr-05">Start Date <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelStartDate">
-                    <span id="coi-entity-details-travel-strt-date">{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
+                    <span id="coi-entity-details-travel-strt-date">{{travelDisclosureList?.travelStartDate | dateFormatter}}</span>
                   </app-no-data-label>
                 </span>
               </div>
@@ -667,7 +667,7 @@
                 <label for="coi-entity-details-travel-end-date" class="fw-bold pr-05">End Date <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelEndDate">
-                    <span id="coi-entity-details-travel-end-date">{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
+                    <span id="coi-entity-details-travel-end-date">{{travelDisclosureList?.travelEndDate | dateFormatter}}</span>
                   </app-no-data-label>
                 </span>
               </div>

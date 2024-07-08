@@ -113,21 +113,21 @@
                 <span class="coi-text-dark d-block">Create Date</span>
                 <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp" classesToApply="ms-2 coi-text-light">
                     <span class="ml-2 fs-14">{{existingDisclosureDetails?.createTimestamp |
-                        dateFormatter}}</span>
+                        dateFormatterWithTimezone}}</span>
                 </app-no-data-label>
             </div>
             <div class="col-4 mb-2">
                 <span class="coi-text-dark d-block">Expiration Date</span>
                 <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate" classesToApply="ms-2 coi-text-light">
                     <span class="ml-2 fs-14">{{existingDisclosureDetails?.expirationDate |
-                        dateFormatter}}</span>
+                        dateFormatterWithTimeZone}}</span>
                 </app-no-data-label>
             </div>
             <div class="col-4 mb-2">
                 <span class="coi-text-dark d-block">Certification Date</span>
                 <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt" classesToApply="ms-2 coi-text-light">
                     <span class="ml-2 fs-14">{{existingDisclosureDetails?.certifiedAt |
-                        dateFormatter}}</span>
+                        dateFormatterWithTimeZone}}</span>
                 </app-no-data-label>
             </div>
 
@@ -298,20 +298,20 @@
                                         <span class="coi-text-dark d-block">Create Date</span>
                                         <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp" classesToApply="ms-2 coi-text-light">
                                             <span
-                                                class="coi-text-light">{{existingDisclosureDetails?.createTimestamp | dateFormatter}}</span>
+                                                class="coi-text-light">{{existingDisclosureDetails?.createTimestamp | dateFormatterWithTimezone}}</span>
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-6 col-lg-4 py-1">
                                         <span class="coi-text-dark d-block">Certification Date</span>
                                         <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt" classesToApply="ms-2 coi-text-light">
-                                            <span class="coi-text-light">{{existingDisclosureDetails?.certifiedAt | dateFormatter}}</span>
+                                            <span class="coi-text-light">{{existingDisclosureDetails?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-6 col-lg-4 py-1">
                                         <span class="coi-text-dark d-block">Expiration Date</span>
                                         <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate" classesToApply="ms-2 coi-text-light">
                                             <span
-                                                class="coi-text-light">{{existingDisclosureDetails?.expirationDate | dateFormatter}}</span>
+                                                class="coi-text-light">{{existingDisclosureDetails?.expirationDate | dateFormatterWithTimeZone}}</span>
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-6 col-lg-4 py-1">

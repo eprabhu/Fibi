@@ -4,7 +4,7 @@ import { environment } from '../../../../../admin-dashboard/src/environments/env
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../../fibi/src/app/common/services/end-point.config';
-import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates, getDateObjectFromTimeStamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
@@ -42,7 +42,10 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination = null;
     travelSectionconfig: any = {};
-
+    travelDates = {
+        startDate: null,
+        endDate: null
+    }
     helpText = [
         'All the fields of travel disclosure form are mandatory.',
         'Fill in all the fields of the disclosure form and to save your progress, click on the ‘Save’ button.',
@@ -96,6 +99,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;
         this.destination = responseObject.destinationCountry ? 'International' : 'Domestic';
         this.travelDisclosureRO = this._dataStore.getTravelDisclosureRO();
+        this.setLocalDateObject(responseObject);
         if (responseObject.travelEntityName) {
             this.isResultFromSearch = true;
         }
@@ -160,8 +164,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.setValuesForDestinationType();
         requestObject.isSponsoredTravel = true;
         requestObject.travelAmount = !requestObject.travelAmount ? null : convertToValidAmount(requestObject.travelAmount);
-        requestObject.travelStartDate = parseDateWithoutTimestamp(requestObject.travelStartDate);
-        requestObject.travelEndDate = parseDateWithoutTimestamp(requestObject.travelEndDate);
+        requestObject.travelStartDate = parseDateWithoutTimestamp(this.travelDates.startDate);
+        requestObject.travelEndDate = parseDateWithoutTimestamp(this.travelDates.endDate);
         requestObject.noOfDays = getTotalNoOfDays(requestObject.travelStartDate, requestObject.travelEndDate);
         return requestObject;
     }
@@ -255,13 +259,13 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     validateDates(): boolean {
         this.dateValidationList.clear();
-        if (!this.travelDisclosureRO.travelStartDate) {
+        if (!this.travelDates.startDate) {
             this.dateValidationList.set('startDate', 'Please select the start date.');
         }
 
-        if (this.travelDisclosureRO.travelEndDate) {
-            if (!((compareDates(this.travelDisclosureRO.travelStartDate,
-                this.travelDisclosureRO.travelEndDate) === 1) ? false : true)) {
+        if (this.travelDates.endDate) {
+            if (!((compareDates(this.travelDates.startDate,
+                this.travelDates.endDate) === 1) ? false : true)) {
                 this.dateValidationList.set('endDate', 'Please provide a valid end date.');
             }
         } else {
@@ -308,12 +312,18 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.travelResObject.travelState = response.travelstate;
         this.travelResObject.disclosureStatus = response.coiTravelDisclosureStatusTypeDetalis.description;
         this.travelResObject.disclosureStatusCode = response.coiTravelDisclosureStatusTypeDetalis.disclosureStatusCode;
+        this.setLocalDateObject(response);
         this._dataStore.manualDataUpdate(this.travelResObject);
         this._router.navigate([], {
             queryParams: {
                 disclosureId: this.travelResObject.travelDisclosureId
             }
         });
+    }
+
+    setLocalDateObject(response: any) {
+        this.travelDates.startDate = getDateObjectFromTimeStamp(response.travelStartDate);
+        this.travelDates.endDate = getDateObjectFromTimeStamp(response.travelEndDate);
     }
 
     viewEntity(entityId: string): void {
@@ -372,7 +382,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     getTravelSectionConfig(){
         this.travelSectionconfig = this._activatedRoute.snapshot.data.moduleConfig;
-        this._informationAndHelpTextService.moduleConfiguration = this.commonService.getSectionCodeAsKeys(this.travelSectionconfig);   
+        this._informationAndHelpTextService.moduleConfiguration = this.commonService.getSectionCodeAsKeys(this.travelSectionconfig);
     }
 
 }

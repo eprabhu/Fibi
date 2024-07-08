@@ -367,7 +367,7 @@
 </div>
 
 <!-- SFI Details section if SFI Details tab is clicked -->
-<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'" class="p-3">
+<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'" [class.p-3] = "!isEditMode">
         <div *ngIf="!isEditMode" class="card p-3">
             <div class="row mb-2">
                 <div class="col-3" tabindex="-1">
@@ -377,17 +377,18 @@
                 <div class="col-3" tabindex="-1">
                     <label class="d-block coi-text-dark" aria-label="Start Date Of Involvement">Start
                         Date Of Involvement</label>
-                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementStartDate">
+                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementStartDate">
                         <span class="coi-text-light"
-                            aria-label="involvementDate.involvementStartDate | dateFormatterWithTimeZone" id="coi-view-relationship-details-sfi-detail-dateof-involvement">
-                            {{involvementDate.involvementStartDate | dateFormatterWithTimeZone}}</span>
+                            aria-label="relationshipsDetails?.involvementStartDate | dateFormatter" id="coi-view-relationship-details-sfi-detail-dateof-involvement">
+                            {{relationshipsDetails?.involvementStartDate | dateFormatter}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col-3" tabindex="-1">
                     <label class="d-block coi-text-dark">End Date Of Involvement</label>
-                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementEndDate">
-                        <span class="coi-text-light" id="coi-view-relationship-details-sfi-detail-enddate-involvement">{{involvementDate.involvementEndDate |
-                            dateFormatterWithTimeZone}}</span>
+                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementEndDate">
+                        <span  aria-label="relationshipsDetails?.involvementEndDate | dateFormatter"
+                        class="coi-text-light" id="coi-view-relationship-details-sfi-detail-enddate-involvement">{{relationshipsDetails?.involvementEndDate |
+                            dateFormatter}}</span>
                     </app-no-data-label>
                 </div>
             </div>
