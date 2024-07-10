@@ -192,7 +192,7 @@
                     </app-endpoint-search>
                 </div>
             </div>
-            
+
             <div *ngIf="projectDisclosureValidation?.has('proposalSearch')"
                 class="invalid-feedback d-block">
                 {{projectDisclosureValidation?.get('proposalSearch')}}
@@ -253,8 +253,8 @@
                                     <strong>Error: Disclosure Already Exists</strong>
                                 </div>
                                 <p class="mb-0">
-                                    A disclosure has already been created for the {{selectedProjectType}} you are attempting to add. Please review the existing disclosures or select a different {{selectedProjectType}}.                                                                        
-                                    To see the details, 
+                                    A disclosure has already been created for the {{selectedProjectType}} you are attempting to add. Please review the existing disclosures or select a different {{selectedProjectType}}.
+                                    To see the details,
                                     <span *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning" class="link-primary"
                                     (click)="navigateToDisclosure(existingDisclosureDetails?.disclosureId);" id="coi-view-disclosure"
                                     aria-label="Click here to view disclosure" title="Click here to view disclosure" role="link" tabindex="0">
@@ -275,7 +275,7 @@
                                         aria-label="Click here to view disclosure" title="Click here to view disclosure" role="link" tabindex="0">
                                         View disclosure</span>
                                 </p>
-                            </ng-container>                            
+                            </ng-container>
                         </div>
 
                         <div class="row">
@@ -297,8 +297,7 @@
                                     <div class="col-6 col-lg-4 py-1">
                                         <span class="coi-text-dark d-block">Create Date</span>
                                         <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp" classesToApply="ms-2 coi-text-light">
-                                            <span
-                                                class="coi-text-light">{{existingDisclosureDetails?.createTimestamp | dateFormatterWithTimezone}}</span>
+                                            <span class="coi-text-light">{{existingDisclosureDetails?.createTimestamp | dateFormatterWithTimeZone}}</span>
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-6 col-lg-4 py-1">
