@@ -724,12 +724,13 @@
             *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
             [ngClass]="currentSelected.tab == 'TRAVEL_DISCLOSURES' ? 'col-lg-12' : ''">
             <span class="filter-search">
-                <mat-icon aria-hidden="true" class="fs-25px searchButton" *ngIf="!searchText">search</mat-icon>
+                <mat-icon aria-hidden="true" class="fs-25px searchButton">search</mat-icon>
                 <input class="form-control pe-5" type="text" id="searchText" [placeholder]="getSearchPlaceHolder()"
                     [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
             </span>
-            <mat-icon tabindex="0" role="button" class="closeButton" *ngIf="searchText"
-                (click)="resetDashboardAfterSearch()" (keyup.enter)="resetDashboardAfterSearch()" id="coi-user-disclosure-dashboard-filterby-close-btn">close</mat-icon>
+            <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText" (click)="resetDashboardAfterSearch()" (keyup.enter)="resetDashboardAfterSearch()">
+                <mat-icon class="closeButton" id="coi-user-disclosure-dashboard-filterby-close-btn">close</mat-icon>
+            </span>
         </div>
     </div>
 </div>
