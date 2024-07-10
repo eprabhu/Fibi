@@ -512,7 +512,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isShowCountModal = event;
     }
 
-    openDetailModal(coiData: any): void {
+    openPersonDetailsModal(coiData: any): void {
         this.commonService.openPersonDetailsModal(coiData.coiDisclosure.person.personId)
     }
 

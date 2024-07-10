@@ -17,7 +17,7 @@ export class ConsultingService {
   $triggerFormValidate: Subject<any> = new Subject<any>();
   isDataChangeAvailableInEntity = false;
   canDisableSubmit = true;
-  headerEntityName = '';
+  coiEntity: any = {};
 
   constructor(private _http: HttpClient,
     private _commonService: CommonService) { }

@@ -150,7 +150,7 @@ export class CountModalComponent implements OnInit {
     }
 
     reduceTitleLength(title: string): string {
-        return title.length > 90 ? title.slice(0, 90) + '...' : title;
+        return title?.length > 90 ? title?.slice(0, 90) + '...' : title;
     }
 
     // FullName

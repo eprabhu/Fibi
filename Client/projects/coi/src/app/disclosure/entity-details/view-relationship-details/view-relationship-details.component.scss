@@ -16,31 +16,6 @@
     cursor: pointer;
 }
 
-.entity-status {
-    color: white;
-    width: max-content;
-    height: 27px;
-    background: #54BF5B;
-    position: relative;
-    right: 15px;
-    top: -8px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 0 50px 50px 0;
-    padding: 10px 18px;
-
-    &:before {
-        content: "";
-        position: absolute;
-        height: 0;
-        width: 0;
-        border-bottom: 6px solid black;
-        border-left: 6px solid transparent;
-        top: -5px;
-        left: 0;
-    }
-}
-
 .inactive-pill {
     background-color: #949494;
     color: #fff;
