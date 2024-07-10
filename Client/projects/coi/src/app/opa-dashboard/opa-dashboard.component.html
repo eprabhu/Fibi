@@ -227,18 +227,18 @@
                         <div class="card-body px-3 py-2" id="coi-opa-dashboard-card-body">
                             <div class="row">
                                 <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                    <div class="row">
-                                        <div class="col-12 d-inline-flex mb-2">
+                                    <div class="row m-0">
+                                        <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
                                             <!-- OPA card badge -->
                                                 <span class="d-flex" tabindex="-1"
                                                     [attr.aria-label]="'Inside OPA card, Person Name ' + (coi?.personName) + 'The person is a' +(coi?.isFaculty ? 'Faculty' : 'Staff') +
-                                                                                                'Reporting Cycle ' + (coi?.periodStartDate | dateFormatter) + 'to' + (coi?.periodEndDate | dateFormatter)">
-                                                    <span class="entity-status shadow-sm d-flex align-items-center bg-opa-clip">
+                                                    'Reporting Cycle ' + (coi?.periodStartDate | dateFormatter) + 'to' + (coi?.periodEndDate | dateFormatter)">
+                                                    <span class="coi-card-notch-ribbon shadow-sm bg-opa-clip">
                                                         <span>OPA</span>
                                                     </span>
                                                 </span>
                                             <!-- Coi card header -->
-                                                <h4 class="mb-0 d-flex fs-14">
+                                                <h4 class="mb-0 d-flex fs-14 ms-1">
                                                     <span class="d-inline-flex">
                                                         <mat-icon class="coi-text-light fs-18 me-1">person</mat-icon>
                                                         <span class="coi-text-light text-nowrap d-inline-flex fs-6" tabindex="-1"

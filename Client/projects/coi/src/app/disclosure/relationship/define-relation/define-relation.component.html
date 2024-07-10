@@ -4,13 +4,13 @@
       <div class="card mb-2" id="relationship-details-body" tabindex="-1">
         <div class="row mx-0 w-100">
           <div class="col-lg px-0">
-            <div class="row">
-              <div class="col-12">
+            <div class="row m-0">
+              <div class="col-12 ps-0 position-absolute top-0 start-0">
                 <div tabindex="-1" class="d-flex"
                   [attr.aria-label]="selectedProject?.projectType + ': number, ' + selectedProject?.projectNumber + ' - ' + selectedProject?.title">
-                  <span class="active-ribbon text-nowrap shadow-sm align-items-center d-flex"
+                  <span class="coi-card-notch-ribbon shadow-sm me-2"
                     [style.background-color]="selectedProject?.projectBadgeColour">{{selectedProject?.projectType}}</span>
-                    <span class="mt-2 d-inline-flex">
+                    <span class="mt-1 d-inline-flex">
                       <mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
                       <mat-icon *ngIf="selectedProject?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
                       <a tabindex="0" class="fs-6 link-primary cursor-pointer fw-600 text-slice"
@@ -25,7 +25,7 @@
                 </div>
               </div>
             </div>
-            <div class="row fs-14 px-3 pb-1 pt-3">
+            <div class="row fs-14 px-3 pb-1 pt-3 mt-4">
               <!-- Principal Investigator -->
               <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mb-2"
                 [attr.aria-label]="'Principal investigator is ' + (selectedProject?.piName ? selectedProject?.piName : 'empty')">

@@ -106,8 +106,8 @@
     </div>
     <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-2">
         <label for="coi-person-details-home-unit" class="d-block coi-text-dark">Home Unit</label>
-        <app-no-data-label [valueToShow]="personValues?.person?.unit?.unitName" [classesToApply]="'fs-14'">
-            <span class="fs-14 coi-text-light" id="coi-person-details-home-unit"> {{personValues?.person?.unit?.unitName}}</span>
+        <app-no-data-label [valueToShow]="personValues?.person?.unit?.unitDetail" [classesToApply]="'fs-14'">
+            <span class="fs-14 coi-text-light" id="coi-person-details-home-unit"> {{personValues?.person?.unit?.unitDetail}}</span>
         </app-no-data-label> 
     </div>
     <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12">

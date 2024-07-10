@@ -746,15 +746,15 @@
                     <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId && !disclosure?.disclosureId">
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                <div class="row">
-                                    <div class="col-12 d-inline-flex mb-1">
+                                <div class="row m-0">
+                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-center">
                                         <span class="d-flex" tabindex="-1"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
-                                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                                            <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
                                                 <span id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType }}</span>
                                             </span></span>
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
-                                            class="mb-0 d-flex">
+                                            class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex">
                                                 <mat-icon class="coi-text-light me-1" aria-hidden="true">person</mat-icon>
                                                 <span class="coi-text-light text-nowrap fs-6" tabindex="-1"
@@ -906,19 +906,19 @@
                     <ng-container *ngIf="disclosure?.travelDisclosureId">
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                <div class="row">
-                                    <div class="col-12 d-inline-flex align-items-center mb-1">
+                                <div class="row m-0">
+                                    <div class="col-12 d-inline-flex align-items-center mb-1 coi-card-body-notch-container">
                                         <!-- Travel Card badge -->
                                         <span class="d-flex">
                                             <span
-                                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
+                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}"
                                                 tabindex="-1"
                                                 [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                                 <span id="coi-user-disclosure-travel-card-value-heading-{{index}}">{{disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType}}</span>
                                             </span>
                                         </span>
                                         <!-- Travel Card Entity -->
-                                        <h4 *ngIf="disclosure.travelDisclosureId" class="d-flex">
+                                        <h4 *ngIf="disclosure.travelDisclosureId" class="d-flex ms-1 mb-0">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
@@ -1084,12 +1084,12 @@
                     <ng-container *ngIf="disclosure?.opaDisclosureId">
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                <div class="row">
-                                    <div class="col-12 d-inline-flex mb-1">
+                                <div class="row m-0">
+                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-center">
                                         <!-- OPA Card badge -->
                                         <span class="d-flex">
                                             <span
-                                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
+                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}"
                                                 tabindex="-1"
                                                 [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                                 <span id="coi-user-disclosure-opa-card-value-heading-{{index}}">{{disclosure?.travelDisclosureId? 'Travel' :
@@ -1099,7 +1099,7 @@
                                             </span>
                                         </span>
                                         <!-- OPA Card Reporting Cycle -->
-                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex">
+                                        <h4 *ngIf="disclosure.opaDisclosureId" class="d-inline-flex ms-1 mb-0">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>
@@ -1200,17 +1200,17 @@
                     <ng-container *ngIf="disclosure?.disclosureId">
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                <div class="row">
-                                    <div class="col-12 d-inline-flex mb-1">
+                                <div class="row m-0">
+                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-center">
                                         <!-- Consulting Card badge -->
                                         <span class="d-flex">
-                                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
+                                            <span class="coi-card-notch-ribbon shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
                                                 tabindex="-1" attr.aria-label="Consulting disclosure">
                                                 <span id="coi-user-disclosure-opa-card-value-heading-{{index}}">Consulting</span>
                                             </span>
                                         </span>
                                         <!-- Consulting Card Reporting Cycle -->
-                                        <h4 *ngIf="disclosure.disclosureId" class="d-flex">
+                                        <h4 *ngIf="disclosure.disclosureId" class="d-flex ms-1 mb-0">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1">person</mat-icon>

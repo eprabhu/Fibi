@@ -294,7 +294,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
-                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `# ${ele.proposalId} - ${ele.proposalTitle}` : `# ${ele.awardId} - ${ele.awardTitle}`);
+                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `#${ele.proposalId} - ${ele.proposalTitle}` : `#${ele.awardId} - ${ele.awardTitle}`);
                     });
                 }
                 this.setEventTypeFlag();
@@ -698,16 +698,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 return 'bg-award-clip';
             default:
                 return;
-        }
-    }
-
-    modalHeader (disclosure) {
-        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
-            if (disclosure.fcoiTypeCode === '2') {
-                return `# ${disclosure.proposalId} - ${disclosure.proposalTitle}`;
-            } else if (disclosure.fcoiTypeCode === '3') {
-                return `# ${disclosure.awardId} - ${disclosure.awardTitle}`;
-            }
         }
     }
 

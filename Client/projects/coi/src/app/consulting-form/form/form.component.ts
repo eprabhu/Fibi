@@ -135,7 +135,7 @@ export class FormComponent {
         this.entityDetails.coiEntity = deepCloneObject(this.addEntityConfirmation);
         this.addEntityConfirmation = null;
         this.checkForSubmitDisable();
-        this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+        this.setHeaderEntityName(this.entityDetails.coiEntity);
     }
 
     clearEntityDetails(): void{
@@ -144,7 +144,7 @@ export class FormComponent {
         this.canShowEntityFields = false;
         this.resetEntity();
         this.checkForSubmitDisable();
-        this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+        this.setHeaderEntityName(this.entityDetails.coiEntity);
     }
 
     resetEntity() {
@@ -336,7 +336,7 @@ export class FormComponent {
             this.entityDetailsAlreadySave = deepCloneObject(this.consultingForm.consultingFormDisclosure.personEntity);
             this.resetEntityDefaultValue(this.entityDetailsAlreadySave.coiEntity.entityName);
             this.isResultFromSearch = true;
-            this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+            this.setHeaderEntityName(this.entityDetails.coiEntity);
         } else {
             this.entityDetails = new EntityDetails();
             this.entityDetailsAlreadySave = null;
@@ -346,8 +346,8 @@ export class FormComponent {
         this.checkForSubmitDisable();
     }
 
-    setHeaderEntityName(entityName) {
-        this.consultingService.headerEntityName = entityName;
+    setHeaderEntityName(coiEntity: any) {
+        this.consultingService.coiEntity = coiEntity;
     }
 
     // commentSliderEvent(event) {

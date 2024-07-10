@@ -347,17 +347,17 @@
                         <div class="card-body px-3 py-2" id="coi-admin-dashboard-card-body">
                             <div class="row" *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
                                 <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                    <div class="row">
-                                        <div class="col-12 d-inline-flex mb-2">
+                                    <div class="row m-0">
+                                        <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
                                             <!-- Coi card badge -->
                                             <span class="d-flex" tabindex="-1"
                                                   [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' : coi?.disclosureId ? 'Consulting' :  coi?.fcoiType) + ' disclosure'">
-                                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}">
+                                            <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}">
                                                 <span>{{ coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.disclosureId ? 'Consulting' : coi?.fcoiType }}</span>
                                             </span></span>
                                             <!-- Coi card header -->
                                             <h4 *ngIf="!coi.travelDisclosureId && !coi.opaDisclosureId"
-                                                class="mb-0 d-flex align-items-baseline">
+                                                class="mb-0 d-flex align-items-baseline ms-1">
                                             <span class="d-inline-flex align-items-center">
                                                 <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
@@ -534,19 +534,19 @@
                             <ng-container *ngIf="coi?.travelDisclosureId">
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                        <div class="row">
-                                            <div class="col-12 d-inline-flex mb-2">
+                                        <div class="row m-0">
+                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
                                                 <!-- Travel Card badge -->
                                                 <span class="d-flex">
                                             <span
-                                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}"
+                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}"
                                                 tabindex="-1"
                                                 [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' :  coi?.fcoiType) + ' disclosure'">
                                                 <span>{{coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.fcoiType}}</span>
                                             </span>
                                         </span>
                                                 <!-- Travel Card Entity -->
-                                                <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex">
+                                                <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
@@ -711,18 +711,18 @@
                             <ng-container *ngIf="coi?.disclosureId">
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                        <div class="row">
-                                            <div class="col-12 d-inline-flex mb-2">
+                                        <div class="row m-0">
+                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
                                                 <!-- Consulting Card badge -->
                                                 <span>
                                                     <span class="d-flex" tabindex="-1" attr.aria-label="Consulting disclosure">
-                                                        <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}">
+                                                        <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}">
                                                             <span>Consulting</span>
                                                         </span>
                                                     </span>
                                                 </span>
                                                 <!-- Consulting Entity Name -->
-                                                <h4 class="mb-0 d-flex">
+                                                <h4 class="mb-0 d-flex ms-1">
                                                     <ng-container>
                                                         <span class="d-inline-flex">
                                                             <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>

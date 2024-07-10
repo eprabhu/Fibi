@@ -5,78 +5,99 @@
             <div class="row mx-0">
                 <div class="col-lg px-0">
                     <div class="card-header px-3">
-                        <div class="row flex-grow-1 position-relative pe-3">
-                            <div class="col-xl-8 d-flex align-items-center px-0 pe-3">
-                                <span class="d-flex" tabindex="-1"
-                                    [attr.aria-label]="'OPA disclosure'">
-                                    <span class="opa-badge shadow-sm d-flex align-items-center bg-opa-clip">
-                                        <span>OPA</span>
-                                    </span>
-                                </span>
-                                <h3 class="card-title align-items-start flex-column fs-16 mb-0">
-                                    <a class="link-primary cursor-pointer" tabindex="0" (click)="openDetailModal()"
-                                        (keyup.enter)="openDetailModal()" (keyup.space)="openDetailModal()"
-                                        [attr.aria-label]="opa?.opaDisclosure?.personName + opa?.opaDisclosure?.personPrimaryTitle + opa?.opaDisclosure?.homeUnitName + opa?.opaDisclosure?.personEmail"
-                                        title="Click here to view details of {{opa?.opaDisclosure?.personName}}">{{opa?.opaDisclosure?.personName}}
-                                    </a>
-                                    <div class="m-0">
-                                        <span class="coi-text-light">
-                                            {{opa?.opaDisclosure?.personPrimaryTitle}} |
-                                            {{commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)}}
-                                            |
-                                            {{opa?.opaDisclosure?.personEmail}}
+                        <div class="row flex-grow-1 position-relative m-0">
+                            <div class="d-flex col-12 px-0 coi-card-header-notch-container">
+                                <!-- badge -->
+                                <div class="d-flex mb-auto" tabindex="-1" aria-label="OPA disclosure">
+                                    <span class="coi-card-notch-ribbon shadow-sm bg-opa-clip">OPA</span>
+                                </div>
+                                <div class="col row m-0">
+                                    <div class="col-12 d-flex justify-content-between p-0">
+                                        <!-- person -->
+                                        <span class="d-flex align-items-center coi-text-light ms-2 mt-1 text-nowrap">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                            <a class="link-primary cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal()"
+                                                (keyup.enter)="openPersonDetailsModal()" (keyup.space)="openPersonDetailsModal()"
+                                                attr.aria-label="Click here to view details of {{opa?.opaDisclosure?.personName}}"
+                                                title="Click here to view details of {{opa?.opaDisclosure?.personName}}">{{opa?.opaDisclosure?.personName}}
+                                            </a>
                                         </span>
-                                    </div>
-                                </h3>
-                            </div>
-                            <div class="d-flex justify-content-end align-items-center col-xl-4">
-                                <div class="card-toolbar ms-auto">
-                                    <div class="align-items-center d-flex f-14">
-                                        <!-- <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover me-2"
-                                            [class.link-primary]="4">
-                                            Trainings({{1}})
-                                        </a> | -->
-                                        <span class="ms-2 me-2"
-                                            tabindex="0" [title]="opa?.opaDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
-                                            [attr.aria-label]="opa?.opaDisclosure?.personEntitiesCount ? 'Click to view entities' : ''"
-                                            [class.link-primary]="opa?.opaDisclosure?.personEntitiesCount"
-                                            (click)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
-                                            (keyup.enter)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)" (keyup.space)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
-                                            [class.link-primary]="opa?.opaDisclosure?.personEntitiesCount">
-                                            Entities({{opa?.opaDisclosure?.personEntitiesCount}})
-                                        </span> |
-                                        <span class="ms-2 me-2"
-                                            tabindex="0" [title]="opa?.opaDisclosure?.personNotesCount ? 'Click to view notes' : ''"
-                                            [attr.aria-label]="opa?.opaDisclosure?.personNotesCount ? 'Click to view notes' : ''"
-                                            [class.link-primary]="opa?.opaDisclosure?.personNotesCount"
-                                            (click)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)"
-                                            (keyup.enter)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)" (keyup.space)="openSlider('NOTES',opa?.opaDisclosure?.personNotesCount)"
-                                            [class.link-primary]="opa?.opaDisclosure?.personNotesCount">
-                                            Notes({{opa?.opaDisclosure?.personNotesCount}})
-                                        </span> |
-                                        <span class="ms-2 me-3"
-                                            tabindex="0" [title]="opa?.opaDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
-                                            [attr.aria-label]="opa?.opaDisclosure?.personAttachmentsCount ? 'Click to view attachments' : ''"
-                                            [class.link-primary]="opa?.opaDisclosure?.personAttachmentsCount"
-                                            (click)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)"
-                                            (keyup.enter)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)" (keyup.space)="openSlider('ATTACHMENTS',opa?.opaDisclosure?.personAttachmentsCount)"
-                                            [class.link-primary]="opa?.opaDisclosure?.personAttachmentsCount">
-                                            Attachments({{opa?.opaDisclosure?.personAttachmentsCount}})
-                                        </span>
-                                        <button (click)="collapseHeader()"
-                                            title="Click to {{isCardExpanded ? 'collapse' : 'view'}} OPA Disclosure"
-                                            attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} OPA Disclosure"
-                                            class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                            <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
-                                        </button>
+                                        <!-- links -->
+                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-1 me-2">
+                                            <!-- <span class="ms-2 me-2"  role="link"
+                                                [title]="0 ? 'Click here to view trainings' : ''"
+                                                [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
+                                                [ngClass]="0 ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="-1">
+                                                Trainings({{0}})
+                                            </span> | -->
+                                            <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
+                                                role="link" (keyup.enter)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
+                                                (keyup.space)="openSlider('ENTITY', opa?.opaDisclosure?.personEntitiesCount)"
+                                                [title]="opa?.opaDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [attr.aria-label]="opa?.opaDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [ngClass]="opa?.opaDisclosure?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="opa?.opaDisclosure?.personEntitiesCount > 0 ? 0 : -1">
+                                                Entities({{opa?.opaDisclosure?.personEntitiesCount}})
+                                            </a> |
+                                            <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', opa?.opaDisclosure?.personNotesCount)" role="link"
+                                                (keyup.enter)="openSlider('NOTES', opa?.opaDisclosure?.personNotesCount)"
+                                                (keyup.space)="openSlider('NOTES', opa?.opaDisclosure?.personNotesCount)"
+                                                [title]="opa?.opaDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [attr.aria-label]="opa?.opaDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [ngClass]="opa?.opaDisclosure?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="0"
+                                                [tabIndex]="opa?.opaDisclosure?.personNotesCount > 0 ? 0 : -1" >
+                                                Notes({{opa?.opaDisclosure?.personNotesCount}})
+                                            </a> |
+                                            <a class="ms-2 fs-13"
+                                                (click)="openSlider('ATTACHMENTS', opa?.opaDisclosure?.personAttachmentsCount)" role="link"
+                                                (keyup.enter)="openSlider('ATTACHMENTS', opa?.opaDisclosure?.personAttachmentsCount)"
+                                                (keyup.space)="openSlider('ATTACHMENTS', opa?.opaDisclosure?.personAttachmentsCount)"
+                                                [title]="opa?.opaDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [attr.aria-label]="opa?.opaDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [ngClass]="opa?.opaDisclosure?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="opa?.opaDisclosure?.personAttachmentsCount > 0 ? 0 : -1">
+                                                Attachments({{opa?.opaDisclosure?.personAttachmentsCount}})
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12 d-flex p-0 align-items-center">
+                                <!-- email -->
+                                <span class="d-flex align-items-center coi-text-light mt-1"
+                                    [title]="opa?.opaDisclosure?.personEmail">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                    <span class="text-slice">{{opa?.opaDisclosure?.personEmail}}</span>
+                                </span>
+                                <!-- home unit -->
+                                <span class="d-flex align-items-center coi-text-light ms-3 mt-1"
+                                    [title]="commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                    <span class="text-slice">{{commonService.getPersonLeadUnitDetails(opa?.opaDisclosure)}}</span>
+                                </span>
+                                <!-- title -->
+                                <span *ngIf="opa?.opaDisclosure?.personPrimaryTitle"
+                                    class="d-flex align-items-center coi-text-light ms-3 mt-1"
+                                    [title]="opa?.opaDisclosure?.personPrimaryTitle">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                    <span class="text-slice">{{opa?.opaDisclosure?.personPrimaryTitle}}</span>
+                                </span>
+                            </div>
+                            <button (click)="collapseHeader()"
+                                title="Click to {{isCardExpanded ? 'collapse' : 'view'}} OPA Disclosure"
+                                attr.aria-label="Click to {{isCardExpanded ? 'collapse' : 'view'}} OPA Disclosure"
+                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-btn-position">
+                                <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            </button>
                         </div>
                     </div>
                     <div class="card-body" *ngIf="isCardExpanded" id="coi-opa-card">
                         <div class="row gap-0">
-                            <div class="col-6 col-xxl-5">
+                            <div class="col-6 col-xxl-4">
                                 <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                                     <span class="coi-text-darker fs-6 coi-field-set">Details</span>
                                     <div class="row">
@@ -105,11 +126,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-6 col-xxl-3">
+                            <div class="col-6 col-lg-6 col-xxl-4">
                                 <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                                     <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
                                     <div class="row">
-                                        <div class="col-lg-6 mt-3 pe-0">
+                                        <div class="col-lg-8 mt-3 pe-0">
                                             <label class="coi-text-dark d-block">
                                                 Cycle
                                             </label>
@@ -120,7 +141,7 @@
                                                 </app-no-data-label>
                                             </span>
                                         </div>
-                                        <div class="col-lg-6 mt-3 pe-0">
+                                        <div class="col-lg-4 mt-3 pe-0">
                                             <label class="coi-text-dark d-block"> Create
                                             </label>
                                             <span class="coi-text-light">
@@ -358,14 +379,14 @@
             <div [routerLink]="['form']" (click)="setTopDynamically()" class="navigation-box border-end" queryParamsHandling='merge'
                  role="button">
                 <div class="navigation-box-content" routerLinkActive="active"
-                     title="Click to view the OPA Report"
-                     aria-label="Click to view the OPA Report">OPA Report
+                     title="Click here to view the OPA Report"
+                     aria-label="Click here to view the OPA Report">OPA Report
                 </div>
             </div>
             <div *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode !== '1' && checkForOPAAdmin()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                  role="button">
-                <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
-                     aria-label="Click to view the reviews">Reviews
+                <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the reviews"
+                     aria-label="Click here to view the reviews">Reviews
                 </div>
             </div>
             <div *ngIf="opa?.opaDisclosure?.reviewStatusType?.reviewStatusCode !== '1'" [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
