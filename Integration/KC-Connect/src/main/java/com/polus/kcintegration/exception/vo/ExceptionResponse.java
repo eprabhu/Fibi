@@ -9,8 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ExceptionResponse {
 
-	private String errorMessage;
-	private String errorCode;
+	private int status;
+
+	private String error;
+
+	private String message;
+
+	private String details;
+
 	private String timestamp;
 
 }
