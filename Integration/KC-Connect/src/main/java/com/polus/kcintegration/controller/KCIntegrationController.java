@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.polus.kcintegration.dao.KCIntegrationDao;
 import com.polus.kcintegration.dto.ProposalRequest;
@@ -66,9 +67,11 @@ public class KCIntegrationController {
 				})
 				.doOnError(error -> {
 					if (error instanceof WebClientRequestException) {
-						throw new IntegrationCustomException("WebClient request failed", error);
+						throw new IntegrationCustomException("WebClient request failed", error, proposalRequest);
+					} else if (error instanceof WebClientResponseException) {
+						throw new IntegrationCustomException("WebClient response failed", error, proposalRequest);
 					} else {
-						logger.error("Error during WebClient call in KC connect application", error);
+						throw new IntegrationCustomException("Error during WebClient call in KC connect application", error, proposalRequest);
 					}
 				}).then();
 	}

@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -29,13 +30,25 @@ public class IntegrationExceptionLog implements Serializable {
 	@SequenceGenerator(name = "integration_exception_log_seq", sequenceName = "integration_exception_log_seq", allocationSize = 1)
 	private Long id;
 
-	@Column(name = "EXCEPTION_MESSAGE")
-	private String exceptionMessage;
-
 	@Column(name = "EXCEPTION_TYPE")
 	private String exceptionType;
 
-	@Column(name = "UPDATE_TIMESTAMP")
+	@Lob
+	@Column(name = "EXCEPTION_MESSAGE", columnDefinition = "CLOB")
+	private String exceptionMessage;
+
+	@Lob
+	@Column(name = "STACK_TRACE", columnDefinition = "CLOB")
+	private String stackTrace;
+
+	@Column(name = "URL")
+	private String url;
+
+	@Lob
+	@Column(name = "REQUEST_OBJ", columnDefinition = "CLOB")
+	private String requestObject;
+
+	@Column(name = "CREATE_TIMESTAMP")
 	private LocalDateTime timestamp;
 
 }
