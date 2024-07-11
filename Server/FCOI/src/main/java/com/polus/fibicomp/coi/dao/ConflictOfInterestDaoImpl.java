@@ -3119,8 +3119,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public void assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
-
+	public Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, ");
@@ -3130,9 +3130,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("adminGroupId", adminGroupId);
 		query.setParameter("adminPersonId", adminPersonId);
 		query.setParameter("disclosureId", disclosureId);
-		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateTimestamp", updateTimestamp);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
+		return updateTimestamp;
 	}
 
 	@Override
