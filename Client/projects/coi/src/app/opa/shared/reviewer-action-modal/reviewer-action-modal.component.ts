@@ -7,7 +7,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import {OpaService} from '../../services/opa.service';
 import {isEmptyObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {OPA} from '../../opa-interface';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
+import { parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-reviewer-action-modal',

@@ -14,7 +14,7 @@
 <section>
     <div class="table-responsive coi-table-striped mt-2 p-2" id="sfi-relationship">
         <table class="table table-bordered fs-14 table-striped mb-0">
-            <thead [ngClass]="{'sticky-top z-0':isSlider}" id="sfi-relationship-table-header">
+            <thead [ngClass]="{'sticky-top z-index-10':isSlider}" id="sfi-relationship-table-header">
                 <tr class="fw-600">
                     <th scope="col" class="col-md-3 col-xl-3 th-border-left" tabindex="0" aria-label="Project(s)">Project(s)</th>
                     <th scope="col" class="col-md-4 col-lg-3 col-xl-2" tabindex="0" aria-label="conflict status"><span
@@ -25,15 +25,14 @@
             </thead>
             <tbody>
                 <tr *ngFor="let projectSfi of projectSFIDetails; let i = index" id="coi-sfi-project-relation-tbody-tr-{{i}}">
-                    <td class="pt-2">
-                    <div class="d-flex flex-column">
-                        <div class="d-flex flex-nowrap align-items-center entity-status shadow-sm mt-2" [style.background-color]="projectSfi?.projectBadgeColour">
-                            {{ projectSfi.projectType }}
+                    <td class="border-radius-start">
+                        <div class="row m-0">
+                            <span class="coi-card-notch-ribbon shadow-sm coi-notch-position col-auto"
+                                [style.background-color]="projectSfi?.projectBadgeColour">{{ projectSfi.projectType }}</span>
+                            <div class="text-slice col-12 p-0" [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
+                                {{projectSfi?.projectTitle}}
+                            </div>
                         </div>
-                        <div class="text-slice" [attr.aria-label]="projectSfi?.projectTitle" [title]="projectSfi?.projectTitle">
-                            {{projectSfi?.projectTitle}}
-                        </div>
-                    </div>
                     </td>
                     <td>
                         <select [(ngModel)]="projectSfi.projectConflictStatusCode" class="form-select form-control"

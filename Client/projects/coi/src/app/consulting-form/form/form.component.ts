@@ -11,11 +11,11 @@ import { deepCloneObject, isEmptyObject, openModal } from 'projects/fibi/src/app
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { Router } from '@angular/router';
 import { ConsultingService } from '../services/consulting-service.service';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { FBConfiguration } from '../../shared/form-builder-view/form-builder-interface';
 import { DataStoreService } from '../services/data-store.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { HttpResponse } from '@angular/common/http';
+import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-form',
@@ -135,7 +135,7 @@ export class FormComponent {
         this.entityDetails.coiEntity = deepCloneObject(this.addEntityConfirmation);
         this.addEntityConfirmation = null;
         this.checkForSubmitDisable();
-        this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+        this.setHeaderEntityName(this.entityDetails.coiEntity);
     }
 
     clearEntityDetails(): void{
@@ -144,7 +144,7 @@ export class FormComponent {
         this.canShowEntityFields = false;
         this.resetEntity();
         this.checkForSubmitDisable();
-        this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+        this.setHeaderEntityName(this.entityDetails.coiEntity);
     }
 
     resetEntity() {
@@ -336,7 +336,7 @@ export class FormComponent {
             this.entityDetailsAlreadySave = deepCloneObject(this.consultingForm.consultingFormDisclosure.personEntity);
             this.resetEntityDefaultValue(this.entityDetailsAlreadySave.coiEntity.entityName);
             this.isResultFromSearch = true;
-            this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+            this.setHeaderEntityName(this.entityDetails.coiEntity);
         } else {
             this.entityDetails = new EntityDetails();
             this.entityDetailsAlreadySave = null;
@@ -346,8 +346,8 @@ export class FormComponent {
         this.checkForSubmitDisable();
     }
 
-    setHeaderEntityName(entityName) {
-        this.consultingService.headerEntityName = entityName;
+    setHeaderEntityName(coiEntity: any) {
+        this.consultingService.coiEntity = coiEntity;
     }
 
     // commentSliderEvent(event) {

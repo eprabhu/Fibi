@@ -4,89 +4,89 @@
             <span>Relationship between SFIs and Projects</span>
             <app-common-help-text [subSectionId]="803" [elementId]="'coi-conflict-slider-header'"></app-common-help-text></ng-container>
         <ng-container content>
-            <div class="p-3 coi-box-red border border-secondary border-opacity-50 mx-0 rounded-2 shadow-medium position-sticky z-2 custom-stickytop">
+            <div class="p-3 coi-box-red border border-secondary border-opacity-50 mx-0 rounded-3 shadow-medium position-sticky z-2 custom-stickytop">
                 <div class="row align-items-start">
-                    <div class="col-auto pe-0">
+                    <div class="col d-flex coi-card-notch-ribbon-container">
                         <span
-                            class="entity-status shadow-sm align-items-center d-flex text-nowrap {{getColorBadges(coiData?.coiDisclosure?.coiDisclosureFcoiType)}}">
+                            class="coi-card-notch-ribbon me-3 shadow-sm {{getColorBadges(coiData?.coiDisclosure?.coiDisclosureFcoiType)}}">
                             <span>{{coiData?.coiDisclosure?.coiDisclosureFcoiType?.description}}</span>
                         </span>
-                    </div>
-                    <div class="col ps-0">
-                        <div class="col d-flex mb-2 ps-md-1 mt-md-1 mt-xl-0">
-                            <h4 class="mb-0 d-flex label-text f-16 coi-ms-n15px align-self-baseline flex-column">
-                                <div>
-                                    <!-- Person Details -->
-                                    <div class="d-flex align-items-center flex-wrap">
-                                        <!-- Person Name -->
-                                        <div *ngIf="disclosureMetaData?.coiPersonFullName" class="d-flex align-items-end me-3">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
-                                            <span class="coi-text-light fs-14 text-slice" [title]="disclosureMetaData?.coiPersonFullName">
-                                                {{disclosureMetaData?.coiPersonFullName}}
-                                            </span>
-                                        </div>
-                                        <!-- Person Title -->
-                                        <div *ngIf="coiData?.coiDisclosure?.personPrimaryTitle" class="d-flex align-items-end me-3">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
-                                            <span class="coi-text-light fs-14 text-slice"
-                                                [title]="coiData?.coiDisclosure?.personPrimaryTitle">{{coiData?.coiDisclosure?.personPrimaryTitle}}</span>
-                                        </div>
-                                        <!-- Person Department -->
-                                        <div *ngIf="coiData?.coiDisclosure?.unit?.unitDetail" class="d-flex align-items-end me-3">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
-                                            <span class="coi-text-light fs-14 text-slice"
-                                                [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
-                                        </div>
-                                        <!-- Person Email -->
-                                        <div *ngIf="coiData?.coiDisclosure?.personEmail" class="d-flex align-items-end">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
-                                            <span class="coi-text-light fs-14 text-slice"
-                                                [title]="coiData?.coiDisclosure?.personEmail">{{coiData?.coiDisclosure?.personEmail}}</span>
+                        <div class="col mt-2">
+                            <div class="col d-flex mb-2 ps-md-1 mt-md-1 mt-xl-0">
+                                <h4 class="mb-0 d-flex label-text f-16 coi-ms-n15px align-self-baseline flex-column">
+                                    <div>
+                                        <!-- Person Details -->
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            <!-- Person Name -->
+                                            <div *ngIf="disclosureMetaData?.coiPersonFullName" class="d-flex align-items-end me-3">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice" [title]="disclosureMetaData?.coiPersonFullName">
+                                                    {{disclosureMetaData?.coiPersonFullName}}
+                                                </span>
+                                            </div>
+                                            <!-- Person Title -->
+                                            <div *ngIf="coiData?.coiDisclosure?.personPrimaryTitle" class="d-flex align-items-end me-3">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice"
+                                                    [title]="coiData?.coiDisclosure?.personPrimaryTitle">{{coiData?.coiDisclosure?.personPrimaryTitle}}</span>
+                                            </div>
+                                            <!-- Person Department -->
+                                            <div *ngIf="coiData?.coiDisclosure?.unit?.unitDetail" class="d-flex align-items-end me-3">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice"
+                                                    [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                            </div>
+                                            <!-- Person Email -->
+                                            <div *ngIf="coiData?.coiDisclosure?.personEmail" class="d-flex align-items-end">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice"
+                                                    [title]="coiData?.coiDisclosure?.personEmail">{{coiData?.coiDisclosure?.personEmail}}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <ng-container
-                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode== '2' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode === '1'"
-                                    class="ms-1">
-                                    <span class="title-text text-slice mt-2"
-                                        [title]="entityDetails?.title">
-                                        <span>
-                                            <mat-icon aria-hidden="true" class="coi-text-light"
-                                                *ngIf="selectedProject?.projectType == 'Development Proposal' || selectedProject?.projectType == 'Institute Proposal'">article</mat-icon>
-                                            <mat-icon aria-hidden="true" class="coi-text-light"
-                                                *ngIf="selectedProject?.projectType == 'Award'">workspace_premium</mat-icon>
+                                    <ng-container
+                                        *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode== '2' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode === '1'"
+                                        class="ms-1">
+                                        <span class="title-text text-slice mt-2"
+                                            [title]="entityDetails?.title">
+                                            <span>
+                                                <mat-icon aria-hidden="true" class="coi-text-light"
+                                                    *ngIf="selectedProject?.projectType == 'Development Proposal' || selectedProject?.projectType == 'Institute Proposal'">article</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light"
+                                                    *ngIf="selectedProject?.projectType == 'Award'">workspace_premium</mat-icon>
+                                            </span>
+                                            #{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}
                                         </span>
-                                        #{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}
+                                    </ng-container>
+                                </h4>
+                            </div>
+                            <div class="mb-2 left-spacing">
+                                <app-no-data-label [valueToShow]="entityDetails?.entityName">
+                                    <span class="grey-text fw-500 text-slice" id="coi-conflict-card-sfi" [title]="entityDetails?.entityName">
+                                        <mat-icon aria-hidden="true"
+                                            class="coi-text-light me-2">apartment</mat-icon>{{entityDetails?.entityName}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col d-flex flex-wrap fw-medium fs-13 gap-2 align-items-start ps-5 mb-2">
+                                <ng-container class="mt-2"
+                                    *ngFor="let relation of coiSummaryService.getEntityRelationTypePills(relationshipType)">
+                                    <span class="relationship-pill mb-md-2 mb-lg-2 mb-xl-0 px-2 py-1 border rounded-4 d-inline-block">
+                                        <span class="d-flex coi-purple-text">
+                                            <mat-icon aria-hidden="true"
+                                                class="flex-shrink-0 me-1">{{coiSummaryService.getIcon(relation?.relationshipType)}}</mat-icon>
+                                            <span class="fw-bold">{{relation?.relationshipType}} :</span>
+                                            <span class="fw-normal">{{relation?.description}}</span>
+                                        </span>
                                     </span>
                                 </ng-container>
-                            </h4>
-                        </div>
-                        <div class="mb-2 left-spacing">
-                            <app-no-data-label [valueToShow]="entityDetails?.entityName">
-                                <span class="grey-text fw-500 text-slice" id="coi-conflict-card-sfi" [title]="entityDetails?.entityName">
-                                    <mat-icon aria-hidden="true"
-                                        class="coi-text-light me-2">apartment</mat-icon>{{entityDetails?.entityName}}</span>
-                            </app-no-data-label>
-                        </div>
-                        <div class="col d-flex flex-wrap fw-medium fs-13 gap-2 align-items-start ps-5 mb-2">
-                            <ng-container class="mt-2"
-                                *ngFor="let relation of coiSummaryService.getEntityRelationTypePills(relationshipType)">
-                                <span class="relationship-pill mb-md-2 mb-lg-2 mb-xl-0 px-2 py-1 border rounded-4 d-inline-block">
-                                    <span class="d-flex coi-purple-text">
-                                        <mat-icon aria-hidden="true"
-                                            class="flex-shrink-0 me-1">{{coiSummaryService.getIcon(relation?.relationshipType)}}</mat-icon>
-                                        <span class="fw-bold">{{relation?.relationshipType}} :</span>
-                                        <span class="fw-normal">{{relation?.description}}</span>
-                                    </span>
-                                </span>
-                            </ng-container>
+                            </div>
                         </div>
                     </div>
-                    <div class="col d-flex justify-content-end gap-2">
+                    <div class="col-12 col-xl-auto d-flex justify-content-end gap-2">
                         <label class="coi-text-light d-block text-nowrap" for="coi-disclosure-risk-disclosure">Conflict status :</label>
                         <span class="coi-text-light fw-normal">
                             <app-no-data-label [valueToShow]="conflictHistory[0]?.conflictStatusCode">

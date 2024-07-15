@@ -50,12 +50,10 @@ import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryResponse;
-import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
-import com.polus.fibicomp.coi.dto.ProjectOverviewDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
@@ -1756,7 +1754,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} catch (Exception e) {
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
-		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
+		dto.setUpdateTimestamp(conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId()));
 		if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
 			conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
 			dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);

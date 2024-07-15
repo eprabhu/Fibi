@@ -44,7 +44,9 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             this.coiValidationMap.clear();
             this.coiTableValidation.clear();
         }
-        this.projectSFIDetails = this.projectSFIDetails.map(ele =>({...ele,isSaved: false}));
+        if(this.projectSFIDetails && this.projectSFIDetails.length) {
+            this.projectSFIDetails = this.projectSFIDetails.map(ele =>({...ele,isSaved: false}));
+        }
     }
 
     ngOnInit() {

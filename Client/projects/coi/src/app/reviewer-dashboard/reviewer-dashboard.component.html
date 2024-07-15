@@ -190,19 +190,19 @@
                     <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
                         (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
                         <div class="row mt-2">
-                            <div class="col">
-                                <span class="d-flex">
+                            <div class="col coi-card-body-notch-container">
+                                <span class="d-flex align-items-center">
                                     <span
-                                        class="entity-status shadow-sm align-items-center d-flex mt-2 {{getColorBadges(coi.fcoiTypeCode)}}">
+                                        class="coi-card-notch-ribbon shadow-sm mt-2 {{getColorBadges(coi.fcoiTypeCode)}}">
                                         <span>{{coi?.fcoiType}}</span>
                                     </span>
-                                    <h4 class="mb-0 mt-2 d-flex label-text">
+                                    <h4 class="mb-0 mt-2 d-flex label-text ms-1">
                                         <i class="fa fa-user mt-65" aria-hidden="true"></i>
                                         <strong class="me-2 ml-2 text-nowrap mt-2">{{coi.disclosurePersonFullName}}</strong>
                                         <ng-container *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="ms-1">
                                             <span class="pipe me-2 mt-1"></span>
-                                            <img *ngIf="coi?.fcoiTypeCode==2" class="proposal-icon mt-1" src="{{deployMap}}assets/images/proposal.png">
-                                            <img *ngIf="coi?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
+                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='2'">article</mat-icon>
+                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
                                             <span class="text-nowrap mt-2">Project :</span>
                                             <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(coi) : modalHeader(coi) | slice:0:180)}}
                                             <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>180">...

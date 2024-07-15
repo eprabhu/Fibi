@@ -4,106 +4,107 @@
         <div class="card coi-card-expanded">
             <div class="row mx-0">
                 <div class="col-lg px-0">
-                    <div class="row pt-2">
-                        <div class="col-auto">
-                            <span class="d-flex" tabindex="-1" [attr.aria-label]="'Consulting disclosure'">
-                                <span
-                                    class="consulting-badge shadow-sm d-flex align-items-center bg-consulting-clip">
-                                    <span>Consulting</span>
-                                </span>
-                            </span>
-                        </div>
-                        <div class="col">
-                            <div class="row position-relative pe-3">
-                                <div class="col d-flex px-0 pe-3">
-                                    <div class="card-title align-items-start flex-column mb-0" *ngIf="consultingService?.headerEntityName">
-                                        <div class="fs-16 d-flex align-items-center">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1 mb-1">apartment</mat-icon>
-                                            <span class="text-slice" [attr.aria-label]="consultingService?.headerEntityName"
-                                                title="{{consultingService?.headerEntityName}}">{{consultingService?.headerEntityName}}
-                                            </span>
-                                        </div>
-                                    </div>
+                    <div class="card-header px-3">
+                        <div class="row flex-grow-1 position-relative m-0">
+                            <div class="d-flex col-12 px-0 coi-card-header-notch-container">
+                                <!-- badge -->
+                                <div class="d-flex mb-auto" tabindex="-1" aria-label="Consulting disclosure">
+                                    <span class="coi-card-notch-ribbon shadow-sm bg-consulting-clip">Consulting</span>
                                 </div>
-                                <div class="col-auto">
-                                    <div class="card-toolbar ms-auto me-2">
-                                        <div class="align-items-center d-flex f-14">
-                                            <!-- <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover me-2"
-                                                [class.link-primary]="4">
-                                                Trainings({{1}})
-                                            </a> | -->
-                                            <span class="ms-2 me-2" tabindex="0"
-                                                [title]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
-                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personEntitiesCount"
-                                                (click)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
-                                                (keyup.enter)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
-                                                (keyup.space)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
-                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personEntitiesCount">
-                                                Entities({{consultingForm?.consultingFormDisclosure?.personEntitiesCount}})
-                                            </span> |
-                                            <span class="ms-2 me-2" tabindex="0"
-                                                [title]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
-                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personNotesCount"
-                                                (click)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
-                                                (keyup.enter)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
-                                                (keyup.space)="openSlider('NOTES',consultingForm?.consultingFormDisclosure?.personNotesCount)"
-                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personNotesCount">
-                                                Notes({{consultingForm?.consultingFormDisclosure?.personNotesCount}})
-                                            </span> |
-                                            <span class="ms-2 me-3" tabindex="0"
-                                                [title]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
-                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount"
-                                                (click)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
-                                                (keyup.enter)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
-                                                (keyup.space)="openSlider('ATTACHMENTS',consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
-                                                [class.link-primary]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount">
-                                                Attachments({{consultingForm?.consultingFormDisclosure?.personAttachmentsCount}})
-                                            </span>
-                                            <button (click)="collapseHeader()"
-                                                title="Click to {{isCardExpanded ? 'collapse' : 'view'}} Consulting Disclosure"
-                                                attr.aria-label="{{ isCardExpanded ? 'collapse' : 'view' }} Consulting Disclosure"
-                                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                                <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ?
-                                                    'expand_less' : 'expand_more'}}</mat-icon>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row position-relative pe-3">
-                                <div class="fs-14 d-flex align-items-center px-0">
-                                    <span class="coi-text-light d-flex align-items-center fs-14 flex-wrap">
-                                        <span class="d-flex align-items-center me-3 mt-1">
+                                <div class="col row m-0">
+                                    <div class="col-12 d-flex justify-content-between p-0">
+                                        <!-- person -->
+                                        <span class="d-flex align-items-center coi-text-light ms-2 mt-1 text-nowrap">
                                             <mat-icon aria-hidden="true"
                                                 class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
-                                            <span class="link-primary cursor-pointer" tabindex="0" (click)="openPersonDetailsModal()"
+                                            <a class="link-primary cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal()"
                                                 (keyup.enter)="openPersonDetailsModal()" (keyup.space)="openPersonDetailsModal()"
-                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.person?.fullName + consultingForm?.consultingFormDisclosure?.person?.primaryTitle + consultingForm?.consultingFormDisclosure?.person?.homeUnitName + consultingForm?.consultingFormDisclosure?.person?.personEmail"
+                                                attr.aria-label="Click here to view details of {{consultingForm?.consultingFormDisclosure?.person?.fullName}}"
                                                 title="Click here to view details of {{consultingForm?.consultingFormDisclosure?.person?.fullName}}">{{consultingForm?.consultingFormDisclosure?.person?.fullName}}
-                                            </span>
+                                            </a>
                                         </span>
-                                        <span class="d-flex align-items-center me-3 mt-1" *ngIf="consultingForm?.consultingFormDisclosure?.person?.primaryTitle">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
-                                            <span>{{consultingForm?.consultingFormDisclosure?.person?.primaryTitle}}</span>
-                                        </span>
-                                        <span class="d-flex align-items-center me-3 mt-1">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1 mb-1">home</mat-icon>
-                                            <span>{{commonService.getPersonLeadUnitDetails(consultingForm?.consultingFormDisclosure?.person?.unit)}}</span>
-                                        </span>
-                                        <span class="d-flex align-items-center mt-1">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
-                                            <span>{{consultingForm?.consultingFormDisclosure?.person?.emailAddress}}</span>
-                                        </span>
-                                    </span>
+
+                                        <!-- links -->
+                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-1 me-2">
+                                            <!-- <span class="ms-2 me-2"  role="link"
+                                                [title]="0 ? 'Click here to view trainings' : ''"
+                                                [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
+                                                [ngClass]="0 ? 'link-primary cursor-pointer' : ''" tabindex="-1">
+                                                Trainings({{0}})
+                                            </span> | -->
+                                            <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
+                                                role="link" (keyup.enter)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
+                                                (keyup.space)="openSlider('ENTITY', consultingForm?.consultingFormDisclosure?.personEntitiesCount)"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [ngClass]="consultingForm?.consultingFormDisclosure?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="consultingForm?.consultingFormDisclosure?.personEntitiesCount > 0 ? 0 : -1">
+                                                Entities({{consultingForm?.consultingFormDisclosure?.personEntitiesCount}})
+                                            </a> |
+                                            <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', consultingForm?.consultingFormDisclosure?.personNotesCount)" role="link"
+                                                (keyup.enter)="openSlider('NOTES', consultingForm?.consultingFormDisclosure?.personNotesCount)"
+                                                (keyup.space)="openSlider('NOTES', consultingForm?.consultingFormDisclosure?.personNotesCount)"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [ngClass]="consultingForm?.consultingFormDisclosure?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="consultingForm?.consultingFormDisclosure?.personNotesCount > 0 ? 0 : -1" >
+                                                Notes({{consultingForm?.consultingFormDisclosure?.personNotesCount}})
+                                            </a> |
+                                            <a class="ms-2 fs-13"
+                                                (click)="openSlider('ATTACHMENTS', consultingForm?.consultingFormDisclosure?.personAttachmentsCount)" role="link"
+                                                (keyup.enter)="openSlider('ATTACHMENTS', consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
+                                                (keyup.space)="openSlider('ATTACHMENTS', consultingForm?.consultingFormDisclosure?.personAttachmentsCount)"
+                                                [title]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [attr.aria-label]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [ngClass]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="consultingForm?.consultingFormDisclosure?.personAttachmentsCount > 0 ? 0 : -1">
+                                                Attachments({{consultingForm?.consultingFormDisclosure?.personAttachmentsCount}})
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-12 d-flex p-0 align-items-center">
+                                <!-- email -->
+                                <span class="d-flex align-items-center coi-text-light mt-1"
+                                    [title]="consultingForm?.consultingFormDisclosure?.person?.emailAddress">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                    <span class="text-slice">{{consultingForm?.consultingFormDisclosure?.person?.emailAddress}}</span>
+                                </span>
+                                <!-- home unit -->
+                                <span class="d-flex align-items-center coi-text-light ms-3 mt-1"
+                                    [title]="commonService.getPersonLeadUnitDetails(consultingForm?.consultingFormDisclosure?.person?.unit)">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                    <span class="text-slice">{{commonService.getPersonLeadUnitDetails(consultingForm?.consultingFormDisclosure?.person?.unit)}}</span>
+                                </span>
+                                <!-- title -->
+                                <span *ngIf="consultingForm?.consultingFormDisclosure?.person?.primaryTitle"
+                                    class="d-flex align-items-center coi-text-light ms-3 mt-1"
+                                    [title]="consultingForm?.consultingFormDisclosure?.person?.primaryTitle">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                    <span class="text-slice">{{consultingForm?.consultingFormDisclosure?.person?.primaryTitle}}</span>
+                                </span>
+                            </div>
+                            <h3 *ngIf="consultingService?.coiEntity?.entityName" class="card-title fs-16 mb-0 mt-1 ps-0">
+                                <div class="fs-16 d-flex align-items-center">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px">apartment</mat-icon>
+                                    <!-- <a class="link-primary fs-6 text-slice" (click)="navigateToEntity()"
+                                        title="Click here to navigate to {{ consultingService?.coiEntity?.entityName }}"
+                                        attr.aria-label="Click here to navigate to {{ consultingService?.coiEntity?.entityName }}"
+                                        (keyup.enter)="navigateToEntity()" (keyup.space)="navigateToEntity()">
+                                        {{ consultingService?.coiEntity?.entityName }}
+                                    </a> -->
+                                    <span class="coi-text-darker fs-6 text-slice" [title]="consultingService?.coiEntity?.entityName">{{ consultingService?.coiEntity?.entityName }}</span>
+                                </div>
+                            </h3>
+                            <button (click)="collapseHeader()"
+                                title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-btn-position">
+                                <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            </button>
                         </div>
                     </div>
                     <div class="card-body" *ngIf="isCardExpanded"
@@ -162,8 +163,7 @@
                                             <span class="coi-text-light">
                                                 <app-no-data-label
                                                     [valueToShow]="consultingForm?.consultingFormDisclosure?.certifiedAt">
-                                                    <span>{{consultingForm?.consultingFormDisclosure?.certifiedAt |
-                                                        dateFormatterWithTimeZone}}</span>
+                                                    <span>{{consultingForm?.consultingFormDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -417,14 +417,14 @@
         <div class="navigation-tabs d-flex align-items-center">
             <div [routerLink]="['form']" (click)="setTopDynamically()" class="navigation-box border-end"
                 queryParamsHandling='merge' role="button">
-                <div class="navigation-box-content" routerLinkActive="active" title="Click to view the Consulting Form"
-                    aria-label="Click to view the Consulting Form">Consulting Form
+                <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the Consulting Form"
+                    aria-label="Click here to view the Consulting Form">Consulting Form
                 </div>
             </div>
             <!-- <div *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode !== '1' && checkForConsultingAdmin()" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                  role="button">
-                <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
-                     aria-label="Click to view the reviews">Reviews
+                <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the reviews"
+                     aria-label="Click here to view the reviews">Reviews
                 </div>
             </div> -->
             <div *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode !== '1'"
