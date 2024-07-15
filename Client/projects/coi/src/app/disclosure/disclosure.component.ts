@@ -512,7 +512,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isShowCountModal = event;
     }
 
-    openDetailModal(coiData: any): void {
+    openPersonDetailsModal(coiData: any): void {
         this.commonService.openPersonDetailsModal(coiData.coiDisclosure.person.personId)
     }
 
@@ -540,7 +540,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
             this.coiData.coiDisclosure.reviewStatusCode = event.reviewStatusCode;
-            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
+            this.coiData.coiDisclosure.updateTimestamp = event.updateTimestamp;
             this.getCoiReview();
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
@@ -551,9 +551,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
             if (data) {
                 this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(data);
+                this.reviewList = data;
             }
-            this.reviewList = data;
-            this.coiService.isReviewActionCompleted = data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
         }))
     }
 

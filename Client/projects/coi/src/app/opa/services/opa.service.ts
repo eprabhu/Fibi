@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
 import {BehaviorSubject, of, Subject} from 'rxjs';
 import { FormBuilderEvent } from '../../shared/form-builder-view/form-builder-interface';
-import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 
 @Injectable()
 export class OpaService {

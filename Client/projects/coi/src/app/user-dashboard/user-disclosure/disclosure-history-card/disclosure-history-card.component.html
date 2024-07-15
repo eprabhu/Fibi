@@ -4,22 +4,22 @@
 
 <!-- Project history card  -->
 <div *ngIf="!disclosure?.travelDisclosureId && !disclosure.opaDisclosureId && !disclosure.consultDisclId"
-    class="card coi-card-regular position-relative m-06">
+    class="card coi-card-regular position-relative ms-12px me-2">
     <div class="card-body">
         <div class="row">
             <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
-                <div class="row">
-                    <div class="col-12 d-inline-flex mb-2">
-                        <span class="d-flex" tabindex="0">
-                            <span tabindex="0" [attr.aria-label]="disclosure?.fcoiType"
-                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                <div class="row m-0">
+                    <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
+                        <span class="d-flex">
+                            <span tabindex="-1" [attr.aria-label]="disclosure?.fcoiType"
+                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
                                 <span>{{disclosure?.fcoiType}}</span>
                             </span>
                         </span>
-                        <h4 class="d-flex align-items-baseline fs-14 mb-0 title-color" tabindex="0"
+                        <h4 class="d-flex align-items-baseline fs-14 mb-0 ms-1"
                             *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
                             <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'"
-                                tabindex="0" [attr.aria-label]="disclosure?.projectHeader">
+                                tabindex="-1" [attr.aria-label]="disclosure?.projectHeader">
                                 <span class="d-flex">
                                     <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
                                         *ngIf="disclosure?.fcoiTypeCode==2">article</mat-icon>
@@ -29,7 +29,7 @@
                                         (click)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
                                         (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
                                         (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
-                                        [title]="'Click here to view details of ' + disclosure?.projectHeader" 
+                                        [title]="'Click here to view details of ' + disclosure?.projectHeader"
                                         [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
                                         <span class="text-slice">{{disclosure?.projectHeader}}</span>
                                     </a>
@@ -65,8 +65,8 @@
                             <span class="break-point-1200">
                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                     <span class="coi-text-light"
-                                        aria.label="{{disclosure?.expirationDate | dateFormatter}}">{{disclosure?.expirationDate
-                                        | dateFormatter}}</span>
+                                        aria.label="{{disclosure?.expirationDate | dateFormatterWithTimeZone}}">{{disclosure?.expirationDate
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -126,19 +126,19 @@
 </div>
 
 <!-- Travel history card  -->
-<div *ngIf="disclosure?.travelDisclosureId" class="card coi-card-regular position-relative m-06">
+<div *ngIf="disclosure?.travelDisclosureId" class="card coi-card-regular position-relative ms-12px me-2">
     <div class="card-body">
         <div class="row">
             <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
-                <div class="row">
-                    <div class="col-12 d-inline-flex align-items-center mb-2">
-                        <span class="d-flex" tabindex="0">
+                <div class="row m-0 ">
+                    <div class="col-12 d-inline-flex align-items-center mb-2 coi-card-body-notch-container">
+                        <span class="d-flex">
                             <span
-                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
                                 <span aria-label="Travel">Travel</span>
                             </span>
                         </span>
-                        <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0">
+                        <h4 class="align-items-center d-flex fs-14 mb-0 ms-1">
                             <span>
                                 <span class="d-flex">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
@@ -149,7 +149,7 @@
                     </div>
                 </div>
                 <div class="row mx-0">
-                    <div class="col-md-6 col-lg-3 mb-2" tabindex="0">
+                    <div class="col-md-6 col-lg-3 mb-2">
                         <div>
                             <label class="coi-text-dark d-block">Destination</label>
                                 <app-no-data-label
@@ -185,8 +185,8 @@
                             <span class="coi-text-light">
                                 <app-no-data-label [valueToShow]="disclosure?.expirationDate">
                                     <span class="coi-text-light ms-0"
-                                        aria-label="{{disclosure?.expirationDate | dateFormatter}}">{{disclosure?.expirationDate
-                                        | dateFormatter}}</span>
+                                        aria-label="{{disclosure?.expirationDate | dateFormatterWithTimeZone}}">{{disclosure?.expirationDate
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -246,15 +246,15 @@
 </div>
 
 <!-- OPA history card  -->
-<div *ngIf="disclosure?.opaDisclosureId" class="card coi-card-regular position-relative m-06">
+<div *ngIf="disclosure?.opaDisclosureId" class="card coi-card-regular position-relative ms-12px me-2">
     <div class="card-body">
         <div class="row">
             <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
-                <div class="row">
-                    <div class="col-12 d-inline-flex align-items-center mb-2">
+                <div class="row m-0">
+                    <div class="col-12 d-inline-flex align-items-center mb-2 coi-card-body-notch-container">
                         <span class="d-flex" tabindex="0">
                             <span
-                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
                                 <span aria-label="OPA">OPA</span>
                             </span>
                         </span>
@@ -277,8 +277,8 @@
                             <span>
                                 <app-no-data-label [valueToShow]="disclosure?.submissionTimestamp">
                                     <span class="coi-text-light"
-                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
-                                        | dateFormatter}}</span>
+                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatterWithTimeZone">{{disclosure?.submissionTimestamp
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>
@@ -328,19 +328,19 @@
 </div>
 
 <!-- Consulting history card  -->
-<div *ngIf="disclosure?.consultDisclId" class="card coi-card-regular position-relative m-06">
+<div *ngIf="disclosure?.consultDisclId" class="card coi-card-regular position-relative ms-12px me-2">
     <div class="card-body">
         <div class="row">
             <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
-                <div class="row">
-                    <div class="col-12 d-inline-flex align-items-center mb-2">
-                        <span class="d-flex" tabindex="0">
+                <div class="row m-0">
+                    <div class="col-12 d-inline-flex align-items-center mb-2 coi-card-body-notch-container">
+                        <span class="d-flex">
                             <span
-                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}">
+                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
                                 <span aria-label="Consulting">Consulting</span>
                             </span>
                         </span>
-                        <h4 class="align-items-center d-flex fs-14 mb-0 title-color" tabindex="0" *ngIf="disclosure.entityName">
+                        <h4 class="align-items-center d-flex fs-14 mb-0 ms-1" *ngIf="disclosure.entityName">
                             <span>
                                 <span class="d-flex">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
@@ -355,10 +355,10 @@
                         <div>
                             <label class="coi-text-dark d-block">Certification Date</label>
                             <span>
-                                <app-no-data-label [valueToShow]="disclosure?.submissionTimestamp">
+                                <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
                                     <span class="coi-text-light"
-                                        [attr.aria-label]="disclosure?.submissionTimestamp | dateFormatter">{{disclosure?.submissionTimestamp
-                                        | dateFormatter}}</span>
+                                        [attr.aria-label]="disclosure?.certifiedAt | dateFormatterWithTimeZone">{{disclosure?.certifiedAt
+                                        | dateFormatterWithTimeZone}}</span>
                                 </app-no-data-label>
                             </span>
                         </div>

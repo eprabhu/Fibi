@@ -69,10 +69,21 @@
 
 
   <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="projectList.length>1 && !switchRelationView">
-    <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
+    <mat-icon class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
     <input type="text" placeholder="Search by Project Id, Project Name, PI, Sponsor, Prime Sponsor  "
     class="searchField ms-2" [(ngModel)]="searchText">
+    <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText" (click)="searchText = ''" (keyup.enter)="searchText = ''">
+        <mat-icon  class="closeButton" id="coi-relationship-seaarch-close-btn">close</mat-icon>
+    </span>
+  </div>
 
+  <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="canShowEntitySearch && switchRelationView">
+    <mat-icon class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
+    <input type="text" placeholder="Search by Entity"
+    class="searchField ms-2" [(ngModel)]="searchText" (ngModelChange)="getSearchedEntities()">
+    <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText"(click)="clearSearchText()" (keyup.enter)="clearSearchText()">
+        <mat-icon class="closeButton" id="coi-relationship-seaarch-close-btn">close</mat-icon>
+    </span>
   </div>
 
     <ng-container *ngIf="!switchRelationView">
@@ -85,11 +96,11 @@
                         <div class="card mt-2 shadow-medium py-1" [id]="project.projectId">
                             <div class="card-body mb-2">
                                 <div class="row">
-                                    <div class="col-12 mb-3">
-                                        <div class="d-flex align-items-center">
-                                            <span class="active-ribbon shadow-sm align-items-center d-flex text-nowrap me-2" [style.background-color]="project?.projectBadgeColour"
+                                    <div class="col-12 position-absolute ps-0 start-0 top-0">
+                                        <div class="d-flex">
+                                            <span class="coi-card-notch-ribbon shadow-sm align-items-center d-flex text-nowrap me-2" [style.background-color]="project?.projectBadgeColour"
                                                 aria-label="proposal">{{project?.projectType}}</span>
-                                            <span class="d-inline-flex">
+                                            <span class="d-inline-flex pt-1">
                                                 <mat-icon *ngIf="project?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
                                                 <mat-icon *ngIf="project?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
                                                 <a tabindex="0" class="fs-6 link-primary fw-600 text-slice" id="link-{{project?.projectId}}"
@@ -102,7 +113,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="d-xl-flex px-3">
+                                    <div class="d-xl-flex px-3 mt-4">
                                         <div class="col-md-12 col-xl-8">
                                             <div class="row">
                                                 <!-- Principal Investigator -->
@@ -271,11 +282,13 @@
 
     <app-define-sfi-project *ngIf="switchRelationView"
                             [isEditMode]="isEditMode"
+                            [searchText]="searchWord"
                             [coiStatusList]="coiStatusList"
                             [disclosureId]="coiData?.coiDisclosure?.disclosureId"
                             [coiData]="coiData"
                             [disclosureStatusCode]="coiData?.coiDisclosure?.disclosureStatusCode"
                             (conflictStatusChanged)="updateConflictStatus()"
+                            (hasEntitesCount) = "canShowEntitesSearch($event)"
     ></app-define-sfi-project>
 
   <app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode"

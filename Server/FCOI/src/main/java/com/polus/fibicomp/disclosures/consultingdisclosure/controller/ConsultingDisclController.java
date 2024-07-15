@@ -24,7 +24,7 @@ import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclSubmi
 import com.polus.fibicomp.disclosures.consultingdisclosure.service.ConsultingDisclosureService;
 
 @RestController
-@RequestMapping("/consultingDisclosure")
+@RequestMapping("/coi/consultingDisclosure")
 public class ConsultingDisclController {
 
 	protected static Logger logger = LogManager.getLogger(ConsultingDisclController.class.getName());

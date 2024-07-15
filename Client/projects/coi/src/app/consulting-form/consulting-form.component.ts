@@ -56,7 +56,7 @@ export class ConsultingFormComponent {
         private _activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        this.consultingService.headerEntityName = '';
+        this.consultingService.coiEntity = {};
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.setTopDynamically();
@@ -73,7 +73,7 @@ export class ConsultingFormComponent {
         this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
             const MODULE_ID = params['disclosureId'];
             if (this.consultingForm.consultingFormDisclosure.disclosureId != MODULE_ID) {
-               this.consultingService.headerEntityName = '';
+               this.consultingService.coiEntity = {};
                this.validationList = [];
                this.loadNewFormAndUpdateStore(MODULE_ID);
                this.resetChangeFlags();
@@ -362,6 +362,10 @@ export class ConsultingFormComponent {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    navigateToEntity(): void {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.consultingService?.coiEntity?.entityId } })
     }
 
 }

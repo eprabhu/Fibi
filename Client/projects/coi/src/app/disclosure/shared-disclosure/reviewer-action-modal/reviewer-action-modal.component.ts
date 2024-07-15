@@ -5,8 +5,8 @@ import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
-import { parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-reviewer-action-modal',

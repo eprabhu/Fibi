@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { CoiTravelDisclosure, EntityDetails, TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
 import { Subject } from 'rxjs';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { getTotalNoOfDays, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { CommonService } from '../../common/services/common.service';
+import { getTotalNoOfDays, parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Injectable()
 export class TravelDataStoreService {

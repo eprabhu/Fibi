@@ -6,7 +6,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title fs-16" title="{{ showFullTitle() }}">{{modalHeader()}}</h4>
-              <button type="button" class="btn-close" title="Click to close"  data-bs-dismiss="modal" aria-label="Click to close" (click)="closeCountModal()"></button>
+              <button type="button" class="btn-close" title="Click here to close" aria-label="Click here to close"  data-bs-dismiss="modal" (click)="closeCountModal()"></button>
             </div>
             <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
                 <div *ngIf="coiFinancialEntityDetails.length > 0" class="coi-table-striped table-responsive border">
@@ -24,43 +24,22 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of coiFinancialEntityDetails ; let i = index" id="coi-count-modal-table-tbody-row-{{i}}">
+                                <td class="col-4"><span [title]="item?.coiEntity?.entityName ? item?.coiEntity?.entityName : ''"
+                                    class="text-slice">{{item?.coiEntity?.entityName}}</span></td>
+                                <td><app-no-data-label [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label></td>
+                                <td><span [title]="item?.coiEntity?.entityType?.description ? item?.coiEntity?.entityType?.description : ''"
+                                    class="text-slice"><app-no-data-label [valueToShow]="item?.coiEntity?.entityType?.description"></app-no-data-label></span></td>
+                                <td><app-no-data-label [valueToShow]="item?.involvementStartDate"><span>{{ item?.involvementStartDate |dateFormatter }}</span></app-no-data-label></td>
+                                <td><app-no-data-label [valueToShow]="item?.involvementEndDate"><span>{{ item?.involvementEndDate |dateFormatter }}</span></app-no-data-label></td>
                                 <td>
-                                    <span *ngIf="item?.coiEntity?.entityName">
-                                        <span class="word-break-all new-line-property mx-2"
-                                            *ngIf="!isEntityNameRead && item?.coiEntity?.entityName?.length > 50; else showFullInfo">
-                                            <span class="mt-2">{{(item?.coiEntity?.entityName |
-                                                slice:0:50)}}</span>
-                                            <span (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead"
-                                              tabindex="0" role="link" aria-label="Click here to Read more" title="Click here to Read more"
-                                                class="link-primary"><span class="fw-medium">...Read
-                                                        More
-                                                    <i aria-hidden="true"></i></span>
-                                            </span>
-                                        </span>
-                                        <ng-template #showFullInfo>
-                                            <span
-                                                class="word-break-all new-line-property">{{item?.coiEntity?.entityName}}</span>
-                                            <span *ngIf="item?.coiEntity?.entityName?.length > 50" class="link-primary mt-2 fw-medium" tabindex="0" role="link" aria-label="Click here to read less"
-                                                title="Click here to Read less" (click)="isEntityNameRead = !isEntityNameRead" (keydown.enter)="isEntityNameRead = !isEntityNameRead">
-                                                <span class="fw-medium"><u> Read Less</u>
-                                                    <i aria-hidden="true"></i></span>
-                                            </span>
-                                        </ng-template>
-                                    </span>
+                                    <div class="d-flex justify-content-center w-100">
+                                        <button
+                                            class="align-items-center justify-content-center btn-primary-icon d-flex fs-16 m-0 py-1 px-2 action-icons"
+                                            title="Click here to view SFI details" aria-label="Click here to view SFI details" (click)="viewSliderEmit(true, item?.personEntityId)">
+                                            <mat-icon aria-hidden="true">visibility</mat-icon>
+                                        </button>
+                                    </div>
                                 </td>
-                                <td> <app-no-data-label [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label></td>
-                                <td> <app-no-data-label [valueToShow]="item?.coiEntity?.entityType?.description"></app-no-data-label></td>
-                                <td> <app-no-data-label [valueToShow]="item?.involvementStartDate"><span>{{ item?.involvementStartDate |dateFormatter }}</span></app-no-data-label></td>
-                                <td> <app-no-data-label [valueToShow]="item?.involvementEndDate"><span>{{ item?.involvementEndDate |dateFormatter }}</span></app-no-data-label>
-                                    <td>
-                                        <div class="d-flex justify-content-center w-100">
-                                            <button
-                                                class="align-items-center justify-content-center btn-primary-icon d-flex fs-16 m-0 py-1 px-2 action-icons"
-                                                title="Click to view SFI details" aria-label="Click to view SFI details" (click)="viewSliderEmit(true, item?.personEntityId)">
-                                                <mat-icon aria-hidden="true">visibility</mat-icon>
-                                            </button>
-                                        </div>
-                                    </td>
                             </tr>
                         </tbody>
                     </table>
@@ -78,8 +57,8 @@
             </div>
             <div class="modal-body pt-0" *ngIf="moduleCode === 3 || moduleCode === 1">
                 <nav class="d-flex fw-bold border-bottom mb-2 nav nav-underline">
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click to view Development Proposals"
-                         aria-label="Click to view Development Proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
+                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click here to view development proposals"
+                         aria-label="Click here to view development proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
                          (click)='currentModalTab="Proposal"; switchTableData()' (keydown.enter)="currentModalTab='Proposal';switchTableData()">
                         <span  class="px-2 fw-500">
                             {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Development Proposals'}}
@@ -87,7 +66,7 @@
                     </div>
                     <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()'
                         (keydown.enter)="currentModalTab='Award';switchTableData()"
-                         title="Click to view Awards" aria-label="Click to view Awards" role="button" [class.active]="currentModalTab == 'Award'">
+                         title="Click here to view awards" aria-label="Click here to view awards" role="button" [class.active]="currentModalTab == 'Award'">
                         <span class="px-2 fw-500">
                             {{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
                             'Awards'}}
@@ -109,25 +88,17 @@
                         </thead>
                         <tbody>
                             <tr class="row-hover" *ngFor="let name of tableArray;let index = index" id="coi-listofaward-table-row-{{index}}">
-                                <td>#{{name?.moduleItemId}}:
-                                    <span *ngIf="!isReadMore[index] && name?.title?.length > 50; else showFullInfo">
-                                        <span class="word-break-all new-line-property">{{(name?.title | slice:0:50)}}</span>
-                                        <span tabindex="0" role="link" aria-label="Click here to read more" title="Click here to Read more"
-                                          (keydown.enter)="isReadMore[index] = !isReadMore[index]"
-                                          (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium link-primary">... Read more</span>
-                                    </span>
-                                    <ng-template #showFullInfo>
-                                        <span class="word-break-all new-line-property">{{name?.title}}</span>
-                                        <span *ngIf="name?.title?.length > 50" tabindex="0" role="link" aria-label="Click here to Read less"
-                                            title="Click here to Read less" (click)="isReadMore[index] = !isReadMore[index]"
-                                             (keydown.enter)="isReadMore[index] = !isReadMore[index]"
-                                            class="link-primary fw-medium ms-1">Read Less
-                                        </span>
-                                    </ng-template></td>
-                                <td>{{name?.principalInvestigator}}</td>
-                                <td>{{name?.unitNumber}} - {{name?.unitName}}</td>
-                                <td>{{name.sponsor}}</td>
-                                <td><app-no-data-label [valueToShow]="name.primeSponsor"></app-no-data-label></td>
+                                <td>
+                                    <div class="d-flex" title="#{{name?.moduleItemId}}: {{name?.title}}">#{{name?.moduleItemId}}: <span class="text-slice ms-1">{{name?.title}}</span></div>
+                                </td>
+                                <td><span [title]="name.principalInvestigator ? name.principalInvestigator : ''"
+                                    class="text-slice">{{name?.principalInvestigator}}</span></td>
+                                <td><span [title]="name.unitNumber ? (name?.unitNumber + ' - ' + name?.unitName) : ''"
+                                    class="text-slice">{{name?.unitNumber}} - {{name?.unitName}}</span></td>
+                                <td><span [title]="name.sponsor ? name.sponsor : ''"
+                                    class="text-slice">{{name.sponsor}}</span></td>
+                                <td><span [title]="name.primeSponsor ? name.primeSponsor : ''"
+                                    class="text-slice"><app-no-data-label [valueToShow]="name.primeSponsor"></app-no-data-label></span></td>
                                 <td>
                                     <app-no-data-label [valueToShow]="name.conflictStatus">
                                          <span *ngIf="name.conflictStatus">
@@ -138,8 +109,8 @@
                                 </td>
                                 <td *ngIf="currentModalTab == 'Proposal'">
                                     <div class="d-flex justify-content-center">
-                                        <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons" title="Click to view proposal details"
-                                            aria-label="Click to view proposal details" (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode)">
+                                        <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons" title="Click here to view proposal details"
+                                            aria-label="Click here to view proposal details" (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode)">
                                             <mat-icon aria-hidden="true">visibility</mat-icon>
                                         </button>
                                     </div>
@@ -147,7 +118,7 @@
                                 <td *ngIf="currentModalTab == 'Award'">
                                     <div class="d-flex justify-content-center">
                                         <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons"
-                                         aria-label="Click to view award details" title="Click to view award details"
+                                         aria-label="Click here to view award details" title="Click here to view award details"
                                             (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode);">
                                             <mat-icon aria-hidden="true">visibility</mat-icon>
                                         </button>
@@ -171,7 +142,7 @@
 
             <div class="modal-footer">
               <button class="btn btn-outline-secondary" id="count-modal-close-btn" data-bs-dismiss="modal"
-               type="button" title="Cancel"(click)="closeCountModal()">Close</button>
+               type="button" title="Click here to close" aria-label="Click here to close" (click)="closeCountModal()">Close</button>
             </div>
           </div>
         </div>

@@ -38,6 +38,22 @@ export const OPA_DASHBOARD_RIGHTS = new Set(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_
 export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'SFI Details';
 
 export const DATE_PLACEHOLDER = 'MM/dd/YYYY';
+export const DEFAULT_DATE_FORMAT = 'MM/dd/yyyy';
+export const LONG_DATE_FORMAT = 'MM/dd/yyyy h:mm:ss a';
+export const TIME_FORMAT = 'h:mm:ss a';
+
+//  Angular Material date picker
+export const DATE_PICKER_FORMAT_MATERIAL = {
+    parse: {
+      dateInput: 'MM/DD/YYYY HH:mm:ss',
+    },
+    display: {
+      dateInput: 'MM/DD/YYYY',
+      monthYearLabel: 'MMM YYYY',
+      dateA11yLabel: 'LL',
+      monthYearA11yLabel: 'MMMM YYYY',
+    },
+  };
 
 export const EDITOR_CONFIGURATION = {
     link: {

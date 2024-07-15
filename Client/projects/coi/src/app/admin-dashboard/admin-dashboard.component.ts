@@ -9,7 +9,6 @@ import {
     isEmptyObject, openModal,
     setFocusToElement
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.service';
@@ -22,6 +21,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
 import {openSlider, closeSlider, closeCommonModal, openCoiSlider} from '../common/utilities/custom-utilities';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
+import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -38,7 +38,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     @ViewChild('mainHeaders', { static: true }) mainHeaders: ElementRef;
 
     setFocusToElement = setFocusToElement;
-    DEFAULT_DATE_FORMAT = DATE_PLACEHOLDER;
     isShowDisclosureList = false;
     currentSelected = {
         tab: 'IN_PROGRESS',
@@ -295,7 +294,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
-                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `# ${ele.proposalId} - ${ele.proposalTitle}` : `# ${ele.awardId} - ${ele.awardTitle}`);
+                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `#${ele.proposalId} - ${ele.proposalTitle}` : `#${ele.awardId} - ${ele.awardTitle}`);
                     });
                 }
                 this.setEventTypeFlag();
@@ -696,16 +695,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 return 'bg-award-clip';
             default:
                 return;
-        }
-    }
-
-    modalHeader (disclosure) {
-        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
-            if (disclosure.fcoiTypeCode === '2') {
-                return `# ${disclosure.proposalId} - ${disclosure.proposalTitle}`;
-            } else if (disclosure.fcoiTypeCode === '3') {
-                return `# ${disclosure.awardId} - ${disclosure.awardTitle}`;
-            }
         }
     }
 

@@ -198,7 +198,7 @@ export class OpaComponent implements OnInit {
         }
     }
 
-    openDetailModal(): void {
+    openPersonDetailsModal(): void {
         this.commonService.openPersonDetailsModal(this.opa.opaDisclosure.personId)
     }
 

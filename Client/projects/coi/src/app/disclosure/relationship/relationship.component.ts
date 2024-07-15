@@ -52,6 +52,8 @@ export class RelationshipComponent implements OnInit {
   currentRelation: number;
   switchRelationView = false;
   projectList: GenericProject[] = [];
+  searchWord: string;
+  canShowEntitySearch = true;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -216,10 +218,24 @@ getDependencyDetails() {
 }
 
     switchRelationViewMode(newValue) {
+      this.getSearchedEntities();
       if (this.switchRelationView !== newValue && !newValue) {
           this.ngOnInit();
       }
       this.switchRelationView = newValue;
+    }
+
+    getSearchedEntities() {
+        this.searchWord = this.searchText;
+    }
+
+    clearSearchText() {
+        this.searchWord = '';
+        this.searchText = '';
+    }
+
+    canShowEntitesSearch(event) {
+        this.canShowEntitySearch = event;
     }
 
 }

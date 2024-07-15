@@ -7,129 +7,121 @@
                     <div class="row mx-0">
                         <div class="col-lg px-0">
                             <div class="card-header px-3">
-                                <div class="row flex-grow-1 position-relative">
-                                    <div class="col-xl-8 d-flex px-0">
-                                        <span class="d-flex" tabindex="-1"
-                                            [attr.aria-label]="(coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId? 'OPA' :  coiData?.coiDisclosure?.coiDisclosureFcoiType?.description) + ' disclosure'">
-                                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges()}}">
-                                                <span>{{ coiData?.coiDisclosure?.travelDisclosureId? 'Travel' : coiData?.coiDisclosure?.opaDisclosureId ?
-                                                    'OPA' : coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
-                                            </span>
-                                        </span>
-                                        <h3 class="card-title align-self-baseline flex-column fs-16 mb-0">
-                                            <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                                                <span class="link-primary" tabindex="0" (click)="openDetailModal(coiData)"
-                                                    (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
-                                                    title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</span>
-                                            </ng-container>
-                                            <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                                                <span class="coi-text-darker fs-6" title="{{ coiData?.projectDetail?.title }}">[
-                                                    <span class="link-primary fs-6" (click)="openProjectDetailsModal()"
-                                                        (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
-                                                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
-                                                            {{ coiData?.projectDetail?.moduleItemId }} :
-                                                        </ng-container>
-                                                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
-                                                            {{ coiData?.projectDetail?.moduleItemKey }} :
-                                                        </ng-container>
-                                                        {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
-                                                        coiData?.projectDetail?.title }}
-                                                    </span>] By
-                                                    <span class="link-primary fw-lighter fs-14" tabindex="0" role="link"
-                                                        (click)="openDetailModal(coiData)" [attr.aria-label]="'Click here to view person details of '+ coiData?.coiDisclosure?.person?.fullName"
-                                                        (keyup.enter)="openDetailModal(coiData)" (keyup.space)="openDetailModal(coiData)"
-                                                        title="Click here to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
-                                                        {{ coiData?.coiDisclosure?.person?.fullName }}</span>
-                                                </span>
-                                            </ng-container>
-                                            <div class="m-0">
-                                                <span class="coi-text-light">
-                                                    {{coiData?.coiDisclosure?.personPrimaryTitle}} |
-                                                    <span>{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
-                                                    |
-                                                    {{coiData?.coiDisclosure?.personEmail}}
-                                                </span>
-                                            </div>
-                                        </h3>
-                                    </div>
-                                    <div class="d-flex justify-content-end align-items-center col-xxl-4" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ?'mt-xxl-2':'pe-md-0 pe-xxl-2'">
-                                        <div class="card-toolbar ms-auto" [class.py-0]="coiData?.coiDisclosure?.riskCategoryCode">
-                                            <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode"
-                                                class="d-flex justify-content-end align-items-center pe-md-0 pe-xxl-4">
-                                                <label class="coi-text-dark me-2" for="badge-risk">Risk :</label>
-                                                <span class="d-flex pe-xl-1" id="badge-risk">
+                                <div class="row flex-grow-1 position-relative m-0">
+                                    <div class="d-flex col-12 px-0 coi-card-header-notch-container">
+                                        <!-- badge -->
+                                        <div class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiDisclosureFcoiType?.description + ' disclosure'">
+                                            <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges()}}">{{ coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
+                                        </div>
+                                        <div class="col row m-0">
+                                            <div class="col-12 d-flex justify-content-between p-0">
+                                                <!-- person -->
+                                                <span class="d-flex align-items-center coi-text-light ms-2 mt-1 text-nowrap">
                                                     <mat-icon aria-hidden="true"
-                                                        class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1">warning</mat-icon>
-                                                    <span class="coi-text-light">
-                                                        {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
-                                                    </span>
+                                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                                    <a class="link-primary fs-6 cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal(coiData)"
+                                                        (keyup.enter)="openPersonDetailsModal(coiData)" (keyup.space)="openPersonDetailsModal(coiData)"
+                                                        attr.aria-label="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}"
+                                                        title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}
+                                                    </a>
                                                 </span>
+                                                <!-- links -->
+                                                <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-1 me-2">
+                                                    <!-- <span class="ms-2 me-2"  role="link"
+                                                        [title]="0 ? 'Click here to view trainings' : ''"
+                                                        [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
+                                                        [ngClass]="0 ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="-1">
+                                                        Trainings({{0}})
+                                                    </span> | -->
+                                                    <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', coiData?.personEntitiesCount)"
+                                                        role="link" (keyup.enter)="openSlider('ENTITY', coiData?.personEntitiesCount)"
+                                                        (keyup.space)="openSlider('ENTITY', coiData?.personEntitiesCount)"
+                                                        [title]="coiData?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                        [attr.aria-label]="coiData?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                        [ngClass]="coiData?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                        [tabIndex]="coiData?.personEntitiesCount > 0 ? 0 : -1">
+                                                        Entities({{coiData?.personEntitiesCount}})
+                                                    </a> |
+                                                    <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', coiData?.personNotesCount)" role="link"
+                                                        (keyup.enter)="openSlider('NOTES', coiData?.personNotesCount)"
+                                                        (keyup.space)="openSlider('NOTES', coiData?.personNotesCount)"
+                                                        [title]="coiData?.personNotesCount ? 'Click here to view notes' : ''"
+                                                        [attr.aria-label]="coiData?.personNotesCount ? 'Click here to view notes' : ''"
+                                                        [ngClass]="coiData?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="0"
+                                                        [tabIndex]="coiData?.personNotesCount > 0 ? 0 : -1" >
+                                                        Notes({{coiData?.personNotesCount}})
+                                                    </a> |
+                                                    <a class="ms-2 fs-13"
+                                                        (click)="openSlider('ATTACHMENTS', coiData?.personAttachmentsCount)" role="link"
+                                                        (keyup.enter)="openSlider('ATTACHMENTS', coiData?.personAttachmentsCount)"
+                                                        (keyup.space)="openSlider('ATTACHMENTS', coiData?.personAttachmentsCount)"
+                                                        [title]="coiData?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                        [attr.aria-label]="coiData?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                        [ngClass]="coiData?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                        [tabIndex]="coiData?.personAttachmentsCount > 0 ? 0 : -1">
+                                                        Attachments({{coiData?.personAttachmentsCount}})
+                                                    </a>
+                                                </div>
                                             </div>
-
-                                            <div class="d-flex justify-content-end align-items-center f-14 pe-md-0" [ngClass]="coiData?.coiDisclosure?.riskCategoryCode ? 'py-xxl-2':'pe-xxl-4'"
-                                            [class.py-1]="!coiData?.coiDisclosure?.riskCategoryCode">
-                                                <span class="ms-2 me-2"  role="link"
-                                                    [title]="0 ? 'Click to view trainings' : ''"
-                                                    [attr.aria-label]="0 ? 'Click to view trainings' : ''"
-                                                    [ngClass]="0 ? 'link-primary cursor-pointer' : ''" tabindex="-1">
-                                                    Trainings({{0}})
-                                                </span> |
-                                                <span class="ms-2 me-2" (click)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    role="link" (keyup.enter)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    (keyup.space)="openSlider('ENTITY', coiData.personEntitiesCount)"
-                                                    [title]="coiData.personEntitiesCount ? 'Click to view entities' : ''"
-                                                    [attr.aria-label]="coiData.personEntitiesCount ? 'Click to view entities' : ''"
-                                                    [ngClass]="coiData.personEntitiesCount ? 'link-primary cursor-pointer' : ''"
-                                                    [tabIndex]="coiData?.personEntitiesCount > 0 ? 0 : -1">
-                                                    Entities({{coiData.personEntitiesCount}})
-                                                </span> |
-                                                <span class="ms-2 me-2" (click)="openSlider('NOTES', coiData.personNotesCount)" role="link"
-                                                    (keyup.enter)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    (keyup.space)="openSlider('NOTES', coiData.personNotesCount)"
-                                                    [title]="coiData.personNotesCount ? 'Click to view notes' : ''"
-                                                    [attr.aria-label]="coiData.personNotesCount ? 'Click to view notes' : ''"
-                                                    [ngClass]="coiData.personNotesCount ? 'link-primary cursor-pointer' : ''" tabindex="0"
-                                                    [tabIndex]="coiData?.personNotesCount > 0 ? 0 : -1" >
-                                                    Notes({{coiData.personNotesCount}})
-                                                </span> |
-                                                <span class="ms-2" [class.me-xl-2]="!coiData?.coiDisclosure?.riskCategoryCode"
-                                                    (click)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)" role="link"
-                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    (keyup.space)="openSlider('ATTACHMENTS', coiData.personAttachmentsCount)"
-                                                    [title]="coiData.personAttachmentsCount ? 'Click to view attachments' : ''"
-                                                    [attr.aria-label]="coiData.personAttachmentsCount ? 'Click to view attachments' : ''"
-                                                    [ngClass]="coiData.personAttachmentsCount ? 'link-primary cursor-pointer' : ''"
-                                                    [tabIndex]="coiData?.personAttachmentsCount > 0 ? 0 : -1">
-                                                    Attachments({{coiData.personAttachmentsCount}})
-                                                </span>
-                                            </div>
-                                            <button (click)="collapseHeader()"
-                                                title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
-                                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                                <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
-                                            </button>
                                         </div>
                                     </div>
+                                    <div class="col-12 d-flex p-0 align-items-center">
+                                        <!-- email -->
+                                        <span class="d-flex align-items-center coi-text-light mt-1"
+                                            [title]="coiData?.coiDisclosure?.personEmail">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                            <span class="text-slice">{{coiData?.coiDisclosure?.personEmail}}</span>
+                                        </span>
+                                        <!-- home unit -->
+                                        <span class="d-flex align-items-center coi-text-light ms-3 mt-1"
+                                            [title]="commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                            <span class="text-slice">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
+                                        </span>
+                                        <!-- title -->
+                                        <span class="d-flex align-items-center coi-text-light ms-3 mt-1" *ngIf="coiData?.coiDisclosure?.personPrimaryTitle"
+                                            [title]="coiData?.coiDisclosure?.personPrimaryTitle">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                            <span class="text-slice">{{coiData?.coiDisclosure?.personPrimaryTitle}}</span>
+                                        </span>
+                                    </div>
+                                    <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
+                                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2'">
+                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">article</mat-icon>
+                                            <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
+                                                title="Click here to view details of #{{ coiData?.projectDetail?.moduleItemId }} : {{ coiData?.projectDetail?.title }}"
+                                                attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.moduleItemId }} : {{ coiData?.projectDetail?.title }}"
+                                                (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
+                                                #{{ coiData?.projectDetail?.moduleItemId }} : {{ coiData?.projectDetail?.title }}
+                                            </a>
+                                        </ng-container>
+                                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='3'">
+                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">workspace_premium</mat-icon>
+                                            <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
+                                                title="Click here to view details of #{{ coiData?.projectDetail?.moduleItemKey }} : {{ coiData?.projectDetail?.title }}"
+                                                attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.moduleItemKey }} : {{ coiData?.projectDetail?.title }}"
+                                                (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
+                                                #{{ coiData?.projectDetail?.moduleItemKey }} : {{ coiData?.projectDetail?.title }}
+                                            </a>
+                                        </ng-container>
+                                    </h3>
+                                    <button (click)="collapseHeader()"
+                                        title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                        class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-btn-position">
+                                        <mat-icon aria-hidden="true" class="collapse-icon">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                    </button>
                                 </div>
                             </div>
                             <div class="card-body" *ngIf="isCardExpanded">
                                 <div class="row gap-0">
-                                    <div class="col-6 col-xxl-5">
+                                    <div class="col-6 col-xxl-4">
                                         <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                                             <span class="coi-text-darker fs-6 coi-field-set">Details</span>
                                             <div class="row">
-                                                <div class="col-lg-12 mt-2 pe-0">
-                                                    <label class="coi-text-dark d-block">
-                                                        <i aria-hidden="true" class="fa fa-home me-1"></i>Department
-                                                    </label>
-                                                    <span class="coi-text-light">
-                                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
-                                                            <span class="text-overflow"
-                                                                [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.unit)}}</span>
-                                                        </app-no-data-label>
-                                                    </span>
-                                                </div>
-                                                <div class="col-lg-6 mt-2 pe-0">
+                                                <div class="col-12 mt-2 pe-0">
                                                     <label class="coi-text-dark d-block">
                                                         <i aria-hidden="true"
                                                             class="fa fa-user-o fw-700 me-1"></i>Administrator
@@ -139,7 +131,7 @@
                                                         <span>{{coiData?.coiDisclosure?.adminPersonName}}</span>
                                                     </app-no-data-label></span>
                                                 </div>
-                                                <div class="col mt-2 pe-0">
+                                                <div class="col-12 mt-2 pe-0">
                                                     <label class="coi-text-dark d-block">
                                                         <img alt="add-adminGroup icon" class="activity-icon"
                                                             src="assets/images/multiple-admin-1.svg">Admin Group
@@ -154,7 +146,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-lg-6 col-xxl-3 mt-4 mt-sm-0">
+                                    <div class="col-6 col-lg-6 col-xxl-4 mt-4 mt-sm-0">
                                         <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
                                             <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
                                             <div class="row">
@@ -182,7 +174,7 @@
                                                     </label>
                                                     <span class="coi-text-light">
                                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                                            <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
+                                                            <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
@@ -219,13 +211,26 @@
                                                         </span>
                                                     </app-no-data-label>
                                                 </div>
+                                                <div class="col-4 col-lg-4 col-xl-6 mt-2 pe-0">
+                                                    <label class="coi-text-lighter d-block">Risk
+                                                    </label>
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiRiskCategory?.description">
+                                                        <span class="d-flex" id="badge-risk">
+                                                            <mat-icon aria-hidden="true"
+                                                                class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0">warning</mat-icon>
+                                                            <span class="coi-text-dark">
+                                                                {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
+                                                            </span>
+                                                        </span>
+                                                    </app-no-data-label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 py-3 action-header-border">
+                        <div class="col-lg-3 pt-3 action-header-border">
                             <div class="h-100" *ngIf="isCreateMode">
                                 <div class="d-grid gap-2 d-md-flex flex-md-wrap">
                                     <button class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
@@ -411,13 +416,13 @@
                 <div class="navigation-tabs coi-navigation-tabs d-flex align-items-center">
                     <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active"
-                            title="Click to view the disclosure screening form"
-                            area-describedby="Click to view the disclosure screening form">Disclosure</div>
+                            title="Click here to view the disclosure screening form"
+                            area-describedby="Click here to view the disclosure screening form">Disclosure</div>
                     </div>
                     <div *ngIf="canShowReviewerTab || coiService.isCOIAdministrator" [routerLink]="['review']"
                         class="navigation-box border-end" queryParamsHandling='merge' role="button">
-                        <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
-                            area-describedby="Click to view the reviews">Reviews</div>
+                        <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the reviews"
+                            area-describedby="Click here to view the reviews">Reviews</div>
                     </div>
                     <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
                         title="click to view history" role="button">

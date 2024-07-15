@@ -7,23 +7,24 @@
     </ng-container>
     <!-- slider header card -->
     <ng-container content-sticky>
-        <div class="card card-scroll rounded-2 shadow-medium coi-box-red mt-3 p-0">
-            <div class="card-body">
+        <div class="card card-scroll shadow-medium coi-box-red mt-3 p-0">
+            <div class="card-body pt-0">
                 <div class="row">
                     <!-- Badge and Current Risk -->
-                    <div class="col-12 d-flex mb-3">
-                        <div class="d-flex col">
-                            <span
-                                class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails)}}">
-                                <span>{{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
+                    <div class="col-12 d-flex mb-3 ps-0 align-items-start">
+                        <div class="d-flex col align-items-center">
+                            <span class="coi-card-notch-ribbon shadow-sm me-2 {{getColorBadges(disclosureDetails)}}">
+                                <span>{{disclosureDetails.coiDisclosureFcoiType?.description}}</span>
                             </span>
-                            <h4 class="mb-0 label-text f-16 coi-ms-n15px me-5">
+                            <h4 class="mb-0 label-text f-16 me-5 d-flex align-items-center">
                                 <ng-container *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'">
-                                    <span class="title-text text-slice" [title]="modalHeader(projectDetails)">{{modalHeader(projectDetails)}}</span>
+                                    <mat-icon *ngIf="disclosureDetails.fcoiTypeCode === '2'" aria-hidden="true" class="coi-text-light flex-shrink-0 me-1">article</mat-icon>
+                                    <mat-icon *ngIf="disclosureDetails.fcoiTypeCode === '3'" aria-hidden="true" class="coi-text-light flex-shrink-0 me-1">workspace_premium</mat-icon>
+                                    <span class="title-text text-slice" title="#{{projectDetails.moduleItemId}} - {{projectDetails.title}}">#{{projectDetails.moduleItemId}} - {{projectDetails.title}}</span>
                                 </ng-container>
                             </h4>
                         </div>
-                        <div class="col-auto align-items-start justify-content-end">
+                        <div class="col-auto align-items-start justify-content-end mt-1">
                             <div class="d-inline-flex align-items-center">
                                 <label class="coi-text-light" for="coi-current-disclosure-risk">Risk: </label>
                                 <span class="ml-2 coi-text-light fw-normal">
