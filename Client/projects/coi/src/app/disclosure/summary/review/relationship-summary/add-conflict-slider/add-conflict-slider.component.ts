@@ -7,6 +7,9 @@ import { isEmptyObject, openModal } from '../../../../../../../../fibi/src/app/c
 import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CoiService } from '../../../../services/coi.service';
 import { openCoiSlider } from '../../../../../common/utilities/custom-utilities';
+import { DataStoreService } from '../../../../services/data-store.service';
+import { COI, ProjectRelationshipDetails } from '../../../../coi-interface';
+import { CoiSummaryService } from '../../../coi-summary.service';
 
 @Component({
     selector: 'app-add-conflict-slider',
@@ -20,6 +23,8 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     @Input() entityDetails: any = null;
     @Input() isEditMode: any = null;
     @Input() disclosureMetaData: any = null;
+    @Input() relationshipType : any[] = [];
+    @Input() selectedProject: ProjectRelationshipDetails;
     @ViewChild('addCommentOverlay', { static: true }) addCommentOverlay: ElementRef;
 
     conflictHistory = [];
@@ -32,14 +37,18 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     isReadMore: boolean[] = [];
     titleReadMore = false;
     coiConflictStatusType: any = null;
+    coiData = new COI();
+    relationshipTypeCache = {};
 
     constructor( public dataStoreService: CoiSummaryEventsAndStoreService,
-                 private _commonService: CommonService,  public coiService: CoiService ) { }
+                 private _commonService: CommonService,  public coiService: CoiService,
+                 public dataStore: DataStoreService,public coiSummaryService: CoiSummaryService) { }
 
     ngOnInit() {
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
+        this.coiData = this.dataStore.getData();        
     }
 
     showConflictNavBar() {
@@ -127,9 +136,9 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     }
 
 
-isEmptyHistory(): boolean {
-    return isEmptyObject(this.conflictHistory);
-}
+    isEmptyHistory(): boolean {
+        return isEmptyObject(this.conflictHistory);
+    }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
@@ -137,5 +146,21 @@ isEmptyHistory(): boolean {
 
     isFieldValueChanges(): boolean {
        return !!((this.conflictStatus  || this.comment));
+    }
+
+    getColorBadges(disclosure): string {
+        if (disclosure?.travelDisclosureId) {
+            return 'bg-travel-clip';
+        }
+        switch (disclosure.fcoiTypeCode) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
     }
 }

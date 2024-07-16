@@ -3,11 +3,13 @@ import { Injectable } from '@angular/core';
 
 import { CommonService } from '../../common/services/common.service';
 import { RO } from '../coi-interface';
+import { URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
 
 @Injectable()
 export class CoiSummaryService {
 
   activeSubNavItemId = '';
+  relationshipTypeCache = {};
 
     constructor(
         private _http: HttpClient,
@@ -52,6 +54,30 @@ export class CoiSummaryService {
     }
 
     getProjectRelationship(disclosureId: number) {
-      return this._http.get(`${this._commonService.baseUrl}/disclosure/projects/${disclosureId}`);
+      return this._http.get(this._commonService.baseUrl + URL_FOR_DISCLOSURE_PROJECT.replace('{disclosureId}', disclosureId.toString()));
+    }
+
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return { relationshipType: relationshipType[0] || '', description: relationshipType[1] || '' };
+            });
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+    }
+
+    getIcon(key): string {
+        switch (key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            case 'Consulting': return 'supervisor_account';
+            default: return;
+        }
     }
 }

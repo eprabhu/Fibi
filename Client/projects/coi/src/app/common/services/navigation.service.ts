@@ -33,7 +33,6 @@ export class NavigationService {
     previousURL = '';
     navigationGuardUrl = '';
 
-
     constructor(private _router: Router, public _commonService: CommonService) {
         this.routerEventSubscription();
     }
@@ -44,7 +43,6 @@ export class NavigationService {
      */
     routerEventSubscription() {
         this._router.events.subscribe(event => {
-            this._commonService.isManualLoaderOn = false;
             if (event instanceof RouteConfigLoadStart) {
                 this._commonService.isShowLoader.next(true);
             }

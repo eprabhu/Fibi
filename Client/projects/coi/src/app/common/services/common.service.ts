@@ -8,19 +8,17 @@ import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RES
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
+import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
 export class CommonService {
 
     isShowLoader = new BehaviorSubject<boolean>(true);
-    isManualLoaderOn = false;
-    isShowOverlay = false;
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
     opaUrl = '';
-    consultingUrl = '';
     formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
@@ -71,6 +69,8 @@ export class CommonService {
     $updateLatestAttachment = new Subject();
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
+    projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
+    modalPersonId: string = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService,private _router: Router) {
     }
@@ -121,7 +121,6 @@ export class CommonService {
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
         this.formUrl = configurationData.formUrl;
-        this.consultingUrl = configurationData.consultingUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -473,6 +472,41 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         if (RESOURCE_URLS[projectTypeCode]) {
             window.open(`${EXTERNAL_APPLICATION_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
         }
+    }
+
+    setLoaderRestriction(): void {
+        this.isPreventDefaultLoader = true;
+    }
+
+    removeLoaderRestriction(): void {
+        this.isPreventDefaultLoader = false;
+    }
+
+    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null): void {
+        this.projectDetailsModalInfo.projectDetails = projectDetails;
+        this.projectDetailsModalInfo.coiDisclosureId = coiDisclosureId;
+    }
+
+    closeProjectDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-project-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.projectDetailsModalInfo = new DisclosureProjectModalData();
+        }, 200);
+    }
+
+    openPersonDetailsModal(personId: string): void {
+        this.modalPersonId = personId;
+    }
+
+    closePersonDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-person-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.modalPersonId ='';
+        }, 200);
     }
 
 }

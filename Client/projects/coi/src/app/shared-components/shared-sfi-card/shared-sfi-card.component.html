@@ -9,8 +9,8 @@
                                     [ngClass]="SFIObject?.isActive ? SFIObject.isFormCompleted ? 'complete-ribbon' : 'incomplete-ribbon' : 'inactive-ribbon'">
                                     {{SFIObject?.isActive ? SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span> -->
                         <p class="entity-title entity-name my-auto mb-0 coi-text-darker fs-6" tabindex="-1"
-                                [attr.aria-label]="'entity name' + SFIObject?.entityName">
-                                <app-read-more [valueToShow]="SFIObject?.entityName" [sliceCount]="200"></app-read-more>
+                            [attr.aria-label]="'entity name' + SFIObject?.entityName">
+                            <span class="text-slice" [title]="SFIObject?.entityName">{{SFIObject?.entityName}}</span>
                         </p>
                     </div>
                     <div class="col-auto text-end">

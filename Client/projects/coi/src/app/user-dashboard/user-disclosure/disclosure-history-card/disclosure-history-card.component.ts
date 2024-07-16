@@ -43,12 +43,6 @@ export class DisclosureHistoryCardComponent implements OnInit {
         }
     }
 
-    getProjectTitle(): string {
-        if (this.disclosure.fcoiTypeCode === '2' || this.disclosure.fcoiTypeCode === '3') {
-            return `#${this.disclosure.projectNumber} - ${this.disclosure.projectTitle}`;
-        }
-    }
-
     redirectToDisclosure(): void {
         const redirectUrl = this.disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL :
         this.disclosure.opaDisclosureId ? OPA_REDIRECT_URL :

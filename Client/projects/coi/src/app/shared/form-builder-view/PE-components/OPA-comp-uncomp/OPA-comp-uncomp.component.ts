@@ -4,11 +4,11 @@ import { FormBuilderService } from '../../form-builder.service';
 import { getEndPointForEntity } from '../../search-configurations';
 import { CompUnComp, CompUnCompPE, EntityDetails, EntitySaveRO, RelationShipSaveRO } from './interface';
 import { OPACompUncompService } from './OPA-comp-uncomp.service';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { Subject } from 'rxjs';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
 import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { parseDateWithoutTimestamp } from '../../../../common/utilities/date-utilities';
 
 export const leftSlideInOut = trigger('leftSlideInOut', [
   transition(':enter', [

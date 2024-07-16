@@ -42,7 +42,6 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatIconModule} from '@angular/material/icon';
-import {DATE_PICKER_FORMAT_MATERIAL} from '../../../../fibi/src/app/app-constants';
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -72,6 +71,9 @@ import { FormSectionsComponent } from './form-builder-view/form-sections/form-se
 import { FormValidatorModule } from './form-validator/form-validator.module';
 import { CommonHelpTextComponent } from './common-help-text/common-help-text.component';
 import { CommonInformationComponent } from './common-information/common-information.component';
+import { VisibleInViewportDirective } from './directives/visibleInViewport.directive';
+import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
+import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
 
 @NgModule({
     imports: [
@@ -104,7 +106,7 @@ import { CommonInformationComponent } from './common-information/common-informat
         PELayerComponent,
         ReadMoreComponent,
         OPACompUncompComponent, OPAOutsideFinancialRelationComponent, OPAInstituteResourceUseComponent, OPAStudentSubordinateEmployeeComponent,
-        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent],
+        TailingSpaceRemoverDirective,FormBuilderViewComponent,FormSectionsComponent , CommonHelpTextComponent,CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -164,7 +166,9 @@ import { CommonInformationComponent } from './common-information/common-informat
         FormSectionsComponent,
         FormValidatorModule,
         CommonHelpTextComponent,
-        CommonInformationComponent
+        CommonInformationComponent,
+        VisibleInViewportDirective,
+        SkeletonLoaderComponent
     ],
 
     providers: [

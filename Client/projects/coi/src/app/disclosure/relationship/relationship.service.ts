@@ -1,6 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {CommonService} from '../../common/services/common.service';
+import { URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
 
 @Injectable()
 
@@ -22,7 +23,7 @@ export class RelationshipService {
     }
 
     getReporterProjects(disclosureId) {
-        return this._http.get(this._commonService.baseUrl + '/disclosure/projects/' + disclosureId);
+        return this._http.get(this._commonService.baseUrl + URL_FOR_DISCLOSURE_PROJECT.replace('{disclosureId}', disclosureId.toString()));
     }
 
     lookups() {

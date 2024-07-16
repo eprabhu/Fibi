@@ -1,62 +1,108 @@
 <ng-container *ngIf="isOpenSlider">
     <app-coi-slider (closeSlider)="hideConflictNavBar()" [elementId]="'add-conflict'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
-        <ng-container header>Relationship between SFIs and Projects</ng-container>
+        <ng-container header id="coi-conflict-slider-header">
+            <span>Relationship between SFIs and Projects</span>
+            <app-common-help-text [subSectionId]="803" [elementId]="'coi-conflict-slider-header'"></app-common-help-text></ng-container>
         <ng-container content>
-            <div class="row p-3 coi-box-red border border-secondary border-opacity-50 mx-0 mt-2 rounded-2 shadow-medium">
-                <div class="col-lg-6 col-md-12 px-0 mb-2">
-                    <label class="d-block coi-text-dark" for="">Person Associated with Disclosure</label>
-                    <app-no-data-label [valueToShow]="disclosureMetaData?.coiPersonFullName">
-                        <span class="grey-text fw-500 text-slice" [title]="disclosureMetaData?.coiPersonFullNam">{{disclosureMetaData?.coiPersonFullName}}</span>
-                    </app-no-data-label>
-                </div>
-                <div class="col-lg-6 col-md-12 px-0 mb-2">
-                    <label class="d-block coi-text-dark" for="">Significant Financial Interest</label>
-                    <app-no-data-label [valueToShow]="entityDetails?.entityName">
-                        <span class="grey-text fw-500 text-slice" [title]="entityDetails?.entityName">{{entityDetails?.entityName}}</span>
-                    </app-no-data-label>
-                </div>
-                <div class="col-12 px-0 mb-2">
-                    <label class="d-block coi-text-dark" for="">Project</label>
-                    <ng-container *ngIf="entityDetails?.moduleCode == 3 || entityDetails?.moduleCode == 1">
-                        <app-no-data-label [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
-                            <span class="grey-text fw-500 text-slice" title="#{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}">
-                                <strong>#{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}</strong>
-                            </span>
-                        </app-no-data-label>
-                    </ng-container>
-                </div>
-                <div class="col-lg-6 col-md-12 px-0 mb-md-2 mb-lg-0">
-                    <label class="d-block coi-text-dark" for="">Sponsor</label>
-                    <app-no-data-label [valueToShow]="entityDetails?.sponsor">
-                        <span class="grey-text fw-500 text-slice" [title]="entityDetails?.sponsor">{{entityDetails?.sponsor}}</span>
-                    </app-no-data-label>
-                </div>
-                <div class="col-lg-6 col-md-12 px-0">
-                    <label class="d-block coi-text-dark" for="">Prime Sponsor</label>
-
-                    <app-no-data-label [valueToShow]="entityDetails?.primeSponsor">
-                        <span class="grey-text fw-500 text-slice" [title]="entityDetails?.primeSponsor">{{entityDetails?.primeSponsor}}</span>
-                    </app-no-data-label>
-                </div>
-            </div>
-            <div *ngIf="isEditMode" class="d-flex alert alert-primary fs-14 my-2">
-                <mat-icon role="img" class="flex-shrink-0" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-                <p class="fs-14 mb-0 ms-2">
-                    <span class="d-flex algin-items-start">
-                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
-                        <span>Modify the conflict status of this Project - SFI relation from the Conflict Status field.</span>
-                    </span>
-                    <span class="d-flex algin-items-start mt-2">
-                        <mat-icon class="fs-14 mt-1 me-1 flex-shrink-0">keyboard_double_arrow_right</mat-icon>
-                        <span>Provide an adequate reason for your decision in the description field provided.
+            <div class="p-3 coi-box-red border border-secondary border-opacity-50 mx-0 rounded-3 shadow-medium position-sticky z-2 custom-stickytop">
+                <div class="row align-items-start">
+                    <div class="col d-flex coi-card-notch-ribbon-container">
+                        <span
+                            class="coi-card-notch-ribbon me-3 shadow-sm {{getColorBadges(coiData?.coiDisclosure?.coiDisclosureFcoiType)}}">
+                            <span>{{coiData?.coiDisclosure?.coiDisclosureFcoiType?.description}}</span>
                         </span>
-                    </span>
-                </p>
+                        <div class="col mt-2">
+                            <div class="col d-flex mb-2 ps-md-1 mt-md-1 mt-xl-0">
+                                <h4 class="mb-0 d-flex label-text f-16 coi-ms-n15px align-self-baseline flex-column">
+                                    <div>
+                                        <!-- Person Details -->
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            <!-- Person Name -->
+                                            <div *ngIf="disclosureMetaData?.coiPersonFullName" class="d-flex align-items-end me-3">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice" [title]="disclosureMetaData?.coiPersonFullName">
+                                                    {{disclosureMetaData?.coiPersonFullName}}
+                                                </span>
+                                            </div>
+                                            <!-- Person Title -->
+                                            <div *ngIf="coiData?.coiDisclosure?.personPrimaryTitle" class="d-flex align-items-end me-3">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice"
+                                                    [title]="coiData?.coiDisclosure?.personPrimaryTitle">{{coiData?.coiDisclosure?.personPrimaryTitle}}</span>
+                                            </div>
+                                            <!-- Person Department -->
+                                            <div *ngIf="coiData?.coiDisclosure?.unit?.unitDetail" class="d-flex align-items-end me-3">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice"
+                                                    [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                            </div>
+                                            <!-- Person Email -->
+                                            <div *ngIf="coiData?.coiDisclosure?.personEmail" class="d-flex align-items-end">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                                <span class="coi-text-light fs-14 text-slice"
+                                                    [title]="coiData?.coiDisclosure?.personEmail">{{coiData?.coiDisclosure?.personEmail}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ng-container
+                                        *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode== '2' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3' || coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode === '1'"
+                                        class="ms-1">
+                                        <span class="title-text text-slice mt-2"
+                                            [title]="entityDetails?.title">
+                                            <span>
+                                                <mat-icon aria-hidden="true" class="coi-text-light"
+                                                    *ngIf="selectedProject?.projectType == 'Development Proposal' || selectedProject?.projectType == 'Institute Proposal'">article</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light"
+                                                    *ngIf="selectedProject?.projectType == 'Award'">workspace_premium</mat-icon>
+                                            </span>
+                                            #{{entityDetails?.moduleItemId}} - {{entityDetails?.title}}
+                                        </span>
+                                    </ng-container>
+                                </h4>
+                            </div>
+                            <div class="mb-2 left-spacing">
+                                <app-no-data-label [valueToShow]="entityDetails?.entityName">
+                                    <span class="grey-text fw-500 text-slice" id="coi-conflict-card-sfi" [title]="entityDetails?.entityName">
+                                        <mat-icon aria-hidden="true"
+                                            class="coi-text-light me-2">apartment</mat-icon>{{entityDetails?.entityName}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col d-flex flex-wrap fw-medium fs-13 gap-2 align-items-start ps-5 mb-2">
+                                <ng-container class="mt-2"
+                                    *ngFor="let relation of coiSummaryService.getEntityRelationTypePills(relationshipType)">
+                                    <span class="relationship-pill mb-md-2 mb-lg-2 mb-xl-0 px-2 py-1 border rounded-4 d-inline-block">
+                                        <span class="d-flex coi-purple-text">
+                                            <mat-icon aria-hidden="true"
+                                                class="flex-shrink-0 me-1">{{coiSummaryService.getIcon(relation?.relationshipType)}}</mat-icon>
+                                            <span class="fw-bold">{{relation?.relationshipType}} :</span>
+                                            <span class="fw-normal">{{relation?.description}}</span>
+                                        </span>
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-auto d-flex justify-content-end gap-2">
+                        <label class="coi-text-light d-block text-nowrap" for="coi-disclosure-risk-disclosure">Conflict status :</label>
+                        <span class="coi-text-light fw-normal">
+                            <app-no-data-label [valueToShow]="conflictHistory[0]?.conflictStatusCode">
+                                <span class="badge {{_commonService.getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(conflictHistory[0]?.conflictStatusCode)}}">
+                                    {{conflictHistory[0]?.conflictStatusDescription}}
+                            </span>
+                            </app-no-data-label>
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div *ngIf="isEditMode" class="card shadow-sm p-3">
+            <div *ngIf="isEditMode" class="card shadow-sm p-3 mt-2">
                 <div class="row">
                     <div class="col-md-12 col-xl-4">
-                        <label class="fs-14 fw-500" for="select-conflict-status">Conflict Status
+                        <label class="fs-14 fw-500" for="select-conflict-status">
+                            <span>Conflict Status</span>
                             <app-common-help-text [subSectionId]="803" [elementId]="'select-conflict-status'"></app-common-help-text>
                         </label>
                         <span>
@@ -79,7 +125,8 @@
                         </span>
                     </div>
                     <div class="col-md-12 col-xl-8">
-                        <label class="fs-14 fw-500" for="coi-conflict-status-change">Describe the reason for Conflict status change
+                        <label class="fs-14 fw-500" for="coi-conflict-status-change">
+                            <span>Describe the reason for Conflict status change</span>
                             <app-common-help-text [subSectionId]="803" [elementId]="'coi-conflict-status-change'"></app-common-help-text>
                         </label>
                         <textarea id="coi-conflict-status-change" class="form-control fs-14" placeholder="Description" row="1"
@@ -109,20 +156,17 @@
                 </h3>
             </div>
 
-            <div class="card" id="risk-history">
+            <div class="card" id="conflict-history">
                 <div class="card-content">
                     <div class="card-body">
                             <ng-container *ngIf="conflictHistory.length > 0;else noData">
                                 <ul class="timeline">
                                     <li *ngFor="let historyEntry of conflictHistory;let index = index; let last = last;">
-                                        <div tabindex="0">
-                                            <span class="badge me-2 {{_commonService.getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(historyEntry?.conflictStatusCode)}}">
-                                            {{historyEntry?.conflictStatusDescription}}</span>
-                                            <i class="fa fa-user coi-text-light fs-16 me-1" aria-hidden="true"></i>
-                                            <span class="fw-700 fs-14">{{historyEntry?.updateUserFullName}}</span>
+                                        <span class="fs-14" [innerHTML]="historyEntry?.message" tabindex="-1"></span>
+                                        <div tabindex="-1">
                                             <span class="coi-text-lighter fs-13"> {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                                         </div>
-                                        <p class="coi-text-light pt-3 pb-4" tabindex="0">
+                                        <p class="coi-text-light pb-4" tabindex="-1">
                                             <span class="fs-14">
                                                 <mat-icon class="format_quote">format_quote</mat-icon>
                                                 <span *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo" class="fst-italic">

@@ -1,15 +1,15 @@
 <div *ngIf="selectedProject?.moduleCode" [id]="'coi-card-' + selectedProject?.projectId" class="card coi-card-regular border shadow me-2 mt-2 ms-2"
   [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject.projectTypeCode+'-'+selectedProject?.projectId}">
-    <div class="card-header px-4 py-2 d-flex align-items-center justify-content-between border-bottom-0 flex-nowrap">
+    <div class="d-flex align-items-start  justify-content-between position-absolute start-0 top-0">
       <span class="d-flex align-items-center">
-          <span class="active-ribbon shadow-sm align-items-center d-flex text-nowrap me-2" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
-          <span class="d-inline-flex">
+          <span class="coi-card-notch-ribbon shadow-sm me-2 mb-auto" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
+          <span class="d-flex align-items-center">
             <mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
             <mat-icon *ngIf="selectedProject?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
             <a tabindex="0" class="fs-6 link-primary fw-600 text-slice" id="link-{{selectedProject?.projectId}}"
                 title="Click here to view project details of #{{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
                 attr.aria-label="Click here to view project details of {{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
-                (click)="openModule()" (keyup.enter)="openModule()" (keyup.space)="openModule()" data-bs-toggle="modal" data-bs-target="#moduleViewModal">
+                (click)="openModule()" (keyup.enter)="openModule()" (keyup.space)="openModule()">
                 #{{selectedProject?.projectNumber}}- {{selectedProject?.title}}
             </a>
         </span>
@@ -23,13 +23,13 @@
         </div>
         <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
         <!-- comments -->
-        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity"
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', null)" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity"
           title="Click here to open comments" aria-label="Click here to open comments" type="button">
           <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
         </button>
       </div>
     </div>
-    <div *ngIf="isCollapsed" class="card-body" id="coi-relationship">
+    <div *ngIf="isCollapsed" class="card-body mt-4" id="coi-relationship">
       <div class="row mb-2">
         <!-- Principal Investigator -->
         <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
@@ -140,15 +140,15 @@
                             {{relation?.coiEntity?.entityName}}
                           </a>
                         </div>
-                        <div class="d-flex flex-wrap fw-medium fs-13 gap-2">
-                            <ng-container *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                              <span class="relationship-pill border px-3 py-1 rounded-4 d-inline-block">
-                                <span class="d-flex coi-purple-text">
-                                    <mat-icon aria-hidden="true"
-                                    class="flex-shrink-0 me-1">{{getIcon(relation?.relationshipType)}}</mat-icon>
-                                    <span class="fw-bold me-1">{{relation?.relationshipType}}:</span>
-                                    <span class="fw-normal">{{relation?.description}}</span>
-                                </span>
+                        <div class="d-flex flex-wrap fw-medium fs-13">
+                            <ng-container class="mt-2" *ngFor="let relation of coiSummaryService.getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                              <span class="relationship-pill border px-3 py-1 rounded-4 me-2 d-inline-block mb-2">
+                                  <span class="d-flex coi-purple-text me-2">
+                                      <mat-icon aria-hidden="true"
+                                      class="flex-shrink-0 me-1">{{coiSummaryService.getIcon(relation?.relationshipType)}}</mat-icon>
+                                      <span class="fw-bold">{{relation?.relationshipType}} :</span>
+                                      <span class="fw-normal">{{relation?.description}}</span>
+                                  </span>
                               </span>
                             </ng-container>
                         </div>
@@ -208,5 +208,6 @@
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
+  [relationshipType]="relationshipType" [selectedProject]="selectedProject"></app-add-conflict-slider>
 

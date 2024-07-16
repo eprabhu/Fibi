@@ -284,11 +284,12 @@ public interface ConflictOfInterestService {
 	 * 2) Is part of any pending project disclosure
 	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
 	 *
+	 * @param personId
 	 * @param moduleCode
 	 * @param moduleItemId
 	 * @return
 	 */
-    ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
+    ResponseEntity<Object> validateDisclosure(String personId, Integer moduleCode, String moduleItemId);
 
 	/**
 	 * This method is used to assign admin group or admin person
@@ -516,4 +517,5 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> getDisclosureLookups();
+
 }

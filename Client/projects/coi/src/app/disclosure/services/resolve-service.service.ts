@@ -36,7 +36,6 @@ export class ResolveServiceService {
             forkJoin(this.getHttpRequests(route)).subscribe((res: any[]) => {
                 if (res.length > 1) {
                     this.updateSectionConfig(res[1]);
-                    this.hideManualLoader();
                 }
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
@@ -93,11 +92,6 @@ export class ResolveServiceService {
 
     private loadDisclosure(disclosureId: string) {
         return this._coiService.loadDisclosure(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
-    }
-
-    private hideManualLoader() {
-        this._commonService.isShowLoader.next(false);
-        this._commonService.isManualLoaderOn = false;
     }
 
     private redirectOnError(error) {

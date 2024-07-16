@@ -45,8 +45,6 @@ export class OpaComponent implements OnInit {
     description: any;
     showSlider = false;
     selectedType: string;
-    showPersonDetailsModal = false;
-    personDetailsModalVO = {personId: '', fullName: ''};
     $subscriptions = [];
     commentsRight: {
         canViewPrivateComments: boolean;
@@ -200,14 +198,8 @@ export class OpaComponent implements OnInit {
         }
     }
 
-    closePersonDetailsModal(event) {
-        this.showPersonDetailsModal = event;
-    }
-
-    openDetailModal(): void {
-        this.personDetailsModalVO.personId = this.opa.opaDisclosure.personId;
-        this.personDetailsModalVO.fullName = this.opa.opaDisclosure.personName;
-        this.showPersonDetailsModal = true;
+    openPersonDetailsModal(): void {
+        this.commonService.openPersonDetailsModal(this.opa.opaDisclosure.personId)
     }
 
     private getDataFromStore() {

@@ -59,7 +59,7 @@ public class AuthController {
 		Authentication authenticate = null;
 		String userName = "";
 		if ("EXTERNALAUTH".equals(loginMode)) {
-			String remoteUser = req.getRemoteUser().substring(0, req.getRemoteUser().lastIndexOf('@'));
+			String remoteUser = req.getHeader("REMOTE_USER").substring(0, req.getHeader("REMOTE_USER").lastIndexOf('@'));
 			if (remoteUser == null) {
 				remoteUser = (req.getUserPrincipal() != null ? req.getUserPrincipal().getName() : null);
 			}
