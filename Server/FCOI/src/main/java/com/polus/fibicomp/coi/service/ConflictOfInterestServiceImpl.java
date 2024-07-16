@@ -192,9 +192,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
 		if (conflictOfInterestVO.getCoiDisclosure() != null && conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode() == null) {
-			Map<String, Object> validatedObject = conflictOfInterestDao.validateProjectDisclosure(AuthenticatedUser.getLoginPersonId(),
-					conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().equals("3") ?
-							Constants.DEV_PROPOSAL_MODULE_CODE : Constants.AWARD_MODULE_CODE,
+			Map<String, Object> validatedObject = conflictOfInterestDao.validateProjectDisclosure(conflictOfInterestVO.getPersonId(),
+					conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().equals("3")
+							? Constants.DEV_PROPOSAL_MODULE_CODE
+							: Constants.AWARD_MODULE_CODE,
 					conflictOfInterestVO.getCoiDisclosure().getModuleItemKey());
 			if (validatedObject.get("pendingProject") != null ) {
 				CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure((Integer) validatedObject.get("pendingProject"));
@@ -209,7 +210,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				return new ResponseEntity<>(coiDisclosureDto, HttpStatus.METHOD_NOT_ALLOWED);
 			}
 		} else if (conflictOfInterestVO.getCoiDisclosure() != null && conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().equals("1")) {
-			CoiDisclosure fcoiDisclosure = conflictOfInterestDao.isFCOIDisclosureExists(AuthenticatedUser.getLoginPersonId(), "1", Constants.COI_PENDING_STATUS);
+			CoiDisclosure fcoiDisclosure = conflictOfInterestDao.isFCOIDisclosureExists(conflictOfInterestVO.getPersonId(), "1", Constants.COI_PENDING_STATUS);
 			if (fcoiDisclosure != null) {
 				return new ResponseEntity<>(fcoiDisclosure, HttpStatus.METHOD_NOT_ALLOWED);
 			}
@@ -255,7 +256,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
 		coiDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
-		coiDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		Person personDetail = personDao.getPersonDetailById(conflictOfInterestVO.getPersonId());
+		coiDisclosure.setUpdateUser(personDetail.getPrincipalName());
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		if(coiDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
@@ -269,7 +271,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_CREATED)
 					.disclosureId(coiDisclosure.getDisclosureId()).disclosureNumber(coiDisclosure.getDisclosureNumber())
 					.fcoiTypeCode(coiDisclosure.getFcoiTypeCode()).revisionComment(coiDisclosure.getRevisionComment())
-					.reporter(AuthenticatedUser.getLoginUserFullName())
+					.reporter(personDetail.getFullName())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -1706,8 +1708,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId) {
-		Map<String, Object> validatedObject = conflictOfInterestDao.validateProjectDisclosure(AuthenticatedUser.getLoginPersonId(), moduleCode, moduleItemId);
+	public ResponseEntity<Object> validateDisclosure(String personId, Integer moduleCode, String moduleItemId) {
+		Map<String, Object> validatedObject = conflictOfInterestDao.validateProjectDisclosure(personId, moduleCode, moduleItemId);
 		if (validatedObject.get("pendingProject") != null) {
 			CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure((Integer) validatedObject.get("pendingProject"));
 			CoiDisclosureDto coiDisclosureDto = new CoiDisclosureDto();
