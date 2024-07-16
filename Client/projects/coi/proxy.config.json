@@ -263,7 +263,7 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
-    "/validate/*": {
+    "/validateDisclosure": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
