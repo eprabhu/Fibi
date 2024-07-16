@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.polus.fibicomp.person.pojo.Person;
 
 @Repository
-public interface ApplicationUserRepository extends JpaRepository<Person, Long> {
+public interface ApplicationUserRepository extends JpaRepository<Person, String> {
 
 	/**
 	 * This method is used to validate user credentials.

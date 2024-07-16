@@ -46,14 +46,11 @@ public class JwtService {
     }
 
     private String createToken(Claims claims, String userName) {
-    	Date now = new Date();
-		Date expiryDate = new Date(now.getTime() 
-				+ EXPIRATION_TIME
-				);
+    	
         return Jwts.builder()
                 .setClaims(claims)                
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignKey(), SignatureAlgorithm.HS512).compact();
     }
 
