@@ -214,7 +214,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (fcoiDisclosure != null) {
 				return new ResponseEntity<>(fcoiDisclosure, HttpStatus.METHOD_NOT_ALLOWED);
 			}
-			fcoiDisclosure = conflictOfInterestDao.isFCOIDisclosureExists(AuthenticatedUser.getLoginPersonId(), "1", Constants.COI_ACTIVE_STATUS);
+			fcoiDisclosure = conflictOfInterestDao.isFCOIDisclosureExists(conflictOfInterestVO.getPersonId(), "1", Constants.COI_ACTIVE_STATUS);
 			if (fcoiDisclosure != null) {
 				return new ResponseEntity<>(fcoiDisclosure, HttpStatus.METHOD_NOT_ALLOWED);
 			}
