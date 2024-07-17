@@ -237,4 +237,13 @@ public class CoiTravelDisclosure implements Serializable {
 	@Transient
 	private String riskLevel;
 
+	@Transient
+	private Long personNotesCount;
+
+	@Transient
+	private Long personAttachmentsCount;
+
+	@Transient
+	private Integer personEntitiesCount;
+
 }
