@@ -23,5 +23,6 @@ public class AuthResponse implements Serializable {
     private String primaryTitle;
     private String homeUnitName;
     private Boolean isFaculty;
+    private String email;
     
 }
