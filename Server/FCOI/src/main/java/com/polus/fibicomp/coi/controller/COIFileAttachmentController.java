@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.polus.core.common.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.service.COIFileAttachmentService;
-import com.polus.fibicomp.common.dao.CommonDao;
 
 import io.swagger.v3.oas.annotations.Operation;
 

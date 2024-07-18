@@ -90,6 +90,7 @@ public class AuthController {
 						.gender(optionalPerson.get().getGender())
 						.primaryTitle(optionalPerson.get().getPrimaryTitle())
 						.isFaculty(optionalPerson.get().getIsFaculty())
+						.email(optionalPerson.get().getEmailAddress())
 						.build();
 				if (optionalPerson.get().getUnit() == null) {
 					Unit unit = unitService.getRootUnit();

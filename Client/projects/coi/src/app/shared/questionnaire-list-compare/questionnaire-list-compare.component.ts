@@ -45,7 +45,7 @@ export class QuestionnaireListCompareComponent implements OnChanges, OnDestroy {
     currentModuleSubItemKey: '',
     currentQuestionnaireMode: null,
     baseQuestionnaireMode: null,
-    actionUserId: this._commonService.getCurrentUserDetail('personId'),
+    actionUserId: this._commonService.getCurrentUserDetail('personID'),
     actionPersonName: this._commonService.getCurrentUserDetail('userName'),
   };
   @Input() compareDetails: CompareType = {

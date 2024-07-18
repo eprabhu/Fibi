@@ -39,7 +39,7 @@ export class AttachmentsComponent implements OnInit {
     }
 
     getPersonId() {
-        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personId');
+        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personID');
     }
 
     getAllAttachments() {
@@ -49,7 +49,7 @@ export class AttachmentsComponent implements OnInit {
             if (data) {
                 this.attachmentLists = data;
                 this.isFirstTimeLoad = false;
-            } 
+            }
             if (!data?.length) {
                 this.isShowCreate = true;
             }

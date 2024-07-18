@@ -73,7 +73,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     getActionList(type) {
         if (!this.isSaving) {
             this.isSaving = true;
-            this.inboxObject.toPersonId = this._commonService.getCurrentUserDetail('personId');
+            this.inboxObject.toPersonId = this._commonService.getCurrentUserDetail('personID');
             this.inboxObject.isViewAll = 'N';
             this.inboxObject.processed = type;
             this.inboxObject.fromDate = parseDateWithoutTimestamp(this.inboxObject.fromDate);
@@ -135,7 +135,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     getRequestObjectForBanner(): any {
         return {
             'moduleCodeList': [8, 24],
-            'personId': this._commonService.getCurrentUserDetail('personId'),
+            'personId': this._commonService.getCurrentUserDetail('personID'),
             'alertType': 'B'
         };
     }
