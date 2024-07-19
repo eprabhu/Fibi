@@ -76,10 +76,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
             || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
-        this.userDetails = {
-            personId: this.commonService.getCurrentUserDetail('personID'),
-            fullName: this.commonService.getCurrentUserDetail('fullName')
-        };
         this.openModalTriggeredFromChild();
     }
 
