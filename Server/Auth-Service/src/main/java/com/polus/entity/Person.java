@@ -205,11 +205,20 @@ public class Person implements Serializable {
 	
 	@Column(name = "IS_EXTERNAL_USER")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isExternalUser = false;
+	private String userType;
 
     @Column(name = "OFFICE_PHONE")
 	private String officePhone;
-  
-	
-    
+
+	@Column(name = "IS_MFA_ENABLED")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isMfaEnabled = false;
+
+	@Column(name = "SECRET")
+	private String secret;
+
+	@Column(name = "IS_EXTERNAL_USER")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isExternalUser = false;
+
 }
