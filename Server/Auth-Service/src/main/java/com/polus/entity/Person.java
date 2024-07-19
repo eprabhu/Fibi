@@ -202,10 +202,6 @@ public class Person implements Serializable {
 
 	@Column(name = "DATE_WHEN_PERSON_INACTIVE")
 	private Timestamp dateOfInactive;
-	
-	@Column(name = "IS_EXTERNAL_USER")
-	@Convert(converter = JpaCharBooleanConversion.class)
-	private String userType;
 
     @Column(name = "OFFICE_PHONE")
 	private String officePhone;
