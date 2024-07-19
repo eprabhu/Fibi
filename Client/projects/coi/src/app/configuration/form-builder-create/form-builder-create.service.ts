@@ -85,10 +85,6 @@ export class FormBuilderCreateService {
         return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formheader", formDetails);
     }
 
-    publishForm(formDetails: CreateFormHeader): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formheader", formDetails);
-    }
-
     createFormSection(formSection: FormSectionObject): Observable<any> {
         return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/formsection", formSection);
     }
@@ -174,37 +170,6 @@ export class FormBuilderCreateService {
 
     deleteusage(usageID: number): Observable<any> {
         return this._http.delete(this._commonService.formUrl + `/formbuilder/config/v1/formusage/${usageID}`);
-    }
-    getSystemLookupByCustomType(dataTypeCode:{dataTypeCode:string}): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/getSystemLookupByCustomType", dataTypeCode);
-    }
-
-    configureCustomElement(customData: configureCustomElement): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/configureCustomElement", customData);
-    }
-
-    fetchCustomData(customDataId:{customDataElementId:string}): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/fetchFormCustomElementById", customDataId);
-    }
-
-    getModuleList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + "/getModuleList");
-    }
-
-    saveFormUsage(integationObj: saveFormUsage): Observable<any> {
-        return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/formusage", integationObj);
-    }
-
-    updateFormUsage(integationObj: UpdateFormUsage): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formusage", integationObj);
-    }
-
-    getAllFormUsage(formBuilderId: string): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + `/formbuilder/config/v1/formusage/${formBuilderId}`);
-    }
-
-    deleteusage(usageID: number): Observable<any> {
-        return this._http.delete(this._commonService.baseUrl + `/formbuilder/config/v1/formusage/${usageID}`);
     }
 
 }
