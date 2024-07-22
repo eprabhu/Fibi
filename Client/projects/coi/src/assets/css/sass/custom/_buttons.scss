@@ -119,12 +119,23 @@
     color: white;
     border: 1px solid #007DEC;
 
-    label {
+    .btn-outline-grey-custom-text {
       color: white !important;
     }
 
     img {
       filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
+    }
+  }
+
+  &.btn-outline-grey-active {
+    background-color: #007DEC !important;
+    color: white !important;
+    border: 1px solid #007DEC;
+    box-shadow: 0 0 6px 0px rgb(0 125 236 / 35%) !important;
+
+    .btn-outline-grey-custom-text {
+      color: white !important;
     }
   }
 

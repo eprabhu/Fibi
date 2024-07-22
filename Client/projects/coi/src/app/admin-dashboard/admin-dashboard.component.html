@@ -550,7 +550,7 @@
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
-                                                <strong class="coi-text-light fs-6 text-nowrap me-2" tabindex="-1"
+                                                <strong class="coi-text-light fs-6 text-nowrap me-1" tabindex="-1"
                                                         [attr.aria-label]="'Disclosure Person' + (coi.travellerName)">
                                                     {{coi.travellerName}}
                                                 </strong>
@@ -906,7 +906,7 @@
                                                         <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                         <span>
                                                         <app-no-data-label id="purpose" [valueToShow]="coi?.travelPurpose">
-                                                            <app-read-more [classesToApply]="'coi-text-light word-break-all'" [valueToShow]="coi?.travelPurpose" [sliceCount]="80"></app-read-more>
+                                                            <span class="text-slice" [title]="coi?.travelPurpose">{{coi?.travelPurpose}}</span>
                                                         </app-no-data-label>
                                                         </span>
                                                     </div>

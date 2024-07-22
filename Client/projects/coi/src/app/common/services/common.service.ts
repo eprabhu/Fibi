@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
 
-type Method = 'SOME' | 'EVERY';
+export type Method = 'SOME' | 'EVERY';
+export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | '';
+export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 @Injectable()
 export class CommonService {
 
@@ -71,6 +73,7 @@ export class CommonService {
     isOpenAttachmentModal = false;
     projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
     modalPersonId: string = '';
+    $globalEventNotifier = new Subject<GlobalEventNotifier>();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService,private _router: Router) {
     }
@@ -507,6 +510,19 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         setTimeout(() => {
             this.modalPersonId ='';
         }, 200);
+    }
+
+    getRiskColor(typeCode: string): string {
+        switch (typeCode) {
+            case '1':
+                return 'high-risk';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return '';
+        }
     }
 
 }

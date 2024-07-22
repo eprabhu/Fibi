@@ -5,8 +5,8 @@ import { CommonService } from '../../common/services/common.service';
 import { TravelDataStoreService } from './travel-data-store.service';
 import { TravelDisclosureService } from './travel-disclosure.service';
 import { NavigationService } from '../../common/services/navigation.service';
-import { TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
+import { TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure.interface';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanDeactivate, Navigation, Router, RouterStateSnapshot} from '@angular/router';
 import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, REPORTER_HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { openCommonModal } from '../../common/utilities/custom-utilities';
 
@@ -14,9 +14,10 @@ import { openCommonModal } from '../../common/utilities/custom-utilities';
 @Injectable()
 export class TravelRouteGuardService implements CanActivate, CanDeactivate<boolean> {
 
-    constructor(private _service: TravelDisclosureService,
+    constructor(private _router: Router,
                 private _commonService: CommonService,
-                private _router: Router,
+                private _activatedRoute: ActivatedRoute,
+                private _service: TravelDisclosureService,
                 private _dataStore: TravelDataStoreService,
                 private _navigationService: NavigationService) {
     }
@@ -49,15 +50,21 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     canDeactivate(): boolean {
-        const shouldShowUnsavedModal = (!this._service.isChildRouteTriggered && this.hasHomeAndPersonId() && this._dataStore.getEditModeForDisclosure())
-                                        || this._service.travelDataChanged;
+        const CURRENT_NAVIGATION: Navigation | null = this._router.getCurrentNavigation();
+        const NAVIGATION_GUARD_URL: string = CURRENT_NAVIGATION?.finalUrl?.toString() || '';
+        const HAS_TRAVEL_DISCLOSURE_ID: boolean = !!this._activatedRoute.snapshot.queryParamMap.get('disclosureId');
+        const HAS_CREATE_TRAVEL_DISCLOSURE_URL: boolean = NAVIGATION_GUARD_URL.includes('create-travel-disclosure');
+    
+        if (this._service.isAllowNavigation) {
+            this._service.isAllowNavigation = false;
+            return true;
+        }
 
-        if (shouldShowUnsavedModal) {
+        if (this._service.travelDataChanged || (!HAS_CREATE_TRAVEL_DISCLOSURE_URL && !HAS_TRAVEL_DISCLOSURE_ID)) {
             openCommonModal('travel-unsaved-changes-modal');
             return false;
         }
 
-        this._service.isChildRouteTriggered = this._navigationService.navigationGuardUrl.includes('create');
         return true;
     }
 

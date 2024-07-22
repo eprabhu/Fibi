@@ -44,26 +44,6 @@
     @extend .status-pill-position;
 }
 
-.risk-badge {
-    top: -5px;
-    position: relative;
-}
-
-.invalid {
-    @extend .risk-badge;
-    color: #ff0000;
-}
-
-.medium-risk {
-    @extend .risk-badge;
-    color: #ff8c00;
-}
-
-.low-risk {
-    @extend .risk-badge;
-    color: #4CB57D;
-}
-
 .entity-risk-badge {
     width: max-content !important;
 }

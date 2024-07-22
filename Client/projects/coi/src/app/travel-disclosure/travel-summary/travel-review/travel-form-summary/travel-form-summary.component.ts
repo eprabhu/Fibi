@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
-import { EntityDetails, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
+import { EntityDetails, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure.interface';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { getFormattedAmount } from '../../../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
+import { heightAnimation } from 'projects/coi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-travel-form-summary',
     templateUrl: './travel-form-summary.component.html',
-    styleUrls: ['./travel-form-summary.component.scss']
+    styleUrls: ['./travel-form-summary.component.scss'],
+    animations: [heightAnimation('0', '*', 400, 'heightAnimation')]
 })
 export class TravelFormSummaryComponent implements OnInit, OnDestroy {
 

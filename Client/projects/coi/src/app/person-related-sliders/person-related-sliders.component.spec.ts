@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { HeaderSlidersComponent } from './header-sliders.component';
+import { PersonRelatedSlidersComponent } from './person-related-sliders.component';
 
-describe('HeaderSlidersComponent', () => {
-  let component: HeaderSlidersComponent;
-  let fixture: ComponentFixture<HeaderSlidersComponent>;
+describe('PersonRelatedSlidersComponent', () => {
+  let component: PersonRelatedSlidersComponent;
+  let fixture: ComponentFixture<PersonRelatedSlidersComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderSlidersComponent ]
+      declarations: [ PersonRelatedSlidersComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderSlidersComponent);
+    fixture = TestBed.createComponent(PersonRelatedSlidersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
