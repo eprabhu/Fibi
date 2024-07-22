@@ -1,6 +1,6 @@
 2023-08-03 09:36:05 INFO com.polus.fibi.graphconnect.GraphConnectMainApp - Starting GraphConnectMainApp using Java 17.0.3 with PID 1968 (D:\projects\Fibi-COI-v1\Fibi\Server\Graph-Connect\target\classes started by LENOVO in D:\projects\Fibi-COI-v1\Fibi\Server\Graph-Connect)
 2023-08-03 09:36:05 INFO com.polus.fibi.graphconnect.GraphConnectMainApp - No active profile set, falling back to 1 default profile: "default"
-2023-08-03 09:36:05 INFO org.springframework.cloud.config.client.ConfigServerConfigDataLoader - Fetching config from server at : http://host.docker.internal:9296
+2023-08-03 09:36:05 INFO org.springframework.cloud.config.client.ConfigServerConfigDataLoader - Fetching config from server at : http://localhost:9296
 2023-08-03 09:36:05 INFO org.springframework.cloud.config.client.ConfigServerConfigDataLoader - Located environment: name=GRAPH-CONNECT, profiles=[default], label=null, version=null, state=null
 2023-08-03 09:36:07 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
 2023-08-03 09:36:07 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
