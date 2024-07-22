@@ -11,7 +11,7 @@ import {DataStoreService} from './services/data-store.service';
 import {OpaService} from './services/opa.service';
 import {OPASharedModule} from './shared/shared.module';
 import {SharedModule} from '../shared/shared.module';
-import { HeaderSlidersModule } from '../disclosure/header-sliders/header-sliders.module';
+import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
 import { ReviewRouteGuardService } from './services/review-route-guard.service';
 import {RouterGuardService} from './services/router-guard.service';
 
@@ -50,7 +50,7 @@ const routes: Routes = [{
         FormsModule,
         SharedModule,
         OPASharedModule,
-        HeaderSlidersModule
+        PersonRelatedSlidersModule
     ],
     providers: [
         OpaService,

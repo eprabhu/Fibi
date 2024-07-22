@@ -713,19 +713,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isOpenRiskSlider = false;
     }
 
-    getWarningClass(typeCode) {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
-    }
-
     getManageDisclosureRight(): boolean {
         const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
         const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
