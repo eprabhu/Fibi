@@ -1,32 +1,31 @@
 <div [@fadeInOutHeight]>
-    <div class="alert alert-primary mb-3">
+    <div class="alert alert-primary my-2">
         <app-read-more [valueToShow]="headerInfoText" [sliceCount]="650" [classesToApply]="'fs-14'"></app-read-more>
     </div>
-    <div class="card mt-1">
+    <div class="card p-4">
+        <!-- error box -->
+        <div *ngIf="!isCheckBoxDisable" class="alert alert-danger fs-14" role="alert">
+            <i class="fa fa-exclamation-circle icon me-2"></i>
+            <span>Kindly complete all the mandatory fields in the Travel Details section to certify the disclosure.</span>
+        </div>
 
-        <div class="card-body">
-            <!-- error box -->
-            <div class="p-15 mx-5 mt-3" *ngIf="!isCheckBoxDisable">
-                <div class="text-danger">
-                    <p role="alert" class="w-100 fa fa-exclamation-circle icon alert alert-danger py-3" role="alert">
-                        <span class="m-3 fw-400 fs-14">Kindly complete all the mandatory fields in the Travel Details section to certify the disclosure.</span>
+        <div class="d-flex justify-content-center card-body text-center mx-3 py-0">
+            <!-- check box -->
+            <div class="text-secondary text-center d-flex ">
+                <div class="me-2">
+                    <input type="checkbox" (ngModelChange)="certify();" [(ngModel)]="travelService.isTravelCertified"
+                        [disabled]="!isCheckBoxDisable" class="certify-box mt-1 cursor-pointer" aria-label="Please check here to certify the disclosure">
+                </div>
+                <div class="fs-14">
+                    <p class="mb-0">
+                        I agree to abide by the University COI policy guidelines and certify that the information provided for
+                        the Financial conflict of interest, including, responses to screening questions, list of my pertinent
+                        Significant Financial interests and possible relationship to my sponsored activity is an accurate and
+                        current statement of my reportable outside interests and activities.
                     </p>
                 </div>
             </div>
-
-            <!-- check box -->
-            <div class="gridSkin p-15 text-center d-flex justify-content-center m-5">
-                <div class="me-3">
-                    <input type="checkbox" (change)="certify();" [checked]="travelService.isTravelCertified"
-                    [disabled]="!isCheckBoxDisable" class="certify-box mt-1 cursor-pointer">
-                </div>
-                <p>
-                    I agree to abide by the University COI policy guidelines and certify that the information provided for
-                    the Financial conflict of interest, including, responses to screening questions, list of my pertinent
-                    Significant Financial interests and possible relationship to my sponsored activity is an accurate and
-                    current statement of my reportable outside interests and activities.
-                </p>
-            </div>
         </div>
+
     </div>
 </div>

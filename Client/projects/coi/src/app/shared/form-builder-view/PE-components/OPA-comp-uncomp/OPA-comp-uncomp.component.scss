@@ -97,21 +97,6 @@
   position: relative;
 }
 
-.invalid {
-  @extend .riskbadge;
-  color: #ff0000;
-}
-
-.medium-risk {
-  @extend .riskbadge;
-  color: #ff8c00;
-}
-
-.low-risk {
-  @extend .riskbadge;
-  color: rgb(26, 172, 62);
-}
-
 .small-icon {
   transform: scale(0.7);
   cursor: pointer;

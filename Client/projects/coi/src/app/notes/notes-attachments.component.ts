@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NotesAttachmentsService } from './notes-attachments.service';
 import { Subscription } from 'rxjs';
-import { listAnimation } from '../../common/utilities/animations';
-import { CommonService } from '../../common/services/common.service';
-import { openSlider, closeSlider, openCoiSlider } from '../../common/utilities/custom-utilities';
-import { EDITOR_CONFIGURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { deepCloneObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
+import { deepCloneObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Router } from '@angular/router';
+import { listAnimation } from '../common/utilities/animations';
+import { EDITOR_CONFIGURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
+import { CommonService } from '../common/services/common.service';
+import { closeSlider, openCoiSlider } from '../common/utilities/custom-utilities';
 
 class Notes {
     content: string;

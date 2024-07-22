@@ -1,4 +1,3 @@
-import { NotesAttachmentsModule } from './../user-dashboard/notes/notes-attachments.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConsultingFormComponent } from './consulting-form.component';
@@ -13,9 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { ReviewModule } from './review/review.module';
 import { HistoryModule } from './history/history.module';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
-import { HeaderSliderComponent } from './header-slider/header-slider.component';
 import { SfiModule } from '../disclosure/sfi/sfi.module';
-import { AttachmentsModule } from '../user-dashboard/attachments/attachments.module';
+import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
 
 const routes: Routes = [{
     path: '', component: ConsultingFormComponent, canActivate: [ResolveServiceService], children: [
@@ -42,7 +40,6 @@ const routes: Routes = [{
 @NgModule({
   declarations: [
     ConsultingFormComponent,
-    HeaderSliderComponent
   ],
   imports: [
     CommonModule,
@@ -52,8 +49,7 @@ const routes: Routes = [{
     ReviewModule,
     HistoryModule,
     SharedComponentModule,
-    NotesAttachmentsModule,
-    AttachmentsModule,
+    PersonRelatedSlidersModule,
     SfiModule
   ],
   providers: [

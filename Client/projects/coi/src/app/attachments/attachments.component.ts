@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AttachmentsService } from './attachments.service';
-import { CommonService } from '../../common/services/common.service';
-import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
-import { environment } from '../../../environments/environment';
+import { CommonService } from '../common/services/common.service';
+import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
+import { HTTP_ERROR_STATUS } from '../app-constants';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'app-attachments',
@@ -13,7 +13,8 @@ import { environment } from '../../../environments/environment';
 })
 export class AttachmentsComponent implements OnInit {
 
-    @Input() coiPersonId: any = null;
+    @Input() personId: any = null;
+    @Input() isViewMode: boolean = false;
     attachmentLists = [];
     isFirstTimeLoad = false;
     $subscriptions: Subscription[] = [];
@@ -39,7 +40,7 @@ export class AttachmentsComponent implements OnInit {
     }
 
     getPersonId() {
-        return this.coiPersonId ? this.coiPersonId : this._commonService.getCurrentUserDetail('personId');
+        return this.personId ? this.personId : this._commonService.getCurrentUserDetail('personId');
     }
 
     getAllAttachments() {

@@ -24,7 +24,7 @@
                                             </a>
                                         </span>
                                         <!-- links -->
-                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-1 me-2">
+                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-auto me-3">
                                             <!-- <span class="ms-2 me-2"  role="link"
                                                 [title]="0 ? 'Click here to view trainings' : ''"
                                                 [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
@@ -188,10 +188,6 @@
                 <div class="col-lg-3 border-prev-nxt ng-tns-c246-40 ng-star-inserted" ng-reflect-ng-class="">
                     <div class="h-100" *ngIf="isCardExpanded">
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
-                            <button title="Go to OPA home page" (click)="goToHomeUrl()" id="opa_home_btn" aria-label="GO TO O P A home"
-                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                <mat-icon aria-hidden="true">home</mat-icon>
-                            </button>
                             <button (click)="location.back()" title="Go to Back" id="opa_back_btn"
                                 class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
                                 aria-label="Go to Back">
@@ -259,10 +255,6 @@
                     </div>
                     <div class="h-100" *ngIf="!isCardExpanded">
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
-                            <button title="Go to OPA home page" class="btn btn-outline-grey pb-0 fs-14 col fit-height" aria-label="GO TO O P A home"
-                                id="opa_home_btn" (click)="goToHomeUrl()">
-                                <mat-icon aria-hidden="true">home</mat-icon>
-                            </button>
                             <button title="Go to Back" class="btn btn-outline-grey pb-0 fs-14 col fit-height" (click)="location.back()"
                                 id="opa_back_btn" aria-label="Back">
                                 <mat-icon aria-hidden="true">reply</mat-icon>
@@ -398,9 +390,10 @@
 </div>
 
 <ng-container *ngIf="showSlider">
-    <app-header-sliders (closePage)="closeHeaderSlider($event)"
-    [coiPersonId] = "opa?.opaDisclosure?.personId" [sliderType]="selectedType"
-    [personName]="opa?.opaDisclosure?.personName"></app-header-sliders>
+    <app-person-related-sliders (closePage)="closeHeaderSlider($event)" for="OPA"
+        [personId] = "opa?.opaDisclosure?.personId" [sliderType]="selectedType"
+        [personName]="opa?.opaDisclosure?.personName">
+    </app-person-related-sliders>
 </ng-container>
 
 <div>
