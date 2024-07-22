@@ -1,21 +1,45 @@
 package com.polus.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 
-@Service
-public class AuthService {
+import com.polus.dto.AuthRequest;
+import com.polus.dto.AuthResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-    @Autowired
-    private JwtService jwtService;
+public interface AuthService {
 
-    public String generateToken(String username) {
-        return jwtService.generateToken(username);
-    }
+	/**
+	 * @param username
+	 * @return
+	 */
+	String generateToken(String username);
 
-    public void validateToken(String token) {
-        jwtService.validateToken(token);
-    }
-   
+	/**
+	 * @param token
+	 */
+	void validateToken(String token);
+
+	/**
+	 * @param username
+	 * @return
+	 */
+	ResponseEntity<AuthResponse> checkAuthorization(HttpServletRequest request, HttpServletResponse servletResponse);
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	ResponseEntity<AuthResponse> checkSSOAuthorization(HttpServletRequest request, HttpServletResponse response);
+
+	ResponseEntity<?> verifyCode(AuthRequest vo);
+
+	/**
+	 *
+	 * @param request
+	 * @param response
+	 */
+	void logout(HttpServletRequest request, HttpServletResponse response);
+
 }

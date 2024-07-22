@@ -93,8 +93,6 @@ public class Person implements Serializable {
 
 	@Column(name = "COUNTRY_OF_CITIZENSHIP")
 	private String countryOfCitizenshipCode;
-	
-	
 
 	@Column(name = "PRIMARY_TITLE")
 	private String primaryTitle;

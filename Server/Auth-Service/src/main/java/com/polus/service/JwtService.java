@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
 	@Autowired
-	PersonService service;
+	PersonService personService;
 	
 	private static final String LOGIN_PERSON_ID = "personId";
 	private static final String LOGIN_PERSON_UNIT = "unitNumber";
@@ -36,26 +36,58 @@ public class JwtService {
 
 
     public String generateToken(String userName) {       
-    	Optional<Person> optionalPerson = service.loadUserByUsername(userName);
+    	Optional<Person> optionalPerson = personService.loadUserByUsername(userName);
     	Person person = optionalPerson.orElseThrow(); 
         Claims claims = Jwts.claims().setSubject(userName);
  	    claims.put(LOGIN_PERSON_ID, person.getPersonId());
  	    claims.put(LOGIN_PERSON_UNIT, person.getHomeUnit());
  	    claims.put(LOGIN_USER_FULL_NAME, person.getFullName());
+ 	   claims.put("isExternalUser", false);
         return createToken(claims, userName);
     }
 
     private String createToken(Claims claims, String userName) {
-    	
+    	Date now = new Date();
+		Date expiryDate = new Date(now.getTime() 
+				+ EXPIRATION_TIME
+				);
         return Jwts.builder()
                 .setClaims(claims)                
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
                 .signWith(getSignKey(), SignatureAlgorithm.HS512).compact();
     }
 
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
-    }    
+    }
+
+	public String getUsernameFromToken(String token) {
+		if (!Optional.ofNullable(token).isPresent()) {
+			return null;
+		}
+		String username;
+		try {
+			final Claims claims = this.getAllClaimsFromToken(token);
+			username = claims.getSubject();
+		} catch (Exception e) {
+			username = null;
+		}
+		return username;
+	}
+
+	private Claims getAllClaimsFromToken(String token) {
+		Claims claims;
+		try {
+			claims = Jwts.parser()
+					.setSigningKey(SECRET)
+					.parseClaimsJws(token)
+					.getBody();
+		} catch (Exception e) {
+			claims = null;
+		}
+		return claims;
+	}
+
 }
