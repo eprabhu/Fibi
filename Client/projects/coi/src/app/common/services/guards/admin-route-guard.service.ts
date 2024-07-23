@@ -11,20 +11,14 @@ export class AdminRouteGuardService {
 
     async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
         localStorage.setItem('currentUrl', state.url);
-        const authToken = this._commonService.getCurrentUserDetail('Authorization');
-        if (authToken) {
-            return await this.isPathRightAccessible();
-        } else {
-            this._router.navigate(['/login']);
-            return false;
-        }
+        return await this.isPathRightAccessible();
     }
 
     private async isPathRightAccessible(): Promise<boolean> {
         if (await this.isPathAllowed()) {
             return true;
         } else {
-            this._router.navigate(['/fibi/error/403']);
+            this._router.navigate(['/coi/error-handler/403']);
             return false;
         }
     }
@@ -34,14 +28,10 @@ export class AdminRouteGuardService {
     }
 
     private async hasPathRights(): Promise<boolean> {
-        const isAdmin = await this.checkIfRightsPresent(ADMIN_DASHBOARD_RIGHTS) ||
-            this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
+        const isAdmin = this._commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
+        'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'])||
+        this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
         return isAdmin || this._commonService.isCoiReviewer;
-    }
-
-    async checkIfRightsPresent(adminDashboardRights: Set<string>): Promise<boolean> {
-        const rightsArray = await this._commonService.fetchPermissions();
-        return rightsArray.some((right) => adminDashboardRights.has(right));
     }
 
 }

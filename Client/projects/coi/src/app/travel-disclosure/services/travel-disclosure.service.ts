@@ -31,7 +31,7 @@ export class TravelDisclosureService {
     }
 
     isCheckLoggedUser(personId: string): boolean {
-        return personId === this._commonService.getCurrentUserDetail('personId');
+        return personId === this._commonService.getCurrentUserDetail('personID');
     }
 
     createCoiTravelDisclosure(travelDisclosureRO: object) {

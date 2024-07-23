@@ -519,7 +519,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personID'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
                 if(res) {

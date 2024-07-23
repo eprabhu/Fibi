@@ -8,9 +8,17 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.service.CommonService;
+import com.polus.core.filemanagement.FileManagementOutputDto;
+import com.polus.core.filemanagement.FileManagementService;
+import com.polus.core.filemanagement.FileManagmentConstant;
+import com.polus.core.filemanagement.FileManagmentInputDto;
 import com.polus.fibicomp.constants.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +27,7 @@ import com.polus.fibicomp.coi.dao.COIFileAttachmentDao;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
-import com.polus.fibicomp.common.service.CommonService;
-import com.polus.fibicomp.filemanagement.FileManagementOutputDto;
-import com.polus.fibicomp.filemanagement.FileManagementService;
-import com.polus.fibicomp.filemanagement.FileManagmentConstant;
-import com.polus.fibicomp.filemanagement.FileManagmentInputDto;
-import com.polus.fibicomp.print.service.PrintService;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 
@@ -38,9 +40,6 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 
 	@Autowired
 	COIFileAttachmentDao coiFileAttachmentDao;
-
-	@Autowired
-	private PrintService printService;
 
 	@Autowired
 	private CommonService commonService;
@@ -154,11 +153,21 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 		ResponseEntity<byte[]> attachmentData = null;
 		try {
 			FileManagementOutputDto fileData = fileManagementService.downloadFile(COI_MODULE_CODE, attachment.getFileDataId());
-			attachmentData = printService.setAttachmentContent(fileData.getOriginalFileName(), fileData.getData());
+			attachmentData = setAttachmentContent(fileData.getOriginalFileName(), fileData.getData());
 		} catch (Exception e) {
 			throw new COIFileAttachmentException("Exception in downloadDisclAttachment in COIFileAttachmentService, " + e);
 		}
 		return attachmentData;
+	}
+
+	private ResponseEntity<byte[]> setAttachmentContent(String fileName, byte[] data) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/octet-stream"));
+		headers.setContentDispositionFormData(fileName, fileName);
+		headers.setContentLength(data.length);
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		headers.setPragma("public");
+		return new ResponseEntity<>(data, headers, HttpStatus.OK);
 	}
 
 	@Override
