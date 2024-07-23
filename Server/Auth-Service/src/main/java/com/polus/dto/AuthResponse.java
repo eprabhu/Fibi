@@ -17,12 +17,19 @@ public class AuthResponse implements Serializable {
 
     private String personId;
     private String userName;
+    private String firstName;
+    private String lastName;
     private String fullName;
-    private String homeUnit;
+    private String unitNumber;
+    private Boolean isUnitAdmin; //not using
+    private Boolean login;
+    private String userType;
+    private String secretImageUri;
+    private Boolean isExternalUser;
     private String gender;
+    private String homeUnit;
     private String primaryTitle;
     private String homeUnitName;
     private Boolean isFaculty;
-    private String email;
-    
+
 }
