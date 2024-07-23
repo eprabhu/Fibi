@@ -208,7 +208,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openTravelDisclosure(): void {
         this.triggeredFrom = 'TRAVEL_DISCLOSURE';
-        this.getActiveDisclosureAndOpenModal();
+        this.isShowCreateOrReviseModal = true;
     }
 
     getActiveDisclosureAndOpenModal() {

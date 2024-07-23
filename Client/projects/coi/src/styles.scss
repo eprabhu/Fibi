@@ -391,6 +391,27 @@
     top: 5px;
 }
 
+.top-10px {
+    top: 10px;
+}
+
 .coi-mat-icon-size {
     font-size: 1rem !important;
+}
+
+.w-1rem {
+    width: 1rem;
+}
+
+@media (min-width: 992px) {
+    .action-header-border {
+        border-left: 1px solid #0000002d;
+    }
+}
+
+@media (max-width: 991px) {
+    .action-header-border {
+        border-top: 1px solid #0000002d;
+        border-left: 0 !important;
+    }
 }

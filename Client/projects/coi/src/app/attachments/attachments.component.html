@@ -26,7 +26,7 @@
                             <th class="bg-secondary-subtle" scope="col" style="width: 30%">Description</th>
                             <th class="bg-secondary-subtle" scope="col" style="width: 25%">File name</th>
                             <th class="bg-secondary-subtle" scope="col" style="width: 15%">Last Updated</th>
-                            <th class="bg-secondary-subtle" scope="col" style="width: 10%" *ngIf="!coiPersonId">Action</th>
+                            <th class="bg-secondary-subtle" scope="col" style="width: 10%" *ngIf="!isViewMode">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white">
@@ -47,18 +47,18 @@
                             <td>{{attachment.fileName}}</td>
                             <td>{{attachment.updateTimestamp |
                                 dateFormatterWithTimeZone:'long'}}</td>
-                            <td *ngIf="!coiPersonId">
-                                <div class="d-inline-flex">
-                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click here to edit attachment" tabindex="0">
+                            <td *ngIf="!isViewMode">
+                                <div class="d-flex align-items-center">
+                                    <button class="mt-1 btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 coi-scale-9" title="Click here to edit attachment">
                                         <mat-icon aria-hidden="true">edit</mat-icon>
-                                    </span>
-                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click here to download attachment" tabindex="0">
+                                    </button>
+                                    <button class="mt-1 btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 coi-scale-9" title="Click here to download attachment">
                                         <mat-icon aria-hidden="true">vertical_align_bottom</mat-icon>
-                                    </span>
-                                    <span class="me-2 cursor-pointer coi-btn-icon" title="Click here to open more options" tabindex="0"
+                                    </button>
+                                    <button class="mt-1 btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 coi-scale-9" title="Click here to open more options"
                                         [matMenuTriggerFor]="createActionMenu">
                                         <mat-icon aria-hidden="true">more_vert</mat-icon>
-                                    </span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
