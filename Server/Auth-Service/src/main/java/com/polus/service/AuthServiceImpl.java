@@ -27,6 +27,7 @@ import com.polus.dto.AuthRequest;
 import com.polus.dto.AuthResponse;
 import com.polus.entity.Person;
 import com.polus.entity.PersonLoginDetail;
+import com.polus.entity.Unit;
 import com.polus.repository.PersonLoginDetailRepository;
 
 import jakarta.servlet.http.Cookie;
@@ -65,6 +66,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private Environment environment;
+
+    @Autowired	
+    private static UnitService unitService;
 
     @Override
     public ResponseEntity<AuthResponse> checkAuthorization(HttpServletRequest request, HttpServletResponse response) {
@@ -224,7 +228,7 @@ public class AuthServiceImpl implements AuthService {
 
     private static AuthResponse getAuthResponseDetails(Optional<Person> optionalPerson) {
         AuthResponse response = AuthResponse.builder()
-                .personId(optionalPerson.map(Person::getPersonId).orElse(null))
+        		.personID(optionalPerson.map(Person::getPersonId).orElse(null))
                 .userName(optionalPerson.map(Person::getPrincipalName).orElse(null))
                 .firstName(optionalPerson.map(Person::getFirstName).orElse(null))
                 .lastName(optionalPerson.map(Person::getLastName).orElse(null))
@@ -234,7 +238,17 @@ public class AuthServiceImpl implements AuthService {
                 .gender(optionalPerson.map(Person::getGender).orElse(null))
 //                .userType(optionalPerson.isPresent() ? optionalPerson.get().getUserType() : null)
                 .isExternalUser(optionalPerson.map(Person::getIsExternalUser).orElse(null))
+                .email(optionalPerson.map(Person::getEmailAddress).orElse(null))
+                .primaryTitle(optionalPerson.map(Person::getPrimaryTitle).orElse(null))
                 .build();
+        if (optionalPerson.get().getUnit() == null) {
+			Unit unit = unitService.getRootUnit();
+			response.setHomeUnit(unit.getUnitNumber());
+			response.setHomeUnitName(unit.getUnitName());
+		} else {
+			response.setHomeUnit(optionalPerson.map(Person::getUnit).map(Unit::getUnitNumber).orElse(null));
+			response.setHomeUnitName(optionalPerson.map(Person::getUnit).map(Unit::getUnitName).orElse(null));
+		}
         return response;
     }
 
