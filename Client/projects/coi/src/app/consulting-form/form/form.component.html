@@ -212,7 +212,7 @@
 (builderStatus)="formBuilderDataChanged($event)"></app-form-builder-view>
 
 <!-- Entity Details Modal -->
-<button class="d-none" data-bs-toggle="modal" data-bs-target="#entity-details" id="coi-add-sfi-persondetailsTrigger">
+<button tabindex="-1" class="d-none" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#entity-details" id="coi-add-sfi-persondetailsTrigger">
 </button>
 
 <div class="modal fade mySkinDialog modal-lg" id="entity-details" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -247,8 +247,8 @@
                         <span class="fw-normal">
                             <div class="text-color fs-14 d-flex align-items-center">
                                 <span>
-                                    <mat-icon
-                                        class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                                    <mat-icon aria-hidden="true"
+                                        class="{{commonService.getRiskColor(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
                                 </span>
                                 <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
                             </div>

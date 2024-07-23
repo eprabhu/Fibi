@@ -200,19 +200,6 @@ export class OPACompUncompComponent implements OnInit {
         this.compUnCompData.opaDisclActivityId = null;
     }
 
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case 'High':
-                return 'invalid';
-            case 'Medium':
-                return 'medium-risk';
-            case 'Low':
-                return 'low-risk';
-            default:
-                return;
-        }
-    }
-
     viewEntityDetails(id) {
         window.open(window.location.origin + window.location.pathname + '#/coi/entity-management/entity-details?entityManageId=' + id);
     }

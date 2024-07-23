@@ -1,5 +1,5 @@
-<div class="row mb-3 " [ngClass]="isSlider? 'sticky-top' : 'sticky-top-50'" id="create-sfi-header">
-    <div class="col-12">
+<div class="row mb-3 " [ngClass]="isSlider? 'sticky-top-slider' : 'sticky-top-50'" id="create-sfi-header">
+    <div class="col-12 bg-white">
 		<div class="card shadow-sm">
 			<div class="row mx-0">
 				<div class="col-xl-8 col-lg-9 col-md-12 px-0" [class.my-auto]="isSlider">
@@ -476,19 +476,18 @@
 							<div class="row mb-3 mt-2 mx-0 px-2">
 								<div *ngFor="let subsection of relationLookup | keyvalue;" class="col-lg-4 col-md-6 col-xl-4 col-xxl-4">
 									<div tabindex="-1" [attr.aria-label]="subsection?.key">
-										<label class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
+										<label for="sfi-relation" class="fs-14 fw-500 label-text pb-1 pt-2">{{subsection.key}}</label>
 									</div>
-									<div class="relation">
+									<div class="relation" id="sfi-relation">
 										<div *ngFor="let relation of subsection.value;let isFirst = first; let isLast = last;"
-											class="form-check d-block mb-2" tabindex="-1"
-											[attr.aria-label]="relation?.personEntityRelType?.description" role="checkbox">
+											class="form-check d-block mb-2" [attr.aria-label]="relation?.personEntityRelType?.description">
 											<input type="checkbox" name="relation"
-												class="form-check-input text-secondary border border-secondary"
+												class="form-check-input text-secondary border border-secondary cursor-pointer"
 												[id]="'sfi-relation'+relation.validPersonEntityRelTypeCode"
 												[value]="relation?.validPersonEntityRelTypeCode"
 												[(ngModel)]="isChecked[relation.validPersonEntityRelTypeCode]"
 												title="Click here to select {{relation?.description?.toLowerCase()}} relation">
-											<label class="r-title fs-14">
+											<label [for]="'sfi-relation'+relation.validPersonEntityRelTypeCode" class="r-title fs-14 cursor-pointer">
 												{{relation?.personEntityRelType?.description}}
 											</label>
 										</div>
@@ -574,7 +573,7 @@
 </div>
 
 <!-- Update confirmation -->
-<div class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog">
+<div tabindex="-1" class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog" aria-label="Confirmation">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -609,8 +608,7 @@
 </div>
 
   <!-- Entity Details Modal -->
-  <button class="d-none" data-bs-toggle="modal" data-bs-target="#entity-details" id="coi-add-sfi-persondetailsTrigger">
-  </button>
+  <button tabindex="-1" class="d-none" data-bs-toggle="modal" data-bs-target="#entity-details" id="coi-add-sfi-persondetailsTrigger" aria-hidden="true"></button>
 
   <div class="modal fade mySkinDialog modal-lg" id="entity-details" tabindex="-1" aria-labelledby="exampleModalLabel"
     data-bs-backdrop="static" aria-hidden="true">
@@ -649,7 +647,7 @@
                 <div class="text-color fs-14 d-flex align-items-center">
                   <span>
                     <mat-icon
-                      class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                      class="{{_commonService.getRiskColor(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
                   </span>
                   <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
                 </div>

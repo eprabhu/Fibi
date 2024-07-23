@@ -2,19 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelActionAfterSubmitRO, TravelConflictRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
-
+import { EntityDetails, TravelActionAfterSubmitRO, TravelConflictRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure.interface';
 
 @Injectable()
 export class TravelDisclosureService {
 
-    coiTravelDisclosure = new TravelDisclosure();
     saveSubject = new Subject();
+    travelEntityDetails = new EntityDetails();
+    coiTravelDisclosure = new TravelDisclosure();
 
     isAdminDashboard = false;
     travelDataChanged = false;
+    isAllowNavigation = false;
     isTravelCertified = false;
-    isChildRouteTriggered = false;
+    isCreateNewTravelDisclosure = false;
 
     unSavedTabName = '';
     PREVIOUS_MODULE_URL = '';

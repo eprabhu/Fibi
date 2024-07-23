@@ -459,20 +459,6 @@ export class AddSfiComponent implements OnInit {
         this.canShowEntityFields = false;
     }
 
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
-    }
-
-
     getSelectedRelationTypeCodes() {
         return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
     }

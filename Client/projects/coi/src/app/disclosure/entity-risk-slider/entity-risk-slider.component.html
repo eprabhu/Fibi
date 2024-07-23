@@ -31,7 +31,7 @@
                                     <div class="text-color fs-14 d-flex align-items-center">
                                         <span class="text-secondary fs-14">
                                             <mat-icon
-                                                class="{{getWarningClass(disclosureDetails?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                                                class="{{commonService.getRiskColor(disclosureDetails?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
                                         </span>
                                         <app-no-data-label [valueToShow]="disclosureDetails?.coiRiskCategory?.description">
                                             <span

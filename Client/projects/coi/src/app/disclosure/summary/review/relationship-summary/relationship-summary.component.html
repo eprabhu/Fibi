@@ -1,6 +1,6 @@
 <div *ngIf="selectedProject?.moduleCode" [id]="'coi-card-' + selectedProject?.projectId" class="card coi-card-regular border shadow me-2 mt-2 ms-2"
   [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject.projectTypeCode+'-'+selectedProject?.projectId}">
-    <div class="d-flex align-items-start  justify-content-between position-absolute start-0 top-0">
+    <div class="d-flex align-items-start  justify-content-between position-absolute start-0 top-0 w-100">
       <span class="d-flex align-items-center">
           <span class="coi-card-notch-ribbon shadow-sm me-2 mb-auto" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
           <span class="d-flex align-items-center">

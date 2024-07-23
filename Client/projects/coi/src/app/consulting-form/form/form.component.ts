@@ -44,13 +44,13 @@ export class FormComponent {
     entityDetailsAlreadySave: any;
     showTextAreaLimiter: boolean;
 
-    constructor(private _elasticConfig: ElasticConfigService, private _commonService: CommonService, private _formService: FormService,
+    constructor(private _elasticConfig: ElasticConfigService, public commonService: CommonService, private _formService: FormService,
         private _router: Router, public consultingService: ConsultingService, public dataStore: DataStoreService
     ) { }
 
     ngOnInit() {
         this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
-        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.getSFILookup();
         this.saveSubscribe();
         this.getDataFromStore();
@@ -119,7 +119,7 @@ export class FormComponent {
             this.clearCountryField = new String('false');
         }, err => {
             this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
         }));
     }
 
@@ -163,7 +163,7 @@ export class FormComponent {
     private clearSFIFields(): void {
         this.entityDetails = new EntityDetails();
         this.clearCountryField = new String('true');
-        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.isResultFromSearch = false;
         this.mandatoryList.clear();
         this.isNewEntityFromSearch = false;
@@ -359,7 +359,7 @@ export class FormComponent {
     //         formBuilderSectionId : event.formBuilderSectionId,
     //         headerName: event.headerName
     //     }
-    //     this._commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
+    //     this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
     //     this._opa.isShowCommentNavBar = true;
     // }
 
@@ -375,7 +375,7 @@ export class FormComponent {
             }
 
             case 'ERROR':
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 break;
             default: break;
         }
@@ -436,19 +436,6 @@ export class FormComponent {
 
     checkForSubmitDisable() {
         this.consultingService.canDisableSubmit = this.entityDetails.coiEntity.entityName ? false : true;
-    }
-
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
     }
 
  onEntityChanges() {

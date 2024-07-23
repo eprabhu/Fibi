@@ -27,7 +27,7 @@
               <div class="text-color fs-14 d-flex align-items-center">
                 <span class="text-secondary fs-14">
                   <mat-icon
-                    class="{{getWarningClass(entityDetails?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                    class="{{commonService.getRiskColor(entityDetails?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
                 </span>
                 <app-no-data-label [valueToShow]="entityDetails?.entityRiskCategory">
                   <span class="ms-1 mt-1 fw-normal">{{entityDetails?.entityRiskCategory?.description}}</span>
