@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
-import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
@@ -24,13 +22,11 @@ import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
-import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiProjectType;
@@ -52,7 +48,6 @@ import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
-import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
@@ -77,19 +72,6 @@ import com.polus.fibicomp.pojo.Unit;
 @Service
 public interface ConflictOfInterestDao {
 
-	/**
-	 * This method is used for save disclosure details
-	 * @param coiDisclosure
-	 * @return
-	 */
-	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure);
-
-	/**
-	 * This method is used for get disclosure details
-	 * @param coiDisclosureId
-	 * @return
-	 */
-	public CoiDisclosure loadDisclosure(Integer coiDisclosureId);
 
 	/**
 	 * This method is used for get number of sfi for a person
@@ -148,7 +130,7 @@ public interface ConflictOfInterestDao {
 	 * @param 
 	 * @return list of Coi Disclosure Detail Statuses
 	 */
-	List<CoiConflictStatusType> getCoiConflictStatusTypes();
+//	List<CoiConflictStatusType> getCoiConflictStatusTypes();
 
 	/**
 	 * This method is used for get sfi details based on financialEntityId
@@ -190,12 +172,6 @@ public interface ConflictOfInterestDao {
 	 * @return count of disclosures
 	 */
 	Integer getNumberOfDisclosure(String disclosureCategoryType);
-
-	/**
-	 * This method is used for certify disclosure
-	 * @param coiDisclosure
-	 */
-	public void certifyDisclosure(CoiDisclosure coiDisclosure);
 	
 	/**
 	 * This method is used for certify disclosure
@@ -205,41 +181,10 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * 
-	 * @param disclosureId 
-	 * @param 
-	 * @return list of Coi Disclosure Details
-	 */
-	public List<CoiDisclEntProjDetails> getProjectRelationshipByParam(Integer moduleCode, Integer moduleItemId, String loginPersonId, Integer disclosureId);
-
-	/**
-	 * 
-	 * @param 
-	 * @return save or update of Coi Disclosure Details
-	 */
-	CoiDisclEntProjDetails saveOrUpdateCoiDisclEntProjDetails(CoiDisclEntProjDetails entityProjectRelation);
-
-	/**
-	 * 
-	 * @param 
-	 * @return check if SFI Completed For Project
-	 */
-	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId);
-
-	/**
-	 * 
 	 * @param 
 	 * @return get SFI Based On DisclosureId
 	 */
 	public List<PersonEntity> getSFIBasedOnDisclosureId(Integer disclosureId);
-
-	/**
-	 * This method is used for evaluate DisclosureQuestionnaire
-	 * @param moduleCode
-	 * @param submoduleCode
-	 * @param moduleItemKey
-	 * @return Boolean value
-	 */
-	public boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, Integer moduleItemKey);
 
 	/**
 	 * This method is used for save the evaluate DisclosureQuestionnaire value in disclosure table
@@ -270,12 +215,6 @@ public interface ConflictOfInterestDao {
 	 * @return list of ModuleItemKeys
 	 */
 	public List<String> getModuleItemKeysByCOIFinancialEntityIdAndModuleCode(Integer coiFinancialEntityId, Integer moduleCode);
-
-	/**
-	 * This method is used for fetchCoiSections
-	 * @return
-	 */
-	public List<CoiSectionsType> fetchCoiSections();
 
 	/**
 	 * This method is used for saveCoiReview
@@ -453,14 +392,6 @@ public interface ConflictOfInterestDao {
 	@Deprecated
 	public CoiReviewCommentAttachment deleteAttachment(Integer coiReviewCommentAttId);
 
-
-	/**
-	 * This method is used for get ProjectRelationship/disclosureDetails
-	 * @param disclosureDetailsId
-	 * @return CoiDisclosureDetails
-	 */
-	CoiDisclEntProjDetails getProjectRelationship(Integer disclosureDetailsId);
-
 	/**
 	 * This method is used for get tags of a comment
 	 * @param coiReviewCommentId
@@ -497,12 +428,6 @@ public interface ConflictOfInterestDao {
 	public void deleteReviewTagByReviewId(Integer coiReviewId);
 
 	/**
-	 * This method is used for add Reviewer Status
-	 * @param coiDisclosureDetails
-	 */
-	void addReviewerStatus(CoiDisclEntProjDetails coiDisclosureDetails);
-
-	/**
 	 * This method is used for saveOrUpdate ProjectConflictHistory
 	 * @param coiConflictHistory
 	 * @return
@@ -535,12 +460,6 @@ public interface ConflictOfInterestDao {
 	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber);
 
 	/**
-	 * @param disclosureId
-	 * @param coiFinancialEntityId
-	 */
-	public void updateFinacialEntityInDisclosureRelation(Integer disclosureId, Integer coiFinancialEntityId);
-
-	/**
 	 *This method is used to get the count based on conflict status
 	 *
 	 * @param moduleCode module code
@@ -558,8 +477,6 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiDisclosure> getActiveDisclosure(String personId);
 
-	public Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
-
 	/**
 	 * @param vo
 	 * @return list of coi
@@ -575,13 +492,6 @@ public interface ConflictOfInterestDao {
 	 */
 	public DashBoardProfile getCOIAdminDashboard(CoiDashboardVO vo);
 
-	/**
-	 * This method is used to get list of sfi
-	 * @param vo
-	 * @return list of sfi
-	 */
-	public DashBoardProfile getSFIDashboard(CoiDashboardVO vo);
-
 	public List<CoiEntity> getAllEntityList(ConflictOfInterestVO vo);
 
 	public void setEntityStatus(ConflictOfInterestVO vo);
@@ -595,7 +505,9 @@ public interface ConflictOfInterestDao {
 	 * @param searchString 
 	 * @return
 	 */
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString, Integer moduleItemKey);
+//	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString, Integer moduleItemKey);
+
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, String searchString, Integer moduleItemKey);
 
 	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
@@ -613,8 +525,6 @@ public interface ConflictOfInterestDao {
 
 	public PersonEntity saveOrUpdatePersonEntity(PersonEntity personEntity);
 
-	public Integer generateMaxDisclosureNumber();
-	
 	public CoiTravelDisclosureTraveler saveOrUpdateCoiTravelDisclosureTraveller(CoiTravelDisclosureTraveler coiTravelDisclosureTraveller);
 
 
@@ -671,7 +581,7 @@ public interface ConflictOfInterestDao {
 
 	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
 
-	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
+//	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
 
 	/**
 	 * This method is used to check the sfi is created with this entity
@@ -694,19 +604,13 @@ public interface ConflictOfInterestDao {
 	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId,
 								   Integer moduleCode, String moduleItemKey, String type);
 
-	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
-
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
 
-	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId);
+//	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId);
 
-	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId);
+//	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId);
 
 	public boolean isSFIDefined(String personId);
-
-	public boolean isRelationshipDefined(Integer disclosureId);
-
-	public boolean isMasterDisclosurePresent(String personId);
 
 	/**
 	 *
@@ -718,19 +622,6 @@ public interface ConflictOfInterestDao {
 	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
 	
 	public Integer generateMaxPersonEntityId();
-
-	/**
-	 * This method is used to validate
-	 * 1) If selected project expired date passed
-	 * 2) Is part of any pending project disclosure
-	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
-	 *
-	 * @param personId personId
-	 * @param moduleCode moduleCode
-	 * @param moduleItemKey moduleItemKey
-	 * @return Map of validated values
-	 */
-	Map<String, Object> validateProjectDisclosure(String personId, Integer moduleCode, String moduleItemKey);
 
 	/**
 	 * This method is used for get sfi details by a person id or disclosure id
@@ -765,14 +656,6 @@ public interface ConflictOfInterestDao {
 	 * This method is used to fetch the entire row(Unit details) from unit table against the input unit number
 	 */
 	public Unit getUnitFromUnitNumber(String unitNumber);
-
-	/**
-	 * This method is used to validate conflicts and update
-	 *
-	 * @param disclosureId disclosureId
-	 * @return CoiConflictStatusType
-	 */
-	CoiConflictStatusTypeDto validateConflicts(Integer disclosureId);
 
 	/**
 	 * This method is used to load CoiConflictStatusType
@@ -834,10 +717,6 @@ public interface ConflictOfInterestDao {
 
 	public EntityRiskCategory getEntityRiskDetails(String riskCategoryCode);
 
-	public void updateCoiDisclEntProjDetails(String projectConflictStatusCode, Integer disclosureDetailsId);
-
-	public String getProjectConflictStatusCode(Integer disclosureDetailsId);
-
 	/**
 	 * This method is used to delete Person entity
 	 * @param personEntityId
@@ -896,15 +775,6 @@ public interface ConflictOfInterestDao {
 	
 	public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId);
 
-	public String getConflictStatusUpdateUser(Integer disclosureDetailsId);
-	
-
-	/**
-	 * This method is used to update disclosure header update details
-	 * @param disclosureId
-	 */
-	Timestamp updateDisclosureUpdateDetails(Integer disclosureId);
-
 	/**
 	 * This method is used to update PersonEntity header update details
 	 * @param personEntityId
@@ -962,7 +832,7 @@ public interface ConflictOfInterestDao {
 	 */
 	Timestamp updateEntityRiskCategory(CoiEntityDto entityDto);
 
-	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
+//	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
 
 
 	/**
@@ -1009,25 +879,17 @@ public interface ConflictOfInterestDao {
 	public void saveOrUpdateTravelDisclosureActionLog(TravelDisclosureActionLog travelDisclosureActionLog);
 
 	/**
-	 * This method is used to sync disclosure risk
-	 * @param disclosureId
-	 * @param disclosureNumber
-	 * @return CoiRiskCategory
-	 */
-	CoiRiskCategory syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber);
-
-	/**
 	 * This method is used to update disclosure risk
 	 * @param coiDisclosureDto
 	 * @return
 	 */
-	Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto);
+//	Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto);
 
 	/**
 	 * This method is used to fetch all disclosure risk
 	 * @return
 	 */
-	List<CoiRiskCategory> fetchDisclosureRiskCategory();
+//	List<CoiRiskCategory> fetchDisclosureRiskCategory();
 
 	/**
 	 * This method is used to get disclosure history count
@@ -1080,18 +942,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public List<DisclAttaType> loadDisclAttachTypes();
-
-	/**
-	 * This method is used to Check if the reviewers in the disclosure have completed their reviews
-	 * @return
-	 */
-	public Boolean isReviewerReviewCompleted(Integer disclosureId);
-
-	/**
-	 * This method is used to Check if the disclosure have reviewers assigned
-	 * @return
-	 */
-	public Boolean isReviewerAssigned(Integer disclosureId);
 	
 	List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
     
@@ -1195,30 +1045,6 @@ public interface ConflictOfInterestDao {
 	boolean isEntityApproved(Integer entityId);
 
 	/**
-	 * This method checks a risk is added against a disclosure
-	 * @param coiDisclosureDto
-	 * @return
-	 */
-	boolean isDisclosureRiskAdded(CoiDisclosureDto coiDisclosureDto);
-
-	/**
-	 * This
-	 * @param projectConflictStatusCode
-	 * @param disclosureDetailsId
-	 * @return
-	 */
-	boolean isDisclEntProjConflictAdded(String projectConflictStatusCode, Integer disclosureDetailsId);
-
-	/**
-	 * This method is used to check FCOI disclosure is exists or not
-	 * @param personId
-	 * @param versionStatus
-	 * @param fcoiTypeCode
-	 * @return
-	 */
-	CoiDisclosure isFCOIDisclosureExists(String personId, String fcoiTypeCode, String versionStatus);
-
-	/**
 	 * This method is used to check entity is active or not
 	 * @param entityId
 	 * @param entityNumber
@@ -1296,16 +1122,9 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used to check if project is present for a disclosure 
-	 * @param ConflictOfInterestVO
+	 * @param vo
 	 */
 	public Boolean isProjectPresent(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to check if SFI is completed for a disclosure 
-	 * @param personEntityId
-	 * @param disclosureId
-	 */
-	public Boolean isSFICompletedForDisclosure(Integer personEntityId, Integer disclosureId);
 
 	/**
 	 * This method is used to get the count of conflicts marked by personEntityId
@@ -1313,13 +1132,6 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureId
 	 */
 	public List<Map<Object, Object>> disclosureStatusCountBySFI(Integer personEntityId, Integer disclosureId);
-
-	/**
-	 * This method is used to get the projects related based on personEntityId and disclosureId
-	 * @param personEntityId
-	 * @param disclosureId
-	 */
-	public List<CoiDisclEntProjDetails> getProjectRelationshipBySFI(Integer personEntityId, Integer disclosureId);
 
 	/**
 	 * This method is used to Check if the opa disclosure have reviewers assigned
@@ -1337,7 +1149,7 @@ public interface ConflictOfInterestDao {
 	 * This method is used to Check if the risk status of the disclosure has been modified
 	 * @return
 	 */
-	public Boolean isDisclosureRiskStatusModified(String riskCategoryCode, Integer disclosureId);
+//	public Boolean isDisclosureRiskStatusModified(String riskCategoryCode, Integer disclosureId);
 
 	/**
 	 * This method is used to Check if the risk status of the entity has been modified
@@ -1368,33 +1180,5 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public boolean isTravelDisclosureRiskStatusModified(String riskCategoryCode, Integer travelDisclosureId);
-
-	/**
-	 *
-	 * @param disclosureId
-	 * @return
-	 */
-    List<DisclosureProjectDto> getDisclosureProjects(Integer disclosureId);
-
-	/**
-	 *
-	 * @param vo
-	 * @return
-	 */
-	List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo);
-
-	/**
-     * This method is used to fetch disclosure details id by dislcosure id
-    *
-    * @return List of disclosure details id
-    */
-	public List<Integer> getDisclDetailsIdByDisclId(Integer disclosureId);
-
-	/**
-     * This method is used to fetch conflict status code from conflict history table using disclosure details id
-    *
-    * @return conflict status
-    */
-	public String getConflictHistoryStatusCodeByDisclId(Integer disclosureDetailsId);
 
 }

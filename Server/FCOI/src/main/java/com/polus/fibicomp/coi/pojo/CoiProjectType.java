@@ -10,9 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "COI_PROJECT_TYPE")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CoiProjectType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -27,6 +33,9 @@ public class CoiProjectType implements Serializable {
 	@Column(name = "BADGE_COLOR")
 	private String badgeColor;
 
+	@Column(name = "PROJECT_ICON")
+	private String projectIcon;
+
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
@@ -37,51 +46,4 @@ public class CoiProjectType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getCoiProjectTypeCode() {
-		return coiProjectTypeCode;
-	}
-
-	public void setCoiProjectTypeCode(String coiProjectTypeCode) {
-		this.coiProjectTypeCode = coiProjectTypeCode;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public String getBadgeColor() {
-		return badgeColor;
-	}
-
-	public void setBadgeColor(String badgeColor) {
-		this.badgeColor = badgeColor;
-	}
 }

@@ -11,18 +11,18 @@ import lombok.Setter;
 @Setter
 public class CoiDisclEntProjDetailsDto {
 
-	private Integer disclosureDetailsId;
+	private Integer coiDisclProjectEntityRelId;
 	private Integer disclosureId;
 	private Integer disclosureNumber;
 	private Integer personEntityId;
 	private Integer entityId;
 	private CoiEntityDto coiEntity;
-	private Integer entityNumber;
+//	private Integer entityNumber;
 	private Integer moduleCode;
 	private String moduleItemKey;
 	private String projectConflictStatusCode;
 	private CoiProjConflictStatusType coiProjConflictStatusType;
-	private String updateUser;
+	private String updatedBy;
 	private Timestamp updateTimestamp;
 	private DisclComment disclComment;
 	private PersonEntityRelationshipDto personEntityRelationshipDto;

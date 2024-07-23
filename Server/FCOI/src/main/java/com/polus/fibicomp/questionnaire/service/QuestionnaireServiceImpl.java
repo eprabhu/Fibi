@@ -16,6 +16,7 @@ import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.pojo.CoiQuestAnswer;
 import com.polus.fibicomp.coi.pojo.CoiQuestAnswerAttachment;
 import com.polus.fibicomp.coi.pojo.CoiQuestTableAnswer;
+import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
 import com.polus.fibicomp.questionnaire.pojo.QuestTableAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,6 +82,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
 	@Autowired
 	private ConflictOfInterestDao conflictOfInterestDao;
+
+	@Autowired
+	private FcoiDisclosureDao fcoiDisclosureDao;
 
 	private static final String RADIO = "Radio";
 	private static final String CHECKBOX = "Checkbox";
@@ -1226,7 +1230,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		if (moduleCode.equals(Constants.MODULE_CODE_AWARD)) {
 			awardService.updateAwardDocumentUpdateUserAndTimestamp(moduleItemKey, updateUser);
 		} else if (moduleCode.equals(Constants.COI_MODULE_CODE) && subModuleCode.equals(Constants.COI_SUBMODULE_CODE)) {
-			conflictOfInterestDao.updateDisclosureUpdateDetails(moduleItemKey);
+			fcoiDisclosureDao.updateDisclosureUpdateDetails(moduleItemKey);
 		} else if(moduleCode.equals(Constants.COI_MODULE_CODE ) && subModuleCode.equals(Constants.COI_SFI_SUBMODULE_CODE)) {
 			conflictOfInterestDao.updatePersonEntityUpdateDetails(moduleItemKey);
 		}

@@ -19,7 +19,7 @@ public class CoiSectionTypeDto {
 
 	private List<PersonEntity> personEntities;
 
-	private List<DisclosureDetailDto> projectList;
+	private List<DisclosureProjectDto> projectList;
 
 	private List<CoiSectionsType> coiSectionsTypeList;
 

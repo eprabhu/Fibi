@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
@@ -46,7 +48,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ConflictOfInterestVO {
 
-	private CoiDisclosure coiDisclosure;
+	private CoiDisclosureDto coiDisclosure;
 
 	private Person person;
 
@@ -62,7 +64,7 @@ public class ConflictOfInterestVO {
 
 	private List<DisclosureDetailDto> awards;
 
-	private DisclosureDetailDto projectDetail;
+	private DisclosureProjectDto projectDetail;
 
 	private String searchString;
 
@@ -84,7 +86,7 @@ public class ConflictOfInterestVO {
 
 	private Integer moduleItemId;
 
-	private List<CoiDisclEntProjDetails> coiDisclEntProjDetails;
+	private List<CoiDisclProjectEntityRel> disclProjectEntityRels;
 
 	private Integer disclosureId;
 
@@ -138,7 +140,7 @@ public class ConflictOfInterestVO {
 
 	private String sort;
 
-	private CoiDisclEntProjDetails coiDisclEntProjDetail;
+	private CoiDisclProjectEntityRel coiDisclEntProjDetail;
 
 	private String disclosureCategoryType;
 
@@ -280,7 +282,7 @@ public class ConflictOfInterestVO {
 
 	private String Comment;
 
-	private Integer disclosureDetailsId;
+	private Integer coiDisclProjectEntityRelId;
 
 	private String documentOwnerPersonId;
 

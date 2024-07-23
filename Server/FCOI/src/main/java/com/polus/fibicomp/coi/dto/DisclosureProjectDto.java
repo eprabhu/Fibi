@@ -39,4 +39,7 @@ public class DisclosureProjectDto {
 	private String projectTypeCode;
 	private String projectType;
 	private String projectBadgeColour;
+	private String projectIcon;
+	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
+
 }

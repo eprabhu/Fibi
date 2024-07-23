@@ -1776,4 +1776,5 @@ public interface Constants {
     Integer TRAVEL_MODULE_CODE = 24;
     String COI_VALIDATION_PRO_SFI_ACTION_TYPE = "PS";
     Integer TRAVEL_SELF_RELATIONSHIP = 4;
+    String PROJECT_DISCL_FCOI_TYPE_CODE = "2";
 }

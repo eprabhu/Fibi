@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.polus.fibicomp.pojo.Unit;
 
@@ -39,12 +40,6 @@ public class DisclosureView {
 	private String reviewStatus;
 	private Timestamp submittedDate;
 	private Integer lastApprovedVersion;
-	private Integer noOfSfiInActive;
-	private Integer noOfSfiInPending;
-	private Integer noOfAwardInPending;
-	private Integer noOfProposalInPending;
-	private Integer noOfAwardInActive;
-	private Integer noOfProposalInActive;
 	private Timestamp createTimestamp;
 	private Integer disclosureVersionNumber;
 	private String disclosurePersonFullName;
@@ -58,13 +53,7 @@ public class DisclosureView {
 	private String reviewerStatusCode;
 	private String reviewerStatus;
 	private String reviewerFullName;
-	private String proposalId;
-	private String proposalTitle;
-	private String awardId;
-	private String awardTitle;
 	private Integer noOfSfi;
-	private Integer noOfAward;
-	private Integer noOfProposal;
 	private Timestamp certifiedAt;
 	private Unit unit;
 	private Integer travelDisclosureId;
@@ -105,5 +94,12 @@ public class DisclosureView {
 	private Integer adminGroupId;
 	private String unitName;
 	private List<List<String>> reviewerList;
+	private List<Map<Object, Object>> projectCount;
+	private String projectNumber;
+	private String projectTitle;
+	private String projectBadgeColor;
+	private String projectIcon;
+	private String projectType;
+	private String coiProjectTypeCode;
 
 }
