@@ -371,7 +371,7 @@
                         <!-- check logged person & disclosure created person is same -->
                         <button mat-menu-item
                             *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(consultingForm?.consultingFormDisclosure?.adminPersonId) &&
-                            (commonService?.getCurrentUserDetail('personId') == consultingForm?.consultingFormDisclosure?.personId)"
+                            (commonService?.getCurrentUserDetail('personID') == consultingForm?.consultingFormDisclosure?.personId)"
                             title="Click to Withdraw" aria-label="Click to Withdraw" tabindex="0"
                             id="consulting_withdraw"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
@@ -385,7 +385,7 @@
                         <!-- Check logged person and administrator are same -->
                         <button mat-menu-item
                             *ngIf="consultingForm?.consultingFormDisclosure?.adminPersonId && ['3','4','5'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode) &&
-                                    (commonService?.getCurrentUserDetail('personId') == consultingForm?.consultingFormDisclosure?.adminPersonId)"
+                                    (commonService?.getCurrentUserDetail('personID') == consultingForm?.consultingFormDisclosure?.adminPersonId)"
                             title="Click to Return Disclosure" tabindex="0" id="consulting_return"
                             (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
