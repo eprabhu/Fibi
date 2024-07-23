@@ -40,7 +40,7 @@ export class AttachmentsComponent implements OnInit {
     }
 
     getPersonId() {
-        return this.personId ? this.personId : this._commonService.getCurrentUserDetail('personId');
+        return this.personId ? this.personId : this._commonService.getCurrentUserDetail('personID');
     }
 
     getAllAttachments() {
@@ -50,7 +50,7 @@ export class AttachmentsComponent implements OnInit {
             if (data) {
                 this.attachmentLists = data;
                 this.isFirstTimeLoad = false;
-            } 
+            }
             if (!data?.length) {
                 this.isShowCreate = true;
             }

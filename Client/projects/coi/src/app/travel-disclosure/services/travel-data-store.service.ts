@@ -107,7 +107,7 @@ export class TravelDataStoreService {
 
     getEditModeForDisclosure(): boolean {
         if (this.storeData.travelDisclosureId) {
-            return (['1', '4', '5'].includes(this.storeData.reviewStatusCode) && this.storeData.personId === this._commonService.getCurrentUserDetail('personId'));
+            return (['1', '4', '5'].includes(this.storeData.reviewStatusCode) && this.storeData.personId === this._commonService.getCurrentUserDetail('personID'));
         } else {
             return true;
         }

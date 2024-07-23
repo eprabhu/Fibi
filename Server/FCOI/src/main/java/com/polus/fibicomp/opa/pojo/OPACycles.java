@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.polus.fibicomp.util.JpaCharBooleanConversion;
+import com.polus.core.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

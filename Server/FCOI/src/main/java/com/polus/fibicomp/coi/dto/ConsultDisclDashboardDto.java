@@ -2,8 +2,8 @@ package com.polus.fibicomp.coi.dto;
 
 import java.sql.Timestamp;
 
-import com.polus.fibicomp.pojo.Unit;
 
+import com.polus.core.pojo.Unit;
 import lombok.Data;
 
 @Data

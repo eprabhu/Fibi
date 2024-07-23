@@ -6,7 +6,7 @@ import com.polus.entity.Person;
 
 import java.util.Optional;
 
-public interface UserCredentialRepository  extends JpaRepository<Person,Integer> {
+public interface UserCredentialRepository  extends JpaRepository<Person,String> {
    
     public Optional<Person> findByPrincipalName(String principalName);
 }

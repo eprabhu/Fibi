@@ -94,7 +94,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private fetchTravelRights(): void {
-        this.currentPersonId = this.commonService.getCurrentUserDetail('personId');
+        this.currentPersonId = this.commonService.getCurrentUserDetail('personID');
         this.isTravelAdministrator = this.commonService.getAvailableRight('MANAGE_TRAVEL_DISCLOSURE');
     }
 

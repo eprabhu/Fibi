@@ -7,11 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.polus.fibicomp.proposal.dao.ProposalDao;
-import com.polus.fibicomp.proposal.dao.ProposalDaoImpl;
-import com.polus.fibicomp.proposal.pojo.Proposal;
-import com.polus.fibicomp.proposal.pojo.ProposalKeyword;
-
 public class DashboardTest {
 
 	protected static Logger logger = LogManager.getLogger(DashboardTest.class.getName());
@@ -153,14 +148,14 @@ public class DashboardTest {
 		
 		Committee comm = committeeDao.saveCommittee(committee);
 		System.out.println("comm : " + comm);*/
-		ProposalDao proposalDao = ctx.getBean("proposalDao", ProposalDaoImpl.class);
-		Proposal proposal = proposalDao.fetchProposalById(4);
-		List<ProposalKeyword> proposalKeywords = proposal.getProposalKeywords();
-		System.out.println("proposalKeywords : " + proposalKeywords);
-		proposalKeywords.remove(0);
-		proposal = proposalDao.saveOrUpdateProposal(proposal);
-		System.out.println("proposal : " + proposal);
-		ctx.close();
+//		ProposalDao proposalDao = ctx.getBean("proposalDao", ProposalDaoImpl.class);
+//		Proposal proposal = proposalDao.fetchProposalById(4);
+//		List<ProposalKeyword> proposalKeywords = proposal.getProposalKeywords();
+//		System.out.println("proposalKeywords : " + proposalKeywords);
+//		proposalKeywords.remove(0);
+//		proposal = proposalDao.saveOrUpdateProposal(proposal);
+//		System.out.println("proposal : " + proposal);
+//		ctx.close();
 	}
 
 }
