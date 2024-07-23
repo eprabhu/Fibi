@@ -208,6 +208,6 @@
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
+  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personID') == coiDetails?.adminPersonId)"
   [relationshipType]="relationshipType" [selectedProject]="selectedProject"></app-add-conflict-slider>
 
