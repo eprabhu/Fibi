@@ -4,7 +4,7 @@ import { CommonService } from '../../common/services/common.service';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { EntityDetails, TravelConflictRO, TravelDisclosure } from '../travel-disclosure-interface';
+import { EntityDetails, TravelConflictRO, TravelDisclosure } from '../travel-disclosure.interface';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { closeSlider, openCoiSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 
@@ -135,19 +135,6 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
-    }
-
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
     }
 
     isFieldValueChanges(): boolean {

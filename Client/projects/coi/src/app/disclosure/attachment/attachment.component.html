@@ -114,8 +114,8 @@
                 <div class="col-lg-1 col text-right">
                   <ul class="actionButtonGroup mt-5">
                     <li>
-                      <a id="external-review-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor" aria-label="Click to Remove File" title="Click to Remove File"
-                        (click)="deleteFromUploadedFileList(i)"></a>
+                      <a role="link" tabindex="0" id="external-review-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor" aria-label="Click here to remove file" title="Click here to remove file"
+                        (click)="deleteFromUploadedFileList(i)" (keyup.enter)="deleteFromUploadedFileList(i)" (keyup.space)="deleteFromUploadedFileList(i)"></a>
                     </li>
                   </ul>
                 </div>

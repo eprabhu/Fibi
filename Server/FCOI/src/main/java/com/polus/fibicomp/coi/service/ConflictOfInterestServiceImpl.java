@@ -230,7 +230,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (fcoiDisclosure != null) {
 				return new ResponseEntity<>(fcoiDisclosure, HttpStatus.METHOD_NOT_ALLOWED);
 			}
-			fcoiDisclosure = conflictOfInterestDao.isFCOIDisclosureExists(AuthenticatedUser.getLoginPersonId(), "1", Constants.COI_ACTIVE_STATUS);
+			fcoiDisclosure = conflictOfInterestDao.isFCOIDisclosureExists(conflictOfInterestVO.getPersonId(), "1", Constants.COI_ACTIVE_STATUS);
 			if (fcoiDisclosure != null) {
 				return new ResponseEntity<>(fcoiDisclosure, HttpStatus.METHOD_NOT_ALLOWED);
 			}
@@ -1241,6 +1241,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setDescription(vo.getDescription());
 		coiTravelDisclosure.setCreateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setPerson(personDao.getPersonDetailById(AuthenticatedUser.getLoginPersonId()));
+		coiTravelDisclosure.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(AuthenticatedUser.getLoginPersonId()));
+		coiTravelDisclosure.setPersonNotesCount(conflictOfInterestDao.personNotesCount(AuthenticatedUser.getLoginPersonId()));
+		coiTravelDisclosure.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(AuthenticatedUser.getLoginPersonId()).build()));
 		setAllTravelDisclosureStatus(coiTravelDisclosure, vo.getEntityId());
 		coiTravelDisclosure.setPersonFullName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getPersonId()));
 		setUnitDetails(coiTravelDisclosure, vo);
@@ -1517,6 +1521,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setCertifiedBy(coiTravelDisclosure.getCertifiedBy());
 		dto.setDescription(coiTravelDisclosure.getDescription());
 		dto.setExpirationDate(coiTravelDisclosure.getExpirationDate());
+		dto.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(dto.getPersonId()));
+		dto.setPersonNotesCount(conflictOfInterestDao.personNotesCount(dto.getPersonId()));
+		dto.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(dto.getPersonId()).build()));
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 

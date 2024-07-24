@@ -183,20 +183,6 @@ export class TravelRiskSliderComponent implements OnInit {
 		return isEmptyObject(this.disclosureHistoryLogs);
 	}
 
-
-	getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
-    }
-
 	sortNull() {return 0;}
 
     closeConflictSlider() {

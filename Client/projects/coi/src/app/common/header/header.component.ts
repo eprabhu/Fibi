@@ -76,10 +76,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
             || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
-        this.userDetails = {
-            personId: this.commonService.getCurrentUserDetail('personID'),
-            fullName: this.commonService.getCurrentUserDetail('fullName')
-        };
         this.openModalTriggeredFromChild();
     }
 
@@ -212,7 +208,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openTravelDisclosure(): void {
         this.triggeredFrom = 'TRAVEL_DISCLOSURE';
-        this.getActiveDisclosureAndOpenModal();
+        this.isShowCreateOrReviseModal = true;
     }
 
     getActiveDisclosureAndOpenModal() {
@@ -279,7 +275,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     openPersonDetailsModal(): void {
-        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personId'));
+        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personID'));
     }
 
 

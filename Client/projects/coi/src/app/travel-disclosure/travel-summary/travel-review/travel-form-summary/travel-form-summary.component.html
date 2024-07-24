@@ -1,23 +1,21 @@
-<div class="main-title">
-    <h3 class="d-flex pe-3 align-items-center fs-16 position-relative">
+<div class="main-title mx-1">
+    <h3 class="d-flex pe-1 align-items-center fs-16 position-relative">
         <strong class="mt-1">Travel Details</strong>
-        <span class="d-inline-block flex-fill" tabindex="-1" data-bs-toggle="tooltip" title="View Travel Details"
-            data-bs-placement="top">
-            <mat-icon class="me-2 info-icon fs-16" data-bs-toggle="tooltip">info</mat-icon>
+        <span class="d-inline-block" tabindex="-1" data-bs-toggle="tooltip" title="Travel details" data-bs-placement="top">
+            <mat-icon class="ms-1 f-16 mt-1 text-secondary position-relative" data-bs-toggle="tooltip">info</mat-icon>
         </span>
-        <button class="btn d-flex btn-primary-icon btn-sm mr-2 mt-1" id="add-activity" title="Add Review Comment"
-            type="button">
-            <mat-icon>rate_review</mat-icon>
-        </button>
+        <!-- expand or collapse -->
         <button (click)="isCollapsed=!isCollapsed;"
-            class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm me-1">
-            <mat-icon>{{isCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
+            title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+            class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm position-relative top-0 start-0 ms-auto">
+            <mat-icon aria-hidden="true" [ngClass]="isCollapsed ? 'rotate-180' : 'rotate-0'">expand_more</mat-icon>
         </button>
     </h3>
 </div>
 
-<div class="card row py-4 px-4 d-flex align-items-center shadow mx-1 mt-3" *ngIf="isCollapsed">
-    <div class="col-12 mb-3 pb-2 px-0">
+<div *ngIf="isCollapsed" [@heightAnimation]
+    class="card p-1 d-flex shadow mx-1 my-3">
+    <div class="col-12 mb-3 pb-2 px-2">
         <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true" (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
     </div>
 
@@ -32,8 +30,7 @@
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-destination">Destination</label>
-            <span class="col-12 fs-14 grey-text">{{travelDisclosure?.isInterNationalTravel?
-                'International' : 'Domestic'}}
+            <span class="col-12 fs-14 grey-text">{{travelDisclosure?.isInterNationalTravel ? 'International' : 'Domestic'}}
             </span>
         </span>
 
@@ -65,19 +62,14 @@
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-startDate">Start Date</label>
             <app-no-data-label [valueToShow]="travelDisclosure?.travelStartDate">
-                <span class="fs-14 grey-text col-12"
-                    for="travel-disclosure-startDate">{{travelDisclosure?.travelStartDate |
-                    dateFormatter}}</span>
+                <span class="fs-14 grey-text col-12" for="travel-disclosure-startDate">{{travelDisclosure?.travelStartDate | dateFormatter}}</span>
             </app-no-data-label>
         </span>
 
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-endDate">End Date</label>
             <app-no-data-label [valueToShow]="travelDisclosure?.travelEndDate">
-                <span class="fs-14 grey-text col-12"
-                    for="travel-disclosure-endDate">{{travelDisclosure?.travelEndDate
-                    |
-                    dateFormatter}}</span>
+                <span class="fs-14 grey-text col-12" for="travel-disclosure-endDate">{{travelDisclosure?.travelEndDate | dateFormatter}}</span>
             </app-no-data-label>
         </span>
     </div>

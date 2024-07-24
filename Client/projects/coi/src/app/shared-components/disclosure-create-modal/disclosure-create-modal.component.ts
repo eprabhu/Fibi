@@ -18,8 +18,8 @@ import {
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
 import { RevisionObject, Disclosure } from '../shared-interface';
-import { checkForVowelInFirstLetter } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { checkForVowelInFirstLetter } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -79,18 +79,26 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.setSearchOptions();
         if (this.triggeredFrom === 'FCOI_DISCLOSURE') {
             this.checkForFCOIActive();
-            document.getElementById('open-create-or-revise-modal').click();
+            this.openDisclosureCreateModal();
+        } else if (this.triggeredFrom == 'TRAVEL_DISCLOSURE') {
+            this.openDisclosureCreateModal();
         } else {
             this.getCoiProjectTypes();
         }
     }
 
+    private openDisclosureCreateModal(): void {
+        document.getElementById('open-create-or-revise-modal')?.click();
+    }
+
     clearModal(): void {
-        this.mandatoryList.clear();
-        this.clearProjectDisclosure();
-        this.reviseObject = new RevisionObject();
-        this.emitCreateOrRevise.emit({closeModal: false});
-        this.clearProjectField = new String('true');
+        setTimeout(() => {
+            this.mandatoryList.clear();
+            this.clearProjectDisclosure();
+            this.reviseObject = new RevisionObject();
+            this.emitCreateOrRevise.emit({ closeModal: false });
+            this.clearProjectField = new String('true');
+        }, 200);
     }
 
     resetHomeUnit(): void {
@@ -205,9 +213,22 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     navigateToTravelDisclosure(): void {
         if (this.validateTravelDisclosure()) {
-            this.getCreateTravelRequestObject();
             hideModal('reviseOrCreateDisclosureModal');
-            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],{queryParams: {mode:'create'}});
+            if (this._router.url.includes('create-travel-disclosure')) {
+                this.commonService.$globalEventNotifier.next(
+                    {
+                        uniqueId: 'CREATE_NEW_TRAVEL_DISCLOSURE',
+                        content: {
+                            homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
+                            description: this.reviseObject.revisionComment,
+                            personId: this.commonService.getCurrentUserDetail('personID'),
+                            homeUnitName: this.homeUnitName
+                        }
+                    });
+            } else {
+                this.getCreateTravelRequestObject();
+                this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL], { queryParams: { disclosureId: null }, queryParamsHandling: 'merge'});
+            }
             this.clearModal();
         }
     }
@@ -386,7 +407,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private getCoiProjectTypes(): void {
         this.$subscriptions.push(this._disclosureCreateModalService.getCoiProjectTypes().subscribe((res: any) => {
             this.projectTypes = res.coiProjectTypes;
-            document.getElementById('open-create-or-revise-modal').click();
+            this.openDisclosureCreateModal();
         }));
     }
 

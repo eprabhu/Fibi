@@ -6,7 +6,7 @@ import { CommonService } from '../../common/services/common.service';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
-import { TravelDisclosure } from '../travel-disclosure-interface';
+import { TravelDisclosure } from '../travel-disclosure.interface';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 

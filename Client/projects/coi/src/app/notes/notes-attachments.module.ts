@@ -4,10 +4,10 @@ import { NotesAttachmentsComponent } from './notes-attachments.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NotesAttachmentsService } from './notes-attachments.service';
 import { FormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
-import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { SharedModule } from '../shared/shared.module';
+import { SharedComponentModule } from '../shared-components/shared-component.module';
 
 const routes: Routes = [{ path: '', component: NotesAttachmentsComponent }];
 

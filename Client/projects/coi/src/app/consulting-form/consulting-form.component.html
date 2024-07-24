@@ -25,7 +25,7 @@
                                         </span>
 
                                         <!-- links -->
-                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-1 me-2">
+                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-auto me-3">
                                             <!-- <span class="ms-2 me-2"  role="link"
                                                 [title]="0 ? 'Click here to view trainings' : ''"
                                                 [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
@@ -208,11 +208,6 @@
                 <div class="col-lg-3 border-prev-nxt ng-tns-c246-40 ng-star-inserted" ng-reflect-ng-class="">
                     <div class="h-100" *ngIf="isCardExpanded">
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
-                            <button title="Go to Consulting home page" (click)="goToHomeUrl()" id="opa_home_btn"
-                                aria-label="GO TO O P A home"
-                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                <mat-icon aria-hidden="true">home</mat-icon>
-                            </button>
                             <button (click)="location.back()" title="Go to Back" id="opa_back_btn"
                                 class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14"
                                 aria-label="Go to Back">
@@ -290,11 +285,6 @@
                     </div>
                     <div class="h-100" *ngIf="!isCardExpanded">
                         <div class="d-grid gap-2 d-md-flex flex-md-wrap mb-2 mt-3">
-                            <button title="Go to Consulting home page"
-                                class="btn btn-outline-grey pb-0 fs-14 col fit-height" aria-label="GO TO O P A home"
-                                id="opa_home_btn" (click)="goToHomeUrl()">
-                                <mat-icon aria-hidden="true">home</mat-icon>
-                            </button>
                             <button title="Go to Back" class="btn btn-outline-grey pb-0 fs-14 col fit-height"
                                 (click)="location.back()" id="opa_back_btn" aria-label="Back">
                                 <mat-icon aria-hidden="true">reply</mat-icon>
@@ -381,7 +371,7 @@
                         <!-- check logged person & disclosure created person is same -->
                         <button mat-menu-item
                             *ngIf="consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode == '2' && !(consultingForm?.consultingFormDisclosure?.adminPersonId) &&
-                            (commonService?.getCurrentUserDetail('personId') == consultingForm?.consultingFormDisclosure?.personId)"
+                            (commonService?.getCurrentUserDetail('personID') == consultingForm?.consultingFormDisclosure?.personId)"
                             title="Click to Withdraw" aria-label="Click to Withdraw" tabindex="0"
                             id="consulting_withdraw"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
@@ -395,7 +385,7 @@
                         <!-- Check logged person and administrator are same -->
                         <button mat-menu-item
                             *ngIf="consultingForm?.consultingFormDisclosure?.adminPersonId && ['3','4','5'].includes(consultingForm?.consultingFormDisclosure?.reviewStatusType?.reviewStatusCode) &&
-                                    (commonService?.getCurrentUserDetail('personId') == consultingForm?.consultingFormDisclosure?.adminPersonId)"
+                                    (commonService?.getCurrentUserDetail('personID') == consultingForm?.consultingFormDisclosure?.adminPersonId)"
                             title="Click to Return Disclosure" tabindex="0" id="consulting_return"
                             (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
@@ -437,9 +427,10 @@
 </div>
 
 <ng-container *ngIf="showSlider">
-    <app-header-slider (closePage)="closeHeaderSlider($event)"
-        [consultingPersonId]="consultingForm?.consultingFormDisclosure?.personId" [sliderType]="selectedType"
-        [consultingPersonName]="consultingForm?.consultingFormDisclosure?.person?.fullName"></app-header-slider>
+    <app-person-related-sliders (closePage)="closeHeaderSlider($event)" for="CONSULTING_DISCLOSURE"
+        [personId]="consultingForm?.consultingFormDisclosure?.personId" [sliderType]="selectedType"
+        [personName]="consultingForm?.consultingFormDisclosure?.person?.fullName">
+    </app-person-related-sliders>
 </ng-container>
 
 <div>
@@ -474,7 +465,7 @@
 
 <!-- Complete review modal -->
 <div tabindex="-1" class="modal modal-coi fade mySkinDialog" data-bs-backdrop="static" id="completeReviewModalFromDashboard"
-    role="dialog" aria-labelledBy="completeReviewModalFromDashboard-header">
+    role="dialog" aria-labelledby="completeReviewModalFromDashboard-header">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header pe-0">

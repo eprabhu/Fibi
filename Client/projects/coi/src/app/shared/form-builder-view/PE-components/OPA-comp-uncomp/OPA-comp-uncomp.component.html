@@ -282,11 +282,11 @@
                                                 <span class="text-secondary fs-14 mt-3">
                                                     <span class="text-secondary fs-14">
                                                         <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
-                                                            class="invalid material-icons-round">warning</mat-icon>
+                                                            class="high-risk riskbadge material-icons-round">warning</mat-icon>
                                                         <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
-                                                            class="medium-risk material-icons-round">warning</mat-icon>
+                                                            class="medium-risk riskbadge material-icons-round">warning</mat-icon>
                                                         <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
-                                                            class="low-risk material-icons-round">warning</mat-icon>
+                                                            class="low-risk riskbadge material-icons-round">warning</mat-icon>
                                                     </span>
                                                 </span>
                                                 <span>{{entityDetails?.entityRiskCategory}}</span>
