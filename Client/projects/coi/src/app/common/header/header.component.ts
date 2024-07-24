@@ -275,7 +275,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     openPersonDetailsModal(): void {
-        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personId'));
+        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personID'));
     }
 
 

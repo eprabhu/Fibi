@@ -15,7 +15,7 @@ public class AuthResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String personId;
+    private String personID;
     private String userName;
     private String firstName;
     private String lastName;
@@ -28,8 +28,8 @@ public class AuthResponse implements Serializable {
     private Boolean isExternalUser;
     private String gender;
     private String homeUnit;
-    private String primaryTitle;
     private String homeUnitName;
-    private Boolean isFaculty;
+    private String email;
+    private String primaryTitle;
 
 }

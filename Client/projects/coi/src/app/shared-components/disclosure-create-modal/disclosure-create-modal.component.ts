@@ -221,7 +221,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                         content: {
                             homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
                             description: this.reviseObject.revisionComment,
-                            personId: this.commonService.getCurrentUserDetail('personId'),
+                            personId: this.commonService.getCurrentUserDetail('personID'),
                             homeUnitName: this.homeUnitName
                         }
                     });
