@@ -15,6 +15,5 @@ public interface Constant {
     String IS_EXTERNAL_USER = "isExternalUser";
     String HASH_ALGORITHM = "SHA";
     String CHARSET = "UTF-8";
-    String FIBI_DIRECT_EXCHANGE = "FIBI.DIRECT.EXCHANGE";
     
 }

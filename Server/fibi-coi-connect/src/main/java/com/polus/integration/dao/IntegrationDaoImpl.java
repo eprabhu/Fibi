@@ -1,10 +1,5 @@
 package com.polus.integration.dao;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -32,23 +27,6 @@ public class IntegrationDaoImpl implements IntegrationDao {
 			logger.error("Error occured in convertObjectToJSON : {}", e.getMessage());
 		}
 		return response;
-	}
-
-	@Override
-	public Timestamp getCurrentTimestamp() {
-		return new Timestamp(this.getCurrentDate().getTime());
-	}
-
-	@Override
-	public Date getCurrentDate() {
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		return c.getTime();
-	}
-
-	@Override
-	public String generateUUID() {
-		return UUID.randomUUID().toString();
 	}
 
 }
