@@ -102,6 +102,7 @@ public class MQRouterException  extends RuntimeException {
             exceptionsLog.setStackTrace(cause != null ? ExceptionUtils.getStackTrace(cause) : null);
             MQExceptionLogRepository exceptionsRepository = getMqExceptionsService();
             exceptionsRepository.save(exceptionsLog);
+            LOGGER.info("Exception log error id : {}", exceptionsLog.getId());
         } catch (Exception e) {
             LOGGER.error("Unable to save exception log : {}", e.getMessage());
         }
