@@ -1,0 +1,65 @@
+<div class="section">
+  <div class="section-header form-builder-sticky-header">
+    <span>{{(sectionDetails?.sectionName)?sectionDetails?.sectionName:"{{Section Name Placeholder}}"}}</span>
+    <!-- <button class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex"
+    *ngIf="!isFormEditable" id="add-opa-review-comments" (click)="setCommentDetails(sectionDetails.sectionName, sectionDetails.sectionId, null)" title="Comments" type="button">
+      <mat-icon>rate_review</mat-icon>
+    </button> -->
+    <span class="float-right mt-1"><i class="fa fa-info-circle" aria-hidden="true"></i>
+    </span>
+  </div>
+  <div class="info" *ngIf="sectionDetails.sectionHeader" [innerHTML] = "sectionDetails.sectionHeader">
+  </div>
+  <div class="content">
+    <ng-container *ngFor="let component of sectionDetails.sectionComponent">
+      <div class="info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
+      </div>
+      <!-- <button *ngIf="!isFormEditable && component.componentId && canShowComments(component)" class="mt-0 btn btn-primary-icon btn-sm float-end btn-sm add-activity-button mr-15 d-flex pt-2" id="add-opa-review-comments"
+      (click)="setCommentDetails(null, sectionDetails.sectionId, component.componentId)" title="Comments" type="button">
+        <mat-icon>rate_review</mat-icon>
+      </button> -->
+      <div *ngIf="(component.componentType === 'QN' || ['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE'].includes(component.componentType)) && component.componentRefId != ''"
+      [id]="component.componentId">
+        <app-data-layer
+          [component]="component"
+          [fbConfiguration]="fbConfiguration"
+          [formBuilderId]="formBuilderId"
+          [isFormEditable]="isFormEditable"
+          [saveEventForChildComponent]="saveEventForChildComponent"
+        ></app-data-layer>
+      </div>
+
+      <!-- Rich Text Editor -->
+      <div *ngIf="component.componentType === 'RT'">
+        <div class="p-40" [innerHTML] = "component.componentData"></div>
+      </div>
+      <div *ngIf="component.componentType === 'PE' && component.componentRefId != ''" [id]="component.componentId">
+        <app-PE-layer
+          [component]="component"
+          [fbConfiguration]="fbConfiguration"
+          [formBuilderId]="formBuilderId"
+          [isFormEditable]="isFormEditable"
+          [saveEventForChildComponent]="saveEventForChildComponent"
+          [sectionName]="sectionDetails.sectionName">
+        </app-PE-layer>
+      </div>
+
+      <!-- Horizontal line component -->
+      <div *ngIf="component.componentType === 'HL'">
+         <div class="line" [style]="component.componentData"></div>
+      </div>
+
+      <!-- Break Line -->
+      <div *ngIf="component.componentType === 'BR'">
+         <!-- to be developed -->
+      </div>
+      <div class="info" *ngIf="component.componentFooter" [innerHTML] = "component.componentFooter">
+        {{component.componentFooter}}
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="info" *ngIf="sectionDetails.sectionFooter" [innerHTML] = "sectionDetails.sectionFooter">
+  </div>
+</div>
+

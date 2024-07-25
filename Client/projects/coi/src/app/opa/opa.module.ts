@@ -14,6 +14,7 @@ import {SharedModule} from '../shared/shared.module';
 import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
 import { ReviewRouteGuardService } from './services/review-route-guard.service';
 import {RouterGuardService} from './services/router-guard.service';
+import { FormSharedModule } from '../configuration/form-builder-create/shared/shared.module';
 
 const routes: Routes = [{
     path: '', component: OpaComponent, canActivate: [ResolveServiceService], children: [
@@ -50,7 +51,8 @@ const routes: Routes = [{
         FormsModule,
         SharedModule,
         OPASharedModule,
-        PersonRelatedSlidersModule
+        PersonRelatedSlidersModule,
+        FormSharedModule
     ],
     providers: [
         OpaService,

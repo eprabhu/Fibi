@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
-import { FormBuilderEvent, FormSection } from '../../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent, FormSection } from './shared/form-builder-view/form-builder-interface';
 import {
     ComponentObjects, UpdateFormUsage, saveFormUsage, UpdateSectionObject, UpdateFormHeaderObject, ComponentOrder, CreateComponentObject, CreateFormHeader,
     FormSectionObject, SectionOrder,
@@ -26,7 +26,8 @@ export class FormBuilderCreateService {
         sectionId: "",
         orderNo: ""
     }
-
+    currentTab = "";
+    isFormPublished = "";
     constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
     initiateAutoSave(saveEvent: string) {
@@ -43,10 +44,20 @@ export class FormBuilderCreateService {
                 this.newComponentPosition.sectionId = this.selectedComponent.sectionId;
                 this.newComponentPosition.orderNo = this.selectedComponent.componentOrderNumber;
                 return true;
-
             }
 
         }
+    }
+
+    removeUnsavedComponetsOnTabSwitch() {
+        // This function removes unsavesd components from FormEditorState when user switch tab on purpose.
+        this.formEditorState.forEach(x => {
+            x.sectionComponent.forEach((component, index) => {
+                if (component.tempId) {
+                    x.sectionComponent.splice(index, 1)
+                }
+            })
+        })
     }
 
     isEmptySectionPresent(): boolean {
@@ -83,10 +94,6 @@ export class FormBuilderCreateService {
 
     publishForm(formDetails: CreateFormHeader): Observable<any> {
         return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formheader", formDetails);
-    }
-
-    publishForm(formDetails: CreateFormHeader): Observable<any> {
-        return this._http.put(this._commonService.baseUrl + "/formbuilder/config/v1/formheader", formDetails);
     }
 
     createFormSection(formSection: FormSectionObject): Observable<any> {
@@ -144,38 +151,8 @@ export class FormBuilderCreateService {
     updateFormHeader(formDetails: UpdateFormHeaderObject): Observable<any> {
         return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formheader", formDetails);
     }
-    getSystemLookupByCustomType(dataTypeCode:{dataTypeCode:string}): Observable<any> {
-        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/getSystemLookupByCustomType", dataTypeCode);
-    }
-
-    configureCustomElement(customData: configureCustomElement): Observable<any> {
-        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/configureCustomElement", customData);
-    }
-
-    fetchCustomData(customDataId:{customDataElementId:string}): Observable<any> {
-        return this._http.post(this._commonService.formUrl + "/formbuilder/fetchFormCustomElementById", customDataId);
-    }
-
-    getModuleList(): Observable<any> {
-        return this._http.get(this._commonService.fibiUrl + "/getModuleList");
-    }
-
-    saveFormUsage(integationObj: saveFormUsage): Observable<any> {
-        return this._http.post(this._commonService.formUrl + "/formbuilder/config/v1/formusage", integationObj);
-    }
-
-    updateFormUsage(integationObj: UpdateFormUsage): Observable<any> {
-        return this._http.put(this._commonService.formUrl + "/formbuilder/config/v1/formusage", integationObj);
-    }
-
-    getAllFormUsage(formBuilderId: string): Observable<any> {
-        return this._http.get(this._commonService.formUrl + `/formbuilder/config/v1/formusage/${formBuilderId}`);
-    }
-
-    deleteusage(usageID: number): Observable<any> {
-        return this._http.delete(this._commonService.formUrl + `/formbuilder/config/v1/formusage/${usageID}`);
-    }
-    getSystemLookupByCustomType(dataTypeCode:{dataTypeCode:string}): Observable<any> {
+    
+    getSystemLookupByCustomType(dataTypeCode: { dataTypeCode: string }): Observable<any> {
         return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/getSystemLookupByCustomType", dataTypeCode);
     }
 
@@ -183,7 +160,7 @@ export class FormBuilderCreateService {
         return this._http.post(this._commonService.baseUrl + "/formbuilder/config/v1/configureCustomElement", customData);
     }
 
-    fetchCustomData(customDataId:{customDataElementId:string}): Observable<any> {
+    fetchCustomData(customDataId: { customDataElementId: string }): Observable<any> {
         return this._http.post(this._commonService.baseUrl + "/formbuilder/fetchFormCustomElementById", customDataId);
     }
 

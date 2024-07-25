@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
 import { Subject } from 'rxjs';
-import { FormBuilderEvent } from '../../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent } from '../../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 
 @Injectable()
 

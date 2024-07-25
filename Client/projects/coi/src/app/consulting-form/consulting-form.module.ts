@@ -14,6 +14,7 @@ import { HistoryModule } from './history/history.module';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { SfiModule } from '../disclosure/sfi/sfi.module';
 import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
+import { FormSharedModule } from '../configuration/form-builder-create/shared/shared.module';
 
 const routes: Routes = [{
     path: '', component: ConsultingFormComponent, canActivate: [ResolveServiceService], children: [
@@ -50,7 +51,8 @@ const routes: Routes = [{
     HistoryModule,
     SharedComponentModule,
     PersonRelatedSlidersModule,
-    SfiModule
+    SfiModule,
+    FormSharedModule
   ],
   providers: [
     ResolveServiceService,

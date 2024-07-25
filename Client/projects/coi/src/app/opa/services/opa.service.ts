@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
 import {BehaviorSubject, of, Subject} from 'rxjs';
-import { FormBuilderEvent } from '../../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent } from '../../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 
 @Injectable()
 export class OpaService {
