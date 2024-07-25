@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.polus.integration.entity.cleansematch.dto.StageDnBEntityMatchDTO;
 
 @Repository
-public interface DnBEntityMatchRepository extends JpaRepository<StageDnBEntityMatch, String> {
+public interface DnBEntityMatchRepository extends JpaRepository<StageDnBEntityMatch, Integer> {
 	Page<StageDnBEntityMatch> findAll(Pageable pageable);
 
 	@Query("SELECT new com.polus.integration.entity.cleansematch.dto.StageDnBEntityMatchDTO"

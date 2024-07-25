@@ -35,4 +35,6 @@ public class QuestionnaireVO {
 
 	private String attribute3Value;
 
+	private transient Integer disclosureId;
+
 }
