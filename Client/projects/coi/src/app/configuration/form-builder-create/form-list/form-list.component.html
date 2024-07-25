@@ -1,7 +1,7 @@
 <div class="fb-header d-flex  justify-content-between align-items-center">
     <div class="fw-bold fb-form-list-title">Form List</div>
     <button title="Create Form" aria-label="Click here to create form" class="btn btn-primary fb-fs-14"
-        [routerLink]="['/coi/form-builder-create/create-form']">Create Form</button>
+        [routerLink]="['../../form-builder-create/create-form']">Create Form</button>
 </div>
 
 <div *ngFor="let item of formList; let i = index" class="mt-2">
@@ -28,9 +28,9 @@
                     </div>
                 </div>
                 <div class="col-2 d-flex justify-content-end">
-                    <button [routerLink]="['/coi/form-builder-create/form-editor']"
+                    <button [routerLink]="['../../form-builder-create/form-editor']"
                         [queryParams]={formBuilderId:item.formBuilderId} class="btn fw-bold btn-outline-primary fb-fs-14"
-                        id="View" aria-label="Click here to view form in editor" title="View">View</button>
+                        id="View" aria-label="Click here to view form in editor" title="View"(click)='isFormPublished(item.isActive)'>View</button>
                 </div>
             </div>
         </div>

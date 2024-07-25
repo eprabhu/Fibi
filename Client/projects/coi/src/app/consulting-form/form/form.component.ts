@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { EndpointOptions } from '../../add-sfi/add-sfi.component';
-import { getEndPointOptionsForCountry } from '../../shared/form-builder-view/search-configurations';
+import { getEndPointOptionsForCountry } from '../../configuration/form-builder-create/shared/form-builder-view/search-configurations';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDetails, EntitySaveRO, ExistingEntityDetails } from './form-interface';
 import { setEntityObjectFromElasticResult } from '../../common/utilities/elastic-utilities';
@@ -11,7 +11,7 @@ import { deepCloneObject, isEmptyObject, openModal } from 'projects/fibi/src/app
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { Router } from '@angular/router';
 import { ConsultingService } from '../services/consulting-service.service';
-import { FBConfiguration } from '../../shared/form-builder-view/form-builder-interface';
+import { FBConfiguration } from '../../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { DataStoreService } from '../services/data-store.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { HttpResponse } from '@angular/common/http';

@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormComponent} from './form.component';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '../../shared/shared.module';
+import { FormSharedModule } from '../../configuration/form-builder-create/shared/shared.module';
 
 const routes: Routes = [{path: '', component: FormComponent}];
 
@@ -13,7 +14,8 @@ const routes: Routes = [{path: '', component: FormComponent}];
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
-        SharedModule
+        SharedModule,
+        FormSharedModule
     ]
 })
 export class FormModule {
