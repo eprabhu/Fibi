@@ -13,13 +13,15 @@ import com.polus.repository.UserCredentialRepository;
 public class PersonService {
 
    
-    @Autowired
-    private UserCredentialRepository repository;
- 
-     
-    public Optional<Person> loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByPrincipalName(username);      
-    }
+	@Autowired
+	private UserCredentialRepository repository;
 
+	public Optional<Person> loadUserByUsername(String username) throws UsernameNotFoundException {
+		return repository.findByPrincipalName(username);
+	}
+
+	void updateSecret(String userId, String secret) {
+		repository.updateSecret(userId, secret);
+	}
 
 }

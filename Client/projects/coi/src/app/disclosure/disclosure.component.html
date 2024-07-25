@@ -330,7 +330,7 @@
                                     <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                                     <!-- check logged person & disclosure created person is same -->
                                     <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) &&
-                                    (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
+                                    (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
                                         area-describedby="Click to Withdraw"
                                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                         (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
@@ -342,7 +342,7 @@
                                     <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                                     <!-- Check logged person and administrator are same -->
                                 <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
-                                (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
+                                (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
                                     (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
                                     class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                     <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
@@ -377,7 +377,7 @@
                                 <button *ngIf="coiService.isCOIAdministrator &&
                                                 ((coiService.isReviewActionCompleted
                                                 && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
-                                                && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId))
+                                                && (commonService?.getCurrentUserDetail('personID') == coiData.coiDisclosure.adminPersonId))
                                                 ||
                                                 (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
                                                 && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"

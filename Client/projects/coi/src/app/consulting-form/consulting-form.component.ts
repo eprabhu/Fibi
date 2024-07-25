@@ -212,7 +212,7 @@ export class ConsultingFormComponent {
     }
 
     isLoggedInUser(personId: string): boolean {
-        return this.commonService?.getCurrentUserDetail('personId') === personId;
+        return this.commonService?.getCurrentUserDetail('personID') === personId;
     }
 
     openAddAssignModal(): void {

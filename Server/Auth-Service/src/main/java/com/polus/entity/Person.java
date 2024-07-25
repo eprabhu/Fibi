@@ -93,8 +93,6 @@ public class Person implements Serializable {
 
 	@Column(name = "COUNTRY_OF_CITIZENSHIP")
 	private String countryOfCitizenshipCode;
-	
-	
 
 	@Column(name = "PRIMARY_TITLE")
 	private String primaryTitle;
@@ -202,14 +200,19 @@ public class Person implements Serializable {
 
 	@Column(name = "DATE_WHEN_PERSON_INACTIVE")
 	private Timestamp dateOfInactive;
-	
+
+    @Column(name = "OFFICE_PHONE")
+	private String officePhone;
+
+	@Column(name = "IS_MFA_ENABLED")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isMfaEnabled = false;
+
+	@Column(name = "SECRET")
+	private String secret;
+
 	@Column(name = "IS_EXTERNAL_USER")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isExternalUser = false;
 
-    @Column(name = "OFFICE_PHONE")
-	private String officePhone;
-  
-	
-    
 }

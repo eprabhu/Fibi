@@ -23,7 +23,7 @@ export class DisclosureCreateModalService {
     return this._http.post(this._commonService.baseUrl + '/validateDisclosure', {
         "moduleCode": moduleCode,
         "moduleItemId": moduleId,
-        "personId": this._commonService.getCurrentUserDetail('personId')
+        "personId": this._commonService.getCurrentUserDetail('personID')
     });
   }
 

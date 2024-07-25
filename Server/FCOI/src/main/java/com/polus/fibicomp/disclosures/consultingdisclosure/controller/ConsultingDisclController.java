@@ -1,5 +1,6 @@
 package com.polus.fibicomp.disclosures.consultingdisclosure.controller;
 
+import com.polus.core.security.AuthenticatedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCommo
 import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCreatetDto;
 import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclSubmitDto;
 import com.polus.fibicomp.disclosures.consultingdisclosure.service.ConsultingDisclosureService;
-import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
 @RequestMapping("/coi/consultingDisclosure")

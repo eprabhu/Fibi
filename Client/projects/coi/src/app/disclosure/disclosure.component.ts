@@ -310,7 +310,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'moduleSubItemCode': 0,
             'moduleSubItemKey': 0,
             'moduleItemKey': this.coiData.coiDisclosure.disclosureId,
-            'actionUserId': this.commonService.getCurrentUserDetail('personId'),
+            'actionUserId': this.commonService.getCurrentUserDetail('personID'),
             'actionPersonName': this.commonService.getCurrentUserDetail('fullName'),
             'questionnaireMode': 'ACTIVE_ANSWERED_UNANSWERED'
         };
@@ -615,7 +615,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
      */
     checkForModifyRisk() {
         return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) &&
-        (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
+        (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personID'));
     }
 
     withdrawDisclosure() {
