@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit} from '@angular/core';
-import { FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent} from '../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { Subject} from 'rxjs';
 import { OpaService} from './services/opa.service';
 import { hideModal, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
