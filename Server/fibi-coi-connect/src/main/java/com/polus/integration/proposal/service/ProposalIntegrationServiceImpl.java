@@ -27,6 +27,8 @@ import com.polus.integration.proposal.dto.ProposalPersonDTO;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
 import com.polus.integration.proposal.pojo.COIIntegrationProposal;
 import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
+import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
+import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrQstnMapping;
 import com.polus.integration.proposal.repository.ProposalQnAIntegrationRepository;
 import com.polus.integration.proposal.vo.CreateProposalDisclosureVO;
 import com.polus.integration.proposal.vo.ProcessProposalDisclosureVO;
@@ -59,7 +61,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	private ProposalIntegrationDao proposalIntegrationDao;
 
 	@Autowired
-	private QuestionnaireService questionnaireService; 
+	private QuestionnaireService questionnaireService;
 
 	@Autowired
 	private FcoiFeignClient fcoiFeignClient;
@@ -70,12 +72,10 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	@Value("${fibi.messageq.queues.devPropQuesAnsIntegration}")
 	private String devPropQuesAnsIntegrationQueue;
 
-	private static final String TEXT = "Text";
-	private static final String RADIO = "Radio";
-	private static final String ANSWER_TYPE = "ANSWER_TYPE";
 	private static final String ANSWERS = "ANSWERS";
-	private static final String CHECKBOX = "Checkbox";
+	private static final String QUESTION_NUMBER = "QUESTION_NUMBER";
 	private static final String AC_TYPE = "AC_TYPE";
+	private static final String QUESTION_ID = "QUESTION_ID";
 
 	@Override
 	public void syncProposalDetails(ProposalDTO proposalDTO) {
@@ -224,7 +224,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		processProposalDisclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE.toString());
 		processProposalDisclosureVO.setModuleItemId(vo.getProposalNumber());
 		processProposalDisclosureVO.setPersonId(vo.getPersonId());
-		validateAndCreateDisclosure(createValidateDisclosureVO(vo), processProposalDisclosureVO);
+		validateAndCreateDisclosure(createValidateDisclosureVO(vo), processProposalDisclosureVO, vo.getQuestionnaireId());
 	}
 
 	private ValidateDisclosureVO createValidateDisclosureVO(QuestionnaireVO vo) {
@@ -236,22 +236,36 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	@SuppressWarnings("unchecked")
-	public void validateAndCreateDisclosure(ValidateDisclosureVO validateDisclosureVO, ProcessProposalDisclosureVO vo) {			
+	public void validateAndCreateDisclosure(ValidateDisclosureVO validateDisclosureVO, ProcessProposalDisclosureVO vo, Integer questionnaireId) {			
 		try {
 			ResponseEntity<Object> response = fcoiFeignClient.validateDisclosure(validateDisclosureVO);
 			Map<String, Object> responseObject = (Map<String, Object>) response.getBody();
 			if (responseObject.get(Constant.PENDING_PROJECT) == null) {
 				CreateProposalDisclosureVO disclosureVO = prepareCreateProposalDisclosureResponse(vo);
-				fcoiFeignClient.createDisclosure(disclosureVO);
+				ResponseEntity<Object> responseObj = fcoiFeignClient.createDisclosure(disclosureVO);
+				Map<String, Object> responseBody = (Map<String, Object>) responseObj.getBody();
+				Map<String, Object> coiDisclosure = (Map<String, Object>) responseBody.get("coiDisclosure");
 				logger.info("Disclosure created successfully.");
+				syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
 			} else {
 				logger.info("Pending project exists, disclosure creation skipped.");
+				Map<String, Object> coiDisclosure = (Map<String, Object>) responseObject.get(Constant.PENDING_PROJECT);
+				syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
             }
 		} catch (Exception e) {
 			logger.error("Exception occurred while validating or creating disclosure", e);
 			throw new MQRouterException("ER004", "Error in validateAndCreateDisclosure: {}", e, e.getMessage(), devPropQuesAnsIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.DEV_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE, Constant.QUESTIONNAIRE_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 		}
     }
+
+	private void syncQuestionniareAnswers(Map<String, Object> coiDisclosure, ProcessProposalDisclosureVO vo, Integer questionnaireId) {
+		QuestionnaireVO questionnaireVO = new QuestionnaireVO();
+		questionnaireVO.setProposalNumber(vo.getModuleItemId());
+		questionnaireVO.setPersonId(vo.getPersonId());
+		questionnaireVO.setQuestionnaireId(questionnaireId);
+		questionnaireVO.setDisclosureId((Integer) coiDisclosure.get("disclosureId"));
+		getQuestionnaire(questionnaireVO);
+	}
 
 	private CreateProposalDisclosureVO prepareCreateProposalDisclosureResponse(ProcessProposalDisclosureVO vo) {
 		CreateProposalDisclosureVO disclosureVO = new CreateProposalDisclosureVO();
@@ -265,32 +279,32 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	    return disclosureVO;
 	}
 
-	@Override
-	public String getQuestionnaire(QuestionnaireDataBus questionnaireDataBus) {
+	
+	private String getQuestionnaire(QuestionnaireVO vo) {
 		try {
+			FibiCoiQnrMapping  qnrMapping = proposalIntegrationDao.getQuestionnaireMappingInfo(vo.getQuestionnaireId());
+			QuestionnaireDataBus questionnaireDataBus = new QuestionnaireDataBus();
+			questionnaireDataBus.setQuestionnaireId(qnrMapping.getFibiQnrId());
 			questionnaireDataBus = questionnaireService.getQuestionnaireDetails(questionnaireDataBus);
-			logger.info("Questionnaire : {}", questionnaireDataBus);
-			questionnaireDataBus = saveQuestionnaireAnswers(questionnaireDataBus);
+			questionnaireDataBus = saveQuestionnaireAnswers(questionnaireDataBus, qnrMapping.getQuestions(), vo.getPersonId(), vo.getProposalNumber(), vo.getDisclosureId(), vo.getQuestionnaireId());
 			return integrationDao.convertObjectToJSON(questionnaireDataBus);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Exception occurred while getQuestionnaire", e);
-			throw new MQRouterException("ER004", "Error in getQuestionnaire: {}", e, e.getMessage(), "saveQuestionnaire", null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.DEV_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE, "saveQuestionnaire", integrationDao.generateUUID());
+			throw new MQRouterException("ER004", "Error in getQuestionnaire: {}", e, e.getMessage(), "saveQuestionnaire", null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.SUB_MODULE_CODE, "saveQuestionnaire", integrationDao.generateUUID());
 		}
 	}
 
-	public QuestionnaireDataBus saveQuestionnaireAnswers(QuestionnaireDataBus questionnaireDataBus) {
+	public QuestionnaireDataBus saveQuestionnaireAnswers(QuestionnaireDataBus questionnaireDataBus, List<FibiCoiQnrQstnMapping> mappingQuestions, String disclosurePersonId, Integer proposalNumber, Integer disclosureId, Integer questionnaireId) {
 		try {
 			questionnaireDataBus.setModuleItemCode(Constant.COI_MODULE_CODE);
 			questionnaireDataBus.setModuleSubItemCode(Constant.SUB_MODULE_CODE);
 			questionnaireDataBus.setModuleSubItemKey(Constant.SUB_MODULE_ITEM_KEY);
-			questionnaireDataBus.setModuleItemKey("37"); //hard coding disclosure id for testing purpose
+			questionnaireDataBus.setModuleItemKey(disclosureId.toString());
 			questionnaireDataBus.setQuestionnaireCompleteFlag("Y");
-			if (questionnaireDataBus.getQuestionnaire() != null) {
-				List<HashMap<String, Object>> questions = questionnaireDataBus.getQuestionnaire().getQuestions();
-				questions.forEach(question -> {
-					prepareAnswer(question, questionnaireDataBus);
-				});
+			if (questionnaireDataBus.getQuestionnaire() != null && questionnaireDataBus.getQuestionnaire().getQuestions() != null) {
+				List<HashMap<String, Object>> fibiQuestions = questionnaireDataBus.getQuestionnaire().getQuestions();
+				prepareQuestionAnswers(fibiQuestions, mappingQuestions, questionnaireId, proposalNumber, disclosurePersonId);
 			}
 			return questionnaireService.saveQuestionnaireAnswers(questionnaireDataBus, null);
 		} catch (Exception e) {
@@ -299,20 +313,21 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
 	}
 
-	private void prepareAnswer(HashMap<String, Object> question, QuestionnaireDataBus questionnaireDataBus) {
-		HashMap<String, String> answers = new HashMap<>();
-		question.put(AC_TYPE, questionnaireDataBus.getQuestionnaireAnswerHeaderId() != null ? "U" : "I");
-		if (question.get(ANSWERS) != null) {
-			answers = (HashMap<String, String>) question.get(ANSWERS);
-		}
-		if (TEXT.equals(question.get(ANSWER_TYPE))) {
-			answers.put("1", "From Integration Test Answer");
-		} else if (RADIO.equals(question.get(ANSWER_TYPE))) {
-			answers = (HashMap<String, String>) question.get(ANSWERS);
-			answers.put("1", "Yes");
-		} else if (CHECKBOX.equals(question.get(ANSWER_TYPE))) {
-			answers.put("1", "true");
-		}
+	@SuppressWarnings("unchecked")
+	private void prepareQuestionAnswers(List<HashMap<String, Object>> questions, List<FibiCoiQnrQstnMapping> mappingQuestions, Integer questionnaireId, Integer proposalNumber, String disclosurePersonId) {
+		questions.forEach(question -> {
+			mappingQuestions.forEach(mappingQuestion -> {
+				if (question.get(QUESTION_NUMBER).equals(mappingQuestion.getFibiQstnNum()) && question.get(QUESTION_ID).equals(mappingQuestion.getFibiQstnId())) {
+					question.put(AC_TYPE, "I");
+					String answer = proposalIntegrationDao.getQuestionAnswerByParams(mappingQuestion.getSourceQstnId(), questionnaireId, proposalNumber, disclosurePersonId);
+					HashMap<String, String> answers = new HashMap<>();
+					if (question.get(ANSWERS) != null) {
+						answers = (HashMap<String, String>) question.get(ANSWERS);
+					}
+					answers.put("1", answer);
+				}
+			});
+		});
 	}
 
 }

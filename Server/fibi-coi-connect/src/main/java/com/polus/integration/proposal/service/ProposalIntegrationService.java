@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.integration.proposal.dto.ProposalDTO;
 import com.polus.integration.proposal.vo.QuestionnaireVO;
 
@@ -23,11 +22,5 @@ public interface ProposalIntegrationService {
 	 * @param quetionnaireVOs
 	 */
 	public void syncPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> quetionnaireVOs);
-
-	/**
-	 * @param request
-	 * @return
-	 */
-	public String getQuestionnaire(QuestionnaireDataBus questionnaireDataBus);
 
 }
