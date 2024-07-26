@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { FormSection, SectionComponent } from '../../../../shared/form-builder-view/form-builder-interface';
+import { FormSection, SectionComponent } from '../../shared/form-builder-view/form-builder-interface';
 import { FormBuilderCreateService } from '../../form-builder-create.service';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import { EDITOR_CONFIGURATION } from '../../../.././app-constants';
+import { EDITOR_CONFIURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../../fibi/src/app/app-constants';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Constants } from '../../../../../../../fibi/src/app/admin-modules/custom-data/custom-data.constants';
 import { CommonService } from '../../../../common/services/common.service';
@@ -25,7 +25,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
     @Output() additionalInformationInitialComponentSave: EventEmitter<any> = new EventEmitter();
 
     appAutoCompletedefaultValue: string;
-    showSelectedSection: boolean = false;
+    showSelectedSection = false;
     programElementList: Array<ProgramElementList> = [];
     questionnaireElementList: Array<QuestionnaireElementList> = [];
     customElementList: Array<CustomDataElements> = [];
@@ -33,12 +33,12 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
     selectedSection = new FormSection;
     autoCompleterOption: any = {};
     elementList: any = [];
-    appAutoComplete: string = '';
+    appAutoComplete = '';
     clearField: String;
     componentHeader: string;
     componentFooter: string;
     public Editor = DecoupledEditor;
-    editorConfig = EDITOR_CONFIGURATION;
+    editorConfig = EDITOR_CONFIURATION;
     $subscriptions: Subscription[] = [];
     customDataOptions = [];
     customDatalookUpArray: Array<{}>;
@@ -61,7 +61,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.selectedFormElement();
         this.selectedSectionEvent();
-        this.selectedComponent.componentType = ''
+        this.selectedComponent.componentType = '';
     }
 
     ngOnDestroy(): void {
@@ -71,6 +71,10 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
 
     selectedFormElement(): void {
         this.additionInfoComponentEvent.subscribe((data) => {
+            if (!Object.keys(data).length) {
+                this.selectedComponent.componentType = '';
+                return;
+            }
             this.setFocusForFields();
             this.showSelectedSection = false;
             this.formValidation.clear();
@@ -79,9 +83,9 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                 this.selectedComponent = new SectionComponent();
                 this.selectedComponent.componentType = data.componentTypeCode;
                 this.selectedComponent.componentTypeDescription = data.description;
-                this.selectedComponent.componentData = "";
-                this.selectedComponent.componentHeader = "";
-                this.selectedComponent.componentFooter = "";
+                this.selectedComponent.componentData = '';
+                this.selectedComponent.componentHeader = '';
+                this.selectedComponent.componentFooter = '';
                 this.formBuilderService.currentComponentPosition.tempId = data.tempId;
                 this.formBuilderService.currentComponentPosition.sectionId = data.sectionId;
                 this.formBuilderService.currentComponentPosition.orderNo = data.componentOrderNumber;
@@ -96,7 +100,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                 this.selectedComponent.componentId = data.componentId;
                 this.loadComponent();
             }
-        })
+        });
 
     }
 
@@ -107,7 +111,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
         this.customDataElement.defaultValue = null;
         this.customDataElement.acType = 'I';
         this.customDataElement.isMultiSelectLookup = 'N';
-        this.customDataElement.hasLookup = "N";
+        this.customDataElement.hasLookup = 'N';
         this.loadCustomDataLookup();
         if (['CB', 'RB'].includes(this.selectedComponent.componentType)) {
             this.customDataOptions = [];
@@ -157,9 +161,12 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                     selectedComponent = JSON.parse(JSON.stringify(this.selectedComponent));
                     this.additionalInformationInitialComponentSave.emit(selectedComponent);
                     this.isInitialSave = false;
-                    this.customDataElement.acType = "U";
+                    this.customDataElement.acType = 'U';
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Configurations Saved successfully.');
+                }, err => {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Saving Configurations failed.');
                 })
-            )
+            );
         }
     }
 
@@ -179,49 +186,36 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
         createComponentObject.componentOrder = orderNo;
         createComponentObject.componentData = this.selectedComponent.componentData;
         createComponentObject.componentRefId = this.selectedComponent.componentRefId;
-        createComponentObject.description = "test";
+        createComponentObject.description = 'test';
         createComponentObject.componentFooter = this.selectedComponent.componentFooter;
         createComponentObject.componentHeader = this.selectedComponent.componentHeader;
-        createComponentObject.isActive = "Y";
+        createComponentObject.isActive = 'Y';
         createComponentObject.componentTypeDescription = this.selectedComponent.componentTypeDescription;
         createComponentObject.label = this.selectedComponent.label;
         createComponentObject.isMandatory = this.selectedComponent.isMandatory;
         createComponentObject.validationMessage = this.selectedComponent.validationMessage;
-
-        // const createComponentObject = {
-        //     "formBuilderSectionId": formSectionId,
-        //     "formBuilderId": this.formBuilderId,
-        //     "componentTypeCode": this.selectedComponent.componentType,
-        //     "componentOrderNumber": orderNo,
-        //     "componentData": this.selectedComponent.componentData,
-        //     "componentRefId": this.selectedComponent.componentRefId,
-        //     "description": "",
-        //     "headerInstruction": this.selectedComponent.componentHeader,
-        //     "footerInstruction": this.selectedComponent.componentFooter,
-        //     "isActive": "Y",
-        //     "componentTypeDescription": this.selectedComponent.componentTypeDescription,
-        //     "label": this.selectedComponent.label,
-        //     "isMandatory": this.selectedComponent.isMandatory,
-        //     "validationMessage": this.selectedComponent.validationMessage
-        // }
         return createComponentObject;
     }
 
     selectedSectionEvent(): void {
         this.additionalInfoSectionEvent.subscribe((data: any) => {
+            if (!Object.keys(data).length) {
+                this.selectedSection.sectionId = null;
+                return;
+            }
             this.selectedSection.sectionHeader = data.sectionHeader;
             this.selectedSection.sectionFooter = data.sectionFooter;
             this.selectedSection.sectionId = data.sectionId;
             this.selectedSection.sectionName = data.sectionName;
             this.selectedSection.sectionOrder = data.sectionOrder;
             this.showSelectedSection = true;
-            this.selectedComponent.componentType = "";
+            this.selectedComponent.componentType = '';
             setTimeout(() => {
                 document.getElementById('section-name').focus();
             }, 1000);
             this.loadSection();
 
-        })
+        });
     }
 
     activateSelectedComponent(): void {
@@ -242,29 +236,15 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
     }
 
     prepareComponentObject(): ComponentObjects {
-        // const prepareComponentObject = {
-        //     "formBuilderSectCompId": this.selectedComponent.componentId,
-        //     "componentTypeCode": this.selectedComponent.componentType,
-        //     "componentData": this.selectedComponent.componentData,
-        //     "componentRefId": this.selectedComponent.componentRefId,
-        //     "description": "desc about the component",
-        //     "headerInstruction": this.selectedComponent.componentHeader,
-        //     "footerInstruction": this.selectedComponent.componentFooter,
-        //     "isActive": "Y",
-        //     "label": this.selectedComponent.label,
-        //     "isMandatory": this.selectedComponent.isMandatory,
-        //     "validationMessage": this.selectedComponent.validationMessage
-
-        // }
         const prepareComponentObject = new ComponentObjects();
         prepareComponentObject.componentId = this.selectedComponent.componentId;
         prepareComponentObject.componentType = this.selectedComponent.componentType;
         prepareComponentObject.componentData = this.selectedComponent.componentData;
         prepareComponentObject.componentRefId = this.selectedComponent.componentRefId;
-        prepareComponentObject.description = "";
+        prepareComponentObject.description = '';
         prepareComponentObject.componentHeader = this.selectedComponent.componentHeader;
         prepareComponentObject.componentFooter = this.selectedComponent.componentFooter;
-        prepareComponentObject.isActive = "Y";
+        prepareComponentObject.isActive = 'Y';
         prepareComponentObject.label = this.selectedComponent.label;
         prepareComponentObject.isMandatory = this.selectedComponent.isMandatory;
         prepareComponentObject.validationMessage = this.selectedComponent.validationMessage;
@@ -276,35 +256,28 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
         if (this.isFormFieldValidation()) {
             this.$subscriptions.push(
                 this.formBuilderService.updateComponent(this.prepareComponentObject()).subscribe((data: component) => {
-                    this.additionalInformationComponent.emit({ componentData: this.prepareComponentObject(), sectionId: this.selectedComponent.sectionId });
+                    this.additionalInformationComponent
+                        .emit({ componentData: this.prepareComponentObject(), sectionId: this.selectedComponent.sectionId });
                     this.formBuilderService.unSavedChange = false;
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Configurations updated successfully.');
+                }, err => {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Updating Configurations failed.');
                 })
             );
         }
     }
 
     prepareSectionObject(): UpdateSectionObject {
-        // const sectionObject = {
-        //     "formBuilderSectionId": this.selectedSection.sectionId,
-        //     "sectionName": this.selectedSection.sectionName,
-        //     "sectionOrderNumber": this.selectedSection.sectionOrder,
-        //     "businessRuleId": null,
-        //     "description": "",
-        //     "helpText": "",
-        //     "headerInstruction": this.selectedSection.sectionHeader,
-        //     "footerInstruction": this.selectedSection.sectionFooter,
-        //     "isActive": "Y"
-        // }
         const sectionObject = new UpdateSectionObject();
         sectionObject.sectionId = this.selectedSection.sectionId;
         sectionObject.sectionName = this.selectedSection.sectionName;
         sectionObject.sectionOrder = this.selectedSection.sectionOrder;
         sectionObject.sectionBusinessRule = null;
-        sectionObject.sectionDescription = "";
-        sectionObject.sectionHelpText = ""
+        sectionObject.sectionDescription = '';
+        sectionObject.sectionHelpText = '';
         sectionObject.sectionHeader = this.selectedSection.sectionHeader;
         sectionObject.sectionFooter = this.selectedSection.sectionFooter;
-        sectionObject.isActive = "Y";
+        sectionObject.isActive = 'Y';
 
         return sectionObject;
     }
@@ -314,6 +287,9 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
             this.formBuilderService.updateSection(this.prepareSectionObject()).subscribe((data: SectionUpdate) => {
                 this.additionalInformation.emit(this.prepareSectionObject());
                 this.formBuilderService.unSavedChange = false;
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Configurations updated successfully.');
+            }, err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Updating Configurations failed.');
             })
         );
 
@@ -328,13 +304,13 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
         switch (this.selectedComponent.componentType) {
             case 'PE':
                 this.selectedComponent.componentRefId = event.progElementId;
-                if (this.selectedComponent.label === null) {
+                if (this.selectedComponent.label == null) {
                     this.selectedComponent.label = JSON.parse(JSON.stringify(event.progElementName));
                 }
                 break;
             case 'CE':
                 this.selectedComponent.componentRefId = event.customElementId;
-                if (this.selectedComponent.label === null) {
+                if (this.selectedComponent.label == null) {
                     this.selectedComponent.label = JSON.parse(JSON.stringify(event.customElementName));
                 }
                 break;
@@ -342,7 +318,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                 this.selectedComponent.componentRefId = event.ACTIVE_QUESTIONNAIRE_ID;
                 // Intentional comment => if this value need to be changed directly
                 // this.selectedComponent.label = event.QUESTIONNAIRE_LABEL
-                if (this.selectedComponent.label === null) {
+                if (this.selectedComponent.label == null) {
                     this.selectedComponent.label = JSON.parse(JSON.stringify(event.QUESTIONNAIRE_LABEL));
                 }
                 break;
@@ -456,7 +432,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                     this.activateSelectedComponent();
                 }
             })
-        )
+        );
     }
 
     loadSection(): void {
@@ -465,15 +441,16 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                 this.selectedSection.sectionHeader = data.sectionHeader;
                 this.selectedSection.sectionFooter = data.sectionFooter;
             })
-        )
+        );
     }
 
     fetchCustomData(componentRefId: string): void {
         this.$subscriptions.push(
-            this.formBuilderService.fetchCustomData({ "customDataElementId": componentRefId }).subscribe((data) => {
+            this.formBuilderService.fetchCustomData({ 'customDataElementId': componentRefId }).subscribe((data) => {
                 this.customDataElement.dataLength = data.customDataElement.dataLength;
                 this.customDataElement.defaultValue = data.customDataElement.defaultValue;
                 this.customDataElement.customElementId = data.customDataElement.customElementId;
+                this.customDataElement.lookupArgument = data.customDataElement.lookupArgument;
                 this.customDataTempOptions = data.elementOptions;
                 this.customDataOptions = JSON.parse(JSON.stringify(this.customDataTempOptions));
                 this.deletedCustomDataOptions = [];
@@ -482,8 +459,11 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                 this.selectedComponentData.description = data.customDataElement.customDataTypes.description;
                 this.selectedComponentData.updateTimestamp = data.customDataElement.customDataTypes.updateTimestamp;
                 this.selectedComponentData.updateUser = data.customDataElement.customDataTypes.updateUser;
+                this.loadCustomDataLookup();
+                this.selectedCustomDataLookup();
+
             })
-        )
+        );
     }
 
     public onReady(editor): void {
@@ -495,16 +475,16 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
 
     addCustomDataOptions(): void {
         this.customDataOptions.push({
-            "optionName": "",
-            'customDataElementsId': this.customDataElement.customElementId || "",
+            'optionName': '',
+            'customDataElementsId': this.customDataElement.customElementId || '',
             'updateUser': this.commonService.getCurrentUserDetail('userName'),
             'updateTimestamp': new Date().getTime()
-        })
+        });
     }
 
     deleteOptions(index: number): void {
-        if (this.customDataOptions.length != 1) {
-            if (this.customDataElement.acType === "U") {
+        if (this.customDataOptions.length !== 1) {
+            if (this.customDataElement.acType == 'U') {
                 this.deletedCustomDataOptions = this.customDataOptions.splice(index, 1);
             } else {
                 this.customDataOptions.splice(index, 1);
@@ -515,10 +495,11 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
     loadCustomDataLookup(): void {
         if (['AS', 'ES', 'SD', 'UD'].includes(this.selectedComponent.componentType)) {
             this.$subscriptions.push(
-                this.formBuilderService.getSystemLookupByCustomType({ dataTypeCode: this.selectedComponent.componentType }).subscribe((data) => {
-                    this.customDatalookUpArray = data.lookUps;
-                })
-            )
+                this.formBuilderService.getSystemLookupByCustomType({ dataTypeCode: this.selectedComponent.componentType })
+                    .subscribe((data) => {
+                        this.customDatalookUpArray = data.lookUps;
+                    })
+            );
 
         }
     }
@@ -553,17 +534,17 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
             updateTimestamp: this.selectedComponentData.updateTimestamp,
             updateUser: this.selectedComponentData.updateUser,
             isActive: 'Y'
-        }
+        };
         this.customDataElement.updateTimestamp = new Date().getTime();
         this.customDataElement.updateUser = this.commonService.getCurrentUserDetail('fullName');
-        this.customDataElement.isActive = "Y";
-        this.customDataElement.lookupWindow = "";
+        this.customDataElement.isActive = 'Y';
+        this.customDataElement.lookupWindow = '';
         this.customDataElement.customElementName = this.selectedComponent.label;
-        this.customDataElement.dataLength = this.customDataElement.dataLength || "";
-        this.customDataElement.defaultValue = this.customDataElement.defaultValue || "";
-        this.customDataElement.lookupArgument = this.customDataElement.lookupArgument || "";
+        this.customDataElement.dataLength = this.customDataElement.dataLength || '';
+        this.customDataElement.defaultValue = this.customDataElement.defaultValue || '';
+        this.customDataElement.lookupArgument = this.customDataElement.lookupArgument || '';
         this.customDataElement.dataType = this.selectedComponentData.componentTypeCode;
-        if (['SD', 'UD'].includes(this.selectedComponent.componentType)) this.customDataElement.hasLookup = "Y";
+        if (['SD', 'UD'].includes(this.selectedComponent.componentType)) {this.customDataElement.hasLookup = 'Y'; }
     }
 
     saveCustomData(): void {
@@ -573,14 +554,15 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
                 customDataElement: this.customDataElement,
                 elementOptions: this.customDataOptions,
                 deleteOptions: this.deletedCustomDataOptions
-            }
+            };
             this.$subscriptions.push(
                 this.formBuilderService.configureCustomElement(customDataElement).subscribe((data: ConfigureCustomElement) => {
                     this.selectedComponent.componentRefId = data.customDataElement.customElementId;
-                    if (this.customDataElement.acType === "I") { this.componentInitialSave(); }
-                    else { this.updateFormComponent(); }
+                    if (this.customDataElement.acType == 'I') { this.componentInitialSave(); } else { this.updateFormComponent(); }
+                }, err => {
+                     this.commonService.showToast(HTTP_ERROR_STATUS, `${this.customDataElement.acType == 'I' ? 'Saving Configurations failed.' : 'Updating Configurations failed.'}`);
                 })
-            )
+            );
         }
     }
 
@@ -603,19 +585,22 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
     isFormFieldValidation(): boolean {
         this.formValidation.clear();
         if (!this.selectedComponent.label) {
-            this.formValidation.set("labelValidation", true);
+            this.formValidation.set('labelValidation', true);
         }
         if (['PE', 'QN'].includes(this.selectedComponent.componentType) && !this.selectedComponent.componentRefId) {
-            this.formValidation.set("componentRefIDValidation", true);
+            this.formValidation.set('componentRefIDValidation', true);
         }
         if (['RB', 'CB'].includes(this.selectedComponent.componentType)) {
-            const emptyOptions = this.customDataOptions.find(x => x.optionName == "");
+            const emptyOptions = this.customDataOptions.find(x => x.optionName == '');
             if (emptyOptions) {
-                this.formValidation.set("Optionvalidation", true);
+                this.formValidation.set('Optionvalidation', true);
             }
         }
         if (['NE', 'SE'].includes(this.selectedComponent.componentType) && !this.customDataElement.dataLength) {
-            this.formValidation.set("dataLengthValidation", true);
+            this.formValidation.set('dataLengthValidation', true);
+        }
+        if (['AS', 'UD', 'ES', 'SD'].includes(this.selectedComponent.componentType) && !this.customDataElement.lookupArgument) {
+            this.formValidation.set('lookupArgumentValidation', true);
         }
         if (this.formValidation.size > 0) {
             return false;
@@ -626,7 +611,7 @@ export class FormAddtionalInformationComponent implements OnInit, OnDestroy {
 
     numberValidation(event: any): void {
         const inputPattern = /^[0-9]+$/;
-        const pasted_text = event.clipboardData ? (event.clipboardData).getData("text") : null;
+        const pasted_text = event.clipboardData ? (event.clipboardData).getData('text') : null;
         const inputString = pasted_text ? pasted_text : String.fromCharCode(event.charCode);
         if (!inputPattern.test(inputString)) {
             event.preventDefault();

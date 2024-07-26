@@ -27,6 +27,5 @@ public class IntegrationController {
     	logger.info("Inside fibi coi connect {}");
     	return coiIntegrationService.saveOrUpdateRecievedProposalDetail(request);
     }
-
 	
 }

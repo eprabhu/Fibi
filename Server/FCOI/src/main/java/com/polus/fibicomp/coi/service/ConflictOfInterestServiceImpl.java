@@ -272,7 +272,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
 		coiDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
-		Person personDetail = personDao.getPersonDetailById(conflictOfInterestVO.getPersonId());
+		Person personDetail = personDao.getPersonDetailById(coiDisclosure.getPersonId());
 		coiDisclosure.setUpdateUser(personDetail.getPrincipalName());
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);

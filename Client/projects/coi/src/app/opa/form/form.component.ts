@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
-import {FBConfiguration, FormBuilderEvent} from '../../shared/form-builder-view/form-builder-interface';
+import {FBConfiguration, FormBuilderEvent} from '../../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { OpaService } from '../services/opa.service';
 import {DataStoreService} from '../services/data-store.service';
 import {OPA} from "../opa-interface";

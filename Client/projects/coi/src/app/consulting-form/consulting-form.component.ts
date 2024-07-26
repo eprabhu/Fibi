@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultAssignAdminDetails, DisclsoureHeaderDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { Subject } from 'rxjs';
 import { Location } from '@angular/common';
-import { FormBuilderEvent } from '../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent } from '../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { hideModal, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from "../common/services/navigation.service";
 import { ConsultingForm } from './consulting-form.interface';
