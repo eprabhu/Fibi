@@ -19,13 +19,16 @@ public class TokenService {
     private long tokenValidityInSeconds = 24 * 60 * 60; // 24 hours as default
 
     
-    public TokenService() {
+    public TokenService() throws Exception {
         this.thirdPartyApiClient = new DnBAPITokenClient();
         TokenResponseDTO response = fetchNewToken();
         this.token = response.getAccessToken();
         this.tokenType = response.getTokenType();
         this.tokenValidityInSeconds = response.getExpiresIn();
-        // Schedule a task to renew the token
+        if(token == null) {
+        	logger.error("No DnB Token generated");      
+        	return;
+        }
         scheduler.scheduleAtFixedRate(this::renewToken, tokenValidityInSeconds - 300, tokenValidityInSeconds, TimeUnit.SECONDS);
     }
 
