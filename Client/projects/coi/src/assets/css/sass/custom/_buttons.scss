@@ -140,3 +140,8 @@
   }
 
 }
+
+.coi-table-sort-btn:hover .coi-table-sort-icon,
+.coi-table-sort-btn:focus .coi-table-sort-icon {
+    color: #007DEC !important;
+}
