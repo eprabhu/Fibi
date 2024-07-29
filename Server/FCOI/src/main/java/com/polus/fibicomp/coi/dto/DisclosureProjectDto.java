@@ -24,11 +24,16 @@ public class DisclosureProjectDto {
 	private Timestamp projectEndDate;
 	private String homeUnitNumber;
 	private String homeUnitName;
+	private String leadUnitNumber;
+	private String leadUnitName;
 	private String sponsorName;
+	private String sponsorCode;
 	private String primeSponsorName;
+	private String primeSponsorCode;
 	private String piName;
 	private String keyPersonId;
 	private String keyPersonName;
+	private String keyPersonRole;
 	private String reporterRole;
 	private String conflictStatus;
 	private String conflictStatusCode;
@@ -39,4 +44,21 @@ public class DisclosureProjectDto {
 	private String projectTypeCode;
 	private String projectType;
 	private String projectBadgeColour;
+	private Boolean disclosureSubmitted;
+	private Boolean questionnaireCompleted;
+	private Boolean disclsoureNeeded;
+	private String disclosureReviewStatus;
+	private String submissionStatus;
+	private Integer inCompletCount;
+	private Integer completeCount;
+	private Integer disclosureId;
+	private Boolean trainingCompleted;
+	private Boolean certification;
+	private Boolean disclosureRequired;
+	private Timestamp updateTimestamp;
+	private String disclosureStatus;
+	private Integer proposalCount;
+	private Integer commentCount;
+	private Integer keyPersonCount;
+
 }
