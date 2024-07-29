@@ -5,7 +5,8 @@
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
         <div *ngIf="isShowNavBarOverlay" class="nav-bar-custom-overlay d-block" (click)="onClickMenuBar()"></div>
-        <ul id="responsive-nav" *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+        <ul id="responsive-nav" *ngIf="router.url.includes('/user-dashboard/')" role="menu" aria-label="navigation"
+            class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
             <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()"
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures' : 'Go to My Disclosures'"
                 aria-description="Goto my home">My Disclosures

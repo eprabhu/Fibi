@@ -223,14 +223,14 @@
                         <!-- Comments -->
                         <button *ngIf="!isCreateMode"
                             title="Click here to add new review comments" aria-label="Click here to add new review comments"
-                            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col transition-300ms">
+                            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col">
                             <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
                             <span *ngIf="isCardExpanded" class="ms-2">Comments</span>
                         </button>
 
                         <!-- more option button for expanded card-->
                         <button *ngIf="!isCreateMode && isCardExpanded" mat-button [matMenuTriggerFor]="beforeMenu"
-                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col transition-300ms"
+                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col"
                             title="Click here for more actions" aria-label="Click here for more actions" aria-expanded="false" aria-haspopup= "true">
                             <mat-icon class="moreActionIcon flex-shrink-0" aria-hidden="true">more_vert</mat-icon>
                         </button>
@@ -294,7 +294,7 @@
                                 <button title="Click here to assign administrator/admin group"
                                     aria-label="Click here to assign administrator/admin group"
                                     [ngClass]="isCardExpanded? 'col-lg-12 col' : 'col'"
-                                    class="btn btn-primary fs-14 d-flex justify-content-center align-items-center transition-300ms"
+                                    class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
                                     (click)="openAddAssignModal()">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">group_add</mat-icon>
                                     <span *ngIf="isCardExpanded" class="ms-2">Assign Admin</span>
@@ -307,7 +307,7 @@
                                 title="Click here to return travel disclosure" aria-label="Click here to return travel disclosure"
                                 (click)="openConfirmationModal('Return', true, true, returnErrorMsg);"
                                 [ngClass]="isCardExpanded? 'col-lg-12 col' : 'col'"
-                                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center transition-300ms">
+                                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
                                 <mat-icon class="returnIcon flex-shrink-0" aria-hidden="true">refresh</mat-icon>
                                 <span *ngIf="isCardExpanded" class="ms-1">Return</span>
                             </button>
@@ -318,7 +318,7 @@
                                 aria-label="Click here to approve travel disclosure"
                                 (click)="openConfirmationModal('Approve', true);"
                                 [ngClass]="isCardExpanded? 'col-lg-12 col' : 'col'"
-                                class="btn btn-primary fs-14 d-flex justify-content-center align-items-center transition-300ms">
+                                class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
                                 <mat-icon aria-hidden="true" class="flex-shrink-0">check_circle_outline</mat-icon>
                                 <span *ngIf="isCardExpanded" class="ms-2">Approve</span>
                             </button>
@@ -328,7 +328,7 @@
                             <!-- save -->
                             <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
                                 aria-label="Click here to save travel disclosure"
-                                class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center transition-300ms"
+                                class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
                                 (click)="saveTravelDisclosure()" title="Click here to save travel disclosure">
                                 <mat-icon class="flex-shrink-0" aria-hidden="true">save</mat-icon>
                                 <span class="ms-2">Save</span>
@@ -336,7 +336,7 @@
 
                             <!-- submit -->
                             <button *ngIf="isRouteComplete(['certification'])"
-                                class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center transition-300ms"
+                                class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
                                 aria-label="Click here to submit travel disclosure"
                                 (click)="openConfirmationModal('Submit', false);"
                                 [disabled]="!service.isTravelCertified" title="Click here to submit travel disclosure">
@@ -347,7 +347,7 @@
 
                         <!-- more option for collapse card-->
                         <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && !isCardExpanded"
-                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col transition-300ms"
+                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col"
                             title="Click here for more actions" aria-label="Click here for more actions" aria-expanded="false" aria-haspopup= "true">
                             <mat-icon aria-hidden="true" class="flex-shrink-0">more_vert</mat-icon>
                         </button>
