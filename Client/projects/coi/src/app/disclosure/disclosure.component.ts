@@ -19,7 +19,8 @@ import {
     NO_DATA_FOUND_MESSAGE,
     REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
-    CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
+    CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE,
+    EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { openCommonModal } from '../common/utilities/custom-utilities';
@@ -107,6 +108,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
+    EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE;
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
