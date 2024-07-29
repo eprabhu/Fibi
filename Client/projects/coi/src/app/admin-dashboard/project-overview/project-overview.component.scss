@@ -1,0 +1,18 @@
+.count-badge{
+    background: #7b68ee;
+    color: #fff;
+}
+
+.nav-filter-sticky{
+    position: sticky;
+    top: 103px;
+    z-index: 2;
+    background-color: #f1f1f1;
+}
+
+@media (min-width: 1200px) {
+    .nav-filter-sticky {
+        top: 110px;
+    }
+}
+
