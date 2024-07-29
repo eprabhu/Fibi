@@ -2,8 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import {CONSULTING_REDIRECT_URL, DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../app-constants';
-import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
+import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForSponsor } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject, hideModal,
     isEmptyObject, openModal,
@@ -13,21 +12,24 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.service';
 import {
+    CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
     ADMIN_DASHBOARD_RIGHTS,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
-import {openSlider, closeSlider, closeCommonModal, openCoiSlider} from '../common/utilities/custom-utilities';
+import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation, leftSlideInOut, heightAnimation } from '../common/utilities/animations';
+import { openCoiSlider } from '../common/utilities/custom-utilities';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
+import { CoiProjectOverviewRequest } from './admin-dashboard.interface';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss'],
-    animations: [fadeInOutHeight, listAnimation, topSlideInOut,
+    animations: [fadeInOutHeight, listAnimation, topSlideInOut,leftSlideInOut,
+        heightAnimation('0', '*', 300, 'heightAnimation'),
         slideInAnimation('0','12px', 400, 'slideUp'),
         slideInAnimation('0','-12px', 400, 'slideDown'),
         scaleOutAnimation('-2px','0', 200, 'scaleOut'),
@@ -59,6 +61,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     travelDisclosureStatusOptions = 'coi_travel_disclosure_status#TRAVEL_DISCLOSURE_STATUS_CODE#true#true';
     travelDocumentStatusOptions = 'coi_travel_document_status#DOCUMENT_STATUS_CODE#true#true';
     travelReviewStatusOptions = 'coi_travel_review_status#REVIEW_STATUS_CODE#true#true';
+    // reviewStatusOptionsForProjectOverview = 'COI_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#true#true';
+    proposalStatusOptionsForProjectOverview = 'EMPTY#EMPTY#true#true#true#true';
     $subscriptions: Subscription[] = [];
     result: any = { disclosureCount: 0 };
     $coiList = new Subject();
@@ -70,6 +74,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     coiList = [];
     isActiveDisclosureAvailable: boolean;
     advanceSearchDates = { approvalDate: null, expirationDate: null, certificationDate: null };
+    advacnceSearchDatesForProjectOverview = {startDate : null, endDate : null}
     selectedStartReviewCoiId = null;
     selectedReviewStatusCode = null;
     isSaving = false;
@@ -88,6 +93,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     entitySearchOptions: any = {};
     sortCountObj: SortCountObj;
     clearField: string;
+    clearAdvSearchFields : string;
     countryClearField: string;
     isHover: boolean[] = [];
     isViewAdvanceSearch = true;
@@ -96,6 +102,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isShowAdminDashboard = false;
     hasTravelDisclosureRights = false;
     hasConsultingDisclosureRights = false;
+    hasProjectOverviewRights = false;
     disclosureTypes: any;
     addAdmin: any = {};
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
@@ -140,6 +147,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isPurposeRead = false;
     isShowOptions = false;
     sliderElementId = '';
+    $projectOverviewList = new Subject<any>();
+    localProjectOverviewRO = new CoiProjectOverviewRequest();
+    leadUnitSearchOptionsForProjectOverview: any = {};
+    sponsorSearchOptionsForProjectOverview: any = {};
+    primeSponsorSearchOptionsForProjectOverview: any = {};
+    elasticPersonSearchOptionsForProjectOverview: any = {};
+    lookupValuesForProjectOverview = [];
+    lookupArrayForProjectStatus: any[] = [];
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -159,6 +174,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.checkForAdvanceSearch();
         this.checkTravelDisclosureRights();
         this.checkForConsultingDisclosureRight();
+        this.checkForProjectOverviewRight();
+        this.setSearchOptionsForProjectOverview();
     }
 
     checkForPreviousURL() {
@@ -268,6 +285,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     setDashboardTab() {
         this.coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
             sessionStorage.getItem('currentCOIAdminTab') : this.isShowAdminDashboard ? 'ALL_DISCLOSURES' : 'MY_REVIEWS';
+            if( this.coiAdminDashboardService.coiRequestObject.tabName == 'PROJECTS'){
+                this.getLookupDataForProjectStatus();
+            }
         this.checkForTravelDisclosureTabChange(this.coiAdminDashboardService.coiRequestObject.tabName);
     }
 
@@ -342,10 +362,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         if (this.isAdvanceSearchTab(tabName)) {
             this.resetAdvanceSearchFields();
             this.setAdvanceSearch();
-            if (tabName !== 'ALL_DISCLOSURES') {
+            if (tabName !== 'ALL_DISCLOSURES' && tabName !== 'PROJECTS') {
                 this.$coiList.next();
             }
-            return;
+        }
+        if(tabName == 'PROJECTS'){
+            this.getLookupDataForProjectStatus();
+            this.clearAndExecuteAdvancedSearch();
         }
         this.localCOIRequestObject.tabName = tabName;
     }
@@ -365,7 +388,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     isAdvanceSearchTab(tabName): boolean {
         return [ 'ALL_DISCLOSURES', 'NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI',
-                 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES', 'CONSULTING_DISCLOSURES' ].includes(tabName);
+                 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES', 'CONSULTING_DISCLOSURES', 'PROJECTS' ].includes(tabName);
     }
 
     fetchMentionedComments() {
@@ -679,6 +702,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             ['MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE'].includes(right));
     }
 
+    async checkForProjectOverviewRight() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.hasProjectOverviewRights = rightsArray.some((right) =>
+            ['MANAGE_PROJECT_DISCLOSURE_OVERVIEW'].includes(right));
+    }
+
     getColorBadges(disclosure) {
         if (disclosure?.travelDisclosureId) {
             return 'bg-travel-clip';
@@ -861,8 +890,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.showSlider = false;
             this.entityId = null;
             this.sliderElementId = '';
-		}, 500);
-	  }
+	    }, 500);
+	}
 
     checkIfAllDisclosuresSelected() {
         this.isAllDisclosuresSelected = this.selectedDisclosures.filter(index => index).length == this.coiList.length;
@@ -922,4 +951,70 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
        return this.selectedDisclosures.filter(e => e).length;
     }
 
+    projectTabAdvSearch() {
+        this.setAdvanceSearchDateValuesToRO();
+        this.localProjectOverviewRO.advancedSearch = 'A';
+        this.$projectOverviewList.next(this.localProjectOverviewRO);
+        this.setAdvanceSearchOfProjectOverviewToServiceObject();
+    }
+
+    setAdvanceSearchOfProjectOverviewToServiceObject() {
+        this.coiAdminDashboardService.projectOverviewRequestObject.property2 = this.localProjectOverviewRO.property2  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.property3 = this.localProjectOverviewRO.property3  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.property6 = this.localProjectOverviewRO.property6  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.property4 = this.localProjectOverviewRO.property4  || [];
+        this.coiAdminDashboardService.projectOverviewRequestObject.property5 = this.localProjectOverviewRO.property5  || [];
+        this.coiAdminDashboardService.projectOverviewRequestObject.property9 = this.localProjectOverviewRO.property9  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.property11 = this.localProjectOverviewRO.property11  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.personId = this.localProjectOverviewRO.personId  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.property13 =  parseDateWithoutTimestamp(this.localProjectOverviewRO.property13)  || null;
+        this.coiAdminDashboardService.projectOverviewRequestObject.property14 =  parseDateWithoutTimestamp(this.localProjectOverviewRO.property14)  || null;
+    }
+
+    private setSearchOptionsForProjectOverview() {
+        this.leadUnitSearchOptionsForProjectOverview = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
+        this.sponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor();
+        this.primeSponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor();
+        this.elasticPersonSearchOptionsForProjectOverview = this._elasticConfig.getElasticForPerson();
+    }
+
+    leadUnitUpdateFunction(unit: any) {
+        this.localProjectOverviewRO.property3 = unit ? unit.unitNumber : null;
+    }
+
+    sponsorUpdateFunction(sponsor : any) {
+            this.localProjectOverviewRO.property9 = sponsor ? sponsor.sponsorCode : null;
+    }
+
+    primeSponsorUpdateFunction(primeSponosr:any) {
+        this.localProjectOverviewRO.property11 = primeSponosr ? primeSponosr.sponsorCode : null;
+    }
+
+    fetchPersonName(person : any) {
+        this.localProjectOverviewRO.personId = person ? person.prncpl_id : null;
+    }
+
+    onLookupSelectData(data: any, property: string) {
+        this.lookupValuesForProjectOverview[property] = data;
+        this.localProjectOverviewRO[property] = data.length ? data.map(d => d.code) : [];
+    }
+
+    setAdvanceSearchDateValuesToRO() {
+        this.localProjectOverviewRO.property13 = parseDateWithoutTimestamp(this.advacnceSearchDatesForProjectOverview.startDate);
+        this.localProjectOverviewRO.property14 = parseDateWithoutTimestamp(this.advacnceSearchDatesForProjectOverview.endDate);
+    }
+
+    clearAndExecuteAdvancedSearch() {
+        this.localProjectOverviewRO = new CoiProjectOverviewRequest();
+        this.$projectOverviewList.next(this.localProjectOverviewRO);
+        this.advacnceSearchDatesForProjectOverview = {startDate : null, endDate : null};
+        this.lookupValuesForProjectOverview = [];
+        this.setSearchOptionsForProjectOverview();
+    }
+
+    getLookupDataForProjectStatus(){
+        this.$subscriptions.push(this.coiAdminDashboardService.getLookupDataForProposalStatus().subscribe((res: any) => {
+            this.lookupArrayForProjectStatus = res; 
+        }))
+    }
 }
