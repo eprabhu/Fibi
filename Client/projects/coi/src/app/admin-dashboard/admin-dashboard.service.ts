@@ -4,11 +4,13 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonService } from '../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../app-constants';
+import { CoiProjectOverviewRequest } from './admin-dashboard.interface';
 
 @Injectable()
 export class AdminDashboardService {
 
   coiRequestObject = new CoiDashboardRequest();
+  projectOverviewRequestObject = new CoiProjectOverviewRequest();
   isAdvanceSearch: any;
   searchDefaultValues: NameObject = new NameObject();
   sortCountObject: SortCountObj = new SortCountObj();
@@ -44,9 +46,13 @@ export class AdminDashboardService {
       return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
   }
 
-    completeDisclosureReviews(disclosureNumberMap) {
-      return this._http.patch(this._commonService.baseUrl + '/completeDisclosureReviews', disclosureNumberMap);
-    }
+  completeDisclosureReviews(disclosureNumberMap) {
+    return this._http.patch(this._commonService.baseUrl + '/completeDisclosureReviews', disclosureNumberMap);
+  }
+
+  getLookupDataForProposalStatus(){
+    return this._http.get(this._commonService.baseUrl + 'project/getProjectStatusLookup/Proposal');
+  }
 
 }
 
@@ -113,3 +119,5 @@ export class NameObject {
   departmentName = '';
   travelCountryName = '';
 }
+
+
