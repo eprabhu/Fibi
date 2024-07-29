@@ -14,6 +14,11 @@ import com.polus.fibicomp.coi.repository.ActionLogDao;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
+import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.core.security.AuthenticatedUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +57,9 @@ public class PersonEntityServiceImpl implements PersonEntityService {
     @Autowired
     private ActionLogDao actionLogDao;
 
+    @Autowired
+    private FcoiDisclosureDao fcoiDisclosureDao;
+
     private static final String IS_FORM_COMPLETED = "isFormCompleted";
 
     @Override
@@ -79,6 +87,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         ResponseEntity<Map<String, Object>> responseData = updatePersonEntityCompleteFlag(personEntity.getPersonEntityId());
         personEntity.setIsFormCompleted((Boolean) responseData.getBody().get(IS_FORM_COMPLETED));
         if (personEntity.getDisclosureId() != null) {
+            //TODO
             conflictOfInterestDao.syncProjectWithDisclosure(personEntity.getDisclosureId(),
                     null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
         }
@@ -364,7 +373,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
 											            .orElse(null));});
 		if(vo.getFilterType().equalsIgnoreCase("Financial")) {
 			responseData.put("isProjectPresent", conflictOfInterestDao.isProjectPresent(vo));
-			personEntities.forEach(personEntity -> personEntity.setSfiCompleted(conflictOfInterestDao.isSFICompletedForDisclosure(personEntity.getPersonEntityId(), vo.getDisclosureId())));
+			personEntities.forEach(personEntity -> personEntity.setSfiCompleted(fcoiDisclosureDao.isSFICompletedForDisclosure(personEntity.getPersonEntityId(), vo.getDisclosureId())));
 			personEntities.forEach(personEntity -> personEntity.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCountBySFI(personEntity.getPersonEntityId(), vo.getDisclosureId())));
 		}
 		responseData.put("personEntities", personEntities);

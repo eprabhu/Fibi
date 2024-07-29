@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -102,12 +102,13 @@ public class CoiDisclosure implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE1_FK6"), name = "RISK_CATEGORY_CODE", referencedColumnName = "RISK_CATEGORY_CODE", insertable = false, updatable = false)
 	private CoiRiskCategory coiRiskCategory;
-	
-	@Column(name = "MODULE_CODE")
-	private Integer moduleCode;
-	
-	@Column(name = "MODULE_ITEM_KEY")
-	private String moduleItemKey;
+
+	@Column(name = "COI_PROJECT_TYPE_CODE")
+	private String coiProjectTypeCode;
+
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE_FK7"), name = "COI_PROJECT_TYPE_CODE", referencedColumnName = "COI_PROJECT_TYPE_CODE", insertable = false, updatable = false)
+	private CoiProjectType coiProjectType;
 	
 	@Column(name = "EXPIRATION_DATE")
 	private Date expirationDate;
@@ -117,7 +118,11 @@ public class CoiDisclosure implements Serializable {
 	
 	@Column(name = "CERTIFIED_BY")
 	private String certifiedBy;
-	
+
+//	@ManyToOne
+//	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE_FK10"), name = "CERTIFIED_BY", referencedColumnName = "PERSON_ID", insertable = false, updatable = false)
+//	private Person certifiedPerson;
+
 	@Column(name = "CERTIFIED_AT")
 	private Timestamp certifiedAt;
 	
@@ -135,12 +140,12 @@ public class CoiDisclosure implements Serializable {
 	private Timestamp updateTimestamp;
 
 	@LastModifiedBy
-	@Column(name = "UPDATE_USER")
-	private String updateUser;
-	
+	@Column(name = "UPDATED_BY")
+	private String updatedBy;
+
 	@CreatedBy
-	@Column(name = "CREATE_USER")
-	private String createUser;
+	@Column(name = "CREATED_By")
+	private String createdBy;
 
 	@CreatedDate
 	@Column(name = "CREATE_TIMESTAMP")
@@ -154,15 +159,6 @@ public class CoiDisclosure implements Serializable {
 
 	@Transient
 	private Integer numberOfSFI;
-
-	@Transient
-	private Integer numberOfProposals;
-	
-	@Transient
-	private Integer numberOfAwards;
-	
-	@Transient
-	private String coiProjectTypeCode;
 
 	@Transient
 	private String adminGroupName;

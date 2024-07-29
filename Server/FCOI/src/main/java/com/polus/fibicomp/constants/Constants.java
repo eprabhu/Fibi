@@ -203,4 +203,5 @@ public interface Constants {
     String DISCLOSURE_TYPE_CODE_AWARD = "3";
     String DISCLOSURE_TYPE_CODE_PROPOSAL = "2";
     String DISCLOSURE_TYPE_CODE_REVISION = "4";
+    String PROJECT_DISCL_FCOI_TYPE_CODE = "2";
 }

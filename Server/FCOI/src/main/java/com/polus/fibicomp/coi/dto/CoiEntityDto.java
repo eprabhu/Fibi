@@ -23,4 +23,6 @@ public class CoiEntityDto {
 	private String revisionReason;
 	private String updatedUserFullName;
 	private String riskCategoryCode;
+	private String countryName;
+	private String entityType;
 }
