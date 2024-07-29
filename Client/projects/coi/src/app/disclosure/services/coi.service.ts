@@ -36,7 +36,8 @@ export class CoiService {
     focusSFIRelationId: any;
     isRelationshipSaving = false;
     $isExpandSection = new Subject<{section: string,isExpand: boolean}>();
-
+    currentActiveQuestionnaire: any;
+    
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService,
