@@ -4,4 +4,3 @@
 \. ./procedures_functions.sql
 \. ./create_views.sql
 \. ./scripts.sql
-\. ./migration_scripts.sql

@@ -6,3 +6,12 @@ VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), '
 
 INSERT INTO coi_project_comment_type (COMMENT_TYPE_CODE, DESCRIPTION, IS_ACTIVE, UPDATE_TIMESTAMP, UPDATED_BY)
 VALUES ('1', 'General', 'Y', now(), 'quickstart');
+
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('1', 'In Progress', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('2', 'Approval In Progress', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('3', 'Returned', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('4', 'Approved', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('5', 'Submitted', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('6', 'Post-Submission Approval', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('7', 'Post-Submission Return', now(), 'quickstart', 'Y');
+INSERT INTO coi_int_stage_dev_proposal_status (STATUS_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATED_BY, IS_ACTIVE) VALUES ('8', 'Recalled', now(), 'quickstart', 'Y');
