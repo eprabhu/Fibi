@@ -973,8 +973,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     private setSearchOptionsForProjectOverview() {
         this.leadUnitSearchOptionsForProjectOverview = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
-        this.sponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor();
-        this.primeSponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor();
+        this.sponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor({ baseUrl: this.commonService.fibiUrl });
+        this.primeSponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor({ baseUrl: this.commonService.fibiUrl });
         this.elasticPersonSearchOptionsForProjectOverview = this._elasticConfig.getElasticForPerson();
     }
 

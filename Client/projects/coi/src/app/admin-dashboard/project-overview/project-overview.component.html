@@ -24,16 +24,16 @@
 
     <div *ngIf="projectOverviewData?.projectOverviewDetails?.length; else noData"
         [@listAnimation]="projectOverviewData?.projectOverviewDetails?.length">
-        <ng-container *ngFor="let projectData of projectOverviewData?.projectOverviewDetails ; let index = index">
+        <ng-container *ngFor="let projectData of projectOverviewData?.projectOverviewDetails ; let index1 = index">
             <ng-container>
-                <div class="col-12 card coi-card-regular" id="coi-project-overview-card-{{index}}">
+                <div class="col-12 card coi-card-regular" id="coi-project-overview-card-{{index1}}">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8 col-lg-10">
                                 <div class="row m-0">
                                     <div class="col-md-9 col-lg-10 d-flex px-0 coi-card-body-notch-container mb-2">
                                         <!-- proposal Card badge -->
-                                        <span class="coi-card-notch-ribbon me-1 shadow-sm" id="coi-project-overview-badge"
+                                        <span class="coi-card-notch-ribbon me-1 shadow-sm" id="coi-project-overview-badge-{{index1}}"
                                             [style.background-color]="projectData?.projectDetails.projectBadgeColour"
                                             tabindex="-1" [attr.aria-label]="projectData?.projectDetails?.projectType">
                                             {{projectData?.projectDetails?.projectType}}
@@ -41,8 +41,9 @@
                                         <div class="d-flex align-items-center">
                                             <mat-icon aria-hidden="true"
                                                 class="coi-text-light flex-shrink-0">article</mat-icon>
-                                            <a class="link-primary fs-6 text-slice fw-600" id="coi-project-overview-title" tabindex="0"
-                                                (click)="openProjectDetailsModal(projectData.projectDetails)"
+                                            <a class="link-primary fs-6 text-slice fw-600" id="coi-project-overview-title-{{index1}}" tabindex="0"
+                                                (click)="openProjectDetailsModal(projectData.projectDetails)" (keyup.enter)="openProjectDetailsModal(projectData.projectDetails)"
+                                                (keyup.space)="openProjectDetailsModal(projectData.projectDetails)"
                                                 [title]="'Click here to view details of #'+ projectData?.projectDetails?.projectId + ' - ' + projectData?.projectDetails?.title"
                                                 role="link">
                                                 #{{projectData?.projectDetails?.projectId + ' - ' + projectData?.projectDetails?.title}}
@@ -57,7 +58,7 @@
                                         <label for="coi-project-overview-piname"
                                             class="d-block coi-text-dark">Principal Investigator</label>
                                         <div tabindex="-1">
-                                            <span id="coi-project-overview-piname">
+                                            <span id="coi-project-overview-piname-{{index1}}">
                                                 <app-no-data-label [valueToShow]="projectData?.projectDetails?.piName">
                                                     <span class="coi-text-light text-slice" 
                                                         [title]="projectData?.projectDetails?.piName">{{projectData?.projectDetails?.piName}}</span>
@@ -70,7 +71,7 @@
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <label for="coi-project-overview-leadunit" class="d-block coi-text-dark">Lead
                                             Unit</label>
-                                        <div tabindex="-1" id="coi-project-overview-leadunit">
+                                        <div tabindex="-1" id="coi-project-overview-leadunit-{{index1}}">
                                             <span>
                                                 <app-no-data-label
                                                     [valueToShow]="projectData?.projectDetails?.leadUnitName">
@@ -88,7 +89,7 @@
                                             class="d-block coi-text-dark">Project
                                             Status </label>
                                         <div tabindex="-1">
-                                            <span id="coi-project-overview-Project-status">
+                                            <span id="coi-project-overview-Project-status-{{index1}}">
                                                 <app-no-data-label
                                                     [valueToShow]="projectData?.projectDetails?.projectStatus">
                                                     <span class="coi-text-light text-slice"
@@ -104,7 +105,7 @@
                                         <label for="coi-project-overview-sponsor-name"
                                             class="d-block coi-text-dark">Sponsor</label>
                                         <div tabindex="-1">
-                                            <span  id="coi-project-overview-sponsor-name" [attr.aria-label]="projectData?.projectDetails?.sponsorName">
+                                            <span  id="coi-project-overview-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.sponsorName">
                                                 <app-no-data-label
                                                     [valueToShow]="projectData?.projectDetails?.sponsorName">
                                                     <span class="coi-text-light text-slice"
@@ -120,7 +121,7 @@
                                         <label for="coi-project-overview-prime-sponsor-name"
                                             class="d-block coi-text-dark">Prime Sponsor</label>
                                         <div tabindex="-1">
-                                            <span id="coi-project-overview-prime-sponsor-name" [attr.aria-label]="projectData?.projectDetails?.primeSponsorName">
+                                            <span id="coi-project-overview-prime-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.primeSponsorName">
                                                 <app-no-data-label
                                                     [valueToShow]="projectData?.projectDetails?.primeSponsorName">
                                                     <span class="coi-text-light text-slice"
@@ -138,7 +139,7 @@
                                         <label for="coi-project-overview-start-date"
                                             class="d-block coi-text-dark">Period</label>
                                         <div>
-                                            <span  id="coi-project-overview-start-date">
+                                            <span  id="coi-project-overview-start-date-{{index1}}">
                                                 <app-no-data-label
                                                     [valueToShow]="(projectData?.projectDetails?.projectStartDate ? projectData?.projectDetails?.projectStartDate : 'No start date') + ' - ' + (projectData?.projectDetails?.projectEndDate ? projectData?.projectDetails?.projectEndDate : 'No end date')">
                                                     <span class="coi-text-light text-slice"
@@ -162,7 +163,7 @@
                                             class="{{getSubmissionStatusBadge(projectData?.projectDetails?.submissionStatus)}} me-1">
                                         </span>
                                         <span class="coi-text-light fw-bold"
-                                            id="coi-project-overview-submission status" [title]="projectData?.projectDetails?.submissionStatus">
+                                            id="coi-project-overview-submission status-{{index1}}" [title]="projectData?.projectDetails?.submissionStatus">
                                             {{projectData?.projectDetails?.submissionStatus}}
                                         </span>
                                     </span>
@@ -178,7 +179,7 @@
                                         <span
                                             class="{{getReviewStatusBadge(projectData?.projectDetails?.disclosureReviewStatus)}} me-1">
                                         </span>
-                                        <span class="coi-text-light fw-bold" id="coi-project-overview-review status"
+                                        <span class="coi-text-light fw-bold" id="coi-project-overview-review status-{{index1}}"
                                         [title]="projectData?.projectDetails?.disclosureReviewStatus">
                                             {{projectData?.projectDetails?.disclosureReviewStatus}}
                                         </span>
@@ -188,12 +189,12 @@
 
                                 <div *ngIf="projectData?.projectDetails?.keyPersonCount > 0"
                                     class="col-auto d-flex justify-content-end">
-                                    <button (click)="toggleProjectOverviewCard(index)"
-                                        id="coi-project-overview-collapse-btn"
+                                    <button (click)="toggleProjectOverviewCard(index1)"
+                                        id="coi-project-overview-collapse-btn-{{index1}}"
                                         class="align-items-center btn d-flex jusitfy-content-center p-0 me-1 shadow-sm toggle-btn mt-2"
                                         aria-label="Click here to collapse / expand Project overview section">
                                         <mat-icon title="Click here to collapse / expand Project overview section"
-                                            [ngClass]="isProjectOverviewCardCollapse[index] ? 'rotate-180' : 'rotate-0'"
+                                            [ngClass]="isProjectOverviewCardCollapse[index1] ? 'rotate-180' : 'rotate-0'"
                                             aria-hidden="true">expand_more</mat-icon>
                                     </button>
                                 </div>
@@ -204,7 +205,8 @@
                         <div class="row">
                             <div class="col-12 d-flex mt-3 gap-2 align-items-baseline justify-content-between">
                                 <div class="d-flex align-items-start cursor-pointer"
-                                    (click)="toggleProjectOverviewCard(index)"
+                                    (click)="toggleProjectOverviewCard(index1)" (keyup.enter)="toggleProjectOverviewCard(index1)"
+                                    (keyup.space)="toggleProjectOverviewCard(index1)" tabindex="0"
                                     title="Click here to collapse / expand   Key personnel details"
                                     aria-label="Click here to collapse / expand   Key personnel details">
                                     <h4 class="me-1 mb-0 fs-6 link-primary" for="coi-project-overview-keyperson-count">
@@ -213,15 +215,15 @@
                                         class="count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">
                                         <app-no-data-label [valueToShow]="projectData?.projectDetails?.keyPersonCount">
                                             <span class="text-slice fs-12 fw-700"
-                                                id="coi-project-overview-keyperson-count"
+                                                id="coi-project-overview-keyperson-count-{{index1}}"
                                                 [title]="projectData?.projectDetails?.keyPersonCount">{{projectData?.projectDetails?.keyPersonCount}}</span>
                                         </app-no-data-label>
                                     </span>
                                 </div>
                                 <div>
                                     <button class="align-items-start btn btn-sm btn-tertiary d-inline-flex position-relative"
-                                        tabindex="0" (click)="toggleSlider(index)" (keyup.enter)="toggleSlider(index)"
-                                        (keyup.space)="toggleSlider(index)" id="coi-comment-btn"
+                                        tabindex="0" (click)="toggleSlider(index1)" (keyup.enter)="toggleSlider(index1)"
+                                        (keyup.space)="toggleSlider(index1)" id="coi-comment-btn-{{index1}}"
                                         title="Click here to open comment slider">
                                         <mat-icon aria-hidden="true" class="hyper-link me-1">rate_review</mat-icon>
                                         <span class="me-2">{{projectData?.projectDetails?.commentCount && projectData.projectDetails.commentCount > 0  ? 'Comments('+projectData?.projectDetails?.commentCount + ')' : 'Comments'}}
@@ -229,93 +231,93 @@
                                     </button>
                                 </div>
                             </div>
-                            <div  *ngIf="isProjectOverviewCardCollapse[index]" class="col-12 mt-3" [@heightAnimation]>
+                            <div  *ngIf="isProjectOverviewCardCollapse[index1]" class="col-12 mt-3" [@heightAnimation]>
                                 <div class="table-responsive coi-table-striped">
                                     <table  *ngIf="projectData?.projectDetails?.keyPersonCount > 0" class="table table-bordered fs-14 fw-medium table-striped"
-                                        id="coi-keyperson-table">
+                                        id="coi-keyperson-table-{{index1}}">
                                         <thead>
-                                            <tr class="header-border table-light" id="coi-project-overview-table-thead">
+                                            <tr class="header-border table-light" id="coi-project-overview-table-thead-{{index1}}">
                                                 <th style="width: 11%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index + '_keyPersonName'] ? 'Click here to sort key personnel name in ascending order' : 'Click here to sort key personnel name in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_keyPersonName'] ? 'Click here to sort key personnel name in ascending order' : 'Click here to sort key personnel name in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index + '_keyPersonName'] ? 'Click here to sort key personnel name in ascending order' : 'Click here to sort key personnel name in descending order' }}"
-                                                        (click)="onSortClick(index, 'keyPersonName')">
+                                                        aria-label="{{ isDesc[index1 + '_keyPersonName'] ? 'Click here to sort key personnel name in ascending order' : 'Click here to sort key personnel name in descending order' }}"
+                                                        (click)="onSortClick(index1, 'keyPersonName')">
                                                         <span class="coi-text-darker">Name</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_keyPersonName'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_keyPersonName']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_keyPersonName'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_keyPersonName']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
                                                 <th style="width: 12%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index + '_keyPersonRole'] ? 'Click here to sort key personnel role in ascending order' : 'Click here to sort key personnel role in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_keyPersonRole'] ? 'Click here to sort key personnel role in ascending order' : 'Click here to sort key personnel role in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index + '_keyPersonRole'] ? 'Click here to sort key personnel role in ascending order' : 'Click here to sort key personnel role in descending order' }}"
-                                                        (click)="onSortClick(index, 'keyPersonRole')">
+                                                        aria-label="{{ isDesc[index1 + '_keyPersonRole'] ? 'Click here to sort key personnel role in ascending order' : 'Click here to sort key personnel role in descending order' }}"
+                                                        (click)="onSortClick(index1, 'keyPersonRole')">
                                                         <span class="coi-text-darker">Role</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_keyPersonRole'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_keyPersonRole']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_keyPersonRole'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_keyPersonRole']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
                                                 <th style="width: 14%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index + '_homeUnitName'] ? 'Click here to sort department in ascending order' : 'Click here to sort department in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_homeUnitName'] ? 'Click here to sort department in ascending order' : 'Click here to sort department in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index + '_homeUnitName'] ? 'Click here to sort department in ascending order' : 'Click here to sort department in descending order' }}"
-                                                        (click)="onSortClick(index, 'homeUnitName')">
+                                                        aria-label="{{ isDesc[index1 + '_homeUnitName'] ? 'Click here to sort department in ascending order' : 'Click here to sort department in descending order' }}"
+                                                        (click)="onSortClick(index1, 'homeUnitName')">
                                                         <span class="coi-text-darker">Department</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_homeUnitName'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_homeUnitName']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_homeUnitName'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_homeUnitName']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
                                                 <th style="width: 10%;" class="p-0 align-middle">
                                                     <button class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        title="{{ isDesc[index + '_trainingCompleted'] ? 'Click here to sort training in ascending order' : 'Click here to sort training in descending order' }}"
-                                                        aria-label="{{ isDesc[index + '_trainingCompleted'] ? 'Click here to sort training in ascending order' : 'Click here to sort training in descending order' }}"
-                                                        (click)="onSortClick(index, 'trainingCompleted')">
+                                                        title="{{ isDesc[index1 + '_trainingCompleted'] ? 'Click here to sort training in ascending order' : 'Click here to sort training in descending order' }}"
+                                                        aria-label="{{ isDesc[index1 + '_trainingCompleted'] ? 'Click here to sort training in ascending order' : 'Click here to sort training in descending order' }}"
+                                                        (click)="onSortClick(index1, 'trainingCompleted')">
                                                         <span class="coi-text-darker">Training</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_trainingCompleted'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_trainingCompleted']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_trainingCompleted'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_trainingCompleted']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
                                                 <th style="width: 10%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index + '_questionnaireCompleted'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_questionnaireCompleted'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index + '_questionnaireCompleted'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
-                                                        (click)="onSortClick(index, 'questionnaireCompleted')">
+                                                        aria-label="{{ isDesc[index1 + '_questionnaireCompleted'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
+                                                        (click)="onSortClick(index1, 'questionnaireCompleted')">
                                                         <span class="coi-text-darker">Certification</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_questionnaireCompleted'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_questionnaireCompleted']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_questionnaireCompleted'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_questionnaireCompleted']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
                                                 <th style="width: 9%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index + '_disclosureSubmitted'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_disclosureSubmitted'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index + '_disclosureSubmitted'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
-                                                        (click)="onSortClick(index, 'disclosureSubmitted')">
+                                                        aria-label="{{ isDesc[index1 + '_disclosureSubmitted'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
+                                                        (click)="onSortClick(index1, 'disclosureSubmitted')">
                                                         <span class="coi-text-darker">Disclosure</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_disclosureSubmitted'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_disclosureSubmitted']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_disclosureSubmitted'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_disclosureSubmitted']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
                                                 <th style="width: 12%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index + '_disclosureReviewStatus'] ? 'Click here to sort review status in ascending order' : 'Click here to sort review status in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_disclosureReviewStatus'] ? 'Click here to sort review status in ascending order' : 'Click here to sort review status in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index + '_disclosureReviewStatus'] ? 'Click here to sort review status in ascending order' : 'Click here to sort review status in descending order' }}"
-                                                        (click)="onSortClick(index, 'disclosureReviewStatus')">
+                                                        aria-label="{{ isDesc[index1 + '_disclosureReviewStatus'] ? 'Click here to sort review status in ascending order' : 'Click here to sort review status in descending order' }}"
+                                                        (click)="onSortClick(index1, 'disclosureReviewStatus')">
                                                         <span class="coi-text-darker">Review Status</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index + '_disclosureReviewStatus'],
-                                                            'fa-sort-alpha-desc': isDesc[index + '_disclosureReviewStatus']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_disclosureReviewStatus'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_disclosureReviewStatus']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
@@ -323,15 +325,16 @@
                                             </tr>
                                         </thead>
                                         <tbody class="white-bg">
-                                            <tr *ngFor="let keyPersonData of projectData.keyPersonDetails; let i = index"
+                                            <tr *ngFor="let keyPersonData of projectData.keyPersonDetails; let index2 = index"
                                                 class="tr-hover">
                                                 <!-- keyperson name -->
                                                 <td class="table-data fw-600 px-1 coi-text-light">
                                                     <div class="m-0 mb-2 row py-1">
                                                         <app-no-data-label [valueToShow]="keyPersonData?.keyPersonName">
                                                             <span class="align-items-center d-flex px-0">
-                                                                <a class="link-primary text-slice" id="coi-project-overview-keyperson-name" tabindex="0"
-                                                                    (click)="openPersonDetailsModal(keyPersonData.keyPersonId)"
+                                                                <a class="link-primary text-slice" id="coi-project-overview-keyperson-name-{{index2}}" tabindex="0"
+                                                                    (click)="openPersonDetailsModal(keyPersonData.keyPersonId)" (keyup.enter)="openPersonDetailsModal(keyPersonData.keyPersonId)"
+                                                                    (keyup.space)="openPersonDetailsModal(keyPersonData.keyPersonId)"
                                                                     [title]="'Click here to view details of ' + keyPersonData?.keyPersonName"
                                                                     [attr.aria-label]="keyPersonData?.keyPersonName"
                                                                     role="link">
@@ -345,7 +348,7 @@
                                                 <td class="px-1">
                                                     <div class="m-0 mb-2 row py-1 coi-text-light">
                                                         <app-no-data-label [valueToShow]="keyPersonData?.keyPersonRole">
-                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-keyperson-role">
+                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-keyperson-role-{{index2}}">
                                                                 <span class="text-slice"
                                                                     [title]="keyPersonData?.keyPersonRole"
                                                                     [attr.aria-label]="keyPersonData?.keyPersonRole">
@@ -359,7 +362,7 @@
                                                 <td class="px-1 coi-text-light">
                                                     <div class="m-0 mb-2 row py-1">
                                                         <app-no-data-label [valueToShow]="keyPersonData?.homeUnitName">
-                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-department">
+                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-department-{{index2}}">
                                                                 <span class="text-slice"
                                                                     [title]="keyPersonData?.homeUnitNumber + '-' + keyPersonData?.homeUnitName"
                                                                     [attr.aria-label]="keyPersonData?.homeUnitNumber + '-' + keyPersonData?.homeUnitName">
@@ -375,7 +378,7 @@
                                                     <div class="m-0 mb-2 row py-1">
                                                         <app-no-data-label
                                                             [valueToShow]="keyPersonData?.trainingCompleted">
-                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-training">
+                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-training-{{index2}}">
                                                                 <span class="text-slice"
                                                                     [title]="keyPersonData?.trainingCompleted"
                                                                     [attr.aria-label]="keyPersonData?.trainingCompleted">
@@ -390,7 +393,7 @@
                                                     <div class="m-0 mb-2 row py-1">
                                                         <app-no-data-label [valueToShow]="keyPersonData?.questionnaireCompleted">
                                                             <span
-                                                                class="align-items-center d-flex px-0" id="coi-project-overview-certification">
+                                                                class="align-items-center d-flex px-0" id="coi-project-overview-certification-{{index2}}">
                                                                 <span class="text-slice"
                                                                     [title]="keyPersonData?.questionnaireCompleted ? 'Completed' : 'Incomplete'"
                                                                     [attr.aria-label]="keyPersonData?.questionnaireCompleted ? 'Completed' : 'Incomplete'">
@@ -406,7 +409,7 @@
                                                     <div class="m-0 mb-2 row py-1">
                                                         <app-no-data-label
                                                             [valueToShow]="keyPersonData?.disclosureStatus">
-                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-disclosure">
+                                                            <span class="align-items-center d-flex px-0" id="coi-project-overview-disclosure-{{index2}}">
                                                                 <span class="text-slice"
                                                                     [title]="keyPersonData?.disclosureStatus"
                                                                     [attr.aria-label]="keyPersonData?.disclosureStatus">
@@ -437,18 +440,18 @@
                                                     <div class="d-flex justify-content-center">
                                                         <button
                                                             *ngIf="keyPersonData?.disclosureStatus == 'Completed' && keyPersonData?.disclosureId !== 0 || null"
-                                                            id="coi-keyperson-disclosure-view-btn"
+                                                            id="coi-keyperson-disclosure-view-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                                                            title="Click here to view the disclosure"
+                                                            title="Click here to view the disclosure" aria-label="Click here to view the disclosure"
                                                             (click)="redirectToDisclosure(keyPersonData)"
                                                             (keyup.enter)="redirectToDisclosure(keyPersonData)"
                                                             (keyup.space)="redirectToDisclosure(keyPersonData)">
                                                             <mat-icon>visibility</mat-icon>
                                                         </button>
                                                         <button *ngIf="keyPersonData?.disclosureStatus === 'Pending' || keyPersonData?.questionnaireCompleted === false"
-                                                            id="coi-keyperson-disclosure-notify-btn"
+                                                            id="coi-keyperson-disclosure-notify-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                                                            title="Click here to notify the keyperson to complete the disclosure">
+                                                            title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure">
                                                             <mat-icon>notifications_active</mat-icon>
                                                         </button>
                                                     </div>
