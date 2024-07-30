@@ -121,7 +121,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
             delete element.isSaved;
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....', 1250);
             this.$subscriptions.push(this._relationShipService.singleEntityProjectRelationSFI(element, element.personEntityId,
-                element.disclosureId, this._commonService.currentUserDetails.personId).subscribe((data: any) => {
+                element.disclosureId, this._commonService.currentUserDetails.personID).subscribe((data: any) => {
                 this._relationShipService.projectSFIDetails[element.personEntityId][index] = data.coiDisclEntProjDetail;
                 this.coiValidationMap.clear();
                 this.relationshipChanged.emit(true);
@@ -171,7 +171,7 @@ export class SfiProjectRelationSharedComponent implements OnInit, OnChanges, OnD
     saveClick() {
         this.$subscriptions.push(this._relationShipService.saveEntityProjectRelationSFI(
             this.prepareSaveObject(), this.projectSFIDetails[0].personEntityId, this.projectSFIDetails[0].disclosureId,
-            this._commonService.currentUserDetails.personId)
+            this._commonService.currentUserDetails.personID)
             .subscribe((data: any) => {
                 this._relationShipService.projectSFIDetails[this.projectSFIDetails[0].personEntityId] = data.coiDisclEntProjDetails;
                 hideModal('applyToAllConfirmationModal');
