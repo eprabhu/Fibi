@@ -76,7 +76,7 @@
                             Travel
                             <span class="d-none d-inline-1500 ms-1 ">Disclosures</span> 
                         </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
+                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard && hasTravelDisclosureRights" ></span>
                         <li *ngIf="hasConsultingDisclosureRights"  (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
                             (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
@@ -86,7 +86,7 @@
                             Consulting
                             <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
                         </li>
-                        <span *ngIf="isShowAdminDashboard" class="separator" aria-hidden="true" role="separator"></span>
+                        <span *ngIf="isShowAdminDashboard && hasConsultingDisclosureRights" class="separator" aria-hidden="true" role="separator"></span>
                         <li *ngIf="hasProjectOverviewRights"  (click)="changeTab('PROJECTS')" tabindex="0" id="coi-admin-dashboard-project-overview"
                             (keyup.enter)="changeTab('PROJECTS')" (keyup.space)="changeTab('PROJECTS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS'"
@@ -498,7 +498,7 @@
                             <div class="row" *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
                                 <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                     <div class="row m-0">
-                                        <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
+                                        <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                             <!-- Coi card badge -->
                                             <span class="d-flex" tabindex="-1"
                                                   [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' : coi?.disclosureId ? 'Consulting' :  coi?.fcoiType) + ' disclosure'">
@@ -685,7 +685,7 @@
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                         <div class="row m-0">
-                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
+                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                                 <!-- Travel Card badge -->
                                                 <span class="d-flex">
                                             <span
@@ -862,7 +862,7 @@
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                         <div class="row m-0">
-                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-center">
+                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                                 <!-- Consulting Card badge -->
                                                 <span>
                                                     <span class="d-flex" tabindex="-1" attr.aria-label="Consulting disclosure">

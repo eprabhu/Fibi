@@ -164,7 +164,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     ) { document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
-        await this.getPermissions();
+        this.getPermissions();
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -393,7 +393,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     fetchMentionedComments() {
         this.$subscriptions.push(this.coiAdminDashboardService.loadCoiReviewComments({
-            personId: this.commonService.getCurrentUserDetail('personId'),
+            personId: this.commonService.getCurrentUserDetail('personID'),
             disclosureId: null,
             coiSubSectionsId: null,
             coiSectionsTypeCode: null,
@@ -688,20 +688,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    async getPermissions() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+    getPermissions() {
+        this.isShowAdminDashboard = this.commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
     }
 
-    async checkTravelDisclosureRights() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.hasTravelDisclosureRights = rightsArray.some((right) =>
+    checkTravelDisclosureRights() {
+        this.hasTravelDisclosureRights = this.commonService.rightsArray.some((right) =>
             ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
     }
 
-    async checkForConsultingDisclosureRight() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.hasConsultingDisclosureRights = rightsArray.some((right) =>
+    checkForConsultingDisclosureRight() {
+        this.hasConsultingDisclosureRights = this.commonService.rightsArray.some((right) =>
             ['MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE'].includes(right));
     }
 
@@ -976,8 +973,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     private setSearchOptionsForProjectOverview() {
         this.leadUnitSearchOptionsForProjectOverview = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
-        this.sponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor();
-        this.primeSponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor();
+        this.sponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor({ baseUrl: this.commonService.fibiUrl });
+        this.primeSponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor({ baseUrl: this.commonService.fibiUrl });
         this.elasticPersonSearchOptionsForProjectOverview = this._elasticConfig.getElasticForPerson();
     }
 

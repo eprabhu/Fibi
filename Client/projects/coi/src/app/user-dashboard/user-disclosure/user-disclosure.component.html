@@ -741,13 +741,13 @@
         <ng-container *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
             <!-- New card design starts(master card) -->
             <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="card coi-card-regular">
-                <div class="card-body px-3 py-2" id="coi-user-disclosure-dashboard-cards-card">
+                <div class="card-body px-3 py-2" id="coi-user-disclosure-dashboard-card-{{index}}">
                     <!-- For Coi disclosures card -->
                     <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId && !disclosure?.disclosureId">
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row m-0">
-                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-center">
+                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-end">
                                         <span class="d-flex" tabindex="-1"
                                             [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
                                             <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
@@ -907,7 +907,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row m-0">
-                                    <div class="col-12 d-inline-flex align-items-center mb-1 coi-card-body-notch-container">
+                                    <div class="col-12 d-inline-flex align-items-end mb-1 coi-card-body-notch-container">
                                         <!-- Travel Card badge -->
                                         <span class="d-flex">
                                             <span
@@ -1085,7 +1085,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row m-0">
-                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-center">
+                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-end">
                                         <!-- OPA Card badge -->
                                         <span class="d-flex">
                                             <span
@@ -1201,7 +1201,7 @@
                         <div class="row">
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row m-0">
-                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-center">
+                                    <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-end">
                                         <!-- Consulting Card badge -->
                                         <span class="d-flex">
                                             <span class="coi-card-notch-ribbon shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"

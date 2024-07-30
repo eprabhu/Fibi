@@ -161,12 +161,12 @@
                                 </span>
                                 <div *ngIf="commentDetails?.commentId !== replayComment?.commentId"
                                     class="col-3 d-flex f-13 pb-2 justify-content-end align-items-center me-2">
-                                    <span class="hand-cursor mr-15 hand-hover text-primary" id="{{'btn-edit-chid'+replyFroComment}}"
+                                    <span class="hand-cursor mr-15 hand-hover text-primary" id="{{'btn-edit-chid'+replyForComment}}"
                                         (click)="editReplyComment(replayComment,i)">
                                         <i aria-hidden="true" class="fa fa-pencil mr-2"></i>
                                         Edit
                                     </span>
-                                    <span class="hand-cursor mr-2 hand-hover text-danger" id="{{'btn-delete-chid'+replyFroComment}}"
+                                    <span class="hand-cursor mr-2 hand-hover text-danger" id="{{'btn-delete-chid'+replyForComment}}"
                                         (click)="deleteComment(replayComment,i)">
                                         <i aria-hidden="true" class="fa fa-trash mr-2"></i>
                                         Delete

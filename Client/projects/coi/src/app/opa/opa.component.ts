@@ -249,7 +249,7 @@ export class OpaComponent implements OnInit {
 
     updateOpaReview(modalType: ModalType) {
         const reviewerInfo = this.opa.opaReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '3');
+            ele.assigneePersonId === this.commonService.currentUserDetails.personID && ele.reviewStatusTypeCode != '3');
         if (reviewerInfo) {
             this.opaService.$SelectedReviewerDetails.next(reviewerInfo);
             this.opaService.triggerStartOrCompleteCoiReview(modalType);
@@ -262,7 +262,7 @@ export class OpaComponent implements OnInit {
     }
 
     isLoggedInUser(personId: string) {
-        return this.commonService?.getCurrentUserDetail('personId') === personId;
+        return this.commonService?.getCurrentUserDetail('personID') === personId;
     }
 
     openSlider(type, count) {

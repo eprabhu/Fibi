@@ -72,6 +72,8 @@ export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
 export const TRAVEL_MODULE_CODE = 24;
 export const CONSULTING_MODULE_CODE = 27;
+// Proposal Certification Questionaire Sub Module Code
+export const EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = 802;
 
 export const COI_REVIEW_STATUS_TYPE = {
     SUBMITTED: '2'

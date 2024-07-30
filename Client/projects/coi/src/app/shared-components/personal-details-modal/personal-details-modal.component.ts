@@ -46,7 +46,7 @@ export class PersonalDetailsModalComponent implements OnInit {
     }
 
     private setPersonBtnRights(): void {
-        const isLoggedInPerson = this.personId === this.commonService.currentUserDetails.personId;
+        const isLoggedInPerson = this.personId === this.commonService.currentUserDetails.personID;
         this.canShowPersonDetails = (isLoggedInPerson || this.commonService.getAvailableRight('MAINTAIN_PERSON'));
     }
 

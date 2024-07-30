@@ -75,7 +75,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     }
 
     private checkDefaultAdminPersonId(): boolean {
-        return this.defaultAdminDetails.adminPersonId === this._commonService.getCurrentUserDetail('personId');
+        return this.defaultAdminDetails.adminPersonId === this._commonService.getCurrentUserDetail('personID');
     }
 
     private setDefaultAdminDetails(): void {
@@ -120,7 +120,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     public assignToMe(checkBoxEvent: any) {
         if (checkBoxEvent.target.checked) {
             this.adminSearchOptions.defaultValue = this._commonService.getCurrentUserDetail('fullName');
-            this.addAdmin.adminPersonId = this._commonService.getCurrentUserDetail('personId');
+            this.addAdmin.adminPersonId = this._commonService.getCurrentUserDetail('personID');
             this.isAssignToMe = true;
             this.getPersonGroup();
             this.assignAdminMap.clear();
@@ -201,7 +201,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     }
 
     private setAssignToMe(): boolean {
-        return this.addAdmin.adminPersonId === this._commonService.getCurrentUserDetail('personId') ? true : false;
+        return this.addAdmin.adminPersonId === this._commonService.getCurrentUserDetail('personID') ? true : false;
     }
 
     public clearData() {
