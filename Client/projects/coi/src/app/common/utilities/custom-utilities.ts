@@ -123,3 +123,18 @@ export function closeCoiSlider(element_id:string): void {
 export function checkForVowelInFirstLetter(word) {
     return ['a', 'e', 'i', 'o', 'u'].includes(word[0].toLowerCase()) ? `an ${word}` : `a ${word}`;
 }
+
+/**
+ * Scrolls the page to a specified section by its ID, with an optional offset for the header.
+ *
+ * @param sectionId - The ID of the section to scroll to.
+ * @param srollElement - scrolling element.
+ * @param offsetTop - The offset top, which is subtracted from the scroll position.
+ */
+export function jumpToSection({ sectionId = '', offsetTop = 0, srollElement = window }): void {
+    const SECTION_ELEMENT: HTMLElement | null = document.getElementById(sectionId);
+    if (!SECTION_ELEMENT) { return; }
+    const elementPosition = SECTION_ELEMENT.getBoundingClientRect().top;
+    const SCROLL_TO = elementPosition + srollElement?.pageYOffset - offsetTop;
+    srollElement.scrollTo({ top: SCROLL_TO, behavior: 'smooth' });
+}
