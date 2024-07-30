@@ -76,7 +76,7 @@
                             Travel
                             <span class="d-none d-inline-1500 ms-1 ">Disclosures</span> 
                         </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
+                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard && hasTravelDisclosureRights" ></span>
                         <li *ngIf="hasConsultingDisclosureRights"  (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
                             (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
@@ -86,7 +86,7 @@
                             Consulting
                             <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
                         </li>
-                        <span *ngIf="isShowAdminDashboard" class="separator" aria-hidden="true" role="separator"></span>
+                        <span *ngIf="isShowAdminDashboard && hasConsultingDisclosureRights" class="separator" aria-hidden="true" role="separator"></span>
                         <li *ngIf="hasProjectOverviewRights"  (click)="changeTab('PROJECTS')" tabindex="0" id="coi-admin-dashboard-project-overview"
                             (keyup.enter)="changeTab('PROJECTS')" (keyup.space)="changeTab('PROJECTS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS'"
