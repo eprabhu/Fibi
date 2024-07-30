@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { ValidationResponse } from './form-validator.interface';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { fadeIn, slideDown } from './form-validator-animation';
+import { OPA_REDIRECT_URL } from 'projects/coi/src/app/app-constants';
 
 declare const $: any;
 
@@ -23,7 +24,7 @@ export class FormValidatorComponent implements OnChanges {
     subscription$ = [];
     isShowDock = false;
     currentIndex = 0;
-    defaultFormPath = '/coi/opa/form';
+    defaultFormPath = OPA_REDIRECT_URL;
     navigationDetails: any = null;
     isErrorPresent = false;
     isShowNavigationIcons = false;

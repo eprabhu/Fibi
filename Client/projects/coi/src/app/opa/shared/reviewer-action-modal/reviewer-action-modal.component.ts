@@ -114,7 +114,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     }
 
     updateReviewActions(reviewer) {
-        this._opaService.isDisclosureReviewer = (reviewer.assigneePersonId === this._commonService.currentUserDetails.personId && reviewer.opaReviewId == this._opaService.currentOPAReviewForAction.opaReviewId);
+        this._opaService.isDisclosureReviewer = (reviewer.assigneePersonId === this._commonService.currentUserDetails.personID && reviewer.opaReviewId == this._opaService.currentOPAReviewForAction.opaReviewId);
         if (reviewer.reviewStatusTypeCode === '2' && this._opaService.isDisclosureReviewer) {
             this._opaService.isStartReview = false;
             this._opaService.isCompleteReview = true;
@@ -140,7 +140,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
 
     private getNextAssignedReview(): any {
         return this.reviewerList.find(ele =>
-            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            ele.assigneePersonId === this._commonService.currentUserDetails.personID
             && ele.reviewStatusTypeCode != 3);
     }
 
