@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { DataStoreService } from '../disclosure/services/data-store.service';
 import { EntityDetailsModule } from '../disclosure/entity-details/entity-details.module';
 import { ProjectOverviewComponent } from './project-overview/project-overview.component';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ProjectOverviewCommentsSliderComponent } from './project-overview-comments-slider/project-overview-comments-slider.component';
 
@@ -28,7 +27,6 @@ const routes: Routes = [{path: '', component: AdminDashboardComponent}];
         FormsModule,
         SharedModule,
         EntityDetailsModule,
-        InfiniteScrollModule,
         CKEditorModule 
     ],
     providers: [AdminDashboardService, DataStoreService]
