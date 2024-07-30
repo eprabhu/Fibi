@@ -17,16 +17,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dao.ProjectDao;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.ProjectCommentDto;
 import com.polus.fibicomp.coi.dto.ProjectOverviewDto;
 import com.polus.fibicomp.coi.dto.ProjectOverviewResponseDto;
 import com.polus.fibicomp.coi.pojo.CoiProjectComment;
-import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 
 @Service
 @Transactional

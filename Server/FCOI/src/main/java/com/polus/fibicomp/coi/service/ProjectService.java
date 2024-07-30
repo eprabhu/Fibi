@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.ProjectCommentDto;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 
 @Transactional
 @Service

@@ -22,16 +22,16 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.ProjectCommentDto;
 import com.polus.fibicomp.coi.dto.ProjectStatusLookupDto;
 import com.polus.fibicomp.coi.pojo.CoiProjectComment;
 import com.polus.fibicomp.coi.pojo.CoiProposalStatusType;
-import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.security.AuthenticatedUser;
 
 import oracle.jdbc.OracleTypes;
 
