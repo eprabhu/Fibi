@@ -249,7 +249,7 @@ export class OpaComponent implements OnInit {
 
     updateOpaReview(modalType: ModalType) {
         const reviewerInfo = this.opa.opaReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '3');
+            ele.assigneePersonId === this.commonService.currentUserDetails.personID && ele.reviewStatusTypeCode != '3');
         if (reviewerInfo) {
             this.opaService.$SelectedReviewerDetails.next(reviewerInfo);
             this.opaService.triggerStartOrCompleteCoiReview(modalType);

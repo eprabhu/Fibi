@@ -357,7 +357,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private startReviewIfLoggingPerson(): any {
         return this.reviewerList.find(ele =>
-            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            ele.assigneePersonId === this._commonService.currentUserDetails.personID
             && ele.reviewStatusTypeCode === '1');
     }
 
@@ -377,7 +377,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private getNextAssignedReview(): any {
         return this.reviewerList.find(ele =>
-            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            ele.assigneePersonId === this._commonService.currentUserDetails.personID
             && ele.reviewStatusTypeCode !== '3');
     }
 
