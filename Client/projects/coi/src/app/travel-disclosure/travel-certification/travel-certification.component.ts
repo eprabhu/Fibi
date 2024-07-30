@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { CoiTravelDisclosure, TravelDisclosure } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, TravelDisclosure } from '../travel-disclosure.interface';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
@@ -37,12 +37,11 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
     proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
-    constructor(public travelService: TravelDisclosureService, private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
-    }
+    constructor(public travelService: TravelDisclosureService, private _dataStore: TravelDataStoreService) {  }
 
     ngOnInit(): void {
         this.isCheckBoxDisable = !this.validateTravelDisclosureRO();
+        window.scrollTo(0, 0);
     }
 
     ngOnDestroy(): void {

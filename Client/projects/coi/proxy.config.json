@@ -231,6 +231,10 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
+    "/auth/logout": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
     "/fetchFaqDetails": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -263,7 +267,7 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
-    "/validate/*": {
+    "/validateDisclosure": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
@@ -607,39 +611,39 @@
         "secure": false
     },
     "/consultingDisclosure/create": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/getDisclosureHeader/*": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/savePersonEntityDetails": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/submit": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/withdraw": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/return": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/assignAdmin": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/complete/*" : {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/consultingDisclosure/history/*" : {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     }
 }

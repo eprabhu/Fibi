@@ -3,19 +3,19 @@ import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { getEndPointOptionsForEntity, getEndPointOptionsForLeadUnit } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { NameObject, ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation} from '../common/utilities/animations';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
+import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-reviewer-dashboard',
     templateUrl: './reviewer-dashboard.component.html',
     styleUrls: ['./reviewer-dashboard.component.scss'],
-    animations: [listAnimation, topSlideInOut, fadeInOutHeight, 
+    animations: [listAnimation, topSlideInOut, fadeInOutHeight,
         slideInAnimation('0','12px', 400, 'slideUp'),
         slideInAnimation('0','-12px', 400, 'slideDown'),
         scaleOutAnimation('-2px','0', 200, 'scaleOut'),

@@ -8,17 +8,12 @@ import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utiliti
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../../../../fibi/src/app/app-constants';
 import {DATE_PLACEHOLDER} from '../../../app-constants';
-import {
-    compareDates,
-    getDateObjectFromTimeStamp,
-    getDuration,
-    parseDateWithoutTimestamp
-} from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import {PersonProjectOrEntity, coiReviewComment} from '../../../shared-components/shared-interface';
 import {CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
 import {OPA, OpaDisclosure} from '../../opa-interface';
 import { ElasticConfigService } from '../../../common/services/elastic-config.service';
+import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-coi-review-location',

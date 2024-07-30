@@ -1,70 +1,113 @@
 <div *ngIf="selectedProject?.moduleCode" [id]="'coi-card-' + selectedProject?.projectId" class="card coi-card-regular border shadow me-2 mt-2 ms-2"
   [ngClass]="{'coi-card-highlight': coiSummaryService.activeSubNavItemId === selectedProject.projectTypeCode+'-'+selectedProject?.projectId}">
-    <div class="card-header px-4 py-2 d-flex align-items-start justify-content-between border-bottom-0 flex-nowrap">
-      <span class="d-flex">
-          <span class="active-ribbon shadow-sm align-items-center d-flex text-nowrap" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
-          <span class="word-break-all new-line-property badge-margin coi-text-darker fs-16 mt-1">
-            <span class="link-primary" (click)="openModule();" (keydown.enter)="openModule()" tabindex="0" role="link"
-              aria-label="Click here to view project details" title="Click here to view project details">
-              #{{selectedProject?.projectNumber}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}
-              </span>
-            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100" (click)="readMoreOrLess=true" tabindex="0" role="link" aria-label="Click here to Read more"
-                title="Click here to Read more" (keydown.enter)="readMoreOrLess= true">
-                <span class="link-primary fw-medium fs-14">...Read More</span>
-            </span>
-            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false" (keydown.enter)="readMoreOrLess= false"
-            tabindex="0" role="link" aria-label="Click here to Read less" title="Click here to Read less">
-              <span class="link-primary fw-medium fs-14">Read Less</span>
-            </span>
-          </span>
+    <div class="d-flex align-items-start  justify-content-between position-absolute start-0 top-0 w-100">
+      <span class="d-flex align-items-center">
+          <span class="coi-card-notch-ribbon shadow-sm me-2 mb-auto" [ngStyle]="{'background-color': selectedProject.projectBadgeColour}">{{selectedProject?.projectType}}</span>
+          <span class="d-flex align-items-center">
+            <mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
+            <mat-icon *ngIf="selectedProject?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
+            <a tabindex="0" class="fs-6 link-primary fw-600 text-slice" id="link-{{selectedProject?.projectId}}"
+                title="Click here to view project details of #{{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
+                attr.aria-label="Click here to view project details of {{selectedProject?.projectNumber}} - {{selectedProject?.title}}"
+                (click)="openModule()" (keyup.enter)="openModule()" (keyup.space)="openModule()">
+                #{{selectedProject?.projectNumber}}- {{selectedProject?.title}}
+            </a>
+        </span>
       </span>
-
-      <span class="align-items-center d-flex">
-        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity" title="Comments" type="button">
-          <mat-icon>rate_review</mat-icon>
-      </button>
-      </span>
-    </div>
-      <div *ngIf="isCollapsed" class="card-body" id="coi-relationship">
-			<div class="row">
-				<div class="col">
-					<div class="row">
-						<div class="col-6 col-md-4 mb-2">
-							<label for="coi-relationship-summary-principal-investigator" class="coi-text-dark d-block">Principal Investigator</label>
-							<span class="coi-text-light" id="coi-relationship-summary-principal-investigator">{{selectedProject?.piName}}</span>
-						</div>
-						<div class="col-6 col-md-4 mb-2">
-							<label for="coi-relationship-summar-project-role" class="coi-text-dark d-block">Project Role</label>
-							<span class="coi-text-light" id="coi-relationship-summar-project-role">{{selectedProject?.reporterRole}}</span>
-						</div>
-						<div class="col-6 col-md-4 mb-2">
-							<label for="coi-relationship-summar-period" class="coi-text-dark d-block">Period</label>
-							<span class="coi-text-light" id="coi-relationship-summar-period">{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate
-								|
-								dateFormatter}}</span>
-						</div>
-						<div class="col-6 col-md-4 mb-2">
-							<label for="coi-relationship-sponsor" class="coi-text-dark d-block">Sponsor</label>
-							<span class="coi-text-light" id="coi-relationship-sponsor">{{selectedProject?.sponsorName}}</span>
-						</div>
-						<div class="col-6 col-md-4 mb-2">
-							<label for="coi-relationship-lead-unit" class="coi-text-dark d-block">Lead Unit</label>
-							<app-no-data-label [valueToShow]="selectedProject?.homeUnitName">
-								<span class="coi-text-light" id="coi-relationship-lead-unit">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
-							</app-no-data-label>
-						</div>
-					</div>
-				</div>
-        <div class="col-auto">
+      <div class="col-auto d-flex align-items-center ms-3">
+        <!-- Conflict Status -->
         <div *ngIf="projectRelations.length > 0 && projectRelations[0]?.coiEntity?.entityName != null" class="me-2">
-            <label for="coi-relationship-conflict-status" class="coi-text-lighter d-block">Conflict Status</label>
+            <label for="coi-relationship-conflict-status" class="coi-text-light me-2 fw-500 d-block d-lg-inline">Conflict Status:</label>
             <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(worstCaseStatus?.projectConflictStatusCode)}}"></span>
             <span class="badgeFont" id="coi-relationship-conflict-status">{{worstCaseStatus?.description}}</span>
-          </div>
-          <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
         </div>
-			</div>
+        <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
+        <!-- comments -->
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', null)" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity"
+          title="Click here to open comments" aria-label="Click here to open comments" type="button">
+          <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="isCollapsed" class="card-body mt-4" id="coi-relationship">
+      <div class="row mb-2">
+        <!-- Principal Investigator -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Principal investigator is ' + (selectedProject?.piName ? selectedProject?.piName : 'empty')">
+            <label for="coi-relationship-pi-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block">Principal Investigator</label>
+            <div id="coi-relationship-pi-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="selectedProject?.piName">
+                    <span class="coi-text-light" [title]="selectedProject?.piName">{{selectedProject?.piName}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+        <!-- Reporter's Project Role -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Reporters project role is ' + (selectedProject?.reporterRole ? selectedProject?.reporterRole : 'empty')">
+            <label for="coi-relationship-role-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block">Reporter's Project Role</label>
+            <div id="coi-relationship-role-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="selectedProject?.reporterRole">
+                    <span class="coi-text-light" [title]="selectedProject?.reporterRole">{{selectedProject?.reporterRole}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+        <!-- Period -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Period is ' + ((selectedProject?.projectStartDate || selectedProject?.projectEndDate) ?
+            ((selectedProject?.projectStartDate | dateFormatter) + ' - ' + (selectedProject?.projectEndDate | dateFormatter))  : 'empty')">
+            <label for="coi-relationship-period-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block">Period</label>
+            <div id="coi-relationship-period-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="selectedProject?.projectStartDate || selectedProject?.projectEndDate">
+                    <span [title]="(selectedProject?.projectStartDate | dateFormatter) + ' - ' + (selectedProject?.projectEndDate | dateFormatter)"
+                        class="coi-text-light">{{selectedProject?.projectStartDate | dateFormatter}} - {{selectedProject?.projectEndDate | dateFormatter}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+        <!-- Project Status -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Project status is ' + (selectedProject?.projectStatus ? selectedProject?.projectStatus : 'empty')">
+            <label for="coi-relationship-status-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block">Project Status</label>
+            <div id="coi-relationship-status-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="selectedProject?.projectStatus">
+                    <span class="coi-text-light" [title]="selectedProject?.projectStatus">{{selectedProject?.projectStatus}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+        <!-- Lead Unit -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Lead unit is ' + (_commonService.getPersonLeadUnitDetails(selectedProject) ?
+            _commonService.getPersonLeadUnitDetails(selectedProject) : 'empty')">
+            <label for="coi-relationship-unit-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block">Lead Unit</label>
+            <div id="coi-relationship-unit-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="_commonService.getPersonLeadUnitDetails(selectedProject)">
+                    <span [title]="_commonService.getPersonLeadUnitDetails(selectedProject)"
+                        class="coi-text-light">{{_commonService.getPersonLeadUnitDetails(selectedProject)}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+        <!-- Sponsor -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Sponsor is ' + (selectedProject?.sponsorName ? selectedProject?.sponsorName : 'empty')">
+            <label for="coi-relationship-sponsor-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block"
+                aria-label="Sponsor is, ">Sponsor</label>
+            <div id="coi-relationship-sponsor-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="selectedProject?.sponsorName">
+                    <span class="coi-text-light" [title]="selectedProject?.sponsorName">{{selectedProject?.sponsorName}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+        <!-- Prime Sponsor -->
+        <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
+            [attr.aria-label]="'Prime sponsor is ' + (selectedProject?.primeSponsorName ? selectedProject?.primeSponsorName : 'empty')">
+            <label for="coi-relationship-prime-sponsor-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block"
+                aria-label="Prime sponsor is, ">Prime Sponsor</label>
+            <div id="coi-relationship-prime-sponsor-{{selectedProject?.moduleCode}}" class="text-slice">
+                <app-no-data-label [valueToShow]="selectedProject?.primeSponsorName">
+                    <span class="coi-text-light" [title]="selectedProject?.primeSponsorName">{{selectedProject?.primeSponsorName}}</span>
+                </app-no-data-label>
+            </div>
+        </div>
+    </div>
       <div class="table-responsive coi-table-striped">
       <table class="table table-bordered fs-14 fw-medium table-striped" *ngIf="projectRelations.length > 0  && projectRelations[0]?.coiEntity?.entityName != null" id="coi-relationship-summary-table">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
@@ -89,26 +132,24 @@
                 <tbody class="white-bg">
                   <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
                     <td class="table-data fw-600 px-3">
-                        <div class="m-0 mb-2 row py-1">
-                            <span class="align-items-center d-flex px-0">
-                                <span class="link-primary" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
-                                (keydown.enter)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
-                                tabindex="0" [attr.aria-label]="'Click here to view SFI details'" role="link" title="Click here to view SFI details">
-                                        {{relation?.coiEntity?.entityName.length > 100 ?
-                                            (relation?.coiEntity?.entityName | slice:0:100)+'...' : relation?.coiEntity?.entityName}}
-                                </span>
-                            </span>
+                        <div class="mb-2 py-1">
+                          <a class="link-primary text-slice" (click)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
+                            (keydown.enter)="openEntityDetails(relation?.personEntityRelationshipDto?.personEntityId)"
+                            tabindex="0" attr.aria-label="Click here to view SFI details of {{relation?.coiEntity?.entityName}}" role="link"
+                            title="Click here to view SFI details of '{{relation?.coiEntity?.entityName}}'">
+                            {{relation?.coiEntity?.entityName}}
+                          </a>
                         </div>
                         <div class="d-flex flex-wrap fw-medium fs-13">
-                            <ng-container class="mt-2" *ngFor="let relation of getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                    <span class="relationship-pill border px-3 py-1 rounded-4 me-2 d-inline-block">
-                                        <span class="d-flex coi-purple-text">
-                                            <mat-icon aria-hidden="true"
-                                            class="flex-shrink-0 me-1">{{getIcon(relation?.relationshipType)}}</mat-icon>
-                                            <span class="fw-bold">{{relation?.relationshipType}} :</span>
-                                            <span class="fw-normal">{{relation?.description}}</span>
-                                    </span>
-                                </span>
+                            <ng-container class="mt-2" *ngFor="let relation of coiSummaryService.getEntityRelationTypePills(relation?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                              <span class="relationship-pill border px-3 py-1 rounded-4 me-2 d-inline-block mb-2">
+                                  <span class="d-flex coi-purple-text me-2">
+                                      <mat-icon aria-hidden="true"
+                                      class="flex-shrink-0 me-1">{{coiSummaryService.getIcon(relation?.relationshipType)}}</mat-icon>
+                                      <span class="fw-bold">{{relation?.relationshipType}} :</span>
+                                      <span class="fw-normal">{{relation?.description}}</span>
+                                  </span>
+                              </span>
                             </ng-container>
                         </div>
                         <div class="row mt-2 fw-medium fs-13">
@@ -147,7 +188,7 @@
                       <div class="d-flex">
                         <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned review completed, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
                         <button *ngIf="(['3', '7', '8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
-                        && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
+                        && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personID') == coiDetails?.adminPersonId)"
                         class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                         <span class="btn-secondary-svg"></span>
@@ -167,5 +208,6 @@
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personID') == coiDetails?.adminPersonId)"
+  [relationshipType]="relationshipType" [selectedProject]="selectedProject"></app-add-conflict-slider>
 

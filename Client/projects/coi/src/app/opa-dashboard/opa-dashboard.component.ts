@@ -8,11 +8,11 @@ import { getEndPointOptionsForLeadUnit } from '../../../../fibi/src/app/common/s
 import { CommonService } from '../common/services/common.service';
 import { deepCloneObject, isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../common/services/navigation.service';
-import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DASHBOARD_RIGHTS } from '../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DASHBOARD_RIGHTS, OPA_REDIRECT_URL } from '../app-constants';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
+import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-opa-dashboard',
@@ -72,7 +72,7 @@ export class OpaDashboardComponent implements OnInit {
     ) {  document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
-        await this.getPermissions();
+        this.isShowAdminDashboard = this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -230,11 +230,6 @@ export class OpaDashboardComponent implements OnInit {
              }));
     }
 
-    async getPermissions() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.isShowAdminDashboard = rightsArray.some((right) => OPA_DASHBOARD_RIGHTS.has(right));
-    }
-
     sortResult(sortFieldBy) {
         this.sortCountObj[sortFieldBy]++;
         if (this.sortCountObj[sortFieldBy] < 3) {
@@ -317,7 +312,7 @@ export class OpaDashboardComponent implements OnInit {
     }
 
     redirectToDisclosure(opa) {
-        this._router.navigate(['/coi/opa/form'],
+        this._router.navigate([OPA_REDIRECT_URL],
             { queryParams: { disclosureId: opa.opaDisclosureId } });
     }
 

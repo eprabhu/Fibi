@@ -1,43 +1,72 @@
-.navigation-to-tabs {
-    background-color: #F8F8F8;
-    color: #606060;
+.right-navigation-card {
+    border: solid 1px #dbdae2 !important;
 
-    &:hover {
-        background-color: #48647F;
-        color: white;
-    }
-}
-
-.sub-navigation-to-tabs {
-    color: #606060;
-
-    .bg-sub-goto {
-        background-color: #F2F6FE;
+    .card-header {
+        min-height: auto;
+        font-weight: 600;
+        background-color: #f5f4fb;
     }
 
-    .sub-goto {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+    .card-body {
+        overflow-y: auto;
+        min-height: auto;
 
-        &:hover {
-            background-color: #48647F !important;
-            color: white;
-            cursor: pointer;
+        &::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            width: 5px;
+            height: 5px;
         }
     }
-}
 
-.side-bar-title {
-    min-height: 55px;
-    background-color: #E8E8E8;
-}
+    .nav {
+        .nav-item {
+            &.active {
+                color: #007dec;
+                background: #e8e8e8;
+                font-weight: 600;
+                border-bottom: solid 1px #dee2e6;
+                border-top: solid 1px #dee2e6;
+                max-height: 300px;
+                overflow-y: auto;
 
-.scrollable-section {
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 40vh;
-    max-height: 51vh;
+                &::-webkit-scrollbar {
+                    width: 5px;
+                    height: 5px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    width: 5px;
+                    height: 5px;
+                }
+
+                &:nth-child(1) {
+                    border-top: 0;
+                }
+            }
+
+            &.active a {
+                color: #007dec;
+            }
+
+            &:hover {
+                background: #f1f1f1;
+
+                & .nav-link {
+                    color: #007dec;
+                }
+            }
+
+            .nav-link {
+                color: #505050;
+                font-weight: 500;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 ::-webkit-scrollbar {

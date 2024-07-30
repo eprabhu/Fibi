@@ -67,7 +67,7 @@ export class DataStoreService {
     }
 
     isLoggedInUser(personId: string) {
-        return this._commonService?.getCurrentUserDetail('personId') === personId;
+        return this._commonService?.getCurrentUserDetail('personID') === personId;
     }
 
 }

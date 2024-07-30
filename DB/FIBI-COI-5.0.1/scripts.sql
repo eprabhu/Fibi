@@ -40,3 +40,5 @@ UPDATE `coi_project_type` SET `BADGE_COLOR` = '#148582' WHERE (`COI_PROJECT_TYPE
 UPDATE `coi_project_type` SET `BADGE_COLOR` = '#7d9e32' WHERE (`COI_PROJECT_TYPE_CODE` = '3');
 UPDATE `COI_DISCLOSURE_FCOI_TYPE` SET `DESCRIPTION` = 'Development Proposal' WHERE (`FCOI_TYPE_CODE` = '2');
 
+UPDATE DYN_ELEMENT_CONFIG SET HELP = 'Please select the conflict status' WHERE (ELEMENT_ID = '1540');
+UPDATE DYN_ELEMENT_CONFIG SET HELP = 'Please provide the reason for your conflict status selection' WHERE (ELEMENT_ID = '1541');

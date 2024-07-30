@@ -11,8 +11,8 @@
  */
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import {getDateObjectFromTimeStamp} from "../../../../../fibi/src/app/common/utilities/date-utilities";
-import {DEFAULT_DATE_FORMAT, LONG_DATE_FORMAT, TIME_FORMAT} from "../../../../../fibi/src/app/app-constants";
+import { DEFAULT_DATE_FORMAT, LONG_DATE_FORMAT, TIME_FORMAT } from '../../app-constants';
+import { getDateObjectFromTimeStamp } from '../../common/utilities/date-utilities';
 
 @Pipe({
   name: 'dateFormatter'

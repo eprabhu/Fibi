@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {  Router} from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
-import {
-    AWARD_EXTERNAL_RESOURCE_URL,
-    HTTP_ERROR_STATUS,
-    IP_EXTERNAL_RESOURCE_URL,
-    PROPOSAL_EXTERNAL_RESOURCE_URL
-} from '../../app-constants';
+import { HTTP_ERROR_STATUS} from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
@@ -57,6 +52,8 @@ export class RelationshipComponent implements OnInit {
   currentRelation: number;
   switchRelationView = false;
   projectList: GenericProject[] = [];
+  searchWord: string;
+  canShowEntitySearch = true;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -143,7 +140,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personId');
+    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personID');
     this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode) && IS_CREATE_USER;
   }
 
@@ -221,10 +218,24 @@ getDependencyDetails() {
 }
 
     switchRelationViewMode(newValue) {
+      this.getSearchedEntities();
       if (this.switchRelationView !== newValue && !newValue) {
           this.ngOnInit();
       }
       this.switchRelationView = newValue;
+    }
+
+    getSearchedEntities() {
+        this.searchWord = this.searchText;
+    }
+
+    clearSearchText() {
+        this.searchWord = '';
+        this.searchText = '';
+    }
+
+    canShowEntitesSearch(event) {
+        this.canShowEntitySearch = event;
     }
 
 }

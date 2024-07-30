@@ -14,18 +14,16 @@
         </div>
         <div class="col-4">
             <ul class="nav-options mb-0">
-                <li role="tab" aria-label="build" (keydown.enter)="navigateToTab('1');"
-                    class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0"
-                    [routerLink]="['editor']" [queryParams]={formBuilderId:formBuilderId}>Build</li>
-                <li role="tab" aria-label="Integration" (keydown.enter)="navigateToTab('2');"
-                    class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0"
-                    [routerLink]="['integration']"
+                <li role="tab" aria-label="build" class="cursor-pointer nav-options-link"
+                    routerLinkActive="active nav-sub-obtions" tabindex="0" [routerLink]="['editor']"
+                    [queryParams]={formBuilderId:formBuilderId}>Build</li>
+                <li role="tab" aria-label="Integration" class="cursor-pointer nav-options-link"
+                    routerLinkActive="active nav-sub-obtions" tabindex="0" [routerLink]="['integration']"
                     [queryParams]={formBuilderId:formBuilderId,title:formTitle,formBuilderNumber:formBuilderNumber}>
-                    Integration
-                </li>
-                <li role="tab" aria-label="Preview" (keydown.enter)="navigateToTab('3');"
-                    class="cursor-pointer nav-options-link" routerLinkActive="active nav-sub-obtions" tabindex="0"
-                    [routerLink]="['preview']" [queryParams]={formBuilderId:formBuilderId}>Preview</li>
+                    Integration</li>
+                <li role="tab" aria-label="Preview" class="cursor-pointer nav-options-link"
+                    routerLinkActive="active nav-sub-obtions" tabindex="0" [routerLink]="['preview']"
+                    [queryParams]={formBuilderId:formBuilderId}>Preview</li>
             </ul>
         </div>
         <div class="col-4 d-flex justify-content-end">
@@ -34,33 +32,69 @@
                 <i class="fa fa-solid fa-upload"></i>
                 Publish
             </button>
+            <button title="Back to form List" (click)="navigateToFormList()"
+                class="btn fb-back-button cursor-pointer ml-2">
+                <i aria-hidden="true" class="fa fa-reply"></i>
+            </button>
         </div>
     </nav>
 </div>
-<div class="modal fade mySkinDialog fb-modal" data-bs-backdrop="static" id="publish-Modal" role="dialog">
+<div class="modal fade mySkinDialog fb-modal" data-bs-backdrop="static" data-backdrop="static" id="publish-Modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header ct-footer-padding">
                 <h4 class="fb-fs-16">{{publisModalHeading}}</h4>
-                <button type="button" class="btn-close fs-12 " data-bs-dismiss="modal" aria-label="Close"
-                    (click)="canFormBePublished()"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                    (click)="closeBtn('#publish-Modal')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body ct-modal-padding">
                 <span class="fs-14">{{publisModalMsg}} </span>
             </div>
             <div class="modal-footer ct-footer-padding">
                 <button *ngIf="isFormPublishable" id="cancel-publish-Modal" aria-label="click here to cancel"
-                    title="Cancel" class="btn btn-outline-secondary fs-14" id="claim-sumbit-no-btn"
-                    data-bs-dismiss="modal" type="button">Cancel
+                    title="Cancel" class="btn btn-outline-secondary fb-btn-height fs-14" id="claim-sumbit-no-btn"
+                    data-dismiss="modal" type="button">Cancel
                 </button>
-                <button *ngIf="isFormPublishable" id="confirm-publish-btn" data-bs-dismiss="modal"
+                <button *ngIf="isFormPublishable" id="confirm-publish-btn" data-dismiss="modal"
                     class="btn btn-primary fs-14 ms-2" aria-label="Click here to Publish" title="Publish" type="button"
-                    (click)="publishForm()">Publish</button>
+                    (click)="publishForm();closeBtn('#publish-Modal')">Publish</button>
                 <button *ngIf="!isFormPublishable" id="close-publish-Modal" aria-label="click here to close"
-                    title="Close" data-bs-dismiss="modal" class="btn btn-primary fs-14 ms-2"
-                    type="button">Close</button>
+                    title="Close" data-dismiss="modal" (click)="closeBtn('#publish-Modal')" class="btn btn-primary fs-14 ms-2" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Unsaved changes warning modal -->
+
+<div class="modal fade mySkinDialog fb-modal" data-bs-backdrop="static" data-backdrop="static" id="unSavedChange-warning-Modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ct-footer-padding">
+                <h4 class="fb-fs-16">Unsaved Components</h4>
+                <button type="button" class="close" aria-label="Close" (click)="closeBtn('#unSavedChange-warning-Modal'); isBackButtonClicked = 'N' ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ct-modal-padding">
+                <span class="fs-14">You have unsaved changes. Do you want to leave the page without configuring
+                    components?</span>
+            </div>
+            <div class="modal-footer ct-footer-padding">
+                <button id="cancel-page-switch-Modal" aria-label="click here to cancel"
+                    (click)= "isBackButtonClicked = 'N';closeBtn('#unSavedChange-warning-Modal')"  title="Cancel"
+                    class="btn btn-outline-secondary fb-btn-height fs-14" id="claim-sumbit-no-btn"
+                    type="button">
+                    Cancel
+                </button>
+                <button id="confirm-page-switch-btn" class="btn btn-primary fs-14 ms-2"
+                    aria-label="Click here to switch tab" title="Yes" type="button"
+                    (click)="removeUnsavedComponentsOnTabSwitch();closeBtn('#unSavedChange-warning-Modal')">Yes</button>
             </div>
         </div>
     </div>
 </div>
 <router-outlet></router-outlet>
+<div class="footerPush"></div>

@@ -22,7 +22,9 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
     @Input() coiStatusList = [];
     @Input() coiData: any;
     @Input() isEditMode = false;
+    @Input() searchText = '';
     @Output() conflictStatusChanged = new EventEmitter();
+    @Output() hasEntitesCount = new EventEmitter();
 
     deployMap = environment.deployUrl;
     disclosureSfi: DisclosureSFIs = new DisclosureSFIs();
@@ -35,6 +37,7 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
     selectedSfi = {};
     selectedSfiIndex = -1;
     $subscriptions: Subscription[] = [];
+    sfis = [];
 
     constructor(public relationshipService: RelationshipService, private _commonService: CommonService, public coiService: CoiService) {
     }
@@ -44,7 +47,7 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.disclosureId.previousValue !== changes.disclosureId.currentValue) {
+        if (changes.disclosureId && changes.disclosureId.previousValue !== changes.disclosureId.currentValue) {
             this.getSFIDetails();
         }
     }
@@ -54,9 +57,16 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
             this.$subscriptions.push(this.relationshipService.getSFIOfDisclosure(this.disclosureId)
                 .subscribe((res: DisclosureSFIs) => {
                     this.disclosureSfi = res;
+                    this.canShowEntitySearch();
                     this.isShowCollapsedConflictRelationship = this.disclosureSfi.personEntities.length === 1;
                     this.getProjectsForEntity();
                 }));
+        }
+    }
+
+    canShowEntitySearch() {
+        if(this.disclosureSfi.personEntities.length < 2) {
+            this.hasEntitesCount.emit(false);
         }
     }
 
@@ -74,15 +84,17 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
     }
 
     getEntityRelationTypePills(validPersonEntityRelType: string) {
-        if (this.relationshipTypeCache[validPersonEntityRelType]) {
+        if (validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
+            });
             return this.relationshipTypeCache[validPersonEntityRelType];
         }
-        const entityRelTypes = validPersonEntityRelType.split(':;:');
-        this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
-            const relationshipType = entity.split(':');
-            return {relationshipType: relationshipType[0] || '', description: relationshipType[1] || ''};
-        });
-        return this.relationshipTypeCache[validPersonEntityRelType];
     }
 
     getDisclosureCount(typeCode, disclosureStatus) {
@@ -104,6 +116,7 @@ export class DefineSfiProjectComponent implements OnChanges, OnDestroy {
                 .subscribe((res: DisclosureSFIs) => {
                     setTimeout(() => {
                         this.disclosureSfi = res;
+                        this.canShowEntitySearch();
                         this.coiService.isRelationshipSaving = true;
                         this.conflictStatusChanged.next();
                     }, 500);

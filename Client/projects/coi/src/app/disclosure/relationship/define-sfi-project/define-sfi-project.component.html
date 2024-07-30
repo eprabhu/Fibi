@@ -1,145 +1,137 @@
-<ng-container *ngFor="let sfi of disclosureSfi.personEntities; let i = index">
-    <div class="card mt-2 shadow-medium">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12 col-xl-8 mb-md-2">
-                    <div class="card-header bg-white border-0">
-                        <div class="row flex-grow-1">
-                            <div class="col d-flex px-0">
-                                <div class="fw-bold d-flex align-items-center">
-                                    <span [attr.aria-label]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName?.length >
-                                            75 && !readMore[sfi?.personEntityId] ? (sfi?.personEntityRelationshipDto?.entityName | slice:0:75) + '...' :
-                                                sfi?.personEntityRelationshipDto?.entityName}}
-                                    </span>
-                                    <span *ngIf="sfi?.personEntityRelationshipDto?.entityName > 75" (keydown.enter)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])"
-                                        (click)="readMoreOption(sfi?.personEntityId, readMore[sfi?.personEntityId])" tabindex="0" role="link"
-                                        [attr.aria-label]="readMore[sfi?.personEntityId] ?'Click here to Read Less' : 'Click here to Read More'"
-                                        [title]="readMore[sfi?.personEntityId] ?'Click here to Read less' : 'Click here to Read more'" id="btn-read-action-{{sfi?.personEntityId}}"
-                                        class="link-primary fs-13">
-                                        {{readMore[sfi?.personEntityId] ? "Read Less" : "Read More"}}
-                                    </span>
-                                    <span *ngIf="isShowWarning(sfi)" class="ms-1 fs-12 sfi-info-text px-2 rounded-5 rounded-pill" title="Modified">
-                                    Modified
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-end align-items-center col-auto ms-2 px-0">
-                                <span class="badge f-14 ms-auto px-3 py-2 rounded-5"
-                                    [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
-                                    || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
-                                    sfi?.personEntityRelationshipDto?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
-                                    {{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
-                                    || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
-                                    sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body py-0">
-                        <div class="row">
-                            <div class="col-md-6 col-xl-3 mb-2 ps-1">
-                                <label aria-label="Relationship" class="d-block fw-500 fs-14 coi-text-dark" for=""
-                                [attr.aria-label]="'Entity Type is' + sfi?.personEntityRelationshipDto?.entityType">Entity Type</label>
-                                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.personEntityRelationshipDto?.entityType">
-                                    <span class="coi-text-light fs-14">{{sfi?.personEntityRelationshipDto?.entityType}}</span>
-                                </app-no-data-label>
-                            </div>
-                            <div class="col-md-6 col-xl-3 mb-2">
-                                <label class="d-block fw-500 fs-14 coi-text-dark" for="" [attr.aria-label]="'Start Date Of Involvement is ' + sfi?.involvementStartDate | dateFormatter">
-                                    Start Date Of Involvement</label>
-                                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.involvementStartDate">
-                                    <span class="coi-text-light fs-14">{{sfi?.involvementStartDate | dateFormatter}}</span>
-                                </app-no-data-label>
-                            </div>
-                            <div class="col-md-6 col-xl-3 mb-2 ps-md-1 ps-xl-2">
-                                <label class="d-block fw-500 fs-14 coi-text-dark" for="" [attr.aria-label]="'End Date Of Involvement is ' + sfi?.involvementEndDate
-                                                        | dateFormatter">End Date Of Involvement</label>
-                                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.involvementEndDate">
-                                    <span class="coi-text-light fs-14">{{sfi?.involvementEndDate | dateFormatter}}</span>
-                                </app-no-data-label>
-                            </div>
-                            <div class="col-md-6 col-xl-3 mb-2">
-                                <label class="d-block fw-500 fs-14 coi-text-dark" for="" [attr.aria-label]="'Country is ' + sfi?.personEntityRelationshipDto?.countryName">Country</label>
-                                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.personEntityRelationshipDto?.countryName">
-                                    <span class="coi-text-light fs-14">{{sfi?.personEntityRelationshipDto?.countryName}}</span>
-                                </app-no-data-label>
-                            </div>
-                            <div class="col-lg-12 ps-1">
-                                <label class="fw-500 fs-14 coi-text-dark me-2" for="">Relationship</label>
-                                <span>
-                                    <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.validPersonEntityRelType">
-                                        <span class="pill-container">
-                                            <ng-container *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
-                                                <span class="relationship-pill border px-2 py-1 rounded-4 me-2 fs-14 d-inline-block coi-text-light"
-                                                [attr.aria-label]="'Relationship in ' + relation?.relationshipType +' are ' + relation?.description">
-                                                    <span class="d-flex coi-purple-text">
-                                                        <mat-icon aria-hidden="true"
-                                                        class="flex-shrink-0 me-1">{{getIcon(relation.relationshipType)}}</mat-icon>
-                                                    <span class="fw-bold me-1">{{relation?.relationshipType}}:</span>
-                                                    <span>{{relation?.description}}</span>
-                                                    </span>
-                                                </span>
-                                            </ng-container>
-                                        </span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Project/SFI Relationship -->
-                <div class="col-md-12 col-xl-4">
-                    <div class="d-flex align-items-center border h-100 mt-xl-0 p-3 position-relative rounded-1 table-bg-color">
-                        <span class="status-pill fs-13">Project/SFI Relationship</span>
-                        <div class="row">
-                            <div class="col-6 fs-14">
-                                <div class="gap-1 row">
-                                    <div class="d-flex align-items-center col-12"
-                                        [attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, sfi.disclosureStatusCount)">
-                                        <label class="count-label" for="">No Conflict : </label>
-                                        <span class="fs-12"
-                                            [ngClass]="{'badge rounded-pill text-no-conflict-badge':sfi.sfiCompleted != null}">
-                                            {{sfi.sfiCompleted != null? getDisclosureCount(1,
-                                            sfi.disclosureStatusCount) : '--'}}</span>
+<ng-container *ngIf="(disclosureSfi.personEntities| SearchFilter : searchText: ['coiEntity.entityName']) as sfis; let i = index">
+    <div *ngIf="sfis.length">
+        <ng-container *ngFor="let sfi of sfis; let i = index">
+            <div class="card mt-2 shadow-medium">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-8 mb-md-2">
+                            <div class="card-header bg-white border-0">
+                                <div class="row flex-grow-1">
+                                    <div class="col d-flex px-0">
+                                        <div class="fw-bold d-flex align-items-center">
+                                            <span class="text-slice" [title]="sfi?.personEntityRelationshipDto?.entityName">{{sfi?.personEntityRelationshipDto?.entityName}}</span>
+                                            <span *ngIf="isShowWarning(sfi)" class="ms-1 fs-12 sfi-info-text px-2 rounded-5 rounded-pill">Modified</span>
+                                        </div>
                                     </div>
-                                    <div class="d-flex align-items-center col-12"
-                                        [attr.aria-label]="'Potential Conflict count: ' + getDisclosureCount(2, sfi.disclosureStatusCount)">
-                                        <label class="count-label" for="">Potential Conflict :</label>
-                                        <span class="fs-12"
-                                            [ngClass]="{'badge rounded-pill text-potential-conflict-badge':sfi.sfiCompleted != null}">
-                                            {{sfi.sfiCompleted != null ?
-                                            getDisclosureCount(2,sfi.disclosureStatusCount):' --'}}</span>
-                                    </div>
-                                    <div class="d-flex align-items-center col-12"
-                                        [attr.aria-label]="'Conflict Identified count: ' + getDisclosureCount(3, sfi.disclosureStatusCount)">
-                                        <label class="count-label" for="">Conflict Identified :</label>
-                                        <span class="fs-12"
-                                            [ngClass]="{'badge rounded-pill text-conflict-badge':sfi.sfiCompleted != null}">
-                                            {{ sfi.sfiCompleted !=
-                                            null?getDisclosureCount(3,sfi.disclosureStatusCount): '--'}}</span>
+                                    <div class="d-flex justify-content-end align-items-center col-auto ms-2 px-0">
+                                        <span class="badge f-14 ms-auto px-3 py-2 rounded-5"
+                                            [ngClass]="sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
+                                            || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                                            sfi?.personEntityRelationshipDto?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                            {{sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ACTIVE'
+                                            || sfi?.personEntityRelationshipDto?.personEntityVersionStatus == 'ARCHIVE' ?
+                                            sfi?.personEntityRelationshipDto?.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-center col-6">
+                            <div class="card-body py-0">
                                 <div class="row">
-                                    <div *ngIf="!isShowCollapsedConflictRelationship"
-                                        class="d-flex justify-content-center col-12">
-                                        <button title="Click to Define Project - SFI relationship" id="btn-define-relationship"
-                                        aria-label="Click to Define Project - SFI relationship"
-                                            class="align-items-center btn btn-primary d-flex fs-14 text-nowrap"
-                                            (click)="openDefineRelationship(sfi, i)" type="submit">
-                                            <img src="{{deployMap}}assets/images/define-relation-hover.svg"
-                                                class="mr-2 hover_img"
-                                                alt="Define Relationship">Define Relationship
-                                        </button>
+                                    <div class="col-md-6 col-xl-3 mb-2 ps-1">
+                                        <label aria-label="Relationship" class="d-block fw-500 fs-14 coi-text-dark" for=""
+                                        [attr.aria-label]="'Entity Type is' + sfi?.personEntityRelationshipDto?.entityType">Entity Type</label>
+                                        <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.personEntityRelationshipDto?.entityType">
+                                            <span class="coi-text-light fs-14">{{sfi?.personEntityRelationshipDto?.entityType}}</span>
+                                        </app-no-data-label>
                                     </div>
-                                    <div class="d-flex justify-content-center col-12"
-                                        [class.mt-1]="!isShowCollapsedConflictRelationship">
-                                        <div *ngIf="sfi.sfiCompleted == true" class="d-flex fs-14 text-success">
-                                            <mat-icon class="fs-18 me-1">done</mat-icon><span class="">Completed</span>
+                                    <div class="col-md-6 col-xl-3 mb-2">
+                                        <label class="d-block fw-500 fs-14 coi-text-dark" for="" [attr.aria-label]="'Start Date Of Involvement is ' + sfi?.involvementStartDate | dateFormatter">
+                                            Start Date Of Involvement</label>
+                                        <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.involvementStartDate">
+                                            <span class="coi-text-light fs-14">{{sfi?.involvementStartDate | dateFormatter}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-md-6 col-xl-3 mb-2 ps-md-1 ps-xl-2">
+                                        <label class="d-block fw-500 fs-14 coi-text-dark" for="" [attr.aria-label]="'End Date Of Involvement is ' + sfi?.involvementEndDate
+                                                                | dateFormatter">End Date Of Involvement</label>
+                                        <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.involvementEndDate">
+                                            <span class="coi-text-light fs-14">{{sfi?.involvementEndDate | dateFormatter}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-md-6 col-xl-3 mb-2">
+                                        <label class="d-block fw-500 fs-14 coi-text-dark" for="" [attr.aria-label]="'Country is ' + sfi?.personEntityRelationshipDto?.countryName">Country</label>
+                                        <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="sfi?.personEntityRelationshipDto?.countryName">
+                                            <span class="coi-text-light fs-14">{{sfi?.personEntityRelationshipDto?.countryName}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-lg-12 ps-1">
+                                        <label class="fw-500 fs-14 coi-text-dark me-2" for="">Relationship</label>
+                                        <span>
+                                            <app-no-data-label [valueToShow]="sfi?.personEntityRelationshipDto?.validPersonEntityRelType">
+                                                <span class="pill-container">
+                                                    <ng-container *ngFor="let relation of getEntityRelationTypePills(sfi?.personEntityRelationshipDto?.validPersonEntityRelType)">
+                                                        <span class="relationship-pill border px-2 py-1 rounded-4 me-2 fs-14 d-inline-block coi-text-light"
+                                                        [attr.aria-label]="'Relationship in ' + relation?.relationshipType +' are ' + relation?.description">
+                                                            <span class="d-flex coi-purple-text">
+                                                                <mat-icon aria-hidden="true"
+                                                                class="flex-shrink-0 me-1">{{getIcon(relation?.relationshipType)}}</mat-icon>
+                                                            <span class="fw-bold me-1">{{relation?.relationshipType}}:</span>
+                                                            <span>{{relation?.description}}</span>
+                                                            </span>
+                                                        </span>
+                                                    </ng-container>
+                                                </span>
+                                            </app-no-data-label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Project/SFI Relationship -->
+                        <div class="col-md-12 col-xl-4">
+                            <div class="d-flex align-items-center border h-100 mt-xl-0 p-3 position-relative rounded-1 table-bg-color">
+                                <span class="status-pill fs-13">Project/SFI Relationship</span>
+                                <div class="row">
+                                    <div class="col-6 fs-14">
+                                        <div class="gap-1 row">
+                                            <div class="d-flex align-items-center col-12"
+                                                [attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, sfi.disclosureStatusCount)">
+                                                <label class="count-label" for="">No Conflict : </label>
+                                                <span class="fs-12"
+                                                    [ngClass]="{'badge rounded-pill text-no-conflict-badge':sfi.sfiCompleted != null}">
+                                                    {{sfi.sfiCompleted != null? getDisclosureCount(1,
+                                                    sfi.disclosureStatusCount) : '--'}}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center col-12"
+                                                [attr.aria-label]="'Potential Conflict count: ' + getDisclosureCount(2, sfi.disclosureStatusCount)">
+                                                <label class="count-label" for="">Potential Conflict :</label>
+                                                <span class="fs-12"
+                                                    [ngClass]="{'badge rounded-pill text-potential-conflict-badge':sfi.sfiCompleted != null}">
+                                                    {{sfi.sfiCompleted != null ?
+                                                    getDisclosureCount(2,sfi.disclosureStatusCount):' --'}}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center col-12"
+                                                [attr.aria-label]="'Conflict Identified count: ' + getDisclosureCount(3, sfi.disclosureStatusCount)">
+                                                <label class="count-label" for="">Conflict Identified :</label>
+                                                <span class="fs-12"
+                                                    [ngClass]="{'badge rounded-pill text-conflict-badge':sfi.sfiCompleted != null}">
+                                                    {{ sfi.sfiCompleted !=
+                                                    null?getDisclosureCount(3,sfi.disclosureStatusCount): '--'}}</span>
+                                            </div>
                                         </div>
-                                        <div *ngIf="sfi.sfiCompleted == false" class="d-flex fs-14 text-danger">
-                                            <mat-icon class="fs-18 me-1">not_interested</mat-icon><span
-                                                class="">Incomplete</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center col-6">
+                                        <div class="row">
+                                            <div *ngIf="!isShowCollapsedConflictRelationship"
+                                                class="d-flex justify-content-center col-12">
+                                                <button title="Click to Define Project - SFI relationship" id="btn-define-relationship"
+                                                aria-label="Click to Define Project - SFI relationship"
+                                                    class="align-items-center btn btn-primary d-flex fs-14 text-nowrap"
+                                                    (click)="openDefineRelationship(sfi, i)" type="submit">
+                                                    <img src="{{deployMap}}assets/images/define-relation-hover.svg"
+                                                        class="mr-2 hover_img"
+                                                        alt="Define Relationship">Define Relationship
+                                                </button>
+                                            </div>
+                                            <div class="d-flex justify-content-center col-12"
+                                                [class.mt-1]="!isShowCollapsedConflictRelationship">
+                                                <div *ngIf="sfi.sfiCompleted == true" class="d-flex fs-14 text-success">
+                                                    <mat-icon class="fs-18 me-1">done</mat-icon><span class="">Completed</span>
+                                                </div>
+                                                <div *ngIf="sfi.sfiCompleted == false" class="d-flex fs-14 text-danger">
+                                                    <mat-icon class="fs-18 me-1">not_interested</mat-icon><span
+                                                        class="">Incomplete</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -147,17 +139,20 @@
                         </div>
                     </div>
                 </div>
+                <section class="mx-3 mb-3" *ngIf="isShowCollapsedConflictRelationship">
+                    <app-sfi-project-relation-shared
+                        [(isSaving)]="coiService.isRelationshipSaving"
+                        [projectSFIDetails]="relationshipService.projectSFIDetails[sfi.personEntityId]"
+                        [coiStatusList]="coiStatusList"
+                        [projectIdTitleMap]="projectIdTitleMap"
+                        (relationshipChanged)="updateRelationshipStatus()"
+                    ></app-sfi-project-relation-shared>
+                </section>
             </div>
-        </div>
-        <section class="mx-3 mb-3" *ngIf="isShowCollapsedConflictRelationship">
-            <app-sfi-project-relation-shared
-                [(isSaving)]="coiService.isRelationshipSaving"
-                [projectSFIDetails]="relationshipService.projectSFIDetails[sfi.personEntityId]"
-                [coiStatusList]="coiStatusList"
-                [projectIdTitleMap]="projectIdTitleMap"
-                (relationshipChanged)="updateRelationshipStatus()"
-            ></app-sfi-project-relation-shared>
-        </section>
+        </ng-container>
+    </div>
+    <div *ngIf="!sfis.length">
+        <app-no-information> </app-no-information>
     </div>
 </ng-container>
 

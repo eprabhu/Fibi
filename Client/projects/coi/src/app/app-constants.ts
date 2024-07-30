@@ -38,6 +38,22 @@ export const OPA_DASHBOARD_RIGHTS = new Set(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_
 export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'SFI Details';
 
 export const DATE_PLACEHOLDER = 'MM/dd/YYYY';
+export const DEFAULT_DATE_FORMAT = 'MM/dd/yyyy';
+export const LONG_DATE_FORMAT = 'MM/dd/yyyy h:mm:ss a';
+export const TIME_FORMAT = 'h:mm:ss a';
+
+//  Angular Material date picker
+export const DATE_PICKER_FORMAT_MATERIAL = {
+    parse: {
+      dateInput: 'MM/DD/YYYY HH:mm:ss',
+    },
+    display: {
+      dateInput: 'MM/DD/YYYY',
+      monthYearLabel: 'MMM YYYY',
+      dateA11yLabel: 'LL',
+      monthYearA11yLabel: 'MMMM YYYY',
+    },
+  };
 
 export const EDITOR_CONFIGURATION = {
     link: {
@@ -56,6 +72,8 @@ export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
 export const TRAVEL_MODULE_CODE = 24;
 export const CONSULTING_MODULE_CODE = 27;
+// Proposal Certification Questionaire Sub Module Code
+export const EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = 802;
 
 export const COI_REVIEW_STATUS_TYPE = {
     SUBMITTED: '2'
@@ -88,6 +106,8 @@ export const SSO_TIMEOUT_ERROR_MESSAGE = 'Your session has been expired.';
 export const SSO_TIMEOUT_ERROR_CODE = 0;
 export const SSO_LOGOUT_URL = '';
 
-export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId=';
-export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId=';
-export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId=';
+export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={awardId}';
+export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={developmentProposalId}';
+export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={instituteProposalId}';
+
+export const URL_FOR_DISCLOSURE_PROJECT = '/disclosure/projects/{disclosureId}';

@@ -449,19 +449,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         return REQ_BODY;
     }
 
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return '';
-        }
-    }
-
     getDisclosureTitleName(fcoiTypeCode: any): string {
 		switch (fcoiTypeCode) {
 			case '1':
@@ -606,22 +593,11 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     openProjectDetails() {
         if (this.selectedProjectDetails) {
-            openModal('projectDetailsViewModal');
+           this.commonService.openProjectDetailsModal(this.selectedProjectDetails, null)
         }
-    }
-
-    openProjectMoreDetails(moduleId) {
-        let redirectUrl = '';
-        if (this.selectedProjectDetails.moduleCode == 3) {
-            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
-        } else {
-            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
-        }
-        window.open(redirectUrl);
     }
 
     showTaskNavBar() {
-        // document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         const slider = document.querySelector('.slider-base');
         slider.classList.add('slider-opened');
     }

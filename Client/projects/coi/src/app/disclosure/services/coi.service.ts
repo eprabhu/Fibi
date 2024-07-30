@@ -1,13 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { ApplicableQuestionnaire, RO, getApplicableQuestionnaireData } from '../coi-interface';
-import {
-    AWARD_EXTERNAL_RESOURCE_URL,
-    IP_EXTERNAL_RESOURCE_URL,
-    PROPOSAL_EXTERNAL_RESOURCE_URL
-} from "../../app-constants";
 
 @Injectable()
 export class CoiService {
@@ -41,26 +36,12 @@ export class CoiService {
     focusSFIRelationId: any;
     isRelationshipSaving = false;
     $isExpandSection = new Subject<{section: string,isExpand: boolean}>();
-
+    currentActiveQuestionnaire: any;
+    
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService,
     ) { }
-
-    openProjectMoreDetails(projectId, projectTypeCode) {
-        const resourceUrls = {
-            1: AWARD_EXTERNAL_RESOURCE_URL,
-            2: IP_EXTERNAL_RESOURCE_URL,
-            3: PROPOSAL_EXTERNAL_RESOURCE_URL
-        };
-        const externalApplicationUrl = this._commonService.fibiApplicationUrl;
-        if (resourceUrls[projectTypeCode]) {
-            const redirectUrl = `${externalApplicationUrl}${resourceUrls[projectTypeCode]}${projectId}`;
-            window.open(redirectUrl);
-        } else {
-            console.error('Unknown projectTypeCode:', projectTypeCode);
-        }
-    }
 
     loadDisclosure(disclosureId: string) {
         return this._http.get(`${this._commonService.baseUrl}/loadDisclosure/${disclosureId}`);

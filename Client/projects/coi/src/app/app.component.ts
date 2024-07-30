@@ -21,10 +21,14 @@ export class AppComponent {
 		const CURRENT_USER = getFromLocalStorage();
 		const REFRESH_MODAL = document.getElementById('refreshModal');
 		if (CURRENT_USER) {
-			if (this._commonService.getCurrentUserDetail('personId') != CURRENT_USER.personId) {
+			if (this._commonService.getCurrentUserDetail('personID') != CURRENT_USER.personID) {
 				this.openRefreshModal(REFRESH_MODAL);
 			} else {
-				this.closeModalOrRelogin(REFRESH_MODAL);
+                if(window.location.href.includes('/logout')) {
+                    this._commonService.redirectionBasedOnRights();
+                } else {
+                    this.closeModalOrRelogin(REFRESH_MODAL);
+                }
 			}
 		} else {
 			this.openRefreshModal(REFRESH_MODAL);
@@ -77,5 +81,4 @@ export class AppComponent {
 			document.body.removeAttribute("style");
 		}, 1500);
 	}
-
 }

@@ -31,7 +31,7 @@ export class FormService {
   }
 
   saveFormPersonEntityDetails(params) {
-    return this._http.patch(this._commonService.consultingUrl + '/savePersonEntityDetails', params);
+    return this._http.patch(this._commonService.baseUrl + '/consultingDisclosure/savePersonEntityDetails', params);
   }
 
 }

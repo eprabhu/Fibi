@@ -4,23 +4,23 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {Toast} from 'bootstrap';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
+import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
 
-type Method = 'SOME' | 'EVERY';
+export type Method = 'SOME' | 'EVERY';
+export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | '';
+export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 @Injectable()
 export class CommonService {
 
     isShowLoader = new BehaviorSubject<boolean>(true);
-    isManualLoaderOn = false;
-    isShowOverlay = false;
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
     opaUrl = '';
-    consultingUrl = '';
     formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
@@ -32,7 +32,6 @@ export class CommonService {
     enableSSO = false;
     rightsArray: any = [];
     isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
-    isValidUser = false;
     extension: any = [];
     currentUserDetails: any = {};
     isWafEnabled: boolean;
@@ -71,8 +70,11 @@ export class CommonService {
     $updateLatestAttachment = new Subject();
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
+    projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
+    modalPersonId: string = '';
+    $globalEventNotifier = new Subject<GlobalEventNotifier>();
 
-    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService,private _router: Router) {
+    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
 
     /**
@@ -82,22 +84,12 @@ export class CommonService {
         return new Promise(async (resolve, reject) => {
             const CONFIG_DATA: any = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
-            if (this.enableSSO) {
-                const USER_DATA = await this.loginWithCurrentUser();
-                this.isValidUser = USER_DATA.body['login'];
-                this.updateLocalStorageWithUserDetails(USER_DATA);
-            }
-            if (this.currentUserDetails && this.currentUserDetails.Authorization) {
-                try {
-                    // const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
-                    // this.assignSystemParameters(SYSTEM_PARAMETERS);
-                    await this.fetchPermissions();
-                    resolve(true);
-                } catch (e) {
-                    console.error(e);
-                    resolve(true);
-                }
-            } else {
+            try {
+                const loginUserDetails: any = await this.authLogin();
+                this.onSuccessFullLogin(loginUserDetails);
+                resolve(true);
+            } catch (e) {
+                this.onFailedLogin(e);
                 resolve(true);
             }
         });
@@ -121,7 +113,6 @@ export class CommonService {
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
         this.formUrl = configurationData.formUrl;
-        this.consultingUrl = configurationData.consultingUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -152,12 +143,19 @@ export class CommonService {
         return this._http.post(this.formUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
     }
 
+    authLogin() {
+        return this._http.post(this.authUrl + '/login', {}, {observe: 'response'}).toPromise();
+    }
+
+    signOut() {
+        return this._http.get(this.authUrl + '/logout');
+    }
+
     /**
      * @param  {} details update the local storage with application constant values
      *  will be moved to application context once SSO is stable
      */
     updateLocalStorageWithUserDetails(details) {
-        details.body['Authorization'] = details.headers.get('authorization');
         this.currentUserDetails = details.body;
         setIntoLocalStorage(details.body);
     }
@@ -221,10 +219,9 @@ export class CommonService {
         const {fibiRights, coiRights} = await this.getAllSystemRights();
         this.assignFibiBasedRights(fibiRights);
         this.assignCOIBasedRights(coiRights);
-        return this.rightsArray;
     }
 
-    private assignCOIBasedRights(coiRights) {
+    assignCOIBasedRights(coiRights) {
         if (coiRights) {
             if ('IS_REVIEW_MEMBER' in coiRights) {
                 this.isCoiReviewer = coiRights.IS_REVIEW_MEMBER;
@@ -238,7 +235,7 @@ export class CommonService {
         }
     }
 
-    private assignFibiBasedRights(fibiRights) {
+    assignFibiBasedRights(fibiRights) {
         if (fibiRights.length) {
             this.rightsArray = fibiRights;
         }
@@ -437,9 +434,6 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
             return 'green-badge-for-slider';
     }
 }
-    removeUserDetailsFromLocalStorage() {
-        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
-    }
 
     getAvailableRight(rights: string | string[], method: Method = 'SOME'): boolean {
       const rightsArray = Array.isArray(rights) ? rights : [rights];
@@ -454,13 +448,101 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         return getPersonLeadUnitDetails(unitData);
     }
 
+    onSuccessFullLogin(userData) {
+        this.updateLocalStorageWithUserDetails(userData);
+        this.refreshAfterLogin();
+    }
+
+    redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
+        const RESOURCE_URLS = {
+            1: AWARD_EXTERNAL_RESOURCE_URL.replace('{awardId}', projectId),
+            2: IP_EXTERNAL_RESOURCE_URL.replace('{instituteProposalId}', projectId),
+            3: PROPOSAL_EXTERNAL_RESOURCE_URL.replace('{developmentProposalId}', projectId),
+        };
+        const EXTERNAL_APPLICATION_URL = this.fibiApplicationUrl;
+        if (RESOURCE_URLS[projectTypeCode]) {
+            window.open(`${EXTERNAL_APPLICATION_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
+        }
+    }
+
+    setLoaderRestriction(): void {
+        this.isPreventDefaultLoader = true;
+    }
+
+    removeLoaderRestriction(): void {
+        this.isPreventDefaultLoader = false;
+    }
+
+    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null): void {
+        this.projectDetailsModalInfo.projectDetails = projectDetails;
+        this.projectDetailsModalInfo.coiDisclosureId = coiDisclosureId;
+    }
+
+    closeProjectDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-project-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.projectDetailsModalInfo = new DisclosureProjectModalData();
+        }, 200);
+    }
+
+    openPersonDetailsModal(personId: string): void {
+        this.modalPersonId = personId;
+    }
+
+    closePersonDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-person-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.modalPersonId ='';
+        }, 200);
+    }
+
+    getRiskColor(typeCode: string): string {
+        switch (typeCode) {
+            case '1':
+                return 'high-risk';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return '';
+        }
+    }
+
+    //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
+    //when we are in login page itself , or logout page we have to refresh and navigate to page based on rights.
+    //during 403, 401 also need right based navigation.
+    refreshAfterLogin() {
+        const currentUrl = window.location.href;
+        let PATH_STR = ['login', 'logout', '401', '403'];
+        if (PATH_STR.some((str) => currentUrl.includes(str))) {
+            this.redirectionBasedOnRights();
+        }
+    }
+
+    onFailedLogin(err): void {
+        if (err.status == 401) {
+            this.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
+        } else if (err.status === 403) {
+            this._router.navigate(['/error-handler/403']);
+        }
+    }
+
     redirectionBasedOnRights() {
         this.fetchPermissions(true).then((res) => {
-			const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-				|| this.isCoiReviewer;
-			const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
-			this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
-		});
+            const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+                || this.isCoiReviewer;
+            const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
+            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
+        });
+    }
+
+    removeUserDetailsFromLocalStorage() {
+        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
 }

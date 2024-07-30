@@ -69,72 +69,128 @@
 
 
   <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="projectList.length>1 && !switchRelationView">
-    <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
+    <mat-icon class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
     <input type="text" placeholder="Search by Project Id, Project Name, PI, Sponsor, Prime Sponsor  "
     class="searchField ms-2" [(ngModel)]="searchText">
+    <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText" (click)="searchText = ''" (keyup.enter)="searchText = ''">
+        <mat-icon  class="closeButton" id="coi-relationship-seaarch-close-btn">close</mat-icon>
+    </span>
+  </div>
 
+  <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="canShowEntitySearch && switchRelationView">
+    <mat-icon class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
+    <input type="text" placeholder="Search by Entity"
+    class="searchField ms-2" [(ngModel)]="searchText" (ngModelChange)="getSearchedEntities()">
+    <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText"(click)="clearSearchText()" (keyup.enter)="clearSearchText()">
+        <mat-icon class="closeButton" id="coi-relationship-seaarch-close-btn">close</mat-icon>
+    </span>
   </div>
 
     <ng-container *ngIf="!switchRelationView">
         <ng-container
             *ngIf="(projectList| SearchFilter : searchText:
-  ['title', 'moduleItemId', 'moduleItemKey', 'principalInvestigator', 'sponsor', 'primeSponsor']) as projects; let i = index">
+                ['title', 'moduleItemId', 'moduleItemKey', 'principalInvestigator', 'sponsor', 'primeSponsor']) as projects; let i = index">
             <ng-container *ngIf="isShowNoDataCard">
                 <div *ngIf="projects.length">
                     <ng-container *ngFor="let project of projects;let i = index">
                         <div class="card mt-2 shadow-medium py-1" [id]="project.projectId">
                             <div class="card-body mb-2">
                                 <div class="row">
-                                    <div class="col-12 mb-3">
-
+                                    <div class="col-12 position-absolute ps-0 start-0 top-0">
                                         <div class="d-flex">
-                                            <span class="active-ribbon shadow-sm align-items-center d-flex text-nowrap" [style.background-color]="project?.projectBadgeColour"
+                                            <span class="coi-card-notch-ribbon shadow-sm align-items-center d-flex text-nowrap me-2" [style.background-color]="project?.projectBadgeColour"
                                                 aria-label="proposal">{{project?.projectType}}</span>
-                                            <span>
-                                                <span title="Click to view project details" class="fs-6 link-primary fw-600"
-                                                    aria-label="'Click to view project details'" id="link-{{project?.projectId}}"
-                                                    (click)="selectedProjectForView=project;"  data-bs-toggle="modal" data-bs-target="#moduleViewModal"
-                                                    [attr.aria-label]="project?.projectNumber + '_' + project?.title ">#{{project?.projectNumber}}
-                                                    -
-                                                    {{project?.title?.length >
-                                                    75 && !collapseViewMore[project?.projectId] ? (project?.title | slice:0:75) :
-                                                        project?.title}}
-                                                </span>
-                                                <span (click)="collapseViewMoreOption(project?.projectId, collapseViewMore[project?.projectId])"
-                                                    *ngIf="project?.title?.length > 75" tabindex="0" role="link"  id="link-read-more-less"
-                                                    aria-label="Click here to {{collapseViewMore[project?.projectId] ? ' Read Less' : ' Read More'}}" title="Click here to {{collapseViewMore[project?.projectId] ? ' Read less' : ' Read more'}}"
-                                                    class="fs-14 fw-medium link-primary">
-                                                    {{collapseViewMore[project?.projectId] ? "Read Less" : "...Read More"}}</span>
+                                            <span class="d-inline-flex pt-1">
+                                                <mat-icon *ngIf="project?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
+                                                <mat-icon *ngIf="project?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
+                                                <a tabindex="0" class="fs-6 link-primary fw-600 text-slice" id="link-{{project?.projectId}}"
+                                                    title="Click here to view project details of #{{project?.projectNumber}} - {{project?.title}}"
+                                                    attr.aria-label="Click here to view project details of {{project?.projectNumber}} - {{project?.title}}"
+                                                    (click)="_commonService.openProjectDetailsModal(project)" (keyup.enter)="_commonService.openProjectDetailsModal(project)"
+                                                    (keyup.space)="_commonService.openProjectDetailsModal(project)">
+                                                    #{{project?.projectNumber}}- {{project?.title}}
+                                                </a>
                                             </span>
                                         </div>
-
                                     </div>
-                                    <div class="d-xl-flex px-3">
+                                    <div class="d-xl-flex px-3 mt-4">
                                         <div class="col-md-12 col-xl-8">
                                             <div class="row">
-                                                <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="coi-relationship-pi-{{i}}">Principal Investigator</label>
-                                                    <span class="coi-text-light" id="coi-relationship-pi-{{i}}">{{project?.piName}}</span>
+                                                <!-- Principal Investigator -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Principal investigator is ' + (project?.piName ? project?.piName : 'empty')">
+                                                    <label for="coi-relationship-pi-{{i}}" class="coi-text-dark d-block">Principal Investigator</label>
+                                                    <div id="coi-relationship-pi-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="project?.piName">
+                                                            <span class="coi-text-light" [title]="project?.piName">{{project?.piName}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="coi-relationship-role-{{i}}">Project Role</label>
-                                                    <span class="coi-text-light" id="coi-relationship-role-{{i}}">{{project?.reporterRole}}</span>
+                                                <!-- Reporter's Project Role -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Reporters project role is ' + (project?.reporterRole ? project?.reporterRole : 'empty')">
+                                                    <label for="coi-relationship-role-{{i}}" class="coi-text-dark d-block">Reporter's Project Role</label>
+                                                    <div id="coi-relationship-role-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="project?.reporterRole">
+                                                            <span class="coi-text-light" [title]="project?.reporterRole">{{project?.reporterRole}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="coi-relationship-period-{{i}}">Period</label>
-                                                    <span class="coi-text-light" id="coi-relationship-period-{{i}}">{{project?.projectStartDate | dateFormatter}} - {{project?.projectEndDate |
-                                                        dateFormatter}}</span>
+                                                <!-- Period -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Period is ' + ((project?.projectStartDate || project?.projectEndDate) ?
+                                                    ((project?.projectStartDate | dateFormatter) + ' - ' + (project?.projectEndDate | dateFormatter))  : 'empty')">
+                                                    <label for="coi-relationship-period-{{i}}" class="coi-text-dark d-block">Period</label>
+                                                    <div id="coi-relationship-period-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="project?.projectStartDate || project?.projectEndDate">
+                                                            <span [title]="(project?.projectStartDate | dateFormatter) + ' - ' + (project?.projectEndDate | dateFormatter)"
+                                                                class="coi-text-light">{{project?.projectStartDate | dateFormatter}} - {{project?.projectEndDate | dateFormatter}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="coi-relationship-sponsor-{{i}}">Sponsor</label>
-                                                    <span class="coi-text-light"  id="coi-relationship-sponsor-{{i}}">{{project?.sponsorName}}</span>
+                                                <!-- Project Status -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Project status is ' + (project?.projectStatus ? project?.projectStatus : 'empty')">
+                                                    <label for="coi-relationship-status-{{i}}" class="coi-text-dark d-block">Project Status</label>
+                                                    <div id="coi-relationship-status-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="project?.projectStatus">
+                                                            <span class="coi-text-light" [title]="project?.projectStatus">{{project?.projectStatus}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6 col-lg-4 mb-2">
-                                                    <label class="coi-text-dark d-block" for="coi-relationship-unit-{{i}}">Lead Unit</label>
-                                                    <app-no-data-label [valueToShow]="project?.homeUnitName">
-                                                        <span
-                                                            class="coi-text-light"  id="coi-relationship-unit-{{i}}">{{_commonService.getPersonLeadUnitDetails(project)}}</span>
-                                                    </app-no-data-label>
+                                                <!-- Lead Unit -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Lead unit is ' + (_commonService.getPersonLeadUnitDetails(project) ?
+                                                    _commonService.getPersonLeadUnitDetails(project) : 'empty')">
+                                                    <label for="coi-relationship-unit-{{i}}" class="coi-text-dark d-block">Lead Unit</label>
+                                                    <div id="coi-relationship-unit-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="_commonService.getPersonLeadUnitDetails(project)">
+                                                            <span [title]="_commonService.getPersonLeadUnitDetails(project)"
+                                                                class="coi-text-light">{{_commonService.getPersonLeadUnitDetails(project)}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
+                                                </div>
+                                                <!-- Sponsor -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Sponsor is ' + (project?.sponsorName ? project?.sponsorName : 'empty')">
+                                                    <label for="coi-relationship-sponsor-{{i}}" class="coi-text-dark d-block"
+                                                        aria-label="Sponsor is, ">Sponsor</label>
+                                                    <div id="coi-relationship-sponsor-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="project?.sponsorName">
+                                                            <span class="coi-text-light" [title]="project?.sponsorName">{{project?.sponsorName}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
+                                                </div>
+                                                <!-- Prime Sponsor -->
+                                                <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
+                                                    [attr.aria-label]="'Prime sponsor is ' + (project?.primeSponsorName ? project?.primeSponsorName : 'empty')">
+                                                    <label for="coi-relationship-prime-sponsor-{{i}}" class="coi-text-dark d-block"
+                                                        aria-label="Prime sponsor is, ">Prime Sponsor</label>
+                                                    <div id="coi-relationship-prime-sponsor-{{i}}" class="text-slice">
+                                                        <app-no-data-label [valueToShow]="project?.primeSponsorName">
+                                                            <span class="coi-text-light" [title]="project?.primeSponsorName">{{project?.primeSponsorName}}</span>
+                                                        </app-no-data-label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,86 +282,15 @@
 
     <app-define-sfi-project *ngIf="switchRelationView"
                             [isEditMode]="isEditMode"
+                            [searchText]="searchWord"
                             [coiStatusList]="coiStatusList"
                             [disclosureId]="coiData?.coiDisclosure?.disclosureId"
                             [coiData]="coiData"
                             [disclosureStatusCode]="coiData?.coiDisclosure?.disclosureStatusCode"
                             (conflictStatusChanged)="updateConflictStatus()"
+                            (hasEntitesCount) = "canShowEntitesSearch($event)"
     ></app-define-sfi-project>
 
   <app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode"
       [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()" [relationList]="projectList" [currentRelation]="currentRelation"></app-define-relation>
 
-
-  <button type="button" class="btn btn-primary btn-sm" hidden=true id="module-view-modal-button" data-bs-toggle="modal"
-      data-bs-target="#moduleViewModal"></button>
-  <div class="modal fade" id="moduleViewModal" tabindex="-1" aria-labelledby="moduleViewModal" aria-hidden="true"  data-bs-backdrop="static">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">
-                    Details of
-                    <strong title="{{ selectedProjectForView?.title }}">
-                        #{{selectedProjectForView?.projectNumber}} -
-                        {{ (selectedProjectForView?.title)?.length > 80 ? (selectedProjectForView?.title | slice:0: 80)+'...' :
-                        selectedProjectForView?.title }}
-                    </strong>
-                </h4>
-                  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" aria-label="Click to close the popup" tabindex="0"></button>
-              </div>
-              <div class="modal-body">
-                  <div class="row mx-0 mt-3">
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Principal Investigator</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.piName">
-                              <span class="grey-text m-0">{{selectedProjectForView?.piName}}</span>
-                          </app-no-data-label>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Project Role</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.reporterRole">
-                              <span class="grey-text m-0">{{selectedProjectForView?.reporterRole}}</span>
-                          </app-no-data-label>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Period</label>
-                          <span class="grey-text m-0">
-                              {{selectedProjectForView?.projectStartDate | dateFormatter}} - {{selectedProjectForView?.projectEndDate |
-                              dateFormatter}}</span>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">{{selectedProjectForView?.projectType}} Status</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.projectStatus">
-                              <span class="grey-text m-0">{{selectedProjectForView?.projectStatus}}</span>
-                          </app-no-data-label>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Sponsor</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.sponsorName">
-                              <span class="grey-text m-0">{{selectedProjectForView?.sponsorName}}</span>
-                          </app-no-data-label>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Prime Sponsor</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.primeSponsorName">
-                              <span class="grey-text m-0">{{selectedProjectForView?.primeSponsorName}}</span>
-                          </app-no-data-label>
-                      </div>
-                      <div class="col-lg-4 col-sm-6 col-12 mb-3">
-                          <label class="d-block label-text">Lead Unit</label>
-                          <span class="grey-text m-0">
-                            {{_commonService.getPersonLeadUnitDetails(selectedProjectForView)}}</span>
-                      </div>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <button title="Click to close the popup" type="button" (click)="selectedProjectForView= null" aria-label="Click to close the popup"
-                  id="btn-close"
-                      class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" title="Click to view project details page" aria-label="Click to view project details page" id="btn-more-details"
-                      (click)="coiService.openProjectMoreDetails(selectedProjectForView.projectId, selectedProjectForView.projectTypeCode);selectedProjectForView= null;"
-                      class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
-              </div>
-          </div>
-      </div>
-  </div>

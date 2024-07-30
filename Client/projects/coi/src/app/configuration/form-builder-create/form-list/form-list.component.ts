@@ -34,4 +34,8 @@ export class FormListComponent implements OnInit, OnDestroy {
         );
     }
 
+    isFormPublished(isActive){
+        this.formBuilderService.isFormPublished = isActive;
+    }
+
 }

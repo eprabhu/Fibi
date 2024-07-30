@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
-  selector: 'app-travel-summary',
-  templateUrl: './travel-summary.component.html',
-  styleUrls: ['./travel-summary.component.scss'],
-  animations: [fadeInOutHeight]
+    selector: 'app-travel-summary',
+    templateUrl: './travel-summary.component.html',
+    styleUrls: ['./travel-summary.component.scss'],
+    animations: [fadeInOutHeight]
 })
-export class TravelSummaryComponent {
+export class TravelSummaryComponent implements OnInit {
 
-  constructor() {
-    window.scrollTo(0, 0);
-  }
+    ngOnInit(): void {
+        window.scrollTo(0, 0);
+    }
+
 }

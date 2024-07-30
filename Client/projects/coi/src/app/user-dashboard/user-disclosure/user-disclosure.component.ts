@@ -4,7 +4,8 @@ import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL, CONSULTING_REDIRECT_URL,
-    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL,
+    HTTP_ERROR_STATUS
 } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
@@ -129,7 +130,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      * created then that one will comes first in the list.
      */
     private getDashboardList(): any {
-        const DISCLOSURE_VIEWS = this.result.disclosureViews || [];
+        const DISCLOSURE_VIEWS = this.getDisclosureProjectHeader(this.result.disclosureViews);
         const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
         const OPA_DETAILS = this.result.opaDashboardDto || [];
         const CONSULTING_DISCLOSURE = this.result.consultingDisclDashboardViews || [];
@@ -406,18 +407,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    modalHeader(disclosure: UserDisclosure) {
-        if (!disclosure.opaDisclosureId && (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3')) {
-            if (disclosure.fcoiTypeCode === '2') {
-                return `#${disclosure.proposalId} - ${disclosure.proposalTitle}`;
-            } else if (disclosure.fcoiTypeCode === '3') {
-                return `#${disclosure.awardId} - ${disclosure.awardTitle}`;
-            }
-        } else {
-            return `#${disclosure.opaDisclosureId}`;
-        }
-    }
-
     formatTravellerTypes(travellerTypes: string): string {
         return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
     }
@@ -442,10 +431,27 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private getAllDisclosureHistories(data: any): any {
-        const DISCLOSURE_HISTORY = data.disclosureHistoryDtos || [];
+        const DISCLOSURE_HISTORY = this.getDisclosureHistoryProjectHeader(data.disclosureHistoryDtos)
         const OPA_HISTORY = data.opaDashboardDtos || [];
         const MERGED_LIST = [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
         return this.getSortedListForParam(MERGED_LIST, 'updateTimeStamp');
+    }
+
+    private getDisclosureHistoryProjectHeader(disclosureHistory: any): any[] {
+        return disclosureHistory?.map((ele: any) => {
+            ele.projectHeader = (ele.fcoiTypeCode === '2' || ele.fcoiTypeCode === '3') ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
+            return ele;
+        }) || [];
+    }
+
+    private getDisclosureProjectHeader(disclosures: UserDisclosure[]) {
+        return disclosures?.map((ele: any) => {
+            ele.projectHeader =
+                ele.fcoiTypeCode === '2' ? `#${ele.proposalId} - ${ele.proposalTitle}` :
+                ele.fcoiTypeCode === '3' ? `#${ele.awardId} - ${ele.awardTitle}` :
+                '';
+            return ele;
+        }) || [];
     }
 
     openFCOIModal(type) {
@@ -513,11 +519,15 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personID'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
-            }));
+                if(res) {
+                    this._router.navigate([OPA_REDIRECT_URL], { queryParams: { disclosureId: res.disclosureId } });
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                }
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')));
     }
 
     selectedTabLabel(): string {

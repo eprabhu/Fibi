@@ -124,30 +124,6 @@
     /* cursor: pointer; */
 }
 
-.active-ribbon {
-    color: #fff;
-    width: max-content;
-    height: 27px;
-    position: relative;
-    left: -29px;
-    top: 2px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 0 50px 50px 0;
-    padding: 10px 18px;
-
-    &::before {
-        content: "";
-        position: absolute;
-        height: 0;
-        width: 0;
-        border-bottom: 6px solid #151515;
-        border-left: 6px solid transparent;
-        top: -6px;
-        left: 0;
-    }
-}
-
 .grey-text {
     font-size: 0.875rem;
     color: #48647F;
@@ -307,27 +283,9 @@ tr.tr-hover {
     background-color: #f2f6fe;
 }
 
-.status-pill {
-    position: absolute;
-    left: 14px;
-    top: -12px;
-    background-color: white;
-    border-radius: 1rem !important;
-    font-weight: 600 !important;
-    padding: 1px 0.5rem;
-    border: 1px solid #dee2e6 !important;
-    font-size: 0.8125rem;
-    letter-spacing: 0.1px
-}
-
 .count-label {
     display: inline-block;
     width: 150px;
-}
-
-label {
-    color: #48647f;
-    font-weight: 500;
 }
 
 .sortable-icon {

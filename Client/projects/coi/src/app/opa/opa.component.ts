@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit} from '@angular/core';
-import { FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent} from '../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { Subject} from 'rxjs';
 import { OpaService} from './services/opa.service';
 import { hideModal, openModal} from '../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -45,8 +45,6 @@ export class OpaComponent implements OnInit {
     description: any;
     showSlider = false;
     selectedType: string;
-    showPersonDetailsModal = false;
-    personDetailsModalVO = {personId: '', fullName: ''};
     $subscriptions = [];
     commentsRight: {
         canViewPrivateComments: boolean;
@@ -200,14 +198,8 @@ export class OpaComponent implements OnInit {
         }
     }
 
-    closePersonDetailsModal(event) {
-        this.showPersonDetailsModal = event;
-    }
-
-    openDetailModal(): void {
-        this.personDetailsModalVO.personId = this.opa.opaDisclosure.personId;
-        this.personDetailsModalVO.fullName = this.opa.opaDisclosure.personName;
-        this.showPersonDetailsModal = true;
+    openPersonDetailsModal(): void {
+        this.commonService.openPersonDetailsModal(this.opa.opaDisclosure.personId)
     }
 
     private getDataFromStore() {
@@ -270,7 +262,7 @@ export class OpaComponent implements OnInit {
     }
 
     isLoggedInUser(personId: string) {
-        return this.commonService?.getCurrentUserDetail('personId') === personId;
+        return this.commonService?.getCurrentUserDetail('personID') === personId;
     }
 
     openSlider(type, count) {

@@ -56,7 +56,7 @@ export class RouterGuardService  {
                 'moduleSubItemCode': 0,
                 'moduleSubItemKey': 0,
                 'moduleItemKey': this.ModuleId,
-                'actionUserId': this._commonService.getCurrentUserDetail('personId'),
+                'actionUserId': this._commonService.getCurrentUserDetail('personID'),
                 'actionPersonName': this._commonService.getCurrentUserDetail('fullName'),
                 'questionnaireMode': 'ACTIVE_ANSWERED_UNANSWERED'
             };
