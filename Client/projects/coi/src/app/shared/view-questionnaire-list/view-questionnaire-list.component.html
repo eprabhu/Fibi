@@ -41,7 +41,7 @@
                     <div class="px-4">
                         <ul class="nav nav-tabs mb-0">
                             <li class="nav-item hand-cursor mb-2" *ngFor='let questionnaire of questionnaireList; let i= index'
-                                id="questionnaire-tab{{i}}"
+                            id="questionnaire-tab{{i}}"
                                 [ngClass]="{'qst-success-nav':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                         (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null &&
                                                         isViewMode),
@@ -51,7 +51,7 @@
                                     class=" tab subTabLink nav-item nav-link txt-medium text-black hand-cursor" [ngClass]="{'active':selectedIndex === i,
                                                 'text-success fw-600':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                                     (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null
-                                                                    && isViewMode)}" >
+                                                                    && isViewMode)}" id="{{questionnaire?.QUESTIONNAIRE_ID}}">
                                     <i [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y',
                                                     'txt-red':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
                                                                 questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null}"
@@ -82,7 +82,7 @@
                     (questionnaireEditEvent)="markQuestionnaireAsEdited($event)" [isViewMode]="isViewMode"
                     [moduleDetails]="requestObject" (flagUpdationEvent)="updateFlag($event)"
                     [externalSaveEvent]="externalSaveEvent" [isShowSave]="isShowSave" [saveButtonLabel]="saveButtonLabel"
-                    [isShowQuestionnaireDock]="isShowQuestionnaireDock"></app-view-questionnaire>
+                    [isShowQuestionnaireDock]="isShowQuestionnaireDock" [isQuestionnaireValidateMode]="isQuestionnaireValidateMode"></app-view-questionnaire>
             </div>
         </div>
     </div>
