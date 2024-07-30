@@ -23,7 +23,8 @@ import { fadeInOutHeight } from '../../common/utilities/animations';
                     [isShowSave]="false"
                     [saveButtonLabel]="'Save and Continue'"
                     (QuestionnaireSaveEvent)="getSaveEvent($event)"
-                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
+                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)"
+                    [isQuestionnaireValidateMode]="false">
             </app-view-questionnaire-list>
         </div>
     `,
