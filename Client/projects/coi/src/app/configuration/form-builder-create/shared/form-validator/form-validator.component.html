@@ -10,15 +10,13 @@
             <ng-container *ngFor="let validation of validationList; let index = index">
                 <div *ngIf="validation.validationType != 'VW'"
                     class="alert alert-text mb-2 alert-danger hand-cursor py-2 fs-14" role="alert"
-                    (click)="currentIndex=index;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)"
-                    data-bs-dismiss="modal">
+                    (click)="currentIndex=index;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)">
                     <i class="me-2 fa fa-exclamation-circle icon text-danger" aria-hidden="true"></i>
                     <strong>Error: </strong><span [innerHTML]="validation.validationMessage"></span>
                 </div>
                 <div *ngIf="validation.validationType == 'VW'"
                     class="alert alert-text mb-2 alert-warning hand-cursor py-2 fs-14" role="alert"
-                    (click)="currentIndex=index;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)"
-                    data-bs-dismiss="modal">
+                    (click)="currentIndex=index;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)">
                     <i class="me-2 fa fa-exclamation-triangle icon text-warning" aria-hidden="true"></i>
                     <strong>Warning: </strong><span [innerHTML]="validation.validationMessage"></span>
                 </div>
@@ -63,14 +61,14 @@
                             <ng-container *ngFor="let validation of validationList; let index = index">
                                 <div *ngIf="validation.validationType != 'VW'"
                                     class="alert alert-text mb-2 alert-danger hand-cursor py-2 fs-14" role="alert"
-                                    (click)="currentIndex=index;isShowDock = true;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)"
+                                    (click)="currentIndex=index;isShowDock = true;isModalOpened = false;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)"
                                     data-bs-dismiss="modal">
                                     <i class="me-2 fa fa-exclamation-circle icon text-danger" aria-hidden="true"></i>
                                     <strong>Error: </strong><span [innerHTML]="validation.validationMessage"></span>
                                 </div>
                                 <div *ngIf="validation.validationType == 'VW'"
                                     class="alert alert-text mb-2 alert-warning hand-cursor py-2 fs-14" role="alert"
-                                    (click)="currentIndex=index;isShowDock = true;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)"
+                                    (click)="currentIndex=index;isShowDock = true;isModalOpened = false;goToCorrespondingValidation(validation?.componentId, validation?.navigationURL)"
                                     data-bs-dismiss="modal">
                                     <i class="me-2 fa fa-exclamation-triangle icon text-warning" aria-hidden="true"></i>
                                     <strong>Warning: </strong><span [innerHTML]="validation.validationMessage"></span>

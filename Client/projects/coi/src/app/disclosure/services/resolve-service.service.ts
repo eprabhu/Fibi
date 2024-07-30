@@ -134,7 +134,7 @@ export class ResolveServiceService {
 
     getLoggedInReviewerInfo(coiReviewerList): any {
         const getReviewerDetail = coiReviewerList.find(item => item.assigneePersonId ===
-            this._commonService.currentUserDetails.personId && item.reviewStatusTypeCode != '2');
+            this._commonService.currentUserDetails.personID && item.reviewStatusTypeCode != '2');
         return getReviewerDetail;
     }
 
