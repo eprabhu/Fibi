@@ -8,7 +8,7 @@
                 <div class="row flex-grow-1 position-relative">
                   <div class="col-xl d-flex align-items-center">
                     <h1 class="fw-bold mt-3 px-3 fs-18" [attr.aria-label]="entityDetails?.entityName">
-                      <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100"></app-read-more>
+                      <span class="text-slice" [title]="entityDetails?.entityName">{{entityDetails?.entityName}}</span>
                     </h1>
                   </div>
                   <div class="d-flex justify-content-end align-items-center col-xl-auto">

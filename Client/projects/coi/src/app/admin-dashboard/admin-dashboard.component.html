@@ -1,7 +1,7 @@
 <div [@fadeInOutHeight]>
     <section class="section-advanced-search">
         <div class="fs-18 fw-bold d-inline-block mb-2" tabindex="-1" title="COI Disclosures Dashboard" aria-label="COI Disclosures Dashboard">COI Disclosures</div>
-        <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm rounded-2" aria-labelledby="navbarResponsive">
+        <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm rounded-2 nav-tab-sticky" aria-labelledby="navbarResponsive">
             <div class="list navbar-toggleable-xs">
                 <div class="d-flex justify-content-between">
                     <button #mainHeaders id="responsiveColapse" [ngClass]="isShowOptions ? 'd-none' : 'hamburger-display'"
@@ -19,11 +19,12 @@
                                         <i class="fa fa-bars f-14 text-muted mx-colr" aria-hidden="true"
                                             title="Click here for more pages"></i>
                     </button>
+                    <!-- tabs -->
                     <ul class="m-0 p-0 menu-responsive fit-content tabs-collapsed collapse" id="navbarResponsive" aria-label="navigation list" tabindex="-1">
                         <li *ngIf="isShowAdminDashboard" (click)="changeTab('ALL_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-all-disclosures"
                             (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'All Disclosures' : 'Click here to view all disclosures'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'Click here to view all disclosures'" >
                             All Disclosures
@@ -32,7 +33,7 @@
                         <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" id="coi-admin-dashboard-new-submissions"
                             (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'New Submissions ' : 'Click here to view new submissions'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'Selected tab is New Submissions ' : 'Click here to view new submissions'">
                             New Submissions
@@ -42,7 +43,7 @@
                             (keyup.enter)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                             (keyup.space)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'New Submission - No SFI' : 'Click here to view new submission - No SFI'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'Selected tab is New Submission - No SFI ' : 'Click here to view new submission - No SFI'">
                             New Submissions - No SFI
@@ -51,7 +52,7 @@
                         <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabindex="0" id="coi-admin-dashboard-my-reviews"
                             (keyup.space)="changeTab('MY_REVIEWS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'My Reviews' : 'Click to view My Reviews'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'Click to view My Reviews'">
                             My Reviews
@@ -60,7 +61,7 @@
                         <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabindex="0" id="coi-admin-dashboard-all-reviews"
                             (keyup.space)="changeTab('ALL_REVIEWS')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'All Reviews' : 'Click to view All Reviews'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'Click to view All Reviews'">
                             All Reviews
@@ -69,32 +70,45 @@
                         <li *ngIf="hasTravelDisclosureRights" (click)="changeTab('TRAVEL_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-travel-disclosure"
                             (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Click to view Travel Disclosures'">
-                            Travel Disclosures
+                            Travel
+                            <span class="d-none d-inline-1500 ms-1 ">Disclosures</span> 
                         </li>
                         <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
                         <li *ngIf="hasConsultingDisclosureRights"  (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
                             (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
                             [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
-                            class="p-3 fs-6 align-self-center"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
                             [title]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click to view Consulting Disclosures'"
                             [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Selected tab is Consulting Disclosures' : 'Click to view Consulting Disclosures'">
-                            Consulting Disclosures
+                            Consulting
+                            <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
                         </li>
+                        <span *ngIf="isShowAdminDashboard" class="separator" aria-hidden="true" role="separator"></span>
+                        <li *ngIf="hasProjectOverviewRights"  (click)="changeTab('PROJECTS')" tabindex="0" id="coi-admin-dashboard-project-overview"
+                            (keyup.enter)="changeTab('PROJECTS')" (keyup.space)="changeTab('PROJECTS')"
+                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS'"
+                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS' ? 'project Overview' : 'Click here to view Project overview'"
+                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS' ? 'Selected tab is Project overview' : 'Click here to view Project overview'">
+                            Projects
+                        </li>
+                        <span *ngIf="isShowAdminDashboard && hasProjectOverviewRights" class="separator" aria-hidden="true" role="separator"></span>
                     </ul>
                     <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
-                        <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0" tabindex="0"
+                        <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0 text-nowrap" tabindex="0"
                             id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
                             (click)="toggleAdvanceSearch();" (keyup.enter)="toggleAdvanceSearch()" (keyup.space)="toggleAdvanceSearch()" aria-label="Toggle Advanced Search"
                             title="Click here to expand / collapse Advanced Search fields">
-                            <mat-icon aria-hidden="true" class="me-3 flex-shrink-0">tune</mat-icon>Advanced Search</span>
+                            <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">tune</mat-icon>Advanced Search</span>
                     </div>
                 </div>
             </div>
+            <!-- advanced search -->
             <div class="pb-3 px-3 pt-2 border-top" *ngIf="isViewAdvanceSearch && coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'" id="collapseExample" [@topSlideInOut]>
-                <div class="row g-3">
+                <div *ngIf="coiAdminDashboardService.coiRequestObject.tabName !='PROJECTS'" class="row g-3">
                     <!-- Person Name -->
                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by person name" tabindex="-1"
                          aria-label="Person search field" role="searchbox">
@@ -289,13 +303,150 @@
                                 aria-label="Click here to get the search results with/without fields">Search
                         </button>
                     </div>
+                </div>
 
+                <!-- project tab advance search -->
+                <div *ngIf="coiAdminDashboardService.coiRequestObject.tabName =='PROJECTS'" class="row g-3">
+                
+                    <!-- Proposal title -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
+                        <label class="d-block">Proposal Title</label>
+                        <input type="text" id="adv-search-Proposal-title" placeholder="Proposal Title" aria-label="Proposal Title"
+                            maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="localProjectOverviewRO.property2" />
+                    </div>
+                
+                    <!-- proposal number -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
+                        <label class="d-block">Proposal Number</label>
+                        <input type="text" id="adv-search-proposal-number" placeholder="Proposal Number" aria-label="Proposal Number"
+                            maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="localProjectOverviewRO.property6"  />
+                    </div>
+                
+                    <!-- Person Name -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by person name" tabindex="-1"
+                        aria-label="Person search field" role="searchbox">
+                        <label class="d-block" for="adv-project-tab-person-name">Person</label>
+                        <app-elastic (selectedResult)="fetchPersonName($event)" [clearField]="advSearchClearField"
+                            [options]="elasticPersonSearchOptionsForProjectOverview" [placeHolder]="'Search by Person'"
+                            [uniqueId]="'adv-project-tab-person-name'">
+                        </app-elastic>
+                    </div>
+
+                    <!-- Department Name -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by department name" tabindex="-1"
+                        aria-label="Department search field" role="searchbox">
+                        <label class="d-block" for="adv-project-tab-department-name">
+                            Department
+                        </label>
+                        <app-endpoint-search (onSelect)="leadUnitUpdateFunction($event)" [clearField]="clearAdvSearchFields"
+                            [httpOptions]="leadUnitSearchOptionsForProjectOverview" [placeHolder]="'Search by Department'"
+                            [uniqueId]="'adv-project-tab-department-name'">
+                        </app-endpoint-search>
+                    </div>
+                
+                    <!-- Project Status -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="-1" role="listbox" aria-label="Porposal Status dropdown"
+                        title="Click here to search by Project status">
+                        <label class="d-block" for="adv-project-tab-Project-status">
+                            Project Status
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelectData($event, 'property4')" [options]="proposalStatusOptionsForProjectOverview"
+                            [externalArray]="lookupArrayForProjectStatus" [isExternalArray]="true"
+                            [selectedLookUpList]="lookupValuesForProjectOverview['property4']" [uniqueId]="'adv-project-tab-proposal-status'">
+                        </app-look-up>
+                    </div>
+
+                    <!-- Sponsor -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by Sponsor" tabindex="-1"
+                        aria-label="sponsor search field" role="searchbox">
+                        <label class="d-block" for="adv-disclosure-department-name">
+                            Sponsor
+                        </label>
+                        <app-endpoint-search (onSelect)="sponsorUpdateFunction($event)" [clearField]="clearAdvSearchFields"
+                            [httpOptions]="sponsorSearchOptionsForProjectOverview" [placeHolder]="'Search by Sponsor'"
+                            [uniqueId]="'adv-project-tab-sponsor-name'">
+                        </app-endpoint-search>
+                    </div>
+
+                    <!-- Prime Sponsor -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by prime sponsor" tabindex="-1"
+                        aria-label="Prime sponsor search field" role="searchbox">
+                        <label class="d-block" for="adv-project-tab-prime-name">
+                            Prime Sponsor
+                        </label>
+                        <app-endpoint-search (onSelect)="primeSponsorUpdateFunction($event)" [clearField]="clearAdvSearchFields"
+                            [httpOptions]="primeSponsorSearchOptionsForProjectOverview" [placeHolder]="'Search by Prime sponsor'"
+                            [uniqueId]="'adv-project-tab-prime-name'">
+                        </app-endpoint-search>
+                    </div>
+
+                    <!-- Review Status -->
+                    <!-- <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="-1" role="listbox" aria-label="review Status dropdown"
+                        title="Click here to search by review status">
+                        <label class="d-block" for="adv-project-tab-review-status">
+                            Review Status
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelectData($event, 'property5')" [options]="reviewStatusOptionsForProjectOverview"
+                            [selectedLookUpList]="lookupValuesForProjectOverview['property5']" [uniqueId]="'adv-project-tab-review-status'">
+                        </app-look-up>
+                    </div> -->
+
+                    <!-- start date -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by END date"
+                         tabindex="-1"
+                         aria-label="Expiration Date">
+                        <label class="d-block" for="coi-admin-dashboard-adv-disclosure-expiration-date">
+                            Start Date
+                        </label>
+                        <span class="dateField">
+                            <input matInput [matDatepicker]="startDate" id="coi-project-overview-expiration-date" (click)="startDate.open()"
+                                   (keyup.enter)="startDate.open()" (keyup.space)="startDate.open()"
+                                   class="form-control d-inline-block" [(ngModel)]="advacnceSearchDatesForProjectOverview.startDate"
+                                   placeholder="{{datePlaceHolder}}">
+                            <i (click)="startDate.open()"  (keyup.enter)="startDate.open()" (keyup.space)="startDate.open()"
+                               class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                            <mat-datepicker #startDate></mat-datepicker>
+                        </span>
+                    </div>
+
+                    <!-- end date -->
+                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12" title="Click here to search by END date"
+                         tabindex="-1"
+                         aria-label="Expiration Date">
+                        <label class="d-block" for="coi-admin-dashboard-adv-disclosure-expiration-date">
+                            End Date
+                        </label>
+                        <span class="dateField">
+                            <input matInput [matDatepicker]="endDate" id="coi-project-overview-expiration-date" (click)="endDate.open()"
+                                   (keyup.enter)="endDate.open()" (keyup.space)="endDate.open()"
+                                   class="form-control d-inline-block" [(ngModel)]="advacnceSearchDatesForProjectOverview.endDate"
+                                   placeholder="{{datePlaceHolder}}">
+                            <i (click)="endDate.open()"  (keyup.enter)="endDate.open()" (keyup.space)="endDate.open()"
+                               class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                            <mat-datepicker #endDate></mat-datepicker>
+                        </span>
+                    </div>
+
+                    <div class="col d-flex justify-content-end mt-4 align-items-end">
+                        <button class="btn btn-outline-secondary fs-14 mx-2 px-3" id="coi-project-tab-clear-btn"
+                                role="button"
+                                (click)="clearAndExecuteAdvancedSearch()" title="Click here to clear all the fields"
+                                aria-label="Click here to clear all the fields">Clear
+                        </button>
+                        <button class="btn btn-primary fs-14" id="coi-project-tab-search-btn" (click)="projectTabAdvSearch()"
+                                aria-label="Click here to get the search results with/without fields">Search
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
 
+        <div *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'PROJECTS'">
+            <app-project-overview [dataForAdvanceSearch]="$projectOverviewList"> </app-project-overview>  
+        </div>
+
          <!-- sorting for all disclosures-->
-        <div class="sort-div border mt-2 px-3" *ngIf="isShowDisclosureList && coiList.length">
+        <div *ngIf="isShowDisclosureList && coiList.length && coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'" class="sort-div border mt-2 px-3">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
             <button *ngFor="let sortSection of sortSectionsList; let index = index"
                 title="Click to sort by {{sortSection?.fieldName}}"
@@ -318,46 +469,45 @@
                 </div>
             </button>
         </div>
-
-        <ng-container *ngIf="isShowDisclosureList && !isLoading;">
-            <div *ngIf="coiList.length > 0;else noData" [@listAnimation]="coiList.length">
-
-                <section class="d-flex justify-content-between align-items-center select-all-section shadow-sm p-2 border border-primary-subtle complete-review-section"
-                         [class.position-sticky]="selectedItemCount()"
-                        *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS_WITHOUT_SFI'">
-                    <div class="d-flex align-items-center ms-2">
-                        <input type="checkbox" id="coi-admin-dashboard-select-all-input" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()" tabindex="0">
-                        <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer" tabindex="-1">Select all <span *ngIf="selectedItemCount()" id="coi-admin-dashboard-select-all"
-                                                                                                                  class="fs-14 py-2 ms-2 fw-medium"
-                                                                                                                  title="{{selectedItemCount()}}">
-                            ({{selectedItemCount()}} Selected)
-                        </span></label>
-                    </div>
-                    <div>
-                        <button [@topSlideInOut] class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()"
-                         (click)="confirmCompleteReview()" (keyup.enter)="confirmCompleteReview()" (keyup.space)="confirmCompleteReview()"
-                         title="Click here to complete final review" aria-label="Click here to complete final review">
-                            <mat-icon aria-hidden="true" class="me-2 flex-shrink-0">done</mat-icon> Complete Final Review</button>
-                    </div>
-                </section>
-
+    </section>
+    <ng-container *ngIf="isShowDisclosureList && !isLoading;">
+        <div *ngIf="coiList.length > 0;else noData" [@listAnimation]="coiList.length">
+            <section class="d-flex justify-content-between align-items-center select-all-section shadow-sm p-2 border border-primary-subtle complete-review-section"
+                        [class.position-sticky]="selectedItemCount()"
+                    *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS_WITHOUT_SFI'">
+                <div class="d-flex align-items-center ms-2">
+                    <input type="checkbox" id="coi-admin-dashboard-select-all-input" class="cursor-pointer" [checked]="isAllDisclosuresSelected" (change)="selectAllDisclosures()" tabindex="0">
+                    <label for="select-all" class="f-14 label-text ms-2 mt-1 cursor-pointer" tabindex="-1">Select all <span *ngIf="selectedItemCount()" id="coi-admin-dashboard-select-all"
+                                                                                                                class="fs-14 py-2 ms-2 fw-medium"
+                                                                                                                title="{{selectedItemCount()}}">
+                        ({{selectedItemCount()}} Selected)
+                    </span></label>
+                </div>
+                <div>
+                    <button [@topSlideInOut] class="align-items-center btn btn-primary d-flex f-13" *ngIf="atLeastOneIsSelected()"
+                        (click)="confirmCompleteReview()" (keyup.enter)="confirmCompleteReview()" (keyup.space)="confirmCompleteReview()"
+                        title="Click here to complete final review" aria-label="Click here to complete final review">
+                        <mat-icon aria-hidden="true" class="me-2 flex-shrink-0">done</mat-icon> Complete Final Review</button>
+                </div>
+            </section>
+            <ng-container *ngIf="coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'">
                 <ng-container *ngFor="let coi of coiList;let index=index;">
                     <div class="card coi-card-regular" [class.selected-active-background]="selectedDisclosures[index]" (mouseover)="isHover[index] = true"
                          (mouseout)="isHover[index] = false">
                         <div class="card-body px-3 py-2" id="coi-admin-dashboard-card-body">
                             <div class="row" *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
                                 <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                    <div class="row">
-                                        <div class="col-12 d-inline-flex mb-2">
+                                    <div class="row m-0">
+                                        <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                             <!-- Coi card badge -->
                                             <span class="d-flex" tabindex="-1"
                                                   [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' : coi?.disclosureId ? 'Consulting' :  coi?.fcoiType) + ' disclosure'">
-                                            <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}">
+                                            <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}">
                                                 <span>{{ coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.disclosureId ? 'Consulting' : coi?.fcoiType }}</span>
                                             </span></span>
                                             <!-- Coi card header -->
                                             <h4 *ngIf="!coi.travelDisclosureId && !coi.opaDisclosureId"
-                                                class="mb-0 d-flex align-items-baseline">
+                                                class="mb-0 d-flex align-items-baseline ms-1">
                                             <span class="d-inline-flex align-items-center">
                                                 <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
@@ -371,14 +521,14 @@
                                                 <span class="d-inline-flex" tabindex="-1"
                                                       [attr.aria-label]="'Project is #, ' + coi?.projectHeader">
                                                     <span class="pipe mx-1"></span>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="coi?.fcoiTypeCode==='2'">article</mat-icon>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1" *ngIf="coi?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='2'">article</mat-icon>
+                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
                                                     <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
                                                         id="coi-admin-dashboard-card-value-article-{{index}}"
                                                         (click)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
                                                         (keyup.enter)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
                                                         (keyup.space)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                        [title]="'Click here to view details of ' + coi?.projectHeader" 
+                                                        [title]="'Click here to view details of ' + coi?.projectHeader"
                                                         [attr.aria-label]="'Click here to view details of ' + coi?.projectHeader">
                                                         <span class="text-slice">{{coi?.projectHeader}}</span>
                                                     </a>
@@ -402,11 +552,11 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6 mb-2">
                                                 <!-- Coi card Certification Date -->
-                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
+                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatterWithTimeZone)">
                                                     <label class="d-block coi-text-dark">Certification Date</label>
                                                     <span class="coi-text-light">
                                                 <app-no-data-label [valueToShow]="coi?.certifiedAt">
-                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -417,7 +567,7 @@
                                                     <label class="d-block coi-text-dark">Expiration Date</label>
                                                     <span>
                                                 <app-no-data-label [valueToShow]="coi?.expirationDate">
-                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-expiration-date-{{index}}">{{coi?.expirationDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light" id="coi-admin-dashboard-card-value-expiration-date-{{index}}">{{coi?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -534,23 +684,23 @@
                             <ng-container *ngIf="coi?.travelDisclosureId">
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                        <div class="row">
-                                            <div class="col-12 d-inline-flex mb-2">
+                                        <div class="row m-0">
+                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                                 <!-- Travel Card badge -->
                                                 <span class="d-flex">
                                             <span
-                                                class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}"
+                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}"
                                                 tabindex="-1"
                                                 [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' :  coi?.fcoiType) + ' disclosure'">
                                                 <span>{{coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.fcoiType}}</span>
                                             </span>
                                         </span>
                                                 <!-- Travel Card Entity -->
-                                                <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex">
+                                                <h4 *ngIf="coi.travelDisclosureId" class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex">
                                                 <!-- <i class="fa fa-user coi-text-lighter fs-18 me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
-                                                <strong class="coi-text-light fs-6 text-nowrap me-2" tabindex="-1"
+                                                <strong class="coi-text-light fs-6 text-nowrap me-1" tabindex="-1"
                                                         [attr.aria-label]="'Disclosure Person' + (coi.travellerName)">
                                                     {{coi.travellerName}}
                                                 </strong>
@@ -624,7 +774,7 @@
                                                     <label for="certify-date" class="d-block coi-text-dark">Certification Date</label>
                                                     <span class="coi-text-light">
                                                 <app-no-data-label id="certify-date" [valueToShow]="coi?.travelSubmissionDate">
-                                                    <span class="coi-text-light">{{coi?.travelSubmissionDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light">{{coi?.travelSubmissionDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -635,7 +785,7 @@
                                                     <label for="expiration-date" class="d-block coi-text-dark">Expiration Date</label>
                                                     <span>
                                                 <app-no-data-label id="expiration-date" [valueToShow]="coi?.expirationDate">
-                                                    <span class="coi-text-light">{{coi?.expirationDate | dateFormatter}}</span>
+                                                    <span class="coi-text-light">{{coi?.expirationDate | dateFormatterWithTimeZone}}</span>
                                                 </app-no-data-label>
                                             </span>
                                                 </div>
@@ -643,86 +793,86 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-2 d-flex d-lg-block">
-                                        <!-- Travel Card Disclosure Status -->
-                                        <div tabindex="-1" *ngIf="!coi?.opaDisclosureId"
-                                             class="flex-grow-1 lh-sm mb-2"
-                                             [attr.aria-label]="'Disclosure Status' + (coi.conflictStatus)">
-                                            <label for="status" class="d-block coi-text-lighter">Disclosure Status</label>
-                                            <span>
-                                        <app-no-data-label [valueToShow]="coi?.conflictStatus"
-                                                           *ngIf="!coi?.travelDisclosureId">
-                                            <span
-                                                class="{{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
-                                                id="status">
-                                            </span>
-                                            <span class="coi-text-dark">
-                                                {{coi?.conflictStatus}}
-                                            </span>
-                                        </app-no-data-label>
-                                        <app-no-data-label [valueToShow]="coi?.travelDisclosureStatusDescription"
-                                                           *ngIf="coi?.travelDisclosureId">
-                                            <span
-                                                class="{{commonService.getDisclosureConflictBadge(coi?.travelDisclosureStatusCode)}}"
-                                                id="status">
-                                            </span>
-                                            <span class="coi-text-dark">
-                                                {{coi?.travelDisclosureStatusDescription}}
-                                            </span>
-                                        </app-no-data-label>
-                                    </span>
-                                        </div>
-                                        <!-- Travel Card Document Status -->
-                                        <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
-                                             [attr.aria-label]="'Document Status' + (coi.documentStatusDescription)">
-                                            <label for="review-status" class="d-block coi-text-lighter">Document Status</label>
-                                            <span>
-                                        <app-no-data-label id="review-status"
-                                                           [valueToShow]="coi?.documentStatusDescription">
-                                            <span
-                                                [class.text-dark]="commonService.getDocumentStatusBadge(coi?.documentStatusCode) === 'warning'"
-                                                class="{{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"></span>
-                                            <span class="coi-text-dark">
-                                                {{coi?.documentStatusDescription}}
-                                            </span>
-                                        </app-no-data-label>
-                                    </span>
-                                        </div>
-                                        <!-- Travel Card Review Status -->
-                                        <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
-                                             [attr.aria-label]="'Review Status' + (coi?.reviewStatus)">
-                                            <label for="id" class="d-block coi-text-lighter">Review Status</label>
-                                            <span>
-                                        <app-no-data-label id="review-status"
-                                                           [valueToShow]="coi?.reviewDescription">
-                                            <span
-                                                [class.text-dark]="commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
-                                                class="{{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"></span>
-                                            <span class="coi-text-dark">
-                                                {{coi?.reviewDescription}}
-                                            </span>
-                                        </app-no-data-label>
-                                    </span>
-                                        </div>
+                                <div class="col-lg-2 d-flex d-lg-block">
+                                    <!-- Travel Card Disclosure Status -->
+                                    <div tabindex="-1" *ngIf="!coi?.opaDisclosureId"
+                                            class="flex-grow-1 lh-sm mb-2"
+                                            [attr.aria-label]="'Disclosure Status' + (coi.conflictStatus)">
+                                        <label for="status" class="d-block coi-text-lighter">Disclosure Status</label>
+                                        <span>
+                                    <app-no-data-label [valueToShow]="coi?.conflictStatus"
+                                                        *ngIf="!coi?.travelDisclosureId">
+                                        <span
+                                            class="{{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
+                                            id="status">
+                                        </span>
+                                        <span class="coi-text-dark">
+                                            {{coi?.conflictStatus}}
+                                        </span>
+                                    </app-no-data-label>
+                                    <app-no-data-label [valueToShow]="coi?.travelDisclosureStatusDescription"
+                                                        *ngIf="coi?.travelDisclosureId">
+                                        <span
+                                            class="{{commonService.getDisclosureConflictBadge(coi?.travelDisclosureStatusCode)}}"
+                                            id="status">
+                                        </span>
+                                        <span class="coi-text-dark">
+                                            {{coi?.travelDisclosureStatusDescription}}
+                                        </span>
+                                    </app-no-data-label>
+                                </span>
+                                    </div>
+                                    <!-- Travel Card Document Status -->
+                                    <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                            [attr.aria-label]="'Document Status' + (coi.documentStatusDescription)">
+                                        <label for="review-status" class="d-block coi-text-lighter">Document Status</label>
+                                        <span>
+                                    <app-no-data-label id="review-status"
+                                                        [valueToShow]="coi?.documentStatusDescription">
+                                        <span
+                                            [class.text-dark]="commonService.getDocumentStatusBadge(coi?.documentStatusCode) === 'warning'"
+                                            class="{{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"></span>
+                                        <span class="coi-text-dark">
+                                            {{coi?.documentStatusDescription}}
+                                        </span>
+                                    </app-no-data-label>
+                                </span>
+                                    </div>
+                                    <!-- Travel Card Review Status -->
+                                    <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                            [attr.aria-label]="'Review Status' + (coi?.reviewStatus)">
+                                        <label for="id" class="d-block coi-text-lighter">Review Status</label>
+                                        <span>
+                                    <app-no-data-label id="review-status"
+                                                        [valueToShow]="coi?.reviewDescription">
+                                        <span
+                                            [class.text-dark]="commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
+                                            class="{{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"></span>
+                                        <span class="coi-text-dark">
+                                            {{coi?.reviewDescription}}
+                                        </span>
+                                    </app-no-data-label>
+                                </span>
                                     </div>
                                 </div>
-                            </ng-container>
+                            </div>
+                        </ng-container>
 
                             <ng-container *ngIf="coi?.disclosureId">
                                 <div class="row">
                                     <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
-                                        <div class="row">
-                                            <div class="col-12 d-inline-flex mb-2">
+                                        <div class="row m-0">
+                                            <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                                 <!-- Consulting Card badge -->
                                                 <span>
                                                     <span class="d-flex" tabindex="-1" attr.aria-label="Consulting disclosure">
-                                                        <span class="entity-status shadow-sm d-flex align-items-center {{getColorBadges(coi)}}">
+                                                        <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}">
                                                             <span>Consulting</span>
                                                         </span>
                                                     </span>
                                                 </span>
                                                 <!-- Consulting Entity Name -->
-                                                <h4 class="mb-0 d-flex">
+                                                <h4 class="mb-0 d-flex ms-1">
                                                     <ng-container>
                                                         <span class="d-inline-flex">
                                                             <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
@@ -753,13 +903,13 @@
                                             </div>
                                             <!-- Certification Date -->
                                             <div class="col-lg-3 col-md-6 mb-2">
-                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatter)">
+                                                <div tabindex="-1" [attr.aria-label]="'Certification Date' + (coi?.certifiedAt | dateFormatterWithTimeZone)">
                                                     <label class="d-block coi-text-dark">Certification Date</label>
                                                     <span class="coi-text-light">
                                                         <app-no-data-label [valueToShow]="coi?.certifiedAt">
                                                             <span class="coi-text-light"
                                                                 id="coi-admin-dashboard-card-value-certification-date-{{index}}">{{coi?.certifiedAt
-                                                                | dateFormatter}}</span>
+                                                                | dateFormatterWithTimeZone}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                 </div>
@@ -792,91 +942,91 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-2 d-flex d-lg-block">
-                                        <!-- Disposition Status For Consulting card only -->
-                                        <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
-                                            [attr.aria-label]="'Disposition Status' + (coi?.dispositionStatusDescription)">
-                                            <label class="d-block coi-text-lighter">Disposition Status</label>
-                                            <span class="break-point-1200">
-                                                <span class="{{commonService.getConsultingDispositionStatusBadge(coi?.dispositionStatusCode)}}"></span>
-                                                <span class="coi-text-dark" id="coi-admin-dashboard-card-value-disposition-status-{{index}}">
-                                                    {{coi?.dispositionStatusDescription}}
+                                <div class="col-lg-2 d-flex d-lg-block">
+                                    <!-- Disposition Status For Consulting card only -->
+                                    <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                        [attr.aria-label]="'Disposition Status' + (coi?.dispositionStatusDescription)">
+                                        <label class="d-block coi-text-lighter">Disposition Status</label>
+                                        <span class="break-point-1200">
+                                            <span class="{{commonService.getConsultingDispositionStatusBadge(coi?.dispositionStatusCode)}}"></span>
+                                            <span class="coi-text-dark" id="coi-admin-dashboard-card-value-disposition-status-{{index}}">
+                                                {{coi?.dispositionStatusDescription}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <!-- Review Status For Consulting card only -->
+                                    <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
+                                        [attr.aria-label]="'Review Status' + (coi?.reviewStatusDescription)">
+                                        <label for="id" class="d-block coi-text-lighter">Review Status</label>
+                                        <span>
+                                            <app-no-data-label [valueToShow]="coi?.reviewStatusDescription">
+                                                <span class="{{commonService.getConsultingReviewStatusBadge(coi?.reviewStatusCode)}}"
+                                                    id="review-status"></span>
+                                                <span class="coi-text-dark" id="coi-admin-dashboard-card-value-review-status-{{index}}">
+                                                    {{coi?.reviewStatusDescription}}
                                                 </span>
-                                            </span>
-                                        </div>
-                                        <!-- Review Status For Consulting card only -->
-                                        <div tabindex="-1" class="flex-grow-1 lh-sm mb-2"
-                                            [attr.aria-label]="'Review Status' + (coi?.reviewStatusDescription)">
-                                            <label for="id" class="d-block coi-text-lighter">Review Status</label>
-                                            <span>
-                                                <app-no-data-label [valueToShow]="coi?.reviewStatusDescription">
-                                                    <span class="{{commonService.getConsultingReviewStatusBadge(coi?.reviewStatusCode)}}"
-                                                        id="review-status"></span>
-                                                    <span class="coi-text-dark" id="coi-admin-dashboard-card-value-review-status-{{index}}">
-                                                        {{coi?.reviewStatusDescription}}
-                                                    </span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </div>
+                                            </app-no-data-label>
+                                        </span>
                                     </div>
                                 </div>
-                            </ng-container>
-                        </div>
+                            </div>
+                        </ng-container>
+                    </div>
 
-                        <!-- Footer section -->
-                        <div class="card-footer">
-                            <div class="row">
-                                <ng-container *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
-                                    <div class="col-lg-10">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && !coi.disclosureId">
-                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfiInActive"
-                                                        tabindex="{{coi?.noOfSfiInActive > 0 ? 0 : -1}}" role="link"
-                                                        [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
-                                                        [ngClass]="coi?.noOfSfiInActive ? 'badge' : 'zero-count-padding'"
-                                                        (keyup.enter)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);"
-                                                        [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfiInActive + (coi?.noOfSfiInActive > 0 ? '. Click to view SFI list' : '')"
-                                                        (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);">{{coi?.noOfSfiInActive || 0}}</span>
-                                                    <span class="fw-500" [ngClass]="coi?.noOfSfiInActive > 0 ? 'cursor-pointer' : '' "
-                                                        (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);"
-                                                        [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
-                                                        [class.link-primary]="coi?.noOfSfiInActive > 0">Significant Financial Interest</span>
-                                                </div>
+                    <!-- Footer section -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <ng-container *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
+                                <div class="col-lg-10">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && !coi.disclosureId">
+                                                <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfiInActive"
+                                                    tabindex="{{coi?.noOfSfiInActive > 0 ? 0 : -1}}" role="link"
+                                                    [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
+                                                    [ngClass]="coi?.noOfSfiInActive ? 'badge' : 'zero-count-padding'"
+                                                    (keyup.enter)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);"
+                                                    [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfiInActive + (coi?.noOfSfiInActive > 0 ? '. Click to view SFI list' : '')"
+                                                    (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);">{{coi?.noOfSfiInActive || 0}}</span>
+                                                <span class="fw-500" [ngClass]="coi?.noOfSfiInActive > 0 ? 'cursor-pointer' : '' "
+                                                    (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);"
+                                                    [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
+                                                    [class.link-primary]="coi?.noOfSfiInActive > 0">Significant Financial Interest</span>
                                             </div>
-                                            <div class="col-md-3 col-lg-2">
-                                                <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'">
-                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
-                                                        tabindex="{{coi?.noOfProposalInActive > 0 ? 0 : -1}}" role="link"
-                                                        [attr.aria-label]="'Proposals count is ' + coi?.noOfProposalInActive + (coi?.noOfProposalInActive > 0 ? '. Click here to view Development Proposal list' : '')"
-                                                        [title]="coi?.noOfProposalInActive > 0 ? 'Click here to view Development Proposal list' : '' "
-                                                        (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
-                                                        (keyup.enter)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
-                                                        [ngClass]="coi?.noOfProposalInActive ? 'badge' : 'zero-count-padding'">{{coi?.noOfProposalInActive}}</span>
-                                                    <span class="fw-500" [ngClass]="coi?.noOfProposalInActive > 0 ? 'cursor-pointer' : '' "
-                                                        [class.link-primary]="coi.noOfProposalInActive > 0"
-                                                        [title]="coi?.noOfProposalInActive > 0 ? 'Click here to view Development Proposal list' : '' "
-                                                        (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
-                                                        (keyup.enter)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);" (keyup.space)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);">Development Proposal</span>
-                                                </div>
+                                        </div>
+                                        <div class="col-md-3 col-lg-2">
+                                            <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'">
+                                                <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
+                                                    tabindex="{{coi?.noOfProposalInActive > 0 ? 0 : -1}}" role="link"
+                                                    [attr.aria-label]="'Proposals count is ' + coi?.noOfProposalInActive + (coi?.noOfProposalInActive > 0 ? '. Click here to view Development Proposal list' : '')"
+                                                    [title]="coi?.noOfProposalInActive > 0 ? 'Click here to view Development Proposal list' : '' "
+                                                    (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
+                                                    (keyup.enter)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
+                                                    [ngClass]="coi?.noOfProposalInActive ? 'badge' : 'zero-count-padding'">{{coi?.noOfProposalInActive}}</span>
+                                                <span class="fw-500" [ngClass]="coi?.noOfProposalInActive > 0 ? 'cursor-pointer' : '' "
+                                                    [class.link-primary]="coi.noOfProposalInActive > 0"
+                                                    [title]="coi?.noOfProposalInActive > 0 ? 'Click here to view Development Proposal list' : '' "
+                                                    (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
+                                                    (keyup.enter)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);" (keyup.space)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);">Development Proposal</span>
                                             </div>
+                                        </div>
 
-                                            <div class="col-md-3 col-lg-2">
-                                                <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'">
-                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
-                                                        tabindex="{{coi?.noOfAwardInActive > 0 ? 0 : -1}}" role="link"
-                                                        (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
-                                                        (keyup.enter)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
-                                                        [title]="coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '' "
-                                                        [attr.aria-label]="'Awards count is ' + coi?.noOfAwardInActive + (coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '')"
-                                                        [ngClass]="coi?.noOfAwardInActive ? 'badge' : 'zero-count-padding'">{{coi?.noOfAwardInActive}}</span>
-                                                    <span class="fw-500" [ngClass]="coi?.noOfAwardInActive > 0 ? 'cursor-pointer' : '' "
-                                                        [class.link-primary]="coi.noOfAwardInActive > 0"
-                                                        [title]="coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '' "
-                                                        (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
-                                                        (keyup.enter)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);" (keyup.space)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);">Awards</span>
-                                                </div>
+                                        <div class="col-md-3 col-lg-2">
+                                            <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'">
+                                                <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
+                                                    tabindex="{{coi?.noOfAwardInActive > 0 ? 0 : -1}}" role="link"
+                                                    (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
+                                                    (keyup.enter)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
+                                                    [title]="coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '' "
+                                                    [attr.aria-label]="'Awards count is ' + coi?.noOfAwardInActive + (coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '')"
+                                                    [ngClass]="coi?.noOfAwardInActive ? 'badge' : 'zero-count-padding'">{{coi?.noOfAwardInActive}}</span>
+                                                <span class="fw-500" [ngClass]="coi?.noOfAwardInActive > 0 ? 'cursor-pointer' : '' "
+                                                    [class.link-primary]="coi.noOfAwardInActive > 0"
+                                                    [title]="coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '' "
+                                                    (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
+                                                    (keyup.enter)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);" (keyup.space)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);">Awards</span>
                                             </div>
+                                        </div>
 
                                             <div class="col-md-12 col-lg-4" tabindex="-1">
                                                 <label class="coi-text-lighter  d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
@@ -906,7 +1056,7 @@
                                                         <label for="purpose" class="coi-text-dark d-block">Purpose</label>
                                                         <span>
                                                         <app-no-data-label id="purpose" [valueToShow]="coi?.travelPurpose">
-                                                            <app-read-more [classesToApply]="'coi-text-light word-break-all'" [valueToShow]="coi?.travelPurpose" [sliceCount]="80"></app-read-more>
+                                                            <span class="text-slice" [title]="coi?.travelPurpose">{{coi?.travelPurpose}}</span>
                                                         </app-no-data-label>
                                                         </span>
                                                     </div>
@@ -915,12 +1065,11 @@
                                             <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column" tabindex="-1">
                                                     <div
-                                                        [attr.aria-label]="'Start Date' + (coi.travelStartDate | dateFormatterWithTimeZone)">
+                                                        [attr.aria-label]="'Start Date' + (coi.travelStartDate | dateFormatter)">
                                                         <label for="start-date" class="coi-text-dark d-block">Start Date</label>
                                                         <span>
                                                         <app-no-data-label id="start-date" [valueToShow]="coi?.travelStartDate">
-                                                            <span class="coi-text-light">{{coi?.travelStartDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                            <span class="coi-text-light">{{coi?.travelStartDate | dateFormatter}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                     </div>
@@ -928,12 +1077,11 @@
                                             </div>
                                             <div class="col-md-4 text-lg-start">
                                                 <div class="align-items-center flex-column" tabindex="-1">
-                                                    <div [attr.aria-label]="'End Date' + (coi?.travelEndDate | dateFormatterWithTimeZone)">
+                                                    <div [attr.aria-label]="'End Date' + (coi?.travelEndDate | dateFormatter)">
                                                         <label for="end-date" class="coi-text-dark d-block">End Date</label>
                                                         <span>
                                                         <app-no-data-label id="end-date" [valueToShow]="coi?.travelEndDate">
-                                                            <span class="coi-text-light">{{coi?.travelEndDate |
-                                                                dateFormatterWithTimeZone}}</span>
+                                                            <span class="coi-text-light">{{coi?.travelEndDate | dateFormatter}}</span>
                                                         </app-no-data-label>
                                                     </span>
                                                     </div>
@@ -966,23 +1114,22 @@
                             </div>
                         </div>
                     </div>
-
-                </ng-container>
-            </div>
-            <ng-template #noData>
-                <app-no-information></app-no-information>
-            </ng-template>
-        </ng-container>
-         <!-- Pagination -->
-         <div [hidden]="isLoading" *ngIf="coiList.length > 0 && isShowDisclosureList" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-            <nav aria-label="pagination section" class="pagination justify-content-end">
-                <app-pagination  (pageChangeEvent)="actionsOnPageChange($event)"
-                    [totalCount]="result.travelDisclosureCount ? result.travelDisclosureCount : result.consultDisclCount ?  result.consultDisclCount : result.disclosureCount"
-                    [defaultCurrentPage]="coiAdminDashboardService.coiRequestObject.currentPage">
-                </app-pagination>
-            </nav>
+                </ng-container>   
+            </ng-container>
         </div>
-    </section>
+        <ng-template #noData>
+            <app-no-information *ngIf="coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'"></app-no-information>
+        </ng-template>
+    </ng-container>
+    <!-- Pagination -->
+    <div [hidden]="isLoading" *ngIf="coiList.length > 0 && isShowDisclosureList && coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <nav aria-label="pagination section" class="pagination justify-content-end">
+        <app-pagination  (pageChangeEvent)="actionsOnPageChange($event)"
+            [totalCount]="result.travelDisclosureCount ? result.travelDisclosureCount : result.consultDisclCount ?  result.consultDisclCount : result.disclosureCount"
+            [defaultCurrentPage]="coiAdminDashboardService.coiRequestObject.currentPage">
+        </app-pagination>
+    </nav>
+    </div>
     <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"
         [disclosureId]="addAdmin.disclosureId" [path]="assignAdminPath" [actionType]="'A'">
     </app-assign-administrator-modal>
@@ -1029,7 +1176,6 @@
         </div>
     </div>
 </div>
-
 <app-confirmation-modal [modalName] = "'complete-review-confirmation-modal'" (primaryBtnAction)="performCompleteReview()"
                         [primaryBtnName]="'Complete Final Review'" >
     <!-- modal header -->

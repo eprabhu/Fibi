@@ -9,17 +9,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { FormPreviewComponent } from './form-preview/form-preview.component';
+import {FormBuilderCreateRouteGaurdService} from '../form-builder-create-route-guard.service';
+import { FormSharedModule } from '../shared/shared.module';
+
 
 const routes: Routes = [
     {
         path: '', component: FormBuilderNavComponent,
         children: [
             { path: '', redirectTo: 'editor', pathMatch: 'full' },
-            { path: 'editor', component: FormEditorComponent },
+            { path: 'editor', canActivate: [FormBuilderCreateRouteGaurdService], canDeactivate: [FormBuilderCreateRouteGaurdService],
+                component: FormEditorComponent },
             { path: 'preview', component: FormPreviewComponent },
             { path: 'integration', component: FormIntegrationComponent },
         ]
-    }]
+    }];
 
 @NgModule({
     imports: [
@@ -27,7 +31,8 @@ const routes: Routes = [
         DragDropModule,
         RouterModule.forChild(routes),
         SharedModule,
-        FormsModule
+        FormsModule,
+        FormSharedModule
 
     ],
     declarations: [
@@ -36,7 +41,9 @@ const routes: Routes = [
         FormEditorComponent,
         FormAddtionalInformationComponent,
         FormPreviewComponent
-    ],
+    ], providers: [
+        FormBuilderCreateRouteGaurdService
+    ]
 
 })
 export class FormEditorModule { }

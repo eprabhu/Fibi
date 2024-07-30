@@ -6,114 +6,116 @@
 
     <!-- slider header card -->
     <ng-container content-sticky>
-            <div class="border border-opacity-50 border-secondary coi-box-red mt-2 mx-0 p-3 rounded-2 row shadow-medium">
-                <div class="col-12 fw-500 p-0">
-                    <span class="mb-0 f-16 label-text">
-                        <app-read-more [valueToShow]="travelDisclosure?.travelEntityName" [sliceCount]="100"></app-read-more>
-                    </span>
-                 </div>
-                <div class="col-6 p-0 fs-14 my-2">
-                    <label class="d-block coi-text-dark" for="">Person associated with travel
-                    </label>
+        <div class="border border-opacity-50 border-secondary coi-box-red mt-2 mx-0 p-3 rounded-2 row shadow-medium">
+            <span class="d-flex col-12 p-0">
+                <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">apartment</mat-icon>
+                <span id="conflict-slider-travelDisclosure-entity">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.travelEntityName">
+                        <span class="coi-text-darker fs-6 text-slice" [title]="travelDisclosure?.travelEntityName">{{travelDisclosure?.travelEntityName}}</span>
+                    </app-no-data-label>
+                </span>
+            </span>
+            <div class="col-6 p-0 fs-14 my-2">
+                <label class="d-block coi-text-dark" for="conflict-slider-travelDisclosure-person">Person associated with travel</label>
+                <span id="conflict-slider-travelDisclosure-person">
                     <app-no-data-label [valueToShow]="travelDisclosure?.personFullName">
-                        <span class="grey-text fw-500">{{travelDisclosure?.personFullName}}</span>
+                        <span class="coi-text-light">{{travelDisclosure?.personFullName}}</span>
                     </app-no-data-label>
-                </div>
-                <div class="col-6 p-0 fs-14 my-2">
-                    <label class="d-block coi-text-dark" for="">Department</label>
-                    <app-no-data-label [valueToShow]="travelDisclosure?.homeUnitNumber">
-                        <span class="grey-text fw-500">{{travelDisclosure?.homeUnitNumber}} -
-                            {{travelDisclosure?.homeUnitName}}</span>
-                    </app-no-data-label>
-                </div>
-                <div class="col-6 p-0 fs-14">
-                    <label class="d-block coi-text-dark" for="">Risk</label>
-                    <app-no-data-label [valueToShow]="travelDisclosure?.riskLevel">
-                        <span class="d-flex align-items-start">
-                            <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round"
-                                aria-hidden="true">warning</mat-icon>
-                            <span class="grey-text fw-500 ms-1">{{travelDisclosure?.riskLevel}}</span>
-                        </span>
-                        </app-no-data-label>
-                </div>
-                <div class="col-6 p-0 fs-14">
-                    <label class="d-block coi-text-dark" for="">Disclosure</label>
-                    <span class="grey-text fw-500">
-                        <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                            <span
-                                class="{{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
-                            <span class="badgeFont">{{travelDisclosure?.disclosureStatus}}</span>
-                        </app-no-data-label>
-                    </span>
-                </div>
+                </span>
             </div>
-
+            <div class="col-6 p-0 fs-14 my-2">
+                <label class="d-block coi-text-dark" for="conflict-slider-travelDisclosure-department">Department</label>
+                <span id="conflict-slider-travelDisclosure-department">
+                    <app-no-data-label [valueToShow]="commonService.getPersonLeadUnitDetails(travelDisclosure)">
+                        <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(travelDisclosure)}}</span>
+                    </app-no-data-label>
+                </span>
+            </div>
+            <div class="col-6 p-0 fs-14">
+                <label for="conflict-slider-travelDisclosure-risk" class="coi-text-lighter d-block">Risk</label>
+                <span id="conflict-slider-travelDisclosure-risk">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.riskLevel">
+                        <span class="d-flex">
+                            <mat-icon class="{{commonService.getRiskColor(travelDisclosure?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0"
+                                aria-hidden="true">warning</mat-icon>
+                            <span class="coi-text-dark">{{travelDisclosure?.riskLevel}}</span>
+                        </span>
+                    </app-no-data-label>
+                </span>
+            </div>
+            <div class="col-6 p-0 fs-14">
+                <label for="conflict-slider-travelDisclosure-disclosureStatus" class="coi-text-lighter d-block">Disclosure</label>
+                <span id="conflict-slider-travelDisclosure-disclosureStatus">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
+                        <span class="{{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                        <span class="coi-text-dark ms-1">{{travelDisclosure?.disclosureStatus}}</span>
+                    </app-no-data-label>
+                </span>
+            </div>
+        </div>
     </ng-container>
 
     <!-- slider content -->
     <ng-container content>
-        <!-- help text -->
-        <div class="mb-0" *ngIf="isEditMode">
+       <ng-container *ngIf="isEditMode">
+            <!-- help text -->
             <app-help-text [helpTextList]="helpText" [tooltip]="'Manage Travel Disclosure Status'"></app-help-text>
-        </div>
-        <!-- disclosure status update -->
-        <div *ngIf="isEditMode" class="mt-2 card comment-card shadow-sm p-3">
-            <div class="row">
-                <!-- disclosure status lookup -->
-                <div class="col-md-12 col-xl-4">
-                    <label class="fs-14 fw-500">Disclosure Status</label>
-                    <span>
-                        <select class="form-control form-select" [(ngModel)]="disclosureStatusCode"
-                            [ngClass]="travelConflictValidationMap?.has('disclosureStatusCode') || travelConflictValidationMap?.has('duplicateDisclosure') ?
-                                'is-invalid d-block' : ''" (ngModelChange)="setCoiTravelConflictStatusType()">
-                            <option [value]=null>--Select--</option>
-                            <option *ngFor="let status of disclosureStatusLookUpList"
-                                [value]="status.disclosureStatusCode">
-                                {{status?.description}}</option>
-                        </select>
-                        <div *ngIf="travelConflictValidationMap?.has('disclosureStatusCode')"
-                            class="invalid-feedback d-block fs-12">
-                            {{travelConflictValidationMap?.get('disclosureStatusCode')}}
+
+            <!-- disclosure status update -->
+            <div class="mt-2 card shadow-sm p-3">
+                <div class="row">
+                    <!-- disclosure status lookup -->
+                    <div class="col-md-12 col-xl-4">
+                        <label for="conflict-slider-travelDisclosure-status-edit" class="fs-14 fw-500">Disclosure Status</label>
+                        <span>
+                            <select id="conflict-slider-travelDisclosure-status-edit" class="form-control form-select" [(ngModel)]="disclosureStatusCode"
+                                [ngClass]="travelConflictValidationMap?.has('disclosureStatusCode') || travelConflictValidationMap?.has('duplicateDisclosure') ?
+                                    'is-invalid d-block' : ''" (ngModelChange)="setCoiTravelConflictStatusType()">
+                                <option [value]=null>--Select--</option>
+                                <option *ngFor="let status of disclosureStatusLookUpList"
+                                    [value]="status.disclosureStatusCode">
+                                    {{status?.description}}</option>
+                            </select>
+                            <div *ngIf="travelConflictValidationMap?.has('disclosureStatusCode')"
+                                class="invalid-feedback d-block fs-12">
+                                {{travelConflictValidationMap?.get('disclosureStatusCode')}}
+                            </div>
+                            <div *ngIf="travelConflictValidationMap?.has('duplicateDisclosure')" class="d-block fs-12 invalid-feedback">
+                                {{travelConflictValidationMap?.get('duplicateDisclosure')}}
+                            </div>
+                        </span>
+                    </div>
+                    <!-- description -->
+                    <div class="col-md-12 col-xl-8">
+                        <label for="conflict-slider-travelDisclosure-status-description" class="fs-14 fw-500">Describe the reason for Disclosure status change</label>
+                        <textarea appAutoGrow id="conflict-slider-travelDisclosure-status-description" class="form-control fs-14" placeholder="Description"
+                            rows="1" [(ngModel)]="comment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
+                            [ngClass]="travelConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
+                            (ngModelChange)="comment = comment.trim()">
+                        </textarea>
+                        <div *ngIf="travelConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
+                            {{travelConflictValidationMap?.get('comment')}}
                         </div>
-                        <div *ngIf="travelConflictValidationMap?.has('duplicateDisclosure')" class="d-block fs-12 invalid-feedback">
-                            {{travelConflictValidationMap?.get('duplicateDisclosure')}}
-                        </div>
-                    </span>
-                </div>
-                <!-- description -->
-                <div class="col-md-12 col-xl-8">
-                    <label class="fs-14 fw-500">Describe the reason for Disclosure status change</label>
-                    <textarea appAutoGrow id="main-panel-comnt" class="form-control fs-14" placeholder="Description"
-                        rows="1" [(ngModel)]="comment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
-                        [ngClass]="travelConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
-                        (ngModelChange)="comment = comment.trim()">
-                    </textarea>
-                    <div *ngIf="travelConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
-                        {{travelConflictValidationMap?.get('comment')}}
                     </div>
                 </div>
+                <!-- save clear btn -->
+                <div class="mt-2 ms-auto">
+                    <button type="button" class="btn btn-outline-secondary fs-14 me-2" (click)="clearConflictModal()"
+                        title="Click here to clear" aria-label="Click here to clear">Clear</button>
+                    <button type="button" class="btn btn-primary fs-14" (click)="manageTravelConflict()"
+                        title="Click here to save" aria-label="Click here to save">Save</button>
+                </div>
             </div>
-            <!-- save clear btn -->
-            <div class="text-muted mt-2">
-                <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
-                    (click)="manageTravelConflict()">
-                    Save
-                </button>
-                <button type="button" class="btn btn-outline-secondary float-end mr-10 fs-14" data-bs-dismiss="modal"
-                    (click)="clearConflictModal()">
-                    Clear
-                </button>
-            </div>
-        </div>
+       </ng-container>
 
         <!-- Conflict History -->
-        <div class="mt-2 main-title" tabindex="-1">
+        <div class="mt-3 border-bottom" tabindex="-1">
             <h3 class="d-flex align-items-center fs-16"><strong>Conflict History</strong>
                 <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top"></span>
             </h3>
         </div>
 
-        <div class="card mt-2" id="risk-history">
+        <div class="card mt-2" id="travel-conflict-history">
             <div class="card-content">
                 <div class="card-body" id="coi-travel-add-conflict-slider-card-body">
                         <ng-container *ngIf="conflictHistory.length > 0; else noData">
@@ -131,15 +133,18 @@
                                             <span [ngClass]="historyEntry?.updateUser ? '': 'fst-italic'">{{
                                                 (!isReadMore[index] && historyEntry?.comment?.length > 230) ?
                                                 (historyEntry?.comment | slice:0:230) : historyEntry?.comment }}
-                            
                                                 <!-- for read more and less -->
                                                 <ng-container *ngIf="historyEntry?.comment?.length > 230">
-                                                    <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium cursor-pointer">
-                                                        <strong>
-                                                            <span *ngIf="!isReadMore[index]">...<u title="Expand comment">Read More</u></span>
-                                                            <u title="Collapse comment" *ngIf="isReadMore[index]">Read Less</u>
-                                                        </strong>
-                                                    </span>
+                                                    <a tabindex="0" role="link"
+                                                        (click)="isReadMore[index] = !isReadMore[index]"
+                                                        (keyup.enter)="isReadMore[index] = !isReadMore[index]"
+                                                        (keyup.space)="isReadMore[index] = !isReadMore[index]" 
+                                                        title="Click here to read {{isReadMore[index] ? 'less' : 'more'}}"
+                                                        class="fw-medium cursor-pointer coi-text-light text-decoration-none"
+                                                        attr.aria-label="Click here to read {{isReadMore[index] ? 'less' : 'more'}}">
+                                                        <span *ngIf="!isReadMore[index]">...</span>
+                                                        <u class="fw-600">{{isReadMore[index] ? 'Read Less' : 'Read More'}}</u>
+                                                    </a>
                                                 </ng-container>
                                             </span>
                                         </span>

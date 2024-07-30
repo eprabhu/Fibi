@@ -13,7 +13,7 @@ export class SharedEntityInfoCardComponent implements OnInit {
   @Input() isShowRisk = true;
   @Output() emitEntityId = new EventEmitter<any>();
   isReadMore: false;
-  constructor(public commonServices: CommonService) { }
+  constructor(public commonService: CommonService) { }
 
   ngOnInit() {
   }
@@ -21,18 +21,5 @@ export class SharedEntityInfoCardComponent implements OnInit {
   public viewEntityDetails(entityId: any) {
      this.emitEntityId.emit(entityId);
   }
-
-  getWarningClass(typeCode): string {
-    switch (typeCode) {
-        case '1':
-            return 'invalid';
-        case '2':
-            return 'medium-risk';
-        case '3':
-            return 'low-risk';
-        default:
-            return;
-    }
-}
 
 }

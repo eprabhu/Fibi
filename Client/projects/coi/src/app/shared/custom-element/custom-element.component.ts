@@ -3,7 +3,6 @@ import { CustomElementService } from './custom-element.service';
 import { CommonService } from '../../common/services/common.service';
 import { Observable, Subscription } from 'rxjs';
 import { setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import {
   getEndPointOptionsForCostCentre,
   getEndPointOptionsForCountry,
@@ -16,8 +15,9 @@ import {
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {AutoSaveService} from "../../../../../fibi/src/app/common/services/auto-save.service";
-import {DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Component({
   selector: 'app-custom-element',

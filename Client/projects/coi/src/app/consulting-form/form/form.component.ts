@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { EndpointOptions } from '../../add-sfi/add-sfi.component';
-import { getEndPointOptionsForCountry } from '../../shared/form-builder-view/search-configurations';
+import { getEndPointOptionsForCountry } from '../../configuration/form-builder-create/shared/form-builder-view/search-configurations';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDetails, EntitySaveRO, ExistingEntityDetails } from './form-interface';
 import { setEntityObjectFromElasticResult } from '../../common/utilities/elastic-utilities';
@@ -11,11 +11,11 @@ import { deepCloneObject, isEmptyObject, openModal } from 'projects/fibi/src/app
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { Router } from '@angular/router';
 import { ConsultingService } from '../services/consulting-service.service';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
-import { FBConfiguration } from '../../shared/form-builder-view/form-builder-interface';
+import { FBConfiguration } from '../../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { DataStoreService } from '../services/data-store.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { HttpResponse } from '@angular/common/http';
+import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-form',
@@ -44,13 +44,13 @@ export class FormComponent {
     entityDetailsAlreadySave: any;
     showTextAreaLimiter: boolean;
 
-    constructor(private _elasticConfig: ElasticConfigService, private _commonService: CommonService, private _formService: FormService,
+    constructor(private _elasticConfig: ElasticConfigService, public commonService: CommonService, private _formService: FormService,
         private _router: Router, public consultingService: ConsultingService, public dataStore: DataStoreService
     ) { }
 
     ngOnInit() {
         this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
-        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.getSFILookup();
         this.saveSubscribe();
         this.getDataFromStore();
@@ -119,7 +119,7 @@ export class FormComponent {
             this.clearCountryField = new String('false');
         }, err => {
             this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
         }));
     }
 
@@ -135,7 +135,7 @@ export class FormComponent {
         this.entityDetails.coiEntity = deepCloneObject(this.addEntityConfirmation);
         this.addEntityConfirmation = null;
         this.checkForSubmitDisable();
-        this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+        this.setHeaderEntityName(this.entityDetails.coiEntity);
     }
 
     clearEntityDetails(): void{
@@ -144,7 +144,7 @@ export class FormComponent {
         this.canShowEntityFields = false;
         this.resetEntity();
         this.checkForSubmitDisable();
-        this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+        this.setHeaderEntityName(this.entityDetails.coiEntity);
     }
 
     resetEntity() {
@@ -163,7 +163,7 @@ export class FormComponent {
     private clearSFIFields(): void {
         this.entityDetails = new EntityDetails();
         this.clearCountryField = new String('true');
-        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.isResultFromSearch = false;
         this.mandatoryList.clear();
         this.isNewEntityFromSearch = false;
@@ -336,7 +336,7 @@ export class FormComponent {
             this.entityDetailsAlreadySave = deepCloneObject(this.consultingForm.consultingFormDisclosure.personEntity);
             this.resetEntityDefaultValue(this.entityDetailsAlreadySave.coiEntity.entityName);
             this.isResultFromSearch = true;
-            this.setHeaderEntityName(this.entityDetails.coiEntity.entityName);
+            this.setHeaderEntityName(this.entityDetails.coiEntity);
         } else {
             this.entityDetails = new EntityDetails();
             this.entityDetailsAlreadySave = null;
@@ -346,8 +346,8 @@ export class FormComponent {
         this.checkForSubmitDisable();
     }
 
-    setHeaderEntityName(entityName) {
-        this.consultingService.headerEntityName = entityName;
+    setHeaderEntityName(coiEntity: any) {
+        this.consultingService.coiEntity = coiEntity;
     }
 
     // commentSliderEvent(event) {
@@ -359,7 +359,7 @@ export class FormComponent {
     //         formBuilderSectionId : event.formBuilderSectionId,
     //         headerName: event.headerName
     //     }
-    //     this._commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
+    //     this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);
     //     this._opa.isShowCommentNavBar = true;
     // }
 
@@ -375,7 +375,7 @@ export class FormComponent {
             }
 
             case 'ERROR':
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 break;
             default: break;
         }
@@ -436,19 +436,6 @@ export class FormComponent {
 
     checkForSubmitDisable() {
         this.consultingService.canDisableSubmit = this.entityDetails.coiEntity.entityName ? false : true;
-    }
-
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
     }
 
  onEntityChanges() {

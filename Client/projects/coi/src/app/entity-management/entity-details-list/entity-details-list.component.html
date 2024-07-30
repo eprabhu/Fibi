@@ -361,7 +361,7 @@
                   <span class="break-point-1200">
                     <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
                       <span id="coi-entity-details-start-date">
-                        {{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}
+                        {{entityListData?.involvementStartDate | dateFormatter}}
                       </span>
                     </app-no-data-label>
                   </span>
@@ -370,7 +370,7 @@
                   <label for="coi-entity-details-end-date">End Date of Involvement <span>:</span></label>
                   <span class="break-point-1200 ms-1">
                     <app-no-data-label [valueToShow]="entityListData?.involvementEndDate">
-                      <span id="coi-entity-details-end-date">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
+                      <span id="coi-entity-details-end-date">{{entityListData?.involvementEndDate | dateFormatter}}</span>
                     </app-no-data-label>
                   </span>
                 </div>
@@ -411,19 +411,19 @@
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
             <div class="row">
-              <div class="col text-secondary fs-14 d-flex">
+              <div class="col text-secondary fs-14 d-flex coi-card-notch-ribbon-container">
                 <div class="col-height" tabindex="-1">
-                  <span class="shadow-sm d-flex align-items-center ps-2 mt-4 status-pill"
+                  <span class="shadow-sm coi-card-notch-ribbon"
                     [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'bg-fcoi-clip': (disclosureList?.fcoiTypeCode === '2'?'bg-proposal-clip':'bg-award-clip')">
                     <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
                 </div>
-                <div class="col coi-ms-n15px" tabindex="-1">
+                <div class="col ms-2 mt-1" tabindex="-1">
                   <span class="fw-bold">{{disclosureList?.fcoiTypeCode === '1'
                     ?'FCOI' : 'Project'}} Disclosure By
                     {{disclosureList?.disclosurePersonFullName}}</span>
                 </div>
               </div>
-              <div class="col-3 text-secondary fs-14" tabindex="1">
+              <div class="col-3 text-secondary fs-14">
                 <label class="fw-bold  me-2 pr-10">
                   Disclosure Status <span>:</span></label>
                   <span class="break-point-1200">
@@ -461,7 +461,7 @@
                     <label for="coi-entity-details-exp-date" class="fw-bold me-2">Expiration Date <span>:</span></label>
                     <span class="break-point-1200">
                       <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
-                        <span id="coi-entity-details-exp-date">{{disclosureList?.expirationDate | dateFormatter}}</span>
+                        <span id="coi-entity-details-exp-date">{{disclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
                       </app-no-data-label>
                     </span>
                   </div>
@@ -494,13 +494,13 @@
                 <label for="coi-entity-details-project" class="fw-bold">Project <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="disclosureList?.fcoiTypeCode === '2'? disclosureList?.proposalId : disclosureList?.awardId">
-                    <span *ngIf="disclosureList?.fcoiTypeCode === '2'" [title]="disclosureList?.proposalTitle.length>30? disclosureList?.proposalTitle:''"
-                      [ngClass]="{'hand-cursor':disclosureList?.proposalTitle.length>30}" id="coi-entity-details-project">
-                     #{{disclosureList?.proposalId}} - {{(disclosureList?.proposalTitle.length>30) ? (disclosureList?.proposalTitle|slice:0:27)+'...':disclosureList?.proposalTitle}}
+                    <span *ngIf="disclosureList?.fcoiTypeCode === '2'" [title]="disclosureList?.proposalTitle?.length>30? disclosureList?.proposalTitle:''"
+                      [ngClass]="{'hand-cursor':disclosureList?.proposalTitle?.length>30}" id="coi-entity-details-project">
+                     #{{disclosureList?.proposalId}} - {{(disclosureList?.proposalTitle?.length>30) ? (disclosureList?.proposalTitle|slice:0:27)+'...':disclosureList?.proposalTitle}}
                     </span>
-                    <span *ngIf="disclosureList?.fcoiTypeCode === '3'" [title]="disclosureList?.awardTitle.length>30? disclosureList?.awardTitle:''"
-                      [ngClass]="{'hand-cursor':disclosureList?.awardTitle.length>30}" id="coi-entity-details-award">
-                      #{{disclosureList?.awardId}} - {{(disclosureList?.awardTitle.length>30)?(disclosureList?.awardTitle|slice:0:27)+'...':disclosureList?.awardTitle}}
+                    <span *ngIf="disclosureList?.fcoiTypeCode === '3'" [title]="disclosureList?.awardTitle?.length>30? disclosureList?.awardTitle:''"
+                      [ngClass]="{'hand-cursor':disclosureList?.awardTitle?.length>30}" id="coi-entity-details-award">
+                      #{{disclosureList?.awardId}} - {{(disclosureList?.awardTitle?.length>30)?(disclosureList?.awardTitle|slice:0:27)+'...':disclosureList?.awardTitle}}
                     </span>
                   </app-no-data-label>
                 </span>
@@ -547,20 +547,22 @@
       </ng-container>
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'TRAVEL_DISCLOSURES'">
         <div *ngFor="let travelDisclosureList of entityRelations;let i=index"
-          class="disclosure-card mt-2 rounded-1 light-dark-text-color"
+          class="disclosure-card mt-2 light-dark-text-color"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
-            <div class="d-flex">
-              <div class="col-height">
-                <span class="status-pill bg-travel-clip shadow-sm d-flex align-items-center ps-2 mt-4">
-                  <span class="px-2">Travel</span></span>
+            <div class="row">
+              <div class="col text-secondary fs-14 d-flex coi-card-notch-ribbon-container pe-0">
+                <div class="col-height">
+                  <span class="coi-card-notch-ribbon bg-travel-clip shadow-sm">
+                    <span class="px-2">Travel</span></span>
+                </div>
+                <div class="col ms-2 mt-1">
+                  <span class="fw-bold" id="coi-entity-details-travel">#{{travelDisclosureList?.travelDisclosureNumber}} : Travel Disclosure By
+                    {{travelDisclosureList?.travellerName}}</span>
+                </div>
               </div>
-              <div class="col text-secondary fs-14">
-                <span class="fw-bold" id="coi-entity-details-travel">#{{travelDisclosureList?.travelDisclosureNumber}} : Travel Disclosure By
-                  {{travelDisclosureList?.travellerName}}</span>
-              </div>
-              <div class="col-3 text-secondary fs-14">
-                <label class="fw-bold pr-05 me-2">Disclosure Status <span>:</span></label>
+              <div class="col-3 text-secondary fs-14 p-0">
+                <label class="fw-bold pr-05 me-2 coi-ms-n5px">Disclosure Status <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelDisclosurestatus">
                     <span
@@ -659,7 +661,7 @@
                 <label for="coi-entity-details-travel-strt-date" class="fw-bold pr-05">Start Date <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelStartDate">
-                    <span id="coi-entity-details-travel-strt-date">{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
+                    <span id="coi-entity-details-travel-strt-date">{{travelDisclosureList?.travelStartDate | dateFormatter}}</span>
                   </app-no-data-label>
                 </span>
               </div>
@@ -667,7 +669,7 @@
                 <label for="coi-entity-details-travel-end-date" class="fw-bold pr-05">End Date <span>:</span></label>
                 <span class="break-point-1200">
                   <app-no-data-label [valueToShow]="travelDisclosureList?.travelEndDate">
-                    <span id="coi-entity-details-travel-end-date">{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
+                    <span id="coi-entity-details-travel-end-date">{{travelDisclosureList?.travelEndDate | dateFormatter}}</span>
                   </app-no-data-label>
                 </span>
               </div>

@@ -1,14 +1,18 @@
-<button class="d-none" data-bs-toggle="modal" data-bs-target="#entitypersondetails" id="entityPersonDetailsTrigger">
-</button>
+<button tabindex="-1" class="d-none" data-bs-toggle="modal" data-bs-target="#coi-person-view-modal"
+    id="coi-person-view-modal-trigger-btn" aria-hidden="true"></button>
 
-<div class="modal fade mySkinDialog modal-xl" data-bs-backdrop="static" tabindex="-1" id="entitypersondetails" role="dialog">
+<div class="modal fade mySkinDialog modal-xl" data-bs-backdrop="static" tabindex="-1" id="coi-person-view-modal" role="dialog"
+    aria-labelledby="coi-person-view-modal-header">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title userDetail"><i class="mr-2 fa fa-user-o"
-                        aria-hidden="true"></i>{{userdetails?.fullName}}</h4>
-                <button type="button" class="btn-close" title="Click to close" data-bs-dismiss="modal" aria-label="Click to close"
-                    (click)="addNewValue(false)"></button>
+                <h4 class="modal-title userDetail" id="coi-person-view-modal-header">
+                    <i class="mr-2 fa fa-user-o" aria-hidden="true"></i>
+                    <span>{{personValues?.person?.fullName}}</span>
+                </h4>
+                <button type="button" class="btn-close" title="Click here to close" data-bs-dismiss="modal"
+                    aria-label="Click here to close" id="coi-person-view-modal-close-btn"
+                    (click)="commonService.closePersonDetailsModal(false)"></button>
             </div>
             <div class="modal-body">
                 <div class="d-flex nav-sticky mb-" id="person-modal">
@@ -16,34 +20,32 @@
                         <div class="d-flex align-items-center text-secondary cursor-pointer nav-link px-3"
                             tabindex="0" role="button" aria-label="Click to view Person Details" title="Click to view Person Details"
                             (click)="currentTab='PERSON_DETAILS'" (keydown.enter)="currentTab='PERSON_DETAILS'"  [class.active]="currentTab == 'PERSON_DETAILS'">
-                            <span class="fw-500 fs-16">
-                                Person Details
-                            </span>
+                            <span class="fw-500 fs-16">Person Details</span>
                         </div>
                         <div class="d-flex align-items-center text-secondary cursor-pointer nav-link px-3" (click)="currentTab='TRAINING_DETAILS'"
                             tabindex="0" role="button" aria-label="Click to view Training" title="Click to view Training"
                             [class.active]="currentTab == 'TRAINING_DETAILS'" (keydown.enter)="currentTab == 'TRAINING_DETAILS'">
-                            <span class="fw-500 fs-16">
-                                Training
-                            </span>
+                            <span class="fw-500 fs-16">Training</span>
                         </div>
                     </nav>
                 </div>
                 <app-person-details class="fs-14" [personValues]="personValues" [user]="id"
                     *ngIf="currentTab =='PERSON_DETAILS'"></app-person-details>
-                <app-Training-details class="fs-14" [userdetails]="userdetails"
+                <app-Training-details class="fs-14" [personId]="personId"
                     *ngIf="currentTab == 'TRAINING_DETAILS'"></app-Training-details>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Cancel"
-                    (click)="addNewValue(false)">Close
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button" title="Click here to close"
+                    aria-label="Click here to close" (click)="commonService.closePersonDetailsModal(false)">
+                    Close
                 </button>
-                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" class="btn btn-primary me-0" title="View Person Details"
-                    type="button" (click)="viewPersonDetails(userdetails?.personId)">
+                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" class="btn btn-primary me-0"
+                    title="Click here to view person details" aria-label="Click here to view person details"
+                    type="button" (click)="viewPersonDetails(personId)">
                     View Person Details
                 </button>
             </div>
         </div>
     </div>
 </div>
-<!-- PersonfullDetails,  TrainingDetails -->
+

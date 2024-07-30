@@ -1,13 +1,8 @@
-<div class="d-flex justify-content-end update-configuration d-flex align-items-center" *ngIf="showSelectedSection && selectedSection.sectionId">
-    <button class="btn btn-primary fs-14  mt-2 d-flex align-items-center" tabindex="0" id="update-configuration"
-        aria-label="Click here to update Configurations" (click)="updateForSection();"
-        (keyup.enter)="updateForSection();" (keyup.space)="updateForSection();" title="Update Configuration">
-        <mat-icon class="fb-icon-size mr-2">save</mat-icon>Update Configurations</button>
-</div>
 <div class="section-edit" title="" tabindex="0" aria-label="" *ngIf="showSelectedSection && selectedSection.sectionId">
     <label class="d-block mt-3 fw-600 mt-1 fb-label-font-size" for="section-name">Section name</label>
     <input id="section-name" type="text" class="form-control" id="section-name"
-        (ngModelChange)="this.formBuilderService.unSavedChange = true;" [(ngModel)]="selectedSection.sectionName">
+        (ngModelChange)="this.formBuilderService.unSavedChange = true;" placeholder="Section name"
+        [(ngModel)]="selectedSection.sectionName">
     <label class="d-block fw-600 mt-3 mt-1 fb-label-font-size" for="section-header">
         Section Header
     </label>
@@ -22,15 +17,6 @@
         placeholder="Comment" row="1" maxlength="2000"></ckeditor>
 </div>
 
-<div class="d-flex justify-content-end update-configuration"
-    *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE','QN','PE','RT'].includes(selectedComponent.componentType)">
-    <button *ngIf="isInitialSave" type="button" tabindex="0" class="btn btn-primary fs-14  mt-2 d-flex align-items-center"
-        (click)="saveForComponents();" aria-label="click here to save configuration" id="save-configuration-btn"
-        title="Save Configurations"><mat-icon class="fb-icon-size mr-2">save</mat-icon> Save Configurations</button>
-    <button *ngIf="!isInitialSave" type="button" tabindex="0" class="btn btn-primary fs-14  mt-2 d-flex align-items-center"
-        (click)="updateForComponents();" aria-label="click here to Update configuration" id="update-configuration-btn"
-        title="Update Configurations"><mat-icon class="fb-icon-size mr-2">save</mat-icon> Update Configurations</button>
-</div>
 <div class="section-edit" title="" tabindex="0" aria-label=""
     *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE','QN','PE','RT'].includes(selectedComponent.componentType)">
     <div id="element-Name"
@@ -103,21 +89,25 @@
         <!--common lookup for all -->
         <ng-container *ngIf="['ES','AS','SD','UD'].includes(selectedComponent.componentType)">
             <label class="mt-3 fw-600 mt-1 fb-label-font-size">
+                <span class="fb-mandatory">*</span>
                 Lookup Type
             </label>
             <select [(ngModel)]="customDataElement.lookupArgument" (ngModelChange)="selectedCustomDataLookup()"
-                class="form-select">
+                class="form-control">
                 <option [ngValue]=null>--Select--</option>
                 <option [ngValue]="option.code" *ngFor=" let option of customDatalookUpArray">{{option.description}}
                 </option>
             </select>
+            <div *ngIf="formValidation?.has('lookupArgumentValidation')">
+                <span class="mandatory text-danger fs-14 d-inline-block">*Please select a value</span>
+            </div>
             <!--common lookup for all  End-->
             <!--common Default value lookup for all -->
             <ng-container *ngIf="['AS','ES'].includes(selectedComponent.componentType)">
                 <label class="mt-3 fw-600 mt-1 fb-label-font-size">
                     Default Value
                 </label>
-                <select [(ngModel)]="customDataElement.defaultValue" class="form-select">
+                <select [(ngModel)]="customDataElement.defaultValue" class="form-control">
                     <option [ngValue]=null>--Select--</option>
                     <option [ngValue]="option.value" *ngFor=" let option of customDataDefaultValueArray">{{option.key}}
                     </option>
@@ -155,7 +145,7 @@
                 Is Multiple?
             </label>
             <span class="py-1" aria-label="" role="switch">
-                <a *ngIf="customDataElement.isMultiSelectLookup == 'Y' " class="pl-2">
+                <a *ngIf="customDataElement.isMultiSelectLookup == 'Y'" class="pl-2">
                     <label class="switch" tabindex="0" (click)="customDataElement.isMultiSelectLookup = 'N'"
                         (keyup.enter)="customDataElement.isMultiSelectLookup = 'N'">
                         <input type="checkbox" checked>
@@ -163,7 +153,7 @@
                                 class="fs-12 mt-1 activate-text">Yes</small></span>
                     </label>
                 </a>
-                <a *ngIf="customDataElement.isMultiSelectLookup == 'N' " class="pl-2">
+                <a *ngIf="customDataElement.isMultiSelectLookup == 'N'" class="pl-2">
                     <label class="switch" tabindex="0" (click)="customDataElement.isMultiSelectLookup = 'Y'"
                         (keyup.enter)="customDataElement.isMultiSelectLookup = 'Y'">
                         <input type="checkbox">
@@ -246,4 +236,23 @@
                 [(ngModel)]="selectedComponent.validationMessage">
         </ng-container>
     </div>
+</div>
+<div class="d-flex justify-content-end update-configuration p-2"
+    *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE','CE','QN','PE','RT'].includes(selectedComponent.componentType)">
+    <button *ngIf="isInitialSave" type="button" tabindex="0"
+        class="btn btn-primary fs-14  mt-2 d-flex align-items-center" (click)="saveForComponents();"
+        aria-label="click here to save configuration" id="save-configuration-btn" title="Save Configurations"><i
+            class="fa fa-save fb-mr-1" aria-hidden="true"></i> Save Configurations</button>
+    <button *ngIf="!isInitialSave" type="button" tabindex="0"
+        class="btn btn-primary fs-14  mt-2 d-flex align-items-center" (click)="updateForComponents();"
+        aria-label="click here to Update configuration" id="update-configuration-btn" title="Update Configurations"><i
+            class="fa fa-save fb-mr-1" aria-hidden="true"></i> Update Configurations</button>
+</div>
+
+<div class="d-flex justify-content-end update-configuration d-flex align-items-center p-2"
+    *ngIf="showSelectedSection && selectedSection.sectionId">
+    <button class="btn btn-primary fs-14  mt-2 d-flex align-items-center" tabindex="0" id="update-configuration"
+        aria-label="Click here to update Configurations" (click)="updateForSection();"
+        (keyup.enter)="updateForSection();" (keyup.space)="updateForSection();" title="Update Configuration">
+        <i class="fa fa-save fb-mr-1" aria-hidden="true"></i>Update Configurations</button>
 </div>

@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultAssignAdminDetails, DisclsoureHeaderDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { Subject } from 'rxjs';
 import { Location } from '@angular/common';
-import { FormBuilderEvent } from '../shared/form-builder-view/form-builder-interface';
+import { FormBuilderEvent } from '../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
 import { hideModal, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from "../common/services/navigation.service";
 import { ConsultingForm } from './consulting-form.interface';
@@ -23,8 +23,6 @@ export class ConsultingFormComponent {
 
     consultingForm: ConsultingForm = new ConsultingForm();
     $subscriptions = [];
-    showPersonDetailsModal = false;
-    personDetailsModalVO = { personId: '', fullName: '' };
     showSlider = false;
     selectedType: string;
     isCardExpanded = true;
@@ -58,7 +56,7 @@ export class ConsultingFormComponent {
         private _activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        this.consultingService.headerEntityName = '';
+        this.consultingService.coiEntity = {};
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.setTopDynamically();
@@ -75,7 +73,7 @@ export class ConsultingFormComponent {
         this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
             const MODULE_ID = params['disclosureId'];
             if (this.consultingForm.consultingFormDisclosure.disclosureId != MODULE_ID) {
-               this.consultingService.headerEntityName = '';
+               this.consultingService.coiEntity = {};
                this.validationList = [];
                this.loadNewFormAndUpdateStore(MODULE_ID);
                this.resetChangeFlags();
@@ -103,9 +101,7 @@ export class ConsultingFormComponent {
     }
 
     openPersonDetailsModal(): void {
-        this.personDetailsModalVO.personId = this.consultingForm.consultingFormDisclosure.person.personId;
-        this.personDetailsModalVO.fullName = this.consultingForm.consultingFormDisclosure.person.fullName;
-        this.showPersonDetailsModal = true;
+        this.commonService.openPersonDetailsModal(this.consultingForm.consultingFormDisclosure.person.personId)
     }
 
     openSlider(type: string, count: number): void {
@@ -216,7 +212,7 @@ export class ConsultingFormComponent {
     }
 
     isLoggedInUser(personId: string): boolean {
-        return this.commonService?.getCurrentUserDetail('personId') === personId;
+        return this.commonService?.getCurrentUserDetail('personID') === personId;
     }
 
     openAddAssignModal(): void {
@@ -364,12 +360,12 @@ export class ConsultingFormComponent {
         }
     }
 
-    closePersonDetailsModal(event: any): void {
-        this.showPersonDetailsModal = event;
-    }
-
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    navigateToEntity(): void {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.consultingService?.coiEntity?.entityId } })
     }
 
 }

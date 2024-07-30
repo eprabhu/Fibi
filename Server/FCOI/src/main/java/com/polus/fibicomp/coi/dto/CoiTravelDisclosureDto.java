@@ -76,5 +76,8 @@ public class CoiTravelDisclosureDto {
 	private EntityRiskCategory entityRiskCategory;
 	private String personPrimaryTitle;
 	private String personEmail;
+	private Long personNotesCount;
+	private Long personAttachmentsCount;
+	private Integer personEntitiesCount;
 
 }

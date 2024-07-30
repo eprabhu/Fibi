@@ -746,8 +746,9 @@ public interface ConflictOfInterestDao {
 	 * @param adminGroupId
 	 * @param adminPersonId
 	 * @param disclosureId
+	 * @return Update Timestamp
 	 */
-    void assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+	Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
 
     /**
 	 * This method is used for updating review status of disclosure

@@ -36,8 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     homeNavigation: string = '';
     isAdministrator: boolean = false;
-    ispersondetailsmodal = false;
-    userDetails = null;
     noteComment: any;
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
@@ -78,10 +76,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
             || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
-        this.userDetails = {
-            personId: this.commonService.getCurrentUserDetail('personID'),
-            fullName: this.commonService.getCurrentUserDetail('fullName')
-        };
         this.openModalTriggeredFromChild();
     }
 
@@ -160,10 +154,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
-    }
-
     private passwordAtleast7Characters() {
         if (this.resetPassword.password.length < 7) {
             this.passwordValidation.set('password-length', true);
@@ -218,7 +208,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openTravelDisclosure(): void {
         this.triggeredFrom = 'TRAVEL_DISCLOSURE';
-        this.getActiveDisclosureAndOpenModal();
+        this.isShowCreateOrReviseModal = true;
     }
 
     getActiveDisclosureAndOpenModal() {
@@ -282,6 +272,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.querySelector("html").className = '';
         document.querySelector("html").classList.add(themename);
         $('#dissmiss-btn').click();
+    }
+
+    openPersonDetailsModal(): void {
+        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personID'));
     }
 
 

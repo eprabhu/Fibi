@@ -361,10 +361,9 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.checkEntityAdded(entityNumber);
 	}
 
-	@GetMapping("/validate/{moduleCode}/disclosure/{moduleItemId}")
-	public ResponseEntity<Object> validateDisclosure(@PathVariable("moduleCode") Integer moduleCode,
-												   @PathVariable("moduleItemId") String moduleItemId) {
-		return conflictOfInterestService.validateDisclosure(moduleCode, moduleItemId);
+	@PostMapping("/validateDisclosure")
+	public ResponseEntity<Object> validateDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		return conflictOfInterestService.validateDisclosure(vo.getPersonId(), vo.getModuleCode(), vo.getModuleItemId().toString());
 	}
 
 	@PatchMapping("/disclosure/assignAdmin")

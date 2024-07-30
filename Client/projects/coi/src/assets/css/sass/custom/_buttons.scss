@@ -119,7 +119,7 @@
     color: white;
     border: 1px solid #007DEC;
 
-    label {
+    .btn-outline-grey-custom-text {
       color: white !important;
     }
 
@@ -128,4 +128,20 @@
     }
   }
 
+  &.btn-outline-grey-active {
+    background-color: #007DEC !important;
+    color: white !important;
+    border: 1px solid #007DEC;
+    box-shadow: 0 0 6px 0px rgb(0 125 236 / 35%) !important;
+
+    .btn-outline-grey-custom-text {
+      color: white !important;
+    }
+  }
+
+}
+
+.coi-table-sort-btn:hover .coi-table-sort-icon,
+.coi-table-sort-btn:focus .coi-table-sort-icon {
+    color: #007DEC !important;
 }

@@ -62,7 +62,9 @@
         <mat-icon class="fs-25px searchButton">search</mat-icon>
         <input class="form-control pe-5" type="text" id="searchText" placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
       </span>
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
+      <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText" (click)="clearSearchText()" (keyup.enter)="clearSearchText()">
+        <mat-icon class="closeButton">close</mat-icon>
+      </span>
     </div>
   </div>
 </div>

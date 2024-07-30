@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
 
-type Method = 'SOME' | 'EVERY';
+export type Method = 'SOME' | 'EVERY';
+export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | '';
+export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 @Injectable()
 export class CommonService {
 
@@ -19,7 +21,6 @@ export class CommonService {
     fibiUrl = '';
     authUrl = '';
     opaUrl = '';
-    consultingUrl = '';
     formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
@@ -70,6 +71,8 @@ export class CommonService {
     isShowCreateNoteModal = false;
     isOpenAttachmentModal = false;
     projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
+    modalPersonId: string = '';
+    $globalEventNotifier = new Subject<GlobalEventNotifier>();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -110,7 +113,6 @@ export class CommonService {
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
         this.formUrl = configurationData.formUrl;
-        this.consultingUrl = configurationData.consultingUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -485,6 +487,31 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }, 200);
     }
 
+    openPersonDetailsModal(personId: string): void {
+        this.modalPersonId = personId;
+    }
+
+    closePersonDetailsModal(isOpen = true): void {
+        if (isOpen) {
+            document.getElementById('coi-person-view-modal-close-btn')?.click();
+        }
+        setTimeout(() => {
+            this.modalPersonId ='';
+        }, 200);
+    }
+
+    getRiskColor(typeCode: string): string {
+        switch (typeCode) {
+            case '1':
+                return 'high-risk';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return '';
+        }
+    }
 
     //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
     //when we are in login page itself , or logout page we have to refresh and navigate to page based on rights.

@@ -1,436 +1,457 @@
-<div class="border-top-0 mb-3 mx-3 row header-sticky">
-    <div class="col-9 p-0">
-        <div class="border shadow-sm bg-white h-100">
-            <div class="disclosure-heading px-3 d-flex">
-                <!-- disclosure heading -->
-                <div class="align-self-center flex-fill d-flex">
-                    <p class="m-0" tabindex="-1">
-                        <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
-                            <strong [attr.aria-label]="'Travel Disclosure By ' + userDetails?.fullName">Travel Disclosure By
-                                <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="0"
-                                        (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
-                                        [attr.aria-label]="'click to show the details of' + userDetails?.fullName"
-                                        title="click to show the details of {{userDetails?.fullName}}">
-                                        {{userDetails?.fullName}}
-                                    </u>
+<div class="row header-sticky mb-2">
+    <div class="col-12">
+        <!-- new top card -->
+        <div class="card coi-card-expanded">
+            <div class="row mx-0">
+                <div class="col-lg px-0">
+                    <div class="card-header px-3">
+                        <div class="row flex-grow-1 position-relative m-0">
+                            <div class="d-flex col-12 px-0 coi-card-header-notch-container">
+                                <!-- badge -->
+                                <div class="d-flex mb-auto" tabindex="-1" aria-label="Travel disclosure">
+                                    <span class="coi-card-notch-ribbon shadow-sm bg-travel-clip">Travel</span>
+                                </div>
+                                <div class="col row m-0">
+                                    <div class="col-12 d-flex justify-content-between p-0">
+                                        <!-- person -->
+                                        <span class="d-flex align-items-center coi-text-light ms-2 mt-1 text-nowrap">
+                                            <mat-icon aria-hidden="true"
+                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                            <a class="link-primary cursor-pointer"
+                                                (click)="commonService.openPersonDetailsModal(userDetails.personId)" tabindex="0"
+                                                (keydown.enter)="commonService.openPersonDetailsModal(userDetails.personId)"
+                                                (keydown.space)="commonService.openPersonDetailsModal(userDetails.personId)"
+                                                [attr.aria-label]="'Click here to show the details of' + userDetails.fullName"
+                                                title="Click here to show the details of {{userDetails.fullName}}">
+                                                {{userDetails.fullName}}
+                                            </a>
+                                        </span>
+
+                                        <!-- links -->
+                                        <div *ngIf="travelDisclosure?.travelDisclosureId" class="d-flex justify-content-end align-items-center f-14 ms-auto mt-auto me-3">
+                                            <!-- <span class="ms-2 me-2"  role="link"
+                                                [title]="0 ? 'Click here to view trainings' : ''"
+                                                [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
+                                                [ngClass]="0 ? 'link-primary cursor-pointer' : ''" tabindex="-1">
+                                                Trainings({{0}})
+                                            </span> | -->                                           
+                                            <a class="ms-2 me-2 fs-13" (click)="openPersonSlider('ENTITY', travelDisclosure?.personEntitiesCount)"
+                                                role="link" (keyup.enter)="openPersonSlider('ENTITY', travelDisclosure?.personEntitiesCount)"
+                                                (keyup.space)="openPersonSlider('ENTITY', travelDisclosure?.personEntitiesCount)"
+                                                [title]="travelDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [attr.aria-label]="travelDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                [ngClass]="travelDisclosure?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="travelDisclosure?.personEntitiesCount > 0 ? 0 : -1">
+                                                Entities({{travelDisclosure?.personEntitiesCount ?? 0 }})
+                                            </a> |
+                                            <a class="ms-2 me-2 fs-13" (click)="openPersonSlider('NOTES', travelDisclosure?.personNotesCount)" role="link"
+                                                (keyup.enter)="openPersonSlider('NOTES', travelDisclosure?.personNotesCount)"
+                                                (keyup.space)="openPersonSlider('NOTES', travelDisclosure?.personNotesCount)"
+                                                [title]="travelDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [attr.aria-label]="travelDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                [ngClass]="travelDisclosure?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="travelDisclosure?.personNotesCount > 0 ? 0 : -1" >
+                                                Notes({{travelDisclosure?.personNotesCount ?? 0 }})
+                                            </a> |
+                                            <a class="ms-2 fs-13"
+                                                (click)="openPersonSlider('ATTACHMENTS', travelDisclosure?.personAttachmentsCount)" role="link"
+                                                (keyup.enter)="openPersonSlider('ATTACHMENTS', travelDisclosure?.personAttachmentsCount)"
+                                                (keyup.space)="openPersonSlider('ATTACHMENTS', travelDisclosure?.personAttachmentsCount)"
+                                                [title]="travelDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [attr.aria-label]="travelDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                [ngClass]="travelDisclosure?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                [tabIndex]="travelDisclosure?.personAttachmentsCount > 0 ? 0 : -1">
+                                                Attachments({{travelDisclosure?.personAttachmentsCount ?? 0 }})
+                                            </a>
+ 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex p-0 align-items-center column-gap-3">
+                                <!-- email -->
+                                <span *ngIf="userDetails?.emailAddress" class="d-flex align-items-center coi-text-light mt-1"
+                                    [title]="userDetails?.emailAddress">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                    <span class="text-slice">{{userDetails?.emailAddress}}</span>
                                 </span>
-                            </strong>
-                        </ng-container>
-                        <ng-container *ngIf="travelDisclosure?.travelDisclosureId">
-                            <strong [attr.aria-label]="'hash' + travelDisclosure?.travelDisclosureId + ' : Travel Disclosure By ' + userDetails?.fullName">
-                                #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
-                                <span class="text-primary cursor-pointer">
-                                    <u (click)="isPersonDetailsModalOpen = true;" tabindex="-1"
-                                        (keydown.enter)="isPersonDetailsModalOpen = true;" (keydown.space)="isPersonDetailsModalOpen = true;"
-                                        [attr.aria-label]="'click to show the details of ' + userDetails?.fullName"
-                                        title="click to show the details of {{userDetails?.fullName}}">
-                                        {{userDetails?.fullName}}
-                                    </u>
+                                <!-- home unit -->
+                                <span class="d-flex align-items-center coi-text-light mt-1"
+                                    [title]="commonService.getPersonLeadUnitDetails(userDetails)">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                    <span class="text-slice">{{commonService.getPersonLeadUnitDetails(userDetails)}}</span>
                                 </span>
-                            </strong>
-                        </ng-container>
-                    </p>
-                </div>
-                <!-- risk details -->
-                <div tabindex="-1" class="d-flex ms-auto me-2" *ngIf="travelDisclosure?.riskLevel">
-                    <div class="align-items-center d-flex ml-15">
-                        <label class="fw-500 fs-14 mr-2 mt-1" aria-label="Risk is">Risk :</label>
-                        <div class="text-color fs-14 d-flex align-items-center">
-                        <span class="text-secondary fs-14">
-                            <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round" aria-hidden="true">warning</mat-icon>
-                        </span>
-                        <span class="ml-2 mt-1">
-                            {{travelDisclosure?.riskLevel}}
-                        </span>
-                        </div>
-                    </div>
-                </div>
-                <!-- collapse/expand button -->
-                <div class="d-flex" *ngIf="!isCreateMode">
-                    <ng-container>
-                        <div class="align-items-center d-flex" title="Click here to collapse/un-collapse">
-                            <button (click)="isCardExpanded=!isCardExpanded;" role="button" type="button" aria-expanded="isCardExpanded"
-                                [attr.aria-label]="'Click here to ' + (isCardExpanded ? 'collapse' : 'expand') + ' Details of Travel Disclosure Document'"
-                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                <mat-icon aria-hidden="true">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                                <!-- title -->
+                                <span *ngIf="userDetails?.primaryTitle"
+                                    class="d-flex align-items-center coi-text-light mt-1"
+                                    [title]="userDetails?.primaryTitle">
+                                    <mat-icon aria-hidden="true"
+                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                    <span class="text-slice">{{userDetails?.primaryTitle}}</span>
+                                </span>
+                            </div>
+                            <h3 *ngIf="service?.travelEntityDetails?.entityName" class="card-title fs-16 mb-0 mt-1 ps-0">
+                                <div class="fs-16 d-flex align-items-center">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px">apartment</mat-icon>
+                                    <span class="coi-text-darker fs-6 text-slice"
+                                        [title]="service?.travelEntityDetails?.entityName">{{ service?.travelEntityDetails?.entityName }}</span>
+                                </div>
+                            </h3>
+                            <button (click)="isCardExpanded=!isCardExpanded;"
+                                title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-btn-position">
+                                <mat-icon aria-hidden="true" [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'">expand_more</mat-icon>
                             </button>
                         </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div *ngIf="isCardExpanded" class="d-flex p-3 bg-white" tabindex="-1" aria-label="Details of Travel Disclosure Document">
-                <!-- user details -->
-                <div class="col me-2">
-                    <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Department is">
-                                    <i aria-hidden="true" class="fa fa-home mr-2"></i>
-                                    Department :
-                                </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2"
-                                    [valueToShow]="userDetails?.homeUnit || userDetails?.homeUnitName">
-                                    <div title="{{userDetails?.homeUnit}} - {{userDetails?.homeUnitName}}">
-                                        {{userDetails?.homeUnit}} -
-                                        {{userDetails?.homeUnitName}}
-                                    </div>
-                                </app-no-data-label>
-                            </div>
-                        </div>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Administrator is">
-                                    <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
-                                    Administrator :
-                                </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="travelDisclosure?.adminPersonName">
-                                    <div title="{{travelDisclosure?.adminPersonName}}">
-                                        {{travelDisclosure?.adminPersonName}}
-                                    </div>
-                                </app-no-data-label>
-                            </div>
-                        </div>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14" aria-label="Admin Group is">
-                                    <img aria-hidden="true" class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
-                                        alt="add-adminGroup icon">
-                                    Admin Group :
-                                </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="travelDisclosure?.adminGroupName">
-                                    <div title="{{travelDisclosure?.adminGroupName}}">
-                                        {{travelDisclosure?.adminGroupName}}
-                                    </div>
-                                </app-no-data-label>
-                            </div>
-                        </div>
                     </div>
-                </div>
-                <!-- for date box -->
-                <div class="col-auto me-2">
-                    <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill" tabindex="-1" aria-label="Important Dates Of Travel Disclosure">Date</span>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14"
-                                    aria-label="Create Date is">Create : </label>
-                                <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="travelDisclosure?.createTimestamp">
-                                        <span>{{travelDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14"
-                                    aria-label="Certification Date is">Certification : </label>
-                                <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="travelDisclosure?.certifiedAt">
-                                        <span>{{travelDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14"
-                                    aria-label="Approved Date is">Approved : </label>
-                                <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="travelDisclosure?.acknowledgeAt">
-                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatterWithTimeZone}}</span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- for status box -->
-                <div class="col-auto status-card-width" >
-                    <div class="border rounded-1 position-relative p-3 fw-medium">
-                        <span class="status-pill" tabindex="-1" aria-label="Statuses Of Travel Disclosure">Status</span>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14 col-4"
-                                    aria-label="Document status is">Document : </label>
-                                <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="travelDisclosure?.documentStatusCode">
-                                        <span
-                                            class="fs-14 {{commonService.getDocumentStatusBadge(travelDisclosure?.documentStatusCode)}}"></span>
-                                            <span class="badgeFont">
-                                                {{travelDisclosure?.documentStatus}}
+                    <div *ngIf="isCardExpanded" [@heightAnimation]>
+                        <div class="row p-3">
+                            <div class="col-6 col-lg-5 col-xl-3 col-xxl-4">
+                                <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                    <span class="coi-text-darker fs-6 coi-field-set">Details</span>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6 col-lg-6 col-xl-12 col-xxl-12 mt-2 pe-0">
+                                            <label for="travel-administrator" class="coi-text-dark d-block">
+                                                <i aria-hidden="true" class="fa fa-user-o fw-700 me-1"></i>
+                                                <span>Administrator</span>
+                                            </label>
+                                            <span id="travel-administrator"  class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.adminPersonName">
+                                                    <span class="coi-text-light text-slice" [title]="ravelDisclosure?.adminPersonName">{{travelDisclosure?.adminPersonName}}</span>
+                                                </app-no-data-label>
                                             </span>
-                                    </app-no-data-label>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14 col-4"
-                                    aria-label="Review status is">Review : </label>
-                                <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="travelDisclosure?.reviewStatusCode">
-                                        <span
-                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(travelDisclosure?.reviewStatusCode)}}"></span>
-                                            <span class="badgeFont">
-                                                {{travelDisclosure?.reviewStatus}}
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-6 col-xl-12 col-xxl-12 mt-2 pe-0">
+                                            <label for="travel-admin-group"  class="coi-text-dark d-block">
+                                                <img alt="add-adminGroup icon" class="w-1rem me-1" src="{{deployMap}}assets/images/multiple-admin-1.svg">
+                                                <span>Admin Group</span>
+                                            </label>
+                                            <span id="travel-admin-group" class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.adminGroupName">
+                                                    <span class="coi-text-light text-slice" [title]="ravelDisclosure?.adminGroupName">{{travelDisclosure?.adminGroupName}}</span>
+                                                </app-no-data-label>
                                             </span>
-                                    </app-no-data-label>
-                                </span>
+                                        </div>
+    
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mt-2" tabindex="-1">
-                            <div class="col d-flex">
-                                <label class="text-nowrap grey-text fw-600 fs-14 col-4"
-                                aria-label="Disclosure status is">Disclosure : </label>
-                                <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                                        <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
-                                        <span class="badgeFont">
-                                            {{travelDisclosure?.disclosureStatus}}
-                                        </span>
-                                    </app-no-data-label>
-                                </span>
+                            <div class="col-6 col-lg-7 col-xl-4 col-xxl-4">
+                                <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                    <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
+                                    <div class="row">
+                                        <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travel-administrator" class="coi-text-dark d-block">Create</label>
+                                            <span id="travel-administrator" class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.createTimestamp">
+                                                    <span class="coi-text-light">{{travelDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travel-administrator" class="coi-text-dark d-block">Certification</label>
+                                            <span id="travel-administrator" class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.certifiedAt">
+                                                    <span class="coi-text-light">{{travelDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travel-approved" class="coi-text-dark d-block">Approved</label>
+                                            <span id="travel-approved" class="coi-text-light">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.acknowledgeAt">
+                                                    <span class="coi-text-light">{{travelDisclosure?.acknowledgeAt | dateFormatterWithTimeZone}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-lg-12 col-xl-5 col-xxl-4 mt-4 mt-xl-0">
+                                <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                    <span class="coi-text-darker fs-6 coi-field-set">Status</span>
+                                    <div class="row">
+                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travelDisclosure-documentStatus" class="coi-text-lighter d-block">Document</label>
+                                            <span id="travelDisclosure-documentStatus">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.documentStatus">
+                                                    <span class="{{commonService.getDocumentStatusBadge(travelDisclosure?.documentStatusCode)}}"></span>
+                                                    <span class="coi-text-dark ms-1">{{travelDisclosure?.documentStatus}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travelDisclosure-reviewStatus" class="coi-text-lighter d-block">Review</label>
+                                            <span id="travelDisclosure-reviewStatus">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.reviewStatus">
+                                                    <span class="{{commonService.getTravelReviewStatusBadge(travelDisclosure?.reviewStatusCode)}}"></span>
+                                                    <span class="coi-text-dark ms-1">{{travelDisclosure?.reviewStatus}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travelDisclosure-disclosureStatus" class="coi-text-lighter d-block">Disclosure</label>
+                                            <span id="travelDisclosure-disclosureStatus">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
+                                                    <span class="{{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                                                    <span class="coi-text-dark ms-1">{{travelDisclosure?.disclosureStatus}}</span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                            <label for="travelDisclosure-risk" class="coi-text-lighter d-block">Risk</label>
+                                            <span id="travelDisclosure-risk">
+                                                <app-no-data-label [valueToShow]="travelDisclosure?.riskLevel">
+                                                    <span class="d-flex">
+                                                        <mat-icon class="{{commonService.getRiskColor(travelDisclosure?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0"
+                                                            aria-hidden="true">warning</mat-icon>
+                                                        <span class="coi-text-dark">{{travelDisclosure?.riskLevel}}</span>
+                                                    </span>
+                                                </app-no-data-label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <ng-container *ngIf="!isCreateMode">
-                <div class="navigation-tabs d-flex align-items-center" tabindex="-1"  role="navigation" aria-label="travel disclosure">
-                     <!-- Disclosure -->
-                    <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'"
-                        [attr.aria-label]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'" role="link">
-                        <div class="navigation-box-content" routerLinkActive="active">
-                            Disclosure
-                        </div>
-                    </button>
-                     <!-- Related Disclosures -->
-                    <button [routerLink]="['related-disclosures']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        [title]="isRouteComplete(['related-disclosures'])? 'Related Disclosures' : 'Go to step Related Disclosures'"
-                        [attr.aria-label]="isRouteComplete(['related-disclosures'])? 'Related Disclosures' : 'Go to step Related Disclosures'" role="link">
-                        <div class="navigation-box-content" routerLinkActive="active">
-                            Related Disclosures
-                        </div>
-                    </button>
-                     <!-- History -->
-                    <button [routerLink]="['history']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        [title]="isRouteComplete(['history'])? 'History' : 'Go to step History'"
-                        [attr.aria-label]="isRouteComplete(['history'])? 'History' : 'Go to step History'" role="link">
-                        <div class="navigation-box-content" routerLinkActive="active">
-                            History
-                        </div>
-                    </button>
-                </div>
-            </ng-container>
-        </div>
-    </div>
-    <!-- right side options -->
-    <div class="col-3 px-0">
-        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm h-100"
-            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : '' : 'collapse-right-tab'" tabindex="-1"  role="menu" aria-label="travel disclosure actions section">
-            <div class="row m-0 py-3 px-3">
-                <!-- home -->
-                <button (click)="navigateBack()" title="Go to home" aria-label="Go to home"
-                    [ngClass]="(travelDisclosure?.reviewStatusCode != '2' && !isCreateMode && travelDisclosure?.reviewStatusCode != '7') ? 'col-2' : 'col'"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14" [class.mb-2]="isCardExpanded" [class.me-1]="!isCreateMode">
-                    <mat-icon aria-hidden="true">home</mat-icon>
-                    <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
-                </button>
-
-                <!-- Comments -->
-                <button title="Click here to add new review comments" aria-label="Click here to add new review comments"
-                    *ngIf="!isCreateMode" [class.mb-2]="isCardExpanded"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col mx-1">
-                    <mat-icon aria-hidden="true">rate_review</mat-icon>
-                    <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
-                </button>
-
-                <!-- more option button for expanded card-->
-                <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && isCardExpanded"
-                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-2"
-                    title="Click for More Actions" aria-label="Click for More Actions" aria-expanded="false" aria-haspopup= "true">
-                    <mat-icon class="moreActionIcon" aria-hidden="true">more_vert</mat-icon>
-                    <span>More Actions</span>
-                </button>
-
-                <!-- more options -->
-                <mat-menu #beforeMenu="matMenu" xPosition="before">
-                    <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
-                    <ng-container *ngIf="isTravelAdministrator">
-                        <!-- reassigned admin -->
-                        <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]) && isTravelAdministrator" aria-label="Click here to Reassign administrator"
-                            title="Click here to Reassign Administrator/Admin Group"
-                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
-                            (click)="openAddAssignModal()">
-                            <mat-icon aria-hidden="true">group_add</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
-                        </button>
-                    </ng-container>
-                    <ng-container *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS, TRAVEL_REVIEW_STATUS.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
-                        <!-- manage /view disclosure status -->
-                        <button mat-menu-item (click)="openConflictSlider()"
-                            [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
-                            title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
-                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon aria-hidden="true">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure
-                                Status</span>
+                <div *ngIf="!(isRouteComplete(['history']) && isCreateMode)" class="d-flex flex-column col-lg-3 p-3 action-header-border">
+                    <div class="row m-0 gap-2 align-items-center">
+                        <!-- Comments -->
+                        <button *ngIf="!isCreateMode"
+                            title="Click here to add new review comments" aria-label="Click here to add new review comments"
+                            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col">
+                            <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
+                            <span *ngIf="isCardExpanded" class="ms-2">Comments</span>
                         </button>
 
-                        <!-- manage /view travel risk status -->
-                        <button mat-menu-item (click)="openRiskSlider()"
-                            [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View') + ' Risk'"
-                            title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk"
-                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                            <mat-icon class="material-icons-round" aria-hidden="true">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
-                                'visibility'}}</mat-icon>
-                            <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk</span>
+                        <!-- more option button for expanded card-->
+                        <button *ngIf="!isCreateMode && isCardExpanded" mat-button [matMenuTriggerFor]="beforeMenu"
+                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col"
+                            title="Click here for more actions" aria-label="Click here for more actions" aria-expanded="false" aria-haspopup= "true">
+                            <mat-icon class="moreActionIcon flex-shrink-0" aria-hidden="true">more_vert</mat-icon>
                         </button>
-                    </ng-container>
 
-                    <!-- Withdraw disclosure -->
-                    <button mat-menu-item title="Click here to Withdraw Travel Disclosure" aria-label="Click here to Withdraw Travel Disclosure"
-                        (click)="openConfirmationModal('Withdraw', true, true, withdrawErrorMsg);"
-                        class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
-                        *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && travelDisclosure?.personId == currentPersonId">
-                        <mat-icon aria-hidden="true">logout</mat-icon>
-                        <span class="ms-2 fw-medium fs-14">Withdraw</span>
-                    </button>
+                        <!-- more options -->
+                        <mat-menu #beforeMenu="matMenu" xPosition="before">
+                            <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
+                            <ng-container *ngIf="isTravelAdministrator">
+                                <!-- reassigned admin -->
+                                <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS]) && isTravelAdministrator"
+                                    aria-label="Click here to reassign administrator/admin group"
+                                    title="Click here to reassign administrator/admin group"
+                                    class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
+                                    (click)="openAddAssignModal()">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">group_add</mat-icon>
+                                    <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS, TRAVEL_REVIEW_STATUS.APPROVED_ACKNOWLEDGED], 'SOME') && checkAdministratorRight()">
+                                <!-- manage /view disclosure status -->
+                                <button mat-menu-item (click)="openConflictSlider()"
+                                    [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'manage' : 'view') + ' disclosure status'"
+                                    title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'manage' : 'view'}} disclosure status"
+                                    class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
+                                    <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Manage' : 'View'}} Disclosure
+                                        Status</span>
+                                </button>
 
-                    <!-- notify -->
-                    <button mat-menu-item title="Click here to Notify" aria-label="Click here to Notify"
-                        class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
-                        <mat-icon aria-hidden="true">notifications</mat-icon>
-                        <span class="ms-2 fw-medium fs-14">Notify</span>
-                    </button>
-                </mat-menu>
+                                <!-- manage /view travel risk status -->
+                                <button mat-menu-item (click)="openRiskSlider()"
+                                    [attr.aria-label]="'Click here to ' + (checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'modify' : 'view') + ' risk'"
+                                    title="Click here to {{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'modify' : 'view'}} risk"
+                                    class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
+                                    <mat-icon class="material-icons-round flex-shrink-0" aria-hidden="true">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'warning' :
+                                        'visibility'}}</mat-icon>
+                                    <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME') ? 'Modify' : 'View'}} Risk</span>
+                                </button>
+                            </ng-container>
 
-                <ng-container *ngIf="!isCreateMode">
-                    <!-- assign admin -->
-                    <ng-container *ngIf="!travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && isTravelAdministrator">
-                        <button title="Click here to Assign Administrator/Admin Group"
-                            aria-label="Click here to assign administrator"
-                            [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
-                            class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
-                            (click)="openAddAssignModal()">
-                            <mat-icon aria-hidden="true">group_add</mat-icon>
-                            <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
+                            <!-- Withdraw disclosure -->
+                            <button mat-menu-item title="Click here to withdraw travel disclosure" aria-label="Click here to withdraw travel disclosure"
+                                (click)="openConfirmationModal('Withdraw', true, true, withdrawErrorMsg);"
+                                class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
+                                *ngIf="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && userDetails.personId == currentPersonId">
+                                <mat-icon aria-hidden="true" class="flex-shrink-0">logout</mat-icon>
+                                <span class="ms-2 fw-medium fs-14">Withdraw</span>
+                            </button>
+
+                            <!-- notify -->
+                            <button mat-menu-item title="Click here to notify" aria-label="Click here to notify"
+                                class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
+                                <mat-icon aria-hidden="true" class="flex-shrink-0">notifications</mat-icon>
+                                <span class="ms-2 fw-medium fs-14">Notify</span>
+                            </button>
+                        </mat-menu>
+
+                        <ng-container *ngIf="!isCreateMode">
+                            <!-- assign admin -->
+                            <ng-container *ngIf="!travelDisclosure?.adminPersonId && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]) && isTravelAdministrator">
+                                <button title="Click here to assign administrator/admin group"
+                                    aria-label="Click here to assign administrator/admin group"
+                                    [ngClass]="isCardExpanded? 'col-lg-12 col' : 'col'"
+                                    class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
+                                    (click)="openAddAssignModal()">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">group_add</mat-icon>
+                                    <span *ngIf="isCardExpanded" class="ms-2">Assign Admin</span>
+                                </button>
+                            </ng-container>
+
+
+                            <!-- return to pi -->
+                            <button *ngIf="showReturnOrApproveButton()"
+                                title="Click here to return travel disclosure" aria-label="Click here to return travel disclosure"
+                                (click)="openConfirmationModal('Return', true, true, returnErrorMsg);"
+                                [ngClass]="isCardExpanded? 'col-lg-12 col' : 'col'"
+                                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
+                                <mat-icon class="returnIcon flex-shrink-0" aria-hidden="true">refresh</mat-icon>
+                                <span *ngIf="isCardExpanded" class="ms-1">Return</span>
+                            </button>
+
+                            <!-- approve disclosure -->
+                            <button *ngIf="(isTravelAdministrator && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED])) || (showReturnOrApproveButton())"
+                                title="Click here to approve travel disclosure"
+                                aria-label="Click here to approve travel disclosure"
+                                (click)="openConfirmationModal('Approve', true);"
+                                [ngClass]="isCardExpanded? 'col-lg-12 col' : 'col'"
+                                class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
+                                <mat-icon aria-hidden="true" class="flex-shrink-0">check_circle_outline</mat-icon>
+                                <span *ngIf="isCardExpanded" class="ms-2">Approve</span>
+                            </button>
+                        </ng-container>
+
+                        <ng-container *ngIf="isCreateMode">
+                            <!-- save -->
+                            <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
+                                aria-label="Click here to save travel disclosure"
+                                class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                                (click)="saveTravelDisclosure()" title="Click here to save travel disclosure">
+                                <mat-icon class="flex-shrink-0" aria-hidden="true">save</mat-icon>
+                                <span class="ms-2">Save</span>
+                            </button>
+
+                            <!-- submit -->
+                            <button *ngIf="isRouteComplete(['certification'])"
+                                class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                                aria-label="Click here to submit travel disclosure"
+                                (click)="openConfirmationModal('Submit', false);"
+                                [disabled]="!service.isTravelCertified" title="Click here to submit travel disclosure">
+                                <mat-icon class="flex-shrink-0" aria-hidden="true">done</mat-icon>
+                                <span class="ms-2">Submit</span>
+                            </button>
+                        </ng-container>
+
+                        <!-- more option for collapse card-->
+                        <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && !isCardExpanded"
+                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col"
+                            title="Click here for more actions" aria-label="Click here for more actions" aria-expanded="false" aria-haspopup= "true">
+                            <mat-icon aria-hidden="true" class="flex-shrink-0">more_vert</mat-icon>
                         </button>
-                    </ng-container>
 
-
-                    <!-- return to pi -->
-                    <button *ngIf="showReturnOrApproveButton()"
-                            title="Click here to Return Travel Disclosure" aria-label="Click here to Return Travel Disclosure"
-                        (click)="openConfirmationModal('Return', true, true, returnErrorMsg);"
-                        [ngClass]="isCardExpanded? 'col-12 mb-2' : 'col ms-2'"
-                        class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
-                        <mat-icon class="returnIcon" aria-hidden="true">refresh</mat-icon>
-                        <span class="ms-1" *ngIf="isCardExpanded">Return</span>
-                    </button>
-
-                    <!-- approve disclosure -->
-                    <button *ngIf="(isTravelAdministrator && checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED]))
-                                   || (showReturnOrApproveButton())"
-                        title="Click here to Approve Travel Disclosure"
-                        aria-label="Click here to Approve Travel Disclosure"
-                        (click)="openConfirmationModal('Approve', true);"
-                        [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
-                        class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
-                        <mat-icon aria-hidden="true">check_circle_outline</mat-icon>
-                        <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
-                    </button>
-                </ng-container>
-
-                <ng-container *ngIf="isCreateMode">
-                    <!-- save -->
-                    <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
-                        aria-label="Click here to Save Travel Disclosure"
-                        class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="saveTravelDisclosure()" title="Click here to Save Travel Disclosure">
-                        <mat-icon class="me-2" aria-hidden="true">save</mat-icon>
-                        Save
-                    </button>
-
-                    <!-- submit -->
-                    <button class="col-12 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        aria-label="Click here to Submit Travel Disclosure"
-                        (click)="openConfirmationModal('Submit', false);" *ngIf="isRouteComplete(['certification'])"
-                        [disabled]="!service.isTravelCertified" title="Click here to Submit Travel Disclosure">
-                        <mat-icon class="me-2" aria-hidden="true">done</mat-icon>
-                        Submit
-                    </button>
-                </ng-container>
-
-                <!-- more option for collapse card-->
-                <button mat-button [matMenuTriggerFor]="beforeMenu" *ngIf="!isCreateMode && !isCardExpanded"
-                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mx-1"
-                    title="Click here for More Actions" aria-label="Click here for More Actions" aria-expanded="false" aria-haspopup= "true">
-                    <mat-icon aria-hidden="true">more_vert</mat-icon>
-                </button>
-
-                <!-- last update date -->
-                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'mt-2' : ''" tabindex="-1">
-                    <div class="fw-medium me-3">Last Updated By :</div>
-                    <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
-                        dateFormatterWithTimeZone:'long'}}</div>
+                    </div>
+                    <!-- last update date -->
+                    <div class="fs-14 coi-text-light mt-2" *ngIf="!isCreateMode && isCardExpanded" tabindex="-1">
+                        <div class="fw-medium me-3">Last Updated By :</div>
+                        <div>{{userDetails.fullName}} On {{travelDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mx-0 p-0 row">
-        <ng-container *ngIf="isCreateMode">
-            <div class="p-0">
-                <div class="nav-progress navigation-tabs row" tabindex="-1" role="navigation" aria-label="travel disclosure">
-                    <!-- travel details -->
-                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
-                        [class.complete]="isRouteComplete(['travel-details', 'certification'])"
-                        [routerLink]="['travel-details']" queryParamsHandling='merge'
-                        [class.cursor-pointer]="!isRouteComplete(['travel-details'])" role="link"
-                        [attr.aria-label]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'"
-                        tabindex="0"
-                        [title]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'">
-                        Travel Details
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
+    <!-- create mode -->
+    <ng-container *ngIf="isCreateMode">
+        <div class="col-12 mt-2">
+            <div class="steps-outer px-3">
+                <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1" [class.border-end]="travelDisclosure?.reviewStatusCode != 1 && travelDisclosure?.reviewStatusCode != null">
+                    <!-- Travel Details -->
+                    <li>
+                        <a class="step-pills" id="step_1"
+                            [class.active-step]="isRouteComplete(['travel-details', 'certification'])"
+                            tabindex="0" (click)="navigateTo('TRAVEL_DETAILS');" (keyup.enter)="navigateTo('TRAVEL_DETAILS');" (keyup.space)="navigateTo('TRAVEL_DETAILS');"
+                            [title]="isRouteComplete(['travel-details'])? 'Travel details' : 'Click here to go to step travel details'"
+                            [attr.aria-label]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Click here to go to step travel details'">
+                            <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon flex-shrink-0">flight</mat-icon></span>
+                            <span class="plls-text">Travel Details</span>
+                        </a>
+                    </li>
+                    <!-- divider -->
+                    <li>
+                        <span class="arrow-right px-2" [class.active-arrow]="isRouteComplete(['certification'])">
+                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        </span>
+                    </li>
+                    <!-- Certification -->
+                    <li>
+                        <a class="step-pills" [class.active-step]="isRouteComplete(['certification'])" tabindex="0"
+                            [title]="isRouteComplete(['certification'])? 'Certification' : 'Click here to go to step certification'"
+                            [attr.aria-label]="isRouteComplete(['certification'])? 'Certification' : 'Click here to go to step certification'"
+                            id="step_2" (click)="navigateTo('CERTIFY');" (keyup.enter)="navigateTo('CERTIFY');"
+                            (keyup.space)="navigateTo('CERTIFY');">
+                            <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon flex-shrink-0">military_tech</mat-icon></span>
+                            <span class="plls-text">Certification</span>
+                        </a>
+                    </li>
+                </ul>
+                <span *ngIf="travelDisclosure.travelDisclosureId" class="d-inline-block ms-auto ps-3">
+                    <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" id="travel-disclosure-history"
+                        [class.btn-outline-grey-active]="isRouteComplete(['history'])" (click)="navigateTo('HISTORY_CREATE');"
+                        (keyup.space)="navigateTo('HISTORY_CREATE');" (keyup.enter)="navigateTo('HISTORY_CREATE');">
+                        <mat-icon aria-hidden="true" class="mat-step-icon mr-2 flex-shrink-0">update</mat-icon>
+                        <span class="btn-outline-grey-custom-text">History</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </ng-container>
+    <!-- view mode -->
+    <ng-container *ngIf="!isCreateMode">
+        <div class="col-lg-12">
+            <div class="navigation-tabs d-flex align-items-center" tabindex="-1"  role="navigation" aria-label="travel disclosure">
+                    <!-- Disclosure -->
+                <button (click)="navigateTo('SUMMARY');" (keyup.space)="navigateTo('SUMMARY');" (keyup.enter)="navigateTo('SUMMARY');"
+                    class="border-0 btn navigation-box border-end"
+                    [title]="isRouteComplete(['summary']) ? 'Disclosure' : 'Go to step Disclosure'"
+                    [attr.aria-label]="isRouteComplete(['summary']) ? 'Disclosure' : 'Go to step Disclosure'" role="link">
+                    <div class="navigation-box-content" [class.active]="isRouteComplete(['summary'])">
+                        Disclosure
                     </div>
-                    <!-- certification -->
-                    <div class="col fs-14" (click)="service.isChildRouteTriggered = true"
-                        [attr.aria-label]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'"
-                        tabindex="0" [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
-                        queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
-                        [title]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'"
-                        role="link">
-                        Certification
+                </button>
+                    <!-- Related Disclosures -->
+                <button (click)="navigateTo('RELATED_DISCLOSURES');" (keyup.space)="navigateTo('RELATED_DISCLOSURES');"
+                    (keyup.enter)="navigateTo('RELATED_DISCLOSURES');"
+                    class="border-0 btn navigation-box border-end"
+                    [title]="isRouteComplete(['related-disclosures']) ? 'Related Disclosures' : 'Go to step Related Disclosures'"
+                    [attr.aria-label]="isRouteComplete(['related-disclosures']) ? 'Related Disclosures' : 'Go to step Related Disclosures'" role="link">
+                    <div class="navigation-box-content" [class.active]="isRouteComplete(['related-disclosures'])">
+                        Related Disclosures
                     </div>
-                    <!-- <span
-                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center border-r-0 d-flex justify-content-center col hand-cursor nav-border-right">
-                        Notes & Attachments
-                    </span> -->
-                    <span *ngIf="travelDisclosure?.reviewStatusCode != 1 && travelDisclosure?.reviewStatusCode != null"
-                        [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
-                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center border-r-0 d-flex justify-content-center col hand-cursor">
+                </button>
+                    <!-- History -->
+                <button (click)="navigateTo('HISTORY_VIEW');" (keyup.space)="navigateTo('HISTORY_VIEW');" (keyup.enter)="navigateTo('HISTORY_VIEW');"
+                    class="border-0 btn navigation-box border-end"
+                    [title]="isRouteComplete(['history']) ? 'History' : 'Go to step History'"
+                    [attr.aria-label]="isRouteComplete(['history']) ? 'History' : 'Go to step History'" role="link">
+                    <div class="navigation-box-content" [class.active]="isRouteComplete(['history'])">
                         History
-                    </span>
-                </div>
+                    </div>
+                </button>
             </div>
-        </ng-container>
-    </div>
+        </div>
+    </ng-container>
 </div>
-<div class="mx-3">
+
+<div>
     <router-outlet></router-outlet>
 </div>
 
 <!--Unsaved Changes confirmation Modal-->
 <app-confirmation-modal [modalName] = "'travel-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
-    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'" (primaryBtnAction)="removeNewTravelCreateObject()" (close)="removeNewTravelCreateObject()">
     <!-- modal header -->
     <ng-container header>
         <span>Confirmation</span>
@@ -472,11 +493,6 @@
     </ng-container>
 </app-confirmation-modal>
 
-<!-- personal details Modal-->
-<app-personal-details-modal *ngIf="isPersonDetailsModalOpen"
-    (closeModalPersonDetails)="closePersonDetailsModal($event)" [userdetails]="userDetails">
-</app-personal-details-modal>
-
 <!-- assign admin modal -->
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen"
     [defaultAdminDetails]="defaultAdminDetails"
@@ -487,8 +503,8 @@
 
 <!-- disclosure status slider -->
 <app-travel-add-conflict-slider *ngIf="isOpenSlider"
-    [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
-    [isEditMode]="checkReviewStatusCode([TRAVEL_REVIEW_STATUS.SUBMITTED, TRAVEL_REVIEW_STATUS.REVIEW_IN_PROGRESS], 'SOME')" (closePage)="closeConflictSlider()" >
+    [entityDetails]="service.travelEntityDetails" [travelDisclosure]="travelDisclosure"
+    [isEditMode]="checkReviewStatusCode([TRAVEL_REVIEW_STATUS?.SUBMITTED, TRAVEL_REVIEW_STATUS?.REVIEW_IN_PROGRESS], 'SOME')" (closePage)="closeConflictSlider()" >
 </app-travel-add-conflict-slider>
 
 <div *ngIf="isOpenRiskSlider">
@@ -496,3 +512,9 @@
 </div>
 
 <app-concurrency-warning-modal *ngIf="service.concurrentUpdateAction" [sectionName]="service.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
+
+<ng-container *ngIf="isShowPersonSlider">
+    <app-person-related-sliders (closePage)="closePersonSlider()" for="TRAVEL_DISCLOSURE"
+        [personId]="userDetails.personId" [sliderType]="selectedPersonSliderType" [personName]="userDetails.fullName">
+    </app-person-related-sliders>
+</ng-container>

@@ -9,6 +9,7 @@ import { CoiService } from '../../../services/coi.service';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { DataStoreService } from '../../../services/data-store.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
+import { EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE } from '../../../../../app/app-constants';
 
 @Component({
     selector: 'app-screening-questionnaire-summary',
@@ -19,12 +20,12 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
 
     configuration: any = {
         moduleItemCode: 8,
-        moduleSubitemCodes: [0],
+        moduleSubitemCodes: [0, EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE],
         moduleItemKey: '',
         moduleSubItemKey: 0,
         actionUserId: this._commonService.getCurrentUserDetail('personID'),
         actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
-        enableViewMode: true,
+        enableViewMode: [0, EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE],
         isChangeWarning: true,
         isEnableVersion: true,
     };
