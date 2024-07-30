@@ -12,11 +12,11 @@ const endPointOptions: any = {
 
 
 export function getEndPointOptionsForSponsor(
-    { contextField = ENDPOINT_SPONSOR_OUTPUT_FORMAT, formatString = ENDPOINT_SPONSOR_OUTPUT_FORMAT, defaultValue = '', params = null } = {}
+    { contextField = ENDPOINT_SPONSOR_OUTPUT_FORMAT, formatString = ENDPOINT_SPONSOR_OUTPUT_FORMAT, defaultValue = '', params = null, baseUrl = '' } = {}
 ) {
     endPointOptions.contextField = contextField;
     endPointOptions.formatString = formatString;
-    endPointOptions.path = 'findSponsors';
+    endPointOptions.path = baseUrl + '/findSponsors';
     endPointOptions.defaultValue = defaultValue;
     endPointOptions.params = params;
     return JSON.parse(JSON.stringify(endPointOptions));
@@ -56,7 +56,7 @@ export function getEndPointOptionsForLeadUnit(defaultValue = '', baseUrl = '', f
     endPointOptions.formatString = DEFAULT_UNIT_FORMAT;
     // endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
     // endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
-    endPointOptions.path = baseUrl + '/' + 'findLeadUnits';
+    endPointOptions.path = baseUrl + '/findDepartment';
     endPointOptions.defaultValue = defaultValue;
     endPointOptions.params = null;
     endPointOptions.filterFields = 'unitName, unitNumber';
