@@ -1,9 +1,0 @@
-FROM openjdk:17
-
-ARG JAR_FILE=target/*.jar
-
-COPY ${JAR_FILE} coi-api-gateway.jar
-
-ENTRYPOINT [ "java","-jar", "/coi-api-gateway.jar" ]
-
-EXPOSE 9090
