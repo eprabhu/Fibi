@@ -59,7 +59,7 @@ export class ResolveServiceService {
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
         if (['1', '5', '6'].includes(reviewStatusCode) && !currentPath
-            .includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId) {
+            .includes('create-disclosure') && personId == this._commonService.currentUserDetails.personID) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
         } else if (!['1', '5', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
@@ -98,7 +98,7 @@ export class ResolveServiceService {
 
     getLoggedInReviewerInfo(coiReviewerList): any {
         const getReviewerDetail = coiReviewerList.find(item => item.assigneePersonId ===
-            this._commonService.currentUserDetails.personId && item.reviewStatusTypeCode != '3');
+            this._commonService.currentUserDetails.personID && item.reviewStatusTypeCode != '3');
         return getReviewerDetail;
     }
 
