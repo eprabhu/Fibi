@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.fibicomp.coi.dto.ProjectCommentDto;
 import com.polus.fibicomp.coi.service.ProjectService;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 
 @RestController
 @RequestMapping("/coi/project")

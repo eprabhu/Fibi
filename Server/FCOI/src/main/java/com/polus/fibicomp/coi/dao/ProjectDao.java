@@ -9,7 +9,7 @@ import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.ProjectCommentDto;
 import com.polus.fibicomp.coi.dto.ProjectStatusLookupDto;
 import com.polus.fibicomp.coi.pojo.CoiProjectComment;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 
 @Transactional
 @Service
