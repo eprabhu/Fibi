@@ -39,7 +39,7 @@
     "moment": "^2.29.4",
     "npm": "^10.4.0",
     "rxjs": "^6.6.2",
-    "socket.io-client": "^4.5.4",
+    "socket.io-client": "^4.7.5",
     "tslib": "^1.9.0",
     "zone.js": "~0.11.4",
     "d3": "^7.8.5"
