@@ -65,7 +65,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     getProjectOverviewComments(commentFetchRequestPayload) {
         this.$subscriptions.push(this.projectOverviewService.getProjectOverviewComments(commentFetchRequestPayload).subscribe((res: any) => {
             this.commentsData = res;
-            this.currentUserId = this.commonService.getCurrentUserDetail('personId');
+            this.currentUserId = this.commonService.getCurrentUserDetail('personID');
             this.initializeVisibleComments();
         }));
     }
