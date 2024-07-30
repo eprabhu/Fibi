@@ -51,7 +51,7 @@ export class AdminDashboardService {
   }
 
   getLookupDataForProposalStatus(){
-    return this._http.get(this._commonService.baseUrl + 'project/getProjectStatusLookup/Proposal');
+    return this._http.get(this._commonService.baseUrl + '/project/getProjectStatusLookup/Proposal');
   }
 
 }
