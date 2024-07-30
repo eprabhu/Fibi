@@ -741,7 +741,7 @@
         <ng-container *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
             <!-- New card design starts(master card) -->
             <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="card coi-card-regular">
-                <div class="card-body px-3 py-2" id="coi-user-disclosure-dashboard-cards-card">
+                <div class="card-body px-3 py-2" id="coi-user-disclosure-dashboard-card-{{index}}">
                     <!-- For Coi disclosures card -->
                     <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId && !disclosure?.disclosureId">
                         <div class="row">
