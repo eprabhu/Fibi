@@ -6,6 +6,7 @@ import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/
 import {fileDownloader} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {CommonService} from "../../common/services/common.service";
 import {HttpClient} from "@angular/common/http";
+import {ApplicableQuestionnaire} from '../../disclosure/coi-interface';
 
 interface Configuration {
     moduleItemCode: number;
@@ -55,6 +56,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     @Input() isShowCollapse = false;
     @Input() saveButtonLabel = 'Save';
     @Output() currentActiveQuestionnaire: EventEmitter<any> = new EventEmitter<any>();
+    @Input() isQuestionnaireValidateMode: boolean = false;
 
     requestObject = {
         moduleItemCode: null,
@@ -130,6 +132,9 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
                 data.forEach((d: any) => this.combineQuestionnaireList(d.applicableQuestionnaire));
                 this.checkQuestionnaireOpened();
                 this._CDRef.markForCheck();
+                if (this.questionnaireList.length && this.isQuestionnaireValidateMode) {
+                    this.validateMandatory();
+                }
             }));
     }
 
@@ -160,10 +165,11 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     }
 
     checkQuestionnaireOpened() {
-        return this.selectedIndex === null ? this.versionWarning(0) : false;
+        return (this.selectedIndex === null && !this.isQuestionnaireValidateMode) ? this.versionWarning(0) : false;
     }
 
     isQuestionnaireChanged(index) {
+        this.clearPreviousActiveTabs();
         this.tempSelectedIndex = index;
         this.configuration.isChangeWarning && this.activeQuestionnaire.isChanged ? this.openModalOnDataChange() : this.versionWarning(index);
     }
@@ -297,5 +303,41 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
      */
     isAllQuestionnairesCompleted(): boolean {
         return this.questionnaireList.every(Q => Q.QUESTIONNAIRE_COMPLETED_FLAG === 'Y' && !Q.NEW_QUESTIONNAIRE_ID);
+    }
+
+    validateMandatory(): any {
+        let unAnsweredMandatoryQuestionnaire = this.getMandatoryNotCompletedQuestionnaire(this.questionnaireList);
+        if (unAnsweredMandatoryQuestionnaire && unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID) {
+            this.openQuestionnaireById(unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID);
+            setTimeout(() => {
+                document.getElementById(`${unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID}`).classList.add('active');
+            }, 10);
+        }
+
+    }
+
+    getMandatoryNotCompletedQuestionnaire(questionnaires: ApplicableQuestionnaire[]) {
+        return questionnaires.find((element) => element.IS_MANDATORY === 'Y' && element.QUESTIONNAIRE_COMPLETED_FLAG !== 'Y');
+    }
+
+    filterQuestionnaireById(id): any {
+        return this.questionnaireList.find((question: any) => question.QUESTIONNAIRE_ID === id);
+    }
+
+    openQuestionnaireById(id) {
+        if (id) {
+            const selectedQuestionnaire = this.filterQuestionnaireById(id);
+            this.isViewMode = this.checkViewMode(selectedQuestionnaire.MODULE_SUB_ITEM_CODE);
+            this.activeQuestionnaire.isChanged = false;
+            this.activeQuestionnaire = Object.assign({}, selectedQuestionnaire);
+            this.currentActiveQuestionnaire.emit(this.activeQuestionnaire);
+        }
+    }
+
+    clearPreviousActiveTabs() {
+        const navTabList = document.querySelectorAll('.subTabLink');
+        navTabList.forEach(navTabEl => {
+            navTabEl.classList.remove('active');
+        });
     }
 }
