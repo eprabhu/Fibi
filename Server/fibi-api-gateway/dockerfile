@@ -1,0 +1,9 @@
+FROM openjdk:17
+
+ARG JAR_FILE=target/*.jar
+
+COPY ${JAR_FILE} fibi-api-gateway.jar
+
+ENTRYPOINT [ "java","-jar", "/fibi-api-gateway.jar" ]
+
+EXPOSE 13003
