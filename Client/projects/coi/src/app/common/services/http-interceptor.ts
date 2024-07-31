@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { CommonService } from './common.service';
 import {SSO_TIMEOUT_ERROR_CODE} from "../../../../../fibi/src/app/app-constants";
 import { openCommonModal } from '../utilities/custom-utilities';
+import { LoginPersonDetails } from './coi-common.interace.ts';
 /**
  * this is used to add authorization token and handle error on token expiration
  * and loader for the entire application is handled here
@@ -29,7 +30,6 @@ import { openCommonModal } from '../utilities/custom-utilities';
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
     
-    AuthToken: string;
     currentActiveAPICount = 0;
     loaderRestrictedUrls: any[] = [];
 
@@ -39,10 +39,6 @@ export class AppHttpInterceptor implements HttpInterceptor {
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
-        if (this.AuthToken) {
-            req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
-        }
         if (this._commonService.isPreventDefaultLoader) {
             this.loaderRestrictedUrls.push(req.urlWithParams);
         } else {
@@ -53,7 +49,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
             catchError((error) => {
                 if (error.status === 401 || this.isUnAuthorized(error)) {
                     this._commonService.enableSSO ? localStorage.clear() : this._commonService.removeUserDetailsFromLocalStorage();
-                    this._commonService.currentUserDetails = {};
+                    this._commonService.currentUserDetails = new LoginPersonDetails();
                     this._commonService.enableSSO ?  this._router.navigate(['error/401']) : this._router.navigate(['/login']);
                 }
 
