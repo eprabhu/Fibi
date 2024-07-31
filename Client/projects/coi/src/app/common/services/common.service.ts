@@ -9,10 +9,8 @@ import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
+import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method } from './coi-common.interace.ts';
 
-export type Method = 'SOME' | 'EVERY';
-export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | '';
-export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 @Injectable()
 export class CommonService {
 
@@ -33,7 +31,7 @@ export class CommonService {
     rightsArray: any = [];
     isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     extension: any = [];
-    currentUserDetails: any = {};
+    currentUserDetails = new LoginPersonDetails();
     isWafEnabled: boolean;
     canAddOrganization: boolean;
     isGrantCallStatusAutomated = false;
@@ -155,17 +153,17 @@ export class CommonService {
      * @param  {} details update the local storage with application constant values
      *  will be moved to application context once SSO is stable
      */
-    updateLocalStorageWithUserDetails(details) {
+    updateLocalStorageWithUserDetails(details: any) {
         this.currentUserDetails = details.body;
         setIntoLocalStorage(details.body);
     }
 
-    getCurrentUserDetail(detailsKey: string) {
+    getCurrentUserDetail(detailsKey: LoginPersonDetailsKey) {
         return this.currentUserDetails && this.currentUserDetails[detailsKey] ?
             this.currentUserDetails[detailsKey] : this.updateCurrentUser(detailsKey);
     }
 
-    updateCurrentUser(detailsKey: string) {
+    updateCurrentUser(detailsKey: LoginPersonDetailsKey) {
         this.currentUserDetails = getFromLocalStorage();
         return this.currentUserDetails && this.currentUserDetails[detailsKey] ? this.currentUserDetails[detailsKey] : '';
     }

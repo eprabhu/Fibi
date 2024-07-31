@@ -96,6 +96,9 @@ export class FormComponent {
     private getSFILookup(): void {
         this.$subscriptions.push(this._formService.addSFILookUp().subscribe((res: any) => {
             this.sfiLookUpList = res;
+        },
+        error => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
     }
 
@@ -224,7 +227,10 @@ export class FormComponent {
             if (data) {
                 this.saveFormPersonEntity(data.personEntityId, data.entityNumber);
             }
-        }));
+        }, error => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }
+    ));
     }
 
     private entityDetailsValidation(): void {
@@ -265,6 +271,9 @@ export class FormComponent {
                     this.entityDetails.coiEntity = data;
                     this.createNewSFIWithEntity();
                 }
+            },
+            error => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }))
         }
     }
@@ -275,6 +284,8 @@ export class FormComponent {
                 this.saveFormPersonEntity(data.personEntityId, data.entityNumber);
                 this.setExistingEntityDetails(data);
             }
+        },error => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }))
     }
 
@@ -395,6 +406,9 @@ export class FormComponent {
             setTimeout(() => {
                 this.isNewEntityFromSearch = false;
             });
+        },
+        error => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
     }
 
