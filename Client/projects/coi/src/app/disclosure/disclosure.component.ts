@@ -560,7 +560,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     public updateCoiReview(modalType: ModalType) {
         const reviewerInfo = this.coiData.coiReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '2');
+            ele.assigneePersonId === this.commonService.currentUserDetails.personID && ele.reviewStatusTypeCode != '2');
         if (reviewerInfo) {
             this.coiService.$SelectedReviewerDetails.next(reviewerInfo);
             this.coiService.triggerStartOrCompleteCoiReview(modalType);

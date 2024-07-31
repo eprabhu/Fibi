@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
 import { CONSULTING_REDIRECT_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
+import { LoginPersonDetails } from '../services/coi-common.interace.ts';
 
 declare const $: any;
 class ChangePassword {
@@ -25,7 +26,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     personId: any;
     fullName = '';
     clearField: String = '';
-    loginPerson = this.commonService.getCurrentUserDetail('externalReviewerRight');
     isMaleUser = this.commonService.getCurrentUserDetail('gender') === 'M';
     isAdmin = true;
     resetPassword = new ChangePassword();
@@ -99,7 +99,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     clearCurrentUserAndGotoLogin() {
         if (!this.commonService.enableSSO) {
             ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
-            this.commonService.currentUserDetails = {};
+            this.commonService.currentUserDetails = new LoginPersonDetails();
           }
           this.router.navigate(['/logout']);
     }
@@ -245,7 +245,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     createOPA() {
         this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personID'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
+            this.commonService.getCurrentUserDetail('unitNumber'))
             .subscribe((res: any) => {
                 if(res) {
                     this.router.navigate([OPA_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
@@ -257,7 +257,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     createConsultingDisclosure() {
         this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personID'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
+            this.commonService.getCurrentUserDetail('unitNumber'))
             .subscribe((res: any) => {
                 if(res) {
                     this.router.navigate([CONSULTING_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});

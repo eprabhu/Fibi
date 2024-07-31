@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TravelDisclosureService } from './services/travel-disclosure.service';
-import { CommonService, GlobalEventNotifier } from '../common/services/common.service';
+import { CommonService } from '../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -19,6 +19,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { closeCommonModal, openCommonModal } from '../common/utilities/custom-utilities';
 import { heightAnimation } from '../common/utilities/animations';
+import { GlobalEventNotifier } from '../common/services/coi-common.interace.ts';
 
 type Method = 'SOME' | 'EVERY';
 
