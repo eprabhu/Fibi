@@ -237,7 +237,7 @@ export class AddSfiComponent implements OnInit {
         if (event) {
             this.clearField = new String('false');
             event = setEntityObjectFromElasticResult(event);
-            this.checkIfSFIAlreadyAdded(event.entityId, event);
+            this.checkIfSFIAlreadyAdded(event.entityNumber, event);
         } else {
             this.sfiService.$addRelationService.next(null);
         }

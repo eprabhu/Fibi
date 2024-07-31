@@ -121,7 +121,7 @@ small {
 }
 
 .sticky-0 {
-    top: 0;
+    top: -16px;
     z-index: 11;
     position: sticky;
 }
@@ -339,7 +339,7 @@ small {
     font-weight: 500;
     border-radius: 0 50px 50px 0;
     padding: 10px 18px;
-    
+
     &::before {
         content: "";
         position: absolute;
