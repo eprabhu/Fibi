@@ -529,6 +529,14 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
       */
      goToCorrespondingUnAnsweredQuestion(id) {
         this.highlight = id;
+        scrollIntoView('ques_' + id);
+        const ansID = document.getElementById('ans_' + id);
+        this.setFocusToFields(ansID);
+     }
+
+
+     goToUnAnsweredQuestionOnValidation(id) {
+        this.highlight = id;
         const SCROLL_CONFIG: any = { 
             sectionId: 'ques_' + id, 
             offsetTop: (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100), 
@@ -1122,7 +1130,7 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
          let question = this.firstUnAnsweredQuestion(this.questionnaire.questions);
          if (question) {
              setTimeout(() => {
-                 this.goToCorrespondingUnAnsweredQuestion(question.QUESTION_ID);
+                 this.goToUnAnsweredQuestionOnValidation(question.QUESTION_ID);
              }, 500);
          }
      }
