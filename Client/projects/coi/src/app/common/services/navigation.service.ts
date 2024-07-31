@@ -7,8 +7,6 @@
 
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, RouteConfigLoadStart, RouteConfigLoadEnd, GuardsCheckEnd } from '@angular/router';
-import { routeConfigurations } from '../../../../../fibi/src/app/common/utilities/route-config';
-import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from './common.service';
 /**
  * this will control all the route configurations inside fibi. we take path details from

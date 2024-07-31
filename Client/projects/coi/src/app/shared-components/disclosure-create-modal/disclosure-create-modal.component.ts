@@ -103,8 +103,8 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     resetHomeUnit(): void {
         this.isHideEndpointSearch = true;
-        this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
-        this.unitSearchOptions.defaultValue = this.commonService.currentUserDetails.homeUnit + ' - ' + this.commonService.currentUserDetails.homeUnitName;
+        this.reviseObject.homeUnit = this.commonService.currentUserDetails.unitNumber;
+        this.unitSearchOptions.defaultValue = this.commonService.currentUserDetails.unitNumber + ' - ' + this.commonService.currentUserDetails.unitName;
         this.mandatoryList.delete('homeUnit');
     }
 
@@ -374,9 +374,9 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private setSearchOptions(): void {
-        this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.homeUnit + '-' + this.commonService.currentUserDetails.homeUnitName, this.commonService.fibiUrl, 'unitNumber - unitName');
-        this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
-        this.homeUnitName = this.commonService.currentUserDetails.homeUnitName;
+        this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.unitNumber + '-' + this.commonService.currentUserDetails.unitName, this.commonService.fibiUrl, 'unitNumber - unitName');
+        this.reviseObject.homeUnit = this.commonService.currentUserDetails.unitNumber;
+        this.homeUnitName = this.commonService.currentUserDetails.unitName;
         this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
         this.unitHttpOptions = getEndPointOptionsForDepartment();
         this.sponsorSearchOptions = getEndPointOptionsForSponsor();

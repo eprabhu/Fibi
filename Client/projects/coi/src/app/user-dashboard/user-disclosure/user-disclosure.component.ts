@@ -520,7 +520,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     createOPA() {
         this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personID'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
+            this.commonService.getCurrentUserDetail('unitNumber'))
             .subscribe((res: any) => {
                 if(res) {
                     this._router.navigate([OPA_REDIRECT_URL], { queryParams: { disclosureId: res.disclosureId } });
