@@ -8,10 +8,10 @@
                         <div class="row flex-grow-1 position-relative">
                             <div class="d-flex align-items-center" [ngClass]="entityDetails?.entityName?.length > 20 ? 'col-12 col-lg' : 'col'">
                                 <div class="fw-bold d-flex align-items-center" tabindex="-1">
-                                    <a [tabindex]="showViewButton() ? '0' : '-1'" [ngClass]="{'d-flex link-primary cursor-pointer': showViewButton()}" (click)="viewEntityDetails()"
+                                    <span [tabindex]="showViewButton() ? '0' : '-1'" [ngClass]="{'d-flex link-primary cursor-pointer': showViewButton()}" (click)="viewEntityDetails()"
                                         (keyup.enter)="viewEntityDetails()" (keyup.space)="viewEntityDetails()">
                                         <span class="text-slice">{{ entityDetails?.entityName }}</span>
-                                    </a>
+                                    </span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
                                         *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
                                 </div>
