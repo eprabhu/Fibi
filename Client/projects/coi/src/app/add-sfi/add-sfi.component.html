@@ -1,5 +1,5 @@
 <div class="row mb-3 " [ngClass]="isSlider? 'sticky-top-slider' : 'sticky-top-50'" id="create-sfi-header">
-    <div class="col-12 bg-white">
+    <div class="col-12" [class.bg-white]="isSlider">
 		<div class="card shadow-sm">
 			<div class="row mx-0">
 				<div class="col-xl-8 col-lg-9 col-md-12 px-0" [class.my-auto]="isSlider">

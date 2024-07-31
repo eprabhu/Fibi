@@ -471,9 +471,10 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         this.isPreventDefaultLoader = false;
     }
 
-    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null): void {
+    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null, needReporterRole: boolean = true): void {
         this.projectDetailsModalInfo.projectDetails = projectDetails;
         this.projectDetailsModalInfo.coiDisclosureId = coiDisclosureId;
+        this.projectDetailsModalInfo.needReporterRole = needReporterRole;
     }
 
     closeProjectDetailsModal(isOpen = true): void {
