@@ -83,10 +83,11 @@
                         <app-common-help-text [helpTextHardCoded]="travelDescHelpText"></app-common-help-text>
                     </ng-container>
               </label>
-              <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
-                        appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
-                        placeholder = "Please provide the purpose of the trip."
-                        [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
+              <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')"
+                    (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
+                    appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
+                    placeholder = "Please provide the {{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'purpose of the trip.' : 'description.'}}"
+                    [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
               </textarea>
               <span *ngIf="mandatoryList?.has('reviseComment')" class="fs-13 invalid-feedback d-block">
                   {{mandatoryList?.get('reviseComment')}}
@@ -391,20 +392,36 @@
     </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" id="claim-sumbit-no-btn" data-bs-dismiss="modal" type="button" title="Click here to cancel" aria-label="Click here to cancel" (click)="clearModal()">Cancel</button>
-          <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0" id="claim-sumbit-no-btn"
-            type="button" (click)="createOrReviseDisclosure()" [title]="hasFCOI ? 'Click here to Create Revision' : 'Click here to Create FCOI'"
-            [attr.aria-label]="hasFCOI ? 'Click to Create Revision' : 'Click to Create FCOI'">
-          <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
-          <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container></button>
-          <button  *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary" id="claim-sumbit-no-btn"
-            type="button" title="Click here to continue with creating the project disclosure"
-            aria-label="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();">Create</button>
-          <button class="btn btn-primary" *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" type="button" title="Click to continue with creating the travel disclosure"
-            aria-label="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();"> Create </button>
-          <button *ngIf="isShowConcurrencyWarning" class="btn btn-primary" id="coi-view-disclosure" type="button"
-            title="Click here to view disclosure" aria-label="Click here to view disclosure"
-            (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">View Disclosure</button>
+            <button class="btn btn-outline-secondary" id="disclosure-create-cancel-btn" data-bs-dismiss="modal" type="button"
+                title="Click here to cancel" aria-label="Click here to cancel" (click)="clearModal()">Cancel</button>
+            <!-- FCOI/REVISE -->
+            <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0"
+                id="fcoi-revise-disclosure-create-cancel-btn" type="button" (click)="createOrReviseDisclosure()"
+                [title]="hasFCOI ? 'Click here to create revision' : 'Click here to create FCOI'"
+                [attr.aria-label]="hasFCOI ? 'Click here to create revision' : 'Click here to create FCOI'">
+                <!-- FCOI create -->
+                <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container>
+                <!-- REVISE create -->
+                <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
+            </button>
+            <!-- project create -->
+            <button *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary"
+                id="project-disclosure-create-btn" type="button" title="Click here to continue with creating the project disclosure"
+                aria-label="Click here to continue with creating the project disclosure" (click)="createProjectDisclosureAPI();">
+                Create
+            </button>
+            <!-- for travel create -->
+            <button *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" class="btn btn-primary" type="button"
+                id="travel-disclosure-create-btn" title="Click to continue with creating the travel disclosure"
+                aria-label="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();">
+                Create
+            </button>
+            <!-- view disclosure -->
+            <button *ngIf="isShowConcurrencyWarning" class="btn btn-primary" id="disclosure-create-view-disclosure" type="button"
+                title="Click here to view disclosure" aria-label="Click here to view disclosure"
+                (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);">
+                View Disclosure
+            </button>
         </div>
       </div>
     </div>
