@@ -25,7 +25,8 @@ import { EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE } from '../../app-constants'
                     [saveButtonLabel]="'Save and Continue'"
                     (QuestionnaireSaveEvent)="getSaveEvent($event)"
                     (currentActiveQuestionnaire)="currentActiveQuestionaireChanged($event)"
-                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
+                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)"
+                    [isQuestionnaireValidateMode]="false">
             </app-view-questionnaire-list>
         </div>
     `,
