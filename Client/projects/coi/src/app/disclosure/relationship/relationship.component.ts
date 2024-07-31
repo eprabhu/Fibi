@@ -11,6 +11,7 @@ import { RO } from '../coi-interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { CoiService } from '../services/coi.service';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-relationship',
@@ -54,6 +55,7 @@ export class RelationshipComponent implements OnInit {
   projectList: GenericProject[] = [];
   searchWord: string;
   canShowEntitySearch = true;
+  getFormattedSponsor = getFormattedSponsor;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,

@@ -11,7 +11,7 @@ import { Subject, Subscription, interval } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { CoiService } from '../../services/coi.service';
 import { scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { openCoiSlider } from '../../../common/utilities/custom-utilities';
+import { getFormattedSponsor, openCoiSlider } from '../../../common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-define-relation',
@@ -63,6 +63,7 @@ export class DefineRelationComponent implements OnInit {
   isSaving = false;
   isShowSlider = false;
   isReadMore = false;
+  getFormattedSponsor = getFormattedSponsor;
 
   constructor(private _relationShipService: RelationshipService, public coiService: CoiService, public snackBar: MatSnackBar, public commonService: CommonService, private _dataStore: DataStoreService) { }
 

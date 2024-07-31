@@ -107,7 +107,7 @@ export class DisclosureProjectData {
     projectBadgeColour: string = '';
     projectEndDate: number | null = null;
     projectStartDate: number | null = null;
-    sponsorCode?: any;
+    sponsorCode: any;
     entityCount?: any;
     leadUnitName?: any;
     disclosureId?: any;
@@ -118,7 +118,7 @@ export class DisclosureProjectData {
     leadUnitNumber?: any;
     proposalStatus?: any;
     inCompletCount?: any;
-    primeSponsorCode?: any;
+    primeSponsorCode: any;
     disclsoureNeeded?: any;
     sfiCompleted?: boolean;
     keyPersonName?: string;
@@ -134,4 +134,5 @@ export class DisclosureProjectData {
 export class DisclosureProjectModalData {
     projectDetails: DisclosureProjectData | null = null;
     coiDisclosureId: number | null = null;
+    needReporterRole: boolean = true;
 }

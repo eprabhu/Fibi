@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { getFormattedSponsor, openCoiSlider } from '../../common/utilities/custom-utilities';
 import { EDITOR_CONFIURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { ProjectOverviewService } from '../project-overview.service';
@@ -32,7 +32,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     commentsData: any[] = [];
     mandatoryMap = new Map();
     currentUserId: any;
-
+    getFormattedSponsor = getFormattedSponsor;
 
     constructor(public projectOverviewService: ProjectOverviewService, public commonService: CommonService) { }
 
