@@ -222,19 +222,22 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     private static AuthResponse getAuthResponseDetails(Optional<Person> optionalPerson) {
-        AuthResponse response = AuthResponse.builder()
+        return AuthResponse.builder()
                 .personID(optionalPerson.map(Person::getPersonId).orElse(null))
                 .userName(optionalPerson.map(Person::getPrincipalName).orElse(null))
                 .firstName(optionalPerson.map(Person::getFirstName).orElse(null))
                 .lastName(optionalPerson.map(Person::getLastName).orElse(null))
                 .fullName(optionalPerson.map(Person::getFullName).orElse(null))
+                .email(optionalPerson.map(Person::getEmailAddress).orElse(null))
+                .primaryTitle(optionalPerson.map(Person::getPrimaryTitle).orElse(null))
                 .unitNumber(optionalPerson.map(Person::getHomeUnit).orElse(null))
+                .unitName(optionalPerson.isPresent() && optionalPerson.get().getUnit() != null ?
+                        optionalPerson.get().getUnit().getUnitName() : null)
                 .login(Boolean.TRUE)
                 .gender(optionalPerson.map(Person::getGender).orElse(null))
 //                .userType(optionalPerson.isPresent() ? optionalPerson.get().getUserType() : null)
                 .isExternalUser(optionalPerson.map(Person::getIsExternalUser).orElse(null))
                 .build();
-        return response;
     }
 
     @Override
