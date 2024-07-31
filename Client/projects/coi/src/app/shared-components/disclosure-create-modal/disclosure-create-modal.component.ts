@@ -112,6 +112,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (event) {
             this.reviseObject.homeUnit = event.unitNumber;
             this.homeUnitName = event.unitName;
+            this.mandatoryList.delete('homeUnit');
         } else {
             this.reviseObject.homeUnit = null;
             this.homeUnitName = null;
@@ -267,7 +268,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             revisionComment: this.reviseObject.revisionComment,
             personId: this.commonService.getCurrentUserDetail('personID')
         };
-        if (this.validateForm()) {
+        if (this.validateFCOIForm()) {
             this._disclosureCreateModalService.createDisclosure({'coiDisclosure': fcoiDisclosureObj}).subscribe((data: any) => {
                 hideModal('reviseOrCreateDisclosureModal');
                 this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
@@ -393,10 +394,10 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.disclosureNumber = this.hasFCOI ? this.hasFCOI.disclosureNumber : null;
     }
 
-    private validateForm(): boolean {
+    private validateFCOIForm(): boolean {
         this.mandatoryList.clear();
-        if (!this.reviseObject.revisionComment && this.hasFCOI) {
-            this.mandatoryList.set('reviseComment', 'Please enter the reason for revising your FCOI disclosure.');
+        if (!this.reviseObject.revisionComment) {
+            this.mandatoryList.set('reviseComment', `Please enter the reason for ${this.hasFCOI ? 'revise' : 'create'} your FCOI disclosure.`);
         }
         if (!this.reviseObject.homeUnit) {
             this.mandatoryList.set('homeUnit', 'Please select a valid unit to create an FCOI disclosure.');
@@ -413,7 +414,7 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     private reviseDisclosure(): void {
         this.reviseObject.disclosureId = this.hasFCOI ? this.hasFCOI.disclosureId : null;
-        if (this.validateForm()) {
+        if (this.validateFCOIForm()) {
             if (!this.canReviseFCOI) {
                 this.$subscriptions.push(this._disclosureCreateModalService.reviseDisclosure(this.reviseObject)
                     .subscribe((data: any) => {
