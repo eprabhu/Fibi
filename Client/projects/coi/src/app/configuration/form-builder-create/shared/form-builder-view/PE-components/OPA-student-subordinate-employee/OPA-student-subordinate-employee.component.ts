@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { StudentSubordinateEmployee, StudentSubordinatePE } from './interface';
-import { getEndPointForEntity, getEndPointOptionsForCountry } from '../../search-configurations';
+import { getEndPointForEntity } from '../../search-configurations';
 import { FormBuilderService } from '../../form-builder.service';
 import { CommonService } from '../../../../../../common/services/common.service';
 import { OPAStudentSubordinateService } from './OPA-student-subordinate.service';
@@ -10,7 +10,8 @@ import { ElasticConfigService } from '../../../../../../common/services/elastic-
 @Component({
     selector: 'app-OPA-student-subordinate-employee',
     templateUrl: './OPA-student-subordinate-employee.component.html',
-    styleUrls: ['./OPA-student-subordinate-employee.component.scss']
+    styleUrls: ['./OPA-student-subordinate-employee.component.scss'],
+    providers: [OPAStudentSubordinateService]
 })
 export class OPAStudentSubordinateEmployeeComponent implements OnInit {
 

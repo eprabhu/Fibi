@@ -5,7 +5,7 @@
         </div>
         <div class="content" id="ENTITY_SECTION">
             <div class="row mb-3">
-                <div class="col-12" *ngIf="isFormEditMode">
+                <div class="col-12 position-relative" *ngIf="isFormEditMode">
                     <label for="consulting-entity-name">Entity Name</label>
                     <app-elastic *ngIf="!isNewEntityFromSearch ;else textBox" [uniqueId]="'consulting-entity-name'"
                         class="w-100 mt-4" [options]="entitySearchOptions"
