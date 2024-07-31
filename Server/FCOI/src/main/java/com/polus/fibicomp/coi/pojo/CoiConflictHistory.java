@@ -30,8 +30,8 @@ public class CoiConflictHistory implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer coiConflictHistoryId;
 
-	@Column(name = "DISCLOSURE_DETAILS_ID")
-	private Integer disclosureDetailsId;
+	@Column(name = "COI_DISCL_PROJECT_ENTITY_REL_ID")
+	private Integer coiDisclProjectEntityRelId;
 
 	@Column(name = "DISCLOSURE_ID")
 	private Integer disclosureId;
@@ -49,8 +49,8 @@ public class CoiConflictHistory implements Serializable {
 	private Timestamp updateTimestamp;
 
 	@LastModifiedBy
-	@Column(name = "UPDATE_USER")
-	private String updateUser;
+	@Column(name = "UPDATED_BY")
+	private String updatedBy;
 
 	@Transient
 	private String updateUserFullName;

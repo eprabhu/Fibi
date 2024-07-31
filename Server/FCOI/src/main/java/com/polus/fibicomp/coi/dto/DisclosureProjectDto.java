@@ -60,5 +60,7 @@ public class DisclosureProjectDto {
 	private Integer proposalCount;
 	private Integer commentCount;
 	private Integer keyPersonCount;
+	private String projectIcon;
+	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
 
 }
