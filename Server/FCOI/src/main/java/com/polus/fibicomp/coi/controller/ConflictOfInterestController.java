@@ -287,11 +287,6 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> checkEntityAdded(@PathVariable("entityNumber") Integer entityNumber) {
 		return conflictOfInterestService.checkEntityAdded(entityNumber);
 	}
-
-	@PatchMapping("/disclosure/assignAdmin")
-	public ResponseEntity<Object> assignDisclosureAdmin(@RequestBody CoiDisclosureDto dto) {
-		return conflictOfInterestService.assignDisclosureAdmin(dto);
-	}
 	
 	@GetMapping(value = "/loadTravelDisclosure/{travelDisclosureId}")
 	public ResponseEntity<Object> loadTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {

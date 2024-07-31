@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -139,4 +136,12 @@ public interface FcoiDisclosureService {
      * @return
      */
     ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
+
+
+    /**
+     * This method is used to update administrator
+     * @param dto
+     * @return
+     */
+    ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
 }

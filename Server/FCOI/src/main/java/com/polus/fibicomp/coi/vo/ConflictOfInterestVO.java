@@ -8,6 +8,7 @@ import java.util.List;
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Unit;
 import com.polus.core.roles.pojo.AdminGroup;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;

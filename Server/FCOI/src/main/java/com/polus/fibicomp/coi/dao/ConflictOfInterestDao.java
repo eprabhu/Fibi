@@ -632,16 +632,6 @@ public interface ConflictOfInterestDao {
 	 */
 	List<PersonEntity> getSFIOfDisclosure(ConflictOfInterestVO vo);
 
-	/**
-	 *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
-	 *
-	 * @param adminGroupId
-	 * @param adminPersonId
-	 * @param disclosureId
-	 * @return Update Timestamp
-	 */
-	Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
-
     /**
 	 * This method is used for updating review status of disclosure
 	 *
@@ -1017,14 +1007,6 @@ public interface ConflictOfInterestDao {
 	boolean isRelationshipAdded(List<Integer> validPersonEntityRelTypeCodes, Integer personEntityId);
 
 	/**
-	 * This method is used to check given admin person and group is added or not
-	 * @param adminGroupId
-	 * @param adminPersonId
-	 * @param disclosureId
-	 */
-	boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId);
-
-	/**
 	 *	This method checks a travel disclosure exists with certain conditions
 	 * @param vo
 	 * @return
@@ -1158,12 +1140,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public Boolean isEntityRiskStatusModified(String riskCategoryCode, Integer disclosureId);
-
-	/**
-	 * This method is used to Check if Admin is assigned
-	 * @return
-	 */
-	public boolean isAdminPersonOrGroupAdded(Integer disclosureId);
 
 	/**
 	 * This method is used to Check if same Admin is assigned in Travel disclsoure

@@ -18,6 +18,12 @@ import javax.persistence.Transient;
 
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Unit;
+import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.coi.pojo.CoiProjectType;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
+import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;

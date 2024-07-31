@@ -174,7 +174,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String APPROVED = "3";
 	private static final String REVIEW_STATUS_COMPLETE = "4";
 	private static final String DISCLOSURE_REVIEW_IN_PROGRESS = "3";
-	private static final String REVIEW_IN_PROGRESS = "Review in progress";
 	private static final String DISCLOSURE_REVIEW_COMPLETED = "4";
 	private static final String RISK_CAT_CODE_LOW = "3";
 	private static final String REVIEW_STATUS_WITHDRAWN = "6";
@@ -1342,85 +1341,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
-		if ((dto.getActionType().equals("R") && (conflictOfInterestDao.isSameAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())))
-				|| (dto.getActionType().equals("A") && conflictOfInterestDao.isAdminPersonOrGroupAdded(dto.getDisclosureId()))) {
-			return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
-		}
-		CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(dto.getDisclosureId());
-		if ((dto.getActionType().equals("R"))
-				&& (disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_RETURN) || disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_COMPLETED))) {
-			return new ResponseEntity<>("Reassign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
-		}
-		if (dto.getActionType().equals("A") && !disclosure.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_STATUS_SUBMITTED)) {
-			return new ResponseEntity<>("Assign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
-		}
-		try {
-			saveAssignAdminActionLog(dto.getAdminPersonId(), dto.getDisclosureId(), disclosure.getDisclosureNumber(), disclosure.getAdminPersonId());
-		} catch (Exception e) {
-			logger.error("assignDisclosureAdmin : {}", e.getMessage());
-		}
-		dto.setUpdateTimestamp(conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId()));
-		if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
-			conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
-			dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
-			dto.setReviewStatus(REVIEW_IN_PROGRESS);
-		}
-		else{
-			dto.setReviewStatusCode(disclosure.getReviewStatusCode());
-			dto.setReviewStatus(disclosure.getCoiReviewStatusType().getDescription());
-		}
-		Map<String, String> actionTypes = new HashMap<>();
-		Map<String, String> additionalDetails = new HashMap<>();
-		if (dto.getActionType().equals("A")) {
-			actionTypes.put(FCOI_DISCLOSURE, ActionTypes.FCOI_ASSIGN_ADMIN);
-			actionTypes.put(PROJECT_DISCLOSURE, ActionTypes.PROJECT_ASSIGN_ADMIN);
-		} else {
-			actionTypes.put(FCOI_DISCLOSURE, ActionTypes.FCOI_REASSIGN_ADMIN);
-			actionTypes.put(PROJECT_DISCLOSURE, ActionTypes.PROJECT_REASSIGN_ADMIN);
-			additionalDetails.put(StaticPlaceholders.NOTIFICATION_RECIPIENTS, disclosure.getAdminPersonId());
-			additionalDetails.put(StaticPlaceholders.ADMINISTRATOR_NAME, personDao.getPersonFullNameByPersonId(disclosure.getAdminPersonId()));
-		}
-		additionalDetails.put(StaticPlaceholders.ADMIN_ASSIGNED_BY, personDao.getPersonFullNameByPersonId(AuthenticatedUser.getLoginPersonId()));
-		additionalDetails.put(StaticPlaceholders.ADMIN_ASSIGNED_TO, personDao.getPersonFullNameByPersonId(dto.getAdminPersonId()));
-		additionalDetails.put(StaticPlaceholders.CERTIFICATION_DATE, disclosure.getCertifiedAt().toString());
-		additionalDetails.put(StaticPlaceholders.DISCLOSURE_STATUS, disclosure.getConflictStatusCode() != null ?
-				disclosure.getCoiConflictStatusType().getDescription() : RISK_CATEGORY_LOW_DESCRIPTION);
-		processCoiMessageToQ(getDisclosureActionType(disclosure.getFcoiTypeCode(), actionTypes), disclosure.getDisclosureId(), null, additionalDetails);
-
-		dto.setAdminGroupName(dto.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
-		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(dto.getAdminPersonId()));
-		dto.setConflictStatus(disclosure.getCoiConflictStatusType() != null ? disclosure.getCoiConflictStatusType().getDescription() : null);
-		dto.setConflictStatusCode(disclosure.getConflictStatusCode());
-		dto.setDispositionStatusCode(disclosure.getDispositionStatusCode());
-		dto.setDispositionStatus(disclosure.getCoiDispositionStatusType().getDescription());
-		return new ResponseEntity<>(dto, HttpStatus.OK);
-	}
-
-	public void saveAssignAdminActionLog(String adminPersonId, Integer disclosureId, Integer disclosureNumber, String oldAdminPersonId) {
-
-		String oldAdminPerson = oldAdminPersonId != null ? personDao.getPersonFullNameByPersonId(oldAdminPersonId) : null;
-		String newAdminPerson = personDao.getPersonFullNameByPersonId(adminPersonId);
-		if (oldAdminPerson != null) {
-			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REASSIGN_ADMIN)
-	                .disclosureId(disclosureId)
-	                .disclosureNumber(disclosureNumber)
-	                .oldAdmin(oldAdminPerson)
-	                .coiAdmin(AuthenticatedUser.getLoginUserFullName())
-	                .newAdmin(newAdminPerson).build();
-			actionLogService.saveDisclosureActionLog(actionLogDto);
-		}
-		else {
-			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ASSIGN_ADMIN)
-	                .disclosureId(disclosureId)
-	                .disclosureNumber(disclosureNumber)
-	                .coiAdmin(AuthenticatedUser.getLoginUserFullName())
-	                .newAdmin(newAdminPerson).build();
-			actionLogService.saveDisclosureActionLog(actionLogDto);
-		}
-	}
-
-	@Override
 	public ResponseEntity<Object> evaluateValidation(Integer disclosureId) {
 		//TODO
 //		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
@@ -2079,7 +1999,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
     //Defining action type based on disclosure type code
-    private static String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes) {
+	@Override
+    public String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes) {
         String actionType;
         if (fcoiType.equals(Constants.DISCLOSURE_TYPE_CODE_FCOI) ||
                 fcoiType.equals(Constants.DISCLOSURE_TYPE_CODE_REVISION)) {
@@ -2091,7 +2012,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
     }
 
     //Setting up the basic details for publishing message to queue
-    private void processCoiMessageToQ(String actionType, Integer moduleItemKey, Integer moduleSubItemKey, Map<String, String> additionDetails) {
+	@Override
+    public void processCoiMessageToQ(String actionType, Integer moduleItemKey, Integer moduleSubItemKey, Map<String, String> additionDetails) {
         MessageQVO messageQVO = new MessageQVO();
         messageQVO.setActionType(actionType);
         messageQVO.setModuleCode(Constants.COI_MODULE_CODE);

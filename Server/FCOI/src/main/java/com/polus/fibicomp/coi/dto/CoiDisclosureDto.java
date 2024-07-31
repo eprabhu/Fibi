@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import com.polus.core.person.pojo.Person;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
@@ -12,7 +13,6 @@ import com.polus.fibicomp.coi.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
-import com.polus.fibicomp.person.pojo.Person;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

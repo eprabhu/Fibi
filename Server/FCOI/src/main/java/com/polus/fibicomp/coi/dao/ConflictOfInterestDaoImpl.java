@@ -2735,24 +2735,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
-		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
-		StringBuilder hqlQuery = new StringBuilder();
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, ");
-		hqlQuery.append("c.updateTimestamp = :updateTimestamp, c.updateUser = :updateUser ");
-		hqlQuery.append("WHERE c.disclosureId = : disclosureId");
-		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("adminGroupId", adminGroupId);
-		query.setParameter("adminPersonId", adminPersonId);
-		query.setParameter("disclosureId", disclosureId);
-		query.setParameter("updateTimestamp", updateTimestamp);
-		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
-		query.executeUpdate();
-		return updateTimestamp;
-	}
-
-	@Override
 	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -3828,24 +3810,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return (boolean) query.getSingleResult();
 	}
 
-
-	@Override
-	public boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
-		StringBuilder hqlQuery = new StringBuilder();
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then true else false end ");
-		hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
-		if (adminGroupId != null)
-			hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
-		hqlQuery.append("AND c.disclosureId = : disclosureId");
-		Query query = session.createQuery(hqlQuery.toString());
-		if (adminGroupId != null)
-			query.setParameter("adminGroupId", adminGroupId);
-		query.setParameter("adminPersonId", adminPersonId);
-		query.setParameter("disclosureId", disclosureId);
-		return (boolean)query.getSingleResult();
-	}
-
 	public CoiTravelDisclosure isTravelDisclosureExists(ConflictOfInterestVO vo) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -4193,18 +4157,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
             query.setParameter("riskCategoryCode", riskCategoryCode);
         }
         return (Boolean) query.getSingleResult();
-	}
-
-	@Override
-	public boolean isAdminPersonOrGroupAdded(Integer disclosureId) {
-		StringBuilder hqlQuery = new StringBuilder();
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then false else true end ");
-		hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId is null AND c.adminGroupId is null ");
-		hqlQuery.append("AND c.disclosureId = : disclosureId");
-		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("disclosureId", disclosureId);
-		return (boolean)query.getSingleResult();
 	}
 
 	@Override

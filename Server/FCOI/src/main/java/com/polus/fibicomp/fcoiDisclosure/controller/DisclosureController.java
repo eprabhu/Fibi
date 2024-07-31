@@ -1,13 +1,14 @@
 package com.polus.fibicomp.fcoiDisclosure.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.controller.ConflictOfInterestController;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
-import com.polus.fibicomp.security.AuthenticatedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 
 import java.util.List;
 
@@ -151,6 +151,11 @@ public class DisclosureController {
     public ResponseEntity<Object> validateDisclosure(@PathVariable("moduleCode") Integer moduleCode,
                                                      @PathVariable("moduleItemId") String moduleItemId) {
         return disclosureService.validateDisclosure(moduleCode, moduleItemId);
+    }
+
+    @PatchMapping("/assignAdmin")
+    public ResponseEntity<Object> assignDisclosureAdmin(@RequestBody CoiDisclosureDto dto) {
+        return disclosureService.assignDisclosureAdmin(dto);
     }
 
 }

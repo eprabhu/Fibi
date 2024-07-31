@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
@@ -21,9 +23,7 @@ import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
-import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.security.AuthenticatedUser;
 import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -867,5 +867,93 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
 
         }
 //        return null;
+    }
+
+    @Override
+    public boolean isAdminPersonOrGroupAdded(Integer disclosureId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then false else true end ");
+        hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId is null AND c.adminGroupId is null ");
+        hqlQuery.append("AND c.disclosureId = : disclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("disclosureId", disclosureId);
+        return (boolean)query.getSingleResult();
+    }
+
+    @Override
+    public boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then true else false end ");
+        hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
+        if (adminGroupId != null)
+            hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
+        hqlQuery.append("AND c.disclosureId = : disclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        if (adminGroupId != null)
+            query.setParameter("adminGroupId", adminGroupId);
+        query.setParameter("adminPersonId", adminPersonId);
+        query.setParameter("disclosureId", disclosureId);
+        return (boolean)query.getSingleResult();
+    }
+
+    @Override
+    public Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
+        Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, ");
+        hqlQuery.append("c.updateTimestamp = :updateTimestamp, c.updatedBy = :updatedBy ");
+        hqlQuery.append("WHERE c.disclosureId = : disclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("adminGroupId", adminGroupId);
+        query.setParameter("adminPersonId", adminPersonId);
+        query.setParameter("disclosureId", disclosureId);
+        query.setParameter("updateTimestamp", updateTimestamp);
+        query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
+        query.executeUpdate();
+        return updateTimestamp;
+    }
+
+    public void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId, Integer moduleCode, String moduleItemKey, String type) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection connection = sessionImpl.connection();
+        try {
+            CallableStatement statement = connection.prepareCall("{call COI_SYNC_FCOI_DISCLOSURE(?,?,?)}");
+            if (disclosureId == null) {
+                statement.setNull(1, Types.INTEGER);
+            } else {
+                statement.setInt(1, disclosureId);
+            }
+            if (disclosureNumber == null) {
+                statement.setNull(2, Types.INTEGER);
+            } else {
+                statement.setInt(2, disclosureNumber);
+            }
+
+            statement.setString(3, AuthenticatedUser.getLoginPersonId());
+            statement.setString(4, AuthenticatedUser.getLoginUserName());
+            if (personEntityId == null) {
+                statement.setNull(5, Types.INTEGER);
+            } else {
+                statement.setInt(5, personEntityId);
+            }
+            if (moduleCode == null) {
+                statement.setNull(6, Types.INTEGER);
+            } else {
+                statement.setInt(6, moduleCode);
+            }
+            if (moduleItemKey == null) {
+                statement.setNull(7, Types.INTEGER);
+            } else {
+                statement.setString(7, moduleItemKey);
+            }
+            statement.setString(8, type);
+            statement.execute();
+        } catch (Exception e) {
+            logger.error("Exception in syncProjectWithDisclosure {}", e.getMessage());
+        }
     }
 }

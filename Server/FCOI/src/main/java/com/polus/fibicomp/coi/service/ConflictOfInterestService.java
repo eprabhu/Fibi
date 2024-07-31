@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,21 +35,6 @@ import com.polus.fibicomp.coi.dto.CommonRequestDto;
 @Transactional
 @Service(value = "conflictOfInterestService")
 public interface ConflictOfInterestService {
-
-	/**
-	 * This method is used to create Disclosure
-	 * @param vo
-	 * @return created disclosure details, person details and number of sfi
-	 */
-//	ResponseEntity<Object> createDisclosure(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to get list of disclosure
-	 * @param disclosureId
-	 * @return
-	 */
-//	ResponseEntity<Object> loadDisclosure(Integer disclosureId);
-
 
 	/**
 	 * This method is used for get list of entity table values(enpoint for entity)
@@ -203,15 +189,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> checkEntityAdded(Integer entityNumber);
-
-	/**
-	 * This method is used to assign admin group or admin person
-	 *
-	 * @param dto
-	 * @return
-	 */
-	ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
-
     
     /**
 	 * This method is used to assign admin group or admin person for travel disclosures
@@ -407,4 +384,20 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> checkTravelDisclosureRiskStatus(CoiTravelDisclosureDto travelDisclosureDto);
 
+	/**
+	 * This method is used to build & push message to queue
+	 * @param actionType
+	 * @param moduleItemKey
+	 * @param moduleSubItemKey
+	 * @param additionDetails
+	 */
+	void processCoiMessageToQ(String actionType, Integer moduleItemKey, Integer moduleSubItemKey, Map<String, String> additionDetails);
+
+	/**
+	 * Defining action type based on disclosure type code
+	 * @param fcoiType
+	 * @param actionTypes
+	 * @return
+	 */
+	String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes);
 }

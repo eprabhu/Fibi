@@ -300,4 +300,30 @@ public interface FcoiDisclosureDao {
 
     void syncFcoiDisclProjectsAndEntities(Integer disclosureId, Integer disclosureNumber,Integer coiDisclProjectId, Integer moduleCode,
                                           String moduleItemKey, String sfiJsonArray, String loginPersonId);
+
+    /**
+     * This method is used to Check if Admin is assigned
+     * @param disclosureId
+     * @return
+     */
+    boolean isAdminPersonOrGroupAdded(Integer disclosureId);
+
+    /**
+     * This method is used to check given admin person and group is added or not
+     * @param adminGroupId
+     * @param adminPersonId
+     * @param disclosureId
+     */
+    boolean isSameAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+
+    /**
+     *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
+     *
+     * @param adminGroupId
+     * @param adminPersonId
+     * @param disclosureId
+     * @return Update Timestamp
+     */
+    Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+
 }
