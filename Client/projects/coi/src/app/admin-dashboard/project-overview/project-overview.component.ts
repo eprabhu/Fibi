@@ -25,6 +25,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     @Input() dataForAdvanceSearch: Observable<any>;
     projectOverviewData: ProjectOverview = new ProjectOverview();
     projectOverviewRequestObject = new CoiProjectOverviewRequest();
+    displayFilterTab = false;
     isProjectOverviewCardCollapse: boolean[] = [];
     $subscriptions: Subscription[] = [];
     isLoading = true;
@@ -181,6 +182,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
     actionsOnPageChange(event) {
         if (this.projectOverviewRequestObject.currentPage != event) {
+            this.isProjectOverviewCardCollapse = [];
             this.projectOverviewRequestObject.currentPage = event;
             this.loadProjectData();
         }
