@@ -21,81 +21,94 @@
                     </button>
                     <!-- tabs -->
                     <ul class="m-0 p-0 menu-responsive fit-content tabs-collapsed collapse" id="navbarResponsive" aria-label="navigation list" tabindex="-1">
-                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('ALL_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-all-disclosures"
-                            (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'All Disclosures' : 'Click here to view all disclosures'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'Click here to view all disclosures'" >
-                            All Disclosures
-                        </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
-                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" id="coi-admin-dashboard-new-submissions"
-                            (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'New Submissions ' : 'Click here to view new submissions'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'Selected tab is New Submissions ' : 'Click here to view new submissions'">
-                            New Submissions
-                        </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
-                        <li *ngIf="isShowAdminDashboard" (click)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')" tabindex="0" id="coi-admin-dashboard-new-submissions-nosfi"
-                            (keyup.enter)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
-                            (keyup.space)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'New Submission - No SFI' : 'Click here to view new submission - No SFI'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'Selected tab is New Submission - No SFI ' : 'Click here to view new submission - No SFI'">
-                            New Submissions - No SFI
-                        </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
-                        <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabindex="0" id="coi-admin-dashboard-my-reviews"
-                            (keyup.space)="changeTab('MY_REVIEWS')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'My Reviews' : 'Click to view My Reviews'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'Click to view My Reviews'">
-                            My Reviews
-                        </li>
-                        <span class="separator" aria-hidden="true" role="separator"></span>
-                        <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabindex="0" id="coi-admin-dashboard-all-reviews"
-                            (keyup.space)="changeTab('ALL_REVIEWS')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'All Reviews' : 'Click to view All Reviews'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'Click to view All Reviews'">
-                            All Reviews
-                        </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard" ></span>
-                        <li *ngIf="hasTravelDisclosureRights" (click)="changeTab('TRAVEL_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-travel-disclosure"
-                            (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Click to view Travel Disclosures'">
-                            Travel
-                            <span class="d-none d-inline-1500 ms-1 ">Disclosures</span> 
-                        </li>
-                        <span class="separator" aria-hidden="true" role="separator" *ngIf="isShowAdminDashboard && hasTravelDisclosureRights" ></span>
-                        <li *ngIf="hasConsultingDisclosureRights"  (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
-                            (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click to view Consulting Disclosures'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Selected tab is Consulting Disclosures' : 'Click to view Consulting Disclosures'">
-                            Consulting
-                            <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
-                        </li>
-                        <span *ngIf="isShowAdminDashboard && hasConsultingDisclosureRights" class="separator" aria-hidden="true" role="separator"></span>
-                        <li *ngIf="hasProjectOverviewRights"  (click)="changeTab('PROJECTS')" tabindex="0" id="coi-admin-dashboard-project-overview"
-                            (keyup.enter)="changeTab('PROJECTS')" (keyup.space)="changeTab('PROJECTS')"
-                            [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS'"
-                            class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                            [title]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS' ? 'project Overview' : 'Click here to view Project overview'"
-                            [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS' ? 'Selected tab is Project overview' : 'Click here to view Project overview'">
-                            Projects
-                        </li>
-                        <span *ngIf="isShowAdminDashboard && hasProjectOverviewRights" class="separator" aria-hidden="true" role="separator"></span>
+                        <!-- fcoi/project -->
+                        <ng-container *ngIf="hasFCOIDiscosureRights">
+                            <li (click)="changeTab('ALL_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-all-disclosures"
+                                (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'All Disclosures' : 'Click here to view all disclosures'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES' ? 'Selected tab is All Disclosures' : 'Click here to view all disclosures'" >
+                                All Disclosures
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                            <li (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" id="coi-admin-dashboard-new-submissions"
+                                (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'New Submissions ' : 'Click here to view new submissions'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS' ? 'Selected tab is New Submissions ' : 'Click here to view new submissions'">
+                                New Submissions
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                            <li (click)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')" tabindex="0" id="coi-admin-dashboard-new-submissions-nosfi"
+                                (keyup.enter)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
+                                (keyup.space)="changeTab('NEW_SUBMISSIONS_WITHOUT_SFI')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'New Submission - No SFI' : 'Click here to view new submission - No SFI'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS_WITHOUT_SFI' ? 'Selected tab is New Submission - No SFI ' : 'Click here to view new submission - No SFI'">
+                                New Submissions - No SFI
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                        </ng-container>
+                        <!-- review  -->
+                        <ng-container *ngIf="hasFCOIDiscosureRights || hasReviewerRight">
+                            <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabindex="0" id="coi-admin-dashboard-my-reviews"
+                                (keyup.space)="changeTab('MY_REVIEWS')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'My Reviews' : 'Click to view My Reviews'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'Click to view My Reviews'">
+                                My Reviews
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                            <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabindex="0" id="coi-admin-dashboard-all-reviews"
+                                (keyup.space)="changeTab('ALL_REVIEWS')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'All Reviews' : 'Click to view All Reviews'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'Click to view All Reviews'">
+                                All Reviews
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                        </ng-container>
+                        <!-- travel -->
+                        <ng-container *ngIf="hasTravelDisclosureRights">
+                            <li (click)="changeTab('TRAVEL_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-travel-disclosure"
+                                (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Click to view Travel Disclosures'">
+                                Travel <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                        </ng-container>
+                        <!-- consulting -->
+                        <ng-container *ngIf="hasConsultingDisclosureRights">
+                            <li (click)="changeTab('CONSULTING_DISCLOSURES')" tabindex="0" id="coi-admin-dashboard-consulting-disclosure"
+                                (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click to view Consulting Disclosures'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Selected tab is Consulting Disclosures' : 'Click to view Consulting Disclosures'">
+                                Consulting <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                        </ng-container>
+                        <!-- project -->
+                        <ng-container *ngIf="hasProjectOverviewRights">
+                            <li (click)="changeTab('PROJECTS')" tabindex="0" id="coi-admin-dashboard-project-overview"
+                                (keyup.enter)="changeTab('PROJECTS')" (keyup.space)="changeTab('PROJECTS')"
+                                [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS'"
+                                class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS' ? 'project Overview' : 'Click here to view Project overview'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='PROJECTS' ? 'Selected tab is Project overview' : 'Click here to view Project overview'">
+                                Projects
+                            </li>
+                            <span class="separator" aria-hidden="true" role="separator"></span>
+                        </ng-container>
                     </ul>
                     <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
                         <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0 text-nowrap" tabindex="0"
