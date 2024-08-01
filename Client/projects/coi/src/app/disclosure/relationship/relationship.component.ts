@@ -99,6 +99,10 @@ export class RelationshipComponent implements OnInit {
             .getReporterProjects(this.coiData.coiDisclosure.disclosureId)
             .subscribe((res: any) => {
                 this.projectList = res || [];
+                if (this.projectList.length === 1) {
+                    this.isShowCollapsedConflictRelationship = true;
+                    this.getEntityList();
+                }
                 this.highlightProjectValidation();
             }));
     }
@@ -150,8 +154,8 @@ getDisclosureCount(typeCode, disclosureStatus) {
     this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
         const LINKED_MODULE = data?.awards[0] || data?.proposals[0];
-        this.awardList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
-        this.awardList[0].sfiCompleted = LINKED_MODULE.sfiCompleted;
+        this.projectList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
+        this.projectList[0].sfiCompleted = LINKED_MODULE.sfiCompleted;
       }
     }));
   }
