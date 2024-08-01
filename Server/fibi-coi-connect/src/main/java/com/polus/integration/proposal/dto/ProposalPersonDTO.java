@@ -18,7 +18,7 @@ public class ProposalPersonDTO {
 
 	private String keyPersonId;
 
-	private String keyPersonRoleCode;
+	private Integer keyPersonRoleCode;
 
 	private String keyPersonRole;
 

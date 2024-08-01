@@ -35,7 +35,7 @@ public class COIIntegrationProposalPerson implements Serializable {
 
 	@Id
 	@Column(name = "KEY_PERSON_ROLE_CODE")
-	private String keyPersonRoleCode;
+	private Integer keyPersonRoleCode;
 
 	@Id
 	@Column(name = "KEY_PERSON_ID")
