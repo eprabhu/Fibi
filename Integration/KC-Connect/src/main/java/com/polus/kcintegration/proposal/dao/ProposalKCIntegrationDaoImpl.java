@@ -128,7 +128,7 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	                        .proposalNumber(rset.getInt("PROPOSAL_NUMBER"))
 	                        .keyPersonName(rset.getString("FULL_NAME"))
 	                        .keyPersonId(rset.getString("PERSON_ID"))
-	                        .keyPersonRoleCode(rset.getString("PROP_PERSON_ROLE_CODE"))
+	                        .keyPersonRoleCode(rset.getInt("PROP_PERSON_ROLE_CODE"))
 	                        .keyPersonRole(rset.getString("KEY_PERSON_ROLE"))
 	                        .percentageOfEffort(rset.getBigDecimal("PERCENTAGE_OF_EFFORT"))
 	                        .attribute1Label(rset.getString("ATTRIBUTE_1_LABEL"))

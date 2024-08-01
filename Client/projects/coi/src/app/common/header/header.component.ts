@@ -5,7 +5,7 @@ import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
-import { CONSULTING_REDIRECT_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
+import { ADMIN_DASHBOARD_RIGHTS, CONSULTING_REDIRECT_URL, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
 import { LoginPersonDetails } from '../services/coi-common.interace.ts';
 
 declare const $: any;
@@ -73,8 +73,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
-        this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-            || this.commonService.isCoiReviewer;
+        this.isAdministrator = this.commonService.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS)
+            || this.commonService.isCoiReviewer || this.commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
         this.navigateForHomeIcon();
         this.openModalTriggeredFromChild();
     }

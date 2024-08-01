@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableFeignClients
 @EnableAsync
-@ComponentScan({"com.polus.*","com.polus.appcorelib.*","com.polus.core.common.*","com.polus.fibicomp.applicationexception.*"})
+@ComponentScan({"com.polus.*"})
 public class CoiIntegrationApplication {
 
 	public static void main(String[] args) {

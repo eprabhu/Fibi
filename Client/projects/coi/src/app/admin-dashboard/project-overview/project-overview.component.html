@@ -1,5 +1,5 @@
 <div *ngIf="!isLoading">
-    <div *ngIf="projectOverviewData?.projectOverviewDetails?.length"
+    <div *ngIf="projectOverviewData?.projectOverviewDetails?.length && displayFilterTab"
         class="advance-search overflow-hide-nav coi-search-box mt-2 nav-filter-sticky">
         <div class="row m-0">
             <div class="col-lg-auto px-3 py-2">
@@ -207,8 +207,8 @@
                                 <div class="d-flex align-items-start cursor-pointer"
                                     (click)="toggleProjectOverviewCard(index1)" (keyup.enter)="toggleProjectOverviewCard(index1)"
                                     (keyup.space)="toggleProjectOverviewCard(index1)" tabindex="0"
-                                    title="Click here to collapse / expand   Key personnel details"
-                                    aria-label="Click here to collapse / expand   Key personnel details">
+                                    title="Click here to collapse / expand Key personnel details"
+                                    aria-label="Click here to collapse / expand Key personnel details">
                                     <h4 class="me-1 mb-0 fs-6 link-primary" for="coi-project-overview-keyperson-count">
                                         Key personnel</h4>
                                     <span [attr.aria-label]="projectData?.projectDetails?.keyPersonCount"
@@ -439,7 +439,7 @@
                                                 <td class="p-0">
                                                     <div class="d-flex justify-content-center">
                                                         <button
-                                                            *ngIf="keyPersonData?.disclosureStatus == 'Completed' && keyPersonData?.disclosureId !== 0 || null"
+                                                            *ngIf="keyPersonData?.disclosureStatus == 'Completed'"
                                                             id="coi-keyperson-disclosure-view-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to view the disclosure" aria-label="Click here to view the disclosure"
@@ -448,12 +448,14 @@
                                                             (keyup.space)="redirectToDisclosure(keyPersonData)">
                                                             <mat-icon>visibility</mat-icon>
                                                         </button>
-                                                        <button *ngIf="keyPersonData?.disclosureStatus === 'Pending' || keyPersonData?.questionnaireCompleted === false"
+                                                        <button *ngIf="(keyPersonData?.disclosureStatus === 'Pending') || 
+                                                        (!keyPersonData?.disclosureStatus  && !keyPersonData?.questionnaireCompleted)"
                                                             id="coi-keyperson-disclosure-notify-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure">
                                                             <mat-icon>notifications_active</mat-icon>
                                                         </button>
+                                                        <span *ngIf="keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureStatus === 'Not Required'">--</span>
                                                     </div>
                                                 </td>
                                             </tr>

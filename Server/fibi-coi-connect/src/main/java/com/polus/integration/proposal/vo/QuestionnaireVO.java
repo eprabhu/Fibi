@@ -37,4 +37,6 @@ public class QuestionnaireVO {
 
 	private transient Integer disclosureId;
 
+	private transient String updateUser;
+
 }
