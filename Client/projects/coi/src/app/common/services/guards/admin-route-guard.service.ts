@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { CommonService } from '../common.service';
 import { getPathWithoutParams } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { ADMIN_DASHBOARD_RIGHTS } from '../../../app-constants';
+import { ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS } from '../../../app-constants';
 
 @Injectable()
 export class AdminRouteGuardService {
@@ -28,9 +28,7 @@ export class AdminRouteGuardService {
     }
 
     private async hasPathRights(): Promise<boolean> {
-        const isAdmin = this._commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
-        'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'])||
-        this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
+        const isAdmin = this._commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right)) || this._commonService.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS);
         return isAdmin || this._commonService.isCoiReviewer;
     }
 

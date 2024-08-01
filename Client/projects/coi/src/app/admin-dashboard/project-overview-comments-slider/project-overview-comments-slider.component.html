@@ -30,8 +30,7 @@
 
                         <!-- princiapl investigator -->
                         <div class="col-lg-4 col-md-6 mb-2">
-                            <label for="coi-comment-slider-pi" class="d-block coi-text-dark">Principal
-                                Investigator</label>
+                            <label for="coi-comment-slider-pi" class="d-block coi-text-dark">Principal Investigator</label>
                             <div tabindex="-1">
                                 <span [attr.aria-label]="dataForCommentSlider?.projectDetails?.piName" id="coi-comment-slider-pi">
                                     <app-no-data-label [valueToShow]="dataForCommentSlider?.projectDetails?.piName">
@@ -44,14 +43,13 @@
 
                         <!-- Lead Unit -->
                         <div class="col-lg-4 col-md-6 mb-2">
-                            <label for="coi-comment-slider-leadunit" class="d-block coi-text-dark">Lead
-                                Unit</label>
+                            <label for="coi-comment-slider-leadunit" class="d-block coi-text-dark">Lead Unit</label>
                             <div tabindex="-1">
                                 <span id="coi-comment-slider-leadunit">
-                                    <app-no-data-label [valueToShow]="dataForCommentSlider?.projectDetails?.leadUnitName">
+                                    <app-no-data-label [valueToShow]="commonService.getPersonLeadUnitDetails({unitName: dataForCommentSlider?.projectDetails?.leadUnitName, unitNumber: dataForCommentSlider?.projectDetails?.leadUnitNumber})">
                                         <span class="coi-text-light text-slice"
-                                            [title]="dataForCommentSlider?.projectDetails?.leadUnitNumber + ' - ' + dataForCommentSlider?.projectDetails?.leadUnitName">
-                                            {{dataForCommentSlider?.projectDetails?.leadUnitNumber+ ' - ' +     dataForCommentSlider?.projectDetails?.leadUnitName}}</span>
+                                            [title]="commonService.getPersonLeadUnitDetails({unitName: dataForCommentSlider?.projectDetails?.leadUnitName, unitNumber: dataForCommentSlider?.projectDetails?.leadUnitNumber})">
+                                            {{commonService.getPersonLeadUnitDetails({unitName: dataForCommentSlider?.projectDetails?.leadUnitName, unitNumber: dataForCommentSlider?.projectDetails?.leadUnitNumber})}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -59,8 +57,7 @@
 
                         <!-- Project Status -->
                         <div class="col-lg-4 col-md-6 mb-2">
-                            <label for="coi-comment-slider-project-status" class="d-block coi-text-dark">Project Status
-                            </label>
+                            <label for="coi-comment-slider-project-status" class="d-block coi-text-dark">Project Status</label>
                             <div tabindex="-1">
                                 <span id="coi-comment-slider-project-status">
                                     <app-no-data-label [valueToShow]="dataForCommentSlider?.projectDetails?.projectStatus">
@@ -76,11 +73,11 @@
                         <div class="col-lg-4 col-md-6 mb-2">
                             <label for="coi-comment-slider-sponsor" class="d-block coi-text-dark">Sponsor</label>
                             <div tabindex="-1">
-                                <span [attr.aria-label]="dataForCommentSlider?.projectDetails?.sponsorName"  id="coi-comment-slider-sponsor">
-                                    <app-no-data-label [valueToShow]="dataForCommentSlider?.projectDetails?.sponsorName">
+                                <span [attr.aria-label]="getFormattedSponsor(dataForCommentSlider?.projectDetails?.sponsorCode, dataForCommentSlider?.projectDetails?.sponsorName)"  id="coi-comment-slider-sponsor">
+                                    <app-no-data-label [valueToShow]="getFormattedSponsor(dataForCommentSlider?.projectDetails?.sponsorCode, dataForCommentSlider?.projectDetails?.sponsorName)">
                                         <span class="coi-text-light text-slice"
-                                            [title]="dataForCommentSlider?.projectDetails?.sponsorCode + ' - ' + dataForCommentSlider?.projectDetails?.sponsorName">
-                                            {{dataForCommentSlider?.projectDetails?.sponsorCode + ' - ' + dataForCommentSlider?.projectDetails?.sponsorName}}</span>
+                                            [title]="getFormattedSponsor(dataForCommentSlider?.projectDetails?.sponsorCode, dataForCommentSlider?.projectDetails?.sponsorName)">
+                                            {{getFormattedSponsor(dataForCommentSlider?.projectDetails?.sponsorCode, dataForCommentSlider?.projectDetails?.sponsorName)}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -89,14 +86,13 @@
 
                         <!-- prime sponsor -->
                         <div class="col-lg-4 col-md-6 mb-2">
-                            <label for="coi-comment-slider-prime-sponsor" class="d-block coi-text-dark">Prime
-                                Sponsor</label>
+                            <label for="coi-comment-slider-prime-sponsor" class="d-block coi-text-dark">Prime Sponsor</label>
                             <div tabindex="-1">
-                                <span [attr.aria-label]="dataForCommentSlider?.projectDetails?.primeSponsorName" id="coi-comment-slider-prime-sponsor">
-                                    <app-no-data-label [valueToShow]="dataForCommentSlider?.projectDetails?.primeSponsorName">
+                                <span [attr.aria-label]="getFormattedSponsor(dataForCommentSlider?.projectDetails?.primeSponsorCode, dataForCommentSlider?.projectDetails?.primeSponsorName)" id="coi-comment-slider-prime-sponsor">
+                                    <app-no-data-label [valueToShow]="getFormattedSponsor(dataForCommentSlider?.projectDetails?.primeSponsorCode, dataForCommentSlider?.projectDetails?.primeSponsorName)">
                                         <span class="coi-text-light text-slice"
-                                            [title]="dataForCommentSlider?.projectDetails?.primeSponsorCode + ' - ' + dataForCommentSlider?.projectDetails?.primeSponsorName">
-                                            {{dataForCommentSlider?.projectDetails?.primeSponsorCode + ' - ' + dataForCommentSlider?.projectDetails?.primeSponsorName}}</span>
+                                            [title]="getFormattedSponsor(dataForCommentSlider?.projectDetails?.primeSponsorCode, dataForCommentSlider?.projectDetails?.primeSponsorName)">
+                                            {{getFormattedSponsor(dataForCommentSlider?.projectDetails?.primeSponsorCode, dataForCommentSlider?.projectDetails?.primeSponsorName)}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -110,7 +106,7 @@
                             <div>
                                 <span id="coi-comment-slider-period">
                                     <app-no-data-label
-                                        [valueToShow]="(dataForCommentSlider?.projectDetails?.projectStartDate ? dataForCommentSlider?.projectDetails?.projectStartDate : 'No start date') + ' - ' + (dataForCommentSlider?.projectDetails?.projectEndDate ? dataForCommentSlider?.projectDetails?.projectEndDate : 'No end date')">
+                                        [valueToShow]="dataForCommentSlider?.projectDetails?.projectStartDate && dataForCommentSlider?.projectDetails?.projectEndDate">
                                         <span class="coi-text-light text-slice"
                                         [title]="((dataForCommentSlider?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (dataForCommentSlider?.projectDetails?.projectEndDate | dateFormatter))">
                                             {{dataForCommentSlider?.projectDetails?.projectStartDate | dateFormatter}} - {{dataForCommentSlider?.projectDetails?.projectEndDate | dateFormatter}}</span>
@@ -214,11 +210,11 @@
                                 </div>
                                 <div class="col-12 d-flex align-items-center justify-content-end gap-2 mt-2 p-0">
                                     <button class="btn btn-outline-secondary px-4 fs-14" id="coi-parent-commment-edit-cancle-btn"
-                                    title="Click here to cancel edit" aria-label="Click here to cancel edit" (click)="cancelOrClearCommentsDetails()">
+                                        title="Click here to cancel edit" aria-label="Click here to cancel edit" (click)="cancelOrClearCommentsDetails()">
                                         Cancel
                                     </button>
                                     <button class="btn btn-primary fs-14" id="coi-parent-commment-edit-add-btn" 
-                                    title="Click here to save edited comment" aria-label="Click here to save edited comment" (click)="addEditedComment(data,index)">Save
+                                        title="Click here to save edited comment" aria-label="Click here to save edited comment" (click)="addEditedComment(data,index)">Save
                                         Comment
                                     </button>
                                 </div>
@@ -236,8 +232,7 @@
                                 class="align-items-baseline btn btn-sm btn-tertiary d-inline-flex position-relative" title="Click here to add reply comment"
                                 aria-label="Click here to add reply comment" (click)="replyComment(data,index)">
                                     <i aria-hidden="true" class="fa fa-reply me-1"></i>
-                                    <span class="me-2">Reply
-                                    </span>
+                                    <span class="me-2">Reply</span>
                                 </button>
                             </div>
                             
@@ -266,7 +261,7 @@
                         </div>
 
                         <!-- child comment section -->
-                        <div  *ngFor="let childComment of visibleCommentsMap[index] || [] ; let replyIndex = index" class="comments-reply-card coi-card-regular p-3">
+                        <div  *ngFor="let childComment of visibleCommentsMap[index] || [] ; let replyIndex = index" class="comments-reply-card coi-card-regular p-3 shadow-none">
                             <div class="row">
                                 <div class="d-flex justify-content-center person-icon-container p-0">
                                     <span

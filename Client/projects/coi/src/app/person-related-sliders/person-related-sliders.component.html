@@ -13,7 +13,7 @@
         </div>
         <div class="px-2">
             <ng-container *ngIf="sliderType === 'NOTES'">
-                <app-notes-attachments [personId]="personId"></app-notes-attachments>
+                <app-notes-attachments [coiPersonId]="personId"></app-notes-attachments>
             </ng-container>
             <ng-container *ngIf="sliderType === 'ATTACHMENTS'">
                 <app-attachments [personId]="personId" [isViewMode]="isAttachmentViewMode"></app-attachments>

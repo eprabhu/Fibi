@@ -17,7 +17,7 @@ public class COIIntPropPersonCompositeKey implements Serializable {
 
 	private String keyPersonRole;
 
-	private String keyPersonRoleCode;
+	private Integer keyPersonRoleCode;
 
 	private String keyPersonId;
 
