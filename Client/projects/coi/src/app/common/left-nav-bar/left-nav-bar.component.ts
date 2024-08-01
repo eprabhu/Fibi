@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {CommonService} from "../services/common.service";
 import {Router} from "@angular/router";
-import {ADMIN_DASHBOARD_RIGHTS} from "../../app-constants";
+import {ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS} from "../../app-constants";
 
 @Component({
     selector: 'app-left-nav-bar',
@@ -24,10 +24,12 @@ export class LeftNavBarComponent implements OnInit {
 
     ngOnInit() {
         this.checkUserHasRight();
-        this.isAdministrator = this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-            || this._commonService.isCoiReviewer;
+        // FCOI
+        this.isAdministrator = this._commonService.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS)
+            || this._commonService.isCoiReviewer || this._commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+        // OPA
         this.isOPAAdministrator = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA'])
-            || this._commonService.isOPAReviewer;
+            || this._commonService.isOPAReviewer || this._commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
     }
 
     offClickSideBarHandler(event) {
