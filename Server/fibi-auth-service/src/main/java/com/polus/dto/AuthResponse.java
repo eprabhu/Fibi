@@ -21,11 +21,14 @@ public class AuthResponse implements Serializable {
     private String lastName;
     private String fullName;
     private String unitNumber;
+    private String unitName;
     private Boolean isUnitAdmin; //not using
     private Boolean login;
     private String userType;
     private String secretImageUri;
     private Boolean isExternalUser;
     private String gender;
-    
+    private String email;
+    private String primaryTitle;
+
 }
