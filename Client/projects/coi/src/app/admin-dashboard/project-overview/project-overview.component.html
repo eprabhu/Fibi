@@ -439,7 +439,7 @@
                                                 <td class="p-0">
                                                     <div class="d-flex justify-content-center">
                                                         <button
-                                                            *ngIf="keyPersonData?.disclosureStatus == 'Completed' && keyPersonData?.disclosureId"
+                                                            *ngIf="keyPersonData?.disclosureStatus == 'Completed'"
                                                             id="coi-keyperson-disclosure-view-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to view the disclosure" aria-label="Click here to view the disclosure"
@@ -448,12 +448,14 @@
                                                             (keyup.space)="redirectToDisclosure(keyPersonData)">
                                                             <mat-icon>visibility</mat-icon>
                                                         </button>
-                                                        <button *ngIf="keyPersonData?.disclosureStatus === 'Pending' || keyPersonData?.questionnaireCompleted === false"
+                                                        <button *ngIf="(keyPersonData?.disclosureStatus === 'Pending') || 
+                                                        (!keyPersonData?.disclosureStatus  && !keyPersonData?.questionnaireCompleted)"
                                                             id="coi-keyperson-disclosure-notify-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure">
                                                             <mat-icon>notifications_active</mat-icon>
                                                         </button>
+                                                        <span *ngIf="keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureStatus === 'Not Required'">--</span>
                                                     </div>
                                                 </td>
                                             </tr>
