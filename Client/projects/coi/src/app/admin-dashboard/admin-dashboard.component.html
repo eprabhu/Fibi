@@ -1,7 +1,7 @@
 <div [@fadeInOutHeight]>
-    <section class="section-advanced-search">
+    <section class="section-advanced-search coi-dashboard-tab-sticky">
         <div class="fs-18 fw-bold d-inline-block mb-2" tabindex="-1" title="COI Disclosures Dashboard" aria-label="COI Disclosures Dashboard">COI Disclosures</div>
-        <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm rounded-2 nav-tab-sticky" aria-labelledby="navbarResponsive">
+        <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm rounded-2 coi-nav-tab-sticky" aria-labelledby="navbarResponsive">
             <div class="list navbar-toggleable-xs">
                 <div class="d-flex justify-content-between">
                     <button #mainHeaders id="responsiveColapse" [ngClass]="isShowOptions ? 'd-none' : 'hamburger-display'"
@@ -99,7 +99,7 @@
                     </ul>
                     <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
                         <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0 text-nowrap" tabindex="0"
-                            id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
+                            id="coi-admindash-adv-search" aria-controls="collapseExample" aria-expanded="false"
                             (click)="toggleAdvanceSearch();" (keyup.enter)="toggleAdvanceSearch()" (keyup.space)="toggleAdvanceSearch()" aria-label="Toggle Advanced Search"
                             title="Click here to expand / collapse Advanced Search fields">
                             <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">tune</mat-icon>Advanced Search</span>
@@ -441,11 +441,7 @@
             </div>
         </nav>
 
-        <div *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'PROJECTS'">
-            <app-project-overview [dataForAdvanceSearch]="$projectOverviewList"> </app-project-overview>  
-        </div>
-
-         <!-- sorting for all disclosures-->
+        <!-- sorting for all disclosures-->
         <div *ngIf="isShowDisclosureList && coiList.length && coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'" class="sort-div border mt-2 px-3">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
             <button *ngFor="let sortSection of sortSectionsList; let index = index"
@@ -470,6 +466,7 @@
             </button>
         </div>
     </section>
+    <!-- Other Disclosures -->
     <ng-container *ngIf="isShowDisclosureList && !isLoading;">
         <div *ngIf="coiList.length > 0;else noData" [@listAnimation]="coiList.length">
             <section class="d-flex justify-content-between align-items-center select-all-section shadow-sm p-2 border border-primary-subtle complete-review-section"
@@ -1121,6 +1118,10 @@
             <app-no-information *ngIf="coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'"></app-no-information>
         </ng-template>
     </ng-container>
+    <!-- Project Overview -->
+    <div *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'PROJECTS'">
+        <app-project-overview [dataForAdvanceSearch]="$projectOverviewList"> </app-project-overview>  
+    </div>
     <!-- Pagination -->
     <div [hidden]="isLoading" *ngIf="coiList.length > 0 && isShowDisclosureList && coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
     <nav aria-label="pagination section" class="pagination justify-content-end">
