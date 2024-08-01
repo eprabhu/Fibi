@@ -3,34 +3,16 @@ package com.polus.integration.proposal.dao;
 
 import org.springframework.stereotype.Service;
 
-import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
-import com.polus.integration.proposal.pojo.COIIntegrationProposal;
-import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
+import com.polus.questionnaire.dto.FetchQnrAnsHeaderDto;
+import com.polus.questionnaire.dto.GetQNRDetailsDto;
+import com.polus.questionnaire.dto.QuestionnaireSaveDto;
 
 import jakarta.transaction.Transactional;
 
 @Transactional
 @Service
 public interface ProposalIntegrationDao {
-
-	/**
-	 * @param coiIntegrationProposal
-	 * @return
-	 */
-	public COIIntegrationProposal saveOrUpdateCoiIntegrationProposal(COIIntegrationProposal coiIntegrationProposal);
-
-	/**
-	 * @param coiIntegrationProposal
-	 * @return
-	 */
-	public COIIntegrationProposalPerson saveOrUpdateCoiIntegrationProposalPerson(COIIntegrationProposalPerson coiIntegrationProposalPerson);
-
-	/**
-	 * @param coiIntegrationProposal
-	 * @return
-	 */
-	public COIIntegrationPropQuestAns saveOrUpdateCoiIntegrationQuestionnaire(COIIntegrationPropQuestAns coiIntegrationPropQuestAns);
 
 	/**
 	 * @param questionnaireId
@@ -46,5 +28,23 @@ public interface ProposalIntegrationDao {
 	 * @return
 	 */
 	public String getQuestionAnswerByParams(Integer fibiQstnId, Integer questionnaireId, Integer proposalNumber, String disclosurePersonId);
+
+	/**
+	 * @param questionnaireDataBus
+	 * @return
+	 */
+	public Integer findQuestionnaireAnsHeaderId(FetchQnrAnsHeaderDto request);
+
+	/**
+	 * @param questionnaireDataBus
+	 * @return
+	 */
+	public GetQNRDetailsDto getQuestionnaireDetails(GetQNRDetailsDto questionnaireDataBus);
+
+	/**
+	 * @param questionnaireDataBus
+	 * @return
+	 */
+	public QuestionnaireSaveDto saveQuestionnaireAnswers(QuestionnaireSaveDto questionnaireDataBus) throws Exception;
 
 }
