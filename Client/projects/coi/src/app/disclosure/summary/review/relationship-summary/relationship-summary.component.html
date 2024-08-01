@@ -87,23 +87,23 @@
         </div>
         <!-- Sponsor -->
         <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
-            [attr.aria-label]="'Sponsor is ' + (selectedProject?.sponsorName ? selectedProject?.sponsorName : 'empty')">
+            [attr.aria-label]="'Sponsor is ' + (getFormattedSponsor(selectedProject?.sponsorCode, selectedProject?.sponsorName) ? getFormattedSponsor(selectedProject?.sponsorCode, selectedProject?.sponsorName) : 'empty')">
             <label for="coi-relationship-sponsor-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block"
                 aria-label="Sponsor is, ">Sponsor</label>
             <div id="coi-relationship-sponsor-{{selectedProject?.moduleCode}}" class="text-slice">
-                <app-no-data-label [valueToShow]="selectedProject?.sponsorName">
-                    <span class="coi-text-light" [title]="selectedProject?.sponsorName">{{selectedProject?.sponsorName}}</span>
+                <app-no-data-label [valueToShow]="getFormattedSponsor(selectedProject?.sponsorCode, selectedProject?.sponsorName)">
+                    <span class="coi-text-light" [title]="getFormattedSponsor(selectedProject?.sponsorCode, selectedProject?.sponsorName)">{{getFormattedSponsor(selectedProject?.sponsorCode, selectedProject?.sponsorName)}}</span>
                 </app-no-data-label>
             </div>
         </div>
         <!-- Prime Sponsor -->
         <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-2"
-            [attr.aria-label]="'Prime sponsor is ' + (selectedProject?.primeSponsorName ? selectedProject?.primeSponsorName : 'empty')">
+            [attr.aria-label]="'Prime sponsor is ' + (getFormattedSponsor(selectedProject?.primeSponsorCode, selectedProject?.primeSponsorName) ? getFormattedSponsor(selectedProject?.primeSponsorCode, selectedProject?.primeSponsorName) : 'empty')">
             <label for="coi-relationship-prime-sponsor-{{selectedProject?.moduleCode}}" class="coi-text-dark d-block"
                 aria-label="Prime sponsor is, ">Prime Sponsor</label>
             <div id="coi-relationship-prime-sponsor-{{selectedProject?.moduleCode}}" class="text-slice">
-                <app-no-data-label [valueToShow]="selectedProject?.primeSponsorName">
-                    <span class="coi-text-light" [title]="selectedProject?.primeSponsorName">{{selectedProject?.primeSponsorName}}</span>
+                <app-no-data-label [valueToShow]="getFormattedSponsor(selectedProject?.primeSponsorCode, selectedProject?.primeSponsorName)">
+                    <span class="coi-text-light" [title]="getFormattedSponsor(selectedProject?.primeSponsorCode, selectedProject?.primeSponsorName)">{{getFormattedSponsor(selectedProject?.primeSponsorCode, selectedProject?.primeSponsorName)}}</span>
                 </app-no-data-label>
             </div>
         </div>

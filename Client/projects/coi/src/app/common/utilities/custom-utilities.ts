@@ -138,3 +138,7 @@ export function jumpToSection({ sectionId = '', offsetTop = 0, srollElement = wi
     const SCROLL_TO = elementPosition + srollElement?.pageYOffset - offsetTop;
     srollElement.scrollTo({ top: SCROLL_TO, behavior: 'smooth' });
 }
+
+export function getFormattedSponsor(sponsorCode: any, sponsorName: any): string {
+    return sponsorCode && sponsorName ?  `${sponsorCode} - ${sponsorName}` : sponsorCode || sponsorName;
+}

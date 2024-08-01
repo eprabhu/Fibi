@@ -70,7 +70,7 @@
 
   <div class="d-flex align-items-center form-control col-lg-12 col-md-12 col-12 mx-auto mt-2 px-3 rounded py-2" *ngIf="projectList.length>1 && !switchRelationView">
     <mat-icon class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
-    <input type="text" placeholder="Search by Project Id, Project Name, PI, Sponsor, Prime Sponsor  "
+    <input type="text" placeholder="Search by Project Id, Project Name, PI"
     class="searchField ms-2" [(ngModel)]="searchText">
     <span tabindex="0" aria-label="Clear Search Text" class="d-flex align-items-center" *ngIf="searchText" (click)="searchText = ''" (keyup.enter)="searchText = ''">
         <mat-icon  class="closeButton" id="coi-relationship-seaarch-close-btn">close</mat-icon>
@@ -89,7 +89,7 @@
     <ng-container *ngIf="!switchRelationView">
         <ng-container
             *ngIf="(projectList| SearchFilter : searchText:
-                ['title', 'moduleItemId', 'moduleItemKey', 'principalInvestigator', 'sponsor', 'primeSponsor']) as projects; let i = index">
+            ['title', 'projectNumber', 'projectId', 'piName']) as projects; let i = index">
             <ng-container *ngIf="isShowNoDataCard">
                 <div *ngIf="projects.length">
                     <ng-container *ngFor="let project of projects;let i = index">
@@ -172,23 +172,23 @@
                                                 </div>
                                                 <!-- Sponsor -->
                                                 <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
-                                                    [attr.aria-label]="'Sponsor is ' + (project?.sponsorName ? project?.sponsorName : 'empty')">
+                                                    [attr.aria-label]="'Sponsor is ' + (getFormattedSponsor(project?.sponsorCode, project?.sponsorName) ? getFormattedSponsor(project?.sponsorCode, project?.sponsorName) : 'empty')">
                                                     <label for="coi-relationship-sponsor-{{i}}" class="coi-text-dark d-block"
                                                         aria-label="Sponsor is, ">Sponsor</label>
                                                     <div id="coi-relationship-sponsor-{{i}}" class="text-slice">
-                                                        <app-no-data-label [valueToShow]="project?.sponsorName">
-                                                            <span class="coi-text-light" [title]="project?.sponsorName">{{project?.sponsorName}}</span>
+                                                        <app-no-data-label [valueToShow]="getFormattedSponsor(project?.sponsorCode, project?.sponsorName)">
+                                                            <span class="coi-text-light" [title]="getFormattedSponsor(project?.sponsorCode, project?.sponsorName)">{{getFormattedSponsor(project?.sponsorCode, project?.sponsorName)}}</span>
                                                         </app-no-data-label>
                                                     </div>
                                                 </div>
                                                 <!-- Prime Sponsor -->
                                                 <div tabindex="-1" class="col-12 col-md-4 col-lg-3 col-xl-4 col-xxl-3 mb-2"
-                                                    [attr.aria-label]="'Prime sponsor is ' + (project?.primeSponsorName ? project?.primeSponsorName : 'empty')">
+                                                    [attr.aria-label]="'Prime sponsor is ' + (getFormattedSponsor(project?.primeSponsorCode, project?.primeSponsorName) ? getFormattedSponsor(project?.primeSponsorCode, project?.primeSponsorName) : 'empty')">
                                                     <label for="coi-relationship-prime-sponsor-{{i}}" class="coi-text-dark d-block"
                                                         aria-label="Prime sponsor is, ">Prime Sponsor</label>
                                                     <div id="coi-relationship-prime-sponsor-{{i}}" class="text-slice">
-                                                        <app-no-data-label [valueToShow]="project?.primeSponsorName">
-                                                            <span class="coi-text-light" [title]="project?.primeSponsorName">{{project?.primeSponsorName}}</span>
+                                                        <app-no-data-label [valueToShow]="getFormattedSponsor(project?.primeSponsorCode, project?.primeSponsorName)">
+                                                            <span class="coi-text-light" [title]="getFormattedSponsor(project?.primeSponsorCode, project?.primeSponsorName)">{{getFormattedSponsor(project?.primeSponsorCode, project?.primeSponsorName)}}</span>
                                                         </app-no-data-label>
                                                     </div>
                                                 </div>

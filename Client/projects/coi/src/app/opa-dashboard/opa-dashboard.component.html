@@ -1,5 +1,6 @@
 <div [@fadeInOutHeight]>
-    <section class="section-advanced-search">
+    <section>
+        <section class="section-advanced-search coi-dashboard-tab-sticky">
         <div class="fs-18 fw-bold d-inline-block mb-2" tabindex="-1" title="OPA Disclosures Dashboard"
             aria-label="OPA Disclosures Dashboard">OPA Disclosures</div>
         <nav class="coi-admin-dash mb-2 mx-0 border shadow-sm bg-white">
@@ -217,6 +218,7 @@
                 </div>
             </button>
         </div>
+        </section>
 
         <ng-container *ngIf="isShowOPAList && !isLoading;">
             <div *ngIf="opaList.length > 0;else noData" [@listAnimation]="opaList.length">

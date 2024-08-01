@@ -140,17 +140,18 @@ public class ProjectServiceImpl implements ProjectService {
 				}
 				return dto.build();
 			}).collect(Collectors.toList());
-			if (keyPersonDetails.stream().allMatch(dto -> DISCLOSURE_NOT_REQUIRED.equals(dto.getDisclosureStatus()))) {
+			if (keyPersonDetails.stream().allMatch(dto -> DISCLOSURE_NOT_REQUIRED.equals(dto.getDisclosureStatus()))
+					|| keyPersonDetails.stream().anyMatch(dto -> dto.getDisclosureStatus() == null)) {
 				disclosureSubmissionStatus = null;
 			} else if (keyPersonDetails.stream()
 					.filter(dto -> !DISCLOSURE_NOT_REQUIRED.equalsIgnoreCase(dto.getDisclosureStatus()))
 					.allMatch(dto -> DISCLOSURE_COMPLETED.equals(dto.getDisclosureStatus()))) {
 				disclosureSubmissionStatus = DISCLOSURE_COMPLETED;
-			} else if (keyPersonDetails.stream().anyMatch(dto -> DISCLOSURE_PENDING.equals(dto.getDisclosureStatus()))) {
+			} else {
 				disclosureSubmissionStatus = DISCLOSURE_PENDING;
 			}
-			if (DISCLOSURE_NOT_REQUIRED.equals(disclosureSubmissionStatus)) {
-				disclosureReviewStatus = null;
+			if (disclosureSubmissionStatus == null) {
+			    disclosureReviewStatus = null;
 			} else if (DISCLOSURE_COMPLETED.equals(disclosureSubmissionStatus) || DISCLOSURE_PENDING.equals(disclosureSubmissionStatus)) {
 				boolean allReviewsCompleted = keyPersonDetails.stream()
 						.filter(dto -> !DISCLOSURE_NOT_REQUIRED.equals(dto.getDisclosureStatus()))

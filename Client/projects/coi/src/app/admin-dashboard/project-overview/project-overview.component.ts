@@ -7,6 +7,7 @@ import { POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-project-overview',
@@ -24,6 +25,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     @Input() dataForAdvanceSearch: Observable<any>;
     projectOverviewData: ProjectOverview = new ProjectOverview();
     projectOverviewRequestObject = new CoiProjectOverviewRequest();
+    displayFilterTab = false;
     isProjectOverviewCardCollapse: boolean[] = [];
     $subscriptions: Subscription[] = [];
     isLoading = true;
@@ -33,6 +35,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private isInitialCall: boolean = true;
     totalPageCount: number | null = null;
     getIndexForSlider: number;
+    getFormattedSponsor = getFormattedSponsor;
 
 
     constructor(private projectOverviewService: ProjectOverviewService, public commonService: CommonService, private _router: Router) { }
@@ -117,6 +120,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         const SELECTED_PROJECT_DETAILS = {
             title: projectDetails?.title,
             sponsorName: projectDetails?.sponsorName,
+            sponsorCode : projectDetails?.sponsorCode,
             homeUnitName: projectDetails?.leadUnitName,
             projectEndDate: projectDetails?.projectEndDate,
             projectId: projectDetails?.projectId,
@@ -127,11 +131,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
             projectTypeCode: projectDetails?.projectTypeCode,
             piName: projectDetails?.piName,
             primeSponsorName: projectDetails?.primeSponsorName,
+            primeSponsorCode: projectDetails?.primeSponsorCode,
             projectType: projectDetails.projectType,
             projectBadgeColour: projectDetails.projectBadgeColour,
             projectNumber: projectDetails?.projectId
         }
-        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
+        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS, null, false);
     }
 
     openPersonDetailsModal(personID: string): any {
@@ -177,6 +182,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
     actionsOnPageChange(event) {
         if (this.projectOverviewRequestObject.currentPage != event) {
+            this.isProjectOverviewCardCollapse = [];
             this.projectOverviewRequestObject.currentPage = event;
             this.loadProjectData();
         }

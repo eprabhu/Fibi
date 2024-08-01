@@ -797,6 +797,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         const SELECTED_PROJECT_DETAILS: DisclosureProjectData = {
             title: this.coiData.projectDetail?.title,
             sponsorName: this.coiData.projectDetail?.sponsor,
+            sponsorCode : this.coiData.projectDetail?.sponsorCode,
             homeUnitName: this.coiData.projectDetail?.unitName,
             projectEndDate: this.coiData.projectDetail?.endDate,
             projectId: this.coiData.projectDetail?.moduleItemId,
@@ -807,6 +808,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             projectTypeCode: this.coiData.projectDetail?.moduleCode,
             piName: this.coiData.projectDetail?.principalInvestigator,
             primeSponsorName: this.coiData.projectDetail?.primeSponsor,
+            primeSponsorCode: this.coiData.projectDetail?.primeSponsorCode,
             projectType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.description,
             projectBadgeColour: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ? '#7d9e33' : '#c9a742',
             projectNumber: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ?
