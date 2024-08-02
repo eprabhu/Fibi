@@ -1,9 +1,10 @@
 {
-  "baseUrl": "http://192.168.1.248/coi",
-  "fibiUrl": "http://192.168.1.248/fibii",
-  "authUrl": "http://192.168.1.248/auth",
-  "opaUrl": "http://192.168.1.248/opa",
-  "formUrl":"http://192.168.1.248/",
+  "baseUrl": "https://fibicoi.fibiweb.com/coi",
+  "fibiUrl": "https://fibicoi.fibiweb.com/fibii",
+  "authUrl": "https://fibicoi.fibiweb.com/auth",
+  "opaUrl": "https://fibicoi.fibiweb.com/opa",
+  "formUrl":"https://fibicoi.fibiweb.com/",
+  "consultingUrl": "https://fibicoi.fibiweb.com/consultingDisclosure",
   "enableSSO": false,
   "enableGraph": true,
   "isElasticAuthentiaction": false,
@@ -11,7 +12,7 @@
   "elasticDelimiter": ":",
   "elasticPassword": "changeme",
   "elasticAuthScheme": "Basic",
-  "elasticIndexUrl": "http://192.168.1.225:9210/",
+  "elasticIndexUrl": "https://fibicoi.fibiweb.com/elastic_8/",
   "indexValue": "",
-  "fibiApplicationUrl":"http://192.168.1.47:8080/fibi"
+  "fibiApplicationUrl":"https://dev.fibiweb.com/fibi"
 }
