@@ -4,7 +4,6 @@
   "authUrl": "https://fibicoi.fibiweb.com/auth",
   "opaUrl": "https://fibicoi.fibiweb.com/opa",
   "formUrl":"https://fibicoi.fibiweb.com/",
-  "consultingUrl": "https://fibicoi.fibiweb.com/consultingDisclosure",
   "enableSSO": false,
   "enableGraph": true,
   "isElasticAuthentiaction": false,
