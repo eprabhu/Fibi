@@ -128,15 +128,17 @@ public class ProjectServiceImpl implements ProjectService {
 						.homeUnitNumber(project.getHomeUnitNumber())
 						.questionnaireCompleted(project.getQuestionnaireCompleted())
 						.disclosureId(project.getDisclosureId());
-				if (Boolean.TRUE.equals(project.getDisclsoureNeeded())) {
-					if (Boolean.TRUE.equals(project.getDisclosureSubmitted())) {
-						dto.disclosureStatus(DISCLOSURE_COMPLETED);
-					} else {
-						dto.disclosureStatus(DISCLOSURE_PENDING);
+				if (project.getQuestionnaireCompleted()) {
+					if (Boolean.TRUE.equals(project.getDisclsoureNeeded())) {
+						if (Boolean.TRUE.equals(project.getDisclosureSubmitted())) {
+							dto.disclosureStatus(DISCLOSURE_COMPLETED);
+						} else {
+							dto.disclosureStatus(DISCLOSURE_PENDING);
+						}
+						dto.disclosureReviewStatus(project.getDisclosureReviewStatus());
+					} else if (Boolean.FALSE.equals(project.getDisclsoureNeeded())) {
+						dto.disclosureStatus(DISCLOSURE_NOT_REQUIRED);
 					}
-					dto.disclosureReviewStatus(project.getDisclosureReviewStatus());
-				} else if (Boolean.FALSE.equals(project.getDisclsoureNeeded())) {
-					dto.disclosureStatus(DISCLOSURE_NOT_REQUIRED);
 				}
 				return dto.build();
 			}).collect(Collectors.toList());
