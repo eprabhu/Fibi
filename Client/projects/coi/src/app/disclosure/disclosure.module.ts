@@ -17,10 +17,10 @@ import { SharedComponentModule } from '../shared-components/shared-component.mod
 import {DataStoreService} from "./services/data-store.service";
 import { SharedDisclosureModule } from './shared-disclosure/shared-disclosure.module';
 import { EntityRiskSliderModule } from './entity-risk-slider/entity-risk-slider.module';
-import { HeaderSlidersModule } from './header-sliders/header-sliders.module';
 import { SfiListComponent } from './sfi-list/sfi-list.component';
 import { CoiService } from './services/coi.service';
 import { ReviewRouteGuardService } from './services/review-route-guard.service';
+import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
 
 
 const routes: Routes = [
@@ -87,7 +87,7 @@ const routes: Routes = [
         SharedComponentModule,
         SharedDisclosureModule,
         EntityRiskSliderModule,
-        HeaderSlidersModule
+        PersonRelatedSlidersModule
     ]
 })
 export class DisclosureModule {

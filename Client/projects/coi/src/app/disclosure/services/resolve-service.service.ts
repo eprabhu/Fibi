@@ -36,7 +36,6 @@ export class ResolveServiceService {
             forkJoin(this.getHttpRequests(route)).subscribe((res: any[]) => {
                 if (res.length > 1) {
                     this.updateSectionConfig(res[1]);
-                    this.hideManualLoader();
                 }
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
@@ -59,11 +58,11 @@ export class ResolveServiceService {
     // 1 - pending, 5 - withdrawn, 6 - reutrned
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
-        if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId ) {
+        if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personID ) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
         } else if (!['1','5','6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
-        } else if ((['5', '1', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure') && this._commonService.currentUserDetails.personId != personId)) {
+        } else if ((['5', '1', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure') && this._commonService.currentUserDetails.personID != personId)) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {
@@ -93,11 +92,6 @@ export class ResolveServiceService {
 
     private loadDisclosure(disclosureId: string) {
         return this._coiService.loadDisclosure(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
-    }
-
-    private hideManualLoader() {
-        this._commonService.isShowLoader.next(false);
-        this._commonService.isManualLoaderOn = false;
     }
 
     private redirectOnError(error) {
@@ -140,7 +134,7 @@ export class ResolveServiceService {
 
     getLoggedInReviewerInfo(coiReviewerList): any {
         const getReviewerDetail = coiReviewerList.find(item => item.assigneePersonId ===
-            this._commonService.currentUserDetails.personId && item.reviewStatusTypeCode != '2');
+            this._commonService.currentUserDetails.personID && item.reviewStatusTypeCode != '2');
         return getReviewerDetail;
     }
 
@@ -156,7 +150,7 @@ export class ResolveServiceService {
         this._dataStore.disclosureSectionConfig = this._commonService.getSectionCodeAsKeys(sectionData);
         this.setModuleConfiguration();
     }
-    
+
     setModuleConfiguration() {
         this._informationAndHelpTextService.moduleConfiguration = this._dataStore.disclosureSectionConfig;
     }

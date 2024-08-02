@@ -13,10 +13,11 @@ import { CoiService } from '../disclosure/services/coi.service';
 import { TravelAddConflictSliderComponent } from './travel-add-conflict-slider/travel-add-conflict-slider.component';
 import { AddSfiModule } from '../add-sfi/add-sfi.module';
 import { TravelRiskSliderModule } from './travel-risk-slider/travel-risk-slider.module';
+import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
 
 const routes: Routes = [
     {
-        path: '', component: TravelDisclosureComponent, canActivate: [TravelRouteGuardService], canDeactivate: [TravelRouteGuardService],
+        path: '', component: TravelDisclosureComponent, canActivate: [TravelRouteGuardService], canDeactivate: [],
         children: [
             {
                 path: 'travel-details', canDeactivate: [TravelRouteGuardService],
@@ -25,11 +26,6 @@ const routes: Routes = [
             {
                 path: 'certification', canDeactivate: [TravelRouteGuardService],
                 loadChildren: () => import('./travel-certification/travel-certification.module').then(m => m.TravelCertificationModule)
-            },
-            {
-                path: 'screening', canDeactivate: [TravelRouteGuardService],
-                loadChildren: () => import('./travel-questionnaire/travel-questionnaire.module')
-                .then(m => m.TravelQuestionnaireModule)
             },
             {
                 path: 'summary', canDeactivate: [],
@@ -59,6 +55,7 @@ const routes: Routes = [
         SharedModule,
         FormsModule,
         AddSfiModule,
+        PersonRelatedSlidersModule,
         RouterModule.forChild(routes),
         SharedComponentModule,
         TravelRiskSliderModule

@@ -7,8 +7,6 @@
 
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, RouteConfigLoadStart, RouteConfigLoadEnd, GuardsCheckEnd } from '@angular/router';
-import { routeConfigurations } from '../../../../../fibi/src/app/common/utilities/route-config';
-import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from './common.service';
 /**
  * this will control all the route configurations inside fibi. we take path details from
@@ -33,7 +31,6 @@ export class NavigationService {
     previousURL = '';
     navigationGuardUrl = '';
 
-
     constructor(private _router: Router, public _commonService: CommonService) {
         this.routerEventSubscription();
     }
@@ -44,7 +41,6 @@ export class NavigationService {
      */
     routerEventSubscription() {
         this._router.events.subscribe(event => {
-            this._commonService.isManualLoaderOn = false;
             if (event instanceof RouteConfigLoadStart) {
                 this._commonService.isShowLoader.next(true);
             }

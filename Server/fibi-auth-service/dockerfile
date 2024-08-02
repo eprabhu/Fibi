@@ -1,0 +1,9 @@
+FROM openjdk:17
+
+ARG JAR_FILE=target/*.jar
+
+COPY ${JAR_FILE} fibi-auth-service.jar
+
+ENTRYPOINT [ "java","-jar", "/fibi-auth-service.jar" ]
+
+EXPOSE 13002

@@ -5,7 +5,8 @@ import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
-import { CONSULTING_REDIRECT_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
+import { ADMIN_DASHBOARD_RIGHTS, CONSULTING_REDIRECT_URL, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
+import { LoginPersonDetails } from '../services/coi-common.interace.ts';
 
 declare const $: any;
 class ChangePassword {
@@ -25,7 +26,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     personId: any;
     fullName = '';
     clearField: String = '';
-    loginPerson = this.commonService.getCurrentUserDetail('externalReviewerRight');
     isMaleUser = this.commonService.getCurrentUserDetail('gender') === 'M';
     isAdmin = true;
     resetPassword = new ChangePassword();
@@ -36,8 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     homeNavigation: string = '';
     isAdministrator: boolean = false;
-    ispersondetailsmodal = false;
-    userDetails = null;
     noteComment: any;
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
@@ -75,13 +73,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
-        this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-            || this.commonService.isCoiReviewer;
+        this.isAdministrator = this.commonService.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS)
+            || this.commonService.isCoiReviewer || this.commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
         this.navigateForHomeIcon();
-        this.userDetails = {
-            personId: this.commonService.getCurrentUserDetail('personId'),
-            fullName: this.commonService.getCurrentUserDetail('fullName')
-        };
         this.openModalTriggeredFromChild();
     }
 
@@ -94,11 +88,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
+        this.$subscriptions.push(this.commonService.signOut().subscribe(
+            null,
+            null,
+            () => {
+                this.clearCurrentUserAndGotoLogin();
+        }));
+    }
+
+    clearCurrentUserAndGotoLogin() {
         if (!this.commonService.enableSSO) {
             ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
-            this.commonService.currentUserDetails = {};
+            this.commonService.currentUserDetails = new LoginPersonDetails();
           }
-          this.commonService.rightsArray = [];
+          this.router.navigate(['/logout']);
     }
 
     changePassword() {
@@ -151,10 +154,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
-    }
-
     private passwordAtleast7Characters() {
         if (this.resetPassword.password.length < 7) {
             this.passwordValidation.set('password-length', true);
@@ -170,7 +169,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     saveOrUpdateNote() {
         if (this.noteComment.trim()) {
             this.$subscriptions.push(this.headerService.saveOrUpdatePersonNote({
-                'personId': this.commonService.getCurrentUserDetail('personId'),
+                'personId': this.commonService.getCurrentUserDetail('personID'),
                 'content': this.noteComment.trim()
             }).subscribe((ele: any) => {
                 this.commonService.isShowCreateNoteModal = false;
@@ -209,7 +208,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     openTravelDisclosure(): void {
         this.triggeredFrom = 'TRAVEL_DISCLOSURE';
-        this.getActiveDisclosureAndOpenModal();
+        this.isShowCreateOrReviseModal = true;
     }
 
     getActiveDisclosureAndOpenModal() {
@@ -245,8 +244,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
+        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personID'),
+            this.commonService.getCurrentUserDetail('unitNumber'))
             .subscribe((res: any) => {
                 if(res) {
                     this.router.navigate([OPA_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
@@ -257,8 +256,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     createConsultingDisclosure() {
-        this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personId'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
+        this.$subscriptions.push(this.headerService.createConsultingForm(this.commonService.getCurrentUserDetail('personID'),
+            this.commonService.getCurrentUserDetail('unitNumber'))
             .subscribe((res: any) => {
                 if(res) {
                     this.router.navigate([CONSULTING_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
@@ -273,6 +272,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.querySelector("html").className = '';
         document.querySelector("html").classList.add(themename);
         $('#dissmiss-btn').click();
+    }
+
+    openPersonDetailsModal(): void {
+        this.commonService.openPersonDetailsModal(this.commonService.getCurrentUserDetail('personID'));
     }
 
 

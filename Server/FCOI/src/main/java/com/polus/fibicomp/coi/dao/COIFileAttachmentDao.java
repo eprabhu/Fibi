@@ -12,6 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,15 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.repository.COIDisclosureAttachmentRepository;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
-import com.polus.fibicomp.common.dao.CommonDao;
 
 @Component
 public class COIFileAttachmentDao {

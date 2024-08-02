@@ -11,6 +11,7 @@ import { RO } from '../coi-interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { CoiService } from '../services/coi.service';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-relationship',
@@ -52,6 +53,9 @@ export class RelationshipComponent implements OnInit {
   currentRelation: number;
   switchRelationView = false;
   projectList: GenericProject[] = [];
+  searchWord: string;
+  canShowEntitySearch = true;
+  getFormattedSponsor = getFormattedSponsor;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -95,6 +99,10 @@ export class RelationshipComponent implements OnInit {
             .getReporterProjects(this.coiData.coiDisclosure.disclosureId)
             .subscribe((res: any) => {
                 this.projectList = res || [];
+                if (this.projectList.length === 1) {
+                    this.isShowCollapsedConflictRelationship = true;
+                    this.getEntityList();
+                }
                 this.highlightProjectValidation();
             }));
     }
@@ -138,7 +146,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personId');
+    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personID');
     this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode) && IS_CREATE_USER;
   }
 
@@ -146,8 +154,8 @@ getDisclosureCount(typeCode, disclosureStatus) {
     this.$subscriptions.push(this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
         const LINKED_MODULE = data?.awards[0] || data?.proposals[0];
-        this.awardList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
-        this.awardList[0].sfiCompleted = LINKED_MODULE.sfiCompleted;
+        this.projectList[0].disclosureStatusCount = LINKED_MODULE.disclosureStatusCount;
+        this.projectList[0].sfiCompleted = LINKED_MODULE.sfiCompleted;
       }
     }));
   }
@@ -216,10 +224,24 @@ getDependencyDetails() {
 }
 
     switchRelationViewMode(newValue) {
+      this.getSearchedEntities();
       if (this.switchRelationView !== newValue && !newValue) {
           this.ngOnInit();
       }
       this.switchRelationView = newValue;
+    }
+
+    getSearchedEntities() {
+        this.searchWord = this.searchText;
+    }
+
+    clearSearchText() {
+        this.searchWord = '';
+        this.searchText = '';
+    }
+
+    canShowEntitesSearch(event) {
+        this.canShowEntitySearch = event;
     }
 
 }

@@ -1,0 +1,25 @@
+<ng-container *ngIf="component.componentType === 'QN'">
+  <app-view-questionnaire-v2 [questionnaireVO] = "component.questionnaire"
+  [externalEvent]="saveEventForChildComponent"
+  [isViewMode]="!isFormEditable"
+  (questionnaireEditEvent) ="emitEditOrSaveAction('CHANGED', $event)"
+  (questionnaireSaveEvent) ="saveEventsFromChild($event, component)"
+  ></app-view-questionnaire-v2>
+</ng-container>
+
+<ng-container *ngIf="['CE'].includes(component.componentType)">
+  <app-custom-element-v2 [customElementVO] = "component.customElement"
+  [externalEvent]="saveEventForChildComponent"
+  [isViewMode]="!isFormEditable"
+  (dataChangeEvent) ="emitEditOrSaveAction('CHANGED', $event)"
+  (saveEvent) ="saveEventsFromChild($event)"></app-custom-element-v2>
+</ng-container>
+
+<ng-container *ngIf="['SE','NE','DE','CB','RB','ES','AS','SD','UD','TE'].includes(component.componentType)">
+  <app-form-element-view [customElementVO] = "component.customElement"
+  [externalEvent]="saveEventForChildComponent"
+  [isViewMode]="!isFormEditable"
+  (dataChangeEvent) ="emitEditOrSaveAction('CHANGED', $event)"
+  (saveEvent) ="saveEventsFromChild($event)"></app-form-element-view>
+</ng-container>
+

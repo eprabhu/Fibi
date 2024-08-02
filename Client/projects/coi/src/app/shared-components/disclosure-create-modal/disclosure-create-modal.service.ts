@@ -20,7 +20,11 @@ export class DisclosureCreateModalService {
   }
 
   checkIfDisclosureAvailable(moduleCode, moduleId) {
-    return this._http.get(`${this._commonService.baseUrl}/validate/${moduleCode}/disclosure/${moduleId}`);
+    return this._http.post(this._commonService.baseUrl + '/validateDisclosure', {
+        "moduleCode": moduleCode,
+        "moduleItemId": moduleId,
+        "personId": this._commonService.getCurrentUserDetail('personID')
+    });
   }
 
 }

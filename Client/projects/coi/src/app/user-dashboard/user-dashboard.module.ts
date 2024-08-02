@@ -22,10 +22,10 @@ const routes: Routes = [
             loadChildren: () => import('./user-entities/user-entities.module').then(m => m.UserEntitiesModule)
         }, {
             path: 'notes',
-            loadChildren: () => import('./notes/notes-attachments.module').then(m => m.NotesAttachmentsModule)
+            loadChildren: () => import('../notes/notes-attachments.module').then(m => m.NotesAttachmentsModule)
         }, {
             path: 'attachments',
-            loadChildren: () => import('./attachments/attachments.module').then(m => m.AttachmentsModule)
+            loadChildren: () => import('../attachments/attachments.module').then(m => m.AttachmentsModule)
         }]
     }];
 

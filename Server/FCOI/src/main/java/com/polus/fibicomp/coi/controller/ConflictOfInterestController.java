@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
+import com.polus.core.inbox.pojo.Inbox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +50,7 @@ import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.inbox.pojo.Inbox;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.core.security.AuthenticatedUser;;
 
 @RestController
 @RequestMapping("/coi")
@@ -361,10 +361,9 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.checkEntityAdded(entityNumber);
 	}
 
-	@GetMapping("/validate/{moduleCode}/disclosure/{moduleItemId}")
-	public ResponseEntity<Object> validateDisclosure(@PathVariable("moduleCode") Integer moduleCode,
-												   @PathVariable("moduleItemId") String moduleItemId) {
-		return conflictOfInterestService.validateDisclosure(moduleCode, moduleItemId);
+	@PostMapping("/validateDisclosure")
+	public ResponseEntity<Object> validateDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		return conflictOfInterestService.validateDisclosure(vo.getPersonId(), vo.getModuleCode(), vo.getModuleItemId().toString());
 	}
 
 	@PatchMapping("/disclosure/assignAdmin")

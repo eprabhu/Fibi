@@ -6,11 +6,11 @@ import { Subscription, forkJoin } from 'rxjs';
 import { ADMIN_DASHBOARD_URL, REPORTER_HOME_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
-import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
 import { isEmptyObject, scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { heightAnimation } from '../../../common/utilities/animations';
+import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-view-relationship-details',
@@ -154,7 +154,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
                     personEntityId: this.relationshipsDetails.personEntityId
                 };
                 this.setAdditionalDetails(res.personEntity);
-                this.entityDetailsServices.canMangeSfi = this.relationshipsDetails.personId === this.commonService.currentUserDetails.personId ? true : false;
+                this.entityDetailsServices.canMangeSfi = this.relationshipsDetails.personId === this.commonService.currentUserDetails.personID ? true : false;
                 this.updatedRelationshipStatus = this.relationshipsDetails.versionStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
                 if(canLoadFirstRelation) {
                     this.triggerOpenQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
@@ -314,7 +314,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
             moduleSubItemCode: 801,
             moduleSubItemKey: subItemCode,
             moduleItemKey: this.entityId,
-            actionUserId: this.commonService.getCurrentUserDetail('personId'),
+            actionUserId: this.commonService.getCurrentUserDetail('personID'),
             actionPersonName: this.commonService.getCurrentUserDetail('fullName'),
             questionnaireNumbers: [],
             questionnaireMode: this.isEditMode ? 'ACTIVE_ANSWERED_UNANSWERED' : this.relationshipsDetails.isFormCompleted ? 'ANSWERED' : 'ACTIVE_ANSWERED_UNANSWERED'
@@ -399,7 +399,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         }));
     }
 
-    viewEntityDetails(event) {
+    viewEntityDetails() {
         if(this.showViewButton()) {
             this.closeEntityInfoCard.emit(false);
             document.body.removeAttribute("style");

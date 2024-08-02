@@ -17,7 +17,7 @@
  * QUESTIONNAIRE_COMPLETED_FLAG etc;
  * happy coding:)
  **/
- import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+ import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
  import * as _ from 'lodash';
  import { QuestionnaireService } from './questionnaire.service';
  import { CommonService } from '../../common/services/common.service';
@@ -41,6 +41,7 @@ import {
 import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/utilities/date-utilities";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { jumpToSection } from '../../common/utilities/custom-utilities';
 
  @Component({
      selector: 'app-view-questionnaire',
@@ -60,6 +61,8 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
      @Input() isShowQuestionnaireDock = true;
      @Input() saveButtonLabel: string;
      // @Output() flagUpdationEvent = new EventEmitter<any>();
+     @Input() isQuestionnaireValidateMode: boolean = false;
+     @ViewChild('dockBoxIcon') dockBoxIcon: ElementRef<HTMLElement>;
 
      searchObjectMapping = {
          'fibiperson': 'prncpl_id',
@@ -105,6 +108,7 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
      lookUpValues = {};
      IsEnableACTypeChecking = false;
      isShowLimiterInTable: any = {};
+     isSaveClicked = false;
 
      constructor(
          private _questionnaireService: QuestionnaireService,
@@ -123,8 +127,10 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
      */
      autoSaveEvent() {
          if (this.externalSaveEvent) {
-            this.$subscriptions.push(this.externalSaveEvent.subscribe(_event =>
-                !this.isViewMode && this.questionnaireDetails.isChanged && this.saveQuestionnaire()
+            this.$subscriptions.push(this.externalSaveEvent.subscribe(_event => {
+                this.addAnimationToDockBox();
+                !this.isViewMode && this.questionnaireDetails.isChanged && this.saveQuestionnaire();
+            }
             ));
          }
      }
@@ -172,6 +178,9 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
                  this.IsEnableACTypeChecking = true;
                  this.showHelpMsg = [];
                  this._CDRef.markForCheck();
+                 if(this.questionnaire && this.isQuestionnaireValidateMode) {
+                    this.validateMandatory();
+                 }
              })
          );
      }
@@ -519,10 +528,23 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
       * it scrolls to the position of question and focus on the field too.
       */
      goToCorrespondingUnAnsweredQuestion(id) {
-         this.highlight = id;
-         scrollIntoView('ques_' + id);
-         const ansID = document.getElementById('ans_' + id);
-         this.setFocusToFields(ansID);
+        this.highlight = id;
+        scrollIntoView('ques_' + id);
+        const ansID = document.getElementById('ans_' + id);
+        this.setFocusToFields(ansID);
+     }
+
+
+     goToUnAnsweredQuestionOnValidation(id) {
+        this.highlight = id;
+        const SCROLL_CONFIG: any = { 
+            sectionId: 'ques_' + id, 
+            offsetTop: (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100), 
+            srollElement: window
+        }
+        jumpToSection(SCROLL_CONFIG);
+        const ansID = document.getElementById('ans_' + id);
+        this.setFocusToFields(ansID);
      }
 
      /**
@@ -945,6 +967,9 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
      }
 
      saveQuestionnaire() {
+        if (!this.externalSaveEvent) {
+            this.addAnimationToDockBox();
+        }
          this.deleteUnAnsweredTableRows();
          this.result.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
          /* isSaving flag is used for  avoiding mutiple service call. */
@@ -1099,5 +1124,39 @@ import { ElasticConfigService } from '../../common/services/elastic-config.servi
                question.SHOW_QUESTION = data.rulePassed;
                this.findUnAnsweredQuestions();
        }));
-    }
+    }     
+
+     validateMandatory() {
+         let question = this.firstUnAnsweredQuestion(this.questionnaire.questions);
+         if (question) {
+             setTimeout(() => {
+                 this.goToUnAnsweredQuestionOnValidation(question.QUESTION_ID);
+             }, 500);
+         }
+     }
+
+     firstUnAnsweredQuestion(questions: any[]): any {
+         return questions.find((question: any) => question.SHOW_QUESTION === true && !this.getAnswerCount(question.ANSWERS, question));
+     }
+
+     addAnimationToDockBox() {
+         this.isSaveClicked = true;
+         this.animateBox();
+     }
+
+     animateBox() {
+         if (this.dockBoxIcon) {
+             this.dockBoxIcon.nativeElement.classList.remove('wobble');
+             this.dockBoxIcon.nativeElement.parentElement.parentElement.classList.remove('pulse');
+         }
+
+         setTimeout(() => {
+             if (this.dockBoxIcon && this.isSaveClicked && this.uniqueIdFromUnAnsweredQuestions.length > 0) {
+                 this.dockBoxIcon.nativeElement.classList.add('wobble');
+                 this.dockBoxIcon.nativeElement.parentElement.parentElement.classList.add('pulse');
+             }
+         }, 10);
+     }
+    
  }
+

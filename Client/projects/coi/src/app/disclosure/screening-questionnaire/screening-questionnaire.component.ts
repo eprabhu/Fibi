@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { CommonService } from '../../common/services/common.service';
-import { CoiDisclosure, getApplicableQuestionnaireData } from '../coi-interface';
+import { CoiDisclosure } from '../coi-interface';
 import { CoiService } from '../services/coi.service';
 import { DataStoreService } from '../services/data-store.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
@@ -11,6 +10,8 @@ import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/cust
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 import {SfiService} from "../sfi/sfi.service";
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE } from '../../app-constants';
+
 @Component({
     selector: 'app-screening-questionnaire',
     template: `
@@ -23,7 +24,9 @@ import { fadeInOutHeight } from '../../common/utilities/animations';
                     [isShowSave]="false"
                     [saveButtonLabel]="'Save and Continue'"
                     (QuestionnaireSaveEvent)="getSaveEvent($event)"
-                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
+                    (currentActiveQuestionnaire)="currentActiveQuestionaireChanged($event)"
+                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)"
+                    [isQuestionnaireValidateMode]="false">
             </app-view-questionnaire-list>
         </div>
     `,
@@ -37,12 +40,12 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     coiDisclosure: CoiDisclosure = new CoiDisclosure();
     configuration: any = {
         moduleItemCode: 8,
-        moduleSubitemCodes: [0],
+        moduleSubitemCodes: [0, EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE],
         moduleItemKey: '',
         moduleSubItemKey: 0,
-        actionUserId: this._commonService.getCurrentUserDetail('personId'),
+        actionUserId: this._commonService.getCurrentUserDetail('personID'),
         actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
-        enableViewMode: false,
+        enableViewMode: [0, EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE],
         isChangeWarning: true,
         isEnableVersion: true,
     };
@@ -79,7 +82,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
         this.configuration.moduleItemKey = DATA.coiDisclosure.disclosureId;
-        this.configuration.enableViewMode = !this._dataStore.getEditModeForCOI();
+        this.configuration.enableViewMode = !this._dataStore.getEditModeForCOI() ? [ 0, EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE ] : [ EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE ];
         this.configuration = deepCloneObject(this.configuration);
     }
 
@@ -115,6 +118,10 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     markQuestionnaireAsEdited(changeStatus: boolean): void {
       this.coiService.unSavedModules = 'Screening Questionnaire';
       this._dataStore.dataChanged = changeStatus;
+    }
+
+    currentActiveQuestionaireChanged(activeQuestionnaire: any): void {
+        this.coiService.currentActiveQuestionnaire = activeQuestionnaire;
     }
 
 }

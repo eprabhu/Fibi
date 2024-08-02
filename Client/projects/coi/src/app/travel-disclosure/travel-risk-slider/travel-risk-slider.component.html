@@ -1,236 +1,165 @@
 <app-coi-slider (closeSlider)="closeConflictSlider()" [elementId]="'travel-risk-slider'" [isHeaderNeeded]="true" [isChangedFieldValue]="isFieldValueChanges()">
 
-  <!-- slider header -->
-  <ng-container header>
-      <span>Manage Travel Risk</span>
-  </ng-container>
+    <!-- slider header -->
+    <ng-container header>
+        <span>Manage Travel Risk</span>
+    </ng-container>
 
-  <!-- slider header card -->
-  <ng-container content-sticky>
-      <div class="mt-1">
-          <div class="info-card-border card-scroll mt-2 rounded-2 shadow-medium bg-light mx-3">
-              <div class="row ml-15 mt-2">
-                  <div class="position-relative p-3 fs-14 pl-5 fw-500">
-                      <div class="row">
-                          <div class="col">
-                              <span class="d-flex">
-                                  <h4 class="mb-0 d-flex">
-                                          {{travelDisclosure?.travelEntityName}}
-                                  </h4>
-                              </span>
-                          </div>
-                      </div>
-                      <div class="row mt-3">
-                          <div class="col d-flex">
-                              <label class="left-margin me-2 grey-text fw-600">Person associated with travel:
-                              </label>
-                              <app-no-data-label [valueToShow]="travelDisclosure?.personFullName">
-                                  <span class="grey-text fw-normal">{{travelDisclosure?.personFullName}}</span>
-                              </app-no-data-label>
-                          </div>
-                          <div class="col d-flex">
-                              <label class="grey-text fw-600">Department: </label>
-                              <span class="ml-2 grey-text fw-normal">
-                                  <app-no-data-label [valueToShow]="travelDisclosure?.homeUnitNumber">
-                                      <span>{{travelDisclosure?.homeUnitNumber}} - {{travelDisclosure?.homeUnitName}}</span>
-                                  </app-no-data-label>
-                              </span>
-                          </div>
-                      </div>
-                      <div class="row mt-2">
-                          <div class="col d-flex align-items-center">
-                              <label class="grey-text fw-600">Risk: </label>
-                              <span class="ml-2 grey-text">
-                                  <div class="text-color fs-14 d-flex align-items-center">
-                                      <span class="text-secondary fs-14">
-                                          <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                                      </span>
-                                      <app-no-data-label
-                                      [valueToShow]="travelDisclosure?.riskLevel">
-                                      <span class="ml-2 mt-1 fw-normal">{{travelDisclosure?.riskLevel}}</span>
-                                  </app-no-data-label>
-                                  </div>
-                              </span>
-                          </div>
-                          <div class="col d-flex align-items-center">
-                              <label class="grey-text fw-600">Disclosure : </label>
-                              <span class="grey-text fs-14 ms-3 col fw-normal">
-                                <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                                    <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
-                                    <span class="badgeFont">{{travelDisclosure?.disclosureStatus}}</span>
-                                </app-no-data-label>
-                            </span>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </ng-container>
+    <!-- slider header card -->
+    <ng-container content-sticky>
+        <div class="border border-opacity-50 border-secondary coi-box-red mt-2 mx-0 p-3 rounded-2 row shadow-medium">
+            <span class="d-flex col-12 p-0">
+                <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">apartment</mat-icon>
+                <span id="risk-slider-travelDisclosure-entity">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.travelEntityName">
+                        <span class="coi-text-darker fs-6 text-slice" [title]="travelDisclosure?.travelEntityName">{{travelDisclosure?.travelEntityName}}</span>
+                    </app-no-data-label>
+                </span>
+            </span>
+            <div class="col-6 p-0 fs-14 my-2">
+                <label class="d-block coi-text-dark" for="risk-slider-travelDisclosure-person">Person associated with travel</label>
+                <span id="risk-slider-travelDisclosure-person">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.personFullName">
+                        <span class="coi-text-light">{{travelDisclosure?.personFullName}}</span>
+                    </app-no-data-label>
+                </span>
+            </div>
+            <div class="col-6 p-0 fs-14 my-2">
+                <label class="d-block coi-text-dark" for="risk-slider-travelDisclosure-department">Department</label>
+                <span id="risk-slider-travelDisclosure-department">
+                    <app-no-data-label [valueToShow]="commonService.getPersonLeadUnitDetails(travelDisclosure)">
+                        <span class="coi-text-light">{{commonService.getPersonLeadUnitDetails(travelDisclosure)}}</span>
+                    </app-no-data-label>
+                </span>
+            </div>
+            <div class="col-6 p-0 fs-14">
+                <label for="risk-slider-travelDisclosure-risk" class="coi-text-lighter d-block">Risk</label>
+                <span id="risk-slider-travelDisclosure-risk">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.riskLevel">
+                        <span class="d-flex">
+                            <mat-icon class="{{commonService.getRiskColor(travelDisclosure?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0"
+                                aria-hidden="true">warning</mat-icon>
+                            <span class="coi-text-dark">{{travelDisclosure?.riskLevel}}</span>
+                        </span>
+                    </app-no-data-label>
+                </span>
+            </div>
+            <div class="col-6 p-0 fs-14">
+                <label for="risk-slider-travelDisclosure-disclosureStatus" class="coi-text-lighter d-block">Disclosure</label>
+                <span id="risk-slider-travelDisclosure-disclosureStatus">
+                    <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
+                        <span class="{{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                        <span class="coi-text-dark ms-1">{{travelDisclosure?.disclosureStatus}}</span>
+                    </app-no-data-label>
+                </span>
+            </div>
+        </div>
+    </ng-container>
 
-  <!-- modal content -->
-  <ng-container content>
-      <!-- help text -->
-      <div class="mx-3 mt-3" *ngIf="isEditMode">
-          <app-help-text [helpTextList]="helpTexts" [tooltip]="'Disclosure Risk History'"></app-help-text>
-      </div>
+    <!-- content -->
+    <ng-container content>
+        <ng-container *ngIf="isEditMode">
+            <!-- help text -->
+            <app-help-text [helpTextList]="helpTexts" [tooltip]="'Disclosure Risk History'"></app-help-text>
 
-      <!-- risk edit section -->
-      <div *ngIf="isEditMode" class="card-body">
-              <div class="card comment-card shadow-sm mx-1">
-                  <div class="row ml-15 mt-4">
-                      <div class="col-4 ml-15 align-items-center">
-                          <label class="fs-14 fw-500">Risk:</label>
-                          <span>
-                              <select class="form-control form-select" [(ngModel)]="riskCategoryCode"
-                                  [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"
-                                  (ngModelChange)="clearValidationOnValueChange('LEVEL')">
-                                  <option [value]=null>--Select--</option>
-                                  <option *ngFor="let status of riskLookup" [value]="status.riskCategoryCode">
-                                      {{status?.description}}</option>
-                              </select>
-                              <div *ngIf="riskValidationMap?.has('riskLevelCode')"
-                                  class="invalid-feedback d-block fs-12">
-                                  {{riskValidationMap?.get('riskLevelCode')}}
-                              </div>
-                              <div *ngIf="riskValidationMap?.has('duplicateRisk')"
-                                  class="d-block fs-12 invalid-feedback">
-                                  {{riskValidationMap?.get('duplicateRisk')}}
-                              </div>
-                          </span>
-                      </div>
-                      <div class="col mr-10">
-                          <label class="fs-14 fw-500">Describe the reason for Travel Risk level change:</label>
-                          <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all" placeholder="Description" row="1"
-                              [(ngModel)]="riskComment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
-                              [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
-                              (ngModelChange)="clearValidationOnValueChange('COMMENT'); riskComment = riskComment.trim()"></textarea>
-                          <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
-                              {{riskValidationMap?.get('comment')}}
-                          </div>
-                      </div>
-                  </div>
-                  <div class="text-muted mb-3 mr-10 mt-2">
-                      <button type="button" class="btn btn-primary float-end fs-14" (click)="checkForModification()">Save</button>
-                      <button type="button" class="btn btn-outline-secondary float-end mr-10"
-                          (click)="clearRiskChanges()">Clear</button>
-                  </div>
-              </div>
-      </div>
+            <!-- risk edit section -->
+            <div class="mt-2 card shadow-sm p-3">
+                <div class="row">
+                    <div class="col-md-12 col-xl-4">
+                        <label for="risk-slider-travelDisclosure-risk-edit" class="fs-14 fw-500">Risk:</label>
+                        <span>
+                            <select id="risk-slider-travelDisclosure-risk-edit" class="form-control form-select" [(ngModel)]="riskCategoryCode"
+                                [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"
+                                (ngModelChange)="clearValidationOnValueChange('LEVEL')">
+                                <option [value]=null>--Select--</option>
+                                <option *ngFor="let status of riskLookup" [value]="status.riskCategoryCode">
+                                    {{status?.description}}</option>
+                            </select>
+                            <div *ngIf="riskValidationMap?.has('riskLevelCode')"
+                                class="invalid-feedback d-block fs-12">
+                                {{riskValidationMap?.get('riskLevelCode')}}
+                            </div>
+                            <div *ngIf="riskValidationMap?.has('duplicateRisk')"
+                                class="d-block fs-12 invalid-feedback">
+                                {{riskValidationMap?.get('duplicateRisk')}}
+                            </div>
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-xl-8">
+                        <label for="risk-slider-travelDisclosure-risk-description" class="fs-14 fw-500">Describe the reason for Travel Risk level change:</label>
+                        <textarea appAutoGrow id="risk-slider-travelDisclosure-risk-description" class="form-control fs-14" placeholder="Description"
+                            rows="1" [(ngModel)]="riskComment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
+                            [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
+                            (ngModelChange)="clearValidationOnValueChange('COMMENT'); riskComment = riskComment.trim()">
+                        </textarea>
+                        <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
+                            {{riskValidationMap?.get('comment')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 ms-auto">
+                    <button type="button" class="btn btn-outline-secondary fs-14 me-2" (click)="clearRiskChanges()"
+                        title="Click here to clear" aria-label="Click here to clear">Clear</button>
+                    <button type="button" class="btn btn-primary fs-14" (click)="checkForModification()"
+                        title="Click here to save" aria-label="Click here to save">Save</button>
+                </div>
+            </div>
+        </ng-container>
 
-      <!-- risk history heading -->
-      <div class="main-title mt-3 mx-4" id="" tabindex="0">
-          <h3 class="d-flex align-items-center fs-16"><strong>Travel Risk History</strong>
-              <span class="d-inline-block" data-bs-toggle="tooltip"
-                  data-bs-placement="top">
-              </span>
-          </h3>
-      </div>
+        <!-- risk history heading -->
+        <div class="border-bottom mt-3" id="" tabindex="-1">
+            <h3 class="d-flex align-items-center fs-16">
+                <strong>Travel Risk History</strong>
+                <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top"></span>
+            </h3>
+        </div>
 
-      <!-- risk history log -->
-      <div class="card mt-3 mx-4" id="travel-risk-history">
-          <div class="card-content">
-              <div class="card-body">
-                      <div *ngIf="!isEmptyHistory()">
-                        <ul class="timeline">
-                            <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
-                            <li *ngFor="let historyEntry of disclosure.value; let index=index">
-                                <span class="fs-14" [innerHTML]="historyEntry?.description" tabindex="0"></span>
-                                <p class="coi-text-lighter fs-13" tabindex="0">{{disclosure.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
-                                <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="0">
-                                    <span *ngIf="historyEntry?.comment" class="fs-14">
-                                        <mat-icon class="format_quote">format_quote</mat-icon>
-                                        <span class="fst-italic mx-2" [attr.aria-label]="historyEntry?.comment"
-                                            *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                                            <span class="coi-text-light mt-2"> {{(historyEntry?.comment | slice:0:230)}}</span>
-                                            <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor" title="Read More"><span class="fw-medium">... <u>Read more</u>
-                                                    <i aria-hidden="true"></i></span>
+        <!-- risk history log -->
+        <div class="card mt-2" id="travel-risk-history">
+            <div class="card-content">
+                <div class="card-body">
+                        <div *ngIf="!isEmptyHistory()">
+                            <ul class="timeline">
+                                <ng-container *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
+                                <li *ngFor="let historyEntry of disclosure.value; let index=index">
+                                    <span class="fs-14" [innerHTML]="historyEntry?.description" tabindex="-1"></span>
+                                    <p class="coi-text-lighter fs-13" tabindex="-1">{{disclosure.key}} {{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'time'}}</p>
+                                    <p *ngIf="historyEntry?.description" class="coi-text-light" tabindex="-1">
+                                        <span *ngIf="historyEntry?.comment" class="fs-14">
+                                            <mat-icon class="format_quote">format_quote</mat-icon>
+                                            <span class="fst-italic mx-2 coi-text-light">{{(!isReadMore[index] && historyEntry?.comment?.length > 230) ?
+                                                (historyEntry?.comment | slice:0:230) : historyEntry?.comment }}
+                                                <!-- for read more and less -->
+                                                <ng-container *ngIf="historyEntry?.comment?.length > 230">
+                                                    <a tabindex="0" role="link"
+                                                        (click)="isReadMore[index] = !isReadMore[index]"
+                                                        (keyup.enter)="isReadMore[index] = !isReadMore[index]"
+                                                        (keyup.space)="isReadMore[index] = !isReadMore[index]" 
+                                                        title="Click here to read {{isReadMore[index] ? 'less' : 'more'}}"
+                                                        class="fw-medium cursor-pointer coi-text-light text-decoration-none"
+                                                        attr.aria-label="Click here to read {{isReadMore[index] ? 'less' : 'more'}}">
+                                                        <span *ngIf="!isReadMore[index]">...</span>
+                                                        <u class="fw-600">{{isReadMore[index] ? 'Read Less' : 'Read More'}}</u>
+                                                    </a>
+                                                </ng-container>
                                             </span>
                                         </span>
-                                        <ng-template #showFullInfo>
-                                            <span tabindex='0' [attr.aria-label]="historyEntry?.comment" class="fst-italic mx-2 coi-text-light">{{historyEntry?.comment}}</span>
-                                            <span *ngIf="historyEntry?.comment?.length > 230" class="hand-cursor mt-2 fw-medium" title="Read Less"
-                                                (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true">
-                                                <span class="fw-medium"><u>Read Less</u>
-                                                    <i aria-hidden="true"></i></span>
-                                            </span>
-                                        </ng-template>
-                                    </span>
-                                </p>
-                            </li>
-                        </ng-container>
-                        </ul>
-                      </div>
-                      <div *ngIf="isEmptyHistory()">
-                          <app-no-information [isBorderNeeded]="false"> </app-no-information>
-                      </div>
-              </div>
-          </div>
-      </div>
-  </ng-container>
-  <ng-container confirmation-content>
-    You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
-</ng-container>
-
-</app-coi-slider>
-
-
-  <!-- risk history log -->
-  <!-- <div class="card mt-3 mx-4" id="travel-risk-history">
-    <div class="card-content">
-        <div class="card-body">
-            <div class="form-row">
-                <div class="table-responsive" *ngIf="!isEmptyHistory()">
-                    <table class="table mb-0">
-                        <caption class="sr-only">Risk History Comments </caption>
-                        <thead class="sr-none"></thead>
-                        <tbody>
-                            <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
-                                <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">
-                                    {{disclosure.key}}</h4>
-                                <ul class="pl-4 pr-3 mb-0">
-                                    <li *ngFor="let historyEntry of disclosure.value;let index=index"
-                                        class="p-3">
-                                        <div class="form-row">
-                                            <div class="col">
-                                                <p class="fs-14 mb-0">
-                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                    <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
-                                                        dateFormatterWithTimeZone:'time'}}</label>
-                                                    <span [innerHTML]="historyEntry?.description"></span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
-                                            <span
-                                                *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                                                <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'"> {{(historyEntry?.comment | slice:0:230)}}</span>
-                                                <span (click)="isReadMore[index] = !isReadMore[index]"
-                                                    class="hand-cursor"><span class="fw-medium">... <u>Read
-                                                            more</u>
-                                                        <i aria-hidden="true"></i></span>
-                                                </span>
-                                            </span>
-                                            <ng-template #showFullInfo>
-                                                <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'">{{historyEntry?.comment}}</span>
-                                                <span *ngIf="historyEntry?.comment?.length > 230"
-                                                    (click)="isReadMore[index] = !isReadMore[index]"
-                                                    aria-hidden="true" class="hand-cursor"><span
-                                                        class="fw-medium">. <u>Read Less</u>
-                                                        <i aria-hidden="true"></i></span>
-                                                </span>
-                                            </ng-template>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div *ngIf="isEmptyHistory()">
-                    <app-no-information [isBorderNeeded]="false"> </app-no-information>
+                                    </p>
+                                </li>
+                            </ng-container>
+                            </ul>
+                        </div>
+                        <div *ngIf="isEmptyHistory()">
+                            <app-no-information [isBorderNeeded]="false"> </app-no-information>
+                        </div>
                 </div>
             </div>
         </div>
-    </div>
-</div> -->
+    </ng-container>
+
+    <!-- modal content -->
+    <ng-container confirmation-content>
+        You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
+    </ng-container>
+
+</app-coi-slider>

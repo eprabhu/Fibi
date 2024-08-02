@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
-import { FormBuilderCreateService } from '../../form-builder-create.service'
-import { FetchModuleCode, FormIntegration, GetAllFormUsage, ModuleList, IntegrtionResponse, SubModules, UpdateFormUsage, saveFormUsage } from '../../form-builder-create-interface'
+import { FormBuilderCreateService } from '../../form-builder-create.service';
+import {FetchModuleCode, FormIntegration, GetAllFormUsage, ModuleList, IntegrtionResponse, SubModules,
+        UpdateFormUsage, saveFormUsage} from '../../form-builder-create-interface';
 
 declare const $: any;
 
@@ -21,7 +22,7 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
     formBuilderNumber: string;
     formUsage: GetAllFormUsage[];
     formUsageList = [];
-    editStatus = "";
+    editStatus = '';
     deleteIndex: number;
     editIndex: number;
     formValidation = new Map();
@@ -75,9 +76,9 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
             let subSectionName;
             this.$subscriptions.push(
                 this.formBuilderService.saveFormUsage(this.prepareFormUsageObject()).subscribe((data: IntegrtionResponse) => {
-                    moduleName = this.moduleList.find((x) => x.MODULE_CODE == data.moduleCode)
+                    moduleName = this.moduleList.find((x) => x.MODULE_CODE == data.moduleCode);
                     subSectionName = moduleName.subModules.find((subSection) =>
-                        subSection.SUB_MODULE_CODE == data.subModuleCode)
+                        subSection.SUB_MODULE_CODE == data.subModuleCode);
                     this.formUsageList.push(
                         {
                             formUsageId: data.formUsageId,
@@ -87,10 +88,10 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
                             moduleCode: moduleName?.MODULE_CODE,
                             subSectionCode: subSectionName?.SUB_MODULE_CODE || 0,
                         }
-                    )
+                    );
                     this.resetUsage();
                 })
-            )
+            );
         }
 
     }
@@ -101,9 +102,9 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
         formUsageObject.formBuilderId = this.formBuilderId;
         formUsageObject.moduleCode = this.formIntegtion.formModuleCode;
         formUsageObject.subModuleCode = this.formIntegtion.formSubSectionCode || 0,
-        formUsageObject.businessRuleId = null;
-        formUsageObject.description = "sample";
-        formUsageObject.isActive = "Y";
+            formUsageObject.businessRuleId = null;
+        formUsageObject.description = 'sample';
+        formUsageObject.isActive = 'Y';
         return formUsageObject;
     }
 
@@ -128,17 +129,17 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
                                 subSectionCode: subSectionName?.SUB_MODULE_CODE || 0
                             }
                         )
-                    })
+                    });
                 }
             })
-        )
+        );
     }
 
 
     editUsage(item, status: string, index: number): void {
-        if (status === "E") {
+        if (status === 'E') {
             this.editIndex = index;
-            this.editStatus = "E";
+            this.editStatus = 'E';
             this.formIntegtion.formModuleCode = item.moduleCode;
             this.findSubModuleList();
             this.formIntegtion.formSubSectionCode = item.subSectionCode;
@@ -154,9 +155,9 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
         formUsageObject.formBuilderId = this.formBuilderId;
         formUsageObject.moduleCode = this.formIntegtion.formModuleCode;
         formUsageObject.subModuleCode = this.formIntegtion.formSubSectionCode || 0,
-        formUsageObject.businessRuleId = null;
-        formUsageObject.description = "sample";
-        formUsageObject.isActive = "Y";
+            formUsageObject.businessRuleId = null;
+        formUsageObject.description = 'sample';
+        formUsageObject.isActive = 'Y';
         formUsageObject.formOrderNumber = this.formIntegtion.formOrderNumber;
         return formUsageObject;
     }
@@ -173,33 +174,33 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
                     this.formUsageList[this.editIndex].moduleCode = Number(data.moduleCode);
                     this.formUsageList[this.editIndex].subSectionCode = Number(data.subModuleCode);
                     this.formUsageList[this.editIndex].formUsageId = data.formUsageId;
-                    moduleName = this.moduleList.find((x) => x.MODULE_CODE == data.moduleCode)
+                    moduleName = this.moduleList.find((x) => x.MODULE_CODE == data.moduleCode);
                     subSectionName = moduleName.subModules.find((subSection) =>
-                        subSection.SUB_MODULE_CODE == data.subModuleCode)
+                        subSection.SUB_MODULE_CODE == data.subModuleCode);
                     this.formUsageList[this.editIndex].moduleName = moduleName.DESCRIPTION;
                     this.formUsageList[this.editIndex].subSectionName = subSectionName?.DESCRIPTION;
                     this.resetUsage();
                 })
-            )
+            );
         }
     }
 
     resetUsage(): void {
         this.formValidation.clear();
-        this.editStatus = "";
+        this.editStatus = '';
         this.formIntegtion = new FormIntegration;
     }
 
     deleteUsage(): void {
         this.formBuilderService.deleteusage(this.formIntegtion.formUsageId).subscribe((data) => {
             this.formUsageList.splice(this.deleteIndex, 1);
-        })
+        });
     }
 
     isModuleCodeValid(): boolean {
         this.formValidation.clear();
         if (!this.formIntegtion.formModuleCode) {
-            this.formValidation.set("moduleCodeValidation", true);
+            this.formValidation.set('moduleCodeValidation', true);
         }
         if (this.formValidation.size > 0) {
             return false;
@@ -214,6 +215,11 @@ export class FormIntegrationComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    closeBtn(id: string) {
+        $(id).modal('hide');
+
     }
 
 }

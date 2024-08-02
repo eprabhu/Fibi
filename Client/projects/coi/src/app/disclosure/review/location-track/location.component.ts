@@ -10,10 +10,10 @@ import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utiliti
 import {deepCloneObject, hideModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
-import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { PersonProjectOrEntity, coiReviewComment } from '../../../shared-components/shared-interface';
 import { heightAnimation } from '../../../common/utilities/animations';
 import { ElasticConfigService } from '../../../common/services/elastic-config.service';
+import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -348,7 +348,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private getNextAssignedReview(): any {
         return this.reviewerList.find(ele =>
-            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            ele.assigneePersonId === this._commonService.currentUserDetails.personID
             && ele.reviewStatusTypeCode !== '2');
     }
 

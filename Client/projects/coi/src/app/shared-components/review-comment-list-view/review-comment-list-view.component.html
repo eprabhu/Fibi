@@ -69,26 +69,26 @@
                         </span>
                         <div class="f-13 justify-content-end mt-1 text-secondary me-2">
                             <ng-container *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId">
-                                <span class="hand-cursor mr-15 hand-hover text-primary" id="btn-edit-parent-comment"
+                                <span class="hand-cursor me-2 hand-hover text-primary" id="btn-edit-parent-comment"
                                     (click)="editParentComment(list,i)">
-                                    <i aria-hidden="true" class="fa fa-pencil mr-2"></i>
+                                    <i aria-hidden="true" class="fa fa-pencil me-1"></i>
                                     Edit
                                 </span>
-                                <span class="hand-cursor mr-15 hand-hover text-danger" id="btn-delete-parent-comment"
+                                <span class="hand-cursor me-2 hand-hover text-danger" id="btn-delete-parent-comment"
                                     (click)="deleteComment(list,i)">
-                                    <i aria-hidden="true" class="fa fa-trash mr-2"></i>
+                                    <i aria-hidden="true" class="fa fa-trash me-1"></i>
                                     Delete
                                 </span>
                             </ng-container>
                             <span *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId"
-                                class="hand-cursor hand-hover mr-15" id="btn-reply" (click)="replyComment(list,i)">
-                                <i aria-hidden="true" class="fa fa-reply mr-2"></i>
+                                class="hand-cursor hand-hover me-2" id="btn-reply" (click)="replyComment(list,i)">
+                                <i aria-hidden="true" class="fa fa-reply me-1"></i>
                                 Reply
                             </span>
                             <span class="hand-cursor hand-hover" id="btn-show-reply"
                                 [class.text-primary]="list?.childComments && list?.childComments?.length"
                                 (click)="showReplyComment(list,isShowReplyComment && selectedCommentIdList.includes(list?.commentId)? 'HIDE':'SHOW')">
-                                <i aria-hidden="true" class="fa fa-commenting mr-2"></i> 
+                                <i aria-hidden="true" class="fa fa-commenting me-1"></i>
                                 <!-- <ng-container>{{isShowReplyComment && selectedCommentIdList.includes(list?.commentId)
                                     ?'Hide':'Show'}}</ng-container> -->
                                 {{list?.childComments && list?.childComments?.length ? list?.childComments?.length : 0}} Replies
@@ -161,14 +161,14 @@
                                 </span>
                                 <div *ngIf="commentDetails?.commentId !== replayComment?.commentId"
                                     class="col-3 d-flex f-13 pb-2 justify-content-end align-items-center me-2">
-                                    <span class="hand-cursor mr-15 hand-hover text-primary" id="{{'btn-edit-chid'+replyFroComment}}"
+                                    <span class="hand-cursor me-2 hand-hover text-primary" id="{{'btn-edit-chid'+replyForComment}}"
                                         (click)="editReplyComment(replayComment,i)">
-                                        <i aria-hidden="true" class="fa fa-pencil mr-2"></i>
+                                        <i aria-hidden="true" class="fa fa-pencil me-1"></i>
                                         Edit
                                     </span>
-                                    <span class="hand-cursor mr-2 hand-hover text-danger" id="{{'btn-delete-chid'+replyFroComment}}"
+                                    <span class="hand-cursor hand-hover text-danger" id="{{'btn-delete-chid'+replyForComment}}"
                                         (click)="deleteComment(replayComment,i)">
-                                        <i aria-hidden="true" class="fa fa-trash mr-2"></i>
+                                        <i aria-hidden="true" class="fa fa-trash me-1"></i>
                                         Delete
                                     </span>
                                 </div>
@@ -203,4 +203,3 @@
 </div>
 
 
-                

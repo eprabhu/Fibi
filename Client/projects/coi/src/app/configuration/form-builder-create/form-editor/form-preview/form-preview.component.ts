@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FBConfiguration } from '../../../../shared/form-builder-view/form-builder-interface';
+import { FBConfiguration } from '../../shared/form-builder-view/form-builder-interface';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilderCreateService } from '../../form-builder-create.service';
 import { CommonService } from '../../../../common/services/common.service';
@@ -27,7 +27,7 @@ export class FormPreviewComponent implements OnInit, AfterViewInit {
         if (this.formBuilderId) {
             this.fbConfiguration.moduleItemCode = '23';
             this.fbConfiguration.moduleSubItemCode = '0';
-            this.fbConfiguration.documentOwnerPersonId = this._commonService.currentUserDetails.personId;
+            this.fbConfiguration.documentOwnerPersonId = this._commonService.currentUserDetails.personID;
             this.fbConfiguration.formBuilderId = this.formBuilderId;
             this._formBuilderService.formBuilderEvents.next({ eventType: 'BLANK_FORM', data: this.fbConfiguration });
         }

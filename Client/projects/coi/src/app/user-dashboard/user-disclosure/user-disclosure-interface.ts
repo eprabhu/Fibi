@@ -83,6 +83,7 @@ export interface UserDisclosure {
         travelDisclosureStatusDescription: string;
         opaDisclosureId: any;
         disclosureId: any;
+        projectHeader: string;
       }
 
       export interface UnitDetails {

@@ -28,7 +28,7 @@ export class HeaderService {
     }
 
     createConsultingForm(personId, homeUnit) {
-        return this._http.post(this._commonService.consultingUrl + '/create', { personId, homeUnit });
+        return this._http.post(this._commonService.baseUrl + '/consultingDisclosure/create', { personId, homeUnit });
     }
 
 }

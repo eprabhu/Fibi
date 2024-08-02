@@ -83,7 +83,7 @@ export class AddAttachmentModalComponent implements OnInit {
             this.isSaving = true;
             this.updateAddAttachmentDetails();
             this.$subscriptions.push(this._attachmentService.addAttachment({
-                'personId': this._commonService.getCurrentUserDetail('personId'),
+                'personId': this._commonService.getCurrentUserDetail('personID'),
                 'newAttachments': this.newAttachments
             }, this.uploadedFiles).subscribe((data: any) => {
                 this.isSaving = false;

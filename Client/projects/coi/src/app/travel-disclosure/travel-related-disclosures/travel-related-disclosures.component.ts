@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { TravelDisclosure, EntityDetails, TravelHistoryRO, TravelHistory } from '../travel-disclosure-interface';
+import { TravelDisclosure, EntityDetails, TravelHistoryRO, TravelHistory } from '../travel-disclosure.interface';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';

@@ -1,7 +1,7 @@
 package com.polus.fibicomp.opa.controller;
 
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.security.AuthenticatedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

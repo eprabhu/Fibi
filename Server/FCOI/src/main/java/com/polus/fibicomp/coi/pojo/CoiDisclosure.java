@@ -16,14 +16,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.polus.core.person.pojo.Person;
+import com.polus.core.pojo.Unit;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.polus.fibicomp.person.pojo.Person;
-import com.polus.fibicomp.pojo.Unit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

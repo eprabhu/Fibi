@@ -6,16 +6,17 @@
                 <div class="col-lg px-0">
                     <div class="card-header bg-white px-3 border-bottom">
                         <div class="row flex-grow-1 position-relative">
-                            <div class="col-lg-6 d-flex align-items-center">
+                            <div class="d-flex align-items-center" [ngClass]="entityDetails?.entityName?.length > 20 ? 'col-12 col-lg' : 'col'">
                                 <div class="fw-bold d-flex align-items-center" tabindex="-1">
-                                    <span tabindex="-1" title="Click here to view Disclosure" aria-label="Click here to view Disclosure">
-                                        <app-read-more [valueToShow]="entityDetails?.entityName" [sliceCount]="100" [clickableContent]="showViewButton() ? 'true' : 'false'" (emitClickEvent)="viewEntityDetails($event)"></app-read-more>
+                                    <span [tabindex]="showViewButton() ? '0' : '-1'" [ngClass]="{'d-flex link-primary cursor-pointer': showViewButton()}" (click)="viewEntityDetails()"
+                                        (keyup.enter)="viewEntityDetails()" (keyup.space)="viewEntityDetails()">
+                                        <span class="text-slice">{{ entityDetails?.entityName }}</span>
                                     </span>
                                     <span class="badge rounded-pill text-bg-secondary ms-2"
                                         *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'">Archive</span>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end align-items-center col-lg-6">
+                            <div class="d-flex justify-content-end align-items-center col-auto ms-auto">
                                 <span class="badge rounded-5 f-14 ms-auto px-3 py-2 rounded-5"
                                     [ngClass]="relationshipsDetails?.versionStatus == 'ACTIVE' || relationshipsDetails?.versionStatus == 'ARCHIVE' ?  relationshipsDetails?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
                                     {{relationshipsDetails?.versionStatus == 'ACTIVE' ||
@@ -158,7 +159,7 @@
                                     </button>
                                     <button
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col" id="coi-view-relationship-details-back-btn"
-                                        (click)="navigateBack()"  title="Click to go back to Entity list" aria-hidden="Click to go back to Entity list">
+                                        (click)="navigateBack()"  title="Click here to go back to Entity list" aria-label="Click here to go back to Entity list">
                                         <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
                                         <span class="fs-14 mx-2 btn-content-back" *ngIf="isCardExpanded">Back</span>
                                     </button>
@@ -366,7 +367,7 @@
 </div>
 
 <!-- SFI Details section if SFI Details tab is clicked -->
-<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'" class="p-3">
+<div *ngIf="entityDetailsServices.activeTab === 'RELATION_DETAILS'" [class.p-3] = "!isEditMode">
         <div *ngIf="!isEditMode" class="card p-3">
             <div class="row mb-2">
                 <div class="col-3" tabindex="-1">
@@ -376,17 +377,18 @@
                 <div class="col-3" tabindex="-1">
                     <label class="d-block coi-text-dark" aria-label="Start Date Of Involvement">Start
                         Date Of Involvement</label>
-                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementStartDate">
+                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementStartDate">
                         <span class="coi-text-light"
-                            aria-label="involvementDate.involvementStartDate | dateFormatterWithTimeZone" id="coi-view-relationship-details-sfi-detail-dateof-involvement">
-                            {{involvementDate.involvementStartDate | dateFormatterWithTimeZone}}</span>
+                            aria-label="relationshipsDetails?.involvementStartDate | dateFormatter" id="coi-view-relationship-details-sfi-detail-dateof-involvement">
+                            {{relationshipsDetails?.involvementStartDate | dateFormatter}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col-3" tabindex="-1">
                     <label class="d-block coi-text-dark">End Date Of Involvement</label>
-                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementEndDate">
-                        <span class="coi-text-light" id="coi-view-relationship-details-sfi-detail-enddate-involvement">{{involvementDate.involvementEndDate |
-                            dateFormatterWithTimeZone}}</span>
+                    <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementEndDate">
+                        <span  aria-label="relationshipsDetails?.involvementEndDate | dateFormatter"
+                        class="coi-text-light" id="coi-view-relationship-details-sfi-detail-enddate-involvement">{{relationshipsDetails?.involvementEndDate |
+                            dateFormatter}}</span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -407,7 +409,7 @@
                             <span class="coi-text-light text-break fs-14">{{ relationshipsDetails?.staffInvolvement}}
                             </span><span (click)="isReadMoreRelationWith =!isReadMoreRelationWith" (keyup.enter)="isReadMoreRelationWith =!isReadMoreRelationWith" (keyup.space)="isReadMoreRelationWith =!isReadMoreRelationWith"
                             tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-relationship"
-                                class="fw-medium link-primary">Read Less</span>
+                                class="fw-medium link-primary fs-14">Read Less</span>
                         </ng-template>
                     </app-no-data-label>
                 </div>
@@ -428,7 +430,7 @@
                         <ng-template #more2>
                             <span class="coi-text-light text-break fs-14">{{relationshipsDetails?.studentInvolvement}}
                             </span><span (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea" (keydown.enter)="isReadMoreBusinessArea = !isReadMoreBusinessArea" (keydown.space)="isReadMoreBusinessArea = !isReadMoreBusinessArea"
-                                class="link-primary fw-medium"  tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-PBA">Read Less</span>
+                                class="link-primary fw-medium fs-14"  tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-PBA">Read Less</span>
                         </ng-template>
                     </app-no-data-label>
                 </div>
@@ -450,10 +452,10 @@
                         </span>
                         <ng-template #more3>
                             <span class="coi-text-light text-break">{{
-                                relationshipsDetails?.studentInvolvement}}
+                                relationshipsDetails?.instituteResourceInvolvement}}
                             </span><span (click)="isReadMoreUniversity =!isReadMoreUniversity" (keyup.enter)="isReadMoreUniversity =!isReadMoreUniversity" (keyup.space)="isReadMoreUniversity =!isReadMoreUniversity"
                             tabindex="0" role="link" aria-label="Click here to read less" title="Click here to Read less" id="link-read-less-REYU"
-                                class="link-primary fw-medium">Read Less</span>
+                                class="link-primary fw-medium fs-14">Read Less</span>
                         </ng-template>
                     </app-no-data-label>
                 </div>
@@ -517,8 +519,8 @@
                         <div class="d-flex px-3" tabindex="-1">
                             <label class="d-block fs-14 fw-500 px-1 pb-1 row label-text">Sponsors Research</label>
                         </div>
-                        <div class="col d-flex px-2" title="Click to toggle Yes/No" tabindex="0">
-                            <span class="py-1" role="switch">
+                        <div class="col d-flex px-2" title="Click here to toggle Yes/No" tabindex="0" aria-label="Click here to toggle Yes/No">
+                            <span class="py-1">
                                 <a *ngIf="additionalDetails.sponsorsResearch" class="pl-2">
                                     <label class="switch"
                                         (click)="additionalDetails.sponsorsResearch = false;addUnSavedChanges()">

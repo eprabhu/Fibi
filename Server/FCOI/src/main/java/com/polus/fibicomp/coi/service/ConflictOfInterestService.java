@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.dto.COIFileRequestDto;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,6 @@ import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -30,11 +29,8 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
-import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
-import com.polus.fibicomp.inbox.pojo.Inbox;
+import com.polus.core.inbox.pojo.Inbox;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.dto.CommonRequestDto;
 
@@ -284,11 +280,12 @@ public interface ConflictOfInterestService {
 	 * 2) Is part of any pending project disclosure
 	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
 	 *
+	 * @param personId
 	 * @param moduleCode
 	 * @param moduleItemId
 	 * @return
 	 */
-    ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
+    ResponseEntity<Object> validateDisclosure(String personId, Integer moduleCode, String moduleItemId);
 
 	/**
 	 * This method is used to assign admin group or admin person
@@ -474,7 +471,7 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method used to complete disclosure reviews
-	 * @param map
+	 * @param disclosureIdNumberMap
 	 * @return
 	 */
 	ResponseEntity<Object> completeDisclosureReviews(Map<Integer, Integer> disclosureIdNumberMap);
@@ -516,4 +513,5 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> getDisclosureLookups();
+
 }

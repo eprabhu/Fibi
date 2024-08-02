@@ -130,7 +130,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
      * created then that one will comes first in the list.
      */
     private getDashboardList(): any {
-        const DISCLOSURE_VIEWS = this.result.disclosureViews || [];
+        const DISCLOSURE_VIEWS = this.getDisclosureProjectHeader(this.result.disclosureViews);
         const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
         const OPA_DETAILS = this.result.opaDashboardDto || [];
         const CONSULTING_DISCLOSURE = this.result.consultingDisclDashboardViews || [];
@@ -407,18 +407,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    modalHeader(disclosure: UserDisclosure) {
-        if (!disclosure.opaDisclosureId && (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3')) {
-            if (disclosure.fcoiTypeCode === '2') {
-                return `#${disclosure.proposalId} - ${disclosure.proposalTitle}`;
-            } else if (disclosure.fcoiTypeCode === '3') {
-                return `#${disclosure.awardId} - ${disclosure.awardTitle}`;
-            }
-        } else {
-            return `#${disclosure.opaDisclosureId}`;
-        }
-    }
-
     formatTravellerTypes(travellerTypes: string): string {
         return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
     }
@@ -443,7 +431,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private getAllDisclosureHistories(data: any): any {
-        const DISCLOSURE_HISTORY = data.disclosureHistoryDtos || [];
+        const DISCLOSURE_HISTORY = this.getDisclosureHistoryProjectHeader(data.disclosureHistoryDtos)
         const OPA_HISTORY = data.opaDashboardDtos || [];
         const MERGED_LIST = [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
         return this.getSortedListForParam(MERGED_LIST, 'updateTimeStamp');
@@ -531,8 +519,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
-            this.commonService.getCurrentUserDetail('homeUnit'))
+        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personID'),
+            this.commonService.getCurrentUserDetail('unitNumber'))
             .subscribe((res: any) => {
                 if(res) {
                     this._router.navigate([OPA_REDIRECT_URL], { queryParams: { disclosureId: res.disclosureId } });

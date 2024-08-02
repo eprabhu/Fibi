@@ -19,13 +19,14 @@ import {
     NO_DATA_FOUND_MESSAGE,
     REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
-    CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE
+    CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE,
+    EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
-import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, DisclosureProjectData, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
@@ -66,9 +67,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureType: string;
     coiList = [];
     prevURL = '';
-    userDetails: any;
     userId: any;
-    ispersondetailsmodal = false;
     disclosureId: number;
     disclosureNumber: number;
     disclosureStatusCode: string;
@@ -109,6 +108,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
+    EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE;
     // CoiConflictStatusType = CoiConflictStatusType;
     // CoiReviewStatusType = CoiReviewStatusType;
     commentsRight: any = {};
@@ -312,7 +312,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'moduleSubItemCode': 0,
             'moduleSubItemKey': 0,
             'moduleItemKey': this.coiData.coiDisclosure.disclosureId,
-            'actionUserId': this.commonService.getCurrentUserDetail('personId'),
+            'actionUserId': this.commonService.getCurrentUserDetail('personID'),
             'actionPersonName': this.commonService.getCurrentUserDetail('fullName'),
             'questionnaireMode': 'ACTIVE_ANSWERED_UNANSWERED'
         };
@@ -514,13 +514,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isShowCountModal = event;
     }
 
-    openDetailModal(coiData: any): void {
-        this.userDetails = coiData.coiDisclosure.person;
-        this.ispersondetailsmodal = true;
-    }
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
-
+    openPersonDetailsModal(coiData: any): void {
+        this.commonService.openPersonDetailsModal(coiData.coiDisclosure.person.personId)
     }
 
     goToHomeUrl() {
@@ -547,7 +542,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
             this.coiData.coiDisclosure.reviewStatusCode = event.reviewStatusCode;
-            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
+            this.coiData.coiDisclosure.updateTimestamp = event.updateTimestamp;
             this.getCoiReview();
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
@@ -558,15 +553,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
             if (data) {
                 this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(data);
+                this.reviewList = data;
             }
-            this.reviewList = data;
-            this.coiService.isReviewActionCompleted = data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
         }))
     }
 
     public updateCoiReview(modalType: ModalType) {
         const reviewerInfo = this.coiData.coiReviewerList.find(ele =>
-            ele.assigneePersonId === this.commonService.currentUserDetails.personId && ele.reviewStatusTypeCode != '2');
+            ele.assigneePersonId === this.commonService.currentUserDetails.personID && ele.reviewStatusTypeCode != '2');
         if (reviewerInfo) {
             this.coiService.$SelectedReviewerDetails.next(reviewerInfo);
             this.coiService.triggerStartOrCompleteCoiReview(modalType);
@@ -623,7 +617,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
      */
     checkForModifyRisk() {
         return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) &&
-        (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
+        (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personID'));
     }
 
     withdrawDisclosure() {
@@ -721,19 +715,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isOpenRiskSlider = false;
     }
 
-    getWarningClass(typeCode) {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return;
-        }
-    }
-
     getManageDisclosureRight(): boolean {
         const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
         const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
@@ -811,4 +792,29 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isCardExpanded = !this.isCardExpanded;
         this.isUserCollapse = !this.isUserCollapse;
     }
+
+    openProjectDetailsModal(): void {
+        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = {
+            title: this.coiData.projectDetail?.title,
+            sponsorName: this.coiData.projectDetail?.sponsor,
+            sponsorCode : this.coiData.projectDetail?.sponsorCode,
+            homeUnitName: this.coiData.projectDetail?.unitName,
+            projectEndDate: this.coiData.projectDetail?.endDate,
+            projectId: this.coiData.projectDetail?.moduleItemId,
+            homeUnitNumber: this.coiData.projectDetail?.unitNumber,
+            reporterRole: this.coiData.projectDetail?.reporterRole,
+            projectStartDate: this.coiData.projectDetail?.startDate,
+            projectStatus: this.coiData.projectDetail?.moduleStatus,
+            projectTypeCode: this.coiData.projectDetail?.moduleCode,
+            piName: this.coiData.projectDetail?.principalInvestigator,
+            primeSponsorName: this.coiData.projectDetail?.primeSponsor,
+            primeSponsorCode: this.coiData.projectDetail?.primeSponsorCode,
+            projectType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.description,
+            projectBadgeColour: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ? '#7d9e33' : '#c9a742',
+            projectNumber: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ?
+                this.coiData?.projectDetail?.moduleItemId : this.coiData?.projectDetail?.moduleItemKey
+        }
+        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
+    }
+    
 }

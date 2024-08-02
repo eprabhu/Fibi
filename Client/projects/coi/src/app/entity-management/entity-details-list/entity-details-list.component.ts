@@ -6,13 +6,13 @@ import { fadeInOutHeight, listAnimation } from '../../common/utilities/animation
 import { Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { getEndPointOptionsForLeadUnit } from '../../../../../fibi/src/app/common/services/end-point.config';
-import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { switchMap } from 'rxjs/operators';
 import { CREATE_DISCLOSURE_ROUTE_URL, HTTP_ERROR_STATUS, POST_CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
 import { openCoiSlider } from '../../common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Component({
   selector: 'app-entity-details-list',

@@ -53,10 +53,9 @@ export class ReviewComponent implements OnInit {
         );
     }
  
-    openModuleSummaryDetails(event = null) {
-        this.selectedProject = event;
+    openModuleSummaryDetails(event: any) {
         if (event) {
-            openModal('projectViewModal');
+            this.commonService.openProjectDetailsModal(event, null);
         }
     }
 

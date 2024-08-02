@@ -1,17 +1,22 @@
-<div [@enterAnimation]>
-    <div class="Details of Disclosureborder shadow-sm">
-        <div class="align-items-center d-flex f-15 fw-bold px-3 side-bar-title">
-            Navigate to
-        </div>
-        <div class="bg-white p-3 scrollable-section">
-            <div (click)="jumpToSection('travel-details');" tabindex="0" (keyup.enter)="jumpToSection('travel-details');" (keyup.space)="jumpToSection('travel-details');"
-                class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">
-                Travel Details
-            </div>
-            <div (click)="jumpToSection('certify');" tabindex="0" (keyup.enter)="jumpToSection('certify');" (keyup.space)="jumpToSection('certify');"
-                class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">
-                Certification
-            </div>
-        </div>
+<div class="card right-navigation-card mb-3 slideLeft" id="travel-disclosure-toolkit">
+    <div class="card-header h-auto d-flex align-items-center border-bottom">
+        Navigate to
+    </div>
+    <div class="card-body p-0 rounded-0">
+        <ul class="nav flex-column">
+            <li class="nav-item" [ngClass]="{'active': activeNav == 'travel-details'}">
+                <a class="nav-link" role="link" tabindex="0"
+                    title="Click here to go to travel details section" aria-label="Click here to go to travel details section"
+                    (click)="jumpToSection('travel-details');" (keyup.enter)="jumpToSection('travel-details');" 
+                    (keyup.space)="jumpToSection('travel-details');">Travel Details</a>
+            </li>
+
+            <li class="nav-item" [ngClass]="{'active': activeNav == 'certify'}" >
+                <a class="nav-link" role="link" tabindex="0"
+                    title="Click here to go to certification section" aria-label="Click here to go to certification section"
+                    (click)="jumpToSection('certify');" (keyup.enter)="jumpToSection('certify');"
+                    (keyup.space)="jumpToSection('certify');">Certification</a>
+            </li>
+        </ul>
     </div>
 </div>

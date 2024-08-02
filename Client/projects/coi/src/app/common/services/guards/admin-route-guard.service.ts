@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { CommonService } from '../common.service';
 import { getPathWithoutParams } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { ADMIN_DASHBOARD_RIGHTS } from '../../../app-constants';
+import { ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS } from '../../../app-constants';
 
 @Injectable()
 export class AdminRouteGuardService {
@@ -11,20 +11,14 @@ export class AdminRouteGuardService {
 
     async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
         localStorage.setItem('currentUrl', state.url);
-        const authToken = this._commonService.getCurrentUserDetail('Authorization');
-        if (authToken) {
-            return await this.isPathRightAccessible();
-        } else {
-            this._router.navigate(['/login']);
-            return false;
-        }
+        return await this.isPathRightAccessible();
     }
 
     private async isPathRightAccessible(): Promise<boolean> {
         if (await this.isPathAllowed()) {
             return true;
         } else {
-            this._router.navigate(['/fibi/error/403']);
+            this._router.navigate(['/coi/error-handler/403']);
             return false;
         }
     }
@@ -34,14 +28,8 @@ export class AdminRouteGuardService {
     }
 
     private async hasPathRights(): Promise<boolean> {
-        const isAdmin = await this.checkIfRightsPresent(ADMIN_DASHBOARD_RIGHTS) ||
-            this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
+        const isAdmin = this._commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right)) || this._commonService.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS);
         return isAdmin || this._commonService.isCoiReviewer;
-    }
-
-    async checkIfRightsPresent(adminDashboardRights: Set<string>): Promise<boolean> {
-        const rightsArray = await this._commonService.fetchPermissions();
-        return rightsArray.some((right) => adminDashboardRights.has(right));
     }
 
 }

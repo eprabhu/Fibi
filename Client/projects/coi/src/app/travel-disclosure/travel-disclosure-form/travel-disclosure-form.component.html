@@ -1,335 +1,332 @@
 <div [@fadeInOutHeight]>
     <app-help-text [helpTextList]="helpText" [tooltip]="'Travel Disclosure Form'" [isReadMoreLess]="true"></app-help-text>
 
-    <div class="card mt-3">
-        <div class="row p-4 m-3 shadow-sm bg-white">
-            <!-- Entity Name -->
-            <div class="row d-flex px-0" tabindex="-1">
-                <label class="fw-500 fs-14 col-custom coi-label-help p-0 align-items-start" for="travel-disclosure-entity-name">Entity Name
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travel-disclosure-entity-name'"></app-common-help-text>
-                </label>
-                <div class="col">
-                    <app-elastic [options]="entitySearchOptions"
+    <div class="card mt-2">
+        <div class="card-body p-4">
+            <div class="row">
+                <!-- Entity Name -->
+                <div class="row mx-0 px-0" tabindex="-1">
+                    <label class="coi-text-dark d-block" for="travel-disclosure-entity-name">
+                        <span>Entity Name</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travel-disclosure-entity-name'"></app-common-help-text>
+                    </label>
+                    <div class="col-12">
+                        <app-elastic [options]="entitySearchOptions"
                             [clearField]="clearField" [uniqueId]="'travel-disclosure-entity-name'"
                             [isError]="(mandatoryList?.has('entity'))" class="w-100"
                             (selectedResult)="selectedEntityEvent($event)">
-                    </app-elastic>
-                    <app-common-information [elementId]="'travel-disclosure-entity-name'" [subSectionId]="2401"></app-common-information>
-                    <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-msg d-block position-absolute">
-                        {{mandatoryList?.get('entity')}}
-                    </span>
-                </div>
-            </div>
-            <ng-container *ngIf="isResultFromSearch">
-                <div class="col-custom"></div>
-                <div class="col p-0 me-4 mt-5">
-                    <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true"
-                        (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
-                </div>
-            </ng-container>
-
-            <!-- traveller details -->
-            <div class="row d-flex px-0 mt-20 pt-2">
-                <label class="fw-500 fs-14 col-custom coi-label-help align-items-start" for="travel-disclosure-traveller">Traveller
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travel-disclosure-traveller'"></app-common-help-text>
-                </label>
-                <div class="col-10">
-                    <div class="divCenter">
-                        <span *ngFor="let details of travellerTypeLookup; let i = index" id="travel-disclosure-traveller"
-                            class="mt-2 me-5">
-                            <input class="travelDisclosure-radio-checkbox ms-1 me-3 hand-cursor border-secondary"
-                                type="checkbox" value={{details.description}} id="traveller-checkbox{{i}}"
-                                [(ngModel)]=details.isChecked
-                                (ngModelChange)="getTravellerTypeCode(); setUnSavedChangesTrue();">  
-                            <label class="form-check-label fs-14 fw-normal hand-cursor" for="traveller-checkbox{{i}}">
-                                {{details.description}}
-                            </label>
+                        </app-elastic>
+                        <app-common-information [elementId]="'travel-disclosure-entity-name'" [subSectionId]="2401"></app-common-information>
+                        <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-feedback d-block">
+                            {{mandatoryList?.get('entity')}}
                         </span>
                     </div>
-                    <app-common-information [elementId]="'travel-disclosure-traveller'" [subSectionId]="2401"></app-common-information>
-                    <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-msg d-block position-absolute col">
-                        {{mandatoryList?.get('traveller')}}
-                    </span>
-                </div>   
-            </div>
-
-            <!-- title -->
-            <div class="row d-flex mt-5 px-0 pt-3">
-                <label for="travelDisclosure-title" class="fw-500 fs-14 col-custom coi-label-help align-items-start">Trip Title
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-title'"></app-common-help-text>
-                </label>
-                <div class="col">
-                    <textarea id="travelDisclosure-title" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=200
-                        class="form-control fs-14" autocomplete="off" [(ngModel)]="travelDisclosureRO.travelTitle"
-                        (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.travelTitle = travelDisclosureRO.travelTitle.trim()"
-                        [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
-                    </textarea>
-                    <app-common-information [elementId]="'travelDisclosure-title'" [subSectionId]="2401"></app-common-information>   
-                    <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-msg d-block position-absolute">
-                        {{mandatoryList?.get('title')}}
-                    </span>
+                    <!-- entity card -->
+                    <ng-container *ngIf="isResultFromSearch">
+                        <div class="col-12">
+                            <app-shared-entity-info-card [entityDetails]="service.travelEntityDetails" [viewMore]="true"
+                                (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
+                        </div>
+                    </ng-container>
                 </div>
-            </div>
 
-            <!-- destination -->
-            <div class="row d-flex mt-4 px-0">
-                <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom text-nowrap coi-label-help align-items-start">Destination
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-domestic'"></app-common-help-text>
-                </label>
-                <div class="divCenter ms-1 col">
-                    <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
-                        id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
-                        (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
-                    <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-domestic">
-                        Domestic
+                <!-- traveller details -->
+                <div class="row mt-3 mx-0 px-0">
+                    <label class="coi-text-dark d-block" for="travel-disclosure-traveller">
+                        <span>Traveller</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travel-disclosure-traveller'"></app-common-help-text>
                     </label>
-                    <input class=" ms-4 me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
-                        id="travelDisclosure-international" value="International" [(ngModel)]="destination"
-                        (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue();">
-                    <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-international">
-                        International
+                    <div class="col-12 mt-1">
+                        <div class="d-flex align-items-center">
+                            <span *ngFor="let details of travellerTypeLookup; let i = index" id="travel-disclosure-traveller"
+                                class="me-3">
+                                <input class="travelDisclosure-radio-checkbox ms-1 me-2 hand-cursor border-secondary"
+                                    type="checkbox" value={{details.description}} id="traveller-checkbox{{i}}"
+                                    [(ngModel)]=details.isChecked
+                                    (ngModelChange)="getTravellerTypeCode(); setUnSavedChangesTrue();">
+                                <label class="form-check-label fs-14 fw-normal hand-cursor" for="traveller-checkbox{{i}}">
+                                    {{details.description}}
+                                </label>
+                            </span>
+                        </div>
+                        <app-common-information [elementId]="'travel-disclosure-traveller'" [subSectionId]="2401"></app-common-information>
+                        <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-feedback d-block">
+                            {{mandatoryList?.get('traveller')}}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- title -->
+                <div class="row mt-3 mx-0 px-0">
+                    <label for="travelDisclosure-title" class="coi-text-dark d-block">
+                        <span>Trip Title</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-title'"></app-common-help-text>
                     </label>
+                    <div class="col-12">
+                        <textarea id="travelDisclosure-title" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=200
+                            class="form-control fs-14" autocomplete="off" [(ngModel)]="travelDisclosureRO.travelTitle"
+                            (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.travelTitle = travelDisclosureRO.travelTitle.trim()"
+                            [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
+                        </textarea>
+                        <app-common-information [elementId]="'travelDisclosure-title'" [subSectionId]="2401"></app-common-information>
+                        <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-feedback d-block">
+                            {{mandatoryList?.get('title')}}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- destination -->
+                <div class="row mx-0 px-0">
+                    <label for="travelDisclosure-destination" class="coi-text-dark d-block">
+                        <span>Destination</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-domestic'"></app-common-help-text>
+                    </label>
+                    <div class="d-flex align-items-center col-12 mt-1">
+                        <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
+                            id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
+                            (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
+                        <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-domestic">
+                            Domestic
+                        </label>
+                        <input class=" ms-4 me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
+                            id="travelDisclosure-international" value="International" [(ngModel)]="destination"
+                            (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue();">
+                        <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-international">
+                            International
+                        </label>
+                    </div>
                     <app-common-information [elementId]="'travelDisclosure-domestic'" [subSectionId]="2401"></app-common-information>
+                    <span *ngIf="mandatoryList.has('destination')" class="fs-13 invalid-feedback d-block">
+                        {{mandatoryList.get('destination')}}
+                    </span>
                 </div>
-                <span *ngIf="mandatoryList.has('destination')" class="fs-13 invalid-msg d-block destination-margin">
-                    {{mandatoryList.get('destination')}}
-                </span>
-            </div>
 
-            <!-- country/state/city -->
-            <div class="row mt-4 px-0 d-flex justify-content-between">
-                <!-- City list -->
-                <div class="row col-6">
-                    <label for="travelDisclosure-cityList" class="fw-500 fs-14 col-custom coi-label-help align-items-start" align-items-start>City
-                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-cityList'"></app-common-help-text>
-                    </label>
-                    <div class="col">
-                        <input type="text" id="travelDisclosure-cityList" autocomplete="off"
-                            [(ngModel)]="travelDisclosureRO.destinationCity" class="form-control"
-                            (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.destinationCity = travelDisclosureRO.destinationCity.trim()"
-                            [ngClass]="(mandatoryList?.get('city')) ? 'invalid-border':''">
+                <!-- country/state/city -->
+                <div class="row mt-3 mx-0 px-0">
+                    <!-- City list -->
+                    <div class="col-6">
+                        <label for="travelDisclosure-cityList" class="coi-text-dark d-block">
+                            <span>City</span>
+                            <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-cityList'"></app-common-help-text>
+                        </label>
+                        <div class="col-12">
+                            <input type="text" id="travelDisclosure-cityList" autocomplete="off"
+                                [(ngModel)]="travelDisclosureRO.destinationCity" class="form-control"
+                                (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.destinationCity = travelDisclosureRO.destinationCity.trim()"
+                                [ngClass]="(mandatoryList?.get('city')) ? 'invalid-border':''">
                             <app-common-information [elementId]="'travelDisclosure-cityList'" [subSectionId]="2401"></app-common-information>
-                        <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-msg d-block position-absolute">
-                            {{mandatoryList?.get('city')}}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Country and State list -->
-                <div class="row col-6">
-                    <ng-container *ngIf="destination === 'International'">
-                        <!-- Country list -->
-                        <label class="fw-500 fs-14 col-custom coi-label-help align-items-start" for="travelDisclosure-countryList col-custom">Country
-                            <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-countryList'"></app-common-help-text>
-                        </label>
-                        <div class="col">
-                            <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
-                                [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
-                                (change)="setUnSavedChangesTrue();" autocomplete="off"
-                                [isError]="(mandatoryList?.has('country'))? true: false">
-                            </app-endpoint-search>
-                            <app-common-information [elementId]="'travelDisclosure-countryList'" [subSectionId]="2401"></app-common-information>
-                            <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-msg d-block position-absolute">
-                                {{mandatoryList?.get('country')}}
+                            <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-feedback d-block">
+                                {{mandatoryList?.get('city')}}
                             </span>
                         </div>
-                    </ng-container>
+                    </div>
 
-                    <ng-container *ngIf="destination !== 'International' && destination !== null">
-                        <!-- State list -->
-                        <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom coi-label-help align-items-start">State
-                            <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisc-destinationState'"></app-common-help-text>
-                        </label>
-                        <div class="col">
-                            <input type="text" id="travelDisc-destinationState" autocomplete="off"
-                                [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
-                                (ngModelChange)="setUnSavedChangesTrue();"
-                                [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
+                    <!-- Country and State list -->
+                    <div class="col-6">
+                        <ng-container *ngIf="destination === 'International'">
+                            <!-- Country list -->
+                            <label class="coi-text-dark d-block" for="travelDisclosure-countryList">
+                                <span>Country</span>
+                                <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-countryList'"></app-common-help-text>
+                            </label>
+                            <div class="col-12">
+                                <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
+                                    [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
+                                    (change)="setUnSavedChangesTrue();" autocomplete="off"
+                                    [isError]="(mandatoryList?.has('country'))? true: false">
+                                </app-endpoint-search>
+                                <app-common-information [elementId]="'travelDisclosure-countryList'" [subSectionId]="2401"></app-common-information>
+                                <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-feedback d-block">
+                                    {{mandatoryList?.get('country')}}
+                                </span>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="destination !== 'International' && destination !== null">
+                            <!-- State list -->
+                            <label for="travelDisclosure-stateList" class="coi-text-dark d-block">
+                                <span>State</span>
+                                <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisc-destinationState'"></app-common-help-text>
+                            </label>
+                            <div class="col-12">
+                                <input type="text" id="travelDisc-destinationState" autocomplete="off"
+                                    [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
+                                    (ngModelChange)="setUnSavedChangesTrue();"
+                                    [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
                                 <app-common-information [elementId]="'travelDisc-destinationState'" [subSectionId]="2401"></app-common-information>
-                            <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-msg d-block position-absolute">
-                                {{mandatoryList?.get('state')}}
+                                <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-feedback d-block">
+                                    {{mandatoryList?.get('state')}}
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <!-- Date -->
+                <div class="row mt-3 mx-0 px-0">
+                    <!-- start date -->
+                    <div class="col-6">
+                        <label for="travelDisclosure-startDate" class="coi-text-dark d-block">
+                            <span>Start Date</span>
+                            <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-startDate'"></app-common-help-text>
+                        </label>
+                        <div class="col-12">
+                            <span class="dateField w-100">
+                                <input matInput [matDatepicker]="startDate" id="travelDisclosure-startDate"
+                                    placeholder={{datePlaceHolder}} (click)="startDate.open()" autocomplete="off"
+                                    class="d-inline-block form-control w-100" [(ngModel)]="travelDates.startDate"
+                                    (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
+                                    (keypress)="commonService._keyPress($event, 'date')"
+                                    [ngClass]="(dateValidationList?.get('startDate')) ? 'invalid-border':''" />
+                                    <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
+                                <mat-datepicker #startDate></mat-datepicker>
+                            </span>
+                            <app-common-information [elementId]="'travelDisclosure-startDate'" [subSectionId]="2401"></app-common-information>
+                            <span *ngIf="(dateValidationList.get('startDate'))" class="fs-13 invalid-feedback d-block">
+                                {{dateValidationList.get('startDate')}}
                             </span>
                         </div>
-                    </ng-container>
-                </div>
-            </div>
-            <!-- Date -->
-            <div class="row px-0 mt-5 pt-2 d-flex justify-content-between pb-2">
-                <!-- start date -->
-                <div class="row col-6">
-                    <label for="travelDisclosure-startDate" class="fw-500 fs-14 col-custom coi-label-help ps-0 align-items-start">
-                        Start Date
-                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-startDate'"></app-common-help-text>
-                    </label>
-                    <div class="col">
-                        <span class="dateField w-100">
-                            <input matInput [matDatepicker]="startDate" id="travelDisclosure-startDate"
-                                placeholder={{datePlaceHolder}} (click)="startDate.open()" autocomplete="off"
-                                class="d-inline-block form-control w-100" [(ngModel)]="travelDisclosureRO.travelStartDate"
-                                (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
-                                (keypress)="commonService._keyPress($event, 'date')"
-                                [ngClass]="(dateValidationList?.get('startDate')) ? 'invalid-border':''" />  
-                                <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
-                            <mat-datepicker #startDate></mat-datepicker>
-                        </span>
-                        <app-common-information [elementId]="'travelDisclosure-startDate'" [subSectionId]="2401"></app-common-information>
-                        <span *ngIf="(dateValidationList.get('startDate'))" class="fs-13 invalid-msg d-block position-absolute">
-                            {{dateValidationList.get('startDate')}}
-                        </span>
+                    </div>
+
+                    <!-- end date -->
+                    <div class="col-6">
+                        <label for="travelDisclosure-endDate" class="coi-text-dark d-block">
+                            <span>End Date</span>
+                            <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-endDate'"></app-common-help-text>
+                        </label>
+                        <div class="col-12">
+                            <span class="dateField">
+                                <input matInput [matDatepicker]="endDate" id="travelDisclosure-endDate"
+                                    placeholder="{{datePlaceHolder}}" (click)="endDate.open()" autocomplete="off"
+                                    class="d-inline-block form-control w-100" [(ngModel)]="travelDates.endDate"
+                                    (keypress)="commonService._keyPress($event, 'date')"
+                                    (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
+                                    [ngClass]="(dateValidationList?.get('endDate')) ? 'invalid-border':''" />
+                                <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
+                                <mat-datepicker #endDate></mat-datepicker>
+                            </span>
+                            <app-common-information [elementId]="'travelDisclosure-endDate'" [subSectionId]="2401"></app-common-information>
+                            <span *ngIf="(dateValidationList.get('endDate'))" class="fs-13 invalid-feedback d-block">
+                                {{dateValidationList.get('endDate')}}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- end date -->
-                <div class="row col-6">
-                    <label for="travelDisclosure-endDate" class="fw-500 fs-14 col-custom coi-label-help align-items-start">
-                        End Date
-                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-endDate'"></app-common-help-text>
+                <!-- Trip purpose -->
+                <div class="row mt-3 mx-0 px-0">
+                    <label for="travelDisclosure-tripPurpose" class="coi-text-dark d-block">
+                        <span>Purpose of the Trip</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-tripPurpose'"></app-common-help-text>
                     </label>
-                    <div class="col">
-                        <span class="dateField">
-                            <input matInput [matDatepicker]="endDate" id="travelDisclosure-endDate"
-                                placeholder="{{datePlaceHolder}}" (click)="endDate.open()" autocomplete="off"
-                                class="d-inline-block form-control w-100" [(ngModel)]="travelDisclosureRO.travelEndDate"
-                                (keypress)="commonService._keyPress($event, 'date')"
-                                (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
-                                [ngClass]="(dateValidationList?.get('endDate')) ? 'invalid-border':''" />  
-                            <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
-                            <mat-datepicker #endDate></mat-datepicker>
-                        </span>
-                        <app-common-information [elementId]="'travelDisclosure-endDate'" [subSectionId]="2401"></app-common-information>
-                        <span *ngIf="(dateValidationList.get('endDate'))" class="fs-13 invalid-msg d-block position-absolute">
-                            {{dateValidationList.get('endDate')}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trip purpose -->
-            <div class="row mt-5 px-0">
-                <label for="travelDisclosure-tripPurpose" class="fw-500 fs-14 col-12 mb-1 coi-label-help">
-                    Purpose of the Trip
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-tripPurpose'"></app-common-help-text>
-                </label>
-                <div class="col-12">
-                    <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
-                        class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
-                        (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.purposeOfTheTrip = travelDisclosureRO.purposeOfTheTrip.trim()"
-                        [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
+                    <div class="col-12">
+                        <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
+                            class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
+                            (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.purposeOfTheTrip = travelDisclosureRO.purposeOfTheTrip.trim()"
+                            [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
                         </textarea>
                         <app-common-information [elementId]="'travelDisclosure-tripPurpose'" [subSectionId]="2401"></app-common-information>
-                    <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-msg d-block position-absolute">
-                        {{mandatoryList?.get('purpose')}}
-                    </span>
+                        <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-feedback d-block">
+                            {{mandatoryList?.get('purpose')}}
+                        </span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- relationship with research -->
-            <div class="row px-0 mt-5">
-                <label for="travelDisclosure-relationship" class="fw-500 fs-14 col-12 mb-1 coi-label-help">
-                    Relationship to Your Research
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-relationship'"></app-common-help-text>
-                </label>
-                <div class="col-12">
-                    <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
-                        class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
-                        (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.relationshipToYourResearch = travelDisclosureRO.relationshipToYourResearch.trim()"
-                        [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
-                    </textarea>
-                    <app-common-information [elementId]="'travelDisclosure-relationship'" [subSectionId]="2401"></app-common-information>
-                    <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-msg d-block position-absolute">
-                        {{mandatoryList?.get('relationship')}}
-                    </span>
+                <!-- relationship with research -->
+                <div class="row mx-0 px-0">
+                    <label for="travelDisclosure-relationship" class="coi-text-dark d-block">
+                        <span>Relationship to Your Research</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-relationship'"></app-common-help-text>
+                    </label>
+                    <div class="col-12">
+                        <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
+                            class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
+                            (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.relationshipToYourResearch = travelDisclosureRO.relationshipToYourResearch.trim()"
+                            [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
+                        </textarea>
+                        <app-common-information [elementId]="'travelDisclosure-relationship'" [subSectionId]="2401"></app-common-information>
+                        <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-feedback d-block">
+                            {{mandatoryList?.get('relationship')}}
+                        </span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Estimated amount -->
-            <div class="row px-0 mt-5 pb-4 justify-content-between d-flex align-items-center">
-                <label for="travelDisclosure-estimation" class="fw-500 fs-14 col-12 mb-1 coi-label-help">
-                    Actual U.S. dollar amount reimbursed and/or paid on your behalf
-                    <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-estimation'"></app-common-help-text>
-                </label>
-                <div class="col-12">
-                    <input appCurrencyFormat class="form-control" type="text"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0(?=[^.])/g, '0');"
-                        [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
-                        id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChangesTrue();"
-                        [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
+                <!-- Estimated amount -->
+                <div class="row mx-0 px-0">
+                    <label for="travelDisclosure-estimation" class="coi-text-dark d-block">
+                        <span>Actual U.S. dollar amount reimbursed and/or paid on your behalf</span>
+                        <app-common-help-text [subSectionId]="2401" [elementId]="'travelDisclosure-estimation'"></app-common-help-text>
+                    </label>
+                    <div class="col-12">
+                        <input appCurrencyFormat class="form-control" type="text"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0(?=[^.])/g, '0');"
+                            [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
+                            id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChangesTrue();"
+                            [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
                         <app-common-information [elementId]="'travelDisclosure-estimation'" [subSectionId]="2401"></app-common-information>
-                    <span *ngIf="mandatoryList?.has('amount')" class="fs-13 invalid-msg d-block position-absolute">
-                        {{mandatoryList?.get('amount')}}
-                    </span>
+                        <span *ngIf="mandatoryList?.has('amount')" class="fs-13 invalid-feedback d-block">
+                            {{mandatoryList?.get('amount')}}
+                        </span>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
 <!-- Entity Details Modal -->
-<button class="d-none" data-bs-toggle="modal" data-bs-target="#travel-entity-details" id="persondetails">
-</button>
+<button class="d-none" tabindex="-1" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#travel-entity-details" id="persondetails"></button>
 
 <div class="modal fade mySkinDialog modal-lg" id="travel-entity-details" tabindex="-1" aria-labelledby="exampleModalLabel"
   data-bs-backdrop="static" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header headerStyle">
-        <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close" (click)="clearEntityDetails()"></button>
+        <h5 class="modal-title userDetail text-slice" id="travel-create-entityDetails" [title]="addEntityConfirmation?.entityName">{{addEntityConfirmation?.entityName}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Click here to close" title="Click here to close" (click)="clearEntityDetails()"></button>
       </div>
       <div class="modal-body">
         <div class="mx-1 row pt-1 d-flex mb-3">
           <div class="text-secondary fs-14 col-4 mb-15">
-            <label class="grey-text me-2"> Country</label>
-            <span class="d-flex fs-14 fw-normal"> {{addEntityConfirmation?.country?.countryName}}</span>
+            <label for="travel-form-entity-country" class="coi-text-dark d-block"> Country</label>
+            <span id="travel-form-entity-country" class="coi-text-light"> {{addEntityConfirmation?.country?.countryName}}</span>
           </div>
           <div class="text-secondary fs-14 col-4 mb-15">
-            <label class="grey-text me-2">Entity Type</label>
-            <span class="d-flex fs-14 fw-normal"> {{addEntityConfirmation?.entityType?.description}}</span>
+            <label for="travel-form-entity-type" class="coi-text-dark d-block">Entity Type</label>
+            <span id="travel-form-entity-type" class="coi-text-light"> {{addEntityConfirmation?.entityType?.description}}</span>
           </div>
           <div class="text-secondary fs-14 col-4">
-            <label class="grey-text me-2">Entity Status</label>
-            <span class="fs-14 fw-400 d-flex entity-risk-badge px-3"
-              [ngClass]="addEntityConfirmation?.isActive ? 'active' : 'inactive'">{{addEntityConfirmation?.isActive
-              ?'Active':'Inactive'}}</span>
+            <label for="travel-form-entity-status" class="coi-text-dark d-block">Entity Status</label>
+            <span id="travel-form-entity-status" class="fs-14 fw-400 d-flex entity-risk-badge px-3"
+                [ngClass]="addEntityConfirmation?.isActive ? 'active' : 'inactive'">{{addEntityConfirmation?.isActive?'Active':'Inactive'}}</span>
           </div>
           <div class="text-secondary fs-14 col-8 mt-2">
-            <label class="grey-text me-2 d-flex"> Address</label>
-              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
-                <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
-                  <span> {{(addEntityConfirmation?.address |
-                    slice:0:55)}}
-                  <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
-                  </span></span>
-                </span>
-              </app-no-data-label>
-            <ng-template #showFullInfo>
-              <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
-              <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
-                class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
-              </span>
-            </ng-template>
+            <label for="travel-form-entity-address" class="coi-text-dark d-block">Address</label>
+            <span id="travel-form-entity-address" class="coi-text-light">
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="addEntityConfirmation?.address">
+                    <span class="coi-text-light text-slice" [title]="addEntityConfirmation?.address">{{addEntityConfirmation?.address}}</span>
+                </app-no-data-label>
+            </span>
           </div>
-          <div class="col text-secondary fs-14 align-items-center mt-2">
-            <label class="fw-bold me-2">Risk </label>
-            <span class="fw-normal">
-              <div class="text-color fs-14 d-flex">
-                <span>
-                  <mat-icon
-                    class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                </span>
-                <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
-              </div>
+          <div class="text-secondary fs-14 col mt-2">
+            <label for="travel-form-entity-risk" class="coi-text-lighter d-block">Risk</label>
+            <span id="travel-form-entity-risk">
+                <app-no-data-label [valueToShow]="addEntityConfirmation?.entityRiskCategory?.description">
+                    <span class="d-flex">
+                        <mat-icon class="{{commonService.getRiskColor(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0"
+                            aria-hidden="true">warning</mat-icon>
+                        <span class="coi-text-dark">{{addEntityConfirmation?.entityRiskCategory?.description}}</span>
+                    </span>
+                </app-no-data-label>
             </span>
           </div>
         </div>
       </div>
       <div class="modal-footer ct-footer-padding">
-        <button (click)="clearEntityDetails()" class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn"
+        <button (click)="clearEntityDetails()" class="btn btn-outline-secondary fs-14" id="claim-sumbit-no-btn"
           data-bs-dismiss="modal" type="button">Clear
         </button>
         <button (click)="confirmEntityDetails()" data-bs-dismiss="modal"
-          class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button">Confirm</button>
+          class="btn btn-primary fs-14" type="button">Confirm</button>
       </div>
     </div>
   </div>

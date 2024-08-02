@@ -449,19 +449,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         return REQ_BODY;
     }
 
-    getWarningClass(typeCode): string {
-        switch (typeCode) {
-            case '1':
-                return 'invalid';
-            case '2':
-                return 'medium-risk';
-            case '3':
-                return 'low-risk';
-            default:
-                return '';
-        }
-    }
-
     getDisclosureTitleName(fcoiTypeCode: any): string {
 		switch (fcoiTypeCode) {
 			case '1':
@@ -606,7 +593,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     openProjectDetails() {
         if (this.selectedProjectDetails) {
-            openModal('projectDetailsViewModal');
+           this.commonService.openProjectDetailsModal(this.selectedProjectDetails, null)
         }
     }
 

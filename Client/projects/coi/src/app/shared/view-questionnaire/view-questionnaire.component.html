@@ -16,7 +16,7 @@
 	<div class="qst-list-padding">
 		<ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index; let isLast = last'>
 			<div class="card questionnaire-card p-4" [class.mb-4]="!isLast" tabindex="-1" aria-label="questionnaire" tabindex="-1" [attr.aria-label]="question.GROUP_LABEL"
-				[ngClass]="{'card-active-line': highlight == question.QUESTION_ID}"
+				[ngClass]="{'card-active-line': highlight == question.QUESTION_ID , 'card-active-line-danger': isSaveClicked && uniqueIdFromUnAnsweredQuestions.includes(question.QUESTION_ID)}"
 				(click)="highlight = question.QUESTION_ID" *ngIf="question.SHOW_QUESTION == true">
 				<ul [ngSwitch]="true" class="qst-list m-0 p-0">
 					<li *ngSwitchCase="question.ANSWER_TYPE === 'Table'" id="ques_{{question.QUESTION_ID}}">
@@ -461,23 +461,23 @@
 		</div>
 		<!-- dock -->
 		<div class="dock-box border mt-3 p-3"
-			*ngIf="uniqueIdFromUnAnsweredQuestions.length !== 0 && isShowDock && !isViewMode && isShowQuestionnaireDock">
+			*ngIf="uniqueIdFromUnAnsweredQuestions.length !== 0 && isShowDock && !isViewMode && isShowQuestionnaireDock"
+			>
 			<span *ngIf="uniqueIdFromUnAnsweredQuestions.length > 0">
-				<i class="fa fa-question bg-primary dock-question-box" aria-hidden="true" title=""></i>
+				<i class="fa fa-question bg-primary dock-question-box" aria-hidden="true" title="" #dockBoxIcon></i>
 				You have <b>{{uniqueIdFromUnAnsweredQuestions.length}}</b> unanswered question(s).
-				<i aria-hidden="true" class="fa fa-times float-right m-1" (click)="isShowDock = !isShowDock"></i>
+				<i aria-hidden="true" class="fa fa-times m-1 hand-cursor" (click)="isShowDock = !isShowDock"></i>
 			</span>
 			<div class="mt-0 text-center pt-3">
 				<a *ngIf="uniqueIdFromUnAnsweredQuestions.length > 0" (click)="moveToNextUnansweredQuestion('LEFT')"
-					class="page-link btn btn-tertiary arrow-btn d-inline-block mr-2 hover-arrow-color"
-					aria-label="Previous" title="Go to Previous Unanswered question">
+					class="page-link btn btn-tertiary arrow-btn d-inline-block mr-2 hover-arrow-color" aria-label="Previous"
+					title="Go to Previous Unanswered question">
 					<span aria-hidden="true"><i class="fa fa-angle-double-left pt-10" aria-hidden="true"></i></span>
 					<span class="sr-only"></span>
 				</a>
 				<a *ngIf="uniqueIdFromUnAnsweredQuestions.length > 0"
 					class="page-link btn btn-tertiary arrow-btn d-inline-block mr-4 hover-arrow-color"
-					(click)="moveToNextUnansweredQuestion('RIGHT')" aria-label="Next"
-					title="Go to Next Unanswered question">
+					(click)="moveToNextUnansweredQuestion('RIGHT')" aria-label="Next" title="Go to Next Unanswered question">
 					<span aria-hidden="true"><i class="fa fa-angle-double-right pt-10" aria-hidden="true"></i></span>
 					<span class="sr-only"></span>
 				</a>

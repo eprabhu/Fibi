@@ -77,7 +77,7 @@
     <div class="d-flex justify-content-center card-body text-center mx-3 mt-3 py-0">
         <div class="text-secondary text-center d-flex ">
             <div class="me-2"><input (change)="toggleCertification()" [checked]="_coiService.isCertified" aria-label="Please check here to certify the disclosure"
-                    [disabled]="checkForDisable()" class="certify-box mt-1" type="checkbox"></div>
+                    [disabled]="checkForDisable()" class="certify-box mt-1 cursor-pointer" type="checkbox"></div>
             <div class="fs-14">
                 <p *ngIf="coiDisclosure?.certificationText" class="mb-0">{{coiDisclosure.certificationText}}</p>
                 <p *ngIf="!coiDisclosure?.certificationText" class="mb-0">{{certificationText}}</p>

@@ -53,18 +53,6 @@ small {
     }
 }
 
-.invalid {
-    color: #ff0000;
-}
-
-.medium-risk {
-    color: #ff8c00;
-}
-
-.low-risk {
-    color: rgb(26, 172, 62);
-}
-
 .relation-header {
     position: absolute;
     top: -11px;
@@ -76,14 +64,16 @@ small {
     min-height: unset !important;
 }
 
-.sticky-top {
-    z-index: 10 !important;
-}
-
 .sticky-top-50 {
+    position: sticky;
     top: 50px;
     z-index: 11;
+}
+
+.sticky-top-slider {
     position: sticky;
+    top: -16px;
+    z-index: 10;
 }
 
 @media (min-width: 992px) {

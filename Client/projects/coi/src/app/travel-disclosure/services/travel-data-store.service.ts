@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CoiTravelDisclosure, EntityDetails, TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, EntityDetails, TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure.interface';
 import { Subject } from 'rxjs';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { getTotalNoOfDays, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { CommonService } from '../../common/services/common.service';
+import { getTotalNoOfDays, parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Injectable()
 export class TravelDataStoreService {
@@ -12,6 +12,10 @@ export class TravelDataStoreService {
     travelCreateModalDetails: TravelCreateModalDetails;
 
     constructor(private _commonService: CommonService) { }
+
+    setCreateModalDetails(travelCreateModalDetails: TravelCreateModalDetails): void {
+        sessionStorage.setItem('travelCreateModalDetails', JSON.stringify(travelCreateModalDetails));
+    }
 
     getCreateModalDetails(): TravelCreateModalDetails {
         this.travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
@@ -91,7 +95,9 @@ export class TravelDataStoreService {
     }
 
     setStoreData(data: TravelDisclosure): void {
+        const KEYS = Object.keys(data);
         this.storeData = this.structuredClone(data);
+        this.dataEvent.next(KEYS);
     }
 
     private structuredClone(obj: TravelDisclosure): any {
@@ -101,7 +107,7 @@ export class TravelDataStoreService {
 
     getEditModeForDisclosure(): boolean {
         if (this.storeData.travelDisclosureId) {
-            return (['1', '4', '5'].includes(this.storeData.reviewStatusCode) && this.storeData.personId === this._commonService.getCurrentUserDetail('personId'));
+            return (['1', '4', '5'].includes(this.storeData.reviewStatusCode) && this.storeData.personId === this._commonService.getCurrentUserDetail('personID'));
         } else {
             return true;
         }

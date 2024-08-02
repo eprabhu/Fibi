@@ -90,3 +90,49 @@ export interface coiReviewComment {
     subSectionTitle?:any;
     subSectionId?:any;
 }
+
+export class DisclosureProjectData {
+    title: string = '';
+    piName: string = '';
+    projectId: string = '';
+    projectType: string = '';
+    sponsorName: string = '';
+    reporterRole: string = '';
+    homeUnitName: string = '';
+    projectStatus: string = '';
+    projectNumber: string = '';
+    homeUnitNumber: string = '';
+    projectTypeCode: string = '';
+    primeSponsorName: string = '';
+    projectBadgeColour: string = '';
+    projectEndDate: number | null = null;
+    projectStartDate: number | null = null;
+    sponsorCode: any;
+    entityCount?: any;
+    leadUnitName?: any;
+    disclosureId?: any;
+    completeCount?: any;
+    keyPersonRole?: any;
+    moduleCode?: number;
+    keyPersonId?: string;
+    leadUnitNumber?: any;
+    proposalStatus?: any;
+    inCompletCount?: any;
+    primeSponsorCode: any;
+    disclsoureNeeded?: any;
+    sfiCompleted?: boolean;
+    keyPersonName?: string;
+    conflictStatus?: string;
+    disclosureSubmitted?: any;
+    conflictStatusCode?: string;
+    relationShipExists?: boolean;
+    questionnaireCompleted?: any;
+    disclosureReviewStatus?: any;
+    disclosureStatusCount?: any[] = [];
+}
+
+export class DisclosureProjectModalData {
+    projectDetails: DisclosureProjectData | null = null;
+    coiDisclosureId: number | null = null;
+    needReporterRole: boolean = true;
+}

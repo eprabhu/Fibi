@@ -37,7 +37,6 @@ export class ResolveServiceService {
             forkJoin(this.getHttpRequests(route)).subscribe((res: any[]) => {
                 if (res.length > 1) {
                     this.updateSectionConfig(res[1]);
-                    this.hideManualLoader();
                 }
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
@@ -60,7 +59,7 @@ export class ResolveServiceService {
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
         if (['1', '5', '6'].includes(reviewStatusCode) && !currentPath
-            .includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId) {
+            .includes('create-disclosure') && personId == this._commonService.currentUserDetails.personID) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
         } else if (!['1', '5', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
@@ -99,7 +98,7 @@ export class ResolveServiceService {
 
     getLoggedInReviewerInfo(coiReviewerList): any {
         const getReviewerDetail = coiReviewerList.find(item => item.assigneePersonId ===
-            this._commonService.currentUserDetails.personId && item.reviewStatusTypeCode != '3');
+            this._commonService.currentUserDetails.personID && item.reviewStatusTypeCode != '3');
         return getReviewerDetail;
     }
 
@@ -123,11 +122,6 @@ export class ResolveServiceService {
 
     private loadDisclosure(disclosureId: string) {
         return this._opaService.loadOPA(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
-    }
-
-    private hideManualLoader() {
-        this._commonService.isShowLoader.next(false);
-        this._commonService.isManualLoaderOn = false;
     }
 
     private redirectOnError(error) {

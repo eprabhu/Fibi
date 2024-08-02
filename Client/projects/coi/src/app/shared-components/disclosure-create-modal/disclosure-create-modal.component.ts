@@ -18,8 +18,8 @@ import {
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
 import { RevisionObject, Disclosure } from '../shared-interface';
-import { checkForVowelInFirstLetter } from 'projects/coi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { checkForVowelInFirstLetter } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -69,6 +69,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     To revert to the original unit, click on the 'Reset' icon.`
     travelDescHelpText = 'Please provide the purpose of the trip.';
     projectTypeHelpText = 'Please select a project type to proceed with disclosure creation.';
+    projectTitle: string = '';
 
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
@@ -78,24 +79,32 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.setSearchOptions();
         if (this.triggeredFrom === 'FCOI_DISCLOSURE') {
             this.checkForFCOIActive();
-            document.getElementById('open-create-or-revise-modal').click();
+            this.openDisclosureCreateModal();
+        } else if (this.triggeredFrom == 'TRAVEL_DISCLOSURE') {
+            this.openDisclosureCreateModal();
         } else {
             this.getCoiProjectTypes();
         }
     }
 
+    private openDisclosureCreateModal(): void {
+        document.getElementById('open-create-or-revise-modal')?.click();
+    }
+
     clearModal(): void {
-        this.mandatoryList.clear();
-        this.clearProjectDisclosure();
-        this.reviseObject = new RevisionObject();
-        this.emitCreateOrRevise.emit({closeModal: false});
-        this.clearProjectField = new String('true');
+        setTimeout(() => {
+            this.mandatoryList.clear();
+            this.clearProjectDisclosure();
+            this.reviseObject = new RevisionObject();
+            this.emitCreateOrRevise.emit({ closeModal: false });
+            this.clearProjectField = new String('true');
+        }, 200);
     }
 
     resetHomeUnit(): void {
         this.isHideEndpointSearch = true;
-        this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
-        this.unitSearchOptions.defaultValue = this.commonService.currentUserDetails.homeUnit + ' - ' + this.commonService.currentUserDetails.homeUnitName;
+        this.reviseObject.homeUnit = this.commonService.currentUserDetails.unitNumber;
+        this.unitSearchOptions.defaultValue = this.commonService.currentUserDetails.unitNumber + ' - ' + this.commonService.currentUserDetails.unitName;
         this.mandatoryList.delete('homeUnit');
     }
 
@@ -103,6 +112,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (event) {
             this.reviseObject.homeUnit = event.unitNumber;
             this.homeUnitName = event.unitName;
+            this.mandatoryList.delete('homeUnit');
         } else {
             this.reviseObject.homeUnit = null;
             this.homeUnitName = null;
@@ -120,14 +130,15 @@ export class DisclosureCreateModalComponent implements OnInit {
             const selectedModuleCode = this.selectedProjectType === 'Award' ? '1' : '3';
             // const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.awardId : event.moduleItemId : null;
             const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.moduleItemId : event.moduleItemId : null;
+            const projectTitle = event ? `${event.moduleItemKey} ${event.title}` : '';
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
                     if (data.pendingProject != null) {
                         this.isShowExistingDisclosure = true;
-                        this.setExistingDisclosureDetails('Project', data.pendingProject);
+                        this.setExistingDisclosureDetails('Project', data.pendingProject, projectTitle);
                     } else if (data.fcoiProject != null) {
                         this.isShowExistingDisclosure = true;
-                        this.setExistingDisclosureDetails('FCOI', data.fcoiProject);
+                        this.setExistingDisclosureDetails('FCOI', data.fcoiProject, projectTitle);
                     } else {
                         this.assignSelectedProject(event);
                     }
@@ -139,7 +150,6 @@ export class DisclosureCreateModalComponent implements OnInit {
             });
         } else {
             this.clearProjectDisclosure();
-
         }
     }
 
@@ -196,7 +206,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             {
                 homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
                 description: this.reviseObject.revisionComment,
-                personId: this.commonService.getCurrentUserDetail('personId'),
+                personId: this.commonService.getCurrentUserDetail('personID'),
                 homeUnitName: this.homeUnitName
             }
         ));
@@ -204,9 +214,22 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     navigateToTravelDisclosure(): void {
         if (this.validateTravelDisclosure()) {
-            this.getCreateTravelRequestObject();
             hideModal('reviseOrCreateDisclosureModal');
-            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],{queryParams: {mode:'create'}});
+            if (this._router.url.includes('create-travel-disclosure')) {
+                this.commonService.$globalEventNotifier.next(
+                    {
+                        uniqueId: 'CREATE_NEW_TRAVEL_DISCLOSURE',
+                        content: {
+                            homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
+                            description: this.reviseObject.revisionComment,
+                            personId: this.commonService.getCurrentUserDetail('personID'),
+                            homeUnitName: this.homeUnitName
+                        }
+                    });
+            } else {
+                this.getCreateTravelRequestObject();
+                this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL], { queryParams: { disclosureId: null }, queryParamsHandling: 'merge'});
+            }
             this.clearModal();
         }
     }
@@ -219,7 +242,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     revisionComment: this.reviseObject.revisionComment,
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this.commonService.getCurrentUserDetail('personId'),
+                    personId: this.commonService.getCurrentUserDetail('personID'),
                 },
                 [this.selectedProjectType == 'Award' ? 'coiProjectAward' : 'coiProjectProposal']: {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(), ...this.getCreateDisclosureRO()
@@ -232,7 +255,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     revisionComment: this.reviseObject.revisionComment,
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this.commonService.getCurrentUserDetail('personId')
+                    personId: this.commonService.getCurrentUserDetail('personID')
                 }
             };
         }
@@ -243,9 +266,9 @@ export class DisclosureCreateModalComponent implements OnInit {
             fcoiTypeCode: '1',
             homeUnit: this.reviseObject.homeUnit,
             revisionComment: this.reviseObject.revisionComment,
-            personId: this.commonService.getCurrentUserDetail('personId')
+            personId: this.commonService.getCurrentUserDetail('personID')
         };
-        if (this.validateForm()) {
+        if (this.validateFCOIForm()) {
             this._disclosureCreateModalService.createDisclosure({'coiDisclosure': fcoiDisclosureObj}).subscribe((data: any) => {
                 hideModal('reviseOrCreateDisclosureModal');
                 this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
@@ -352,9 +375,9 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private setSearchOptions(): void {
-        this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.homeUnit + '-' + this.commonService.currentUserDetails.homeUnitName, this.commonService.fibiUrl, 'unitNumber - unitName');
-        this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
-        this.homeUnitName = this.commonService.currentUserDetails.homeUnitName;
+        this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.unitNumber + '-' + this.commonService.currentUserDetails.unitName, this.commonService.fibiUrl, 'unitNumber - unitName');
+        this.reviseObject.homeUnit = this.commonService.currentUserDetails.unitNumber;
+        this.homeUnitName = this.commonService.currentUserDetails.unitName;
         this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
         this.unitHttpOptions = getEndPointOptionsForDepartment();
         this.sponsorSearchOptions = getEndPointOptionsForSponsor();
@@ -371,10 +394,10 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.disclosureNumber = this.hasFCOI ? this.hasFCOI.disclosureNumber : null;
     }
 
-    private validateForm(): boolean {
+    private validateFCOIForm(): boolean {
         this.mandatoryList.clear();
-        if (!this.reviseObject.revisionComment && this.hasFCOI) {
-            this.mandatoryList.set('reviseComment', 'Please enter the reason for revising your FCOI disclosure.');
+        if (!this.reviseObject.revisionComment) {
+            this.mandatoryList.set('reviseComment', `Please enter the reason for ${this.hasFCOI ? 'revise' : 'create'} your FCOI disclosure.`);
         }
         if (!this.reviseObject.homeUnit) {
             this.mandatoryList.set('homeUnit', 'Please select a valid unit to create an FCOI disclosure.');
@@ -385,13 +408,13 @@ export class DisclosureCreateModalComponent implements OnInit {
     private getCoiProjectTypes(): void {
         this.$subscriptions.push(this._disclosureCreateModalService.getCoiProjectTypes().subscribe((res: any) => {
             this.projectTypes = res.coiProjectTypes;
-            document.getElementById('open-create-or-revise-modal').click();
+            this.openDisclosureCreateModal();
         }));
     }
 
     private reviseDisclosure(): void {
         this.reviseObject.disclosureId = this.hasFCOI ? this.hasFCOI.disclosureId : null;
-        if (this.validateForm()) {
+        if (this.validateFCOIForm()) {
             if (!this.canReviseFCOI) {
                 this.$subscriptions.push(this._disclosureCreateModalService.reviseDisclosure(this.reviseObject)
                     .subscribe((data: any) => {
@@ -442,12 +465,13 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.existingDisclosureDetails.disclosurePersonFullName = this.canReviseFCOI.disclosurePersonFullName;
     }
 
-    private setExistingDisclosureDetails(type: string, data: any): void {
+    private setExistingDisclosureDetails(type: string, data: any, projectTitle: string = ''): void {
         this.disclosureNumber = data.disclosureNumber;
         this.existingDisclosureDetails = deepCloneObject(data);
         this.existingDisclosureDetails['disclosureType'] = type;
         if (type == 'Project') {
             this.existingDisclosureDetails['type'] = this.selectedProjectType;
+            this.projectTitle = projectTitle;
         }
         this.isShowResultCard = true;
     }
