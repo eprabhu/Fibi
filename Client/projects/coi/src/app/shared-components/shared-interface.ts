@@ -136,3 +136,37 @@ export class DisclosureProjectModalData {
     coiDisclosureId: number | null = null;
     needReporterRole: boolean = true;
 }
+
+export interface AssignAdminGroup {
+    adminGroupId: number
+    adminGroupName: string
+    description: string
+    email: any
+    roleId: number
+    role: Role
+    primaryPersonId: any
+    person: any
+    isActive: boolean
+    updateTimestamp: number
+    updateUser: string
+    moduleCode: number
+}
+
+export interface Role {
+    roleId: number
+    roleName: string
+    description: string
+    statusFlag: string
+    roleTypeCode: string
+    roleType: RoleType
+    createTimeStamp: number
+    createUser: string
+    updateTimeStamp: number
+    updateUser: string
+}
+
+export interface RoleType {
+    roleTypeCode: string
+    roleType: string
+    isActive: boolean
+}

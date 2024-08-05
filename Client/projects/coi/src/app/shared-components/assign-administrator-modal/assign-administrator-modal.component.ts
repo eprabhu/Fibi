@@ -4,7 +4,7 @@ import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
+import { AssignAdminGroup, AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
 import {COI_MODULE_CODE, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_MODULE_CODE, TRAVEL_MODULE_CODE, CONSULTING_MODULE_CODE} from '../../app-constants';
 
 declare const $: any;
@@ -57,7 +57,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
 
     private getAdminDetails() {
         this.$subscriptions.push(this._assignAdminService.getAdminDetails(this.getModuleCode()).subscribe((data: any) => {
-            this.setAdminGroupOptions(data);
+            this.setAdminGroupOptions(data.adminGroups);
             this.setCompleterOptions(data.persons, 'fullName', this.adminSearchOptions);
         }));
     }
@@ -96,9 +96,9 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         }
     }
 
-    private setAdminGroupOptions(data): void {
+    private setAdminGroupOptions(adminGroups: AssignAdminGroup[]): void {
         this.adminGroupsCompleterOptions = {
-            arrayList: this.getActiveAdminGroups(data),
+            arrayList: this.getActiveAdminGroups(adminGroups),
             contextField: 'adminGroupName',
             filterFields: 'adminGroupName',
             formatString: 'adminGroupName',
@@ -106,8 +106,8 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         };
     }
 
-    private getActiveAdminGroups(data) {
-        return data.adminGroups.filter(element => element.isActive === 'Y');
+    private getActiveAdminGroups(adminGroups: AssignAdminGroup[]) {
+        return adminGroups.filter(element => element.isActive);
     }
 
     private setCompleterOptions(arrayList: any, searchShowField: string, searchOption: any = null) {
