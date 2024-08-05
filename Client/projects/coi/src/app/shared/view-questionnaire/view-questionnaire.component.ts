@@ -39,7 +39,7 @@ import {
     getEndPointOptionsForSponsor
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/utilities/date-utilities";
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { jumpToSection } from '../../common/utilities/custom-utilities';
 
@@ -109,6 +109,7 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
      IsEnableACTypeChecking = false;
      isShowLimiterInTable: any = {};
      isSaveClicked = false;
+     datePlaceHolder = DATE_PLACEHOLDER;
 
      constructor(
          private _questionnaireService: QuestionnaireService,
@@ -537,9 +538,9 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
 
      goToUnAnsweredQuestionOnValidation(id) {
         this.highlight = id;
-        const SCROLL_CONFIG: any = { 
-            sectionId: 'ques_' + id, 
-            offsetTop: (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100), 
+        const SCROLL_CONFIG: any = {
+            sectionId: 'ques_' + id,
+            offsetTop: (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100),
             srollElement: window
         }
         jumpToSection(SCROLL_CONFIG);
@@ -1124,7 +1125,7 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
                question.SHOW_QUESTION = data.rulePassed;
                this.findUnAnsweredQuestions();
        }));
-    }     
+    }
 
      validateMandatory() {
          let question = this.firstUnAnsweredQuestion(this.questionnaire.questions);
@@ -1157,6 +1158,6 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
              }
          }, 10);
      }
-    
+
  }
 
