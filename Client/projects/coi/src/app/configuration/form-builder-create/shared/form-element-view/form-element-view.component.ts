@@ -15,7 +15,7 @@ import {
     getEndPointOptionsForSponsor
 } from '../../../../../../../fibi/src/app/common/services/end-point.config';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../app-constants';
 import { ElasticConfigService } from '../../../../common/services/elastic-config.service';
 import { FormElementViewService } from './form-element-view.service';
 
@@ -63,7 +63,7 @@ export class FormElementViewComponent implements OnInit {
   validationId: any = [];
   lengthValidationId: number;
   numberValidationId: number;
-  datePlaceHolder = DEFAULT_DATE_FORMAT;
+  datePlaceHolder = DATE_PLACEHOLDER;
   $subscriptions: Subscription[] = [];
   ESOptions: any = {};
   EPOptions: any = {};
@@ -346,7 +346,7 @@ export class FormElementViewComponent implements OnInit {
     }
 
     fileDrop(event){
-        
+
     }
 
 }

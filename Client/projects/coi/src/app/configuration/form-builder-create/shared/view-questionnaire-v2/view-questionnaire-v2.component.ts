@@ -22,6 +22,7 @@ import {
 import { compareDatesWithoutTimeZone } from '../../../../common/utilities/date-utilities';
 import { Questionnaire, QuestionnaireVO } from './questionnaire-interface';
 import { ElasticConfigService } from '../../../../common/services/elastic-config.service';
+import { DATE_PLACEHOLDER } from '../../../../app-constants';
 
 @Component({
     selector: 'app-view-questionnaire-v2',
@@ -84,6 +85,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     IsEnableACTypeChecking = false;
     isShowLimiterInTable: any = {};
     isDataChanged = false;
+    datePlaceHolder = DATE_PLACEHOLDER;
 
     constructor(
         private _questionnaireService: QuestionnaireService,
