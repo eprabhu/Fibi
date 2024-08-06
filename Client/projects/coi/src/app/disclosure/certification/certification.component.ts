@@ -123,4 +123,9 @@ checkForDisable() {
     getProjectName(projectName) {
         return projectName.Title + ' | ' + projectName.Entity;
     }
+
+    openQuestionnaire() {
+        this._coiService.isFromCertificationTab = true;
+        this.router.navigate(['/coi/create-disclosure/screening']);
+    }
 }

@@ -26,7 +26,7 @@ import { EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE } from '../../app-constants'
                     (QuestionnaireSaveEvent)="getSaveEvent($event)"
                     (currentActiveQuestionnaire)="currentActiveQuestionaireChanged($event)"
                     (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)"
-                    [isQuestionnaireValidateMode]="false">
+                    [isQuestionnaireValidateMode]="isQuestionnaireValidateMode">
             </app-view-questionnaire-list>
         </div>
     `,
@@ -49,6 +49,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
         isChangeWarning: true,
         isEnableVersion: true,
     };
+    isQuestionnaireValidateMode = false;
 
     constructor(
         private _commonService: CommonService,
@@ -62,6 +63,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         window.scrollTo(0, 0);
+        this.getQuestionnaireValidateMode();
     }
 
     ngOnDestroy() {
@@ -122,6 +124,13 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
 
     currentActiveQuestionaireChanged(activeQuestionnaire: any): void {
         this.coiService.currentActiveQuestionnaire = activeQuestionnaire;
+    }
+
+    getQuestionnaireValidateMode() {
+        if(this.coiService.isFromCertificationTab) {
+            this.coiService.isFromCertificationTab = false;
+            this.isQuestionnaireValidateMode = true;
+        }
     }
 
 }

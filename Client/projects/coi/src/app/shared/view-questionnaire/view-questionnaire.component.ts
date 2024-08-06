@@ -23,7 +23,6 @@
  import { CommonService } from '../../common/services/common.service';
  import { Subscription, Observable} from 'rxjs';
 import {easeIn} from "../../../../../fibi/src/app/common/utilities/animations";
-import {WafAttachmentService} from "../../../../../fibi/src/app/common/services/waf-attachment.service";
 import { scrollIntoView, setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {Question, TableAnswer} from "./questionnaire.interface";
@@ -39,7 +38,7 @@ import {
     getEndPointOptionsForSponsor
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/utilities/date-utilities";
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { jumpToSection } from '../../common/utilities/custom-utilities';
 
@@ -109,6 +108,7 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
      IsEnableACTypeChecking = false;
      isShowLimiterInTable: any = {};
      isSaveClicked = false;
+     datePlaceHolder = DATE_PLACEHOLDER;
 
      constructor(
          private _questionnaireService: QuestionnaireService,
@@ -128,7 +128,9 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
      autoSaveEvent() {
          if (this.externalSaveEvent) {
             this.$subscriptions.push(this.externalSaveEvent.subscribe(_event => {
-                this.addAnimationToDockBox();
+                if(this.isQuestionnaireValidateMode) {
+                    this.addAnimationToDockBox();
+                }
                 !this.isViewMode && this.questionnaireDetails.isChanged && this.saveQuestionnaire();
             }
             ));
@@ -537,12 +539,9 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
 
      goToUnAnsweredQuestionOnValidation(id) {
         this.highlight = id;
-        const SCROLL_CONFIG: any = { 
-            sectionId: 'ques_' + id, 
-            offsetTop: (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100), 
-            srollElement: window
-        }
-        jumpToSection(SCROLL_CONFIG);
+        const SECTION_ID = 'ques_' + id;
+        const OFFSET_TOP = document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100;
+        jumpToSection(SECTION_ID, OFFSET_TOP);
         const ansID = document.getElementById('ans_' + id);
         this.setFocusToFields(ansID);
      }
@@ -573,7 +572,7 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
          if (this.currentIndex > this.uniqueIdFromUnAnsweredQuestions.length - 1) {
              this.currentIndex = 0;
          }
-         this.goToCorrespondingUnAnsweredQuestion(this.uniqueIdFromUnAnsweredQuestions[this.currentIndex]);
+         this.goToUnAnsweredQuestionOnValidation(this.uniqueIdFromUnAnsweredQuestions[this.currentIndex]);
      }
 
      /** Navigates the position of unanswered question towards left. */
@@ -582,7 +581,7 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
          if (this.currentIndex < 0) {
              this.currentIndex = this.uniqueIdFromUnAnsweredQuestions.length - 1;
          }
-         this.goToCorrespondingUnAnsweredQuestion(this.uniqueIdFromUnAnsweredQuestions[this.currentIndex]);
+         this.goToUnAnsweredQuestionOnValidation(this.uniqueIdFromUnAnsweredQuestions[this.currentIndex]);
      }
 
      /**
@@ -1124,14 +1123,17 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
                question.SHOW_QUESTION = data.rulePassed;
                this.findUnAnsweredQuestions();
        }));
-    }     
+    }
 
      validateMandatory() {
-         let question = this.firstUnAnsweredQuestion(this.questionnaire.questions);
-         if (question) {
-             setTimeout(() => {
-                 this.goToUnAnsweredQuestionOnValidation(question.QUESTION_ID);
-             }, 500);
+         if (this.questionnaire.questions.length > 0) {
+             const question = this.firstUnAnsweredQuestion(this.questionnaire.questions);
+             if (question) {
+                 this.currentIndex = 0;
+                 setTimeout(() => {
+                     this.goToUnAnsweredQuestionOnValidation(question.QUESTION_ID);
+                 }, 500);
+             }
          }
      }
 
@@ -1157,6 +1159,5 @@ import { jumpToSection } from '../../common/utilities/custom-utilities';
              }
          }, 10);
      }
-    
- }
 
+ }
