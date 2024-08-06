@@ -10,7 +10,7 @@ import { debounce, switchMap } from 'rxjs/operators';
 import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { jumpToSection, openCoiSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-sfi',
@@ -83,7 +83,8 @@ export class SfiComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 setTimeout(() => {
                     if(this.focusSFIId) {
-                        scrollIntoView(this.focusSFIId);
+                        const offset = (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100);
+                        jumpToSection(this.focusSFIId, offset);
                         const ELEMENT = document.getElementById(this.focusSFIId);
                         ELEMENT.classList.add('error-highlight-card');
                         this.focusSFIId = null;
