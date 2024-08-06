@@ -300,7 +300,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		questionnaireSaveDto.setQuestionnaireId(qnrMapping.getFibiQnrId());
 		questionnaireSaveDto.setQuestionnaire(questionnaire.getQuestionnaire());
 		questionnaireSaveDto.setQuestionnaireAnswerHeaderId(questionnaire.getQuestionnaireAnswerHeaderId());
-		questionnaireSaveDto.setAcType(questionnaire.getQuestionnaireAnswerHeaderId() != null ? "U" : "I");
+		questionnaireSaveDto.setAcType(questionnaire.getQuestionnaireAnswerHeaderId() != null ? Constant.AC_TYPE_UPDATE : Constant.AC_TYPE_INSERT);
 		questionnaireSaveDto.setActionUserId(vo.getUpdateUser());
 		return saveQuestionnaireAnswers(questionnaireSaveDto, qnrMapping.getQuestions(), vo.getPersonId(), Integer.parseInt(vo.getProposalNumber()), vo.getDisclosureId(), vo.getQuestionnaireId(), questionnaire.getQuestionnaireAnswerHeaderId());
 	}
