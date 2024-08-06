@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProposalPersonDTO {
 
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	private String keyPersonName;
 

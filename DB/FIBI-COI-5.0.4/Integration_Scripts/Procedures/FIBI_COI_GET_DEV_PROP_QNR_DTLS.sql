@@ -6,28 +6,29 @@ cur_generic        OUT SYS_REFCURSOR)
 IS
 BEGIN
     OPEN cur_generic FOR
-    SELECT DISTINCT
+       SELECT DISTINCT
                     QAH.module_sub_item_key AS PERSON_ID,
-                    QA.question_id,
-                    QAH.questionnaire_id,
-                    QAH.module_item_key     AS PROJECT_NUMBER,
-                    QA.ANSWER,
-                    '1'ATTRIBUTE_1_LABEL,
-                    '2'ATTRIBUTE_1_VALUE,
-                    '3'ATTRIBUTE_2_LABEL,
-                    '4'ATTRIBUTE_2_VALUE,
-                    '5'ATTRIBUTE_3_LABEL,
-                    '6'ATTRIBUTE_3_VALUE,
+                    q.question_id,
+                    qn.QUESTIONNAIRE_ID as questionnaire_id ,
+                    case when QA.ANSWER = 'Y' then 'Yes' when QA.ANSWER = 'N' then 'No' else QA.ANSWER end  as ANSWER,
+                    NULL AS ATTRIBUTE_1_LABEL,
+                    NULL AS ATTRIBUTE_1_VALUE,
+                    NULL AS ATTRIBUTE_2_LABEL,
+                    NULL AS ATTRIBUTE_2_VALUE,
+                    NULL AS ATTRIBUTE_3_LABEL,
+                    NULL AS ATTRIBUTE_3_VALUE,
                     P.HOME_UNIT AS HOME_UNIT,
                     '3' as COI_PROJECT_TYPE_CODE
 
-FROM   quest_answer_header QAH
-       LEFT JOIN quest_answer QA
-              ON QA.questionnaire_ans_header_id =
-                 QAH.questionnaire_ans_header_id
-        LEFT JOIN PERSON P ON P.PERSON_ID = qah.module_sub_item_key
-WHERE  QAH.module_item_key = AV_PROPOSAL_NUMBER
-       AND QAH.QUESTIONNAIRE_ID = AV_QUESTIONNAIRE_ID      
+FROM   questionnaire_answer_header QAH
+LEFT JOIN questionnaire_answer QA
+              ON QA.QUESTIONNAIRE_AH_ID_FK =
+                 QAH.QUESTIONNAIRE_ANSWER_HEADER_ID
+inner join question q on q.QUESTION_REF_ID = qa.QUESTION_REF_ID_FK
+left join QUESTIONNAIRE qn on qn.QUESTIONNAIRE_REF_ID = qah.QUESTIONNAIRE_REF_ID_FK
+LEFT JOIN PERSON P ON P.PERSON_ID = qah.module_sub_item_key
+WHERE  substr(QAH.module_item_key,1,instr(QAH.module_item_key,'|')-1) = AV_PROPOSAL_NUMBER  
+       AND qn.QUESTIONNAIRE_ID =AV_QUESTIONNAIRE_ID     
        AND QAH.module_sub_item_key = AV_PERSON_ID ; 
-
+   
 END;

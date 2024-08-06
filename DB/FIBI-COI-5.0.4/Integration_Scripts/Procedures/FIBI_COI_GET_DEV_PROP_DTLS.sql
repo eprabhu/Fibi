@@ -25,16 +25,16 @@ BEGIN
       PAD.inst_proposal_id            AS IP_NUMBER,
       EP.update_timestamp             AS SRC_SYS_UPDATE_TIMESTAMP,
       EP.update_user                  AS SRC_SYS_UPDATE_USER_NAME,
-      ' '                             AS ATTRIBUTE_1_LABEL,
-      ' '                             AS ATTRIBUTE_1_VALUE,
-      ' '                             AS ATTRIBUTE_2_LABEL,
-      ' '                             AS ATTRIBUTE_2_VALUE,
-      ' '                             AS ATTRIBUTE_3_LABEL,
-      ' '                             AS ATTRIBUTE_3_VALUE,
-      ' '                             AS ATTRIBUTE_4_LABEL,
-      ' '                             AS ATTRIBUTE_4_VALUE,
-      ' '                             AS ATTRIBUTE_5_LABEL,
-      ' '                             AS ATTRIBUTE_5_VALUE
+      NULL                            AS ATTRIBUTE_1_LABEL,
+      NULL                            AS ATTRIBUTE_1_VALUE,
+      NULL                            AS ATTRIBUTE_2_LABEL,
+      NULL                            AS ATTRIBUTE_2_VALUE,
+      NULL                            AS ATTRIBUTE_3_LABEL,
+      NULL                            AS ATTRIBUTE_3_VALUE,
+      NULL                            AS ATTRIBUTE_4_LABEL,
+      NULL                            AS ATTRIBUTE_4_VALUE,
+      NULL                            AS ATTRIBUTE_5_LABEL,
+      NULL                            AS ATTRIBUTE_5_VALUE
       FROM   eps_proposal EP
              left join unit U
                     ON U.unit_number = EP.owned_by_unit
