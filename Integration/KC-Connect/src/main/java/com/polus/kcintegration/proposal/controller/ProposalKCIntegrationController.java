@@ -29,7 +29,7 @@ public class ProposalKCIntegrationController {
 	public void syncPersonQuestionnaireAndCreateDisclosure(@RequestBody QuestionnaireVO vo) {
 		logger.info("Request for createProposalDisclosure");
 		logger.info("QuestionnaireVO : {}", vo);
-		proposalIntegrationService.syncPersonQuestionnaireAndCreateDisclosure(vo.getProposalNumber(), vo.getQuestionnaireId(), vo.getPersonId());
+		proposalIntegrationService.feedPersonQuestionnaireAndCreateDisclosure(vo.getProposalNumber(), vo.getQuestionnaireId(), vo.getPersonId());
 	}	
 
 }

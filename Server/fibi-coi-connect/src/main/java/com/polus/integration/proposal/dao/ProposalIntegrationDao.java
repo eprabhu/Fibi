@@ -1,6 +1,9 @@
 package com.polus.integration.proposal.dao;
 
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;

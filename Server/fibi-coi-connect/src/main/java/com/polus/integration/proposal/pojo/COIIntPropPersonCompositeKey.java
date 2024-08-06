@@ -13,7 +13,7 @@ public class COIIntPropPersonCompositeKey implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	private String keyPersonRole;
 
