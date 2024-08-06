@@ -15,6 +15,6 @@ public interface ProposalPersonIntegrationRepository extends JpaRepository<COIIn
 
 
 	@Query("SELECT e FROM COIIntegrationProposalPerson e WHERE e.proposalNumber = :proposalNumber")
-	List<COIIntegrationProposalPerson> findProposalPersonsByProposalNumber(@Param("proposalNumber") Integer proposalNumber);
+	List<COIIntegrationProposalPerson> findProposalPersonsByProposalNumber(@Param("proposalNumber") String proposalNumber);
 
 }

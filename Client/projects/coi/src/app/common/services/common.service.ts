@@ -20,6 +20,9 @@ export class CommonService {
     authUrl = '';
     opaUrl = '';
     formUrl = '';
+    EXTERNAL_APPLICATION_BASE_URL = '';
+    EXTERNAL_PROPOSAL_URL = '';
+    EXTERNAL_AWARD_URL = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -121,6 +124,9 @@ export class CommonService {
         this.elasticConfigService.indexValue = configurationData.indexValue;
         this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
         this.enableGraph = configurationData.enableGraph;
+        this.EXTERNAL_APPLICATION_BASE_URL = configurationData.EXTERNAL_APPLICATION_BASE_URL;
+        this.EXTERNAL_PROPOSAL_URL = configurationData.EXTERNAL_PROPOSAL_URL;
+        this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
     }
 
     pageScroll(elementId) {
@@ -453,13 +459,13 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 
     redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
         const RESOURCE_URLS = {
-            1: AWARD_EXTERNAL_RESOURCE_URL.replace('{awardId}', projectId),
-            2: IP_EXTERNAL_RESOURCE_URL.replace('{instituteProposalId}', projectId),
-            3: PROPOSAL_EXTERNAL_RESOURCE_URL.replace('{developmentProposalId}', projectId),
+            1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
+            2: IP_EXTERNAL_RESOURCE_URL.replace('{projectId}', projectId),
+            3: (this.EXTERNAL_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
         };
-        const EXTERNAL_APPLICATION_URL = this.fibiApplicationUrl;
+        const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
         if (RESOURCE_URLS[projectTypeCode]) {
-            window.open(`${EXTERNAL_APPLICATION_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
+            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
         }
     }
 

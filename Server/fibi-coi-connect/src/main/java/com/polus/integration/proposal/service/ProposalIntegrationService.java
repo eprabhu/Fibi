@@ -16,11 +16,11 @@ public interface ProposalIntegrationService {
 	/**
 	 * @param proposalDTOs
 	 */
-	public void syncProposalDetails(ProposalDTO proposalDTO);
+	public void feedProposalDetails(ProposalDTO proposalDTO);
 
 	/**
 	 * @param quetionnaireVOs
 	 */
-	public void syncPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> quetionnaireVOs);
+	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> quetionnaireVOs);
 
 }

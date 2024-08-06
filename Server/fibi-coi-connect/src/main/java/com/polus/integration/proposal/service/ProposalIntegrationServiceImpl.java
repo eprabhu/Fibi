@@ -1,10 +1,9 @@
 package com.polus.integration.proposal.service;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,7 +76,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	private static final String ANSWER_TYPE = "ANSWER_TYPE";
 
 	@Override
-	public void syncProposalDetails(ProposalDTO proposalDTO) {
+	public void feedProposalDetails(ProposalDTO proposalDTO) {
 		try {
 			COIIntegrationProposal proposal = proposalIntegrationRepository.findProposalByProposalNumber(proposalDTO.getProposalNumber());
 			if (proposal != null) {
@@ -167,22 +166,21 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	@Override
-	public void syncPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> questionnaireVOs) {
+	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> questionnaireVOs) {
 		try {
-			Set<Integer> proposalNumbers = new HashSet<>();
-			questionnaireVOs.forEach(vo ->{
-				if (!proposalNumbers.contains(vo.getProposalNumber())) {
-					COIIntegrationProposal proposal = proposalIntegrationRepository.findProposalByProposalNumber(vo.getProposalNumber());
-					if (proposal != null) {
-						List<COIIntegrationPropQuestAns> questAnswers = qnAIntegrationRepository.findQuestionAnswersByProposalNumber(vo.getProposalNumber());
-						saveOrUpdateQuestionAnswer(questAnswers, questionnaireVOs);
-						proposalNumbers.add(vo.getProposalNumber());
-						prepareValidateAndCreateDisclosureVO(vo);
-					} else {
-						logger.info("No such proposal exist in COIIntegrationProposal: {}", vo.getProposalNumber());
-					}
-				}
-			});
+			Map<String, List<QuestionnaireVO>> groupedByProposal = questionnaireVOs.stream().collect(Collectors.groupingBy(QuestionnaireVO::getProposalNumber));
+			for (Map.Entry<String, List<QuestionnaireVO>> entry : groupedByProposal.entrySet()) {
+	            String proposalNumber = entry.getKey();
+	            List<QuestionnaireVO> questVOs = entry.getValue();
+				COIIntegrationProposal proposal = proposalIntegrationRepository.findProposalByProposalNumber(proposalNumber);
+	            if (proposal != null && !questVOs.isEmpty()) {
+	                List<COIIntegrationPropQuestAns> questAnswers = qnAIntegrationRepository.findQuestionAnswersByProposalNumber(proposalNumber);
+					saveOrUpdateQuestionAnswer(questAnswers, questVOs);
+					prepareValidateAndCreateDisclosure(questVOs.get(0));
+	            } else {
+	                logger.info("No such proposal exists in COIIntegrationProposal: {}", proposalNumber);
+	            }
+	        }
 		} catch (Exception e) {
 			logger.error("Error in saving proposal questionnaire details: {}", questionnaireVOs, e);
 			throw new MQRouterException("ER004", "Error in saving proposal questionnaire details: {}", e, e.getMessage(), devPropQuesAnsIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, Constant.QUESTIONNAIRE_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
@@ -216,12 +214,12 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		return integrationPropQuestAns;
 	}
 
-	private void prepareValidateAndCreateDisclosureVO(QuestionnaireVO vo) {
+	private void prepareValidateAndCreateDisclosure(QuestionnaireVO vo) {
 		ProcessProposalDisclosureVO processProposalDisclosureVO = new ProcessProposalDisclosureVO();
 		processProposalDisclosureVO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
 		processProposalDisclosureVO.setHomeUnit(vo.getPersonHomeUnit());
 		processProposalDisclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE.toString());
-		processProposalDisclosureVO.setModuleItemId(vo.getProposalNumber());
+		processProposalDisclosureVO.setModuleItemId(Integer.parseInt(vo.getProposalNumber()));
 		processProposalDisclosureVO.setPersonId(vo.getPersonId());
 		validateAndCreateDisclosure(createValidateDisclosureVO(vo), processProposalDisclosureVO, vo.getQuestionnaireId());
 	}
@@ -229,7 +227,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	private ValidateDisclosureVO createValidateDisclosureVO(QuestionnaireVO vo) {
 		ValidateDisclosureVO disclosureVO = new ValidateDisclosureVO();
 	    disclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE.toString());
-	    disclosureVO.setModuleItemId(vo.getProposalNumber());
+	    disclosureVO.setModuleItemId(Integer.parseInt(vo.getProposalNumber()));
 	    disclosureVO.setPersonId(vo.getPersonId());
 	    return disclosureVO;
 	}
@@ -245,10 +243,12 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 				Map<String, Object> responseBody = (Map<String, Object>) responseObj.getBody();
 				Map<String, Object> coiDisclosure = (Map<String, Object>) responseBody.get("coiDisclosure");
 				logger.info("Disclosure created successfully.");
+				logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
 				syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
 			} else {
 				logger.info("Pending project exists, disclosure creation skipped.");
 				Map<String, Object> coiDisclosure = (Map<String, Object>) responseObject.get(Constant.PENDING_PROJECT);
+				logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
 				syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
             }
 		} catch (Exception e) {
@@ -259,7 +259,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 
 	private void syncQuestionniareAnswers(Map<String, Object> coiDisclosure, ProcessProposalDisclosureVO vo, Integer questionnaireId) {
 		QuestionnaireVO questionnaireVO = new QuestionnaireVO();
-		questionnaireVO.setProposalNumber(vo.getModuleItemId());
+		questionnaireVO.setProposalNumber(vo.getModuleItemId().toString());
 		questionnaireVO.setPersonId(vo.getPersonId());
 		questionnaireVO.setQuestionnaireId(questionnaireId);
 		questionnaireVO.setDisclosureId((Integer) coiDisclosure.get("disclosureId"));
@@ -300,9 +300,9 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		questionnaireSaveDto.setQuestionnaireId(qnrMapping.getFibiQnrId());
 		questionnaireSaveDto.setQuestionnaire(questionnaire.getQuestionnaire());
 		questionnaireSaveDto.setQuestionnaireAnswerHeaderId(questionnaire.getQuestionnaireAnswerHeaderId());
-		questionnaireSaveDto.setAcType(questionnaire.getQuestionnaireAnswerHeaderId() != null ? "U" : "I");
+		questionnaireSaveDto.setAcType(questionnaire.getQuestionnaireAnswerHeaderId() != null ? Constant.AC_TYPE_UPDATE : Constant.AC_TYPE_INSERT);
 		questionnaireSaveDto.setActionUserId(vo.getUpdateUser());
-		return saveQuestionnaireAnswers(questionnaireSaveDto, qnrMapping.getQuestions(), vo.getPersonId(), vo.getProposalNumber(), vo.getDisclosureId(), vo.getQuestionnaireId(), questionnaire.getQuestionnaireAnswerHeaderId());
+		return saveQuestionnaireAnswers(questionnaireSaveDto, qnrMapping.getQuestions(), vo.getPersonId(), Integer.parseInt(vo.getProposalNumber()), vo.getDisclosureId(), vo.getQuestionnaireId(), questionnaire.getQuestionnaireAnswerHeaderId());
 	}
 
 	private GetQNRDetailsDto getQuestionnaireByParam(GetQNRDetailsDto questionnaire, Integer fibiQuestionnaireId, String moduleItemKey) {
@@ -344,7 +344,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 			questions.forEach(question -> {
 				mappingQuestions.forEach(mappingQuestion -> {
 					if (question.get(QUESTION_NUMBER).equals(mappingQuestion.getFibiQstnNum()) && question.get(QUESTION_ID).equals(mappingQuestion.getFibiQstnId())) {
-						question.put(AC_TYPE, questionnaireAnswerHeaderId != null ? "U" : "I");
+						question.put(AC_TYPE, question.get(AC_TYPE) != null ? Constant.AC_TYPE_UPDATE : Constant.AC_TYPE_INSERT);
 						String answer = proposalIntegrationDao.getQuestionAnswerByParams(mappingQuestion.getSourceQstnId(), questionnaireId, proposalNumber, disclosurePersonId);
 						HashMap<String, String> answers = new HashMap<>();
 						if (question.get(ANSWERS) != null) {
@@ -355,6 +355,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 						} else {
 							answers.put("1", answer);
 						}
+						question.put(ANSWERS, answers);
 					}
 				});
 			});

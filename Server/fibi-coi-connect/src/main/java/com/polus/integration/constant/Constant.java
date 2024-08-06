@@ -30,5 +30,7 @@ public interface Constant {
 	String COI_PROJECT_TYPE_PROPOSAL = "3";
 	String PENDING_PROJECT = "pendingProject";
 	String FIBI_DIRECT_EXCHANGE = "FIBI.DIRECT.EXCHANGE";
+	String AC_TYPE_UPDATE = "U";
+	String AC_TYPE_INSERT = "I";
 
 }
