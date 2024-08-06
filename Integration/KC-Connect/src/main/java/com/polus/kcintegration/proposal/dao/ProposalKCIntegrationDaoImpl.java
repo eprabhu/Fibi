@@ -61,7 +61,7 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	            
 	            while (rset != null && rset.next()) {
 	            	  dto = ProposalDTO.builder()
-	                        .proposalNumber(rset.getInt("PROPOSAL_NUMBER"))
+	                        .proposalNumber(rset.getString("PROPOSAL_NUMBER"))
 	                        .versionNumber(rset.getInt("VERSION_NUMBER"))
 	                        .ipNumber(rset.getString("IP_NUMBER"))
 	                        .sponsorGrantNumber(rset.getString("SPONSOR_GRANT_NUMBER"))
@@ -125,7 +125,7 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	            rset = (ResultSet) storedProcedure.getOutputParameterValue(2);
 	            while (rset != null && rset.next()) {
 	            	ProposalPersonDTO  dto = ProposalPersonDTO.builder()
-	                        .proposalNumber(rset.getInt("PROPOSAL_NUMBER"))
+	                        .proposalNumber(rset.getString("PROPOSAL_NUMBER"))
 	                        .keyPersonName(rset.getString("FULL_NAME"))
 	                        .keyPersonId(rset.getString("PERSON_ID"))
 	                        .keyPersonRoleCode(rset.getInt("PROP_PERSON_ROLE_CODE"))
@@ -157,13 +157,13 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	}
 
 	@Override
-	public List<QuestionnaireDTO> fetchQuestionnaireDetailsByParams(Integer moduleItemId, Integer questionnaireId, String personId) {
+	public List<QuestionnaireDTO> fetchQuestionnaireDetailsByParams(String moduleItemId, Integer questionnaireId, String personId) {
 		List<QuestionnaireDTO> questionnaireVOs = new ArrayList<>();
 		ResultSet rset = null;
 		try {
 			String procedureName = "FIBI_COI_GET_DEV_PROP_QNR_DTLS";
 	        StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(procedureName);
-	        storedProcedure.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN);
+	        storedProcedure.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
 	        storedProcedure.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
 	        storedProcedure.registerStoredProcedureParameter(3, String.class, ParameterMode.IN);
 	        storedProcedure.registerStoredProcedureParameter(4, void.class, ParameterMode.REF_CURSOR);
@@ -175,7 +175,7 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	        	rset = (ResultSet) storedProcedure.getOutputParameterValue(4);
 	            while (rset != null && rset.next()) {
 	            	QuestionnaireDTO vo = new QuestionnaireDTO();
-	            	vo.setProposalNumber(rset.getInt("PROJECT_NUMBER"));
+	            	vo.setProposalNumber(moduleItemId);
 	            	vo.setPersonId(rset.getString("PERSON_ID"));
 	            	vo.setQuestionId(rset.getInt("QUESTION_ID"));
 	            	vo.setQuestionnaireId(rset.getInt("QUESTIONNAIRE_ID"));
@@ -193,7 +193,7 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	        }
 		} catch (Exception e) {
 			logger.error("Exception in fetchQuestionnaireDetailsByParams: {}", e.getMessage(), e);
-			throw new IntegrationCustomException("Error during feedDevelopmentProposal :{}", e, moduleItemId);
+			throw new IntegrationCustomException("Error during fetchQuestionnaireDetailsByParams :{}", e, moduleItemId);
 		} finally {
 	        if (rset != null) {
 	            try {

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProposalDTO {
 
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	private String title;
 

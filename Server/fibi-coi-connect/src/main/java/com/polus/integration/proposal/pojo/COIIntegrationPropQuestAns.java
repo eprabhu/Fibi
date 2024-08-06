@@ -29,7 +29,7 @@ public class COIIntegrationPropQuestAns implements Serializable {
 	private Integer stageProposalQnrAnsId;
 
 	@Column(name = "PROPOSAL_NUMBER")
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	@Column(name = "KEY_PERSON_ID")
 	private String keyPersonId;
