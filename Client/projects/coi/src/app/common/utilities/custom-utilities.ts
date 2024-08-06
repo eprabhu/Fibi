@@ -128,15 +128,22 @@ export function checkForVowelInFirstLetter(word) {
  * Scrolls the page to a specified section by its ID, with an optional offset for the header.
  *
  * @param sectionId - The ID of the section to scroll to.
- * @param srollElement - scrolling element.
  * @param offsetTop - The offset top, which is subtracted from the scroll position.
  */
-export function jumpToSection({ sectionId = '', offsetTop = 0, srollElement = window }): void {
+export function jumpToSection(sectionId = '', offset = 0) {
     const SECTION_ELEMENT: HTMLElement | null = document.getElementById(sectionId);
-    if (!SECTION_ELEMENT) { return; }
-    const elementPosition = SECTION_ELEMENT.getBoundingClientRect().top;
-    const SCROLL_TO = elementPosition + srollElement?.pageYOffset - offsetTop;
-    srollElement.scrollTo({ top: SCROLL_TO, behavior: 'smooth' });
+    // Scroll the element into view
+    SECTION_ELEMENT.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Calculate the new scroll position
+    const elementRect = SECTION_ELEMENT.getBoundingClientRect();
+    const offsetTop = window.pageYOffset + elementRect.top - offset;
+
+    // Apply the scroll offset
+    window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+    });
 }
 
 export function getFormattedSponsor(sponsorCode: any, sponsorName: any): string {

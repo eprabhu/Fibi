@@ -16,7 +16,7 @@
 	<div class="qst-list-padding">
 		<ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index; let isLast = last'>
 			<div class="card questionnaire-card p-4" [class.mb-4]="!isLast" tabindex="-1" aria-label="questionnaire" tabindex="-1" [attr.aria-label]="question.GROUP_LABEL"
-				[ngClass]="{'card-active-line': highlight == question.QUESTION_ID , 'card-active-line-danger': isSaveClicked && uniqueIdFromUnAnsweredQuestions.includes(question.QUESTION_ID)}"
+				[ngClass]="{'card-active-line': highlight == question.QUESTION_ID , 'card-active-line-danger': (isSaveClicked || highlight == question.QUESTION_ID) && isQuestionnaireValidateMode && uniqueIdFromUnAnsweredQuestions.includes(question.QUESTION_ID)}"
 				(click)="highlight = question.QUESTION_ID" *ngIf="question.SHOW_QUESTION == true">
 				<ul [ngSwitch]="true" class="qst-list m-0 p-0">
 					<li *ngSwitchCase="question.ANSWER_TYPE === 'Table'" id="ques_{{question.QUESTION_ID}}">
@@ -309,7 +309,7 @@
                       id="ans_{{question.QUESTION_ID}}" (click)="certificationDate.open()"
                       class="form-control d-inline-block" [(ngModel)]="question.ANSWERS[1]"
                      (ngModelChange)="showChildQuestions(question)"
-                      placeholder="dd/MM/yyyy">
+                      placeholder="{{datePlaceHolder}}">
                     <i (click)="questionnaire_date.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                     <mat-datepicker #questionnaire_date></mat-datepicker>
                   </span>

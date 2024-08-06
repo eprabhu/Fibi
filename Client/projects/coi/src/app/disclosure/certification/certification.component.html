@@ -18,6 +18,9 @@
             <ng-container *ngIf="this._coiService.certificationResponseErrors.length > 0">
                 <div role="alert" class="alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'" role="alert">
                         <i class="fa fa-exclamation-circle icon me-2"></i>{{error.validationMessage}}
+                        <a *ngIf="error.mandatoryComplete ==='false'" tabindex="0"  role="link" (click)="openQuestionnaire()"
+                            (keydown.enter)="openQuestionnaire()" class="cursor-pointer" aria-label="Click here to View questionnaire"
+                            title="Click here to View questionnaire">View questionnaire</a>
                     <span *ngIf="collapseViewMore[errorIndex]" class="link-primary fs-14" (keydown.enter)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])"
                         (click)="collapseViewMoreOption(errorIndex, collapseViewMore[errorIndex])" tabindex="0" role="link" [id]="'link-error-'+errorIndex"
                         [attr.aria-label]="error.sfiList && error.sfiList.length>0 ?'Click here View affected SFIs':'Click here View affected Projects'"

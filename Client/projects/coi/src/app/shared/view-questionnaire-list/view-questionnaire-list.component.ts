@@ -308,7 +308,8 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     validateMandatory(): any {
         let unAnsweredMandatoryQuestionnaire = this.getMandatoryNotCompletedQuestionnaire(this.questionnaireList);
         if (unAnsweredMandatoryQuestionnaire && unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID) {
-            this.openQuestionnaireById(unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID);
+            const questionnaireIndex = this.getIndexFromQuestionnaireId(this.questionnaireList, unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID);
+            this.versionWarning(questionnaireIndex);
             setTimeout(() => {
                 document.getElementById(`${unAnsweredMandatoryQuestionnaire?.QUESTIONNAIRE_ID}`).classList.add('active');
             }, 10);
@@ -320,24 +321,14 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
         return questionnaires.find((element) => element.IS_MANDATORY === 'Y' && element.QUESTIONNAIRE_COMPLETED_FLAG !== 'Y');
     }
 
-    filterQuestionnaireById(id): any {
-        return this.questionnaireList.find((question: any) => question.QUESTIONNAIRE_ID === id);
-    }
-
-    openQuestionnaireById(id) {
-        if (id) {
-            const selectedQuestionnaire = this.filterQuestionnaireById(id);
-            this.isViewMode = this.checkViewMode(selectedQuestionnaire.MODULE_SUB_ITEM_CODE);
-            this.activeQuestionnaire.isChanged = false;
-            this.activeQuestionnaire = Object.assign({}, selectedQuestionnaire);
-            this.currentActiveQuestionnaire.emit(this.activeQuestionnaire);
-        }
-    }
-
     clearPreviousActiveTabs() {
         const navTabList = document.querySelectorAll('.subTabLink');
         navTabList.forEach(navTabEl => {
             navTabEl.classList.remove('active');
         });
+    }
+
+    getIndexFromQuestionnaireId(questionnaireList: any[], id) {
+        return questionnaireList.findIndex(obj => obj.QUESTIONNAIRE_ID === id);
     }
 }
