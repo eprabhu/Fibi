@@ -16,7 +16,7 @@ import {
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {AutoSaveService} from "../../../../../fibi/src/app/common/services/auto-save.service";
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
-import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 
 @Component({
@@ -48,7 +48,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
   validationId: any = [];
   lengthValidationId: number;
   numberValidationId: number;
-  datePlaceHolder = DEFAULT_DATE_FORMAT;
+  datePlaceHolder = DATE_PLACEHOLDER;
   $subscriptions: Subscription[] = [];
   elasticSearchOptions: any = {};
   endPointSearchOptions: any = {};

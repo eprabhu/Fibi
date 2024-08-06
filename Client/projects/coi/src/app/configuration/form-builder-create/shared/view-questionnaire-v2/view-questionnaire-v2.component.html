@@ -129,7 +129,7 @@
                         <input matInput [matDatepicker]="questionnaire_date" [disabled]="isViewMode"
                           id="ans_{{question.QUESTION_ID}}" (click)="certificationDate.open()"
                           class="form-control d-inline-block" [(ngModel)]="question.ANSWERS[1]"
-                          (ngModelChange)="showChildQuestions(question)" placeholder="dd/MM/yyyy">
+                          (ngModelChange)="showChildQuestions(question)" placeholder="{{datePlaceHolder}}">
                         <i (click)="questionnaire_date.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                         <mat-datepicker #questionnaire_date></mat-datepicker>
                       </span>

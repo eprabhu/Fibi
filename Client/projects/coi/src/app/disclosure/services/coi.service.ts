@@ -37,6 +37,7 @@ export class CoiService {
     isRelationshipSaving = false;
     $isExpandSection = new Subject<{section: string,isExpand: boolean}>();
     currentActiveQuestionnaire: any;
+    isFromCertificationTab = false;
     
     constructor(
         private _http: HttpClient,
@@ -141,7 +142,7 @@ export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireD
     let errorArray = [];
     if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
         if (isAllMandatoryQuestionnaireNotCompleted(res.applicableQuestionnaire)) {
-            let questionnaire_error = {validationMessage: '', validationType : "VE", };
+            let questionnaire_error = {validationMessage: '', validationType : "VE", mandatoryComplete: "false"};
             questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
             errorArray.push(questionnaire_error);
         }
