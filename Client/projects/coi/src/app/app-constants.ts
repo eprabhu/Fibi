@@ -113,8 +113,8 @@ export const SSO_TIMEOUT_ERROR_MESSAGE = 'Your session has been expired.';
 export const SSO_TIMEOUT_ERROR_CODE = 0;
 export const SSO_LOGOUT_URL = '';
 
-export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={awardId}';
-export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={developmentProposalId}';
-export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={instituteProposalId}';
+export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={projectId}';
+export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={projectId}';
+export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={projectId}';
 
 export const URL_FOR_DISCLOSURE_PROJECT = '/disclosure/projects/{disclosureId}';
