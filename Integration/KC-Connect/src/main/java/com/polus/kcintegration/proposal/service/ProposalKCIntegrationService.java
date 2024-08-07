@@ -19,6 +19,6 @@ public interface ProposalKCIntegrationService {
 	 * @param questionnaireId 
 	 * @return
 	 */
-	public void syncPersonQuestionnaireAndCreateDisclosure(Integer moduleItemId, Integer questionnaireId, String personId);
+	public void feedPersonQuestionnaireAndCreateDisclosure(String moduleItemId, Integer questionnaireId, String personId);
 
 }

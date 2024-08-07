@@ -40,10 +40,10 @@ public class ProposalIntegrationListener {
 	@RabbitListener(queues = "${fibi.messageq.queues.devProposalIntegration}")
 	public void feedProposalDetails(Message ampqMessage) {
 		String response = new String(ampqMessage.getBody());
-		logger.info("Message received : {}", response);
+		logger.info("Message received in proposal integration: {}", response);
 		try {
 			ProposalDTO proposalDTO = new ObjectMapper().readValue(response, ProposalDTO.class);
-			integrationService.syncProposalDetails(proposalDTO);
+			integrationService.feedProposalDetails(proposalDTO);
 		} catch (JsonProcessingException e) {
 			logger.error("JSON parsing error for message in proposal integration: {}", response, e);
 			throw new MQRouterException(Constant.ERROR_CODE, "Invalid JSON format", e, e.getMessage(),
@@ -60,11 +60,12 @@ public class ProposalIntegrationListener {
 	}
 
 	@RabbitListener(queues = "${fibi.messageq.queues.devPropQuesAnsIntegration}")
-	public void syncPersonQuestionnaireAndCreateDisclosure(Message ampqMessage) {
+	public void feedPersonQuestionnaireAndCreateDisclosure(Message ampqMessage) {
 		String response = new String(ampqMessage.getBody());
+		logger.info("Message received in feedPersonQuestionnaireAndCreateDisclosure: {}", response);
 		try {
 			List<QuestionnaireVO> questionnaireVOs = new ObjectMapper().readValue(response,	new TypeReference<List<QuestionnaireVO>>(){});
-			integrationService.syncPersonQuestionnaireAndCreateDisclosure(questionnaireVOs);
+			integrationService.feedPersonQuestionnaireAndCreateDisclosure(questionnaireVOs);
 		} catch (JsonProcessingException e) {
 			logger.error("JSON parsing error for message in proposal questionnaire integration: {}", response, e);
 			throw new MQRouterException(Constant.ERROR_CODE, "Invalid JSON format", e, e.getMessage(),

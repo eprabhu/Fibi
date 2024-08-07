@@ -29,7 +29,7 @@ public interface ProposalKCIntegrationDao {
 	 * @param questionnaireId 
 	 * @return
 	 */
-	public List<QuestionnaireDTO> fetchQuestionnaireDetailsByParams(Integer moduleItemId, Integer questionnaireId, String personId);
+	public List<QuestionnaireDTO> fetchQuestionnaireDetailsByParams(String moduleItemId, Integer questionnaireId, String personId);
 
 	/**
 	 * @param proposalNumber
