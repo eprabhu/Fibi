@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QuestionnaireDTO {
 
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	private String personId;
 

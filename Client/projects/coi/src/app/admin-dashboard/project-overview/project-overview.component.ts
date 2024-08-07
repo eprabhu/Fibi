@@ -35,6 +35,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private isInitialCall: boolean = true;
     totalPageCount: number | null = null;
     getIndexForSlider: number;
+    currentSortStateKey: string | null = null;
     getFormattedSponsor = getFormattedSponsor;
 
 
@@ -77,11 +78,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }));
     }
 
-    toggleProjectOverviewCard(index: number) {
+    toggleProjectOverviewCard(index: number): void {
         this.isProjectOverviewCardCollapse[index] = !this.isProjectOverviewCardCollapse[index];
     }
 
-    sortKeypersonsList(isAsc: boolean, index: number, key: any) {
+    sortKeypersonsList(isAsc: boolean, index: number, key: any): void {
         const stateKey = `${index}_${key}`;
         this.isDesc[stateKey] = !isAsc;
         const allKeysHaveValues = this.projectOverviewData.projectOverviewDetails[index].keyPersonDetails.every(person => person[key] !== undefined);
@@ -102,9 +103,20 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    onSortClick(index: number, key: any) {
+    /**
+     * 
+     * @param index To retrieve the accurate project using the index value.
+     * @param key The key is used to obtain a specific field name from the keyperson table, based on the data given at a particular index value.
+     */
+    onSortClick(index: number, key: any): void {
         const stateKey = `${index}_${key}`;
         const currentSortDirection = this.isDesc[stateKey] ? true : false;
+        
+        if (this.currentSortStateKey && this.currentSortStateKey !== stateKey) {
+            this.isDesc[this.currentSortStateKey] = null;
+        }
+    
+        this.currentSortStateKey = stateKey;
         this.sortKeypersonsList(currentSortDirection, index, key);
     }
 
@@ -171,16 +183,16 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    toggleSlider(index: number) {
+    toggleSlider(index: number): void {
         this.getIndexForSlider = index;
         this.showSlider = true;
     }
 
-    closeHeaderSlider() {
+    closeHeaderSlider(): void {
         this.showSlider = false;
     }
 
-    actionsOnPageChange(event) {
+    actionsOnPageChange(event): void {
         if (this.projectOverviewRequestObject.currentPage != event) {
             this.isProjectOverviewCardCollapse = [];
             this.projectOverviewRequestObject.currentPage = event;
@@ -188,7 +200,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    handleCommentCount(updatedCount: number) {
+    handleCommentCount(updatedCount: number): void {
         this.projectOverviewData.projectOverviewDetails[this.getIndexForSlider].projectDetails.commentCount = updatedCount;
     }
 

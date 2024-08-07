@@ -10,12 +10,12 @@ BEGIN
        EPP.person_id,
        P.full_name,
        EPP.calendar_year_effort          AS PERCENTAGE_OF_EFFORT,
-	   ' ' AS  ATTRIBUTE_1_LABEL ,
-       ' ' AS   ATTRIBUTE_1_VALUE ,
-       ' ' AS   ATTRIBUTE_2_LABEL ,
-       ' ' AS   ATTRIBUTE_2_VALUE ,
-       ' ' AS   ATTRIBUTE_3_LABEL ,
-       ' ' AS   ATTRIBUTE_3_VALUE
+	   NULL AS  ATTRIBUTE_1_LABEL ,
+       NULL AS   ATTRIBUTE_1_VALUE ,
+       NULL AS   ATTRIBUTE_2_LABEL ,
+       NULL AS   ATTRIBUTE_2_VALUE ,
+       NULL AS   ATTRIBUTE_3_LABEL ,
+       NULL AS   ATTRIBUTE_3_VALUE
 	   FROM   eps_proposal EP
 	    INNER JOIN eps_prop_person EPP
               ON EPP.proposal_number = EP.proposal_number

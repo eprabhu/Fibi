@@ -23,7 +23,7 @@ public class ProposalKCIntegrationServiceImpl implements ProposalKCIntegrationSe
 	protected static Logger logger = LogManager.getLogger(ProposalKCIntegrationServiceImpl.class.getName());
 
 	@Autowired
-	private ProposalKCIntegrationDao proposalIntegrationDao;
+	private ProposalKCIntegrationDao proposalKCDao;
 
 	@Autowired
 	private MessagingService messagingService;
@@ -40,9 +40,9 @@ public class ProposalKCIntegrationServiceImpl implements ProposalKCIntegrationSe
 	@Override
 	public void feedProposal(String proposalNumber) {
 		try {
-			ProposalDTO feedProposal = proposalIntegrationDao.fetchProposalByProposalNumber(proposalNumber);
+			ProposalDTO feedProposal = proposalKCDao.fetchProposalByProposalNumber(proposalNumber);
 			if (feedProposal != null) {
-				feedProposal.setProposalPersons(proposalIntegrationDao.fetchProposalPersons(proposalNumber));
+				feedProposal.setProposalPersons(proposalKCDao.fetchProposalPersons(proposalNumber));
 			}
 			messagingService.sendMessage(Constant.FIBI_DIRECT_EXCHANGE, devProposalIntegrationQueue, new Message(kcIntegrationDao.convertObjectToJSON(feedProposal).getBytes()));
 		} catch (Exception e) {
@@ -52,9 +52,9 @@ public class ProposalKCIntegrationServiceImpl implements ProposalKCIntegrationSe
 	}
 
 	@Override
-	public void syncPersonQuestionnaireAndCreateDisclosure(Integer moduleItemId, Integer questionnaireId, String personId) {
+	public void feedPersonQuestionnaireAndCreateDisclosure(String moduleItemId, Integer questionnaireId, String personId) {
 		try {
-			List<QuestionnaireDTO> questionnaireVOs = proposalIntegrationDao.fetchQuestionnaireDetailsByParams(moduleItemId, questionnaireId, personId);
+			List<QuestionnaireDTO> questionnaireVOs = proposalKCDao.fetchQuestionnaireDetailsByParams(moduleItemId, questionnaireId, personId);
 			messagingService.sendMessage(Constant.FIBI_DIRECT_EXCHANGE, devPropQuesAnsIntegrationQueue, new Message(kcIntegrationDao.convertObjectToJSON(questionnaireVOs).getBytes()));
 		} catch (Exception e) {
 			logger.error("Error occurred in syncPersonQuestionnaireAndCreateDisclosure: {}", e.getMessage());

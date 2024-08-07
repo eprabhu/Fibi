@@ -177,7 +177,7 @@
             
                                     <mat-menu #beforeMenu="matMenu" xPosition="before">
                                         <ng-container>
-                                            <button mat-menu-item title="Click here to edit comment" aria-label="Click here to edit comment" id="coi-parent-commment-edit-btn" (click)="editParentComment(data,index)"
+                                            <button mat-menu-item title="Click here to edit comment" aria-label="Click here to edit comment" id="coi-parent-commment-edit-btn" (click)="editParentComment(data)"
                                                 area-describedby="Click here to edit comment"
                                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                                 <mat-icon class="me-0 coi-text-lighter" aria-hidden="true">edit</mat-icon>
@@ -186,7 +186,7 @@
                                         </ng-container>
             
                                         <ng-container>
-                                            <button *ngIf="!data?.childComments || data.childComments.length === 0" id="coi-parent-commment-delete-btn" mat-menu-item title="Click here to delete comment" (click)="deleteComment(data,index)"
+                                            <button *ngIf="!data?.childComments || data.childComments.length === 0" id="coi-parent-commment-delete-btn" mat-menu-item title="Click here to delete comment" (click)="deleteComment(data)"
                                                 area-describedby="Click here to delete comment"
                                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                                 <mat-icon aria-hidden="true"
@@ -337,7 +337,7 @@
                                                     Cancel
                                                 </button>
                                                 <button class="btn btn-primary fs-14" id="coi-child-commment-edit-add-btn" 
-                                                title="Click here to add edited comments"  aria-label="Click here to cancel edited comments" (click)="addReplyEditedComments(childComment,replyIndex)">Save
+                                                title="Click here to add edited comments"  aria-label="Click here to cancel edited comments" (click)="addReplyEditedComments(childComment)">Save
                                                     Comment
                                                 </button>
                                             </div>
