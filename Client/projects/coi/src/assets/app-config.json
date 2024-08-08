@@ -1,7 +1,7 @@
 {
   "baseUrl": "https://fibicoi.fibiweb.com/coi",
   "fibiUrl": "https://qa.fibiweb.com/fibi4_6",
-  "authUrl": "https://qa.fibiweb.com/auth",
+  "authUrl": "https://fibicoi.fibiweb.com/auth",
   "opaUrl": "https://fibicoi.fibiweb.com/opa",
   "formUrl":"https://fibicoi.fibiweb.com/",
   "enableSSO": false,
@@ -11,7 +11,7 @@
   "elasticDelimiter": ":",
   "elasticPassword": "Polsol_@#7889",
   "elasticAuthScheme": "Basic",
- "elasticIndexUrl":"https://qa.fibiweb.com/elastic_8/",
+  "elasticIndexUrl":"https://qa.fibiweb.com/elastic_8/",
   "indexValue": "",
   "EXTERNAL_APPLICATION_BASE_URL": "",
   "EXTERNAL_PROPOSAL_URL": "",
