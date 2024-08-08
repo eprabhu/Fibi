@@ -38,7 +38,7 @@ export class CoiService {
     $isExpandSection = new Subject<{section: string,isExpand: boolean}>();
     currentActiveQuestionnaire: any;
     isFromCertificationTab = false;
-    
+
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService,
@@ -151,8 +151,8 @@ export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireD
             questionnaire_error.validationMessage = 'Please complete all the Questionnaire(s) in the “Screening Questionnaire” section.';
             errorArray.push(questionnaire_error);
         }
-        return errorArray;
     }
+    return errorArray;
 }
 
 function isAllMandatoryQuestionnaireNotCompleted(questionnaires: ApplicableQuestionnaire[]) {

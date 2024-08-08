@@ -300,7 +300,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     checkQuestionnaireCompleted(res) {
         let errorArray = certifyIfQuestionnaireCompleted(res);
-        if(errorArray.length) {
+        if(errorArray && errorArray.length) {
             errorArray.forEach(ele => this.coiService.submitResponseErrors.push(ele));
         }
         this.validateRelationship();
@@ -816,5 +816,5 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
         this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
     }
-    
+
 }
