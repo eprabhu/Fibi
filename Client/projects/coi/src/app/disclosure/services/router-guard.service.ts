@@ -64,7 +64,7 @@ export class RouterGuardService  {
 
         checkQuestionnaireCompleted(res) {
             let errorArray = certifyIfQuestionnaireCompleted(res);
-            if(errorArray.length) {
+            if(errorArray && errorArray.length) {
                 errorArray.forEach(ele => this._coiService.certificationResponseErrors.push(ele));
             }
         }
