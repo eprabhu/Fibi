@@ -1,6 +1,6 @@
 {
   "baseUrl": "https://fibicoi.fibiweb.com/coi",
-  "fibiUrl": "https://qa.fibiweb.com/fibi",
+  "fibiUrl": "https://fibicoi.fibiweb.com/fibii",
   "authUrl": "https://fibicoi.fibiweb.com/auth",
   "opaUrl": "https://fibicoi.fibiweb.com/opa",
   "formUrl":"https://fibicoi.fibiweb.com/",
