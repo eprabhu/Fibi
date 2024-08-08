@@ -6,19 +6,17 @@ import java.util.Date;
 import java.util.List;
 
 import com.polus.core.person.pojo.Person;
-import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
-import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.coi.pojo.CoiProjectType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Transient;
 
 @Data
 @NoArgsConstructor
@@ -42,6 +40,7 @@ public class CoiDisclosureDto {
 	private String reviewStatus;
 	private Date certifiedAt;
 	private Date expirationDate;
+	private Boolean syncNeeded;
 	private Timestamp updateTimestamp;
 	private Timestamp createTimestamp;
 	private String updateUserFullName;

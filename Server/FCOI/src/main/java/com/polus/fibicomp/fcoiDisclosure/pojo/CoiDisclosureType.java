@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -12,14 +12,14 @@ import javax.persistence.Table;
 import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_DISCLOSURE_FCOI_TYPE")
-public class CoiDisclosureFcoiType implements Serializable {
+@Table(name = "COI_DISCLOSURE_TYPE")
+public class CoiDisclosureType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "FCOI_TYPE_CODE")
-	private String fcoiTypeCode;
+	@Column(name = "DISCLOSURE_TYPE_CODE")
+	private String disclosureTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,12 +34,12 @@ public class CoiDisclosureFcoiType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getFcoiTypeCode() {
-		return fcoiTypeCode;
+	public String getDisclosureTypeCode() {
+		return disclosureTypeCode;
 	}
 
-	public void setFcoiTypeCode(String fcoiTypeCode) {
-		this.fcoiTypeCode = fcoiTypeCode;
+	public void setDisclosureTypeCode(String disclosureTypeCode) {
+		this.disclosureTypeCode = disclosureTypeCode;
 	}
 
 	public String getDescription() {

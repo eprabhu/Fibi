@@ -13,13 +13,9 @@ import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
-import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
-import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiProjectAward;
-import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.constants.ActionTypes;
 import com.polus.fibicomp.constants.StaticPlaceholders;
@@ -27,7 +23,7 @@ import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
@@ -35,7 +31,6 @@ import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
 import com.polus.fibicomp.reviewcomments.dao.ReviewCommentDao;
 import com.polus.fibicomp.reviewcomments.dto.ReviewCommentsDto;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
-import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -52,17 +47,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -218,8 +204,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         coiDisclosureDto.setPersonEntitiesCount(coiDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(coiDisclosure.getPersonId()).build()));
         coiDisclosureDto.setPersonAttachmentsCount(coiDao.personAttachmentsCount(coiDisclosure.getPersonId()));
         coiDisclosureDto.setPersonNotesCount(coiDao.personNotesCount(coiDisclosure.getPersonId()));
-//        coiDisclosureDto.syncProjectWithDisclosure(coiDisclosure.getDisclosureId(),
-//                null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
+        disclosureDao.syncFCOIDisclosure(coiDisclosure.getDisclosureId(), coiDisclosure.getDisclosureNumber());
         vo.setCoiDisclosure(coiDisclosureDto);
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
@@ -682,5 +667,11 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .newAdmin(newAdminPerson).build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
         }
+    }
+
+    @Override
+    public void syncFCOIDisclosure(CoiDisclosureDto coiDisclosureDto) {
+        disclosureDao.syncFCOIDisclosure(coiDisclosureDto.getDisclosureId(),
+                coiDisclosureDto.getDisclosureNumber());
     }
 }

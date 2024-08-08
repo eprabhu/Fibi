@@ -359,13 +359,6 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> completeDisclosureReviews(Map<Integer, Integer> disclosureIdNumberMap);
 
-
-	/**
-	 * This method syncs the projects with all ACTIVE person entities(SFIs)
-	 * @param disclosureId
-	 */
-	void syncProjectPersonEntity(Integer disclosureId);
-
 	/**
 	 * This method is used to Check if the risk status of the disclosure has been modified
 	 * @return

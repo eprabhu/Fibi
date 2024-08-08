@@ -158,4 +158,9 @@ public class DisclosureController {
         return disclosureService.assignDisclosureAdmin(dto);
     }
 
+    @PostMapping("/sync")
+    public void syncFCOIDisclosure(@RequestBody CoiDisclosureDto coiDisclosureDto) {
+        disclosureService.syncFCOIDisclosure(coiDisclosureDto);
+    }
+
 }

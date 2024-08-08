@@ -5,8 +5,8 @@ import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
@@ -14,7 +14,7 @@ import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -326,4 +326,10 @@ public interface FcoiDisclosureDao {
      */
     Timestamp assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
 
+    /**
+     * This method is used to sync the projects/SFIs with disclosure
+     * @param disclosureId
+     * @param disclosureNumber
+     */
+    void syncFCOIDisclosure(Integer disclosureId, Integer disclosureNumber);
 }

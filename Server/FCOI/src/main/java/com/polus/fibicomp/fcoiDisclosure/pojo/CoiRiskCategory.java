@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -12,14 +12,14 @@ import javax.persistence.Table;
 import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_DISPOSITION_STATUS_TYPE")
-public class CoiDispositionStatusType implements Serializable {
+@Table(name = "COI_RISK_CATEGORY")
+public class CoiRiskCategory implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "DISPOSITION_STATUS_CODE")
-	private String dispositionStatusCode;
+	@Column(name = "RISK_CATEGORY_CODE")
+	private String riskCategoryCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -37,12 +37,12 @@ public class CoiDispositionStatusType implements Serializable {
 	@Column(name = "SORT_ORDER")
 	private String sortOrder;
 
-	public String getDispositionStatusCode() {
-		return dispositionStatusCode;
+	public String getRiskCategoryCode() {
+		return riskCategoryCode;
 	}
 
-	public void setDispositionStatusCode(String dispositionStatusCode) {
-		this.dispositionStatusCode = dispositionStatusCode;
+	public void setRiskCategoryCode(String riskCategoryCode) {
+		this.riskCategoryCode = riskCategoryCode;
 	}
 
 	public String getDescription() {

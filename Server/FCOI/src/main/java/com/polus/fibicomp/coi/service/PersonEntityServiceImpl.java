@@ -14,11 +14,7 @@ import com.polus.fibicomp.coi.repository.ActionLogDao;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
-import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.core.security.AuthenticatedUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -366,11 +362,12 @@ public class PersonEntityServiceImpl implements PersonEntityService {
 		String personId = disclosureId == null ? vo.getPersonId() : null;
 		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getRelatedEntityInfo(disclosureId, personId, null);
 		personEntities.forEach(personEntity -> {personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao.getValidPersonEntityRelTypes(personEntity.getPersonEntityId()));
-												personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
-														.stream()
-											            .filter(dto -> personEntity.getPersonEntityId().equals(dto.getPersonEntityId()))
-											            .findFirst()
-											            .orElse(null));});
+//												personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
+//														.stream()
+//											            .filter(dto -> personEntity.getPersonEntityId().equals(dto.getPersonEntityId()))
+//											            .findFirst()
+//											            .orElse(null));
+        });
 		if(vo.getFilterType().equalsIgnoreCase("Financial")) {
 			responseData.put("isProjectPresent", conflictOfInterestDao.isProjectPresent(vo));
 			personEntities.forEach(personEntity -> personEntity.setSfiCompleted(fcoiDisclosureDao.isSFICompletedForDisclosure(personEntity.getPersonEntityId(), vo.getDisclosureId())));

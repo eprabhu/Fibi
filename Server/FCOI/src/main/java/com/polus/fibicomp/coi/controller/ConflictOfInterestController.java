@@ -486,10 +486,4 @@ public class ConflictOfInterestController {
     	logger.info("Request for getSFIRelationshipDetails");
    		return conflictOfInterestService.getSFIRelationshipDetails();
    	}
-
-	@GetMapping("/syncFcoiDisclosure/{disclosureId}")
-	public void sy(@PathVariable("disclosureId") Integer disclosureId) {
-		conflictOfInterestService.syncProjectPersonEntity(disclosureId);
-	}
-
 }

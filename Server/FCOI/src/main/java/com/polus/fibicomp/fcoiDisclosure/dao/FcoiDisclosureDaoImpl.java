@@ -13,8 +13,8 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
@@ -22,7 +22,7 @@ import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.constants.Constants;
 import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +40,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -916,44 +915,19 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         return updateTimestamp;
     }
 
-    public void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId, Integer moduleCode, String moduleItemKey, String type) {
-        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+    @Override
+    public void syncFCOIDisclosure(Integer disclosureId, Integer disclosureNumber) {
+        Session session = Objects.requireNonNull(hibernateTemplate.getSessionFactory()).getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
         try {
             CallableStatement statement = connection.prepareCall("{call COI_SYNC_FCOI_DISCLOSURE(?,?,?)}");
-            if (disclosureId == null) {
-                statement.setNull(1, Types.INTEGER);
-            } else {
-                statement.setInt(1, disclosureId);
-            }
-            if (disclosureNumber == null) {
-                statement.setNull(2, Types.INTEGER);
-            } else {
-                statement.setInt(2, disclosureNumber);
-            }
-
+            statement.setInt(1, disclosureId);
+            statement.setInt(2, disclosureNumber);
             statement.setString(3, AuthenticatedUser.getLoginPersonId());
-            statement.setString(4, AuthenticatedUser.getLoginUserName());
-            if (personEntityId == null) {
-                statement.setNull(5, Types.INTEGER);
-            } else {
-                statement.setInt(5, personEntityId);
-            }
-            if (moduleCode == null) {
-                statement.setNull(6, Types.INTEGER);
-            } else {
-                statement.setInt(6, moduleCode);
-            }
-            if (moduleItemKey == null) {
-                statement.setNull(7, Types.INTEGER);
-            } else {
-                statement.setString(7, moduleItemKey);
-            }
-            statement.setString(8, type);
             statement.execute();
         } catch (Exception e) {
-            logger.error("Exception in syncProjectWithDisclosure {}", e.getMessage());
+            logger.error("Exception in syncFCOIDisclosure {}", e.getMessage());
         }
     }
 }

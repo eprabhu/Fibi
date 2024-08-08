@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.ForeignKey;
@@ -18,12 +19,8 @@ import javax.persistence.Transient;
 
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Unit;
-import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
-import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.coi.pojo.CoiProjectType;
+import com.polus.core.util.JpaCharBooleanConversion;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -140,6 +137,10 @@ public class CoiDisclosure implements Serializable {
 
 	@Column(name = "ADMIN_PERSON_ID")
 	private String adminPersonId;
+
+	@Column(name = "SYNC_NEEDED")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean syncNeeded;
 	
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")

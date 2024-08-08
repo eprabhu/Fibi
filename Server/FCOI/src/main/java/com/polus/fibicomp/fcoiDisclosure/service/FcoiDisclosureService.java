@@ -137,11 +137,17 @@ public interface FcoiDisclosureService {
      */
     ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
 
-
     /**
      * This method is used to update administrator
      * @param dto
      * @return
      */
     ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
+
+    /**
+     * This method syncs the projects with person entities(SFIs)
+     * @param coiDisclosureDto
+     */
+    void syncFCOIDisclosure(CoiDisclosureDto coiDisclosureDto);
+
 }
