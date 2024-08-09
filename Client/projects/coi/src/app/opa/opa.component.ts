@@ -313,6 +313,9 @@ export class OpaComponent implements OnInit {
         this.isCardExpanded=!this.isCardExpanded;
         this.isUserCollapse=!this.isUserCollapse;
         this.setTopDynamically();
+        setTimeout (() => {
+            this.commonService.$globalEventNotifier.next({uniqueId: 'COI_OPA_HEADER', content: { isCardExpanded: this.isCardExpanded }});
+        });
     }
 
     setTopDynamically() {
@@ -341,6 +344,7 @@ export class OpaComponent implements OnInit {
             this.isCardExpanded = window.innerWidth > 1399;
         }
         this.setTopDynamically();
+        this.commonService.$globalEventNotifier.next({uniqueId: 'COI_OPA_HEADER', content: { isCardExpanded: this.isCardExpanded }});
     }
 
     private validateForm(): void {

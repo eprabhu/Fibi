@@ -428,3 +428,13 @@
     z-index: 10;
     background-color: #f1f1f1;
 }
+
+.coi-reviewer-header-sticky{
+    position: sticky;
+    z-index: 10;
+    background-color: #f0f2f3;
+}
+
+.coi-invalid-FieldBorder {
+	border: 1px solid red !important;
+}

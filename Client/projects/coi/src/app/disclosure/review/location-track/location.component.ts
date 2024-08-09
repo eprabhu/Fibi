@@ -58,7 +58,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
-        private _reviewService: ReviewService,
+        public reviewService: ReviewService,
         private _dataStore: DataStoreService,
         public _commonService: CommonService,
         public coiService: CoiService
@@ -172,7 +172,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         if (this.validateReview()) {
             this.reviewDetails.disclosureId = this.coiDisclosure.disclosureId;
             this.getReviewDates();
-            this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview({ coiReview: this.reviewDetails }).subscribe((res: any) => {
+            this.$subscriptions.push(this.reviewService.saveOrUpdateCoiReview({ coiReview: this.reviewDetails }).subscribe((res: any) => {
                 this.updateTimeAndUser(res)
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.reviewDetails = {};
@@ -238,7 +238,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     deleteReview() {
-        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((response: any) => {
+        this.$subscriptions.push(this.reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((response: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
             this.coiDisclosure.coiReviewStatusType = response.coiReviewStatusType;
             this.updateTimeAndUser(response);
