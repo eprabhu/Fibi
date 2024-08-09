@@ -165,7 +165,7 @@ export class FormBuilderCreateService {
     }
 
     getModuleList(): Observable<any> {
-        return this._http.get(this._commonService.baseUrl + "/getModuleList");
+        return this._http.get(this._commonService.fibiUrl + "/getModuleList");
     }
 
     saveFormUsage(integationObj: saveFormUsage): Observable<any> {
