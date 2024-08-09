@@ -12,6 +12,7 @@ import { ReviewHistoryComponent } from './review-history/review-history.componen
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
+import { CoiService } from '../../disclosure/services/coi.service';
 
 @NgModule({
     imports: [
@@ -29,7 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
         GeneralCommentsComponent,
         ReviewHistoryComponent
     ],
-    providers: [ReviewService]
+    providers: [ReviewService , CoiService]
 })
 export class ReviewModule {
 }

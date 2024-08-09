@@ -129,7 +129,7 @@
             <!-- add new comment text editor -->
             <div *ngIf="showAddComment || dataForCommentSlider?.projectDetails?.commentCount === 0" class="card shadow-medium p-3 mb-3">
                 <div class="col-12">
-                    <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
+                    <div [ngClass]="mandatoryMap.has('comment') ? 'coi-invalid-FieldBorder' : ''">
                         <ckeditor [(ngModel)]="projectOverviewCommentDetails.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
                         placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                     </div>
@@ -201,7 +201,7 @@
                             <!-- parent comment edit text editor -->
                             <ng-container *ngIf="projectOverviewService.editParentCommentId == data?.commentId && projectOverviewService.isEditParentComment">
                                 <div class="col p-0 mt-3">
-                                    <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
+                                    <div [ngClass]="mandatoryMap.has('comment') ? 'coi-invalid-FieldBorder' : ''">
                                         <ckeditor [(ngModel)]="data.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
                                             placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                                     </div>
@@ -241,7 +241,7 @@
                         <!-- reply comment text editor -->
                         <div *ngIf="projectOverviewCommentDetails?.parentCommentId === data?.commentId && isReplyComment" class="row m-0">
                             <div class="col-12 p-0 mt-3" id="person-main-commment-editor">
-                                <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
+                                <div [ngClass]="mandatoryMap.has('comment') ? 'coi-invalid-FieldBorder' : ''">
                                     <ckeditor [(ngModel)]="projectOverviewCommentDetails.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
                                         placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                                 </div>
@@ -324,7 +324,7 @@
                                         <!-- edit child comment text editor -->
                                         <ng-container *ngIf="projectOverviewCommentDetails.commentId == childComment.commentId && isEditComment">
                                             <div class="col-12 mt-3">
-                                                <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
+                                                <div [ngClass]="mandatoryMap.has('comment') ? 'coi-invalid-FieldBorder' : ''">
                                                     <ckeditor [(ngModel)]="childComment.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
                                                         placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                                                 </div>
