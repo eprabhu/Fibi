@@ -1,12 +1,17 @@
 package com.polus.fibicomp.fcoiDisclosure.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.controller.ConflictOfInterestController;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
 import org.apache.logging.log4j.LogManager;
@@ -68,9 +73,29 @@ public class DisclosureController {
     }
 
     @PostMapping("/project/relations")
-    public ResponseEntity<Object> getDisclosureProjectRelations(@RequestBody ConflictOfInterestVO vo) {
+    public ResponseEntity<Object> getDisclosureProjectRelations(@RequestBody ProjectEntityRequestDto vo) throws JsonProcessingException {
         logger.info("Requesting for /project/relations");
-        return disclosureService.getDisclProjectEntityRelations(vo);
+        List<DisclosureProjectDto> disclProjects = disclosureService.getDisclProjectEntityRelations(vo);
+        if (disclProjects.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(getObjectMapper().writeValueAsString(disclProjects), HttpStatus.OK);
+    }
+
+    @PostMapping("/entity/relations")
+    public ResponseEntity<Object> getDisclosureEntityRelations(@RequestBody ProjectEntityRequestDto vo) throws JsonProcessingException {
+        logger.info("Requesting for /entity/relations");
+        List<PersonEntityRelationshipDto> disclPersonEntities = disclosureService.getDisclosureEntityRelations(vo);
+        if (disclPersonEntities.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(getObjectMapper().writeValueAsString(disclPersonEntities), HttpStatus.OK);
+    }
+
+    public ObjectMapper getObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        return objectMapper;
     }
 
     @PostMapping("/saveEntityProjectRelation")

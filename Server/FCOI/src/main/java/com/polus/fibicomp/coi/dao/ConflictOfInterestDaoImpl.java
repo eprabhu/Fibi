@@ -3959,7 +3959,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive) {
+	public List<PersonEntityRelationshipDto> getPersonEntities(Integer disclosureId, String personId, Boolean fetchNonArchive) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		SessionImpl sessionImpl = (SessionImpl) session;
 		Connection connection = sessionImpl.connection();

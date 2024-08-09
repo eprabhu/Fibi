@@ -1076,7 +1076,7 @@ public interface ConflictOfInterestDao {
 	 * @param fetchNonArchive
 	 * @return list of SFI relations
 	 */
-	public List<PersonEntityRelationshipDto> getRelatedEntityInfo(Integer disclosureId, String personId, Boolean fetchNonArchive);
+	public List<PersonEntityRelationshipDto> getPersonEntities(Integer disclosureId, String personId, Boolean fetchNonArchive);
 
 
 	/**

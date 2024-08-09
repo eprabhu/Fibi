@@ -1902,7 +1902,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> getSFIRelationshipDetails() {
-		return new ResponseEntity<>(conflictOfInterestDao.getRelatedEntityInfo(null, AuthenticatedUser.getLoginPersonId(), true), HttpStatus.OK);
+		return new ResponseEntity<>(conflictOfInterestDao.getPersonEntities(null, AuthenticatedUser.getLoginPersonId(), true), HttpStatus.OK);
 	}
 
 	@Override

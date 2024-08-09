@@ -15,6 +15,7 @@ import java.util.Map;
 @Builder
 public class DisclosureProjectDto {
 
+	private Integer coiDisclProjectId;
 	private Integer moduleCode;
 	private String projectId;
 	private String projectNumber;
@@ -62,5 +63,4 @@ public class DisclosureProjectDto {
 	private Integer keyPersonCount;
 	private String projectIcon;
 	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
-
 }

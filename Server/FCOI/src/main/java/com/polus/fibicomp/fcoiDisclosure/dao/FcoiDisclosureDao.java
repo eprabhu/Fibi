@@ -5,6 +5,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
@@ -206,10 +207,10 @@ public interface FcoiDisclosureDao {
 
     /**
      * This method fetches disclosure entity vs project relations
-     * @param vo
+     * @param disclosureId
      * @return
      */
-    List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo);
+    List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(Integer disclosureId);
 
     /**
      * This method is used to check FCOI disclosure is exists or not

@@ -1,24 +1,22 @@
 package com.polus.fibicomp.fcoiDisclosure.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.core.questionnaire.service.QuestionnaireService;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
-import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
-import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
+import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.constants.ActionTypes;
 import com.polus.fibicomp.constants.StaticPlaceholders;
+import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
@@ -40,15 +38,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -377,17 +372,73 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     }
 
     @Override
-    public ResponseEntity<Object> getDisclProjectEntityRelations(ConflictOfInterestVO vo) {
-//        List<PersonEntityRelationshipDto> personEntityRelationshipDto =  coiDao.getRelatedEntityInfo(vo.getDisclosureId(), null, null);
-        List<CoiDisclEntProjDetailsDto> disclosureDetails = disclosureDao.getDisclEntProjDetails(vo);
-        for (CoiDisclEntProjDetailsDto coiDisclEntProjDetails : disclosureDetails) {
-            DisclComment commentObj = getDisclProjectConflictComment(vo.getDisclosureId(), coiDisclEntProjDetails.getCoiDisclProjectEntityRelId());
-            coiDisclEntProjDetails.setDisclComment(commentObj != null ? commentObj : new DisclComment());
-//            coiDisclEntProjDetails.setPersonEntityRelationshipDto(personEntityRelationshipDto.stream()
-//                    .filter(dto -> coiDisclEntProjDetails.getEntityId().equals(dto.getEntityId()))
-//                    .findFirst().orElse(null));
+    public List<DisclosureProjectDto> getDisclProjectEntityRelations(ProjectEntityRequestDto vo) {
+
+        CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
+                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
+        CompletableFuture<List<DisclosureProjectDto>> projectsFuture =
+                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
+        CompletableFuture<List<PersonEntityRelationshipDto>> personEntityRelationshipFuture =
+                CompletableFuture.supplyAsync(() -> coiDao.getPersonEntities(vo.getDisclosureId(), vo.getPersonId(), null));
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(
+                disclosureDetailsFuture, projectsFuture, personEntityRelationshipFuture
+        );
+        List<DisclosureProjectDto> disclProjects;
+        try {
+            allOf.get();
+            List<CoiDisclEntProjDetailsDto> disclProjEntRelations = disclosureDetailsFuture.get();
+            disclProjects = projectsFuture.get();
+            List<PersonEntityRelationshipDto> disclPersonEntities = personEntityRelationshipFuture.get();
+            for (CoiDisclEntProjDetailsDto projEntityDetail : disclProjEntRelations) {
+                Optional<PersonEntityRelationshipDto> matchingProject = disclPersonEntities.stream()
+                        .filter(personEntity -> personEntity.getPersonEntityId().equals(projEntityDetail.getPersonEntityId()))
+                        .findFirst();
+                matchingProject.ifPresent(projEntityDetail::setPersonEntity);
+            }
+            Map<Integer, List<CoiDisclEntProjDetailsDto>> disclEntityRelations = disclProjEntRelations.stream()
+                    .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getCoiDisclProjectId));
+            disclProjects.forEach(disclosureProject ->
+                    disclosureProject.setCoiDisclEntProjDetails(disclEntityRelations.get(disclosureProject.getCoiDisclProjectId()))
+            );
+
+        } catch (Exception e) {
+            throw new ApplicationException("Unable to fetch data", e, CoreConstants.JAVA_ERROR);
         }
-        return new ResponseEntity<>(disclosureDetails, HttpStatus.OK);
+        return disclProjects;
+    }
+
+    @Override
+    public List<PersonEntityRelationshipDto> getDisclosureEntityRelations(ProjectEntityRequestDto vo) {
+        CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
+                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
+        CompletableFuture<List<DisclosureProjectDto>> projectsFuture =
+                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
+        CompletableFuture<List<PersonEntityRelationshipDto>> personEntityRelationshipFuture =
+                CompletableFuture.supplyAsync(() -> coiDao.getPersonEntities(vo.getDisclosureId(), vo.getPersonId(), null));
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(
+                disclosureDetailsFuture, projectsFuture, personEntityRelationshipFuture
+        );
+        List<PersonEntityRelationshipDto> disclPersonEntities;
+        try {
+            allOf.get();
+            List<CoiDisclEntProjDetailsDto> disclProjEntRelations = disclosureDetailsFuture.get();
+            List<DisclosureProjectDto> disclProjects = projectsFuture.get();
+            disclPersonEntities = personEntityRelationshipFuture.get();
+            for (CoiDisclEntProjDetailsDto projEntityDetail : disclProjEntRelations) {
+                Optional<DisclosureProjectDto> matchingProject = disclProjects.stream()
+                        .filter(project -> project.getCoiDisclProjectId().equals(projEntityDetail.getCoiDisclProjectId()))
+                        .findFirst();
+                matchingProject.ifPresent(projEntityDetail::setProject);
+            }
+            Map<Integer, List<CoiDisclEntProjDetailsDto>> disclEntityRelations = disclProjEntRelations.stream()
+                    .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getPersonEntityId));
+            disclPersonEntities.forEach(personEntityRelationshipDto ->
+                    personEntityRelationshipDto.setProjEntRelations(disclEntityRelations.get(personEntityRelationshipDto.getPersonEntityId()))
+            );
+        } catch (Exception e) {
+            throw new ApplicationException("Unable to fetch data", e, CoreConstants.JAVA_ERROR);
+        }
+        return disclPersonEntities;
     }
 
     @Override

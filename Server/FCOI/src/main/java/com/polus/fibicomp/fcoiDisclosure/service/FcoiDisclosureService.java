@@ -3,7 +3,10 @@ package com.polus.fibicomp.fcoiDisclosure.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -75,7 +78,14 @@ public interface FcoiDisclosureService {
      * @param vo
      * @return
      */
-    ResponseEntity<Object> getDisclProjectEntityRelations(ConflictOfInterestVO vo);
+    List<DisclosureProjectDto> getDisclProjectEntityRelations(ProjectEntityRequestDto vo);
+
+    /**
+     * This method is used to fetch disclosure project entity relations
+     * @param vo
+     * @return
+     */
+    List<PersonEntityRelationshipDto> getDisclosureEntityRelations(ProjectEntityRequestDto vo);
 
     /**
      * This method is used to save disclosure Relationship details.

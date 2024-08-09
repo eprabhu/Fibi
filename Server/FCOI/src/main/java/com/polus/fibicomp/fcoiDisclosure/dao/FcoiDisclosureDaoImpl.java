@@ -13,6 +13,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
@@ -24,6 +25,7 @@ import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -170,24 +172,22 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             }
             while (rset != null && rset.next()) {
                 disclosureProjects.add(DisclosureProjectDto.builder()
+                        .coiDisclProjectId(rset.getInt("COI_DISCL_PROJECTS_ID"))
                         .moduleCode(rset.getInt("MODULE_CODE"))
                         .projectId(rset.getString("PROJECT_ID"))
                         .projectNumber(rset.getString("PROJECT_NUMBER"))
-                        .title(rset.getString("TITLE"))
-                        .projectStatus(rset.getString("STATUS"))
-                        .projectStartDate(rset.getTimestamp("START_DATE"))
-                        .projectEndDate(rset.getTimestamp("END_DATE"))
-                        .homeUnitNumber(rset.getString("HOME_UNIT_NUMBER"))
-                        .homeUnitName(rset.getString("HOME_UNIT_NAME"))
-                        .sponsorName(rset.getString("SPONSOR_NAME"))
-                        .primeSponsorName(rset.getString("PRIME_SPONSOR_NAME"))
-                        .piName(rset.getString("PI"))
+                        .title(rset.getString("PROJECT_TITLE"))
+                        .projectStatus(rset.getString("PROJECT_STATUS"))
+                        .projectStartDate(rset.getTimestamp("PROJECT_START_DATE"))
+                        .projectEndDate(rset.getTimestamp("PROJECT_END_DATE"))
+                        .homeUnitNumber(rset.getString("LEAD_UNIT_NUMBER"))
+                        .homeUnitName(rset.getString("LEAD_UNIT_NAME"))
+                        .sponsorName(rset.getString("PROJECT_SPONSOR_NAME"))
+                        .primeSponsorName(rset.getString("PROJECT_PRIME_SPONSOR_NAME"))
+                        .piName(rset.getString("PI_NAME"))
                         .keyPersonId(rset.getString("KEY_PERSON_ID"))
-                        .keyPersonName(rset.getString("KEY_PERSON"))
+                        .keyPersonName(rset.getString("KEY_PERSON_NAME"))
                         .reporterRole(rset.getString("REPORTER_ROLE"))
-                        .conflictStatus(rset.getString("CONFLICT_DESCRIPTION"))
-                        .conflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"))
-                        .relationShipExists(rset.getBoolean("RELATIONSHIP_EXISTS"))
                         .sfiCompleted(rset.getBoolean("IS_PROJECT_COMPLETED"))
                         .disclosureStatusCount(rset.getString("CONFLICT_STATUS_COUNT") != null ? convertJsonStringToListMap(rset.getString("CONFLICT_STATUS_COUNT")) : null)
                         .projectType(rset.getString("COI_PROJECT_TYPE"))
@@ -465,7 +465,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(ConflictOfInterestVO vo) {
+    public List<CoiDisclEntProjDetailsDto> getDisclEntProjDetails(Integer disclosureId) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         List<CoiDisclEntProjDetailsDto> disclosureProjects = new ArrayList<>();
         SessionImpl sessionImpl = (SessionImpl) session;
@@ -474,95 +474,38 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         ResultSet rset = null;
         try {
             if (oracledb.equalsIgnoreCase("N")) {
-                statement = connection.prepareCall("{call COI_DISCL_ENT_PROJ_DETAILS(?, ?, ?, ?)}");
-                statement.setInt(1, vo.getDisclosureId());
-                if (vo.getPersonEntityId() == null) {
-                    statement.setNull(2, Types.INTEGER);
-                }
-                else {
-                    statement.setInt(2, vo.getPersonEntityId());
-                }
-                if (vo.getModuleCode() == null) {
-                    statement.setNull(3, Types.INTEGER);
-                }
-                else {
-                    statement.setInt(3, vo.getModuleCode());
-                }
-                if (vo.getModuleItemId() == null) {
-                    statement.setNull(4, Types.VARCHAR);
-                }
-                else {
-                    statement.setInt(4, vo.getModuleItemId());
-                }
+                statement = connection.prepareCall("{call COI_DISCL_ENT_PROJ_DETAILS(?)}");
+                statement.setInt(1, disclosureId);
                 statement.execute();
                 rset = statement.getResultSet();
             } else if (oracledb.equalsIgnoreCase("Y")) {
                 String procedureName = "COI_DISCL_ENT_PROJ_DETAILS";
-                String functionCall = "{call " + procedureName + "(?,?,?,?,?)}";
+                String functionCall = "{call " + procedureName + "(?,?)}";
                 statement = connection.prepareCall(functionCall);
                 statement.registerOutParameter(1, OracleTypes.CURSOR);
-                statement.setNull(2, vo.getDisclosureId());
-                if (vo.getPersonEntity() == null) {
-                    statement.setNull(3, Types.INTEGER);
-                }
-                else {
-                    statement.setInt(3, vo.getPersonEntityId());
-                }
-                if (vo.getModuleCode() == null) {
-                    statement.setNull(4, Types.INTEGER);
-                }
-                else {
-                    statement.setInt(4, vo.getModuleCode());
-                }
-                if (vo.getModuleItemId() == null) {
-                    statement.setNull(5, Types.INTEGER);
-                }
-                else {
-                    statement.setInt(5, vo.getModuleItemId());
-                }
+                statement.setInt(2, disclosureId);
                 statement.execute();
                 rset = (ResultSet) statement.getObject(1);
             }
             while (rset != null && rset.next()) {
                 CoiDisclEntProjDetailsDto entProjDetailsDto = new CoiDisclEntProjDetailsDto();
                 entProjDetailsDto.setCoiDisclProjectEntityRelId(rset.getInt("COI_DISCL_PROJECT_ENTITY_REL_ID"));
-                entProjDetailsDto.setDisclosureId(rset.getInt("DISCLOSURE_ID"));
-                entProjDetailsDto.setDisclosureNumber(rset.getInt("DISCLOSURE_NUMBER"));
+                entProjDetailsDto.setCoiDisclProjectId(rset.getInt("COI_DISCL_PROJECTS_ID"));
                 entProjDetailsDto.setPersonEntityId(rset.getInt("PERSON_ENTITY_ID"));
                 entProjDetailsDto.setPersonEntityNumber(rset.getInt("PERSON_ENTITY_NUMBER"));
                 entProjDetailsDto.setPrePersonEntityId(rset.getInt("PREVIOUS_PERSON_ENTITY_ID"));
                 entProjDetailsDto.setEntityId(rset.getInt("ENTITY_ID"));
-//                entProjDetailsDto.setEntityNumber(rset.getInt("ENTITY_NUMBER"));
-                entProjDetailsDto.setModuleCode(rset.getInt("MODULE_CODE"));
-                entProjDetailsDto.setModuleItemKey(rset.getString("MODULE_ITEM_KEY"));
                 entProjDetailsDto.setProjectConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
                 entProjDetailsDto.setUpdatedBy(rset.getString("UPDATED_BY"));
                 entProjDetailsDto.setUpdateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"));
-                entProjDetailsDto.setProjectId(rset.getString("PROJECT_ID"));
-                entProjDetailsDto.setProjectNumber(rset.getString("PROJECT_NUMBER"));
-                entProjDetailsDto.setProjectTitle(rset.getString("PROJECT_TITLE"));
-                entProjDetailsDto.setProjectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"));
-                entProjDetailsDto.setProjectType(rset.getString("COI_PROJECT_TYPE"));
-                entProjDetailsDto.setProjectBadgeColour(rset.getString("BADGE_COLOR"));
                 CoiProjConflictStatusType coiProjConflictStatusType = new CoiProjConflictStatusType();
                 coiProjConflictStatusType.setDescription(rset.getString("PROJECT_CONFLICT_STATUS"));
                 coiProjConflictStatusType.setProjectConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
                 entProjDetailsDto.setCoiProjConflictStatusType(coiProjConflictStatusType);
-                CoiEntityDto coiEntityDto = new CoiEntityDto();
-                coiEntityDto.setEntityId(rset.getInt("ENTITY_ID"));
-                coiEntityDto.setEntityNumber(rset.getInt("ENTITY_NUMBER"));
-                coiEntityDto.setEntityName(rset.getString("ENTITY_NAME"));
-                coiEntityDto.setVersionNumber(rset.getInt("VERSION_NUMBER"));
-                coiEntityDto.setVersionStatus(rset.getString("VERSION_STATUS"));
-                coiEntityDto.setEntityStatusCode(rset.getString("ENTITY_STATUS_CODE"));
-                coiEntityDto.setCreateUser(rset.getString("ENTITY_CREATE_USER"));
-                coiEntityDto.setCreateTimestamp(rset.getTimestamp("ENTITY_CREATE_TIMESTAMP"));
-                coiEntityDto.setUpdateUser(rset.getString("ENTITY_UPDATE_USER"));
-                coiEntityDto.setUpdateTimestamp(rset.getTimestamp("ENTITY_UPDATE_TIMESTAMP"));
-                coiEntityDto.setRiskCategoryCode(rset.getString("RISK_CATEGORY_CODE"));
-                coiEntityDto.setCountryName(rset.getString("ENTITY_COUNTRY_NAME"));
-                coiEntityDto.setEntityType(rset.getString("ENTITY_TYPE"));
-                entProjDetailsDto.setCoiEntity(coiEntityDto);
+                DisclComment disclComment = new DisclComment();
+                disclComment.setCommentId(rset.getInt("COMMENT_ID") == 0 ? null : rset.getInt("COMMENT_ID"));
+                disclComment.setComment(rset.getString("COMMENT"));
+                entProjDetailsDto.setDisclComment(disclComment);
                 disclosureProjects.add(entProjDetailsDto);
             }
         } catch (SQLException e) {
