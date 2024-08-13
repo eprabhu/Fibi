@@ -15,6 +15,7 @@ import com.polus.questionnaire.service.QuestionnaireEngineServiceImpl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -77,6 +78,25 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	@Override
 	public QuestionnaireSaveDto saveQuestionnaireAnswers(QuestionnaireSaveDto questionnaireDataBus) throws Exception {
 		return questionnaireService.saveQuestionnaireAnswers(questionnaireDataBus);
+	}
+
+	@Override
+	public Boolean canCreateProjectDisclosure(Integer questionnaireId, String personId, String proposalNumber) {
+	    try {
+	        Query query = entityManager.createNativeQuery("SELECT FN_INT_CAN_CREATE_PROP_DISCL(:proposalNumber, :personId, :questionnaireId)")
+	        							.setParameter("proposalNumber", proposalNumber)
+	                                   .setParameter("personId", personId)
+	                                   .setParameter("questionnaireId", questionnaireId);
+
+	        Object result = query.getSingleResult();
+	        if (result instanceof Number) {
+	            return ((Number) result).intValue() == 1;
+	        }
+	        return false;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 }
