@@ -1,9 +1,6 @@
 package com.polus.integration.proposal.dao;
 
 
-import java.util.HashMap;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
@@ -49,5 +46,13 @@ public interface ProposalIntegrationDao {
 	 * @return
 	 */
 	public QuestionnaireSaveDto saveQuestionnaireAnswers(QuestionnaireSaveDto questionnaireDataBus) throws Exception;
+
+	/**
+	 * @param questionnaireId
+	 * @param personId
+	 * @param proposalNumber
+	 * @return
+	 */
+	public Boolean canCreateProjectDisclosure(Integer questionnaireId, String personId, String proposalNumber);
 
 }
