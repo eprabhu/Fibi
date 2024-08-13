@@ -38,8 +38,8 @@ BEGIN
       FROM   eps_proposal EP
              left join unit U
                     ON U.unit_number = EP.owned_by_unit
-             left join eps_proposal_status EPS
-                    ON EPS.status_code = EP.status_code
+             left join proposal_state EPS
+                    ON EPS.state_type_code = EP.status_code
              left join sponsor S
                     ON S.sponsor_code = EP.prime_sponsor_code
              left join sponsor S1
