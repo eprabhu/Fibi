@@ -777,6 +777,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         if(!this.isUserCollapse) {
             this.isCardExpanded = window.innerWidth > 1399;
         }
+        this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
     }
 
     setFocus(id) {
@@ -791,6 +792,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     collapseHeader() {
         this.isCardExpanded = !this.isCardExpanded;
         this.isUserCollapse = !this.isUserCollapse;
+        setTimeout (() => {
+            this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
+        });
     }
 
     openProjectDetailsModal(): void {

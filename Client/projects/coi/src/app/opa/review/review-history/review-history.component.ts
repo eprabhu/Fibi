@@ -22,8 +22,9 @@ export class ReviewHistoryComponent implements OnInit, OnDestroy {
     opaDisclosure = null;
     reviewHistoryLogs: any = {};
     isReadMore = false;
+    hasHistoryLogs : any[] = [];
 
-    constructor(private _reviewService: ReviewService,
+    constructor(public reviewService: ReviewService,
                 public dataFormatPipe: DateFormatPipeWithTimeZone,
                 private _commonService: CommonService,
                 private _dataStore: DataStoreService) {
@@ -39,8 +40,9 @@ export class ReviewHistoryComponent implements OnInit, OnDestroy {
     }
 
     getReviewHistory() {
-        this.$subscriptions.push(this._reviewService.reviewHistory(this.opaDisclosure.opaDisclosureId).subscribe((data: any) => {
+        this.$subscriptions.push(this.reviewService.reviewHistory(this.opaDisclosure.opaDisclosureId).subscribe((data: any) => {
             this.updateHistoryLogs(data);
+            this.hasHistoryLogs = data;
         }, _err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));

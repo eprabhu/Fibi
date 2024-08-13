@@ -25,8 +25,9 @@ export class ReviewHistoryComponent implements OnInit {
     dependencies = ['coiDisclosure', 'coiReviewerList'];
     isReadMore = false;
     isExpanded = true;
+    hasHistoryLogs: any[] = [];
 
-    constructor( private _reviewService: ReviewService,
+    constructor( public reviewService: ReviewService,
                  public _dataFormatPipe: DateFormatPipeWithTimeZone,
                  private _commonService: CommonService,
                  private _dataStore: DataStoreService ) { }
@@ -58,8 +59,9 @@ export class ReviewHistoryComponent implements OnInit {
     }
 
     getReviewHistory() {
-        this.$subscriptions.push(this._reviewService.reviewHistory(this.coiDisclosure.disclosureId).subscribe((data: any) => {
+        this.$subscriptions.push(this.reviewService.reviewHistory(this.coiDisclosure.disclosureId).subscribe((data: any) => {
             this.updateHistoryLogs(data);
+            this.hasHistoryLogs = data;       
         }, _err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
