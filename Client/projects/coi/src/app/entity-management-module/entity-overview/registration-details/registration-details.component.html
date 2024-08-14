@@ -1,0 +1,55 @@
+<div class="card">
+    <div class="fs-16 mx-3 my-1">Registration Details</div>
+    <div>
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Registration Details'" (buttonAction)="addRegistrationDetails($event)"></app-no-information>
+    </div>
+</div>
+
+<!-- open add industry confirmation -->
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addRegistrationDetails" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Registration Details</h4>
+				<button type="button" class="btn-close" id="coi-add-registration-details-close-btn" title="Click here to close" data-bs-dismiss="modal"
+					aria-label="Click here to close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-registration-type">
+                            Entity Registration Type
+                        </label>
+                        <app-look-up (selectedResult)="entityRegistrationTypeSelect($event)" [options]="entityRegistrationTypeOption"
+                            [uniqueId]="'coi-entity-registration-type'" [isError]="mandatoryList?.has('registrationType')">
+                            <!-- [selectedLookUpList]="lookupValues['property21']" -->
+                        </app-look-up>
+                        <div *ngIf="mandatoryList?.has('registrationType')" class="invalid-feedback d-block fs-13" tabindex="-1"
+                            aria-label="Entity Registration Type">
+                            <span id="coi-entity-registration-type-validation1">{{mandatoryList?.get('registrationType')}}</span>
+                        </div>
+					</div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-registration-number">
+                            Entity Registration Number
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-name"
+                        [ngClass]="(mandatoryList?.has('registrationNumber')) ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="registrationDetails.regNumber">
+                        <div *ngIf="mandatoryList?.has('registrationNumber')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('registrationNumber')}}
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="coi-add-entity-registration-details-cancel-btn" data-bs-dismiss="modal" type="button"
+				title="Click here to cancel" (click)="clearRegistrationDetails()">Cancel
+				</button>
+				<button class="btn btn-primary me-0" id="coi-add-entity-registration-details-add-btn" type="button"
+					title="Click here to add entity registration details" aria-label="Click here to add" (click)="addRegistration()">Add Registration
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

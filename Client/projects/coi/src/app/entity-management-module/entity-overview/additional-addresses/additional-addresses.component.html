@@ -1,0 +1,136 @@
+<div class="card">
+    <div class="mx-3 my-1 d-flex align-items-center">
+        <div class="col fs-16 my-2">Additional Addresses</div>
+        <div class="col-auto" *ngIf="isAdditionalAddressAvailable">
+            <button id="additional-address-add-button"
+                class="btn btn-primary fs-14 d-inline-flex" title="'Click here to add additional address"
+                aria-label="'Click here to'additional address">
+                <mat-icon>add</mat-icon>Add Additional Addresses
+            </button>
+        </div>
+    </div>
+    <div *ngIf="!isAdditionalAddressAvailable">
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Additional Addresses'" (buttonAction)="addIndustryDetails($event)"></app-no-information>
+    </div>
+    <div *ngIf="isAdditionalAddressAvailable" c>
+
+    </div>
+</div>
+
+<!-- open add industry confirmation -->
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addAdditionalAddress" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Additional Address</h4>
+				<button type="button" class="btn-close" id="coi-add-additional-address-close-btn" title="Click here to close" data-bs-dismiss="modal"
+					aria-label="Click here to close"></button>
+			</div>
+			<div class="modal-body">
+                <div class="row mt-2 mb-3">
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-type">
+                            Address Type
+                        </label>
+                        <select class="form-control form-select" id="coi-entity-type" [(ngModel)]="additionalAddressObj.addressType"
+                        (ngModelChange)="changeEvent('entityType')">
+                            <option [value]="null">--Select Type--</option>
+                            <!-- <option *ngFor="let type of"
+                                                            [value]="type" >
+                                                            {{type?.description}}</option> -->
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-type">
+                            Phone Number
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-city" [(ngModel)]="additionalAddressObj.city"
+                        [ngClass]="(mandatoryList?.has('city')) ? 'is-invalid d-block' : ''">
+                    </div>
+                </div>
+				<div class="row mt-2 mb-3">
+                    <div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-address-1">
+                            <span class="mandatory me-1">*</span>
+                            Address 1
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-address-1"
+                        [ngClass]="(mandatoryList?.has('addressLine1')) ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="additionalAddressObj.addressLine1">
+                        <div *ngIf="mandatoryList?.has('addressLine1')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('addressLine1')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-address-2">
+                            <span class="mandatory me-1">*</span>
+                            Address 2
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-address-2"
+                        [ngClass]="(mandatoryList?.has('addressLine2')) ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="additionalAddressObj.addressLine2">
+                        <div *ngIf="mandatoryList?.has('addressLine2')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('addressLine2')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-country">
+                            Country
+                        </label>
+                        <app-endpoint-search [clearField]="clearCountryField" [uniqueId]="'coi-entity-country'"
+								[httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
+								class="w-100 mt-4" [isError]="mandatoryList?.has('countryCode')">
+                        </app-endpoint-search>
+                        <div *ngIf="mandatoryList?.has('countryCode')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('countryCode')}}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-city">
+                            City
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-city" [(ngModel)]="additionalAddressObj.city"
+                        [ngClass]="(mandatoryList?.has('city')) ? 'is-invalid d-block' : ''">
+                        <div *ngIf="mandatoryList?.has('city')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('city')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-state">
+                            State
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-state" [(ngModel)]="additionalAddressObj.state"
+                        [ngClass]="(mandatoryList?.has('state')) ? 'is-invalid d-block' : ''">
+                        <div *ngIf="mandatoryList?.has('state')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('state')}}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-postCode">
+                            ZIP
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-postCode" [(ngModel)]="additionalAddressObj.postCode"
+                        [ngClass]="(mandatoryList?.has('postCode')) ? 'is-invalid d-block' : ''">
+                        <div *ngIf="mandatoryList?.has('postCode')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('postCode')}}
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="coi-add-additional-address-cancel-btn" data-bs-dismiss="modal" type="button"
+				title="Click to cancel" (click)="clearAdditionalAddress()">Cancel
+				</button>
+				<button class="btn btn-primary me-0" id="coi-add-additional-address-add-btn" type="button"
+					title="Click here to add additional address" aria-label="Click here to add additional address" (click)="addIndustry()">Add Additional Address
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

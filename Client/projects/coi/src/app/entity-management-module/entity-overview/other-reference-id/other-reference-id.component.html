@@ -1,0 +1,75 @@
+<!-- <div class="card"> -->
+    <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+        <div class="row mb-2">
+            <div class="col-12 d-flex align-items-center coloured-bg-header">
+                <mat-icon class="icon-bg me-2 my-2 coloured-icons fs-14" aria-hidden="true">domain</mat-icon>
+                <span class="fs-16 fw-medium">{{sectionName}}</span>
+            </div>
+            <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Other Reference Id'" (buttonAction)="addOtherRefId($event)"></app-no-information>
+        </div>
+    </div>
+<!-- </div> -->
+
+<!-- open add entity risk -->
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="otherReferenceIdModal" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Other Reference Id</h4>
+				<button type="button" class="btn-close" id="coi-other-reference-id-close-btn" title="Click here to close" data-bs-dismiss="modal"
+					aria-label="Click here to close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row mb-3">
+					<div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-refernece-id-type">
+                            Reference Id Type
+                        </label>
+                        <app-look-up (selectedResult)="onReferenceIdTypeSelected($event)" [options]="coiCurrencyOptions"
+                        [uniqueId]="'coi-refernece-id-type'" [isError]="mandatoryList?.has('referenceType')"></app-look-up>
+                        <div *ngIf="mandatoryList?.has('referenceType')" class="invalid-feedback d-block fs-13" tabindex="-1"
+                            aria-label="Entity Registration Type">
+                            <span id="coi-entity-registration-type-validation1">{{mandatoryList?.get('referenceType')}}</span>
+                        </div>
+					</div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-reference-id">
+                            Reference ID
+                        </label>
+                        <input type="text" class="form-control" [(ngModel)]="otherReferenceIdObj.referenceId" id="coi-reference-id"
+                        [ngClass]="(mandatoryList?.has('referenceId')) ? 'is-invalid d-block' : ''">
+                        <div *ngIf="mandatoryList?.has('referenceId')" class="invalid-feedback d-block fs-13" tabindex="-1"
+                            aria-label="Entity Registration Type">
+                            <span id="coi-entity-registration-type-validation1">{{mandatoryList?.get('referenceId')}}</span>
+                        </div>
+					</div>
+                </div>
+                <div class="row">
+					<div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-reference-id-description">
+                            Description
+                        </label>
+                        <textarea appAutoGrow class="form-control" id="coi-other-reference-id-description" rows="1"
+                            [(ngModel)]="otherReferenceIdObj.description" appTailingSpaceRemover
+                            [limit]=2000 appLengthValidator
+                            [ngClass]="(mandatoryList?.has('description')) ? 'is-invalid d-block' : ''"
+                            [styleList]="'mt-2 float-end word-count'" title="Other Reference Id Description" aria-label="Other Reference Id Description">
+                        </textarea>
+                        <div *ngIf="mandatoryList?.has('description')" class="invalid-feedback d-block fs-13" tabindex="-1"
+                            aria-label="Entity Registration Type">
+                            <span id="coi-entity-registration-type-validation1">{{mandatoryList?.get('description')}}</span>
+                        </div>
+					</div>
+                </div>
+            </div>
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="coi-other-reference-id-cancel-btn" data-bs-dismiss="modal" type="button"
+				title="Click to cancel" (click)="clearOtherReferenceID()">Cancel
+				</button>
+				<button class="btn btn-primary me-0" id="coi-other-reference-id-add-btn" type="button"
+					title="Click here to add industry" aria-label="Click here to add" (click)="addOtherReferenceID()">Add Industry
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

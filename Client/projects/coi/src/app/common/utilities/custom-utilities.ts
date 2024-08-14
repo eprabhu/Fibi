@@ -149,3 +149,32 @@ export function jumpToSection(sectionId = '', offset = 0) {
 export function getFormattedSponsor(sponsorCode: any, sponsorName: any): string {
     return sponsorCode && sponsorName ?  `${sponsorCode} - ${sponsorName}` : sponsorCode || sponsorName;
 }
+
+/*
+ * checks whether a given email address is valid or not.
+ * @param emailAddress
+ */
+export function isValidEmailAddress(emailAddress: string): boolean {
+    // tslint:disable-next-line: max-line-length
+    const emailRgx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRgx.test(String(emailAddress).trim().toLowerCase());
+}
+
+export function phoneNumberValidation(input: any) {
+    const pattern = (/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[0-9]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/);
+    if (!pattern.test(input)) {
+        const newPattern = /^([a-zA-Z]|[0-9a-zA-Z])+$/;
+        return (newPattern.test(input)) ? 'Alphabets cannot be added in  Phone number field.' : ' Please provide a valid phone number';
+    } else {
+        return null;
+    }
+}
+
+export function inputRestrictionForNumberField(input: any) {
+    const pattern = /[0-9\+\-\/\ ]/;
+    if (!pattern.test(input)) {
+        return true;
+    } else {
+        return null;
+    }
+}
