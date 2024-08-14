@@ -223,7 +223,7 @@ public interface ConflictOfInterestDao {
 	 * @param 
 	 * @return check if SFI Completed For Project
 	 */
-	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId);
+	public Boolean checkIsSFICompletedForProject(Integer moduleCode, String moduleItemId, Integer disclosureId);
 
 	/**
 	 * 
@@ -239,7 +239,7 @@ public interface ConflictOfInterestDao {
 	 * @param moduleItemKey
 	 * @return Boolean value
 	 */
-	public boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, Integer moduleItemKey);
+	public boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, String moduleItemKey);
 
 	/**
 	 * This method is used for save the evaluate DisclosureQuestionnaire value in disclosure table
