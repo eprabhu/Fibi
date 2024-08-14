@@ -394,7 +394,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId) {
+	public Boolean checkIsSFICompletedForProject(Integer moduleCode, String moduleItemId, Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
 		hqlQuery.append("SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
@@ -431,7 +431,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public boolean evaluateDisclosureQuestionnaire(Integer moduleCode,Integer submoduleCode,Integer moduleItemKey) {
+	public boolean evaluateDisclosureQuestionnaire(Integer moduleCode,Integer submoduleCode,String moduleItemKey) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		SessionImpl sessionImpl = (SessionImpl) session;
 		Connection connection = sessionImpl.connection();
@@ -443,7 +443,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			statement.registerOutParameter(1, OracleTypes.INTEGER);
 			statement.setInt(2, moduleCode);
 			statement.setInt(3, submoduleCode);
-			statement.setInt(4, moduleItemKey);
+			statement.setString(4, moduleItemKey);
 			statement.execute();
 			int result = statement.getInt(1);
 			if (result == 1) {
@@ -1883,7 +1883,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
 					if (disclosureId != null) {
 						detail.setIsRelationShipExists(rset.getInt("RELATIONSHIP_COUNT") > 0 ? true : false);
-						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
+						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId() != null ? detail.getModuleItemId().toString() : null, disclosureId));
 						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 					}
 				}
@@ -1906,7 +1906,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
 					if (disclosureId != null) {
 						detail.setIsRelationShipExists(rset.getInt("RELATIONSHIP_COUNT") > 0 ? true : false);
-						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
+						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId() != null ? detail.getModuleItemId().toString() : null, disclosureId));
 						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 					}
 				}
@@ -4976,7 +4976,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					statement.setNull(4, Types.VARCHAR);
 				}
 				else {
-					statement.setInt(4, vo.getModuleItemId());
+					statement.setString(4, vo.getModuleItemId());
 				}
 				statement.execute();
 				rset = statement.getResultSet();
@@ -5002,7 +5002,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					statement.setNull(5, Types.INTEGER);
 				}
 				else {
-					statement.setInt(5, vo.getModuleItemId());
+					statement.setString(5, vo.getModuleItemId());
 				}
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
