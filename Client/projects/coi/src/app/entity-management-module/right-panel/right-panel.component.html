@@ -1,0 +1,39 @@
+<div class="card p-1 h-100 position-fixed">
+    <div class="row fs-14 m-2 py-1 rounded-1 matching-card">
+        <div class="col-12">
+            <span class="coi-text-light d-block">D-U-N-S Number</span>
+            <span class="d-flex">
+            <span class="coi-text-light">
+                12323112
+            </span>
+            <span class="align-items-center badge d-inline-flex fw-normal fs-13 px-2 rounded-5 text-bg-light-success">
+                <mat-icon class="me-1 fs-13">cancel</mat-icon>
+                <span>Matched</span>
+            </span>
+            </span>
+        </div>
+        <div class="col-12 mt-2">
+            <span class="coi-text-light d-block">Sponsor</span>
+            <span class="align-items-center badge d-inline-flex fs-13 fw-normal px-2 rounded-5 text-bg-light-success">
+                <mat-icon class="me-1 fs-13">cancel</mat-icon>
+                <span>Ready For Feed</span>
+            </span>
+        </div>
+        <div class="col-12 mt-2">
+            <span class="coi-text-light d-block">Sub-award Organization</span>
+            <span class="align-items-center badge d-inline-flex fs-13 fw-normal px-2 rounded-5 text-bg-light-danger">
+                <mat-icon class="me-1 fs-13">check_circle</mat-icon>
+                <span>Not Ready For Feed</span>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div *ngFor="let section of sectionDetails; let isFirst = first" class="p-0">
+            <div class="border-bottom fs-14 mx-2 py-3 d-flex cursor-pointer" [class.border-top]="isFirst"
+            (click)="scrollToSelectedSection(section)" [class.selected-section]="section.sectionId === selectedSectionId">
+            <mat-icon *ngIf="section.sectionId === selectedSectionId" class="ms-2">chevron_left</mat-icon>
+            <span [class.left-padding]="section.sectionId !== selectedSectionId" [class.ms-2]="section.sectionId === selectedSectionId">{{section?.sectionName}}</span>
+        </div>
+        </div>
+    </div>
+</div>

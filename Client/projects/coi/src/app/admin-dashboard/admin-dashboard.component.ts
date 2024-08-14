@@ -1029,7 +1029,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     getLookupDataForProjectStatus(): void {
         this.$subscriptions.push(this.coiAdminDashboardService.getLookupDataForProposalStatus().subscribe((res: any) => {
-            this.lookupArrayForProjectStatus = res; 
+            this.lookupArrayForProjectStatus = res;
         }))
     }
 }

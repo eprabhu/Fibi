@@ -1,0 +1,169 @@
+<div class="card px-3">
+    <div class="fs-16 my-1">Other Details</div>
+    <div class="row mb-3 mt-3">
+        <div class="col-4" tabindex="-1" aria-label="Start Date">
+            <div class="d-flex">
+                <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                    for="coi-other-details-start-date">Start Date
+                </label>
+            </div>
+            <div>
+                <span class="dateField w-100">
+                    <input matInput [matDatepicker]="otherDetailsStartDate" id="coi-other-details-start-date"
+                        placeholder="{{datePlaceHolder}}" style="width: 100% !important" (click)="otherDetailsStartDate.open()"
+                        autocomplete="off" class="d-inline-block form-control"
+                        [(ngModel)]="startDate" (ngModelChange)="onDateSelect('START')"
+                        (keypress)="commonService._keyPress($event, 'date')" />
+                    <i title="Click here to select Start date" (click)="otherDetailsStartDate.open()"
+                        (keyup.enter)="otherDetailsStartDate.open()" (keyup.space)="otherDetailsStartDate.open()"
+                        class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click here to select date"></i>
+                    <mat-datepicker #otherDetailsStartDate>
+                    </mat-datepicker>
+                </span>
+            </div>
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Incorporation Date">
+            <div class="d-flex">
+                <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                    for="coi-other-details-incorporation-date">Incorporation Date
+                </label>
+            </div>
+            <div>
+                <span class="dateField w-100">
+                    <input matInput [matDatepicker]="incorporationStartDate" id="coi-other-incorporation-start-date"
+                        placeholder="{{datePlaceHolder}}" style="width: 100% !important"
+                        (click)="incorporationStartDate.open()" autocomplete="off" class="d-inline-block form-control"
+                        [(ngModel)]="incorporationDate" (ngModelChange)="onDateSelect('INCORPORATION')"
+                        (keypress)="commonService._keyPress($event, 'date')" />
+                    <i title="Click here to select incorporation date" (click)="incorporationStartDate.open()"
+                        (keyup.enter)="incorporationStartDate.open()" (keyup.space)="incorporationStartDate.open()"
+                        class="fa fa-calendar fa-large insidePicker hand-cursor"
+                        title="Click here to select incorporation date"></i>
+                    <mat-datepicker #incorporationStartDate>
+                    </mat-datepicker>
+                </span>
+            </div>
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Incorporation In">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-incorporation-in">Incorporation In
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-incorporation-in"
+                [(ngModel)]="otherDetailsObj.incorporationIn" (ngModelChange)="changeEvent('incorporationIn')">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-4" tabindex="-1" aria-label="Currency">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help" for="coi-other-details-currency">Currency
+            </label>
+            <app-look-up (selectedResult)="onCurrencyLookupSelect($event)" [options]="coiCurrencyOptions"
+                [uniqueId]="'adv-review-status'">
+                <!-- [selectedLookUpList]="lookupValues['property21']" -->
+            </app-look-up>
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Congressional district">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-congressional-district">Congressional district
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-congressional-district"
+                [(ngModel)]="otherDetailsObj.congressionalDistrict" (ngModelChange)="changeEvent('congressionalDistrict')">
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Federal Employer ID">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-federal-employer-id">Federal Employer ID
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-federal-employer-id"
+                [(ngModel)]="otherDetailsObj.federalEmployerId" (ngModelChange)="changeEvent('federalEmployerId')">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-4" tabindex="-1"
+            aria-label="Entity Prior Name">
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-details-entity-prior-name">
+                Entity Prior Name
+            </label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control fs-13" id="coi-other-details-entity-prior-name"
+                 aria-label="Enter phone number" aria-describedby="button-addon2"
+                [(ngModel)]="entityPriorName">
+                <button id="coi-other-details-entity-prior-name-add-btn"
+                    class="btn btn-primary phone-no-btn fs-14 rounded-0" title="Click here to add entity prior name"
+                    aria-label="Click here to add entity prior name" (click)="addEntityPriorName()">
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                </button>
+            </div>
+            <div class="fileChips word-break-all mt-2" *ngIf="otherDetailsObj?.entityPriorName?.length > 0">
+                <ng-container *ngFor="let priorName of otherDetailsObj.entityPriorName;let i = index;">
+                    <span class="align-items-end d-inline-flex">{{priorName}}
+                        <mat-icon class="fileChips-close fs-13" id="coi-prior-name-delete" aria-hidden="true"
+                            (click)="deletePriorName(i)" title="Remove this entity prior number">clear</mat-icon>
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Entity Alternate Name">
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-details-entity-alternate-name">
+                Alternate Name
+            </label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control fs-13" id="coi-other-details-entity-alternate-name"
+                 aria-label="Enter phone number" aria-describedby="button-addon2"
+                [(ngModel)]="entityAlternateName">
+                <button id="coi-other-details-entity-alternate-name-add-btn" class="btn btn-primary phone-no-btn fs-14 rounded-0"
+                    title="Click here to add entity alternate name" aria-label="Click here to add entity prior name"
+                    (click)="addEntityAlternatename()">
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                </button>
+            </div>
+            <div class="fileChips word-break-all mt-2" *ngIf="otherDetailsObj?.entityAlternateName?.length > 0">
+                <ng-container *ngFor="let alternateName of otherDetailsObj.entityAlternateName;let i = index;">
+                    <span class="align-items-end d-inline-flex">{{alternateName}}
+                        <mat-icon class="fileChips-close fs-13" id="coi-alternate-name-delete" aria-hidden="true"
+                            (click)="deleteEntityAlternateName(i)"
+                            title="Remove this entity alternate number">clear</mat-icon>
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Entity Short Name">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-entity-short-name">Entity Short Name
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-entity-short-name"
+                [(ngModel)]="otherDetailsObj.entityShortName" (ngModelChange)="changeEvent('entityShortName')">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6" tabindex="-1"
+            aria-label="Number of employees">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-number-of-employees">Number of employees
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-number-of-employees"
+                [(ngModel)]="otherDetailsObj.numberofemployees" (ngModelChange)="changeEvent('numberofemployees')">
+        </div>
+        <div class="col-6" tabindex="-1"
+            aria-label="Entity Business Status">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-entity-business-status">Entity Business Status
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-entity-business-status"
+                [(ngModel)]="otherDetailsObj.entityBusinessStatus"  (ngModelChange)="changeEvent('entityBusinessStatus')">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12" tabindex="-1" aria-label="Activity Text">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-activity-type">Activity Text (Business Description)
+            </label>
+            <input type="text" class="form-control fs-13" id="coi-other-details-activity-type"
+                [(ngModel)]="otherDetailsObj.activityText" (ngModelChange)="changeEvent('activityText')">
+        </div>
+    </div>
+</div>

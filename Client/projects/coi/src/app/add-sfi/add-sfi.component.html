@@ -81,7 +81,7 @@
 		<div class="row align-items-baseline px-1" tabindex="-1">
 			<!-- Entity Name -->
 			<div class="col-12" tabindex="-1" aria-label="Entity Name Search Field" [class.mb-2]="!isResultFromSearch && !isEntityManagement">
-				<div class="d-flex position-relative">
+				<div class="d-flex position-relative" *ngIf="!isEntityManagement && !isNewEntityFromSearch && !canShowEntityFields">
 					<label class="d-block fs-14 fw-500 px-1 pb-1 label-text coi-label-help" for="coi-add-sfi-entity-name">
 						<span class="mandatory">*</span>
 						Entity Name
@@ -89,22 +89,22 @@
 					</label>
 				</div>
 				<div class="col">
-                    <app-elastic *ngIf="!isEntityManagement && !isNewEntityFromSearch ;else textBox" [uniqueId]="'coi-add-sfi-entity-name'" class="w-100 mt-4"
+                    <app-elastic *ngIf="!isEntityManagement && !isNewEntityFromSearch && !canShowEntityFields" [uniqueId]="'coi-add-sfi-entity-name'" class="w-100 mt-4"
                         [options]="EntitySearchOptions" [placeHolder]="'Type here to search / add an Entity Name'"
                         [clearField]="clearField" [isDisabled]="isViewMode"
                         [isError]="mandatoryList?.has('entityName') || mandatoryList?.has('entityAlreadyAdded')"
                         (selectedResult)="selectedEvent($event)" [addNewValue]="'ALLOW_UNIQUE'" (newValueSelect)="addNewEntity($event)">
                     </app-elastic>
-					<ng-template #textBox>
+					<!-- <ng-template #textBox>
 						<input type="text" class="form-control fs-13"  [class.pr-6]="isNewEntityFromSearch"
 							[(ngModel)]="entityDetails.coiEntity.entityName"
 							[ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
 							id="coi-add-sfi-entity-name" (ngModelChange)="setHeader();" appLengthValidator
-							[limit]=500 [styleList]="'mt-2 float-end word-count'">
+							[limit]=500 [styleList]="'mt-2 float-end word-count'"> -->
                         <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13"
-                            (click)="entityDetails.coiEntity.entityName = '';isNewEntityFromSearch = false"> Back to Search </a>
-					</ng-template>
-					<app-common-information [elementId]="'coi-add-sfi-entity-name'" [subSectionId]="531"></app-common-information>
+                            (click)="entityDetails.coiEntity.entityName = '';isNewEntityFromSearch = false;canShowEntityFields = false" > Back to Search </a>
+					<!-- </ng-template> -->
+					<app-common-information *ngIf="!isEntityManagement && !isNewEntityFromSearch && !canShowEntityFields" [elementId]="'coi-add-sfi-entity-name'" [subSectionId]="531"></app-common-information>
 					<div *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-block fs-13"
 						tabindex="-1" aria-label="Entity Name Validation" aria-describedby="entity-name-validation1">
 						<span id="coi-add-sfi-entity-name-validation1">{{mandatoryList?.get('entityName')}}</span>
@@ -193,171 +193,7 @@
 					</div>
 				</div>
 				<ng-container *ngIf="canShowEntityFields">
-					<!-- Country -->
-					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Country Search Field">
-						<div class="d-flex position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-country-search">
-								<span class="mandatory">*</span>
-								Country
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-country-search'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col">
-							<app-endpoint-search [clearField]="clearCountryField" [uniqueId]="'coi-add-sfi-country-search'"
-								[httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
-								[isDisabled]="isResultFromSearch || isViewMode ||modifyType ==='1'"
-								class="w-100 mt-4" [isError]="mandatoryList?.has('country')">
-							</app-endpoint-search>
-							<app-common-information [elementId]="'coi-add-sfi-country-search'" [subSectionId]="531"></app-common-information>
-							<div id="coi-add-sfi-country-valiidation" *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block fs-13">
-								{{mandatoryList?.get('country')}}
-							</div>
-						</div>
-					</div>
-					<!-- City -->
-					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1" aria-label="City">
-						<div class="d-flex fs-15 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-city-input-box">City
-							<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-city-input-box'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col">
-							<input id="coi-add-sfi-city-input-box" type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.city"
-								[disabled]="isResultFromSearch || isViewMode" appTailingSpaceRemover>
-								<app-common-information [elementId]="'coi-add-sfi-city-input-box'" [subSectionId]="531"></app-common-information>
-						</div>
-					</div>
-					<!-- Address -->
-					<div class="col-12" tabindex="-1" aria-label="Address">
-						<span>
-							<label for="coi-add-sfi-address-textarea" class="fs-14 fw-500 pb-1 label-text coi-label-help">
-								<span class="mandatory">*</span>
-								Address
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-address-textarea'"></app-common-help-text>
-							</label>
-							<textarea appAutoGrow class="form-control" rows="1"
-								[(ngModel)]="entityDetails.coiEntity.address"
-								appTailingSpaceRemover id="coi-add-sfi-address-textarea"
-								[ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator
-								[limit]=2000 [styleList]="'mt-2 float-end word-count'" title="Adress" aria-label="Adress">
-                            </textarea>
-							<app-common-information [elementId]="'coi-add-sfi-address-textarea'" [subSectionId]="531"></app-common-information>
-							<div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13 position-absolute">
-								{{mandatoryList?.get('address')}}
-							</div>
-						</span>
-					</div>
-					<!-- Phone -->
-					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Phone">
-						<div class="d-flex px-1 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-phone-input-box">
-								Phone
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-phone-input-box'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col">
-								<input id="coi-add-sfi-phone-input-box" class="form-control" [(ngModel)]="entityDetails.coiEntity.phone"
-									appTailingSpaceRemover
-									(keypress)="inputRestriction($event)"
-									[disabled]="isResultFromSearch || isViewMode"
-									(keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)" maxlength="15">
-									<app-common-information [elementId]="'coi-add-sfi-phone-input-box'" [subSectionId]="531"></app-common-information>
-						</div>
-					</div>
-					<!-- Zip Code -->
-					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1" aria-label="Zip Code">
-						<div class="d-flex fs-15 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-zip-code">
-								Zip Code
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-zip-code'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col pe-1">
-							<input id="coi-add-sfi-zip-code" type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.zipCode"
-								appTailingSpaceRemover
-								(keypress)="inputRestriction($event)" maxlength="15"
-								[disabled]="isResultFromSearch || isViewMode">
-								<app-common-information [elementId]="'coi-add-sfi-zip-code'" [subSectionId]="531"></app-common-information>
-						</div>
-					</div>
-					<!-- Website -->
-					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" tabindex="-1" aria-label="Website">
-						<div class="d-flex position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-website">Website
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-website'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col">
-							<input id="coi-add-sfi-website" type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL"
-								 [disabled]="isResultFromSearch || isViewMode"
-								appTailingSpaceRemover>
-								<app-common-information [elementId]="'coi-add-sfi-website'" [subSectionId]="531"></app-common-information>
-						</div>
-					</div>
-					<!-- Email Address -->
-					<div class="col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 mt-3 mt-xl-0" tabindex="-1" aria-label="Email Address">
-						<div class="d-flex fs-15 position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-email-input-box"> Email Address
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-email-input-box'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col">
-							<input  type="text" class="form-control" id="coi-add-sfi-email-input-box"
-								[(ngModel)]="entityDetails.coiEntity.emailAddress"
-								[ngClass]="emailWarningMsg != null ? 'is-invalid d-block' : ''"
-								[disabled]="isResultFromSearch || isViewMode"
-								appTailingSpaceRemover>
-								<app-common-information [elementId]="'coi-add-sfi-email-input-box'" [subSectionId]="531"></app-common-information>
-							<div *ngIf="emailWarningMsg" class="invalid-feedback d-block fs-13">
-								{{emailWarningMsg}}
-							</div>
-						</div>
-					</div>
-					<!-- Entity Type -->
-					<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" tabindex="-1" aria-label="Entity Type Dropdown">
-						<div class="d-flex position-relative">
-							<label class="d-block fs-14 fw-500 pb-1 label-text coi-label-help" for="coi-add-sfi-entity-type">
-								<span class="mandatory">*</span> Entity Type
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-entity-type'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col">
-							<select class="form-control form-select" id="coi-add-sfi-entity-type"
-								[(ngModel)]="entityDetails.coiEntity.entityTypeCode"
-								(ngModelChange)="setEntityTypeObj();"
-								[ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''"
-								[disabled]="isResultFromSearch || isViewMode || modifyType ==='1'">
-								<option [value]="null">--Select Type--</option>
-								<option *ngFor="let type of sfiLookUpList?.entityType"
-									[value]="type?.entityTypeCode" [hidden]="type?.isActive != true">
-									{{type?.description}}</option>
-							</select>
-							<app-common-information [elementId]="'coi-add-sfi-entity-type'" [subSectionId]="531"></app-common-information>
-							<div *ngIf="mandatoryList?.has('entityType')" class="invalid-feedback d-block fs-13">
-								{{mandatoryList?.get('entityType')}}
-							</div>
-						</div>
-					</div>
-					<!-- Risk -->
-					<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-3 mt-md-0" *ngIf="isEntityManagement"  tabindex="-1" aria-label="Risk Dropdwon">
-						<div class="d-flex px-1 position-relative">
-							<label class="d-block fs-14 fw-500 px-1 pb-1 label-text" for="coi-add-sfi-risk-level">Risk
-								<app-common-help-text [subSectionId]="531" [elementId]="'coi-add-sfi-risk-level'"></app-common-help-text>
-							</label>
-						</div>
-						<div class="col px-1">
-							<select class="form-select form-control fs-14"
-								[(ngModel)]="entityDetails.coiEntity.riskCategoryCode"
-								[disabled]="modifyType ==='1'" (ngModelChange)="setEntityRiskCategoryObj()"
-								id="coi-add-sfi-risk-level">
-								<ng-container *ngFor="let riskLevel of riskLevelLookup">
-									<option [value]="riskLevel?.riskCategoryCode">{{riskLevel?.description}}
-									</option>
-								</ng-container>
-							</select>
-							<app-common-information [elementId]="'coi-add-sfi-risk-level'" [subSectionId]="531"></app-common-information>
-						</div>
-					</div>
+                    <app-entity-creation [isCreateScreen]="true" (emitEntityRO)="saveBasicEntityDetails($event)" [saveEntity]="saveEntity"></app-entity-creation>
 				</ng-container>
 				<ng-container *ngIf="isResultFromSearch">
 					<div class="mb-2">

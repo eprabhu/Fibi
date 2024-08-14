@@ -1,0 +1,180 @@
+
+        <div class="row mb-3">
+            <div class="col-9">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-name">
+                    <span class="mandatory me-1">*</span>
+                    Entity Name
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-name"
+                [ngClass]="(mandatoryList?.has('primaryName')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="createEntityObj.primaryName" (ngModelChange)="changeEvent('primaryName')">
+                <div *ngIf="mandatoryList?.has('primaryName')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('primaryName')}}
+                </div>
+            </div>
+            <div class="col-3">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-type">
+                    Entity Type
+                </label>
+                <select class="form-control form-select" id="coi-entity-type" [(ngModel)]="createEntityObj.entityType"
+                (ngModelChange)="changeEvent('entityType')">
+                    <option [value]="null">--Select Type--</option>
+                    <!-- <option *ngFor="let type of"
+                									[value]="type" >
+                									{{type?.description}}</option> -->
+                </select>
+            </div>
+        </div>
+        <div class="row mx-0 py-3">
+            <div class="card" [class.grey-background]="!isCreateScreen">
+                <div class="color-black mb-2">
+                    <label class="form-check-label colour-black relation-header px-2 fs-14 label-text coi-label-help" [class.grey-background]="!isCreateScreen">Primary Address
+                    </label>
+                </div>
+                <div class="row mt-2 mb-3">
+                    <div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-address-1">
+                            <span class="mandatory me-1">*</span>
+                            Address 1
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-address-1"
+                        [ngClass]="(mandatoryList?.has('primaryAddressLine1')) ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="createEntityObj.primaryAddressLine1" (ngModelChange)="changeEvent('primaryAddressLine1')">
+                        <div *ngIf="mandatoryList?.has('primaryAddressLine1')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('primaryAddressLine1')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-address-2">
+                            Address 2
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-address-2"
+                        [ngClass]="(mandatoryList?.has('primaryAddressLine2')) ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="createEntityObj.primaryAddressLine2" (ngModelChange)="changeEvent('primaryAddressLine2')">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-city">
+                            City
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-city" [(ngModel)]="createEntityObj.city" (ngModelChange)="changeEvent('city')">
+                    </div>
+                    <div class="col-3">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-state">
+                            State
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-state" [(ngModel)]="createEntityObj.state" (ngModelChange)="changeEvent('state')">
+                    </div>
+                    <div class="col-3">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-postCode">
+                            ZIP
+                        </label>
+                        <input type="text" class="form-control fs-13" id="coi-entity-postCode" [(ngModel)]="createEntityObj.postCode" (ngModelChange)="changeEvent('postCode')">
+                    </div>
+                    <div class="col-3">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-country">
+                            Country
+                        </label>
+                        <app-endpoint-search [clearField]="clearCountryField" [uniqueId]="'coi-entity-country'"
+								[httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
+								class="w-100 mt-4" [isError]="mandatoryList?.has('country')">
+                        </app-endpoint-search>
+                        <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('country')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-phone">
+                    Phone
+                </label>
+                <input type="text" class="form-control fs-13"  id="coi-entity-phone"
+                [ngClass]="(mandatoryList?.has('phone')) ? 'is-invalid d-block' : ''"
+                (focusout)="validateAndAddPhoneNumber()"
+                [(ngModel)]="createEntityObj.phoneNumber" (ngModelChange)="clearPhoneValidation()" (keypress)="checkForValidPhoneNumber($event)">
+                <div *ngIf="mandatoryList?.has('phone')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('phone')}}
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-certifiedEmail">
+                    Email Address
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-certifiedEmail"
+                [ngClass]="(mandatoryList?.has('certifiedEmail')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="createEntityObj.certifiedEmail"
+                (focusout)="validateEmail()" (ngModelChange)="clearEmailValidation()">
+                <div *ngIf="mandatoryList?.has('certifiedEmail')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('certifiedEmail')}}
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-websiteAddress">
+                    Website
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-websiteAddress" [(ngModel)]="createEntityObj.websiteAddress" (ngModelChange)="changeEvent('websiteAddress')">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-dunsNumber">
+                    D-U-N-S Number
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-dunsNumber" [(ngModel)]="createEntityObj.dunsNumber"
+                [ngClass]="(mandatoryList?.has('duns')) ? 'is-invalid d-block' : ''"
+                (ngModelChange)="changeEvent('dunsNumber')" (focusout)="checkForDuplicateDUNS()">
+                <div *ngIf="mandatoryList?.has('duns')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('duns')}}
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-UEI">
+                    UEI Number
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-UEI" [(ngModel)]="createEntityObj.ueiNumber"
+                [ngClass]="(mandatoryList?.has('uei')) ? 'is-invalid d-block' : ''"
+                (ngModelChange)="changeEvent('ueiNumber')" (focusout)="checkForDuplicateUEI()">
+                <div *ngIf="mandatoryList?.has('uei')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('uei')}}
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-CAGE">
+                    CAGE Number
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-CAGE"
+                [ngClass]="(mandatoryList?.has('cage')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="createEntityObj.cageNumber"
+                (focusout)="checkForDuplicateCAGE()">
+                <div *ngIf="mandatoryList?.has('cage')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('cage')}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="!isCreateScreen">
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-human-sub-assurance">
+                    Human Sub Assurance
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-human-sub-assurance" [(ngModel)]="createEntityObj.humanSubAssurance" (ngModelChange)="changeEvent('humanSubAssurance')">
+            </div>
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-animal-welfare-assurance">
+                    Animal Welfare Assurance
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-animal-welfare-assurance" [(ngModel)]="createEntityObj.animalWelfare" (ngModelChange)="changeEvent('animalWelfare')">
+            </div>
+            <div class="col-4">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-aaalac">
+                   AAALAC (Animal Accreditaion)
+                </label>
+                <input type="text" class="form-control fs-13" id="coi-entity-aaalac" [(ngModel)]="createEntityObj.animalAccrediation" (ngModelChange)="changeEvent('animalAccrediation')">
+            </div>
+        </div>
+

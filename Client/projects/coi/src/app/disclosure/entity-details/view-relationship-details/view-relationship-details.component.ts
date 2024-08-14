@@ -172,7 +172,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     navigateBack() {
-        if (this.previousUrlBeforeActivate === '' && (this._navigationService.previousURL.includes('personEntityId') || this._navigationService.previousURL.includes('entity-management') ||
+        if (this.previousUrlBeforeActivate === '' && (this._navigationService.previousURL.includes('personEntityId') || this._navigationService.previousURL.includes('manage-entity') ||
             this._navigationService.previousURL.includes('create-sfi/create') || this._navigationService.previousURL === '')) {
             this._router.navigate(['/coi/user-dashboard/entities']);
         } else {
@@ -487,7 +487,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     showViewButton() {
-        return  this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY']) && !['entity-management/entity-details'].some(ele => this._router.url.includes(ele))
+        return  this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY']) && !['manage-entity/'].some(ele => this._router.url.includes(ele))
     }
 
     private getSfiEntityDetails(): void {

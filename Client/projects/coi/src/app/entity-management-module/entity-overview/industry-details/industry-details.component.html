@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="fs-16 mx-3 my-1">Industry Details</div>
+    <div>
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Industry Details'" (buttonAction)="addIndustryDetails($event)"></app-no-information>
+    </div>
+</div>
+
+<!-- open add industry confirmation -->
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addIndustryDetails" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Industry Details</h4>
+				<button type="button" class="btn-close" id="coi-add-industry-details-close-btn" title="Click here to close" data-bs-dismiss="modal"
+					aria-label="Click here to close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-industry-category-type">
+                            Industry Category Type
+                        </label>
+                        <app-look-up (selectedResult)="onIndustryCategoryTypeSelect($event)" [options]="industryCategoryTypeOptions"
+                            [uniqueId]="'coi-industry-category-type'" [isError]="mandatoryList?.has('industryCategoryType')">
+                            <!-- [selectedLookUpList]="lookupValues['property21']" -->
+                        </app-look-up>
+                        <div *ngIf="mandatoryList?.has('industryCategoryType')" class="invalid-feedback d-block fs-13" tabindex="-1"
+                            aria-label="Industry Category Type">
+                            <span id="coi-industry-category-type-validation1">{{mandatoryList?.get('industryCategoryType')}}</span>
+                        </div>
+					</div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-industry-category-description">
+                            Industry Category Description
+                        </label>
+                        <app-look-up (selectedResult)="onIndustryCategoryDescriptionSelect($event)" [options]="industryCategoryDescriptionOptions"
+                            [uniqueId]="'coi-industry-category-description'" [isError]="mandatoryList?.has('industryCategroyDescription')">
+                            <!-- [selectedLookUpList]="lookupValues['property21']" -->
+                        </app-look-up>
+                        <div *ngIf="mandatoryList?.has('industryCategroyDescription')" class="invalid-feedback d-block fs-13"
+						tabindex="-1" aria-label="Industry Category Description">
+						<span id="coi-industry-category-description-validation1">{{mandatoryList?.get('industryCategroyDescription')}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary" id="coi-add-industry-details-cancel-btn" type="button"
+            title="Click to cancel" (click)="clearIndustryDetails()">Cancel
+            </button>
+            <button class="btn btn-primary me-0" id="coi-add-industry-details-add-btn" type="button"
+                title="Click here to add industry" aria-label="Click here to add" (click)="addIndustry()">Add Industry
+            </button>
+        </div>
+	</div>
+</div>
