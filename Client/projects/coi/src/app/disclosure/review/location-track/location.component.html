@@ -8,7 +8,7 @@
                                                         ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && reviewerList?.length"
                                 class="col-auto" [class.me-5]="reviewerList?.length">
                                 <button (click)="clearReviewModal()"
-                                    aria-label="Click to Add Reviewer"
+                                    aria-label="Click here to Add Reviewer"
                                     class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center"
                                     data-bs-toggle="modal" title="Click here to add Reviewers" data-bs-target="#add-coi-reviewer-modal" id="coi_add_reviewer_btn">
                                     <mat-icon class="me-2" aria-hidden="true">person_add</mat-icon>
@@ -27,7 +27,7 @@
     <div class="card-body fs-14" *ngIf="isExpanded" [@heightAnimation] [class.p-5]="!reviewerList?.length">
         <div *ngIf="coiService.isCOIAdministrator && ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && !reviewerList?.length" 
         class="d-flex align-items-center justify-content-center">
-                <button (click)="clearReviewModal()" aria-label="Click to Add Reviewer"
+                <button (click)="clearReviewModal()" aria-label="Click here to Add Reviewer"
                     class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center"
                     data-bs-toggle="modal" title="Click here to add Reviewers" data-bs-target="#add-coi-reviewer-modal" id="coi_add_reviewer_btn">
                     <mat-icon class="me-2" aria-hidden="true">person_add</mat-icon>

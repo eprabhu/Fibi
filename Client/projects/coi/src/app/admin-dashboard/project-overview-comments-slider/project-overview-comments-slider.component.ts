@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { getFormattedSponsor, openCoiSlider } from '../../common/utilities/custom-utilities';
 import { EDITOR_CONFIURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
@@ -20,7 +20,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     @Output() commentCountUpdated = new EventEmitter<number>();
     public Editor = DecoupledEditor;
     editorConfig = EDITOR_CONFIURATION;
-    isReplyComment = false;
+    isReplyCommentOpen = false;
     projectOverviewCommentDetails: CoiProjectOverviewComment = new CoiProjectOverviewComment();
     $subscriptions: Subscription[] = [];
     showAddComment = false;
@@ -32,6 +32,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     commentsData: any[] = [];
     mandatoryMap = new Map();
     currentUserId: any;
+    isEditorFocused = false;
     getFormattedSponsor = getFormattedSponsor;
 
     constructor(public projectOverviewService: ProjectOverviewService, public commonService: CommonService) { }
@@ -73,7 +74,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
 
     addComment(details): void {
         this.$subscriptions.push(this.projectOverviewService.addProjectOverviewComment(details).subscribe((res: any) => {
-            this.cancelOrClearCommentsDetails();
+            this.cancelOrClearCommentsDetails(true);
             if (details) {
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment added successfully');
                 this.dataForCommentSlider.projectDetails.commentCount++;
@@ -87,7 +88,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
 
     updateComment(details): void {
         this.$subscriptions.push(this.projectOverviewService.updateProjectOverviewComment(details).subscribe((res: any) => {
-            this.cancelOrClearCommentsDetails();
+            this.cancelOrClearCommentsDetails(true);
             if (details) {
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment updated successfully');
             }
@@ -98,7 +99,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
 
     deleteComment(details): void {
         this.$subscriptions.push(this.projectOverviewService.deleteProjectOverviewComments(details.commentId).subscribe((res: any) => {
-            this.cancelOrClearCommentsDetails();
+            this.cancelOrClearCommentsDetails(true);
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment deleted successfully');
             this.dataForCommentSlider.projectDetails.commentCount--;
             this.commentCountUpdated.emit(this.dataForCommentSlider.projectDetails.commentCount)
@@ -112,6 +113,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     }
 
     toggleAddCommentBox(): void {
+        this.mandatoryMap.clear();
         this.showAddComment = !this.showAddComment;
     }
 
@@ -122,10 +124,12 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         );
     }
 
-    replyComment(commentDetails, index): void {
-        if (!this.isReplyComment && !this.projectOverviewService.isEditParentComment && !this.isEditComment) {
+    replyComment(commentDetails): void {
+        this.mandatoryMap.clear();
+        if (!this.isReplyCommentOpen && !this.projectOverviewService.isEditParentComment && !this.isEditComment) {
+            this.projectOverviewCommentDetails.comment = null;
             this.projectOverviewCommentDetails.parentCommentId = commentDetails.commentId;
-            this.isReplyComment = true;
+            this.isReplyCommentOpen = true;
         }
     }
 
@@ -145,7 +149,8 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     }
 
     editParentComment(details): void {
-        if (!this.projectOverviewService.isEditParentComment && !this.isEditComment && !this.isReplyComment) {
+        this.mandatoryMap.clear();
+        if (!this.projectOverviewService.isEditParentComment && !this.isEditComment && !this.isReplyCommentOpen) {
             this.projectOverviewService.isEditParentComment = true;
             this.projectOverviewService.editParentCommentId = details.commentId;
         }
@@ -168,12 +173,14 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         return this.mandatoryMap.size > 0;
     }
 
-    cancelOrClearCommentsDetails(): void {
+    cancelOrClearCommentsDetails(shouldFetchComments: boolean = false): void {
         this.projectOverviewCommentDetails = new CoiProjectOverviewComment();
         this.isEditComment = false;
-        this.isReplyComment = false;
+        this.isReplyCommentOpen = false;
         this.projectOverviewService.isEditParentComment = false;
-        this.loadProjectOverviewCommentBody();
+        if(shouldFetchComments){
+            this.loadProjectOverviewCommentBody();
+        }
         this.projectOverviewService.editParentCommentId = null;
         this.mandatoryMap.clear();
     }
@@ -203,7 +210,8 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     }
 
     editReplyComment(childComment, index): void {
-        if (!this.isEditComment && !this.projectOverviewService.isEditParentComment && !this.isReplyComment) {
+        this.mandatoryMap.clear();
+        if (!this.isEditComment && !this.projectOverviewService.isEditParentComment && !this.isReplyCommentOpen) {
             this.isEditComment = true;
             this.currentEditIndex = index;
             this.projectOverviewCommentDetails.commentId = childComment.commentId;
@@ -215,5 +223,23 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         if (!this.validateComment()) {
             this.updateComment(this.projectOverviewCommentDetails)
         }
-    }  
+    }
+
+    /**
+     * This host listener is used to keep the background scroll fixed at the top at all times.
+     */
+    @HostListener('window:scroll')
+    onScroll() {
+      if (this.isEditorFocused) {
+        window.scrollTo(0, 0);
+      }
+    }
+
+    onEditorFocus() {
+        this.isEditorFocused = true;
+    }
+    
+    onEditorBlur() {
+        this.isEditorFocused = false;
+    }
 }

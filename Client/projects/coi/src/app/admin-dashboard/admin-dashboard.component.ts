@@ -165,6 +165,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     async ngOnInit() {
         this.getPermissions();
+        this.checkTravelDisclosureRights();
+        this.checkForConsultingDisclosureRight();
+        this.checkForProjectOverviewRight();
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -172,9 +175,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.checkForSort();
         this.checkForPagination();
         this.checkForAdvanceSearch();
-        this.checkTravelDisclosureRights();
-        this.checkForConsultingDisclosureRight();
-        this.checkForProjectOverviewRight();
         this.setSearchOptionsForProjectOverview();
     }
 
@@ -718,8 +718,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     async checkForProjectOverviewRight() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.hasProjectOverviewRights = rightsArray.some((right) =>
+        this.hasProjectOverviewRights = this.commonService.rightsArray.some((right) =>
             ['MANAGE_PROJECT_DISCLOSURE_OVERVIEW'].includes(right));
     }
 
