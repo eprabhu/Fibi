@@ -4,7 +4,7 @@ import { DataStoreService } from '../../services/data-store.service';
 import { focusElementById, openCommonModal } from '../../../common/utilities/custom-utilities';
 import { isEmptyObject } from '../../../../../../../projects/fibi/src/app/common/utilities/custom-utilities';
 import { DefineRelationshipService } from '../services/define-relationship.service';
-import { COI, CoiDisclEntProjDetail, DefineRelationshipDataStore, ProjectSfiRelationConflictRO, ProjectSfiRelations } from '../../coi-interface';
+import { COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, DefineRelationshipDataStore, ProjectSfiRelationConflictRO, ProjectSfiRelations } from '../../coi-interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, CONFLICT_STATUS_BADGE } from '../../../app-constants';
@@ -74,6 +74,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
         const ICON_MAP: { [key: string]: any } = {};
     
         this.projectSfiRelation?.coiDisclEntProjDetails?.forEach((entity: CoiDisclEntProjDetail) => {
+            entity.projectConflictStatusCode = entity.projectConflictStatusCode ? entity.projectConflictStatusCode : null;
             const PERSON_ENTITY = entity?.personEntity;
             const ENTITY_RELATION_TYPE = PERSON_ENTITY?.validPersonEntityRelType;
     
@@ -155,6 +156,9 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
 
     private updateSfiDetails(sfiDetails: CoiDisclEntProjDetail, res: ProjectSfiRelationConflictRO): void {
         sfiDetails.disclComment.commentId = res.commentId;
+        sfiDetails.coiProjConflictStatusType = this.defineRelationService.coiStatusList.find((type: CoiProjConflictStatusType) => {
+            type.projectConflictStatusCode === sfiDetails.projectConflictStatusCode
+        });
         this.projectSfiRelation.conflictCount = this.defineRelationService.getFormattedConflictCount(this.projectSfiRelation?.coiDisclEntProjDetails);
         this._defineRelationsDataStore.updateOrReplaceProject(this.projectSfiRelation, ['conflictCount']);
         this._defineRelationsDataStore.updateCoiDisclEntProjDetails(this.projectSfiRelation.projectId, sfiDetails);
