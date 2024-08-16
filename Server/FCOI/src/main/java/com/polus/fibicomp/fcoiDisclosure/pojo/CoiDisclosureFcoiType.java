@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -12,14 +12,14 @@ import javax.persistence.Table;
 import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_CONFLICT_STATUS_TYPE")
-public class CoiConflictStatusType implements Serializable {
+@Table(name = "COI_DISCLOSURE_FCOI_TYPE")
+public class CoiDisclosureFcoiType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "CONFLICT_STATUS_CODE")
-	private String conflictStatusCode;
+	@Column(name = "FCOI_TYPE_CODE")
+	private String fcoiTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,15 +34,12 @@ public class CoiConflictStatusType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	@Column(name = "SORT_ORDER")
-	private String sortOrder;
-
-	public String getConflictStatusCode() {
-		return conflictStatusCode;
+	public String getFcoiTypeCode() {
+		return fcoiTypeCode;
 	}
 
-	public void setConflictStatusCode(String conflictStatusCode) {
-		this.conflictStatusCode = conflictStatusCode;
+	public void setFcoiTypeCode(String fcoiTypeCode) {
+		this.fcoiTypeCode = fcoiTypeCode;
 	}
 
 	public String getDescription() {
@@ -77,11 +74,4 @@ public class CoiConflictStatusType implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public String getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(String sortOrder) {
-		this.sortOrder = sortOrder;
-	}
 }

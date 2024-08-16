@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -95,9 +96,6 @@ public class CoiReviewComments implements Serializable {
 
 	@Transient
 	private PersonEntity personEntity;
-
-	@Transient
-	private CoiDisclEntProjDetails disclEntProjDetails;
 	
 	public Integer getCoiReviewCommentId() {
 		return coiReviewCommentId;
@@ -251,11 +249,4 @@ public class CoiReviewComments implements Serializable {
 		this.personEntity = personEntity;
 	}
 
-	public CoiDisclEntProjDetails getDisclEntProjDetails() {
-		return disclEntProjDetails;
-	}
-
-	public void setDisclEntProjDetails(CoiDisclEntProjDetails disclEntProjDetails) {
-		this.disclEntProjDetails = disclEntProjDetails;
-	}
 }

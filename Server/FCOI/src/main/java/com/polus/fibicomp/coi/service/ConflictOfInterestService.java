@@ -18,12 +18,10 @@ import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
-import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
@@ -39,27 +37,6 @@ import com.polus.fibicomp.coi.dto.CommonRequestDto;
 public interface ConflictOfInterestService {
 
 	/**
-	 * This method is used to create Disclosure
-	 * @param vo
-	 * @return created disclosure details, person details and number of sfi
-	 */
-	ResponseEntity<Object> createDisclosure(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to get list of disclosure
-	 * @param disclosureId
-	 * @return
-	 */
-	ResponseEntity<Object> loadDisclosure(Integer disclosureId);
-
-	/**
-	 * This method is used to get list of Disclosure Relations.
-	 * @param vo
-	 * @return A list of Disclosure Relations.
-	 */
-	String getDisclosureRelations(ConflictOfInterestVO vo);
-
-	/**
 	 * This method is used for get list of entity table values(enpoint for entity)
 	 * @param vo
 	 * @return A list of entity
@@ -71,45 +48,6 @@ public interface ConflictOfInterestService {
 	 * @return EntityStatus, EntityType, CoiFinancialEntityRelType
 	 */
 	ResponseEntity<Object> loadAddSFILookups();
-
-
-	/**
-	 * This method is used to certifyDisclosure
-	 * @param coiDisclosure
-	 * @return vo
-	 */
-	ResponseEntity<Object> certifyDisclosure(CoiDisclosure coiDisclosure);
-
-	/**
-	 * This method is used to save disclosure Relationship details.
-	 * @return vo
-	 */
-	ConflictOfInterestVO saveEntityProjectRelation(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to get disclosure Relationship by proposalId.
-	 * @return vo
-	 */
-	ResponseEntity<Object> getDisclosureProjectRelations(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to get sfi relation all conflicts are completed or not.
-	 * @return vo
-	 */
-	String checkSFICompleted(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to revise Coi disclosure
-	 * @return counts
-	 */
-	ResponseEntity<Object> reviseDisclosure(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used for evaluate DisclosureQuestionnaire
-	 * @param vo
-	 * @return boolean value
-	 */
-	boolean evaluateDisclosureQuestionnaire(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used to get disclosure details for SFI
@@ -162,13 +100,6 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber);
 
 	/**
-	 * This method is used for update ProjectConflictStatus
-	 * @param disclEntProjDetails
-	 * @return CoiDisclosureOldDetails
-	 */
-	CoiDisclEntProjDetails updateProjectConflictStatus(CoiDisclEntProjDetails disclEntProjDetails);
-
-	/**
 	 * This method is used for get Project Conflict History
 	 * @param coiConflictHistoryId
 	 * @return list of CoiConflictHistory
@@ -189,14 +120,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	String loadDisclosureHistory(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is ued to save a single entity project relation
-	 *
-	 * @param vo
-	 * @return
-	 */
-	ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used to create Entity
@@ -227,13 +150,6 @@ public interface ConflictOfInterestService {
 	 * @return A list of dashboard COI data.
 	 */
 	String getCOIAdminDashboard(@Valid CoiDashboardVO vo);
-
-	/**
-	 * This method is used to get SFI dasboard data .
-	 * @param vo -
-	 * @return A list of dashboard SFI data.
-	 */
-	String getSFIDashboard(CoiDashboardVO vo);
 
 	String getCOIDashboardCount(CoiDashboardVO vo);
 
@@ -273,35 +189,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> checkEntityAdded(Integer entityNumber);
-
-	/**
-	 * Validate
-	 * 1) If selected project expired date passed
-	 * 2) Is part of any pending project disclosure
-	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
-	 *
-	 * @param personId
-	 * @param moduleCode
-	 * @param moduleItemId
-	 * @return
-	 */
-    ResponseEntity<Object> validateDisclosure(String personId, Integer moduleCode, String moduleItemId);
-
-	/**
-	 * This method is used to assign admin group or admin person
-	 *
-	 * @param dto
-	 * @return
-	 */
-	ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
-
-	/**
-	 * This method is used to validate conflicts and update
-	 *
-	 * @param disclosureId
-	 * @return
-	 */
-    ResponseEntity<Object> validateConflicts(Integer disclosureId);
     
     /**
 	 * This method is used to assign admin group or admin person for travel disclosures
@@ -332,24 +219,12 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId, String description);
 
 	/**
-	 * This method is used to evaluate validation conditions:
-	 * 1.If SFI has to be defined based on questionnaire evaluation.
-	 * 2.Is there any SFI's with relationship not defined.
-	 * 3.Is there any SFI in draft status
-	 */
-	ResponseEntity<Object> evaluateValidation(Integer disclosureId);
-
-	ResponseEntity<Object> getProjConflictStatusType();
-
-	/**
 	 *This method is used to activate/inactive entity by checking the entity is used anywhere.
 	 * If entity is linked on a SFI new version will be created
 	 * @param coiEntityDto
 	 * @return
 	 */
 	ResponseEntity<Object> activateOrInactivateEntity(CoiEntityDto coiEntityDto);
-
-	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used to fetch all entity relationship types
@@ -408,20 +283,20 @@ public interface ConflictOfInterestService {
 	 * @param disclosureDto
 	 * @return
 	 */
-	ResponseEntity<Object> modifyDisclosureRisk(CoiDisclosureDto disclosureDto);
+//	ResponseEntity<Object> modifyDisclosureRisk(CoiDisclosureDto disclosureDto);
 
 	/**
 	 * This method is used to fetch all disclosure risk
 	 * @return
 	 */
-	ResponseEntity<Object> fetchAllDisclosureRisk();
+//	ResponseEntity<Object> fetchAllDisclosureRisk();
 
 	/**
 	 * This method is used to fetch disclosure history
 	 * @param actionLogDto
 	 * @return
 	 */
-	ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto);
+//	ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto);
 
 	/**
 	 * This method is used to fetch section type codes
@@ -476,18 +351,11 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> completeDisclosureReviews(Map<Integer, Integer> disclosureIdNumberMap);
 
-
-	/**
-	 * This method syncs the projects with all ACTIVE person entities(SFIs)
-	 * @param disclosureId
-	 */
-	void syncProjectPersonEntity(Integer disclosureId);
-
 	/**
 	 * This method is used to Check if the risk status of the disclosure has been modified
 	 * @return
 	 */
-	ResponseEntity<Object> checkDisclosureRiskStatus(CoiDisclosureDto disclosureDto);
+//	ResponseEntity<Object> checkDisclosureRiskStatus(CoiDisclosureDto disclosureDto);
 
 	/**
 	 * This method is used to Check if the risk status of the Entity has been modified
@@ -502,16 +370,19 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> checkTravelDisclosureRiskStatus(CoiTravelDisclosureDto travelDisclosureDto);
 
 	/**
-	 * This method returns projects of a disclosure
-	 * @param disclosureId
-	 * @return
+	 * This method is used to build & push message to queue
+	 * @param actionType
+	 * @param moduleItemKey
+	 * @param moduleSubItemKey
+	 * @param additionDetails
 	 */
-	ResponseEntity<Object> getDisclosureProjects(Integer disclosureId);
+	void processCoiMessageToQ(String actionType, Integer moduleItemKey, Integer moduleSubItemKey, Map<String, String> additionDetails);
 
 	/**
-	 * This method fetches dislocsure lookups
+	 * Defining action type based on disclosure type code
+	 * @param fcoiType
+	 * @param actionTypes
 	 * @return
 	 */
-	ResponseEntity<Object> getDisclosureLookups();
-
+	String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes);
 }

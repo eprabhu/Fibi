@@ -1,20 +1,25 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
-import com.polus.core.util.JpaCharBooleanConversion;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.polus.core.util.JpaCharBooleanConversion;
+
 @Entity
-@Table(name = "COI_REVIEWER_STATUS_TYPE")
-public class CoiReviewerStatusType implements Serializable {
+@Table(name = "COI_DISCLOSURE_TYPE")
+public class CoiDisclosureType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "REVIEW_STATUS_CODE")
-	private String reviewStatusCode;
+	@Column(name = "DISCLOSURE_TYPE_CODE")
+	private String disclosureTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -29,15 +34,12 @@ public class CoiReviewerStatusType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	@Column(name = "SORT_ORDER")
-	private String sortOrder;
-
-	public String getReviewStatusCode() {
-		return reviewStatusCode;
+	public String getDisclosureTypeCode() {
+		return disclosureTypeCode;
 	}
 
-	public void setReviewStatusCode(String reviewStatusCode) {
-		this.reviewStatusCode = reviewStatusCode;
+	public void setDisclosureTypeCode(String disclosureTypeCode) {
+		this.disclosureTypeCode = disclosureTypeCode;
 	}
 
 	public String getDescription() {
@@ -72,12 +74,4 @@ public class CoiReviewerStatusType implements Serializable {
 		this.isActive = isActive;
 	}
 
-
-	public String getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(String sortOrder) {
-		this.sortOrder = sortOrder;
-	}
 }

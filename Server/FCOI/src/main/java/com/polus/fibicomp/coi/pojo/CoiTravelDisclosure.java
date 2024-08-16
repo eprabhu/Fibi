@@ -22,6 +22,7 @@ import javax.persistence.Transient;
 
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Unit;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
