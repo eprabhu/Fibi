@@ -113,12 +113,12 @@ export class CountModalComponent implements OnInit {
 
     // getType
     getType() {
-        if (this.disclosures?.fcoiType) {
-            return this.disclosures?.fcoiType;
+        if (this.disclosures?.projectType) {
+            return this.disclosures?.projectType;
         } else if (this.disfullData?.coiDisclosure?.coiDisclosureFcoiType?.description) {
             return this.disfullData?.coiDisclosure?.coiDisclosureFcoiType?.description;
-        } else if (this.adminData?.fcoiType) {
-            return this.adminData?.fcoiType;
+        } else if (this.adminData?.projectType) {
+            return this.adminData?.projectType;
         } else if (this.reviewerData?.fcoiType) {
             return this.reviewerData?.fcoiType;
         }
@@ -126,20 +126,12 @@ export class CountModalComponent implements OnInit {
 
     // title
     getTitle(): string {
-        if (this.disclosures?.fcoiTypeCode) {
-            if (this.disclosures?.fcoiTypeCode === '2') {
-                return this.reduceTitleLength(this.disclosures?.proposalTitle);
-            } else {
-                return this.reduceTitleLength(this.disclosures?.awardTitle);
-            }
+        if (this.disclosures?.fcoiTypeCode === '2') {
+            return this.reduceTitleLength(this.disclosures?.projectHeader);
         } else if (this.disfullData?.projectDetail?.title) {
             return this.reduceTitleLength(this.disfullData?.projectDetail?.title);
-        } else if (this.adminData?.fcoiTypeCode) {
-            if (this.adminData?.fcoiTypeCode === '3') {
-                return this.reduceTitleLength(this.adminData.awardTitle);
-            } else {
-                return this.reduceTitleLength(this.adminData.proposalTitle);
-            }
+        } else if (this.adminData?.fcoiTypeCode === '2') {
+            return this.reduceTitleLength(this.adminData?.projectHeader);
         } else if (this.reviewerData?.fcoiTypeCode) {
             if (this.reviewerData?.fcoiTypeCode === '3') {
                 return this.reduceTitleLength(this.reviewerData.awardTitle);
@@ -150,7 +142,7 @@ export class CountModalComponent implements OnInit {
     }
 
     reduceTitleLength(title: string): string {
-        return title?.length > 90 ? title?.slice(0, 90) + '...' : title;
+        return title?.length > 50 ? title?.slice(0, 50) + '...' : title;
     }
 
     // FullName
@@ -222,20 +214,12 @@ export class CountModalComponent implements OnInit {
     }
 
     showFullTitle(): string {
-        if (this.disclosures?.fcoiTypeCode) {
-            if (this.disclosures?.fcoiTypeCode === '2') {
-                return this.disclosures?.proposalTitle;
-            } else {
-                return this.disclosures?.awardTitle;
-            }
+        if (this.disclosures?.fcoiTypeCode === '2') {
+            return this.disclosures?.projectHeader;
         } else if (this.disfullData?.projectDetail?.title) {
             return this.disfullData?.projectDetail?.title;
         } else if (this.adminData?.fcoiTypeCode) {
-            if (this.adminData?.fcoiTypeCode === '3') {
-                return this.adminData.awardTitle;
-            } else {
-                return this.adminData.proposalTitle;
-            }
+            return this.adminData?.projectHeader;
         } else if (this.reviewerData?.fcoiTypeCode) {
             if (this.reviewerData?.fcoiTypeCode === '3') {
                 return this.reviewerData.awardTitle;

@@ -5,7 +5,7 @@ export class AssignAdminRO {
     opaDisclosureId?: '';
     opaDisclosureNumber?: '';
     disclosureId?: '';
-    actionType?:'R' | 'A' ;
+    actionType?: 'R' | 'A';
 }
 
 export class DefaultAssignAdminDetails {
@@ -17,16 +17,10 @@ export class DefaultAssignAdminDetails {
 
 export class PersonProjectOrEntity {
     personFullName = '';
-    projectDetails ?: any = {};
-    entityName ? = '';
-    unitDetails = '';
-    unitNumber = null;
-    unitName = '';
+    projectDetails?: any = null;
+    entityName? = '';
     homeUnit? = '';
     homeUnitName? = '';
-}
-
-export class DisclsoureHeaderDetails {
     personEmail = '';
     personPrimaryTitle = '';
 }
@@ -76,38 +70,39 @@ export class SfiObject {
     entityName = '';
     canDelete: boolean;
     isFormCompleted: false;
-  }
+}
 
 export interface coiReviewComment {
-    documentOwnerPersonId:string;
-    componentTypeCode : any;
+    documentOwnerPersonId: string;
+    componentTypeCode: any;
     subModuleItemKey?: any;
-    subModuleItemNumber?:any;
-    sfiStatus?:any;
-    selectedProject?:any;
-    coiSubSectionsTitle?:any;
-    headerName?:any;
-    subSectionTitle?:any;
-    subSectionId?:any;
+    subModuleItemNumber?: any;
+    sfiStatus?: any;
+    selectedProject?: any;
+    coiSubSectionsTitle?: any;
+    headerName?: any;
+    subSectionTitle?: any;
+    subSectionId?: any;
 }
 
 export class DisclosureProjectData {
-    title: string = '';
-    piName: string = '';
-    projectId: string = '';
-    projectType: string = '';
-    sponsorName: string = '';
-    reporterRole: string = '';
-    homeUnitName: string = '';
-    projectStatus: string = '';
-    projectNumber: string = '';
-    homeUnitNumber: string = '';
-    projectTypeCode: string = '';
-    primeSponsorName: string = '';
-    projectBadgeColour: string = '';
-    projectEndDate: number | null = null;
-    projectStartDate: number | null = null;
-    sponsorCode: any;
+    title?: string = '';
+    piName?: string = '';
+    projectId?: string = '';
+    projectType?: string = '';
+    sponsorName?: string = '';
+    reporterRole?: string = '';
+    homeUnitName?: string = '';
+    projectStatus?: string = '';
+    projectNumber?: string = '';
+    homeUnitNumber?: string = '';
+    projectTypeCode?: string = '';
+    primeSponsorName?: string = '';
+    projectBadgeColour?: string = '';
+    projectEndDate?: number | null = null;
+    projectStartDate?: number | null = null;
+    primeSponsorCode?: any;
+    sponsorCode?: any;
     entityCount?: any;
     leadUnitName?: any;
     disclosureId?: any;
@@ -118,11 +113,11 @@ export class DisclosureProjectData {
     leadUnitNumber?: any;
     proposalStatus?: any;
     inCompletCount?: any;
-    primeSponsorCode: any;
     disclsoureNeeded?: any;
     sfiCompleted?: boolean;
     keyPersonName?: string;
     conflictStatus?: string;
+    projectIcon?: string = '';
     disclosureSubmitted?: any;
     conflictStatusCode?: string;
     relationShipExists?: boolean;
@@ -169,4 +164,14 @@ export interface RoleType {
     roleTypeCode: string
     roleType: string
     isActive: boolean
+}
+
+export interface FCOIDisclosureCreateRO {
+    coiProjectTypeCode?: string
+    revisionComment?: string
+    moduleItemKey?: number
+    fcoiTypeCode?: string
+    moduleCode?: number
+    homeUnit: string
+    personId: string
 }

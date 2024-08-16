@@ -25,6 +25,8 @@ import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-com
 import { ConcurrencyWarningModalComponent } from './concurrency-warning-modal/concurrency-warning-modal.component';
 import { EntityDetailsCardComponent } from './entity-details-card/entity-details-card.component';
 import { SharedProjectDetailsModalComponent } from './shared-project-details-modal/shared-project-details-modal.component';
+import { CoiModalComponent } from './coi-modal/coi-modal.component';
+import { ScrollSpyComponent } from './scroll-spy/scroll-spy.component';
 
 @NgModule({
   imports: [
@@ -32,8 +34,7 @@ import { SharedProjectDetailsModalComponent } from './shared-project-details-mod
     MatIconModule,
     SharedModule,
     FormsModule,
-    AddSfiModule,
-
+    AddSfiModule
   ],
   declarations: [
     NoInformationComponent,
@@ -55,8 +56,10 @@ import { SharedProjectDetailsModalComponent } from './shared-project-details-mod
     ReviewCommentListViewComponent,
     CoiReviewCommentsComponent,
     ConcurrencyWarningModalComponent,
+    SharedProjectDetailsModalComponent,
     EntityDetailsCardComponent,
-    SharedProjectDetailsModalComponent
+    CoiModalComponent,
+    ScrollSpyComponent
   ],
   exports: [
     NoInformationComponent,
@@ -77,7 +80,9 @@ import { SharedProjectDetailsModalComponent } from './shared-project-details-mod
     CoiReviewCommentsComponent,
     ConcurrencyWarningModalComponent,
     EntityDetailsCardComponent,
-    SharedProjectDetailsModalComponent
+    SharedProjectDetailsModalComponent,
+    CoiModalComponent,
+    ScrollSpyComponent
   ]
 })
 export class SharedComponentModule { }

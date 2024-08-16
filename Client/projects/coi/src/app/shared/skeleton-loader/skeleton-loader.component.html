@@ -25,16 +25,18 @@
             <div *ngIf="loaderType.rows && loaderType.columns" class="coi-skeleton-table" aria-hidden="true">
                 <table class="table border fs-14 fw-medium" id="coi-relationship-summary-table">
                     <thead>
-                        <tr class="table-light border" id="coi-relationship-summary-table-thead">
-                            <th class="px-3 border-none" scope="col" *ngFor="let cell of generateArray(loaderType.columns)">
+                        <tr class="table-light border-bottom" id="coi-relationship-summary-table-thead">
+                            <th *ngFor="let cell of columnArray; let i = index; let last = last"
+                                class="px-3 border-0 border-end" [class.border-end-0]="last" scope="col" >
                                 <div class="coi-skeleton-header-cell coi-skelton-animate-shimmer w-100"></div>
                                 <span class="d-none">table loader</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white">
-                        <tr *ngFor="let row of generateArray(loaderType.rows-1);">
-                            <td class="px-3" *ngFor="let cell of generateArray(loaderType.columns); let i = index">
+                        <tr *ngFor="let row of rowArray">
+                            <td *ngFor="let cell of columnArray; let i = index; let last = last"
+                                class="px-3 border-0 border-end" [class.border-end-0]="last">
                                 <div class="coi-skeleton-cell coi-skelton-animate-shimmer w-100"></div>
                                 <div class="coi-skeleton-cell coi-skelton-animate-shimmer w-75 mt-2"></div>
                             </td>

@@ -105,6 +105,10 @@
     line-height: var(--theme-line-height);
     border-radius: .5rem;
 
+    &.border-0, &.border-none {
+        border: none !important;
+    }
+
     .card-header {
             display: flex;
             justify-content: space-between;
@@ -113,7 +117,7 @@
             // min-height: 70px;
             color: var(--bs-card-cap-color);
             background-color: var(--theme-card-bg-color);
-            border-bottom: 1px solid var(--theme-card-border-color);
+            border-bottom: var(--theme-header-border);
         .card-title {
             display: flex;
             align-items: center;
@@ -220,7 +224,7 @@
             flex-wrap: wrap;
             color: var(--bs-card-cap-color);
             background-color: var(--theme-card-bg-color);
-            border-bottom: 1px solid var(--theme-card-border-color);
+            border-bottom: var(--theme-header-border);
             border-radius: .5rem !important;
         .card-title {
             display: flex;
@@ -527,4 +531,12 @@
 
 .low-risk {
     color: #1aac3e;
+}
+
+.coi-card-highlight {
+    border: 1px dashed #ffc700 !important;
+    background-color: #fff8dd !important;
+    .card, .card-header, .card-body {
+        background-color: #fff8dd !important;
+    }
 }

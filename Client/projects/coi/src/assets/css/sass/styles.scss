@@ -31,6 +31,7 @@
 
 * {
     outline: 0;
+    scroll-behavior: smooth;
 }
 
 body,
@@ -736,6 +737,14 @@ ul.timeline>li:nth-child(1) {
   font-size: 1.25rem !important;
 }
 
+.coi-scale-7 {
+  transform: scale(0.7);
+}
+
+.coi-scale-8 {
+  transform: scale(0.8);
+}
+
 .coi-scale-9 {
   transform: scale(0.9);
 }
@@ -794,4 +803,3 @@ ul.timeline>li:nth-child(1) {
   padding-left: 0.6rem;
   padding-right: 0.6rem;
 }
-
