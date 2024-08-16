@@ -2,6 +2,7 @@ package com.polus.fibicomp.coi.dto;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,6 @@ public class PersonEntityRelationshipDto {
 	private Date involvementStartDate;
 	private Date involvementEndDate;
     private List<CoiDisclEntProjDetailsDto> projEntRelations;
+    private Map<Integer, Long> conflictCount;
+    private Boolean conflictCompleted;
 }

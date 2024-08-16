@@ -154,12 +154,12 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         ExecutorService executorService = Executors.newWorkStealingPool(4);
         disclosureProjects.forEach(disclosureProject ->
                 executorService.submit(() -> {
-            logger.info("syncFcoiDisclProjectsAndEntities is executing for project id {} on thread {}", disclosureProject.getCoiDisclProjectId(), Thread.currentThread().getName());
-            disclosureDao.syncFcoiDisclProjectsAndEntities(coiDisclosure.getDisclosureId(),
-                    coiDisclosure.getDisclosureNumber(), disclosureProject.getCoiDisclProjectId(),
-                    disclosureProject.getModuleCode(), disclosureProject.getModuleItemKey(),
-                    sfiJsonString, loginPersonId);
-        }));
+                    logger.info("syncFcoiDisclProjectsAndEntities is executing for project id {} on thread {}", disclosureProject.getCoiDisclProjectId(), Thread.currentThread().getName());
+                    disclosureDao.syncFcoiDisclProjectsAndEntities(coiDisclosure.getDisclosureId(),
+                            coiDisclosure.getDisclosureNumber(), disclosureProject.getCoiDisclProjectId(),
+                            disclosureProject.getModuleCode(), disclosureProject.getModuleItemKey(),
+                            sfiJsonString, loginPersonId);
+                }));
 
         vo.setDisclosureId(coiDisclosure.getDisclosureId());
 
@@ -199,7 +199,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         coiDisclosureDto.setPersonEntitiesCount(coiDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(coiDisclosure.getPersonId()).build()));
         coiDisclosureDto.setPersonAttachmentsCount(coiDao.personAttachmentsCount(coiDisclosure.getPersonId()));
         coiDisclosureDto.setPersonNotesCount(coiDao.personNotesCount(coiDisclosure.getPersonId()));
-        disclosureDao.syncFCOIDisclosure(coiDisclosure.getDisclosureId(), coiDisclosure.getDisclosureNumber());
+        if (coiDisclosure.getSyncNeeded()) {
+            disclosureDao.syncFCOIDisclosure(coiDisclosure.getDisclosureId(), coiDisclosure.getDisclosureNumber());
+        }
         vo.setCoiDisclosure(coiDisclosureDto);
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
@@ -222,7 +224,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         boolean isReturned = true;
         if (coiDisclosureObj.getReviewStatusCode().equals(REVIEW_STATUS_PENDING)) {
             riskCategory = disclosureDao.syncDisclosureRisk(coiDisclosureObj.getDisclosureId(), coiDisclosureObj.getDisclosureNumber());
-            isReturned =false;
+            isReturned = false;
         }
         if (riskCategory == null) {
             coiDisclosureDto.setRiskCategoryCode(RISK_CATEGORY_LOW);
@@ -373,7 +375,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public List<DisclosureProjectDto> getDisclProjectEntityRelations(ProjectEntityRequestDto vo) {
-
+        if (disclosureDao.isProjectSFISyncNeeded(vo.getDisclosureId())) {
+            disclosureDao.syncFCOIDisclosure(vo.getDisclosureId(), vo.getDisclosureNumber());
+        }
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
         CompletableFuture<List<DisclosureProjectDto>> projectsFuture =
@@ -397,11 +401,18 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             }
             Map<Integer, List<CoiDisclEntProjDetailsDto>> disclEntityRelations = disclProjEntRelations.stream()
                     .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getCoiDisclProjectId));
-            disclProjects.forEach(disclosureProject ->
-                    disclosureProject.setCoiDisclEntProjDetails(disclEntityRelations.get(disclosureProject.getCoiDisclProjectId()))
-            );
-
+            disclProjects.parallelStream().forEach(disclosureProject -> {
+                List<CoiDisclEntProjDetailsDto> disclEntProjDetails = disclEntityRelations.get(disclosureProject.getCoiDisclProjectId());
+                Map<Integer, Long> conflictCount = getRelationConflictCount(disclEntProjDetails);
+                if (!conflictCount.containsKey(0)) {
+                    disclosureProject.setConflictCompleted(true);
+                }
+                conflictCount.remove(0);
+                disclosureProject.setConflictCount(conflictCount);
+                disclosureProject.setCoiDisclEntProjDetails(disclEntProjDetails);
+            });
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ApplicationException("Unable to fetch data", e, CoreConstants.JAVA_ERROR);
         }
         return disclProjects;
@@ -432,28 +443,60 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             }
             Map<Integer, List<CoiDisclEntProjDetailsDto>> disclEntityRelations = disclProjEntRelations.stream()
                     .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getPersonEntityId));
-            disclPersonEntities.forEach(personEntityRelationshipDto ->
-                    personEntityRelationshipDto.setProjEntRelations(disclEntityRelations.get(personEntityRelationshipDto.getPersonEntityId()))
-            );
+            disclPersonEntities.parallelStream().forEach(personEntityRelationshipDto -> {
+                List<CoiDisclEntProjDetailsDto> disclEntProjDetails = disclEntityRelations.get(personEntityRelationshipDto.getPersonEntityId());
+
+                Map<Integer, Long> conflictCount = getRelationConflictCount(disclEntProjDetails);
+                if (!conflictCount.containsKey(0)) {
+                    personEntityRelationshipDto.setConflictCompleted(true);
+                }
+                conflictCount.remove(0);
+                personEntityRelationshipDto.setConflictCount(conflictCount);
+                personEntityRelationshipDto.setProjEntRelations(disclEntProjDetails);
+            });
         } catch (Exception e) {
             throw new ApplicationException("Unable to fetch data", e, CoreConstants.JAVA_ERROR);
         }
         return disclPersonEntities;
     }
 
+    private static Map<Integer, Long> getRelationConflictCount(List<CoiDisclEntProjDetailsDto> disclEntProjDetails) {
+        if (disclEntProjDetails == null) {
+            return Collections.EMPTY_MAP;
+        }
+        Map<Integer, Long> conflictCount = disclEntProjDetails.stream().collect(Collectors.groupingBy(projectConflictStatus -> {
+            if (projectConflictStatus.getProjectConflictStatusCode() != null
+                    && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) >= 100
+                    && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) < 200) {
+                return 1;
+            } else if (projectConflictStatus.getProjectConflictStatusCode() != null
+                    && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) >= 200
+                    && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) < 300) {
+                return 2;
+            } else if (projectConflictStatus.getProjectConflictStatusCode() != null
+                    && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) >= 300
+                    && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) < 400) {
+                return 3;
+            } else return 0;
+        }, Collectors.counting()));
+        return conflictCount;
+    }
+
     @Override
-    public ConflictOfInterestVO saveEntityProjectRelation(ConflictOfInterestVO vo) {
-        List<CoiDisclProjectEntityRel> entityProjectRelations = vo.getDisclProjectEntityRels();
-        entityProjectRelations.forEach(entityProjectRelation -> {
-            entityProjectRelation.setPrePersonEntityId(entityProjectRelation.getPersonEntityId());
-            disclosureDao.saveOrUpdateCoiDisclEntProjDetails(entityProjectRelation);
-            saveDisclProjRelationComment(entityProjectRelation);
-        });
+    public ProjectEntityRequestDto saveDisclosureConflict(ProjectEntityRequestDto vo) {
+        disclosureDao.saveOrUpdateCoiDisclEntProjDetails(vo);
+        if (vo.getApplyAll()) {
+            disclosureDao.fetchDisclProjectEntityRelIds(vo).forEach(disclProjectEntityRelId -> {
+                vo.setCoiDisclProjectEntityRelId(disclProjectEntityRelId);
+                vo.setCommentId(saveDisclProjRelationComment(vo).getCommentId());
+            });
+        }
         return vo;
     }
 
-    private void saveDisclProjRelationComment(CoiDisclProjectEntityRel entityProjectRelation) {
-        DisclComment disclComment = entityProjectRelation.getDisclComment();
+    private DisclComment saveDisclProjRelationComment(ProjectEntityRequestDto entityProjectRelation) {
+        DisclComment disclComment = new DisclComment();
+        disclComment.setCommentId(entityProjectRelation.getCommentId());
         disclComment.setComponentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE);        //Disclosure detail comment
 //		disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//TODO Disclosure detail comment
         disclComment.setCommentPersonId(AuthenticatedUser.getLoginPersonId());
@@ -466,31 +509,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclComment.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclComment.setUpdateTimestamp(commonDao.getCurrentTimestamp());
         reviewCommentDao.saveObject(disclComment);
-    }
-
-    @Override
-    public String checkSFICompleted(ConflictOfInterestVO vo) {
-        if (Boolean.TRUE.equals(vo.getIsSfiProjectMapping())) {
-            vo.setSfiCompleted(disclosureDao.isSFICompletedForDisclosure(vo.getPersonEntityId(), vo.getDisclosureId()));
-        } else {
-            vo.setSfiCompleted(disclosureDao.checkIsSFICompletedForProject(vo.getModuleCode(), vo.getModuleItemId(), vo.getDisclosureId()));
-        }
-        return commonDao.convertObjectToJSON(vo);
-    }
-
-    @Override
-    public ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo) {
-        try {
-            CoiDisclProjectEntityRel entityProjectRelation = vo.getCoiDisclEntProjDetail();
-            entityProjectRelation.setPrePersonEntityId(entityProjectRelation.getPersonEntityId());
-            disclosureDao.saveOrUpdateCoiDisclEntProjDetails(entityProjectRelation);
-            saveDisclProjRelationComment(entityProjectRelation);
-            disclosureDao.updateDisclosureUpdateDetails(entityProjectRelation.getDisclosureId());
-        } catch (Exception e) {
-            logger.error("saveSingleEntityProjectRelation : {}", e.getMessage());
-            throw new ApplicationException("Failed to save Entity Project Relation", e, Constants.JAVA_ERROR);
-        }
-        return vo;
+        return disclComment;
     }
 
     @Override
@@ -515,10 +534,30 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         copyDisclosure.setRevisionComment(vo.getRevisionComment());
         copyDisclosure.setHomeUnit(vo.getHomeUnit());
         copyDisclosure(disclosure, copyDisclosure);
-//        vo.setCoiDisclosure(copyDisclosure);
         vo.setDisclosureId(copyDisclosure.getDisclosureId());
-        copyDisclosureDetails(disclosure, copyDisclosure);
         copyDisclosureQuestionnaireData(disclosure, copyDisclosure);
+        List<CoiDisclProjects> disclosureProjects = disclosureDao.syncFcoiDisclosureProjects(copyDisclosure.getDisclosureId(),
+                copyDisclosure.getDisclosureNumber(), copyDisclosure.getPersonId());
+        List<SFIJsonDetailsDto> sfiDetails =
+                disclosureDao.getPersonEntitiesByPersonId(copyDisclosure.getPersonId());
+
+        if (disclosureProjects.isEmpty()) {
+            throw new ApplicationException("No project(s) found/synced", Constants.JAVA_ERROR);
+        }
+        try {
+            String sfiJsonString = convertListToJson(sfiDetails);
+            ExecutorService executorService = Executors.newWorkStealingPool(4);
+            disclosureProjects.forEach(disclosureProject ->
+                    executorService.submit(() -> {
+                        logger.info("syncFcoiDisclProjectsAndEntities is executing for project id {} on thread {}", disclosureProject.getCoiDisclProjectId(), Thread.currentThread().getName());
+                        disclosureDao.syncFcoiDisclProjectsAndEntities(copyDisclosure.getDisclosureId(),
+                                copyDisclosure.getDisclosureNumber(), disclosureProject.getCoiDisclProjectId(),
+                                disclosureProject.getModuleCode(), disclosureProject.getModuleItemKey(),
+                                sfiJsonString, copyDisclosure.getPersonId());
+                    }));
+        } catch (Exception e) {
+            logger.info("Unable to sync SFIs : {}", e.getMessage());
+        }
         DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVISED).disclosureId(copyDisclosure.getDisclosureId()).disclosureNumber(copyDisclosure.getDisclosureNumber()).fcoiTypeCode(copyDisclosure.getFcoiTypeCode()).revisionComment(copyDisclosure.getRevisionComment()).reporter(AuthenticatedUser.getLoginUserFullName()).build();
         actionLogService.saveDisclosureActionLog(actionLogDto);
         return new ResponseEntity<>(vo, HttpStatus.OK);
@@ -535,34 +574,6 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         copyDisclosure.setCreatedBy(AuthenticatedUser.getLoginUserName());
         copyDisclosure.setUpdatedBy(AuthenticatedUser.getLoginUserName());
         return disclosureDao.saveOrUpdateCoiDisclosure(copyDisclosure);
-    }
-
-    private void copyDisclosureDetails(CoiDisclosure disclosure, CoiDisclosure copyDisclosure) {
-//        List<CoiDisclEntProjDetails> disclosureDetails = disclosureDao.getProjectRelationshipByParam(null ,
-//                null, disclosure.getPersonId(), disclosure.getDisclosureId());
-//        for (CoiDisclEntProjDetails disclosureDetail: disclosureDetails) {
-//            CoiDisclEntProjDetails copyDisclosureDetail = new CoiDisclEntProjDetails();
-//            BeanUtils.copyProperties(disclosureDetail, copyDisclosureDetail);
-//            copyDisclosureDetail.setDisclosureDetailsId(null);
-//            copyDisclosureDetail.setCoiDisclosure(copyDisclosure);
-//            copyDisclosureDetail.setDisclosureId(copyDisclosure.getDisclosureId());
-//            copyDisclosureDetail.setDisclosureNumber(copyDisclosure.getDisclosureNumber());
-//            copyDisclosureDetail.setUpdateUser(AuthenticatedUser.getLoginUserName());
-//            copyDisclosureDetail.setUpdateTimestamp(commonDao.getCurrentTimestamp());
-//            conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(copyDisclosureDetail);
-//            DisclComment disclComment = getDisclProjectConflictComment(disclosureDetail.getDisclosureId(), disclosureDetail.getDisclosureDetailsId());
-//            if (disclComment != null) {
-//                disclComment.setComponentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE);		//Disclosure detail comment
-//                disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//Disclosure detail comment
-//                disclComment.setCommentPersonId(AuthenticatedUser.getLoginPersonId());
-//                disclComment.setDocumentOwnerPersonId(AuthenticatedUser.getLoginPersonId());
-//                disclComment.setIsPrivate(false);
-//                disclComment.setModuleItemKey(copyDisclosureDetail.getDisclosureId());
-//                disclComment.setModuleItemNumber(String.valueOf(copyDisclosureDetail.getDisclosureNumber()));
-//                disclComment.setSubModuleItemKey(copyDisclosureDetail.getDisclosureDetailsId());
-//                reviewCommentDao.saveObject(disclComment);
-//            }
-//        }
     }
 
     private void copyDisclosureQuestionnaireData(CoiDisclosure disclosure, CoiDisclosure copyDisclosure) {
@@ -665,8 +676,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             coiDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
             dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
             dto.setReviewStatus(REVIEW_IN_PROGRESS);
-        }
-        else{
+        } else {
             dto.setReviewStatusCode(disclosure.getReviewStatusCode());
             dto.setReviewStatus(disclosure.getCoiReviewStatusType().getDescription());
         }
@@ -709,8 +719,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .coiAdmin(AuthenticatedUser.getLoginUserFullName())
                     .newAdmin(newAdminPerson).build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
-        }
-        else {
+        } else {
             DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ASSIGN_ADMIN)
                     .disclosureId(disclosureId)
                     .disclosureNumber(disclosureNumber)
@@ -725,4 +734,17 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclosureDao.syncFCOIDisclosure(coiDisclosureDto.getDisclosureId(),
                 coiDisclosureDto.getDisclosureNumber());
     }
+
+    @Override
+    public ResponseEntity<Object> evaluateValidation(Integer disclosureId, Integer disclosureNumber) {
+        disclosureDao.syncFCOIDisclosure(disclosureId, disclosureNumber);
+        List<COIValidateDto> coiValidateDtoList = disclosureDao.evaluateValidation(disclosureId, AuthenticatedUser.getLoginPersonId());
+        return new ResponseEntity<>(coiValidateDtoList, HttpStatus.OK);
+    }
+
+    @Override
+    public void updateFcoiDisclSyncNeedStatus(DisclosureProjectDto projectDto) {
+        disclosureDao.updateFcoiDisclSyncNeedStatus(projectDto);
+    }
+
 }

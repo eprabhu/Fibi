@@ -88,24 +88,10 @@ public interface FcoiDisclosureService {
     List<PersonEntityRelationshipDto> getDisclosureEntityRelations(ProjectEntityRequestDto vo);
 
     /**
-     * This method is used to save disclosure Relationship details.
+     * This method is used to save disclosure Relationship conflict details.
      * @return vo
      */
-    ConflictOfInterestVO saveEntityProjectRelation(ConflictOfInterestVO vo);
-
-    /**
-     * This method is used to get sfi relation all conflicts are completed or not.
-     * @return vo
-     */
-    String checkSFICompleted(ConflictOfInterestVO vo);
-
-    /**
-     * This method is ued to save a single entity project relation
-     *
-     * @param vo
-     * @return
-     */
-    ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo);
+    ProjectEntityRequestDto saveDisclosureConflict(ProjectEntityRequestDto vo);
 
     /**
      * This method is used to revise Coi disclosure
@@ -159,5 +145,19 @@ public interface FcoiDisclosureService {
      * @param coiDisclosureDto
      */
     void syncFCOIDisclosure(CoiDisclosureDto coiDisclosureDto);
+
+    /**
+     * This method is used to evaluate validation conditions:
+     * 1.If SFI has to be defined based on questionnaire evaluation.
+     * 2.Is there any SFI's with relationship not defined.
+     * 3.Is there any SFI in draft status
+     */
+    ResponseEntity<Object> evaluateValidation(Integer disclosureId, Integer disclosureNumber);
+
+    /**
+     * This method is used to update sync needed status from integration side
+     * @param projectDto
+     */
+    void updateFcoiDisclSyncNeedStatus(DisclosureProjectDto projectDto);
 
 }

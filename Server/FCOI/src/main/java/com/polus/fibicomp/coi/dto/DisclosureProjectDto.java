@@ -40,8 +40,8 @@ public class DisclosureProjectDto {
 	private String conflictStatusCode;
 	private Integer entityCount;
 	private Boolean relationShipExists;
-	private Boolean sfiCompleted;
-	private List<Map<Object, Object>> disclosureStatusCount;
+	private Boolean conflictCompleted;
+	private Map<Integer, Long> conflictCount;
 	private String projectTypeCode;
 	private String projectType;
 	private String projectBadgeColour;

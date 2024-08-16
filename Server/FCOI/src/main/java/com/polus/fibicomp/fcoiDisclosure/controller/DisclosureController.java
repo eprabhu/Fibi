@@ -94,22 +94,14 @@ public class DisclosureController {
 
     public ObjectMapper getObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return objectMapper;
     }
 
-    @PostMapping("/saveEntityProjectRelation")
-    public String saveEntityProjectRelation(@RequestBody ConflictOfInterestVO vo) {
+    @PostMapping("/relation/conflict")
+    public ProjectEntityRequestDto applyAllDisclosureConflict(@RequestBody ProjectEntityRequestDto vo) {
         logger.info("Requesting for saveEntityProjectRelation");
-        vo = disclosureService.saveEntityProjectRelation(vo);
-        return disclosureService.checkSFICompleted(vo);
-    }
-
-    @PostMapping("/singleEntityProjectRelation")
-    public String saveSingleEntityProjectRelation(@RequestBody ConflictOfInterestVO vo) {
-        logger.info("Requesting for saveEntityProjectRelation");
-        vo = disclosureService.saveSingleEntityProjectRelation(vo);
-        return disclosureService.checkSFICompleted(vo);
+        return disclosureService.saveDisclosureConflict(vo);
     }
 
     @PostMapping("/reviseDisclosure")
@@ -188,4 +180,15 @@ public class DisclosureController {
         disclosureService.syncFCOIDisclosure(coiDisclosureDto);
     }
 
+    @GetMapping("/evaluateValidation/{disclosureId}/{disclosureNumber}")
+    public ResponseEntity<Object> evaluateValidation(@PathVariable("disclosureId") Integer disclosureId,
+                                                     @PathVariable("disclosureId") Integer disclosureNumber) {
+        logger.info("Requesting for evaluateValidation");
+        return disclosureService.evaluateValidation(disclosureId, disclosureNumber);
+    }
+
+    @PutMapping("/integration/syncNeeded")
+    public void updateFcoiDisclSyncNeedStatus(@RequestBody DisclosureProjectDto projectDto) {
+        disclosureService.updateFcoiDisclSyncNeedStatus(projectDto);
+    }
 }

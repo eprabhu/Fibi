@@ -760,8 +760,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	Integer getMaxPersonEntityNumber();
-	
-	public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId);
 
 	/**
 	 * This method is used to update PersonEntity header update details

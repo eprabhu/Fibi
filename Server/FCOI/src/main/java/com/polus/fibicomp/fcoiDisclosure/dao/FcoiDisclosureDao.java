@@ -1,9 +1,6 @@
 package com.polus.fibicomp.fcoiDisclosure.dao;
 
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
+import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
@@ -183,7 +180,14 @@ public interface FcoiDisclosureDao {
      * This method used to update conflict status against entity & project
      * @param entityProjectRelation
      */
-    void saveOrUpdateCoiDisclEntProjDetails(CoiDisclProjectEntityRel entityProjectRelation);
+    void saveOrUpdateCoiDisclEntProjDetails(ProjectEntityRequestDto entityProjectRelation);
+
+    /**
+     * Fetch DisclProjectEntityRelIds
+     * @param entityProjectRelation
+     * @return
+     */
+    List<Integer> fetchDisclProjectEntityRelIds(ProjectEntityRequestDto entityProjectRelation);
 
     /**
      * This method is used to check if SFI is completed for a disclosure
@@ -333,4 +337,39 @@ public interface FcoiDisclosureDao {
      * @param disclosureNumber
      */
     void syncFCOIDisclosure(Integer disclosureId, Integer disclosureNumber);
+
+    /**
+     * Disclosure validation before submission.
+     * @param disclosureId
+     * @param personId
+     * @return
+     */
+    List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId);
+
+    /**
+     * This method is used to check disclosure project sfi sync is needed
+     * @param disclosureId
+     * @return
+     */
+    boolean isProjectSFISyncNeeded(Integer disclosureId);
+
+    /**
+     * This method is used to update sync needed flag
+     * @param disclosureId
+     * @param syncNeeded
+     */
+    void updateDisclosureSyncNeeded(Integer disclosureId, boolean syncNeeded);
+
+    /**
+     * This method is used to update sync needed flag
+     * @param personEntityId
+     * @param syncNeeded
+     */
+    void updateDisclosureSyncNeededByPerEntId(Integer personEntityId, boolean syncNeeded);
+
+    /**
+     * This method is used to update the disclosures sync needed flag by certain condition
+     * @param projectDto
+     */
+    void updateFcoiDisclSyncNeedStatus(DisclosureProjectDto projectDto);
 }

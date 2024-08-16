@@ -36,6 +36,14 @@ public class CoiProjectType implements Serializable {
 	@Column(name = "PROJECT_ICON")
 	private String projectIcon;
 
+	@Column(name = "FCOI_NEEDED")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean fcoiNeeded;
+
+	@Column(name = "PROJECT_DISCLOSURE_NEEDED")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean projectDisclosureNeeded;
+
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 

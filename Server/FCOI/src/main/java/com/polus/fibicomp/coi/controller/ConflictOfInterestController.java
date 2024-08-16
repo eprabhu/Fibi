@@ -338,12 +338,6 @@ public class ConflictOfInterestController {
 		return generalService.fetchAdminGroupsAndPersons(moduleCode);
 	}
 
-	@GetMapping("/evaluateValidation/{disclosureId}")
-	public ResponseEntity<Object> evaluateValidation(@PathVariable("disclosureId") Integer disclosureId) {
-		logger.info("Requesting for evaluateValidation");
-		return conflictOfInterestService.evaluateValidation(disclosureId);
-	}
-
 
 	@PutMapping("/entity/activateInactivate")
 	public ResponseEntity<Object> activateOrInactivateEntity(@RequestBody CoiEntityDto coiEntityDto) {

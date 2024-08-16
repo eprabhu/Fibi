@@ -1333,17 +1333,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> evaluateValidation(Integer disclosureId) {
-		//TODO
-//		conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
-//				null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
-		List <COIValidateDto>coiValidateDtoList = new ArrayList<>();
-//		String personId = conflictOfInterestDao.loadDisclosure(disclosureId).getPersonId(); //TODO need recheck
-		coiValidateDtoList = conflictOfInterestDao.evaluateValidation(disclosureId, AuthenticatedUser.getLoginPersonId());
-		return new ResponseEntity<>(coiValidateDtoList, HttpStatus.OK);
-	}
-
-	@Override
 	public ResponseEntity<Object> activateOrInactivateEntity(CoiEntityDto coiEntityDto) {
 		if (conflictOfInterestDao.isEntityActiveOrNot(null, coiEntityDto.getEntityNumber(), coiEntityDto.getIsActive(), Constants.COI_ACTIVE_STATUS)) {
 			if (coiEntityDto.getIsActive()) {

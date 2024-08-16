@@ -219,14 +219,6 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId, String description);
 
 	/**
-	 * This method is used to evaluate validation conditions:
-	 * 1.If SFI has to be defined based on questionnaire evaluation.
-	 * 2.Is there any SFI's with relationship not defined.
-	 * 3.Is there any SFI in draft status
-	 */
-	ResponseEntity<Object> evaluateValidation(Integer disclosureId);
-
-	/**
 	 *This method is used to activate/inactive entity by checking the entity is used anywhere.
 	 * If entity is linked on a SFI new version will be created
 	 * @param coiEntityDto

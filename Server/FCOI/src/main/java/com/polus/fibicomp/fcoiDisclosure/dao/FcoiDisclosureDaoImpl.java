@@ -6,12 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.security.AuthenticatedUser;
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
+import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
@@ -27,6 +24,7 @@ import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 import oracle.jdbc.OracleTypes;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -42,17 +40,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.sql.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -76,7 +66,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public CoiDisclosure loadDisclosure (Integer disclosureId) {
+    public CoiDisclosure loadDisclosure(Integer disclosureId) {
         return hibernateTemplate.get(CoiDisclosure.class, disclosureId);
     }
 
@@ -131,7 +121,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         }
         hqlQuery.append("d.disclosureId = :disclosureId ");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("disclosureId",disclosureId);
+        query.setParameter("disclosureId", disclosureId);
         if (riskCategoryCode != null) {
             query.setParameter("riskCategoryCode", riskCategoryCode);
         }
@@ -183,13 +173,13 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
                         .homeUnitNumber(rset.getString("LEAD_UNIT_NUMBER"))
                         .homeUnitName(rset.getString("LEAD_UNIT_NAME"))
                         .sponsorName(rset.getString("PROJECT_SPONSOR_NAME"))
+                        .sponsorCode(rset.getString("SPONSOR_CODE"))
                         .primeSponsorName(rset.getString("PROJECT_PRIME_SPONSOR_NAME"))
+                        .primeSponsorCode(rset.getString("PRIME_SPONSOR_CODE"))
                         .piName(rset.getString("PI_NAME"))
                         .keyPersonId(rset.getString("KEY_PERSON_ID"))
                         .keyPersonName(rset.getString("KEY_PERSON_NAME"))
                         .reporterRole(rset.getString("REPORTER_ROLE"))
-                        .sfiCompleted(rset.getBoolean("IS_PROJECT_COMPLETED"))
-                        .disclosureStatusCount(rset.getString("CONFLICT_STATUS_COUNT") != null ? convertJsonStringToListMap(rset.getString("CONFLICT_STATUS_COUNT")) : null)
                         .projectType(rset.getString("COI_PROJECT_TYPE"))
                         .projectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"))
                         .projectBadgeColour(rset.getString("BADGE_COLOR"))
@@ -211,7 +201,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             CollectionType listType = mapper.getTypeFactory().constructCollectionType(List.class, Map.class);
             return mapper.readValue(jsonString, listType);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.error("Exception in convertJsonStringToListMap", e.getMessage());
         }
@@ -255,7 +245,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
         Root<CoiDisclosure> root = query.from(CoiDisclosure.class);
         query.select(builder.max(root.get("disclosureNumber")));
-        if(session.createQuery(query).getSingleResult() != null) {
+        if (session.createQuery(query).getSingleResult() != null) {
             return session.createQuery(query).getSingleResult() + 1;
         } else {
             return 1;
@@ -311,7 +301,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         criteriaUpdate.set("reviewStatusCode", coiDisclosure.getReviewStatusCode());
         criteriaUpdate.set("updateTimestamp", currentTimestamp);
         criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginPersonId());
-        criteriaUpdate.set("expirationDate",coiDisclosure.getExpirationDate());
+        criteriaUpdate.set("expirationDate", coiDisclosure.getExpirationDate());
         criteriaUpdate.where(cb.equal(root.get("disclosureId"), coiDisclosure.getDisclosureId()));
         session.createQuery(criteriaUpdate).executeUpdate();
     }
@@ -329,7 +319,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             statement.execute();
             ResultSet rset = statement.getResultSet();
             if (rset != null && rset.next()) {
-                CoiConflictStatusTypeDto  conflictStatusTypeDto = new CoiConflictStatusTypeDto();
+                CoiConflictStatusTypeDto conflictStatusTypeDto = new CoiConflictStatusTypeDto();
                 conflictStatusTypeDto.setConflictStatusCode(rset.getString(1));
                 conflictStatusTypeDto.setDescription(rset.getString(2));
                 return conflictStatusTypeDto;
@@ -395,19 +385,66 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public void saveOrUpdateCoiDisclEntProjDetails(CoiDisclProjectEntityRel entityProjectRelation) {
+    public void saveOrUpdateCoiDisclEntProjDetails(ProjectEntityRequestDto entityProjectRelation) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("UPDATE CoiDisclProjectEntityRel r SET r.projectConflictStatusCode = :projectConflictStatusCode, ");
-        hqlQuery.append("r.updatedBy = :updatedBy, r.updateTimestamp = :updateTimestamp, r.prePersonEntityId = :prePersonEntityId ");
-        hqlQuery.append("WHERE r.coiDisclProjectEntityRelId = :coiDisclProjectEntityRelId");
-        Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("coiDisclProjectEntityRelId", entityProjectRelation.getCoiDisclProjectEntityRelId());
+        hqlQuery.append("UPDATE COI_DISCL_PROJECT_ENTITY_REL cd ");
+        hqlQuery.append("INNER JOIN COI_DISCL_PROJECTS d ON d.COI_DISCL_PROJECTS_ID = cd.COI_DISCL_PROJECTS_ID ");
+        hqlQuery.append("SET cd.PROJECT_CONFLICT_STATUS_CODE = :projectConflictStatusCode, ");
+        hqlQuery.append("cd.UPDATED_BY = :updatedBy, cd.UPDATE_TIMESTAMP = :updateTimestamp, cd.PREVIOUS_PERSON_ENTITY_ID = cd.PERSON_ENTITY_ID ");
+        hqlQuery.append("WHERE d.DISCLOSURE_ID = :disclosureId ");
+        if (entityProjectRelation.getApplyAll()) {
+            if (entityProjectRelation.getRelationshipSFIMode()) {
+                hqlQuery.append("AND cd.PERSON_ENTITY_ID = :personEntityId ");
+            } else {
+                hqlQuery.append("AND cd.COI_DISCL_PROJECTS_ID = :coiDisclProjectId ");
+            }
+        } else {
+            hqlQuery.append("AND cd.COI_DISCL_PROJECT_ENTITY_REL_ID = :coiDisclProjectEntityRelId ");
+        }
+        Query query = session.createNativeQuery(hqlQuery.toString());
+        if (entityProjectRelation.getApplyAll()) {
+            if (entityProjectRelation.getRelationshipSFIMode()) {
+                query.setParameter("personEntityId", entityProjectRelation.getPersonEntityId());
+            } else {
+                query.setParameter("coiDisclProjectId", entityProjectRelation.getCoiDisclProjectId());
+            }
+        } else {
+            query.setParameter("coiDisclProjectEntityRelId", entityProjectRelation.getCoiDisclProjectEntityRelId());
+        }
+        query.setParameter("disclosureId", entityProjectRelation.getDisclosureId());
         query.setParameter("projectConflictStatusCode", entityProjectRelation.getProjectConflictStatusCode());
-        query.setParameter("prePersonEntityId", entityProjectRelation.getPrePersonEntityId());
         query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
         query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Integer> fetchDisclProjectEntityRelIds(ProjectEntityRequestDto entityProjectRelation) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT r.DisclProjectEntityRelId FROM CoiDisclProjectEntityRel r ");
+        hqlQuery.append("WHERE r.coiDisclProject.disclosureId = :disclosureId ");
+        if (entityProjectRelation.getApplyAll()) {
+            if (entityProjectRelation.getRelationshipSFIMode()) {
+                hqlQuery.append("AND r.personEntityId = :personEntityId ");
+            } else {
+                hqlQuery.append("AND r.coiDisclProjectId = :coiDisclProjectId ");
+            }
+        }
+        Query query = session.createQuery(hqlQuery.toString());
+        if (entityProjectRelation.getApplyAll()) {
+            if (entityProjectRelation.getRelationshipSFIMode()) {
+                query.setParameter("personEntityId", entityProjectRelation.getPersonEntityId());
+            } else {
+                query.setParameter("coiDisclProjectId", entityProjectRelation.getCoiDisclProjectId());
+            }
+        }
+        query.setParameter("disclosureId", entityProjectRelation.getDisclosureId());
+        query.setParameter("projectConflictStatusCode", entityProjectRelation.getProjectConflictStatusCode());
+        query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
+        query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+        return query.getResultList();
     }
 
     @Override
@@ -423,8 +460,8 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         query.setParameter("personEntityId", personEntityId);
         Object countData = query.getSingleResult();
         if (countData != null) {
-            Long  count = (Long ) countData;
-            return  count.intValue() != 0 ? Boolean.FALSE : Boolean.TRUE;
+            Long count = (Long) countData;
+            return count.intValue() != 0 ? Boolean.FALSE : Boolean.TRUE;
         }
         return null;
     }
@@ -436,16 +473,14 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         hqlQuery.append("SELECT COUNT(*) FROM CoiDisclProjectEntityRel r ");
         hqlQuery.append("WHERE r.projectConflictStatusCode IS NULL ");
         hqlQuery.append("AND r.coiDisclProject.disclosureId = :disclosureId ");
-        hqlQuery.append("AND r.coiDisclProject.moduleCode = :moduleCode ");
-        hqlQuery.append("AND r.coiDisclProject.moduleItemKey = :moduleItemKey ");
+        hqlQuery.append("AND r.coiDisclProjectId = :moduleCode ");
         Query query = session.createQuery(hqlQuery.toString(), Long.class);
         query.setParameter("disclosureId", disclosureId);
         query.setParameter("moduleCode", moduleCode);
-        query.setParameter("moduleItemKey", moduleItemId);
         Object countData = query.getSingleResult();
         if (countData != null) {
-            Long  count = (Long ) countData;
-            return  count.intValue() != 0 ? Boolean.FALSE : Boolean.TRUE;
+            Long count = (Long) countData;
+            return count.intValue() != 0 ? Boolean.FALSE : Boolean.TRUE;
         }
         return null;
     }
@@ -539,7 +574,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public boolean evaluateDisclosureQuestionnaire(Integer moduleCode,Integer submoduleCode,Integer moduleItemKey) {
+    public boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, Integer moduleItemKey) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
@@ -644,9 +679,9 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         query.setParameter("disclosureId", disclosureId);
         Object countData = query.getSingleResult();
         if (countData != null) {
-            return (Integer ) countData;
+            return (Integer) countData;
         }
-       return null;
+        return null;
     }
 
     @Override
@@ -663,14 +698,12 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
                 statement.setString(1, personId);
                 if (moduleCode == null) {
                     statement.setNull(2, Types.INTEGER);
-                }
-                else {
+                } else {
                     statement.setInt(2, moduleCode);
                 }
                 if (moduleItemKey == null) {
                     statement.setNull(3, Types.VARCHAR);
-                }
-                else {
+                } else {
                     statement.setString(3, moduleItemKey);
                 }
                 statement.execute();
@@ -768,8 +801,8 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public void syncFcoiDisclProjectsAndEntities(Integer disclosureId, Integer disclosureNumber,Integer coiDisclProjectId, Integer moduleCode,
-                                                          String moduleItemKey, String sfiJsonArray, String loginPersonId) {
+    public void syncFcoiDisclProjectsAndEntities(Integer disclosureId, Integer disclosureNumber, Integer coiDisclProjectId, Integer moduleCode,
+                                                 String moduleItemKey, String sfiJsonArray, String loginPersonId) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
@@ -803,7 +836,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             Objects.requireNonNull(statement).execute();
 //            connection.close();
         } catch (Exception e) {
-            logger.error("Exception on syncFcoiDisclProjectsAndEntities for coiDisclProjectId : {} | {}",coiDisclProjectId,  e.getMessage());
+            logger.error("Exception on syncFcoiDisclProjectsAndEntities for coiDisclProjectId : {} | {}", coiDisclProjectId, e.getMessage());
 //            throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
         } finally {
 
@@ -820,7 +853,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         hqlQuery.append("AND c.disclosureId = : disclosureId");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("disclosureId", disclosureId);
-        return (boolean)query.getSingleResult();
+        return (boolean) query.getSingleResult();
     }
 
     @Override
@@ -830,14 +863,14 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then true else false end ");
         hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
         if (adminGroupId != null)
-            hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
+            hqlQuery.append("AND c.adminGroupId = :adminGroupId ");
         hqlQuery.append("AND c.disclosureId = : disclosureId");
         Query query = session.createQuery(hqlQuery.toString());
         if (adminGroupId != null)
             query.setParameter("adminGroupId", adminGroupId);
         query.setParameter("adminPersonId", adminPersonId);
         query.setParameter("disclosureId", disclosureId);
-        return (boolean)query.getSingleResult();
+        return (boolean) query.getSingleResult();
     }
 
     @Override
@@ -871,6 +904,141 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             statement.execute();
         } catch (Exception e) {
             logger.error("Exception in syncFCOIDisclosure {}", e.getMessage());
+            throw new ApplicationException("Exception in syncFCOIDisclosure ", e, CoreConstants.DB_PROC_ERROR);
+        }
+    }
+
+    @Override
+    public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId) {
+        List<COIValidateDto> coiValidateDtoList = new ArrayList<>();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection connection = sessionImpl.connection();
+        List<COIValidateDataDto> validateDataDtos = new ArrayList<>();
+        try {
+            CallableStatement statement = connection.prepareCall("{call COI_EVALUATE_VALIDATION(?,?)}");
+            statement.setInt(1, disclosureId);
+            statement.setString(2, personId);
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                COIValidateDataDto validateDataDto = new COIValidateDataDto();
+                BeanUtils.populate(validateDataDto, resultSetToMap(resultSet));
+                validateDataDtos.add(validateDataDto);
+            }
+            Map<String, List<COIValidateDataDto>> groupedValidation = validateDataDtos.stream().filter(o -> !o.getVALIDATION_MSG_TYPE()
+                            .equals(Constants.COI_VALIDATION_PRO_SFI_ACTION_TYPE))
+                    .collect(Collectors.groupingBy(COIValidateDataDto::getMESSAGE, Collectors.toList()));
+            groupedValidation.entrySet().forEach(validationObj -> {
+                validationObj.getValue().forEach(data -> {
+                    COIValidateDto coiValidateDto = new COIValidateDto();
+                    coiValidateDto.setValidationMessage(data.getMESSAGE());
+                    coiValidateDto.setValidationType(data.getVALIDATION_TYPE());
+                    coiValidateDto.setSfiList(data.getSFIs() != null ?
+                            Arrays.asList(data.getSFIs().split(":;:")) : new ArrayList<>());
+                    coiValidateDtoList.add(coiValidateDto);
+                });
+            });
+            Map<String, List<COIValidateDataDto>> groupedValidationPS = validateDataDtos.stream().filter(o -> o.getVALIDATION_MSG_TYPE().equals(Constants.COI_VALIDATION_PRO_SFI_ACTION_TYPE))
+                    .collect(Collectors.groupingBy(COIValidateDataDto::getMESSAGE, Collectors.toList()));
+            groupedValidationPS.entrySet().forEach(validationObj -> {
+                COIValidateDto coiValidateDto = new COIValidateDto();
+                coiValidateDto.setValidationMessage(validationObj.getKey());
+                coiValidateDto.setValidationType(validationObj.getValue().get(0).getVALIDATION_TYPE());
+                List<List<Map<String, String>>> projectSfiListMaps = validationObj.getValue().stream()
+                        .map(item -> Arrays.stream(item.getPROJ_SFI_DETAILS().split("\\|\\|"))
+                                .map(part -> Arrays.stream(part.trim().split("::")).map(String::trim).toArray(String[]::new))
+                                .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])))
+                        .collect(Collectors.groupingBy(map -> map.get("ModuleItemKey")))
+                        .values()
+                        .stream()
+                        .collect(Collectors.toList());
+                coiValidateDto.setProjectSfiList(projectSfiListMaps);
+                coiValidateDto.setSfiList(new ArrayList<>());
+                coiValidateDtoList.add(coiValidateDto);
+            });
+            return coiValidateDtoList;
+        } catch (Exception e) {
+            logger.error("Exception on evaluateValidation {}", e.getMessage());
+            throw new ApplicationException("error in evaluateValidation ", e, Constants.DB_PROC_ERROR);
+        }
+    }
+
+    // Convert ResultSet to Map
+    private Map<String, Object> resultSetToMap(ResultSet rs) throws SQLException {
+        ResultSetMetaData metaData = rs.getMetaData();
+        int numColumns = metaData.getColumnCount();
+        Map<String, Object> resultMap = new HashMap<>();
+        for (int i = 1; i <= numColumns; i++) {
+            String columnName = metaData.getColumnLabel(i);
+            Object columnValue = rs.getObject(i);
+            resultMap.put(columnName, columnValue);
+        }
+        return resultMap;
+    }
+
+    @Override
+    public boolean isProjectSFISyncNeeded(Integer disclosureId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT c.syncNeeded ");
+        hqlQuery.append("FROM CoiDisclosure c WHERE  c.disclosureId = :disclosureId ");
+        org.hibernate.Query<Boolean> query = session.createQuery(hqlQuery.toString());
+        query.setParameter("disclosureId", disclosureId);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public void updateDisclosureSyncNeeded(Integer disclosureId, boolean syncNeeded) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("UPDATE CoiDisclosure c SET c.syncNeeded = :syncNeeded ");
+        hqlQuery.append("WHERE  c.disclosureId = :disclosureId ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("disclosureId", disclosureId);
+        query.setParameter("syncNeeded", syncNeeded);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void updateDisclosureSyncNeededByPerEntId(Integer personEntityId, boolean syncNeeded) {
+            StringBuilder hqlQuery = new StringBuilder();
+            Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+            hqlQuery.append("UPDATE COI_DISCLOSURE d ");
+            hqlQuery.append("INNER JOIN COI_DISCL_PROJECTS dp ON dp.DISCLOSURE_ID = d.DISCLOSURE_ID ");
+            hqlQuery.append("INNER JOIN COI_DISCL_PROJECT_ENTITY_REL dd ON dd.COI_DISCL_PROJECTS_ID = dp.COI_DISCL_PROJECTS_ID  ");
+            hqlQuery.append("SET d.SYNC_NEEDED = :syncNeeded ");
+            hqlQuery.append("WHERE dd.PERSON_ENTITY_ID = :personEntityId ");
+            hqlQuery.append("AND d.REVIEW_STATUS_CODE IN (1, 5, 6) ");
+            Query query = session.createNativeQuery(hqlQuery.toString());
+            query.setParameter("personEntityId", personEntityId);
+            String status = syncNeeded ? "Y" : "N";
+            query.setParameter("syncNeeded", status);
+            query.executeUpdate();
+    }
+
+    @Override
+    public void updateFcoiDisclSyncNeedStatus(DisclosureProjectDto projectDto) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection connection = sessionImpl.connection();
+        CallableStatement statement = null;
+        try {
+            if (oracledb.equalsIgnoreCase("N")) {
+                statement = connection.prepareCall("{call COI_SYNC_UPDATE_DISCL_INTEG_UPDATES(?,?)}");
+                statement.setInt(1, projectDto.getModuleCode());
+                statement.setString(2, projectDto.getProjectId());
+            } else if (oracledb.equalsIgnoreCase("Y")) {
+                String functionCall = "{call COI_DISCL_PROJ_ENTITY_INSERTION(?,?,?)}";
+                statement = connection.prepareCall(functionCall);
+                statement.registerOutParameter(1, OracleTypes.CURSOR);
+                statement.setInt(2, projectDto.getModuleCode());
+                statement.setString(3, projectDto.getProjectId());
+            }
+            Objects.requireNonNull(statement).execute();
+        } catch (Exception e) {
+            logger.error("Exception on updateFcoiDisclSyncNeedStatus : {} | {} | {}", projectDto.getModuleCode(),projectDto.getProjectId(), e.getMessage());
+            throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
         }
     }
 }
