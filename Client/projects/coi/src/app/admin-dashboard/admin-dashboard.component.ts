@@ -10,7 +10,7 @@ import {
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
-import { AdminDashboardService, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.service';
+import { AdminDashboardService } from './admin-dashboard.service';
 import {
     CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, FCOI_PROJECT_DISCLOSURE_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
@@ -22,6 +22,7 @@ import { openCoiSlider } from '../common/utilities/custom-utilities';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 import { CoiProjectOverviewRequest } from './admin-dashboard.interface';
+import { SortCountObj, CoiDashboardRequest, NameObject, CoiDashboardDisclosures } from './admin-dashboard.interface';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -70,7 +71,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     countrySearchOptions: any = {};
     lookupValues = [];
     advSearchClearField: string;
-    coiList = [];
+    coiList: CoiDashboardDisclosures[] = [];
     isActiveDisclosureAvailable: boolean;
     advanceSearchDates = { approvalDate: null, expirationDate: null, certificationDate: null };
     advacnceSearchDatesForProjectOverview = {startDate : null, endDate : null}
@@ -326,9 +327,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                     this.coiList = this.getAdminDashboardList();
                     this.isLoading = false;
                     this.coiList.map(ele => {
-                        ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
-                        ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
-                        ele.projectHeader = (ele.fcoiTypeCode === '2' ? `#${ele.proposalId} - ${ele.proposalTitle}` : `#${ele.awardId} - ${ele.awardTitle}`);
+                        ele.projectHeader = ele.fcoiTypeCode === '2' ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
                     });
                 }
                 this.setEventTypeFlag();
@@ -470,21 +469,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.isShowCountModal = event;
     }
 
-    setSelectedModuleCode(moduleName, coi, count = null) {
+    setSelectedModuleCode(moduleName: string, coi: CoiDashboardDisclosures, count: number | null = null, moduleCode: number = 0) {
         if (count > 0) {
-            switch (moduleName) {
-                case 'sfi':
-                    this.selectedModuleCode = 8;
-                    break;
-                case 'award':
-                    this.selectedModuleCode = 1;
-                    break;
-                case 'proposal':
-                    this.selectedModuleCode = 3;
-                    break;
-                default:
-                    this.selectedModuleCode = 0;
-            }
+            this.selectedModuleCode = moduleCode;
             this.adminData = coi;
             this.fcoiTypeCode = coi?.fcoiTypeCode;
             this.isShowCountModal = true;
@@ -723,25 +710,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             ['MANAGE_PROJECT_DISCLOSURE_OVERVIEW'].includes(right));
     }
 
-    getColorBadges(disclosure) {
-        if (disclosure?.travelDisclosureId) {
-            return 'bg-travel-clip';
-        }
-        if (disclosure?.disclosureId) {
-            return 'bg-consulting-clip';
-        }
-        switch (disclosure.fcoiTypeCode) {
-            case '1':
-                return 'bg-fcoi-clip';
-            case '2':
-                return 'bg-proposal-clip';
-            case '3':
-                return 'bg-award-clip';
-            default:
-                return;
-        }
-    }
-
     formatTravellerListValues(travellerTypes: string): string {
         return travellerTypes ? travellerTypes.split(',').map(value => value.trim()).join(', ') : '';
     }
@@ -827,7 +795,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.coiAdminDashboardService.searchDefaultValues.travelCountryName = this.localSearchDefaultValues.travelCountryName || null;
     }
 
-    showAssignAdminButton(coi): boolean {
+    showAssignAdminButton(coi: any): boolean {
         const tabName = this.coiAdminDashboardService.coiRequestObject.tabName;
         const IS_TAB_FOR_NEW_SUBMISSION = ['NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI'].includes(tabName);
         const IS_TRAVEL_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_TRAVEL_DISCLOSURE');
@@ -848,24 +816,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
         switch (fcoiTypeCode) {
             case '1':
-            case '4':
+            case '3':
                 return IS_FCOI_ADMINISTRATOR;
             case '2':
-            case '3':
                 return IS_PROJECT_ADMINISTRATOR;
-        }
-    }
-
-    getDisclosureTitleName(fcoiTypeCode: any): string {
-        switch (fcoiTypeCode) {
-            case '1':
-                return 'FCOI';
-            case '2':
-                return 'Proposal';
-            case '3':
-                return 'Award';
-            case '4':
-                return 'FCOI';
+            default:
+                return ;
         }
     }
 

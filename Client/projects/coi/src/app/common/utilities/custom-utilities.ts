@@ -83,28 +83,14 @@ export function closeSlider(sliderName: string = 'coi-slider'): void {
     }, 500);
 }
 
-export function openCommonModal(modalName: string = 'confirmation-modal'): void {
-    const triggerBtn = document.getElementById(`${modalName}-trigger-btn`);
-    if (triggerBtn) {
-        triggerBtn.click();
-    }
-}
-
-export function closeCommonModal(modalName: string = 'confirmation-modal'): void {
-    const closeBtn = document.getElementById(`${modalName}-dismiss-btn`);
-    if (closeBtn) {
-        closeBtn.click();
-    }
-}
-
-export function focusElementyById(element_id: string): void {
+export function focusElementById(element_id: string): void {
     const focusElement: HTMLElement | null = document.getElementById(element_id);
     focusElement?.blur();
     focusElement?.focus();
 }
 
 
-export function openCoiSlider(element_id:string): void {
+export function openCoiSlider(element_id: string): void {
     setTimeout(() => {
         if (element_id) {
             document.getElementById(`${element_id}-trigger-btn`)?.click();
@@ -112,7 +98,7 @@ export function openCoiSlider(element_id:string): void {
     });
 }
 
-export function closeCoiSlider(element_id:string): void {
+export function closeCoiSlider(element_id: string): void {
     setTimeout(() => {
         if (element_id) {
             document.getElementById(`${element_id}-close-btn`)?.click();
@@ -148,4 +134,61 @@ export function jumpToSection(sectionId = '', offset = 0) {
 
 export function getFormattedSponsor(sponsorCode: any, sponsorName: any): string {
     return sponsorCode && sponsorName ?  `${sponsorCode} - ${sponsorName}` : sponsorCode || sponsorName;
+}
+
+/**
+ * Opens a common modal dialog by triggering its associated button click event.
+ *
+ * @param modalName - The name of the modal, used to construct the trigger button's ID.
+ */
+export function openCommonModal(modalName: string): void {
+    const triggerBtn = document.getElementById(`${modalName}-trigger-btn`);
+    if (triggerBtn) {
+        triggerBtn.click();
+        focusElementById(modalName);
+    }
+}
+
+/**
+ * Closes a common modal dialog by triggering its associated close button click event.
+ *
+ * @param modalName - The name of the modal, used to construct the close button's ID.
+ */
+export function closeCommonModal(modalName: string = 'common-modal'): void {
+    const closeBtn = document.getElementById(`${modalName}-dismiss-btn`);
+    if (closeBtn) {
+        closeBtn.click();
+    }
+}
+
+export function scrollToElementWithinBoundaries(focusElement: HTMLElement | undefined, boundaryTop = 0, boundaryBottom = 0, scrollableElement: HTMLElement | any = window) {
+    if (focusElement) {
+        const elementRect = focusElement.getBoundingClientRect();
+        const scrollableRect = scrollableElement === window ? { top: 0, bottom: window.innerHeight } : scrollableElement.getBoundingClientRect();
+        const scrollTop = scrollableElement === window ? window.pageYOffset : scrollableElement.scrollTop;
+
+        const absoluteElementTop = elementRect.top + scrollTop - scrollableRect.top;
+        const elementBottom = elementRect.bottom + scrollTop - scrollableRect.top;
+
+        const scrollableTop = scrollTop + boundaryTop;
+        const scrollableBottom = scrollTop + (scrollableElement === window ? window.innerHeight : scrollableElement.clientHeight) - boundaryBottom;
+
+        if (absoluteElementTop < scrollableTop) {
+            scrollableElement.scrollTo({
+                top: absoluteElementTop - boundaryTop,
+                behavior: 'smooth'
+            });
+        } else if (elementBottom > scrollableBottom) {
+            scrollableElement.scrollTo({
+                top: elementBottom - (scrollableElement === window ? window.innerHeight : scrollableElement.clientHeight) + boundaryBottom,
+                behavior: 'smooth'
+            });
+        } else {
+            focusElement.scrollIntoView({
+                block: 'nearest',
+                inline: 'nearest',
+                behavior: 'smooth'
+            });
+        }
+    }
 }

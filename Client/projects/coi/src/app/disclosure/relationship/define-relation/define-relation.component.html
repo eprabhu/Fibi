@@ -11,7 +11,7 @@
                   <span class="coi-card-notch-ribbon shadow-sm me-2"
                     [style.background-color]="selectedProject?.projectBadgeColour">{{selectedProject?.projectType}}</span>
                     <span class="mt-1 d-inline-flex">
-                      <mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
+                      <mat-icon *ngIf="selectedProject?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">text_snippet</mat-icon>
                       <mat-icon *ngIf="selectedProject?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
                       <a tabindex="0" class="fs-6 link-primary cursor-pointer fw-600 text-slice"
                         title="Click here to navigate to project details of #{{selectedProject?.projectNumber}} - {{selectedProject?.title}}"

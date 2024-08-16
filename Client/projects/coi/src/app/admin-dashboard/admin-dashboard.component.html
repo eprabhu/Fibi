@@ -510,40 +510,34 @@
                                     <div class="row m-0">
                                         <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                             <!-- Coi card badge -->
-                                            <span class="d-flex" tabindex="-1"
-                                                  [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' : coi?.disclosureId ? 'Consulting' :  coi?.fcoiType) + ' disclosure'">
-                                            <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}">
-                                                <span>{{ coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.disclosureId ? 'Consulting' : coi?.fcoiType }}</span>
-                                            </span></span>
+                                            <span *ngIf="coi.fcoiTypeCode === '2'" class="coi-card-notch-ribbon shadow-sm"
+                                                [style.backgroundColor]="coi.projectBadgeColor"
+                                                [attr.aria-label]="coi?.projectType + ' coi'" tabindex="-1"
+                                                id="coi-user-coi-coi-card-value-heading-{{index}}">{{ coi?.projectType }}</span>
+                                            <span *ngIf="coi.fcoiTypeCode !== '2'" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
+                                                [attr.aria-label]="coi?.projectType + ' coi'" tabindex="-1"
+                                                id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
                                             <!-- Coi card header -->
                                             <h4 *ngIf="!coi.travelDisclosureId && !coi.opaDisclosureId"
-                                                class="mb-0 d-flex align-items-baseline ms-1">
+                                                class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex align-items-center">
-                                                <!-- <i class="fa fa-user coi-text-lighter me-1" aria-hidden="true"></i> -->
                                                 <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0">person</mat-icon>
                                                 <span class="coi-text-light text-nowrap fs-6" tabindex="-1" id="coi-admin-dashboard-card-value-personinfo-{{index}}"
                                                       [attr.aria-label]="'Disclosure person ' + coi.disclosurePersonFullName">
                                                     {{coi.disclosurePersonFullName}}</span>
                                             </span>
-                                                <ng-container
-                                                    *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'"
-                                                    class="">
-                                                <span class="d-inline-flex" tabindex="-1"
-                                                      [attr.aria-label]="'Project is #, ' + coi?.projectHeader">
-                                                    <span class="pipe mx-1"></span>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='2'">article</mat-icon>
-                                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
-                                                    <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
-                                                        id="coi-admin-dashboard-card-value-article-{{index}}"
-                                                        (click)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                        (keyup.enter)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                        (keyup.space)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                        [title]="'Click here to view details of ' + coi?.projectHeader"
-                                                        [attr.aria-label]="'Click here to view details of ' + coi?.projectHeader">
-                                                        <span class="text-slice">{{coi?.projectHeader}}</span>
-                                                    </a>
-                                                </span>
-                                                </ng-container>
+                                            <ng-container *ngIf="coi.fcoiTypeCode === '2'">
+                                                <span class="pipe mx-1"></span>
+                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{coi.projectIcon}}</mat-icon>
+                                                <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
+                                                    (click)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                    (keyup.enter)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                    (keyup.space)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                    [title]="'Click here to view details of ' + coi?.projectHeader"
+                                                    [attr.aria-label]="'Click here to view details of ' + coi?.projectHeader">
+                                                    <span class="text-slice">{{coi?.projectHeader}}</span>
+                                                </a>
+                                            </ng-container>
                                             </h4>
                                         </div>
                                     </div>
@@ -699,10 +693,10 @@
                                                 <!-- Travel Card badge -->
                                                 <span class="d-flex">
                                             <span
-                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}"
+                                                class="coi-card-notch-ribbon shadow-sm bg-travel-clip"
                                                 tabindex="-1"
-                                                [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' :  coi?.fcoiType) + ' disclosure'">
-                                                <span>{{coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.fcoiType}}</span>
+                                                [attr.aria-label]="(coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId? 'OPA' :  coi?.projectType) + ' disclosure'">
+                                                <span>{{coi?.travelDisclosureId? 'Travel' : coi?.opaDisclosureId ? 'OPA' : coi?.projectType}}</span>
                                             </span>
                                         </span>
                                                 <!-- Travel Card Entity -->
@@ -739,8 +733,7 @@
                                             </div>
                                             <!-- Travel Card Destination -->
                                             <div class="col-lg-4 col-md-6 mb-2">
-                                                <div *ngIf="coi?.fcoiTypeCode!= 1" tabindex="-1"
-                                                     [attr.aria-label]="'Destination' + (coi?.travelCity || coi?.travelCountry || coi?.travelState)">
+                                                <div tabindex="-1" [attr.aria-label]="'Destination' + (coi?.travelCity || coi?.travelCountry || coi?.travelState)">
                                                     <label for="destination" class="d-block coi-text-dark">Destination</label>
                                                     <span>
                                                 <app-no-data-label id="destination"
@@ -983,62 +976,51 @@
                         </ng-container>
                     </div>
 
-                    <!-- Footer section -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <ng-container *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
-                                <div class="col-lg-10">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-6 col-lg-4">
-                                            <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && !coi.disclosureId">
-                                                <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfiInActive"
-                                                    tabindex="{{coi?.noOfSfiInActive > 0 ? 0 : -1}}" role="link"
-                                                    [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
-                                                    [ngClass]="coi?.noOfSfiInActive ? 'badge' : 'zero-count-padding'"
-                                                    (keyup.enter)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);"
-                                                    [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfiInActive + (coi?.noOfSfiInActive > 0 ? '. Click to view SFI list' : '')"
-                                                    (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);">{{coi?.noOfSfiInActive || 0}}</span>
-                                                <span class="fw-500" [ngClass]="coi?.noOfSfiInActive > 0 ? 'cursor-pointer' : '' "
-                                                    (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfiInActive);"
-                                                    [title]="coi?.noOfSfiInActive > 0 ? 'Click here to view SFI list' : '' "
-                                                    [class.link-primary]="coi?.noOfSfiInActive > 0">Significant Financial Interest</span>
+                        <!-- Footer section -->
+                        <div class="card-footer">
+                            <div class="row">
+                                <ng-container *ngIf="!coi?.travelDisclosureId && !coi?.disclosureId">
+                                    <div class="col-lg-10">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && !coi.disclosureId">
+                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfi"
+                                                        tabindex="{{coi?.noOfSfi > 0 ? 0 : -1}}" role="link"
+                                                        [title]="coi?.noOfSfi > 0 ? 'Click here to view SFI list' : '' "
+                                                        [ngClass]="coi?.noOfSfi ? 'badge' : 'zero-count-padding'"
+                                                        [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfi + (coi?.noOfSfi > 0 ? '. Click to view SFI list' : '')"
+                                                        (keyup.enter)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);" (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);"
+                                                        (keyup.space)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);">{{coi?.noOfSfi || 0}}</span>
+                                                    <span class="fw-500" [ngClass]="coi?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                                        (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);"
+                                                        [title]="coi?.noOfSfi > 0 ? 'Click here to view SFI list' : '' "
+                                                        [class.link-primary]="coi?.noOfSfi > 0">Significant Financial Interest</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 col-lg-2">
-                                            <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'">
-                                                <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
-                                                    tabindex="{{coi?.noOfProposalInActive > 0 ? 0 : -1}}" role="link"
-                                                    [attr.aria-label]="'Proposals count is ' + coi?.noOfProposalInActive + (coi?.noOfProposalInActive > 0 ? '. Click here to view Development Proposal list' : '')"
-                                                    [title]="coi?.noOfProposalInActive > 0 ? 'Click here to view Development Proposal list' : '' "
-                                                    (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
-                                                    (keyup.enter)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
-                                                    [ngClass]="coi?.noOfProposalInActive ? 'badge' : 'zero-count-padding'">{{coi?.noOfProposalInActive}}</span>
-                                                <span class="fw-500" [ngClass]="coi?.noOfProposalInActive > 0 ? 'cursor-pointer' : '' "
-                                                    [class.link-primary]="coi.noOfProposalInActive > 0"
-                                                    [title]="coi?.noOfProposalInActive > 0 ? 'Click here to view Development Proposal list' : '' "
-                                                    (click)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);"
-                                                    (keyup.enter)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);" (keyup.space)="setSelectedModuleCode('proposal', coi, coi?.noOfProposalInActive);">Development Proposal</span>
-                                            </div>
-                                        </div>
+                                            <ng-container *ngIf="coi?.fcoiTypeCode !== '2'">
+                                                <ng-container *ngFor="let projectCount of coi?.projectCount">
+                                                    <div class="col-md-3 col-lg-2">
+                                                        <div class="d-flex align-items-center fw-semibold">
+                                                            <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
+                                                                tabindex="{{projectCount?.projectCount > 0 ? 0 : -1}}" role="link"
+                                                                [attr.aria-label]="projectCount?.projectType + ' count is ' + projectCount?.projectCount + (projectCount?.projectCount > 0 ? '. Click here to view ' + projectCount?.projectType + ' list' : '')"
+                                                                [title]="projectCount?.projectCount > 0 ? 'Click here to view {{projectCount?.projectType}} list' : '' "
+                                                                (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                [ngClass]="projectCount?.projectCount ? 'badge' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
+                                                            <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
+                                                                [class.link-primary]="projectCount?.projectCount > 0"
+                                                                [title]="projectCount?.projectCount > 0 ? 'Click here to view {{projectCount?.projectType}} list' : '' "
+                                                                (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);">{{projectCount?.projectType}}</span>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </ng-container>
 
-                                        <div class="col-md-3 col-lg-2">
-                                            <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && coi?.fcoiTypeCode == '1'">
-                                                <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
-                                                    tabindex="{{coi?.noOfAwardInActive > 0 ? 0 : -1}}" role="link"
-                                                    (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
-                                                    (keyup.enter)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
-                                                    [title]="coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '' "
-                                                    [attr.aria-label]="'Awards count is ' + coi?.noOfAwardInActive + (coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '')"
-                                                    [ngClass]="coi?.noOfAwardInActive ? 'badge' : 'zero-count-padding'">{{coi?.noOfAwardInActive}}</span>
-                                                <span class="fw-500" [ngClass]="coi?.noOfAwardInActive > 0 ? 'cursor-pointer' : '' "
-                                                    [class.link-primary]="coi.noOfAwardInActive > 0"
-                                                    [title]="coi?.noOfAwardInActive > 0 ? 'Click here to view Award list' : '' "
-                                                    (click)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);"
-                                                    (keyup.enter)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);" (keyup.space)="setSelectedModuleCode('award', coi, coi?.noOfAwardInActive);">Awards</span>
-                                            </div>
-                                        </div>
-
-                                            <div class="col-md-12 col-lg-4" tabindex="-1">
+                                            <div class="ms-auto col-md-12 col-lg-4" tabindex="-1">
                                                 <label class="coi-text-lighter  d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By</label>
                                                 <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
                                                       [attr.aria-label]="coi?.updateUser + ' on ' +
@@ -1106,10 +1088,10 @@
                                                 class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
                                                 [title]="coi?.travelDisclosureId ? 'Click here to view travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
                                                             coi?.disclosureId ? 'Click here to view consulting disclosure' :
-                                                            coi?.fcoiTypeCode!= 1 ? 'Click here to view Project Disclosure' : 'Click here to view FCOI disclosure'"
+                                                            coi?.fcoiTypeCode === 2 ? 'Click here to view Project Disclosure' : 'Click here to view FCOI disclosure'"
                                                 [attr.aria-label]="coi?.travelDisclosureId ? 'Click here to view Travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
                                                             coi?.disclosureId ? 'Click here to view consulting disclosure' :
-                                                            coi?.fcoiTypeCode!= 1 ? 'Click here to view Project Disclosure' : 'Click to view FCOI disclosure'">
+                                                            coi?.fcoiTypeCode === 2 ? 'Click here to view Project Disclosure' : 'Click to view FCOI disclosure'">
                                             <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">visibility</mat-icon>View
                                         </button>
                                         <button id="coi-admin-dashboard-assign-admin-btn" *ngIf="showAssignAdminButton(coi)" (click)="openAssignAdminModal(coi);"

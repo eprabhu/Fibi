@@ -58,7 +58,7 @@
                                 <div *ngIf="projectIndex<2" class="card fs-14 mt-2 p-2 alert" [ngClass]="error.validationType == 'VW' ? 'alert-warning' : 'alert-danger'">
                                     <span class="d-flex">
                                         <mat-icon *ngIf="projectList[0]?.ModuleCode == 3" class="mt-1 flex-shrink-0" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">workspace_premium</mat-icon>
-                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 1" class="mt-1 flex-shrink-0" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">article</mat-icon>
+                                        <mat-icon *ngIf="projectList[0]?.ModuleCode == 1" class="mt-1 flex-shrink-0" [ngClass]="error.validationType == 'VE' ? 'text-danger': 'text-warning'" aria-hidden="true">text_snippet</mat-icon>
                                         <strong class="fs-6 ms-1 text-dark">{{projectList[0].Title}}</strong>
                                     </span>
                                         <div *ngFor="let sfiList of projectList;let SFIIndex = index;let last = last" class="mt-2 ms-4">

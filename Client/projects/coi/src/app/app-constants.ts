@@ -117,4 +117,11 @@ export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={proje
 export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={projectId}';
 export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={projectId}';
 
-export const URL_FOR_DISCLOSURE_PROJECT = '/disclosure/projects/{disclosureId}';
+export const URL_FOR_DISCLOSURE_PROJECT = '/fcoiDisclosure/projects/{disclosureId}';
+
+export const CONFLICT_STATUS_BADGE: { [key: string]: string } = {
+  '100': 'green-badge',
+  '200': 'brown-badge',
+  '300': 'red-badge',
+  '400': 'green-badge'
+};

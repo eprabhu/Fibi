@@ -40,7 +40,6 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     reviewActionConfirmation: any = {};
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
-    projectDetail: any = {};
     isMangeReviewAction = false;
     disReviewLocation = 'OPA_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
     disReviewStatus = 'OPA_REVIEW_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
@@ -383,8 +382,9 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
-        this.personProjectDetails.projectDetails = this.projectDetail;
         this.personProjectDetails.homeUnit = this.opaDisclosure.homeUnit;
         this.personProjectDetails.homeUnitName = this.opaDisclosure.homeUnitName;
+        this.personProjectDetails.personEmail = this.opaDisclosure.personEmail;
+        this.personProjectDetails.personPrimaryTitle = this.opaDisclosure.personPrimaryTitle;
     }
 }

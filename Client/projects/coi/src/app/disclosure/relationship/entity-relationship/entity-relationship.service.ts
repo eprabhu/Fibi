@@ -44,7 +44,7 @@ getProjectRelationships(id, disclosureStatusCode, personId) {
 }
 
 saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {
-  return this._http.post(this._commonService.baseUrl + '/saveEntityProjectRelation',
+  return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/saveEntityProjectRelation',
   {'coiDisclosureDetails': params,
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,
@@ -55,7 +55,7 @@ saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {
 
 getEntityProjectRelations(moduleCode, moduleItemId, disclosureId, disclosureStatusCode, personId, isProposalDisclosure) {
   if (!isProposalDisclosure) {
-      return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations',
+      return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/project/relations',
     {
     'moduleCode': moduleCode,
     'moduleItemId': moduleItemId,
@@ -65,7 +65,7 @@ getEntityProjectRelations(moduleCode, moduleItemId, disclosureId, disclosureStat
     'personId': personId
     });
   } else {
-    return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations',
+    return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/project/relations',
   {
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,
