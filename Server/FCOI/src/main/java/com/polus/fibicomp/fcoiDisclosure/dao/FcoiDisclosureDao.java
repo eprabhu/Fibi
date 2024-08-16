@@ -232,7 +232,7 @@ public interface FcoiDisclosureDao {
      * @param moduleItemKey
      * @return Boolean value
      */
-    boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, Integer moduleItemKey);
+    boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, String moduleItemKey);
 
     /**
      * This

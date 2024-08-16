@@ -574,7 +574,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, Integer moduleItemKey) {
+    public boolean evaluateDisclosureQuestionnaire(Integer moduleCode, Integer submoduleCode, String moduleItemKey) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
@@ -586,7 +586,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             statement.registerOutParameter(1, OracleTypes.INTEGER);
             statement.setInt(2, moduleCode);
             statement.setInt(3, submoduleCode);
-            statement.setInt(4, moduleItemKey);
+            statement.setString(4, moduleItemKey);
             statement.execute();
             int result = statement.getInt(1);
             if (result == 1) {
