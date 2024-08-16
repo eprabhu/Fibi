@@ -143,8 +143,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             disclosureProjects = disclosureDao.syncFcoiDisclosureProjects(coiDisclosure.getDisclosureId(),
                     coiDisclosure.getDisclosureNumber(), loginPersonId);
         }
-        List<SFIJsonDetailsDto> sfiDetails =
-                disclosureDao.getPersonEntitiesByPersonId(loginPersonId);
+        List<SFIJsonDetailsDto> sfiDetails = disclosureDao.getPersonEntitiesByPersonId(loginPersonId);
 
         if (disclosureProjects.isEmpty()) {
             throw new ApplicationException("No project(s) found/synced", Constants.JAVA_ERROR);
@@ -483,20 +482,27 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     }
 
     @Override
-    public ProjectEntityRequestDto saveDisclosureConflict(ProjectEntityRequestDto vo) {
+    public ResponseEntity<Object> saveDisclosureConflict(ProjectEntityRequestDto vo) {
         disclosureDao.saveOrUpdateCoiDisclEntProjDetails(vo);
+        List<ProjectEntityRequestDto> projectEntityRequestDtos = new ArrayList<>();
         if (vo.getApplyAll()) {
             disclosureDao.fetchDisclProjectEntityRelIds(vo).forEach(disclProjectEntityRelId -> {
                 vo.setCoiDisclProjectEntityRelId(disclProjectEntityRelId);
                 vo.setCommentId(saveDisclProjRelationComment(vo).getCommentId());
+                projectEntityRequestDtos.add(vo);
             });
+
+        } else {
+            vo.setCommentId(saveDisclProjRelationComment(vo).getCommentId());
+            projectEntityRequestDtos.add(vo);
         }
-        return vo;
+        return new ResponseEntity<>(projectEntityRequestDtos, HttpStatus.OK);
     }
 
     private DisclComment saveDisclProjRelationComment(ProjectEntityRequestDto entityProjectRelation) {
         DisclComment disclComment = new DisclComment();
         disclComment.setCommentId(entityProjectRelation.getCommentId());
+        disclComment.setComment(entityProjectRelation.getComment());
         disclComment.setComponentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE);        //Disclosure detail comment
 //		disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//TODO Disclosure detail comment
         disclComment.setCommentPersonId(AuthenticatedUser.getLoginPersonId());
@@ -508,7 +514,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclComment.setModuleCode(Constants.COI_MODULE_CODE);
         disclComment.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclComment.setUpdateTimestamp(commonDao.getCurrentTimestamp());
-        reviewCommentDao.saveObject(disclComment);
+        disclosureDao.saveOrUpdateDisclComment(disclComment);
         return disclComment;
     }
 

@@ -94,12 +94,12 @@ public class DisclosureController {
 
     public ObjectMapper getObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return objectMapper;
     }
 
     @PostMapping("/relation/conflict")
-    public ProjectEntityRequestDto applyAllDisclosureConflict(@RequestBody ProjectEntityRequestDto vo) {
+    public ResponseEntity<Object> applyAllDisclosureConflict(@RequestBody ProjectEntityRequestDto vo) {
         logger.info("Requesting for saveEntityProjectRelation");
         return disclosureService.saveDisclosureConflict(vo);
     }

@@ -1,6 +1,7 @@
 package com.polus.fibicomp.fcoiDisclosure.dao;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -423,7 +424,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     public List<Integer> fetchDisclProjectEntityRelIds(ProjectEntityRequestDto entityProjectRelation) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("SELECT r.DisclProjectEntityRelId FROM CoiDisclProjectEntityRel r ");
+        hqlQuery.append("SELECT r.coiDisclProjectEntityRelId FROM CoiDisclProjectEntityRel r ");
         hqlQuery.append("WHERE r.coiDisclProject.disclosureId = :disclosureId ");
         if (entityProjectRelation.getApplyAll()) {
             if (entityProjectRelation.getRelationshipSFIMode()) {
@@ -441,9 +442,6 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             }
         }
         query.setParameter("disclosureId", entityProjectRelation.getDisclosureId());
-        query.setParameter("projectConflictStatusCode", entityProjectRelation.getProjectConflictStatusCode());
-        query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
-        query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
         return query.getResultList();
     }
 
@@ -745,21 +743,19 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         ResultSet rset = null;
         try {
             if (oracledb.equalsIgnoreCase("N")) {
-                statement = connection.prepareCall("{call COI_DISCL_PROJ_INSERTION(?,?,?,?)}");
+                statement = connection.prepareCall("{call COI_SYNC_INSERT_DISCL_PROJECTS(?,?,?)}");
                 statement.setInt(1, disclosureId);
                 statement.setInt(2, disclosureNumber);
                 statement.setString(3, loginPersonId);
-                statement.setString(4, loginPersonId);
                 statement.execute();
                 rset = statement.getResultSet();
             } else if (oracledb.equalsIgnoreCase("Y")) {
-                String functionCall = "{call COI_DISCL_PROJ_INSERTION(?,?,?,?,?)}";
+                String functionCall = "{call COI_SYNC_INSERT_DISCL_PROJECTS(?,?,?,?)}";
                 statement = connection.prepareCall(functionCall);
                 statement.registerOutParameter(1, OracleTypes.CURSOR);
                 statement.setInt(2, disclosureId);
                 statement.setInt(3, disclosureNumber);
                 statement.setString(4, loginPersonId);
-                statement.setString(5, loginPersonId);
                 statement.execute();
                 rset = (ResultSet) statement.getObject(1);
             }
@@ -775,9 +771,8 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             return coiDisclProjects;
         } catch (Exception e) {
             logger.error("Exception on syncFcoiDisclosureProjects {}", e.getMessage());
-//            throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
+            throw new ApplicationException("Exception on syncFcoiDisclosureProjects", e, Constants.DB_PROC_ERROR);
         }
-        return null;
     }
 
     @Override
@@ -1040,5 +1035,12 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             logger.error("Exception on updateFcoiDisclSyncNeedStatus : {} | {} | {}", projectDto.getModuleCode(),projectDto.getProjectId(), e.getMessage());
             throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
         }
+    }
+
+    @Override
+    public void saveOrUpdateDisclComment(DisclComment disclComment) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        session.merge(disclComment);
+        session.flush();
     }
 }

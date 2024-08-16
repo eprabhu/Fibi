@@ -257,22 +257,26 @@ ELSE
                                         T1.CREATE_TIMESTAMP,
 										T1.EXPIRATION_DATE,
 										T1.COI_PROJECT_TYPE_CODE,
-										CONCAT(''['', TRIM(BOTH '','' FROM CONCAT(
-                                        CASE WHEN T8.DISCLOSURE_ID IS NOT NULL THEN CONCAT(''{'',
-                                        												''"projectType"'', '' : "'', T8.COI_PROJECT_TYPE, ''"'',
-                                        												''"projectCount"'', '' : "'', T8.NO_OF_PROPOSAL,''"'',
-                                        												''"moduleCode"'','' : '', 3, ''},'') ELSE '''' END,
-                                        CASE WHEN T8.DISCLOSURE_ID IS NOT NULL AND T9.DISCLOSURE_ID IS NOT NULL THEN '','' ELSE '''' END,
-                                        CASE WHEN T9.DISCLOSURE_ID IS NOT NULL THEN CONCAT(''{'',
-                                                                                        ''"projectType"'', '' : "'', T9.COI_PROJECT_TYPE, ''"'',
-                                                                                        ''"projectCount"'', '' : "'', T9.NO_OF_AWARD, ''"'',
-                                                                                        ''"moduleCode"'','' : '', 1,''},'') ELSE '''' END,
-                                        CASE WHEN T9.DISCLOSURE_ID IS NOT NULL AND T60.DISCLOSURE_ID IS NOT NULL THEN '','' ELSE '''' END,
-                                        CASE WHEN T60.DISCLOSURE_ID IS NOT NULL THEN CONCAT(''{'',
-                                                                                        ''"projectType"'', '' : "'', T60.COI_PROJECT_TYPE, ''"'',
-                                                                                        ''"projectCount"'', '' : "'', T60.NO_OF_IPS, ''"'',
-                                                                                        ''"moduleCode"'','' : '', 2,''},'') ELSE '''' END
-                                        )),'']'') AS PROJECT_COUNT,
+										JSON_ARRAY(
+                                            IF(T8.DISCLOSURE_ID IS NOT NULL,
+                                                JSON_OBJECT(
+                                                    ''projectType'', T8.COI_PROJECT_TYPE,
+                                                    ''projectCount'', T8.NO_OF_PROPOSAL,
+                                                    ''moduleCode'', 3
+                                                ), NULL),
+                                            IF(T9.DISCLOSURE_ID IS NOT NULL,
+                                                JSON_OBJECT(
+                                                    ''projectType'', T9.COI_PROJECT_TYPE,
+                                                    ''projectCount'', T9.NO_OF_AWARD,
+                                                    ''moduleCode'', 1
+                                                ), NULL),
+                                            IF(T60.DISCLOSURE_ID IS NOT NULL,
+                                                JSON_OBJECT(
+                                                    ''projectType'', T60.COI_PROJECT_TYPE,
+                                                    ''projectCount'', T60.NO_OF_IPS,
+                                                    ''moduleCode'', 2
+                                                ), NULL)
+                                        ) AS PROJECT_COUNT,
 										CASE WHEN T1.FCOI_TYPE_CODE = 2 THEN COALESCE(T14.PROPOSAL_TITLE,
 											T62.IP_TITLE,
 											T15.AWARD_TITLE) ELSE NULL END AS PROJECT_TITLE,

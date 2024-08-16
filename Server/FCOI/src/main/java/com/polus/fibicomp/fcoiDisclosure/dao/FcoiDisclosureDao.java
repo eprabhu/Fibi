@@ -13,6 +13,7 @@ import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
+import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -372,4 +373,10 @@ public interface FcoiDisclosureDao {
      * @param projectDto
      */
     void updateFcoiDisclSyncNeedStatus(DisclosureProjectDto projectDto);
+
+    /**
+     *
+     * @param disclComment
+     */
+    void saveOrUpdateDisclComment(DisclComment disclComment);
 }

@@ -91,7 +91,7 @@ public interface FcoiDisclosureService {
      * This method is used to save disclosure Relationship conflict details.
      * @return vo
      */
-    ProjectEntityRequestDto saveDisclosureConflict(ProjectEntityRequestDto vo);
+    ResponseEntity<Object> saveDisclosureConflict(ProjectEntityRequestDto vo);
 
     /**
      * This method is used to revise Coi disclosure
