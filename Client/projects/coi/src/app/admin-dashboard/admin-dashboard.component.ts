@@ -12,8 +12,7 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.service';
 import {
-    CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
-    ADMIN_DASHBOARD_RIGHTS,
+    CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, FCOI_PROJECT_DISCLOSURE_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
@@ -99,7 +98,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isViewAdvanceSearch = true;
     adminData: any;
     fcoiTypeCode: any;
-    isShowAdminDashboard = false;
+    hasReviewerRight = false;
+    hasFCOIDiscosureRights = false;
     hasTravelDisclosureRights = false;
     hasConsultingDisclosureRights = false;
     hasProjectOverviewRights = false;
@@ -284,11 +284,25 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     setDashboardTab() {
         this.coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
-            sessionStorage.getItem('currentCOIAdminTab') : this.isShowAdminDashboard ? 'ALL_DISCLOSURES' : 'MY_REVIEWS';
+            sessionStorage.getItem('currentCOIAdminTab') : this.getDefaultDashboard();
             if( this.coiAdminDashboardService.coiRequestObject.tabName == 'PROJECTS'){
                 this.getLookupDataForProjectStatus();
             }
         this.checkForTravelDisclosureTabChange(this.coiAdminDashboardService.coiRequestObject.tabName);
+    }
+
+    private getDefaultDashboard(): string {
+        if (this.hasFCOIDiscosureRights) {
+            return 'ALL_DISCLOSURES';
+        } else if (this.hasReviewerRight) {
+            return 'MY_REVIEWS';
+        } else if (this.hasTravelDisclosureRights) {
+            return 'TRAVEL_DISCLOSURES';
+        } else if (this.hasConsultingDisclosureRights) {
+            return 'CONSULTING_DISCLOSURES';
+        } else if (this.hasProjectOverviewRights) {
+            return 'PROJECTS';
+        }
     }
 
     toggleADSearch() {
@@ -689,7 +703,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     getPermissions() {
-        this.isShowAdminDashboard = this.commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+        this.hasFCOIDiscosureRights = this.commonService.rightsArray.some((right) => FCOI_PROJECT_DISCLOSURE_RIGHTS.includes(right));
+        this.hasReviewerRight = this.commonService.isCoiReviewer;
     }
 
     checkTravelDisclosureRights() {
@@ -951,14 +966,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
        return this.selectedDisclosures.filter(e => e).length;
     }
 
-    projectTabAdvSearch() {
+    projectTabAdvSearch(): void {
         this.setAdvanceSearchDateValuesToRO();
         this.localProjectOverviewRO.advancedSearch = 'A';
         this.$projectOverviewList.next(this.localProjectOverviewRO);
         this.setAdvanceSearchOfProjectOverviewToServiceObject();
     }
 
-    setAdvanceSearchOfProjectOverviewToServiceObject() {
+    setAdvanceSearchOfProjectOverviewToServiceObject(): void {
         this.coiAdminDashboardService.projectOverviewRequestObject.property2 = this.localProjectOverviewRO.property2  || null;
         this.coiAdminDashboardService.projectOverviewRequestObject.property3 = this.localProjectOverviewRO.property3  || null;
         this.coiAdminDashboardService.projectOverviewRequestObject.property6 = this.localProjectOverviewRO.property6  || null;
@@ -971,40 +986,40 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.coiAdminDashboardService.projectOverviewRequestObject.property14 =  parseDateWithoutTimestamp(this.localProjectOverviewRO.property14)  || null;
     }
 
-    private setSearchOptionsForProjectOverview() {
+    private setSearchOptionsForProjectOverview(): void {
         this.leadUnitSearchOptionsForProjectOverview = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
         this.sponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor({ baseUrl: this.commonService.fibiUrl });
         this.primeSponsorSearchOptionsForProjectOverview = getEndPointOptionsForSponsor({ baseUrl: this.commonService.fibiUrl });
         this.elasticPersonSearchOptionsForProjectOverview = this._elasticConfig.getElasticForPerson();
     }
 
-    leadUnitUpdateFunction(unit: any) {
+    leadUnitUpdateFunction(unit: any): void {
         this.localProjectOverviewRO.property3 = unit ? unit.unitNumber : null;
     }
 
-    sponsorUpdateFunction(sponsor : any) {
+    sponsorUpdateFunction(sponsor : any): void {
             this.localProjectOverviewRO.property9 = sponsor ? sponsor.sponsorCode : null;
     }
 
-    primeSponsorUpdateFunction(primeSponosr:any) {
+    primeSponsorUpdateFunction(primeSponosr:any): void {
         this.localProjectOverviewRO.property11 = primeSponosr ? primeSponosr.sponsorCode : null;
     }
 
-    fetchPersonName(person : any) {
+    fetchPersonName(person : any): void {
         this.localProjectOverviewRO.personId = person ? person.prncpl_id : null;
     }
 
-    onLookupSelectData(data: any, property: string) {
+    onLookupSelectData(data: any, property: string): void {
         this.lookupValuesForProjectOverview[property] = data;
         this.localProjectOverviewRO[property] = data.length ? data.map(d => d.code) : [];
     }
 
-    setAdvanceSearchDateValuesToRO() {
+    setAdvanceSearchDateValuesToRO(): void {
         this.localProjectOverviewRO.property13 = parseDateWithoutTimestamp(this.advacnceSearchDatesForProjectOverview.startDate);
         this.localProjectOverviewRO.property14 = parseDateWithoutTimestamp(this.advacnceSearchDatesForProjectOverview.endDate);
     }
 
-    clearAndExecuteAdvancedSearch() {
+    clearAndExecuteAdvancedSearch(): void {
         this.localProjectOverviewRO = new CoiProjectOverviewRequest();
         this.$projectOverviewList.next(this.localProjectOverviewRO);
         this.advacnceSearchDatesForProjectOverview = {startDate : null, endDate : null};
@@ -1012,7 +1027,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.setSearchOptionsForProjectOverview();
     }
 
-    getLookupDataForProjectStatus(){
+    getLookupDataForProjectStatus(): void {
         this.$subscriptions.push(this.coiAdminDashboardService.getLookupDataForProposalStatus().subscribe((res: any) => {
             this.lookupArrayForProjectStatus = res; 
         }))

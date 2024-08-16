@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QuestionnaireVO {
 
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	private String personId;
 
@@ -36,5 +36,7 @@ public class QuestionnaireVO {
 	private String attribute3Value;
 
 	private transient Integer disclosureId;
+
+	private transient String updateUser;
 
 }

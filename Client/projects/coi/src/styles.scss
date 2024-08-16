@@ -415,3 +415,26 @@
         border-left: 0 !important;
     }
 }
+
+.coi-nav-tab-sticky{
+    position: sticky;
+    top: 50px;
+    z-index: 10;
+}
+
+.coi-dashboard-tab-sticky{
+    position: sticky;
+    top: 17px;
+    z-index: 10;
+    background-color: #f1f1f1;
+}
+
+.coi-reviewer-header-sticky{
+    position: sticky;
+    z-index: 10;
+    background-color: #f0f2f3;
+}
+
+.coi-invalid-FieldBorder {
+	border: 1px solid red !important;
+}

@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProposalPersonDTO {
 
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	private String keyPersonName;
 
 	private String keyPersonId;
 
-	private String keyPersonRoleCode;
+	private Integer keyPersonRoleCode;
 
 	private String keyPersonRole;
 

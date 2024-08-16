@@ -27,7 +27,7 @@ public class COIIntegrationProposal implements Serializable {
 	private Integer stageProposalId;
 
 	@Column(name = "PROPOSAL_NUMBER")
-	private Integer proposalNumber;
+	private String proposalNumber;
 
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;

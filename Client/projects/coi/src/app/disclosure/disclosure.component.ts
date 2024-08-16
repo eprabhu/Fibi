@@ -300,7 +300,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     checkQuestionnaireCompleted(res) {
         let errorArray = certifyIfQuestionnaireCompleted(res);
-        if(errorArray.length) {
+        if(errorArray && errorArray.length) {
             errorArray.forEach(ele => this.coiService.submitResponseErrors.push(ele));
         }
         this.validateRelationship();
@@ -777,6 +777,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         if(!this.isUserCollapse) {
             this.isCardExpanded = window.innerWidth > 1399;
         }
+        this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
     }
 
     setFocus(id) {
@@ -791,12 +792,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     collapseHeader() {
         this.isCardExpanded = !this.isCardExpanded;
         this.isUserCollapse = !this.isUserCollapse;
+        setTimeout (() => {
+            this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
+        });
     }
 
     openProjectDetailsModal(): void {
         const SELECTED_PROJECT_DETAILS: DisclosureProjectData = {
             title: this.coiData.projectDetail?.title,
             sponsorName: this.coiData.projectDetail?.sponsor,
+            sponsorCode : this.coiData.projectDetail?.sponsorCode,
             homeUnitName: this.coiData.projectDetail?.unitName,
             projectEndDate: this.coiData.projectDetail?.endDate,
             projectId: this.coiData.projectDetail?.moduleItemId,
@@ -807,6 +812,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             projectTypeCode: this.coiData.projectDetail?.moduleCode,
             piName: this.coiData.projectDetail?.principalInvestigator,
             primeSponsorName: this.coiData.projectDetail?.primeSponsor,
+            primeSponsorCode: this.coiData.projectDetail?.primeSponsorCode,
             projectType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.description,
             projectBadgeColour: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ? '#7d9e33' : '#c9a742',
             projectNumber: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ?
@@ -814,5 +820,5 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
         this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
     }
-    
+
 }

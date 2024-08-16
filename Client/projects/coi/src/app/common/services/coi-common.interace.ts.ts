@@ -1,5 +1,5 @@
 export type Method = 'SOME' | 'EVERY';
-export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | '';
+export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | 'COI_OPA_HEADER' | 'COI_DISCLOSURE_HEADER' | '';
 export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 export type LoginPersonDetailsKey = keyof LoginPersonDetails;
 

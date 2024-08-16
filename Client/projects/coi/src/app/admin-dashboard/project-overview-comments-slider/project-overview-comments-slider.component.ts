@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { getFormattedSponsor, openCoiSlider } from '../../common/utilities/custom-utilities';
 import { EDITOR_CONFIURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { ProjectOverviewService } from '../project-overview.service';
@@ -32,7 +32,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     commentsData: any[] = [];
     mandatoryMap = new Map();
     currentUserId: any;
-
+    getFormattedSponsor = getFormattedSponsor;
 
     constructor(public projectOverviewService: ProjectOverviewService, public commonService: CommonService) { }
 
@@ -54,7 +54,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }, 500);
     }
 
-    loadProjectOverviewCommentBody() {
+    loadProjectOverviewCommentBody(): void {
         this.commentFetchRequestPayload = new projectOverviewCommentFetch();
         this.commentFetchRequestPayload.commentTypeCode = '1';
         this.commentFetchRequestPayload.moduleCode = '3';
@@ -62,7 +62,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         this.getProjectOverviewComments(this.commentFetchRequestPayload);
     }
 
-    getProjectOverviewComments(commentFetchRequestPayload) {
+    getProjectOverviewComments(commentFetchRequestPayload: any): void {
         this.$subscriptions.push(this.projectOverviewService.getProjectOverviewComments(commentFetchRequestPayload).subscribe((res: any) => {
             this.commentsData = res;
             this.currentUserId = this.commonService.getCurrentUserDetail('personID');
@@ -71,7 +71,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     }
 
 
-    addComment(details) {
+    addComment(details): void {
         this.$subscriptions.push(this.projectOverviewService.addProjectOverviewComment(details).subscribe((res: any) => {
             this.cancelOrClearCommentsDetails();
             if (details) {
@@ -85,7 +85,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }));
     }
 
-    updateComment(details) {
+    updateComment(details): void {
         this.$subscriptions.push(this.projectOverviewService.updateProjectOverviewComment(details).subscribe((res: any) => {
             this.cancelOrClearCommentsDetails();
             if (details) {
@@ -96,7 +96,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }))
     }
 
-    deleteComment(details, index) {
+    deleteComment(details): void {
         this.$subscriptions.push(this.projectOverviewService.deleteProjectOverviewComments(details.commentId).subscribe((res: any) => {
             this.cancelOrClearCommentsDetails();
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment deleted successfully');
@@ -111,7 +111,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }))
     }
 
-    toggleAddCommentBox() {
+    toggleAddCommentBox(): void {
         this.showAddComment = !this.showAddComment;
     }
 
@@ -122,20 +122,20 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         );
     }
 
-    replyComment(commentDetails, index) {
+    replyComment(commentDetails, index): void {
         if (!this.isReplyComment && !this.projectOverviewService.isEditParentComment && !this.isEditComment) {
             this.projectOverviewCommentDetails.parentCommentId = commentDetails.commentId;
             this.isReplyComment = true;
         }
     }
 
-    addReplayCommentsDetails() {
+    addReplayCommentsDetails(): void {
         if (!this.validateComment()) {
             this.addCommentsDetails()
         }
     }
 
-    addCommentsDetails() {
+    addCommentsDetails(): void {
         if (!this.validateComment()) {
             this.projectOverviewCommentDetails.commentTypeCode = '1';
             this.projectOverviewCommentDetails.moduleCode = '3';
@@ -144,14 +144,14 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }
     }
 
-    editParentComment(details, index) {
+    editParentComment(details): void {
         if (!this.projectOverviewService.isEditParentComment && !this.isEditComment && !this.isReplyComment) {
             this.projectOverviewService.isEditParentComment = true;
             this.projectOverviewService.editParentCommentId = details.commentId;
         }
     }
 
-    addEditedComment(details) {
+    addEditedComment(details): void {
         this.isEditComment = true;
         this.projectOverviewCommentDetails.commentId = details.commentId;
         this.projectOverviewCommentDetails.comment = details.comment;
@@ -160,29 +160,21 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }
     }
     
-    validateComment() {
+    validateComment(): boolean {
         this.mandatoryMap.clear();
         if (!this.projectOverviewCommentDetails.comment) {
             this.mandatoryMap.set('comment', 'Please add comment');
         }
-        return this.mandatoryMap.size === 0 ? false : true;
+        return this.mandatoryMap.size > 0;
     }
 
-    cancelOrClearCommentsDetails() {
+    cancelOrClearCommentsDetails(): void {
         this.projectOverviewCommentDetails = new CoiProjectOverviewComment();
-        if (this.isEditComment) {
-            this.isEditComment = false;
-        }
-        if (this.isReplyComment) {
-            this.isReplyComment = false;
-        }
-        if (this.projectOverviewService.isEditParentComment) {
-            this.projectOverviewService.isEditParentComment = false;
-        }
+        this.isEditComment = false;
+        this.isReplyComment = false;
+        this.projectOverviewService.isEditParentComment = false;
         this.loadProjectOverviewCommentBody();
-        if (this.projectOverviewService.editParentCommentId) {
-            this.projectOverviewService.editParentCommentId = null;
-        }
+        this.projectOverviewService.editParentCommentId = null;
         this.mandatoryMap.clear();
     }
 
@@ -210,7 +202,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }
     }
 
-    editReplyComment(childComment, index) {
+    editReplyComment(childComment, index): void {
         if (!this.isEditComment && !this.projectOverviewService.isEditParentComment && !this.isReplyComment) {
             this.isEditComment = true;
             this.currentEditIndex = index;
@@ -218,7 +210,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         }
     }
 
-    addReplyEditedComments(childComment, index) {
+    addReplyEditedComments(childComment): void {
         this.projectOverviewCommentDetails.comment = childComment.comment;
         if (!this.validateComment()) {
             this.updateComment(this.projectOverviewCommentDetails)

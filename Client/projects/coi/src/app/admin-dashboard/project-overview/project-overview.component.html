@@ -1,5 +1,5 @@
 <div *ngIf="!isLoading">
-    <div *ngIf="projectOverviewData?.projectOverviewDetails?.length"
+    <div *ngIf="projectOverviewData?.projectOverviewDetails?.length && displayFilterTab"
         class="advance-search overflow-hide-nav coi-search-box mt-2 nav-filter-sticky">
         <div class="row m-0">
             <div class="col-lg-auto px-3 py-2">
@@ -38,10 +38,10 @@
                                             tabindex="-1" [attr.aria-label]="projectData?.projectDetails?.projectType">
                                             {{projectData?.projectDetails?.projectType}}
                                         </span>
-                                        <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-end">
                                             <mat-icon aria-hidden="true"
                                                 class="coi-text-light flex-shrink-0">article</mat-icon>
-                                            <a class="link-primary fs-6 text-slice fw-600" id="coi-project-overview-title-{{index1}}" tabindex="0"
+                                            <a class="link-primary fs-6 text-slice fw-600 lh-1" id="coi-project-overview-title-{{index1}}" tabindex="0"
                                                 (click)="openProjectDetailsModal(projectData.projectDetails)" (keyup.enter)="openProjectDetailsModal(projectData.projectDetails)"
                                                 (keyup.space)="openProjectDetailsModal(projectData.projectDetails)"
                                                 [title]="'Click here to view details of #'+ projectData?.projectDetails?.projectId + ' - ' + projectData?.projectDetails?.title"
@@ -74,10 +74,10 @@
                                         <div tabindex="-1" id="coi-project-overview-leadunit-{{index1}}">
                                             <span>
                                                 <app-no-data-label
-                                                    [valueToShow]="projectData?.projectDetails?.leadUnitName">
+                                                    [valueToShow]="commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})">
                                                     <span class="coi-text-light text-slice"
-                                                        [title]="projectData?.projectDetails?.leadUnitNumber + ' - ' + projectData?.projectDetails?.leadUnitName">
-                                                        {{projectData?.projectDetails?.leadUnitNumber + ' - ' + projectData?.projectDetails?.leadUnitName}}</span>
+                                                        [title]="commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})">
+                                                        {{commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -107,10 +107,10 @@
                                         <div tabindex="-1">
                                             <span  id="coi-project-overview-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.sponsorName">
                                                 <app-no-data-label
-                                                    [valueToShow]="projectData?.projectDetails?.sponsorName">
+                                                    [valueToShow]="getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)">
                                                     <span class="coi-text-light text-slice"
-                                                        [title]="projectData?.projectDetails?.sponsorCode + ' - ' + projectData?.projectDetails?.sponsorName">
-                                                        {{projectData?.projectDetails?.sponsorCode + ' - ' + projectData?.projectDetails?.sponsorName}}</span>
+                                                        [title]="getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)">
+                                                        {{getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -123,10 +123,10 @@
                                         <div tabindex="-1">
                                             <span id="coi-project-overview-prime-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.primeSponsorName">
                                                 <app-no-data-label
-                                                    [valueToShow]="projectData?.projectDetails?.primeSponsorName">
+                                                    [valueToShow]="getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)">
                                                     <span class="coi-text-light text-slice"
-                                                        [title]="projectData?.projectDetails?.primeSponsorCode + ' - ' + projectData?.projectDetails?.primeSponsorName">
-                                                        {{projectData?.projectDetails?.primeSponsorCode + ' - ' + projectData?.projectDetails?.primeSponsorName}}</span>
+                                                        [title]="getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)">
+                                                        {{getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)}}</span>
                                                 </app-no-data-label>
                                             </span>
                                         </div>
@@ -141,7 +141,7 @@
                                         <div>
                                             <span  id="coi-project-overview-start-date-{{index1}}">
                                                 <app-no-data-label
-                                                    [valueToShow]="(projectData?.projectDetails?.projectStartDate ? projectData?.projectDetails?.projectStartDate : 'No start date') + ' - ' + (projectData?.projectDetails?.projectEndDate ? projectData?.projectDetails?.projectEndDate : 'No end date')">
+                                                    [valueToShow]="projectData?.projectDetails?.projectStartDate && projectData?.projectDetails?.projectEndDate">
                                                     <span class="coi-text-light text-slice"
                                                     [title]="((projectData?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (projectData?.projectDetails?.projectEndDate | dateFormatter))">
                                                         {{projectData?.projectDetails?.projectStartDate | dateFormatter}} - {{projectData?.projectDetails?.projectEndDate | dateFormatter}}</span>
@@ -207,8 +207,8 @@
                                 <div class="d-flex align-items-start cursor-pointer"
                                     (click)="toggleProjectOverviewCard(index1)" (keyup.enter)="toggleProjectOverviewCard(index1)"
                                     (keyup.space)="toggleProjectOverviewCard(index1)" tabindex="0"
-                                    title="Click here to collapse / expand   Key personnel details"
-                                    aria-label="Click here to collapse / expand   Key personnel details">
+                                    title="Click here to collapse / expand Key personnel details"
+                                    aria-label="Click here to collapse / expand Key personnel details">
                                     <h4 class="me-1 mb-0 fs-6 link-primary" for="coi-project-overview-keyperson-count">
                                         Key personnel</h4>
                                     <span [attr.aria-label]="projectData?.projectDetails?.keyPersonCount"
@@ -298,14 +298,14 @@
                                                 </th>
 
                                                 <th style="width: 9%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index1 + '_disclosureSubmitted'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_disclosureStatus'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index1 + '_disclosureSubmitted'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
-                                                        (click)="onSortClick(index1, 'disclosureSubmitted')">
+                                                        aria-label="{{ isDesc[index1 + '_disclosureStatus'] ? 'Click here to sort disclosure in ascending order' : 'Click here to sort disclosure in descending order' }}"
+                                                        (click)="onSortClick(index1, 'disclosureStatus')">
                                                         <span class="coi-text-darker">Disclosure</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_disclosureSubmitted'],
-                                                            'fa-sort-alpha-desc': isDesc[index1 + '_disclosureSubmitted']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_disclosureStatus'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_disclosureStatus']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
@@ -439,7 +439,7 @@
                                                 <td class="p-0">
                                                     <div class="d-flex justify-content-center">
                                                         <button
-                                                            *ngIf="keyPersonData?.disclosureStatus == 'Completed' && keyPersonData?.disclosureId !== 0 || null"
+                                                            *ngIf="keyPersonData?.disclosureStatus == 'Completed'"
                                                             id="coi-keyperson-disclosure-view-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to view the disclosure" aria-label="Click here to view the disclosure"
@@ -448,12 +448,14 @@
                                                             (keyup.space)="redirectToDisclosure(keyPersonData)">
                                                             <mat-icon>visibility</mat-icon>
                                                         </button>
-                                                        <button *ngIf="keyPersonData?.disclosureStatus === 'Pending' || keyPersonData?.questionnaireCompleted === false"
+                                                        <button *ngIf="(keyPersonData?.disclosureStatus === 'Pending') || 
+                                                        (!keyPersonData?.disclosureStatus  && !keyPersonData?.questionnaireCompleted)"
                                                             id="coi-keyperson-disclosure-notify-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure">
                                                             <mat-icon>notifications_active</mat-icon>
                                                         </button>
+                                                        <span *ngIf="keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureStatus === 'Not Required'">--</span>
                                                     </div>
                                                 </td>
                                             </tr>

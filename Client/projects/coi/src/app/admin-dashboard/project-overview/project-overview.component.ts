@@ -7,6 +7,7 @@ import { POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-project-overview',
@@ -24,6 +25,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     @Input() dataForAdvanceSearch: Observable<any>;
     projectOverviewData: ProjectOverview = new ProjectOverview();
     projectOverviewRequestObject = new CoiProjectOverviewRequest();
+    displayFilterTab = false;
     isProjectOverviewCardCollapse: boolean[] = [];
     $subscriptions: Subscription[] = [];
     isLoading = true;
@@ -33,6 +35,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private isInitialCall: boolean = true;
     totalPageCount: number | null = null;
     getIndexForSlider: number;
+    currentSortStateKey: string | null = null;
+    getFormattedSponsor = getFormattedSponsor;
 
 
     constructor(private projectOverviewService: ProjectOverviewService, public commonService: CommonService, private _router: Router) { }
@@ -74,11 +78,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }));
     }
 
-    toggleProjectOverviewCard(index: number) {
+    toggleProjectOverviewCard(index: number): void {
         this.isProjectOverviewCardCollapse[index] = !this.isProjectOverviewCardCollapse[index];
     }
 
-    sortKeypersonsList(isAsc: boolean, index: number, key: any) {
+    sortKeypersonsList(isAsc: boolean, index: number, key: any): void {
         const stateKey = `${index}_${key}`;
         this.isDesc[stateKey] = !isAsc;
         const allKeysHaveValues = this.projectOverviewData.projectOverviewDetails[index].keyPersonDetails.every(person => person[key] !== undefined);
@@ -99,9 +103,20 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    onSortClick(index: number, key: any) {
+    /**
+     * 
+     * @param index To retrieve the accurate project using the index value.
+     * @param key The key is used to obtain a specific field name from the keyperson table, based on the data given at a particular index value.
+     */
+    onSortClick(index: number, key: any): void {
         const stateKey = `${index}_${key}`;
         const currentSortDirection = this.isDesc[stateKey] ? true : false;
+        
+        if (this.currentSortStateKey && this.currentSortStateKey !== stateKey) {
+            this.isDesc[this.currentSortStateKey] = null;
+        }
+    
+        this.currentSortStateKey = stateKey;
         this.sortKeypersonsList(currentSortDirection, index, key);
     }
 
@@ -117,6 +132,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         const SELECTED_PROJECT_DETAILS = {
             title: projectDetails?.title,
             sponsorName: projectDetails?.sponsorName,
+            sponsorCode : projectDetails?.sponsorCode,
             homeUnitName: projectDetails?.leadUnitName,
             projectEndDate: projectDetails?.projectEndDate,
             projectId: projectDetails?.projectId,
@@ -127,11 +143,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
             projectTypeCode: projectDetails?.projectTypeCode,
             piName: projectDetails?.piName,
             primeSponsorName: projectDetails?.primeSponsorName,
+            primeSponsorCode: projectDetails?.primeSponsorCode,
             projectType: projectDetails.projectType,
             projectBadgeColour: projectDetails.projectBadgeColour,
             projectNumber: projectDetails?.projectId
         }
-        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
+        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS, null, false);
     }
 
     openPersonDetailsModal(personID: string): any {
@@ -166,23 +183,24 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    toggleSlider(index: number) {
+    toggleSlider(index: number): void {
         this.getIndexForSlider = index;
         this.showSlider = true;
     }
 
-    closeHeaderSlider() {
+    closeHeaderSlider(): void {
         this.showSlider = false;
     }
 
-    actionsOnPageChange(event) {
+    actionsOnPageChange(event): void {
         if (this.projectOverviewRequestObject.currentPage != event) {
+            this.isProjectOverviewCardCollapse = [];
             this.projectOverviewRequestObject.currentPage = event;
             this.loadProjectData();
         }
     }
 
-    handleCommentCount(updatedCount: number) {
+    handleCommentCount(updatedCount: number): void {
         this.projectOverviewData.projectOverviewDetails[this.getIndexForSlider].projectDetails.commentCount = updatedCount;
     }
 

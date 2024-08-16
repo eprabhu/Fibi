@@ -3,6 +3,7 @@ import { CommonService } from '../../common/services/common.service';
 import { DisclosureProjectModalData } from '../shared-interface';
 import { HttpClient } from '@angular/common/http';
 import { HTTP_ERROR_STATUS, URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
+import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-shared-project-details-modal',
@@ -12,6 +13,7 @@ import { HTTP_ERROR_STATUS, URL_FOR_DISCLOSURE_PROJECT } from '../../app-constan
 export class SharedProjectDetailsModalComponent implements OnInit {
 
     $subscriptions = [];
+    getFormattedSponsor = getFormattedSponsor;
 
     @Input() selectedProject: DisclosureProjectModalData = new DisclosureProjectModalData();
 

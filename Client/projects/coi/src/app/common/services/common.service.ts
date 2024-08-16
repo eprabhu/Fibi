@@ -4,7 +4,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {Toast} from 'bootstrap';
-import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
@@ -20,6 +20,9 @@ export class CommonService {
     authUrl = '';
     opaUrl = '';
     formUrl = '';
+    EXTERNAL_APPLICATION_BASE_URL = '';
+    EXTERNAL_PROPOSAL_URL = '';
+    EXTERNAL_AWARD_URL = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -121,6 +124,9 @@ export class CommonService {
         this.elasticConfigService.indexValue = configurationData.indexValue;
         this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
         this.enableGraph = configurationData.enableGraph;
+        this.EXTERNAL_APPLICATION_BASE_URL = configurationData.EXTERNAL_APPLICATION_BASE_URL;
+        this.EXTERNAL_PROPOSAL_URL = configurationData.EXTERNAL_PROPOSAL_URL;
+        this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
     }
 
     pageScroll(elementId) {
@@ -453,13 +459,13 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 
     redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
         const RESOURCE_URLS = {
-            1: AWARD_EXTERNAL_RESOURCE_URL.replace('{awardId}', projectId),
-            2: IP_EXTERNAL_RESOURCE_URL.replace('{instituteProposalId}', projectId),
-            3: PROPOSAL_EXTERNAL_RESOURCE_URL.replace('{developmentProposalId}', projectId),
+            1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
+            2: IP_EXTERNAL_RESOURCE_URL.replace('{projectId}', projectId),
+            3: (this.EXTERNAL_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
         };
-        const EXTERNAL_APPLICATION_URL = this.fibiApplicationUrl;
+        const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
         if (RESOURCE_URLS[projectTypeCode]) {
-            window.open(`${EXTERNAL_APPLICATION_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
+            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
         }
     }
 
@@ -471,9 +477,10 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         this.isPreventDefaultLoader = false;
     }
 
-    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null): void {
+    openProjectDetailsModal(projectDetails: DisclosureProjectData | null = null, coiDisclosureId: number | null = null, needReporterRole: boolean = true): void {
         this.projectDetailsModalInfo.projectDetails = projectDetails;
         this.projectDetailsModalInfo.coiDisclosureId = coiDisclosureId;
+        this.projectDetailsModalInfo.needReporterRole = needReporterRole;
     }
 
     closeProjectDetailsModal(isOpen = true): void {
@@ -532,9 +539,10 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 
     redirectionBasedOnRights() {
         this.fetchPermissions(true).then((res) => {
-            const isAdministrator = this.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-                || this.isCoiReviewer;
-            const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
+            const isAdministrator = this.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS)
+                || this.isCoiReviewer || this.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+            const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA'])
+                || this.isOPAReviewer || this.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
             this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
         });
     }

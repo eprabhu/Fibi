@@ -1,65 +1,71 @@
 package com.polus.kcintegration.proposal.service;
 
-import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.amqp.core.Message;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.polus.kcintegration.constant.Constant;
-import com.polus.kcintegration.dao.KCIntegrationDao;
-import com.polus.kcintegration.exception.custom.IntegrationCustomException;
-import com.polus.kcintegration.message.service.MessagingService;
-import com.polus.kcintegration.proposal.dao.ProposalKCIntegrationDao;
-import com.polus.kcintegration.proposal.dto.ProposalDTO;
-import com.polus.kcintegration.proposal.dto.QuestionnaireDTO;
 
+import com.polus.kcintegration.exception.custom.IntegrationCustomException;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@EnableAsync
+@EnableRetry
 @Transactional
 @Service
 public class ProposalKCIntegrationServiceImpl implements ProposalKCIntegrationService {
 
-	protected static Logger logger = LogManager.getLogger(ProposalKCIntegrationServiceImpl.class.getName());
-
 	@Autowired
-	private ProposalKCIntegrationDao proposalIntegrationDao;
+    private ProposalRetryService proposalRetryService;
 
-	@Autowired
-	private MessagingService messagingService;
-
-	@Autowired
-	private KCIntegrationDao kcIntegrationDao;
-
-	@Value("${fibi.messageq.queues.devProposalIntegration}")
-	private String devProposalIntegrationQueue;
-
-	@Value("${fibi.messageq.queues.devPropQuesAnsIntegration}")
-	private String devPropQuesAnsIntegrationQueue;
-
+	@Async
 	@Override
 	public void feedProposal(String proposalNumber) {
-		try {
-			ProposalDTO feedProposal = proposalIntegrationDao.fetchProposalByProposalNumber(proposalNumber);
-			if (feedProposal != null) {
-				feedProposal.setProposalPersons(proposalIntegrationDao.fetchProposalPersons(proposalNumber));
+		log.info("Proposal feed started for proposalNumber: {}", proposalNumber);
+		CompletableFuture.runAsync(() -> {
+			try {
+				log.info("sleep start....");
+				Thread.sleep(10000);
+				log.info("sleep end....");
+				// Retry the fetching and messaging if the list is null or empty
+				log.info("retryFetchProposalAndSendMessage start....");
+				proposalRetryService.retryFetchProposalAndSendMessage(proposalNumber);
+				log.info("retryFetchProposalAndSendMessage end....");
+			} catch (Exception e) {
+				log.error("Error occurred in feedProposal: {}", e.getMessage());
+				throw new IntegrationCustomException("Error during feedProposal: {}", e);
 			}
-			messagingService.sendMessage(Constant.FIBI_DIRECT_EXCHANGE, devProposalIntegrationQueue, new Message(kcIntegrationDao.convertObjectToJSON(feedProposal).getBytes()));
-		} catch (Exception e) {
-			logger.error("Error occurred in feedProposal: {}", e.getMessage());
-			throw new IntegrationCustomException("Error during feedProposal :{}", e, proposalNumber);
-		}
+		}).exceptionally(e -> {
+	        log.error("Async operation failed: {}", e.getMessage());
+	        return null;
+	    });
 	}
 
+	@Async
 	@Override
-	public void syncPersonQuestionnaireAndCreateDisclosure(Integer moduleItemId, Integer questionnaireId, String personId) {
-		try {
-			List<QuestionnaireDTO> questionnaireVOs = proposalIntegrationDao.fetchQuestionnaireDetailsByParams(moduleItemId, questionnaireId, personId);
-			messagingService.sendMessage(Constant.FIBI_DIRECT_EXCHANGE, devPropQuesAnsIntegrationQueue, new Message(kcIntegrationDao.convertObjectToJSON(questionnaireVOs).getBytes()));
-		} catch (Exception e) {
-			logger.error("Error occurred in syncPersonQuestionnaireAndCreateDisclosure: {}", e.getMessage());
-			throw new IntegrationCustomException("Error during syncPersonQuestionnaireAndCreateDisclosure :{}", e);
-		}
+	public void feedPersonQuestionnaireAndCreateDisclosure(String moduleItemId, Integer questionnaireId, String personId) {
+		log.info("feedPersonQuestionnaireAndCreateDisclosure....");
+		CompletableFuture.runAsync(() -> {
+			try {
+				log.info("sleep start....");
+				Thread.sleep(10000);
+				log.info("sleep end....");
+				// Retry the fetching and messaging if the list is null or empty
+				log.info("retryFetchAndSendMessage start....");
+				proposalRetryService.retryFetchAndSendMessage(moduleItemId, questionnaireId, personId);
+				log.info("retryFetchAndSendMessage end....");
+			} catch (Exception e) {
+				log.error("Error occurred in feedPersonQuestionnaireAndCreateDisclosure: {}", e.getMessage());
+				throw new IntegrationCustomException("Error during feedPersonQuestionnaireAndCreateDisclosure: {}", e);
+			}
+		}).exceptionally(e -> {
+	        log.error("Async operation failed: {}", e.getMessage());
+	        return null;
+	    });
 	}
-	
+
 }

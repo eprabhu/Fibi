@@ -13,6 +13,6 @@ import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
 public interface ProposalQnAIntegrationRepository extends JpaRepository<COIIntegrationPropQuestAns, Integer> {
 
 	@Query("SELECT e FROM COIIntegrationPropQuestAns e WHERE e.proposalNumber = :proposalNumber")
-	List<COIIntegrationPropQuestAns> findQuestionAnswersByProposalNumber(@Param("proposalNumber") Integer proposalNumber);
+	List<COIIntegrationPropQuestAns> findQuestionAnswersByProposalNumber(@Param("proposalNumber") String proposalNumber);
 
 }

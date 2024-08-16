@@ -22,6 +22,7 @@ public interface Constant {
     Integer COI_MODULE_CODE = 8;
     //SubModuleCode
     Integer SUB_MODULE_CODE= 0;
+    Integer COI_INTEGRATION_SUB_MODULE_CODE= 802;
     String SUB_MODULE_ITEM_KEY= "0";
     //Queue Action type
     String PROPOSAL_INTEGRATION_ACTION_TYPE = "PROPOSAL_INTEGRATION";
@@ -29,5 +30,7 @@ public interface Constant {
 	String COI_PROJECT_TYPE_PROPOSAL = "3";
 	String PENDING_PROJECT = "pendingProject";
 	String FIBI_DIRECT_EXCHANGE = "FIBI.DIRECT.EXCHANGE";
+	String AC_TYPE_UPDATE = "U";
+	String AC_TYPE_INSERT = "I";
 
 }

@@ -10,7 +10,7 @@ import { HTTP_ERROR_STATUS } from '../../../../../../../fibi/src/app/app-constan
 import { DataStoreService } from '../../../services/data-store.service';
 import { CoiService } from '../../../services/coi.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
-import {openInNewTab} from "../../../../common/utilities/custom-utilities";
+import {getFormattedSponsor, openInNewTab} from "../../../../common/utilities/custom-utilities";
 
 declare var $: any;
 
@@ -48,6 +48,7 @@ export class RelationshipSummaryComponent implements OnInit {
     worstCaseStatus = null;
     activeCard: string;
     relationshipType: {};
+    getFormattedSponsor = getFormattedSponsor;
 
     constructor(
         public coiSummaryService: CoiSummaryService,
@@ -151,7 +152,7 @@ getEntityProjectRelations() {
             const disclosureDetails:coiReviewComment = {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
                 componentTypeCode: '6',
-                subModuleItemKey: section === 'SFI' ? childSubSection?.disclosureDetailsId : details.moduleItemId,
+                subModuleItemKey: section === 'SFI' ? childSubSection?.disclosureDetailsId : details.projectId,
                 subModuleItemNumber: section === 'RELATIONSHIP' ? details.moduleCode : null,
                 coiSubSectionsTitle: `#${details.projectNumber}: ${details.title}`,
                 selectedProject: details,
@@ -243,5 +244,5 @@ getEntityProjectRelations() {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
     }
 
-   
+
 }
