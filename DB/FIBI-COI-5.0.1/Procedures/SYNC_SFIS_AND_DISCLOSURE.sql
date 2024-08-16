@@ -50,6 +50,8 @@ IF LI_LOCK_ACQUIRED = 1 THEN
                     WHERE T1.VERSION_STATUS='ACTIVE'
                     AND T3.DISCLOSURE_TYPE_CODE = '1' AND T1.PERSON_ID = AV_PERSON_ID;
 
+
+
                 DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE1 = TRUE;
                                 
                 OPEN CUR_ENTITIES;

@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -12,20 +12,17 @@ import javax.persistence.Table;
 import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_PROJECT_TYPE")
-public class CoiProjectType implements Serializable {
+@Table(name = "COI_CONFLICT_STATUS_TYPE")
+public class CoiConflictStatusType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "COI_PROJECT_TYPE_CODE")
-	private String coiProjectTypeCode;
+	@Column(name = "CONFLICT_STATUS_CODE")
+	private String conflictStatusCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
-
-	@Column(name = "BADGE_COLOR")
-	private String badgeColor;
 
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
@@ -37,12 +34,15 @@ public class CoiProjectType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getCoiProjectTypeCode() {
-		return coiProjectTypeCode;
+	@Column(name = "SORT_ORDER")
+	private String sortOrder;
+
+	public String getConflictStatusCode() {
+		return conflictStatusCode;
 	}
 
-	public void setCoiProjectTypeCode(String coiProjectTypeCode) {
-		this.coiProjectTypeCode = coiProjectTypeCode;
+	public void setConflictStatusCode(String conflictStatusCode) {
+		this.conflictStatusCode = conflictStatusCode;
 	}
 
 	public String getDescription() {
@@ -77,11 +77,11 @@ public class CoiProjectType implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public String getBadgeColor() {
-		return badgeColor;
+	public String getSortOrder() {
+		return sortOrder;
 	}
 
-	public void setBadgeColor(String badgeColor) {
-		this.badgeColor = badgeColor;
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }

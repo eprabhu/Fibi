@@ -11,28 +11,19 @@ import lombok.Setter;
 @Setter
 public class CoiDisclEntProjDetailsDto {
 
-	private Integer disclosureDetailsId;
-	private Integer disclosureId;
-	private Integer disclosureNumber;
+	private Integer coiDisclProjectEntityRelId;
+	private Integer coiDisclProjectId;
 	private Integer personEntityId;
-	private Integer entityId;
-	private CoiEntityDto coiEntity;
-	private Integer entityNumber;
-	private Integer moduleCode;
-	private String moduleItemKey;
-	private String projectConflictStatusCode;
-	private CoiProjConflictStatusType coiProjConflictStatusType;
-	private String updateUser;
-	private Timestamp updateTimestamp;
-	private DisclComment disclComment;
-	private PersonEntityRelationshipDto personEntityRelationshipDto;
 	private Integer prePersonEntityId;
 	private Integer personEntityNumber;
-	private String projectNumber;
-	private String projectId;
-	private String projectTitle;
-	private String projectTypeCode;
-	private String projectType;
-	private String projectBadgeColour;
+	private Integer entityId;
+	private CoiEntityDto coiEntity;
+	private String projectConflictStatusCode;
+	private CoiProjConflictStatusType coiProjConflictStatusType;
+	private String updatedBy;
+	private Timestamp updateTimestamp;
+	private DisclComment disclComment;
+	private DisclosureProjectDto project;
+	private PersonEntityRelationshipDto personEntity;
 
 }

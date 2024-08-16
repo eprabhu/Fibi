@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.fcoiDisclosure.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

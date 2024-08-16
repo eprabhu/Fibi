@@ -15,6 +15,7 @@ import java.util.Map;
 @Builder
 public class DisclosureProjectDto {
 
+	private Integer coiDisclProjectId;
 	private Integer moduleCode;
 	private String projectId;
 	private String projectNumber;
@@ -39,8 +40,8 @@ public class DisclosureProjectDto {
 	private String conflictStatusCode;
 	private Integer entityCount;
 	private Boolean relationShipExists;
-	private Boolean sfiCompleted;
-	private List<Map<Object, Object>> disclosureStatusCount;
+	private Boolean conflictCompleted;
+	private Map<Integer, Long> conflictCount;
 	private String projectTypeCode;
 	private String projectType;
 	private String projectBadgeColour;
@@ -60,5 +61,6 @@ public class DisclosureProjectDto {
 	private Integer proposalCount;
 	private Integer commentCount;
 	private Integer keyPersonCount;
-
+	private String projectIcon;
+	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
 }
