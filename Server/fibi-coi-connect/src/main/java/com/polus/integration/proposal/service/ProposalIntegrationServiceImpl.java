@@ -168,6 +168,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	@Override
 	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> questionnaireVOs) {
 		try {
+			logger.info("feedPersonQuestionnaireAndCreateDisclosure .... ");
 			Map<String, List<QuestionnaireVO>> groupedByProposal = questionnaireVOs.stream().collect(Collectors.groupingBy(QuestionnaireVO::getProposalNumber));
 			for (Map.Entry<String, List<QuestionnaireVO>> entry : groupedByProposal.entrySet()) {
 	            String proposalNumber = entry.getKey();
@@ -235,22 +236,25 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	@SuppressWarnings("unchecked")
 	public void validateAndCreateDisclosure(ValidateDisclosureVO validateDisclosureVO, ProcessProposalDisclosureVO vo, Integer questionnaireId) {			
 		try {
-			ResponseEntity<Object> response = fcoiFeignClient.validateDisclosure(validateDisclosureVO);
-			Map<String, Object> responseObject = (Map<String, Object>) response.getBody();
-			if (responseObject.get(Constant.PENDING_PROJECT) == null) {
-				CreateProposalDisclosureVO disclosureVO = prepareCreateProposalDisclosureResponse(vo);
-				ResponseEntity<Object> responseObj = fcoiFeignClient.createDisclosure(disclosureVO);
-				Map<String, Object> responseBody = (Map<String, Object>) responseObj.getBody();
-				Map<String, Object> coiDisclosure = (Map<String, Object>) responseBody.get("coiDisclosure");
-				logger.info("Disclosure created successfully.");
-				logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
-				syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
-			} else {
-				logger.info("Pending project exists, disclosure creation skipped.");
-				Map<String, Object> coiDisclosure = (Map<String, Object>) responseObject.get(Constant.PENDING_PROJECT);
-				logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
-				syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
-            }
+			Boolean canCreateDisclosure = proposalIntegrationDao.canCreateProjectDisclosure(questionnaireId, vo.getPersonId(), vo.getModuleItemId().toString());
+			if (Boolean.TRUE.equals(canCreateDisclosure)) {
+				ResponseEntity<Object> response = fcoiFeignClient.validateDisclosure(validateDisclosureVO);
+				Map<String, Object> responseObject = (Map<String, Object>) response.getBody();
+				if (responseObject.get(Constant.PENDING_PROJECT) == null) {
+					CreateProposalDisclosureVO disclosureVO = prepareCreateProposalDisclosureResponse(vo);
+					ResponseEntity<Object> responseObj = fcoiFeignClient.createDisclosure(disclosureVO);
+					Map<String, Object> responseBody = (Map<String, Object>) responseObj.getBody();
+					Map<String, Object> coiDisclosure = (Map<String, Object>) responseBody.get("coiDisclosure");
+					logger.info("Disclosure created successfully.");
+					logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
+					syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
+				} else {
+					logger.info("Pending project exists, disclosure creation skipped.");
+					Map<String, Object> coiDisclosure = (Map<String, Object>) responseObject.get(Constant.PENDING_PROJECT);
+					logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
+					syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
+	            }
+			}
 		} catch (Exception e) {
 			logger.error("Exception occurred while validating or creating disclosure", e);
 			throw new MQRouterException("ER004", "Error in validateAndCreateDisclosure: {}", e, e.getMessage(), devPropQuesAnsIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, Constant.QUESTIONNAIRE_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());

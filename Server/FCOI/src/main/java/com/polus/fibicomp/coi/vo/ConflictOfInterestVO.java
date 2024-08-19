@@ -82,7 +82,7 @@ public class ConflictOfInterestVO {
 
 	private Integer moduleCode;
 
-	private Integer moduleItemId;
+	private String moduleItemId;
 
 	private List<CoiDisclEntProjDetails> coiDisclEntProjDetails;
 

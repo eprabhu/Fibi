@@ -6,4 +6,3 @@
 \. ./integration_scripts.sql
 \. ./oracle_all.sql
 \. ./create_views.sql
-
