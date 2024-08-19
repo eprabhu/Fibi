@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.polus.integration.entity.cleansematch.config.Constants;
 import com.polus.integration.entity.cleansematch.config.ErrorCode;
-import com.polus.integration.entity.cleansematch.dto.DnBCleanMatchAPIResponse;
-import com.polus.integration.entity.cleansematch.dto.StageDnBEntityMatchDTO;
+import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse;
+import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
+import com.polus.integration.entity.cleansematch.dto.DnBStageEntityMatchDTO;
 import com.polus.integration.entity.cleansematch.entity.DnBEntityMatchRepository;
 import com.polus.integration.entity.cleansematch.entity.StageDnBEntityMatch;
 
@@ -38,7 +39,7 @@ public class DnBBulkCleanseMatchService {
 		List<StageDnBEntityMatch> entityMatches = dnbEntityMatchRepository.findAll(firstPageWithTenRecords)
 				.getContent();
 		//List<StageDnBEntityMatch> entityMatches = dnbEntityMatchRepository.findAll();
-		DnBCleanMatchAPIResponse response =  new DnBCleanMatchAPIResponse();
+		DnBCleanseMatchAPIResponse response =  new DnBCleanseMatchAPIResponse();
         for (StageDnBEntityMatch entityMatch : entityMatches) {
             if (stopMatchFlag.get()) {
                 break;
@@ -46,7 +47,7 @@ public class DnBBulkCleanseMatchService {
             try {
                 String apiUrl = buildApiUrl(entityMatch);
                 entityMatch.setRequest(apiUrl);
-                response = callApi(apiUrl);                
+                response = callAPI(apiUrl);                
             } catch (Exception e) {                
                 ErrorCode errorCode = ErrorCode.DNB_BULK_MATCH_ERROR;
                 entityMatch.setErrorCode(errorCode.getErrorCode());
@@ -68,16 +69,24 @@ public class DnBBulkCleanseMatchService {
     }
     
 	private String buildApiUrl(StageDnBEntityMatch sponsorMatch) {
-		return urlBuilder.buildApiUrl(sponsorMatch);
+		DnBEntityCleanseMatchRequestDTO dto = new DnBEntityCleanseMatchRequestDTO();
+		dto.setSourceDunsNumber(sponsorMatch.getSourceDunsNumber());
+		dto.setSourceDataName(sponsorMatch.getSourceDataName());
+		dto.setCountryCode(sponsorMatch.getCountryCode());
+		dto.setAddressLine1(sponsorMatch.getAddressLine1());
+		dto.setAddressLine2(sponsorMatch.getAddressLine2());
+		dto.setState(sponsorMatch.getState());
+		dto.setPostalCode(sponsorMatch.getPostalCode());
+		return urlBuilder.buildApiUrl(dto);
 	}
 
-	private DnBCleanMatchAPIResponse callApi(String apiUrl) {
+	private DnBCleanseMatchAPIResponse callAPI(String apiUrl) {
 		return apiService.callAPI(apiUrl);
 	}
 
 	private StageDnBEntityMatch prepareDBSaveObject(StageDnBEntityMatch entityMatch,
-			DnBCleanMatchAPIResponse response) {
-		entityMatch.setResponse(response.getFullResponse());
+			DnBCleanseMatchAPIResponse response) {
+		entityMatch.setResponse(response.getFullResponse().toString());
 		entityMatch.setBestMatchResult(response.getHighestMatch());
 		entityMatch.setBestMatchConfidenceCode(response.getHighestMatchConfidenceCode());
 		entityMatch.setExternalSysTransactionId(response.getTransactionID());
@@ -93,7 +102,7 @@ public class DnBBulkCleanseMatchService {
 		return entityMatch;
 	}
 
-	private String setIntegrationStatus(DnBCleanMatchAPIResponse res) {
+	private String setIntegrationStatus(DnBCleanseMatchAPIResponse res) {
 
 		String status = Constants.INT_STATUS_ERROR;
 		if (res.getHttpStatusCode().equals(Constants.HTTP_SUCCESS_CODE)) {
@@ -106,7 +115,7 @@ public class DnBBulkCleanseMatchService {
 		return status;
 	}
 	
-    public List<StageDnBEntityMatchDTO> getCompletedRecord() {
+    public List<DnBStageEntityMatchDTO> getCompletedRecord() {
         return dnbEntityMatchRepository.GetMatchCompleted();
     }
 
