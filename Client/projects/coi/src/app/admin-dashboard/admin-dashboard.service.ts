@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonService } from '../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../app-constants';
-import { CoiProjectOverviewRequest } from './admin-dashboard.interface';
+import { CoiProjectOverviewRequest, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.interface';
 
 @Injectable()
 export class AdminDashboardService {
@@ -55,69 +55,3 @@ export class AdminDashboardService {
   }
 
 }
-
-export class CoiDashboardRequest {
-  isDownload = false;
-  property1 = null;
-  property2 = null;
-  property3 = null;
-  property4 = [];
-  property5 = [];
-  property6 = null;
-  property7 = null;
-  property8 = null;
-  property9 = null;
-  property10 = null;
-  property11 = null;
-  property12 = null;
-  property13 = null;
-  property14 = null;
-  property15 = null;
-  property20 = [];
-  property21 = [];
-  property22 = null;
-  property23 = null;
-  pageNumber = 20;
-  sort: any = {'updateTimeStamp': 'desc'};
-  tabName = '';
-  advancedSearch = 'L';
-  currentPage = 1;
-  constructor(tabName?) {
-    this.tabName = tabName ? tabName : 'ALL_DISCLOSURES';
-  }
-}
-
-export class SortCountObj {
-  coiDisclosureNumber = 0;
-  disclosurePersonFullName = 0;
-  disclosureCategoryType = 0;
-  disclosureStatus = 0;
-  dispositionStatus = 0;
-  reviewStatus = 0;
-  expirationDate = 0;
-  certificationDate = 0;
-  travellerName = 0;
-  travelEntityName = 0;
-  travelState = 0;
-  travelCountry = 0;
-  travelCity = 0;
-  documentStatusDescription = 0;
-  reviewDescription = 0;
-  certifiedAt = 0;
-  travelExpirationDate = 0;
-  travelDisclosureStatusDescription = 0;
-  updateTimeStamp = 2;
-  dispositionStatusDescription = 0;
-  entityName = 0;
-  fullName = 0;
-  reviewStatusDescription = 0;
-}
-
-export class NameObject {
-  entityName = '';
-  personName = '';
-  departmentName = '';
-  travelCountryName = '';
-}
-
-

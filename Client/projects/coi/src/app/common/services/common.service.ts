@@ -74,6 +74,7 @@ export class CommonService {
     projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
     modalPersonId: string = '';
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
+    relationshipTypeCache = {};
     entityURL: any;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
@@ -517,6 +518,30 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
                 return 'low-risk';
             default:
                 return '';
+        }
+    }
+
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return { relationshipType: relationshipType[0] || '', description: relationshipType[1] || '' };
+            });
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+    }
+
+    getRelationshipIcon(key: string): string {
+        switch (key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            case 'Consulting': return 'supervisor_account';
+            default: return;
         }
     }
 

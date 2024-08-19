@@ -101,8 +101,7 @@
                                             <span class="coi-card-notch-ribbon shadow-sm align-items-center d-flex text-nowrap me-2" [style.background-color]="project?.projectBadgeColour"
                                                 aria-label="proposal">{{project?.projectType}}</span>
                                             <span class="d-inline-flex pt-1">
-                                                <mat-icon *ngIf="project?.moduleCode != 1" aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
-                                                <mat-icon *ngIf="project?.moduleCode == 1" aria-hidden="true" class="coi-text-light flex-shrink-0">workspace_premium</mat-icon>
+                                                <mat-icon *ngIf="project.projectIcon" aria-hidden="true" class="coi-text-light flex-shrink-0">{{project.projectIcon}}</mat-icon>
                                                 <a tabindex="0" class="fs-6 link-primary fw-600 text-slice" id="link-{{project?.projectId}}"
                                                     title="Click here to view project details of #{{project?.projectNumber}} - {{project?.title}}"
                                                     attr.aria-label="Click here to view project details of {{project?.projectNumber}} - {{project?.title}}"

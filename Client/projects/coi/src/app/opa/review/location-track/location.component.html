@@ -10,7 +10,7 @@
                             ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode) && reviewerList?.length"
                             class="col-auto">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center me-5" data-bs-toggle="modal"
-                                    title="Click here to add Reviewers" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
+                                    title="Click here to add Reviewers" aria-label="Click here to Add Reviewer" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
                                     <mat-icon aria-hidden="true" class="me-2">person_add</mat-icon>
                                     Add Reviewer
                                 </button>
@@ -29,7 +29,7 @@
         <div *ngIf="isCOIAdministrator && ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode) && !reviewerList?.length"
          class="d-flex align-items-center justify-content-center">
             <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center me-5" data-bs-toggle="modal"
-                title="Click here to add Reviewers" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
+                title="Click here to add Reviewers" aria-label="Click here to Add Reviewer" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
                 <mat-icon aria-hidden="true" class="me-2">person_add</mat-icon>
                 Add Reviewer
             </button>
@@ -213,7 +213,7 @@
             </div>
             <div class="modal-body">
                 <div class="margin-person-card mb-3 mx-0">
-                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="opaDisclosure"></app-person-project-entity-card>
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
                 </div>
                 <div class="row">
                     <div class="col-4" role="listbox"

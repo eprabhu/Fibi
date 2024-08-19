@@ -75,7 +75,7 @@ import { EntityCreationComponent } from './entity-creation/entity-creation.compo
         MatMenuModule,
         MatSelectModule,
         MatInputModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,

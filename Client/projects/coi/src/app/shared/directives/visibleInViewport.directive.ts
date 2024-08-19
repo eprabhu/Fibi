@@ -26,15 +26,15 @@
  *
  * @implements
  * OnInit: Initializes the directive and sets up the Intersection Observer.
- * OnChanges: to update the observer when there is a change in isViewportVisiblityEnabled.
+ * OnChanges: to update the observer when there is a change in isViewportVisibilityEnabled.
  * OnDestroy: Cleans up the Intersection Observer when the directive is destroyed.
  *
  * @input
  * @property {number} minHeight - Minimum height of the element to ensure it is properly detected. Default is 100.
- * @property {boolean} isViewportVisiblityEnabled - Boolean indicating whether lazy loading is enabled. Default is true.
+ * @property {boolean} isViewportVisibilityEnabled - Boolean indicating whether lazy loading is enabled. Default is true.
  * @property {boolean} enableRepeatedLoad - Boolean indicating whether the element should load multiple times. Default is true.
  * @property {boolean} enableRepeatedLoad - Boolean indicating whether the element should load multiple times. Default is true.
- * @property {number} intialDelayTimeToObserve - Initial delay time before the observer starts observing. Default is 0.
+ * @property {number} initialDelayTimeToObserve  - Initial delay time before the observer starts observing. Default is 0.
  * @property {IntersectionObserverInit} intersectionObserverOptions - Options for the Intersection Observer. Default is `{ root: null, rootMargin: '0px 0px 0px 0px', threshold: 0.01 }`.
  *   - `root`: The element that is used as the viewport for checking visibility (defaults to the browser viewport if null).
  *   - `rootMargin`: Margin around the root element to expand or contract the viewport area (specified in pixels or percentages).
@@ -46,7 +46,7 @@
  * @methods
  * createObserver(): create the Intersection observer.
  * disconnectObserver(): to destroy the Intersection observer.
- * updateObserver(): Manages the observer based on the current state of isViewportVisiblityEnabled.
+ * updateObserver(): Manages the observer based on the current state of isViewportVisibilityEnabled.
  *
  * @remarks
  * The directive supports lazy loading with a customizable offset and can be configured to emit boolean single or multiple times.
@@ -65,18 +65,18 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
 
     @Input() minHeight = 100;
     @Input() enableRepeatedLoad = false;
-    @Input() intialDelayTimeToObserve = 0;
-    @Input() isViewportVisiblityEnabled = true;
+    @Input() initialDelayTimeToObserve = 0;
+    @Input() isViewportVisibilityEnabled = true;
     @Input() intersectionObserverOptions: IntersectionObserverInit = {
         root: null,
         rootMargin: '0px 0px 0px 0px',
-        threshold: 0.01
+        threshold: 0.00
     };
 
     @Output() visibleInViewport = new EventEmitter<boolean>();
 
     private hasVisibleInViewport = false;
-    private isOberverDisconnected = false;
+    private isObserverDisconnected  = false;
     private observer: IntersectionObserver;
 
     constructor(private el: ElementRef) { }
@@ -87,18 +87,22 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isViewportVisiblityEnabled) {
+        if (changes.isViewportVisibilityEnabled && !changes.isViewportVisibilityEnabled.firstChange) {
             this.updateObserver();
+        }
+        if (changes.minHeight && !changes.minHeight.firstChange) {
+            this.el.nativeElement.style.minHeight = this.minHeight + 'px';
         }
     }
 
     private createObserver(): void {
         this.observer = new IntersectionObserver((observedEntries: IntersectionObserverEntry[]) => {
             observedEntries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.hasVisibleInViewport = true;
+                const isIntersecting = entry.isIntersecting;
+                if (isIntersecting !== this.hasVisibleInViewport) {
+                    this.hasVisibleInViewport = isIntersecting;
                     this.visibleInViewport.emit(this.hasVisibleInViewport);
-                    if (!this.enableRepeatedLoad) {
+                    if (isIntersecting && !this.enableRepeatedLoad) {
                         this.disconnectObserver();
                     }
                 }
@@ -107,19 +111,19 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
 
         setTimeout(() => {
             this.updateObserver(); // Call method to start/stop lazy loading
-        }, this.intialDelayTimeToObserve);
+        }, this.initialDelayTimeToObserve);
     }
 
     private updateObserver(): void {
-        if (!this.isOberverDisconnected) {
-            this.isViewportVisiblityEnabled ? this.observer?.observe(this.el.nativeElement) : this.observer?.unobserve(this.el.nativeElement);
+        if (!this.isObserverDisconnected ) {
+            this.isViewportVisibilityEnabled ? this.observer?.observe(this.el.nativeElement) : this.observer?.unobserve(this.el.nativeElement);
         }
     }
 
     private disconnectObserver(): void {
         if (this.observer) {
             this.observer.disconnect();
-            this.isOberverDisconnected = true;
+            this.isObserverDisconnected  = true;
         }
     }
 

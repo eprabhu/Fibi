@@ -17,7 +17,7 @@ import {
 } from '../../app-constants';
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
-import { RevisionObject, Disclosure } from '../shared-interface';
+import { RevisionObject, Disclosure, FCOIDisclosureCreateRO } from '../shared-interface';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { checkForVowelInFirstLetter } from '../../common/utilities/custom-utilities';
 
@@ -133,9 +133,9 @@ export class DisclosureCreateModalComponent implements OnInit {
             const projectTitle = event ? `${event.moduleItemKey} ${event.title}` : '';
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
-                    if (data.pendingProject != null) {
+                    if (data.projectDisclosure != null) {
                         this.isShowExistingDisclosure = true;
-                        this.setExistingDisclosureDetails('Project', data.pendingProject, projectTitle);
+                        this.setExistingDisclosureDetails('Project', data.projectDisclosure, projectTitle);
                     } else if (data.fcoiProject != null) {
                         this.isShowExistingDisclosure = true;
                         this.setExistingDisclosureDetails('FCOI', data.fcoiProject, projectTitle);
@@ -178,7 +178,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                 if (data) {
                     hideModal('reviseOrCreateDisclosureModal');
                     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                        this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
+                        this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.disclosureId}});
                     });
                     this.clearModal();
                 }
@@ -234,7 +234,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
     }
 
-    getCreateProjectRequestObject(): any {
+    getCreateProjectRequestObject(): FCOIDisclosureCreateRO | any {
         if (this.isSearchExternalProject) {
             return {
                 coiDisclosure: {
@@ -242,6 +242,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     revisionComment: this.reviseObject.revisionComment,
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
+                    moduleCode: this.manualProjectAddDetails.moduleCode,
                     personId: this.commonService.getCurrentUserDetail('personID'),
                 },
                 [this.selectedProjectType == 'Award' ? 'coiProjectAward' : 'coiProjectProposal']: {
@@ -250,28 +251,28 @@ export class DisclosureCreateModalComponent implements OnInit {
             };
         } else {
             return {
-                coiDisclosure: {
-                    homeUnit: this.reviseObject.homeUnit,
-                    coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
-                    revisionComment: this.reviseObject.revisionComment,
-                    moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this.commonService.getCurrentUserDetail('personID')
-                }
+                fcoiTypeCode: '2',
+                homeUnit: this.reviseObject.homeUnit,
+                coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
+                revisionComment: this.reviseObject.revisionComment,
+                moduleItemKey: this.manualProjectAddDetails.moduleItemId,
+                moduleCode: this.manualProjectAddDetails.moduleCode,
+                personId: this.commonService.getCurrentUserDetail('personID')
             };
         }
     }
 
     createFCOIDisclosure(): void {
-        const fcoiDisclosureObj = {
+        const FCOI_DISCLOSURE_RO: FCOIDisclosureCreateRO = {
             fcoiTypeCode: '1',
             homeUnit: this.reviseObject.homeUnit,
             revisionComment: this.reviseObject.revisionComment,
             personId: this.commonService.getCurrentUserDetail('personID')
         };
         if (this.validateFCOIForm()) {
-            this._disclosureCreateModalService.createDisclosure({'coiDisclosure': fcoiDisclosureObj}).subscribe((data: any) => {
+            this._disclosureCreateModalService.createDisclosure(FCOI_DISCLOSURE_RO).subscribe((data: any) => {
                 hideModal('reviseOrCreateDisclosureModal');
-                this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
+                this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.disclosureId}});
                 this.clearModal();
             }, err => {
                 if (err.status === 405) {
@@ -421,7 +422,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
                         hideModal('reviseOrCreateDisclosureModal');
                         this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
-                            {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
+                            { queryParams: { disclosureId: data.coiDisclosure.disclosureId }});
                         this.clearModal();
                     }, err => {
                         if (err.status === 405) {
@@ -479,6 +480,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private assignSelectedProject(event): void {
         if (event) {
             this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.moduleItemId : event.moduleItemId;
+            this.manualProjectAddDetails.moduleCode = this.selectedProjectType == 'Award' ? event.moduleCode : event.moduleCode;
             this.manualProjectAddDetails.title = (this.selectedProjectType == 'Award' ? event.moduleItemKey : event.moduleItemId)  + ' - ' + event.title ;
             this.manualProjectAddDetails.principalInvestigator = this.selectedProjectType == 'Award' ? event.principalInvestigator : event.principalInvestigator;
             this.manualProjectAddDetails.unitName = this.selectedProjectType == 'Award' ? event.unitName : event.unitName;

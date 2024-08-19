@@ -156,7 +156,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     }
 
     private getProjectRelationshipDetails() {
-        this.$subscriptions.push(this.coiSummaryService.getProjectRelationship(this.coiDetails.disclosureId).subscribe((res: ProjectRelationshipDetails[]) => {
+        this.$subscriptions.push(this._coiService.getDisclosureProjectList(this.coiDetails.disclosureId).subscribe((res: ProjectRelationshipDetails[]) => {
             this.projectList = res || [];
             this._dataStoreAndEventsService.concatenatedProjectList = res;
             this.awardList = this.projectList.filter(ele => ele.projectTypeCode == '1');

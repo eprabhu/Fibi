@@ -37,7 +37,7 @@ import { ElasticConfigService } from '../common/services/elastic-config.service'
 
 export class DisclosureComponent implements OnInit, OnDestroy {
 
-    isCardExpanded = true;
+    isCardExpanded = false;
     isCreateMode = false;
     isSaving = false;
     isCOIAdministrator = true;
@@ -105,7 +105,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     returnModalHelpText = '';
     withdrawModalHelpText = '';
     isOpenRiskSlider = false;
-   reviewList: any = [];
+    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
     EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE;
@@ -346,14 +346,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }));
     }
     validateRelationship() {
-        this.$subscriptions.push(this.coiService.givecoiID(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
-            res.map((error) => {
-                this.coiService.submitResponseErrors.push( error) ;
-            });
-           this.getSfiDetails();
-        }, err => {
-            this.isSaving = false;
-        }));
+        this.$subscriptions.push(
+            this.coiService.evaluateValidation(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
+            .subscribe((res: any) => {
+                res.map((error) => {
+                    this.coiService.submitResponseErrors.push( error) ;
+                });
+                this.getSfiDetails();
+            }, err => {
+                this.isSaving = false;
+            }));
     }
     private getDataFromStore() {
         const coiData = this.dataStore.getData();
@@ -678,10 +680,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.coiData?.coiDisclosure?.person?.fullName;
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
-        this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
         this.personProjectDetails.homeUnit = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
         this.personProjectDetails.homeUnitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
+        this.personProjectDetails.personEmail = this.coiData?.coiDisclosure?.person?.emailAddress;
+        this.personProjectDetails.personPrimaryTitle = this.coiData?.coiDisclosure?.person?.primaryTitle;
     }
 
     performDisclosureAction(event): void {
@@ -778,6 +780,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.isCardExpanded = window.innerWidth > 1399;
         }
         this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
+        this.coiService.headerHeightChange$.next(true);
     }
 
     setFocus(id) {
@@ -794,30 +797,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isUserCollapse = !this.isUserCollapse;
         setTimeout (() => {
             this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
+            this.coiService.headerHeightChange$.next(true);
         });
     }
 
     openProjectDetailsModal(): void {
-        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = {
-            title: this.coiData.projectDetail?.title,
-            sponsorName: this.coiData.projectDetail?.sponsor,
-            sponsorCode : this.coiData.projectDetail?.sponsorCode,
-            homeUnitName: this.coiData.projectDetail?.unitName,
-            projectEndDate: this.coiData.projectDetail?.endDate,
-            projectId: this.coiData.projectDetail?.moduleItemId,
-            homeUnitNumber: this.coiData.projectDetail?.unitNumber,
-            reporterRole: this.coiData.projectDetail?.reporterRole,
-            projectStartDate: this.coiData.projectDetail?.startDate,
-            projectStatus: this.coiData.projectDetail?.moduleStatus,
-            projectTypeCode: this.coiData.projectDetail?.moduleCode,
-            piName: this.coiData.projectDetail?.principalInvestigator,
-            primeSponsorName: this.coiData.projectDetail?.primeSponsor,
-            primeSponsorCode: this.coiData.projectDetail?.primeSponsorCode,
-            projectType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.description,
-            projectBadgeColour: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ? '#7d9e33' : '#c9a742',
-            projectNumber: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ?
-                this.coiData?.projectDetail?.moduleItemId : this.coiData?.projectDetail?.moduleItemKey
-        }
+        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = this.coiData.projectDetail;
         this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
     }
 
