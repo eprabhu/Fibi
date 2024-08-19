@@ -679,5 +679,37 @@
     "/consultingDisclosure/history/*" : {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
+    },
+    "/entity/create" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/saveAdditionalAddresses" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/saveRegistrationDetails" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/fetch/*" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/dunsNumberExists" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/ueiNumberExists" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/cageNumberExists" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/update" : {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
     }
 }

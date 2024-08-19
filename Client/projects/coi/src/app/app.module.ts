@@ -14,7 +14,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from './common/services/dashboard-guard.service';
 import {NavigationService} from './common/services/navigation.service';
-import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
 import { LeftNavBarComponent } from './common/left-nav-bar/left-nav-bar.component';
 import {MatMenuModule} from "@angular/material/menu";
@@ -57,7 +56,6 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         HeaderService,
         DashboardGuardService,
         ElasticConfigService,
-        EntityManagementGuardService,
         {
             provide: APP_INITIALIZER,
             useFactory: getappConfiguration,

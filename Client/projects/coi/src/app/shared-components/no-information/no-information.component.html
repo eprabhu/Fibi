@@ -8,4 +8,9 @@
           <ng-content></ng-content>
           <span class="default-content">There is no information in this section.</span>
       </h5>
+    <button id="buttonName.toLowerCase() + '-no-information-add-btn'" *ngIf="canShowAddButton"
+        class="btn btn-primary fs-14 d-inline-flex" title="'Click here to' + buttonName.toLowerCase()"
+        aria-label="'Click here to' + buttonName.toLowerCase()" (click)="emitButtonEvent()">
+        <mat-icon>add</mat-icon>{{buttonName}}
+    </button>
 </div>

@@ -1,0 +1,49 @@
+<div class="card rounded-2">
+    <div class="card-header bg-transparent fw-500">
+        Create Entity
+    </div>
+    <div class="card-body px-3">
+        <app-entity-creation [isCreateScreen]="true" (emitEntityRO)="saveBasicEntityDetails($event)"
+        [saveEntity]="saveEntity" [initalProceed]="initalProceed"></app-entity-creation>
+    </div>
+    <div class="row px-3 pb-3">
+        <div class="col d-flex justify-content-end align-items-center">
+            <button id="coi-entity-cancel-btn" class="btn btn-outline-secondary ms-2 fs-14" title="Click here to cancel entity creation"
+                aria-label="Click here to cancel entity creation">
+                Cancel
+            </button>
+            <button id="coi-entity-proceed-btn"
+                (click) = "proceedCreateEntity()"
+                class="btn btn-primary ms-2 fs-14"
+                title="Click here to proceed with entity creation" aria-label="Click here to proceed with entity creation">
+                Proceed
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-xl fade mySkinDialog" data-bs-backdrop="static" id="entityProceedCheckMatch" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Matching Entities Found</h4>
+                <button type="button" class="btn-close" id="coi-matching-entitiess-modal-close-btn"
+                    title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close"></button>
+            </div>
+            <div class="modal-body">
+                <app-entity-common-card></app-entity-common-card>
+                <app-entity-common-card></app-entity-common-card>
+                <app-entity-common-card></app-entity-common-card>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" id="coi-matching-entitiess-modal-cancel-btn"
+                    data-bs-dismiss="modal" type="button" title="Click here to cancel">Cancel
+                </button>
+                <button class="btn btn-primary me-0" id="coi-add-industry-details-add-btn" type="button"
+                    title="Click here to add industry" aria-label="Click here to coi-matching-entitiess-modal-close-btn"
+                    (click)="createEntity()">Create Entity
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
