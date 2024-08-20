@@ -5,6 +5,8 @@ import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-uti
 import { Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { EntityDetails } from '../shared/entity-interface';
+import { AutoSaveService } from '../../common/services/auto-save.service';
+import { getCurrentTimeStamp, getDuration, getTimeInterval } from '../../common/utilities/date-utilities';
 
 @Component({
   selector: 'app-header-details',
@@ -22,8 +24,9 @@ export class HeaderDetailsComponent {
     $subscriptions: Subscription[] = [];
     entityDetails: EntityDetails = new EntityDetails();
     entityFullAddress: string = '';
+    latestPriorName: any;
 
-    constructor(public router: Router, public dataStore: EntityDataStoreService) {}
+    constructor(public router: Router, public dataStore: EntityDataStoreService, public autoSaveService: AutoSaveService) {}
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
@@ -66,6 +69,7 @@ export class HeaderDetailsComponent {
         const entityData = this.dataStore.getData();
         if (!entityData || isEmptyObject(entityData)) { return; }
         this.entityDetails = entityData.entityDetails;
+        this.latestPriorName = entityData?.priorNames[0]?.priorNames;
         this.getEntityFullAddress();
     }
 
@@ -92,5 +96,41 @@ export class HeaderDetailsComponent {
                 this.getDataFromStore();
             })
         );
+    }
+    getTimeInterval() {
+        let timeString = '';
+        const startDate = this.autoSaveService.lastSavedTimeStamp;
+        const END_DATE = getCurrentTimeStamp();
+        if (startDate <= END_DATE) {
+            const seconds = Math.floor((END_DATE - (startDate)) / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const DATE_OBJ = getDuration(startDate, END_DATE);
+            const days = Math.floor(hours / 24);
+            if (days > 0) {
+                timeString = this.getTimeIntervalInDays(timeString, DATE_OBJ);
+            }
+            if (days === 0) {
+                timeString = this.getTimeIntervalInHours(timeString, hours, minutes, days, seconds);
+            }
+        }
+        return timeString ? 'Saved ' + timeString + 'ago..' : 'Saved Just Now..';
+    }
+
+    private getTimeIntervalInDays(timeString, DATE_OBJ) {
+        timeString = timeString.concat(DATE_OBJ.durInYears !== 0 ? DATE_OBJ.durInYears + ' year(s) ' : '');
+        timeString = timeString.concat(DATE_OBJ.durInMonths !== 0 ? DATE_OBJ.durInMonths + ' month(s) ' : '');
+        timeString = timeString.concat(DATE_OBJ.durInDays !== 0 ? DATE_OBJ.durInDays + ' day(s) ' : '');
+        return timeString;
+    }
+
+    private getTimeIntervalInHours(timeString, hours, minutes, days, seconds) {
+        hours = hours - (days * 24);
+        minutes = minutes - (days * 24 * 60) - (hours * 60);
+        seconds = seconds - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
+        timeString = timeString.concat(hours !== 0 ? hours + ' hr(s) ' : '');
+        timeString = timeString.concat(hours === 0 && minutes !== 0 ? minutes + ' min(s) ' : '');
+        timeString = timeString.concat(hours === 0 && minutes === 0 && seconds !== 0 ? seconds + ' sec(s) ' : '');
+        return timeString;
     }
 }

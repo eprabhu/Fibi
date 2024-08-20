@@ -54,11 +54,13 @@ export class BasicDetailsComponent {
             this.createEntityObj.cageNumber = data['cageNumber'];
             this.createEntityObj.ueiNumber= data['ueiNumber'];
             this.createEntityObj.dunsNumber = data['dunsNumber'];
+            this.createEntityObj.humanSubAssurance = data['humanSubAssurance'];
+            this.createEntityObj.anumalWelfareAssurance = data['anumalWelfareAssurance'];
+            this.createEntityObj.animalAccreditation = data['animalAccreditation'];
+            this.createEntityObj.phoneNumber = data['phoneNumber'];
+            this.createEntityObj.entityOwnerShip = data['entityOwnershipType'];
+            this.createEntityObj.postCode = data['postCode'];
         }
-    }
-
-    createEntity() {
-        console.log(this.createEntityObj);
     }
 
     private listenDataChangeFromStore() {
@@ -67,6 +69,15 @@ export class BasicDetailsComponent {
                 this.getDataFromStore();
             })
         );
+    }
+
+    updateStoreData(event) {
+        if(!isEmptyObject(event)) {
+            Object.keys(event).forEach((ele) =>{
+                this.entityDetails[ele] = event[ele];
+            });
+            this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
+        }
     }
 
 }

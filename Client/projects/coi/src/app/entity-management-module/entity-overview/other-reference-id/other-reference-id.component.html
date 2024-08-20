@@ -25,7 +25,7 @@
 				<div class="row mb-3">
 					<div class="col-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-refernece-id-type">
-                            Reference Id Type
+                            <span class="mandatory me-1">*</span>Reference Id Type
                         </label>
                         <app-look-up (selectedResult)="onReferenceIdTypeSelected($event)" [options]="coiCurrencyOptions"
                         [uniqueId]="'coi-refernece-id-type'" [isError]="mandatoryList?.has('referenceType')"></app-look-up>
@@ -36,7 +36,7 @@
 					</div>
                     <div class="col-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-reference-id">
-                            Reference ID
+                            <span class="mandatory me-1">*</span>Reference ID
                         </label>
                         <input type="text" class="form-control" [(ngModel)]="otherReferenceIdObj.referenceId" id="coi-reference-id"
                         [ngClass]="(mandatoryList?.has('referenceId')) ? 'is-invalid d-block' : ''">
@@ -49,7 +49,7 @@
                 <div class="row">
 					<div class="col-12">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-reference-id-description">
-                            Description
+                            <span class="mandatory me-1">*</span>Description
                         </label>
                         <textarea appAutoGrow class="form-control" id="coi-other-reference-id-description" rows="1"
                             [(ngModel)]="otherReferenceIdObj.description" appTailingSpaceRemover

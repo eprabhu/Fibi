@@ -70,6 +70,9 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   ngOnChanges() {
     this.searchText = '';
     this.updateLookUpSettings();
+    if (this.isExternalArray) {
+        this.lookUpList = this.externalArray;
+    }
     if (this.selectedLookUpList?.length || this.defaultValue) {
       this.getLookUpValues();
     } else {

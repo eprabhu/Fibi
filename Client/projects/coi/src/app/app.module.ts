@@ -26,6 +26,7 @@ import { LoginGuard } from './common/services/guards/login-guard.service';
 import { ElasticConfigService } from './common/services/elastic-config.service';
 import { InformationAndHelpTextService } from './common/services/informationAndHelpText.service';
 import { SharedModule } from './shared/shared.module';
+import { AutoSaveService } from './common/services/auto-save.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -72,7 +73,9 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         }, NavigationService,
         AdminRouteGuardService,
         LoginGuard,
-        InformationAndHelpTextService],
+        InformationAndHelpTextService,
+        AutoSaveService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

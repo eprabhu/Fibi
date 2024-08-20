@@ -10,6 +10,7 @@ import { EntityRisk } from '../../shared/entity-interface';
 export class EntitySponsorRiskComponent implements OnInit {
 
     entityRisk: EntityRisk = new EntityRisk();
+    // entityRisk: any;
     entityRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#true#true';
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#true#true'
     @Input() sectionName: any;
@@ -19,6 +20,7 @@ export class EntitySponsorRiskComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        window.scrollTo(0,0);
     }
 
     addSponsorRisk(event) {
@@ -27,17 +29,17 @@ export class EntitySponsorRiskComponent implements OnInit {
 
     onRiskSelected(event) {
         if (event) {
-            this.entityRisk.riskType = event.code;
+            this.entityRisk.riskTypeCode = event.code;
         } else {
-            this.entityRisk.riskType = null;
+            this.entityRisk.riskTypeCode = null;
         }
     }
 
     onRiskLevelSelected(event) {
         if (event) {
-            this.entityRisk.riskLevel = event.code;
+            this.entityRisk.riskLevelCode = event.code;
         } else {
-            this.entityRisk.riskLevel = null;
+            this.entityRisk.riskLevelCode = null;
         }
     }
 
@@ -56,13 +58,13 @@ export class EntitySponsorRiskComponent implements OnInit {
 
     entityMandatoryValidation(): void {
         this.mandatoryList.clear();
-        if (!this.entityRisk.riskLevel) {
+        if (!this.entityRisk.riskLevelCode) {
             this.mandatoryList.set('riskLevel', 'Please select risk level.');
         }
-        if (!this.entityRisk.riskType) {
+        if (!this.entityRisk.riskTypeCode) {
             this.mandatoryList.set('riskType', 'Please select risk type.');
         }
-        if (!this.entityRisk.riskDescription) {
+        if (!this.entityRisk.description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
         }
     }
