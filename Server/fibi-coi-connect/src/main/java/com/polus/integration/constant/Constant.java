@@ -44,9 +44,7 @@ public interface Constant {
     Map<String, String> REQUIRED_DnB_INDUSTRY_TYPE = Map.of(
             "24659", "International Standard Industrial Classification Revision 4",
             "35912", "D&B Hoovers Industry Classification",
-            "3599", "D&B Standard Industry Code",
-            "37788", "North American Industry Classification System 2022",
-            "700", "North American Industry Classification System"
+            "37788", "North American Industry Classification System 2022"
         );
 	
 	String PRIMARY_DnB_INDUSTRY_TYPE = "37788";

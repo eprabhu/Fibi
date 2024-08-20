@@ -7,10 +7,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.integration.dnb.referencedata.entity.EntityBusinessType;
+import com.polus.integration.dnb.referencedata.entity.EntityFamilyRoleType;
+import com.polus.integration.dnb.referencedata.entity.EntityOperatingStatusType;
 import com.polus.integration.dnb.referencedata.entity.IndustryCategoryCode;
 import com.polus.integration.dnb.referencedata.entity.IndustryCategoryType;
 import com.polus.integration.dnb.referencedata.entity.RegistrationType;
 import com.polus.integration.dnb.referencedata.repository.EntityBusinessTypeRepository;
+import com.polus.integration.dnb.referencedata.repository.EntityFamilyRoleTypeRepository;
+import com.polus.integration.dnb.referencedata.repository.EntityOperatingStatusTypeRepository;
 import com.polus.integration.dnb.referencedata.repository.IndustryCateCodeRepository;
 import com.polus.integration.dnb.referencedata.repository.IndustryCateTypeRepository;
 import com.polus.integration.dnb.referencedata.repository.RegistrationTypeRepository;
@@ -30,6 +34,12 @@ public class DnBReferenceDataDAO {
 	
 	@Autowired
 	private RegistrationTypeRepository registrationTypeRepository;
+	
+	@Autowired
+	private EntityFamilyRoleTypeRepository familyRoleTypeRepository;
+	
+	@Autowired
+	private EntityOperatingStatusTypeRepository operatingStatusTypeRepository;
 		
 	
 	public void saveIndustryCategoryCode(IndustryCategoryCode entity) {		
@@ -58,5 +68,13 @@ public class DnBReferenceDataDAO {
 	
 	public void saveRegistrationTypeList(List<RegistrationType> entityList) {		
 		registrationTypeRepository.saveAll(entityList);
+	}
+	
+	public void saveFamilyRoleTypeList(List<EntityFamilyRoleType> entityList) {		
+		familyRoleTypeRepository.saveAll(entityList);
+	}
+	
+	public void saveOperatingStatusTypeList(List<EntityOperatingStatusType> entityList) {		
+		operatingStatusTypeRepository.saveAll(entityList);
 	}
 }

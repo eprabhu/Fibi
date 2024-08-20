@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.polus.integration.entity.apitokenservice.TokenService;
 import com.polus.integration.entity.cleansematch.config.Constants;
 import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse;
@@ -92,7 +94,7 @@ public class CleanseMatchAPIService {
 		}
 	}
 
-	private void processSuccessResponse(String jsonResponse, DnBCleanseMatchAPIResponse response,
+	private void processSuccessResponse1(String jsonResponse, DnBCleanseMatchAPIResponse response,
 			ObjectMapper objectMapper) throws Exception {
 		JsonNode rootNode = objectMapper.readTree(jsonResponse);
 		response.setFullResponse(jsonResponse);
@@ -114,6 +116,49 @@ public class CleanseMatchAPIService {
 
 			if (rootNode.get("matchCandidates").isArray() && rootNode.get("matchCandidates").size() > 0) {
 				JsonNode highestMatchNode = rootNode.get("matchCandidates").get(0);
+				response.setHighestMatch(objectMapper.writeValueAsString(highestMatchNode));
+
+				if (highestMatchNode.has("matchQualityInformation")) {
+					JsonNode matchQualityInfo = highestMatchNode.get("matchQualityInformation");
+					if (matchQualityInfo.has("confidenceCode")) {
+						response.setHighestMatchConfidenceCode(matchQualityInfo.get("confidenceCode").asInt());
+					}
+				}
+			}
+		}
+	}
+
+	private void processSuccessResponse(String jsonResponse, DnBCleanseMatchAPIResponse response,
+			ObjectMapper objectMapper) throws Exception {
+		JsonNode rootNode = objectMapper.readTree(jsonResponse);
+		response.setFullResponse(jsonResponse);
+
+		if (rootNode.has("transactionDetail")) {
+			JsonNode transactionDetail = rootNode.get("transactionDetail");
+			if (transactionDetail.has("transactionID")) {
+				response.setTransactionID(transactionDetail.get("transactionID").asText());
+			}
+		}
+
+		if (rootNode.has("candidatesMatchedQuantity")) {
+			response.setCandidatesMatchedQuantity(rootNode.get("candidatesMatchedQuantity").asInt());
+		}
+
+		if (rootNode.has("matchCandidates")) {
+			ArrayNode matchCandidates = (ArrayNode) rootNode.get("matchCandidates");
+			for (JsonNode candidate : matchCandidates) {
+				if (candidate.has("matchQualityInformation")) {
+					JsonNode matchQualityInfo = candidate.get("matchQualityInformation");
+					int confidenceCode = matchQualityInfo.has("confidenceCode")
+							? matchQualityInfo.get("confidenceCode").asInt()
+							: 0;
+					((ObjectNode) matchQualityInfo).removeAll();
+					((ObjectNode) matchQualityInfo).put("confidenceCode", confidenceCode);
+				}
+			}
+			response.setMatchCandidates(objectMapper.writeValueAsString(matchCandidates));
+			if (matchCandidates.size() > 0) {
+				JsonNode highestMatchNode = matchCandidates.get(0);
 				response.setHighestMatch(objectMapper.writeValueAsString(highestMatchNode));
 
 				if (highestMatchNode.has("matchQualityInformation")) {

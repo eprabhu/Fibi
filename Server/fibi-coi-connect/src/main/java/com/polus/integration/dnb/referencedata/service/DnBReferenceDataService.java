@@ -2,8 +2,6 @@ package com.polus.integration.dnb.referencedata.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,8 @@ import com.polus.integration.constant.Constant;
 import com.polus.integration.dnb.referencedata.dao.DnBReferenceDataDAO;
 import com.polus.integration.dnb.referencedata.dto.DnBReferenceDataDTO;
 import com.polus.integration.dnb.referencedata.entity.EntityBusinessType;
+import com.polus.integration.dnb.referencedata.entity.EntityFamilyRoleType;
+import com.polus.integration.dnb.referencedata.entity.EntityOperatingStatusType;
 import com.polus.integration.dnb.referencedata.entity.IndustryCategoryCode;
 import com.polus.integration.dnb.referencedata.entity.IndustryCategoryType;
 import com.polus.integration.dnb.referencedata.entity.RegistrationType;
@@ -84,7 +84,65 @@ public class DnBReferenceDataService {
 		}
 
 	}
+	
 
+	public void loadFamilyRoleType(String code) {
+		try {
+			String apiUrl = buildApiUrl(code);
+			ArrayList<DnBReferenceDataDTO> responseReferenceData = callDnBReferenceAPI(apiUrl);
+			saveFamilyRoleType(responseReferenceData);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	public void loadOperatingStatusType(String code) {
+		try {
+			String apiUrl = buildApiUrl(code);
+			ArrayList<DnBReferenceDataDTO> responseReferenceData = callDnBReferenceAPI(apiUrl);
+			saveOperatingStatusType(responseReferenceData);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}	
+	
+	private void saveFamilyRoleType(ArrayList<DnBReferenceDataDTO> responseReferenceData) {
+
+		List<EntityFamilyRoleType> entityList = new ArrayList<>();
+		for (DnBReferenceDataDTO type : responseReferenceData) {
+			EntityFamilyRoleType dataObj = new EntityFamilyRoleType();
+			dataObj.setFamilyRoleTypeCode(type.getCode());
+			dataObj.setDescription(type.getDescription());
+			dataObj.setIsActive(Constant.DEFAULT_IS_ACTIVE_VALUE);
+			dataObj.setUpdateTimestamp(LocalDateTime.now());
+			dataObj.setUpdatedBy(Constant.UPDATE_BY);
+			entityList.add(dataObj);
+		}
+		if (!entityList.isEmpty()) {
+			industryRefDataDAO.saveFamilyRoleTypeList(entityList);
+		}
+
+	}	
+	
+	private void saveOperatingStatusType(ArrayList<DnBReferenceDataDTO> responseReferenceData) {
+		List<EntityOperatingStatusType> entityList = new ArrayList<>();
+		for (DnBReferenceDataDTO type : responseReferenceData) {
+			EntityOperatingStatusType dataObj = new EntityOperatingStatusType();
+			dataObj.setOperatingStatusTypeCode(type.getCode());
+			dataObj.setDescription(type.getDescription());
+			dataObj.setIsActive(Constant.DEFAULT_IS_ACTIVE_VALUE);
+			dataObj.setUpdateTimestamp(LocalDateTime.now());
+			dataObj.setUpdatedBy(Constant.UPDATE_BY);
+			entityList.add(dataObj);
+		}
+		if (!entityList.isEmpty()) {
+			industryRefDataDAO.saveOperatingStatusTypeList(entityList);
+		}
+	}
+	
 	private void saveBusinessEntityType(ArrayList<DnBReferenceDataDTO> responseReferenceData) {
 
 		List<EntityBusinessType> entityList = new ArrayList<>();

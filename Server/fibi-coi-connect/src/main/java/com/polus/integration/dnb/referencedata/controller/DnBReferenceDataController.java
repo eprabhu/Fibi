@@ -17,7 +17,11 @@ public class DnBReferenceDataController {
 	
 	private static final String DnB_REGISTRATION_NUMBER_TYPE_VALUE = "7";
 	
-	private static final String DnB_BUSINESS_ENTITY_TYPE_VALUE = "197";
+	private static final String DnB_BUSINESS_ENTITY_TYPE_VALUE = "197";	
+	
+	private static final String DnB_FAMILY_TREE_ROLE_TYPE_VALUE = "202";
+	
+	private static final String DnB_OPERATING_STATUS_TYPE_VALUE = "166";
 	
 	
 	@Autowired
@@ -45,5 +49,17 @@ public class DnBReferenceDataController {
 		service.loadBusinessEntityType(DnB_BUSINESS_ENTITY_TYPE_VALUE);
 		return new ResponseEntity<String>("Completed Business Entity Type Loading", HttpStatus.OK);		
 	}
-
+	
+	@GetMapping("/loadFamilyRoleType")
+	public ResponseEntity<String> loadFamilyRoleType() {
+		service.loadFamilyRoleType(DnB_FAMILY_TREE_ROLE_TYPE_VALUE);
+		return new ResponseEntity<String>("Completed Family Role Type Loading", HttpStatus.OK);		
+	}
+	
+	@GetMapping("/loadOperatingStatusType")
+	public ResponseEntity<String> loadOperatingStatusType() {
+		service.loadOperatingStatusType(DnB_OPERATING_STATUS_TYPE_VALUE);
+		return new ResponseEntity<String>("Completed Operating Status Type Loading", HttpStatus.OK);		
+	}
+		
 }
