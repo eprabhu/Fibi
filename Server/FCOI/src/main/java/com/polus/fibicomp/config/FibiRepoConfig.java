@@ -1,36 +1,28 @@
 package com.polus.fibicomp.config;
 
+import java.beans.PropertyVetoException;
 import java.util.Properties;
-import java.util.Set;
 
-import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.polus.*", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
@@ -92,14 +84,38 @@ public class FibiRepoConfig {
 	@Value("${spring.jpa.properties.hibernate.default_schema}")
 	private String hibernateDefault_schema;
 
+//	@Bean
+//	public DataSource getDataSource() {
+//		DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+//		driverManagerDataSource.setDriverClassName(driverClassName);
+//		driverManagerDataSource.setUrl(url);
+//		driverManagerDataSource.setUsername(username);
+//		driverManagerDataSource.setPassword(password);
+//		return driverManagerDataSource;
+//	}
+
 	@Bean
-	public DataSource getDataSource() {
-		DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-		driverManagerDataSource.setDriverClassName(driverClassName);
-		driverManagerDataSource.setUrl(url);
-		driverManagerDataSource.setUsername(username);
-		driverManagerDataSource.setPassword(password);
-		return driverManagerDataSource;
+    public DataSource getDataSource() {
+    ComboPooledDataSource dataSource = new ComboPooledDataSource();
+    dataSource.setJdbcUrl(url);
+    dataSource.setUser(username);
+    dataSource.setPassword(password);
+    dataSource.setDataSourceName("fibids");
+    try {
+       dataSource.setDriverClass(driverClassName);
+    } catch (PropertyVetoException e) {
+       // TODO Auto-generated catch block
+       e.printStackTrace();      }
+ 
+    // Configure other C3P0 properties as needed
+    dataSource.setMinPoolSize(3);
+    dataSource.setMaxPoolSize(20);
+    dataSource.setAcquireIncrement(1);
+    dataSource.setIdleConnectionTestPeriod(3000);
+    dataSource.setMaxIdleTime(600);
+    dataSource.setMaxStatements(0);
+    dataSource.setTestConnectionOnCheckout(true);
+    return dataSource;
 	}
 
 //	@Bean
