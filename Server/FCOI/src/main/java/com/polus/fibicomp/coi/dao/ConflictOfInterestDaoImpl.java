@@ -1564,7 +1564,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
-					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
+					detail.setReporterRole(rset.getString("KEY_PERSON_ROLE_NAME"));
 					detail.setReporterName(rset.getString("KEY_PERSON"));
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					detail.setAccountNumber(rset.getString("ACCOUNT_NUMBER"));
@@ -1580,6 +1580,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
 					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
 					detail.setModuleItemId(rset.getInt("PROPOSAL_ID"));
+					detail.setModuleItemKey(rset.getString("PROPOSAL_ID"));
 					detail.setTitle(rset.getString("TITLE"));
 					detail.setStartDate(rset.getTimestamp("START_DATE"));
 					detail.setEndDate(rset.getTimestamp("END_DATE"));
@@ -1589,7 +1590,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
-					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
+					detail.setReporterRole(rset.getString("KEY_PERSON_ROLE_NAME"));
 					detail.setReporterName(rset.getString("KEY_PERSON"));
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					detail.setConflictStatus(rset.getString("CONFLICT_DESCRIPTION"));
@@ -2430,50 +2431,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return false;
 		}
 	}
-
-	@Override
-	public void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId, Integer moduleCode, String moduleItemKey, String type) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		try {
-			CallableStatement statement = connection.prepareCall("{call SYNC_SFIS_AND_DISCLOSURE(?,?,?,?,?,?,?,?)}");
-			if (disclosureId == null) {
-				statement.setNull(1, Types.INTEGER);
-			} else {
-				statement.setInt(1, disclosureId);
-			}
-			if (disclosureNumber == null) {
-				statement.setNull(2, Types.INTEGER);
-			} else {
-				statement.setInt(2, disclosureNumber);
-			}
-
-			statement.setString(3, AuthenticatedUser.getLoginPersonId());
-			statement.setString(4, AuthenticatedUser.getLoginUserName());
-			if (personEntityId == null) {
-				statement.setNull(5, Types.INTEGER);
-			} else {
-				statement.setInt(5, personEntityId);
-			}
-			if (moduleCode == null) {
-				statement.setNull(6, Types.INTEGER);
-			} else {
-				statement.setInt(6, moduleCode);
-			}
-			if (moduleItemKey == null) {
-				statement.setNull(7, Types.INTEGER);
-			} else {
-				statement.setString(7, moduleItemKey);
-			}
-			statement.setString(8, type);
-			statement.execute();
-		} catch (Exception e) {
-			logger.error("Exception in syncProjectWithDisclosure {}", e.getMessage());
-		}
-	}
-
-
 
 	@Override
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId) {

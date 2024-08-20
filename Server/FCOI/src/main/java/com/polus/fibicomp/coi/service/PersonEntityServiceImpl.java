@@ -83,9 +83,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         ResponseEntity<Map<String, Object>> responseData = updatePersonEntityCompleteFlag(personEntity.getPersonEntityId());
         personEntity.setIsFormCompleted((Boolean) responseData.getBody().get(IS_FORM_COMPLETED));
         if (personEntity.getDisclosureId() != null) {
-            //TODO
-            conflictOfInterestDao.syncProjectWithDisclosure(personEntity.getDisclosureId(),
-                    null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
+            fcoiDisclosureDao.updateDisclosureSyncNeededByPerEntId(personEntity.getPersonEntityId(), true);
         }
         PersonEntityDto personEntityDto = new PersonEntityDto();
         personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());

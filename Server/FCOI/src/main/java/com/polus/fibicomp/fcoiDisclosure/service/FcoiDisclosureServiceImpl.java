@@ -235,6 +235,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             try {
                 saveConflictHistory(coiDisclosureDto.getDisclosureId(), reporterFullName);
             } catch (Exception e) {
+                e.printStackTrace();
                 logger.error("Error in saveConflictHistory: {}", e.getMessage());
             }
         });
@@ -285,7 +286,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         vo.setDisclosureId(disclosureId);
         vo.setReporterFullName(reporterFullName);
         projEntityRelationships.forEach(projEntityRel -> {
-            vo.setCoiDisclEntProjDetail(projEntityRel);
+            CoiDisclProjectEntityRel coiDisclProjectEntityRel = new CoiDisclProjectEntityRel();
+            BeanUtils.copyProperties(projEntityRel, coiDisclProjectEntityRel, "coiDisclProject", "personEntity",  "coiEntity");
+            vo.setCoiDisclEntProjDetail(coiDisclProjectEntityRel);
             saveOrUpdateCoiConflictHistory(vo, Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS);
         });
     }
@@ -359,8 +362,6 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> getDisclosureProjects(Integer disclosureId) {
-//        conflictOfInterestDao.syncProjectWithDisclosure(disclosureId,
-//                null, null, null, null, Constants.TYPE_SYNC_SFI_WITH_DISCLOSURE_PROJECTS);
         return new ResponseEntity<>(disclosureDao.getDisclosureProjects(disclosureId), HttpStatus.OK);
     }
 
@@ -486,12 +487,14 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclosureDao.saveOrUpdateCoiDisclEntProjDetails(vo);
         List<ProjectEntityRequestDto> projectEntityRequestDtos = new ArrayList<>();
         if (vo.getApplyAll()) {
-            disclosureDao.fetchDisclProjectEntityRelIds(vo).forEach(disclProjectEntityRelId -> {
-                vo.setCoiDisclProjectEntityRelId(disclProjectEntityRelId);
-                vo.setCommentId(saveDisclProjRelationComment(vo).getCommentId());
-                projectEntityRequestDtos.add(vo);
+            disclosureDao.fetchDisclProjectEntityRelIds(vo).forEach(obj -> {
+                ProjectEntityRequestDto entityRequestDto = new ProjectEntityRequestDto();
+                BeanUtils.copyProperties(vo, entityRequestDto);
+                entityRequestDto.setCoiDisclProjectEntityRelId((Integer) obj[0]);
+                entityRequestDto.setCommentId(obj[1] != null ? (Integer) obj[1] : null);
+                entityRequestDto.setCommentId(saveDisclProjRelationComment(entityRequestDto).getCommentId());
+                projectEntityRequestDtos.add(entityRequestDto);
             });
-
         } else {
             vo.setCommentId(saveDisclProjRelationComment(vo).getCommentId());
             projectEntityRequestDtos.add(vo);
@@ -514,8 +517,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclComment.setModuleCode(Constants.COI_MODULE_CODE);
         disclComment.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclComment.setUpdateTimestamp(commonDao.getCurrentTimestamp());
-        disclosureDao.saveOrUpdateDisclComment(disclComment);
-        return disclComment;
+        return disclosureDao.saveOrUpdateDisclComment(disclComment);
     }
 
     @Override
@@ -630,8 +632,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     }
 
     @Override
-    public ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId) {
-        Map<String, Object> validatedObject = disclosureDao.validateProjectDisclosure(AuthenticatedUser.getLoginPersonId(), moduleCode, moduleItemId);
+    public ResponseEntity<Object> validateDisclosure(CoiDisclosureDto disclosureDto) {
+        Map<String, Object> validatedObject = disclosureDao.validateProjectDisclosure(disclosureDto.getPersonId(),
+                disclosureDto.getModuleCode(), disclosureDto.getModuleItemKey());
         CoiDisclosureDto coiDisclosureDto = new CoiDisclosureDto();
         if (validatedObject.get("projectDisclosure") != null) {
             CoiDisclosure disclosure = disclosureDao.loadDisclosure((Integer) validatedObject.get("projectDisclosure"));
