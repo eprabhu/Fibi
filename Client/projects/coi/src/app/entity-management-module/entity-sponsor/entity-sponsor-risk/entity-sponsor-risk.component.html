@@ -48,7 +48,7 @@
                             Risk Description
                         </label>
                         <textarea appAutoGrow class="form-control custom-height" id="coi-risk-description" rows="1"
-                            [(ngModel)]="entityRisk.riskDescription" appTailingSpaceRemover
+                            [(ngModel)]="entityRisk.description" appTailingSpaceRemover
                             [limit]=2000 appLengthValidator
                             [ngClass]="(mandatoryList?.has('riskDescription')) ? 'is-invalid d-block' : ''"
                             [styleList]="'mt-2 float-end word-count'" title="Risk Description" aria-label="Risk Description">

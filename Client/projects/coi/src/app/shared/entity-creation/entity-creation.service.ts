@@ -9,23 +9,23 @@ export class EntityCreationService {
     private _commonService: CommonService) { }
 
   autoSaveService(changedRO) {
-    return this._http.patch(this._commonService.entityURL + '/update', changedRO);
+    return this._http.patch(this._commonService.baseUrl + '/entity/update', changedRO);
   }
 
   createEntity(entityRO) {
-    return this._http.post(this._commonService.entityURL + '/create', entityRO);
+    return this._http.post(this._commonService.baseUrl + '/entity/create', entityRO);
   }
 
   validateDUNS(dunsNumber) {
-    return this._http.post(this._commonService.entityURL + '/dunsNumberExists', {dunsNumber: dunsNumber});
+    return this._http.post(this._commonService.baseUrl + '/entity/dunsNumberExists', {dunsNumber: dunsNumber});
   }
 
   validateUEI(ueiNumber) {
-    return this._http.post(this._commonService.entityURL + '/ueiNumberExists', {ueiNumber: ueiNumber});
+    return this._http.post(this._commonService.baseUrl + '/entity/ueiNumberExists', {ueiNumber: ueiNumber});
   }
 
   validateCAGE(cageNumber) {
-    return this._http.post(this._commonService.entityURL + '/cageNumberExists', {cageNumber: cageNumber});
+    return this._http.post(this._commonService.baseUrl + '/entity/cageNumberExists', {cageNumber: cageNumber});
   }
 
 }

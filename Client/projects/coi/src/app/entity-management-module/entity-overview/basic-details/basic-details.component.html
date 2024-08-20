@@ -8,6 +8,8 @@
                 <span class="fs-16 fw-medium">{{sectionName}}</span>
             </div>
         </div>
-        <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)" [saveMode]="'AUTO'" [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails"></app-entity-creation>
+        <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)"
+        [saveMode]="'AUTO'" [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails"
+        (emitSaveObj)="updateStoreData($event)"></app-entity-creation>
     </div>
 </ng-container>

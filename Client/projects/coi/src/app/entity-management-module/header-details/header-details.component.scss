@@ -139,3 +139,18 @@
 .font-size{
     font-size: 30px !important;
 }
+
+.saved-toast {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+.success-icon {
+    color: #0b8a18;
+}
+
+.text-bg-light-success {
+    background-color: #d6edd8db;
+    color: #0b8a18;
+}

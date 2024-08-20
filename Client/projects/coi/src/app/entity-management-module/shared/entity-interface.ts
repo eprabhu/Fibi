@@ -14,8 +14,18 @@ export class Create_Entity{
     ueiNumber: number;
     cageNumber: number;
     humanSubAssurance?: any;
-    animalWelfare?: any;
-    animalAccrediation? : any;
+    anumalWelfareAssurance?: any;
+    animalAccreditation? : any;
+    entityOwnershipTypeCode: any;
+    entityOwnerShip: EntityOwnerShip;
+}
+
+interface EntityOwnerShip {
+    description: string;
+    isActive:boolean;
+    ownershipTypeCode: any;
+    updateTimestamp: any;
+    updatedBy: any;
 }
 
 interface EntityType {
@@ -26,9 +36,10 @@ interface EntityType {
     updateUser: string;
 }
 
-export class Industry_Details{
-    industryCategoryType: any = '';
-    industryCategroyDescription: any = [];
+export class IndustryDetails{
+   entityId: any;
+   entityIndustryCatIds: any = [];
+   primaryCatId: any;
 }
 
 export class RegistrationDetails {
@@ -53,22 +64,23 @@ export class AdditionalAddress {
 export class OtherDetails {
     startDate?: string = '';
     incorporationDate?: string = '';
-    incorporationIn?: string = '';
+    incorporatedIn?: string = '';
     congressionalDistrict?: string = '';
     federalEmployerId?: string = '';
-    entityPriorName?: Array<string> = [];
-    entityAlternateName?: Array<string> = [];
-    entityShortName?: string;
-    numberofemployees?: number = 0;
-    entityBusinessStatus?: any;
+    priorName?: string;
+    foreignName?: string;
+    shortName?: string;
+    numberOfEmployees?: number = 0;
+    businessTypeCode?: any;
     activityText?: string = '';
     currencyCode?: string = '';
 }
 
 export class EntityRisk {
-    riskType: any = '';
-    riskLevel: any = '';
-    riskDescription: string = '';
+    riskTypeCode: any = '';
+    riskLevelCode: any = '';
+    description: string = '';
+    entityId: any;
 }
 
 export class OtheReferenceId {
@@ -135,6 +147,11 @@ export class EntityDetails {
         entityOperatingStatusType: string;
         entitySourceType: string;
         country: Country;
+        phoneNumber: any;
+        congressionalDistrict: any;
+        incorporatedIn: any;
+        numberOfEmployees: any;
+        federalEmployerId: any;
 }
 
 export class Country {
@@ -153,4 +170,24 @@ export class Currency {
     currencySymbol: any;
     updateUser: string;
     updateTimeStamp: any;
+}
+
+export function showEntityToast(type: 'SUCCESS'|'ERROR') {
+    let successToast = document.getElementById('success-toast');
+    let errorMsg = document.getElementById('error-toast');
+    if(type === 'SUCCESS') {
+        if(successToast) {
+            successToast.classList.remove('invisible');
+        }
+        if(errorMsg) {
+            errorMsg.classList.add('invisible');
+        }
+    } else {
+        if(errorMsg) {
+            errorMsg.classList.remove('invisible');
+        }
+        if(successToast) {
+            successToast.classList.add('invisible');
+        }
+    }
 }
