@@ -13,8 +13,6 @@
     color: #0948b2 !important;
 }
 
-.custom-height{
-    max-height: 400px;
-    overflow-y: scroll;
+.rotate-icon {
+    transform: rotate(-45deg);
 }
-

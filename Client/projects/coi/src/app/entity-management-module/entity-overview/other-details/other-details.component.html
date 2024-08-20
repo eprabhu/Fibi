@@ -1,7 +1,7 @@
 <div class="card px-3">
     <div class="fs-16 my-1">Other Details</div>
-    <div class="row mb-3 mt-3">
-        <div class="col-4" tabindex="-1" aria-label="Start Date">
+    <div class="row mb-md-0 mb-lg-3 mt-3">
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-3 mb-xl-0" tabindex="-1" aria-label="Start Date">
             <div class="d-flex">
                 <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
                     for="coi-other-details-start-date">Start Date
@@ -22,7 +22,7 @@
                 </span>
             </div>
         </div>
-        <div class="col-4" tabindex="-1"
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Incorporation Date">
             <div class="d-flex">
                 <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
@@ -45,7 +45,7 @@
                 </span>
             </div>
         </div>
-        <div class="col-4" tabindex="-1"
+        <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Incorporation In">
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
                 for="coi-other-details-incorporation-in">Incorporation In
@@ -55,7 +55,7 @@
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-4" tabindex="-1" aria-label="Currency">
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-3 mb-xl-0" tabindex="-1" aria-label="Currency">
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help" for="coi-other-details-currency">Currency
             </label>
             <app-look-up (selectedResult)="onCurrencyLookupSelect($event)" [options]="coiCurrencyOptions"
@@ -63,7 +63,7 @@
                 <!-- [selectedLookUpList]="lookupValues['property21']" -->
             </app-look-up>
         </div>
-        <div class="col-4" tabindex="-1"
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Congressional district">
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
                 for="coi-other-details-congressional-district">Congressional district
@@ -71,7 +71,7 @@
             <input type="text" class="form-control fs-13" id="coi-other-details-congressional-district"
                 [(ngModel)]="otherDetailsObj.congressionalDistrict" (ngModelChange)="changeEvent('congressionalDistrict')">
         </div>
-        <div class="col-4" tabindex="-1"
+        <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Federal Employer ID">
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
                 for="coi-other-details-federal-employer-id">Federal Employer ID
@@ -80,8 +80,8 @@
                 [(ngModel)]="otherDetailsObj.federalEmployerId" (ngModelChange)="changeEvent('federalEmployerId')">
         </div>
     </div>
-    <div class="row mb-3">
-        <div class="col-4" tabindex="-1"
+    <div class="row mb-md-0 mb-lg-3">
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-3 mb-xl-0" tabindex="-1"
             aria-label="Entity Prior Name">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-details-entity-prior-name">
                 Entity Prior Name
@@ -105,7 +105,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="col-4" tabindex="-1"
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Entity Alternate Name">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-details-entity-alternate-name">
                 Alternate Name
@@ -130,7 +130,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="col-4" tabindex="-1"
+        <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Entity Short Name">
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
                 for="coi-other-details-entity-short-name">Entity Short Name
@@ -139,7 +139,7 @@
                 [(ngModel)]="otherDetailsObj.entityShortName" (ngModelChange)="changeEvent('entityShortName')">
         </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-md-0 mb-lg-3">
         <div class="col-6" tabindex="-1"
             aria-label="Number of employees">
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"

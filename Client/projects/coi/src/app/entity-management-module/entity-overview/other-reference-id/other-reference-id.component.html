@@ -2,7 +2,9 @@
     <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
         <div class="row mb-2">
             <div class="col-12 d-flex align-items-center coloured-bg-header">
-                <mat-icon class="icon-bg me-2 my-2 coloured-icons fs-14" aria-hidden="true">domain</mat-icon>
+                <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
+                    <mat-icon class="coi-mat-icon-size">domain</mat-icon>
+                </span>
                 <span class="fs-16 fw-medium">{{sectionName}}</span>
             </div>
             <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Other Reference Id'" (buttonAction)="addOtherRefId($event)"></app-no-information>

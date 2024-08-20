@@ -1,0 +1,31 @@
+<div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+    <div class="row mb-2">
+        <div class="col-12 d-flex align-items-center coloured-bg-header">
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
+                <mat-icon class="coi-mat-icon-size">newspaper</mat-icon>
+            </span>
+            <span class="fs-16 fw-medium">{{sectionName}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12">
+            <label class="d-block" for="coi-entity-sponsor-code">Sponsor code</label>
+            <input type="text" id="coi-entity-sponsor-code" title="Click here to search by Sponsor code"
+                aria-label="Sponsor code" maxlength="60" autocomplete="off" class="form-control" disabled />
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-md-0">
+            <label class="d-block" for="coi-entity-sponsor-Acronym">Sponsor Acronym</label>
+            <input type="text" id="coi-entity-sponsor-Acronym" placeholder="Google"
+                title="Click here to search by Sponsor Acronym" aria-label="Sponsor Acronym" maxlength="60"
+                autocomplete="off" class="form-control" />
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-lg-0">
+            <label class="d-block" for="coi-entity-sponsortype-lookup">Sponsor Type</label>
+            <app-look-up [options]='templateOptions' [defaultValue]="defaultTemplateLabel" [isExternalArray]="true"
+                [externalArray]="notificationTemplates" [uniqueId]="'coi-entity-sponsortype-lookup'">
+            </app-look-up>
+        </div>
+    </div>
+</div>

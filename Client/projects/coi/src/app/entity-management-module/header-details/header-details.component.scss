@@ -75,6 +75,7 @@
     padding: 19px 16px;
     font-weight: normal !important;
     position: relative;
+    height: 45px;
 }
 
 .header-navigation-links li.active,
@@ -105,8 +106,8 @@
     .header-navigation-links {
         position: absolute;
         left: 0px;
-        top: 70px;
-        background-color: #E4F1FF;
+        top: 200px !important;
+        background-color: #ffffff;
         flex-direction: column;
         min-width: 250px;
         box-shadow: 1px 7px 11px 0px rgb(0 0 0 / 15%);
@@ -128,4 +129,13 @@
             transition: ease-in-out 0.2s;
         }
     }
+}
+
+.custom_icon_size{
+    height: 75px;
+    width: 75px;
+}
+
+.font-size{
+    font-size: 30px !important;
 }

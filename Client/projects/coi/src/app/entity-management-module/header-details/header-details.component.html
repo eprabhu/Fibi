@@ -4,7 +4,9 @@
         <div class="card coi-card-expanded">
             <div class="row mx-0">
                 <div class="col-12 d-flex align-items-center coloured-bg-header py-2 rounded-top-3">
-                    <mat-icon class="icon-bg me-3 my-2 coloured-icons fs-24" aria-hidden="true">domain</mat-icon>
+                    <span class="icon-bg me-3 my-2 coloured-icons fs-24 d-inline-flex align-items-center justify-content-center custom_icon_size" aria-hidden="true">
+                        <mat-icon class="font-size">domain</mat-icon>
+                    </span>
                     <div>
                         <div class="d-flex">
                             <span class="fs-18 fw-medium">{{entityDetails?.primaryName}}</span>
@@ -45,13 +47,13 @@
     <div class="col-12">
         <div class="card border-r-0 p-1">
             <span class="fs-14 px-2 py-1 rounded-1 matching-card d-flex align-items-center">
-                <mat-icon class="fs-16 me-1">info</mat-icon>
-                <span>Click for Check for D-U-N-S Matches & Click Resync now to get the latest info</span>
+                <mat-icon class="fs-16 me-1 flex-shrink-0">info</mat-icon>
+                <span class="text-slice" title="Click for Check for D-U-N-S Matches & Click Resync now to get the latest info">Click for Check for D-U-N-S Matches & Click Resync now to get the latest info</span>
                 <button id="coi-entity-duns-check-match-btn"
-                class="btn btn-primary ms-auto fs-14 me-2 d-flex align-items-center"
+                class="btn btn-primary ms-auto fs-14 me-2 d-flex align-items-center text-nowrap"
                 (click)="viewSlider(true)"
                 title="Click here to check for DUNS match" aria-label="Click here to check for DUNS match">
-                <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">check_circle</mat-icon>Check fro DUNS match
+                <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">check_circle</mat-icon>Check for DUNS match
             </button>
             <button id="coi-entity-duns-resync-btn"
             class="btn btn-outline-primary fs-14 d-flex align-items-center"
