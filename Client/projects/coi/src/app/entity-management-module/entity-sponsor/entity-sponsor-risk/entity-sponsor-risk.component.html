@@ -1,18 +1,17 @@
-    <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
-        <div class="row mb-2">
-            <div class="col-12 d-flex align-items-center coloured-bg-header">
-                <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
-                    <mat-icon class="coi-mat-icon-size">warning</mat-icon>
-                </span>
-                <span class="fs-16 fw-medium">{{sectionName}}</span>
-            </div>
-            <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Risk'" (buttonAction)="addRisk($event)"></app-no-information>
-        </div>
-    </div>
-<!-- </div> -->
+<div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+  <div class="row mb-2">
+      <div class="col-12 d-flex align-items-center coloured-bg-header">
+          <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
+              <mat-icon class="coi-mat-icon-size">warning</mat-icon>
+          </span>
+          <span class="fs-16 fw-medium">{{sectionName}}</span>
+      </div>
+      <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Risk'" (buttonAction)="addSponsorRisk($event)"></app-no-information>
+  </div>
+</div>
 
-<!-- open add entity risk -->
-<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addEntityRisk" role="dialog">
+<!-- entity-sponsor-risk-modal -->
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addEntitySponsorRisk" role="dialog">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -71,3 +70,4 @@
 		</div>
 	</div>
 </div>
+

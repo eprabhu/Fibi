@@ -22,3 +22,7 @@
 .left-padding {
     margin-left: 35px;
 }
+
+.min-height-right-panel {
+    min-height: calc(100vh - 30px - 40px - 30px);
+}
