@@ -82,6 +82,9 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getAnimalAccreditation() != null) {
 			hqlQuery.append(", e.animalAccreditation = :animalAccreditation");
 		}
+		if (dto.getPhoneNumber() != null) {
+			hqlQuery.append(", e.phoneNumber = :phoneNumber");
+		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		if (dto.getPrimaryName() != null) {
@@ -131,6 +134,9 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		}
 		if (dto.getAnimalAccreditation() != null) {
 			query.setParameter("animalAccreditation", dto.getAnimalAccreditation());
+		}
+		if (dto.getPhoneNumber() != null) {
+			query.setParameter("phoneNumber", dto.getPhoneNumber());
 		}
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
