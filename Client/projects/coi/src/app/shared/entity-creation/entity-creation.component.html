@@ -171,7 +171,7 @@
                 <input type="text" class="form-control fs-13" id="coi-entity-CAGE"
                 [ngClass]="(mandatoryList?.has('cage')) ? 'is-invalid d-block' : ''"
                 [(ngModel)]="createEntityObj.cageNumber" (ngModelChange)="clearValidation('cage');numberChangeEvent()"
-                appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                 <span *ngIf="mandatoryList?.has('cage')" class="invalid-feedback d-inline fs-13">
                     {{mandatoryList?.get('cage')}}
                 </span>
