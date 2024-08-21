@@ -10,7 +10,7 @@ import { EntitySponsorComponent } from '../entity-sponsor/entity-sponsor.compone
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', component: EntitySponsorComponent}]),
+    RouterModule.forChild([{ path: '', component: EntityNotesComponent}]),
   ]
 })
 export class EntityNotesModule { }
