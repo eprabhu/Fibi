@@ -47,7 +47,7 @@ export class EntityCreationComponent {
         private _commonService: CommonService, private _autoSaveService: AutoSaveService) {}
 
     ngOnInit() {
-        this.countrySearchOptions = getEndPointOptionsForCountry();
+        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.externalProccedSubscribe();
         this.triggerSingleSave();
         this.triggerExternalSave();
