@@ -124,8 +124,8 @@
                 <ng-container *ngFor="let foreignName of foreignNames;let i = index;">
                     <span class="align-items-center cursor-pointer d-inline-flex mt-2 px-2 py-1 me-2">
                         <span class="me-1 fs-12">{{foreignName?.foreignName}}</span>
-                        <mat-icon class="fileChips-close fs-13" id="coi-alternate-name-delete" aria-hidden="true"
-                            (click)="deleteEntityForeignName(i)"
+                        <mat-icon class="fileChips-close fs-13 cursor-pointer" id="coi-alternate-name-delete" aria-hidden="true"
+                            (click)="deleteEntityForeignName(foreignName, i)"
                             title="Remove this entity alternate number">clear</mat-icon>
                     </span>
                 </ng-container>
@@ -209,3 +209,12 @@
         </div>
     </div>
 </div>
+
+<app-coi-modal [modalConfig]="modalConfig" (modalAction)="postConfirmation($event)">
+    <ng-container modal-header>
+        <span>Confirmation</span>
+    </ng-container>
+    <ng-container modal-body>
+        <p>Do you want to delete <strong>{{deleteForgeinNameObj?.foreignName}}</strong>?</p>
+    </ng-container>
+</app-coi-modal>

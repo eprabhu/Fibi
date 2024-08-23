@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class EntityNotesComponent {
 
+    ngOnInit() {
+        window.scrollTo(0,0);
+    }
 }

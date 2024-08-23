@@ -43,7 +43,7 @@ export class BasicDetailsComponent {
 
     setCreateObj(data) {
         if(data) {
-            this.createEntityObj.primaryName = data['primaryName'];
+            this.createEntityObj.entityName = data['entityName'];
             this.createEntityObj.primaryAddressLine1 = data['primaryAddressLine1'];
             this.createEntityObj.primaryAddressLine2 = data['primaryAddressLine2'];
             this.createEntityObj.city = data['city'];

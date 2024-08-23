@@ -134,4 +134,8 @@ export class IndustryDetailsComponent {
         }, {});
     }
 
+    editIndustry(classification) {
+        console.log(classification);
+    }
+
 }

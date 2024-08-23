@@ -1,3 +1,4 @@
+import { CoiEntity } from './../travel-disclosure/travel-disclosure.interface';
 import { Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
@@ -428,6 +429,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     private setDefaultRiskLevel(): void {
+        if (!this.entityDetails.coiEntity) { this.entityDetails.coiEntity = {}; }
         this.entityDetails.coiEntity.riskCategoryCode = '3';
     }
 

@@ -169,14 +169,14 @@ export class EntityCreationComponent {
     }
 
     private entityMandatoryValidation(): void {
-        this.clearValidation('primaryName');
+        this.clearValidation('entityName');
         this.clearValidation('primaryAddressLine1');
         this.clearValidation('country');
         this.clearValidation('city');
         this.clearValidation('state');
         this.clearValidation('postCode');
-        if (!this.createEntityObj.primaryName) {
-            this.mandatoryList.set('primaryName', 'Please enter entity name.');
+        if (!this.createEntityObj.entityName) {
+            this.mandatoryList.set('entityName', 'Please enter entity name.');
         }
         if (!this.createEntityObj.primaryAddressLine1) {
             this.mandatoryList.set('primaryAddressLine1', 'Please enter address 1.');

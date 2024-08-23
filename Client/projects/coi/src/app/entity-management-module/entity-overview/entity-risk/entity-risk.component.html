@@ -15,15 +15,15 @@
                 <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Risk'" (buttonAction)="addRisk($event)"></app-no-information>
             </div>
             <div *ngIf="entityRisks.length">
-                <div class="card px-2 py-1 bg-white" *ngFor="let risk of entityRisks; let isFirst = first; let isLast = last" [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''" >
-                    <div class="coi-text-light fs-14">{{risk?.riskType?.description}} -
-                        <span [ngClass]="risk?.riskLevel?.riskLevelCode == 3 ? 'text-danger' : risk?.riskLevel?.riskLevelCode == 2 ? 'text-warning' : 'text-success'" class="fw-bold">{{risk?.riskLevel?.description}}</span>
+                <div class="card px-2 py-1 bg-white" *ngFor="let risk of entityRisks; let isFirst = first; let isLast = last; let i = index" [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''" >
+                    <div class="coi-text-light fs-14">{{risk?.riskType ? risk?.riskType?.description : risk?.riskTypeDescription}} -
+                        <span [ngClass]="risk?.riskLevel?.riskLevelCode == 3 ? 'text-danger' : risk?.riskLevel?.riskLevelCode == 2 ? 'text-warning' : 'text-success'" class="fw-bold">{{risk?.riskLevel? risk?.riskLevel?.description : risk?.riskLevelDescription}}</span>
                     </div>
                     <div class="d-flex fs-14 mt-1">
                         <span>{{risk?.description}}</span>
                         <span class="d-flex  ms-auto">
-                            <mat-icon aria-hidden="true" class="me-2">edit</mat-icon>
-                            <mat-icon aria-hidden="true">delete</mat-icon>
+                            <mat-icon aria-hidden="true" class="me-2 cursor-pointer">edit</mat-icon>
+                            <mat-icon aria-hidden="true" class="cursor-pointer" (click)="confirmDeleteRisk(risk, i)">delete</mat-icon>
                         </span>
                     </div>
                 </div>
@@ -95,3 +95,13 @@
 		</div>
 	</div>
 </div>
+
+<app-coi-modal [modalConfig]="modalConfig" (modalAction)="postConfirmation($event)">
+    <ng-container modal-header>
+        <span>Confirmation</span>
+    </ng-container>
+    <ng-container modal-body>
+        <p>Do you want to delete <strong>{{deleteRiskObj?.riskType?.description? deleteRiskObj?.riskType?.description:deleteRiskObj?.riskTypeDescription}} 
+            - {{deleteRiskObj?.riskLevel?.description ? deleteRiskObj?.riskLevel?.description : deleteRiskObj?.riskLevelDescription}}</strong>?</p>
+    </ng-container>
+</app-coi-modal>

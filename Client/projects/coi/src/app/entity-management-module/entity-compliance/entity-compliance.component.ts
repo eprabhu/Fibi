@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./entity-compliance.component.scss']
 })
 export class EntityComplianceComponent {
-
+    ngOnInit() {
+        window.scrollTo(0,0);
+    }
 }

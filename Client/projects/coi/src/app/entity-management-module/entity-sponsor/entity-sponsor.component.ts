@@ -16,6 +16,7 @@ export class EntitySponsorComponent {
 
 
     ngOnInit() {
+        window.scrollTo(0,0);
         this.overViewTab = SponsorTabSection;
     }
 
