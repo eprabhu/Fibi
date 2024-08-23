@@ -106,7 +106,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.getReviewerActionDetails();
-        this.loadSectionsTypeCode();
+        // this.loadSectionsTypeCode();
         this.viewSlider();
     }
 
@@ -157,17 +157,17 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadSectionsTypeCode() {
-        if(this.disclosureType=='COI') {
-            this.$subscriptions.push(this._reviewCommentsService.getSectionsTypeCode({
-                personId: this.disclosureDetails.personId,
-                disclosureId: this.disclosureDetails.disclosureId
-            }).subscribe((res: any) => {
-                this.reviewTypeList = res;
-                this.sectionSearchOptions = this.setCompleterOptions(this.reviewTypeList.coiSectionsTypeList, 'description');
-            }));
-        }
-    }
+    // loadSectionsTypeCode() {
+    //     if(this.disclosureType=='COI') {
+    //         this.$subscriptions.push(this._reviewCommentsService.getSectionsTypeCode({
+    //             personId: this.disclosureDetails.personId,
+    //             disclosureId: this.disclosureDetails.disclosureId
+    //         }).subscribe((res: any) => {
+    //             this.reviewTypeList = res;
+    //             this.sectionSearchOptions = this.setCompleterOptions(this.reviewTypeList.coiSectionsTypeList, 'description');
+    //         }));
+    //     }
+    // }
 
     fileDrop(event) {
         if (event) {
@@ -238,7 +238,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     }
 
 
-    private addOrUpdateComment(details, file) {
+    private addOrUpdateComment(details, file, showAddComment = false) {
         details.moduleCode = this.disclosureType == 'OPA' ? 23 : 8;
         if(this.reviewCommentDetails.componentTypeCode != '10') {
             this.$subscriptions.push(this._reviewCommentsService.addCOIReviewComment(details).subscribe((res: any) => {
@@ -248,7 +248,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
                 } else {
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added Successfully');
                 }
-                this.showAddComment = false;
+                this.showAddComment = showAddComment;
             }, error => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }));
@@ -421,7 +421,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     }
 
     addReplayComment(event) {
-        this.addOrUpdateComment(event.details, this.uploadedFile);
+        this.addOrUpdateComment(event.details, this.uploadedFile, this.showAddComment);
     }
 
     removeChidReviewComment(event) {
@@ -605,6 +605,10 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     addBodyScroll() {
         document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
         document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }
+
+    toggleAddCommentBox(): void {
+        this.showAddComment = !this.showAddComment;
     }
 
 }

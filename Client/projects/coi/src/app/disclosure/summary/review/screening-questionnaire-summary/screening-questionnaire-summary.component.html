@@ -16,15 +16,23 @@
             <mat-icon>{{!coiService.isExpandSummaryBySection['COI801'] ? 'expand_more' : 'expand_less'}}</mat-icon>
         </button>
     </div>
-    <div [hidden]="!coiService.isExpandSummaryBySection['COI801']">
-        <button class="btn btn-primary-icon btn-sm add-activity-button mr-15 mt-2 pt-2 d-flex" tabindex="0"
+    <div [hidden]="!coiService.isExpandSummaryBySection['COI801']" class="position-relative">
+        <!-- <button class="btn btn-primary-icon btn-sm add-activity-button mr-15 mt-2 pt-2 d-flex" tabindex="0"
             id="add-activity" aria-label="Click here to add comment" (click)="modifyReviewComment()"
             title="Click here to add new review comment" type="button">
             <mat-icon>rate_review</mat-icon>
+        </button> -->
+        <button class="align-items-start btn btn-sm btn-tertiary d-inline-flex add-activity-button" tabindex="0"
+            (click)="modifyReviewComment()" (keyup.enter)="modifyReviewComment()" (keyup.space)="modifyReviewComment()"
+            id="add-activity" title="Click here to add new review comment" aria-label="Click here to add comment" type="button">
+            <mat-icon aria-hidden="true" class="hyper-link me-1">rate_review</mat-icon>
+            <!-- <span class="me-2">{{projectData?.projectDetails?.commentCount && projectData.projectDetails.commentCount > 0 ?
+            'Comments('+projectData?.projectDetails?.commentCount + ')' : 'Comments'}}
+            </span> -->
+            <span>Comments</span>
         </button>
         <button
             class="d-flex justify-content-center align-items-center toggle-btn border btn p-0 rounded-5 shadow-sm add-collapse-button"
-            tabindex="0"
             [attr.aria-label]="'Click here to ' + (coiService.isExpandSummaryBySection['COI801'] ? 'collapse' : 'expand') + ' disclosure screening form.'"
             (click)="coiService.isExpandSummaryBySection['COI801'] = !coiService.isExpandSummaryBySection['COI801']"
             [title]="'Click here to ' + (coiService.isExpandSummaryBySection['COI801'] ? 'collapse' : 'expand') + ' disclosure screening form.'">
