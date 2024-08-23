@@ -11,10 +11,16 @@ import javax.persistence.Table;
 
 import com.polus.core.util.JpaCharBooleanConversion;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "ENTITY_STATUS_TYPE")
 public class EntityStatusType implements Serializable {
 

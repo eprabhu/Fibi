@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Convert;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,19 +15,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.polus.core.pojo.Country;
+import com.polus.core.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@javax.persistence.Entity
 @Data
-@Table(name = "GLOBAL_ENTITY")
+@Table(name = "ENTITY")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GlobalEntity implements Serializable {
+public class Entity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,7 +38,7 @@ public class GlobalEntity implements Serializable {
 	private int entityId;
 
 	@Column(name = "PRIMARY_NAME")
-	private String primaryName;
+	private String entityName;
 
 	@Column(name = "FOREIGN_NAME")
 	private String foreignName;
@@ -135,7 +136,7 @@ public class GlobalEntity implements Serializable {
 	@Column(name = "COUNTRY_CODE")
 	private String countryCode;
 
-	@Column(name = "ENTITY_OWNERSHP_TYPE_CODE")
+	@Column(name = "ENTITY_OWNERSHIP_TYPE_CODE")
 	private String entityOwnershipTypeCode;
 
 	@Column(name = "INCORPORATED_IN")
@@ -149,6 +150,19 @@ public class GlobalEntity implements Serializable {
 
 	@Column(name = "NUMBER_OF_EMPLOYEES")
 	private Integer numberOfEmployees;
+
+	@Column(name = "ENTITY_NUMBER")
+	private Integer entityNumber;
+	
+	@Column(name = "VERSION_NUMBER")
+	private Integer versionNumber;
+	
+	@Column(name = "VERSION_STATUS")
+	private String versionStatus;
+
+	@Column(name = "IS_ACTIVE")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isActive;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK1"), name = "ENTITY_STATUS_TYPE_CODE", referencedColumnName = "ENTITY_STATUS_TYPE_CODE", insertable = false, updatable = false)
@@ -167,7 +181,7 @@ public class GlobalEntity implements Serializable {
 	private Country country;
 
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK5"), name = "ENTITY_OWNERSHP_TYPE_CODE", referencedColumnName = "OWNERSHIP_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK5"), name = "ENTITY_OWNERSHIP_TYPE_CODE", referencedColumnName = "OWNERSHIP_TYPE_CODE", insertable = false, updatable = false)
 	private EntityOwnershipType entityOwnershipType;
 
 	@ManyToOne(optional = true)

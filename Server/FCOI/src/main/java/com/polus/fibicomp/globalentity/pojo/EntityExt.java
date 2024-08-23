@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +18,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@javax.persistence.Entity
 @Data
 @Table(name = "ENTITY_EXT")
 @AllArgsConstructor
@@ -38,7 +38,7 @@ public class EntityExt implements Serializable {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_EXT_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private GlobalEntity entity;
+	private Entity entity;
 
     @Column(name = "COL_1_STRING_LABEL")
     private String col1StringLabel;

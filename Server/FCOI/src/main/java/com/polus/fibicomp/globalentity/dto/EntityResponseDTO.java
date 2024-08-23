@@ -8,7 +8,7 @@ import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
 import com.polus.fibicomp.globalentity.pojo.EntityRegistration;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
-import com.polus.fibicomp.globalentity.pojo.GlobalEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EntityResponseDTO {
 
-	private GlobalEntity entityDetails;
+	private Entity entityDetails;
 	private List<EntityIndustryClassification> entityIndustryClassifications;
 	private List<EntityRegistration> entityRegistrations;
 	private List<EntityMailingAddress> entityMailingAddresses;

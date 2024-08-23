@@ -26,9 +26,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.polus.core.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "ENTITY")
+@Table(name = "ENTITY_BACKUP")
 @EntityListeners(AuditingEntityListener.class)
-public class CoiEntity implements Serializable {
+public class CoiEntity_backup implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

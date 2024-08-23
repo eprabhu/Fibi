@@ -15,8 +15,10 @@ public class IndustryDetailsRequestDTO {
 
 	private Integer entityId;
 	private List<Integer> entityIndustryCatIds;
+	private List<Integer> removedEntityIndustryClassIds;
+	private List<Integer> addedEntityIndustryCatIds;
 	private Integer entityIndustryCatId;
 	private String entityIndustryClassId;
-	private String primaryCatId;
+	private int primaryCatId;
 
 }

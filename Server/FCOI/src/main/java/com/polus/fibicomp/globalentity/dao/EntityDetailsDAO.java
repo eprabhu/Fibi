@@ -4,16 +4,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
-import com.polus.fibicomp.globalentity.pojo.GlobalEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 
 @Transactional
 @Service
 public interface EntityDetailsDAO {
 
-	public int createEntity(GlobalEntity entity);
+	public int createEntity(Entity entity);
 
 	public void updateEntity(EntityRequestDTO dto);
 
-	public GlobalEntity fetchEntityDetails(Integer entityId);
+	public Entity fetchEntityDetails(Integer entityId);
 
 }

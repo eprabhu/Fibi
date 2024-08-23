@@ -17,17 +17,15 @@ import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityResponseDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.globalentity.pojo.EntityExternalIdMapping;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
 import com.polus.fibicomp.globalentity.pojo.EntityRegistration;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
-import com.polus.fibicomp.globalentity.pojo.GlobalEntity;
 import com.polus.fibicomp.globalentity.repository.EntityExternalIdMappingRepository;
-import com.polus.fibicomp.globalentity.repository.EntityForeignNameRepository;
 import com.polus.fibicomp.globalentity.repository.EntityIndustryClassificationRepository;
 import com.polus.fibicomp.globalentity.repository.EntityMailingAddressRepository;
-import com.polus.fibicomp.globalentity.repository.EntityPriorNameRepository;
 import com.polus.fibicomp.globalentity.repository.EntityRegistrationRepository;
 import com.polus.fibicomp.globalentity.repository.GlobalEntityRepository;
 
@@ -64,18 +62,18 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 
 	@Override
 	public ResponseEntity<Map<String, Integer>> createEntity(EntityRequestDTO dto) {
-		GlobalEntity entity = mapDTOToEntity(dto);
+		Entity entity = mapDTOToEntity(dto);
 		return new ResponseEntity<>(Map.of("entityId", entityDetailsDAO.createEntity(entity)), HttpStatus.OK);
 	}
 
-	private GlobalEntity mapDTOToEntity(EntityRequestDTO dto) {
-		return GlobalEntity.builder().primaryName(dto.getPrimaryName()).phoneNumber(dto.getPhoneNumber())
+	private Entity mapDTOToEntity(EntityRequestDTO dto) {
+		return Entity.builder().entityName(dto.getEntityName()).phoneNumber(dto.getPhoneNumber())
 				.entityOwnershipTypeCode(dto.getEntityOwnershipTypeCode())
 				.primaryAddressLine1(dto.getPrimaryAddressLine1()).primaryAddressLine2(dto.getPrimaryAddressLine2())
 				.city(dto.getCity()).state(dto.getState()).postCode(dto.getPostCode()).countryCode(dto.getCountryCode())
 				.certifiedEmail(dto.getCertifiedEmail()).websiteAddress(dto.getWebsiteAddress())
 				.dunsNumber(dto.getDunsNumber()).ueiNumber(dto.getUeiNumber()).cageNumber(dto.getCageNumber())
-				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp())
+				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp()).versionNumber(1).versionStatus("ACTIVE").isActive(Boolean.TRUE)
 				.build();
 	}
 
@@ -95,7 +93,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		List<EntityExternalIdMapping> EntityExternalIdMappings = externalIdMappingRepository.findByEntityId(entityId);
 		List<PriorNameResponseDTO> priorNames = companyDetailsService.fetchPriorNames(entityId);
 		List<ForeignNameResponseDTO> foreignNames = companyDetailsService.fetchForeignNames(entityId);
-		GlobalEntity entityDetails = entityRepository.findByEntityId(entityId);
+		Entity entityDetails = entityRepository.findByEntityId(entityId);
 		return new ResponseEntity<>(EntityResponseDTO.builder().entityDetails(entityDetails)
 				.entityIndustryClassifications(entityIndustryClassifications)
 				.entityMailingAddresses(entityMailingAddresses).entityRegistrations(entityRegistrations)

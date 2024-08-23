@@ -488,11 +488,11 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("UPDATE CoiDisclosure cd SET cd.updateTimestamp = :updateTimestamp, cd.updateUser = :updateUser where cd.disclosureId = :disclosureId");
+        hqlQuery.append("UPDATE CoiDisclosure cd SET cd.updateTimestamp = :updateTimestamp, cd.updatedBy = :updatedBy where cd.disclosureId = :disclosureId");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("disclosureId", disclosureId);
         query.setParameter("updateTimestamp", updateTimestamp);
-        query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+        query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
         query.executeUpdate();
         return updateTimestamp;
     }

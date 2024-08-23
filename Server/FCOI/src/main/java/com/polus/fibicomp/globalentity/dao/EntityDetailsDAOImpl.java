@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.polus.core.common.dao.CommonDao;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
-import com.polus.fibicomp.globalentity.pojo.GlobalEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 
 @Repository
 @Transactional
@@ -24,8 +24,10 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	private CommonDao commonDao;
 
 	@Override
-	public int createEntity(GlobalEntity entity) {
+	public int createEntity(Entity entity) {
 		hibernateTemplate.save(entity);
+		updateEntity(
+				EntityRequestDTO.builder().entityNumber(entity.getEntityId()).entityId(entity.getEntityId()).build());
 		return entity.getEntityId();
 	}
 
@@ -33,9 +35,12 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	public void updateEntity(EntityRequestDTO dto) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE GlobalEntity e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
-		if (dto.getPrimaryName() != null) {
-			hqlQuery.append(", e.primaryName = :primaryName");
+		hqlQuery.append("UPDATE Entity e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp ");
+		if (dto.getEntityName() != null) {
+			hqlQuery.append(", e.entityName = :entityName");
+		}
+		if (dto.getEntityNumber() != null) {
+			hqlQuery.append(", e.entityNumber = :entityNumber");
 		}
 		if (dto.getEntityOwnershipTypeCode() != null) {
 			hqlQuery.append(", e.entityOwnershipTypeCode = :entityOwnershipTypeCode");
@@ -87,8 +92,8 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
-		if (dto.getPrimaryName() != null) {
-			query.setParameter("primaryName", dto.getPrimaryName());
+		if (dto.getEntityName() != null) {
+			query.setParameter("entityName", dto.getEntityName());
 		}
 		if (dto.getEntityOwnershipTypeCode() != null) {
 			query.setParameter("entityOwnershipTypeCode", dto.getEntityOwnershipTypeCode());
@@ -138,6 +143,9 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getPhoneNumber() != null) {
 			query.setParameter("phoneNumber", dto.getPhoneNumber());
 		}
+		if (dto.getEntityNumber() != null) {
+			query.setParameter("entityNumber", dto.getEntityNumber());
+		}
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
@@ -145,8 +153,8 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	}
 
 	@Override
-	public GlobalEntity fetchEntityDetails(Integer entityId) {
-		return hibernateTemplate.get(GlobalEntity.class, entityId);
+	public Entity fetchEntityDetails(Integer entityId) {
+		return hibernateTemplate.get(Entity.class, entityId);
 	}
 
 }
