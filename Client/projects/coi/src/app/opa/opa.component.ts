@@ -223,10 +223,10 @@ export class OpaComponent implements OnInit {
 
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.opa.opaDisclosure.opaPerson.personName;
-        this.personProjectDetails.unitNumber = this.opa.opaDisclosure.homeUnit;
-        this.personProjectDetails.unitName = this.opa.opaDisclosure.homeUnitName;
         this.personProjectDetails.homeUnit = this.opa.opaDisclosure.homeUnit;
         this.personProjectDetails.homeUnitName = this.opa.opaDisclosure.homeUnitName;
+        this.personProjectDetails.personEmail = this.opa.opaDisclosure.personEmail;
+        this.personProjectDetails.personPrimaryTitle = this.opa.opaDisclosure.personPrimaryTitle;
     }
 
     completeDisclosureReview() {
@@ -313,6 +313,9 @@ export class OpaComponent implements OnInit {
         this.isCardExpanded=!this.isCardExpanded;
         this.isUserCollapse=!this.isUserCollapse;
         this.setTopDynamically();
+        setTimeout (() => {
+            this.commonService.$globalEventNotifier.next({uniqueId: 'COI_OPA_HEADER', content: { isCardExpanded: this.isCardExpanded }});
+        });
     }
 
     setTopDynamically() {
@@ -341,6 +344,7 @@ export class OpaComponent implements OnInit {
             this.isCardExpanded = window.innerWidth > 1399;
         }
         this.setTopDynamically();
+        this.commonService.$globalEventNotifier.next({uniqueId: 'COI_OPA_HEADER', content: { isCardExpanded: this.isCardExpanded }});
     }
 
     private validateForm(): void {

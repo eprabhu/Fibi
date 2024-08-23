@@ -36,6 +36,14 @@
 }
 
 //size
+.fs-10 {
+    font-size: 0.625rem !important;
+}
+
+.fs-11 {
+    font-size: 0.6875rem !important;
+}
+
 .fs-12 {
     font-size: 0.75rem !important;
 }
@@ -93,4 +101,8 @@
     color: var(--theme-text-gray-600) !important;
     font-size: var(--theme-font-size);
     font-weight: 400 !important;
+}
+
+.coi-bg-body {
+    background-color: var(--theme-body-bg-color) !important;
 }

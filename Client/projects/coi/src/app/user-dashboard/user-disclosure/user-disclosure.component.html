@@ -4,7 +4,7 @@
             <!-- card design for FCOI Disclosure (not pending)-->
             <ng-container *ngIf="hasActiveFCOI">
                 <div class="col-lg-6 mb-10 mb-lg-0"
-                    *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus != 'PENDING'">
+                    *ngIf="disclosure?.fcoiTypeCode !== '2' && disclosure?.versionStatus != 'PENDING'">
 
                     <!-- new card design(modern) -->
                     <div class="card coi-card-lite h-100">
@@ -123,21 +123,20 @@
                                             </h5>
 
                                             <div class="ms-auto">
-                                                <a class="align-items-center btn btn-sm btn-success d-inline-flex me-2"
-                                                    *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" role="button" (keyup.enter)="openFCOIModal('FCOI')" (keyup.space)="openFCOIModal('FCOI')"
-                                                    title="Click here to Renew FCOI Disclosure"
-                                                    aria-describedby="Click here to Renew FCOI Disclosure" id="coi-user-disclosure-fcoi-notpending-card-revise-btn">
+                                                <button class="align-items-center btn btn-sm btn-success d-inline-flex me-2"
+                                                    *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" title="Click here to Renew FCOI Disclosure"
+                                                    aria-label="Click here to Renew FCOI Disclosure" id="coi-user-disclosure-fcoi-notpending-card-revise-btn">
                                                     <mat-icon aria-hidden="true" class="me-1">restart_alt</mat-icon>
                                                     <span>Revise</span>
-                                                </a>
-                                                <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
-                                                    [queryParams]={disclosureId:disclosure.disclosureId} role="button" id="coi-user-disclosure-fcoi-notpending-card-view-btn"
-                                                    [routerLink]="['/coi/disclosure/summary']"
+                                                </button>
+                                                <button class="align-items-center btn btn-sm btn-primary d-inline-flex"
+                                                    id="coi-user-disclosure-fcoi-notpending-card-view-btn"
+                                                    (click)="redirectToFCOIDisclosure(disclosure)"
                                                     [attr.aria-label]="headerService?.activeDisclosures ? 'Click here to view FCOI Disclosure details' : 'Click here to view Disclosure details'"
                                                     [title]="headerService?.activeDisclosures ? 'Click here to view FCOI Disclosure details' : 'Click here to view Disclosure details'">
                                                     <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                     <span>View</span>
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +153,7 @@
                 <div class="col-lg-6 mb-10 mb-lg-0">
 
                     <!-- new card design(modern)2 -->
-                    <div class="card coi-card-lite h-100" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING'">
+                    <div class="card coi-card-lite h-100" *ngIf="disclosure?.fcoiTypeCode !== '2' && disclosure?.versionStatus == 'PENDING'">
                         <div class="card-body" id="coi-user-disclosure-fcoi-pending-card">
                             <div class="row gx-9 h-100">
                                 <div class="col-sm-12">
@@ -260,14 +259,13 @@
 
                                         <div class="d-flex flex-stack mt-auto bd-highlight">
                                             <div class="ms-auto">
-                                                <a class="align-items-center btn btn-sm btn-primary d-inline-flex"
-                                                    [queryParams]={disclosureId:disclosure.disclosureId} role="button"
-                                                    [routerLink]="['/coi/disclosure/summary']"
+                                                <button class="align-items-center btn btn-sm btn-primary d-inline-flex"
+                                                    (click)="redirectToFCOIDisclosure(disclosure)"
                                                     [attr.aria-label]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                                     [title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'">
                                                     <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                     <span>View</span>
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -612,13 +610,13 @@
 
                                     <div class="d-flex flex-stack mt-auto bd-highlight">
                                         <div class="ms-auto">
-                                            <a class="align-items-center btn btn-sm btn-primary d-inline-flex" tabindex="0" id="coi-user-disclosure-opa-approved-card-view-btn"
+                                            <button class="align-items-center btn btn-sm btn-primary d-inline-flex" tabindex="0" id="coi-user-disclosure-opa-approved-card-view-btn"
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
-                                                title="Click here to view OPA disclosure details" aria-describedby="Click here to view OPA disclosure details"
-                                                aria-label="Click here to view OPA disclosure details" role="button">
+                                                title="Click here to view OPA disclosure details"
+                                                aria-label="Click here to view OPA disclosure details">
                                                 <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                 <span>View</span>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -653,7 +651,7 @@
     <div (click)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
         [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click here to view Travel Disclosures'"
         [title]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click here to view Travel Disclosures'"
-        aria-describedby="Click to view Travel Disclosures" tabindex="0"
+        tabindex="0"
         (keyup.enter)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)" (keyup.space)="setTab('TRAVEL_DISCLOSURES', dashboardCount?.travelDisclosureCount)">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="py-2" id="coi-user-disclosure-dashboard-travel-disclosure"
         [attr.aria-label]="currentSelected.tab=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures' : 'Travel Disclosures with ' + (dashboardCount?.travelDisclosureCount || 0) + ' disclosures'">
@@ -662,7 +660,7 @@
     <div (click)="setTab('CONSULTING_DISCLOSURES', dashboardCount?.consultDisclCount)" class="border-end navigation-icons px-3 hand-cursor" role="tab"
         [attr.aria-label]="currentSelected.tab=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click here to view Consulting Disclosures'"
         [title]="currentSelected.tab=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click here to view Consulting Disclosures'"
-        aria-describedby="Click to view Consulting Disclosures" tabindex="0"
+        tabindex="0"
         (keyup.enter)="setTab('CONSULTING_DISCLOSURES', dashboardCount?.consultDisclCount)" (keyup.space)="setTab('CONSULTING_DISCLOSURES', dashboardCount?.consultDisclCount)">
         <span [class.active]="currentSelected.tab=='CONSULTING_DISCLOSURES'" class="py-2" id="coi-user-disclosure-dashboard-consulting-disclosure"
         [attr.aria-label]="currentSelected.tab=='CONSULTING_DISCLOSURES' ? 'Selected tab is consulting Disclosures with ' + (dashboardCount?.consultDisclCount || 0) + ' disclosures' : 'Consulting Disclosures with ' + (dashboardCount?.consultDisclCount || 0) + ' disclosures'">
@@ -671,7 +669,7 @@
     <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 hand-cursor" role="tab"
         [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click here to view Disclosure History'"
         [title]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Disclosure History' : 'Click here to view Disclosure History'"
-        aria-describedby="Click to view Disclosure History" tabindex="0"
+        tabindex="0"
         (keyup.enter)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" (keyup.space)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="py-2" id="coi-user-disclosure-dashboard-history"
         [attr.aria-label]="currentSelected.tab=='DISCLOSURE_HISTORY' ? 'Selected tab is Disclosure History' : 'Disclosure History'">
@@ -748,11 +746,13 @@
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row m-0">
                                     <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-end">
-                                        <span class="d-flex" tabindex="-1"
-                                            [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
-                                            <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
-                                                <span id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType }}</span>
-                                            </span></span>
+                                        <span *ngIf="disclosure.fcoiTypeCode === '2'" class="coi-card-notch-ribbon shadow-sm"
+                                            [style.backgroundColor]="disclosure.projectBadgeColor"
+                                            [attr.aria-label]="disclosure?.projectType + ' disclosure'" tabindex="-1"
+                                            id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.projectType }}</span>
+                                        <span *ngIf="disclosure.fcoiTypeCode !== '2'" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
+                                            [attr.aria-label]="disclosure?.projectType + ' disclosure'" tabindex="-1"
+                                            id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
                                             class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex">
@@ -761,10 +761,9 @@
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName" id="coi-user-disclosure-coi-card-value-person-{{index}}">
                                                     {{disclosure.disclosurePersonFullName}}</span>
                                             </span>
-                                            <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
+                                            <ng-container *ngIf="disclosure.fcoiTypeCode === '2'">
                                                 <span class="pipe mx-1"></span>
-                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="disclosure?.fcoiTypeCode==='2'">article</mat-icon>
-                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="disclosure?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
+                                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{disclosure.projectIcon}}</mat-icon>
                                                 <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
                                                     (click)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
                                                     (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
@@ -911,10 +910,10 @@
                                         <!-- Travel Card badge -->
                                         <span class="d-flex">
                                             <span
-                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}"
+                                                class="coi-card-notch-ribbon shadow-sm bg-travel-clip"
                                                 tabindex="-1"
-                                                [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
-                                                <span id="coi-user-disclosure-travel-card-value-heading-{{index}}">{{disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.fcoiType}}</span>
+                                                [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.projectType) + ' disclosure'">
+                                                <span id="coi-user-disclosure-travel-card-value-heading-{{index}}">{{disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId ? 'OPA' : disclosure?.projectType}}</span>
                                             </span>
                                         </span>
                                         <!-- Travel Card Entity -->
@@ -963,7 +962,7 @@
                                     </div>
                                     <!-- Travel Card Destination -->
                                     <div class="col-lg-4 col-md-6 mb-2">
-                                        <div *ngIf="disclosure?.fcoiTypeCode!= 1" tabindex="-1"
+                                        <div tabindex="-1"
                                             [attr.aria-label]="'Destination is ' + (disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState)">
                                             <label for="destination" class="d-block coi-text-dark">Destination</label>
                                             <span>
@@ -1089,13 +1088,13 @@
                                         <!-- OPA Card badge -->
                                         <span class="d-flex">
                                             <span
-                                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}"
+                                                class="coi-card-notch-ribbon shadow-sm bg-opa-clip"
                                                 tabindex="-1"
-                                                [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.fcoiType) + ' disclosure'">
+                                                [attr.aria-label]="(disclosure?.travelDisclosureId? 'Travel' : disclosure?.opaDisclosureId? 'OPA' :  disclosure?.projectType) + ' disclosure'">
                                                 <span id="coi-user-disclosure-opa-card-value-heading-{{index}}">{{disclosure?.travelDisclosureId? 'Travel' :
                                                     disclosure?.opaDisclosureId?
                                                     'OPA' :
-                                                    disclosure?.fcoiType}}</span>
+                                                    disclosure?.projectType}}</span>
                                             </span>
                                         </span>
                                         <!-- OPA Card Reporting Cycle -->
@@ -1204,7 +1203,7 @@
                                     <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-end">
                                         <!-- Consulting Card badge -->
                                         <span class="d-flex">
-                                            <span class="coi-card-notch-ribbon shadow-sm d-flex align-items-center {{getColorBadges(disclosure)}}"
+                                            <span class="coi-card-notch-ribbon shadow-sm d-flex align-items-center bg-consulting-clip"
                                                 tabindex="-1" attr.aria-label="Consulting disclosure">
                                                 <span id="coi-user-disclosure-opa-card-value-heading-{{index}}">Consulting</span>
                                             </span>
@@ -1322,49 +1321,41 @@
                                             <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="disclosure?.noOfSfi"
                                                 [title]="disclosure?.noOfSfi > 0 ? 'Click here to view SFI list' : '' " role="link" [ngClass]="disclosure?.noOfSfi > 0 ?'badge':'zero-count-padding'"
                                                 [attr.aria-label]="disclosure?.noOfSfi > 0 ?'Click here to view SFI list':''"
-                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
-                                                (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
+                                                (click)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
+                                                (keydown.enter)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
+                                                (keydown.space)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
                                                 id="coi-user-disclosure-noof-sfi">{{disclosure?.noOfSfi
                                                 || 0}}</span>
                                             <span class="fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'link-primary': 'coi-text-light' "
                                                 [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
-                                                (keydown.enter)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi)"
-                                                (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">Significant
+                                                (keydown.enter)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
+                                                (click)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8);">Significant
                                                 Financial Interest</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-lg-2">
-                                        <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
-                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [title]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' " [ngClass]="disclosure?.noOfProposal > 0 ?'badge':'zero-count-padding'"
-                                                [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfProposal"
-                                                (keydown.enter)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal)"
-                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);"
-                                                id="coi-user-disclosure-noof-proposal">{{disclosure?.noOfProposal}}</span>
-                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfProposal > 0 ? 'link-primary' : 'coi-text-light' "
-                                                [title]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
-                                                [attr.aria-label]="disclosure?.noOfProposal > 0 ? 'Click to view Development Proposal list' : '' "
-                                                [tabIndex]="disclosure?.noOfProposal > 0 ? 0 : -1" role="link"
-                                                (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">Development Proposal</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-lg-2">
-                                        <div class="d-flex align-items-center fw-semibold"
-                                            *ngIf="!disclosure?.opaDisclosureId && disclosure?.fcoiTypeCode == '1'">
-                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
-                                                (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)" [ngClass]="disclosure?.noOfAward > 0 ?'badge':'zero-count-padding'"
-                                                (keydown.enter)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)"
-                                                [tabIndex]="disclosure?.noOfAward > 0 ? 0 : -1" role="link" [class.cursor-pointer]="disclosure?.noOfAward"
-                                                [title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
-                                                id=coi-user-disclosure-noof-award>{{disclosure?.noOfAward}}</span>
-                                            <span class="coi-text-light fw-500" [ngClass]="disclosure?.noOfAward > 0 ? 'link-primary':'coi-text-light'"
-                                                (keydown.enter)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward)"
-                                                [tabIndex]="disclosure?.noOfAward > 0 ? 0 : -1" role="link"
-                                                [title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
-                                                (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">Awards</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 col-lg-4" tabindex="-1">
+                                    <ng-container *ngIf="disclosure?.fcoiTypeCode !== '2'">
+                                        <ng-container *ngFor="let projectCount of disclosure?.projectCount">
+                                            <div *ngIf="projectCount" class="col">
+                                                <div class="d-flex align-items-center fw-semibold">
+                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
+                                                        tabindex="{{projectCount?.projectCount > 0 ? 0 : -1}}" role="link"
+                                                        [attr.aria-label]="projectCount?.projectType + ' count is ' + projectCount?.projectCount + (projectCount?.projectCount > 0 ? '. Click here to view ' + projectCount?.projectType + ' list' : '')"
+                                                        [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' alist' : ''"
+                                                        (click)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.space)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.enter)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        [ngClass]="projectCount?.projectCount ? 'badge' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
+                                                    <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
+                                                        [class.link-primary]="projectCount?.projectCount > 0"
+                                                        [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
+                                                        (click)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.enter)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.space)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)">{{projectCount?.projectType}}</span>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
+                                    <div class="col-md-12 col-lg-4 ms-auto" tabindex="-1">
                                         <label class="coi-text-lighter d-inline-flex d-lg-block fs-13 fw-medium" for="id">Last Updated By
                                         </label>
                                         <span id="last-updated" class="coi-text-dark fs-13 fw-normal"
@@ -1435,14 +1426,12 @@
                         </ng-container>
                         <div class="col-lg-2">
                             <div class="d-flex d-inline-block justify-content-end align-items-center px-0 h-100 ">
-                                <button (click)="redirectToDisclosure(disclosure)" role="button" id="coi-user-disclosure-dashboard-view-btn"
-                                (keyup.enter)="redirectToDisclosure(disclosure)" (keyup.space)="redirectToDisclosure(disclosure)"
-                                    aria-describedby="Click here to view Disclosure"
+                                <button (click)="redirectToDisclosure(disclosure)" id="coi-user-disclosure-dashboard-view-btn"
                                     class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                                    [title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
-                                                            disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'"
-                                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
-                                                            disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure' : 'Click to view FCOI disclosure'">
+                                    [title]="disclosure?.travelDisclosureId ? 'Click to view travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
+                                                            disclosure?.fcoiTypeCode == 2 ? 'Click to view project disclosure' : 'Click to view FCOI disclosure'"
+                                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
+                                                            disclosure?.fcoiTypeCode == 2 ? 'Click to view project disclosure' : 'Click to view FCOI disclosure'">
                                     <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>View
                                 </button>
                             </div>
@@ -1474,7 +1463,7 @@
     </div>
 </ng-container>
 
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.projectType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
     (closeModal)="closeModalEvent($event)" (viewSlider)="viewSlider($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures">

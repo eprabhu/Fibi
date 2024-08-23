@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { AddAttachmentModalService } from './add-attachment-modal.service';
 import { CommonService } from '../../services/common.service';
@@ -22,7 +22,8 @@ export class AddAttachmentModalComponent implements OnInit {
     attachmentErrorMsg = '';
     $subscriptions: Subscription[] = [];
     isSaving = false;
-    helpTexts = `You can view and edit attachments under the 'My Attachments' tab.`;
+    // helpTexts = `You can view and edit attachments under the 'My Attachments' tab.`;
+    @Input() attachmentHelpText = '';
     @Output() closeModal = new EventEmitter<boolean>(); //close event.
 
     constructor(private _attachmentService: AddAttachmentModalService, private _commonService: CommonService, public _router: Router) { }

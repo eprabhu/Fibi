@@ -1,6 +1,6 @@
 export class COI {
     coiDisclosure: CoiDisclosure;
-    person: Person;
+    person: Person | null;
     numberOfSFI: number;
     numberOfProposal: number;
     numberOfAward: number;
@@ -12,9 +12,15 @@ export class COI {
     projectDetail: any;
     coiReviewerList: ReviewerList[];
     documentOwnerPersonId: string;
-    personAttachmentsCount: number;
-    personEntitiesCount: number;
-    personNotesCount: number;
+}
+
+export class CoiProjectType {
+    coiProjectTypeCode: string
+    description: string
+    badgeColor: string
+    updateTimestamp: number
+    updateUser: string
+    isActive: boolean
 }
 
 export interface CoiConflictStatusType {
@@ -59,7 +65,7 @@ export interface CoiDisclosureFcoiType {
 
 export class CoiDisclosure {
     disclosureId: number;
-    disclosureNumber: string;
+    disclosureNumber: number;
     versionNumber: number;
     personId: string;
     conflictStatusCode: string;
@@ -81,7 +87,7 @@ export class CoiDisclosure {
     updateTimestamp: number;
     updateUser: string;
     isDisclosureQuestionnaire: boolean;
-    person:any;
+    person: Person;
     adminPersonId: string;
     adminPersonName: string;
     adminGroupId: number;
@@ -92,6 +98,10 @@ export class CoiDisclosure {
     riskCategoryCode: any;
     coiRiskCategory: any;
     updateUserFullName: string;
+    coiProjectType: CoiProjectType;
+    personAttachmentsCount: number;
+    personEntitiesCount: number;
+    personNotesCount: number;
 }
 export interface UnitAdministratorType {
     code: string;
@@ -273,7 +283,7 @@ export class RO {
     'disclosureId' = null;
     'reviewStatusCode' = '';
     'personId': any;
-    'filterType': string =  'ALL';
+    'filterType': string = 'ALL';
     'currentPage': any = 1;
     'pageNumber': any = 20;
     'searchWord': any;
@@ -343,76 +353,76 @@ export interface ApplicableQuestionnaire {
 }
 
 export interface ReviewerList {
-  coiReviewId: number;
-  assigneePersonId: string;
-  disclosureId: number;
-  coiDisclosure: Disclosure;
-  adminGroupId: any;
-  adminGroup: any;
-  reviewStatusTypeCode: string;
-  coiReviewStatus: CoiReviewStatus;
-  description: any;
-  createTimestamp: number;
-  createUser: any;
-  updateTimestamp: number;
-  updateUser: any;
-  assigneePersonName: string;
+    coiReviewId: number;
+    assigneePersonId: string;
+    disclosureId: number;
+    coiDisclosure: Disclosure;
+    adminGroupId: any;
+    adminGroup: any;
+    reviewStatusTypeCode: string;
+    coiReviewStatus: CoiReviewStatus;
+    description: any;
+    createTimestamp: number;
+    createUser: any;
+    updateTimestamp: number;
+    updateUser: any;
+    assigneePersonName: string;
 }
 
 export interface Disclosure {
-  disclosureId: number;
-  personId: string;
-  person: Person;
-  homeUnit: string;
-  unit: Unit;
-  disclosureNumber: number;
-  versionNumber: number;
-  versionStatus: string;
-  fcoiTypeCode: string;
-  coiDisclosureFcoiType: CoiDisclosureFcoiType;
-  conflictStatusCode: string;
-  coiConflictStatusType: CoiConflictStatusType;
-  dispositionStatusCode: string;
-  coiDispositionStatusType: CoiDispositionStatusType;
-  reviewStatusCode: string;
-  coiReviewStatusType: CoiReviewStatusType;
-  riskCategoryCode: string;
-  coiRiskCategory: CoiRiskCategory;
-  moduleCode: number;
-  moduleItemKey: string;
-  expirationDate: number;
-  certificationText: string;
-  certifiedBy: string;
-  certifiedAt: number;
-  revisionComment: string;
-  adminGroupId: any;
-  adminPersonId: string;
-  updateTimestamp: number;
-  updateUser: string;
-  createUser: any;
-  createTimestamp: number;
-  updateUserFullName: any;
-  createUserFullName: any;
-  numberOfSFI: any;
-  numberOfProposals: any;
-  numberOfAwards: any;
-  coiProjectTypeCode: any;
-  adminGroupName: any;
-  adminPersonName: any;
+    disclosureId: number;
+    personId: string;
+    person: Person;
+    homeUnit: string;
+    unit: Unit;
+    disclosureNumber: number;
+    versionNumber: number;
+    versionStatus: string;
+    fcoiTypeCode: string;
+    coiDisclosureFcoiType: CoiDisclosureFcoiType;
+    conflictStatusCode: string;
+    coiConflictStatusType: CoiConflictStatusType;
+    dispositionStatusCode: string;
+    coiDispositionStatusType: CoiDispositionStatusType;
+    reviewStatusCode: string;
+    coiReviewStatusType: CoiReviewStatusType;
+    riskCategoryCode: string;
+    coiRiskCategory: CoiRiskCategory;
+    moduleCode: number;
+    moduleItemKey: string;
+    expirationDate: number;
+    certificationText: string;
+    certifiedBy: string;
+    certifiedAt: number;
+    revisionComment: string;
+    adminGroupId: any;
+    adminPersonId: string;
+    updateTimestamp: number;
+    updateUser: string;
+    createUser: any;
+    createTimestamp: number;
+    updateUserFullName: any;
+    createUserFullName: any;
+    numberOfSFI: any;
+    numberOfProposals: any;
+    numberOfAwards: any;
+    coiProjectTypeCode: any;
+    adminGroupName: any;
+    adminPersonName: any;
 }
 export interface CoiRiskCategory {
-  riskCategoryCode: string;
-  description: string;
-  updateTimestamp: number;
-  updateUser: string;
-  isActive: boolean;
+    riskCategoryCode: string;
+    description: string;
+    updateTimestamp: number;
+    updateUser: string;
+    isActive: boolean;
 }
 export interface CoiReviewStatus {
-  reviewStatusCode: string;
-  description: string;
-  updateTimestamp: number;
-  updateUser: string;
-  isActive: boolean;
+    reviewStatusCode: string;
+    description: string;
+    updateTimestamp: number;
+    updateUser: string;
+    isActive: boolean;
 }
 
 export type ModalType = 'COMPLETE' | 'START';
@@ -442,4 +452,217 @@ export interface ProjectRelationshipDetails {
     projectTypeCode: string;
     projectType: string;
     projectBadgeColour: string;
-  }
+}
+
+// define
+
+export class ApplyToAllModal {
+    projectConflictStatusCode = '';
+    coiDisclProjectId = null;
+    isOpenModal = false;
+    comment = '';
+}
+
+export class AddConflictSlider {
+    isOpenSlider = false;
+    projectSfiRelations = new ProjectSfiRelations();
+    coiDisclEntProjDetail = new CoiDisclEntProjDetail();
+}
+
+export class ProjectSfiRelations {
+    certification?: any = null;
+    title?: string | null = null;
+    piName?: string | null = null;
+    projectId?: string | null = null;
+    moduleCode?: number | null = null;
+    projectIcon?: string | null = null;
+    projectType?: string | null = null;
+    keyPersonId?: string | null = null;
+    entityCount?: number | null = null;
+    sponsorName?: string | null = null;
+    sponsorCode?: string | null = null;
+    homeUnitName?: string | null = null;
+    leadUnitName?: string | null = null;
+    disclosureId?: number | null = null;
+    commentCount?: number | null = null;
+    reporterRole?: string | null = null;
+    projectNumber?: string | null = null;
+    projectStatus?: string | null = null;
+    keyPersonName?: string | null = null;
+    keyPersonRole?: string | null = null;
+    conflictCount? = new ConflictCount();
+    completeCount?: number | null = null;
+    proposalCount?: number | null = null;
+    keyPersonCount?: number | null = null;
+    projectEndDate?: number | null = null;
+    homeUnitNumber?: string | null = null;
+    leadUnitNumber?: string | null = null;
+    conflictStatus?: string | null = null;
+    projectTypeCode?: string | null = null;
+    updateTimestamp?: number | null = null;
+    projectStartDate?: number | null = null;
+    primeSponsorName?: string | null = null;
+    primeSponsorCode?: string | null = null;
+    disclosureStatus?: string | null = null;
+    coiDisclProjectId?: number | null = null;
+    disclsoureNeeded?: boolean | null = null;
+    conflictStatusCode?: string | null = null;
+    conflictCompleted?: boolean | null = null;
+    projectBadgeColour?: string | null = null;
+    trainingCompleted?: boolean | null = null;
+    relationShipExists?: boolean | null = null;
+    disclosureRequired?: boolean | null = null;
+    disclosureSubmitted?: boolean | null = null;
+    disclosureReviewStatus?: string | null = null;
+    questionnaireCompleted?: boolean | null = null;
+    coiDisclEntProjDetails?: CoiDisclEntProjDetail[] = [];
+}
+
+export class ConflictCount { }
+
+export class CoiDisclEntProjDetail {
+    project?: any | null = null;
+    coiEntity?: any | null = null;
+    entityId?: number | null = null;
+    updatedBy?: string | null = null;
+    personEntityId?: number | null = null;
+    updateTimestamp?: number | null = null;
+    coiDisclProjectId?: number | null = null;
+    prePersonEntityId?: number | null = null;
+    personEntityNumber?: number | null = null;
+    disclComment?: DisclComment | null = null;
+    personEntity?: PersonEntity | null = null;
+    projectConflictStatusCode?: string | null = null;
+    coiDisclProjectEntityRelId?: number | null = null;
+    coiProjConflictStatusType?: any | null = null;
+}
+
+export interface CoiProjConflictStatusType {
+    isActive?: any;
+    updateUser?: any;
+    description?: any;
+    updateTimestamp?: any;
+    projectConflictStatusCode?: any;
+}
+
+export interface DisclComment {
+    comment?: any;
+    isPrivate?: any;
+    commentId?: any;
+    moduleCode?: any;
+    updateUser?: any;
+    commentType?: any;
+    commentTags?: any;
+    attachments?: any;
+    componentType?: any;
+    moduleItemKey?: any;
+    subModuleCode?: any;
+    formBuilderId?: any;
+    childComments?: any;
+    commentPersonId?: any;
+    commentTypeCode?: any;
+    parentCommentId?: any;
+    updateTimestamp?: any;
+    moduleItemNumber?: any;
+    subModuleItemKey?: any;
+    componentTypeCode?: any;
+    updateUserFullName?: any;
+    subModuleItemNumber?: any;
+    formBuilderSectionId?: any;
+    moduleSectionDetails?: any;
+    documentOwnerPersonId?: any;
+    formBuilderComponentId?: any;
+    isSectionDetailsNeeded?: any;
+}
+
+export class PersonEntity {
+    conflictCompleted?: any = null;
+    entityId?: number | null = null;
+    entityName?: string | null = null;
+    entityType?: string | null = null;
+    countryName?: string | null = null;
+    entityNumber?: number | null = null;
+    conflictCount?: number | null = null;
+    personEntityId?: number | null = null;
+    isFormCompleted?: boolean | null = null;
+    projEntRelations?: number | null = null;
+    entityRiskCategory?: string | null = null;
+    involvementEndDate?: number | null = null;
+    involvementStartDate?: number | null = null;
+    validPersonEntityRelType?: string | null = null;
+    personEntityVersionStatus?: string | null = null;
+    personEntityRelations?: PersonEntityRelations[] = [];     // for frontend pupose 
+}
+
+export class PersonEntityRelations {
+    icon = '';
+    description = '';
+    relationshipType = '';
+}
+
+export class ProjectSfiRelationLoadRO {
+    personId: string | null = null;
+    disclosureId: number | null = null;
+    disclosureNumber: number | null = null;
+}
+
+export class ProjectSfiRelationConflictRO {
+    disclosureId: number | null = null;
+    disclosureNumber: number | null = null;
+    personId: string | null = null;
+    coiDisclProjectEntityRelId: number | null = null;
+    coiDisclProjectId: number | null = null;
+    projectConflictStatusCode: string | null = null;
+    commentId: number | null = null;
+    comment: string | null = null;
+    personEntityId: number | null = null;
+    relationshipSFIMode: boolean = false;
+    applyAll: boolean = false;
+
+    constructor(init?: Partial<ProjectSfiRelationConflictRO>) {
+        Object.assign(this, init);
+    }
+}
+
+export interface CoiStatus {
+    projectConflictStatusCode: string;
+    description: string;
+    updateTimestamp: number;
+    updateUser: string;
+    isActive: boolean;
+}
+
+export class DefineRelationshipDataStore {
+    projectId: string | 'ALL' | null = null;
+    entityId: number | 'ALL' | null = null;
+    updatedKeys: string[] = [];
+    searchChanged = false;
+}
+
+export interface RelationshipConflictType {
+    label: string;
+    color: string;
+    statusCode: number;
+    projectConflictStatusCode: string;
+}
+
+export interface CertifyDisclosureRO {
+    disclosureId: number;
+    certificationText: string;
+    conflictStatusCode: string;
+}
+
+export interface UpdateProjectRelationshipRO {
+    comment: string;
+    disclosureId: number;
+    conflictStatusCode: string;
+    documentOwnerPersonId: string;
+    coiDisclProjectEntityRelId: number;
+}
+
+export class ExpandCollapseSummaryBySection {
+    COI801 = true;
+    COI802 = true;
+    COI803 = true;
+    COI804 = true;
+}

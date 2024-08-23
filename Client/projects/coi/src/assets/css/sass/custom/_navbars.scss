@@ -146,3 +146,102 @@ header {
     color: var(--theme-blue);
     border-bottom: 2px solid var(--theme-blue);
 }
+
+.coi-nav-tab-sticky{
+    position: sticky;
+    top: 50px;
+    z-index: 10;
+}
+
+.coi-dashboard-tab-sticky{
+    position: sticky;
+    top: 17px;
+    z-index: 10;
+    background-color: var(--theme-body-bg-color);
+}
+
+.nav {
+    .coi-nav-item {
+        .coi-nav-link {
+            display: inline-flex;
+            width: 100%;
+            text-decoration: none;
+            padding: .5rem 1rem;
+            cursor: pointer;
+            color: #505050;
+            background-color: white;
+            font-weight: 500;
+            font-size: 0.875rem;
+
+            &.active {
+                color: #007dec;
+                background: #eef2f4;
+                font-weight: 600;
+            }
+    
+            &:hover {
+                background: #eef2f4;
+    
+                & .nav-link {
+                    color: #007dec;
+                }
+            }
+        }
+    }
+}
+
+.scrollspy-activate {
+    position: relative;
+    border-left: 2px solid var(--theme-primary-color);
+    background-color: #eef2f4;
+    &::before {
+        content: "";
+        position: absolute;
+        left: -7px;
+        top: 40px;
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--theme-primary-color);
+        transform: rotate(44deg);
+        border-right: 0;
+        border-top: 0;   
+        background: #eef2f4;
+    }
+    &:focus {
+        background-color: #eef2f4 !important;
+    }
+}
+
+.scrollspy-section-activate {
+    position: relative;
+    border-left: 2px solid var(--theme-primary-color) !important;
+    background-color: #eef2f4 !important;
+    &::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 37%;
+        width: 8px;
+        height: 8px;
+        border: 2px solid var(--theme-primary-color);
+        transform: rotate(44deg);
+        border-right: 0;
+        border-top: 0;
+        background: #eef2f4;
+    }
+    &:focus {
+        background-color: #eef2f4 !important;
+    }
+}
+
+.coi-scrollspy-right {
+    &:hover {
+        background-color: #eef2f4;
+    }
+    &:focus {
+        background-color: #dfe6ec;
+    }
+    &:focus-visible {
+        box-shadow: none;
+    }
+}

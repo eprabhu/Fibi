@@ -1,0 +1,15 @@
+<ng-container *ngIf="!isCreateScreen">
+    <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+        <div class="row mb-2">
+            <div class="col-12 d-flex align-items-center coloured-bg-header">
+                <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
+                    <mat-icon class="coi-mat-icon-size">newspaper</mat-icon>
+                </span>
+                <span class="fs-16 fw-medium">{{sectionName}}</span>
+            </div>
+        </div>
+        <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)"
+        [saveMode]="'AUTO'" [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails"
+        (emitSaveObj)="updateStoreData($event)"></app-entity-creation>
+    </div>
+</ng-container>

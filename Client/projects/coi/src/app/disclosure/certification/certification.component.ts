@@ -79,22 +79,6 @@ checkForDisable() {
     this._coiService.unSavedModules = 'Certification';
   }
 
-    certifyDisclosure() {
-        if (!this.isSaving) {
-            this.isSaving = true;
-            const REQUESTREPORTDATA = {
-                coiDisclosure: {
-                    disclosureId: this.coiDisclosure.disclosureId,
-                    certificationText: this.coiDisclosure.certificationText ? this.coiDisclosure.certificationText : this.certificationText
-                }
-            };
-            this.$subscriptions.push(this._coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
-                this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
-                this.isSaving = false;
-            }));
-        }
-    }
-
     closeCertifyInfo() {
         this._coiService.isShowCertifyInfo = false;
     }

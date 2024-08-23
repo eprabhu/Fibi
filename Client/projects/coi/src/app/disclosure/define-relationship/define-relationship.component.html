@@ -1,0 +1,11 @@
+<app-scroll-spy [(scrollSpyConfiguration)]="defineRelationshipService.scrollSpyConfiguration"
+    [elementVisiblePercentageList]="defineRelationshipService.elementVisiblePercentageList"
+    [(isExpandRightNav)]="isExpandRightNav"
+    (contentChanged)="defineRelationshipService.scrollSpyCounterChanged($event)">
+    <ng-container scroll-spy-left>
+        <app-project-sfi-relationship></app-project-sfi-relationship>
+    </ng-container>
+    <ng-container scroll-spy-right>
+        <app-project-sfi-navigation></app-project-sfi-navigation>
+    </ng-container>
+</app-scroll-spy>

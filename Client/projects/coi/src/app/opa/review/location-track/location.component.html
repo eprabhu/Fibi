@@ -1,16 +1,16 @@
 <!-- Location -->
 <div class="card my-2">
-    <div class="card-header py-2 ">
+    <div class="card-header py-2 coi-reviewer-header-sticky" [style.top]="reviewService?.headerTop">
 					<h4 class="mb-0">
                         <div class="justify-content-between row d-flex align-items-center position-relative">
                             <div class="col fs-6 my-2 fw-bold">Reviewers</div>
                             <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
                             <div
                             *ngIf="isCOIAdministrator &&
-                            ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode)"
+                            ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode) && reviewerList?.length"
                             class="col-auto">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center me-5" data-bs-toggle="modal"
-                                    title="Add Reviewers" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
+                                    title="Click here to add Reviewers" aria-label="Click here to Add Reviewer" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
                                     <mat-icon aria-hidden="true" class="me-2">person_add</mat-icon>
                                     Add Reviewer
                                 </button>
@@ -25,9 +25,14 @@
                         </div>
                     </h4>
     </div>
-    <div class="card-body" *ngIf="isExpanded">
-        <div *ngIf="!reviewerList?.length">
-            <app-no-information> </app-no-information>
+    <div class="card-body" *ngIf="isExpanded" [class.p-5]="!reviewerList?.length">
+        <div *ngIf="isCOIAdministrator && ['3', '8', '7'].includes(opaDisclosure?.reviewStatusType?.reviewStatusCode) && !reviewerList?.length"
+         class="d-flex align-items-center justify-content-center">
+            <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center me-5" data-bs-toggle="modal"
+                title="Click here to add Reviewers" aria-label="Click here to Add Reviewer" data-bs-target="#add-coi-reviewer-modal" id="opa_add_reviewer_btn">
+                <mat-icon aria-hidden="true" class="me-2">person_add</mat-icon>
+                Add Reviewer
+            </button>
         </div>
         <div class="table-responsive coi-table-striped">
         <table *ngIf="reviewerList?.length" class="table table-bordered table-striped" id="coi-location-component-table">
@@ -208,7 +213,7 @@
             </div>
             <div class="modal-body">
                 <div class="margin-person-card mb-3 mx-0">
-                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="opaDisclosure"></app-person-project-entity-card>
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
                 </div>
                 <div class="row">
                     <div class="col-4" role="listbox"

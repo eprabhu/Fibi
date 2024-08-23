@@ -90,13 +90,13 @@ export class RelationshipComponent implements OnInit {
 
     getLookups() {
       this.$subscriptions.push(this._relationShipService.lookups().subscribe((res: any) => {
-          this.coiStatusList = res.coiProjConflictStatusTypes;
+          this.coiStatusList = res.coiProjConflictStatusTypes ;
       }));
     }
 
     getReporterProjects() {
-        this.$subscriptions.push(this._relationShipService
-            .getReporterProjects(this.coiData.coiDisclosure.disclosureId)
+        this.$subscriptions.push(this.coiService
+            .getDisclosureProjectList(this.coiData.coiDisclosure.disclosureId)
             .subscribe((res: any) => {
                 this.projectList = res || [];
                 if (this.projectList.length === 1) {

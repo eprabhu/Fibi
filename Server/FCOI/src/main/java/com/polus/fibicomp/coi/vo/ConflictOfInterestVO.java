@@ -8,15 +8,17 @@ import java.util.List;
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Unit;
 import com.polus.core.roles.pojo.AdminGroup;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
-import com.polus.fibicomp.coi.pojo.CoiProjectType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
@@ -46,7 +48,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ConflictOfInterestVO {
 
-	private CoiDisclosure coiDisclosure;
+	private CoiDisclosureDto coiDisclosure;
 
 	private Person person;
 
@@ -54,7 +56,7 @@ public class ConflictOfInterestVO {
 
 	private PersonEntity personEntity;
 
-	private CoiEntity coiEntity;
+	private Entity coiEntity;
 
 	private String personId;
 
@@ -62,7 +64,7 @@ public class ConflictOfInterestVO {
 
 	private List<DisclosureDetailDto> awards;
 
-	private DisclosureDetailDto projectDetail;
+	private DisclosureProjectDto projectDetail;
 
 	private String searchString;
 
@@ -84,7 +86,7 @@ public class ConflictOfInterestVO {
 
 	private String moduleItemId;
 
-	private List<CoiDisclEntProjDetails> coiDisclEntProjDetails;
+	private List<CoiDisclProjectEntityRel> disclProjectEntityRels;
 
 	private Integer disclosureId;
 
@@ -138,7 +140,7 @@ public class ConflictOfInterestVO {
 
 	private String sort;
 
-	private CoiDisclEntProjDetails coiDisclEntProjDetail;
+	private CoiDisclProjectEntityRel coiDisclEntProjDetail;
 
 	private String disclosureCategoryType;
 
@@ -164,7 +166,7 @@ public class ConflictOfInterestVO {
 
 	private String filterType;
 
-	private List<CoiEntity> coiEntityList;
+	private List<Entity> entityList;
 
 	private Boolean isActive;
 
@@ -280,7 +282,7 @@ public class ConflictOfInterestVO {
 
 	private String Comment;
 
-	private Integer disclosureDetailsId;
+	private Integer coiDisclProjectEntityRelId;
 
 	private String documentOwnerPersonId;
 

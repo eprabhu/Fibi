@@ -22,7 +22,7 @@
                 <label class="d-block ml-4"><span class="text-danger me-1">*</span>Administrator</label>
                 <div class="col-md-12 col-sm-4 col-12">
                     <app-autocompleter [completerOptions]="adminSearchOptions"
-                    [isError]="assignAdminMap.has('adminName')"
+                        [isError]="assignAdminMap.has('adminName')"
                         [clearField]="clearAdministratorField" [placeHolder]="'Search for admin'"
                         (onSelect)="adminSelect($event)"
                         [ngClass]="(assignAdminMap.get('adminName'))? 'is-invalid d-block' : ''"></app-autocompleter>

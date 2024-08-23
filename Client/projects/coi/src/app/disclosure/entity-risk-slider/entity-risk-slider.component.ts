@@ -5,7 +5,7 @@ import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe'
 import { environment } from '../../../environments/environment';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
-import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
+import { CoiSummaryEventsAndStoreService } from '../summary/services/coi-summary-events-and-store.service';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { openCoiSlider, openCommonModal } from '../../common/utilities/custom-utilities';

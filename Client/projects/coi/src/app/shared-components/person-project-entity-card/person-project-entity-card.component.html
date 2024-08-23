@@ -11,8 +11,8 @@
         <!-- Primary title -->
         <div class="col-md-6 mt-1 d-flex align-items-center">
             <mat-icon aria-hidden="true" class="coi-text-light coi-details-card-mat-icon-size flex-shrink-0 me-2">work</mat-icon>
-            <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personPrimaryTitle">
-                <span class="coi-text-light fs-14 word-break-all">{{disclosureHeaderDetails?.personPrimaryTitle}}</span>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.personPrimaryTitle">
+                <span class="coi-text-light fs-14 word-break-all">{{personProjectOrEntity?.personPrimaryTitle}}</span>
             </app-no-data-label>
         </div>
 
@@ -27,18 +27,20 @@
         <!-- Person email -->
         <div class="col-md-6 mt-1 d-flex align-items-center">
             <mat-icon aria-hidden="true" class="coi-text-light coi-details-card-mat-icon-size flex-shrink-0 me-2">mail</mat-icon>
-            <app-no-data-label [valueToShow]="disclosureHeaderDetails?.personEmail">
-                <span class="coi-text-light fs-14 word-break-all">{{disclosureHeaderDetails?.personEmail}}</span>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.personEmail">
+                <span class="coi-text-light fs-14 word-break-all">{{personProjectOrEntity?.personEmail}}</span>
             </app-no-data-label>
         </div>
 
-        <!-- project  -->
-        <div *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId" class="col-12 my-1 d-flex align-items-center">
-            <mat-icon aria-hidden="true" class="coi-text-light coi-details-card-mat-icon-size flex-shrink-0 me-2">description</mat-icon>
-            <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.moduleItemId">
+        <!-- project new -->
+        <div *ngIf="personProjectOrEntity?.projectDetails" class="col-12 my-1 d-flex align-items-center">
+            <mat-icon aria-hidden="true" class="coi-text-light coi-details-card-mat-icon-size flex-shrink-0 me-2">{{personProjectOrEntity?.projectDetails?.projectIcon}}</mat-icon>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.projectNumber">
                 <span class="coi-text-light fs-14 text-slice"
-                    title="#{{setProjectAndNumberForModuleCodes()}} : {{personProjectOrEntity?.projectDetails?.title }}">#{{setProjectAndNumberForModuleCodes()}} :
-                    {{personProjectOrEntity?.projectDetails?.title }}</span>
+                    title="#{{ personProjectOrEntity?.projectDetails?.projectNumber }} - {{ personProjectOrEntity?.projectDetails?.title }}"
+                    attr.aria-label="#{{ personProjectOrEntity?.projectDetails?.projectNumber }} - {{ personProjectOrEntity?.projectDetails?.title }}">
+                    #{{ personProjectOrEntity?.projectDetails?.projectNumber }} - {{ personProjectOrEntity?.projectDetails?.title }}
+                </span>
             </app-no-data-label>
         </div>
 

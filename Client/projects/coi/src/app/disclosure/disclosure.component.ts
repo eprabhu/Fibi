@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { COI, RO, getApplicableQuestionnaireData } from './coi-interface';
+import { COI, CertifyDisclosureRO, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -37,7 +37,7 @@ import { ElasticConfigService } from '../common/services/elastic-config.service'
 
 export class DisclosureComponent implements OnInit, OnDestroy {
 
-    isCardExpanded = true;
+    isCardExpanded = false;
     isCreateMode = false;
     isSaving = false;
     isCOIAdministrator = true;
@@ -105,7 +105,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     returnModalHelpText = '';
     withdrawModalHelpText = '';
     isOpenRiskSlider = false;
-   reviewList: any = [];
+    reviewList: any = [];
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
     EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE;
@@ -239,16 +239,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
     }
 
-    getDisclosureTitleName(fcoiTypeCode: any, isLowerCase = false) {
+    getDisclosureTitleName(fcoiTypeCode: any) {
         switch (fcoiTypeCode) {
             case '1':
-                return 'FCOI';
-            case '2':
-                return isLowerCase ?  'proposal' : 'Proposal';
-            case '3':
-                return isLowerCase ? 'award' : 'Award';
             case '4':
                 return 'FCOI';
+            default:
+                return this.coiData?.coiDisclosure?.coiProjectType?.description;
         }
     }
 
@@ -319,13 +316,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     certifyDisclosure() {
-        const REQUESTREPORTDATA = {
-            coiDisclosure: {
-                disclosureId: this.coiData.coiDisclosure.disclosureId,
-                certificationText: this.coiData.coiDisclosure.certificationText ?
-                    this.coiData.coiDisclosure.certificationText : this.certificationText,
-                    conflictStatusCode: this.dataStore.disclosureStatus
-            }
+        const REQUESTREPORTDATA: CertifyDisclosureRO = {
+            disclosureId: this.coiData.coiDisclosure.disclosureId,
+            certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
+            conflictStatusCode: this.dataStore.disclosureStatus
         };
         this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
             this.dataStore.dataChanged = false;
@@ -346,14 +340,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }));
     }
     validateRelationship() {
-        this.$subscriptions.push(this.coiService.givecoiID(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
-            res.map((error) => {
-                this.coiService.submitResponseErrors.push( error) ;
-            });
-           this.getSfiDetails();
-        }, err => {
-            this.isSaving = false;
-        }));
+        this.$subscriptions.push(
+            this.coiService.evaluateValidation(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
+            .subscribe((res: any) => {
+                res.map((error) => {
+                    this.coiService.submitResponseErrors.push( error) ;
+                });
+                this.getSfiDetails();
+            }, err => {
+                this.isSaving = false;
+            }));
     }
     private getDataFromStore() {
         const coiData = this.dataStore.getData();
@@ -364,9 +360,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
         if(this.coiData.coiDisclosure) {
-            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true) + ' disclosure.';
-            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true)+ ' disclosure.';
-            this.withdrawModalHelpText = 'You are about to withdraw the '+ this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true) + ' disclosure.';
+            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode) + ' disclosure.';
+            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode)+ ' disclosure.';
+            this.withdrawModalHelpText = 'You are about to withdraw the '+ this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode) + ' disclosure.';
         }
     }
 
@@ -386,18 +382,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.defaultAdminDetails.adminGroupName = this.coiData.coiDisclosure.adminGroupName;
         this.defaultAdminDetails.adminPersonId = this.coiData.coiDisclosure.adminPersonId;
         this.defaultAdminDetails.adminPersonName = this.coiData.coiDisclosure.adminPersonName;
-    }
-
-    getDisclosureStatusBadgeTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case '2':
-            case '4':
-            case '5':
-                return 'white';
-            case '3': case '6': return 'white';
-            default: return 'white';
-        }
     }
 
     completeDisclosureReview() {
@@ -678,10 +662,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.coiData?.coiDisclosure?.person?.fullName;
         this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitNumber = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
-        this.personProjectDetails.unitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
         this.personProjectDetails.homeUnit = this.coiData?.coiDisclosure?.person?.unit?.unitNumber;
         this.personProjectDetails.homeUnitName = this.coiData?.coiDisclosure?.person?.unit?.unitName;
+        this.personProjectDetails.personEmail = this.coiData?.coiDisclosure?.person?.emailAddress;
+        this.personProjectDetails.personPrimaryTitle = this.coiData?.coiDisclosure?.person?.primaryTitle;
     }
 
     performDisclosureAction(event): void {
@@ -775,8 +759,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            this.isCardExpanded = window.innerWidth > 1399;
+            // this.isCardExpanded = window.innerWidth > 1399;
         }
+        this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER_RESIZE', content: { isCardExpanded: this.isCardExpanded, isResize: true }});
     }
 
     setFocus(id) {
@@ -791,29 +776,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     collapseHeader() {
         this.isCardExpanded = !this.isCardExpanded;
         this.isUserCollapse = !this.isUserCollapse;
+        setTimeout (() => {
+            this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER_RESIZE', content: { isCardExpanded: this.isCardExpanded, isResize: false }});
+        });
     }
 
     openProjectDetailsModal(): void {
-        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = {
-            title: this.coiData.projectDetail?.title,
-            sponsorName: this.coiData.projectDetail?.sponsor,
-            sponsorCode : this.coiData.projectDetail?.sponsorCode,
-            homeUnitName: this.coiData.projectDetail?.unitName,
-            projectEndDate: this.coiData.projectDetail?.endDate,
-            projectId: this.coiData.projectDetail?.moduleItemId,
-            homeUnitNumber: this.coiData.projectDetail?.unitNumber,
-            reporterRole: this.coiData.projectDetail?.reporterRole,
-            projectStartDate: this.coiData.projectDetail?.startDate,
-            projectStatus: this.coiData.projectDetail?.moduleStatus,
-            projectTypeCode: this.coiData.projectDetail?.moduleCode,
-            piName: this.coiData.projectDetail?.principalInvestigator,
-            primeSponsorName: this.coiData.projectDetail?.primeSponsor,
-            primeSponsorCode: this.coiData.projectDetail?.primeSponsorCode,
-            projectType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.description,
-            projectBadgeColour: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ? '#7d9e33' : '#c9a742',
-            projectNumber: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2' ?
-                this.coiData?.projectDetail?.moduleItemId : this.coiData?.projectDetail?.moduleItemKey
-        }
+        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = this.coiData.projectDetail;
         this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
     }
 

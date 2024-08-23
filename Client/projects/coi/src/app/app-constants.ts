@@ -117,4 +117,24 @@ export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={proje
 export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={projectId}';
 export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={projectId}';
 
-export const URL_FOR_DISCLOSURE_PROJECT = '/disclosure/projects/{disclosureId}';
+export const URL_FOR_DISCLOSURE_PROJECT = '/fcoiDisclosure/projects/{disclosureId}';
+
+export const CLASS_RED_BADGE = 'red-badge';
+export const CLASS_GREEN_BADGE = 'green-badge';
+export const CLASS_BROWN_BADGE = 'brown-badge';
+
+export const PROJECT_CONFLICT_STATUS_BADGE: { [key: string]: string } = {
+  '100': CLASS_GREEN_BADGE,
+  '200': CLASS_BROWN_BADGE,
+  '300': CLASS_RED_BADGE,
+  '400': CLASS_GREEN_BADGE
+};
+
+export const DISCLOSURE_CONFLICT_STATUS_BADGE: { [key: string]: string } = {
+  '1': CLASS_GREEN_BADGE,
+  '2': CLASS_BROWN_BADGE,
+  '3': CLASS_RED_BADGE,
+  '4': CLASS_GREEN_BADGE,
+  '5': CLASS_BROWN_BADGE,
+  '6': CLASS_RED_BADGE,
+};

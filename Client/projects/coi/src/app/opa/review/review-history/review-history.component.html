@@ -1,7 +1,7 @@
 
 <div [@fadeInOutHeight]>
-    <div class="card" id="opa-review-history">
-        <div class="card-header">
+    <div *ngIf="hasHistoryLogs?.length" class="card" id="opa-review-history">
+        <div class="card-header coi-reviewer-header-sticky" [style.top]="reviewService?.headerTop">
             <h4 class="card-title review-title">
               <div class="justify-content-between row d-flex align-items-center"tabindex="0">
                 <div class="col fs-16 mt-2 fw-bold">Review History</div>

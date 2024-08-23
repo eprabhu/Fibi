@@ -35,8 +35,8 @@ const routes: Routes = [
 
             },
             {
-                path: 'entity-management',
-                loadChildren: () => import('./entity-management/entity-management.module').then(m => m.EntityManagementModule),
+                path: 'entity-dashboard',
+                loadChildren: () => import('./entity-dashboard/entity-dashboard.module').then(m => m.EntityDashboardModule),
 
             },
             {
@@ -86,6 +86,11 @@ const routes: Routes = [
                 path: 'form-builder-create',
                 loadChildren: () => import('./configuration/form-builder-create/form-builder-create.module').then(m => m.FormBuilderCreateModule)
             },
+            {
+                path: 'manage-entity',
+                loadChildren: () => import('./entity-management-module/entity-management-module.module').then(m => m.EntityManagementModuleModule),
+
+            }
           ]
     },
     { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginGuard] },

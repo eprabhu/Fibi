@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -20,22 +20,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.polus.core.person.pojo.Person;
-import com.polus.core.pojo.Unit;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.polus.core.person.pojo.Person;
+import com.polus.core.pojo.Unit;
 import com.polus.core.util.JpaCharBooleanConversion;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "COI_TRAVEL_DISCLOSURE")
 @EntityListeners(AuditingEntityListener.class)
 @Data
@@ -72,7 +74,7 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_TRAVEL_DISCLOSURE_FK2"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private CoiEntity CoiEntity;
+	private Entity Entity;
 	
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
@@ -232,7 +234,7 @@ public class CoiTravelDisclosure implements Serializable {
 	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusList;
 
 	@Transient
-	private CoiEntity entityDetails;
+	private Entity entityDetails;
 
 	@Transient
 	private String riskLevel;

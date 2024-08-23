@@ -6,6 +6,8 @@ import { CommonService } from '../../common/services/common.service';
 @Injectable()
 export class ReviewService {
 
+    headerTop: string = '200px'
+
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService

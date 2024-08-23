@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,6 @@ import com.polus.core.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -90,6 +91,9 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     @Autowired
     private OPAReviewDao opaReviewDao;
 
+    @Autowired
+    private FcoiDisclosureDao fcoiDisclosureDao;
+
     @Override
     public ResponseEntity<Object> saveOrUpdateReviewComment(MultipartFile[] files, DisclComment disclComment) {
         try {
@@ -119,7 +123,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
                 opaDao.updateOPADisclosureUpDetails(Integer.valueOf(disclComment.getModuleItemKey()),
                         commonDao.getCurrentTimestamp());
             } else if (disclComment.getModuleCode() == Constants.COI_MODULE_CODE) {
-                conflictOfInterestDao.updateDisclosureUpdateDetails(Integer.valueOf(disclComment.getModuleItemKey()));
+                fcoiDisclosureDao.updateDisclosureUpdateDetails(Integer.valueOf(disclComment.getModuleItemKey()));
             }
             return new ResponseEntity<>(disclComment, HttpStatus.OK);
         } catch (Exception e) {
@@ -233,10 +237,10 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
         }
         if (reviewComments.getComponentTypeCode().equals("6") && reviewComments.getParentCommentId() == null &&
                 reviewComments.getSubModuleItemKey() != null && reviewComments.getSubModuleItemNumber() == null) {
-            CoiDisclEntProjDetails relationDetail = conflictOfInterestDao.getProjectRelationship(Integer.valueOf(reviewComments.getSubModuleItemKey()));
-            if (relationDetail != null && relationDetail.getModuleCode() == Constants.DEV_PROPOSAL_MODULE_CODE) {
+            CoiDisclProjectEntityRel relationDetail = fcoiDisclosureDao.getCoiDisclProjectEntityRelById(Integer.valueOf(reviewComments.getSubModuleItemKey()));
+            if (relationDetail != null && relationDetail.getCoiDisclProject().getModuleCode() == Constants.DEV_PROPOSAL_MODULE_CODE) {
                 getProposalDetail(reviewComments, proposalTitles, relationDetail);
-            } else if (relationDetail != null && relationDetail.getModuleCode() == Constants.AWARD_MODULE_CODE) {
+            } else if (relationDetail != null && relationDetail.getCoiDisclProject().getModuleCode() == Constants.AWARD_MODULE_CODE) {
                 getAwardDetail(reviewComments, awardTitles, relationDetail);
             }
             if (relationDetail != null && relationDetail.getPersonEntityId() != null) {
@@ -258,7 +262,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
         }
     }
 
-    private void getPersonEntityDetail(DisclComment reviewComments, HashMap<String, String> personEntityNames, CoiDisclEntProjDetails relationDetail) {
+    private void getPersonEntityDetail(DisclComment reviewComments, HashMap<String, String> personEntityNames, CoiDisclProjectEntityRel relationDetail) {
         if (!personEntityNames.containsKey(relationDetail.getPersonEntityId())) {
             PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(Integer.valueOf(relationDetail.getPersonEntityId()));
             personEntityNames.put(String.valueOf(relationDetail.getPersonEntityId()), personEntity.getCoiEntity().getEntityName());
@@ -270,32 +274,33 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
         reviewComments.getModuleSectionDetails().setSectionId(String.valueOf(relationDetail.getPersonEntityId()));
     }
 
-    private void getAwardDetail(DisclComment reviewComments, HashMap<String, String> awardTitles, CoiDisclEntProjDetails relationDetail) {
-        if (!awardTitles.containsKey(relationDetail.getModuleItemKey())) {
+    private void getAwardDetail(DisclComment reviewComments, HashMap<String, String> awardTitles, CoiDisclProjectEntityRel relationDetail) {
+        if (!awardTitles.containsKey(relationDetail.getCoiDisclProject().getModuleItemKey())) {
             List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, null,
-                    null, null, Integer.valueOf(relationDetail.getModuleItemKey()));
-            awardTitles.put(relationDetail.getModuleItemKey(), awardDetails.get(0).getTitle());
+                    null, Integer.valueOf(relationDetail.getCoiDisclProject().getModuleItemKey()));
+
+            awardTitles.put(relationDetail.getCoiDisclProject().getModuleItemKey(), awardDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
-                .sectionName(awardTitles.get(relationDetail.getModuleItemKey()))
-                .sectionId(relationDetail.getModuleItemKey()).build());
+                .sectionName(awardTitles.get(relationDetail.getCoiDisclProject().getModuleItemKey()))
+                .sectionId(relationDetail.getCoiDisclProject().getModuleItemKey()).build());
     }
 
-    private void getProposalDetail(DisclComment reviewComments, HashMap<String, String> proposalTitles, CoiDisclEntProjDetails relationDetail) {
-        if (!proposalTitles.containsKey(relationDetail.getModuleItemKey())) {
+    private void getProposalDetail(DisclComment reviewComments, HashMap<String, String> proposalTitles, CoiDisclProjectEntityRel relationDetail) {
+        if (!proposalTitles.containsKey(relationDetail.getCoiDisclProject().getModuleItemKey())) {
             List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, null,
-                    null, null, Integer.valueOf(relationDetail.getModuleItemKey()));
-            proposalTitles.put(relationDetail.getModuleItemKey(), proposalDetails.get(0).getTitle());
+                    null,  Integer.valueOf(relationDetail.getCoiDisclProject().getModuleItemKey()));
+            proposalTitles.put(relationDetail.getCoiDisclProject().getModuleItemKey(), proposalDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
-                .sectionName(proposalTitles.get(relationDetail.getModuleItemKey()))
-                .sectionId(relationDetail.getModuleItemKey()).build());
+                .sectionName(proposalTitles.get(relationDetail.getCoiDisclProject().getModuleItemKey()))
+                .sectionId(relationDetail.getCoiDisclProject().getModuleItemKey()).build());
     }
 
     private void getAwardDetail(DisclComment reviewComments, HashMap<String, String> awardTitles) {
         if (!awardTitles.containsKey(reviewComments.getSubModuleItemKey())) {
             List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, null,
-                    null, null, Integer.valueOf(reviewComments.getSubModuleItemKey()));
+                    null, Integer.valueOf(reviewComments.getSubModuleItemKey()));
             awardTitles.put(String.valueOf(reviewComments.getSubModuleItemKey()), awardDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
@@ -306,7 +311,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     private void getProposalDetail(DisclComment reviewComments, HashMap<String, String> proposalTitles) {
         if (proposalTitles.containsKey(reviewComments.getSubModuleItemKey())) {
             List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, null,
-                    null, null, Integer.valueOf(reviewComments.getSubModuleItemKey()));
+                    null, Integer.valueOf(reviewComments.getSubModuleItemKey()));
             proposalTitles.put(String.valueOf(reviewComments.getSubModuleItemKey()), proposalDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
@@ -375,7 +380,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
             opaDao.updateOPADisclosureUpDetails(Integer.valueOf(disclComment.getModuleItemKey()),
                     disclComment.getUpdateTimestamp());
         } else if (disclComment.getModuleCode() == Constants.COI_MODULE_CODE) {
-            conflictOfInterestDao.updateDisclosureUpdateDetails(Integer.valueOf(disclComment.getModuleItemKey()));
+            fcoiDisclosureDao.updateDisclosureUpdateDetails(Integer.valueOf(disclComment.getModuleItemKey()));
         }
         Map<String, Object> response = new HashMap<>();
         response.put("status", true);
@@ -390,7 +395,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
             opaDao.updateOPADisclosureUpDetails(Integer.valueOf(disclComment.getModuleItemKey()),
                     disclComment.getUpdateTimestamp());
         } else if (disclComment.getModuleCode() == Constants.COI_MODULE_CODE) {
-            conflictOfInterestDao.updateDisclosureUpdateDetails(Integer.valueOf(disclComment.getModuleItemKey()));
+            fcoiDisclosureDao.updateDisclosureUpdateDetails(Integer.valueOf(disclComment.getModuleItemKey()));
         }
         Map<String, Object> response = new HashMap<>();
         response.put("status", true);

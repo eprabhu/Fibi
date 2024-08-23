@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, isEmptyObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -9,7 +9,6 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { SfiService } from '../disclosure/sfi/sfi.service';
-import { CoiEntity, EntityDetails } from '../entity-management/entity-details-interface';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { setEntityObjectFromElasticResult } from '../common/utilities/elastic-utilities';
 import { InformationAndHelpTextService } from '../common/services/informationAndHelpText.service';
@@ -31,7 +30,8 @@ export interface EndpointOptions {
 })
 export class AddSfiComponent implements OnInit {
     isSaving = false;
-    entityDetails: EntityDetails = new EntityDetails();
+    // entityDetails: EntityDetails = new EntityDetails();
+    entityDetails: any = {};
     additionalDetails: any = {
         sponsorsResearch: false
     };
@@ -70,6 +70,7 @@ export class AddSfiComponent implements OnInit {
         involvementEndDate: null
     }
     isNewEntityFromSearch = false;
+    saveEntity = new Subject();
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -86,7 +87,7 @@ export class AddSfiComponent implements OnInit {
 
     ngOnInit(): void {
         this.getSfiSliderSectionConfig();
-        this.isEntityManagement = this._router.url.includes('entity-management') || this.checkIsEntityTypeInURL();
+        this.isEntityManagement = this._router.url.includes('manage-entity') || this.checkIsEntityTypeInURL();
         this.setHeader();
         this.getSFILookup();
         this.setDefaultRiskLevel();
@@ -131,12 +132,12 @@ export class AddSfiComponent implements OnInit {
 
     private createOrUpdateEntitySFI(): void {
         this.entityDetails.coiEntity.entityId && !this.isEntityManagement ?
-            this.saveAdditionalDetails() : this.saveEntityDetails();
+            this.saveAdditionalDetails() : this.saveEntity.next(true);
     }
 
     saveEntityDetails(): void {
         this.entityDetails.coiEntity.entityStatusCode = this.getEntityStatusCode();
-        this.$subscriptions.push(this.sfiService.saveOrUpdateCoiEntity(this.entityDetails).subscribe((data: CoiEntity) => {
+        this.$subscriptions.push(this.sfiService.saveOrUpdateCoiEntity(this.entityDetails).subscribe((data: any) => {
             this.entityDetails.coiEntity = data;
             this.entityDetails.coiEntity.entityId && !this.isEntityManagement ?
                 this.saveAdditionalDetails() : this.updateDetails();
@@ -147,7 +148,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     private getEntityStatusCode() {
-        return (this._router.url.includes('entity-management') || this.sfiType === 'ENTITY') ? '1' : '2';
+        return (this._router.url.includes('manage-entity') || this.sfiType === 'ENTITY') ? '1' : '2';
     }
 
     private checkIfSFIAlreadyAdded(entityId, event): void {
@@ -253,7 +254,8 @@ export class AddSfiComponent implements OnInit {
     }
 
     private clearSFIFields(): void {
-        this.entityDetails = new EntityDetails();
+        this.entityDetails = {};
+        // this.entityDetails = new EntityDetails();
         this.additionalDetails = {
             sponsorsResearch: false
         };
@@ -396,7 +398,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     private getEntityDetails(): void {
-        this.$subscriptions.push(this.sfiService.getEntityDetails(this.coiEntityManageId).subscribe((res: EntityDetails) => {
+        this.$subscriptions.push(this.sfiService.getEntityDetails(this.coiEntityManageId).subscribe((res: any) => {
             this.entityDetails = res;
             this.heading = `Entity ${this.entityDetails.coiEntity.entityName}`;
             this.clearCountryField = new String('false');
@@ -532,5 +534,9 @@ export class AddSfiComponent implements OnInit {
             case 'Consulting' : return 'supervisor_account';
             default: return;
         }
+    }
+
+    saveBasicEntityDetails(event) {
+        console.log(event);
     }
 }

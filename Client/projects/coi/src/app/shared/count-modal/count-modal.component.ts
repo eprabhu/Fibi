@@ -3,8 +3,10 @@ import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
-import { getPersonLeadUnitDetails } from '../../common/utilities/custom-utilities';
+import { getFormattedSponsor, getPersonLeadUnitDetails } from '../../common/utilities/custom-utilities';
 import { RO } from '../../disclosure/coi-interface';
+import { DisclosureProjectData } from '../../shared-components/shared-interface';
+import { DISCLOSURE_CONFLICT_STATUS_BADGE } from '../../app-constants';
 
 @Component({
     selector: 'app-count-modal',
@@ -29,10 +31,11 @@ export class CountModalComponent implements OnInit {
     @Input() reviewerData: any;
     @Output() viewSlider: EventEmitter<any> = new EventEmitter<any>();
     @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    currentModalTab: number;
     $subscriptions: Subscription[] = [];
     tableArray: any[] = [];
-    currentModalTab = 'Award';
-    projectDatas: any;
+    private projectsList: DisclosureProjectData[] | any[] = [];
     coiFinancialEntityDetails: any[] = [];
     isEntityNameRead = false;
     isReadMore = [];
@@ -46,7 +49,7 @@ export class CountModalComponent implements OnInit {
         } else if (this.moduleCode === 101 && this.inputType === 'SFI_TAB') {
             this.getDisclosureDatas();
         } else {
-            this.getProjectDatas();
+            this.getProjectsList();
         }
     }
 
@@ -71,14 +74,13 @@ export class CountModalComponent implements OnInit {
         return REQ_OBJ;
     }
 
-    getProjectDatas() {
+    getProjectsList() {
         if (this.inputType === 'DISCLOSURE_TAB') {
             this.$subscriptions.push(this._countModalService
-                .getProjectsCount(this.disclosureId, this.disclosureSequenceStatusCode, this.personId)
+                .getDisclosureProjects(this.disclosureId)
                 .subscribe((data: any) => {
-                    this.projectDatas = data;
-                    this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
-                    this.switchTableData();
+                    this.projectsList = this.getUpdatedProjectsList(data);
+                    this.switchTableData(this.moduleCode);
                     document.getElementById('hidden-open-button').click();
                 }, err => {
                     this.closeCountModal();
@@ -113,12 +115,12 @@ export class CountModalComponent implements OnInit {
 
     // getType
     getType() {
-        if (this.disclosures?.fcoiType) {
-            return this.disclosures?.fcoiType;
+        if (this.disclosures?.projectType) {
+            return this.disclosures?.projectType;
         } else if (this.disfullData?.coiDisclosure?.coiDisclosureFcoiType?.description) {
             return this.disfullData?.coiDisclosure?.coiDisclosureFcoiType?.description;
-        } else if (this.adminData?.fcoiType) {
-            return this.adminData?.fcoiType;
+        } else if (this.adminData?.projectType) {
+            return this.adminData?.projectType;
         } else if (this.reviewerData?.fcoiType) {
             return this.reviewerData?.fcoiType;
         }
@@ -126,20 +128,12 @@ export class CountModalComponent implements OnInit {
 
     // title
     getTitle(): string {
-        if (this.disclosures?.fcoiTypeCode) {
-            if (this.disclosures?.fcoiTypeCode === '2') {
-                return this.reduceTitleLength(this.disclosures?.proposalTitle);
-            } else {
-                return this.reduceTitleLength(this.disclosures?.awardTitle);
-            }
+        if (this.disclosures?.fcoiTypeCode === '2') {
+            return this.reduceTitleLength(this.disclosures?.projectHeader);
         } else if (this.disfullData?.projectDetail?.title) {
             return this.reduceTitleLength(this.disfullData?.projectDetail?.title);
-        } else if (this.adminData?.fcoiTypeCode) {
-            if (this.adminData?.fcoiTypeCode === '3') {
-                return this.reduceTitleLength(this.adminData.awardTitle);
-            } else {
-                return this.reduceTitleLength(this.adminData.proposalTitle);
-            }
+        } else if (this.adminData?.fcoiTypeCode === '2') {
+            return this.reduceTitleLength(this.adminData?.projectHeader);
         } else if (this.reviewerData?.fcoiTypeCode) {
             if (this.reviewerData?.fcoiTypeCode === '3') {
                 return this.reduceTitleLength(this.reviewerData.awardTitle);
@@ -150,7 +144,7 @@ export class CountModalComponent implements OnInit {
     }
 
     reduceTitleLength(title: string): string {
-        return title?.length > 90 ? title?.slice(0, 90) + '...' : title;
+        return title?.length > 50 ? title?.slice(0, 50) + '...' : title;
     }
 
     // FullName
@@ -195,47 +189,41 @@ export class CountModalComponent implements OnInit {
         }, 200);
     }
 
-    switchTableData() {
-        this.tableArray = this.currentModalTab === 'Proposal' ? this.projectDatas.proposals : this.projectDatas.awards;
+    switchTableData(moduleCode: number) {
+        this.currentModalTab = moduleCode;
+        this.tableArray = this.filterByModuleCode(moduleCode);
         this.isReadMore = [];
+        document.getElementById('project-count-modal-tabele-scroll')?.scroll(0,0);
     }
+
+    private filterByModuleCode(moduleCode: number): any[] {
+        return this.projectsList.filter(item => item.moduleCode === moduleCode);
+    }
+
+    private getUpdatedProjectsList(projectsList: any[]): any[] {
+        return projectsList.map((project: any) => {
+            return {
+                ...project,
+                formattedLeadUnit: this.commonService.getPersonLeadUnitDetails(project),
+                formattedSponsor: getFormattedSponsor(project?.sponsorCode, project?.sponsorName),
+                formattedPrimeSponsor: getFormattedSponsor(project?.primeSponsorCode, project?.primeSponsorName),
+                disclosureConflictBadge: DISCLOSURE_CONFLICT_STATUS_BADGE[project?.conflictStatusCode]
+            };
+        });
+    }
+    
 
     viewSliderEmit(flag: boolean, entityId) {
         this.viewSlider.emit({'flag': flag, 'entityId': entityId})
     }
 
-    getDisclosureConflictBadge(statusCode: string) {
-        switch (String(statusCode)) {
-            case '100':
-                return 'green-badge';
-            case '200':
-            case '500':
-                return 'brown-badge';
-            case '300':
-            case '600':
-                return 'red-badge';
-            case '400':
-                return 'green-badge';
-            default:
-                return 'yellow-badge';
-        }
-    }
-
     showFullTitle(): string {
-        if (this.disclosures?.fcoiTypeCode) {
-            if (this.disclosures?.fcoiTypeCode === '2') {
-                return this.disclosures?.proposalTitle;
-            } else {
-                return this.disclosures?.awardTitle;
-            }
+        if (this.disclosures?.fcoiTypeCode === '2') {
+            return this.disclosures?.projectHeader;
         } else if (this.disfullData?.projectDetail?.title) {
             return this.disfullData?.projectDetail?.title;
         } else if (this.adminData?.fcoiTypeCode) {
-            if (this.adminData?.fcoiTypeCode === '3') {
-                return this.adminData.awardTitle;
-            } else {
-                return this.adminData.proposalTitle;
-            }
+            return this.adminData?.projectHeader;
         } else if (this.reviewerData?.fcoiTypeCode) {
             if (this.reviewerData?.fcoiTypeCode === '3') {
                 return this.reviewerData.awardTitle;

@@ -1,0 +1,127 @@
+<div tabindex="-1" class="card coi-card-regular mt-0 border-0" id="COI_DEFINE_RELATIONSHIP_NAV_CARD">
+    <div class="card-header px-0 pb-0 border-bottom-0 position-sticky z-index-4 rounded-0" [class.p-0]="!defineRelationshipService.isEditMode"
+        id="COI_DEFINE_RELATIONSHIP_NAV_HEADER" [style.top]="defineRelationshipService.isEditMode ? '-1px' : '-1px'">
+        <div class="row w-100 mx-0" [class.mt-1]="defineRelationshipService.isEditMode">
+            <!-- this code is for future sfi / project switch -->
+            <div *ngIf="IS_SFI_PROJECT_SWITCH" class="col-12 px-3 mb-3">
+                <div class="d-flex align-items-center position-relative coi-switch-container rounded-2 overflow-hidden coi-custom-shadow">
+                    <button (click)="switchTab('SFI')"
+                        title="Click here to switch relationship to SFI" aria-label="Click here to switch relationship to SFI"
+                        class="btn-none d-flex align-items-center justify-content-center w-50 fs-12 coi-switch-inactive-btn"
+                        [ngClass]="currentTab === 'SFI' ? 'coi-switch-active-btn' : 'coi-switch-inactive-btn'">
+                        <mat-icon aria-hidden="true" class="coi-scale-8 flex-shrink-0">help</mat-icon>
+                        <span class="ms-1">SFIs</span>
+                    </button>
+                    <button (click)="switchTab('PROJECT')"
+                        title="Click here to switch relationship to SFI" aria-label="Click here to switch relationship to SFI"
+                        class="btn-none d-flex align-items-center justify-content-center w-50 fs-12"
+                        [ngClass]="currentTab === 'PROJECT' ? 'coi-switch-active-btn' : 'coi-switch-inactive-btn'">
+                        <mat-icon aria-hidden="true" class="coi-scale-8 flex-shrink-0">help</mat-icon>
+                        <span class="ms-1">Projects</span>
+                        <span class="badge rounded-circle text-bg-danger ms-1
+                            py-{{filteredProjectSfiRelationsList?.length.toString().length-1 ? filteredProjectSfiRelationsList?.length.toString().length-1 : 1}}">{{filteredProjectSfiRelationsList?.length}}</span>
+                    </button>
+                </div>
+            </div>
+            <!-- this code is for future sfi / project switch ends -->
+            <div *ngIf="!defineRelationshipService.isEditMode" class="d-flex align-items-center justify-content-end position-relative px-0"
+                [class.coi-active-scrollspy]="defineRelationshipService.scrollSpyConfiguration.activeCounter > 1 && defineRelationshipService.scrollSpyConfiguration.activeCounter < filteredProjectSfiRelationsList?.length + 2 && coiService.isExpandSummaryBySection['COI803']">
+                <a class="coi-nav-link d-flex align-items-center" role="link" tabindex="-1" [class.border-bottom]="!coiService.isExpandSummaryBySection['COI803']"
+                    title="Go to Relationships section" aria-label="Go to Relationships section" (focus)="scrollIntoView()" (click)="openIfClose()">
+                    <span class="me-2">Relationships - Projects</span>
+                    <span class="count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
+                </a>
+                <!-- expand/colapse -->
+                <button id="relationship_collapse_btn" (click)="expandCollapseRelationship()"
+                    [attr.aria-label]="'Click here to ' + (coiService.isExpandSummaryBySection['COI803'] ? 'collapse' : 'expand') + ' Details of relationship'"
+                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-1 coi-scale-9 mt-0 me-2 position-absolute"
+                    [title]="coiService.isExpandSummaryBySection['COI803'] ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
+                    <mat-icon aria-hidden="true" [ngClass]="coiService.isExpandSummaryBySection['COI803'] ? 'rotate-180' : 'rotate-0'">expand_more</mat-icon>
+                </button>
+            </div>
+            <div *ngIf="!IS_SFI_PROJECT_SWITCH && defineRelationshipService.isEditMode" class="col-12 px-3 d-flex align-items-center gap-1 mb-2 lh-1">
+                <span class="coi-text-darker fs-16">Projects</span>
+                <span class="count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
+            </div>
+            <div *ngIf="coiService.isExpandSummaryBySection['COI803']" class="p-0 mb-3 border-bottom"></div>
+            <ng-container *ngIf="coiService.isExpandSummaryBySection['COI803'] && projectSfiRelationsList?.length">
+                <div class="col-12 px-3 d-flex align-items-center gap-2 pb-3 border-bottom">
+                    <div class="d-flex align-items-center position-relative w-100">
+                        <mat-icon aria-hidden="true" class="position-absolute start-6px light-color">search</mat-icon>
+                        <input type="text" placeholder="Search: project details" autocomplete="off"
+                            class="form-control p-x-2rem rounded-2" id="project_sfi_relation_search_text"
+                            name="project_sfi_relation_search_text"
+                            [(ngModel)]="defineRelationshipService.searchText" (ngModelChange)="searchProjectDetails()">
+                        <button *ngIf="defineRelationshipService.searchText" class="btn-none d-flex align-items-center position-absolute end-8px coi-text-lighter" (click)="resetList()"
+                            aria-label="Cleck here to clear search text" title="Cleck here to clear search text">
+                            <mat-icon class="light-color" id="project_sfi_relation_search_text_clear_btn" aria-hidden="true">close</mat-icon>
+                        </button>
+                    </div>
+                    <button *ngIf="IS_SFI_PROJECT_SWITCH" title="Click here to filter" aria-label="Click here to filter"
+                        class="btn-none d-flex align-items-center justify-content-center col-auto coi-text-dark fs-13 filterButtton px-3 h-100 rounded-2">
+                        <span class="me-1 fw-500">Filter</span>
+                        <mat-icon aria-hidden="true" class="light-color coi-scale-8 flex-shrink-0">tune</mat-icon>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div *ngIf="coiService.isExpandSummaryBySection['COI803']" class="card-body rounded-0 border-none position-relative" id="COI_DEFINE_RELATIONSHIP_NAV_BODY"
+        [class.min-height-200px]="defineRelationshipService.isLoading" tabindex="-1"
+        [ngClass]="{'d-flex align-items-center justify-content-center': !filteredProjectSfiRelationsList?.length}">
+        <ng-container *ngIf="!defineRelationshipService.isLoading; else showLoader">
+            <ul *ngIf="filteredProjectSfiRelationsList?.length; else showNoData" class="list-unstyled m-0 ps-3 pe-0 py-0">
+                <li *ngFor="let projectSfiRelation of filteredProjectSfiRelationsList; let navIndex = index">
+                    <!-- tabindex is set to -1 for navigation with up/down keys only -->
+                    <a class="row m-0 w-100 gap-4 pb-3 pt-2 border-bottom text-decoration-none cursor-pointer coi-scrollspy-right" (focus)="coiService.setActiveSection('COI803')"
+                        [class.scrollspy-activate]="defineRelationshipService.scrollSpyConfiguration.activeCounter== (defineRelationshipService.isEditMode ? navIndex : navIndex + 2)"
+                        aria-label="Please click left arrow key to view more details"
+                        [id]="'COI_PROJECT_SFI_RELATION_NAV_' + navIndex" tabindex="-1">
+                        <div class="col-12 px-3 pt-2">
+                            <!-- badge -->
+                            <div class="d-flex align-items-center justify-content-between coi-card-body-notch-container">
+                                <div class="d-flex align-items-center">
+                                    <div [style.background-color]="projectSfiRelation?.projectBadgeColour"
+                                        id="project-realtionship-value-heading-{{projectSfiRelation?.projectId}}"
+                                        class="coi-card-notch-ribbon rounded-start-0 mb-auto p-2">{{ projectSfiRelation?.projectType }}</div>
+                                    <div class="d-flex align-items-end ms-2">
+                                        <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 coi-mat-icon-size">{{projectSfiRelation?.projectIcon}}</mat-icon>
+                                        <span class="coi-text-dark lh-1"
+                                            [title]="'Click here to view details of #' + projectSfiRelation?.projectNumber + ' -' + projectSfiRelation?.title"
+                                            [attr.aria-label]="'Click here to view details of #' + projectSfiRelation?.projectNumber + ' -' + projectSfiRelation?.title">
+                                            <span class="text-slice">#{{projectSfiRelation?.projectNumber}} - {{projectSfiRelation?.title}}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- defined or not icon -->
+                                 <span *ngIf="projectSfiRelation?.conflictCompleted" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                                 <span *ngIf="!projectSfiRelation?.conflictCompleted" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
+                            </div>
+                        </div>
+                        <!-- conflict counts -->
+                        <div class="col-12 d-flex align-items-center justify-content-between">
+                            <ng-container *ngFor="let status of defineRelationshipService.relationshipConflictType; let last = last">
+                                <div class="d-flex align-items-center fs-12 coi-text-light fw-600">
+                                    <span class="text-nowrap">{{ status?.label }}</span>
+                                    <span class="me-2">:</span>
+                                    <span [ngClass]="status?.color" class="conflict-count-width">{{ projectSfiRelation?.conflictCount?.[status?.statusCode] ?? 0 }}</span>
+                                </div>
+                                <span *ngIf="!last" class="me-2 coi-text-lighter">|</span>
+                            </ng-container>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <ng-template #showNoData>
+                <div class="d-flex align-items-center justify-content-center ps-3">
+                    <app-no-information customClass="mt-0" [isBorderNeeded]="false"></app-no-information>
+                </div>
+            </ng-template>
+        </ng-container>
+        <ng-template #showLoader>
+            <div class="w-100 h-100 d-flex align-items-center position-absolute justify-content-center">
+                <mat-icon class="text-primary coi-refresh-rotate-animation">cached</mat-icon>
+            </div>
+        </ng-template>
+    </div>
+</div>

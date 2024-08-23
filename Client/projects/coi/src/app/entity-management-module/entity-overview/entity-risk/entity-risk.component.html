@@ -1,0 +1,97 @@
+    <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+        <div class="row mb-2">
+            <div class="col-12 d-flex align-items-center coloured-bg-header">
+                <mat-icon class="icon-bg me-2 my-2 coloured-icons fs-14" aria-hidden="true">warning</mat-icon>
+                <span class="fs-16 col fw-medium">{{sectionName}}</span>
+                <div class="col-auto" *ngIf="entityRisks.length">
+                    <button id="additional-address-add-button"
+                        class="btn btn-primary fs-14 d-inline-flex" title="'Click here to industry details'"
+                        aria-label="'Click here to industry details'" (click)="addRisk(true)">
+                        <mat-icon>add</mat-icon>Add Risk Details
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="!entityRisks.length">
+                <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Risk'" (buttonAction)="addRisk($event)"></app-no-information>
+            </div>
+            <div *ngIf="entityRisks.length">
+                <div class="card px-2 py-1 bg-white" *ngFor="let risk of entityRisks; let isFirst = first; let isLast = last" [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''" >
+                    <div class="coi-text-light fs-14">{{risk?.riskType?.description}} -
+                        <span [ngClass]="risk?.riskLevel?.riskLevelCode == 3 ? 'text-danger' : risk?.riskLevel?.riskLevelCode == 2 ? 'text-warning' : 'text-success'" class="fw-bold">{{risk?.riskLevel?.description}}</span>
+                    </div>
+                    <div class="d-flex fs-14 mt-1">
+                        <span>{{risk?.description}}</span>
+                        <span class="d-flex  ms-auto">
+                            <mat-icon aria-hidden="true" class="me-2">edit</mat-icon>
+                            <mat-icon aria-hidden="true">delete</mat-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- </div> -->
+
+
+<!-- open add entity risk -->
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addEntityRisk" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Entity Risk</h4>
+				<button type="button" class="btn-close" id="coi-add-industry-details-close-btn" title="Click here to close" data-bs-dismiss="modal"
+					aria-label="Click here to close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row mb-3">
+					<div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-risk-type">
+                            <span class="mandatory me-1">*</span>Risk Type
+                        </label>
+                        <app-look-up (selectedResult)="onRiskSelected($event)" [options]="entityRiskTypeOptions"
+                            [isExternalArray]="true"  [externalArray]="entityRiskTypeList"
+                            [uniqueId]="'coi-risk-type'" [isError]="mandatoryList?.has('riskType')">
+                        </app-look-up>
+                        <div *ngIf="mandatoryList?.has('riskType')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('riskType')}}
+                        </div>
+					</div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-risk-level">
+                            <span class="mandatory me-1">*</span>Risk Level
+                        </label>
+                        <app-look-up (selectedResult)="onRiskLevelSelected($event)" [options]="entityRiskLevelOption"
+                        [uniqueId]="'coi-risk-level'" [isError]="mandatoryList?.has('riskLevel')"></app-look-up>
+                        <div *ngIf="mandatoryList?.has('riskLevel')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('riskLevel')}}
+                        </div>
+					</div>
+                </div>
+                <div class="row">
+					<div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-risk-description">
+                            <span class="mandatory me-1">*</span>Risk Description
+                        </label>
+                        <textarea appAutoGrow class="form-control custom-height" id="coi-risk-description" rows="1"
+                            [(ngModel)]="entityRisk.description" appTailingSpaceRemover
+                            [limit]=2000 appLengthValidator
+                            [ngClass]="(mandatoryList?.has('riskDescription')) ? 'is-invalid d-block' : ''"
+                            [styleList]="'mt-2 float-end word-count'" title="Risk Description" aria-label="Risk Description">
+                        </textarea>
+                        <div *ngIf="mandatoryList?.has('riskDescription')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('riskDescription')}}
+                        </div>
+					</div>
+                </div>
+            </div>
+			<div class="modal-footer">
+				<button class="btn btn-outline-secondary" id="coi-risk-details-cancel-btn" data-bs-dismiss="modal" type="button"
+				title="Click to cancel" (click)="clearRiskDetails()">Cancel
+				</button>
+				<button class="btn btn-primary me-0" id="coi-risk-details-add-btn" type="button"
+					title="Click here to add industry" aria-label="Click here to add" (click)="addRiskDetails()">Add Risk
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

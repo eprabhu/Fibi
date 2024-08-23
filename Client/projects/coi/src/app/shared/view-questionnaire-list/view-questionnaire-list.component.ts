@@ -7,6 +7,7 @@ import {fileDownloader} from "../../../../../fibi/src/app/common/utilities/custo
 import {CommonService} from "../../common/services/common.service";
 import {HttpClient} from "@angular/common/http";
 import {ApplicableQuestionnaire} from '../../disclosure/coi-interface';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 interface Configuration {
     moduleItemCode: number;
@@ -135,6 +136,9 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
                 if (this.questionnaireList.length && this.isQuestionnaireValidateMode) {
                     this.validateMandatory();
                 }
+            }, (_error: any) => {
+                this.isShowNoDatacard = true;
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in loading screening questionnaire.');
             }));
     }
 

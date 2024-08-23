@@ -1,7 +1,7 @@
 package com.polus.fibicomp.coi.dto;
 
 import com.polus.fibicomp.coi.pojo.CoiReviewLocationType;
-import com.polus.fibicomp.coi.pojo.CoiReviewerStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiReviewerStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

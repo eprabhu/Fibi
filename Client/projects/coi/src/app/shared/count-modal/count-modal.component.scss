@@ -116,6 +116,7 @@
 
 .table-responsive {
     overflow: auto !important;
+    scroll-behavior: auto;
 
     .sticky-top {
         top: -1px;

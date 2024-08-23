@@ -4,10 +4,8 @@ import {DisclosureComponent} from './disclosure.component';
 import {RouterModule, Routes} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-
 import {SfiService} from './sfi/sfi.service';
 import {SearchFieldComponent} from './sfi/search-field/search-field.component';
-
 import {ResolveServiceService} from './services/resolve-service.service';
 import {RouterGuardService} from './services/router-guard.service';
 import {SharedModule} from '../shared/shared.module';
@@ -21,7 +19,9 @@ import { SfiListComponent } from './sfi-list/sfi-list.component';
 import { CoiService } from './services/coi.service';
 import { ReviewRouteGuardService } from './services/review-route-guard.service';
 import { PersonRelatedSlidersModule } from '../person-related-sliders/person-related-sliders.module';
-
+import { DefineRelationshipService } from './define-relationship/services/define-relationship.service';
+import { DefineRelationshipDataStoreService } from './define-relationship/services/define-relationship-data-store.service';
+import { DefineRelationsRouterGuard } from './services/define-relation-router-guard.service';
 
 const routes: Routes = [
     {
@@ -35,15 +35,15 @@ const routes: Routes = [
                 path: 'sfi', canDeactivate: [RouterGuardService], component: SfiListComponent
             },
             {
-                path: 'relationship', canDeactivate: [RouterGuardService],
-                loadChildren: () => import('./relationship/relationship.module').then(m => m.RelationshipModule)
+                path: 'relationship', canActivate: [DefineRelationsRouterGuard], canDeactivate: [RouterGuardService],
+                loadChildren: () => import('./define-relationship/define-relationship.module').then(m => m.DefineRelationshipModule)
             },
             {
                 path: 'certification', canActivate: [RouterGuardService], canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./certification/certification.module').then(m => m.CertificationModule)
             },
             {
-                path: 'summary', canDeactivate: [RouterGuardService],
+                path: 'summary', canActivate: [DefineRelationsRouterGuard], canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./summary/summary.module').then(m => m.SummaryModule)
             },
             {
@@ -73,7 +73,10 @@ const routes: Routes = [
         ResolveServiceService,
         RouterGuardService,
         ReviewRouteGuardService,
-        CoiService
+        DefineRelationsRouterGuard,
+        CoiService,
+        DefineRelationshipService,
+        DefineRelationshipDataStoreService
     ],
     exports: [],
     imports: [

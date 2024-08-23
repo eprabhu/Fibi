@@ -16,6 +16,7 @@ import { listAnimation, leftSlideInOut } from '../../common/utilities/animations
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
 import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
+import { DashboardProjectCount } from '../../common/services/coi-common.interace.ts';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -327,30 +328,18 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
-    setSelectedModuleCode(moduleName, id, disclosure, noOfcount) {
-        if (noOfcount > 0) {
-            switch (moduleName) {
-                case 'sfi':
-                    this.selectedModuleCode = 8;
-                    break;
-                case 'proposal':
-                    this.selectedModuleCode = 3;
-                    break;
-                case 'Awards':
-                    this.selectedModuleCode = 1;
-                    break;
-                default:
-                    this.selectedModuleCode = 0;
-            }
+    openCountModal(moduleName: string, disclosure: any, count: number | null = null, moduleCode: number = 0) {
+        if (count > 0) {
+            this.selectedModuleCode = moduleCode;
             this.disclosures = disclosure;
             this.fcoiTypeCode = disclosure?.fcoiTypeCode;
-            this.isShowCountModal = true;
-            this.currentDisclosureId = id;
+            this.currentDisclosureId = disclosure?.coiDisclosureId;
             this.currentDisclosureNumber = disclosure.disclosureNumber || disclosure.coiDisclosureNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
             this.disclosureSequenceStatusCode = disclosure.dispositionStatusCode;
             this.personId = disclosure.personId;
+            this.isShowCountModal = true;
         }
     }
 
@@ -385,25 +374,11 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId || disclosure.disclosureId} });
     }
 
-    getColorBadges(disclosure: UserDisclosure) {
-        if (disclosure?.travelDisclosureId) {
-            return 'bg-travel-clip';
-        }
-        if (disclosure?.opaDisclosureId) {
-            return 'bg-opa-clip';
-        }
-        if (disclosure.disclosureId){
-            return 'bg-consulting-clip';
-        }
-        switch (disclosure.fcoiTypeCode) {
-            case '1':
-                return 'bg-fcoi-clip';
-            case '2':
-                return 'bg-proposal-clip';
-            case '3':
-                return 'bg-award-clip';
-            default:
-                return;
+    redirectToFCOIDisclosure(disclosures: any) {
+        if (disclosures?.disclosureId) {
+            const IS_DISCLOSURE_EDITABLE  = ['1', '5', '6'].includes(disclosures?.reviewStatusCode);
+            const REDIRECT_URL = IS_DISCLOSURE_EDITABLE ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
+            this._router.navigate([REDIRECT_URL], { queryParams: { disclosureId: disclosures?.disclosureId} });
         }
     }
 
@@ -439,17 +414,14 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     private getDisclosureHistoryProjectHeader(disclosureHistory: any): any[] {
         return disclosureHistory?.map((ele: any) => {
-            ele.projectHeader = (ele.fcoiTypeCode === '2' || ele.fcoiTypeCode === '3') ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
+            ele.projectHeader = ele.fcoiTypeCode === '2' ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
             return ele;
         }) || [];
     }
 
-    private getDisclosureProjectHeader(disclosures: UserDisclosure[]) {
+    private getDisclosureProjectHeader(disclosures: any) {
         return disclosures?.map((ele: any) => {
-            ele.projectHeader =
-                ele.fcoiTypeCode === '2' ? `#${ele.proposalId} - ${ele.proposalTitle}` :
-                ele.fcoiTypeCode === '3' ? `#${ele.awardId} - ${ele.awardTitle}` :
-                '';
+            ele.projectHeader = ele.fcoiTypeCode === '2' ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
             return ele;
         }) || [];
     }

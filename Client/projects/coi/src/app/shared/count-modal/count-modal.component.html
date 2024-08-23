@@ -55,27 +55,19 @@
                     </h5>
                 </div>
             </div>
-            <div class="modal-body pt-0" *ngIf="moduleCode === 3 || moduleCode === 1">
+            <div class="modal-body pt-0" *ngIf="disclosures?.projectCount?.length && moduleCode !== 8 && inputType === 'DISCLOSURE_TAB'">
                 <nav class="d-flex fw-bold border-bottom mb-2 nav nav-underline">
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" title="Click here to view development proposals"
-                         aria-label="Click here to view development proposals" role="button" [class.active]="currentModalTab == 'Proposal'"
-                         (click)='currentModalTab="Proposal"; switchTableData()' (keydown.enter)="currentModalTab='Proposal';switchTableData()">
-                        <span  class="px-2 fw-500">
-                            {{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Development Proposals'}}
-                        </span>
-                    </div>
-                    <div class="text-secondary cursor-pointer d-flex nav-link" tabindex="0" (click)='currentModalTab = "Award"; switchTableData()'
-                        (keydown.enter)="currentModalTab='Award';switchTableData()"
-                         title="Click here to view awards" aria-label="Click here to view awards" role="button" [class.active]="currentModalTab == 'Award'">
-                        <span class="px-2 fw-500">
-                            {{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
-                            'Awards'}}
-                        </span>
-                    </div>
+                    <ng-container *ngFor="let projects of disclosures?.projectCount">
+                        <button *ngIf="projects" class="btn-none text-secondary cursor-pointer d-flex nav-link" title="Click here to view {{projects?.projectType}}"
+                            attr.aria-label="Click here to view {{projects?.projectType}}" [class.active]="currentModalTab == projects?.moduleCode"
+                            (click)="switchTableData(projects?.moduleCode)">
+                            <span class="px-2 fw-500">{{projects?.projectType}}</span>
+                        </button>
+                    </ng-container>
                 </nav>
-                <div *ngIf="tableArray.length>0" class="coi-table-striped table-responsive border">
+                <div *ngIf="tableArray.length>0" class="coi-table-striped table-responsive border" id="project-count-modal-tabele-scroll">
                     <table class="table table-bordered table-striped align-middle fs-14 mb-0" id="coi-count-modal-listofaward-table">
-                        <caption class="sr-only">List of Awards/Proposal</caption>
+                        <caption class="sr-only">List of Projects</caption>
                         <thead class="sticky-top">
                             <tr id="coi-count-modal-listofaward-table-thead-row">
                                 <th style="width: 20%;" scope="col">Title</th>
@@ -87,40 +79,44 @@
                                 <th style="width: 1%;" class="text-center" scope="col">Actions</th></tr>
                         </thead>
                         <tbody>
-                            <tr class="row-hover" *ngFor="let name of tableArray;let index = index" id="coi-listofaward-table-row-{{index}}">
+                            <tr class="row-hover" *ngFor="let project of tableArray;let index = index" id="coi-listofaward-table-row-{{index}}">
                                 <td>
-                                    <div class="d-flex" title="#{{name?.moduleItemId}}: {{name?.title}}">#{{name?.moduleItemId}}: <span class="text-slice ms-1">{{name?.title}}</span></div>
+                                    <div title="#{{project?.projectNumber}} - {{project?.title}}"
+                                        class="text-slice">#{{project?.projectNumber}} - {{project?.title}}</div>
                                 </td>
-                                <td><span [title]="name.principalInvestigator ? name.principalInvestigator : ''"
-                                    class="text-slice">{{name?.principalInvestigator}}</span></td>
-                                <td><span [title]="name.unitNumber ? (name?.unitNumber + ' - ' + name?.unitName) : ''"
-                                    class="text-slice">{{name?.unitNumber}} - {{name?.unitName}}</span></td>
-                                <td><span [title]="name.sponsor ? name.sponsor : ''"
-                                    class="text-slice">{{name.sponsor}}</span></td>
-                                <td><span [title]="name.primeSponsor ? name.primeSponsor : ''"
-                                    class="text-slice"><app-no-data-label [valueToShow]="name.primeSponsor"></app-no-data-label></span></td>
                                 <td>
-                                    <app-no-data-label [valueToShow]="name.conflictStatus">
-                                         <span *ngIf="name.conflictStatus">
-                                            <span class="{{getDisclosureConflictBadge(name.conflictStatusCode)}}"></span>
-                                            <span> {{name.conflictStatus}} </span>
+                                    <div [title]="project?.piName ? project?.piName : ''" class="text-slice">
+                                        <app-no-data-label [valueToShow]="project?.piName"></app-no-data-label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [title]="project?.formattedLeadUnit ? project?.formattedLeadUnit : ''" class="text-slice">
+                                        <app-no-data-label [valueToShow]="project?.formattedLeadUnit"></app-no-data-label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [title]="project?.formattedSponsor ? project?.formattedSponsor : ''" class="text-slice">
+                                        <app-no-data-label [valueToShow]="project?.formattedSponsor"></app-no-data-label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [title]="project?.formattedPrimeSponsor ? project?.formattedPrimeSponsor : ''"  class="text-slice">
+                                        <app-no-data-label [valueToShow]="project?.formattedPrimeSponsor"></app-no-data-label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <app-no-data-label [valueToShow]="project?.conflictStatus">
+                                         <span *ngIf="project?.conflictStatus">
+                                            <span class="{{project?.disclosureConflictBadge}}"></span>
+                                            <span> {{project?.conflictStatus}} </span>
                                         </span>
                                     </app-no-data-label>
                                 </td>
-                                <td *ngIf="currentModalTab == 'Proposal'">
+                                <td>
                                     <div class="d-flex justify-content-center">
-                                        <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons" title="Click here to view proposal details"
-                                            aria-label="Click here to view proposal details" (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode)">
-                                            <mat-icon aria-hidden="true">visibility</mat-icon>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td *ngIf="currentModalTab == 'Award'">
-                                    <div class="d-flex justify-content-center">
-                                        <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons"
-                                         aria-label="Click here to view award details" title="Click here to view award details"
-                                            (click)="commonService.redirectToProjectDetails(name.moduleItemId, name.moduleCode);">
-                                            <mat-icon aria-hidden="true">visibility</mat-icon>
+                                        <button class="d-flex justify-content-center align-items-center btn-primary-icon p-1 action-icons" title="Click here to view {{project?.projectType?.toLowerCase()}} details"
+                                            attr.aria-label="Click here to view {{project?.projectType?.toLowerCase()}} details" (click)="commonService.redirectToProjectDetails(project?.projectId, project?.moduleCode)">
+                                            <mat-icon aria-hidden="true" class="mt-2 flex-shrink-0">visibility</mat-icon>
                                         </button>
                                     </div>
                                 </td>

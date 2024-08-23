@@ -40,7 +40,6 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     reviewActionConfirmation: any = {};
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
-    projectDetail: any = {};
     isMangeReviewAction = false;
     disReviewLocation = 'OPA_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
     disReviewStatus = 'OPA_REVIEW_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
@@ -57,7 +56,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
-        private _reviewService: ReviewService,
+        public reviewService: ReviewService,
         private _dataStore: DataStoreService,
         public _commonService: CommonService,
         public opaService: OpaService
@@ -109,7 +108,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     getCoiReview() {
-        this.$subscriptions.push(this._reviewService.getCoiReview(this.opaDisclosure.opaDisclosureId).subscribe((res) => {
+        this.$subscriptions.push(this.reviewService.getCoiReview(this.opaDisclosure.opaDisclosureId).subscribe((res) => {
             this.reviewerList = res || [];
         }, err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching review details.');
@@ -152,7 +151,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         if (this.validateReview()) {
             this.reviewDetails.opaDisclosureId = this.opaDisclosure.opaDisclosureId;
             this.getReviewDates();
-            this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
+            this.$subscriptions.push(this.reviewService.saveOrUpdateCoiReview(this.reviewDetails).subscribe((res: any) => {
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, `Reviewer ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
                 this.opaDisclosure.updateTimestamp = res.opaDisclosure.updateTimestamp;
                 this.opaDisclosure.updateUserFullName = res.updateUserFullName;
@@ -204,7 +203,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     deleteReview() {
-        this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((res: any) => {
+        this.$subscriptions.push(this.reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
             this.opaDisclosure.updateTimestamp = res.updateTimestamp;
             this.opaDisclosure.updateUserFullName = res.updateUserFullName;
@@ -383,8 +382,9 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
-        this.personProjectDetails.projectDetails = this.projectDetail;
         this.personProjectDetails.homeUnit = this.opaDisclosure.homeUnit;
         this.personProjectDetails.homeUnitName = this.opaDisclosure.homeUnitName;
+        this.personProjectDetails.personEmail = this.opaDisclosure.personEmail;
+        this.personProjectDetails.personPrimaryTitle = this.opaDisclosure.personPrimaryTitle;
     }
 }
