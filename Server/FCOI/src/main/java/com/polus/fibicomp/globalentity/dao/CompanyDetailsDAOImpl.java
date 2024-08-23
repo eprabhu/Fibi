@@ -102,8 +102,8 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append(
 				"UPDATE EntityMailingAddress e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
-		if (dto.getAddressType() != null) {
-			hqlQuery.append(", e.addressType = :addressType");
+		if (dto.getAddressTypeCode() != null) {
+			hqlQuery.append(", e.addressTypeCode = :addressTypeCode");
 		}
 		if (dto.getAddressLine1() != null) {
 			hqlQuery.append(", e.addressLine1 = :addressLine1");
@@ -134,8 +134,8 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 		}
 		hqlQuery.append(" WHERE e.entityMailingAddressId = :entityMailingAddressId");
 		Query query = session.createQuery(hqlQuery.toString());
-		if (dto.getAddressType() != null) {
-			query.setParameter("addressType", dto.getAddressType());
+		if (dto.getAddressTypeCode() != null) {
+			query.setParameter("addressTypeCode", dto.getAddressTypeCode());
 		}
 		if (dto.getAddressLine1() != null) {
 			query.setParameter("addressLine1", dto.getAddressLine1());

@@ -40,6 +40,19 @@ public class EntityExternalIdMapping implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_EXTERNAL_MAPPING_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
 	private Entity entity;
 
+	@Column(name = "EXTERNAL_ID_TYPE_CODE")
+    private String externalIdTypeCode;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_EXTERNAL_MAPPING_FK2"), name = "EXTERNAL_ID_TYPE_CODE", referencedColumnName = "EXTERNAL_ID_TYPE_CODE", insertable = false, updatable = false)
+	private EntityExternalIdType entityExternalIdType;
+
+	@Column(name = "EXTERNAL_ID")
+    private String externalId;
+
+	@Column(name = "DESCRIPTION")
+    private String description;
+
     @Column(name = "SPONSOR_CODE")
     private String sponsorCode;
 

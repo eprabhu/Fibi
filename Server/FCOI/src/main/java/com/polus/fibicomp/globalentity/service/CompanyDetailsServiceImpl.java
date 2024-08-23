@@ -162,7 +162,7 @@ public class CompanyDetailsServiceImpl implements CompanyDetailsService {
 	}
 
 	private EntityMailingAddress mapDTOToEntity(AddressDetailsRequestDTO dto) {
-		return EntityMailingAddress.builder().entityId(dto.getEntityId()).addressType(dto.getAddressType())
+		return EntityMailingAddress.builder().entityId(dto.getEntityId()).addressTypeCode(dto.getAddressTypeCode())
 				.addressLine1(dto.getAddressLine1()).addressLine2(dto.getAddressLine2()).city(dto.getCity())
 				.state(dto.getState()).postCode(dto.getPostCode()).countryCode(dto.getCountryCode())
 				.county(dto.getCounty()).locality(dto.getLocality()).region(dto.getRegion())

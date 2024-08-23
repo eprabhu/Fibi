@@ -13,7 +13,7 @@ public class AddressDetailsRequestDTO {
 
 	private Integer entityId;
 	private Integer entityMailingAddressId;
-	private String addressType;
+	private String addressTypeCode;
 	private String addressLine1;
 	private String addressLine2;
 	private String city;

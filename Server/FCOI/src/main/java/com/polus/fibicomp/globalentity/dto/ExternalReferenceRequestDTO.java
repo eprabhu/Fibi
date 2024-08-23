@@ -15,5 +15,8 @@ public class ExternalReferenceRequestDTO {
 	private Integer entityExternalMappingId;
 	private Integer organizationId;
 	private String sponsorCode;
+	private String externalIdTypeCode;
+	private String externalId;
+	private String description;
 
 }
