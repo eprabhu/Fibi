@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { forkJoin, Observable, Subscriber } from 'rxjs';
 import { EntityDataStoreService } from './entity-data-store.service';
 import { CommonService } from '../common/services/common.service';
 import { InformationAndHelpTextService } from '../common/services/informationAndHelpText.service';
 import { EntityManagementService } from './entity-management.service';
 import { catchError } from 'rxjs/operators';
+import { AutoSaveService } from '../common/services/auto-save.service';
+import { NavigationService } from '../common/services/navigation.service';
 
 @Injectable()
 export class EntityManagementResolveService {
@@ -68,7 +70,7 @@ getDisclosureSectionConfig() {
 }
 
 setModuleConfiguration() {
-    // this._informationAndHelpTextService.moduleConfiguration = this._dataStore.disclosureSectionConfig;
+    this._informationAndHelpTextService.moduleConfiguration = this._dataStore.entitySectionConfig;
 }
 
 
@@ -85,4 +87,18 @@ private redirectOnError(error) {
     //     error.error !== 'DISCLOSURE_EXISTS' ? 'Please try again later.' : 'Disclosure already exists.');
     return new Observable(null);
 }
+}
+
+@Injectable()
+export class EntityPathResolveService {
+
+  constructor(private _entityManagementService: EntityManagementService) { }
+
+    canDeactivate(): any {
+        if(this._entityManagementService.hasChangesAvailable) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

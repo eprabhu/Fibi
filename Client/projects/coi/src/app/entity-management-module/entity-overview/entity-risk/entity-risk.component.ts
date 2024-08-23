@@ -4,6 +4,10 @@ import { EntityRisk } from '../../shared/entity-interface';
 import { Subscription } from 'rxjs';
 import { EntityOverviewService } from '../entity-overview.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
+import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
+import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
+import { CommonService } from '../../../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../../../app-constants';
 
 @Component({
   selector: 'app-entity-risk',
@@ -22,6 +26,13 @@ export class EntityRiskComponent {
     entityId: any;
     entityRisks: any;
     entityRiskTypeList: any;
+    selectedRiskType: any;
+    selectedRiskLevel: any;
+    isSaving = false;
+    CONFIRMATIN_MODAL_ID = 'risk-delete-confirm-modal'
+    modalConfig = new COIModalConfig(this.CONFIRMATIN_MODAL_ID, 'Delete', 'Cancel');
+    deleteRiskObj = null;
+    isEditIndex: null | number = null;
 
     addRisk(event) {
         openModal('addEntityRisk');
@@ -33,13 +44,15 @@ export class EntityRiskComponent {
         this.listenDataChangeFromStore();
     }
 
-    constructor(private _entityOverviewService: EntityOverviewService, private _dataStoreService: EntityDataStoreService) {}
+    constructor(private _entityOverviewService: EntityOverviewService, private _dataStoreService: EntityDataStoreService, private _commonService: CommonService) {}
 
     onRiskSelected(event) {
         if(event) {
             this.entityRisk.riskTypeCode = event[0].riskTypeCode;
+            this.selectedRiskType = event[0];
         } else {
             this.entityRisk.riskTypeCode = null;
+            this.selectedRiskType = null;
         }
     }
 
@@ -47,7 +60,6 @@ export class EntityRiskComponent {
         this.$subscriptions.push(this._entityOverviewService.fetchRiskType().subscribe((data: any) => {
             if(data?.length) {
                 this.entityRiskTypeList = data.filter(ele => ele.riskCategoryCode == 'EN');
-                console.log(this.entityRiskTypeList);
             }
         }))
     }
@@ -70,8 +82,10 @@ export class EntityRiskComponent {
     onRiskLevelSelected(event) {
         if(event) {
             this.entityRisk.riskLevelCode = event[0].code;
+            this.selectedRiskLevel = event[0];
         } else {
             this.entityRisk.riskLevelCode = null;
+            this.selectedRiskLevel = null;
         }
     }
 
@@ -104,8 +118,44 @@ export class EntityRiskComponent {
     saveRisk() {
         this.entityRisk.entityId = this.entityId;
         this.$subscriptions.push(this._entityOverviewService.saveRisk(this.entityRisk).subscribe((data: any) => {
+            let test:any = {};
+            test.riskLevelDescription = this.selectedRiskLevel?.description;
+            test.riskTypeDescription = this.selectedRiskType?.description;
+            test.entityRiskId = data.entityRiskId;
+            test.riskLevelCode = this.entityRisk.riskLevelCode;
+            test.riskTypeCode = this.entityRisk.riskTypeCode;
+            test.description = this.entityRisk.description;
+            this.entityRisks.push(test);
+            this._dataStoreService.updateStore(['entityRisks'], { 'entityRisks':  this.entityRisks });
             this.clearRiskDetails();
         }))
+    }
+
+    postConfirmation(modalAction: ModalActionEvent) {
+        if(modalAction.action == 'PRIMARY_BTN') {
+            this.deleteRisk();
+        }
+        closeCommonModal(this.CONFIRMATIN_MODAL_ID);
+    }
+
+    deleteRisk() {
+        if(!this.isSaving) {
+            this.isSaving = true;
+            this.$subscriptions.push(this._entityOverviewService.deleteRisk(this.deleteRiskObj.entityRiskId).subscribe((res: any) => {
+                this.entityRisks.splice(this.isEditIndex, 1);
+                this.deleteRiskObj = null;
+                this.isSaving = false;
+            }, err => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                this.isSaving = false;
+            }))
+        }
+    }
+
+    confirmDeleteRisk(risk, index) {
+        this.deleteRiskObj = risk;
+        this.isEditIndex = index;
+        openCommonModal(this.CONFIRMATIN_MODAL_ID);
     }
 
 }

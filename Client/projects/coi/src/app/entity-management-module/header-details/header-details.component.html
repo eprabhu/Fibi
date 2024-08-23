@@ -9,7 +9,7 @@
                     </span>
                     <div>
                         <div class="d-flex align-items-baseline">
-                            <span class="fs-18 fw-medium">{{entityDetails?.primaryName}}</span>
+                            <span class="fs-18 fw-medium">{{entityDetails?.entityName}}</span>
                             <span *ngIf="latestPriorName" class="fs-13"> {{'('}}Formerly known as {{latestPriorName}}{{')'}}</span>
                             <span>
                                 <span class="badge ms-2 px-2 rounded-pill text-bg-success"> Active</span>
@@ -67,21 +67,27 @@
         <div *ngIf="isShowNavBarOverlay" class="nav-bar-custom-overlay d-block" (click)="onClickMenuBar()"></div>
             <ul id="responsive-nav" role="menu" aria-label="navigation"
             class="header-navigation-links d-flex align-items-center m-0 f-14 cursor-pointer p-0 overflow">
-            <li [routerLink]="['/coi/manage-entity/entity-overview']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'
+            <li [routerLink]="['/coi/manage-entity/entity-overview']" class="mr-2 cursor-pointer d-flex align-items-center" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'
                 routerLinkActive="active" [attr.title]="router.url.includes('/coi/manage-entity/entity-overview') ? 'Overview' : 'Go to Overview'"
-                aria-description="Goto my home">Overview
+                aria-description="Goto my home">
+                <span class="me-2">Overview</span>
+                <span><mat-icon aria-hidden="true" class="fs-16 text-success">check_circle</mat-icon></span>
                 <span *ngIf="router.url.includes('/coi/manage-entity/entity-overview')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/manage-entity/entity-sponsor']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'
+            <li [routerLink]="['/coi/manage-entity/entity-sponsor']" class="mr-2 cursor-pointer d-flex align-items-center" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'
                 routerLinkActive="active"
                 [attr.title]="router.url.includes('entity-sponsor') ? 'Sponsor' : 'Go to Sponsor'"
-                aria-description="Goto my home">Sponsor
+                aria-description="Goto my home">
+                <span class="me-2">Sponsor</span>
+                <span><mat-icon aria-hidden="true" class="fs-16 text-success">check_circle</mat-icon></span>
                 <span *ngIf="router.url.includes('entity-sponsor')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/manage-entity/entity-subaward']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'
+            <li [routerLink]="['/coi/manage-entity/entity-subaward']" class="mr-2 cursor-pointer d-flex align-items-center" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'
                 routerLinkActive="active"
                 [attr.title]="router.url.includes('entity-subaward') ? 'Sub-award Organisation' : 'Go to Sub-award Organisation'"
-                aria-description="Goto my home">Sub-award Organisation
+                aria-description="Goto my home">
+                <span class="me-2">Sub-award Organisation</span>
+                <span><mat-icon aria-hidden="true" class="fs-16 text-success">check_circle</mat-icon></span>
                 <span *ngIf="router.url.includes('entity-subaward')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/manage-entity/entity-compliance']" class="mr-2 cursor-pointer" role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge'

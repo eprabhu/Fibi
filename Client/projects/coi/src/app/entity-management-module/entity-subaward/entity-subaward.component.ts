@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./entity-subaward.component.scss']
 })
 export class EntitySubawardComponent {
-
+    ngOnInit() {
+        window.scrollTo(0,0);
+    }
 }

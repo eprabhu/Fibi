@@ -10,11 +10,28 @@ export class EntityOverviewService {
     addAdditionalAddress(additionalDetailsRO) {
         return this._http.post(this._commonService.baseUrl + '/entity/saveAdditionalAddresses', additionalDetailsRO);
     }
+    updateAdditionalAddresses(additionalDetailsRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/updateAdditionalAddresses', additionalDetailsRO);
+    }
+    deleteAdditionalAddress(id) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/deleteAdditionalAddress/' + id);
+    }
     addRegistrationDetails(registrationDetails) {
         return this._http.post(this._commonService.baseUrl + '/entity/saveRegistrationDetails', registrationDetails);
     }
     updateRegistrationDetails(registrationDetails) {
-        return this._http.get(this._commonService.baseUrl + '/entity/saveRegistrationDetails', registrationDetails);
+        return this._http.patch(this._commonService.baseUrl + '/entity/updateRegistrationDetails', registrationDetails);
+    }
+    deleteRegistrationDetails(entityRegistrationId) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/deleteRegistrationDetails/'+ entityRegistrationId);
+    }
+
+    deleteRisk(id) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/deleteRisk/'+ id);
+    }
+
+    deleteForeignName(id) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/deleteForeignName/'+ id);
     }
 
     fetchIndustryCategoryCode(categoryTypeCode) {
@@ -23,10 +40,6 @@ export class EntityOverviewService {
 
     saveIndustryDetails(industryObj) {
         return this._http.post(this._commonService.baseUrl + '/entity/saveIndustryDetails', industryObj);
-    }
-
-    updateOtherDetails(otherDetailsRO) {
-        return this._http.patch(this._commonService.baseUrl + '/entity/updateOtherDetails', otherDetailsRO);
     }
 
     updatePrioirNameDetails(priorNameRO) {
@@ -46,5 +59,9 @@ export class EntityOverviewService {
 
     fetchRiskType() {
         return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
+    }
+
+    updateOtherDetails(otherDetailsRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/updateOtherDetails', otherDetailsRO);
     }
 }
