@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
 import { RO } from '../../disclosure/coi-interface';
+import { URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
 
 @Injectable()
 export class CountModalService {
@@ -14,10 +15,8 @@ export class CountModalService {
         return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
     }
 
-    getProjectsCount(id, disclosureSequenceStatusCode, personId) {
-        return this._http.post(this._commonService.baseUrl + '/getDisclosureRelations',
-        {'disclosureId': id, 'disclosureStatusCode': disclosureSequenceStatusCode,
-        'personId': personId});
+    getDisclosureProjects(disclosureId: number) {
+        return this._http.get(this._commonService.baseUrl + URL_FOR_DISCLOSURE_PROJECT.replace('{disclosureId}', disclosureId.toString()));
     }
 
     getDisclosureDetails(id) {

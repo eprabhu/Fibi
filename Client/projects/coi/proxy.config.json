@@ -87,6 +87,14 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
+    "/fcoiDisclosure/updateProjectRelationship": {
+        "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
+    "/fcoiDisclosure/historyDashboard": {
+        "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
     "/getSFIDashboard": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
@@ -307,10 +315,6 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/updateProjectRelationship": {
-        "target": "http://10.199.100.23:9090/coi",
-        "secure": false
-    },
     "/loadProjectConflictHistory": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
@@ -420,10 +424,6 @@
         "secure": false
     },
     "/disclosure/history": {
-        "target": "http://10.199.100.23:9090/coi",
-        "secure": false
-    },
-    "/disclosure/historyDashboard": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
@@ -568,32 +568,16 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/coi/saveOrUpdateCoiFinancialEntityDetails": {
-        "secure": false,
-        "target": "http://10.199.100.23:9090/"
-    },
-    "/coi/createSFI": {
-        "target": "http://10.199.100.23:9090/",
+    "/reviewComments/fetch": {
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/coi/getEntityWithRelationShipInfo": {
-        "target": "http://10.199.100.23:9090/",
+    "/reviewComments": {
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/coi/getSFIRelationshipDetails": {
-        "target": "http://10.199.100.23:9090/",
-        "secure": false
-    },
-    "/coi/reviewComments/fetch": {
-        "target": "http://10.199.100.23:9090/",
-        "secure": false
-    },
-    "/coi/reviewComments": {
-        "target": "http://10.199.100.23:9090/",
-        "secure": false
-    },
-    "/coi/reviewComments/*/*": {
-        "target": "http://10.199.100.23:9090/",
+    "/reviewComments/*/*": {
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
     "/formbuilder/reviewComments/fetch": {
@@ -673,6 +657,10 @@
         "secure": false
     },
     "/consultingDisclosure/history/*" : {
+        "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
+    "/getDisclosureDetailsForSFI/*" : {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },

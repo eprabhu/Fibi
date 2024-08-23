@@ -1,12 +1,21 @@
-<div id="SCROLL_SPY_CONTAINER" tabindex="0" (click)="addListener()" (focus)="addListener()" class="row m-0 rounded-3 overflow-hidden">
+<div id="SCROLL_SPY_CONTAINER" tabindex="0" (click)="addListener()" (focus)="addListener()" class="row m-0 position-relative">
     <div tabindex="-1" id="SCROLL_SPY_LEFT_CONTAINER"
-        class="col overflow-y-scroll scrollbar-sm rounded-3 shadow-sm p-0 scroll-snap-y-mandatory"
-        [style.maxHeight]="scrollSpyConfiguration.scrollLeftHeight">
+        class="col overflow-y-scroll scrollbar-sm rounded-3 shadow-sm ps-0 pe-1 scroll-snap-y-mandatory"
+        [style.height]="scrollSpyConfiguration.scrollLeftHeight">
         <ng-content select="[scroll-spy-left]"></ng-content>
     </div>
-    <div tabindex="-1" id="SCROLL_SPY_RIGHT_CONTAINER"
-        class="col-xxl-4 col-xl-4 col-lg-4 col-5 pe-0 overflow-y-scroll scrollbar-sm rounded-3 ps-2 scroll-snap-y-mandatory"
-        [style.maxHeight]="scrollSpyConfiguration.scrollRightHeight">
+    <div tabindex="-1" id="SCROLL_SPY_RIGHT_CONTAINER" [class.d-none]="!isExpandRightNav"
+        class="col-xxl-4 col-xl-5 col-lg-5 col-5 overflow-y-scroll scrollbar-sm rounded-3 ps-2 pe-0 pe-xxl-1 scroll-snap-y-mandatory coi-bg-body"
+        [style.height]="scrollSpyConfiguration.scrollRightHeight">
         <ng-content select="[scroll-spy-right]"></ng-content>
     </div>
+    <button *ngIf="isExpandRightNav" class="align-items-center justify-content-center btn-none hideOrShowScrollNav toggle-btn mt-1"
+        aria-label="Click here to collapse" title="Click here to collapse" (click)="expandOrCollapseRightNav(false)">
+        <mat-icon aria-hidden="true" [ngClass]="isExpandRightNav ? 'rotate-0' : 'rotate-180'" class="flex-shrink-0">close</mat-icon>
+    </button>
+    <button *ngIf="!isExpandRightNav" (click)="expandOrCollapseRightNav(true)"
+        class="align-items-center justify-content-center btn-none hideOrShowScrollNav expand-scroll-nav-right bg-primary py-4 rounded"
+        aria-label="Click here to expand" title="Click here to expand">
+        <mat-icon aria-hidden="true" [ngClass]="isExpandRightNav ? 'rotate-0' : 'rotate-180'" class="flex-shrink-0 text-white">chevron_right</mat-icon>
+    </button>
 </div>

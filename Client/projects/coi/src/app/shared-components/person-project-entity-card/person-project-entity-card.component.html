@@ -37,9 +37,9 @@
             <mat-icon aria-hidden="true" class="coi-text-light coi-details-card-mat-icon-size flex-shrink-0 me-2">{{personProjectOrEntity?.projectDetails?.projectIcon}}</mat-icon>
             <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.projectNumber">
                 <span class="coi-text-light fs-14 text-slice"
-                    title="#{{ personProjectOrEntity?.projectDetails?.projectNumber }} : {{ personProjectOrEntity?.projectDetails?.title }}"
-                    attr.aria-label="#{{ personProjectOrEntity?.projectDetails?.projectNumber }} : {{ personProjectOrEntity?.projectDetails?.title }}">
-                    #{{ personProjectOrEntity?.projectDetails?.projectNumber }} : {{ personProjectOrEntity?.projectDetails?.title }}
+                    title="#{{ personProjectOrEntity?.projectDetails?.projectNumber }} - {{ personProjectOrEntity?.projectDetails?.title }}"
+                    attr.aria-label="#{{ personProjectOrEntity?.projectDetails?.projectNumber }} - {{ personProjectOrEntity?.projectDetails?.title }}">
+                    #{{ personProjectOrEntity?.projectDetails?.projectNumber }} - {{ personProjectOrEntity?.projectDetails?.title }}
                 </span>
             </app-no-data-label>
         </div>

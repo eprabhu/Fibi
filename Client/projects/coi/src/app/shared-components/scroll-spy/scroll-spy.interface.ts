@@ -9,11 +9,13 @@ export class ScrollSpyConfiguration {
     rightOffsetTop = 0;
     leftOffsetBottom = 0;
     rightOffsetBottom = 0;
-    scrollLeftHeight = '600px';
-    scrollRightHeight = '600px';
+    scrollLeftHeight = 'auto';
+    scrollRightHeight = 'auto';
+    elementVisiblePercentageList: any[] = [];
 }
 
 export interface ScrollSpyEvent {
+    isScrolling: boolean;
     navItemClass: string;
     activeCounter: number;
     previousCounter: number | null;

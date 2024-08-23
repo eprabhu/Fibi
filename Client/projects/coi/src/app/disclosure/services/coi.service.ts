@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { ApplicableQuestionnaire, RO, getApplicableQuestionnaireData } from '../coi-interface';
+import { ApplicableQuestionnaire, CertifyDisclosureRO, ExpandCollapseSummaryBySection, RO, getApplicableQuestionnaireData } from '../coi-interface';
 import { URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
 
 @Injectable()
@@ -11,7 +11,6 @@ export class CoiService {
     triggerAddReviewComment$: Subject<any> = new Subject();
     triggerReviewCommentDataUpdate$: Subject<any> = new Subject();
     globalSave$: Subject<any> = new Subject<any>();
-    headerHeightChange$ = new Subject<boolean>();
     unSavedModules = '';
     previousHomeUrl = '';
     isShowInfo = true;
@@ -41,6 +40,8 @@ export class CoiService {
     currentActiveQuestionnaire: any;
     isFromCertificationTab = false;
     isViewportVisibilityEnabled: any[] = [];
+    isExpandSummaryBySection = new ExpandCollapseSummaryBySection();
+    activeSectionId: 'COI801' | 'COI802' | 'COI803' | 'COI804' = 'COI801';
 
     constructor(
         private _http: HttpClient,
@@ -51,8 +52,8 @@ export class CoiService {
         return this._http.get(`${this._commonService.baseUrl}/fcoiDisclosure/fetch/${disclosureId}`);
     }
 
-    certifyDisclosure(params: any) {
-        return this._http.patch(`${this._commonService.baseUrl}/fcoiDisclosure/certifyDisclosure/`, params);
+    certifyDisclosure(params: CertifyDisclosureRO) {
+        return this._http.patch(`${this._commonService.baseUrl}/fcoiDisclosure/certifyDisclosure`, params);
     }
 
     evaluateDisclosureQuestionnaire(params: any) {
@@ -141,6 +142,11 @@ export class CoiService {
                 }
             }
         }
+    }
+
+    setActiveSection(activeSectionId: 'COI801' | 'COI802' | 'COI803' | 'COI804', isExpand = true): void {
+        this.activeSectionId = activeSectionId;
+        this.isExpandSummaryBySection[activeSectionId] = isExpand;
     }
 
 }

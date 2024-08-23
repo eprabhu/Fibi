@@ -199,8 +199,8 @@
     border: solid 1px #e1e3e1;
     display: inline-flex;
     position: absolute;
-    top: 4px;
-    right: 3px;
+    top: 3px;
+    right: 4px;
     background: #fff;
     border-radius: 50%;
     width: 30px;
@@ -485,6 +485,34 @@
 
 .coi-invalid-FieldBorder {
 	border: 1px solid red !important;
+}
+
+.start-35 {
+    left: 35%;
+}
+
+.bottom-20vh {
+    bottom: 20vh;
+}
+
+/* rotate-animation class */
+.coi-refresh-rotate-animation {
+    animation: coi-refresh-rotate 1s linear infinite;
+}
+
+/* Keyframes for rotation */
+@keyframes coi-refresh-rotate {
+    from {
+        transform: rotateX(180deg) scale(2.5) rotateZ(360deg);
+    }
+
+    to {
+        transform: rotateX(180deg) scale(2.5) rotateZ(0deg);
+    }
+}
+
+.min-height-200px {
+    min-height: 200px;
 }
 
 .coi-entity-details-card {

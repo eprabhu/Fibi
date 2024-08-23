@@ -21,7 +21,7 @@ export class CoiProjectType {
     updateTimestamp: number
     updateUser: string
     isActive: boolean
-  }
+}
 
 export interface CoiConflictStatusType {
     conflictStatusCode: string;
@@ -283,7 +283,7 @@ export class RO {
     'disclosureId' = null;
     'reviewStatusCode' = '';
     'personId': any;
-    'filterType': string =  'ALL';
+    'filterType': string = 'ALL';
     'currentPage': any = 1;
     'pageNumber': any = 20;
     'searchWord': any;
@@ -353,76 +353,76 @@ export interface ApplicableQuestionnaire {
 }
 
 export interface ReviewerList {
-  coiReviewId: number;
-  assigneePersonId: string;
-  disclosureId: number;
-  coiDisclosure: Disclosure;
-  adminGroupId: any;
-  adminGroup: any;
-  reviewStatusTypeCode: string;
-  coiReviewStatus: CoiReviewStatus;
-  description: any;
-  createTimestamp: number;
-  createUser: any;
-  updateTimestamp: number;
-  updateUser: any;
-  assigneePersonName: string;
+    coiReviewId: number;
+    assigneePersonId: string;
+    disclosureId: number;
+    coiDisclosure: Disclosure;
+    adminGroupId: any;
+    adminGroup: any;
+    reviewStatusTypeCode: string;
+    coiReviewStatus: CoiReviewStatus;
+    description: any;
+    createTimestamp: number;
+    createUser: any;
+    updateTimestamp: number;
+    updateUser: any;
+    assigneePersonName: string;
 }
 
 export interface Disclosure {
-  disclosureId: number;
-  personId: string;
-  person: Person;
-  homeUnit: string;
-  unit: Unit;
-  disclosureNumber: number;
-  versionNumber: number;
-  versionStatus: string;
-  fcoiTypeCode: string;
-  coiDisclosureFcoiType: CoiDisclosureFcoiType;
-  conflictStatusCode: string;
-  coiConflictStatusType: CoiConflictStatusType;
-  dispositionStatusCode: string;
-  coiDispositionStatusType: CoiDispositionStatusType;
-  reviewStatusCode: string;
-  coiReviewStatusType: CoiReviewStatusType;
-  riskCategoryCode: string;
-  coiRiskCategory: CoiRiskCategory;
-  moduleCode: number;
-  moduleItemKey: string;
-  expirationDate: number;
-  certificationText: string;
-  certifiedBy: string;
-  certifiedAt: number;
-  revisionComment: string;
-  adminGroupId: any;
-  adminPersonId: string;
-  updateTimestamp: number;
-  updateUser: string;
-  createUser: any;
-  createTimestamp: number;
-  updateUserFullName: any;
-  createUserFullName: any;
-  numberOfSFI: any;
-  numberOfProposals: any;
-  numberOfAwards: any;
-  coiProjectTypeCode: any;
-  adminGroupName: any;
-  adminPersonName: any;
+    disclosureId: number;
+    personId: string;
+    person: Person;
+    homeUnit: string;
+    unit: Unit;
+    disclosureNumber: number;
+    versionNumber: number;
+    versionStatus: string;
+    fcoiTypeCode: string;
+    coiDisclosureFcoiType: CoiDisclosureFcoiType;
+    conflictStatusCode: string;
+    coiConflictStatusType: CoiConflictStatusType;
+    dispositionStatusCode: string;
+    coiDispositionStatusType: CoiDispositionStatusType;
+    reviewStatusCode: string;
+    coiReviewStatusType: CoiReviewStatusType;
+    riskCategoryCode: string;
+    coiRiskCategory: CoiRiskCategory;
+    moduleCode: number;
+    moduleItemKey: string;
+    expirationDate: number;
+    certificationText: string;
+    certifiedBy: string;
+    certifiedAt: number;
+    revisionComment: string;
+    adminGroupId: any;
+    adminPersonId: string;
+    updateTimestamp: number;
+    updateUser: string;
+    createUser: any;
+    createTimestamp: number;
+    updateUserFullName: any;
+    createUserFullName: any;
+    numberOfSFI: any;
+    numberOfProposals: any;
+    numberOfAwards: any;
+    coiProjectTypeCode: any;
+    adminGroupName: any;
+    adminPersonName: any;
 }
 export interface CoiRiskCategory {
-  riskCategoryCode: string;
-  description: string;
-  updateTimestamp: number;
-  updateUser: string;
-  isActive: boolean;
+    riskCategoryCode: string;
+    description: string;
+    updateTimestamp: number;
+    updateUser: string;
+    isActive: boolean;
 }
 export interface CoiReviewStatus {
-  reviewStatusCode: string;
-  description: string;
-  updateTimestamp: number;
-  updateUser: string;
-  isActive: boolean;
+    reviewStatusCode: string;
+    description: string;
+    updateTimestamp: number;
+    updateUser: string;
+    isActive: boolean;
 }
 
 export type ModalType = 'COMPLETE' | 'START';
@@ -461,6 +461,12 @@ export class ApplyToAllModal {
     coiDisclProjectId = null;
     isOpenModal = false;
     comment = '';
+}
+
+export class AddConflictSlider {
+    isOpenSlider = false;
+    projectSfiRelations = new ProjectSfiRelations();
+    coiDisclEntProjDetail = new CoiDisclEntProjDetail();
 }
 
 export class ProjectSfiRelations {
@@ -528,15 +534,15 @@ export class CoiDisclEntProjDetail {
     personEntity?: PersonEntity | null = null;
     projectConflictStatusCode?: string | null = null;
     coiDisclProjectEntityRelId?: number | null = null;
-    coiProjConflictStatusType?: CoiProjConflictStatusType | null = null;
+    coiProjConflictStatusType?: any | null = null;
 }
 
 export interface CoiProjConflictStatusType {
-    isActive?: boolean;
-    updateUser?: string;
-    description?: string;
-    updateTimestamp?: number;
-    projectConflictStatusCode?: string;
+    isActive?: any;
+    updateUser?: any;
+    description?: any;
+    updateTimestamp?: any;
+    projectConflictStatusCode?: any;
 }
 
 export interface DisclComment {
@@ -630,6 +636,7 @@ export class DefineRelationshipDataStore {
     projectId: string | 'ALL' | null = null;
     entityId: number | 'ALL' | null = null;
     updatedKeys: string[] = [];
+    searchChanged = false;
 }
 
 export interface RelationshipConflictType {
@@ -637,4 +644,25 @@ export interface RelationshipConflictType {
     color: string;
     statusCode: number;
     projectConflictStatusCode: string;
+}
+
+export interface CertifyDisclosureRO {
+    disclosureId: number;
+    certificationText: string;
+    conflictStatusCode: string;
+}
+
+export interface UpdateProjectRelationshipRO {
+    comment: string;
+    disclosureId: number;
+    conflictStatusCode: string;
+    documentOwnerPersonId: string;
+    coiDisclProjectEntityRelId: number;
+}
+
+export class ExpandCollapseSummaryBySection {
+    COI801 = true;
+    COI802 = true;
+    COI803 = true;
+    COI804 = true;
 }

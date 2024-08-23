@@ -66,7 +66,6 @@ export function openInNewTab(path: string, queryParamKeys: Array<any>, queryPara
 export function openSlider(sliderName: string = 'coi-slider'): void {
     document.getElementById(`${sliderName}-overlay`).style.display = 'block';
     document.getElementById(`${sliderName}-overlay`).classList.add('overlay');
-    document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
 
     setTimeout(() => {
         document.getElementById(sliderName).classList.add('slider-opened');
@@ -78,8 +77,6 @@ export function closeSlider(sliderName: string = 'coi-slider'): void {
 
     setTimeout(() => {
         document.getElementById(`${sliderName}-overlay`).style.display = 'none';
-        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }, 500);
 }
 
@@ -133,7 +130,7 @@ export function jumpToSection(sectionId = '', offset = 0) {
 }
 
 export function getFormattedSponsor(sponsorCode: any, sponsorName: any): string {
-    return sponsorCode && sponsorName ?  `${sponsorCode} - ${sponsorName}` : sponsorCode || sponsorName;
+    return sponsorCode && sponsorName ? `${sponsorCode} - ${sponsorName}` : sponsorCode || sponsorName;
 }
 
 /**
@@ -193,6 +190,57 @@ export function scrollToElementWithinBoundaries(focusElement: HTMLElement | unde
     }
 }
 
+export function isExistSearchWord (object: any, searchText: string, searchKeys: Array<string | string[]>, needFullCheck: boolean): boolean {
+    // Check for combined key values with delimiters first
+    for (const key of searchKeys) {
+        if (typeof key === 'string' && key.startsWith('[') && key.endsWith(']')) {
+            const keyCombination = key.slice(1, -1); // Remove the brackets
+            const delimiter = keyCombination.includes(' - ') ? ' - ' : 
+                              keyCombination.includes(':') ? ':' : ' ';
+            const keys = keyCombination.split(delimiter).map(k => k.trim());
+            const combinedValue = keys.map(k => object[k] ? object[k].toString() : '').join(delimiter);
+            if (doesValueMatchSearchText(combinedValue, searchText)) {
+                return true;
+            }
+        } else {
+            // Handle individual keys
+            const value = object[key as string];
+            if (value && doesValueMatchSearchText(value, searchText)) {
+                return true;
+            }
+        }
+    }
+
+    // If the value is an object, recursively check its properties
+    for (const key in object) {
+        const value = object[key];
+        if (needFullCheck && value && typeof value === 'object' && !Array.isArray(value)) {
+            if (isExistSearchWord(value, searchText, searchKeys, needFullCheck)) {
+                return true;
+            }
+        }
+
+        // If the value is an array, check each item in the array
+        if (needFullCheck && Array.isArray(value)) {
+            for (const item of value) {
+                if (isExistSearchWord(item, searchText, searchKeys, needFullCheck)) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+export function doesValueMatchSearchText(value: any, searchText: string): boolean {
+    // Check if the current value contains the search text
+    if (typeof value === 'string' || typeof value === 'number') {
+        return value.toString().trim().toLowerCase().includes(searchText.trim().toLowerCase());
+    }
+    return false;
+}
+
 /*
  * checks whether a given email address is valid or not.
  * @param emailAddress
@@ -221,3 +269,4 @@ export function inputRestrictionForNumberField(input: any) {
         return null;
     }
 }
+

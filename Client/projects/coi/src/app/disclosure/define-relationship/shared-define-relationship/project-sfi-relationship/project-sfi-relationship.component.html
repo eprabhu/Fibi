@@ -1,0 +1,57 @@
+<div tabindex="-1" class="d-flex flex-column w-100 h-100 min-height-200px" id="COI_DEFINE_RELATIONSHIP_CARD"
+    [ngClass]="{'position-relative bg-white': defineRelationshipService.isLoading}"
+    [class.]="">
+    <ng-container *ngIf="!defineRelationshipService.isLoading; else showLoader">
+        <ng-container *ngIf="filteredProjectSfiRelationsList.length; else showNoData">
+            <ng-container *ngFor="let projectSfiRelation of filteredProjectSfiRelationsList; let projectIndex = index; let first = first; let last = last">
+                <!-- loop -->
+                <div *ngIf="first || isStart" tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2"
+                    (focus)="coiService.setActiveSection('COI803')"
+                    [id]="'COI_PROJECT_SFI_RELATION_' + projectIndex" [enableRepeatedLoad]="true"
+                    (visibleInViewport)="visibleInViewport($event, projectIndex)" 
+                    [initialDelayTimeToObserve]="200" [minHeight]="height"
+                    [intersectionObserverOptions]="intersectionObserverOptions">
+                    <div class="card coi-card-regular mt-0"
+                        [class.coi-card-highlight]="defineRelationshipService.scrollSpyConfiguration.activeCounter == (defineRelationshipService.isEditMode ? projectIndex : projectIndex + 2)">
+                        <!-- project/sfi card -->
+                        <div class="card-header p-0 w-100 rounded-top-4" id="COI_DEFINE_RELATIONSHIP_HEADER">
+                            <app-project-details-card class="w-100" [projectSfiRelation]="projectSfiRelation"></app-project-details-card>
+                        </div>
+                         <!-- project/sfi conflict table -->
+                        <div *ngIf="defineRelationshipService.isShowProjectSfiConflict[projectIndex]" class="card-body w-100">
+                            <app-project-sfi-conflict [projectSfiRelation]="projectSfiRelation"></app-project-sfi-conflict>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!last" class="pt-3 coi-bg-body z-index-2 w-100"></div>
+            </ng-container>
+        </ng-container>
+        <ng-template #showNoData>
+            <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-white">
+                <app-no-information customClass="mt-0" [isBorderNeeded]="false"></app-no-information>
+            </div>
+        </ng-template>
+    </ng-container>
+    <ng-template #showLoader>
+        <div class="d-flex align-items-center position-absolute justify-content-center w-100 h-100">
+            <mat-icon class="text-primary coi-refresh-rotate-animation">cached</mat-icon>
+        </div>
+    </ng-template>
+</div>
+<div *ngIf="!defineRelationshipService.isLoading && filteredProjectSfiRelationsList?.length > 30"
+    class="w-auto d-flex align-items-center position-fixed z-index-1 start-35 bottom-20vh">
+    <mat-icon class="text-primary coi-refresh-rotate-animation">cached</mat-icon>
+</div>
+
+<!-- apply to all modal -->
+<ng-container *ngIf="defineRelationshipService.applyToAllModal.isOpenModal">
+    <app-apply-to-all-modal></app-apply-to-all-modal>
+</ng-container>
+
+<!-- add conflict slider -->
+<ng-container *ngIf="defineRelationshipService.addConflictSlider.isOpenSlider">
+    <app-add-conflict-slider [addConflictSlider]="defineRelationshipService.addConflictSlider"
+        [coiStatusList]="defineRelationshipService.coiStatusList" (closePage)="closeAddConflictSlider($event)"
+        [isEditMode]="['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode == 1 && (loginPersonId == coiData?.coiDisclosure?.adminPersonId)">
+    </app-add-conflict-slider>
+</ng-container>
