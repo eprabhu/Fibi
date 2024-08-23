@@ -1,20 +1,27 @@
 package com.polus.integration.entity.cleansematch.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.polus.integration.entity.apitokenservice.TokenService;
-import com.polus.integration.entity.cleansematch.config.Constants;
-import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse;
-
-import reactor.core.publisher.Mono;
+import com.polus.integration.entity.cleansematch.config.ErrorCode;
+import com.polus.integration.entity.cleansematch.dto.BulkCleanseMatchAPIResponse;
+import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse;
+import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.APIError;
+import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.ErrorDetail;
+import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.MatchCandidate;
+import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
 
 @Service
 public class CleanseMatchAPIService {
@@ -25,186 +32,120 @@ public class CleanseMatchAPIService {
 	@Autowired
 	private TokenService tokenService;
 
-	public DnBCleanseMatchAPIResponse callAPI(String apiUrl) {
+	public EntityCleanseMatchAPIResponse callAPI(String apiUrl) {
 		String token = tokenService.getToken();
-		DnBCleanseMatchAPIResponse response = new DnBCleanseMatchAPIResponse();
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+		DnBAPIResponse apiResponse = new DnBAPIResponse();
+		apiResponse = callExternalAPI(apiUrl, token);
+		BulkCleanseMatchAPIResponse response = PrepareResponse(apiResponse);
+		return  EntityCleanseMatchAPIResponse.builder()
+											 .httpStatusCode(response.getHttpStatusCode())
+											 .transactionID(response.getTransactionID())
+											 .candidatesMatchedQuantity(response.getCandidatesMatchedQuantity())
+											 .matchCandidates(response.getMatchCandidates())
+											 .errorCode(response.getErrorCode())
+											 .errorMessage(response.getErrorMessage())
+											 .errorDetails(response.getErrorDetails())
+											 .build();										 
+											 
+										 
+	}
+	
+	public BulkCleanseMatchAPIResponse callAPIForBulk(String apiUrl) {
+		String token = tokenService.getToken();
+		DnBAPIResponse apiResponse = new DnBAPIResponse();
+		apiResponse = callExternalAPI(apiUrl, token);
+		BulkCleanseMatchAPIResponse response = PrepareResponse(apiResponse);
+		return response;
+	}
 
+	private BulkCleanseMatchAPIResponse PrepareResponse(DnBAPIResponse apiResponse) {
+		BulkCleanseMatchAPIResponse response = new BulkCleanseMatchAPIResponse();
 		try {
-			String jsonResponse = callExternalAPI(apiUrl, token, response, objectMapper);
 
-			if (jsonResponse != null) {
-				processSuccessResponse(jsonResponse, response, objectMapper);
+			if (apiResponse != null) {
+				response.setHttpStatusCode(apiResponse.getHttpStatusCode());
+				response.setFullResponse(apiResponse);
+				if (apiResponse.getTransactionDetail() != null) {
+					response.setTransactionID(apiResponse.getTransactionDetail().getTransactionID());
+				}
+				response.setCandidatesMatchedQuantity(apiResponse.getCandidatesMatchedQuantity());
+				if (apiResponse.getMatchCandidates() != null && !apiResponse.getMatchCandidates().isEmpty()) {
+					response.setMatchCandidates(apiResponse.getMatchCandidates());
+					if (apiResponse.getMatchCandidates().get(0) != null) {
+						response.setHighestMatch(apiResponse.getMatchCandidates().get(0));
+
+						if (apiResponse.getMatchCandidates().get(0).getMatchQualityInformation() != null) {
+							response.setHighestMatchConfidenceCode(apiResponse.getMatchCandidates().get(0)
+									.getMatchQualityInformation().getConfidenceCode());
+						}
+					}
+				}
+
+				if (apiResponse.getError() != null) {
+
+					if (apiResponse.getError().getErrorCode() != null) {
+						response.setErrorCode(apiResponse.getError().getErrorCode());
+						response.setErrorDetails(apiResponse.getError().getErrorMessage());
+						List<ErrorDetail> errorDetails = apiResponse.getError().getErrorDetails();
+						response.setErrorDetails(
+								errorDetails
+									.stream()
+									.map(ErrorDetail::toString)
+									.collect(Collectors.joining("; ")));
+					}
+
+				}
 			}
 
 		} catch (Exception e) {
-			System.err.println("Exception occurred: " + e.getMessage());
+			ErrorCode errorCode = ErrorCode.DNB_CLEANSE_MATCH_ERROR;
+			response.setErrorCode(errorCode.getErrorCode());
+			response.setErrorMessage("Error while API PrepareResponse for Cleanse Match");
+			response.setErrorDetails(e.getMessage());
+			response.setErrorCode(null);
+		}
+		return response;
+	}
+
+	private DnBAPIResponse callExternalAPI(String apiUrl, String token) {
+		DnBAPIResponse response = new DnBAPIResponse();
+		ErrorCode errorCode = ErrorCode.DNB_CLEANSE_MATCH_API_INVOKE;
+		try {
+
+			ResponseEntity<String> responseEntity = webClientBuilder.build().get().uri(apiUrl)
+					.header("Authorization", token).retrieve().toEntity(String.class).block();
+
+			if (responseEntity != null) {
+				String responseBody = responseEntity.getBody();
+				HttpStatusCode httpStatus = responseEntity.getStatusCode();
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				response = mapper.readValue(responseBody, DnBAPIResponse.class);
+				response.setHttpStatusCode(String.valueOf(httpStatus.value()));
+			} else {
+				response.setError(new APIError(errorCode.getErrorCode(), "No response received from the API", null));
+			}
+		} catch (WebClientResponseException e) {
+			response = handleWebClientException(e);
+		} catch (Exception e) {
+			response.setError(new APIError(errorCode.getErrorCode(), e.getMessage(), null));
 		}
 
 		return response;
 	}
 
-	public String callAPIRawResponse(String apiUrl) {
-		String token = tokenService.getToken();
-		String jsonResponse = "";
-		DnBCleanseMatchAPIResponse response = new DnBCleanseMatchAPIResponse();
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+	private DnBAPIResponse handleWebClientException(WebClientResponseException e) {
+		ObjectMapper mapper = new ObjectMapper();
+		DnBAPIResponse response = new DnBAPIResponse();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		try {
-			jsonResponse = callExternalAPI(apiUrl, token, response, objectMapper);
-
-		} catch (Exception e) {
-			System.err.println("Exception occurred: " + e.getMessage());
+			response = mapper.readValue(e.getResponseBodyAsString(), DnBAPIResponse.class);
+		} catch (JsonMappingException e1) {
+			e1.printStackTrace();
+		} catch (JsonProcessingException e1) {
+			e1.printStackTrace();
 		}
-
-		return jsonResponse;
-	}
-
-	private String callExternalAPI(String apiUrl, String token, DnBCleanseMatchAPIResponse response,
-			ObjectMapper objectMapper) {
-		return webClientBuilder.build().get().uri(apiUrl).header("Authorization", token).retrieve()
-				.onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
-						clientResponse -> clientResponse.bodyToMono(String.class).flatMap(errorBody -> {
-							handleErrorResponse(clientResponse.statusCode().toString(), errorBody, response,
-									objectMapper);
-							return Mono.error(new RuntimeException("Error response: " + errorBody));
-						}))
-				.bodyToMono(String.class).doOnSuccess(body -> {
-					response.setHttpStatusCode(Constants.HTTP_SUCCESS_CODE);
-					response.setFullResponse(body);
-				}).doOnError(e -> handleWebClientException(e, response, objectMapper)).block();
-	}
-
-	private void handleErrorResponse(String statusCode, String errorBody, DnBCleanseMatchAPIResponse response,
-			ObjectMapper objectMapper) {
-		response.setFullResponse(errorBody);
-		response.setHttpStatusCode(statusCode);
-		parseErrorResponse(errorBody, response, objectMapper);
-	}
-
-	private void handleWebClientException(Throwable e, DnBCleanseMatchAPIResponse response, ObjectMapper objectMapper) {
-		if (e instanceof WebClientResponseException) {
-			WebClientResponseException webClientResponseException = (WebClientResponseException) e;
-			response.setHttpStatusCode(webClientResponseException.getStatusCode().toString());
-			response.setFullResponse(webClientResponseException.getResponseBodyAsString());
-			parseErrorResponse(webClientResponseException.getResponseBodyAsString(), response, objectMapper);
-		} else {
-			response.setFullResponse(e.getMessage());
-		}
-	}
-
-	private void processSuccessResponse1(String jsonResponse, DnBCleanseMatchAPIResponse response,
-			ObjectMapper objectMapper) throws Exception {
-		JsonNode rootNode = objectMapper.readTree(jsonResponse);
-		response.setFullResponse(jsonResponse);
-
-		if (rootNode.has("transactionDetail")) {
-			JsonNode transactionDetail = rootNode.get("transactionDetail");
-			if (transactionDetail.has("transactionID")) {
-				response.setTransactionID(transactionDetail.get("transactionID").asText());
-			}
-		}
-
-		if (rootNode.has("candidatesMatchedQuantity")) {
-			response.setCandidatesMatchedQuantity(rootNode.get("candidatesMatchedQuantity").asInt());
-		}
-
-		if (rootNode.has("matchCandidates")) {
-			response.setMatchCandidates(objectMapper.writeValueAsString(rootNode.get("matchCandidates")));
-			//response.setMatchCandidates(rootNode.get("matchCandidates").asText());
-
-			if (rootNode.get("matchCandidates").isArray() && rootNode.get("matchCandidates").size() > 0) {
-				JsonNode highestMatchNode = rootNode.get("matchCandidates").get(0);
-				response.setHighestMatch(objectMapper.writeValueAsString(highestMatchNode));
-
-				if (highestMatchNode.has("matchQualityInformation")) {
-					JsonNode matchQualityInfo = highestMatchNode.get("matchQualityInformation");
-					if (matchQualityInfo.has("confidenceCode")) {
-						response.setHighestMatchConfidenceCode(matchQualityInfo.get("confidenceCode").asInt());
-					}
-				}
-			}
-		}
-	}
-
-	private void processSuccessResponse(String jsonResponse, DnBCleanseMatchAPIResponse response,
-			ObjectMapper objectMapper) throws Exception {
-		JsonNode rootNode = objectMapper.readTree(jsonResponse);
-		response.setFullResponse(jsonResponse);
-
-		if (rootNode.has("transactionDetail")) {
-			JsonNode transactionDetail = rootNode.get("transactionDetail");
-			if (transactionDetail.has("transactionID")) {
-				response.setTransactionID(transactionDetail.get("transactionID").asText());
-			}
-		}
-
-		if (rootNode.has("candidatesMatchedQuantity")) {
-			response.setCandidatesMatchedQuantity(rootNode.get("candidatesMatchedQuantity").asInt());
-		}
-
-		if (rootNode.has("matchCandidates")) {
-			ArrayNode matchCandidates = (ArrayNode) rootNode.get("matchCandidates");
-			for (JsonNode candidate : matchCandidates) {
-				if (candidate.has("matchQualityInformation")) {
-					JsonNode matchQualityInfo = candidate.get("matchQualityInformation");
-					int confidenceCode = matchQualityInfo.has("confidenceCode")
-							? matchQualityInfo.get("confidenceCode").asInt()
-							: 0;
-					((ObjectNode) matchQualityInfo).removeAll();
-					((ObjectNode) matchQualityInfo).put("confidenceCode", confidenceCode);
-				}
-			}
-			response.setMatchCandidates(objectMapper.writeValueAsString(matchCandidates));
-			if (matchCandidates.size() > 0) {
-				JsonNode highestMatchNode = matchCandidates.get(0);
-				response.setHighestMatch(objectMapper.writeValueAsString(highestMatchNode));
-
-				if (highestMatchNode.has("matchQualityInformation")) {
-					JsonNode matchQualityInfo = highestMatchNode.get("matchQualityInformation");
-					if (matchQualityInfo.has("confidenceCode")) {
-						response.setHighestMatchConfidenceCode(matchQualityInfo.get("confidenceCode").asInt());
-					}
-				}
-			}
-		}
-	}
-
-	private void parseErrorResponse(String errorBody, DnBCleanseMatchAPIResponse response, ObjectMapper objectMapper) {
-		try {
-			JsonNode rootNode = objectMapper.readTree(errorBody);
-
-			if (rootNode.has("transactionDetail")) {
-				JsonNode transactionDetail = rootNode.get("transactionDetail");
-				if (transactionDetail.has("transactionID")) {
-					response.setTransactionID(transactionDetail.get("transactionID").asText());
-				}
-			}
-
-			if (rootNode.has("error")) {
-				JsonNode error = rootNode.get("error");
-				if (error.has("errorCode")) {
-					response.setErrorCode(error.get("errorCode").asText());
-				}
-				if (error.has("errorMessage")) {
-					response.setErrorMessage(error.get("errorMessage").asText());
-				}
-				if (error.has("errorDetails") && error.get("errorDetails").isArray()
-						&& error.get("errorDetails").size() > 0) {
-					JsonNode errorDetailNode = error.get("errorDetails").get(0);
-					StringBuilder errorDetailBuilder = new StringBuilder();
-					if (errorDetailNode.has("parameter")) {
-						errorDetailBuilder.append(errorDetailNode.get("parameter").asText()).append(": ");
-					}
-					if (errorDetailNode.has("description")) {
-						errorDetailBuilder.append(errorDetailNode.get("description").asText());
-					}
-					response.setErrorDetails(errorDetailBuilder.toString());
-				}
-			}
-		} catch (Exception e) {
-			System.err.println("Error parsing error response: " + e.getMessage());
-		}
+		response.setHttpStatusCode(String.valueOf(e.getStatusCode().value()));
+		return response;
 	}
 }

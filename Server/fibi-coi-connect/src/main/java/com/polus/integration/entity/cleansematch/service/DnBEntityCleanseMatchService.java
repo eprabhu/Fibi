@@ -3,8 +3,11 @@ package com.polus.integration.entity.cleansematch.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.integration.entity.cleansematch.config.ErrorCode;
-import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse;
+import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse;
+import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
 import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
 
 @Service
@@ -16,8 +19,8 @@ public class DnBEntityCleanseMatchService {
 	@Autowired
 	private CleanseMatchAPIService apiService;
 
-	public DnBCleanseMatchAPIResponse runCleanseMatch(DnBEntityCleanseMatchRequestDTO request) {
-		DnBCleanseMatchAPIResponse response = new DnBCleanseMatchAPIResponse();
+	public EntityCleanseMatchAPIResponse runCleanseMatch(DnBEntityCleanseMatchRequestDTO request) {
+		EntityCleanseMatchAPIResponse response = new EntityCleanseMatchAPIResponse();
 		try {
 			String apiUrl = buildApiUrl(request);
 			response = callAPI(apiUrl);
@@ -31,25 +34,12 @@ public class DnBEntityCleanseMatchService {
 		return response;
 	}
 
-	public String runCleanseMatchWithRawResponse(DnBEntityCleanseMatchRequestDTO request) {
-		String response = "";
-		try {
-			String apiUrl = buildApiUrl(request);
-			response = callAPIRawResponse(apiUrl);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return response;
-	}
 	private String buildApiUrl(DnBEntityCleanseMatchRequestDTO request) {
 		return urlBuilder.buildApiUrl(request);
 	}
 
-	private DnBCleanseMatchAPIResponse callAPI(String apiUrl) {
+	private EntityCleanseMatchAPIResponse callAPI(String apiUrl) {
 		return apiService.callAPI(apiUrl);
 	}
-	private String callAPIRawResponse(String apiUrl) {
-		return apiService.callAPIRawResponse(apiUrl);
-	}
+
 }
