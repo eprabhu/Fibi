@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { ApplicableQuestionnaire, RO, getApplicableQuestionnaireData } from '../coi-interface';
+import { URL_FOR_DISCLOSURE_PROJECT } from '../../app-constants';
 
 @Injectable()
 export class CoiService {
@@ -10,6 +11,7 @@ export class CoiService {
     triggerAddReviewComment$: Subject<any> = new Subject();
     triggerReviewCommentDataUpdate$: Subject<any> = new Subject();
     globalSave$: Subject<any> = new Subject<any>();
+    headerHeightChange$ = new Subject<boolean>();
     unSavedModules = '';
     previousHomeUrl = '';
     isShowInfo = true;
@@ -35,9 +37,10 @@ export class CoiService {
     focusModuleId: any;
     focusSFIRelationId: any;
     isRelationshipSaving = false;
-    $isExpandSection = new Subject<{section: string,isExpand: boolean}>();
+    $isExpandSection = new Subject<{ section: string, isExpand: boolean }>();
     currentActiveQuestionnaire: any;
     isFromCertificationTab = false;
+    isViewportVisibilityEnabled: any[] = [];
 
     constructor(
         private _http: HttpClient,
@@ -45,15 +48,15 @@ export class CoiService {
     ) { }
 
     loadDisclosure(disclosureId: string) {
-        return this._http.get(`${this._commonService.baseUrl}/loadDisclosure/${disclosureId}`);
+        return this._http.get(`${this._commonService.baseUrl}/fcoiDisclosure/fetch/${disclosureId}`);
     }
 
     certifyDisclosure(params: any) {
-        return this._http.patch(this._commonService.baseUrl + '/certifyDisclosure', params);
+        return this._http.patch(`${this._commonService.baseUrl}/fcoiDisclosure/certifyDisclosure/`, params);
     }
 
     evaluateDisclosureQuestionnaire(params: any) {
-        return this._http.post(this._commonService.baseUrl + '/evaluateDisclosureQuestionnaire', params);
+        return this._http.post(`${this._commonService.baseUrl}/evaluateDisclosureQuestionnaire`, params);
     }
 
     completeDisclosureReview(disclosureId: any, disclosureNumber: any) {
@@ -65,11 +68,11 @@ export class CoiService {
     }
 
     saveOrUpdateCoiReview(params: any) {
-        return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiReview', params);
+        return this._http.post(`${this._commonService.baseUrl}/saveOrUpdateCoiReview`, params);
     }
 
     getCoiProjectTypes() {
-        return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
+        return this._http.get(`${this._commonService.baseUrl}/getCoiProjectTypes`);
     }
 
     getApplicableQuestionnaire(requestObject: any) {
@@ -92,12 +95,12 @@ export class CoiService {
         this.actionButtonId = modalType === 'START' ? 'coi-start-reviewer-review-modal-trigger' : 'coi-complete-reviewer-review-modal-trigger';
     }
 
-    givecoiID(disclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/evaluateValidation/${disclosureId}`);
+    evaluateValidation(disclosureId: number, disclosureNumber: number) {
+        return this._http.get(`${this._commonService.baseUrl}/fcoiDisclosure/evaluateValidation/${disclosureId}/${disclosureNumber}`);
     }
 
     getSfiDetails(params: RO) {
-        return this._http.post(this._commonService.baseUrl + '/personEntity/fetch', params);
+        return this._http.post(`${this._commonService.baseUrl}/personEntity/fetch`, params);
 
     }
     withdrawDisclosure(params: any) {
@@ -112,13 +115,17 @@ export class CoiService {
         return this._http.get(`${this._commonService.baseUrl}/disclosureHistory/${disclosureId}`);
     }
 
-     isAllReviewsCompleted (reviewerList): boolean {
+    isAllReviewsCompleted(reviewerList): boolean {
         return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
-     }
+    }
 
-     riskAlreadyModified(params: any) {
+    riskAlreadyModified(params: any) {
         return this._http.post(`${this._commonService.baseUrl}/disclosure/riskStatus`, params);
-     }
+    }
+
+    getDisclosureProjectList(disclosureId: number) {
+        return this._http.get(this._commonService.baseUrl + URL_FOR_DISCLOSURE_PROJECT.replace('{disclosureId}', disclosureId.toString()));
+    }
 
     addTableBorder(projectList, headerElementId) {
         if (this.focusSFIRelationId) {
@@ -138,16 +145,16 @@ export class CoiService {
 
 }
 
-export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData, ) {
+export function certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData,) {
     let errorArray = [];
     if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
         if (isAllMandatoryQuestionnaireNotCompleted(res.applicableQuestionnaire)) {
-            let questionnaire_error = {validationMessage: '', validationType : "VE", mandatoryComplete: "false"};
+            let questionnaire_error = { validationMessage: '', validationType: "VE", mandatoryComplete: "false" };
             questionnaire_error.validationMessage = 'Please complete the mandatory Questionnaire(s) in the “Screening Questionnaire” section.';
             errorArray.push(questionnaire_error);
         }
         if (!isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-            let questionnaire_error = {validationMessage: '', validationType : "VW", };
+            let questionnaire_error = { validationMessage: '', validationType: "VW", };
             questionnaire_error.validationMessage = 'Please complete all the Questionnaire(s) in the “Screening Questionnaire” section.';
             errorArray.push(questionnaire_error);
         }

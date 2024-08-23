@@ -201,7 +201,7 @@
                                         <strong class="me-2 ml-2 text-nowrap mt-2">{{coi.disclosurePersonFullName}}</strong>
                                         <ng-container *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="ms-1">
                                             <span class="pipe me-2 mt-1"></span>
-                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='2'">article</mat-icon>
+                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='2'">text_snippet</mat-icon>
                                             <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0" *ngIf="coi?.fcoiTypeCode==='3'">workspace_premium</mat-icon>
                                             <span class="text-nowrap mt-2">Project :</span>
                                             <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(coi) : modalHeader(coi) | slice:0:180)}}

@@ -5,7 +5,7 @@ import { CommonService } from '../common/services/common.service';
 import { ConsultingService } from './services/consulting-service.service';
 import { CONSULTING_REDIRECT_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, REPORTER_HOME_URL } from '../app-constants';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DefaultAssignAdminDetails, DisclsoureHeaderDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { Subject } from 'rxjs';
 import { Location } from '@angular/common';
 import { FormBuilderEvent } from '../configuration/form-builder-create/shared/form-builder-view/form-builder-interface';
@@ -46,7 +46,6 @@ export class ConsultingFormComponent {
     submitHelpTexts = 'You are about to submit the consulting disclosure.';
     confirmationHelpTexts = '';
     description: any;
-    disclosureHeaderDetails = new DisclsoureHeaderDetails();
     validationList = [];
     formBuilderEvents = new Subject<FormBuilderEvent>();
 
@@ -238,13 +237,11 @@ export class ConsultingFormComponent {
 
     private setPersonProjectDetails(): void {
         this.personProjectDetails.personFullName = this.consultingForm.consultingFormDisclosure.person.fullName;
-        this.personProjectDetails.unitNumber = this.consultingForm.consultingFormDisclosure.homeUnit;
-        this.personProjectDetails.unitName = this.consultingForm.consultingFormDisclosure.homeUnitName;
         this.personProjectDetails.homeUnit = this.consultingForm.consultingFormDisclosure.homeUnit;
         this.personProjectDetails.homeUnitName = this.consultingForm.consultingFormDisclosure.homeUnitName;
         this.personProjectDetails.entityName = this.consultingForm.consultingFormDisclosure.personEntity ? this.consultingForm.consultingFormDisclosure.personEntity.coiEntity.entityName : '';
-        this.disclosureHeaderDetails.personEmail = this.consultingForm.consultingFormDisclosure.person.emailAddress;
-        this.disclosureHeaderDetails.personPrimaryTitle = this.consultingForm.consultingFormDisclosure.person.directoryTitle;
+        this.personProjectDetails.personEmail = this.consultingForm.consultingFormDisclosure.person.emailAddress;
+        this.personProjectDetails.personPrimaryTitle = this.consultingForm.consultingFormDisclosure.person.directoryTitle;
     }
 
     submitConsultingForm(): void {

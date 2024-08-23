@@ -1,0 +1,71 @@
+<!-- modal trigger button -->
+<button tabindex="-1" type="button" hidden="true" id="{{modalConfig.namings.modalName}}-trigger-btn" data-bs-toggle="modal"
+    [attr.data-bs-target]="'#' + modalConfig.namings.modalName" aria-hidden="true"></button>
+
+<div tabindex="-1" role="dialog" id="{{modalConfig.namings.modalName}}" class="modal {{modalConfig.styleOptions.animationClass}}"
+    [attr.aria-label]="modalConfig.ADAOptions.modalAriaLabel"
+    [attr.data-bs-focus]="modalConfig.dataBsOptions.focus"
+    [attr.data-bs-backdrop]="modalConfig.dataBsOptions.backdrop"
+    [attr.data-bs-keyboard]="modalConfig.dataBsOptions.keyboard"
+    [attr.aria-labelledBy]="modalConfig.ADAOptions.modalAriaLabel ? '' : (modalConfig.namings.modalName + '-header-content')">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-{{modalConfig.displayOptions.modalSize}} modal-{{modalConfig.displayOptions.fullScreen}}">
+        <div class="modal-content">
+            <!-- header -->
+            <div class="modal-header" id="{{modalConfig.namings.modalName}}-header">
+                <!-- heading -->
+                <h5 class="modal-title fw-bold d-flex align-items-center justify-content-between w-100" id="{{modalConfig.namings.modalName}}-heading">
+                    <!-- header content -->
+                    <div id="{{modalConfig.namings.modalName}}-header-content"><ng-content select="[modal-header]"></ng-content></div>
+                    <!-- close icon button -->
+                    <button type="button" id="{{modalConfig.namings.modalName}}-close-btn"
+                        class="btn-close {{modalConfig.styleOptions.closeBtnClass}}"
+                        aria-label="Click here to close popup" title="Click here to close popup"
+                        (click)="closeModal($event)">
+                    </button>
+                    <!-- modal dismiss btn -->
+                    <button tabindex="-1" type="button" class="d-none" id="{{modalConfig.namings.modalName}}-dismiss-btn"
+                        data-bs-dismiss="modal" aria-hidden="true" (click)="focusAfterModalClose()"></button>
+                </h5>
+            </div>
+            <!-- sticky-content -->
+            <div>
+                <ng-content select="[modal-content-sticky]"></ng-content>
+            </div>
+    
+            <!-- content -->
+            <div class="modal-body border-0"  id="{{modalConfig.namings.modalName}}-content-body">
+                <ng-content select="[modal-body]"></ng-content>
+            </div>
+            <!-- footer -->
+            <div class="modal-footer border-0">
+               <div *ngIf="modalConfig.namings.secondaryBtnName || modalConfig.namings.primaryBtnName" class="col d-flex gap-3  {{modalConfig.styleOptions.footerPosition}}">
+                    <button *ngIf="modalConfig.namings.secondaryBtnName" appPreventDblClick
+                        type="button" class="btn fs-14 {{modalConfig.styleOptions.secondaryBtnClass}}" (click)="performSecondaryAction()"
+                        [title]="modalConfig.ADAOptions.secondaryBtnTitle ? modalConfig.ADAOptions.secondaryBtnTitle : ('click here to ' + modalConfig.namings.secondaryBtnName)"
+                        [attr.aria-label]="modalConfig.ADAOptions.secondaryBtnAriaLabel ? modalConfig.ADAOptions.secondaryBtnAriaLabel : ('click here to ' + modalConfig.namings.secondaryBtnName)">
+                        {{modalConfig.namings.secondaryBtnName}}
+                    </button>
+                    <button *ngIf="modalConfig.namings.primaryBtnName" appPreventDblClick
+                        type="button" class="btn fs-14 {{modalConfig.styleOptions.primaryBtnClass}}" (click)="performPrimaryAction()"
+                        [title]="modalConfig.ADAOptions.primaryBtnTitle ? modalConfig.ADAOptions.primaryBtnTitle : ('click here to ' + modalConfig.namings.primaryBtnName)"
+                        [attr.aria-label]="modalConfig.ADAOptions.primaryBtnAriaLabel ? modalConfig.ADAOptions.primaryBtnAriaLabel : ('click here to ' + modalConfig.namings.primaryBtnName)">
+                        {{modalConfig.namings.primaryBtnName}}
+                    </button>
+               </div>
+               <!-- content after footer -->
+                <div id="{{modalConfig.namings.modalName}}-content-after-footer">
+                    <ng-content select="[modal-content-after-footer]"></ng-content>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- [ngClass]="{
+    'modal-{{modalConfig.displayOptions.modalSize}}': modalConfig.displayOptions.modalSize,
+    'modal-{{modalConfig.displayOptions.fullScreen}}': modalConfig.displayOptions.fullScreen,
+    'modal-dialog-scrollable': true,
+    'modal-dialog-centered' : true
+}"  -->

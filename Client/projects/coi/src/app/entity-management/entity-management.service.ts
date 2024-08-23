@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
-import { NameObject } from '../admin-dashboard/admin-dashboard.service';
 
 
 @Injectable(
@@ -111,4 +110,11 @@ export class SortCountObj {
   riskLevel = 0;
   country = 0;
   updateTimeStamp = 2;
+}
+
+export class NameObject {
+  entityName = '';
+  personName = '';
+  departmentName = '';
+  travelCountryName = '';
 }

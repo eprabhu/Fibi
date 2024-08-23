@@ -74,7 +74,7 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         MatMenuModule,
         MatSelectModule,
         MatInputModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
         AppEndpointSearchComponent, CustomElementComponent,
@@ -136,7 +136,7 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         CommonHelpTextComponent,
         CommonInformationComponent,
         VisibleInViewportDirective,
-        SkeletonLoaderComponent
+        SkeletonLoaderComponent,
     ],
 
     providers: [

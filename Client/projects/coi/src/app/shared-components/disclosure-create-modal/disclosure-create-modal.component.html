@@ -169,7 +169,7 @@
                 <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
                     <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
                         [value]="type.description" class="me-2 cursor-pointer" type="radio"
-                        name="project-type" id="{{type?.description}}" [disabled]="['4', '5'].includes(type?.coiProjectTypeCode)">
+                        name="project-type" id="{{type?.description}}" [disabled]="['2', '4', '5'].includes(type?.coiProjectTypeCode)">
                     <label class="cursor-pointer fw-normal"
                         for="{{type?.description}}">{{type?.description}}</label>
                 </li>
