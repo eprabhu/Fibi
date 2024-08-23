@@ -271,7 +271,7 @@ public interface FcoiDisclosureDao {
      * @param disclosureId
      * @return
      */
-    Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
+    Long getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
 
     /**
      * This method is used to validate

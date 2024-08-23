@@ -676,7 +676,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId) {
+    public Long getNumberOfSFIBasedOnDisclosureId(Integer disclosureId) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         StringBuilder hqlQuery = new StringBuilder();
         hqlQuery.append("SELECT COUNT(DISTINCT r.personEntityId) FROM CoiDisclProjectEntityRel r ");
@@ -685,7 +685,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         query.setParameter("disclosureId", disclosureId);
         Object countData = query.getSingleResult();
         if (countData != null) {
-            return (Integer) countData;
+            return (Long) countData;
         }
         return null;
     }
@@ -839,7 +839,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             }
 
             Objects.requireNonNull(statement).execute();
-//            connection.close();
+            session.flush();
         } catch (Exception e) {
             logger.error("Exception on syncFcoiDisclProjectsAndEntities for coiDisclProjectId : {} | {}", coiDisclProjectId, e.getMessage());
 //            throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);

@@ -645,7 +645,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("reviewStatusCode", coiDisclosure.getReviewStatusCode());
 		criteriaUpdate.set("versionStatus", coiDisclosure.getVersionStatus());
 		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
-		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
+		criteriaUpdate.set("updatedBy", AuthenticatedUser.getLoginPersonId());
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"), coiDisclosure.getDisclosureId()));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -745,14 +745,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<CoiDisclosure> getActiveDisclosure(String personId) {
 		List<CoiDisclosure> coiDisclosures = new ArrayList<>();
 		try {
+			StringBuilder hqlQuery = new StringBuilder();
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<CoiDisclosure> query = builder.createQuery(CoiDisclosure.class);
-			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
-			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
-					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
-					builder.equal(rootCoiDisclosure.get("versionStatus"), Constants.COI_ACTIVE_STATUS)));
-			List<CoiDisclosure> disclData = session.createQuery(query).getResultList();
+			hqlQuery.append("SELECT d FROM CoiDisclosure d");
+			hqlQuery.append(" WHERE d.personId = :personId");
+			hqlQuery.append(" AND d.fcoiTypeCode IN :fcoiTypeCode");
+			hqlQuery.append(" AND d.versionStatus = :versionStatus");
+			org.hibernate.query.Query query = session.createQuery(hqlQuery.toString());
+			query.setParameter("personId", personId);
+			query.setParameter("fcoiTypeCode", Arrays.asList("1", "3"));
+			query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
+			List<CoiDisclosure> disclData = query.getResultList();
 			if (disclData != null && !disclData.isEmpty()) {
 				CoiDisclosure coiDisclosure = disclData.get(0);
 				coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
@@ -770,6 +773,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiDisclosures.add(coiDisclosure);
 			}
 		} catch (Exception ex) {
+			logger.error("Exception on getActiveDisclosure {}", ex.getMessage());
 			throw new ApplicationException("Unable to fetch Active Disclosure", ex, Constants.JAVA_ERROR);
 		}
 		return coiDisclosures;
@@ -1502,8 +1506,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-//	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId,
-//															  String searchString, Integer moduleItemKey) {
 	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId,
 															  String searchString, Integer moduleItemKey) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();

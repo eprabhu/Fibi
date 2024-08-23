@@ -82,9 +82,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         }
         ResponseEntity<Map<String, Object>> responseData = updatePersonEntityCompleteFlag(personEntity.getPersonEntityId());
         personEntity.setIsFormCompleted((Boolean) responseData.getBody().get(IS_FORM_COMPLETED));
-        if (personEntity.getDisclosureId() != null) {
-            fcoiDisclosureDao.updateDisclosureSyncNeededByPerEntId(personEntity.getPersonEntityId(), true);
-        }
+        fcoiDisclosureDao.updateDisclosureSyncNeededByPerEntId(personEntity.getPersonEntityId(), true);
         PersonEntityDto personEntityDto = new PersonEntityDto();
         personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
         personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
