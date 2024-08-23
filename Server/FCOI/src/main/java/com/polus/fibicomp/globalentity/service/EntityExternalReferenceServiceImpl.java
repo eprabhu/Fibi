@@ -36,9 +36,11 @@ public class EntityExternalReferenceServiceImpl implements EntityExternalReferen
 	}
 
 	private EntityExternalIdMapping mapDTOToEntity(ExternalReferenceRequestDTO dto) {
-		return EntityExternalIdMapping.builder().entityId(dto.getEntityId()).organizationId(dto.getOrganizationId())
-				.sponsorCode(dto.getSponsorCode()).updatedBy(AuthenticatedUser.getLoginPersonId())
-				.updateTimestamp(commonDao.getCurrentTimestamp()).build();
+		return EntityExternalIdMapping.builder().entityId(dto.getEntityId())
+				.externalIdTypeCode(dto.getExternalIdTypeCode()).externalId(dto.getExternalId())
+				.organizationId(dto.getOrganizationId()).sponsorCode(dto.getSponsorCode()).description(dto.getDescription())
+				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp())
+				.build();
 	}
 
 	@Override

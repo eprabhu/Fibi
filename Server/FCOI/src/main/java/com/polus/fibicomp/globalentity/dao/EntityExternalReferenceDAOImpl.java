@@ -34,22 +34,28 @@ public class EntityExternalReferenceDAOImpl implements EntityExternalReferenceDA
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE EntityMapping e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
-		if (dto.getOrganizationId() != null) {
-			hqlQuery.append(", e.organizationId = :organizationId");
+		if (dto.getExternalIdTypeCode() != null) {
+			hqlQuery.append(", e.externalIdTypeCode = :externalIdTypeCode");
 		}
-		if (dto.getSponsorCode() != null) {
-			hqlQuery.append(", e.sponsorCode = :sponsorCode");
+		if (dto.getExternalId() != null) {
+			hqlQuery.append(", e.externalId = :externalId");
+		}
+		if (dto.getDescription() != null) {
+			hqlQuery.append(", e.description = :description");
 		}
 		hqlQuery.append(" WHERE e.entityExternalMappingId = :entityExternalMappingId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityExternalMappingId", dto.getEntityExternalMappingId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
-		if (dto.getOrganizationId() != null) {
-			query.setParameter("organizationId", dto.getOrganizationId());
+		if (dto.getExternalIdTypeCode() != null) {
+			query.setParameter("externalIdTypeCode", dto.getExternalIdTypeCode());
 		}
-		if (dto.getSponsorCode() != null) {
-			query.setParameter("sponsorCode", dto.getSponsorCode());
+		if (dto.getExternalId() != null) {
+			query.setParameter("externalId", dto.getExternalId());
+		}
+		if (dto.getDescription() != null) {
+			query.setParameter("description", dto.getDescription());
 		}
 		query.executeUpdate();
 	}

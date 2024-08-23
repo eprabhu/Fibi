@@ -64,11 +64,15 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 	}
 
 	private SubAwdOrgDetailsResponseDTO mapEntityToDTO(EntitySubOrgInfo entitySubOrgInfos) {
-		return SubAwdOrgDetailsResponseDTO.builder().entityId(entitySubOrgInfos.getEntityId())
-				.organizationId(entitySubOrgInfos.getOrganizationId())
-				.organizationTypeCode(entitySubOrgInfos.getOrganizationTypeCode())
-				.samExpirationDate(entitySubOrgInfos.getSamExpirationDate())
-				.subAwdRiskAssmtDate(entitySubOrgInfos.getSubAwdRiskAssmtDate()).build();
+		if (entitySubOrgInfos != null) {
+			return SubAwdOrgDetailsResponseDTO.builder().entityId(entitySubOrgInfos.getEntityId())
+					.organizationId(entitySubOrgInfos.getOrganizationId())
+					.organizationTypeCode(entitySubOrgInfos.getOrganizationTypeCode())
+					.samExpirationDate(entitySubOrgInfos.getSamExpirationDate())
+					.subAwdRiskAssmtDate(entitySubOrgInfos.getSubAwdRiskAssmtDate()).build();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

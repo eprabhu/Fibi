@@ -42,8 +42,12 @@ public class EntityMailingAddress implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_MAILING_ADDRESS_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
 	private Entity entity;
 
-    @Column(name = "ADDRESS_TYPE")
-    private String addressType;
+    @Column(name = "ADDRESS_TYPE_CODE")
+    private String addressTypeCode;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_MAILING_ADDRESS_FK3"), name = "ADDRESS_TYPE_CODE", referencedColumnName = "ADDRESS_TYPE_CODE", insertable = false, updatable = false)
+    private EntityAddressType entityAddressType;
 
     @Column(name = "ADDRESS_LINE_1")
     private String addressLine1;

@@ -72,7 +72,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 				.primaryAddressLine1(dto.getPrimaryAddressLine1()).primaryAddressLine2(dto.getPrimaryAddressLine2())
 				.city(dto.getCity()).state(dto.getState()).postCode(dto.getPostCode()).countryCode(dto.getCountryCode())
 				.certifiedEmail(dto.getCertifiedEmail()).websiteAddress(dto.getWebsiteAddress())
-				.dunsNumber(dto.getDunsNumber()).ueiNumber(dto.getUeiNumber()).cageNumber(dto.getCageNumber())
+				.dunsNumber(dto.getDunsNumber()).ueiNumber(dto.getUeiNumber()).cageNumber(dto.getCageNumber()).entityStatusTypeCode("2")
 				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp()).versionNumber(1).versionStatus("ACTIVE").isActive(Boolean.TRUE)
 				.build();
 	}

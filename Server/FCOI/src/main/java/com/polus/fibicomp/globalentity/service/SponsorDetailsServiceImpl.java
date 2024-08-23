@@ -62,10 +62,14 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	}
 
 	private SponsorDetailsResponseDTO mapEntityToDTO(EntitySponsorInfo entitySponsorInfo) {
-		return SponsorDetailsResponseDTO.builder().entityId(entitySponsorInfo.getEntityId())
-				.acronym(entitySponsorInfo.getAcronym()).id(entitySponsorInfo.getId())
-				.sponsorCode(entitySponsorInfo.getSponsorCode()).sponsorTypeCode(entitySponsorInfo.getSponsorTypeCode())
-				.build();
+		if (entitySponsorInfo != null) {
+			return SponsorDetailsResponseDTO.builder().entityId(entitySponsorInfo.getEntityId())
+					.acronym(entitySponsorInfo.getAcronym()).id(entitySponsorInfo.getId())
+					.sponsorCode(entitySponsorInfo.getSponsorCode())
+					.sponsorTypeCode(entitySponsorInfo.getSponsorTypeCode()).build();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
