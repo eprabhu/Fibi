@@ -73,7 +73,7 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
         threshold: 0.00
     };
 
-    @Output() visibleInViewport = new EventEmitter<boolean>();
+    @Output() visibleInViewport = new EventEmitter<{ isVisible: boolean; observerEntry: IntersectionObserverEntry }>();
 
     private hasVisibleInViewport = false;
     private isObserverDisconnected  = false;
@@ -97,22 +97,25 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
 
     private createObserver(): void {
         this.observer = new IntersectionObserver((observedEntries: IntersectionObserverEntry[]) => {
-            observedEntries.forEach(entry => {
+            observedEntries.forEach((entry: IntersectionObserverEntry) => {
                 const isIntersecting = entry.isIntersecting;
-                if (isIntersecting !== this.hasVisibleInViewport) {
-                    this.hasVisibleInViewport = isIntersecting;
-                    this.visibleInViewport.emit(this.hasVisibleInViewport);
-                    if (isIntersecting && !this.enableRepeatedLoad) {
-                        this.disconnectObserver();
-                    }
+                this.hasVisibleInViewport = isIntersecting;
+                this.visibleInViewport.emit({
+                    isVisible: this.hasVisibleInViewport,
+                    observerEntry: entry
+                });
+    
+                if (isIntersecting && !this.enableRepeatedLoad) {
+                    this.disconnectObserver();
                 }
             });
         }, this.intersectionObserverOptions);
-
+    
         setTimeout(() => {
             this.updateObserver(); // Call method to start/stop lazy loading
         }, this.initialDelayTimeToObserve);
     }
+    
 
     private updateObserver(): void {
         if (!this.isObserverDisconnected ) {

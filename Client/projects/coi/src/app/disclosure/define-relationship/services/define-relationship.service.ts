@@ -1,18 +1,34 @@
 import { Injectable } from '@angular/core';
 import { COIModalConfig } from '../../../shared-components/coi-modal/coi-modal.interface';
-import { ApplyToAllModal, COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, ProjectSfiRelationConflictRO, ProjectSfiRelationLoadRO, ProjectSfiRelations, RelationshipConflictType } from '../../coi-interface';
+import { AddConflictSlider, ApplyToAllModal, COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, ProjectSfiRelationConflictRO, ProjectSfiRelationLoadRO, ProjectSfiRelations, RelationshipConflictType } from '../../coi-interface';
 import { CommonService } from '../../../common/services/common.service';
 import { HttpClient } from '@angular/common/http';
-import { ScrollSpyConfiguration } from '../../../shared-components/scroll-spy/scroll-spy.interface';
+import { ScrollSpyConfiguration, ScrollSpyEvent } from '../../../shared-components/scroll-spy/scroll-spy.interface';
 import { DataStoreService } from '../../services/data-store.service';
 import { coiReviewComment } from '../../../shared-components/shared-interface';
 import { CoiService } from '../../services/coi.service';
+import { deepCloneObject } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Injectable()
 export class DefineRelationshipService {
 
+    searchText = '';
+    isLoading = true;
+    isEditMode = false;
+    isShowErrorToast = false;
+    searchKeys: Array<string> = [
+        'piName',
+        'projectId',
+        'reporterRole',
+        'projectStatus',
+        '[projectNumber - title]',
+        '[sponsorCode - sponsorName]',
+        '[homeUnitNumber - homeUnitName]',
+        '[primeSponsorCode - primeSponsorName]'
+    ];
     isObserverActive: boolean[] = [];
     applyToAllModal = new ApplyToAllModal();
+    addConflictSlider = new AddConflictSlider();
     isShowProjectSfiConflict: boolean[] = [];
     coiStatusList: CoiProjConflictStatusType[] = [];
     relationshipConflictType: RelationshipConflictType[] = [
@@ -21,7 +37,7 @@ export class DefineRelationshipService {
         { statusCode: 3, label: 'Conflict Identified', color: 'text-danger', projectConflictStatusCode: '300' }
     ];
     scrollSpyConfiguration = new ScrollSpyConfiguration();
-    intersectionObserverOptions: IntersectionObserverInit;
+    elementVisiblePercentageList: number[] = [];
     modalConfig = new COIModalConfig('coi-relation-modal', 'Apply to All', 'Cancel', 'lg');
 
     constructor(private _http: HttpClient, private _commonService: CommonService, private _coiService: CoiService, private _dataStore: DataStoreService) { }
@@ -34,10 +50,15 @@ export class DefineRelationshipService {
 
     configureScrollSpy(): void {
         this.scrollSpyConfiguration.activeCounter = 0;
-        this.scrollSpyConfiguration.isActiveKeyNavigation = true;
+        this.scrollSpyConfiguration.isActiveKeyNavigation = false;
         this.scrollSpyConfiguration.navItemClass = 'coi-scrollspy-right';
         this.scrollSpyConfiguration.contentItemClass = 'coi-scrollspy-left';
         this.setHeight();
+    }
+
+    updateScrollSpyConfig(event: { isVisible: boolean; observerEntry: IntersectionObserverEntry; }, SCROLL_SPY_INDEX: number): void {
+        this.elementVisiblePercentageList[SCROLL_SPY_INDEX] = event.observerEntry.intersectionRatio;
+        this.elementVisiblePercentageList = deepCloneObject(this.elementVisiblePercentageList);
     }
 
     setHeight(): void {
@@ -49,37 +70,51 @@ export class DefineRelationshipService {
         this.scrollSpyConfiguration.scrollRightHeight = height;
     }
 
-    openReviewerComment(projectSfiRelation: ProjectSfiRelations, section, childSubSection = null) {
+    openReviewerComment(projectSfiRelation: ProjectSfiRelations, section: 'SFI' | 'RELATIONSHIP', childSubSection?: CoiDisclEntProjDetail) {
         const COI_DATA: COI = this._dataStore.getData();
         const disclosureDetails: coiReviewComment = {
             documentOwnerPersonId: COI_DATA.coiDisclosure.person.personId,
             componentTypeCode: '6',
-            subModuleItemKey: section === 'SFI' ? childSubSection?.disclosureDetailsId : projectSfiRelation?.moduleCode,
+            subModuleItemKey: section === 'SFI' ? childSubSection?.coiDisclProjectEntityRelId : projectSfiRelation?.moduleCode,
             subModuleItemNumber: section === 'RELATIONSHIP' ? projectSfiRelation?.moduleCode : null,
             coiSubSectionsTitle: `#${projectSfiRelation?.projectNumber}: ${projectSfiRelation?.title}`,
             selectedProject: projectSfiRelation,
             sfiStatus: childSubSection?.coiProjConflictStatusType,
-            subSectionTitle: childSubSection?.personEntityRelationshipDto.entityName,
-            subSectionId: childSubSection?.personEntityRelationshipDto.personEntityId,
+            subSectionTitle: childSubSection?.personEntity?.entityName,
+            subSectionId: childSubSection?.personEntity?.personEntityId,
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this._coiService.isShowCommentNavBar = true;
     }
 
-    getFormattedConflictCount(coiDisclEntProjDetails: CoiDisclEntProjDetail[]): {} {
-        return coiDisclEntProjDetails?.reduce((entityConflict, item) => {
+    getFormattedConflictCount(coiDisclEntProjDetails: CoiDisclEntProjDetail[]): { conflictCount: { [key: string]: number }, conflictCompleted: boolean } {
+        const RESULT = coiDisclEntProjDetails?.reduce((acc, item) => {
             const CONFLICT_TYPE = this.relationshipConflictType.find(type => type.projectConflictStatusCode === item.projectConflictStatusCode);
             const STATUS_CODE = CONFLICT_TYPE ? CONFLICT_TYPE.statusCode : null;
-
+    
             if (STATUS_CODE !== null) {
-              entityConflict[STATUS_CODE] = (entityConflict[STATUS_CODE] || 0) + 1;
+                acc.conflictCount[STATUS_CODE] = (acc.conflictCount[STATUS_CODE] || 0) + 1;
+                acc.totalCount++;
             }
-            
-            return entityConflict;
-          }, {});
+    
+            return acc;
+        }, { conflictCount: {} as { [key: string]: number }, totalCount: 0 });
+    
+        return {
+            conflictCount: RESULT.conflictCount,
+            conflictCompleted: RESULT.totalCount === coiDisclEntProjDetails?.length
+        };
+    }
+    
+
+    scrollSpyCounterChanged(event: ScrollSpyEvent): void {
+        this._commonService.$globalEventNotifier.next({uniqueId: 'SCROLL_SPY', content: event});
     }
 
-
+    resetElementVisiblePercentageList(): void {
+        this.elementVisiblePercentageList = this.isEditMode ? [] : this.elementVisiblePercentageList.length > 3 ? this.elementVisiblePercentageList.slice(0, 2).concat(this.elementVisiblePercentageList.slice(-1)) : this.elementVisiblePercentageList;
+        this.elementVisiblePercentageList = deepCloneObject(this.elementVisiblePercentageList);
+    }
 
     private getDefineRelationShipNavHeight(): string {
         const COI_DISCLOSURE_HEADER = document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect();
@@ -94,7 +129,8 @@ export class DefineRelationshipService {
     private getNavOffsetTop(): number {
         const element = document.getElementById('COI_DEFINE_RELATIONSHIP_NAV_HEADER');
         if (element) {
-            return element.getBoundingClientRect().height + 15;
+            const OFFSET_TOP = this.isEditMode ? 0 : 0;
+            return element.getBoundingClientRect().height + 15 + OFFSET_TOP;
         }
         return 0;
     }

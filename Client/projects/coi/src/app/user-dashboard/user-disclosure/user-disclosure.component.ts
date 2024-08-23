@@ -16,6 +16,7 @@ import { listAnimation, leftSlideInOut } from '../../common/utilities/animations
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
 import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
+import { DashboardProjectCount } from '../../common/services/coi-common.interace.ts';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -327,18 +328,18 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
-    setSelectedModuleCode(moduleName: string, disclosure: any, count: number | null = null, moduleCode: number = 0) {
+    openCountModal(moduleName: string, disclosure: any, count: number | null = null, moduleCode: number = 0) {
         if (count > 0) {
             this.selectedModuleCode = moduleCode;
             this.disclosures = disclosure;
             this.fcoiTypeCode = disclosure?.fcoiTypeCode;
-            this.isShowCountModal = true;
             this.currentDisclosureId = disclosure?.coiDisclosureId;
             this.currentDisclosureNumber = disclosure.disclosureNumber || disclosure.coiDisclosureNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
             this.disclosureSequenceStatusCode = disclosure.dispositionStatusCode;
             this.personId = disclosure.personId;
+            this.isShowCountModal = true;
         }
     }
 

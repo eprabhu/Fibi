@@ -129,9 +129,9 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.mandatoryList.clear();
             const selectedModuleCode = this.selectedProjectType === 'Award' ? '1' : '3';
             // const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.awardId : event.moduleItemId : null;
-            const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.moduleItemId : event.moduleItemId : null;
+            const moduleItemKey = event ? this.selectedProjectType === 'Award' ? event.moduleItemKey : event.moduleItemKey : null;
             const projectTitle = event ? `${event.moduleItemKey} ${event.title}` : '';
-            this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
+            this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemKey).subscribe((data: any) => {
                 if (data) {
                     if (data.projectDisclosure != null) {
                         this.isShowExistingDisclosure = true;
@@ -142,6 +142,8 @@ export class DisclosureCreateModalComponent implements OnInit {
                     } else {
                         this.assignSelectedProject(event);
                     }
+                } else {
+                    this.assignSelectedProject(event);
                 }
             }, err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
@@ -241,7 +243,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     homeUnit: this.reviseObject.homeUnit,
                     revisionComment: this.reviseObject.revisionComment,
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
-                    moduleItemKey: this.manualProjectAddDetails.moduleItemId,
+                    moduleItemKey: this.manualProjectAddDetails.moduleItemKey,
                     moduleCode: this.manualProjectAddDetails.moduleCode,
                     personId: this.commonService.getCurrentUserDetail('personID'),
                 },
@@ -255,7 +257,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                 homeUnit: this.reviseObject.homeUnit,
                 coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                 revisionComment: this.reviseObject.revisionComment,
-                moduleItemKey: this.manualProjectAddDetails.moduleItemId,
+                moduleItemKey: this.manualProjectAddDetails.moduleItemKey,
                 moduleCode: this.manualProjectAddDetails.moduleCode,
                 personId: this.commonService.getCurrentUserDetail('personID')
             };
@@ -480,6 +482,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private assignSelectedProject(event): void {
         if (event) {
             this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.moduleItemId : event.moduleItemId;
+            this.manualProjectAddDetails.moduleItemKey = this.selectedProjectType == 'Award' ? event.moduleItemKey : event.moduleItemKey;
             this.manualProjectAddDetails.moduleCode = this.selectedProjectType == 'Award' ? event.moduleCode : event.moduleCode;
             this.manualProjectAddDetails.title = (this.selectedProjectType == 'Award' ? event.moduleItemKey : event.moduleItemId)  + ' - ' + event.title ;
             this.manualProjectAddDetails.principalInvestigator = this.selectedProjectType == 'Award' ? event.principalInvestigator : event.principalInvestigator;

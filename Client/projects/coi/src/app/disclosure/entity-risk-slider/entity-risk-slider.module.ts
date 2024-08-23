@@ -5,7 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { EntityRiskSliderService } from './entity-risk-slider.service';
 import { FormsModule } from '@angular/forms';
-import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
+import { CoiSummaryEventsAndStoreService } from '../summary/services/coi-summary-events-and-store.service';
 
 @NgModule({
     imports: [

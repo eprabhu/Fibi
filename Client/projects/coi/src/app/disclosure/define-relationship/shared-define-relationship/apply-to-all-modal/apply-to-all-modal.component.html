@@ -1,0 +1,55 @@
+<app-coi-modal [modalConfig]="defineRelationshipService.modalConfig" (modalAction)="applyToAllmodalAction($event)">
+    <!-- header -->
+    <ng-container modal-header>
+        <span>Apply to All</span>
+        <app-common-help-text [helpTextHardCoded]="'Apply to all'"></app-common-help-text>
+    </ng-container>
+
+    <ng-container modal-body>
+        <div>
+            <!-- conflict status -->
+            <div class="mb-4">
+                <label for="apply_to_all_select" class="coi-text-dark d-block mb-1">
+                    <span class="mandatory me-1" aria-label="Mandatory field">*</span>
+                    <span>Conflict Status</span>
+                    <app-common-help-text [helpTextHardCoded]="'Please select a conflict status'"></app-common-help-text>
+                </label>
+                <!-- select -->
+                <select class="form-select form-control" id="apply_to_all_select" name="apply_to_all_select"
+                    [(ngModel)]="defineRelationshipService.applyToAllModal.projectConflictStatusCode"
+                    (ngModelChange)="validateConflictStatus()"
+                    title="Click here to select conflict status"
+                    aria-label="Click here to select conflict status"
+                    [class.is-invalid]="mandatoryList.has('CONFLICT_STATUS')">
+                    <option disabled value=""><span class="d-block py-2">--Select--</span></option>
+                    <ng-container *ngFor="let status of defineRelationshipService.coiStatusList; let conflictIndex = index">
+                        <option [value]="status.projectConflictStatusCode"><span
+                                class="d-block py-2">{{status?.description}}</span></option>
+                    </ng-container>
+                </select>
+                <!-- conflict status error -->
+                <span *ngIf="mandatoryList.has('CONFLICT_STATUS')" class="invalid-feedback">{{ mandatoryList.get('CONFLICT_STATUS') }}</span>
+            </div>
+
+            <!-- description -->
+            <div class="mb-1">
+                <label for="apply_to_all_description_textarea" class="coi-text-dark d-block mb-1">
+                    <span class="mandatory me-1" aria-label="Mandatory field">*</span>
+                    <span>Define Project - SFI Relation</span>
+                    <app-common-help-text [helpTextHardCoded]="'Please enter the description.'"></app-common-help-text>
+                </label>
+                <textarea class="form-control" id="apply_to_all_description_textarea" rows="5"
+                    name="apply_to_all_description_textarea"
+                    [(ngModel)]="defineRelationshipService.applyToAllModal.comment"
+                    appLengthValidator [limit]=2000 spellcheck="false"
+                    (ngModelChange)="defineRelationshipService.applyToAllModal.comment = defineRelationshipService.applyToAllModal.comment.trim(); validateDescription()"
+                    title="Click here to provide your description"
+                    placeholder="Please provide the description here."
+                    [attr.aria-label]="defineRelationshipService.applyToAllModal.comment"
+                    [class.is-invalid]="mandatoryList.has('CONFLICT_COMMENT')"></textarea>
+                <!-- description error -->
+                <span *ngIf="mandatoryList.has('CONFLICT_COMMENT')" class="invalid-feedback">{{ mandatoryList.get('CONFLICT_COMMENT') }}</span>
+            </div>
+        </div>
+    </ng-container>
+</app-coi-modal>

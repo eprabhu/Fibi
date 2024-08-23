@@ -1,50 +1,20 @@
-<!--<div id="STICKY_COI_REVIEW_HEADER" class="tab-sticky">
-	<div class="row py-0 px-4">
-		<div class="col">
-			<div class="row my-3 p-0 ">
-				<div class="col-auto f-15">
-					<span> Details of Disclosure :
-						<span class="fw-600">#{{coiDetails?.disclosureNumber}} {{coiDetails?.coiDisclosureCategoryType?.description}}</span>
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class="col-auto d-flex align-items-center">
-			<button class="button-container nav-style" (click)="toggleToolkitVisibility()"
-				title="{{(isToolkitVisible? 'Hide Toolkit':'Show Toolkit')}}">
-				<span class="fa-large fa fa-angle-double-right" *ngIf="isToolkitVisible"></span>
-				<span class="fa-large fa fa-angle-double-left" *ngIf="!isToolkitVisible"></span>
-			</button>
-		</div>
+<ng-container *ngIf="isActivateObserverOption">
+	<div tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2" id="scrollspy_view_0" [enableRepeatedLoad]="true"
+		(visibleInViewport)="defineRelationshipService.updateScrollSpyConfig($event, 0);" [initialDelayTimeToObserve]="200"
+		[minHeight]="0" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI801')">
+		<app-screening-questionnaire-summary></app-screening-questionnaire-summary>
 	</div>
-</div>-->
-
-<app-screening-questionnaire-summary></app-screening-questionnaire-summary>
-<app-sfi-summary></app-sfi-summary>
-<div class="main-title d-flex flex-end justify-content-between px-1 pb-2 position-relative" id="COI803">
-	<h3 class="fs-16">
-	  <span class="d-flex align-items-center">
-	  <strong tabindex="0" aria-label="Relationships">Relationships</strong>
-	  <span class="d-inline-block" tabindex="-1" data-bs-toggle="tooltip" title="View entity relationships."
-		data-bs-placement="top">
-		<mat-icon aria-label="info" class="ms-1 f-16 text-secondary position-relative mt-1" data-bs-toggle="tooltip">info</mat-icon>
-	  </span>
-	</span>
-	</h3>
-	<button [attr.aria-label]="'Click here to ' + (isRelationCollapsed ? 'collapse' : 'expand') + ' Details of relationship'" id="relationship_collapse_btn" class="align-items-center border btn d-flex justify-content-center p-0 position-absolute rounded-5 shadow-sm toggle-btn"
-	(click)="clearHighlightOnRelationshipCollapse()" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
-	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
-	</button>
-  </div>
-<div [hidden]="!isRelationCollapsed">
-	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
-		<div *ngFor="let projectDetails of _dataStoreAndEventsService.concatenatedProjectList; let i =index" [id]="projectDetails.projectTypeCode+'-'+projectDetails.projectId">
-			<app-relationship-summary [selectedProject]="projectDetails" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
-		</div>
-	</ng-container>
-	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
-		<app-no-information> </app-no-information>
+	<div tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2" id="scrollspy_view_1" [enableRepeatedLoad]="true"
+		(visibleInViewport)="defineRelationshipService.updateScrollSpyConfig($event, 1);" [initialDelayTimeToObserve]="200"
+		[minHeight]="0" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI802')">
+		<app-sfi-summary></app-sfi-summary>
 	</div>
-</div>
-<!--<app-conflict-management-summary></app-conflict-management-summary>-->
-<app-certify-summary></app-certify-summary>
+	<div id="scrollspy_view_2">
+		<app-define-relationship-summary></app-define-relationship-summary>
+	</div>
+	<div tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2" id="scrollspy_view_3" [enableRepeatedLoad]="true"
+		(visibleInViewport)="defineRelationshipService.updateScrollSpyConfig($event,  coiService.isExpandSummaryBySection['COI803'] ? this.filteredProjectSfiRelationsList.length + 2 : 2);" [initialDelayTimeToObserve]="200"
+		[minHeight]="0" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI804')">
+		<app-certify-summary></app-certify-summary>
+	</div>
+</ng-container>
