@@ -30,6 +30,7 @@ export class RouterGuardService  {
            forkJoin(this._coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO()), this.evaluateValidation())
                 .subscribe((res: any) => {
                     if (res) {
+                        res[0].applicableQuestionnaire = [];
                         this.checkQuestionnaireCompleted(res[0]);
                         observer.next(true);
                     } else {

@@ -14,7 +14,7 @@ import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
@@ -56,7 +56,7 @@ public class ConflictOfInterestVO {
 
 	private PersonEntity personEntity;
 
-	private CoiEntity coiEntity;
+	private Entity coiEntity;
 
 	private String personId;
 
@@ -166,7 +166,7 @@ public class ConflictOfInterestVO {
 
 	private String filterType;
 
-	private List<CoiEntity> coiEntityList;
+	private List<Entity> entityList;
 
 	private Boolean isActive;
 

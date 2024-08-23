@@ -57,7 +57,7 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
     }
 
     checkForSFIOpenedFromSlider() {
-        return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary', 'entity-management/entity-details', 'user-dashboard/disclosures', 'coi/admin-dashboard'].some(ele => this._router.url.includes(ele))
+        return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary', 'manage-entity/', 'user-dashboard/disclosures', 'coi/admin-dashboard'].some(ele => this._router.url.includes(ele))
     }
 
     async getAvailableRelationship() {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
@@ -29,7 +29,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "COI_DISCL_PROJECT_ENTITY_REL")
 @EntityListeners(AuditingEntityListener.class)
 @Data
@@ -71,7 +71,7 @@ public class CoiDisclProjectEntityRel implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCL_PROJECT_ENTITY_REL_FK3"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private CoiEntity coiEntity;
+	private Entity coiEntity;
 	
 //	@Column(name = "ENTITY_NUMBER")
 //	private Integer entityNumber;

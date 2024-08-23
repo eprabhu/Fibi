@@ -75,6 +75,7 @@ export class CommonService {
     modalPersonId: string = '';
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
     relationshipTypeCache = {};
+    entityURL: any;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -128,6 +129,7 @@ export class CommonService {
         this.EXTERNAL_APPLICATION_BASE_URL = configurationData.EXTERNAL_APPLICATION_BASE_URL;
         this.EXTERNAL_PROPOSAL_URL = configurationData.EXTERNAL_PROPOSAL_URL;
         this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
+        this.entityURL = configurationData.entityURL;
     }
 
     pageScroll(elementId) {
@@ -575,5 +577,19 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     removeUserDetailsFromLocalStorage() {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
+
+    getSectionName(tabName, section) {
+        let sectionDetails = tabName.get(section);
+        if(sectionDetails) {
+           return sectionDetails.sectionName;
+        }
+   }
+
+   getSectionId(tabName, section) {
+       let sectionDetails = tabName.get(section);
+       if(sectionDetails) {
+           return sectionDetails.sectionId;
+       }
+   }
 
 }

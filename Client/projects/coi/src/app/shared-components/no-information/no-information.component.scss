@@ -7,8 +7,8 @@
 
 .no-data-container .no-data-icon-outer {
     display: inline-block;
-    width: 85px;
-    height: 85px;
+    width: 75px;
+    height: 75px;
     margin-bottom: 4px;
     border-radius: 50%;
     background: #eff0f5;
@@ -31,4 +31,8 @@
 
 .no-data-container h5 .default-content:not(:only-child) {
     display: none;
+}
+
+.custom-border-radius{
+border-radius: 0.5rem;
 }
