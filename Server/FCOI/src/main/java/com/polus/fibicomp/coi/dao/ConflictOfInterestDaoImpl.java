@@ -647,7 +647,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("reviewStatusCode", coiDisclosure.getReviewStatusCode());
 		criteriaUpdate.set("versionStatus", coiDisclosure.getVersionStatus());
 		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
-		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
+		criteriaUpdate.set("updatedBy", AuthenticatedUser.getLoginPersonId());
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"), coiDisclosure.getDisclosureId()));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -747,14 +747,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<CoiDisclosure> getActiveDisclosure(String personId) {
 		List<CoiDisclosure> coiDisclosures = new ArrayList<>();
 		try {
+			StringBuilder hqlQuery = new StringBuilder();
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<CoiDisclosure> query = builder.createQuery(CoiDisclosure.class);
-			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
-			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
-					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
-					builder.equal(rootCoiDisclosure.get("versionStatus"), Constants.COI_ACTIVE_STATUS)));
-			List<CoiDisclosure> disclData = session.createQuery(query).getResultList();
+			hqlQuery.append("SELECT d FROM CoiDisclosure d");
+			hqlQuery.append(" WHERE d.personId = :personId");
+			hqlQuery.append(" AND d.fcoiTypeCode IN :fcoiTypeCode");
+			hqlQuery.append(" AND d.versionStatus = :versionStatus");
+			org.hibernate.query.Query query = session.createQuery(hqlQuery.toString());
+			query.setParameter("personId", personId);
+			query.setParameter("fcoiTypeCode", Arrays.asList("1", "3"));
+			query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
+			List<CoiDisclosure> disclData = query.getResultList();
 			if (disclData != null && !disclData.isEmpty()) {
 				CoiDisclosure coiDisclosure = disclData.get(0);
 				coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
@@ -772,6 +775,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiDisclosures.add(coiDisclosure);
 			}
 		} catch (Exception ex) {
+			logger.error("Exception on getActiveDisclosure {}", ex.getMessage());
 			throw new ApplicationException("Unable to fetch Active Disclosure", ex, Constants.JAVA_ERROR);
 		}
 		return coiDisclosures;
@@ -1504,8 +1508,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-//	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId,
-//															  String searchString, Integer moduleItemKey) {
 	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId,
 															  String searchString, Integer moduleItemKey) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -1566,7 +1568,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
-					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
+					detail.setReporterRole(rset.getString("KEY_PERSON_ROLE_NAME"));
 					detail.setReporterName(rset.getString("KEY_PERSON"));
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					detail.setAccountNumber(rset.getString("ACCOUNT_NUMBER"));
@@ -1582,6 +1584,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
 					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
 					detail.setModuleItemId(rset.getInt("PROPOSAL_ID"));
+					detail.setModuleItemKey(rset.getString("PROPOSAL_ID"));
 					detail.setTitle(rset.getString("TITLE"));
 					detail.setStartDate(rset.getTimestamp("START_DATE"));
 					detail.setEndDate(rset.getTimestamp("END_DATE"));
@@ -1591,7 +1594,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
-					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
+					detail.setReporterRole(rset.getString("KEY_PERSON_ROLE_NAME"));
 					detail.setReporterName(rset.getString("KEY_PERSON"));
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					detail.setConflictStatus(rset.getString("CONFLICT_DESCRIPTION"));
@@ -2438,50 +2441,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return false;
 		}
 	}
-
-	@Override
-	public void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId, Integer moduleCode, String moduleItemKey, String type) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		try {
-			CallableStatement statement = connection.prepareCall("{call SYNC_SFIS_AND_DISCLOSURE(?,?,?,?,?,?,?,?)}");
-			if (disclosureId == null) {
-				statement.setNull(1, Types.INTEGER);
-			} else {
-				statement.setInt(1, disclosureId);
-			}
-			if (disclosureNumber == null) {
-				statement.setNull(2, Types.INTEGER);
-			} else {
-				statement.setInt(2, disclosureNumber);
-			}
-
-			statement.setString(3, AuthenticatedUser.getLoginPersonId());
-			statement.setString(4, AuthenticatedUser.getLoginUserName());
-			if (personEntityId == null) {
-				statement.setNull(5, Types.INTEGER);
-			} else {
-				statement.setInt(5, personEntityId);
-			}
-			if (moduleCode == null) {
-				statement.setNull(6, Types.INTEGER);
-			} else {
-				statement.setInt(6, moduleCode);
-			}
-			if (moduleItemKey == null) {
-				statement.setNull(7, Types.INTEGER);
-			} else {
-				statement.setString(7, moduleItemKey);
-			}
-			statement.setString(8, type);
-			statement.execute();
-		} catch (Exception e) {
-			logger.error("Exception in syncProjectWithDisclosure {}", e.getMessage());
-		}
-	}
-
-
 
 	@Override
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId) {

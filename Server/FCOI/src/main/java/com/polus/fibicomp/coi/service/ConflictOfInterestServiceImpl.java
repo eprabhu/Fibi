@@ -212,7 +212,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
-	//TODO getDisclosureDetailsForSFI
 	@Override
 	public ResponseEntity<Object> getDisclosureDetailsForSFI(Integer coiFinancialEntityId) {
 		List<Integer> disclosureIds = conflictOfInterestDao.getDisclosureIdsByCOIFinancialEntityId(coiFinancialEntityId);
@@ -1519,6 +1518,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setExpirationDate(null);
         disclosure.setUpdatedBy(AuthenticatedUser.getLoginPersonId());
         disclosure.setReviewStatusCode(REVIEW_STATUS_WITHDRAWN);
+		disclosure.setSyncNeeded(true);
         disclosure = fcoiDisclosureDao.saveOrUpdateCoiDisclosure(disclosure);
         WithdrawDisclosureDto withdrawDisclosureDto = WithdrawDisclosureDto.builder()
                 .certifiedAt(null)
@@ -1558,6 +1558,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setExpirationDate(null);
         disclosure.setUpdatedBy(AuthenticatedUser.getLoginPersonId());
         disclosure.setReviewStatusCode(REVIEW_STATUS_RETURNED);
+		disclosure.setSyncNeeded(true);
         disclosure = fcoiDisclosureDao.saveOrUpdateCoiDisclosure(disclosure);
 		try {
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_RETURNED)

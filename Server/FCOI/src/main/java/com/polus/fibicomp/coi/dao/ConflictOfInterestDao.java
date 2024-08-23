@@ -589,18 +589,6 @@ public interface ConflictOfInterestDao {
 	 */
 	boolean checkEntityAdded(Integer enitityId, String personId);
 
-	/**
-	 *
-	 * @param disclosureId
-	 * @param disclosureNumber
-	 * @param personEntityId
-	 * @param moduleCode
-	 * @param moduleItemKey
-	 * @param type
-	 */
-	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId,
-								   Integer moduleCode, String moduleItemKey, String type);
-
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
 
 //	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId);
