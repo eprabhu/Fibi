@@ -424,7 +424,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
                         hideModal('reviseOrCreateDisclosureModal');
                         this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
-                            { queryParams: { disclosureId: data.coiDisclosure.disclosureId }});
+                            { queryParams: { disclosureId: data.disclosureId }});
                         this.clearModal();
                     }, err => {
                         if (err.status === 405) {

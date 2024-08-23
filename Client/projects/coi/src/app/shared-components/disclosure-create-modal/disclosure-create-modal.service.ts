@@ -9,7 +9,7 @@ export class DisclosureCreateModalService {
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
     reviseDisclosure(reviseObject) {
-        return this._http.post(this._commonService.baseUrl + '/reviseDisclosure', reviseObject);
+        return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/reviseDisclosure', reviseObject);
     }
 
     createDisclosure(params: FCOIDisclosureCreateRO) {
