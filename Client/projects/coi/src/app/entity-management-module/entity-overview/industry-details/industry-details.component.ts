@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { hideModal, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { Industry_Details } from '../../shared/entity-interface';
+import { deepCloneObject, hideModal, isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { IndustryDetails } from '../../shared/entity-interface';
+import { Subscription } from 'rxjs';
+import { EntityOverviewService } from '../entity-overview.service';
+import { EntityDataStoreService } from '../../entity-data-store.service';
 
 @Component({
   selector: 'app-industry-details',
@@ -9,10 +12,19 @@ import { Industry_Details } from '../../shared/entity-interface';
 })
 export class IndustryDetailsComponent {
 
-    industryDetails: Industry_Details = new Industry_Details();
-    industryCategoryTypeOptions = 'INDUSTRY_CATEGORY_TYPE#INDUSTRY_CATEGORY_TYPE#true#true';
-    industryCategoryDescriptionOptions = 'currency#CURRENCY_CODE#true#true';
+    industryDetails: IndustryDetails = new IndustryDetails();
+    industryCategoryTypeOptions = 'INDUSTRY_CATEGORY_TYPE#INDUSTRY_CATEGORY_TYPE_CODE#false#false';
+    industryCategoryDescriptionOptions = 'EMPTY#EMPTY#true#true';
     mandatoryList = new Map();
+    $subscriptions: Subscription[] = [];
+    industryCategoryTypeCode: any;
+    entityIndustryCategories = [];
+    industryCategoryDescriptionsList: any = [];
+    entityId: any;
+    entityIndustryClassifications: any = [];
+    entityIndustryClassificationsGrouping: any = {};
+    categoryDescriptionList = [];
+    categoryTypeList = [];
 
     addIndustryDetails(event) {
         if(event) {
@@ -20,43 +32,106 @@ export class IndustryDetailsComponent {
         }
     }
 
+    constructor(private _entityOverviewService: EntityOverviewService, private _dataStoreService: EntityDataStoreService) {}
+
+    ngOnInit(){
+        this.getDataFromStore();
+        this.listenDataChangeFromStore();
+    }
+
     clearIndustryDetails() {
         this.mandatoryList.clear();
-        this.industryDetails = new Industry_Details();
+        this.industryDetails = new IndustryDetails();
+        this.categoryTypeList = [];
+        this.categoryDescriptionList = [];
+        this.industryCategoryTypeCode = null;
+        this.entityIndustryCategories = [];
         hideModal('addIndustryDetails');
     }
 
     addIndustry() {
         this.entityMandatoryValidation();
         if(!this.mandatoryList.size) {
-            this.clearIndustryDetails();
+            this.saveIndustryDetails();
         }
     }
 
     onIndustryCategoryTypeSelect(event) {
-        if(event) {
-            this.industryDetails.industryCategoryType = event;
+        this.industryCategoryDescriptionsList = [];
+        if(event && event.length) {
+            this.industryCategoryTypeCode = event[0].code;
+            this.fetchIndustryDescription();
         } else {
-            this.industryDetails.industryCategoryType = null;
+            this.industryCategoryTypeCode = null;
         }
     }
 
+    fetchIndustryDescription() {
+        this.$subscriptions.push(this._entityOverviewService.fetchIndustryCategoryCode(this.industryCategoryTypeCode).subscribe((data: any) => {
+            if(data) {
+                this.industryCategoryDescriptionsList = deepCloneObject(data);
+            }
+        }))
+    }
+
+
     entityMandatoryValidation(): void {
         this.mandatoryList.clear();
-        if(!this.industryDetails.industryCategroyDescription || !this.industryDetails.industryCategroyDescription.length) {
-            this.mandatoryList.set('industryCategroyDescription', 'Please select industry category description.');
+        if(!this.industryCategoryTypeCode || !this.industryCategoryTypeCode.length) {
+            this.mandatoryList.set('industryCategoryTypeCode', 'Please select industry category type.');
         }
-        if(!this.industryDetails.industryCategoryType) {
-            this.mandatoryList.set('industryCategoryType', 'Please select industry category type.');
+        if(!this.entityIndustryCategories || !this.entityIndustryCategories.length) {
+            this.mandatoryList.set('industryCategroyDescription', 'Please select industry category description.');
         }
     }
 
     onIndustryCategoryDescriptionSelect(event) {
-        if(event) {
-            this.industryDetails.industryCategroyDescription = event;
+        if(event && event.length) {
+            this.entityIndustryCategories = event;
         } else {
-            this.industryDetails.industryCategroyDescription = null;
+            this.entityIndustryCategories = [];
         }
+    }
+
+    saveIndustryDetails() {
+        this.setReqObj();
+        this.$subscriptions.push(this._entityOverviewService.saveIndustryDetails(this.industryDetails).subscribe((data: any) => {
+            this._dataStoreService.updateStore(['entityIndustryClassifications'], { 'entityIndustryClassifications':  data });
+            this.clearIndustryDetails();
+        }))
+    }
+
+    setReqObj() {
+        this.industryDetails.entityIndustryCatIds = [];
+        this.industryDetails.entityId = this.entityId;
+        this.entityIndustryCategories.forEach((ele) => {
+            this.industryDetails.entityIndustryCatIds.push(ele.industryCategoryId);
+        })
+    }
+
+    private getDataFromStore() {
+        const entityData = this._dataStoreService.getData();
+        if (isEmptyObject(entityData)) { return; }
+        this.entityId = entityData?.entityDetails?.entityId;
+        this.entityIndustryClassifications = entityData.entityIndustryClassifications;
+        if(this.entityIndustryClassifications.length) {
+            this.entityIndustryClassificationsGrouping = this.groupBy(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'description');
+        }
+    }
+
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
+            })
+        );
+    }
+
+    groupBy(jsonData, key, innerKey, secondInnerKey) {
+        return jsonData.reduce((relationsTypeGroup, item) => {
+            (relationsTypeGroup[item[key][innerKey][secondInnerKey]] = relationsTypeGroup[item[key][innerKey][secondInnerKey]] || []).push(item);
+            return relationsTypeGroup;
+        }, {});
     }
 
 }

@@ -87,6 +87,14 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
+    "/fcoiDisclosure/updateProjectRelationship": {
+        "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
+    "/fcoiDisclosure/historyDashboard": {
+        "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
     "/getSFIDashboard": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
@@ -196,7 +204,7 @@
         "secure": false
     },
     "/getLookUpDatas": {
-        "target": "http://10.199.100.23:9090/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/getCOIReviewerDashboard": {
@@ -248,7 +256,7 @@
         "secure": false
     },
     "/auth/login": {
-        "target": "http://10.199.100.23:9090/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/auth/logout": {
@@ -304,10 +312,6 @@
         "secure": false
     },
     "/getProjConflictStatusType": {
-        "target": "http://10.199.100.23:9090/coi",
-        "secure": false
-    },
-    "/updateProjectRelationship": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
@@ -387,10 +391,6 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/entity/*": {
-        "target": "http://10.199.100.23:9090/coi",
-        "secure": false
-    },
     "/downloadQuesAttachment": {
         "target": "http://10.199.100.23:9090/",
         "secure": false
@@ -424,10 +424,6 @@
         "secure": false
     },
     "/disclosure/history": {
-        "target": "http://10.199.100.23:9090/coi",
-        "secure": false
-    },
-    "/disclosure/historyDashboard": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
@@ -498,7 +494,7 @@
     },
     "/formbuilder/getForm": {
         "target": "http://10.199.100.23:9090/",
-        "secure": false  
+        "secure": false
     },
     "/opa/opaDisclosureHistory": {
         "target": "http://10.199.100.23:9090/",
@@ -572,32 +568,16 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/coi/saveOrUpdateCoiFinancialEntityDetails": {
-        "secure": false,
-        "target": "http://10.199.100.23:9090/"
-    },
-    "/coi/createSFI": {
-        "target": "http://10.199.100.23:9090/",
+    "/reviewComments/fetch": {
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/coi/getEntityWithRelationShipInfo": {
-        "target": "http://10.199.100.23:9090/",
+    "/reviewComments": {
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/coi/getSFIRelationshipDetails": {
-        "target": "http://10.199.100.23:9090/",
-        "secure": false
-    },
-    "/coi/reviewComments/fetch": {
-        "target": "http://10.199.100.23:9090/",
-        "secure": false
-    },
-    "/coi/reviewComments": {
-        "target": "http://10.199.100.23:9090/",
-        "secure": false
-    },
-    "/coi/reviewComments/*/*": {
-        "target": "http://10.199.100.23:9090/",
+    "/reviewComments/*/*": {
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
     "/formbuilder/reviewComments/fetch": {
@@ -678,6 +658,74 @@
     },
     "/consultingDisclosure/history/*" : {
         "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
+    "/getDisclosureDetailsForSFI/*" : {
+        "target": "http://10.199.100.23:9090/coi",
+        "secure": false
+    },
+    "/entity/create" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/saveAdditionalAddresses" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/saveRegistrationDetails" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/fetch/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/dunsNumberExists" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/ueiNumberExists" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/cageNumberExists" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/update" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/fetchIndustryCategoryCode/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/saveIndustryDetails" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/updateOtherDetails" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/addPriorName" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/addForeignName" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/fetchCurrencyDetails" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/saveRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/fetchRiskTypes" : {
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     }
 }

@@ -27,14 +27,14 @@ export class CreateEntityComponent {
 
     saveBasicEntityDetails(event) {
         if(event) {
-            openModal('entityProceedCheckMatch');
+            // openModal('entityProceedCheckMatch');
         }
     }
 
-    createEntity() {
-        this.saveEntity.next(true);
-        hideModal('entityProceedCheckMatch');
-    }
+    // createEntity() {
+    //     this.saveEntity.next(true);
+    //     hideModal('entityProceedCheckMatch');
+    // }
 
     proceedCreateEntity() {
         this.initalProceed.next(true);

@@ -25,7 +25,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
         window.scrollTo(0,0);
         this.setStickyTop();
         this.$subscriptions.push(this.commonService.$globalEventNotifier.subscribe((event: GlobalEventNotifier) => {
-            if (event.uniqueId === 'COI_DISCLOSURE_HEADER') {
+            if (event.uniqueId === 'COI_DISCLOSURE_HEADER_RESIZE') {
                 this.setStickyTop();
             }
         }));

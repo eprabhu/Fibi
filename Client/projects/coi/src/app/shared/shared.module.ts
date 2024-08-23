@@ -60,6 +60,7 @@ import { CommonInformationComponent } from './common-information/common-informat
 import { VisibleInViewportDirective } from './directives/visibleInViewport.directive';
 import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
 import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
+import { EntityCreationComponent } from './entity-creation/entity-creation.component';
 
 @NgModule({
     imports: [
@@ -85,7 +86,7 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
         DragNDragDirective, CustomTagRemoverPipe, PaginationComponent,
         CountModalComponent, ActivityComponent, NoDataLabelComponent, RichTextComponent, HostContainerDirective, ReadMoreComponent,
-        TailingSpaceRemoverDirective, CommonHelpTextComponent, CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent],
+        TailingSpaceRemoverDirective, CommonHelpTextComponent, CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent, EntityCreationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -137,6 +138,7 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         CommonInformationComponent,
         VisibleInViewportDirective,
         SkeletonLoaderComponent,
+        EntityCreationComponent
     ],
 
     providers: [

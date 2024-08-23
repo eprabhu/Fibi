@@ -1,76 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { CoiSummaryEventsAndStoreService } from '../coi-summary-events-and-store.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CoiSummaryEventsAndStoreService } from '../services/coi-summary-events-and-store.service';
 import { Subscription } from 'rxjs';
 import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
-import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CoiService } from '../../services/coi.service';
-import { CoiSummaryService } from '../coi-summary.service';
-import { ProjectRelationshipDetails } from '../../coi-interface';
+import { CoiSummaryService } from '../services/coi-summary.service';
+import { DefineRelationshipDataStore, ProjectSfiRelations } from '../../coi-interface';
+import { DefineRelationshipService } from '../../define-relationship/services/define-relationship.service';
+import { heightAnimation } from '../../../common/utilities/animations';
+import { DefineRelationshipDataStoreService } from '../../define-relationship/services/define-relationship-data-store.service';
+import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-coi-review',
     templateUrl: './review.component.html',
-    styleUrls: ['./review.component.scss']
+    styleUrls: ['./review.component.scss'],
+    animations: [heightAnimation('0', '*', 400, 'heightAnimation')]
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent implements OnInit, OnDestroy {
 
-    isToolkitVisible = true;
-    coiDetails: any = {};
     isRelationCollapsed = true;
     $subscriptions: Subscription[] = [];
-    selectedProject: ProjectRelationshipDetails;
+    intersectionObserverOptions: IntersectionObserverInit;
+    isActivateObserverOption = false;
+    projectSfiRelationsList: ProjectSfiRelations[] = [];
+    filteredProjectSfiRelationsList: ProjectSfiRelations[] = [];
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         private _dataStore: DataStoreService, public commonService: CommonService, public coiService: CoiService,
-        public coiSummaryService: CoiSummaryService
+        public coiSummaryService: CoiSummaryService, public defineRelationshipService: DefineRelationshipService,
+        private _defineRelationshipDataStore: DefineRelationshipDataStoreService
     ) { }
 
     ngOnInit() {
-        this.fetchCOIDetails();
-        this.listenDataChangeFromStore();
-        this.listenToolKitFocusSection();
+        this.getDataFromRelationStore();
+        this.listenDataChangeFromRelationStore();
+        this.intersectionObserverOptions = {
+            root: document.getElementById('SCROLL_SPY_LEFT_CONTAINER'),
+            rootMargin: '0px 0px 0px 0px',
+            threshold: Array.from({ length: 100 }, (_, i) => i / 100)
+        };
+        this.isActivateObserverOption = true;
+
     }
 
-    fetchCOIDetails(): void {
-        this.coiDetails = this._dataStoreAndEventsService.getData(
-            this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId,
-            ['coiDisclosure']
-        ).coiDisclosure;
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
-    toggleToolkitVisibility(): void {
-        this.isToolkitVisible = !this.isToolkitVisible;
-        this._dataStoreAndEventsService.$isToolkitVisible.next(this.isToolkitVisible);
-    }
-    
-    private listenDataChangeFromStore() {
+    private listenDataChangeFromRelationStore(): void {
         this.$subscriptions.push(
-            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                this.fetchCOIDetails();
+            this._defineRelationshipDataStore.$relationsChanged.subscribe((changes: DefineRelationshipDataStore) => {
+                if (changes.updatedKeys.includes('conflictCount') || changes.searchChanged) {
+                    this.getDataFromRelationStore();
+                }
             })
         );
     }
- 
-    openModuleSummaryDetails(event: any) {
-        if (event) {
-            this.commonService.openProjectDetailsModal(event, null);
-        }
-    }
 
-    // 'COI803' parent element of Relationships header.
-    private listenToolKitFocusSection() {
-        this.$subscriptions.push(this.coiService.$isExpandSection.subscribe(ele =>{
-            if (ele.section == 'COI803') {
-                this.isRelationCollapsed = ele.isExpand;
-            }
-        }));
-    }
-
-    clearHighlightOnRelationshipCollapse() {
-        this.isRelationCollapsed = !this.isRelationCollapsed;
-        this.coiSummaryService.activeSubNavItemId = '';
+    private getDataFromRelationStore(): void {
+        this.filteredProjectSfiRelationsList = this._defineRelationshipDataStore.getFilteredStoreData();
+        this.projectSfiRelationsList = this._defineRelationshipDataStore.getActualStoreData();
     }
 
 }

@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { CommonService } from '../../../common/services/common.service';
 import { COISection, Section } from '../coi-comparison-constants';
-import { CoiSummaryEventsAndStoreService } from '../coi-summary-events-and-store.service';
-import { CoiSummaryService } from '../coi-summary.service';
+import { CoiSummaryEventsAndStoreService } from '../services/coi-summary-events-and-store.service';
+import { CoiSummaryService } from '../services/coi-summary.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {HTTP_ERROR_STATUS} from '../../../../../../fibi/src/app/app-constants';
 import { listAnimation, slideInAnimation } from '../../../common/utilities/animations';

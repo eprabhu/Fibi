@@ -98,7 +98,7 @@
         <div class="pt-2 py-2 info-card-border row fs-14 rounded-2 shadow-medium bg-light">
             <div class="col-4 mb-2">
                 <span>
-                    <strong>#{{existingDisclosureDetails?.disclosureNumber}} : {{existingDisclosureDetails?.disclosureType}} Disclosure by {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
+                    <strong>#{{existingDisclosureDetails?.disclosureNumber}} - {{existingDisclosureDetails?.disclosureType}} Disclosure by {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
                 </span>
             </div>
             <div class="col-8 mb-2">
@@ -166,13 +166,14 @@
     </span>
         <div class="mt-1">
             <ul class="mb-0 fs-14">
-                <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
-                    <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
-                        [value]="type.description" class="me-2 cursor-pointer" type="radio"
-                        name="project-type" id="{{type?.description}}" [disabled]="['2', '4', '5'].includes(type?.coiProjectTypeCode)">
-                    <label class="cursor-pointer fw-normal"
-                        for="{{type?.description}}">{{type?.description}}</label>
-                </li>
+                <ng-container *ngFor="let type of projectTypes">
+                    <li *ngIf="type.isActive" class="me-5 d-flex align-items-center">
+                        <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
+                            [value]="type.description" class="me-2 cursor-pointer" type="radio"
+                            name="{{type?.description}}" id="{{type?.description}}" [disabled]="!type?.projectDisclosureNeeded">
+                        <label class="cursor-pointer fw-normal" for="{{type?.description}}">{{type?.description}}</label>
+                    </li>
+                </ng-container>
             </ul>
             <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block fs-13">
                 {{projectDisclosureValidation?.get('projectSelect')}}

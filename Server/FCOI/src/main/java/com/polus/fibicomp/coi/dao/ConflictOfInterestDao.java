@@ -26,7 +26,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
@@ -95,7 +95,7 @@ public interface ConflictOfInterestDao {
 	 * @param vo
 	 * @return
 	 */
-	public List<CoiEntity> searchEntity(ConflictOfInterestVO vo);
+	public List<Entity> searchEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get entity status(lookup)
@@ -162,7 +162,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiEntity
 	 * @return saved information of coiEntity
 	 */
-	CoiEntity saveOrUpdateCoiEntity(CoiEntity coiEntity);
+	Entity saveOrUpdateEntity(Entity coiEntity);
 
 	/**
 	 * This method is used for get number of Disclosure of a person that are in CURRENT_DISCLOSURE type
@@ -470,7 +470,7 @@ public interface ConflictOfInterestDao {
 	 * This method is used to get Entity Details by Entity Id
 	 * @return COIEntity
 	 */
-	public CoiEntity getCoiEntityDetailsById(Integer coiEntityId);
+	public Entity getEntityDetailsById(Integer coiEntityId);
 
 	public List<CoiDisclosure> getActiveDisclosure(String personId);
 
@@ -489,7 +489,7 @@ public interface ConflictOfInterestDao {
 	 */
 	public DashBoardProfile getCOIAdminDashboard(CoiDashboardVO vo);
 
-	public List<CoiEntity> getAllEntityList(ConflictOfInterestVO vo);
+	public List<Entity> getAllEntityList(ConflictOfInterestVO vo);
 
 	public void setEntityStatus(ConflictOfInterestVO vo);
 
@@ -506,7 +506,7 @@ public interface ConflictOfInterestDao {
 
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, String searchString, Integer moduleItemKey);
 
-	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
+	public List<Entity> getAllSystemEntityList(CoiDashboardVO vo);
 
 	public CoiTravelDisclosure saveOrUpdateCoiTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
 
@@ -518,7 +518,7 @@ public interface ConflictOfInterestDao {
 
 	DashBoardProfile getPersonEntityDashboard(CoiDashboardVO vo);
 
-	public Integer generateMaxCoiEntityNumber();
+	public Integer generateMaxEntityNumber();
 
 	public PersonEntity saveOrUpdatePersonEntity(PersonEntity personEntity);
 
@@ -536,7 +536,7 @@ public interface ConflictOfInterestDao {
 
 	public CoiProjectAward saveOrUpdateCoiProjectAward(CoiProjectAward coiProjectAward);
 
-	CoiEntity getCoiEntityByPersonEntityId(Integer personEntityId);
+	Entity getEntityByPersonEntityId(Integer personEntityId);
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
@@ -675,7 +675,7 @@ public interface ConflictOfInterestDao {
     
     public List<CoiTravelDisclosureTraveler> getEntriesFromTravellerTable(Integer travelDisclosureId);
     
-    public CoiEntity getEntityDetails(Integer entityId);
+    public Entity getEntityDetails(Integer entityId);
     
     public void deleteEntriesFromTraveller(Integer travelDisclosureId);
     

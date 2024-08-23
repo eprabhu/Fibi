@@ -222,8 +222,8 @@ public class PersonEntityServiceImpl implements PersonEntityService {
 //            PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(personEntityDto.getPersonEntityId());
 //            personEntityDto.setPersonEntityId(copyPersonEntity(personEntity, personEntity.getVersionStatus()).getPersonEntityId());
 //        }
-        personEntityDto.setUpdateTimestamp(conflictOfInterestDao.updatePersonEntity(personEntityDto));
-        personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_MODIFIED);
+    	personEntityDto.setUpdateTimestamp(conflictOfInterestDao.updatePersonEntity(personEntityDto));
+    	personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_MODIFIED);
         actionLogService.savePersonEntityActionLog(personEntityDto);
         return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
     }
@@ -386,12 +386,12 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         Integer personEntityId = personEntityDto.getPersonEntityId();
         PersonEntity personEntityObj = conflictOfInterestDao.getPersonEntityDetailsById(personEntityId);
         if (personEntityObj != null && personEntityObj.getVersionStatus().equals(Constants.COI_INACTIVE_STATUS)) {
-            personEntityDto.setPersonEntityId(personEntityId);
+        	personEntityDto.setPersonEntityId(personEntityId);
             return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
         }
         Integer latestPerEntVersionId = conflictOfInterestDao.getPersonEntityIdOfNonArchiveVersion(personEntityObj.getPersonEntityNumber());
         if (!latestPerEntVersionId.equals(personEntityId)) {
-            personEntityDto.setPersonEntityId(latestPerEntVersionId);
+        	personEntityDto.setPersonEntityId(latestPerEntVersionId);
             return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
         }
         if (conflictOfInterestDao.checkPersonEntityAdded(personEntityId)) {

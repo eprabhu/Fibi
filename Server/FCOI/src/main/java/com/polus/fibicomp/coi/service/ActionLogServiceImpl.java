@@ -25,7 +25,7 @@ import com.polus.fibicomp.coi.dto.HistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
@@ -86,7 +86,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 	private static final String TYPE_CODE_AWARD = "3";
 
     @Override
-    public void saveEntityActionLog(String actionLogTypeCode, CoiEntity coiEntity, String comment) {
+    public void saveEntityActionLog(String actionLogTypeCode, Entity coiEntity, String comment) {
         EntityActionType entityActionType = actionLogDao.getEntityActionType(actionLogTypeCode);
         if (entityActionType != null) {
             String message = buildEntityLogMessage(entityActionType.getMessage(), coiEntity);
@@ -101,16 +101,16 @@ public class ActionLogServiceImpl implements ActionLogService {
         }
     }
 
-    private String buildEntityLogMessage(String message, CoiEntity coiEntity) {
+    private String buildEntityLogMessage(String message, Entity coiEntity) {
         Map<String, String> placeholdersAndValues = new HashMap<>();
         placeholdersAndValues.put("{ENTITY_NAME}", coiEntity.getEntityName());
-        placeholdersAndValues.put("{PERSON_NAME}", coiEntity.getCreateUserFullName());
-        placeholdersAndValues.put("{ADMIN_NAME}", coiEntity.getUpdatedUserFullName());
+//        placeholdersAndValues.put("{PERSON_NAME}", coiEntity.getCreateUserFullName());
+//        placeholdersAndValues.put("{ADMIN_NAME}", coiEntity.getUpdatedUserFullName());
         placeholdersAndValues.put("{UPDATE_TIMESTAMP}", coiEntity.getUpdateTimestamp().toString());
-        placeholdersAndValues.put("{RISK}", coiEntity.getEntityRiskCategory() != null ? coiEntity.getEntityRiskCategory().getDescription() : "");
-        if (coiEntity.getNewRiskCategory() != null) {
-            placeholdersAndValues.put("{NEW_RISK}", coiEntity.getNewRiskCategory().getDescription());
-        }
+//        placeholdersAndValues.put("{RISK}", coiEntity.getEntityRiskCategory() != null ? coiEntity.getEntityRiskCategory().getDescription() : "");
+//        if (coiEntity.getNewRiskCategory() != null) {
+//            placeholdersAndValues.put("{NEW_RISK}", coiEntity.getNewRiskCategory().getDescription());
+//        }
         return renderPlaceholders(message, placeholdersAndValues);
     }
 

@@ -1,3 +1,11 @@
-.phone-no-btn {
-    height: 32px;
+.fileChips span {
+    display: inline-block;
+    border-radius: 11px;
+    background: gainsboro;
+    /* box-shadow: 2px 1px 1px #cef9ff; */
+}
+
+.modal-body{
+    max-height: 400px;
+    overflow-y: scroll;
 }

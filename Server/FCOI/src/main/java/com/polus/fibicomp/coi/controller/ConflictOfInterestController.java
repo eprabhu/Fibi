@@ -5,8 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.vo.CoiDashboardVO;
-import com.polus.core.inbox.pojo.Inbox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +24,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.CompleteReivewRequestDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
@@ -47,9 +45,10 @@ import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.service.GeneralService;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.core.security.AuthenticatedUser;;
+import com.polus.fibicomp.globalentity.pojo.Entity;;
 
 @RestController
 @RequestMapping("/coi")
@@ -76,7 +75,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/searchEntity")
-	public List<CoiEntity> searchEnitiy(@RequestBody ConflictOfInterestVO vo) {
+	public List<Entity> searchEnitiy(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for searchEntity");
 		return conflictOfInterestService.searchEntity(vo);
 	}
@@ -171,10 +170,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.loadDisclosureHistory(vo);
 	}
 	
-	@PostMapping(value = "/saveOrUpdateCoiEntity")
-	public ResponseEntity<Object> saveOrUpdateCoiEntity(@RequestBody ConflictOfInterestVO vo) {
+	@PostMapping(value = "/saveOrUpdateEntity")
+	public ResponseEntity<Object> saveOrUpdateEntity(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for createEntity");
-		return conflictOfInterestService.saveOrUpdateCoiEntity(vo);
+		return conflictOfInterestService.saveOrUpdateEntity(vo);
 	}
 	
 	@GetMapping("/getEntityDetails/{coiEntityId}")

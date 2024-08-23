@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { AttachmentTab, ComplianceTab, OverviewTabSection, SponsorTabSection, SubawardOrganisationTab } from '../shared/entity-constants';
+import { jumpToSection } from '../../common/utilities/custom-utilities';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-right-panel',
@@ -11,12 +14,12 @@ export class RightPanelComponent {
     currentTab: 'OVERVIEW' | 'SPONSOR' | 'SUBAWARD' | 'COMPLIANCE' | 'ATTACHMENTS' | '';
     sectionDetails: [];
     selectedSectionId: any;
+    $subscriptions: Subscription[] = [];
 
-    constructor() {}
+    constructor(private _router: Router) {}
 
     ngOnInit() {
-        this.currentTab  = this.getCurrentTab(window.location.href);
-        this.getSectionDetails();
+        this.routerEventSubscription();
     }
 
     getCurrentTab(currentURL): any {
@@ -36,6 +39,7 @@ export class RightPanelComponent {
     }
 
     getSectionDetails() {
+        this.sectionDetails = [];
         switch(this.currentTab) {
             case 'OVERVIEW': {
                 this.sectionDetails = this.getArray(OverviewTabSection);
@@ -66,7 +70,9 @@ export class RightPanelComponent {
 
     scrollToSelectedSection(section) {
         this.selectedSectionId = section.sectionId;
-        this.windowScroll(this.selectedSectionId);
+        const offset = (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100);
+        jumpToSection(this.selectedSectionId, offset);
+        // this.windowScroll(this.selectedSectionId);
     }
 
     windowScroll(scrollTo: string) {
@@ -77,12 +83,18 @@ export class RightPanelComponent {
     }
 
     getArray(map): any {
-        let a = [];
+        let sectionName = [];
         map.forEach((value) => {
-            a.push(value);
+            sectionName.push(value);
         });
-        console.log(a);
-        return a;
+        return sectionName;
     }
+
+    routerEventSubscription() {
+        this.$subscriptions.push(this._router.events.subscribe(event => {
+            this.currentTab  = this.getCurrentTab(window.location.href);
+            this.getSectionDetails();
+        }));
+      }
 
 }
