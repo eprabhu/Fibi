@@ -127,11 +127,10 @@ public interface FcoiDisclosureService {
 
     /**
      * This method is used to validate to create a disclosure
-     * @param moduleCode
-     * @param moduleItemId
+     * @param disclosureDto
      * @return
      */
-    ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
+    ResponseEntity<Object> validateDisclosure(CoiDisclosureDto disclosureDto);
 
     /**
      * This method is used to update administrator

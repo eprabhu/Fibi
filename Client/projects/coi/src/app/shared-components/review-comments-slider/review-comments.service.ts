@@ -69,7 +69,7 @@ export class ReviewCommentsService {
 
     getEntityProjectRelations(moduleCode, moduleId, id, status, personId) {
         if (moduleCode == 3) {
-          return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
+          return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/project/relations', {
             'disclosureId': id,
             'proposalIdlinkedInDisclosure': moduleId,
             'disclosureStatusCode': status,
@@ -78,7 +78,7 @@ export class ReviewCommentsService {
             'personId': personId,
           });
         } else {
-          return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
+          return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/project/relations', {
             'disclosureId': id,
             'disclosureStatusCode': status,
             'moduleCode': moduleCode,

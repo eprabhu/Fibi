@@ -74,7 +74,7 @@ export class CommonService {
     projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
     modalPersonId: string = '';
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
-    entityURL: any;
+    relationshipTypeCache = {};
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -128,7 +128,6 @@ export class CommonService {
         this.EXTERNAL_APPLICATION_BASE_URL = configurationData.EXTERNAL_APPLICATION_BASE_URL;
         this.EXTERNAL_PROPOSAL_URL = configurationData.EXTERNAL_PROPOSAL_URL;
         this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
-        this.entityURL = configurationData.entityURL;
     }
 
     pageScroll(elementId) {
@@ -520,6 +519,30 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }
     }
 
+    getEntityRelationTypePills(validPersonEntityRelType: string) {
+        if (validPersonEntityRelType) {
+            if (this.relationshipTypeCache[validPersonEntityRelType]) {
+                return this.relationshipTypeCache[validPersonEntityRelType];
+            }
+            const entityRelTypes = validPersonEntityRelType.split(':;:');
+            this.relationshipTypeCache[validPersonEntityRelType] = entityRelTypes.map(entity => {
+                const relationshipType = entity.split(':');
+                return { relationshipType: relationshipType[0] || '', description: relationshipType[1] || '' };
+            });
+            return this.relationshipTypeCache[validPersonEntityRelType];
+        }
+    }
+
+    getRelationshipIcon(key: string): string {
+        switch (key) {
+            case 'Commitment': return 'handshake';
+            case 'Travel': return 'flight';
+            case 'Financial': return 'paid';
+            case 'Consulting': return 'supervisor_account';
+            default: return;
+        }
+    }
+
     //There are some scenarios where we have to refresh and call get login user detials and navigate similar to initail login.
     //when we are in login page itself , or logout page we have to refresh and navigate to page based on rights.
     //during 403, 401 also need right based navigation.
@@ -552,19 +575,5 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     removeUserDetailsFromLocalStorage() {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
-
-    getSectionName(tabName, section) {
-        let sectionDetails = tabName.get(section);
-        if(sectionDetails) {
-           return sectionDetails.sectionName;
-        }
-   }
-
-   getSectionId(tabName, section) {
-       let sectionDetails = tabName.get(section);
-       if(sectionDetails) {
-           return sectionDetails.sectionId;
-       }
-   }
 
 }

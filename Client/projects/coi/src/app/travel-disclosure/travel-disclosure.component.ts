@@ -310,9 +310,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     private setPersonEntityDetails(): void {
         this.personEntityDetails.personFullName = this.travelDisclosure?.personFullName;
         this.personEntityDetails.entityName = this.travelDisclosure?.travelEntityName;
-        this.personEntityDetails.unitDetails = `${this.travelDisclosure?.homeUnitNumber} - ${this.travelDisclosure?.homeUnitName}`;
         this.personEntityDetails.homeUnitName = this.travelDisclosure?.homeUnitName;
         this.personEntityDetails.homeUnit = this.travelDisclosure?.homeUnitNumber;
+        this.personEntityDetails.personEmail = this.travelDisclosure.personEmail;
+        this.personEntityDetails.personPrimaryTitle = this.travelDisclosure.personPrimaryTitle;
     }
 
     openConflictSlider(): void {

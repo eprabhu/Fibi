@@ -31,5 +31,7 @@ public class PersonEntityRelationshipDto {
 	private Date involvementEndDate;
     private List<CoiDisclEntProjDetailsDto> projEntRelations;
     private Map<Integer, Long> conflictCount;
+    private String conflictStatus;
     private Boolean conflictCompleted;
+    private String conflictStatusCode;
 }

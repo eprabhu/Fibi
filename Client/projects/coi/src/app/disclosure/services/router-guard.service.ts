@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataStoreService } from './data-store.service';
 import { NextObserver, Observable, Subscriber, Subscription, forkJoin } from 'rxjs';
-import { ApplicableQuestionnaire, getApplicableQuestionnaireData } from '../coi-interface';
+import { ApplicableQuestionnaire, COI, getApplicableQuestionnaireData } from '../coi-interface';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './coi.service';
@@ -27,8 +27,7 @@ export class RouterGuardService  {
         this.ModuleId = route.queryParamMap.get('disclosureId');
         const disclosureId = this.ModuleId ? Number(this.ModuleId) : null;
         return new Observable<boolean>((observer: NextObserver<boolean>) => {
-           forkJoin(this._coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO()),
-            this._coiService.givecoiID(disclosureId))
+           forkJoin(this._coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO()), this.evaluateValidation())
                 .subscribe((res: any) => {
                     if (res) {
                         res[0].applicableQuestionnaire = [];
@@ -41,8 +40,9 @@ export class RouterGuardService  {
                         this._coiService.certificationResponseErrors.push( error);
                     });
                 });
-            });
-        }
+        });
+    }
+
     canDeactivate(): boolean {
         if (this._dataStore.dataChanged) {
             openCommonModal('disclosure-unsaved-changes-modal');
@@ -68,6 +68,11 @@ export class RouterGuardService  {
             if(errorArray && errorArray.length) {
                 errorArray.forEach(ele => this._coiService.certificationResponseErrors.push(ele));
             }
+        }
+
+        evaluateValidation(): any {
+            const COI_DATA: COI = this._dataStore.getData();
+            return this._coiService.evaluateValidation(COI_DATA.coiDisclosure.disclosureId, COI_DATA.coiDisclosure.disclosureNumber);
         }
     }
 

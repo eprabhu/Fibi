@@ -1,0 +1,124 @@
+<div class="card coi-card-regular" id="project_realtionship_card_{{projectSfiRelation?.projectId}}">
+    <div class="card-body">
+        <!-- badge, conflict and comment -->
+        <div class="d-flex align-items-start justify-content-between coi-card-body-notch-container">
+            <div class="d-flex align-items-end">
+                <div [style.background-color]="projectSfiRelation?.projectBadgeColour"
+                    id="project-realtionship-value-heading-{{projectSfiRelation?.projectId}}"
+                    class="coi-card-notch-ribbon mb-auto">{{ projectSfiRelation?.projectType }}</div>
+                <div class="d-flex align-items-end ms-2 mt-1">
+                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 coi-scale-9">{{projectSfiRelation?.projectIcon}}</mat-icon>
+                    <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600 lh-1"
+                        id="coi_project_realtionship_title_link_{{projectSfiRelation?.projectId}}"
+                        (click)="commonService.openProjectDetailsModal(projectSfiRelation, null)"
+                        (keyup.enter)="commonService.openProjectDetailsModal(projectSfiRelation, null)"
+                        [title]="'Click here to view details of #' + projectSfiRelation?.projectNumber + ' -' + projectSfiRelation?.title"
+                        [attr.aria-label]="'Click here to view details of #' + projectSfiRelation?.projectNumber + ' -' + projectSfiRelation?.title">
+                        <span class="text-slice">#{{projectSfiRelation?.projectNumber}} - {{projectSfiRelation?.title}}</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center ms-3">
+                <!-- Conflict Status -->
+                <div *ngIf="projectSfiRelation?.conflictStatusCode" class="me-2">
+                    <label class="coi-text-light me-2 fw-500 d-block d-lg-inline"
+                        for="coi_project_relationship_conflict-status_{{projectSfiRelation?.projectId}}">Conflict Status:</label>
+                    <span class="{{CONFLICT_STATUS_BADGE[projectSfiRelation?.conflictStatusCode]}}"></span>
+                    <span class="badgeFont" id="coi_project_relationship_conflict-status_{{projectSfiRelation?.projectId}}">{{projectSfiRelation?.conflictStatus}}</span>
+                </div>
+                <!-- <p class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p> -->
+
+                <!-- comments -->
+                <button
+                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 my-1"
+                    id="coi_project_realtionship_card_comment_btn_{{projectSfiRelation?.projectId}}"
+                    title="Click here to open comments" aria-label="Click here to open comments"
+                    (click)="openReviewerComment()">
+                    <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
+                </button>
+            </div>
+        </div>
+        <!-- project details -->
+        <div class="row">
+            <!-- Principal Investigator -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
+                [attr.aria-label]="'Principal investigator is ' + (projectSfiRelation?.piName ? projectSfiRelation?.piName : 'empty')">
+                <label for="coi_project_realtionship_pi" class="coi-text-dark d-block">Principal Investigator</label>
+                <div id="coi_project_realtionship_pi">
+                    <app-no-data-label [valueToShow]="projectSfiRelation?.piName">
+                        <span class="coi-text-light text-slice" [attr.aria-label]="projectSfiRelation?.piName"
+                            [title]="projectSfiRelation?.piName">{{projectSfiRelation?.piName}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <!-- Reporter's Project Role -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
+                [attr.aria-label]="'Reporters project role is ' + (projectSfiRelation?.reporterRole ? projectSfiRelation?.reporterRole : 'empty')">
+                <label for="coi_project_relationship_role_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Reporter's Project Role</label>
+                <div id="coi_project_relationship_role_{{projectSfiRelation?.projectId}}">
+                    <app-no-data-label [valueToShow]="projectSfiRelation?.reporterRole">
+                        <span class="coi-text-light text-slice" [attr.aria-label]="projectSfiRelation?.reporterRole"
+                            [title]="projectSfiRelation?.reporterRole">{{projectSfiRelation?.reporterRole}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <!-- Period -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
+                [attr.aria-label]="'Period is ' + ((projectSfiRelation?.projectStartDate || projectSfiRelation?.projectEndDate) ?
+            ((projectSfiRelation?.projectStartDate | dateFormatter) + ' - ' + (projectSfiRelation?.projectEndDate | dateFormatter))  : 'empty')">
+                <label for="coi_project_relationship_period_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Period</label>
+                <div id="coi_project_relationship_period_{{projectSfiRelation?.projectId}}">
+                    <app-no-data-label [valueToShow]="projectSfiRelation?.projectStartDate || projectSfiRelation?.projectEndDate">
+                        <span [title]="((projectSfiRelation?.projectStartDate | dateFormatter) + ' - ' + (projectSfiRelation?.projectEndDate | dateFormatter))"
+                            [attr.aria-label]="((projectSfiRelation?.projectStartDate | dateFormatter) + ' - ' + (projectSfiRelation?.projectEndDate | dateFormatter))"
+                            class="coi-text-light text-slice">{{projectSfiRelation?.projectStartDate | dateFormatter}} - {{projectSfiRelation?.projectEndDate | dateFormatter}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <!-- Project Status -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
+                [attr.aria-label]="'Project status is ' + (projectSfiRelation?.projectStatus ? projectSfiRelation?.projectStatus : 'empty')">
+                <label for="coi_project_relationship_status_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Project Status</label>
+                <div id="coi_project_relationship_status_{{projectSfiRelation?.projectId}}">
+                    <app-no-data-label [valueToShow]="projectSfiRelation?.projectStatus">
+                        <span class="coi-text-light text-slice" [attr.aria-label]="projectSfiRelation?.projectStatus"
+                            [title]="projectSfiRelation?.projectStatus">{{projectSfiRelation?.projectStatus}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <!-- Lead Unit -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
+                [attr.aria-label]="'Lead unit is ' + (commonService.getPersonLeadUnitDetails(projectSfiRelation) ? commonService.getPersonLeadUnitDetails(projectSfiRelation) : 'empty')">
+                <label for="coi_project_relationship_unit_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Lead Unit</label>
+                <div id="coi_project_relationship_unit_{{projectSfiRelation?.projectId}}">
+                    <app-no-data-label [valueToShow]="commonService.getPersonLeadUnitDetails(projectSfiRelation)">
+                        <span class="coi-text-light text-slice" [attr.aria-label]="commonService.getPersonLeadUnitDetails(projectSfiRelation)"
+                            [title]="commonService.getPersonLeadUnitDetails(projectSfiRelation)">{{commonService.getPersonLeadUnitDetails(projectSfiRelation)}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <!-- Sponsor -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
+                [attr.aria-label]="'Sponsor is ' + (projectSfiRelation?.sponsorName ? projectSfiRelation?.sponsorName : 'empty')">
+                <label for="coi_project_relationship_sponsor_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Sponsor</label>
+                <div id="coi_project_relationship_sponsor_{{projectSfiRelation?.projectId}}">
+                    <app-no-data-label [valueToShow]="projectSfiRelation?.sponsorName">
+                        <span class="coi-text-light text-slice" [attr.aria-label]="projectSfiRelation?.sponsorName"
+                            [title]="projectSfiRelation?.sponsorName">{{projectSfiRelation?.sponsorName}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+            <!-- Prime Sponsor -->
+            <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4"
+                [attr.aria-label]="'Prime sponsor is ' + (projectSfiRelation?.primeSponsorName ? projectSfiRelation?.primeSponsorName : 'empty')">
+                <label for="coi_project_relationship_prime_sponsor_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Prime Sponsor</label>
+                <div id="coi_project_relationship_prime_sponsor_{{projectSfiRelation?.projectId}}">
+                    <app-no-data-label [valueToShow]="projectSfiRelation?.primeSponsorName">
+                        <span class="coi-text-light text-slice" [attr.aria-label]="projectSfiRelation?.primeSponsorName"
+                            [title]="projectSfiRelation?.primeSponsorName">{{projectSfiRelation?.primeSponsorName}}</span>
+                    </app-no-data-label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

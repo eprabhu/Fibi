@@ -1,30 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
+import { FCOIDisclosureCreateRO } from '../shared-interface';
 
 @Injectable()
 export class DisclosureCreateModalService {
 
-  constructor(private _http: HttpClient, private _commonService: CommonService) { }
+    constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-  reviseDisclosure(reviseObject) {
-    return this._http.post(this._commonService.baseUrl + '/reviseDisclosure', reviseObject);
-  }
+    reviseDisclosure(reviseObject) {
+        return this._http.post(this._commonService.baseUrl + '/reviseDisclosure', reviseObject);
+    }
 
-  createDisclosure(params: any) {
-    return this._http.post(`${this._commonService.baseUrl}/createDisclosure`, params);
-  }
+    createDisclosure(params: FCOIDisclosureCreateRO) {
+        return this._http.post(`${this._commonService.baseUrl}/fcoiDisclosure`, params);
+    }
 
-  getCoiProjectTypes() {
-    return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
-  }
+    getCoiProjectTypes() {
+        return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
+    }
 
-  checkIfDisclosureAvailable(moduleCode, moduleId) {
-    return this._http.post(this._commonService.baseUrl + '/validateDisclosure', {
-        "moduleCode": moduleCode,
-        "moduleItemId": moduleId,
-        "personId": this._commonService.getCurrentUserDetail('personID')
-    });
-  }
+    checkIfDisclosureAvailable(moduleCode: any, moduleId: any) {
+        return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/validate', {
+            moduleCode: moduleCode,
+            moduleItemId: moduleId,
+            personId: this._commonService.getCurrentUserDetail('personID')
+        });
+    }
 
 }

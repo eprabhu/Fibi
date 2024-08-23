@@ -2,7 +2,7 @@ import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/c
 import {CommonService} from "../services/common.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { NavigationEnd, Router } from '@angular/router';
-import { focusElementyById } from '../utilities/custom-utilities';
+import { focusElementById } from '../utilities/custom-utilities';
 import { SSO_LOGOUT_URL, SSO_TIMEOUT_ERROR_MESSAGE } from '../../app-constants';
 
 @Component({
@@ -20,7 +20,7 @@ export class AppRouterComponent implements OnInit, OnDestroy {
     constructor(public commonService: CommonService, private elementRef: ElementRef, private _router: Router) {
         this._router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
-                focusElementyById('app-main-router');
+                focusElementById('app-main-router');
             }
         });
     }

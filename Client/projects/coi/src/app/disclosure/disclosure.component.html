@@ -1,495 +1,484 @@
-
 <!-- New card header start-->
-<div class="row header-sticky" id="COI-DISCLOSURE-HEADER">
-    <div class="col-12">
-        <!-- new top card -->
-        <div class="card coi-card-expanded">
-            <div class="row mx-0">
-                <div class="col-lg px-0">
-                    <div class="card-header px-3">
-                        <div class="row flex-grow-1 position-relative m-0">
-                            <div class="d-flex col-12 px-0 coi-card-header-notch-container">
-                                <!-- badge -->
-                                <div class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiDisclosureFcoiType?.description + ' disclosure'">
-                                    <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges()}}">{{ coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
-                                </div>
-                                <div class="col row m-0">
-                                    <div class="col-12 d-flex justify-content-between p-0">
-                                        <!-- person -->
-                                        <span class="d-flex align-items-center coi-text-light ms-2 mt-1 text-nowrap">
-                                            <mat-icon aria-hidden="true"
-                                                class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
-                                            <a class="link-primary cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal(coiData)"
-                                                (keyup.enter)="openPersonDetailsModal(coiData)" (keyup.space)="openPersonDetailsModal(coiData)"
-                                                attr.aria-label="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}"
-                                                title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}
-                                            </a>
-                                        </span>
-                                        <!-- links -->
-                                        <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-auto me-3">
-                                            <!-- <span class="ms-2 me-2"  role="link"
-                                                [title]="0 ? 'Click here to view trainings' : ''"
-                                                [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
-                                                [ngClass]="0 ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="-1">
-                                                Trainings({{0}})
-                                            </span> | -->
-                                            <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', coiData?.personEntitiesCount)"
-                                                role="link" (keyup.enter)="openSlider('ENTITY', coiData?.personEntitiesCount)"
-                                                (keyup.space)="openSlider('ENTITY', coiData?.personEntitiesCount)"
-                                                [title]="coiData?.personEntitiesCount ? 'Click here to view entities' : ''"
-                                                [attr.aria-label]="coiData?.personEntitiesCount ? 'Click here to view entities' : ''"
-                                                [ngClass]="coiData?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
-                                                [tabIndex]="coiData?.personEntitiesCount > 0 ? 0 : -1">
-                                                Entities({{coiData?.personEntitiesCount}})
-                                            </a> |
-                                            <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', coiData?.personNotesCount)" role="link"
-                                                (keyup.enter)="openSlider('NOTES', coiData?.personNotesCount)"
-                                                (keyup.space)="openSlider('NOTES', coiData?.personNotesCount)"
-                                                [title]="coiData?.personNotesCount ? 'Click here to view notes' : ''"
-                                                [attr.aria-label]="coiData?.personNotesCount ? 'Click here to view notes' : ''"
-                                                [ngClass]="coiData?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="0"
-                                                [tabIndex]="coiData?.personNotesCount > 0 ? 0 : -1" >
-                                                Notes({{coiData?.personNotesCount}})
-                                            </a> |
-                                            <a class="ms-2 fs-13"
-                                                (click)="openSlider('ATTACHMENTS', coiData?.personAttachmentsCount)" role="link"
-                                                (keyup.enter)="openSlider('ATTACHMENTS', coiData?.personAttachmentsCount)"
-                                                (keyup.space)="openSlider('ATTACHMENTS', coiData?.personAttachmentsCount)"
-                                                [title]="coiData?.personAttachmentsCount ? 'Click here to view attachments' : ''"
-                                                [attr.aria-label]="coiData?.personAttachmentsCount ? 'Click here to view attachments' : ''"
-                                                [ngClass]="coiData?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
-                                                [tabIndex]="coiData?.personAttachmentsCount > 0 ? 0 : -1">
-                                                Attachments({{coiData?.personAttachmentsCount}})
-                                            </a>
+<div class="d-flex flex-column gap-2">
+    <div class="row header-sticky gap-2" id="COI-DISCLOSURE-HEADER">
+        <div class="col-12">
+            <!-- new top card -->
+            <div class="card coi-card-expanded">
+                <div class="row mx-0">
+                    <div class="col-lg px-0">
+                        <div class="card-header px-3 border-0">
+                            <div class="row flex-grow-1 position-relative m-0">
+                                <div class="d-flex col-12 px-0 coi-card-header-notch-container">
+                                    <!-- badge -->
+                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'" class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiProjectType?.description + ' disclosure'">
+                                        <span class="coi-card-notch-ribbon shadow-sm" [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
+                                    </div>
+                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'"class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="'FCOI disclosure'">
+                                        <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip">FCOI</span>
+                                    </div>
+                                    <div class="col row m-0">
+                                        <div class="col-12 d-flex justify-content-between p-0">
+                                            <!-- person -->
+                                            <span class="d-flex align-items-center coi-text-light ms-2 mt-1 text-nowrap">
+                                                <mat-icon aria-hidden="true"
+                                                    class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
+                                                <a class="link-primary cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal(coiData)"
+                                                    (keyup.enter)="openPersonDetailsModal(coiData)" (keyup.space)="openPersonDetailsModal(coiData)"
+                                                    attr.aria-label="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}"
+                                                    title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}
+                                                </a>
+                                            </span>
+                                            <!-- links -->
+                                            <div class="d-flex justify-content-end align-items-center f-14 ms-auto mt-auto me-3">
+                                                <!-- <span class="ms-2 me-2"  role="link"
+                                                    [title]="0 ? 'Click here to view trainings' : ''"
+                                                    [attr.aria-label]="0 ? 'Click here to view trainings' : ''"
+                                                    [ngClass]="0 ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="-1">
+                                                    Trainings({{0}})
+                                                </span> | -->
+                                                <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
+                                                    role="link" (keyup.enter)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
+                                                    (keyup.space)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
+                                                    [title]="coiData?.coiDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                    [attr.aria-label]="coiData?.coiDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
+                                                    [ngClass]="coiData?.coiDisclosure?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                    [tabIndex]="coiData?.coiDisclosure?.personEntitiesCount > 0 ? 0 : -1">
+                                                    Entities({{coiData?.coiDisclosure?.personEntitiesCount}})
+                                                </a> |
+                                                <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)" role="link"
+                                                    (keyup.enter)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)"
+                                                    (keyup.space)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)"
+                                                    [title]="coiData?.coiDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                    [attr.aria-label]="coiData?.coiDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
+                                                    [ngClass]="coiData?.coiDisclosure?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="0"
+                                                    [tabIndex]="coiData?.coiDisclosure?.personNotesCount > 0 ? 0 : -1" >
+                                                    Notes({{coiData?.coiDisclosure?.personNotesCount}})
+                                                </a> |
+                                                <a class="ms-2 fs-13"
+                                                    (click)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)" role="link"
+                                                    (keyup.enter)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)"
+                                                    (keyup.space)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)"
+                                                    [title]="coiData?.coiDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                    [attr.aria-label]="coiData?.coiDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
+                                                    [ngClass]="coiData?.coiDisclosure?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
+                                                    [tabIndex]="coiData?.coiDisclosure?.personAttachmentsCount > 0 ? 0 : -1">
+                                                    Attachments({{coiData?.coiDisclosure?.personAttachmentsCount}})
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 d-flex p-0 align-items-center">
-                                <!-- email -->
-                                <span class="d-flex align-items-center coi-text-light mt-1"
-                                    [title]="coiData?.coiDisclosure?.personEmail">
-                                    <mat-icon aria-hidden="true"
-                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
-                                    <span class="text-slice">{{coiData?.coiDisclosure?.personEmail}}</span>
-                                </span>
-                                <!-- home unit -->
-                                <span class="d-flex align-items-center coi-text-light ms-3 mt-1"
-                                    [title]="commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)">
-                                    <mat-icon aria-hidden="true"
-                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
-                                    <span class="text-slice">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
-                                </span>
-                                <!-- title -->
-                                <span class="d-flex align-items-center coi-text-light ms-3 mt-1" *ngIf="coiData?.coiDisclosure?.personPrimaryTitle"
-                                    [title]="coiData?.coiDisclosure?.personPrimaryTitle">
-                                    <mat-icon aria-hidden="true"
-                                        class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
-                                    <span class="text-slice">{{coiData?.coiDisclosure?.personPrimaryTitle}}</span>
-                                </span>
-                            </div>
-                            <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
-                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2'">
-                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">article</mat-icon>
+                                <div class="col-12 d-flex p-0 align-items-center">
+                                    <!-- email -->
+                                    <span class="d-flex align-items-center coi-text-light mt-1"
+                                        [title]="coiData?.coiDisclosure?.person?.emailAddress">
+                                        <mat-icon aria-hidden="true"
+                                            class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">mail</mat-icon>
+                                        <span class="text-slice">{{coiData?.coiDisclosure?.person?.emailAddress}}</span>
+                                    </span>
+                                    <!-- home unit -->
+                                    <span class="d-flex align-items-center coi-text-light ms-3 mt-1"
+                                        [title]="commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)">
+                                        <mat-icon aria-hidden="true"
+                                            class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">home</mat-icon>
+                                        <span class="text-slice">{{commonService.getPersonLeadUnitDetails(coiData?.coiDisclosure?.person?.unit)}}</span>
+                                    </span>
+                                    <!-- title -->
+                                    <span class="d-flex align-items-center coi-text-light ms-3 mt-1" *ngIf="coiData?.coiDisclosure?.person?.primaryTitle"
+                                        [title]="coiData?.coiDisclosure?.person?.primaryTitle">
+                                        <mat-icon aria-hidden="true"
+                                            class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">work</mat-icon>
+                                        <span class="text-slice">{{coiData?.coiDisclosure?.person?.primaryTitle}}</span>
+                                    </span>
+                                </div>
+                                <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && coiData?.projectDetail" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">{{coiData?.projectDetail?.projectIcon}}</mat-icon>
                                     <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
-                                        title="Click here to view details of #{{ coiData?.projectDetail?.moduleItemId }} : {{ coiData?.projectDetail?.title }}"
-                                        attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.moduleItemId }} : {{ coiData?.projectDetail?.title }}"
+                                        title="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} : {{ coiData?.projectDetail?.title }}"
+                                        attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} : {{ coiData?.projectDetail?.title }}"
                                         (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
-                                        #{{ coiData?.projectDetail?.moduleItemId }} : {{ coiData?.projectDetail?.title }}
+                                        #{{ coiData?.projectDetail?.projectNumber }} : {{ coiData?.projectDetail?.title }}
                                     </a>
-                                </ng-container>
-                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='3'">
-                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">workspace_premium</mat-icon>
-                                    <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
-                                        title="Click here to view details of #{{ coiData?.projectDetail?.moduleItemKey }} : {{ coiData?.projectDetail?.title }}"
-                                        attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.moduleItemKey }} : {{ coiData?.projectDetail?.title }}"
-                                        (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
-                                        #{{ coiData?.projectDetail?.moduleItemKey }} : {{ coiData?.projectDetail?.title }}
-                                    </a>
-                                </ng-container>
-                            </h3>
-                            <button (click)="collapseHeader()"
-                                title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
-                                class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-btn-position">
-                                <mat-icon aria-hidden="true" [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'">expand_more</mat-icon>
-                            </button>
+                                </h3>
+                                <button (click)="collapseHeader()"
+                                    title="Click here to collapse / expand" aria-label="Click here to collapse / expand"
+                                    class="toggle-btn align-items-center border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-btn-position">
+                                    <mat-icon aria-hidden="true" [ngClass]="isCardExpanded ? 'rotate-180' : 'rotate-0'">expand_more</mat-icon>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body" *ngIf="isCardExpanded">
-                        <div class="row gap-0">
-                            <div class="col-6 col-lg-5 col-xl-3 col-xxl-4">
-                                <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
-                                    <span class="coi-text-darker fs-6 coi-field-set">Details</span>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6 col-lg-6 col-xl-12 col-xxl-12 mt-2 pe-0">
-                                            <label class="coi-text-dark d-block">
-                                                <i aria-hidden="true"
-                                                    class="fa fa-user-o fw-700 me-1"></i>Administrator
-                                            </label>
-                                            <span class="coi-text-light">
-                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonName">
-                                                <span>{{coiData?.coiDisclosure?.adminPersonName}}</span>
-                                            </app-no-data-label></span>
-                                        </div>
-                                        <div class="col-12 col-md-6 col-lg-6 col-xl-12 col-xxl-12 mt-2 pe-0">
-                                            <label class="coi-text-dark d-block">
-                                                <img alt="add-adminGroup icon" class="activity-icon"
-                                                    src="assets/images/multiple-admin-1.svg">Admin Group
-                                            </label>
-                                            <span class="coi-text-light">
-                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminGroupId">
-                                                    <span>{{coiData?.coiDisclosure?.adminGroupName}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-7 col-xl-4 col-xxl-4">
-                                <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
-                                    <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
-                                    <div class="row">
-                                        <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-dark d-block">
-                                                Create
-                                            </label>
-                                            <span class="coi-text-light">
-                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
-                                                    <span>{{coiData?.coiDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </div>
-                                        <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-dark d-block"> Certification
-                                            </label>
-                                            <span class="coi-text-light">
-                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
-                                                    <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </div>
-                                        <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-dark d-block"> Expiration
-                                            </label>
-                                            <span class="coi-text-light">
-                                                <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                                    <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
-                                                </app-no-data-label>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-lg-12 col-xl-5 col-xxl-4 mt-4 mt-xl-0">
-                                <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
-                                    <span class="coi-text-darker fs-6 coi-field-set">Status</span>
-                                    <div class="row">
-                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-lighter d-block">Disposition
-                                            </label>
-                                            <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}"></span>
-                                            <span class="coi-text-dark">
-                                                {{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}
-                                            </span>
-                                        </div>
-                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-lighter d-block">Review
-                                            </label>
-                                            <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
-                                            <span class="coi-text-dark">
-                                                {{coiData?.coiDisclosure?.coiReviewStatusType?.description}}
-                                            </span>
-                                        </div>
-                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-lighter d-block">Disclosure
-                                            </label>
-                                            <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
-                                                <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}"></span>
-                                                <span class="coi-text-dark">
-                                                    {{coiData?.coiDisclosure?.coiConflictStatusType?.description}}
+                        <div class="card-body" *ngIf="isCardExpanded">
+                            <div class="row gap-0">
+                                <div class="col-6 col-lg-5 col-xl-3 col-xxl-4">
+                                    <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                        <span class="coi-text-darker fs-6 coi-field-set">Details</span>
+                                        <div class="row">
+                                            <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12 mt-2 pe-0">
+                                                <label for="disclosure-administrator" class="coi-text-dark d-block">
+                                                    <i aria-hidden="true" class="fa fa-user-o fw-700 me-1"></i>
+                                                    <span>Administrator</span>
+                                                </label>
+                                                <span id="disclosure-administrator" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonName">
+                                                    <span>{{coiData?.coiDisclosure?.adminPersonName}}</span>
+                                                </app-no-data-label></span>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6 col-xl-12 col-xxl-12 mt-2 pe-0">
+                                                <label for="disclosure-admin-group" class="coi-text-dark d-block">
+                                                    <img alt="add-adminGroup icon" class="activity-icon" src="assets/images/multiple-admin-1.svg">
+                                                    <span>Admin Group</span>
+                                                </label>
+                                                <span id="disclosure-admin-group" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminGroupId">
+                                                        <span>{{coiData?.coiDisclosure?.adminGroupName}}</span>
+                                                    </app-no-data-label>
                                                 </span>
-                                            </app-no-data-label>
+                                            </div>
+    
                                         </div>
-                                        <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
-                                            <label class="coi-text-lighter d-block">Risk
-                                            </label>
-                                            <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiRiskCategory?.description">
-                                                <span class="d-flex" id="badge-risk">
-                                                    <mat-icon aria-hidden="true"
-                                                        class="{{commonService.getRiskColor(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0">warning</mat-icon>
-                                                    <span class="coi-text-dark">
-                                                        {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
-                                                    </span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-7 col-xl-4 col-xxl-4">
+                                    <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                        <span class="coi-text-darker fs-6 coi-field-set">Dates</span>
+                                        <div class="row">
+                                            <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-date-create" class="coi-text-dark d-block">Create</label>
+                                                <span id="disclosure-date-create" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
+                                                        <span>{{coiData?.coiDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                                    </app-no-data-label>
                                                 </span>
-                                            </app-no-data-label>
+                                            </div>
+                                            <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-date-certification" class="coi-text-dark d-block">Certification</label>
+                                                <span id="disclosure-date-certification" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
+                                                        <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
+                                            <div class="col-6 col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-date-expiration" class="coi-text-dark d-block">Expiration</label>
+                                                <span id="disclosure-date-expiration" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
+                                                        <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col col-lg-12 col-xl-5 col-xxl-4 mt-4 mt-xl-0">
+                                    <div class="coi-box-red border border-secondary border-opacity-50 fw-medium p-3 rounded-1 h-100 position-relative">
+                                        <span class="coi-text-darker fs-6 coi-field-set">Status</span>
+                                        <div class="row">
+                                            <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-status-disposition" class="coi-text-lighter d-block">Disposition</label>
+                                                <span id="disclosure-status-disposition" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiDispositionStatusType?.description">
+                                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}"></span>
+                                                        <span class="coi-text-dark ms-1">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
+                                            <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-status-review" class="coi-text-lighter d-block">Review</label>
+                                                <span id="disclosure-status-review" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiReviewStatusType?.description">
+                                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
+                                                        <span class="coi-text-dark ms-1">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
+                                            <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-status-disclosure" class="coi-text-lighter d-block">Disclosure</label>
+                                                <span id="disclosure-status-disclosure" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
+                                                        <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}"></span>
+                                                        <span class="coi-text-dark ms-1">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
+                                            <div class="col-3 col-md-3 col-lg-3 col-xl-6 col-xxl-6 mt-2 pe-0">
+                                                <label for="disclosure-risk-level" class="coi-text-lighter d-block">Risk</label>
+                                                <span id="disclosure-risk-level" class="coi-text-light">
+                                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiRiskCategory?.description">
+                                                        <span class="d-flex">
+                                                            <mat-icon aria-hidden="true"
+                                                                class="{{commonService.getRiskColor(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round me-1 flex-shrink-0">warning</mat-icon>
+                                                            <span class="coi-text-dark">{{coiData?.coiDisclosure?.coiRiskCategory?.description}}</span>
+                                                        </span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 pt-3 action-header-border">
-                    <div class="h-100" *ngIf="isCreateMode">
-                        <div class="d-grid gap-2 d-md-flex flex-md-wrap">
-                            <button (click)="goBackStep(); clickedOption = 'previous'" [disabled]="currentStepNumber==1"
-                                title="Go to previous page" aria-label="Go to previous page"
-                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                <mat-icon aria-hidden="true" class="mr-15">keyboard_backspace</mat-icon>
-                                <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
-                            </button>
-                            <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
-                                title="Go to next page" aria-label="Go to next page"
-                                class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
-                                <mat-icon aria-hidden="true" class="keyboard-backspace">keyboard_backspace</mat-icon>
-                                <span class="ms-2" *ngIf="isCardExpanded">Next</span>
-                            </button>
-                            <button (click)="sfiService.isShowSfiNavBar = true" title="Click here to add new SFI"
-                                *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')"
-                                aria-label="Click to add new SFI"
-                                class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14"
-                                [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                <mat-icon aria-hidden="true" class="me-2">add</mat-icon>
-                                <span class="mt-1 ms-2" *ngIf="isCardExpanded">Add Significant Financial Interest</span>
-                            </button>
-                            <button (click)="triggerSave()"
-                                *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                                title="Click here to save your progress" aria-label="Click to save your progress"
-                                class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
-                                [disabled]="coiService.currentActiveQuestionnaire?.MODULE_SUB_ITEM_CODE == EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE"
-                                [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                <mat-icon aria-hidden="true">save</mat-icon>
-                                <span class="ms-2" *ngIf="isCardExpanded">Save</span>
-                            </button>
-                            <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
-                                *ngIf="router.url.includes('create-disclosure/certification')" title="Click to submit your disclosure"
-                                aria-label="Click here to submit your disclosure"
-                                class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
-                                [ngClass]="isCardExpanded ? 'col-12' : 'col'">
-                                <mat-icon aria-hidden="true">done</mat-icon>
-                                <span class="ms-2" *ngIf="isCardExpanded">Submit</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="h-100" *ngIf="!isCreateMode">
-                        <div class="d-grid d-md-flex flex-md-wrap gap-2 mb-2">
-                                <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
-                                    (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
-                                    [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col'" title="Go to previous page" aria-label="Go to previous page"
-                                    class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center col">
-                                    <mat-icon aria-hidden="true">undo</mat-icon>
+                    <div class="col-lg-3 pt-3 action-header-border">
+                        <div class="h-100" *ngIf="isCreateMode">
+                            <div class="d-grid gap-2 d-md-flex flex-md-wrap">
+                                <button (click)="goBackStep(); clickedOption = 'previous'" [disabled]="currentStepNumber==1"
+                                    title="Go to previous page" aria-label="Go to previous page"
+                                    class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                                    <mat-icon aria-hidden="true" class="mr-15">keyboard_backspace</mat-icon>
                                     <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
                                 </button>
-
-                                <button
-                                    title="Click here to add new review comment"
-                                    (click)="openReviewComment()"
-                                    class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
-                                    <mat-icon aria-hidden="true">rate_review</mat-icon>
-                                    <span class="fs-14 ms-2" *ngIf="isCardExpanded">Comments</span>
+                                <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
+                                    title="Go to next page" aria-label="Go to next page"
+                                    class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col fs-14">
+                                    <mat-icon aria-hidden="true" class="keyboard-backspace">keyboard_backspace</mat-icon>
+                                    <span class="ms-2" *ngIf="isCardExpanded">Next</span>
                                 </button>
-                                <!-- more option button for expanded & collapsed card -->
-                                <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
-                                <button
-                                [matMenuTriggerFor]="beforeMenu"
-                                    class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                    role="button" title="Click for More Actions" aria-label="Click for More Actions">
-                                    <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                                <button (click)="sfiService.isShowSfiNavBar = true" title="Click here to add new SFI"
+                                    *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')"
+                                    aria-label="Click to add new SFI"
+                                    class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14"
+                                    [ngClass]="isCardExpanded ? 'col-12' : 'col'">
+                                    <mat-icon aria-hidden="true" class="me-2">add</mat-icon>
+                                    <span class="mt-1 ms-2" *ngIf="isCardExpanded">Add Significant Financial Interest</span>
                                 </button>
-
-                                <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
-                                    <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" aria-label="Click to Assign Administrator/Admin Group"
-                                        class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col'}}"
-                                        (click)="openAddAssignModal();">
-                                        <mat-icon aria-hidden="true">group_add</mat-icon>
-                                        <span class="ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
-                                    </button>
-                                </ng-container>
-
-                                <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
-                                <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                    <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && ['3', '7', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && getManageDisclosureRight()">
-                                        <button mat-menu-item title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
-                                            class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
-                                            (click)="openAddAssignModal();"
-                                            [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
-                                            <mat-icon aria-hidden="true">group_add</mat-icon>
-                                            <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
-                                        </button>
-                                    </ng-container>
-
-                                    <ng-container *ngIf="checkForModifyRisk()">
-                                        <button mat-menu-item title="Click to Modify Risk" area-describedby="Click to Modify Risk"
-                                            class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
-                                            (click)="openRiskSlider();">
-                                            <mat-icon aria-hidden="true" class="material-icons-round">warning</mat-icon>
-                                            <span class="ms-2 mt-1 fw-medium fs-14">Modify Risk</span>
-                                        </button>
-                                    </ng-container>
-
-                                    <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
-                                    <!-- check logged person & disclosure created person is same -->
-                                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) &&
-                                    (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
-                                        area-describedby="Click to Withdraw"
-                                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
-                                        (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
-                                        <mat-icon aria-hidden="true">logout</mat-icon>
-                                        <span class="ms-2 fw-medium fs-14">Withdraw</span>
-                                    </button>
-
-                                    <!-- return to pi -->
-                                    <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
-                                    <!-- Check logged person and administrator are same -->
-                                <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
-                                (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
-                                    (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
-                                    class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                                    <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
-                                    <span class="ms-1 fw-medium fs-14">Return</span>
+                                <button (click)="triggerSave()"
+                                    *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
+                                    title="Click here to save your progress" aria-label="Click to save your progress"
+                                    class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
+                                    [disabled]="coiService.currentActiveQuestionnaire?.MODULE_SUB_ITEM_CODE == EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE"
+                                    [ngClass]="isCardExpanded ? 'col-12' : 'col'">
+                                    <mat-icon aria-hidden="true">save</mat-icon>
+                                    <span class="ms-2" *ngIf="isCardExpanded">Save</span>
                                 </button>
-
-                                <button mat-menu-item title="Click to Notify"
-                                    class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                                    <mat-icon aria-hidden="true" class="returnIcon">notifications</mat-icon>
-                                    <span class="ms-1 fw-medium fs-14">Notify</span>
-                                </button>
-                            </mat-menu>
-
-                                <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
-                                title="Click to start review" area-describedby="Click to start review"
-                                (click)="updateCoiReview('START')"
-                                id="start-review-btn"
-                                [ngClass]="isCardExpanded? 'col-12' : 'col'"
-                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon aria-hidden="true" class="material-icons-outlined">play_circle_filled</mat-icon>
-                                <span class="ms-2" *ngIf="isCardExpanded"> Start Review </span>
-                            </button>
-
-                                <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
-                                title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
-                                id="complete-review-btn"
-                                [ngClass]="isCardExpanded? 'col-12' : 'col'"
-                                class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
-                                <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
-                                </button>
-                                <button *ngIf="coiService.isCOIAdministrator &&
-                                                ((coiService.isReviewActionCompleted
-                                                && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
-                                                && (commonService?.getCurrentUserDetail('personID') == coiData.coiDisclosure.adminPersonId))
-                                                ||
-                                                (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
-                                                && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"
-                                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                                        [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click here to complete final review"
-                                        data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
+                                <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
+                                    *ngIf="router.url.includes('create-disclosure/certification')" title="Click to submit your disclosure"
+                                    aria-label="Click here to submit your disclosure"
+                                    class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
+                                    [ngClass]="isCardExpanded ? 'col-12' : 'col'">
                                     <mat-icon aria-hidden="true">done</mat-icon>
-                                    <span class="ms-2" *ngIf="isCardExpanded"> Complete Final Review </span>
+                                    <span class="ms-2" *ngIf="isCardExpanded">Submit</span>
                                 </button>
-                                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
-                                    <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
-                                    <span class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}}
-                                        <span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="h-100" *ngIf="!isCreateMode">
+                            <div class="d-grid d-md-flex flex-md-wrap gap-2 mb-2">
+                                    <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                                        (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
+                                        [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col'" title="Go to previous page" aria-label="Go to previous page"
+                                        class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center col">
+                                        <mat-icon aria-hidden="true">undo</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
+                                    </button>
+    
+                                    <button
+                                        title="Click here to add new review comment"
+                                        (click)="openReviewComment()"
+                                        class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
+                                        <mat-icon aria-hidden="true">rate_review</mat-icon>
+                                        <span class="fs-14 ms-2" *ngIf="isCardExpanded">Comments</span>
+                                    </button>
+                                    <!-- more option button for expanded & collapsed card -->
+                                    <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
+                                    <button
+                                    [matMenuTriggerFor]="beforeMenu"
+                                        class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
+                                        role="button" title="Click for More Actions" aria-label="Click for More Actions">
+                                        <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                                    </button>
+    
+                                    <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
+                                        <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" aria-label="Click to Assign Administrator/Admin Group"
+                                            class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col'}}"
+                                            (click)="openAddAssignModal();">
+                                            <mat-icon aria-hidden="true">group_add</mat-icon>
+                                            <span class="ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
+                                        </button>
+                                    </ng-container>
+    
+                                    <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
+                                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && ['3', '7', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && getManageDisclosureRight()">
+                                            <button mat-menu-item title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                                                (click)="openAddAssignModal();"
+                                                [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
+                                                <mat-icon aria-hidden="true">group_add</mat-icon>
+                                                <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
+                                            </button>
+                                        </ng-container>
+    
+                                        <ng-container *ngIf="checkForModifyRisk()">
+                                            <button mat-menu-item title="Click to Modify Risk" area-describedby="Click to Modify Risk"
+                                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                                                (click)="openRiskSlider();">
+                                                <mat-icon aria-hidden="true" class="material-icons-round">warning</mat-icon>
+                                                <span class="ms-2 mt-1 fw-medium fs-14">Modify Risk</span>
+                                            </button>
+                                        </ng-container>
+    
+                                        <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
+                                        <!-- check logged person & disclosure created person is same -->
+                                        <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) &&
+                                        (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
+                                            area-describedby="Click to Withdraw"
+                                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                                            (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
+                                            <mat-icon aria-hidden="true">logout</mat-icon>
+                                            <span class="ms-2 fw-medium fs-14">Withdraw</span>
+                                        </button>
+    
+                                        <!-- return to pi -->
+                                        <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
+                                        <!-- Check logged person and administrator are same -->
+                                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
+                                    (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
+                                        (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
+                                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                        <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
+                                        <span class="ms-1 fw-medium fs-14">Return</span>
+                                    </button>
+    
+                                    <button mat-menu-item title="Click to Notify"
+                                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                        <mat-icon aria-hidden="true" class="returnIcon">notifications</mat-icon>
+                                        <span class="ms-1 fw-medium fs-14">Notify</span>
+                                    </button>
+                                </mat-menu>
+    
+                                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
+                                    title="Click to start review" area-describedby="Click to start review"
+                                    (click)="updateCoiReview('START')"
+                                    id="start-review-btn"
+                                    [ngClass]="isCardExpanded? 'col-12' : 'col'"
+                                    class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                                    <mat-icon aria-hidden="true" class="material-icons-outlined">play_circle_filled</mat-icon>
+                                    <span class="ms-2" *ngIf="isCardExpanded"> Start Review </span>
+                                </button>
+    
+                                    <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
+                                    title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
+                                    id="complete-review-btn"
+                                    [ngClass]="isCardExpanded? 'col-12' : 'col'"
+                                    class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                                    <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
+                                    <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
+                                    </button>
+                                    <button *ngIf="coiService.isCOIAdministrator &&
+                                                    ((coiService.isReviewActionCompleted
+                                                    && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
+                                                    && (commonService?.getCurrentUserDetail('personID') == coiData.coiDisclosure.adminPersonId))
+                                                    ||
+                                                    (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
+                                                    && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"
+                                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                                            [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click here to complete final review"
+                                            data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
+                                        <mat-icon aria-hidden="true">done</mat-icon>
+                                        <span class="ms-2" *ngIf="isCardExpanded"> Complete Final Review </span>
+                                    </button>
+                                    <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
+                                        <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
+                                        <span class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}}
+                                            <span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
+                                    </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- new top card ends -->
         </div>
-        <!-- new top card ends -->
+        <!-- view mode -->
+        <ng-container *ngIf="!isCreateMode">
+            <div class="col-12">
+                <div class="navigation-tabs coi-navigation-tabs d-flex align-items-center">
+                    <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge' role="button">
+                        <div class="navigation-box-content" routerLinkActive="active"
+                            title="Click here to view the disclosure screening form"
+                            area-describedby="Click here to view the disclosure screening form">Disclosure</div>
+                    </div>
+                    <div *ngIf="canShowReviewerTab || coiService.isCOIAdministrator" [routerLink]="['review']"
+                        class="navigation-box border-end" queryParamsHandling='merge' role="button">
+                        <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the reviews"
+                            area-describedby="Click here to view the reviews">Reviews</div>
+                    </div>
+                    <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
+                        title="click to view history" role="button">
+                        <div class="navigation-box-content" routerLinkActive="active">History</div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <!-- create mode -->
+        <ng-container *ngIf="isCreateMode">
+            <div class="col-12">
+                <div class="steps-outer px-3">
+                    <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1" [class.border-end]="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
+                        <li>
+                            <a class="step-pills"
+                                [class.active-step]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
+                                tabindex="0" (click)="goToStep(1);" (keyup.enter)="goToStep(1);" (keyup.space)="goToStep(1);"
+                                id="step_1" attr.aria-label="Screening Questionnaire">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">
+                                        question_mark</mat-icon></span>
+                                <span class="plls-text" title="Screening Questionnaire">Screening Questionnaire</span>
+                            </a>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <a class="step-pills"
+                                [class.active-step]="isRouteComplete(['sfi', 'relationship', 'certification'])" tabindex="0"
+                                id="step_2" (click)="goToStep(2);" (keyup.enter)="goToStep(2);" (keyup.space)="goToStep(2);"
+                                attr.aria-label="Significant Financial Interest(SFIs)">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">apartment</mat-icon></span>
+                                <span class="plls-text" title="Significant Financial Interest(SFIs)">Significant Financial Interest(SFIs)</span>
+                            </a>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['sfi', 'relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <a class="step-pills" [class.active-step]="isRouteComplete(['relationship', 'certification'])"
+                                tabindex="0" id="step_3" attr.aria-label="Relationships" (click)="goToStep(3);"
+                                (keyup.enter)="goToStep(3);" (keyup.space)="goToStep(3);">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">handshake</mat-icon></span>
+                                <span class="plls-text" title="Relationships">Relationships</span>
+                            </a>
+                        </li>
+                        <li><span class="arrow-right px-2"
+                                [class.active-arrow]="isRouteComplete(['relationship', 'certification'])"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
+                                    aria-hidden="true"></i></span></li>
+                        <li>
+                            <a class="step-pills" [class.active-step]="isRouteComplete(['certification'])" tabindex="0"
+                                id="step_4" attr.aria-label="Certification" (click)="goToStep(4);" (keyup.enter)="goToStep(4);"
+                                (keyup.space)="goToStep(4);">
+                                <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">military_tech</mat-icon></span>
+                                <span class="plls-text" title="Certification">Certification</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="d-inline-block ms-auto ps-3" *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
+                        <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" id="history"
+                            [class.btn-outline-grey-active]="isRouteComplete(['history'])" [routerLink]="['history']" (click)="setFocus('history')">
+                            <mat-icon aria-hidden="true" class="mat-step-icon me-2">update</mat-icon>
+                            <span class="btn-outline-grey-custom-text">History</span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </ng-container>
+        <!--navigation-step-end-->
     </div>
-    <!-- view mode -->
-    <ng-container *ngIf="!isCreateMode">
-        <div class="col-12">
-            <div class="navigation-tabs coi-navigation-tabs d-flex align-items-center">
-                <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge' role="button">
-                    <div class="navigation-box-content" routerLinkActive="active"
-                        title="Click here to view the disclosure screening form"
-                        area-describedby="Click here to view the disclosure screening form">Disclosure</div>
-                </div>
-                <div *ngIf="canShowReviewerTab || coiService.isCOIAdministrator" [routerLink]="['review']"
-                    class="navigation-box border-end" queryParamsHandling='merge' role="button">
-                    <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the reviews"
-                        area-describedby="Click here to view the reviews">Reviews</div>
-                </div>
-                <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
-                    title="click to view history" role="button">
-                    <div class="navigation-box-content" routerLinkActive="active">History</div>
-                </div>
-            </div>
-        </div>
-    </ng-container>
-    <!-- create mode -->
-    <ng-container *ngIf="isCreateMode">
-        <div class="col-12 mt-2">
-            <div class="steps-outer px-3">
-                <ul class="steps py-2 mb-0 ps-0 gap-2 pe-3 flex-grow-1" [class.border-end]="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
-                    <li>
-                        <a class="step-pills"
-                            [class.active-step]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                            tabindex="0" (click)="goToStep(1);" (keyup.enter)="goToStep(1);" (keyup.space)="goToStep(1);"
-                            id="step_1" attr.aria-label="Screening Questionnaire">
-                            <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">
-                                    question_mark</mat-icon></span>
-                            <span class="plls-text" title="Screening Questionnaire">Screening Questionnaire</span>
-                        </a>
-                    </li>
-                    <li><span class="arrow-right px-2"
-                            [class.active-arrow]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"><i
-                                class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
-                                aria-hidden="true"></i></span></li>
-                    <li>
-                        <a class="step-pills"
-                            [class.active-step]="isRouteComplete(['sfi', 'relationship', 'certification'])" tabindex="0"
-                            id="step_2" (click)="goToStep(2);" (keyup.enter)="goToStep(2);" (keyup.space)="goToStep(2);"
-                            attr.aria-label="Significant Financial Interest(SFIs)">
-                            <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">apartment</mat-icon></span>
-                            <span class="plls-text" title="Significant Financial Interest(SFIs)">Significant Financial Interest(SFIs)</span>
-                        </a>
-                    </li>
-                    <li><span class="arrow-right px-2"
-                            [class.active-arrow]="isRouteComplete(['sfi', 'relationship', 'certification'])"><i
-                                class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
-                                aria-hidden="true"></i></span></li>
-                    <li>
-                        <a class="step-pills" [class.active-step]="isRouteComplete(['relationship', 'certification'])"
-                            tabindex="0" id="step_3" attr.aria-label="Relationships" (click)="goToStep(3);"
-                            (keyup.enter)="goToStep(3);" (keyup.space)="goToStep(3);">
-                            <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">handshake</mat-icon></span>
-                            <span class="plls-text" title="Relationships">Relationships</span>
-                        </a>
-                    </li>
-                    <li><span class="arrow-right px-2"
-                            [class.active-arrow]="isRouteComplete(['relationship', 'certification'])"><i
-                                class="fa fa-angle-right" aria-hidden="true"></i> <i class="fa fa-angle-right"
-                                aria-hidden="true"></i></span></li>
-                    <li>
-                        <a class="step-pills" [class.active-step]="isRouteComplete(['certification'])" tabindex="0"
-                            id="step_4" attr.aria-label="Certification" (click)="goToStep(4);" (keyup.enter)="goToStep(4);"
-                            (keyup.space)="goToStep(4);">
-                            <span class="plls-icon me-1"><mat-icon aria-hidden="true" class="mat-step-icon">military_tech</mat-icon></span>
-                            <span class="plls-text" title="Certification">Certification</span>
-                        </a>
-                    </li>
-                </ul>
-                <span class="d-inline-block ms-auto ps-3" *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null">
-                    <button type="button" class="btn btn-outline-grey rounded-5 d-flex align-items-center" id="history"
-                        [class.btn-outline-grey-active]="isRouteComplete(['history'])" [routerLink]="['history']" (click)="setFocus('history')">
-                        <mat-icon aria-hidden="true" class="mat-step-icon me-2">update</mat-icon>
-                        <span class="btn-outline-grey-custom-text">History</span>
-                    </button>
-                </span>
-            </div>
-        </div>
-    </ng-container>
-    <!--navigation-step-end-->
-</div>
-<!-- New card header ends-->
+    <!-- New card header ends-->
 
-<div>
-    <router-outlet></router-outlet>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
 </div>
 
 <div *ngIf="sfiService.isShowSfiNavBar">
@@ -519,7 +508,7 @@
             </div>
             <div class="modal-body">
                 <div class="row mt-2 mb-0">
-                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
                     <div class="col-lg-12 mt-3">
                         <p class="fs-14">Are you sure you want to complete the final review of this disclosure?</p>
                     </div>
@@ -729,7 +718,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
                     <div class="col-12 mt-2">
                         <ng-container *ngIf="this.coiService.submitResponseErrors.length > 0">
                             <div class="text-danger" *ngFor="let error of coiService.submitResponseErrors">
@@ -794,7 +783,7 @@
     </ng-container>
     <!-- modal content -->
     <ng-container content>
-        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails" [disclosureHeaderDetails]="coiData?.coiDisclosure"></app-person-project-entity-card>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
     </ng-container>
 </app-confirmation-modal>
 

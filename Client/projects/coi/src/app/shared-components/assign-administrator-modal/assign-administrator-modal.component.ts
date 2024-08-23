@@ -181,7 +181,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     private getPath() {
         switch (this.path) {
             case 'DISCLOSURES':
-                return 'disclosure';
+                return 'fcoiDisclosure';
             case 'TRAVEL_DISCLOSURES':
                 return 'travelDisclosure';
             case 'OPA_DISCLOSURES':

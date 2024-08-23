@@ -40,7 +40,7 @@ export class CustomPreloaderDirective implements OnInit {
     this.renderer.addClass(loadLoaderClass, "spinner-border");
     this.renderer.setStyle(loadLoaderClass, "width", "5rem");
     this.renderer.setStyle(loadLoaderClass, "height", "5rem");
-    this.renderer.setStyle(loadLoaderClass, "color", "#47a69a");
+    this.renderer.setStyle(loadLoaderClass, "color", "#007DEC");
     this.renderer.appendChild(loaderGrid, loadLoaderClass);
 
     const loaderContent = this.renderer.createElement("div");
