@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EntityDetails, OtherDetails, showEntityToast } from '../../shared/entity-interface';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 import { CommonService } from '../../../common/services/common.service';
-import { DATE_PLACEHOLDER } from '../../../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
@@ -10,6 +10,9 @@ import { EntityDataStoreService } from '../../entity-data-store.service';
 import { EntityOverviewService } from '../entity-overview.service';
 import { AutoSaveService } from '../../../common/services/auto-save.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { EntityManagementService } from '../../entity-management.service';
+import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
+import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-other-details',
@@ -28,16 +31,21 @@ export class OtherDetailsComponent {
     businessStatusTypeOptions = 'entity_business_type#BUSINESS_TYPE_CODE#false#false'
     $debounceEvent = new Subject<any>();
     $subscriptions: Subscription[] = [];
-    isFormDataChanged = false;
-    autoSaveRO: any = {};
     entityDetails: EntityDetails = new EntityDetails();
     priorNames: any = [];
     foreignNames: any = [];
     coiCurrencyList: any = [];
+    autoSaveRO: any = {};
+    isOtherDetailsFormChanged: boolean;
     selectedLookupList = [];
+    isSaving = false;
+    CONFIRMATIN_MODAL_ID = 'other-details-delete-confirm-modal'
+    modalConfig = new COIModalConfig(this.CONFIRMATIN_MODAL_ID, 'Delete', 'Cancel');
+    deleteForgeinNameObj = null;
+    isEditIndex: null | number = null;
 
     constructor(public commonService: CommonService, private _entityOverviewService: EntityOverviewService,
-        public dataStore: EntityDataStoreService, private _autoSaveService: AutoSaveService
+        public dataStore: EntityDataStoreService, private _autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService
     ) {}
 
     ngOnInit() {
@@ -115,7 +123,8 @@ export class OtherDetailsComponent {
       }
 
       immediateAPICall(key) {
-        this.isFormDataChanged = true;
+        this.isOtherDetailsFormChanged = true;
+        this._entityManagementService.hasChangesAvailable = true;
         if(this.otherDetailsObj[key]) {
             this.otherDetailsObj[key] = this.otherDetailsObj[key]?.trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
@@ -128,7 +137,8 @@ export class OtherDetailsComponent {
       }
 
     changeEvent(key) {
-        this.isFormDataChanged = true;
+        this.isOtherDetailsFormChanged = true;
+        this._entityManagementService.hasChangesAvailable = true;
         if(this.otherDetailsObj[key]) {
             this.otherDetailsObj[key] = this.otherDetailsObj[key].trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
@@ -137,7 +147,7 @@ export class OtherDetailsComponent {
     }
 
     autoSaveAPI() {
-        if(this.isFormDataChanged) {
+        if(this.isOtherDetailsFormChanged) {
             if(!this.autoSaveRO.hasOwnProperty('priorName') && !this.autoSaveRO.hasOwnProperty('foreignName')) {
                 this.addOtherDetailsAPI();
             } else if(this.autoSaveRO.hasOwnProperty('priorName')){
@@ -155,6 +165,8 @@ export class OtherDetailsComponent {
             this.$subscriptions.push(this._entityOverviewService.updateOtherDetails(this.autoSaveRO).subscribe((data) => {
                 this.updateStoreData(this.autoSaveRO);
                 this.autoSaveRO = {};
+                this._entityManagementService.hasChangesAvailable = false;
+                this.isOtherDetailsFormChanged = false;
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
@@ -176,6 +188,8 @@ export class OtherDetailsComponent {
                 delete this.otherDetailsObj['priorName'];
                 this.entityPriorName = '';
                 this.addOtherDetailsAPI();
+                this._entityManagementService.hasChangesAvailable = false;
+                this.isOtherDetailsFormChanged = false;
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
@@ -196,6 +210,8 @@ export class OtherDetailsComponent {
                 delete this.otherDetailsObj['foreignName'];
                 this.entityForeignName = '';
                 this.addOtherDetailsAPI();
+                this._entityManagementService.hasChangesAvailable = false;
+                this.isOtherDetailsFormChanged = false;
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
@@ -216,9 +232,10 @@ export class OtherDetailsComponent {
         this.immediateAPICall('foreignName');
     }
 
-    deleteEntityForeignName(index) {
-        // this.otherDetailsObj.foreignName.splice(index, 1);
-        // this.changeEvent('entityForeignName');
+    deleteEntityForeignName(foreignName, index) {
+        this.isEditIndex = index;
+        this.deleteForgeinNameObj = foreignName;
+        openCommonModal(this.CONFIRMATIN_MODAL_ID);
     }
 
     onDateSelect(dateType: 'START'| 'INCORPORATION') {
@@ -251,6 +268,27 @@ export class OtherDetailsComponent {
                 }
             });
             this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
+        }
+    }
+
+    postConfirmation(modalAction: ModalActionEvent) {
+        if(modalAction.action == 'PRIMARY_BTN') {
+            this.deleteForgeinName();
+        }
+        closeCommonModal(this.CONFIRMATIN_MODAL_ID);
+    }
+
+    deleteForgeinName() {
+        if(!this.isSaving) {
+            this.isSaving = true;
+            this.$subscriptions.push(this._entityOverviewService.deleteForeignName(this.deleteForgeinNameObj.id).subscribe((res: any) => {
+                this.foreignNames.splice(this.isEditIndex, 1);
+                this.deleteForgeinNameObj = null;
+                this.isSaving = false;
+            }, err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                this.isSaving = false;
+            }))
         }
     }
 

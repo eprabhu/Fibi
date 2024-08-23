@@ -10,7 +10,7 @@ import { RightPanelComponent } from './right-panel/right-panel.component';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { SharedEntityManagementModule } from './shared/shared-entity-management.module';
 import { EntityDataStoreService } from './entity-data-store.service';
-import { EntityManagementResolveService } from './entity-management-resolve.service';
+import { EntityManagementResolveService, EntityPathResolveService } from './entity-management-resolve.service';
 import { EntityManagementService } from './entity-management.service';
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
         path: '', component: EntityManagementModuleComponent, canActivate: [EntityManagementResolveService],
         children: [
             { path: '', redirectTo: 'entity-overview', pathMatch: 'full' },
-            { path: 'entity-overview',loadChildren: () => import('./entity-overview/entity-overview.module').then(m => m.EntityFormOverviewModule)},
+            { path: 'entity-overview',loadChildren: () => import('./entity-overview/entity-overview.module').then(m => m.EntityFormOverviewModule), canDeactivate: [EntityPathResolveService]},
             { path: 'entity-sponsor', loadChildren: () => import('./entity-sponsor/entity-sponsor.module').then(m => m.EntitySponsorModule)},
             { path: 'entity-subaward', loadChildren: () => import('./entity-subaward/entity-subaward.module').then(m => m.EntitySubawardModule)},
             { path: 'entity-compliance', loadChildren: () => import('./entity-compliance/entity-compliance.module').then(m => m.EntityComplianceModule)},
@@ -49,7 +49,8 @@ const routes: Routes = [
   providers: [
     EntityDataStoreService,
     EntityManagementResolveService,
-    EntityManagementService
+    EntityManagementService,
+    EntityPathResolveService
   ]
 })
 export class EntityManagementModuleModule { }

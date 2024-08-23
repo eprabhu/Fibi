@@ -140,7 +140,7 @@ export class EntityDashboardComponent {
         this.isLoading = true;
         return this.entityDashboardService.getAllSystemEntityList(this.entityDashboardService.coiRequestObject);
       })).subscribe((res: any) => {
-        this.entityList = res.coiEntityList || [];
+        this.entityList = res.entityList || [];
         this.resultCount = res.entityCount;
         this.isLoading = false;
       }, _error => {

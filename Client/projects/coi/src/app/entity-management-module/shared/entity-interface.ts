@@ -1,5 +1,5 @@
 export class Create_Entity{
-    primaryName: string = '';
+    entityName: string = '';
     entityType: EntityType;
     primaryAddressLine1: string = '';
     primaryAddressLine2: string = '';
@@ -44,6 +44,7 @@ export class IndustryDetails{
 
 export class RegistrationDetails {
     entityId?: number;
+    entityRegistrationId?: number;
     entityMailingAddressId?: number;
     regTypeCode: any = '';
     regNumber: any = '';
@@ -58,7 +59,8 @@ export class AdditionalAddress {
     state: string = '';
     postCode: number;
     countryCode: string = '';
-    addressType: string = '';
+    addressType?: any;
+    addressTypeCode: string = '';
 }
 
 export class OtherDetails {
@@ -113,7 +115,7 @@ export class EntireEntityDetails {
 
 export class EntityDetails {
         entityId: string|number;
-        primaryName: string;
+        entityName: string;
         foreignName: string;
         priorName: string;
         shortName: string;

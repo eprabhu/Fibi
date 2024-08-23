@@ -6,11 +6,11 @@
                     Entity Name
                 </label>
                 <input type="text" class="form-control fs-13" id="coi-entity-name"
-                [ngClass]="(mandatoryList?.has('primaryName')) ? 'is-invalid d-block' : ''"
-                [(ngModel)]="createEntityObj.primaryName" (ngModelChange)="changeEvent('primaryName')"
+                [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="createEntityObj.entityName" (ngModelChange)="changeEvent('entityName')"
                 appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
-                <span *ngIf="mandatoryList?.has('primaryName')" class="invalid-feedback d-inline fs-13">
-                    {{mandatoryList?.get('primaryName')}}
+                <span *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('entityName')}}
                 </span>
             </div>
             <div class="col-md-12 col-lg-3">
