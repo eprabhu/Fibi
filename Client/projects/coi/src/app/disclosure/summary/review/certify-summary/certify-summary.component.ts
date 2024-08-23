@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { environment } from '../../../../../environments/environment';
 import { CommentConfiguration } from '../../../coi-interface';
-import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
+import { CoiSummaryEventsAndStoreService } from '../../services/coi-summary-events-and-store.service';
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';

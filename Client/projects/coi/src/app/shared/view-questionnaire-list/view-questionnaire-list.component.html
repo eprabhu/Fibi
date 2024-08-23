@@ -1,4 +1,4 @@
-<div *ngIf="isShowNoDatacard && questionnaireList.length != 0 && isShowQuestionnaire" class="card mt-2">
+<div *ngIf="isShowNoDatacard && questionnaireList.length != 0 && isShowQuestionnaire" class="card">
     <!-- <div class="card-header" [ngClass]="isShowExportButton ? '' : 'pr-0' ">
         <h4 class="card-title align-items-center d-flex">
             <div class="">{{questionnaireHeader}}</div>
@@ -118,10 +118,11 @@
         </div>
     </div>
 </div>
-<button class="d-none" id="confirmVersionModalButton" data-bs-toggle="modal" data-bs-target="#confirmVersionModal"></button>
+<button tabindex="-1" class="d-none" id="confirmVersionModalButton" data-bs-toggle="modal" data-bs-target="#confirmVersionModal" aria-hidden="true"></button>
 <button type="button" id="unsavedChangeModalButton" style="display: none" data-bs-toggle="modal"
-    data-bs-target="#unsavedChangeModal"></button>
-<div class="modal fade mySkinDialog" id="unsavedChangeModal" role="dialog">
+    data-bs-target="#unsavedChangeModal" aria-hidden="true" tabindex="-1"></button>
+<div tabindex="-1" class="modal fade mySkinDialog" id="unsavedChangeModal"
+    role="dialog" aria-label="Are you sure you want to leave this page?">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

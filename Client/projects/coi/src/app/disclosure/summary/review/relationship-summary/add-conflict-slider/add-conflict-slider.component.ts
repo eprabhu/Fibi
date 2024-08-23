@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { CoiSummaryEventsAndStoreService } from '../../../coi-summary-events-and-store.service';
+import { CoiSummaryEventsAndStoreService } from '../../../services/coi-summary-events-and-store.service';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../app-constants';
 import { CommonService } from '../../../../../common/services/common.service';
@@ -9,7 +9,7 @@ import { CoiService } from '../../../../services/coi.service';
 import { openCoiSlider } from '../../../../../common/utilities/custom-utilities';
 import { DataStoreService } from '../../../../services/data-store.service';
 import { COI, ProjectRelationshipDetails } from '../../../../coi-interface';
-import { CoiSummaryService } from '../../../coi-summary.service';
+import { CoiSummaryService } from '../../../services/coi-summary.service';
 
 @Component({
     selector: 'app-add-conflict-slider',
@@ -76,7 +76,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
         if (this.projectConflictValidation()) {
             this.$subscriptions.push(
                 this.dataStoreService.updateProjectRelationship({
-                    disclosureDetailsId: this.entityDetails.disclosureDetailsId,
+                    coiDisclProjectEntityRelId: this.entityDetails.disclosureDetailsId,
                     documentOwnerPersonId: this.entityDetails.personId,
                     disclosureId: this.entityDetails.disclosureId,
                     conflictStatusCode: this.conflictStatus,

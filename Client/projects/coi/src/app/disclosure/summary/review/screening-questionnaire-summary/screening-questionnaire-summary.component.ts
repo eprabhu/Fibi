@@ -2,7 +2,7 @@ import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 
 import { environment } from '../../../../../environments/environment';
 import { CommentConfiguration } from '../../../coi-interface';
-import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
+import { CoiSummaryEventsAndStoreService } from '../../services/coi-summary-events-and-store.service';
 import {CommonService} from "../../../../common/services/common.service";
 import { Subscription } from 'rxjs';
 import { CoiService } from '../../../services/coi.service';
@@ -31,14 +31,14 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
     };
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
-    isQuestionnaireCollapsed = false;
     $subscriptions: Subscription[] = [];
     activeQuestionnaire: any = null;
+    isQuestionnaireCollapsed = false;
 
-
-    constructor(
-        private _commonService: CommonService,
-        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,private _coiService: CoiService,private _dataStore: DataStoreService
+    constructor(public coiService: CoiService,
+                private _dataStore: DataStoreService,
+                private _commonService: CommonService,
+                private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService
     ) { }
 
     ngOnInit() {
@@ -46,7 +46,6 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 1;
         this.configuration = Object.assign({}, this.configuration);
-        this.listenToolKitFocusSection();
         setTimeout(() => {
             window.scrollTo(0,0);
         });
@@ -72,20 +71,11 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
             coiSubSectionsTitle: this.activeQuestionnaire?.QUESTIONNAIRE
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
-        this._coiService.isShowCommentNavBar = true;
+        this.coiService.isShowCommentNavBar = true;
     }
 
     setActiveQuestionnaire(event) {
         this.activeQuestionnaire = event;
-    }
-
-    //'COI801' parent element of ScreeningQuestionnaireSummaryComponent.
-    private listenToolKitFocusSection() {
-        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele => {
-            if (ele.section == 'COI801') {
-                this.isQuestionnaireCollapsed = !ele.isExpand;
-            }
-        }));
     }
 
 }

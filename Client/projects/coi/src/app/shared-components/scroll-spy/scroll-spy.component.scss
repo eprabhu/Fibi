@@ -8,3 +8,29 @@
 #SCROLL_SPY_LEFT_CONTAINER {
     scroll-behavior: auto;
 }
+
+.hideOrShowScrollNav {
+    display: none;
+    z-index: 51;
+}
+
+@media (max-width: 991px) {
+    #SCROLL_SPY_RIGHT_CONTAINER {
+        position: absolute;
+        right: 0;
+        width: 450px !important;
+        z-index: 5;
+    }
+
+    .hideOrShowScrollNav {
+        position: absolute;
+        top: -25px;
+        right: -15px;
+        display: flex;
+    }
+
+    .expand-scroll-nav-right {
+        width: 22px;
+        height: 35px;
+    }
+}

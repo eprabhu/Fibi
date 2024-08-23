@@ -1,6 +1,6 @@
 <!-- New card header start-->
-<div class="d-flex flex-column gap-2">
-    <div class="row header-sticky gap-2" id="COI-DISCLOSURE-HEADER">
+<div class="d-flex flex-column">
+    <div class="row header-sticky gap-2 coi-bg-body" id="COI-DISCLOSURE-HEADER">
         <div class="col-12">
             <!-- new top card -->
             <div class="card coi-card-expanded">
@@ -13,7 +13,7 @@
                                     <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'" class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiProjectType?.description + ' disclosure'">
                                         <span class="coi-card-notch-ribbon shadow-sm" [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
                                     </div>
-                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'"class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="'FCOI disclosure'">
+                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1' "class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="'FCOI disclosure'">
                                         <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip">FCOI</span>
                                     </div>
                                     <div class="col row m-0">
@@ -94,10 +94,10 @@
                                 <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && coiData?.projectDetail" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">{{coiData?.projectDetail?.projectIcon}}</mat-icon>
                                     <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
-                                        title="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} : {{ coiData?.projectDetail?.title }}"
-                                        attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} : {{ coiData?.projectDetail?.title }}"
+                                        title="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
+                                        attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
                                         (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
-                                        #{{ coiData?.projectDetail?.projectNumber }} : {{ coiData?.projectDetail?.title }}
+                                        #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}
                                     </a>
                                 </h3>
                                 <button (click)="collapseHeader()"
@@ -475,7 +475,7 @@
         <!--navigation-step-end-->
     </div>
     <!-- New card header ends-->
-
+    <div class="coi-bg-body pt-2 z-index-2"></div>
     <div>
         <router-outlet></router-outlet>
     </div>

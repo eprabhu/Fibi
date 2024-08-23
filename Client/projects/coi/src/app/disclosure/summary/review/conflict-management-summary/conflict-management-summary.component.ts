@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {CoiSummaryEventsAndStoreService} from "../../coi-summary-events-and-store.service";
+import {CoiSummaryEventsAndStoreService} from "../../services/coi-summary-events-and-store.service";
 import {CommentConfiguration} from "../../../coi-interface";
 
 @Component({

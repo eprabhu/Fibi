@@ -1,22 +1,20 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CoiSummaryService } from '../../coi-summary.service';
 import { environment } from '../../../../../environments/environment';
-import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
+import { CoiSummaryEventsAndStoreService } from '../../services/coi-summary-events-and-store.service';
 import { CommentConfiguration, RO } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { Router } from '@angular/router';
 import { CommonService } from '../../../../../app/common/services/common.service';
 import { CoiService } from '../../../services/coi.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
 import { openCoiSlider } from 'projects/coi/src/app/common/utilities/custom-utilities';
-
+import { CoiSummaryService } from '../../services/coi-summary.service';
 
 @Component({
     selector: 'app-sfi-summary',
     templateUrl: './sfi-summary.component.html',
-    styleUrls: ['./sfi-summary.component.scss']
+    styleUrls: ['./sfi-summary.component.scss'],
 })
 export class SfiSummaryComponent implements OnInit, OnDestroy {
 
@@ -27,16 +25,16 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     coiDetails: any = {};
     searchText: string;
-    isCollapsed = true;
     showSlider = false;
     entityId: any;
     isShowNoDataCard = false;
     sliderElementId = ''; 
 
-    constructor(
-        private _coiSummaryService: CoiSummaryService,
-        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService, private elementRef: ElementRef,
-        private _router: Router,private _commonService :CommonService,private _coiService: CoiService,private _dataStore: DataStoreService
+    constructor(public coiService: CoiService,
+                private _dataStore: DataStoreService,
+                private _commonService :CommonService,
+                private _coiSummaryService: CoiSummaryService,
+                private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService
     ) { }
 
     ngOnInit() {
@@ -44,7 +42,6 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this.getSfiDetails();
         this.commentConfiguration.coiSectionsTypeCode = 2;
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
-        this.listenToolKitFocusSection();
     }
 
     ngOnDestroy() {
@@ -121,16 +118,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
             coiSubSectionsTitle: event.personEntityHeader
         }
         this._commonService.$commentConfigurationDetails.next(REQ_BODY);
-        this._coiService.isShowCommentNavBar = true;
-    }
-
-    //'COI802' parent element of SfiSummaryComponent.
-    private listenToolKitFocusSection() {
-        this.$subscriptions.push(this._coiService.$isExpandSection.subscribe(ele => {
-            if (ele.section == 'COI802') {
-                this.isCollapsed = ele.isExpand;
-            }
-        }));
+        this.coiService.isShowCommentNavBar = true;
     }
 
 }
