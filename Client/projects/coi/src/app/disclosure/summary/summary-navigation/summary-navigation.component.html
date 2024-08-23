@@ -1,0 +1,31 @@
+<div class="card rounded-0 border-0 border-top bg-white h-100 shadow-sm" id="disclosure-summary-nav">
+    <div class="card-body p-0 rounded-0">
+        <ul class="nav flex-column">
+            <li class="coi-nav-item border-bottom">
+                <a class="coi-nav-link coi-scrollspy-right" role="link" tabindex="-1" title="Go to Screening Questionnaire Section"
+                    (click)="scrollIntoView('COI801')"
+                    [ngClass]="defineRelationshipService.scrollSpyConfiguration.activeCounter === 0 ? 'scrollspy-section-activate' : 'rounded-top-3'"
+                    aria-label="Go to Screening Questionnaire Section">
+                    Screening Questionnaire
+                </a>
+            </li>
+            <li class="coi-nav-item border-bottom">
+                <a class="coi-nav-link coi-scrollspy-right" role="link" tabindex="-1" title="Go to SFI's section"
+                    [class.scrollspy-section-activate]="defineRelationshipService.scrollSpyConfiguration.activeCounter === 1"
+                    aria-label="Go to SFI's section" (click)="scrollIntoView('COI802')">
+                    Significant Financial Interest
+                </a>
+            </li>
+            <li class="coi-nav-item">
+                <app-project-sfi-navigation></app-project-sfi-navigation>
+            </li>
+            <li class="coi-nav-item border-bottom">
+                <a class="coi-nav-link coi-scrollspy-right" role="link" tabindex="-1" title="Go to Certification section"
+                    [class.scrollspy-section-activate]="defineRelationshipService.scrollSpyConfiguration.activeCounter === (coiService.isExpandSummaryBySection['COI803'] ? filteredProjectSfiRelationsList.length + 2 : 2)"
+                    aria-label="Go to Certification section" (click)="scrollIntoView('COI804')">
+                    Certification
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

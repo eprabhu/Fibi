@@ -1,8 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CoiService } from '../services/coi.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DefineRelationshipService } from './services/define-relationship.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { CommonService } from '../../common/services/common.service';
+import { GlobalEventNotifier } from '../../common/services/coi-common.interace.ts';
 
 @Component({
     selector: 'app-define-relationship',
@@ -12,13 +13,14 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 export class DefineRelationshipComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
+    isExpandRightNav = true;
 
-    constructor(private _coiService: CoiService,
-                public defineRelationService: DefineRelationshipService) { }
+    constructor(private _commonService: CommonService,
+                public defineRelationshipService: DefineRelationshipService) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         setTimeout(() => {
-            this.defineRelationService.configureScrollSpy();
+            this.defineRelationshipService.configureScrollSpy();
         }, 200);
         this.listenDisclosureHeaderChange();
     }
@@ -29,9 +31,12 @@ export class DefineRelationshipComponent implements OnInit, OnDestroy {
 
     private listenDisclosureHeaderChange(): void {
         this.$subscriptions.push(
-            this._coiService.headerHeightChange$.subscribe((event: any) => {
-                if (event) {
-                    this.defineRelationService.setHeight();
+            this._commonService.$globalEventNotifier.subscribe((event: GlobalEventNotifier) => {
+                if (event.uniqueId === 'COI_DISCLOSURE_HEADER_RESIZE') {
+                    this.defineRelationshipService.setHeight();
+                    if (event.content.isResize) {
+                        this.isExpandRightNav = true;
+                    }
                 }
             })
         );

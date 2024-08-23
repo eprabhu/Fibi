@@ -1,8 +1,11 @@
-<div *ngIf="_dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId">
-    <div class="left-div" id="coi_summary_container">
+<app-scroll-spy [(scrollSpyConfiguration)]="defineRelationshipService.scrollSpyConfiguration"
+    [elementVisiblePercentageList]="defineRelationshipService.elementVisiblePercentageList"
+    [(isExpandRightNav)]="isExpandRightNav"
+    (contentChanged)="defineRelationshipService.scrollSpyCounterChanged($event)">
+    <ng-container scroll-spy-left>
         <app-coi-review></app-coi-review>
-    </div>
-    <div class="right-div overflow-hidden" id="coi_summary_toolkit">
-        <app-tool-kit></app-tool-kit>
-    </div>
-</div>
+    </ng-container>
+    <ng-container scroll-spy-right>
+        <app-summary-navigation></app-summary-navigation>
+    </ng-container>
+</app-scroll-spy>

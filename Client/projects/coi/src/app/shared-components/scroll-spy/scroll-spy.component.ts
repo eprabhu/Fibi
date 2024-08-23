@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ScrollSpyConfiguration, ScrollSpyEvent } from './scroll-spy.interface';
 import { scrollToElementWithinBoundaries } from '../../common/utilities/custom-utilities';
 import { deepCloneObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -8,24 +8,35 @@ import { deepCloneObject } from '../../../../../fibi/src/app/common/utilities/cu
     templateUrl: './scroll-spy.component.html',
     styleUrls: ['./scroll-spy.component.scss']
 })
-export class ScrollSpyComponent implements OnInit, OnDestroy {
+export class ScrollSpyComponent implements OnInit, OnChanges, OnDestroy {
 
+    @Input() isExpandRightNav = true;
+    @Input() elementVisiblePercentageList: number[] = [];
     @Input() scrollSpyConfiguration = new ScrollSpyConfiguration();
     @Output() scrollSpyConfigurationChange = new EventEmitter<ScrollSpyConfiguration>();
+    @Output() isExpandRightNavChange = new EventEmitter<boolean>();
     @Output() contentChanged = new EventEmitter<ScrollSpyEvent>();
 
+    isMouseClicked = false;
     private isListenerActive = false;
     private previousCounter: number | null = null;
     private bindOnClick: (event: MouseEvent) => void;
     private bindOnKeyup: (event: KeyboardEvent) => void;
     private bindOnKeydown: (event: KeyboardEvent) => void;
 
-    constructor() {}
+    constructor() { }
 
     ngOnInit(): void {
         this.bindOnClick = this.onDocumentClick.bind(this);
         this.bindOnKeyup = this.onDocumentKeyup.bind(this);
         this.bindOnKeydown = this.onDocumentKeydown.bind(this);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        const { currentValue, previousValue } = changes['elementVisiblePercentageList'] || {};
+        if (currentValue !== previousValue) {
+            this.scrollSpy(currentValue);
+        }
     }
 
     ngOnDestroy(): void {
@@ -76,11 +87,27 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
                     event.preventDefault();
                     this.updateFocusedSection('LEFT');
                     break;
+                case 'Enter':
+                    event.preventDefault();
+                    SCROLL_SPY_ITEMS[this.scrollSpyConfiguration.activeCounter]?.click();
+                    break;
             }
         }
-
     }
-    
+
+    private scrollSpy(elementVisiblePercentageList: number[]): void {
+        const SCROLL_COUNTER = elementVisiblePercentageList.indexOf(Math.max(...elementVisiblePercentageList));
+        if (SCROLL_COUNTER >= 0 && this.scrollSpyConfiguration.activeCounter != SCROLL_COUNTER && !this.isMouseClicked) {
+            this.previousCounter = deepCloneObject(this.scrollSpyConfiguration.activeCounter);
+            this.scrollSpyConfiguration.activeCounter = deepCloneObject(SCROLL_COUNTER)
+            this.scrollRight(true);
+            this.emitContentChanged(this.getElementByCounter('LEFT'), true);
+        }
+        setTimeout(() => {
+            this.isMouseClicked = false;
+        }, 200)
+    }
+
     private updateFocusedSection(section: 'LEFT' | 'RIGHT'): void {
         this.scrollSpyConfiguration.focusedSection = section;
         this.focusElementAndScroll(this.getElementByCounter(section));
@@ -113,7 +140,7 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
         return element?.classList.contains(className) ? element : null;
     }
 
-    private emitContentChanged(activeElement: HTMLElement | undefined) {
+    private emitContentChanged(activeElement: HTMLElement | undefined, isScrolling = false) {
         this.contentChanged.emit({
             activeElement: activeElement,
             previousCounter: this.previousCounter,
@@ -122,6 +149,7 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
             focusedSection: this.scrollSpyConfiguration.focusedSection,
             contentItemClass: this.scrollSpyConfiguration.contentItemClass,
             isActiveKeyNavigation: this.scrollSpyConfiguration.isActiveKeyNavigation,
+            isScrolling: isScrolling
         });
         this.scrollSpyConfigurationChange.emit(this.scrollSpyConfiguration);
     }
@@ -143,8 +171,11 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
         const ACTIVE_COUNTER = SCROLL_SPY_ELEMENT ? SCROLL_SPY_ITEMS.indexOf(SCROLL_SPY_ELEMENT) : activeCounter
         this.previousCounter = deepCloneObject(activeCounter);
         this.scrollSpyConfiguration.activeCounter = ACTIVE_COUNTER;
-        if (focusedSection === 'RIGHT' && SCROLL_SPY_ELEMENT) {
-            this.scrollIntoView(SCROLL_SPY_ELEMENT);
+        if (SCROLL_SPY_ELEMENT) {
+            this.isMouseClicked = true;
+            if (focusedSection === 'RIGHT') {
+                this.scrollIntoView(SCROLL_SPY_ELEMENT);
+            }
         }
     }
 
@@ -155,13 +186,17 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
         }
     }
 
-    private scrollIntoView(activeElement: HTMLElement | undefined) {
+    private scrollIntoView(activeElement: HTMLElement | undefined): void {
         window.scroll(0, 0);
-        const { leftOffsetTop, rightOffsetTop, rightOffsetBottom } = this.scrollSpyConfiguration;
+        this.scrollLeft();
+        this.scrollRight();
+        this.emitContentChanged(activeElement);
+    }
+
+    private scrollLeft(): void {
+        const { leftOffsetTop } = this.scrollSpyConfiguration;
         const SCROLL_SPY_LEFT_ITEM = this.getElementByCounter('LEFT');
-        const SCROLL_SPY_RIGHT_ITEM = this.getElementByCounter('RIGHT');
         const SCROLL_SPY_LEFT_CONTAINER = document.getElementById('SCROLL_SPY_LEFT_CONTAINER');
-        const SCROLL_SPY_RIGHT_CONTAINER = document.getElementById('SCROLL_SPY_RIGHT_CONTAINER');
 
         if (SCROLL_SPY_LEFT_CONTAINER && SCROLL_SPY_LEFT_ITEM) {
             SCROLL_SPY_LEFT_CONTAINER.scrollTo({
@@ -169,8 +204,16 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
                 behavior: 'auto'
             });
         }
+    }
+
+    private scrollRight(needFocus = false): void {
+        const { rightOffsetTop, rightOffsetBottom } = this.scrollSpyConfiguration;
+        const SCROLL_SPY_RIGHT_ITEM = this.getElementByCounter('RIGHT');
+        const SCROLL_SPY_RIGHT_CONTAINER = document.getElementById('SCROLL_SPY_RIGHT_CONTAINER');
+        if (needFocus) {
+            SCROLL_SPY_RIGHT_ITEM?.focus();
+        }
         scrollToElementWithinBoundaries(SCROLL_SPY_RIGHT_ITEM, rightOffsetTop, rightOffsetBottom, SCROLL_SPY_RIGHT_CONTAINER);
-        this.emitContentChanged(activeElement);
     }
 
     private removeListener(): void {
@@ -189,5 +232,10 @@ export class ScrollSpyComponent implements OnInit, OnDestroy {
                 document.addEventListener('keydown', this.bindOnKeydown);
             }
         }
+    }
+
+    expandOrCollapseRightNav(isExpandRightNav: boolean): void {
+        this.isExpandRightNav = isExpandRightNav;
+        this.isExpandRightNavChange.emit(this.isExpandRightNav);
     }
 }

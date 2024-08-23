@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { COI, RO, getApplicableQuestionnaireData } from './coi-interface';
+import { COI, CertifyDisclosureRO, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -239,16 +239,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
     }
 
-    getDisclosureTitleName(fcoiTypeCode: any, isLowerCase = false) {
+    getDisclosureTitleName(fcoiTypeCode: any) {
         switch (fcoiTypeCode) {
             case '1':
-                return 'FCOI';
-            case '2':
-                return isLowerCase ?  'proposal' : 'Proposal';
-            case '3':
-                return isLowerCase ? 'award' : 'Award';
             case '4':
                 return 'FCOI';
+            default:
+                return this.coiData?.coiDisclosure?.coiProjectType?.description;
         }
     }
 
@@ -319,13 +316,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     certifyDisclosure() {
-        const REQUESTREPORTDATA = {
-            coiDisclosure: {
-                disclosureId: this.coiData.coiDisclosure.disclosureId,
-                certificationText: this.coiData.coiDisclosure.certificationText ?
-                    this.coiData.coiDisclosure.certificationText : this.certificationText,
-                    conflictStatusCode: this.dataStore.disclosureStatus
-            }
+        const REQUESTREPORTDATA: CertifyDisclosureRO = {
+            disclosureId: this.coiData.coiDisclosure.disclosureId,
+            certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
+            conflictStatusCode: this.dataStore.disclosureStatus
         };
         this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
             this.dataStore.dataChanged = false;
@@ -366,9 +360,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
         if(this.coiData.coiDisclosure) {
-            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true) + ' disclosure.';
-            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true)+ ' disclosure.';
-            this.withdrawModalHelpText = 'You are about to withdraw the '+ this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode, true) + ' disclosure.';
+            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode) + ' disclosure.';
+            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode)+ ' disclosure.';
+            this.withdrawModalHelpText = 'You are about to withdraw the '+ this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode) + ' disclosure.';
         }
     }
 
@@ -388,18 +382,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.defaultAdminDetails.adminGroupName = this.coiData.coiDisclosure.adminGroupName;
         this.defaultAdminDetails.adminPersonId = this.coiData.coiDisclosure.adminPersonId;
         this.defaultAdminDetails.adminPersonName = this.coiData.coiDisclosure.adminPersonName;
-    }
-
-    getDisclosureStatusBadgeTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case '2':
-            case '4':
-            case '5':
-                return 'white';
-            case '3': case '6': return 'white';
-            default: return 'white';
-        }
     }
 
     completeDisclosureReview() {
@@ -777,10 +759,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            this.isCardExpanded = window.innerWidth > 1399;
+            // this.isCardExpanded = window.innerWidth > 1399;
         }
-        this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
-        this.coiService.headerHeightChange$.next(true);
+        this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER_RESIZE', content: { isCardExpanded: this.isCardExpanded, isResize: true }});
     }
 
     setFocus(id) {
@@ -796,8 +777,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.isCardExpanded = !this.isCardExpanded;
         this.isUserCollapse = !this.isUserCollapse;
         setTimeout (() => {
-            this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER', content: { isCardExpanded: this.isCardExpanded }});
-            this.coiService.headerHeightChange$.next(true);
+            this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER_RESIZE', content: { isCardExpanded: this.isCardExpanded, isResize: false }});
         });
     }
 

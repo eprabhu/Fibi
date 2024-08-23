@@ -43,7 +43,7 @@ const routes: Routes = [
                 loadChildren: () => import('./certification/certification.module').then(m => m.CertificationModule)
             },
             {
-                path: 'summary', canDeactivate: [RouterGuardService],
+                path: 'summary', canActivate: [DefineRelationsRouterGuard], canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./summary/summary.module').then(m => m.SummaryModule)
             },
             {

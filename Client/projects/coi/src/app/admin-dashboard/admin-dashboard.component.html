@@ -999,19 +999,19 @@
                                             </div>
                                             <ng-container *ngIf="coi?.fcoiTypeCode !== '2'">
                                                 <ng-container *ngFor="let projectCount of coi?.projectCount">
-                                                    <div class="col-md-3 col-lg-2">
+                                                    <div *ngIf="projectCount" class="col">
                                                         <div class="d-flex align-items-center fw-semibold">
                                                             <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
                                                                 tabindex="{{projectCount?.projectCount > 0 ? 0 : -1}}" role="link"
                                                                 [attr.aria-label]="projectCount?.projectType + ' count is ' + projectCount?.projectCount + (projectCount?.projectCount > 0 ? '. Click here to view ' + projectCount?.projectType + ' list' : '')"
-                                                                [title]="projectCount?.projectCount > 0 ? 'Click here to view {{projectCount?.projectType}} list' : '' "
+                                                                [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowercase() + ' list' : ''"
                                                                 (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 [ngClass]="projectCount?.projectCount ? 'badge' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
                                                             <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
                                                                 [class.link-primary]="projectCount?.projectCount > 0"
-                                                                [title]="projectCount?.projectCount > 0 ? 'Click here to view {{projectCount?.projectType}} list' : '' "
+                                                                [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowercase() + ' list' : ''"
                                                                 (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);">{{projectCount?.projectType}}</span>

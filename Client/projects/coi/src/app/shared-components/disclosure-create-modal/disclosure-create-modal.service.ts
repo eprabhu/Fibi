@@ -20,10 +20,10 @@ export class DisclosureCreateModalService {
         return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
     }
 
-    checkIfDisclosureAvailable(moduleCode: any, moduleId: any) {
+    checkIfDisclosureAvailable(moduleCode: any, moduleItemKey: any) {
         return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/validate', {
             moduleCode: moduleCode,
-            moduleItemId: moduleId,
+            moduleItemKey: moduleItemKey,
             personId: this._commonService.getCurrentUserDetail('personID')
         });
     }
