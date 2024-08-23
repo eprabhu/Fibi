@@ -1,6 +1,5 @@
 package com.polus.fibicomp.fcoiDisclosure.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.core.applicationexception.dto.ApplicationException;
@@ -40,9 +39,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -146,7 +145,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         List<SFIJsonDetailsDto> sfiDetails = disclosureDao.getPersonEntitiesByPersonId(loginPersonId);
 
         if (disclosureProjects.isEmpty()) {
-            throw new ApplicationException("No project(s) found/synced", Constants.JAVA_ERROR);
+            throw new ApplicationException("No project(s) found!", Constants.JAVA_ERROR);
         }
         String sfiJsonString = convertListToJson(sfiDetails);
 
@@ -287,7 +286,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         vo.setReporterFullName(reporterFullName);
         projEntityRelationships.forEach(projEntityRel -> {
             CoiDisclProjectEntityRel coiDisclProjectEntityRel = new CoiDisclProjectEntityRel();
-            BeanUtils.copyProperties(projEntityRel, coiDisclProjectEntityRel, "coiDisclProject", "personEntity",  "coiEntity");
+            BeanUtils.copyProperties(projEntityRel, coiDisclProjectEntityRel, "coiDisclProject", "personEntity", "coiEntity");
             vo.setCoiDisclEntProjDetail(coiDisclProjectEntityRel);
             saveOrUpdateCoiConflictHistory(vo, Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS);
         });
@@ -403,12 +402,21 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getCoiDisclProjectId));
             disclProjects.parallelStream().forEach(disclosureProject -> {
                 List<CoiDisclEntProjDetailsDto> disclEntProjDetails = disclEntityRelations.get(disclosureProject.getCoiDisclProjectId());
-                Map<Integer, Long> conflictCount = getRelationConflictCount(disclEntProjDetails);
-                if (!conflictCount.containsKey(0)) {
-                    disclosureProject.setConflictCompleted(true);
+                Map<String, Object> returnedObj = getRelationConflictCount(disclEntProjDetails);
+
+                if(returnedObj.get("conflictStatus") != null) {
+                    String conflictStatus = (String) returnedObj.get("conflictStatus");
+                    disclosureProject.setConflictStatus(conflictStatus.isEmpty() ? null : conflictStatus);
+                    disclosureProject.setConflictStatusCode(conflictStatus.isEmpty() ? null : returnedObj.get("conflictStatusCode").toString());
                 }
-                conflictCount.remove(0);
-                disclosureProject.setConflictCount(conflictCount);
+                if ( returnedObj.get("conflictCount") != null) {
+                    Map<Integer, Long> conflictCount = (Map<Integer, Long>) returnedObj.get("conflictCount");
+                    if (conflictCount != null && !conflictCount.containsKey(0)) {
+                        disclosureProject.setConflictCompleted(true);
+                    }
+                    conflictCount.remove(0);
+                    disclosureProject.setConflictCount(conflictCount);
+                }
                 disclosureProject.setCoiDisclEntProjDetails(disclEntProjDetails);
             });
         } catch (Exception e) {
@@ -446,12 +454,20 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             disclPersonEntities.parallelStream().forEach(personEntityRelationshipDto -> {
                 List<CoiDisclEntProjDetailsDto> disclEntProjDetails = disclEntityRelations.get(personEntityRelationshipDto.getPersonEntityId());
 
-                Map<Integer, Long> conflictCount = getRelationConflictCount(disclEntProjDetails);
-                if (!conflictCount.containsKey(0)) {
-                    personEntityRelationshipDto.setConflictCompleted(true);
+                Map<String, Object> returnedObj = getRelationConflictCount(disclEntProjDetails);
+                if(returnedObj.get("conflictStatus") != null) {
+                    String conflictStatus = (String) returnedObj.get("conflictStatus");
+                    personEntityRelationshipDto.setConflictStatus(conflictStatus.isEmpty() ? null : conflictStatus);
+                    personEntityRelationshipDto.setConflictStatusCode(conflictStatus.isEmpty() ? null : returnedObj.get("conflictStatusCode").toString());
                 }
-                conflictCount.remove(0);
-                personEntityRelationshipDto.setConflictCount(conflictCount);
+                if (returnedObj.get("conflictCount") != null) {
+                    Map<Integer, Long> conflictCount = (Map<Integer, Long>) returnedObj.get("conflictCount");
+                    if (!conflictCount.containsKey(0)) {
+                        personEntityRelationshipDto.setConflictCompleted(true);
+                    }
+                    conflictCount.remove(0);
+                    personEntityRelationshipDto.setConflictCount(conflictCount);
+                }
                 personEntityRelationshipDto.setProjEntRelations(disclEntProjDetails);
             });
         } catch (Exception e) {
@@ -460,26 +476,42 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         return disclPersonEntities;
     }
 
-    private static Map<Integer, Long> getRelationConflictCount(List<CoiDisclEntProjDetailsDto> disclEntProjDetails) {
+    private static Map<String, Object> getRelationConflictCount(List<CoiDisclEntProjDetailsDto> disclEntProjDetails) {
         if (disclEntProjDetails == null) {
             return Collections.EMPTY_MAP;
         }
+        Map<String, Object> returnObj = new HashMap<>();
+        AtomicReference<String> conflictStatus = new AtomicReference<>("");
+        AtomicReference<Integer> conflictStatusCode = new AtomicReference<>();
         Map<Integer, Long> conflictCount = disclEntProjDetails.stream().collect(Collectors.groupingBy(projectConflictStatus -> {
             if (projectConflictStatus.getProjectConflictStatusCode() != null
                     && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) >= 100
                     && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) < 200) {
+                conflictStatus.set(projectConflictStatus.getCoiProjConflictStatusType() != null ? projectConflictStatus.getCoiProjConflictStatusType().getDescription() : "");
+                conflictStatusCode.set(1);
                 return 1;
             } else if (projectConflictStatus.getProjectConflictStatusCode() != null
                     && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) >= 200
                     && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) < 300) {
+                if (conflictStatus.get().isEmpty()) {
+                    conflictStatus.set(projectConflictStatus.getCoiProjConflictStatusType() != null ? projectConflictStatus.getCoiProjConflictStatusType().getDescription() : "");
+                    conflictStatusCode.set(2);
+                }
                 return 2;
             } else if (projectConflictStatus.getProjectConflictStatusCode() != null
                     && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) >= 300
                     && Integer.parseInt(projectConflictStatus.getProjectConflictStatusCode()) < 400) {
+                if (conflictStatus.get().isEmpty()) {
+                    conflictStatus.set(projectConflictStatus.getCoiProjConflictStatusType() != null ? projectConflictStatus.getCoiProjConflictStatusType().getDescription() : "");
+                    conflictStatusCode.set(3);
+                }
                 return 3;
             } else return 0;
         }, Collectors.counting()));
-        return conflictCount;
+        returnObj.put("conflictStatus", conflictStatus.get());
+        returnObj.put("conflictCount", conflictCount);
+        returnObj.put("conflictStatusCode", conflictStatusCode.get());
+        return returnObj;
     }
 
     @Override

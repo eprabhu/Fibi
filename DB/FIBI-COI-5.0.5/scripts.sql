@@ -56,4 +56,4 @@ UPDATE `coi_project_type` SET `FCOI_NEEDED` = 'Y', `PROJECT_DISCLOSURE_NEEDED` =
 UPDATE `coi_project_type` SET `FCOI_NEEDED` = 'Y', `PROJECT_DISCLOSURE_NEEDED` = 'N' WHERE (`COI_PROJECT_TYPE_CODE` = '2');
 UPDATE `coi_project_type` SET `FCOI_NEEDED` = 'N', `PROJECT_DISCLOSURE_NEEDED` = 'Y' WHERE (`COI_PROJECT_TYPE_CODE` = '3');
 
-
+DROP TABLE `coi_discl_ent_proj_details`;

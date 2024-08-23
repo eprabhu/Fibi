@@ -371,7 +371,8 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     public String getLatestConflHisStatusCodeByProEntRelId(Integer coiDisclProjectEntityRelId) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("SELECT ch.conflictStatusCode FROM CoiConflictHistory ch ");
+        hqlQuery.append("SELECT cs.description FROM CoiConflictHistory ch ");
+        hqlQuery.append("JOIN CoiProjConflictStatusType cs ON cs.projectConflictStatusCode = ch.conflictStatusCode ");
         hqlQuery.append("WHERE ch.coiDisclProjectEntityRelId = :coiDisclProjectEntityRelId ORDER BY ch.updateTimestamp DESC");
         Query query = session.createQuery(hqlQuery.toString());
         query.setParameter("coiDisclProjectEntityRelId", coiDisclProjectEntityRelId);
@@ -778,6 +779,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             }
             return coiDisclProjects;
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Exception on syncFcoiDisclosureProjects {}", e.getMessage());
             throw new ApplicationException("Exception on syncFcoiDisclosureProjects", e, Constants.DB_PROC_ERROR);
         }
@@ -906,8 +908,9 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             statement.setString(3, AuthenticatedUser.getLoginPersonId());
             statement.execute();
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Exception in syncFCOIDisclosure {}", e.getMessage());
-            throw new ApplicationException("Exception in syncFCOIDisclosure ", e, CoreConstants.DB_PROC_ERROR);
+//            throw new ApplicationException("Exception in syncFCOIDisclosure ", e, CoreConstants.DB_PROC_ERROR);
         }
     }
 
