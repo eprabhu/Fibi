@@ -1,205 +1,211 @@
-
-<div *ngFor="let subsection of groupedCommentsList | keyvalue;" class="section-margin">
+<!-- new comment section -->
+<div *ngFor="let subsection of groupedCommentsList | keyvalue;" class="pb-3 mt-3 px-1">
     <label class="fs-16 fw-bold label-text px-4" *ngIf="isHeaderNeeded">{{getSectionName(subsection.value)}}</label>
-<ng-container *ngFor="let list of subsection.value;let i=index;let last = last">
-    <div class="row mx-4 cmnt-background mt-2">
-        <div class="d-flex form-row p-3">
-           <!-- col-1st -->
-            <div class="col-auto">
-                <mat-icon class="me-1 person-icon">person</mat-icon>
+    <ng-container *ngFor="let list of subsection.value;let subSectionIndex=index;let last = last">
+    <div class="coi-border-grey coi-card-regular p-3">
+        <div class="row position-relative">
+            <div class="d-flex justify-content-center person-icon-container p-0">
+                <span
+                    class="d-inline-flex justify-content-center align-items-center comments-person-info rounded-circle">
+                    <mat-icon aria-hidden="true" class="person-icon flex-shrink-0 fs-24">person</mat-icon>
+                </span>
             </div>
-            <!-- col-2nd -->
-            <div class="col ms-2">
-                <div class="d-flex justify-content-between">
-                    <span>
-                        <span class="fs-14 font-bold">
-                            {{list?.updateUserFullName}}
+            <div class="comment-section-right-container ps-0">
+                <div>
+                    <div class="col-12 d-flex gap-2 align-items-center">
+                        <span id="coi-parent-commment-updateduser">
+                            <app-no-data-label [valueToShow]="list?.updateUserFullName">
+                                <span class="coi-text-light text-slice fw-700 fs-15"
+                                    [title]="list?.updateUserFullName">{{list?.updateUserFullName}}</span>
+                            </app-no-data-label>
                         </span>
-                        <span *ngIf="subsection.value[0]?.moduleSectionDetails?.subsectionName" class="fs-14 ms-2 sub-label px-3 py-2">
-                            {{subsection.value[0]?.moduleSectionDetails?.subsectionName}}
+                        <span id="coi-parent-commment-updated-time">
+                            <app-no-data-label [valueToShow]="(list?.updateTimestamp)">
+                                <span class="coi-text-light text-slice fs-13">
+                                    {{list?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
+                            </app-no-data-label>
                         </span>
-                    </span>
-                </div>
-                <div class="mt-1">
-                    <span class="fs-14">
-                    <div *ngIf="reviewCommentsService.editParentCommentId == list?.commentId && reviewCommentsService.isEditParentComment"
-                        class="d-flex justify-content-end me-4 my-4 row">
-                        <div class="row mr-3">
-                            <div class="col pl-0 pe-5">
-                                <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
-                                    <ckeditor [(ngModel)]="list.comment" [editor]="Editor" [config]="editorConfig"
-                                        (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
-                                </div>
+                        <div *ngIf="reviewCommentsService.editParentCommentId != list?.commentId && currentUserId == list?.commentBy" class="ms-auto col-auto">
+                            <button [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
+                                class="btn-none more-info-icon rounded-circle d-inline-flex justify-content-center align-items-center">
+                                <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                            </button>
+    
+                            <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                <ng-container>
+                                    <button mat-menu-item title="Click here to edit comment" aria-label="Click here to edit comment" id="coi-parent-commment-edit-btn" (click)="editParentComment(list)"
+                                        area-describedby="Click here to edit comment"
+                                        class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                        <mat-icon class="me-0 coi-text-lighter" aria-hidden="true">edit</mat-icon>
+                                        <span class="ms-2 fw-medium fs-14">Edit</span>
+                                    </button>
+                                </ng-container>
+    
+                                <ng-container>
+                                    <button *ngIf="!list?.childComments || list.childComments.length === 0" id="coi-parent-commment-delete-btn" mat-menu-item title="Click here to delete comment" (click)="deleteComment(list)"
+                                        area-describedby="Click here to delete comment"
+                                        class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                        <mat-icon aria-hidden="true"
+                                            class="material-icons-round me-0 coi-text-lighter">delete</mat-icon>
+                                        <span class="ms-2 mt-1 fw-medium fs-14">Delete</span>
+                                    </button>
+                                </ng-container>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <!-- parent comment edit text editor -->
+                    <ng-container *ngIf="reviewCommentsService.editParentCommentId == list?.commentId && reviewCommentsService.isEditParentComment">
+                        <div class="col p-0 mt-3">
+                            <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
+                                <ckeditor [(ngModel)]="list.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
+                                    placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                             </div>
+                            <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12">
+                                {{mandatoryMap?.get('comment')}}</div>
                         </div>
-                        <div class="align-items-center col d-flex justify-content-end mt-20 mx-4 pe-4 pb-3">
-                            <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3"
-                                (click)="cancelOrClearCommentsDetails()">Cancel</button>
-                            <button class="btn btn-primary px-4 py-2 fs-14" (click)="addEditComment(list)">Save
-                                Comment</button>
+                        <div class="col-12 d-flex align-items-center justify-content-end gap-2 mt-2 p-0">
+                            <button class="btn btn-outline-secondary px-4 fs-14" id="coi-parent-commment-edit-cancle-btn"
+                                title="Click here to cancel edit" aria-label="Click here to cancel edit" (click)="cancelOrClearCommentsDetails()">
+                                Cancel
+                            </button>
+                            <button class="btn btn-primary fs-14" id="coi-parent-commment-edit-add-btn" 
+                                title="Click here to save edited comment" aria-label="Click here to save edited comment" (click)="addEditComment(list)">Save
+                                Comment
+                            </button>
                         </div>
+                    </ng-container>
+                    <div *ngIf="reviewCommentsService.editParentCommentId != list?.commentId;" class="col-12 d-flex align-items-baseline">
+                        <app-no-data-label [valueToShow]="(list?.comment)">
+                            <span class="fs-13 word-break-all"
+                            [innerHTML]="(list?.comment)"></span>
+                        </app-no-data-label>
                     </div>
-                        <span *ngIf="list?.coiReviewCommentTag?.length">
-                            <ng-container
-                                *ngFor="let assignee of list?.coiReviewCommentTag; let taggedPersonLast = last">
-                                <span class="text-primary">
-                                    {{'@'+(assignee?.tagPersonId ? assignee?.tagPersonFullName :
-                                    assignee.tagGroupName)+' '}}<span *ngIf="!taggedPersonLast">,</span>
-                                </span>
-                            </ng-container>
-                        </span>
-                        <span class="word-break-all" *ngIf="!readMoreCommentIdList.includes(list?.commentId) && reviewCommentsService.editParentCommentId != list?.commentId">
-                            <span [innerHTML]="(list?.comment.length>280 ?
-                    (list?.comment | slice:0:280 ) : list?.comment)"></span></span>
-                        <span class="word-break-all" *ngIf="readMoreCommentIdList.includes(list?.commentId)">
-                            <span [innerHTML]="(list?.comment)"></span></span>
-                        <span *ngIf="list?.comment.length>280"
-                            (click)="readMore(list,readMoreCommentIdList.includes(list?.commentId) ? 'LESS':'MORE')"
-                            class="hand-cursor italian hyper-link">
-                            {{readMoreCommentIdList.includes(list?.commentId) ? 'Read Less': '...Read More'}}
-                            <i aria-hidden="true"
-                                [ngClass]="readMoreCommentIdList.includes(list?.commentId)?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
-                        </span>
-                    </span>
-                </div>
-                <div class="row">
-                    <div class="align-items-center col-12 d-flex justify-content-between">
-                        <span class="custom-font-color fs-13 text-secondary">{{list?.updateTimestamp| dateFormatterWithTimeZone:
-                            'long'}}
-                        </span>
-                        <div class="f-13 justify-content-end mt-1 text-secondary me-2">
-                            <ng-container *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId">
-                                <span class="hand-cursor me-2 hand-hover text-primary" id="btn-edit-parent-comment"
-                                    (click)="editParentComment(list,i)">
-                                    <i aria-hidden="true" class="fa fa-pencil me-1"></i>
-                                    Edit
-                                </span>
-                                <span class="hand-cursor me-2 hand-hover text-danger" id="btn-delete-parent-comment"
-                                    (click)="deleteComment(list,i)">
-                                    <i aria-hidden="true" class="fa fa-trash me-1"></i>
-                                    Delete
-                                </span>
-                            </ng-container>
-                            <span *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId"
-                                class="hand-cursor hand-hover me-2" id="btn-reply" (click)="replyComment(list,i)">
-                                <i aria-hidden="true" class="fa fa-reply me-1"></i>
-                                Reply
-                            </span>
-                            <span class="hand-cursor hand-hover" id="btn-show-reply"
-                                [class.text-primary]="list?.childComments && list?.childComments?.length"
-                                (click)="showReplyComment(list,isShowReplyComment && selectedCommentIdList.includes(list?.commentId)? 'HIDE':'SHOW')">
-                                <i aria-hidden="true" class="fa fa-commenting me-1"></i>
-                                <!-- <ng-container>{{isShowReplyComment && selectedCommentIdList.includes(list?.commentId)
-                                    ?'Hide':'Show'}}</ng-container> -->
-                                {{list?.childComments && list?.childComments?.length ? list?.childComments?.length : 0}} Replies
-                            </span>
-                        </div>
+                    <div class="col-12 d-flex gap-2 align-items-center mt-3">
+                        <button *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId" id="coi-commment-reply-btn" 
+                        class="align-items-baseline btn btn-sm btn-tertiary d-inline-flex position-relative" title="Click here to add reply comment"
+                        aria-label="Click here to add reply comment" (click)="replyComment(list,index)">
+                            <i aria-hidden="true" class="fa fa-reply me-1"></i>
+                            <span class="me-2">Reply</span>
+                        </button>
                     </div>
                 </div>
-                <div *ngIf="commentDetails?.parentCommentId === list?.commentId && isReplyComment"
-                    class="col-11 mx-2 my-4">
-                    <div class="row d-flex justify-content-end mr-10">
+                <!-- reply comment text editor -->
+                <div *ngIf="commentDetails?.parentCommentId === list?.commentId && isReplyComment" class="row m-0">
+                    <div class="col-12 p-0 mt-3" id="person-main-commment-editor">
                         <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
-                            <ckeditor [(ngModel)]="commentDetails.comment" [editor]="Editor" [config]="editorConfig"
-                                (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
+                            <ckeditor [(ngModel)]="commentDetails.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
+                                placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                         </div>
                         <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12">
                             {{mandatoryMap?.get('comment')}}</div>
-
-                        <!-- <textarea id="main-panel-comnt" class="comment-text-box form-control fs-14 ms-4"
-                            [(ngModel)]="commentDetails.comment" placeholder="Comment" row="1"
-                            maxlength="2000" [ngClass]="mandatoryMap.has('comment') ? 'is-invalid d-block':'' "></textarea>
-                        <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12 p-0">
-                            {{mandatoryMap?.get('comment')}}
-                        </div> -->
                     </div>
-                    <div class="col d-flex justify-content-end  align-items-center mt-20 mr-10">
-                        <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3"
-                            (click)="cancelOrClearCommentsDetails()">Cancel</button>
-                        <button class="btn btn-primary px-4 py-2 fs-14" (click)="addReplayCommentsDetails()">Reply
-                            Comment</button>
+                    <div class="col-12 d-flex align-items-center justify-content-end gap-2 mt-2 p-0">
+                        <button class="btn btn-outline-secondary px-4 fs-14" id="coi-reply-commment-cancle-btn" 
+                        title="Click here to cancel reply comment"  aria-label="Click here to cancel reply comment" (click)="cancelOrClearCommentsDetails()">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary fs-14" id="coi-reply-commment-add-btn" 
+                        title="Click here to add reply comments"  aria-label="Click here to add reply comments" (click)="addReplayCommentsDetails()">Reply
+                            Comment
+                        </button>
                     </div>
                 </div>
-                <ng-container
-                    *ngIf="isShowReplyComment &&  selectedCommentIdList.includes(list?.commentId)">
-                    <div class="mt-2 reply-comments pt-3" *ngFor="let replayComment of list.childComments;let replyIndex = index">
-                        <div class="m-0 row">
-                            <div class="col">
-                                <span class="bg-transparent px-0 fs-14-nav d-flex align-items-center">
-                                    <mat-icon class="me-1 custom-font-color person-icon-position person-icon">person</mat-icon>
-                                    <span class="d-none d-md-inline-block ml-3 mx-2 fs-14 fw-500">
-                                        {{replayComment?.updateUserFullName}}:</span>
-                                </span>
-                            </div>
+                <!-- child comment section -->
+                <div  *ngFor="let replyComment of list.childComments | slice:0:(showReplyArray.includes(list?.commentId) ? undefined : initialVisibleComments);let replyIndex = index" class="comments-reply-card coi-card-regular p-3 shadow-none">
+                    <div class="row">
+                        <div class="d-flex justify-content-center person-icon-container p-0">
+                            <span
+                                class="material-icons comments-person-info rounded-circle d-inline-flex justify-content-center align-items-center">
+                                <mat-icon aria-hidden="true"
+                                    class="person-icon flex-shrink-0 fs-24">person</mat-icon>
+                            </span>
                         </div>
-                        <div *ngIf="(commentDetails?.commentId ? commentDetails?.commentId !== replayComment?.commentId : !commentDetails?.commentId ) ">
-                                <div class="mb-0 comment-card-position-child">
-                                    <span class="fs-14">
-                                        <span *ngIf="!readMoreCommentIdList.includes(replayComment?.commentId)" class="word-break-all">
-                                            <span [innerHTML]="(replayComment?.comment.length>280 ? (replayComment?.comment |
-                                                            slice:0:280 ) : replayComment?.comment)"></span>
-                                        </span>
-                                        <span *ngIf="readMoreCommentIdList.includes(replayComment?.commentId)" class="word-break-all">
-                                            <span [innerHTML]="(replayComment?.comment)"></span>
-                                        </span>
-                                        <span *ngIf="replayComment?.comment.length>280"
-                                            (click)="readMore(replayComment,readMoreCommentIdList.includes(replayComment?.commentId) ? 'LESS':'MORE')"
-                                            class="hand-cursor italian hyper-link">
-                                            {{readMoreCommentIdList.includes(replayComment?.commentId) ? 'Read Less': '...Read
-                                            More'}}
-                                            <i aria-hidden="true"
-                                                [ngClass]="readMoreCommentIdList.includes(replayComment?.commentId) ?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
-                                        </span>
+                        <div class="comment-section-right-container ps-0">
+                            <div class="row">
+                                <div class="col d-flex gap-2 align-items-center">
+                                    <span id="coi-child-commment-updated-user">
+                                        <app-no-data-label [valueToShow]="replyComment?.updateUserFullName">
+                                            <span class="coi-text-light text-slice fw-700 fs-15"
+                                                [title]="replyComment?.updateUserFullName">{{replyComment?.updateUserFullName}}</span>
+                                        </app-no-data-label>
+                                    </span>
+                                    <span id="coi-child-commment-updated-time">
+                                        <app-no-data-label
+                                            [valueToShow]="(replyComment?.updateTimestamp)">
+                                            <span class="coi-text-light text-slice fs-13">
+                                                {{replyComment?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                        </app-no-data-label>
                                     </span>
                                 </div>
-                        </div>
-                        <div class="row comment-card-position-child">
-                            <div class="col d-flex justify-content-between">
-                                <span class="custom-font-color fs-13">{{replayComment?.updateTimestamp|
-                                    dateFormatterWithTimeZone:
-                                    'long'}}
-                                </span>
-                                <div *ngIf="commentDetails?.commentId !== replayComment?.commentId"
-                                    class="col-3 d-flex f-13 pb-2 justify-content-end align-items-center me-2">
-                                    <span class="hand-cursor me-2 hand-hover text-primary" id="{{'btn-edit-chid'+replyForComment}}"
-                                        (click)="editReplyComment(replayComment,i)">
-                                        <i aria-hidden="true" class="fa fa-pencil me-1"></i>
-                                        Edit
-                                    </span>
-                                    <span class="hand-cursor hand-hover text-danger" id="{{'btn-delete-chid'+replyForComment}}"
-                                        (click)="deleteComment(replayComment,i)">
-                                        <i aria-hidden="true" class="fa fa-trash me-1"></i>
-                                        Delete
-                                    </span>
+                                <div *ngIf="commentDetails.commentId != replyComment.commentId && currentUserId == replyComment?.commentBy" class="col-auto">
+                                    <button [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
+                                        class="btn-none more-info-icon rounded-circle d-inline-flex justify-content-center align-items-center">
+                                        <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                                    </button>
+        
+                                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                        <ng-container>
+                                            <button id="coi-child-commment-edit-btn" mat-menu-item title="Click here to edit comment" (click)="editReplyComment(replyComment,replyIndex)"
+                                                area-describedby="Click here to edit comment"
+                                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                                <mat-icon class="me-0 coi-text-lighter" aria-hidden="true">edit</mat-icon>
+                                                <span class="ms-2 fw-medium fs-14">Edit</span>
+                                            </button>
+                                        </ng-container>
+        
+                                        <ng-container>
+                                            <button id="coi-child-commment-delete-btn" mat-menu-item title="Click here to delete comment" (click)="deleteComment(replyComment,replyIndex)"
+                                                area-describedby="Click here to delete comment"
+                                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                                <mat-icon aria-hidden="true"
+                                                    class="material-icons-round me-0 coi-text-lighter">delete</mat-icon>
+                                                <span class="ms-2 mt-1 fw-medium fs-14">Delete</span>
+                                            </button>
+                                        </ng-container>
+                                    </mat-menu>
+                                </div>
+                                <div *ngIf="(commentDetails?.commentId ? commentDetails?.commentId !== replyComment?.commentId : !commentDetails?.commentId ) " class="col-12 d-flex align-items-baseline">
+                                    <app-no-data-label [valueToShow]="(replyComment?.comment)">
+                                        <span class="fs-13 word-break-all no-margin"
+                                        [innerHTML]="(replyComment?.comment)"></span>
+                                    </app-no-data-label>
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="commentDetails?.commentId === replayComment?.commentId && isEditComment"
-                            class="d-flex justify-content-end me-4 my-4 row">
-                            <div class="row comment-card-position-child">
-                                <div class="col pl-0 pe-5">
-                                    <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
-                                        <ckeditor [(ngModel)]="commentDetails.comment" [editor]="Editor" [config]="editorConfig"
-                                            (ready)="onReady($event)" placeholder="Comment" row="1" maxlength="2000"></ckeditor>
-                                    </div>
-                                    <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12">
-                                        {{mandatoryMap?.get('comment')}}</div>
+                        
+                        <!-- edit child comment text editor -->
+                        <ng-container *ngIf="commentDetails.commentId == replyComment.commentId && isEditComment">
+                            <div class="col-12 mt-3">
+                                <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
+                                    <ckeditor [(ngModel)]="commentDetails.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
+                                        placeholder="Comment" row="1" maxlength="2000"></ckeditor>
                                 </div>
+                                <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12">
+                                    {{mandatoryMap?.get('comment')}}</div>
                             </div>
-                            <div class="align-items-center col d-flex justify-content-end mt-20 mx-4 pe-4 pb-3">
-                                <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3"
-                                    (click)="cancelOrClearCommentsDetails()">Cancel</button>
-                                <button class="btn btn-primary px-4 py-2 fs-14" (click)="addReplayCommentsDetails()">Save
-                                    Comment</button>
+                            <div class="col-12 d-flex align-items-center justify-content-end gap-2 mt-2">
+                                <button id="coi-child-commment-edit-cancel-btn" class="btn btn-outline-secondary px-4 fs-14"
+                                title="Click here to cancel edited comments"  aria-label="Click here to cancel edited comments" (click)="cancelOrClearCommentsDetails()">
+                                    Cancel
+                                </button>
+                                <button class="btn btn-primary fs-14" id="coi-child-commment-edit-add-btn" 
+                                title="Click here to add edited comments"  aria-label="Click here to cancel edited comments" (click)="addReplayCommentsDetails()">Save
+                                    Comment
+                                </button>
                             </div>
-                        </div>
+                        </ng-container>
                     </div>
-                </ng-container>
+                </div>
+                <!-- view more -->
+                <div class="mt-2">
+                <span class="link-primary cursor-pointer view-btn-hover" *ngIf="!showReplyArray.includes(list?.commentId) && list.childComments && list.childComments.length > initialVisibleComments" (click)="viewMoreReplies(list?.commentId)" (keyup.enter)="viewMoreReplies(list?.commentId)"
+                    (keyup.space)="viewMoreReplies(list?.commentId)">View {{ list.childComments.length - initialVisibleComments }} more replies...</span>
+                <span *ngIf="showReplyArray.includes(list?.commentId)" class="link-primary cursor-pointer view-btn-hover" (click)="viewLessReplies(list?.commentId)" (keyup.enter)="viewLessReplies(list?.commentId)"
+                    (keyup.space)="viewLessReplies(list?.commentId)">View Less...</span>
+                </div>
             </div>
-
         </div>
     </div>
 </ng-container>
 </div>
-
-
+<!-- new comment section end -->

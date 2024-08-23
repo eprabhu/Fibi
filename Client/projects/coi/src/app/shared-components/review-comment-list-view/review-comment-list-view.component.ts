@@ -38,8 +38,9 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 	selectedCommentIdList:any = [];
 	isShowReplyComment = false;
 	readMoreCommentIdList:any = [];
-	isReadMore = false;
 	groupedCommentsList: any;
+	initialVisibleComments = 2;
+	showReplyArray: any[] = [];
 
 	constructor(private _commonService: CommonService, public reviewCommentsService: ReviewCommentsService) { }
 
@@ -50,8 +51,8 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 		this.groupedCommentsList = [];
 		if(this.commentReviewerList && this.commentReviewerList.length) {
 			this.groupedCommentsList = this.disclosureType === 'COI' ?
-			this.groupBy(deepCloneObject(this.commentReviewerList), 'subModuleItemKey' ) :
-			this.opaGroupBy(deepCloneObject(this.commentReviewerList), 'formBuilderSectionId' , 'subModuleItemKey');
+			this.groupBy(this.commentReviewerList, 'subModuleItemKey' ) :
+			this.opaGroupBy(this.commentReviewerList, 'formBuilderSectionId' , 'subModuleItemKey');
 		}
 	}, 300);
 	}
@@ -182,27 +183,27 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
         return this.mandatoryMap.size === 0 ? false : true;
     }
 	
-	downloadAttachment(attachment) {
-        this.$subscriptions.push(this.reviewCommentsService.downloadAttachment(attachment.attachmentId).subscribe(res => {
-            fileDownloader(res,attachment.fileName);
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment downloaded successfully');
-        },error =>{
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
-        }));
-    }
+	// downloadAttachment(attachment) {
+    //     this.$subscriptions.push(this.reviewCommentsService.downloadAttachment(attachment.attachmentId).subscribe(res => {
+    //         fileDownloader(res,attachment.fileName);
+    //         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment downloaded successfully');
+    //     },error =>{
+    //         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+    //     }));
+    // }
 
-	showReplyComment(details, actionType) {
-		if (details?.childComments?.length) {
-			if (actionType == 'SHOW') {
-				this.selectedCommentIdList.push(details.commentId);
-				this.isShowReplyComment = true;
-			} else {
-				const INDEX = this.selectedCommentIdList.findIndex(ele => ele === details.commentId);
-				this.selectedCommentIdList.splice(INDEX,1);
-				this.isShowReplyComment = this.selectedCommentIdList.length ?  true : false; 
-			}
-		}
-	}
+	// showReplyComment(details, actionType) {
+	// 	if (details?.childComments?.length) {
+	// 		if (actionType == 'SHOW') {
+	// 			this.selectedCommentIdList.push(details.commentId);
+	// 			this.isShowReplyComment = true;
+	// 		} else {
+	// 			const INDEX = this.selectedCommentIdList.findIndex(ele => ele === details.commentId);
+	// 			this.selectedCommentIdList.splice(INDEX,1);
+	// 			this.isShowReplyComment = this.selectedCommentIdList.length ?  true : false; 
+	// 		}
+	// 	}
+	// }
 
 	public onReady(editor) {
         editor.ui.getEditableElement().parentElement.insertBefore(
@@ -210,15 +211,6 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
             editor.ui.getEditableElement()
         );
     }
-
-	readMore(details,actionType) {
-			if (actionType == 'MORE') {
-				this.readMoreCommentIdList.push(details.commentId);
-			} else {
-				const INDEX = this.readMoreCommentIdList.findIndex(ele => ele === details.commentId);
-				this.readMoreCommentIdList.splice(INDEX,1);
-			}
-	}
 
 	getSectionName(valueArray) {
 		let valueArrayRes = valueArray.find(ele => (ele.moduleSectionDetails && (ele.moduleSectionDetails.sectionName != null || ele.moduleSectionDetails.otherDetails !=null)));
@@ -229,7 +221,17 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 		} else {
 			return 'General Comments';
 		}
-		// subsection.value[0]?.moduleSectionDetails ? subsection.value[0]?.moduleSectionDetails?.sectionName : 
+	}
+
+	viewMoreReplies(index) {
+		this.showReplyArray.push(index);
+	}
+
+	viewLessReplies(index) {
+		const itemIndex = this.showReplyArray.indexOf(index);
+		if (itemIndex > -1) {
+			this.showReplyArray.splice(itemIndex, 1);
+		}
 	}
 
 }

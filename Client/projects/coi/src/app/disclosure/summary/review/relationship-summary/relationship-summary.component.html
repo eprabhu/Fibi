@@ -23,9 +23,10 @@
         </div>
         <p *ngIf="projectRelations.length == 0" class="f-14 fw-500 m-0 pe-2">No SFI(s) Attached</p>
         <!-- comments -->
-        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', null)" class="btn btn-primary-icon btn-sm d-flex mt-1" id="add-activity"
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', null)" class="btn btn-tertiary btn-sm d-flex mt-1 me-1" id="add-activity"
           title="Click here to open comments" aria-label="Click here to open comments" type="button">
           <mat-icon aria-hidden="true" class="flex-shrink-0">rate_review</mat-icon>
+          <span>Comments</span>
         </button>
       </div>
     </div>
