@@ -1,14 +1,27 @@
 package com.polus.fibicomp.coi.pojo;
 
+import java.sql.Timestamp;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+//import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.polus.fibicomp.globalentity.pojo.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "ENTITY_ACTION_LOG")
 @Data
 @AllArgsConstructor
@@ -29,7 +42,7 @@ public class EntityActionLog {
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_ACTION_LOG_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-    private CoiEntity coiEntity;
+    private Entity coiEntity;
 
     @Column(name = "ACTION_TYPE_CODE")
     private String actionTypeCode;

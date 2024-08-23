@@ -35,4 +35,6 @@ public interface CompanyDetailsDAO {
 
 	public int saveForeignName(EntityForeignName entity);
 
+	public void updateIndustryDetailsPrimaryFlag(int primaryCatId, Integer entityId);
+
 }

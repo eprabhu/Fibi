@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class EntityRequestDTO {
 
 	private Integer entityId;
-	private String primaryName;
+	private Integer entityNumber;
+	private String entityName;
 	private String phoneNumber;
 	private String entityOwnershipTypeCode;
 	private String primaryAddressLine1;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +20,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@javax.persistence.Entity
 @Data
 @Table(name = "ENTITY_MAILING_ADDRESS")
 @AllArgsConstructor
@@ -40,7 +40,7 @@ public class EntityMailingAddress implements Serializable {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_MAILING_ADDRESS_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private GlobalEntity entity;
+	private Entity entity;
 
     @Column(name = "ADDRESS_TYPE")
     private String addressType;
