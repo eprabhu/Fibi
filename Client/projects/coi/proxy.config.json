@@ -139,7 +139,7 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/reviseDisclosure": {
+    "/fcoiDisclosure/reviseDisclosure": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
