@@ -20,11 +20,10 @@ import com.polus.integration.entity.cleansematch.dto.BulkCleanseMatchAPIResponse
 import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse;
 import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.APIError;
 import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.ErrorDetail;
-import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.MatchCandidate;
 import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
 
 @Service
-public class CleanseMatchAPIService {
+public class DnBCleanseMatchAPIService {
 
 	@Autowired
 	private WebClient.Builder webClientBuilder;

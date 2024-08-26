@@ -15,7 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.integration.entity.cleansematch.config.Constants;
 import com.polus.integration.entity.cleansematch.config.ErrorCode;
-import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
 import com.polus.integration.entity.cleansematch.dto.BulkCleanseMatchAPIResponse;
 import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
 import com.polus.integration.entity.cleansematch.dto.DnBStageEntityMatchDTO;
@@ -23,7 +22,7 @@ import com.polus.integration.entity.cleansematch.entity.DnBEntityMatchRepository
 import com.polus.integration.entity.cleansematch.entity.StageDnBEntityMatch;
 
 @Service
-public class DnBBulkCleanseMatchService {
+public class BulkCleanseMatchService {
 
 	@Autowired
 	private DnBEntityMatchRepository dnbEntityMatchRepository;
@@ -32,7 +31,7 @@ public class DnBBulkCleanseMatchService {
 	private CleanseMatchUrlBuilder urlBuilder;
 
 	@Autowired
-	private CleanseMatchAPIService apiService;
+	private DnBCleanseMatchAPIService apiService;
 
 	private volatile AtomicBoolean stopMatchFlag = new AtomicBoolean(false);
 	

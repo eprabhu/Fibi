@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.integration.entity.cleansematch.dto.DnBStageEntityMatchDTO;
-import com.polus.integration.entity.cleansematch.service.DnBBulkCleanseMatchService;
+import com.polus.integration.entity.cleansematch.service.BulkCleanseMatchService;
 
 @RestController
 @RequestMapping("cleansematch/bulk")
-public class DnBBulkSponsorCleanseMatchController {
+public class BulkCleanseMatchController {
 
 	@Autowired
-	DnBBulkCleanseMatchService bulkCleanseMatchService;
+	BulkCleanseMatchService bulkCleanseMatchService;
 
 	@GetMapping("/ping")
 	public ResponseEntity<String> ping() {

@@ -3,21 +3,18 @@ package com.polus.integration.entity.cleansematch.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.integration.entity.cleansematch.config.ErrorCode;
-import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse;
-import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
 import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
+import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
 
 @Service
-public class DnBEntityCleanseMatchService {
+public class EntityCleanseMatchService {
 
 	@Autowired
 	private CleanseMatchUrlBuilder urlBuilder;
 
 	@Autowired
-	private CleanseMatchAPIService apiService;
+	private DnBCleanseMatchAPIService apiService;
 
 	public EntityCleanseMatchAPIResponse runCleanseMatch(DnBEntityCleanseMatchRequestDTO request) {
 		EntityCleanseMatchAPIResponse response = new EntityCleanseMatchAPIResponse();
