@@ -1,1 +1,11 @@
-<p>entity-subaward works!</p>
+<div class="card rounded-0">
+    <div class="mb-2">
+        <app-entity-subaward-details [sectionName]="commonService.getSectionName(overViewTab,'SUB_AWARD_ORGANISATION')" [sectionId]="commonService.getSectionId(overViewTab,'SUB_AWARD_ORGANISATION')"></app-entity-subaward-details>
+    </div>
+    <div class="mb-2">
+        <app-entity-subaward-risk [sectionName]="commonService.getSectionName(overViewTab,'SUB_AWARD_RISK')" [sectionId]="commonService.getSectionId(overViewTab,'SUB_AWARD_RISK')"> </app-entity-subaward-risk>
+    </div>
+    <div class="mb-2">
+        <app-entity-subaward-attachments [sectionName]="commonService.getSectionName(overViewTab,'SUB_AWARD_ATTACHMENTS')" [sectionId]="commonService.getSectionId(overViewTab,'SUB_AWARD_ATTACHMENTS')"> </app-entity-subaward-attachments>
+    </div>
+</div>

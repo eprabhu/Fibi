@@ -5,7 +5,7 @@
                 <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
                     <mat-icon class="coi-mat-icon-size">domain</mat-icon>
                 </span>
-                <span class="fs-16 fw-medium">{{sectionName}}</span>
+                <span class="fs-16 fw-medium" id="coi-entity-other-ref-id">{{sectionName}}<app-common-help-text [subSectionId]="2608" [elementId]="'coi-entity-other-ref-id'"></app-common-help-text></span>
             </div>
             <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Other Reference Id'" (buttonAction)="addOtherRefId($event)"></app-no-information>
         </div>
@@ -23,9 +23,10 @@
 			</div>
 			<div class="modal-body">
 				<div class="row mb-3">
-					<div class="col-6">
+					<div class="col-sm-12 col-lg-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-refernece-id-type">
                             <span class="mandatory me-1">*</span>Reference Id Type
+                            <app-common-help-text [subSectionId]="2608" [elementId]="'coi-refernece-id-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onReferenceIdTypeSelected($event)" [options]="coiCurrencyOptions"
                         [uniqueId]="'coi-refernece-id-type'" [isError]="mandatoryList?.has('referenceType')"></app-look-up>
@@ -34,9 +35,10 @@
                             <span id="coi-entity-registration-type-validation1">{{mandatoryList?.get('referenceType')}}</span>
                         </div>
 					</div>
-                    <div class="col-6">
+                    <div class="col-sm-12 col-lg-6 mt-sm-2 mt-lg-0">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-reference-id">
                             <span class="mandatory me-1">*</span>Reference ID
+                            <app-common-help-text [subSectionId]="2608" [elementId]="'coi-reference-id'"></app-common-help-text>
                         </label>
                         <input type="text" class="form-control" [(ngModel)]="otherReferenceIdObj.referenceId" id="coi-reference-id"
                         [ngClass]="(mandatoryList?.has('referenceId')) ? 'is-invalid d-block' : ''">
@@ -48,10 +50,11 @@
                 </div>
                 <div class="row">
 					<div class="col-12">
-                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-reference-id-description">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-reference-id-desc">
                             <span class="mandatory me-1">*</span>Description
+                            <app-common-help-text [subSectionId]="2608" [elementId]="'coi-other-reference-id-desc'"></app-common-help-text>
                         </label>
-                        <textarea appAutoGrow class="form-control" id="coi-other-reference-id-description" rows="1"
+                        <textarea appAutoGrow class="form-control" id="coi-other-reference-id-desc" rows="1"
                             [(ngModel)]="otherReferenceIdObj.description" appTailingSpaceRemover
                             [limit]=2000 appLengthValidator
                             [ngClass]="(mandatoryList?.has('description')) ? 'is-invalid d-block' : ''"

@@ -2,7 +2,7 @@
         <div class="row mb-2">
             <div class="col-12 d-flex align-items-center coloured-bg-header">
                 <mat-icon class="icon-bg me-2 my-2 coloured-icons fs-14" aria-hidden="true">warning</mat-icon>
-                <span class="fs-16 col fw-medium">{{sectionName}}</span>
+                <span class="fs-16 col fw-medium" id="coi-entity-risk">{{sectionName}}<app-common-help-text [subSectionId]="2607" [elementId]="'coi-entity-risk'"></app-common-help-text></span>
                 <div class="col-auto" *ngIf="entityRisks.length">
                     <button id="additional-address-add-button"
                         class="btn btn-primary fs-14 d-inline-flex" title="'Click here to industry details'"
@@ -44,9 +44,10 @@
 			</div>
 			<div class="modal-body">
 				<div class="row mb-3">
-					<div class="col-6">
+					<div class="col-sm-12 col-lg-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-risk-type">
                             <span class="mandatory me-1">*</span>Risk Type
+                            <app-common-help-text [subSectionId]="2607" [elementId]="'coi-risk-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onRiskSelected($event)" [options]="entityRiskTypeOptions"
                             [isExternalArray]="true"  [externalArray]="entityRiskTypeList"
@@ -56,9 +57,10 @@
                             {{mandatoryList?.get('riskType')}}
                         </div>
 					</div>
-                    <div class="col-6">
+                    <div class="col-sm-12 col-lg-6 mt-sm-2 mt-lg-0">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-risk-level">
                             <span class="mandatory me-1">*</span>Risk Level
+                            <app-common-help-text [subSectionId]="2607" [elementId]="'coi-risk-level'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onRiskLevelSelected($event)" [options]="entityRiskLevelOption"
                         [uniqueId]="'coi-risk-level'" [isError]="mandatoryList?.has('riskLevel')"></app-look-up>
@@ -71,6 +73,7 @@
 					<div class="col-12">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-risk-description">
                             <span class="mandatory me-1">*</span>Risk Description
+                            <app-common-help-text [subSectionId]="2607" [elementId]="'coi-risk-description'"></app-common-help-text>
                         </label>
                         <textarea appAutoGrow class="form-control custom-height" id="coi-risk-description" rows="1"
                             [(ngModel)]="entityRisk.description" appTailingSpaceRemover

@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { EntityDataStoreService } from '../entity-data-store.service';
+import { CommonService } from '../../common/services/common.service';
+import { ComplianceTab } from '../shared/entity-constants';
 
 @Component({
   selector: 'app-entity-compliance',
@@ -6,7 +9,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./entity-compliance.component.scss']
 })
 export class EntityComplianceComponent {
-    ngOnInit() {
-        window.scrollTo(0,0);
-    }
+
+  overViewTab: any;
+
+  constructor(public commonService: CommonService, public dataStore: EntityDataStoreService) { }
+
+  ngOnInit() {
+    window.scrollTo(0,0);
+    this.overViewTab = ComplianceTab;
+  }
+
+
 }

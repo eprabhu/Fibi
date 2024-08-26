@@ -193,3 +193,10 @@ export function showEntityToast(type: 'SUCCESS'|'ERROR') {
         }
     }
 }
+
+export class EntitySponsorRisk {
+    riskTypeCode: any = '';
+    riskLevelCode: any = '';
+    description: string = '';
+    entityId: any;
+}

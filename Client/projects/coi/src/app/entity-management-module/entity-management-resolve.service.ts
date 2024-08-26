@@ -12,7 +12,7 @@ import { NavigationService } from '../common/services/navigation.service';
 @Injectable()
 export class EntityManagementResolveService {
 
-  private readonly _moduleCode = 'COI8';
+  private readonly _moduleCode = 'GE26';
 
   constructor(private _dataStore: EntityDataStoreService, private _commonService: CommonService,
     private _informationAndHelpTextService : InformationAndHelpTextService, private _entityManagementService: EntityManagementService) { }
