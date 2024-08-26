@@ -1575,11 +1575,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setSponsorAwardNumber(rset.getString("SPONSOR_AWARD_NUMBER"));
 					detail.setConflictStatus(rset.getString("CONFLICT_DESCRIPTION"));
 					detail.setConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
-//					if (disclosureId != null) {
-//						detail.setIsRelationShipExists(rset.getInt("RELATIONSHIP_COUNT") > 0 ? true : false);
-//						detail.setSfiCompleted(fcoiDisclosureDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
-//						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
-//					}
 				}
 				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
 					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
@@ -1599,11 +1594,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					detail.setConflictStatus(rset.getString("CONFLICT_DESCRIPTION"));
 					detail.setConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"));
-//					if (disclosureId != null) {
-//						detail.setIsRelationShipExists(rset.getInt("RELATIONSHIP_COUNT") > 0 ? true : false);
-//						detail.setSfiCompleted(fcoiDisclosureDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
-//						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
-//					}
 				}
 				awardDetails.add(detail);
 			}

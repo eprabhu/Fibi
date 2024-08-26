@@ -159,4 +159,9 @@ public interface FcoiDisclosureService {
      */
     void updateFcoiDisclSyncNeedStatus(DisclosureProjectDto projectDto);
 
+    /**
+     * This method is used to detach projects on certain conditions configured on procedure
+     * @param projectDto
+     */
+    void detachFcoiDisclProject(DisclosureProjectDto projectDto);
 }

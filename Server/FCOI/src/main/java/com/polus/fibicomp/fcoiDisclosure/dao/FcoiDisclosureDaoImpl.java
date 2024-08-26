@@ -316,7 +316,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             CallableStatement statement = connection.prepareCall("{call COI_VALIDATE_DISCLOSURE_CONFLICTS(?,?,?)}");
             statement.setInt(1, disclosureId);
             statement.setString(2, AuthenticatedUser.getLoginPersonId());
-            statement.setString(3, AuthenticatedUser.getLoginUserName());
+            statement.setString(3, AuthenticatedUser.getLoginPersonId());
             statement.execute();
             ResultSet rset = statement.getResultSet();
             if (rset != null && rset.next()) {
@@ -824,6 +824,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
                 statement.setString(6, loginPersonId);
                 statement.setString(7, loginPersonId);
                 statement.setString(8, sfiJsonArray);
+                statement.setString(8, sfiJsonArray);
             } else if (oracledb.equalsIgnoreCase("Y")) {
                 String functionCall = "{call COI_DISCL_PROJ_ENTITY_INSERTION(?,?,?,?,?,?,?,?,?)}";
                 statement = connection.prepareCall(functionCall);
@@ -836,6 +837,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
                 statement.setString(7, loginPersonId);
                 statement.setString(8, loginPersonId);
                 statement.setString(9, sfiJsonArray);
+                statement.setString(10, sfiJsonArray);
             }
 
             Objects.requireNonNull(statement).execute();
@@ -1034,7 +1036,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
                 statement.setInt(1, projectDto.getModuleCode());
                 statement.setString(2, projectDto.getProjectId());
             } else if (oracledb.equalsIgnoreCase("Y")) {
-                String functionCall = "{call COI_DISCL_PROJ_ENTITY_INSERTION(?,?,?)}";
+                String functionCall = "{call COI_SYNC_UPDATE_DISCL_INTEG_UPDATES(?,?,?)}";
                 statement = connection.prepareCall(functionCall);
                 statement.registerOutParameter(1, OracleTypes.CURSOR);
                 statement.setInt(2, projectDto.getModuleCode());
@@ -1053,5 +1055,30 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         hibernateTemplate.saveOrUpdate(disclComment);
         hibernateTemplate.flush();
         return disclComment;
+    }
+
+    @Override
+    public void detachFcoiDisclProject(DisclosureProjectDto projectDto) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection connection = sessionImpl.connection();
+        CallableStatement statement = null;
+        try {
+            if (oracledb.equalsIgnoreCase("N")) {
+                statement = connection.prepareCall("{call COI_SYNC_REMOVE_DEACTIVATED_PROJECTS(?,?)}");
+                statement.setInt(1, projectDto.getModuleCode());
+                statement.setString(2, projectDto.getProjectNumber());
+            } else if (oracledb.equalsIgnoreCase("Y")) {
+                String functionCall = "{call COI_SYNC_REMOVE_DEACTIVATED_PROJECTS(?,?,?)}";
+                statement = connection.prepareCall(functionCall);
+                statement.registerOutParameter(1, OracleTypes.CURSOR);
+                statement.setInt(2, projectDto.getModuleCode());
+                statement.setString(3, projectDto.getProjectNumber());
+            }
+            Objects.requireNonNull(statement).execute();
+        } catch (Exception e) {
+            logger.error("Exception on detachFcoiDisclProject : {} | {} | {}", projectDto.getModuleCode(),projectDto.getProjectNumber(), e.getMessage());
+            throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
+        }
     }
 }

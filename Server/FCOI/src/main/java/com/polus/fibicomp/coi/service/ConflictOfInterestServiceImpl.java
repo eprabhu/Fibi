@@ -1924,6 +1924,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiDisclosure.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			conflictOfInterestDao.completeDisclosureReview(coiDisclosure);
 			CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(disclosureId);
+			disclosure.setAdminPersonName(AuthenticatedUser.getLoginUserFullName());
+			disclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
 			if (disclosure.getFcoiTypeCode().equals("1")) {
 				conflictOfInterestDao.archiveDisclosureOldVersions(disclosureId, disclosureNumber);
 			}
