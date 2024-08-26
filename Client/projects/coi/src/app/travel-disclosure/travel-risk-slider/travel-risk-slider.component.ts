@@ -47,22 +47,6 @@ export class TravelRiskSliderComponent implements OnInit {
 	this.getTravelDisclosureHistory();
   }
 
-  getColorBadges(disclosure): string {
-		if (disclosure?.travelDisclosureId) {
-			return 'bg-travel-clip';
-		}
-		switch (disclosure.fcoiTypeCode) {
-			case '1':
-				return 'bg-fcoi-clip';
-			case '2':
-				return 'bg-proposal-clip';
-			case '3':
-				return 'bg-award-clip';
-			default:
-				return;
-		}
-	}
-
   getDisclosureTitleName(fcoiTypeCode: any): string {
 		switch (fcoiTypeCode) {
 			case '1':

@@ -20,7 +20,7 @@ export class DefineRelationshipDataStoreService {
         return (typeof NATIVE_CLONE_FUNCTION === 'function') ? NATIVE_CLONE_FUNCTION(obj) : JSON.parse(JSON.stringify(obj));
     }
 
-    private getFilteredDisclosureListForSearchWord(payload: DefineRelationshipDataStore): any {
+    private getFilteredDisclosureListForSearchWord(payload: DefineRelationshipDataStore): void {
         this.processProjectsSFIDetails(this.projectSfiRelationsList);
         const FILTERED_LIST: ProjectSfiRelations[] = this.projectSfiRelationsList?.filter((projectSfiRelations: ProjectSfiRelations) => {
             const { searchText, searchKeys } = this._defineRelationshipService;
