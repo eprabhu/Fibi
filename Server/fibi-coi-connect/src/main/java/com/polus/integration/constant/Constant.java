@@ -1,5 +1,9 @@
 package com.polus.integration.constant;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public interface Constant {
 
 	// Security Constant
@@ -32,5 +36,20 @@ public interface Constant {
 	String FIBI_DIRECT_EXCHANGE = "FIBI.DIRECT.EXCHANGE";
 	String AC_TYPE_UPDATE = "U";
 	String AC_TYPE_INSERT = "I";
+	
+	String UPDATE_BY = "10000000001";
+	
+	String DEFAULT_IS_ACTIVE_VALUE = "Y";	
+	
+    Map<String, String> REQUIRED_DnB_INDUSTRY_TYPE = Map.of(
+            "24659", "International Standard Industrial Classification Revision 4",
+            "35912", "D&B Hoovers Industry Classification",
+            "37788", "North American Industry Classification System 2022"
+        );
+	
+	String PRIMARY_DnB_INDUSTRY_TYPE = "37788";
+	
+	String IS_PRIMARY_YES = "Y";
+	String IS_PRIMARY_NO = "N";
 
 }

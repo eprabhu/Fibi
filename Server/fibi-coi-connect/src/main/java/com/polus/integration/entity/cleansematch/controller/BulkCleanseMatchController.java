@@ -3,42 +3,43 @@ package com.polus.integration.entity.cleansematch.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.polus.integration.entity.cleansematch.dto.StageDnBEntityMatchDTO;
-import com.polus.integration.entity.cleansematch.entity.StageDnBEntityMatch;
-import com.polus.integration.entity.cleansematch.service.DnBBulkCleanseMatchService;
+import com.polus.integration.entity.cleansematch.dto.DnBStageEntityMatchDTO;
+import com.polus.integration.entity.cleansematch.service.BulkCleanseMatchService;
 
 @RestController
 @RequestMapping("cleansematch/bulk")
-public class DnBBulkSponsorCleanseMatchController {
+public class BulkCleanseMatchController {
 
 	@Autowired
-	DnBBulkCleanseMatchService bulkCleanseMatchService;
+	BulkCleanseMatchService bulkCleanseMatchService;
 
 	@GetMapping("/ping")
 	public ResponseEntity<String> ping() {
-		return ResponseEntity.accepted().body("Hello from cleansematch/bulk");
+		return new ResponseEntity<String>("Hello from cleansematch/bulk", HttpStatus.OK);
 	}
 
 	@GetMapping("/startBulkCleanseMatch")
 	public ResponseEntity<String> startBulkCleanseMatch() {
 		bulkCleanseMatchService.startBulkCleanseMatch();
-		return ResponseEntity.accepted().body("Processing started");
+		return new ResponseEntity<String>("Processing started", HttpStatus.OK);
 	}
 
 	@GetMapping("/getStatus")
-	public List<StageDnBEntityMatchDTO> getCompletedRecord() {
-		return bulkCleanseMatchService.getCompletedRecord();
+	public ResponseEntity<List<DnBStageEntityMatchDTO>> getCompletedRecord() {
+		List<DnBStageEntityMatchDTO> response = bulkCleanseMatchService.getCompletedRecord();
+		return new ResponseEntity<List<DnBStageEntityMatchDTO>>(response, HttpStatus.OK);	
+		
 	}
    
 	@GetMapping("/stopBulkCleanseMatch")
 	public ResponseEntity<String> stopBulkCleanseMatch() {
 		 bulkCleanseMatchService.stopBulkCleanseMatch();
-		 return ResponseEntity.accepted().body("Processing stopped");
+		 return new ResponseEntity<String>("Processing stopped", HttpStatus.OK);		
 	}
 }
