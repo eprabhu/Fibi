@@ -126,12 +126,12 @@ public class HibernateConfig extends HibernateJpaAutoConfiguration {
 		e.printStackTrace();		}
 
     // Configure other C3P0 properties as needed
-    dataSource.setMinPoolSize(3);
-    dataSource.setMaxPoolSize(20);
+    dataSource.setMinPoolSize(10);
+    dataSource.setMaxPoolSize(50);
     dataSource.setAcquireIncrement(1);
-    dataSource.setIdleConnectionTestPeriod(3000);
+    dataSource.setIdleConnectionTestPeriod(1200);
     dataSource.setMaxIdleTime(600);
-    dataSource.setMaxStatements(0);
+    dataSource.setMaxStatements(10);
     dataSource.setTestConnectionOnCheckout(true);
     return dataSource;
 }
