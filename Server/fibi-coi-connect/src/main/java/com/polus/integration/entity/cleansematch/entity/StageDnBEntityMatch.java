@@ -3,7 +3,6 @@ package com.polus.integration.entity.cleansematch.entity;
 
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

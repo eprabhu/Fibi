@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StageDnBEntityMatchDTO {
+public class DnBStageEntityMatchDTO {
 
 	private Integer id;
 

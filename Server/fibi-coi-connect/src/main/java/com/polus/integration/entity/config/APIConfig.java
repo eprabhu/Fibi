@@ -1,22 +1,32 @@
 package com.polus.integration.entity.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Configuration
-@ConfigurationProperties(prefix = "entity.api.url")
+@Component
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class APIConfig{
+public class APIConfig {
 
-	private String cleansematch;
+		@Value("${entity.dnb.api.url.cleansematch}")
+		private String cleansematch;
+		
+		@Value("${entity.dnb.api.url.referenceData}")
+		private String referenceData;
+		
+		@Value("${entity.dnb.api.url.authToken}")
+		private String authToken;
+		
+		@Value("${entity.dnb.api.auth.customerKey}")
+		private String customerKey;
+		
+		@Value("${entity.dnb.api.auth.customerSecret}")
+		private String customerSecret;
 	
-	private String authToken;
-	   
-	
+
 }
