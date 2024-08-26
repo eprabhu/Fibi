@@ -1,1 +1,8 @@
-<p>entity-compliance works!</p>
+<div class="card rounded-0">
+    <div class="mb-2">
+        <app-entity-compliance-risk [sectionName]="commonService.getSectionName(overViewTab,'COMPLIANCE_RISK')" [sectionId]="commonService.getSectionId(overViewTab,'COMPLIANCE_RISK')"></app-entity-compliance-risk>
+    </div>
+    <div class="mb-2">
+        <app-entity-compliance-attachments [sectionName]="commonService.getSectionName(overViewTab,'COMPLIANCE_ATTACHMENTS')" [sectionId]="commonService.getSectionId(overViewTab,'COMPLIANCE_ATTACHMENTS')"></app-entity-compliance-attachments>
+    </div>
+</div>

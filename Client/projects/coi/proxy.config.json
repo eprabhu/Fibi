@@ -769,7 +769,15 @@
         "secure": false
     },
     "/entity/fetchRiskTypes" : {
-        "target": "http://10.199.100.23:9090/coi",
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/sponsor/saveRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/sponsor/fetch/*" : {
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     }
 }
