@@ -22,4 +22,20 @@ export class EntitySponsorService {
         return this._http.get(`${this._commonService.baseUrl}/entity/sponsor/fetch/${entityId}`);
     }
 
+    deleteRisk(entityRiskId) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/sponsor/deleteRisk/'+ entityRiskId);
+    }
+
+    updateSponsorRisk(params: any) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/sponsor/updateRisk', params, { responseType: 'text' });
+    }
+
+    SponsorDetailsAutoSave(autoSaveRO){
+        return this._http.post(this._commonService.baseUrl + '/entity/sponsor/save', autoSaveRO);
+    }
+
+    updateSponsorDetails(changedRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/sponsor/update', changedRO);
+    }
+
 }

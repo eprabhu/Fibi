@@ -199,4 +199,12 @@ export class EntitySponsorRisk {
     riskLevelCode: any = '';
     description: string = '';
     entityId: any;
+    entityRiskId: any;
+}
+
+export class SponsorDetails { 
+    id?: number;
+    entityId?: any;
+    acronym?: string = '';
+    sponsorTypeCode?: string = '';
 }

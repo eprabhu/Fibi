@@ -23,15 +23,16 @@
             </label>
             <input type="text" id="coi-entity-sponsor-Acronym" placeholder=""
                 title="Sponsor Acronym" aria-label="Sponsor Acronym" maxlength="60"
-                autocomplete="off" class="form-control" />
+                autocomplete="off" class="form-control" 
+                [(ngModel)]="sponsorDetailsObj.acronym" (ngModelChange)="changeEvent('acronym')"/>
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-lg-0">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsortype-lookup">Sponsor Type
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsortype-lookup'"></app-common-help-text>
             </label>
-            <app-look-up [options]='templateOptions' [defaultValue]="defaultTemplateLabel" [isExternalArray]="true"
-                [externalArray]="notificationTemplates" [uniqueId]="'coi-entity-sponsortype-lookup'">
+            <app-look-up (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorRiskLevelOption' [defaultValue]="defaultTemplateLabel"
+            [uniqueId]="'coi-entity-sponsortype-lookup'">
             </app-look-up>
         </div>
     </div>
