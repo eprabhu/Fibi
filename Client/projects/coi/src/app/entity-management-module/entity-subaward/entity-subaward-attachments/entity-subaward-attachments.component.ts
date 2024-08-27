@@ -10,7 +10,7 @@ export class EntitySubawardAttachmentsComponent implements OnInit {
     @Input() sectionName: any;
     @Input() sectionId: any;
     entityAttachmentHelpText: string = '';
-    isOpenSponsorAttachmentModal = false;
+    isOpenSubawardAttachmentModal = false;
 
 
     constructor() { }
@@ -19,12 +19,12 @@ export class EntitySubawardAttachmentsComponent implements OnInit {
     }
 
     closeModal(event: any): void {
-        this.isOpenSponsorAttachmentModal = false;
+        this.isOpenSubawardAttachmentModal = false;
         this.entityAttachmentHelpText = '';
     }
 
     openAttachmentModal() {
-        this.isOpenSponsorAttachmentModal = true
+        this.isOpenSubawardAttachmentModal = true
         this.entityAttachmentHelpText = 'You can view and edit attachments under the subaward tab.';
     }
 
