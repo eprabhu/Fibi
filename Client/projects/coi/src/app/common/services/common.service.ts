@@ -76,6 +76,9 @@ export class CommonService {
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
     relationshipTypeCache = {};
     entityURL: any;
+    hasChangesAvailable: boolean = false;
+    isNavigationStopped: boolean = false;
+    attemptedPath: string = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }

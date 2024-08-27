@@ -7,6 +7,7 @@ export class Create_Entity{
     state: string = '';
     postCode: number;
     countryCode: string = '';
+    country: Country;
     phoneNumber: any;
     certifiedEmail: any = '';
     websiteAddress: any = '';

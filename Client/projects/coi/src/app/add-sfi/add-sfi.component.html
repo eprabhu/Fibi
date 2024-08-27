@@ -5,19 +5,19 @@
 				<div class="col-xl-8 col-lg-9 col-md-12 px-0" [class.my-auto]="isSlider">
 					<div class="card-header bg-white px-3 min-height-unset" [ngClass]="isSlider ? 'border-none' : 'border-bottom'">
 						<div class="row flex-grow-1">
-							<div class="col-lg-12 d-flex align-items-center text-break" tabindex="-1" [attr.aria-label]="(entityDetails.coiEntity.entityName ? entityDetails.coiEntity.entityName : isEntityManagement ? '--Entity Name--' : '-- SFI Name --')">
+							<div class="col-lg-12 d-flex align-items-center text-break" tabindex="-1" [attr.aria-label]="'-- SFI Name --'">
 								<span class="fs-18 fw-500">
-                                    <ng-container *ngIf="entityDetails.coiEntity.entityName">
-                                        <span class="text-slice" [title]="entityDetails.coiEntity.entityName">{{entityDetails.coiEntity.entityName}}</span>
+                                    <ng-container *ngIf="entityDetails?.entityName">
+                                        <span class="text-slice" [title]="entityDetails?.entityName">{{entityDetails?.entityName}}</span>
                                     </ng-container>
-                                    <ng-container *ngIf="!entityDetails.coiEntity.entityName">
-                                        {{isEntityManagement ? '--Entity Name--' : '-- SFI Name --'}}
+                                    <ng-container *ngIf="!entityDetails?.entityName">
+                                        -- SFI Name --
                                     </ng-container>
 								</span>
 							</div>
 						</div>
 					</div>
-					<div *ngIf="!isEntityManagement" id="coi-sfi-header-card-body" class="card-body px-3">
+					<div id="coi-sfi-header-card-body" class="card-body px-3">
 						<div class="row">
 							<!-- Start Date Of Involvement -->
 							<div id="coi-add-sfi-startdate-involvement-label" class="col-xl-4 col-lg-4 col-md-6 col-sm-12" tabindex="-1"
@@ -59,7 +59,7 @@
 							title="Click here to go back to Entity list" aria-label="Click here to go back to Entity list" (keyup.enter)="navigateBack()" (keyup.space)="navigateBack()">
 							<i class="fa fa-reply justify-content-center align-items-center fs-14" aria-hidden="true"></i>
 						</button>
-						<button id="coi-add-sfi-save-btn" [attr.aria-label]="'Click to ' + buttonName" [ngClass]="isSlider && isEntityManagement ? 'col col-lg-12 col-xxl' : 'col-12'"
+						<button id="coi-add-sfi-save-btn" [attr.aria-label]="'Click to ' + buttonName" [ngClass]="isSlider ? 'col col-lg-12 col-xxl' : 'col-12'"
 							class="align-items-center btn btn-primary d-flex fs-14 justify-content-center mt-0 flex-wrap"
 							[title]="btnTitle" (click)="submitEntity();" aria-label="Click here to Save SFI"
 							[disabled]="mandatoryList?.has('entityAlreadyAdded')">
@@ -80,8 +80,8 @@
 	<div class="card-body" id="coi-sfi-additional-details-card-body">
 		<div class="row align-items-baseline px-1" tabindex="-1">
 			<!-- Entity Name -->
-			<div class="col-12" tabindex="-1" aria-label="Entity Name Search Field" [class.mb-2]="!isResultFromSearch && !isEntityManagement">
-				<div class="d-flex position-relative" *ngIf="!isEntityManagement && !isNewEntityFromSearch && !canShowEntityFields">
+			<div class="col-12" tabindex="-1" aria-label="Entity Name Search Field" [class.mb-2]="!isResultFromSearch">
+				<div class="d-flex position-relative" *ngIf="!isNewEntityFromSearch && !canShowEntityFields">
 					<label class="d-block fs-14 fw-500 px-1 pb-1 label-text coi-label-help" for="coi-add-sfi-entity-name">
 						<span class="mandatory">*</span>
 						Entity Name
@@ -89,7 +89,7 @@
 					</label>
 				</div>
 				<div class="col">
-                    <app-elastic *ngIf="!isEntityManagement && !isNewEntityFromSearch && !canShowEntityFields" [uniqueId]="'coi-add-sfi-entity-name'" class="w-100 mt-4"
+                    <app-elastic *ngIf="!isNewEntityFromSearch && !canShowEntityFields" [uniqueId]="'coi-add-sfi-entity-name'" class="w-100 mt-4"
                         [options]="EntitySearchOptions" [placeHolder]="'Type here to search / add an Entity Name'"
                         [clearField]="clearField" [isDisabled]="isViewMode"
                         [isError]="mandatoryList?.has('entityName') || mandatoryList?.has('entityAlreadyAdded')"
@@ -102,9 +102,9 @@
 							id="coi-add-sfi-entity-name" (ngModelChange)="setHeader();" appLengthValidator
 							[limit]=500 [styleList]="'mt-2 float-end word-count'"> -->
                         <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13"
-                            (click)="entityDetails.coiEntity.entityName = '';isNewEntityFromSearch = false;canShowEntityFields = false" > Back to Search </a>
+                            (click)="isNewEntityFromSearch = false;canShowEntityFields = false" > Back to Search </a>
 					<!-- </ng-template> -->
-					<app-common-information *ngIf="!isEntityManagement && !isNewEntityFromSearch && !canShowEntityFields" [elementId]="'coi-add-sfi-entity-name'" [subSectionId]="531"></app-common-information>
+					<app-common-information *ngIf="!isNewEntityFromSearch && !canShowEntityFields" [elementId]="'coi-add-sfi-entity-name'" [subSectionId]="531"></app-common-information>
 					<div *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-block fs-13"
 						tabindex="-1" aria-label="Entity Name Validation" aria-describedby="entity-name-validation1">
 						<span id="coi-add-sfi-entity-name-validation1">{{mandatoryList?.get('entityName')}}</span>
@@ -193,7 +193,9 @@
 					</div>
 				</div>
 				<ng-container *ngIf="canShowEntityFields">
-                    <app-entity-creation [isCreateScreen]="true" (emitEntityRO)="saveBasicEntityDetails($event)" [saveEntity]="saveEntity"></app-entity-creation>
+                    <app-entity-creation [isCreateScreen]="true" [initalProceed]="initalProceed"
+                     [createEntityObj]="entityDetails"
+                     [saveEntity]="saveEntity" (emitSaveObj)="setEntityId($event)" [canNavigateToEntity]="false"></app-entity-creation>
 				</ng-container>
 				<ng-container *ngIf="isResultFromSearch">
 					<div class="mb-2">
@@ -202,7 +204,7 @@
 							(emitEntityId)="viewEntityDetails($event)"></app-shared-entity-info-card>
 					</div>
 				</ng-container>
-				<div *ngIf="isExpandedAdditionalDetails && !isEntityManagement && !mandatoryList?.has('entityAlreadyAdded')"
+				<div *ngIf="!mandatoryList?.has('entityAlreadyAdded')"
 				  id="coi-sfi-expanded-additional-details-card-body" class="card-body pb-1">
 					<div class="row">
 						<!-- Start date of involvement -->
@@ -299,7 +301,7 @@
 						</div>
 					</div>
 					<!-- Realtionship Details [Disclose financial details for the SFI] -->
-					<div class="mb-3 mx-0 row mt-4 pt-1" *ngIf="!isEntityManagement">
+					<div class="mb-3 mx-0 row mt-4 pt-1">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-12 card custom-padding position-relative px-0" id="relation-radio-btn"
 							tabindex="-1" aria-label="Relationship Details Card" [class.invalid-border]="mandatoryList.has('relationRadio')">
 							<div class="color-black mb-2">
@@ -405,41 +407,6 @@
 				</div>
 			</div>
 			<!-- Additional Details Ends -->
-	</div>
-</div>
-
-<!-- Update confirmation -->
-<div tabindex="-1" class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="actionConfirmationModal" role="dialog" aria-label="Confirmation">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Confirmation</h4>
-				<button type="button" class="btn-close" id="coi-add-sfi-update-confirmation-btn" title="Click here to close" data-bs-dismiss="modal"
-					aria-label="Click here to close"></button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-12">
-						<div class="row">
-							<div class="col-12 grey-info font">
-								<span class="fs-14">Would you like to make changes to the existing entity
-									details?
-									Please note that any modifications made will impact the existing SFIs.
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-outline-secondary" id="coi-add-sfi-cancle-btn" data-bs-dismiss="modal" type="button"
-				title="Click to cancel">Cancel
-				</button>
-				<button class="btn btn-primary me-0" id="coi-add-sfi-submit-btn" type="button"
-					(click)="updateEntityDetails()" data-bs-dismiss="modal"  title="Click here to submit" aria-label="Click here to submit">Submit
-				</button>
-			</div>
-		</div>
 	</div>
 </div>
 
