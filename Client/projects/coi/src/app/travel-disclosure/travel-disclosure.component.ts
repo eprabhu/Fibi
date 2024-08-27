@@ -19,7 +19,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 import { closeCommonModal, openCommonModal } from '../common/utilities/custom-utilities';
 import { heightAnimation } from '../common/utilities/animations';
-import { GlobalEventNotifier } from '../common/services/coi-common.interace.ts';
+import { GlobalEventNotifier } from '../common/services/coi-common.interface';
 
 type Method = 'SOME' | 'EVERY';
 

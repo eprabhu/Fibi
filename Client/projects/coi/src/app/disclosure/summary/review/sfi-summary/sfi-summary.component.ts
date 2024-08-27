@@ -4,12 +4,13 @@ import { environment } from '../../../../../environments/environment';
 import { CoiSummaryEventsAndStoreService } from '../../services/coi-summary-events-and-store.service';
 import { CommentConfiguration, RO } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { CommonService } from '../../../../../app/common/services/common.service';
+import { CommonService } from '../../../../common/services/common.service';
 import { CoiService } from '../../../services/coi.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { coiReviewComment } from '../../../../shared-components/shared-interface';
-import { openCoiSlider } from 'projects/coi/src/app/common/utilities/custom-utilities';
+import { openCoiSlider } from '../../../../common/utilities/custom-utilities';
 import { CoiSummaryService } from '../../services/coi-summary.service';
+import { HTTP_ERROR_STATUS } from '../../../../app-constants';
 
 @Component({
     selector: 'app-sfi-summary',
@@ -27,7 +28,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     searchText: string;
     showSlider = false;
     entityId: any;
-    isShowNoDataCard = false;
+    isLoading = false;
     sliderElementId = ''; 
 
     constructor(public coiService: CoiService,
@@ -56,13 +57,16 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.isShowNoDataCard = false;
+        this.isLoading = false;
         this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
             if (data) {
-                this.isShowNoDataCard = true;
+                this.isLoading = true;
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.setSubSectionList();
             }
+        }, (_error: any) => {
+            this.isLoading = true;
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching SFI list failed. Please try again.');
         }));
     }
 

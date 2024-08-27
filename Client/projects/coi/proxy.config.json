@@ -99,10 +99,6 @@
         "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
-    "/getDisclosureRelations": {
-        "target": "http://10.199.100.23:9090/coi",
-        "secure": false
-    },
     "/getTabCount": {
         "target": "http://10.199.100.23:9090/coi",
         "secure": false

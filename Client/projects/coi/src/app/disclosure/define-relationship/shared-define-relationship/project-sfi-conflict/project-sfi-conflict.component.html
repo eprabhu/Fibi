@@ -47,7 +47,7 @@
                         <!-- view page -->
                         <ng-container *ngIf="!defineRelationshipService.isEditMode">
                             <th scope="col" class="col align-middle border-end" tabindex="-1">Relationship between SFIs and Projects</th>
-                            <th scope="col" class="col-2 align-middle border-end text-nowrap" tabindex="-1">
+                            <th scope="col" class="col-2 align-middle border-end text-nowrap p-0" tabindex="-1">
                                 <button title="Click here to sort conflict status in {{isDesc['projectConflictStatusCode'] ? 'ascending' : 'descending'}} order"
                                     attr.aria-label="Click here to sort conflict status in {{isDesc['projectConflictStatusCode'] ? 'ascending' : 'descending'}} order"
                                     class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
@@ -75,7 +75,7 @@
                                             <span [title]="coiDisclEntProjDetail?.personEntity?.entityName" class="coi-text-dark text-slice">{{coiDisclEntProjDetail?.personEntity?.entityName}}</span>
                                         </div>
                                         <!-- modified sign -->
-                                        <span *ngIf="coiDisclEntProjDetail.prePersonEntityId && (coiDisclEntProjDetail.prePersonEntityId != coiDisclEntProjDetail.personEntityId)"
+                                        <span *ngIf="coiDisclEntProjDetail?.prePersonEntityId && (coiDisclEntProjDetail?.prePersonEntityId != coiDisclEntProjDetail?.personEntityId)"
                                             class="fs-12 sfi-info-text px-2 rounded-5 rounded-pill">Modified</span>
                                     </div>
                                     <!-- Entity Type -->
@@ -133,7 +133,7 @@
                                     <!-- select -->
                                     <select class="form-select form-control"
                                         [(ngModel)]="coiDisclEntProjDetail.projectConflictStatusCode"
-                                        (ngModelChange)="saveProjectSfiConflict(coiDisclEntProjDetail, sfiIndex)"
+                                        (ngModelChange)="coiDisclEntProjDetail.isDataChanged = true; saveProjectSfiConflict(coiDisclEntProjDetail, sfiIndex)"
                                         title="Click here to select conflict status"
                                         [class.is-invalid]="mandatoryList.has('CONFLICT_STATUS_' + sfiIndex)"
                                         id="coi_sfi_conflict_{{projectSfiRelation?.projectId}}_{{coiDisclEntProjDetail?.entityId}}_{{sfiIndex}}"
@@ -155,9 +155,9 @@
                                         <span class="mandatory me-1" aria-label="Mandatory field">*</span>
                                         <span>Define Project - SFI Relation</span>
                                     </label>
-                                    <textarea class="form-control comment-text-box textarea-height"
-                                        [(ngModel)]="coiDisclEntProjDetail?.disclComment.comment" rows="4"
-                                        (ngModelChange)="validateDescription(coiDisclEntProjDetail, sfiIndex)"
+                                    <textarea class="form-control"
+                                        [(ngModel)]="coiDisclEntProjDetail?.disclComment.comment" rows="5"
+                                        (ngModelChange)="coiDisclEntProjDetail.isDataChanged = true; validateDescription(coiDisclEntProjDetail, sfiIndex)"
                                         id="coi_sfi_conflict_comment_{{projectSfiRelation?.projectId}}_{{coiDisclEntProjDetail?.entityId}}_{{sfiIndex}}"
                                         name="coi_sfi_conflict_comment_{{projectSfiRelation?.projectId}}_{{coiDisclEntProjDetail?.entityId}}_{{sfiIndex}}"
                                         appLengthValidator [limit]="2000" spellcheck="false"

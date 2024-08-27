@@ -98,6 +98,9 @@ export class ModalStyleOptions {
     /** @param animationClass - CSS class for positioning the modal footer, typically used for alignment. */
     animationClass: string;
 
+    /** @param modalBodyClass =  - CSS class for the modal body */
+    modalBodyClass: string;
+
     /**
      * Constructor to initialize the properties of ModalStyleOptions.
      * @param primaryBtnClass - CSS class for the primary button.
@@ -105,7 +108,7 @@ export class ModalStyleOptions {
      * @param closeBtnClass - CSS class for the close button.
      * @param footerPosition - CSS class for positioning the modal footer.
      */
-    constructor(primaryBtnClass = 'btn-primary', secondaryBtnClass = 'btn-outline-grey', closeBtnClass = '', footerPosition: FlexJustifyClass = 'justify-content-end', animationClass = 'fade') {
+    constructor(primaryBtnClass = 'btn-primary', secondaryBtnClass = 'btn-outline-secondary', closeBtnClass = '', footerPosition: FlexJustifyClass = 'justify-content-end', animationClass = 'fade') {
         this.primaryBtnClass = primaryBtnClass;
         this.secondaryBtnClass = secondaryBtnClass;
         this.closeBtnClass = closeBtnClass;

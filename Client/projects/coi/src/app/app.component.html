@@ -1,7 +1,6 @@
 <router-outlet></router-outlet>
 
-<div class="modal fade mySkinDialog modal-md" id="refreshModal" aria-labelledby="refreshModal"
-	role="dialog">
+<div class="modal fade mySkinDialog modal-md" data-bs-backdrop="static" id="refreshModal" aria-labelledby="refreshModal" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -12,8 +11,8 @@
 				<p>{{modalMessage}}</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-primary" type="button" (click)="refreshPage()" title="Click to refresh"
-					role="button" title="Click to refresh">
+				<button class="btn btn-primary" type="button" (click)="refreshPage()" title="Click here to refresh."
+					aria-label="Click here to refresh.">
 					Refresh
 				</button>
 			</div>

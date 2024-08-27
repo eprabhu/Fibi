@@ -13,10 +13,6 @@ export class CoiSummaryService {
         private _commonService: CommonService
     ) { }
 
-    getProjectRelationships(params: any) {
-        return this._http.post(`${this._commonService.baseUrl}/getDisclosureRelations`, params);
-    }
-
     getEntityProjectRelations(moduleCode, moduleId, id, status, personId) {
       if (moduleCode == 3) {
         return this._http.post(this._commonService.baseUrl + '/fcoiDisclosure/project/relations', {

@@ -29,7 +29,7 @@
                 <a class="coi-nav-link d-flex align-items-center" role="link" tabindex="-1" [class.border-bottom]="!coiService.isExpandSummaryBySection['COI803']"
                     title="Go to Relationships section" aria-label="Go to Relationships section" (focus)="scrollIntoView()" (click)="openIfClose()">
                     <span class="me-2">Relationships - Projects</span>
-                    <span class="count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
+                    <span class="fs-10 count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
                 </a>
                 <!-- expand/colapse -->
                 <button id="relationship_collapse_btn" (click)="expandCollapseRelationship()"
@@ -41,16 +41,17 @@
             </div>
             <div *ngIf="!IS_SFI_PROJECT_SWITCH && defineRelationshipService.isEditMode" class="col-12 px-3 d-flex align-items-center gap-1 mb-2 lh-1">
                 <span class="coi-text-darker fs-16">Projects</span>
-                <span class="count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
+                <span class="fs-10 count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
             </div>
             <div *ngIf="coiService.isExpandSummaryBySection['COI803']" class="p-0 mb-3 border-bottom"></div>
             <ng-container *ngIf="coiService.isExpandSummaryBySection['COI803'] && projectSfiRelationsList?.length">
                 <div class="col-12 px-3 d-flex align-items-center gap-2 pb-3 border-bottom">
                     <div class="d-flex align-items-center position-relative w-100">
                         <mat-icon aria-hidden="true" class="position-absolute start-6px light-color">search</mat-icon>
-                        <input type="text" placeholder="Search: project details" autocomplete="off"
+                        <input type="text" autocomplete="off"
                             class="form-control p-x-2rem rounded-2" id="project_sfi_relation_search_text"
                             name="project_sfi_relation_search_text"
+                            placeholder="Search by Title, PI, Reporter's Role, Lead Unit, Sponsor, Prime Sponsor."
                             [(ngModel)]="defineRelationshipService.searchText" (ngModelChange)="searchProjectDetails()">
                         <button *ngIf="defineRelationshipService.searchText" class="btn-none d-flex align-items-center position-absolute end-8px coi-text-lighter" (click)="resetList()"
                             aria-label="Cleck here to clear search text" title="Cleck here to clear search text">
@@ -102,7 +103,7 @@
                         <div class="col-12 d-flex align-items-center justify-content-between">
                             <ng-container *ngFor="let status of defineRelationshipService.relationshipConflictType; let last = last">
                                 <div class="d-flex align-items-center fs-12 coi-text-light fw-600">
-                                    <span class="text-nowrap">{{ status?.label }}</span>
+                                    <span class="text-nowrap">{{ status?.projectConflictStatus }}</span>
                                     <span class="me-2">:</span>
                                     <span [ngClass]="status?.color" class="conflict-count-width">{{ projectSfiRelation?.conflictCount?.[status?.statusCode] ?? 0 }}</span>
                                 </div>

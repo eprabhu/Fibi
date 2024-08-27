@@ -21,10 +21,6 @@ const routes: Routes = [
                 loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)
             },
             {
-                path: 'reviewer-dashboard',
-                loadChildren: () => import('./reviewer-dashboard/reviewer-dashboard.module').then(m => m.ReviewerDashboardModule)
-            },
-            {
                 path: 'user-dashboard',
                 loadChildren: () => import('./user-dashboard/user-dashboard.module').then(m => m.UserDashboardModule)
             },

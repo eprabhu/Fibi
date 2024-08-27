@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { DefineRelationshipService } from '../define-relationship/services/define-relationship.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
-import { GlobalEventNotifier } from '../../common/services/coi-common.interace.ts';
+import { GlobalEventNotifier } from '../../common/services/coi-common.interface';
 
 @Component({
     selector: 'app-summary',
@@ -36,6 +36,7 @@ export class SummaryComponent implements OnInit {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+        this.defineRelationshipService.clearAllServiceData();
     }
     
     private listenDataChangeFromStore() {

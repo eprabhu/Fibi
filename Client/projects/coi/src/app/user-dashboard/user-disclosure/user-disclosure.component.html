@@ -1318,18 +1318,18 @@
                                 <div class="row align-items-center">
                                     <div class="col-md-6 col-lg-4" tabindex="{{disclosure?.opaDisclosureId ? -1 : 0}}">
                                         <div class="d-flex align-items-center fw-semibold" *ngIf="!disclosure?.opaDisclosureId">
-                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="disclosure?.noOfSfi"
-                                                [title]="disclosure?.noOfSfi > 0 ? 'Click here to view SFI list' : '' " role="link" [ngClass]="disclosure?.noOfSfi > 0 ?'badge':'zero-count-padding'"
+                                            <span class="d-flex align-items-center justify-content-center bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
+                                                [title]="disclosure?.noOfSfi > 0 ? 'Click here to view SFI list' : '' " role="link" [ngClass]="disclosure?.noOfSfi > 0 ?'badge cursor-pointer':'zero-count-padding'"
                                                 [attr.aria-label]="disclosure?.noOfSfi > 0 ?'Click here to view SFI list':''"
-                                                (click)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
-                                                (keydown.enter)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
-                                                (keydown.space)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
+                                                (click)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
+                                                (keydown.enter)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
+                                                (keydown.space)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
                                                 id="coi-user-disclosure-noof-sfi">{{disclosure?.noOfSfi
                                                 || 0}}</span>
                                             <span class="fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'link-primary': 'coi-text-light' "
                                                 [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
-                                                (keydown.enter)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8)"
-                                                (click)="openCountModal('sfi', disclosure, disclosure?.noOfSfi, 8);">Significant
+                                                (keydown.enter)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
+                                                (click)="openCountModal(disclosure, disclosure?.noOfSfi, 8);">Significant
                                                 Financial Interest</span>
                                         </div>
                                     </div>
@@ -1340,17 +1340,17 @@
                                                     <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
                                                         tabindex="{{projectCount?.projectCount > 0 ? 0 : -1}}" role="link"
                                                         [attr.aria-label]="projectCount?.projectType + ' count is ' + projectCount?.projectCount + (projectCount?.projectCount > 0 ? '. Click here to view ' + projectCount?.projectType + ' list' : '')"
-                                                        [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' alist' : ''"
-                                                        (click)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.space)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.enter)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        [ngClass]="projectCount?.projectCount ? 'badge' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
+                                                        [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
+                                                        (click)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.space)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.enter)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        [ngClass]="projectCount?.projectCount ? 'badge cursor-pointer' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
                                                     <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
                                                         [class.link-primary]="projectCount?.projectCount > 0"
                                                         [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
-                                                        (click)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.enter)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.space)="openCountModal(projectCount?.projectType, disclosure, projectCount?.projectCount, projectCount?.moduleCode)">{{projectCount?.projectType}}</span>
+                                                        (click)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.enter)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
+                                                        (keyup.space)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)">{{projectCount?.projectType}}</span>
                                                 </div>
                                             </div>
                                         </ng-container>
@@ -1463,12 +1463,12 @@
     </div>
 </ng-container>
 
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.projectType"
-    [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
-    [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-    (closeModal)="closeModalEvent($event)" (viewSlider)="viewSlider($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures">
-</app-count-modal>
+<!-- count modal -->
+<ng-container *ngIf="countModalData?.isOpenCountModal">
+    <app-coi-count-modal [(coiCountModal)]="countModalData" (viewSlider)="viewSlider($event)"></app-coi-count-modal>
+</ng-container>
 
+<!-- entity slider -->
 <ng-container *ngIf="showSlider">
 	<app-coi-slider (closeSlider)="validateSliderClose()" [elementId]="sliderElementId" [overlay_z_index]="1056" [slider_z_index]="1057">
 		<ng-container content>
