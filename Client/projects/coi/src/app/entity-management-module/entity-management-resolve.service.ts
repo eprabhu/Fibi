@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate, Router } from '@angular/router';
 import { forkJoin, Observable, Subscriber } from 'rxjs';
 import { EntityDataStoreService } from './entity-data-store.service';
 import { CommonService } from '../common/services/common.service';
@@ -75,30 +75,37 @@ setModuleConfiguration() {
 
 
 private redirectOnError(error) {
-    // this._commonService.showToast(HTTP_ERROR_STATUS, (error.error) ?
-//         error.error : 'Something went wrong. Please try again.');
-// if (error.status === 403 && error.error !== 'DISCLOSURE_EXISTS') {
-//     this._commonService.forbiddenModule = '8';
-//     this._router.navigate(['/coi/error-handler/403']);
-//     return new Observable(null);
-// } else {
-//     this._router.navigate([REPORTER_HOME_URL]);
-    // this._commonService.showToast(HTTP_ERROR_STATUS,
-    //     error.error !== 'DISCLOSURE_EXISTS' ? 'Please try again later.' : 'Disclosure already exists.');
     return new Observable(null);
 }
 }
 
 @Injectable()
-export class EntityPathResolveService {
+export class EntityPathResolveService{
 
-  constructor(private _entityManagementService: EntityManagementService) { }
-
-    canDeactivate(): any {
-        if(this._entityManagementService.hasChangesAvailable) {
+  constructor(private _entityManagementService: EntityManagementService, private _commonService: CommonService) { }
+    canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): any {
+        if(this._commonService.hasChangesAvailable) {
+            this._commonService.isNavigationStopped = true;
+            this._commonService.attemptedPath = nextState.url;
             return false;
         } else {
+            this._commonService.isNavigationStopped = false;
+            this._commonService.attemptedPath = '';
             return true;
         }
     }
+
 }
+
+@Injectable()
+export class EntityConfigurationResolveGuardService {
+
+    private readonly _moduleCode = 'GE26';
+    constructor( private _commonService: CommonService ) { }
+
+    resolve() {
+        return this._commonService.getDashboardActiveModules(this._moduleCode);
+    }
+
+}
+

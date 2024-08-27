@@ -10,7 +10,7 @@ import { RightPanelComponent } from './right-panel/right-panel.component';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { SharedEntityManagementModule } from './shared/shared-entity-management.module';
 import { EntityDataStoreService } from './entity-data-store.service';
-import { EntityManagementResolveService, EntityPathResolveService } from './entity-management-resolve.service';
+import { EntityConfigurationResolveGuardService, EntityManagementResolveService, EntityPathResolveService } from './entity-management-resolve.service';
 import { EntityManagementService } from './entity-management.service';
 
 const routes: Routes = [
@@ -19,16 +19,17 @@ const routes: Routes = [
         children: [
             { path: '', redirectTo: 'entity-overview', pathMatch: 'full' },
             { path: 'entity-overview',loadChildren: () => import('./entity-overview/entity-overview.module').then(m => m.EntityFormOverviewModule), canDeactivate: [EntityPathResolveService]},
-            { path: 'entity-sponsor', loadChildren: () => import('./entity-sponsor/entity-sponsor.module').then(m => m.EntitySponsorModule)},
-            { path: 'entity-subaward', loadChildren: () => import('./entity-subaward/entity-subaward.module').then(m => m.EntitySubawardModule)},
-            { path: 'entity-compliance', loadChildren: () => import('./entity-compliance/entity-compliance.module').then(m => m.EntityComplianceModule)},
+            { path: 'entity-sponsor', loadChildren: () => import('./entity-sponsor/entity-sponsor.module').then(m => m.EntitySponsorModule), canDeactivate: [EntityPathResolveService]},
+            { path: 'entity-subaward', loadChildren: () => import('./entity-subaward/entity-subaward.module').then(m => m.EntitySubawardModule), canDeactivate: [EntityPathResolveService]},
+            { path: 'entity-compliance', loadChildren: () => import('./entity-compliance/entity-compliance.module').then(m => m.EntityComplianceModule), canDeactivate: [EntityPathResolveService]},
             { path: 'entity-notes', loadChildren: () => import('./entity-notes/entity-notes.module').then(m => m.EntityNotesModule)},
             { path: 'entity-attachments', loadChildren: () => import('./entity-attachment/entity-attachment.module').then(m => m.EntityAttachmentModule)},
             { path: 'entity-history', loadChildren: () => import('./entity-history/entity-history.module').then(m => m.EntityHistoryModule)},
-            // canActivate: [CreateAgreementGuard],canDeactivate: [AgreementRouteGuardService],
         ]
     },
-    {path: 'create-entity', loadComponent: () => import('./create-entity/create-entity.component'). then(c => c.CreateEntityComponent)}
+    {path: 'create-entity', loadComponent: () => import('./create-entity/create-entity.component'). then(c => c.CreateEntityComponent),
+    resolve: {entityConfig: EntityConfigurationResolveGuardService}
+    }
 ];
 
 @NgModule({
@@ -49,6 +50,7 @@ const routes: Routes = [
   providers: [
     EntityDataStoreService,
     EntityManagementResolveService,
+    EntityConfigurationResolveGuardService,
     EntityManagementService,
     EntityPathResolveService
   ]
