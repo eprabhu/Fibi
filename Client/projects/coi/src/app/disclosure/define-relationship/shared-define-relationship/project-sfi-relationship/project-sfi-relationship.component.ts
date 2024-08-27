@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonService } from '../../../../common/services/common.service';
 import { DefineRelationshipService } from '../../services/define-relationship.service';
 import { AddConflictSlider, COI, DefineRelationshipDataStore, ProjectSfiRelations } from '../../../coi-interface';
@@ -8,22 +8,23 @@ import { DataStoreService } from '../../../services/data-store.service';
 import { isEmptyObject } from '../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CoiService } from '../../../services/coi.service';
 import { HTTP_ERROR_STATUS } from '../../../../app-constants';
+import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-project-sfi-relationship',
     templateUrl: './project-sfi-relationship.component.html',
     styleUrls: ['./project-sfi-relationship.component.scss'],
 })
-export class ProjectSfiRelationshipComponent implements OnInit {
+export class ProjectSfiRelationshipComponent implements OnInit, OnDestroy {
 
-    filteredProjectSfiRelationsList: ProjectSfiRelations[] = [];
     height: any;
     isStart = false;
+    loginPersonId = '';
+    coiData = new COI();
     $subscriptions: Subscription[] = [];
     mandatoryList: Map<string, string> = new Map();
-    loginPersonId = '';
-    coiData = new COI()
     intersectionObserverOptions: IntersectionObserverInit;
+    filteredProjectSfiRelationsList: ProjectSfiRelations[] = [];
 
     constructor(public coiService: CoiService,
                 private _dataStore: DataStoreService,
@@ -34,7 +35,7 @@ export class ProjectSfiRelationshipComponent implements OnInit {
         this.defineRelationshipService.isShowProjectSfiConflict[0] = true;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.getDataFromStore();
         this.getDataFromRelationStore();
         this.listenDataChangeFromStore();
@@ -44,6 +45,10 @@ export class ProjectSfiRelationshipComponent implements OnInit {
             this.defineRelationshipService.isShowErrorToast = false;
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
         }
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
     private listenDataChangeFromStore(): void {
@@ -80,12 +85,12 @@ export class ProjectSfiRelationshipComponent implements OnInit {
         if (!this.isStart) {
             this.intersectionObserverOptions = {
                 root: document.getElementById('SCROLL_SPY_LEFT_CONTAINER'),
-                rootMargin: '200px 0px 200px 0px',
+                rootMargin: '100px 0px 100px 0px',
                 threshold: Array.from({ length: 100 }, (_, i) => i / 100)
             };
             this.defineRelationshipService.updateObserverActivationStatus(this.filteredProjectSfiRelationsList.length, 0, true);
             setTimeout(() => {
-                this.height = document.getElementById('COI_PROJECT_SFI_RELATION_0')?.getBoundingClientRect().height;
+                this.height = document.getElementById('COI_PROJECT_SFI_RELATION_0')?.getBoundingClientRect().height + 'px';
                 this.isStart = true;
             }, 200);
         }

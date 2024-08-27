@@ -173,19 +173,6 @@
   margin-top: 1px;
 }
 
-.action-icons {
-  border-radius: 50%;
-  height: 38px !important;
-  width: 39px !important;
-  font-size: 25px !important;
-  color: rgb(87 87 87 / 77%);
-  cursor: pointer;
-  &:hover {
-    background-color: #e2f1ff;
-    color: #007dec !important;
-  }
-}
-
 .mat-mdc-select-arrow-wrapper {
     height: 21px!important;
 }
@@ -239,6 +226,7 @@
     .coi-table-striped-thead > .coi-table-striped-tr .coi-table-striped-th,
     .coi-table-striped-thead > .coi-table-striped-tr .coi-table-striped-td {
         --bs-table-bg-type: #f0f2f3;
+        vertical-align: middle;
     }
 
     .coi-table-striped-tbody > .coi-table-striped-tr:nth-of-type(odd) > .coi-table-striped-th,

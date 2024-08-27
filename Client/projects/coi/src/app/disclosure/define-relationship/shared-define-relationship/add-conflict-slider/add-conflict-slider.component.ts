@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy, Input, Output, ViewChild, ElementRef, Eve
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from "../../../../app-constants";
 import { CommonService } from "../../../../common/services/common.service";
 import { openCoiSlider } from "../../../../common/utilities/custom-utilities";
-import { isEmptyObject } from "../../../../../../../fibi/src/app/common/utilities/custom-utilities";
+import { deepCloneObject, isEmptyObject } from "../../../../../../../fibi/src/app/common/utilities/custom-utilities";
 import { subscriptionHandler } from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Subscription } from "rxjs";
-import { AddConflictSlider, COI, CoiProjConflictStatusType, UpdateProjectRelationshipRO } from "../../../coi-interface";
+import { AddConflictSlider, COI, CoiConflictStatusType, CoiProjConflictStatusType, UpdateProjectRelationshipRO } from "../../../coi-interface";
 import { CoiService } from "../../../services/coi.service";
 import { DataStoreService } from "../../../services/data-store.service";
 import { CoiSummaryEventsAndStoreService } from "../../../summary/services/coi-summary-events-and-store.service";
@@ -33,15 +33,17 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     projectConflictValidationMap = new Map();
     PROJECT_CONFLICT_STATUS_BADGE = PROJECT_CONFLICT_STATUS_BADGE;
 
-    constructor(public dataStoreService: CoiSummaryEventsAndStoreService,
-                private commonService: CommonService, public coiService: CoiService,
-                public dataStore: DataStoreService) { }
+    constructor( public coiService: CoiService,
+                private _dataStore: DataStoreService,
+                private commonService: CommonService,
+                public dataStoreService: CoiSummaryEventsAndStoreService
+    ) { }
 
     ngOnInit(): void {
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
-        this.coiData = this.dataStore.getData();
+        this.coiData = this._dataStore.getData();
         this.personUnitDetails = this.commonService.getPersonLeadUnitDetails(this.coiData?.coiDisclosure?.person?.unit);
     }
 
@@ -78,10 +80,16 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     private emitUpdatedSfi(): void {
         this.addConflictSlider.coiDisclEntProjDetail.projectConflictStatusCode = this.projectConflictStatusCode;
         const STATUS_TYPE = this.coiStatusList.find((type: any) => type.projectConflictStatusCode === this.projectConflictStatusCode);
-        this.addConflictSlider.coiDisclEntProjDetail.coiProjConflictStatusType.description = STATUS_TYPE.description;
-        this.addConflictSlider.coiDisclEntProjDetail.coiProjConflictStatusType.projectConflictStatusCode = STATUS_TYPE.projectConflictStatusCode;
+        this.addConflictSlider.coiDisclEntProjDetail.coiProjConflictStatusType.description = deepCloneObject(STATUS_TYPE.description);
+        this.addConflictSlider.coiDisclEntProjDetail.coiProjConflictStatusType.projectConflictStatusCode = deepCloneObject(STATUS_TYPE.projectConflictStatusCode);
         this.addConflictSlider.coiDisclEntProjDetail.disclComment.comment = this.comment;
         this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_ADD_CONFLICT_UPDATE', content: this.addConflictSlider });
+    }
+
+    private updateDisclosureConflictStatus(coiConflictStatusTypeDto: CoiConflictStatusType): void {
+        this.coiData.coiDisclosure.coiConflictStatusType = coiConflictStatusTypeDto;
+        this.coiData.coiDisclosure.conflictStatusCode = coiConflictStatusTypeDto?.conflictStatusCode;
+        this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: this.coiData.coiDisclosure });
     }
 
     private getUpdateProjectRelationshipRO(): UpdateProjectRelationshipRO {
@@ -129,15 +137,15 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                     this.conflictHistory = data.coiConflictHistoryList;
                     this.emitUpdatedSfi();
                     this.clearConflictModal();
+                    this.updateDisclosureConflictStatus(data.coiConflictStatusTypeDto);
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
                 }, _err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
-                    // if (_err.status === 405) {
-                    //     this.coiService.concurrentUpdateAction = 'Modify Conflict';
-                    // } 
-                    // else {
-                    // this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
-                    // }
+                    if (_err.status === 405) {
+                        this.coiService.concurrentUpdateAction = 'Modify Conflict';
+                    } 
+                    else {
+                        this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                    }
                 }));
         }
     }

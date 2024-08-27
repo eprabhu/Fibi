@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { CommonService } from './common.service';
 import {SSO_TIMEOUT_ERROR_CODE} from "../../../../../fibi/src/app/app-constants";
 import { openCommonModal } from '../utilities/custom-utilities';
-import { LoginPersonDetails } from './coi-common.interace.ts';
+import { LoginPersonDetails } from './coi-common.interface';
 /**
  * this is used to add authorization token and handle error on token expiration
  * and loader for the entire application is handled here

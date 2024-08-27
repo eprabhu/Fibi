@@ -33,7 +33,7 @@
 </div>
 
 
-<!--Unsaved Changes confirmation Modal-->
+<!--Session Expired Modal starts-->
 <app-confirmation-modal [modalName]="'sessionTimeoutModal'" [primaryBtnName]="'Continue'"
     (primaryBtnAction)="redirectToLogoutPage()">
     <!-- modal header -->
@@ -45,17 +45,18 @@
         <p>{{errorMessage}}</p>
     </div>
 </app-confirmation-modal>
-<!--Unsaved Changes confirmation Modal end-->
+<!--Session Expired Modal ends -->
 
-<!-- shared project deatils modal starts -->
+<!-- Shared Project Details Modal Starts -->
  <ng-container *ngIf="commonService.projectDetailsModalInfo.coiDisclosureId || commonService.projectDetailsModalInfo.projectDetails?.projectId">
     <app-shared-project-details-modal [selectedProject]="commonService.projectDetailsModalInfo"></app-shared-project-details-modal>
  </ng-container>
-<!-- shared project deatils modal end -->
+<!-- Shared Project Details Modal Ends -->
 
 
-<!-- shared person details modal starts -->
+<!-- Shared Person Details Modal Starts -->
  <ng-container *ngIf="commonService.modalPersonId">
     <app-personal-details-modal [personId]="commonService.modalPersonId"></app-personal-details-modal>
  </ng-container>
-<!-- shared person details modal end -->
+<!-- Shared Person Details Modal Ends -->
+

@@ -100,7 +100,7 @@ export class ScrollSpyComponent implements OnInit, OnChanges, OnDestroy {
         if (SCROLL_COUNTER >= 0 && this.scrollSpyConfiguration.activeCounter != SCROLL_COUNTER && !this.isMouseClicked) {
             this.previousCounter = deepCloneObject(this.scrollSpyConfiguration.activeCounter);
             this.scrollSpyConfiguration.activeCounter = deepCloneObject(SCROLL_COUNTER)
-            this.scrollRight(true);
+            this.scrollRight(false);
             this.emitContentChanged(this.getElementByCounter('LEFT'), true);
         }
         setTimeout(() => {

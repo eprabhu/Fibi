@@ -9,7 +9,7 @@ import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
-import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method } from './coi-common.interace.ts';
+import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method } from './coi-common.interface';
 
 @Injectable()
 export class CommonService {
