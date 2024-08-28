@@ -19,10 +19,10 @@ BEGIN
                       S1.sponsor_name                 AS SPONSOR_NAME,
                       EP.prime_sponsor_code           AS PRIME_SPONSOR,
                       S.sponsor_name                  AS PRIME_SPONSOR_NAME,
-      'https://fibi-compl-dev.mit.edu/kc-connect/feedDevelopmentProposal - '
+      'https://fibi-compl-dev.mit.edu/'
       ||EP.proposal_number            AS DOCUMENT_URL,
       EP.program_announcement_number  AS SPONSOR_GRANT_NUMBER,
-      PAD.inst_proposal_id            AS IP_NUMBER,
+      P.proposal_number            AS IP_NUMBER,
       EP.update_timestamp             AS SRC_SYS_UPDATE_TIMESTAMP,
       EP.update_user                  AS SRC_SYS_UPDATE_USER_NAME,
       NULL                            AS ATTRIBUTE_1_LABEL,
@@ -48,5 +48,7 @@ BEGIN
                     ON PT.proposal_type_code = EP.proposal_type_code
              left join proposal_admin_details PAD
                     ON PAD.dev_proposal_number = EP.proposal_number
+             LEFT JOIN PROPOSAL P
+                    ON P.PROPOSAL_ID = PAD.INST_PROPOSAL_ID
       WHERE  EP.proposal_number = av_proposal_number;
-END; 
+END;
