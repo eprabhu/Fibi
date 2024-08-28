@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class EntityCleanseMatchController {
 		return new ResponseEntity<String>("Hello from cleansematch/entity", HttpStatus.OK);
 	}
 
-	@GetMapping("runCleanseMatch")
+	@PostMapping("runCleanseMatch")
 	public ResponseEntity<EntityCleanseMatchAPIResponse> performCleanseMatch(
 			@RequestBody DnBEntityCleanseMatchRequestDTO request) {
 		EntityCleanseMatchAPIResponse response = entityCleanseMatchService.runCleanseMatch(request);
