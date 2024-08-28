@@ -3,6 +3,7 @@ package com.polus.fibicomp.globalentity.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.polus.fibicomp.globalentity.repository.GlobalEntityRepository;
 public class GlobalEntityServiceImpl implements GlobalEntityService {
 
 	@Autowired
+	@Lazy
 	private GlobalEntityRepository entityRepository;
 
 	@Autowired
