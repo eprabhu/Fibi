@@ -1,6 +1,9 @@
 <div class="card">
     <div class="mx-3 my-1 d-flex align-items-center">
-        <div class="col fs-16 my-2">Industry Details</div>
+        <div class="col fs-16 my-2">
+            <label for="coi-entity-industry-details">
+                Industry Details<app-common-help-text [subSectionId]="2603" [elementId]="'coi-entity-industry-details'"></app-common-help-text></label>
+        </div>
         <div class="col-auto" *ngIf="entityIndustryClassifications.length">
             <button id="additional-address-add-button"
                 class="btn btn-primary fs-14 d-inline-flex" title="'Click here to industry details'"
@@ -42,9 +45,10 @@
 			</div>
 			<div class="modal-body">
 				<div class="row mb-3">
-					<div class="col-6">
+					<div class="col-sm-12 col-lg-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-industry-category-type">
                             <span class="mandatory me-1">*</span>Industry Category Type
+                            <app-common-help-text [subSectionId]="2603" [elementId]="'coi-industry-category-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onIndustryCategoryTypeSelect($event)" [options]="industryCategoryTypeOptions"
                             [uniqueId]="'coi-industry-category-type'" [isError]="mandatoryList?.has('industryCategoryTypeCode')"
@@ -55,13 +59,14 @@
                             <span id="coi-industry-category-type-validation1">{{mandatoryList?.get('industryCategoryTypeCode')}}</span>
                         </div>
 					</div>
-                    <div class="col-6">
-                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-industry-category-description">
+                    <div class="col-sm-12 col-lg-6 mt-sm-2 mt-lg-0">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-industry-category">
                             <span class="mandatory me-1">*</span>Industry Category Description
+                            <app-common-help-text [subSectionId]="2603" [elementId]="'coi-industry-category'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onIndustryCategoryDescriptionSelect($event)" [options]="industryCategoryDescriptionOptions"
                             [isExternalArray]="true"  [externalArray]="industryCategoryDescriptionsList"
-                            [uniqueId]="'coi-industry-category-description'" [isError]="mandatoryList?.has('industryCategroyDescription')"
+                            [uniqueId]="'coi-industry-category'" [isError]="mandatoryList?.has('industryCategroyDescription')"
                             [selectedLookUpList]="categoryDescriptionList" [isDisabled]="!industryCategoryDescriptionsList || !industryCategoryDescriptionsList.length">
                         </app-look-up>
                         <div *ngIf="mandatoryList?.has('industryCategroyDescription')" class="invalid-feedback d-block fs-13"

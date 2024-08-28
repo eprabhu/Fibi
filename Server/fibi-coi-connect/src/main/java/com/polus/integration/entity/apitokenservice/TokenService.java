@@ -1,5 +1,6 @@
 package com.polus.integration.entity.apitokenservice;
 
+import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,23 +18,19 @@ public class TokenService {
     private String token;
     private String tokenType;
     private long tokenValidityInSeconds = 24 * 60 * 60; // 24 hours as default
+    private Instant tokenExpirationTime;
 
-    
-    public TokenService() throws Exception {
-        this.thirdPartyApiClient = new DnBAPITokenClient();
-        TokenResponseDTO response = fetchNewToken();
-        this.token = response.getAccessToken();
-        this.tokenType = response.getTokenType();
-        this.tokenValidityInSeconds = response.getExpiresIn();
-        if(token == null) {
-        	logger.error("No DnB Token generated");      
-        	return;
-        }
-        scheduler.scheduleAtFixedRate(this::renewToken, tokenValidityInSeconds - 300, tokenValidityInSeconds, TimeUnit.SECONDS);
-    }
+    public TokenService(DnBAPITokenClient apiClient) throws Exception {
+        this.thirdPartyApiClient = apiClient;       
+  }
 
     private TokenResponseDTO fetchNewToken() {        
-        TokenResponseDTO response = thirdPartyApiClient.getNewToken();        
+    	TokenResponseDTO response = thirdPartyApiClient.getNewToken();  
+        this.token = response.getAccessToken();
+        this.tokenType = response.getTokenType();
+        this.tokenValidityInSeconds = response.getExpiresIn();   
+        this.tokenExpirationTime = Instant.now().plusSeconds(tokenValidityInSeconds);        
+        scheduler.scheduleAtFixedRate(this::renewToken, tokenValidityInSeconds - 300, tokenValidityInSeconds - 300, TimeUnit.SECONDS);
         logger.info("Fetched new token");
         return response;
     }
@@ -53,8 +50,23 @@ public class TokenService {
         return token;
     }
     
-    public String getToken() {
-        return tokenType+" "+token;
+    public String getToken() {    	
+    	if(isTokenExpired()) {
+    		fetchNewToken();
+    	}
+    	if(token == null) {
+    		fetchNewToken();
+    	}    	
+        return tokenType + " " + token;
+    }
+    
+    
+    private boolean isTokenExpired() {
+        if (tokenExpirationTime == null) {
+            return true;
+        }
+        return Instant.now().isAfter(tokenExpirationTime.minusSeconds(60)); 
+        // Consider token expired if less than 60 seconds remaining
     }
 }
 

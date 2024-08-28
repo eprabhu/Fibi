@@ -4,27 +4,35 @@
             <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
                 <mat-icon class="coi-mat-icon-size">newspaper</mat-icon>
             </span>
-            <span class="fs-16 fw-medium">{{sectionName}}</span>
+            <span class="fs-16 fw-medium" id="coi-entity-sponsor-details">{{sectionName}}<app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-details'"></app-common-help-text>
+            </span>
         </div>
     </div>
     <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12">
-            <label class="d-block" for="coi-entity-sponsor-code">Sponsor code</label>
-            <input type="text" id="coi-entity-sponsor-code" title="Click here to search by Sponsor code"
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsor-code">Sponsor code
+                <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-code'"></app-common-help-text>
+            </label>
+            <input type="text" id="coi-entity-sponsor-code" title="Sponsor code"
                 aria-label="Sponsor code" maxlength="60" autocomplete="off" class="form-control" disabled />
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-md-0">
-            <label class="d-block" for="coi-entity-sponsor-Acronym">Sponsor Acronym</label>
-            <input type="text" id="coi-entity-sponsor-Acronym" placeholder="Google"
-                title="Click here to search by Sponsor Acronym" aria-label="Sponsor Acronym" maxlength="60"
-                autocomplete="off" class="form-control" />
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsor-Acronym">Sponsor Acronym
+                <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-Acronym'"></app-common-help-text>
+            </label>
+            <input type="text" id="coi-entity-sponsor-Acronym" placeholder=""
+                title="Sponsor Acronym" aria-label="Sponsor Acronym" maxlength="60"
+                autocomplete="off" class="form-control" 
+                [(ngModel)]="sponsorDetailsObj.acronym" (ngModelChange)="changeEvent('acronym')"/>
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-lg-0">
-            <label class="d-block" for="coi-entity-sponsortype-lookup">Sponsor Type</label>
-            <app-look-up [options]='templateOptions' [defaultValue]="defaultTemplateLabel" [isExternalArray]="true"
-                [externalArray]="notificationTemplates" [uniqueId]="'coi-entity-sponsortype-lookup'">
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsortype-lookup">Sponsor Type
+                <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsortype-lookup'"></app-common-help-text>
+            </label>
+            <app-look-up (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorRiskLevelOption' [defaultValue]="defaultTemplateLabel"
+            [uniqueId]="'coi-entity-sponsortype-lookup'">
             </app-look-up>
         </div>
     </div>

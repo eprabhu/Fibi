@@ -28,7 +28,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _dataStore: DataStoreService, public commonService: CommonService, public coiService: CoiService,
+        public commonService: CommonService, public coiService: CoiService,
         public coiSummaryService: CoiSummaryService, public defineRelationshipService: DefineRelationshipService,
         private _defineRelationshipDataStore: DefineRelationshipDataStoreService
     ) { }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { CommentConfiguration, UpdateProjectRelationshipRO } from '../../coi-interface';
 import { CoiService } from '../../services/coi.service';
 import { HttpClient } from '@angular/common/http';
@@ -8,12 +8,7 @@ import { CommonService } from '../../../common/services/common.service';
 @Injectable()
 export class CoiSummaryEventsAndStoreService {
 
-    $isToolkitVisible = new BehaviorSubject(true);
-    $projectDetails: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     dataEvent = new Subject();
-    concatenatedProjectList: any = [];
-    conflictStatusList: any = [];
-
     coiSummaryConfig: any = {
         currentDisclosureId: null,
     };

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { COIModalConfig } from '../../../shared-components/coi-modal/coi-modal.interface';
-import { AddConflictSlider, ApplyToAllModal, COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, ProjectSfiRelationConflictRO, ProjectSfiRelationLoadRO, ProjectSfiRelations, RelationshipConflictType } from '../../coi-interface';
+import { AddConflictSlider, ApplyToAllModal, COI, CoiConflictStatusType, CoiDisclEntProjDetail, CoiProjConflictStatusType, ExpandCollapseSummaryBySection, FormattedConflictData, ProjectSfiRelationConflictRO, ProjectSfiRelationLoadRO, ProjectSfiRelations, RelationshipConflictType } from '../../coi-interface';
 import { CommonService } from '../../../common/services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { ScrollSpyConfiguration, ScrollSpyEvent } from '../../../shared-components/scroll-spy/scroll-spy.interface';
@@ -28,17 +28,17 @@ export class DefineRelationshipService {
     ];
     isObserverActive: boolean[] = [];
     applyToAllModal = new ApplyToAllModal();
-    addConflictSlider = new AddConflictSlider();
     isShowProjectSfiConflict: boolean[] = [];
-    coiStatusList: CoiProjConflictStatusType[] = [];
-    relationshipConflictType: RelationshipConflictType[] = [
-        { statusCode: 1, label: 'No Conflict', color: 'text-success', projectConflictStatusCode: '100' },
-        { statusCode: 2, label: 'Potential Conflict', color: 'text-warning', projectConflictStatusCode: '200' },
-        { statusCode: 3, label: 'Conflict Identified', color: 'text-danger', projectConflictStatusCode: '300' }
-    ];
-    scrollSpyConfiguration = new ScrollSpyConfiguration();
+    addConflictSlider = new AddConflictSlider();
     elementVisiblePercentageList: number[] = [];
+    coiStatusList: CoiProjConflictStatusType[] = [];
+    scrollSpyConfiguration = new ScrollSpyConfiguration();
     modalConfig = new COIModalConfig('coi-relation-modal', 'Apply to All', 'Cancel', 'lg');
+    relationshipConflictType: RelationshipConflictType[] = [
+        { statusCode: '1', projectConflictStatus: 'No Conflict', color: 'text-success', projectConflictStatusCode: '100' },
+        { statusCode: '2', projectConflictStatus: 'Potential Conflict', color: 'text-warning', projectConflictStatusCode: '200' },
+        { statusCode: '3', projectConflictStatus: 'Conflict Identified', color: 'text-danger', projectConflictStatusCode: '300' }
+    ];
 
     constructor(private _http: HttpClient, private _commonService: CommonService, private _coiService: CoiService, private _dataStore: DataStoreService) { }
 
@@ -87,25 +87,44 @@ export class DefineRelationshipService {
         this._coiService.isShowCommentNavBar = true;
     }
 
-    getFormattedConflictCount(coiDisclEntProjDetails: CoiDisclEntProjDetail[]): { conflictCount: { [key: string]: number }, conflictCompleted: boolean } {
+    getFormattedConflictData(coiDisclEntProjDetails: CoiDisclEntProjDetail[]): FormattedConflictData {
         const RESULT = coiDisclEntProjDetails?.reduce((acc, item) => {
-            const CONFLICT_TYPE = this.relationshipConflictType.find(type => type.projectConflictStatusCode === item.projectConflictStatusCode);
-            const STATUS_CODE = CONFLICT_TYPE ? CONFLICT_TYPE.statusCode : null;
+            const CONFLICT_TYPE: RelationshipConflictType = deepCloneObject(this.relationshipConflictType.find(type => type.projectConflictStatusCode === item.projectConflictStatusCode));
+            const {statusCode, projectConflictStatus} = CONFLICT_TYPE || {};
     
-            if (STATUS_CODE !== null) {
-                acc.conflictCount[STATUS_CODE] = (acc.conflictCount[STATUS_CODE] || 0) + 1;
+            if (statusCode) {
+                acc.conflictCount[statusCode] = (acc.conflictCount[statusCode] || 0) + 1;
                 acc.totalCount++;
+    
+                // Update the worst conflict status code if this statusCode is higher
+                if (acc.conflictStatusCode === null || Number(statusCode) > Number(acc.conflictStatusCode)) {
+                    acc.conflictStatusCode = statusCode;
+                    acc.conflictStatus = projectConflictStatus;
+                }
             }
     
             return acc;
-        }, { conflictCount: {} as { [key: string]: number }, totalCount: 0 });
+        }, { 
+            totalCount: 0,
+            conflictStatus: null as string | null,
+            conflictStatusCode: null as string | null,
+            conflictCount: {} as { [key: string]: number }
+        });
     
         return {
             conflictCount: RESULT.conflictCount,
+            conflictStatus: RESULT.conflictStatus,
+            conflictStatusCode: RESULT.conflictStatusCode,
             conflictCompleted: RESULT.totalCount === coiDisclEntProjDetails?.length
         };
     }
-    
+
+    updateDisclosureConflictStatus(disclConflictStatusType: CoiConflictStatusType): void {
+        const COI_DATA = this._dataStore.getData();
+        COI_DATA.coiDisclosure.coiConflictStatusType = disclConflictStatusType;
+        COI_DATA.coiDisclosure.conflictStatusCode = disclConflictStatusType?.conflictStatusCode;
+        this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: COI_DATA.coiDisclosure });
+    }
 
     scrollSpyCounterChanged(event: ScrollSpyEvent): void {
         this._commonService.$globalEventNotifier.next({uniqueId: 'SCROLL_SPY', content: event});
@@ -114,6 +133,22 @@ export class DefineRelationshipService {
     resetElementVisiblePercentageList(): void {
         this.elementVisiblePercentageList = this.isEditMode ? [] : this.elementVisiblePercentageList.length > 3 ? this.elementVisiblePercentageList.slice(0, 2).concat(this.elementVisiblePercentageList.slice(-1)) : this.elementVisiblePercentageList;
         this.elementVisiblePercentageList = deepCloneObject(this.elementVisiblePercentageList);
+    }
+
+    clearAllServiceData(): void {
+        this.searchText = '';
+        this.isLoading = true;
+        this.isEditMode = false;
+        this.coiStatusList = [];
+        this.isObserverActive = [];
+        this.isShowErrorToast = false;
+        this.isShowProjectSfiConflict = [];
+        this.elementVisiblePercentageList = [];
+        this._coiService.activeSectionId = 'COI801';
+        this.applyToAllModal = new ApplyToAllModal();
+        this.addConflictSlider = new AddConflictSlider();
+        this.scrollSpyConfiguration = new ScrollSpyConfiguration();
+        this._coiService.isExpandSummaryBySection = new ExpandCollapseSummaryBySection();
     }
 
     private getDefineRelationShipNavHeight(): string {

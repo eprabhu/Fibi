@@ -16,7 +16,7 @@ import { listAnimation, leftSlideInOut } from '../../common/utilities/animations
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
 import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
-import { DashboardProjectCount } from '../../common/services/coi-common.interace.ts';
+import { COICountModal, COICountModalViewSlider } from '../../shared-components/shared-interface';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -27,7 +27,7 @@ import { DashboardProjectCount } from '../../common/services/coi-common.interace
 })
 
 export class UserDisclosureComponent implements OnInit, OnDestroy {
-    isShowCountModal = false;
+
     searchText = '';
     currentSelected = {
         tab: 'IN_PROGRESS_DISCLOSURES',
@@ -44,19 +44,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     completeDisclosureList: UserDisclosure[] = [];
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
-    selectedModuleCode: number;
-    currentDisclosureId: any;
-    currentDisclosureNumber: any;
-    disclosureType: any;
-    inputType: string;
     coiList: [];
     isHover: [] = [];
-    disclosureSequenceStatusCode: any;
-    personId: any;
     onButtonHovering: any = true;
     index: any;
-    fcoiTypeCode: any;
-    disclosures: any;
     result: any;
     $subscriptions = [];
     $debounceEventForDisclosureList = new Subject();
@@ -82,6 +73,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isPurposeRead = {};
     $debounceEventForAPISearch = new Subject();
     pageCountFromAPI: number;
+    countModalData = new COICountModal();
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,
@@ -328,18 +320,19 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
-    openCountModal(moduleName: string, disclosure: any, count: number | null = null, moduleCode: number = 0) {
+    openCountModal(disclosure: any, count: number | null = null, moduleCode: number = 0) {
         if (count > 0) {
-            this.selectedModuleCode = moduleCode;
-            this.disclosures = disclosure;
-            this.fcoiTypeCode = disclosure?.fcoiTypeCode;
-            this.currentDisclosureId = disclosure?.coiDisclosureId;
-            this.currentDisclosureNumber = disclosure.disclosureNumber || disclosure.coiDisclosureNumber;
-            this.disclosureType = moduleName;
-            this.inputType = 'DISCLOSURE_TAB';
-            this.disclosureSequenceStatusCode = disclosure.dispositionStatusCode;
-            this.personId = disclosure.personId;
-            this.isShowCountModal = true;
+            this.countModalData = {
+                personUnit: disclosure?.unit,
+                moduleCode: moduleCode,
+                personId: disclosure?.personId,
+                disclosureType: disclosure?.fcoiTypeCode === '2' ? disclosure?.projectType : 'FCOI',
+                inputType: 'DISCLOSURE_TAB',
+                fcoiTypeCode: disclosure?.fcoiTypeCode,
+                disclosureId: disclosure?.coiDisclosureId,
+                personFullName: disclosure?.disclosurePersonFullName,
+                isOpenCountModal: true
+            };
         }
     }
 
@@ -348,12 +341,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.dashboardRequestObject.filterType = type;
         this.dashboardRequestObject.currentPage = 1;
         this.resetAndFetchDisclosure();
-    }
-
-    closeModalEvent(event) {
-        if (!event) {
-            this.isShowCountModal = event;
-        }
     }
 
     redirectToDisclosure(disclosure: UserDisclosure) {
@@ -430,8 +417,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.headerService.$openModal.next(type);
     }
 
-    viewSlider(event) {
-        this.showSlider = event.flag;
+    viewSlider(event: COICountModalViewSlider) {
+        this.showSlider = event.isOpenSlider;
         this.entityId = event.entityId;
         this.sliderElementId = `user-disclosure-entity-${this.entityId}`;
         setTimeout(() => {

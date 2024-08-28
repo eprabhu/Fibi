@@ -11,6 +11,8 @@ import { EntityOverviewService } from '../entity-overview/entity-overview.servic
 import { EntitySponsorDetailsComponent } from './entity-sponsor-details/entity-sponsor-details.component';
 import { EntitySponsorRiskComponent } from './entity-sponsor-risk/entity-sponsor-risk.component';
 import { EntitySponsorAttachmentsComponent } from './entity-sponsor-attachments/entity-sponsor-attachments.component';
+import { AddAttachmentModalModule } from '../../common/header/add-attachment-modal/add-attachment-modal.module';
+import { EntitySponsorService } from './entity-sponsor.service';
 
 @NgModule({
     declarations: [
@@ -26,10 +28,12 @@ import { EntitySponsorAttachmentsComponent } from './entity-sponsor-attachments/
         SharedModule,
         MatIconModule,
         SharedComponentModule,
+        AddAttachmentModalModule,
         SharedEntityManagementModule
     ],
     providers: [
-        EntityOverviewService
+        EntityOverviewService,
+        EntitySponsorService
     ]
 })
 export class EntitySponsorModule { }

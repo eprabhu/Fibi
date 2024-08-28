@@ -23,7 +23,7 @@ export class AddAttachmentModalComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     isSaving = false;
     // helpTexts = `You can view and edit attachments under the 'My Attachments' tab.`;
-    @Input() attachmentHelpText = '';
+    @Input() attachmentHelpText: string;
     @Output() closeModal = new EventEmitter<boolean>(); //close event.
 
     constructor(private _attachmentService: AddAttachmentModalService, private _commonService: CommonService, public _router: Router) { }

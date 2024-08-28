@@ -1,0 +1,17 @@
+<div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+    <div class="row mb-2">
+        <div class="col-12 d-flex align-items-center coloured-bg-header">
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
+                <mat-icon class="rotate-icon coi-mat-icon-size">attach_file</mat-icon>
+            </span>
+            <span class="fs-16 fw-medium" id="coi-entity-subaward-attach">{{sectionName}}<app-common-help-text [subSectionId]="2614" [elementId]="'coi-entity-subaward-attach'"></app-common-help-text>
+            </span>
+        </div>
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Attachment'"
+            (buttonAction)="openAttachmentModal()"></app-no-information>
+    </div>
+</div>
+
+<app-add-attachment-modal *ngIf="isOpenSubawardAttachmentModal" (closeModal)="closeModal($event)"
+    [attachmentHelpText]="entityAttachmentHelpText">
+</app-add-attachment-modal>
