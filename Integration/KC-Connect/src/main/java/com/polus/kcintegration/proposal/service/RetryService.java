@@ -10,9 +10,13 @@ import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
+import com.polus.kcintegration.award.dao.AwardIntegrationDao;
+import com.polus.kcintegration.award.dto.AwardDTO;
 import com.polus.kcintegration.constant.Constant;
 import com.polus.kcintegration.dao.KCIntegrationDao;
 import com.polus.kcintegration.exception.custom.IntegrationCustomException;
+import com.polus.kcintegration.instituteProposal.dao.InstituteProposalIntegrationDao;
+import com.polus.kcintegration.instituteProposal.dto.InstituteProposalDTO;
 import com.polus.kcintegration.message.service.MessagingService;
 import com.polus.kcintegration.proposal.dao.ProposalKCIntegrationDao;
 import com.polus.kcintegration.proposal.dto.ProposalDTO;
@@ -22,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ProposalRetryService {
+public class RetryService {
 
 	@Autowired
 	private ProposalKCIntegrationDao proposalKCDao;
@@ -33,11 +37,23 @@ public class ProposalRetryService {
 	@Autowired
 	private KCIntegrationDao kcIntegrationDao;
 
+	@Autowired
+	private InstituteProposalIntegrationDao ipIntegrationDao;
+
+	@Autowired
+	private AwardIntegrationDao awardDao;
+
 	@Value("${fibi.messageq.queues.devProposalIntegration}")
 	private String devProposalIntegrationQueue;
 
 	@Value("${fibi.messageq.queues.devPropQuesAnsIntegration}")
 	private String devPropQuesAnsIntegrationQueue;
+
+	@Value("${fibi.messageq.queues.instProposalIntegration}")
+	private String instProposalIntegrationQueue;
+
+	@Value("${fibi.messageq.queues.awardIntegration}")
+	private String awardIntegrationQueue;
 
 	@Retryable(retryFor = { IntegrationCustomException.class }, maxAttempts = 3, backoff = @Backoff(delay = 5000))
 	public void retryFetchAndSendMessage(String moduleItemId, Integer questionnaireId, String personId) {
@@ -54,8 +70,7 @@ public class ProposalRetryService {
 		ProposalDTO feedProposal = proposalKCDao.fetchProposalByProposalNumber(proposalNumber);
 		if (feedProposal != null) {
 			feedProposal.setProposalPersons(proposalKCDao.fetchProposalPersons(proposalNumber));
-		}
-	    if (feedProposal == null) {
+		} else {
 	        log.error("Proposal details are null for proposalNumber: {}", proposalNumber);
 	        throw new IntegrationCustomException("Proposal details are null", null);
 	    }
@@ -70,9 +85,35 @@ public class ProposalRetryService {
 	}
 
 	@Recover
-	public void recoverFeedProposal(IntegrationCustomException e, String proposalNumber) {
-		log.error("Retries exhausted for feedProposal with params {}, {}, {}. Error: {}", proposalNumber, e.getMessage());
-		throw new IntegrationCustomException("Retries exhausted for feedProposal with params", e);
+	public void recoverFeed(IntegrationCustomException e, String projectNumber) {
+		log.error("Retries exhausted for feed project with params {}. Error: {}", projectNumber, e.getMessage());
+		throw new IntegrationCustomException("Retries exhausted for feed project with params", e);
+	}
+
+	@Retryable(retryFor = { IntegrationCustomException.class }, maxAttempts = 3, backoff = @Backoff(delay = 5000))
+	public void retryFetchIPAndSendMessage(String proposalNumber) {
+		InstituteProposalDTO feedInstituteProposal = ipIntegrationDao.fetchProposalByProposalNumber(proposalNumber);
+	    if (feedInstituteProposal != null) {
+	        feedInstituteProposal.setProjectPersons(ipIntegrationDao.fetchProposalPersons(proposalNumber));
+	    } else {
+	    	log.error("Institute Proposal details are null for project Number: {}", proposalNumber);
+	        throw new IntegrationCustomException("Institute Proposal details are null", null);
+	    }
+	    messagingService.sendMessage(Constant.FIBI_DIRECT_EXCHANGE, instProposalIntegrationQueue, new Message(kcIntegrationDao.convertObjectToJSON(feedInstituteProposal).getBytes()));
+	    log.info("Message successfully sent to queue for projectNumber: {}", proposalNumber);
+	}
+
+	@Retryable(retryFor = { IntegrationCustomException.class }, maxAttempts = 3, backoff = @Backoff(delay = 5000))
+	public void retryFetchAwardAndSendMessage(String projectNumber) {
+		AwardDTO feedAward = awardDao.fetchProjectByProjectNumber(projectNumber);
+		if (feedAward != null) {
+			feedAward.setProjectPersons(awardDao.fetchProjectPersons(projectNumber));
+		} else {
+	        log.error("Award details are null for project Number: {}", projectNumber);
+	        throw new IntegrationCustomException("Award details are null", null);
+	    }
+		messagingService.sendMessage(Constant.FIBI_DIRECT_EXCHANGE, awardIntegrationQueue, new Message(kcIntegrationDao.convertObjectToJSON(feedAward).getBytes()));
+		log.info("Message successfully sent to queue for projectNumber: {}", projectNumber);
 	}
 
 }

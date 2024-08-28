@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +19,12 @@ import com.polus.kcintegration.proposal.dto.QuestionnaireDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
+import lombok.extern.slf4j.Slf4j;
 
 @Transactional
 @Service
+@Slf4j
 public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
-
-	protected static Logger logger = LogManager.getLogger(ProposalKCIntegrationDaoImpl.class.getName());
 
 	@Autowired
 	private EntityManager entityManager;
@@ -39,7 +37,7 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 			mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			response = mapper.writeValueAsString(object);
 		} catch (Exception e) {
-			logger.error("Error occured in convertObjectToJSON : {}", e.getMessage());
+			log.error("Error occured in convertObjectToJSON : {}", e.getMessage());
 		}
 		return response;
 	}
@@ -96,14 +94,14 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	            }
 	        }
 	    } catch (Exception e) {
-	    	logger.error("Exception in fetchProposalByProposalNumber: {}", e.getMessage(), e);
+	    	log.error("Exception in fetchProposalByProposalNumber: {}", e.getMessage());
 	    	throw new IntegrationCustomException("Error during feedDevelopmentProposal :{}", e, proposalNumber);
 	    } finally {
 	        if (rset != null) {
 	            try {
 	                rset.close();
 	            } catch (SQLException e) {
-	                logger.error("Error closing ResultSet: {}", e.getMessage(), e);
+	                log.error("Error closing ResultSet: {}", e.getMessage());
 	            }
 	        }
 	    }
@@ -131,6 +129,8 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	                        .keyPersonRoleCode(rset.getInt("PROP_PERSON_ROLE_CODE"))
 	                        .keyPersonRole(rset.getString("KEY_PERSON_ROLE"))
 	                        .percentageOfEffort(rset.getBigDecimal("PERCENTAGE_OF_EFFORT"))
+	                        .certificationFlag(rset.getString("CERTIFICATION_FLAG"))
+	                        .disclosureReqFlag(rset.getString("DISCLOSURE_REQUIRED_FLAG"))
 	                        .attribute1Label(rset.getString("ATTRIBUTE_1_LABEL"))
 	                        .attribute1Value(rset.getString("ATTRIBUTE_1_VALUE"))
 	                        .attribute2Label(rset.getString("ATTRIBUTE_2_LABEL"))
@@ -142,14 +142,14 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	            }
 	        }
 	    } catch (SQLException e) {
-	    	logger.error("Exception in fetchProposalPersons: {}", e.getMessage(), e);
+	    	log.error("Exception in fetchProposalPersons: {}", e.getMessage());
 	    	throw new IntegrationCustomException("Error during fetchProposalPersons :{}", e, proposalNumber);
 	    } finally {
 	        if (rset != null) {
 	            try {
 	                rset.close();
 	            } catch (SQLException e) {
-	                logger.error("Error closing ResultSet: {}", e.getMessage(), e);
+	                log.error("Error closing ResultSet: {}", e.getMessage());
 	            }
 	        }
 	    }
@@ -192,14 +192,14 @@ public class ProposalKCIntegrationDaoImpl implements ProposalKCIntegrationDao {
 	            }
 	        }
 		} catch (Exception e) {
-			logger.error("Exception in fetchQuestionnaireDetailsByParams: {}", e.getMessage(), e);
+			log.error("Exception in fetchQuestionnaireDetailsByParams: {}", e.getMessage());
 			throw new IntegrationCustomException("Error during fetchQuestionnaireDetailsByParams :{}", e, moduleItemId);
 		} finally {
 	        if (rset != null) {
 	            try {
 	                rset.close();
 	            } catch (SQLException e) {
-	                logger.error("Error closing ResultSet: {}", e.getMessage(), e);
+	                log.error("Error closing ResultSet: {}", e.getMessage());
 	            }
 	        }
 	    }

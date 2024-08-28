@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProposalKCIntegrationServiceImpl implements ProposalKCIntegrationService {
 
 	@Autowired
-    private ProposalRetryService proposalRetryService;
+    private RetryService proposalRetryService;
 
 	@Async
 	@Override
