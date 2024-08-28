@@ -11,7 +11,7 @@ public class ValidateDisclosureVO {
 
 	private String moduleCode;
 
-	private Integer moduleItemId;
+	private Integer moduleItemKey;
 
 	private String personId;
 }

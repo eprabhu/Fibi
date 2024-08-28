@@ -1,8 +1,6 @@
 package com.polus.integration.proposal.vo;
 
 
-import com.polus.integration.proposal.dto.CoiDisclosureDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +10,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateProposalDisclosureVO {
 
-	private CoiDisclosureDTO coiDisclosure;
+	private Integer disclosureId;
+
+	private String homeUnit;
+
+	private String fcoiTypeCode;
+
+	private String coiProjectTypeCode;
+
+	private Integer moduleItemKey;
 
 	private String personId;
+
+	private Integer moduleCode;
 
 }
