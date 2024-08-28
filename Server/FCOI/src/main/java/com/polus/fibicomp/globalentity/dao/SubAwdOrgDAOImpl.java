@@ -46,9 +46,9 @@ public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 		if (dto.getSubAwdRiskAssmtDate() != null) {
 			hqlQuery.append(", e.subAwdRiskAssmtDate = :subAwdRiskAssmtDate");
 		}
-		hqlQuery.append(" WHERE e.id = :id");
+		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("id", dto.getId());
+		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		if (dto.getOrganizationId() != null) {

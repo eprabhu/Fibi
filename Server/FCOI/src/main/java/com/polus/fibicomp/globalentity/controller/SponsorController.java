@@ -61,19 +61,19 @@ public class SponsorController {
 
 	@PostMapping(value = "/saveRisk")
 	public ResponseEntity<Map<String, Integer>> saveRisk(@RequestBody EntityRiskRequestDTO dto) {
-		logger.info("Requesting for SubAwardOrganization/saveRisk");
+		logger.info("Requesting for Sponsor/saveRisk");
 		return entityRiskService.saveRisk(dto);
 	}
 
 	@PatchMapping(value = "/updateRisk")
 	public ResponseEntity<String> updateRisk(@RequestBody EntityRiskRequestDTO dto) {
-		logger.info("Requesting forSubAwardOrganization/updateRisk");
+		logger.info("Requesting for Sponsor/updateRisk");
 		return entityRiskService.updateRisk(dto);
 	}
 
 	@DeleteMapping(value = "/deleteRisk/{entityRiskId}")
 	public ResponseEntity<String> deleteRisk(@PathVariable(value = "entityRiskId", required = true) final Integer entityRiskId) {
-		logger.info("Requesting for SubAwardOrganization/deleteRisk");
+		logger.info("Requesting for Sponsor/deleteRisk");
 		return entityRiskService.deleteRisk(entityRiskId);
 	}
 

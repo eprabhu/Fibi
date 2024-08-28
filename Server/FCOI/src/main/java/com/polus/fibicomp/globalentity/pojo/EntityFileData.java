@@ -1,15 +1,12 @@
 package com.polus.fibicomp.globalentity.pojo;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.polus.core.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,14 +37,13 @@ public class EntityFileData implements Serializable {
     private String fileName;
 
     @Column(name = "IS_ARCHIVED")
-    @Convert(converter = JpaCharBooleanConversion.class)
-    private Character isArchived;
+    private String isArchived;
 
     @Column(name = "FILE")
     private byte[] file;
 
     @Column(name = "UPDATE_TIMESTAMP")
-    private Timestamp updateTimestamp;
+    private Instant updateTimestamp;
 
     @Column(name = "UPDATED_BY")
     private String updatedBy;

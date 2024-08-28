@@ -31,24 +31,24 @@ public class EntitySectionAttachRef implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ENTITY_SEC_ATT_REF_ID")
-    private int entitySecAttRefId;
+    private Integer entitySecAttRefId;
 
     @Column(name = "ENTITY_ID")
-	private int entityId;
+	private Integer entityId;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SEC_ATT_REF_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
 	private Entity entity;
 
-	@Column(name = "SECTION_CODE")
+	@Column(name = "ENTITY_SECTION_CODE")
     private String sectionCode;
 
 	@ManyToOne(optional = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SEC_ATT_REF_FK2"), name = "SECTION_CODE", referencedColumnName = "ENTITY_SECTION_CODE", insertable = false, updatable = false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SEC_ATT_REF_FK2"), name = "ENTITY_SECTION_CODE", referencedColumnName = "ENTITY_SECTION_CODE", insertable = false, updatable = false)
     private EntitySection entitySection;
 
 	@Column(name = "ENTITY_ATTACHMENT_ID")
-	private int entityAttachmentId;
+	private Integer entityAttachmentId;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SEC_ATT_REF_FK3"), name = "ENTITY_ATTACHMENT_ID", referencedColumnName = "ENTITY_ATTACHMENT_ID", insertable = false, updatable = false)
