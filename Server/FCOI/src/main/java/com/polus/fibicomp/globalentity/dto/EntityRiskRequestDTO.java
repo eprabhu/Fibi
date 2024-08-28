@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class EntityRiskRequestDTO {
 
 	private Integer entityId;
+	private Integer entityRiskId;
 	private String riskTypeCode;
 	private String riskLevelCode;
 	private String description;

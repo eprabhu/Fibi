@@ -37,8 +37,8 @@ public class EntityAttachmentType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	@Column(name = "IS_PRIMARY")
+	@Column(name = "IS_PRIVATE")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isPrimary;
+	private Boolean isPrivate;
 
 }
