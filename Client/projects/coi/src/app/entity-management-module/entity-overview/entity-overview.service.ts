@@ -34,8 +34,19 @@ export class EntityOverviewService {
         return this._http.delete(this._commonService.baseUrl + '/entity/deleteForeignName/'+ id);
     }
 
+    deletePriorName(id) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/deletePriorName/'+ id);
+    }
+
     fetchIndustryCategoryCode(categoryTypeCode) {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetchIndustryCategoryCode/${categoryTypeCode}`);
+    }
+
+    updateIndustryDetails(industryObj) {
+        return this._http.post(`${this._commonService.baseUrl}/entity/updateIndustryDetails}`, industryObj);
+    }
+    deleteIndustryDetails(entityIndustryClassId) {
+        return this._http.delete(`${this._commonService.baseUrl}/entity/deleteIndustryDetails/${entityIndustryClassId}}`);
     }
 
     saveIndustryDetails(industryObj) {
@@ -55,6 +66,19 @@ export class EntityOverviewService {
     }
     saveRisk(riskRO) {
         return this._http.post(this._commonService.baseUrl + '/entity/saveRisk', riskRO);
+    }
+
+    updateRisk(riskRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/updateRisk', riskRO);
+    }
+    saveExternalReference(externalRO) {
+        return this._http.post(this._commonService.baseUrl + '/entity/saveExternalReference', externalRO);
+    }
+    updateExternalReference(externalRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/updateExternalReference', externalRO);
+    }
+    deleteExternalReference(entityExternalMappingId) {
+        return this._http.delete(this._commonService.baseUrl + '/entity/deleteExternalReference/' + entityExternalMappingId);
     }
 
     fetchRiskType() {
