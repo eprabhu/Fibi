@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { AutoSaveService } from '../common/services/auto-save.service';
 import { EntityManagementService } from './entity-management.service';
 import { EntityDataStoreService } from './entity-data-store.service';
 import { Subscription } from 'rxjs';
+import {subscriptionHandler} from '../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-entity-management-module',
     templateUrl: './entity-management-module.component.html',
     styleUrls: ['./entity-management-module.component.scss']
 })
-export class EntityManagementModuleComponent {
+export class EntityManagementModuleComponent implements OnInit, OnDestroy {
 
     result: any;
     dunsResponse: any;
@@ -42,7 +43,7 @@ export class EntityManagementModuleComponent {
                 this._dataStore.entityRiskType = data;
                 this._dataStore.dataEvent.next('ENTITY_RISK_TYPE');
             }
-        }))
+        }));
     }
 
     triggerAutoSave() {
@@ -58,6 +59,11 @@ export class EntityManagementModuleComponent {
                 }
             }
         })
+    }
+
+    ngOnDestroy() {
+        this._autoSaveService.stopAutoSaveEvent();
+        subscriptionHandler(this.$subscriptions);
     }
 
 }

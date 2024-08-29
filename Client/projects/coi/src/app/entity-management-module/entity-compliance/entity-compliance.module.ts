@@ -10,7 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { AddAttachmentModalModule } from '../../common/header/add-attachment-modal/add-attachment-modal.module';
 import { SharedEntityManagementModule } from '../shared/shared-entity-management.module';
-import { EntityOverviewService } from '../entity-overview/entity-overview.service';
 
 @NgModule({
   declarations: [
@@ -28,8 +27,6 @@ import { EntityOverviewService } from '../entity-overview/entity-overview.servic
     AddAttachmentModalModule,
     SharedEntityManagementModule
   ],
-  providers: [
-    EntityOverviewService
-  ]
+  providers: []
 })
 export class EntityComplianceModule { }

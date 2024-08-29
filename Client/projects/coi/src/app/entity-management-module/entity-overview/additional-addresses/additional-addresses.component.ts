@@ -51,7 +51,6 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
 
     selectedCountryEvent(event: any): void {
         if (event) {
-            console.log(event);
             this.additionalAddressObj.countryCode = event.countryCode;
             this.selectedCountry = event;
         } else {
@@ -175,7 +174,6 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     }
 
     editAddress(address, index: number) {
-        console.log(address);
         this.isEditIndex = index;
         this.setAddressDetails(address);
         openModal('addAdditionalAddress');
