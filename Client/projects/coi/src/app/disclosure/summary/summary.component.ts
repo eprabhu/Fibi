@@ -36,7 +36,6 @@ export class SummaryComponent implements OnInit {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
-        this.defineRelationshipService.clearAllServiceData();
     }
     
     private listenDataChangeFromStore() {
