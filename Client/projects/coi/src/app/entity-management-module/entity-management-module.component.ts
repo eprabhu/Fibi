@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { AutoSaveService } from '../common/services/auto-save.service';
+import { EntityManagementService } from './entity-management.service';
+import { EntityDataStoreService } from './entity-data-store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-entity-management-module',
@@ -10,8 +13,9 @@ export class EntityManagementModuleComponent {
 
     result: any;
     dunsResponse: any;
+    $subscriptions: Subscription[] = [];
 
-    constructor(public _autoSaveService: AutoSaveService) { }
+    constructor(public _autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService, private _dataStore: EntityDataStoreService) { }
 
     ngOnInit() {
         this._autoSaveService.initiateAutoSave();
@@ -28,7 +32,17 @@ export class EntityManagementModuleComponent {
             "errorDetails": null
         }
         this.formatDUNSResponse();
+        this.fetchRisk();
         // this.result = this._route.snapshot.data.agreementDetails;
+    }
+
+    private fetchRisk(): void {
+        this.$subscriptions.push(this._entityManagementService.fetchRiskType().subscribe((data: any) => {
+            if(data?.length) {
+                this._dataStore.entityRiskType = data;
+                this._dataStore.dataEvent.next('ENTITY_RISK_TYPE');
+            }
+        }))
     }
 
     triggerAutoSave() {
@@ -44,7 +58,6 @@ export class EntityManagementModuleComponent {
                 }
             }
         })
-        console.log(this.dunsResponse);
     }
 
 }

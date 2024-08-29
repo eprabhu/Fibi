@@ -121,8 +121,10 @@ export class IndustryDetailsComponent {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
-                this.getDataFromStore();
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
+                if (dependencies !==  'ENTITY_RISK_TYPE') {
+                    this.getDataFromStore();
+                }
             })
         );
     }

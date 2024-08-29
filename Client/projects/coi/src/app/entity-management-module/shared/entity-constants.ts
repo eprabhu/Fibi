@@ -28,7 +28,7 @@ export const OverviewTabSection = new Map([
     ['COMPANY_DETAILS' , COMPANY_DETAILS],
     ['ENTITY_RISK' , ENTITY_RISK],
     ['OTHER_REFERENCE_IDS' , OTHER_REFERENCE_IDS],
-    ['ADDITIONAL_INFORMATION' , ADDITIONAL_INFORMATION],
+    // ['ADDITIONAL_INFORMATION' , ADDITIONAL_INFORMATION],
 ]);
 
 export const SponsorTabSection = new Map([
@@ -43,7 +43,7 @@ export const SubawardOrganisationTab = new Map([
     ['SUB_AWARD_RISK' , SUB_AWARD_RISK],
     ['SUB_AWARD_ATTACHMENTS' , SUB_AWARD_ATTACHMENTS],
     ['SUB_AWARD_QUESTIONNAIRE' , SUB_AWARD_QUESTIONNAIRE],
-    ['Additional_Information' , ADDITIONAL_INFORMATION],
+    // ['Additional_Information' , ADDITIONAL_INFORMATION],
 ]);
 
 export const ComplianceTab = new Map([

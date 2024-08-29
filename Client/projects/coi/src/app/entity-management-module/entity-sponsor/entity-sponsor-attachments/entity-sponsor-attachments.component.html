@@ -1,17 +1,123 @@
 <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
     <div class="row mb-2">
-        <div class="col-12 d-flex align-items-center coloured-bg-header">
+        <div class="col-12 d-flex align-items-center coloured-bg-header justify-content-between">
+            <div>
             <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
                 <mat-icon class="rotate-icon coi-mat-icon-size">attach_file</mat-icon>
             </span>
             <span class="fs-16 fw-medium" id="coi-entity-sponsor-attachments">{{sectionName}}<app-common-help-text [subSectionId]="2611" [elementId]="'coi-entity-sponsor-attachments'"></app-common-help-text>
             </span>
+             </div>
+            <div class="col-auto" *ngIf="entityDetails.attachments?.length">
+                <button id="additional-address-add-button" class="btn btn-primary fs-14 d-inline-flex"
+                    title="'Click here to industry details'" aria-label="'Click here to industry details'"
+                    (click)="openAttachmentModal()">
+                    <mat-icon>add</mat-icon>Add Attachment
+                </button>
+            </div>
         </div>
-        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Attachment'"
-            (buttonAction)="openAttachmentModal()"></app-no-information>
+        <div *ngIf="!entityDetails.attachments?.length">
+            <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Attachment'"
+                (buttonAction)="openAttachmentModal()"></app-no-information>
+        </div>
+        <div class="coi-card-regular d-flex align-items-between px-2 py-1 bg-white table-responsive coi-table-striped">
+            <table class="table table-bordered fs-14 fw-medium table-striped">
+                <thead>
+                    <tr class="header-border table-light">
+                        <th style="width: 20%;" class="p-2 align-middle">Attachment Type</th>
+                        <th style="width: 20%;" class="p-2 align-middle">Description</th>
+                        <th style="width: 20%;" class="p-2 align-middle">File Name</th>
+                        <th style="width: 20%;" class="p-2 align-middle">Updated By</th>
+                        <th style="width: 20%;" class="p-2 align-middle">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="white-bg">
+                    <tr *ngFor="let item of entityDetails.attachments; let i = index" class="coi-card-regular">
+                        <td class="table-data fw-600 px-1 coi-text-light">
+                            <div class="m-0 mb-2 py-1">
+                                <app-no-data-label [valueToShow]="item?.attachmentType?.description">
+                                    <span class="align-items-center d-flex px-0" id="coi-project-overview-training-{{i}}">
+                                        <span class="text-slice"
+                                              [title]="item?.attachmentType?.description"
+                                              [attr.aria-label]="item?.attachmentType?.description">
+                                            {{item?.attachmentType?.description}}
+                                        </span>
+                                    </span>
+                                </app-no-data-label>
+                            </div>
+                        </td>
+                        <td class="px-1 coi-text-light">
+                            <div class="m-0 mb-2 py-1">
+                                <app-no-data-label [valueToShow]="item?.comment">
+                                    <span class="align-items-center d-flex px-0" id="coi-project-overview-training-{{i}}">
+                                        <span class="text-slice"
+                                              [title]="item?.attachmentType?.description"
+                                              [attr.aria-label]="item?.attachmentType?.description">
+                                            {{item?.comment}}
+                                        </span>
+                                    </span>
+                                </app-no-data-label>
+                            </div>
+                        </td>
+                        <td class="px-1 coi-text-light">
+                            <div class="m-0 mb-2 py-1">
+                                <app-no-data-label [valueToShow]="item?.fileName">
+                                    <span class="align-items-center d-flex px-0" id="coi-project-overview-training-{{i}}">
+                                        <span class="text-slice"
+                                              [title]="item?.attachmentType?.description"
+                                              [attr.aria-label]="item?.attachmentType?.description">
+                                            {{item?.fileName}}
+                                        </span>
+                                    </span>
+                                </app-no-data-label>
+                            </div>
+                        </td>
+                        <td class="px-1 coi-text-light">
+                            <div class="m-0 mb-2 py-1">
+                                <app-no-data-label [valueToShow]="item?.updateUserFullame">
+                                    <span class="align-items-center d-flex px-0" id="coi-project-overview-training-{{i}}">
+                                        <span class="text-slice"
+                                              [title]="item?.attachmentType?.description"
+                                              [attr.aria-label]="item?.attachmentType?.description">
+                                            {{item?.updateUserFullame}}
+                                        </span>
+                                    </span>
+                                </app-no-data-label>
+                            </div>
+                        </td>
+                        <td class="table-data fw-600 px-1 coi-text-light">
+                            <span class="ms-auto d-flex">
+                                <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                                        title="Click here to edit risk." aria-label="Click here to edit risk." (click)="openAttachmentModal()">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
+                                </button>
+                                <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                                        title="Click here to download." aria-label="Click here to download." (click)="downloadAttachments(item , i)">
+                                    <mat-icon class="pointer">download</mat-icon>
+                                </button>
+                                <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                                        title="Click here to refresh." aria-label="Click here to refresh." (click)="openAttachmentModal()">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">autorenew</mat-icon>
+                                </button>
+                                <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                                        title="Click here to delete." aria-label="Click here to delete." (click)="deleteAttachment(i)">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
     </div>
-</div>
 
-<app-add-attachment-modal *ngIf="isOpenSponsorAttachmentModal" (closeModal)="closeModal($event)"
+<div>
+
+<!-- <app-add-attachment-modal *ngIf="isOpenSponsorAttachmentModal" (closeModal)="closeModal($event)"
     [attachmentHelpText]="entityAttachmentHelpText">
-</app-add-attachment-modal>
+</app-add-attachment-modal> -->
+
+<app-entity-attachment-modal *ngIf="isOpenSponsorAttachmentModal" (closeModal)="closeModal($event)"
+[attachmentHelpText]="entityAttachmentHelpText">
+</app-entity-attachment-modal>

@@ -7,8 +7,41 @@
             <span class="fs-16 fw-medium" id="coi-entity-compliance-risk">{{sectionName}}<app-common-help-text [subSectionId]="2615" [elementId]="'coi-entity-compliance-risk'"></app-common-help-text>
             </span>
         </div>
+        <div *ngIf="!entityRiskList?.length">
         <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Risk'"
             (buttonAction)="addSponsorRisk($event)"></app-no-information>
+        </div>
+        <div *ngIf="entityRiskList?.length">
+            <div class="coi-card-regular d-flex align-items-between px-2 py-1 bg-white"
+                *ngFor="let risk of entityRiskList; let isFirst = first; let isLast = last; let i = index"
+                [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''">
+                <div class="col-md-9 col-lg-10 coi-text-light fs-14">{{risk?.riskType ? risk?.riskType?.description :
+                    risk?.riskTypeDescription}} -
+                    <span
+                        [ngClass]="risk?.riskLevelCode == 3 ? 'text-danger' : risk?.riskLevelCode == 2 ? 'text-warning' : 'text-success'"
+                        class="fw-bold">{{risk?.riskLevel ? risk?.riskLevel?.description : risk?.riskLevelDescription}}</span>
+                    <div class="d-flex fs-14 mt-1">
+                        <span>{{risk?.description}}</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-2 d-flex align-items-center">
+                    <span class="ms-auto d-flex">
+                        <button
+                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                            title="Click here to edit risk." aria-label="Click here to edit risk."
+                            (click)="editRisk(risk, i)">
+                            <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
+                        </button>
+                        <!-- <button
+                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                            title="Click here to delete risk." aria-label="Click here to delete risk."
+                            (click)="confirmDeleteRisk(risk, i)">
+                            <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
+                        </button> -->
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -69,7 +102,7 @@
                     type="button" title="Click to cancel" (click)="clearRiskDetails()">Cancel
                 </button>
                 <button class="btn btn-primary me-0" id="coi-risk-details-add-btn" type="button"
-                    title="Click here to add industry" aria-label="Click here to add" (click)="addRiskDetails()">Add
+                    title="Click here to add industry" aria-label="Click here to add" (click)="addOrUpdateRisk()">Add
                     Risk
                 </button>
             </div>

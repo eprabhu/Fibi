@@ -4,7 +4,6 @@ import { EntitySubawardComponent } from './entity-subaward.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
-import { MatIconModule } from '@angular/material/icon';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { AddAttachmentModalModule } from '../../common/header/add-attachment-modal/add-attachment-modal.module';
 import { SharedEntityManagementModule } from '../shared/shared-entity-management.module';
@@ -16,24 +15,21 @@ import { EntitySubawardAttachmentsComponent } from './entity-subaward-attachment
 
 
 @NgModule({
-  declarations: [
-    EntitySubawardComponent,
-    EntitySubawardDetailsComponent,
-    EntitySubawardRiskComponent,
-    EntitySubawardAttachmentsComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([{ path: '', component: EntitySubawardComponent}]),
-    FormsModule,
-    SharedModule,
-    MatIconModule,
-    SharedComponentModule,
-    AddAttachmentModalModule,
-    SharedEntityManagementModule
-  ],
-  providers: [
-    EntityOverviewService
-  ]
+    declarations: [
+        EntitySubawardComponent,
+        EntitySubawardDetailsComponent,
+        EntitySubawardRiskComponent,
+        EntitySubawardAttachmentsComponent
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild([{ path: '', component: EntitySubawardComponent }]),
+        FormsModule,
+        SharedModule,
+        SharedComponentModule,
+        AddAttachmentModalModule,
+        SharedEntityManagementModule
+    ],
+    providers: []
 })
 export class EntitySubawardModule { }

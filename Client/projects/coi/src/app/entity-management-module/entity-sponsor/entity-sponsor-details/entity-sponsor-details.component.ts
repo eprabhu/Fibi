@@ -19,22 +19,23 @@ export class EntitySponsorDetailsComponent implements OnInit {
 
     @Input() sectionName: any;
     @Input() sectionId: any;
+    // @Input() entitySponsorService.entitySponsorDetails: any;
     sponsorDetailsObj: SponsorDetails = new SponsorDetails();
     notificationTemplates = [];
-    entitySponsorRiskLevelOption = 'SPONSOR_TYPE#SPONSOR_TYPE_CODE#false#false';
+    entitySponsorTypeOption = 'SPONSOR_TYPE#SPONSOR_TYPE_CODE#false#false';
     defaultTemplateLabel = '';
     entityDetails: any;
     $subscriptions: Subscription[] = [];
-    isSponsorDetailsFormChanged: boolean;
+    dataChangeCounter = 0;
     autoSaveRO: any = {};
     $debounceEvent = new Subject<any>();
-
+    isRestrictSave = false;
 
 
     constructor(private _dataStoreService: EntityDataStoreService,
                 private _autoSaveService: AutoSaveService,
                 private _entityManagementService: EntityManagementService,
-                private _entitySponsorService: EntitySponsorService,
+                public entitySponsorService: EntitySponsorService,
                 public commonService: CommonService,
     ) { }
 
@@ -42,7 +43,7 @@ export class EntitySponsorDetailsComponent implements OnInit {
         this.triggerSingleSave();
         this.getDataFromStore();
         this.autoSaveSubscribe();
-        this.listenDataChangeFromStore();
+        this.listenDataChangeFromStore();   
     }
 
     ngOnDestroy(): void {
@@ -53,16 +54,14 @@ export class EntitySponsorDetailsComponent implements OnInit {
         const entityData = this._dataStoreService.getData();
         if (isEmptyObject(entityData)) { return; }
         this.entityDetails = entityData?.entityDetails;
-        console.log("ent details",this.entityDetails);
         this.setOtherDetailsObject();
         
     }
 
     triggerSingleSave() {
-        console.log("entered trigger single save");
-
         this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(2000))).subscribe((data: any) => {
           if (data) {
+            this.dataChangeCounter++;
             this._autoSaveService.commonSaveTrigger$.next(true);
           }
         }
@@ -70,8 +69,9 @@ export class EntitySponsorDetailsComponent implements OnInit {
     }
 
     setOtherDetailsObject(){
-        this.sponsorDetailsObj.acronym = this.entityDetails.acronym;
-        this.sponsorDetailsObj.sponsorTypeCode = this.entityDetails.sponsorTypeCode;
+        this.sponsorDetailsObj.acronym = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.acronym ? this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.acronym : '';
+        this.sponsorDetailsObj.sponsorTypeCode = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode ? this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode : '';
+        this.sponsorDetailsObj.sponsorCode = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorCode ? this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorCode : '';
     }
 
     onSponsorTypeSelect(event){
@@ -85,15 +85,10 @@ export class EntitySponsorDetailsComponent implements OnInit {
     }
 
     autoSaveSubscribe() {
-        console.log("entered auto save subscribe");
         this.$subscriptions.push(this._autoSaveService.autoSaveTrigger$.subscribe(event => this.autoSaveAPI()));
-        console.log("reachout auto save subscribe");
-
     }
 
     changeEvent(key) {
-        console.log("changes occuredsposnor");
-        this.isSponsorDetailsFormChanged = true;
         this._entityManagementService.hasChangesAvailable = true;
         if(this.sponsorDetailsObj[key]) {
             this.sponsorDetailsObj[key] = this.sponsorDetailsObj[key].trim();
@@ -103,41 +98,67 @@ export class EntitySponsorDetailsComponent implements OnInit {
     }
 
     autoSaveAPI() {
-        console.log("entered auto save api");
-
-        if(this.isSponsorDetailsFormChanged) {
+        if (this.dataChangeCounter > 0 && !this.isRestrictSave) {
+            if (!this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO) {
+                this.isRestrictSave = true;
+                this.addNewDetail();
+            }
+            else {
                 this.addOtherDetailsAPI();
-            // }
+            }
         }
     }
 
-    addOtherDetailsAPI() {
-        console.log("entered otherdetailsApi");
-
+    addNewDetail(){
         if(Object.keys(this.autoSaveRO).length) {
-            this.autoSaveRO.entityId = this.entityDetails.entityId;
             this.commonService.setLoaderRestriction();
-            this.$subscriptions.push(this._entitySponsorService.updateSponsorDetails(this.autoSaveRO).subscribe((data) => {
-                this.autoSaveRO = {};
+            this.autoSaveRO.entityId = this.entityDetails.entityId;
+            this.$subscriptions.push(this.entitySponsorService.SponsorDetailsAutoSave(this.autoSaveRO).subscribe((data) => {
                 this._entityManagementService.hasChangesAvailable = false;
-                this.isSponsorDetailsFormChanged = false;
+                this.dataChangeCounter--;
                 showEntityToast('SUCCESS');
-                console.log("api call finished and successfully updated");
-
+                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO = this.autoSaveRO;
+                this.sponsorDetailsObj = this.autoSaveRO;
+                this.autoSaveRO = {};
+                this.isRestrictSave = false;
             }, err => {
-                console.log(err);
                 showEntityToast('ERROR');
-                console.log("api call finished and failed");
-
+                this.isRestrictSave = false;
             }));
             this.commonService.removeLoaderRestriction();
         }
     }
 
+    addOtherDetailsAPI() {
+        if(Object.keys(this.autoSaveRO).length) {
+            this.setDetailsForUpdate();
+            this.commonService.setLoaderRestriction();
+            this.$subscriptions.push(this.entitySponsorService.updateSponsorDetails(this.autoSaveRO).subscribe((data) => {
+                this._entityManagementService.hasChangesAvailable = false;
+                this.dataChangeCounter--;
+                showEntityToast('SUCCESS');
+                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorTypeCode = this.autoSaveRO.sponsorTypeCode;
+                this.autoSaveRO = {};
+            }, err => {
+                showEntityToast('ERROR');
+            }));
+            this.commonService.removeLoaderRestriction();
+        }
+    }
+
+    setDetailsForUpdate(){
+        this.autoSaveRO.entityId = this.entityDetails.entityId;
+        this.autoSaveRO.sponsorTypeCode = this.sponsorDetailsObj.sponsorTypeCode
+        this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO = this.autoSaveRO;
+
+    }
+
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
-                this.getDataFromStore();
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
+                if (dependencies !==  'ENTITY_RISK_TYPE') {
+                    this.getDataFromStore();
+                }
             })
         );
     }

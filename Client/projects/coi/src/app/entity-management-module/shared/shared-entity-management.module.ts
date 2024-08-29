@@ -1,22 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EntityCommonCardComponent } from './entity-common-card/entity-common-card.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
-import { MatIconModule } from '@angular/material/icon';
+import { EntityCommonCardComponent } from './entity-common-card/entity-common-card.component';
+import { EntityAttachmentModalComponent } from './entity-attachment-modal/entity-attachment-modal.component';
+import { EntityRiskSectionComponent } from './entity-risk-section/entity-risk-section.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    EntityCommonCardComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SharedComponentModule,
-    MatIconModule
-  ],
-  exports: [
-    EntityCommonCardComponent
-  ]
+    declarations: [
+        EntityCommonCardComponent,
+        EntityRiskSectionComponent,
+        EntityAttachmentModalComponent,
+    ],
+    imports: [
+        FormsModule,
+        CommonModule,
+        SharedModule,
+        SharedComponentModule,
+    ],
+    exports: [
+        EntityCommonCardComponent,
+        EntityRiskSectionComponent,
+        EntityAttachmentModalComponent,
+    ]
 })
 export class SharedEntityManagementModule { }
