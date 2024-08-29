@@ -4,13 +4,14 @@
             <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
                 <mat-icon class="rotate-icon coi-mat-icon-size">attach_file</mat-icon>
             </span>
-            <span class="fs-16 fw-medium">{{sectionName}}</span>
+            <span class="fs-16 fw-medium" id="coi-entity-sponsor-attachments">{{sectionName}}<app-common-help-text [subSectionId]="2611" [elementId]="'coi-entity-sponsor-attachments'"></app-common-help-text>
+            </span>
         </div>
         <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Attachment'"
             (buttonAction)="openAttachmentModal()"></app-no-information>
     </div>
 </div>
 
-<app-add-attachment-modal *ngIf="commonService.isOpenAttachmentModal" (closeModal)="closeModal($event)"
+<app-add-attachment-modal *ngIf="isOpenSponsorAttachmentModal" (closeModal)="closeModal($event)"
     [attachmentHelpText]="entityAttachmentHelpText">
 </app-add-attachment-modal>

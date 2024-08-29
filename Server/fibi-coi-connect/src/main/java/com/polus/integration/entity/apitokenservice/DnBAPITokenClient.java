@@ -8,57 +8,47 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.integration.entity.config.APIConfig;
 
 @Component
-public class DnBAPITokenClient implements ThirdPartyApiClient{
+public class DnBAPITokenClient implements ThirdPartyApiClient {
 
 	@Autowired
-	private APIConfig urlConfig;
-	
+	private APIConfig apiConfig;
+
 	@Override
 	public TokenResponseDTO getNewToken() {
 		try {
-            
-            String endpoint = getAuthTokenURL();
-            String customerKey = "";
-            String customerSecret = "";
-           
-            String auth = customerKey + ":" + customerSecret;
-            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(endpoint))
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .header("Authorization", "Basic " + encodedAuth)
-                    .header("Cache-Control", "no-cache")
-                    .POST(HttpRequest.BodyPublishers.ofString("grant_type=client_credentials"))
-                    .build();
+			String endpoint = apiConfig.getAuthToken();
+			String customerKey = apiConfig.getCustomerKey();
+			String customerSecret = apiConfig.getCustomerSecret();
 
-            
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			String auth = customerKey + ":" + customerSecret;
+			String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            TokenResponseDTO tokenResponse = objectMapper.readValue(response.body(), TokenResponseDTO.class);
-            System.out.println("Access Token: " + tokenResponse.getAccessToken());
-            System.out.println("Response Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());            
-            return tokenResponse;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+					.header("Content-Type", "application/x-www-form-urlencoded")
+					.header("Authorization", "Basic " + encodedAuth).header("Cache-Control", "no-cache")
+					.POST(HttpRequest.BodyPublishers.ofString("grant_type=client_credentials")).build();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			TokenResponseDTO tokenResponse = objectMapper.readValue(response.body(), TokenResponseDTO.class);
+			System.out.println("Access Token: " + tokenResponse.getAccessToken());
+			System.out.println("Response Code: " + response.statusCode());
+			System.out.println("Response Body: " + response.body());
+			return tokenResponse;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return new TokenResponseDTO();
-	}
-	
-	private String getAuthTokenURL() {
-		//return urlConfig.getAuthToken();
-		return "https://plus.dnb.com/v3/token";
 	}
 
 }

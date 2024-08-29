@@ -24,11 +24,11 @@ export class CoiProjectType {
 }
 
 export interface CoiConflictStatusType {
-    conflictStatusCode: string;
-    description: string;
-    updateTimestamp: number;
-    updateUser: string;
-    isActive: boolean;
+    conflictStatusCode?: string;
+    description?: string;
+    updateTimestamp?: number;
+    updateUser?: string;
+    isActive?: boolean;
 }
 
 export interface CoiDispositionStatusType {
@@ -535,6 +535,7 @@ export class CoiDisclEntProjDetail {
     projectConflictStatusCode?: string | null = null;
     coiDisclProjectEntityRelId?: number | null = null;
     coiProjConflictStatusType?: any | null = null;
+    isDataChanged = false; // for frontend
 }
 
 export interface CoiProjConflictStatusType {
@@ -640,9 +641,9 @@ export class DefineRelationshipDataStore {
 }
 
 export interface RelationshipConflictType {
-    label: string;
     color: string;
-    statusCode: number;
+    statusCode: string;
+    projectConflictStatus: string;
     projectConflictStatusCode: string;
 }
 
@@ -665,4 +666,16 @@ export class ExpandCollapseSummaryBySection {
     COI802 = true;
     COI803 = true;
     COI804 = true;
+}
+
+export interface FormattedConflictData {
+    conflictCount: { [key: string]: number }, 
+    conflictCompleted: boolean,
+    conflictStatusCode: string | null,
+    conflictStatus: string | null,
+}
+
+export interface SaveProjectSfiConflict {
+    disclConflictStatusType: CoiConflictStatusType;
+    conflictDetails: ProjectSfiRelationConflictRO[];
 }

@@ -49,9 +49,9 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		if (dto.getDescription() != null) {
 			hqlQuery.append(", e.description = :description");
 		}
-		hqlQuery.append(" WHERE e.entityId = :entityId");
+		hqlQuery.append(" WHERE e.entityRiskId = :entityRiskId");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("entityId", dto.getEntityId());
+		query.setParameter("entityRiskId", dto.getEntityRiskId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		if (dto.getRiskTypeCode() != null) {
@@ -72,8 +72,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<EntityRisk> query = builder.createQuery(EntityRisk.class);
 		Root<EntityRisk> rootEntityRisk = query.from(EntityRisk.class);
-		query.where(builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "SA"));
-		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "SA");
+		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "OR");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
 		return session.createQuery(query).getResultList();
@@ -88,6 +87,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "SP");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
+	    query.orderBy(builder.asc(rootEntityRisk.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -100,6 +100,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "EN");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
+	    query.orderBy(builder.asc(rootEntityRisk.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -112,6 +113,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "CO");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
+	    query.orderBy(builder.asc(rootEntityRisk.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 

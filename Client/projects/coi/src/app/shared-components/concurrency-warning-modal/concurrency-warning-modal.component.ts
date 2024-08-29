@@ -17,7 +17,7 @@ export class ConcurrencyWarningModalComponent implements OnInit {
         openModal('invalidActionModalCOI', {
             backdrop: 'static',
             keyboard: false,
-            focus: true
+            focus: !document.querySelector('.offcanvas-backdrop')
           });
     }
 

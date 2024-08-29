@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
 import { ADMIN_DASHBOARD_RIGHTS, CONSULTING_REDIRECT_URL, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
-import { LoginPersonDetails } from '../services/coi-common.interace.ts';
+import { LoginPersonDetails } from '../services/coi-common.interface';
 
 declare const $: any;
 class ChangePassword {

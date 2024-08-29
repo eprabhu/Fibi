@@ -8,17 +8,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.polus.integration.entity.cleansematch.dto.StageDnBEntityMatchDTO;
+import com.polus.integration.entity.cleansematch.dto.DnBStageEntityMatchDTO;
 
 @Repository
 public interface DnBEntityMatchRepository extends JpaRepository<StageDnBEntityMatch, Integer> {
 	Page<StageDnBEntityMatch> findAll(Pageable pageable);
 
-	@Query("SELECT new com.polus.integration.entity.cleansematch.dto.StageDnBEntityMatchDTO"
+	@Query("SELECT new com.polus.integration.entity.cleansematch.dto.DnBStageEntityMatchDTO"
 			+ "( e.id, e.sourceDataCode, e.sourceDataName, e.integrationStatusCode, e.candidateMatchedQuantity,"
 			+ " e.bestMatchResult, e.bestMatchConfidenceCode, e.httpStatusCode, "
 			+ " e.externalSysTransactionId, e.errorCode, e.errorMessage, e.errorDetails ) "
 			+ " FROM StageDnBEntityMatch e " + " WHERE e.externalSysTransactionId IS NOT NULL")
-	List<StageDnBEntityMatchDTO> GetMatchCompleted();
+	List<DnBStageEntityMatchDTO> GetMatchCompleted();
 
 }

@@ -6,7 +6,7 @@ import { DefineRelationshipDataStoreService } from '../../services/define-relati
 import { DefineRelationshipDataStore, ProjectSfiRelations } from '../../../coi-interface';
 import { debounce } from 'rxjs/operators';
 import { CommonService } from '../../../../common/services/common.service';
-import { GlobalEventNotifier } from '../../../../common/services/coi-common.interace.ts';
+import { GlobalEventNotifier } from '../../../../common/services/coi-common.interface';
 import { CoiService } from '../../../services/coi.service';
 
 @Component({

@@ -7,6 +7,7 @@ export class Create_Entity{
     state: string = '';
     postCode: number;
     countryCode: string = '';
+    country: Country;
     phoneNumber: any;
     certifiedEmail: any = '';
     websiteAddress: any = '';
@@ -192,4 +193,19 @@ export function showEntityToast(type: 'SUCCESS'|'ERROR') {
             successToast.classList.add('invisible');
         }
     }
+}
+
+export class EntitySponsorRisk {
+    riskTypeCode: any = '';
+    riskLevelCode: any = '';
+    description: string = '';
+    entityId: any;
+    entityRiskId: any;
+}
+
+export class SponsorDetails { 
+    id?: number;
+    entityId?: any;
+    acronym?: string = '';
+    sponsorTypeCode?: string = '';
 }

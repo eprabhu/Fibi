@@ -5,7 +5,8 @@
                 <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
                     <mat-icon class="coi-mat-icon-size">newspaper</mat-icon>
                 </span>
-                <span class="fs-16 fw-medium">{{sectionName}}</span>
+                <span class="fs-16 fw-medium" id="entity-basic-details">{{sectionName}}<app-common-help-text [subSectionId]="2602" [elementId]="'entity-basic-details'"></app-common-help-text>
+                </span>
             </div>
         </div>
         <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)"

@@ -47,6 +47,15 @@ public class COIIntegrationProposalPerson implements Serializable {
 	@Column(name = "PERCENTAGE_OF_EFFORT")
 	private BigDecimal percentageOfEffort;
 
+    @Column(name = "STATUS")
+    private String status;
+
+    @Column(name = "CERTIFICATION_FLAG")
+    private String certificationFlag;
+
+    @Column(name = "DISCLOSURE_REQUIRED_FLAG")
+    private String disclosureReqFlag;
+  
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 

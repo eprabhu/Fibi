@@ -63,7 +63,7 @@ import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 })
 export class VisibleInViewportDirective implements OnInit, OnDestroy {
 
-    @Input() minHeight = 100;
+    @Input() minHeight = '100px';
     @Input() enableRepeatedLoad = false;
     @Input() initialDelayTimeToObserve = 0;
     @Input() isViewportVisibilityEnabled = true;
@@ -82,7 +82,7 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
     constructor(private el: ElementRef) { }
 
     ngOnInit(): void {
-        this.el.nativeElement.style.minHeight = this.minHeight + 'px';
+        this.el.nativeElement.style.minHeight = this.minHeight;
         this.createObserver();
     }
 
@@ -91,7 +91,7 @@ export class VisibleInViewportDirective implements OnInit, OnDestroy {
             this.updateObserver();
         }
         if (changes.minHeight && !changes.minHeight.firstChange) {
-            this.el.nativeElement.style.minHeight = this.minHeight + 'px';
+            this.el.nativeElement.style.minHeight = this.minHeight;
         }
     }
 

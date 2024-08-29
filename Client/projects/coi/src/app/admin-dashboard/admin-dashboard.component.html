@@ -869,7 +869,7 @@
                                                 <!-- Consulting Card badge -->
                                                 <span>
                                                     <span class="d-flex" tabindex="-1" attr.aria-label="Consulting disclosure">
-                                                        <span class="coi-card-notch-ribbon shadow-sm {{getColorBadges(coi)}}">
+                                                        <span class="coi-card-notch-ribbon shadow-sm bg-consulting-clip">
                                                             <span>Consulting</span>
                                                         </span>
                                                     </span>
@@ -984,10 +984,10 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="d-flex align-items-center fw-semibold" *ngIf="!coi?.opaDisclosureId && !coi.disclosureId">
-                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary" [class.cursor-pointer]="coi?.noOfSfi"
+                                                    <span class="bg-light fs-18 fw-700 me-2 rounded-3 text-primary"
                                                         tabindex="{{coi?.noOfSfi > 0 ? 0 : -1}}" role="link"
                                                         [title]="coi?.noOfSfi > 0 ? 'Click here to view SFI list' : '' "
-                                                        [ngClass]="coi?.noOfSfi ? 'badge' : 'zero-count-padding'"
+                                                        [ngClass]="coi?.noOfSfi ? 'badge cursor-pointer' : 'zero-count-padding'"
                                                         [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfi + (coi?.noOfSfi > 0 ? '. Click to view SFI list' : '')"
                                                         (keyup.enter)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);" (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);"
                                                         (keyup.space)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);">{{coi?.noOfSfi || 0}}</span>
@@ -1008,7 +1008,7 @@
                                                                 (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
-                                                                [ngClass]="projectCount?.projectCount ? 'badge' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
+                                                                [ngClass]="projectCount?.projectCount ? 'badge cursor-pointer' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
                                                             <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
                                                                 [class.link-primary]="projectCount?.projectCount > 0"
                                                                 [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
@@ -1129,10 +1129,11 @@
     <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"
         [disclosureId]="addAdmin.disclosureId" [path]="assignAdminPath" [actionType]="'A'">
     </app-assign-administrator-modal>
-    <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
-        [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
-        [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-        [adminData]="adminData" [fcoiTypeCode]="fcoiTypeCode" (viewSlider)="viewSlider($event)"></app-count-modal>
+
+    <!-- count modal -->
+    <ng-container *ngIf="coiCountModal?.isOpenCountModal">
+        <app-coi-count-modal [(coiCountModal)]="coiCountModal" (viewSlider)="viewSlider($event)"></app-coi-count-modal>
+    </ng-container>
 
     <ng-container *ngIf="showSlider">
         <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index]="1057"

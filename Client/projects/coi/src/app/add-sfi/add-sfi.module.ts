@@ -5,12 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { SharedEntityInfoCardComponent } from './shared-entity-info-card/shared-entity-info-card.component';
-import { SfiDataResolveGuardService } from './services/sfi-data-resolve-guard.service';
+import { EntityDataResolveGuardService, SfiDataResolveGuardService } from './services/sfi-data-resolve-guard.service';
 
 
 const routes: Routes = [
   {
-    path: 'create', component: AddSfiComponent, resolve: {moduleConfig: SfiDataResolveGuardService}
+    path: 'create', component: AddSfiComponent, resolve: {moduleConfig: SfiDataResolveGuardService, entityConfig: EntityDataResolveGuardService}
   }];
 
 @NgModule({
@@ -22,6 +22,6 @@ const routes: Routes = [
   ],
   declarations: [AddSfiComponent,SharedEntityInfoCardComponent],
   exports: [AddSfiComponent,SharedEntityInfoCardComponent],
-  providers: [SfiDataResolveGuardService]
+  providers: [SfiDataResolveGuardService, EntityDataResolveGuardService]
 })
 export class AddSfiModule { }

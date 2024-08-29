@@ -403,7 +403,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         if(this.showViewButton()) {
             this.closeEntityInfoCard.emit(false);
             document.body.removeAttribute("style");
-            this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.entityId } });
+            this._router.navigate(['/coi/manage-entity/entity-overview'], { queryParams: { entityManageId: this.entityDetails.entityId } });
         }
     }
 

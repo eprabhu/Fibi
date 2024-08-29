@@ -14,3 +14,15 @@ export class SfiDataResolveGuardService {
     }
 
 }
+
+@Injectable()
+export class EntityDataResolveGuardService {
+
+    private readonly _moduleCode = 'GE26';
+    constructor( private _commonService: CommonService ) { }
+
+    resolve() {
+        return this._commonService.getDashboardActiveModules(this._moduleCode)
+    }
+
+}

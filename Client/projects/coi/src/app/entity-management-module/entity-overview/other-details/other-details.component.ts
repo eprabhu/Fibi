@@ -13,6 +13,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 import { EntityManagementService } from '../../entity-management.service';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-other-details',
@@ -45,6 +46,7 @@ export class OtherDetailsComponent {
     isEditIndex: null | number = null;
 
     constructor(public commonService: CommonService, private _entityOverviewService: EntityOverviewService,
+        private _router: Router,
         public dataStore: EntityDataStoreService, private _autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService
     ) {}
 
@@ -124,7 +126,7 @@ export class OtherDetailsComponent {
 
       immediateAPICall(key) {
         this.isOtherDetailsFormChanged = true;
-        this._entityManagementService.hasChangesAvailable = true;
+        this.commonService.hasChangesAvailable = true;
         if(this.otherDetailsObj[key]) {
             this.otherDetailsObj[key] = this.otherDetailsObj[key]?.trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
@@ -138,7 +140,7 @@ export class OtherDetailsComponent {
 
     changeEvent(key) {
         this.isOtherDetailsFormChanged = true;
-        this._entityManagementService.hasChangesAvailable = true;
+        this.commonService.hasChangesAvailable = true;
         if(this.otherDetailsObj[key]) {
             this.otherDetailsObj[key] = this.otherDetailsObj[key].trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
@@ -165,14 +167,21 @@ export class OtherDetailsComponent {
             this.$subscriptions.push(this._entityOverviewService.updateOtherDetails(this.autoSaveRO).subscribe((data) => {
                 this.updateStoreData(this.autoSaveRO);
                 this.autoSaveRO = {};
-                this._entityManagementService.hasChangesAvailable = false;
+                this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
+                this.navigateToRoute();
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
                 showEntityToast('ERROR');
             }));
             this.commonService.removeLoaderRestriction();
+        }
+    }
+
+    navigateToRoute() {
+        if(this.commonService.isNavigationStopped) {
+            this._router.navigateByUrl(this.commonService.attemptedPath);
         }
     }
 
@@ -188,8 +197,9 @@ export class OtherDetailsComponent {
                 delete this.otherDetailsObj['priorName'];
                 this.entityPriorName = '';
                 this.addOtherDetailsAPI();
-                this._entityManagementService.hasChangesAvailable = false;
+                this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
+                this.navigateToRoute();
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
@@ -210,8 +220,9 @@ export class OtherDetailsComponent {
                 delete this.otherDetailsObj['foreignName'];
                 this.entityForeignName = '';
                 this.addOtherDetailsAPI();
-                this._entityManagementService.hasChangesAvailable = false;
+                this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
+                this.navigateToRoute();
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
@@ -293,6 +304,7 @@ export class OtherDetailsComponent {
     }
 
     ngOnDestroy() {
+        this.commonService.hasChangesAvailable = false;
         subscriptionHandler(this.$subscriptions);
     }
 

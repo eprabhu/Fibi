@@ -10,6 +10,9 @@ import { isEmptyObject } from './../../../../../fibi/src/app/common/utilities/cu
 import { Country, Create_Entity, showEntityToast } from '../../entity-management-module/shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import { OverviewTabSection } from '../../entity-management-module/shared/entity-constants';
+import { EntityManagementService } from '../../entity-management-module/entity-management.service';
+import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
   selector: 'app-entity-creation',
@@ -30,6 +33,7 @@ export class EntityCreationComponent {
     @Input() initalProceed = new Subject();
     @Input() createEntityObj: Create_Entity = new Create_Entity();
     @Input() countryDetails: Country = new Country();
+    @Input() canNavigateToEntity:boolean = true;
     ownershipTypOptions = 'ENTITY_OWNERSHIP_TYPE#OWNERSHIP_TYPE_CODE#false#false';
     @Output() emitSaveObj = new EventEmitter<any>();
     @Output() emitEntityRO = new EventEmitter<any>();
@@ -44,10 +48,12 @@ export class EntityCreationComponent {
     overViewTab = OverviewTabSection;
 
     constructor(private _entityCreateService: EntityCreationService, private _router: Router,private _route: ActivatedRoute,
-        private _commonService: CommonService, private _autoSaveService: AutoSaveService) {}
+        private _commonService: CommonService, private _autoSaveService: AutoSaveService, private _informationHelpTextService: InformationAndHelpTextService) {}
 
     ngOnInit() {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        this.isFormDataChanged = false;
+        this.setCommonChangesFlag(false);
         this.externalProccedSubscribe();
         this.triggerSingleSave();
         this.triggerExternalSave();
@@ -77,8 +83,7 @@ export class EntityCreationComponent {
             if(data) {
                 this.entityMandatoryValidation();
                 if(!this.mandatoryList.size) {
-                    // this.emitEntityRO.emit(true);
-                    this.saveEntity.next(true);
+                    this.emitEntityRO.emit(true);
                 }
             }
         })
@@ -86,11 +91,23 @@ export class EntityCreationComponent {
 
     triggerExternalSave() {
         this.saveEntity.subscribe((data) => {
-            this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
-                this._router.navigate(['/coi/manage-entity/entity-overview'],
-                    { queryParams: { entityManageId: data.entityId } }
-                );
-            }));
+            this.entityMandatoryValidation();
+            if(!this.mandatoryList.size) {
+                this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
+                    this.isFormDataChanged = false;
+                    this.setCommonChangesFlag(false);
+                    if(this.canNavigateToEntity) {
+                        this._router.navigate(['/coi/manage-entity/entity-overview'],
+                            { queryParams: { entityManageId: data.entityId } }
+                        );
+                    } else {
+                        this.emitSaveObj.emit({
+                            'entityId': data.entityId,
+                            'entityName': this.createEntityObj.entityName
+                    });
+                    }
+                }));
+            }
         });
     }
 
@@ -123,21 +140,30 @@ export class EntityCreationComponent {
         if(event && event.length) {
             this.createEntityObj.entityOwnershipTypeCode = event[0].code;
             this.changeEvent('entityOwnershipTypeCode');
+            if(!this.isCreateScreen) {
+                this.createEntityObj.entityOwnerShip.ownershipTypeCode = event[0].code;
+                this.createEntityObj.entityOwnerShip.description = event[0].description;
+            }
         } else {
             this.createEntityObj.entityOwnershipTypeCode = null;
+            this.createEntityObj.entityOwnerShip = null;
         }
     }
 
     changeEvent(key) {
         this.isFormDataChanged = true;
+        this.setCommonChangesFlag(true);
         if(this.saveMode == 'AUTO') {
-            this.createEntityObj[key] = this.createEntityObj[key].trim();
+            if(typeof(this.createEntityObj[key]) == 'string') {
+                this.createEntityObj[key] = this.createEntityObj[key].trim();
+            }
             this.autoSaveRO[key] = this.createEntityObj[key];
             this.$debounceEvent.next(true);
         }
     }
 
     numberChangeEvent() {
+        this.setCommonChangesFlag(true);
         this.$debounceNumberEvent.next(true);
     }
 
@@ -147,8 +173,17 @@ export class EntityCreationComponent {
             this.autoSaveRO.entityId =  this._route.snapshot.queryParamMap.get('entityManageId');
             this._commonService.setLoaderRestriction();
             this.$subscriptions.push(this._entityCreateService.autoSaveService(this.autoSaveRO).subscribe((data: any) => {
+                if(this.autoSaveRO.hasOwnProperty('entityOwnershipTypeCode')) {
+                    this.autoSaveRO['entityOwnershipType'] = this.createEntityObj['entityOwnerShip'];
+                }
+                if(this.autoSaveRO.hasOwnProperty('countryCode')) {
+                    this.autoSaveRO['country'] = this.createEntityObj['country'];
+                }
                 this.emitSaveObj.emit(this.autoSaveRO);
                 this.autoSaveRO = {};
+                this.isFormDataChanged = false;
+                this.setCommonChangesFlag(false);
+                this.navigateToRoute();
                 showEntityToast('SUCCESS');
             }, err => {
                 console.log(err);
@@ -159,10 +194,23 @@ export class EntityCreationComponent {
         }
     }
 
+    setCommonChangesFlag(flag) {
+        this._commonService.hasChangesAvailable = this.isCreateScreen ? false : flag;
+    }
+
+    navigateToRoute() {
+        if(this._commonService.isNavigationStopped) {
+            this._router.navigateByUrl(this._commonService.attemptedPath);
+        }
+    }
+
     selectedCountryEvent(event: any): void {
         if(event) {
             this.createEntityObj.countryCode = event.countryCode;
             this.changeEvent('countryCode');
+            if(!this.isCreateScreen) {
+                this.createEntityObj.country = event;
+            }
         } else {
             this.createEntityObj.countryCode = '';
         }
@@ -262,5 +310,8 @@ export class EntityCreationComponent {
         this.mandatoryList.delete(type);
     }
 
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+    }
 
 }

@@ -3,10 +3,9 @@ package com.polus.integration.proposal.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import com.polus.integration.constant.Constant;
 import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
 import com.polus.integration.proposal.dao.ProposalIntegrationDao;
-import com.polus.integration.proposal.dto.CoiDisclosureDTO;
 import com.polus.integration.proposal.dto.ProposalDTO;
 import com.polus.integration.proposal.dto.ProposalPersonDTO;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
@@ -34,15 +32,17 @@ import com.polus.integration.proposal.vo.ValidateDisclosureVO;
 import com.polus.questionnaire.dto.FetchQnrAnsHeaderDto;
 import com.polus.questionnaire.dto.GetQNRDetailsDto;
 import com.polus.questionnaire.dto.QuestionnaireSaveDto;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.polus.integration.proposal.repository.ProposalIntegrationRepository;
 import com.polus.integration.proposal.repository.ProposalPersonIntegrationRepository;
 
 
 @Transactional
 @Service
+@Slf4j
 public class ProposalIntegrationServiceImpl implements ProposalIntegrationService {
-
-	protected static Logger logger = LogManager.getLogger(ProposalIntegrationServiceImpl.class.getName());
 
 	@Autowired
 	private ProposalIntegrationRepository proposalIntegrationRepository;
@@ -88,7 +88,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 			}
 			prepareProposalPersonDetail(proposalDTO);
 		} catch (Exception e) {
-	        logger.error("Error saving proposal details for ProposalDTO: {}", proposalDTO, e);
+	        log.error("Error saving proposal details for ProposalDTO: {}", proposalDTO, e.getMessage());
 	        throw new MQRouterException("ER004", "Error saving proposal details for ProposalDTO: {}", e, e.getMessage(), devProposalIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE, Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, Constant.PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
 	}
@@ -135,15 +135,22 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 
 	private void saveOrUpdateProposalPersonDetail(List<ProposalPersonDTO> proposalPersonDTOs, List<COIIntegrationProposalPerson> proposalPersons) {
 		proposalPersonDTOs.forEach(proposalPersonDTO -> {
-		COIIntegrationProposalPerson proposalPerson = proposalPersons.stream()
-	            .filter(person -> person.getKeyPersonId().equals(proposalPersonDTO.getKeyPersonId())
-	            		&& person.getKeyPersonRole().equals(proposalPersonDTO.getKeyPersonRole())
-	            				&& person.getProposalNumber().equals(proposalPersonDTO.getProposalNumber()))
-	            .findFirst()
-	            .orElse(new COIIntegrationProposalPerson());
-	        preparePersonDetail(proposalPerson, proposalPersonDTO);
-	        proposalPersonIntegrationRepository.save(proposalPerson);
+			COIIntegrationProposalPerson proposalPerson = proposalPersons.stream()
+					.filter(person -> person.getKeyPersonId().equals(proposalPersonDTO.getKeyPersonId())
+							&& person.getKeyPersonRole().equals(proposalPersonDTO.getKeyPersonRole())
+							&& person.getProposalNumber().equals(proposalPersonDTO.getProposalNumber()))
+					.findFirst().orElse(new COIIntegrationProposalPerson());
+			preparePersonDetail(proposalPerson, proposalPersonDTO);
+			proposalPersonIntegrationRepository.save(proposalPerson);
 		});
+		Set<String> incomingKeyPersonIds = proposalPersonDTOs.stream()
+				.map(proposalPersonDTO -> proposalPersonDTO.getKeyPersonId()).collect(Collectors.toSet());
+		proposalPersons.stream()
+				.filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
+				.forEach(existingPerson -> {
+					existingPerson.setStatus(Constant.IN_ACTIVE);
+					proposalPersonIntegrationRepository.save(existingPerson);
+				});
 	}
 
 	private void preparePersonDetail(COIIntegrationProposalPerson coiIntegrationProposalPerson,	ProposalPersonDTO proposalPersonDTO) {
@@ -162,13 +169,16 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
         coiIntegrationProposalPerson.setKeyPersonName(proposalPersonDTO.getKeyPersonName());
         coiIntegrationProposalPerson.setPercentageOfEffort(proposalPersonDTO.getPercentageOfEffort());
         coiIntegrationProposalPerson.setUpdateTimestamp(integrationDao.getCurrentTimestamp());
+        coiIntegrationProposalPerson.setStatus(Constant.ACTIVE);
+        coiIntegrationProposalPerson.setCertificationFlag(proposalPersonDTO.getCertificationFlag());
+        coiIntegrationProposalPerson.setDisclosureReqFlag(proposalPersonDTO.getDisclosureReqFlag());
         proposalPersonIntegrationRepository.save(coiIntegrationProposalPerson);
 	}
 
 	@Override
 	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> questionnaireVOs) {
 		try {
-			logger.info("feedPersonQuestionnaireAndCreateDisclosure .... ");
+			log.info("feedPersonQuestionnaireAndCreateDisclosure .... ");
 			Map<String, List<QuestionnaireVO>> groupedByProposal = questionnaireVOs.stream().collect(Collectors.groupingBy(QuestionnaireVO::getProposalNumber));
 			for (Map.Entry<String, List<QuestionnaireVO>> entry : groupedByProposal.entrySet()) {
 	            String proposalNumber = entry.getKey();
@@ -179,11 +189,11 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 					saveOrUpdateQuestionAnswer(questAnswers, questVOs);
 					prepareValidateAndCreateDisclosure(questVOs.get(0));
 	            } else {
-	                logger.info("No such proposal exists in COIIntegrationProposal: {}", proposalNumber);
+	                log.info("No such proposal exists in COIIntegrationProposal: {}", proposalNumber);
 	            }
 	        }
 		} catch (Exception e) {
-			logger.error("Error in saving proposal questionnaire details: {}", questionnaireVOs, e);
+			log.error("Error in saving proposal questionnaire details: {}", questionnaireVOs, e.getMessage());
 			throw new MQRouterException("ER004", "Error in saving proposal questionnaire details: {}", e, e.getMessage(), devPropQuesAnsIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, Constant.QUESTIONNAIRE_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 		}
 	}
@@ -228,7 +238,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	private ValidateDisclosureVO createValidateDisclosureVO(QuestionnaireVO vo) {
 		ValidateDisclosureVO disclosureVO = new ValidateDisclosureVO();
 	    disclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE.toString());
-	    disclosureVO.setModuleItemId(Integer.parseInt(vo.getProposalNumber()));
+	    disclosureVO.setModuleItemKey(Integer.parseInt(vo.getProposalNumber()));
 	    disclosureVO.setPersonId(vo.getPersonId());
 	    return disclosureVO;
 	}
@@ -243,20 +253,23 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 				if (responseObject.get(Constant.PENDING_PROJECT) == null) {
 					CreateProposalDisclosureVO disclosureVO = prepareCreateProposalDisclosureResponse(vo);
 					ResponseEntity<Object> responseObj = fcoiFeignClient.createDisclosure(disclosureVO);
-					Map<String, Object> responseBody = (Map<String, Object>) responseObj.getBody();
-					Map<String, Object> coiDisclosure = (Map<String, Object>) responseBody.get("coiDisclosure");
-					logger.info("Disclosure created successfully.");
-					logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
+					Map<String, Object> coiDisclosure = (Map<String, Object>) responseObj.getBody();
+					log.info("Disclosure created successfully.");
+					log.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
 					syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
-				} else {
-					logger.info("Pending project exists, disclosure creation skipped.");
+				}
+			} else {
+				ResponseEntity<Object> response = fcoiFeignClient.validateDisclosure(validateDisclosureVO);
+				Map<String, Object> responseObject = (Map<String, Object>) response.getBody();
+				if (responseObject.get(Constant.PENDING_PROJECT) != null) {
+					log.info("Pending project exists, disclosure creation skipped.");
 					Map<String, Object> coiDisclosure = (Map<String, Object>) responseObject.get(Constant.PENDING_PROJECT);
-					logger.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
+					log.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
 					syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
-	            }
-			}
+				}
+            }
 		} catch (Exception e) {
-			logger.error("Exception occurred while validating or creating disclosure", e);
+			log.error("Exception occurred while validating or creating disclosure", e.getMessage());
 			throw new MQRouterException("ER004", "Error in validateAndCreateDisclosure: {}", e, e.getMessage(), devPropQuesAnsIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, Constant.QUESTIONNAIRE_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 		}
     }
@@ -273,13 +286,12 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 
 	private CreateProposalDisclosureVO prepareCreateProposalDisclosureResponse(ProcessProposalDisclosureVO vo) {
 		CreateProposalDisclosureVO disclosureVO = new CreateProposalDisclosureVO();
-	    CoiDisclosureDTO coiDisclosureDTO = new CoiDisclosureDTO();
-	    coiDisclosureDTO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
-	    coiDisclosureDTO.setHomeUnit(vo.getHomeUnit());
-	    coiDisclosureDTO.setModuleItemKey(vo.getModuleItemId());
-	    coiDisclosureDTO.setPersonId(vo.getPersonId());
-	    disclosureVO.setCoiDisclosure(coiDisclosureDTO);
-	    disclosureVO.setPersonId(vo.getPersonId());
+		disclosureVO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
+		disclosureVO.setHomeUnit(vo.getHomeUnit());
+		disclosureVO.setModuleItemKey(vo.getModuleItemId());
+		disclosureVO.setPersonId(vo.getPersonId());
+		disclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE);
+		disclosureVO.setFcoiTypeCode(Constant.DISCLOSURE_TYPE_CODE_PROPOSAL);
 	    return disclosureVO;
 	}
 
@@ -290,7 +302,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 			getQuestionnaireByParam(questionnaire, qnrMapping.getFibiQnrId(), vo.getDisclosureId().toString());
 			return integrationDao.convertObjectToJSON(prepareQuestionnaireAnswersToSave(qnrMapping, questionnaire, vo));
 		} catch (Exception e) {
-			logger.error("Exception occurred while getQuestionnaire", e);
+			log.error("Exception occurred while getQuestionnaire", e.getMessage());
 			throw new MQRouterException("ER004", "Error in getQuestionnaire: {}", e, e.getMessage(), "saveQuestionnaire", null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, "saveQuestionnaire", integrationDao.generateUUID());
 		}
 	}
@@ -337,12 +349,11 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 			}
 			return proposalIntegrationDao.saveQuestionnaireAnswers(questionnaireDataBus);
 		} catch (Exception e) {
-			logger.error("Exception occurred while saveQuestionnaire", e);
+			log.error("Exception occurred while saveQuestionnaire", e.getMessage());
 			throw new MQRouterException("ER004", "Error in saveQuestionnaire: {}", e, e.getMessage(), "saveQuestionnaire", null, Constant.FIBI_DIRECT_EXCHANGE,  Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, "saveQuestionnaire", integrationDao.generateUUID());
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void prepareQuestionAnswers(List<HashMap<String, Object>> questions, List<FibiCoiQnrQstnMapping> mappingQuestions, Integer questionnaireId, Integer proposalNumber, String disclosurePersonId, Integer questionnaireAnswerHeaderId) {
 		try {
 			questions.forEach(question -> {
@@ -351,9 +362,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 						question.put(AC_TYPE, question.get(AC_TYPE) != null ? Constant.AC_TYPE_UPDATE : Constant.AC_TYPE_INSERT);
 						String answer = proposalIntegrationDao.getQuestionAnswerByParams(mappingQuestion.getSourceQstnId(), questionnaireId, proposalNumber, disclosurePersonId);
 						HashMap<String, String> answers = new HashMap<>();
-						if (question.get(ANSWERS) != null) {
-							answers = (HashMap<String, String>) question.get(ANSWERS);
-						}
 						if (CHECKBOX.equals(question.get(ANSWER_TYPE))) {
 							answers.put(answer, "true");
 						} else {
@@ -364,8 +372,9 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 				});
 			});
 		} catch (Exception e) {
-			logger.error("Exception occurred while prepareQuestionAnswers", e);
+			log.error("Exception occurred while prepareQuestionAnswers", e.getMessage());
 		}
 	}
+
 
 }
