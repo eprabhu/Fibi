@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import { isValidEmailAddress, inputRestrictionForNumberField, phoneNumberValidation } from '../../common/utilities/custom-utilities';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
@@ -26,7 +26,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
   styleUrls: ['./entity-creation.component.scss'],
   providers: [EntityCreationService]
 })
-export class EntityCreationComponent {
+export class EntityCreationComponent implements OnInit, OnDestroy {
 
     clearCountryField: any;
     countrySearchOptions: any;
@@ -85,20 +85,20 @@ export class EntityCreationComponent {
     }
 
     externalProccedSubscribe() {
-        this.initalProceed.subscribe((data) => {
+        this.$subscriptions.push(this.initalProceed.subscribe((data) => {
             if(data) {
                 this.entityMandatoryValidation();
                 if(!this.mandatoryList.size) {
                     this.emitEntityRO.emit(true);
                 }
             }
-        })
+        }));
     }
 
     triggerExternalSave() {
-        this.saveEntity.subscribe((data) => {
+        this.$subscriptions.push(this.saveEntity.subscribe((data) => {
             this.entityMandatoryValidation();
-            if(!this.mandatoryList.size) {
+            if (!this.mandatoryList.size) {
                 this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
                     this.isFormDataChanged = false;
                     this.setCommonChangesFlag(false);
@@ -114,7 +114,7 @@ export class EntityCreationComponent {
                     }
                 }));
             }
-        });
+        }));
     }
 
     triggerSingleSave() {
