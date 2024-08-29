@@ -193,7 +193,6 @@ export class EntityCreationComponent {
                 this.navigateToRoute();
                 showEntityToast('SUCCESS');
             }, err => {
-                console.log(err);
                 showEntityToast('ERROR');
             }
         ));

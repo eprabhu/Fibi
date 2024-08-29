@@ -775,5 +775,65 @@
     "/entity/sponsor/fetch/*" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
+    },
+    "/entity/sponsor/deleteRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/sponsor/updateRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/sponsor/save" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/sponsor/update" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/organization/fetch/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/organization/save" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/organization/update" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/organization/saveRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/organization/updateRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/compliance/saveRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/compliance/updateRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/compliance/fetch/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/organization/deleteRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/compliance/deleteRisk" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/attachment/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
     }
 }

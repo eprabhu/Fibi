@@ -38,7 +38,7 @@
             </div>
             <!-- footer -->
             <div class="modal-footer">
-               <div *ngIf="modalConfig.namings.secondaryBtnName || modalConfig.namings.primaryBtnName" class="col d-flex gap-3  {{modalConfig.styleOptions.footerPosition}}">
+               <div *ngIf="modalConfig.namings.secondaryBtnName || modalConfig.namings.primaryBtnName" class="col d-flex gap-2  {{modalConfig.styleOptions.footerPosition}}">
                     <button *ngIf="modalConfig.namings.secondaryBtnName" appPreventDblClick
                         type="button" class="btn fs-14 {{modalConfig.styleOptions.secondaryBtnClass}}" (click)="performSecondaryAction()"
                         [title]="modalConfig.ADAOptions.secondaryBtnTitle ? modalConfig.ADAOptions.secondaryBtnTitle : ('Click here to ' + modalConfig.namings.secondaryBtnName?.toLowerCase())"

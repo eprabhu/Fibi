@@ -9,6 +9,7 @@ export class EntitySubawardAttachmentsComponent implements OnInit {
 
     @Input() sectionName: any;
     @Input() sectionId: any;
+
     entityAttachmentHelpText: string = '';
     isOpenSubawardAttachmentModal = false;
 
