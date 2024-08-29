@@ -37,6 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -117,16 +118,17 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                 .coiProjectTypeCode(vo.getCoiProjectTypeCode())
                 .createdBy(vo.getPersonId())
                 .personId(vo.getPersonId())
+                .syncNeeded(true)
                 .disclosureNumber(disclosureDao.generateMaxDisclosureNumber())
                 .versionNumber(1).versionStatus(Constants.COI_PENDING_STATUS)
                 .homeUnit(vo.getHomeUnit())
                 .dispositionStatusCode(DISPOSITION_STATUS_PENDING)
                 .reviewStatusCode(REVIEW_STATUS_PENDING)
-                .updatedBy(AuthenticatedUser.getLoginPersonId())
+                .updatedBy(vo.getPersonId())
                 .build();
         disclosureDao.saveOrUpdateCoiDisclosure(coiDisclosure);
         List<CoiDisclProjects> disclosureProjects = new ArrayList<>();
-        String loginPersonId = AuthenticatedUser.getLoginPersonId();
+        String loginPersonId = vo.getPersonId();
         if (vo.getFcoiTypeCode().equals(Constants.PROJECT_DISCL_FCOI_TYPE_CODE)) {
             CoiDisclProjects coiDisclProject = CoiDisclProjects.builder().
                     disclosureId(coiDisclosure.getDisclosureId())
@@ -134,7 +136,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .moduleCode(vo.getModuleCode())
                     .moduleItemKey(vo.getModuleItemKey())
                     .updateTimestamp(commonDao.getCurrentTimestamp())
-                    .updatedBy(AuthenticatedUser.getLoginPersonId())
+                    .updatedBy(coiDisclosure.getPersonId())
                     .build();
             disclosureDao.saveOrUpdateCoiDisclProjects(coiDisclProject);
             disclosureProjects.add(coiDisclProject);
@@ -162,12 +164,12 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         vo.setDisclosureId(coiDisclosure.getDisclosureId());
 
         try {
-//            DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_CREATED)
-//                    .disclosureId(coiDisclosure.getDisclosureId()).disclosureNumber(coiDisclosure.getDisclosureNumber())
-//                    .fcoiTypeCode(coiDisclosure.getFcoiTypeCode()).revisionComment(coiDisclosure.getRevisionComment())
-//                    .reporter(AuthenticatedUser.getLoginUserFullName())
-//                    .build();
-//            actionLogService.saveDisclosureActionLog(actionLogDto);
+            DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_CREATED)
+                    .disclosureId(coiDisclosure.getDisclosureId()).disclosureNumber(coiDisclosure.getDisclosureNumber())
+                    .fcoiTypeCode(coiDisclosure.getFcoiTypeCode()).revisionComment(coiDisclosure.getRevisionComment())
+                    .reporter(personDao.getPersonFullNameByPersonId(loginPersonId))
+                    .build();
+            actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (
                 Exception e) {
             logger.error("createDisclosure : {}", e.getMessage());
@@ -305,10 +307,6 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             coiConflictHistory.setUpdatedBy(coiDisclEntProjDetails.getUpdatedBy());
             coiConflictHistory.setUpdateTimestamp(coiDisclEntProjDetails.getUpdateTimestamp());
             DisclosureActionLogDto actionLogDto = new DisclosureActionLogDto();
-//            List<CoiConflictHistory> coiConflictHistoryList = conflictOfInterestDao.getCoiConflictHistory(vo.getDisclosureDetailsId());
-//            actionLogDto.setActionTypeCode(coiConflictHistoryList.isEmpty()
-//                    ? Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS
-//                    : Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_CONFLICT_STATUS);
             actionLogDto.setActionTypeCode(actionTypeCode);
             actionLogDto.setNewConflictStatus(coiDisclEntProjDetails.getCoiProjConflictStatusType().getDescription());
             if (Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS.equalsIgnoreCase(actionTypeCode)) {
@@ -531,7 +529,10 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             vo.setCommentId(saveDisclProjRelationComment(vo).getCommentId());
             projectEntityRequestDtos.add(vo);
         }
-        return new ResponseEntity<>(projectEntityRequestDtos, HttpStatus.OK);
+        Map<String, Object> responseObj = new HashMap<>();
+        responseObj.put("disclConflictStatusType",disclosureDao.validateConflicts(vo.getDisclosureId()));
+        responseObj.put("conflictDetails", projectEntityRequestDtos);
+        return new ResponseEntity<>(responseObj, HttpStatus.OK);
     }
 
     private DisclComment saveDisclProjRelationComment(ProjectEntityRequestDto entityProjectRelation) {
@@ -539,7 +540,6 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclComment.setCommentId(entityProjectRelation.getCommentId());
         disclComment.setComment(entityProjectRelation.getComment());
         disclComment.setComponentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE);        //Disclosure detail comment
-//		disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//TODO Disclosure detail comment
         disclComment.setCommentPersonId(AuthenticatedUser.getLoginPersonId());
         disclComment.setDocumentOwnerPersonId(AuthenticatedUser.getLoginPersonId());
         disclComment.setIsPrivate(false);
@@ -608,6 +608,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         copyDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
         copyDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
         copyDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
+        copyDisclosure.setSyncNeeded(true);
         copyDisclosure.setVersionNumber(disclosure.getVersionNumber() + 1);
         copyDisclosure.setPersonId(AuthenticatedUser.getLoginPersonId());
         copyDisclosure.setDisclosureNumber(disclosure.getDisclosureNumber());
@@ -643,7 +644,8 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         ProjectRelationshipResponseDto projectRelationshipResponseDto = new ProjectRelationshipResponseDto();
         saveOrUpdateDisclComment(vo);
         disclosureDao.updateCoiDisclEntProjDetails(vo.getConflictStatusCode(), vo.getCoiDisclProjectEntityRelId());
-        disclosureDao.updateDisclosureUpdateDetails(vo.getDisclosureId());
+        projectRelationshipResponseDto.setUpdateTimestamp(disclosureDao.updateDisclosureUpdateDetails(vo.getDisclosureId()));
+        projectRelationshipResponseDto.setUpdateUserFullName(AuthenticatedUser.getLoginUserFullName());
         vo.setCoiDisclEntProjDetail(disclosureDao.getCoiDisclProjectEntityRelById(vo.getCoiDisclProjectEntityRelId()));
         saveOrUpdateCoiConflictHistory(vo, Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_CONFLICT_STATUS);
         projectRelationshipResponseDto.setCoiConflictHistoryList(coiService.getCoiConflictHistory(vo.getCoiDisclProjectEntityRelId()));
@@ -788,4 +790,8 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclosureDao.updateFcoiDisclSyncNeedStatus(projectDto);
     }
 
+    @Override
+    public void detachFcoiDisclProject(DisclosureProjectDto projectDto) {
+        disclosureDao.detachFcoiDisclProject(projectDto);
+    }
 }
