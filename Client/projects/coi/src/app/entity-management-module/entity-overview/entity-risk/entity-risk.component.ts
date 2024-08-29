@@ -62,7 +62,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
     }
 
     onRiskSelected(event) {
-        if (event.length) {
+        if (event && event.length) {
             this.entityRisk.riskTypeCode = event[0].riskTypeCode;
             this.selectedRiskType = event[0];
         } else {
@@ -103,7 +103,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
     }
 
     onRiskLevelSelected(event) {
-        if (event.length) {
+        if (event && event.length) {
             this.entityRisk.riskLevelCode = event[0].code;
             this.selectedRiskLevel = event[0];
         } else {

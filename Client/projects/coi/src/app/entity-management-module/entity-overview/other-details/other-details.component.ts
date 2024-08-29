@@ -316,7 +316,6 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     confirmDeleteName(priorName, index: number) {
-        console.log(priorName);
         this.deletePriorNameObj = priorName;
         this.isEditIndex = index;
         hideModal('entityPriorNameVersionModal');
