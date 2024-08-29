@@ -18,6 +18,7 @@ import com.polus.fibicomp.globalentity.dto.EntityResponseDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.Entity;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityExternalIdMapping;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
@@ -60,6 +61,11 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 	@Autowired
 	private EntityRiskDAO entityRiskDAO;
 
+	@Autowired
+	private EntityFileAttachmentService entityFileAttachmentService;
+
+	private static final String GENERAL_SECTION_CODE = "1";
+
 	@Override
 	public ResponseEntity<Map<String, Integer>> createEntity(EntityRequestDTO dto) {
 		Entity entity = mapDTOToEntity(dto);
@@ -73,7 +79,9 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 				.city(dto.getCity()).state(dto.getState()).postCode(dto.getPostCode()).countryCode(dto.getCountryCode())
 				.certifiedEmail(dto.getCertifiedEmail()).websiteAddress(dto.getWebsiteAddress())
 				.dunsNumber(dto.getDunsNumber()).ueiNumber(dto.getUeiNumber()).cageNumber(dto.getCageNumber()).entityStatusTypeCode("2")
-				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp()).versionNumber(1).versionStatus("ACTIVE").isActive(Boolean.TRUE)
+				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp())
+				.createdBy(AuthenticatedUser.getLoginPersonId()).createTimestamp(commonDao.getCurrentTimestamp())
+				.versionNumber(1).versionStatus("ACTIVE").isActive(Boolean.TRUE)
 				.build();
 	}
 
@@ -93,12 +101,13 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		List<EntityExternalIdMapping> EntityExternalIdMappings = externalIdMappingRepository.findByEntityId(entityId);
 		List<PriorNameResponseDTO> priorNames = companyDetailsService.fetchPriorNames(entityId);
 		List<ForeignNameResponseDTO> foreignNames = companyDetailsService.fetchForeignNames(entityId);
+		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(GENERAL_SECTION_CODE, entityId);
 		Entity entityDetails = entityRepository.findByEntityId(entityId);
 		return new ResponseEntity<>(EntityResponseDTO.builder().entityDetails(entityDetails)
 				.entityIndustryClassifications(entityIndustryClassifications)
 				.entityMailingAddresses(entityMailingAddresses).entityRegistrations(entityRegistrations)
 				.entityRisks(entityRisks).entityExternalIdMappings(EntityExternalIdMappings).priorNames(priorNames)
-				.foreignNames(foreignNames).build(), HttpStatus.OK);
+				.foreignNames(foreignNames).attachments(attachments).build(), HttpStatus.OK);
 	}
 
 }

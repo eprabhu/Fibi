@@ -54,9 +54,7 @@ export class DefineRelationsRouterGuard implements CanActivate {
 
         return this._defineRelationshipService.getProjectRelations(PROJECT_SFI_RELATION).pipe(
             map((res: any) => {
-                if (res) {
-                    this._defineRelationshipDataStore.setStoreData(res);
-                }
+                this._defineRelationshipDataStore.setStoreData(res ? res : []);
                 this._defineRelationshipService.configureScrollSpy();
                 return res; // Return the response for further processing in subscribe
             }),

@@ -40,9 +40,9 @@ public class SponsorDAOImpl implements SponsorDAO {
 		if (dto.getAcronym() != null) {
 			hqlQuery.append(", e.acronym = :acronym");
 		}
-		hqlQuery.append(" WHERE e.id = :id");
+		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("id", dto.getId());
+		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		if (dto.getSponsorTypeCode() != null) {

@@ -190,4 +190,9 @@ public class DisclosureController {
     public void updateFcoiDisclSyncNeedStatus(@RequestBody DisclosureProjectDto projectDto) {
         disclosureService.updateFcoiDisclSyncNeedStatus(projectDto);
     }
+
+    @PutMapping("/integration/detachProject")
+    public void detachFcoiDisclProject(@RequestBody DisclosureProjectDto projectDto) {
+        disclosureService.detachFcoiDisclProject(projectDto);
+    }
 }

@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class SubAwdOrgDetailsResponseDTO {
 
 	private Integer entityId;
+	private Integer id;
 	private Integer organizationId;
 	private String organizationTypeCode;
 	private Date samExpirationDate;

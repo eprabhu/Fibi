@@ -7,12 +7,18 @@ import { CommonService } from '../../common/services/common.service';
 import { EntityCreationService } from './entity-creation.service';
 import { getEndPointOptionsForCountry } from './../../../../../fibi/src/app/common/services/end-point.config';
 import { isEmptyObject } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { Country, Create_Entity, showEntityToast } from '../../entity-management-module/shared/entity-interface';
+import {
+    Country,
+    Create_Entity,
+    EntityOwnerShip,
+    showEntityToast
+} from '../../entity-management-module/shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import { OverviewTabSection } from '../../entity-management-module/shared/entity-constants';
 import { EntityManagementService } from '../../entity-management-module/entity-management.service';
 import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+
 
 @Component({
   selector: 'app-entity-creation',
@@ -140,7 +146,8 @@ export class EntityCreationComponent {
         if(event && event.length) {
             this.createEntityObj.entityOwnershipTypeCode = event[0].code;
             this.changeEvent('entityOwnershipTypeCode');
-            if(!this.isCreateScreen) {
+            if (!this.isCreateScreen) {
+                this.createEntityObj.entityOwnerShip = new EntityOwnerShip();
                 this.createEntityObj.entityOwnerShip.ownershipTypeCode = event[0].code;
                 this.createEntityObj.entityOwnerShip.description = event[0].description;
             }

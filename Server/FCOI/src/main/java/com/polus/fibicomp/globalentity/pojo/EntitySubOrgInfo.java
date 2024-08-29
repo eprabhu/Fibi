@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.persistence.Column;
 //import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,11 +30,12 @@ public class EntitySubOrgInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "ENTITY_ID")
-	private int entityId;
+	private Integer entityId;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SUB_ORG_INFO_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
@@ -47,14 +50,8 @@ public class EntitySubOrgInfo implements Serializable {
     @Column(name = "FEED_STATUS_CODE")
     private String feedStatusCode;
 
-    @Column(name = "NUMBER_OF_EMPLOYEES")
-    private Integer numberOfEmployees;
-
     @Column(name = "IRS_TAX_EXEMPTION")
     private String irsTaxExemption;
-
-    @Column(name = "FEDERAL_EMPLOYER_ID")
-    private String federalEmployerId;
 
     @Column(name = "MASS_TAX_EXEMPT_NUM")
     private String massTaxExemptNum;
@@ -70,12 +67,6 @@ public class EntitySubOrgInfo implements Serializable {
 
     @Column(name = "MASS_EMPLOYEE_CLAIM")
     private String massEmployeeClaim;
-
-    @Column(name = "HUMAN_SUB_ASSURANCE")
-    private String humanSubAssurance;
-
-    @Column(name = "ANIMAL_WELFARE_ASSURANCE")
-    private String animalWelfareAssurance;
 
     @Column(name = "SCIENCE_MISCONDUCT_COMPL_DATE")
     private Date scienceMisconductComplDate;

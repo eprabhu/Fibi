@@ -353,9 +353,9 @@ public class PersonEntityServiceImpl implements PersonEntityService {
     public ResponseEntity<Object> getSFIOfDisclosure(ConflictOfInterestVO vo) {
     	Map<String, Object> responseData = new HashMap<>();
 		List<PersonEntity> personEntities  = conflictOfInterestDao.getSFIOfDisclosure(vo);
-		Integer disclosureId = vo.getDisclosureId() != null ? vo.getDisclosureId() : null;
-		String personId = disclosureId == null ? vo.getPersonId() : null;
-		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getPersonEntities(disclosureId, personId, null);
+//		Integer disclosureId = vo.getDisclosureId() != null ? vo.getDisclosureId() : null;
+//		String personId = disclosureId == null ? vo.getPersonId() : null;
+//		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getPersonEntities(disclosureId, personId, null);
 		personEntities.forEach(personEntity -> {personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao.getValidPersonEntityRelTypes(personEntity.getPersonEntityId()));
 //												personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
 //														.stream()

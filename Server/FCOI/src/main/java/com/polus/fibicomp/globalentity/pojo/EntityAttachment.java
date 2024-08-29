@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,7 @@ public class EntityAttachment implements Serializable {
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    @Column(name = "ENTITY_ATTACHMENT_ID")
-	    private int entityAttachmentId;
+	    private Integer entityAttachmentId;
 
 	    @Column(name = "ATTACHMENT_NUMBER")
 	    private Integer attachmentNumber;
@@ -43,7 +44,7 @@ public class EntityAttachment implements Serializable {
 	    private String versionStatus;
 
 	    @Column(name = "ENTITY_ID")
-		private int entityId;
+		private Integer entityId;
 
 		@ManyToOne(optional = true)
 		@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_ATTACH_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
@@ -80,5 +81,8 @@ public class EntityAttachment implements Serializable {
 
 	    @Column(name = "UPDATED_BY")
 	    private String updatedBy;
+
+	    @Transient
+	    private String updateUserFullame;
 
 }

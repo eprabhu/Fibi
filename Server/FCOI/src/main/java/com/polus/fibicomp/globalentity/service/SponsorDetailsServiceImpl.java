@@ -15,6 +15,7 @@ import com.polus.fibicomp.globalentity.dao.SponsorDAO;
 import com.polus.fibicomp.globalentity.dto.SponsorDetailsResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 import com.polus.fibicomp.globalentity.pojo.EntitySponsorInfo;
 import com.polus.fibicomp.globalentity.repository.EntitySponsorInfoRepository;
@@ -34,6 +35,11 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 
 	@Autowired
 	private EntityRiskDAO entityRiskDAO;
+
+	@Autowired
+	private EntityFileAttachmentService entityFileAttachmentService;
+
+	private static final String SPONSOR_SECTION_CODE = "2";
 
 	@Override
 	public ResponseEntity<Map<String, Integer>> saveDetails(SponsorRequestDTO dto) {
@@ -55,8 +61,9 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	public ResponseEntity<SponsorResponseDTO> fetchDetails(Integer entityId) {
 		SponsorDetailsResponseDTO sponsorDetailsResponseDTO = mapEntityToDTO(entitySponsorInfoRepository.findByEntityId(entityId));
 		List<EntityRisk> entityRisks = entityRiskDAO.findSponsorRiskByEntityId(entityId);
+		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(SPONSOR_SECTION_CODE, entityId);
 		return new ResponseEntity<>(
-				SponsorResponseDTO.builder().sponsorDetailsResponseDTO(sponsorDetailsResponseDTO).entityRisks(entityRisks)
+				SponsorResponseDTO.builder().sponsorDetailsResponseDTO(sponsorDetailsResponseDTO).entityRisks(entityRisks).attachments(attachments)
 				.build(),
 				HttpStatus.OK);
 	}

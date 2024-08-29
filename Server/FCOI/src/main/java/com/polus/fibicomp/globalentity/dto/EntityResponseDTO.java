@@ -9,6 +9,7 @@ import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
 import com.polus.fibicomp.globalentity.pojo.EntityRegistration;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 import com.polus.fibicomp.globalentity.pojo.Entity;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,5 +31,6 @@ public class EntityResponseDTO {
 	private List<EntityExternalIdMapping> entityExternalIdMappings;
 	private List<PriorNameResponseDTO> priorNames;
 	private List<ForeignNameResponseDTO> foreignNames;
+	private List<EntityAttachment> attachments;
 
 }

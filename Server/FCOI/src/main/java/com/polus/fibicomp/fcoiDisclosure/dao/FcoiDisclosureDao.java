@@ -379,4 +379,10 @@ public interface FcoiDisclosureDao {
      * @param disclComment
      */
     DisclComment saveOrUpdateDisclComment(DisclComment disclComment);
+
+    /**
+     *
+     * @param projectDto
+     */
+    void detachFcoiDisclProject(DisclosureProjectDto projectDto);
 }

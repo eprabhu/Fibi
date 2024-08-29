@@ -15,6 +15,7 @@ import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgDetailsResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgResponseDTO;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 import com.polus.fibicomp.globalentity.pojo.EntitySubOrgInfo;
 import com.polus.fibicomp.globalentity.repository.EntitySubOrgInfoRepository;
@@ -34,6 +35,11 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 
 	@Autowired
 	private EntityRiskDAO entityRiskDAO;
+
+	@Autowired
+	private EntityFileAttachmentService entityFileAttachmentService;
+
+	private static final String ORGANIZATION_SECTION_CODE = "3";
 
 	@Override
 	public ResponseEntity<Map<String, Integer>> saveDetails(SubAwdOrgRequestDTO dto) {
@@ -57,8 +63,9 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 	public ResponseEntity<SubAwdOrgResponseDTO> fetchDetails(Integer entityId) {
 		SubAwdOrgDetailsResponseDTO subAwdOrgDetailsResponseDTOs = mapEntityToDTO(entitySubOrgInfoRepository.findByEntityId(entityId));
 		List<EntityRisk> entityRisks = entityRiskDAO.findSubAwdOrgRiskByEntityId(entityId);
+		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(ORGANIZATION_SECTION_CODE, entityId);
 		return new ResponseEntity<>(
-				SubAwdOrgResponseDTO.builder().subAwdOrgDetailsResponseDTO(subAwdOrgDetailsResponseDTOs).entityRisks(entityRisks)
+				SubAwdOrgResponseDTO.builder().subAwdOrgDetailsResponseDTO(subAwdOrgDetailsResponseDTOs).entityRisks(entityRisks).attachments(attachments)
 				.build(),
 				HttpStatus.OK);
 	}
@@ -66,6 +73,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 	private SubAwdOrgDetailsResponseDTO mapEntityToDTO(EntitySubOrgInfo entitySubOrgInfos) {
 		if (entitySubOrgInfos != null) {
 			return SubAwdOrgDetailsResponseDTO.builder().entityId(entitySubOrgInfos.getEntityId())
+					.id(entitySubOrgInfos.getId())
 					.organizationId(entitySubOrgInfos.getOrganizationId())
 					.organizationTypeCode(entitySubOrgInfos.getOrganizationTypeCode())
 					.samExpirationDate(entitySubOrgInfos.getSamExpirationDate())

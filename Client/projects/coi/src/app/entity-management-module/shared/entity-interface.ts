@@ -21,9 +21,9 @@ export class Create_Entity{
     entityOwnerShip: EntityOwnerShip;
 }
 
-interface EntityOwnerShip {
+export class EntityOwnerShip {
     description: string;
-    isActive:boolean;
+    isActive: boolean;
     ownershipTypeCode: any;
     updateTimestamp: any;
     updatedBy: any;
@@ -83,13 +83,16 @@ export class EntityRisk {
     riskTypeCode: any = '';
     riskLevelCode: any = '';
     description: string = '';
+    entityRiskId?: any;
     entityId: any;
 }
 
-export class OtheReferenceId {
-    referenceType: any;
-    referenceId: any = '';
+export class OtherReferenceId {
+    externalIdTypeCode: any;
+    externalId: any = '';
     description: string = '';
+    entityId?: any;
+    entityExternalMappingId?: number;
 }
 
 export class EntityDetailsCard {
@@ -203,9 +206,34 @@ export class EntitySponsorRisk {
     entityRiskId: any;
 }
 
-export class SponsorDetails { 
+export class SponsorDetails {
     id?: number;
     entityId?: any;
     acronym?: string = '';
     sponsorTypeCode?: string = '';
+}
+
+export class EntityExternalIdMappings {
+    entityExternalMappingId: number;
+    entityId: number;
+    entity: any;
+    externalIdTypeCode: string;
+    entityExternalIdType: EntityExternalIdType;
+    entityExternalIdTypeDescription: any;
+    externalId: string;
+    description: string;
+    sponsorCode: any;
+    organizationId: any;
+    updatedBy: string;
+    updateTimestamp: number;
+}
+
+
+
+export interface EntityExternalIdType {
+    externalIdTypeCode: string;
+    description: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    isActive: boolean;
 }

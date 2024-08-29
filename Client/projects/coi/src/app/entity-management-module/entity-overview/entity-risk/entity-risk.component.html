@@ -16,15 +16,22 @@
             </div>
             <div *ngIf="entityRisks.length">
                 <div class="card px-2 py-1 bg-white" *ngFor="let risk of entityRisks; let isFirst = first; let isLast = last; let i = index" [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''" >
-                    <div class="coi-text-light fs-14">{{risk?.riskType ? risk?.riskType?.description : risk?.riskTypeDescription}} -
-                        <span [ngClass]="risk?.riskLevel?.riskLevelCode == 3 ? 'text-danger' : risk?.riskLevel?.riskLevelCode == 2 ? 'text-warning' : 'text-success'" class="fw-bold">{{risk?.riskLevel? risk?.riskLevel?.description : risk?.riskLevelDescription}}</span>
-                    </div>
-                    <div class="d-flex fs-14 mt-1">
-                        <span>{{risk?.description}}</span>
-                        <span class="d-flex  ms-auto">
-                            <mat-icon aria-hidden="true" class="me-2 cursor-pointer">edit</mat-icon>
-                            <mat-icon aria-hidden="true" class="cursor-pointer" (click)="confirmDeleteRisk(risk, i)">delete</mat-icon>
-                        </span>
+                    <div class="d-flex">
+                        <div class="col-md-9 col-lg-10 fs-14">
+                            <span class="coi-text-light me-1">{{risk?.riskType ? risk?.riskType?.description : risk?.riskTypeDescription}} -</span>
+                            <span [class.text-danger]="risk?.riskLevel?.riskLevelCode == 3 || risk?.riskLevelDescription == 'High'"
+                                  [class.text-warning]="risk?.riskLevel?.riskLevelCode == 2 || risk?.riskLevelDescription == 'Medium'"
+                                  [class.text-success]="risk?.riskLevel?.riskLevelCode == 1 || risk?.riskLevelDescription == 'Low'"
+                                  [class.text-muted]="risk?.riskLevel?.riskLevelCode > 3 || risk?.riskLevelDescription == 'NA' || risk?.riskLevelDescription == 'Undetermined'"
+                                  class="fw-bold">{{risk?.riskLevel? risk?.riskLevel?.description : risk?.riskLevelDescription}}</span>
+                            <span class="d-flex coi-text-light fw-600">{{risk?.description}}</span>
+                        </div>
+                        <div class="col-md-3 col-lg-2 d-flex align-items-center">
+                            <span class="d-flex  ms-auto">
+                                <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRisk(risk, i)">edit</mat-icon>
+                                <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDeleteRisk(risk, i)">delete</mat-icon>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,8 +45,9 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Add Entity Risk</h4>
-				<button type="button" class="btn-close" id="coi-add-industry-details-close-btn" title="Click here to close" data-bs-dismiss="modal"
+				<h4 class="modal-title">{{isEditIndex != null ? 'Edit': 'Add'}} Entity Risk</h4>
+				<button type="button" class="btn-close" id="coi-add-industry-details-close-btn" (click)="clearRiskDetails()"
+                        title="Click here to close" data-bs-dismiss="modal"
 					aria-label="Click here to close"></button>
 			</div>
 			<div class="modal-body">
@@ -50,6 +58,7 @@
                             <app-common-help-text [subSectionId]="2607" [elementId]="'coi-risk-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onRiskSelected($event)" [options]="entityRiskTypeOptions"
+                                     [defaultValue]="defaultRiskType" [selectedLookUpList]="selectedLookupType"
                             [isExternalArray]="true"  [externalArray]="entityRiskTypeList"
                             [uniqueId]="'coi-risk-type'" [isError]="mandatoryList?.has('riskType')">
                         </app-look-up>
@@ -63,6 +72,7 @@
                             <app-common-help-text [subSectionId]="2607" [elementId]="'coi-risk-level'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onRiskLevelSelected($event)" [options]="entityRiskLevelOption"
+                                     [defaultValue]="defaultRiskLevel" [selectedLookUpList]="selectedLookupLevel"
                         [uniqueId]="'coi-risk-level'" [isError]="mandatoryList?.has('riskLevel')"></app-look-up>
                         <div *ngIf="mandatoryList?.has('riskLevel')" class="invalid-feedback d-block fs-13">
                             {{mandatoryList?.get('riskLevel')}}
@@ -92,7 +102,9 @@
 				title="Click to cancel" (click)="clearRiskDetails()">Cancel
 				</button>
 				<button class="btn btn-primary me-0" id="coi-risk-details-add-btn" type="button"
-					title="Click here to add industry" aria-label="Click here to add" (click)="addRiskDetails()">Add Risk
+					title="Click here to {{isEditIndex != null ? 'edit': 'add'}} industry"
+                        [attr.aria-label]="'Click here to' + (isEditIndex != null ? 'edit': 'add')"
+                        (click)="performRiskAction()">{{isEditIndex != null ? 'Edit': 'Add'}} Risk
 				</button>
 			</div>
 		</div>
@@ -104,7 +116,7 @@
         <span>Confirmation</span>
     </ng-container>
     <ng-container modal-body>
-        <p>Do you want to delete <strong>{{deleteRiskObj?.riskType?.description? deleteRiskObj?.riskType?.description:deleteRiskObj?.riskTypeDescription}} 
-            - {{deleteRiskObj?.riskLevel?.description ? deleteRiskObj?.riskLevel?.description : deleteRiskObj?.riskLevelDescription}}</strong>?</p>
+        <p>Do you want to delete <strong>{{selectedRiskObj?.riskType?.description? selectedRiskObj?.riskType?.description:selectedRiskObj?.riskTypeDescription}}
+            - {{selectedRiskObj?.riskLevel?.description ? selectedRiskObj?.riskLevel?.description : selectedRiskObj?.riskLevelDescription}}</strong>?</p>
     </ng-container>
 </app-coi-modal>

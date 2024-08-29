@@ -33,7 +33,7 @@ public class EntityExternalReferenceDAOImpl implements EntityExternalReferenceDA
 	public void updatExternalReference(ExternalReferenceRequestDTO dto) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE EntityMapping e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
+		hqlQuery.append("UPDATE EntityExternalIdMapping e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
 		if (dto.getExternalIdTypeCode() != null) {
 			hqlQuery.append(", e.externalIdTypeCode = :externalIdTypeCode");
 		}

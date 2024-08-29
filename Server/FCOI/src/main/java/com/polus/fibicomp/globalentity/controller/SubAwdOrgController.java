@@ -23,7 +23,7 @@ import com.polus.fibicomp.globalentity.service.GlobalEntityService;
 import com.polus.fibicomp.globalentity.service.SubAwdOrgService;
 
 @RestController
-@RequestMapping("/coi/entity/subAwardOrganization")
+@RequestMapping("/coi/entity/organization")
 public class SubAwdOrgController {
 
 	protected static Logger logger = LogManager.getLogger(SubAwdOrgController.class.getName());
