@@ -203,13 +203,19 @@
                                 <th class="align-middle">
                                     Prior Name
                                 </th>
+                                <th class="align-middle w-1rem">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="white-bg">
-                            <tr *ngFor="let priorNames of priorNames; let index2 = index"
+                            <tr *ngFor="let priorName of priorNames; let i = index"
                                 class="tr-hover">
                                 <td class="table-data fw-600 coi-text-light">
-                                   {{priorNames?.priorNames}}
+                                   {{priorName?.priorNames}}
+                                </td>
+                                <td class="align-middle text-center">
+                                    <mat-icon aria-hidden="true" class="cursor-pointer" (click)="confirmDeleteName(priorName, i)">delete</mat-icon>
                                 </td>
                             </tr>
                         </tbody>
@@ -230,6 +236,6 @@
         <span>Confirmation</span>
     </ng-container>
     <ng-container modal-body>
-        <p>Do you want to delete <strong>{{deleteForgeinNameObj?.foreignName}}</strong>?</p>
+        <p>Do you want to delete <strong>{{deletePriorNameObj?.id ? deletePriorNameObj?.priorNames : deleteForgeinNameObj?.foreignName}}</strong>?</p>
     </ng-container>
 </app-coi-modal>

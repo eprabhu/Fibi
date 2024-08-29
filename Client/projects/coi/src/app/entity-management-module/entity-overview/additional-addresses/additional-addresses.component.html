@@ -17,13 +17,17 @@
     </div>
     <div *ngIf="additionalAddresses.length">
         <div class="card mx-3 px-2 py-1 coi-entity-details-card" *ngFor="let address of additionalAddresses; let isLast = last;let i = index" [ngClass]="isLast ? 'mb-3' : 'mb-2'">
-            <div class="coi-text-light fs-14">{{address?.entityAddressType?.description}}</div>
-            <div class="d-flex fs-14 mt-1">
-                <span class="coi-text-dark fw-600">{{getEntityFullAddress(address)}}</span>
-                <span class="d-flex  ms-auto">
-                    <mat-icon aria-hidden="true" (click)="editAddress(address, i)" class="me-2 cursor-pointer">edit</mat-icon>
-                    <mat-icon aria-hidden="true" (click)="confirmDelete(address, i)" class="cursor-pointer">delete</mat-icon>
+            <div class="d-flex">
+                <div class="col-md-9 col-lg-10 coi-text-light fs-14">
+                    {{address?.entityAddressType?.description}}
+                    <span class="fw-600 d-flex">{{getEntityFullAddress(address)}}</span>
+                </div>
+                <div class="col-md-3 col-lg-2 d-flex align-items-center">
+                    <span class="d-flex  ms-auto">
+                    <mat-icon aria-hidden="true" (click)="editAddress(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">edit</mat-icon>
+                    <mat-icon aria-hidden="true" (click)="confirmDelete(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">delete</mat-icon>
                 </span>
+                </div>
             </div>
         </div>
     </div>

@@ -1,21 +1,27 @@
-import { Component } from '@angular/core';
-import { AdditionalAddress } from '../../shared/entity-interface';
-import { getEndPointOptionsForCountry } from 'projects/fibi/src/app/common/services/end-point.config';
-import { deepCloneObject, hideModal, isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { Subscription } from 'rxjs';
-import { EntityDataStoreService } from '../../entity-data-store.service';
-import { EntityOverviewService } from '../entity-overview.service';
-import { CommonService } from '../../../common/services/common.service';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
-import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
-import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AdditionalAddress} from '../../shared/entity-interface';
+import {getEndPointOptionsForCountry} from 'projects/fibi/src/app/common/services/end-point.config';
+import {
+    deepCloneObject,
+    hideModal,
+    isEmptyObject,
+    openModal
+} from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import {Subscription} from 'rxjs';
+import {EntityDataStoreService} from '../../entity-data-store.service';
+import {EntityOverviewService} from '../entity-overview.service';
+import {CommonService} from '../../../common/services/common.service';
+import {HTTP_ERROR_STATUS} from '../../../app-constants';
+import {COIModalConfig, ModalActionEvent} from '../../../shared-components/coi-modal/coi-modal.interface';
+import {closeCommonModal, openCommonModal} from '../../../common/utilities/custom-utilities';
+import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
-  selector: 'app-additional-addresses',
-  templateUrl: './additional-addresses.component.html',
-  styleUrls: ['./additional-addresses.component.scss']
+    selector: 'app-additional-addresses',
+    templateUrl: './additional-addresses.component.html',
+    styleUrls: ['./additional-addresses.component.scss']
 })
-export class AdditionalAddressesComponent {
+export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     additionalAddressObj: AdditionalAddress = new AdditionalAddress();
     clearCountryField = new String('true');
     countrySearchOptions: any;
@@ -32,9 +38,11 @@ export class AdditionalAddressesComponent {
     isSaving = false;
     deletePrimaryKey = null;
     CONFIRMATION_MODAL_ID = 'address-delete-confirm-modal';
-    modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID , 'Delete', 'Cancel');
+    modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
 
-    constructor(private _entityOverviewService: EntityOverviewService, private _dataStorService: EntityDataStoreService, private _commonService: CommonService) {}
+    constructor(private _entityOverviewService: EntityOverviewService, private _dataStorService: EntityDataStoreService, private _commonService: CommonService) {
+    }
+
     ngOnInit() {
         this.countrySearchOptions = getEndPointOptionsForCountry();
         this.getDataFromStore();
@@ -42,7 +50,7 @@ export class AdditionalAddressesComponent {
     }
 
     selectedCountryEvent(event: any): void {
-        if(event) {
+        if (event) {
             console.log(event);
             this.additionalAddressObj.countryCode = event.countryCode;
             this.selectedCountry = event;
@@ -67,24 +75,22 @@ export class AdditionalAddressesComponent {
 
     addIndustry() {
         this.entityMandatoryValidation();
-        if(!this.mandatoryList.size) {
+        if (!this.mandatoryList.size) {
             this.additionalAddressObj.entityId = this.entityId;
             this.$subscriptions.push(this._entityOverviewService.addAdditionalAddress(this.additionalAddressObj).subscribe((data: any) => {
-                console.log(data);
-                let newAddress;
-                newAddress = deepCloneObject(this.additionalAddressObj);
+                const newAddress = deepCloneObject(this.additionalAddressObj);
                 newAddress.entityMailingAddressId = data.entityMailingAddressId;
                 newAddress.country = this.selectedCountry;
                 newAddress.entityAddressType = this.selectAddressType;
                 this.additionalAddresses.push(newAddress);
-                this._dataStorService.updateStore(['entityMailingAddresses'], { 'entityMailingAddresses':  this.additionalAddresses });
+                this.updateDataStore();
                 this.clearAdditionalAddress();
             }))
         }
     }
 
     onAddressTypeSelect(event) {
-        if(event) {
+        if (event) {
             this.additionalAddressObj.addressTypeCode = event[0]?.code;
             this.selectAddressType = event[0];
         } else {
@@ -103,29 +109,31 @@ export class AdditionalAddressesComponent {
 
     entityMandatoryValidation(): void {
         this.mandatoryList.clear();
-        if(!this.additionalAddressObj.addressLine1) {
+        if (!this.additionalAddressObj.addressLine1) {
             this.mandatoryList.set('addressLine1', 'Please enter addressLine1.');
         }
-        if(!this.additionalAddressObj.addressTypeCode) {
+        if (!this.additionalAddressObj.addressTypeCode) {
             this.mandatoryList.set('addressTypeCode', 'Please select addressType.');
         }
-        if(!this.additionalAddressObj.city) {
+        if (!this.additionalAddressObj.city) {
             this.mandatoryList.set('city', 'Please enter city.');
         }
-        if(!this.additionalAddressObj.countryCode) {
+        if (!this.additionalAddressObj.countryCode) {
             this.mandatoryList.set('countryCode', 'Please select country.');
         }
-        if(!this.additionalAddressObj.state) {
+        if (!this.additionalAddressObj.state) {
             this.mandatoryList.set('state', 'Please enter state.');
         }
-        if(!this.additionalAddressObj.postCode) {
+        if (!this.additionalAddressObj.postCode) {
             this.mandatoryList.set('postCode', 'Please enter postCode.');
         }
     }
 
     private getDataFromStore() {
         const entityData = this._dataStorService.getData();
-        if (isEmptyObject(entityData)) { return; }
+        if (isEmptyObject(entityData)) {
+            return;
+        }
         this.entityId = entityData?.entityDetails?.entityId;
         this.additionalAddresses = entityData.entityMailingAddresses;
     }
@@ -143,16 +151,16 @@ export class AdditionalAddressesComponent {
         if (entityOtherAddress?.addressLine2) {
             address = address + ' , ' + entityOtherAddress?.addressLine2;
         }
-        if(entityOtherAddress?.city) {
+        if (entityOtherAddress?.city) {
             address = address + ' , ' + entityOtherAddress?.city;
         }
-        if(entityOtherAddress?.state) {
+        if (entityOtherAddress?.state) {
             address = address + ' , ' + entityOtherAddress?.state;
         }
-        if(entityOtherAddress?.country?.countryName) {
+        if (entityOtherAddress?.country?.countryName) {
             address = address + ' , ' + entityOtherAddress?.country?.countryName;
         }
-        if(entityOtherAddress?.postCode) {
+        if (entityOtherAddress?.postCode) {
             address = address + ' , ' + entityOtherAddress?.postCode;
         }
         return address;
@@ -205,7 +213,7 @@ export class AdditionalAddressesComponent {
                     this.additionalAddresses[this.isEditIndex].city = this.additionalAddressObj.city;
                     this.additionalAddresses[this.isEditIndex].state = this.additionalAddressObj.state;
                     this.additionalAddresses[this.isEditIndex].postCode = this.additionalAddressObj.postCode;
-                    // this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Registration Detail updated successfully.');
+                    this.updateDataStore();
                     this.clearAdditionalAddress();
                     this.isSaving = false;
                 }, err => {
@@ -218,7 +226,7 @@ export class AdditionalAddressesComponent {
     }
 
     postConfirmation(modalAction: ModalActionEvent) {
-        if(modalAction.action == 'PRIMARY_BTN') {
+        if (modalAction.action == 'PRIMARY_BTN') {
             this.deleteAddress();
         } else {
             this.clearAdditionalAddress();
@@ -227,11 +235,11 @@ export class AdditionalAddressesComponent {
     }
 
     deleteAddress() {
-        if(!this.isSaving) {
+        if (!this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(this._entityOverviewService.deleteAdditionalAddress(this.deletePrimaryKey).subscribe((res: any) => {
                 this.additionalAddresses.splice(this.isEditIndex, 1);
-                // this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Additional address deleted successfully.');
+                this.updateDataStore();
                 this.clearAdditionalAddress();
                 this.isSaving = false;
             }, err => {
@@ -239,5 +247,13 @@ export class AdditionalAddressesComponent {
                 this.isSaving = false;
             }));
         }
+    }
+
+    updateDataStore() {
+        this._dataStorService.updateStore(['entityMailingAddresses'], {'entityMailingAddresses': this.additionalAddresses});
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
     }
 }
