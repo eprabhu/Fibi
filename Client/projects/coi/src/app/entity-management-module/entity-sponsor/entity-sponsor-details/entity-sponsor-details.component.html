@@ -14,6 +14,7 @@
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-code'"></app-common-help-text>
             </label>
             <input type="text" id="coi-entity-sponsor-code" title="Sponsor code"
+                [(ngModel)]="sponsorDetailsObj.sponsorCode"
                 aria-label="Sponsor code" maxlength="60" autocomplete="off" class="form-control" disabled />
         </div>
 
@@ -31,7 +32,7 @@
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsortype-lookup">Sponsor Type
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsortype-lookup'"></app-common-help-text>
             </label>
-            <app-look-up (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorRiskLevelOption' [defaultValue]="defaultTemplateLabel"
+            <app-look-up (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorTypeOption' [defaultValue]="sponsorDetailsObj.sponsorTypeCode"
             [uniqueId]="'coi-entity-sponsortype-lookup'">
             </app-look-up>
         </div>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EntityHistoryComponent } from './entity-history.component';
+import { SharedComponentModule } from '../../shared-components/shared-component.module';
 
 @NgModule({
   declarations: [
@@ -9,6 +10,7 @@ import { EntityHistoryComponent } from './entity-history.component';
   ],
   imports: [
     CommonModule,
+    SharedComponentModule,
     RouterModule.forChild([{ path: '', component: EntityHistoryComponent}]),
   ]
 })

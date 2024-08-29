@@ -10,17 +10,20 @@ import { EntityDataStoreService } from './entity-data-store.service';
 @Injectable()
 export class EntityManagementService {
 
-hasChangesAvailable: boolean;
-$subscriptions: Subscription[] = [];
+    hasChangesAvailable: boolean;
+    $subscriptions: Subscription[] = [];
 
+    constructor(private _commonService: CommonService, private _http: HttpClient,
+        private _dataStore: EntityDataStoreService
+    ) { }
 
-constructor(private _commonService: CommonService, private _http: HttpClient,
-    private _dataStore: EntityDataStoreService
-) { }
+    getEntityDetails(entityId) {
+        return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
+    }
 
-getEntityDetails(entityId) {
-    return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
-}
+    fetchRiskType() {
+        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
+    }
 
 }
 

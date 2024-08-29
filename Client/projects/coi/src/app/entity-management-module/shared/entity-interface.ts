@@ -1,4 +1,7 @@
-export class Create_Entity{
+export type EntityRiskProxyController = '/organization' | '/sponsor' | '/compliance' | '';
+export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
+
+export class Create_Entity {
     entityName: string = '';
     entityType: EntityType;
     primaryAddressLine1: string = '';
@@ -16,7 +19,7 @@ export class Create_Entity{
     cageNumber: number;
     humanSubAssurance?: any;
     anumalWelfareAssurance?: any;
-    animalAccreditation? : any;
+    animalAccreditation?: any;
     entityOwnershipTypeCode: any;
     entityOwnerShip: EntityOwnerShip;
 }
@@ -37,10 +40,10 @@ interface EntityType {
     updateUser: string;
 }
 
-export class IndustryDetails{
-   entityId: any;
-   entityIndustryCatIds: any = [];
-   primaryCatId: any;
+export class IndustryDetails {
+    entityId: any;
+    entityIndustryCatIds: any = [];
+    primaryCatId: any;
 }
 
 export class RegistrationDetails {
@@ -83,8 +86,45 @@ export class EntityRisk {
     riskTypeCode: any = '';
     riskLevelCode: any = '';
     description: string = '';
-    entityRiskId?: any;
     entityId: any;
+    entityRiskId?: number | null = null;
+    entity?: EntityDetails;
+    riskLevel?: RiskLevel;
+    updateTimestamp?: number;
+    updatedBy?: string;
+    riskType?: RiskType;
+}
+export class EntityRiskRO {
+    entityId?: any;
+    description?: string = '';
+    riskTypeCode?: string = '';
+    riskLevelCode?: string = '';
+    entityRiskId?: number | null = null;
+}
+
+export interface RiskType {
+    riskTypeCode: string;
+    riskCategoryCode: string;
+    description: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    isActive: boolean;
+}
+
+export interface EntityStatusType {
+    entityStatusTypeCode: string;
+    description: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    isActive: boolean;
+}
+
+export interface RiskLevel {
+    riskLevelCode: string;
+    description: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    isActive: boolean;
 }
 
 export class OtherReferenceId {
@@ -111,63 +151,93 @@ export class EntityDetailsCard {
 }
 
 export class EntireEntityDetails {
+    entityAttachments: EntityAttachmentDetails;
     entityDetails: EntityDetails;
-    entityIndustryClassifications:any = [];
-    entityMailingAddresses:any = [];
-    entityRegistratios:any = [];
+    entityIndustryClassifications: any = [];
+    entityMailingAddresses: any = [];
+    entityRegistratios: any = [];
+    entitySponsor
 }
 
+export class EntityAttachmentDetails {
+    entityAttachmentId: number;
+    attachmentNumber: number;
+    versionNumber: number;
+    versionStatus: any;
+    entityId: number;
+    comment: string;
+    attachmentTypeCode: string;
+    attachmentType: AttachmentType;
+    attachmentStatusCode: any;
+    attachmentStatus: any;
+    fileName: string;
+    mimeType: string;
+    fileDataId: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    updateUserFullame: string;
+}
+
+export interface AttachmentType {
+    attachmentTypeCode: string
+    description: string
+    updateTimestamp: number
+    updatedBy: string
+    isActive: boolean
+    isPrivate: boolean
+  }
+
 export class EntityDetails {
-        entityId: string|number;
-        entityName: string;
-        foreignName: string;
-        priorName: string;
-        shortName: string;
-        dunsNumber: any;
-        ueiNumber: any;
-        cageNumber: any;
-        websiteAddress: string;
-        startDate: any;
-        incorporationDate: any;
-        certifiedEmail: string;
-        activityText: any;
-        primaryAddressLine1: string;
-        primaryAddressLine2: string;
-        city: string;
-        state: string;
-        postCode: any;
-        isPubliclyTradedCompany: string;
-        approvedBy: string;
-        approvedTimestamp: string;
-        createdBy: string;
-        createTimestamp: string;
-        updatedBy: any;
-        updateTimestamp: any;
-        entityStatusTypeCode: string;
-        operatingStatusTypeCode: any;
-        businessEntityType: string;
-        currencyCode: string;
-        entitySourceTypeCode: string;
-        countryCode: string;
-        entityStatusType: string;
-        entityOperatingStatusType: string;
-        entitySourceType: string;
-        country: Country;
-        phoneNumber: any;
-        congressionalDistrict: any;
-        incorporatedIn: any;
-        numberOfEmployees: any;
-        federalEmployerId: any;
+    entityId: string | number;
+    entityName: string;
+    foreignName: string;
+    priorName: string;
+    shortName: string;
+    dunsNumber: any;
+    ueiNumber: any;
+    cageNumber: any;
+    websiteAddress: string;
+    startDate: any;
+    incorporationDate: any;
+    certifiedEmail: string;
+    activityText: any;
+    primaryAddressLine1: string;
+    primaryAddressLine2: string;
+    city: string;
+    state: string;
+    postCode: any;
+    isPubliclyTradedCompany: string;
+    approvedBy: string;
+    approvedTimestamp: string;
+    createdBy: string;
+    createTimestamp: string;
+    updatedBy: any;
+    updateTimestamp: any;
+    entityStatusTypeCode: string;
+    operatingStatusTypeCode: any;
+    businessEntityType: string;
+    currencyCode: string;
+    entitySourceTypeCode: string;
+    countryCode: string;
+    entityStatusType: EntityStatusType;
+    entityOperatingStatusType: string;
+    entitySourceType: string;
+    country: Country;
+    phoneNumber: any;
+    congressionalDistrict: any;
+    incorporatedIn: any;
+    numberOfEmployees: any;
+    federalEmployerId: any;
 }
 
 export class Country {
-        countryCode: string;
-        countryName: string;
-        currencyCode: string;
-        currency: Currency
-        updateTimeStamp: any;
-        updateUser: string;
-        countryTwoCode: any;
+    countryCode: string;
+    countryName: string;
+    currencyCode: string;
+    currency: Currency
+    updateTimeStamp: any;
+    updateUser: string;
+    countryTwoCode: any;
 }
 
 export class Currency {
@@ -178,32 +248,32 @@ export class Currency {
     updateTimeStamp: any;
 }
 
-export function showEntityToast(type: 'SUCCESS'|'ERROR') {
+export function showEntityToast(type: 'SUCCESS' | 'ERROR') {
     let successToast = document.getElementById('success-toast');
     let errorMsg = document.getElementById('error-toast');
-    if(type === 'SUCCESS') {
-        if(successToast) {
+    if (type === 'SUCCESS') {
+        if (successToast) {
             successToast.classList.remove('invisible');
         }
-        if(errorMsg) {
+        if (errorMsg) {
             errorMsg.classList.add('invisible');
         }
     } else {
-        if(errorMsg) {
+        if (errorMsg) {
             errorMsg.classList.remove('invisible');
         }
-        if(successToast) {
+        if (successToast) {
             successToast.classList.add('invisible');
         }
     }
 }
 
 export class EntitySponsorRisk {
-    riskTypeCode: any = '';
-    riskLevelCode: any = '';
-    description: string = '';
-    entityId: any;
-    entityRiskId: any;
+    riskTypeCode?: any = '';
+    riskLevelCode?: any = '';
+    description?: string = '';
+    entityId?: any;
+    entityRiskId?: any;
 }
 
 export class SponsorDetails {
@@ -211,6 +281,7 @@ export class SponsorDetails {
     entityId?: any;
     acronym?: string = '';
     sponsorTypeCode?: string = '';
+    sponsorCode?: any;
 }
 
 export class EntityExternalIdMappings {
@@ -228,12 +299,46 @@ export class EntityExternalIdMappings {
     updateTimestamp: number;
 }
 
-
-
 export interface EntityExternalIdType {
     externalIdTypeCode: string;
     description: string;
     updateTimestamp: number;
     updatedBy: string;
     isActive: boolean;
+}
+
+export class SubAwardOrganization {
+    entityRisks: EntityRisk[] = [];
+    subAwdOrgDetailsResponseDTO = new SubAwardOrganizationDetails();
+}
+
+export class SubAwardOrganizationDetails {
+    id?: number | null = null;
+    entityId?: string | number | null = null;
+    organizationId?: number | null = null;
+    organizationTypeCode?: string | null = null;
+    samExpirationDate?: any | null = null;
+    subAwdRiskAssmtDate?: any | null = null;
+}
+
+export class EntityRiskModalDetails  {
+    entityRisk = new EntityRisk();
+    selectedRiskTypeLookUpList: EntityRisk[] = [];
+    selectedRiskLevelLookUpList: RiskLevel[] = [];
+    defaultRiskLevel = '';
+}
+
+export class SaveAttachmentRo {
+    sectionCode: string;
+    newAttachments = new NewAttachments();
+}
+export class NewAttachments {
+    fileName: string;
+    mimeType: string;
+    attachmentTypeCode: string;
+    entityId: number;
+    comment: string;
+    fileDataId: null;
+    attachmentnumber: number;
+    versionNumber: number;
 }

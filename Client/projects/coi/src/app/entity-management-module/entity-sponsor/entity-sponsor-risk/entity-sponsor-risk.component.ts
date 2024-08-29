@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { hideModal, isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { EntitySponsorRisk } from '../../shared/entity-interface';
+import { EntireEntityDetails, EntitySponsorRisk } from '../../shared/entity-interface';
 import { Subscription } from 'rxjs';
 import { EntitySponsorService } from '../entity-sponsor.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
@@ -17,15 +17,15 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 })
 export class EntitySponsorRiskComponent implements OnInit {
 
-    entitySponsorRisk: EntitySponsorRisk = new EntitySponsorRisk();
+    entitySponsorRiskRO: EntitySponsorRisk = new EntitySponsorRisk();
     entitySponsorRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#false#false';
     entitySponsorRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false';
     @Input() sectionName: any;
     @Input() sectionId: any;
+    // @Input() entitySponsorDetails: any;
     mandatoryList = new Map();
     $subscriptions: Subscription[] = [];
-    entityId: any;
-    entitySponsorRisks: any;
+    entitySponsorRisksDetails: any;
     entityRiskTypeList: any;
     selectedRiskType: any;
     selectedRiskLevel: any;
@@ -50,7 +50,6 @@ export class EntitySponsorRiskComponent implements OnInit {
         window.scrollTo(0,0);
         this.fetchRisk();
         this.getDataFromStore();
-        this.fetchEntityDetails();
         this.listenDataChangeFromStore();
     }
 
@@ -59,23 +58,26 @@ export class EntitySponsorRiskComponent implements OnInit {
     }
 
     fetchRisk() {
-        this.$subscriptions.push(this._entitySponsorService.fetchRiskType().subscribe((data: any) => {
-            if(data?.length) {
-                this.entityRiskTypeList = data.filter(ele => ele.riskCategoryCode == 'SP');
-            }
-        }))
+        this.entityRiskTypeList = this._dataStoreService.getFilterRiskByCode('SP');
     }
 
     private getDataFromStore() {
-        const entityData = this._dataStoreService.getData();
-        if (isEmptyObject(entityData)) { return; }
-        this.entityId = entityData?.entityDetails?.entityId;
+        const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
+        if (isEmptyObject(ENTITY_DATA)) { return; }
+        if (this.entityDetails?.entityId != ENTITY_DATA?.entityDetails?.entityId) {
+            this.fetchEntityDetails(ENTITY_DATA?.entityDetails?.entityId);
+        }
+        this.entityDetails = ENTITY_DATA.entityDetails;
     }
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
-                this.getDataFromStore();
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
+                if (dependencies !==  'ENTITY_RISK_TYPE') {
+                    this.getDataFromStore();
+                } else {
+                    this.fetchRisk();
+                }
             })
         );
     }
@@ -86,11 +88,11 @@ export class EntitySponsorRiskComponent implements OnInit {
 
     onRiskSelected(event) {
         if (event) {
-            this.entitySponsorRisk.riskTypeCode = event[0].riskTypeCode;
+            this.entitySponsorRiskRO.riskTypeCode = event[0].riskTypeCode;
             this.selectedRiskType = event[0];
 
         } else {
-            this.entitySponsorRisk.riskTypeCode = null;
+            this.entitySponsorRiskRO.riskTypeCode = null;
             this.selectedRiskType = null;
 
         }
@@ -98,11 +100,11 @@ export class EntitySponsorRiskComponent implements OnInit {
 
     onRiskLevelSelected(event) {
         if (event) {
-            this.entitySponsorRisk.riskLevelCode = event[0].code;
+            this.entitySponsorRiskRO.riskLevelCode = event[0].code;
             this.selectedRiskLevel = event[0];
 
         } else {
-            this.entitySponsorRisk.riskLevelCode = null;
+            this.entitySponsorRiskRO.riskLevelCode = null;
             this.selectedRiskLevel = null;
         }
     }
@@ -112,7 +114,7 @@ export class EntitySponsorRiskComponent implements OnInit {
         setTimeout(() => {
             this.isEditRisk = false;
             this.mandatoryList.clear();
-            this.entitySponsorRisk = new EntitySponsorRisk();
+            this.entitySponsorRiskRO = new EntitySponsorRisk();
             this.defaultValue = '';
             this.selectedLookUpList = [];
             this.selectedRiskTypeLookUpList = [];
@@ -120,80 +122,71 @@ export class EntitySponsorRiskComponent implements OnInit {
     }
 
     addOrUpdateRisk() {
-        if(!this.isEditRisk){
-            this.entityMandatoryValidation();
-            if (!this.mandatoryList.size) {
-                this.saveSponsorRisk()
-            }
-        }
-        else{
-            this.entityMandatoryValidation();
-            if (!this.mandatoryList.size) {
-            this.UpdateSponsorRisk();
-            }
+        if (this.entityMandatoryValidation()) {
+            this.isEditRisk ?  this.UpdateSponsorRisk() : this.saveSponsorRisk();
         }
     }
 
-    entityMandatoryValidation(): void {
+    entityMandatoryValidation(): boolean {
         this.mandatoryList.clear();
-        if (!this.entitySponsorRisk.riskLevelCode) {
+        if (!this.entitySponsorRiskRO.riskLevelCode) {
             this.mandatoryList.set('riskLevel', 'Please select risk level.');
         }
-        if (!this.entitySponsorRisk.riskTypeCode) {
+        if (!this.entitySponsorRiskRO.riskTypeCode) {
             this.mandatoryList.set('riskType', 'Please select risk type.');
         }
-        if (!this.entitySponsorRisk.description) {
+        if (!this.entitySponsorRiskRO.description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
         }
+
+        return this.mandatoryList.size === 0
     }
 
     saveSponsorRisk() {
-        this.entitySponsorRisk.entityId = this.entityId;
-            this.$subscriptions.push(this._entitySponsorService.saveSponsorRisk(this.entitySponsorRisk).subscribe((data: any) => {
+        this.entitySponsorRiskRO.entityId = this.entityDetails.entityId;
+            this.$subscriptions.push(this._entitySponsorService.saveSponsorRisk(this.entitySponsorRiskRO).subscribe((data: any) => {
                 let test:any = {};
                 test.riskLevelDescription = this.selectedRiskLevel?.description;
                 test.riskTypeDescription = this.selectedRiskType?.description;
                 test.entityRiskId = data.entityRiskId;
-                test.riskLevelCode = this.entitySponsorRisk?.riskLevelCode;
-                test.riskTypeCode = this.entitySponsorRisk.riskTypeCode;
-                test.description = this.entitySponsorRisk.description;
-                this.entitySponsorRisks.push(test);
-                this._dataStoreService.updateStore(['entitySponsorRisks'], { 'entitySponsorRisks':  this.entitySponsorRisks });
+                test.riskLevelCode = this.entitySponsorRiskRO?.riskLevelCode;
+                test.riskTypeCode = this.entitySponsorRiskRO.riskTypeCode;
+                test.description = this.entitySponsorRiskRO.description;
+                this.entitySponsorRisksDetails.push(test);
+                this._dataStoreService.updateStore(['entitySponsorRisksDetails'], { 'entitySponsorRisksDetails':  this.entitySponsorRisksDetails });
                 this.clearRiskDetails();
         }))
     }
 
     UpdateSponsorRisk(){
-        this.$subscriptions.push(this._entitySponsorService.updateSponsorRisk(this.entitySponsorRisk).subscribe((data: any) => {
+        this.$subscriptions.push(this._entitySponsorService.updateSponsorRisk(this.entitySponsorRiskRO).subscribe((data: any) => {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk updated successfully');
             if (data) {
-                console.log("data is ", data);
-                
-                console.log("desc", this.selectedRiskLevel?.description);
-                
-                this.entitySponsorRisks[this.isEditIndex].riskLevelDescription = this.selectedRiskLevel?.description;
+                if (this.selectedRiskLevel?.description) {
+                    this.entitySponsorRisksDetails[this.isEditIndex].riskLevel.description = 
+                    this.entitySponsorRisksDetails[this.isEditIndex].description = this.selectedRiskLevel.description;
+                }
 
-                console.log("test" ,  this.entitySponsorRisks[this.isEditIndex].riskLevelDescription);
+                if (this.selectedRiskType?.description) {
+                    this.entitySponsorRisksDetails[this.isEditIndex].riskType.description = 
+                    this.entitySponsorRisksDetails[this.isEditIndex].description = this.selectedRiskType.description;
+                }
                 
-                this.entitySponsorRisks[this.isEditIndex].riskTypeDescription = this.selectedRiskType?.description;
-                this.entitySponsorRisks[this.isEditIndex].entityRiskId = this.entitySponsorRisk.entityRiskId;
-                this.entitySponsorRisks[this.isEditIndex].riskLevelCode = this.entitySponsorRisk.riskLevelCode;
-                this.entitySponsorRisks[this.isEditIndex].riskTypeCode = this.entitySponsorRisk.riskTypeCode;
-                this.entitySponsorRisks[this.isEditIndex].description = this.entitySponsorRisk.description;
-                this._dataStoreService.updateStore(['entitySponsorRisks'], { 'entitySponsorRisks': this.entitySponsorRisks });   
+                this.entitySponsorRisksDetails[this.isEditIndex].entityRiskId = this.entitySponsorRiskRO.entityRiskId;
+                this.entitySponsorRisksDetails[this.isEditIndex].riskLevelCode = this.entitySponsorRiskRO.riskLevelCode;
+                this.entitySponsorRisksDetails[this.isEditIndex].riskTypeCode = this.entitySponsorRiskRO.riskTypeCode;
+                this.entitySponsorRisksDetails[this.isEditIndex].description = this.entitySponsorRiskRO.description;
+                this._dataStoreService.updateStore(['entitySponsorRisksDetails'], { 'entitySponsorRisksDetails': this.entitySponsorRisksDetails });   
             }
             this.clearRiskDetails();
             
         }))
     }
 
-    fetchEntityDetails(){
-        this.$subscriptions.push(this._entitySponsorService.fetchEntityDetails(this.entityId).subscribe((data: any)=>{
-            this.entitySponsorRisks = data.entityRisks;
-            this.entityDetails = data;    
-        }));
+    private fetchEntityDetails(entityId: string | number){
+        this.entitySponsorRisksDetails = this._entitySponsorService.entitySponsorDetails.entityRisks;
     }
-    
+
     confirmDeleteRisk(risk, index) {
         this.deleteRiskObj = risk;
         this.isEditIndex = index;
@@ -211,7 +204,7 @@ export class EntitySponsorRiskComponent implements OnInit {
         if(!this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(this._entitySponsorService.deleteRisk(this.deleteRiskObj.entityRiskId).subscribe((res: any) => {
-                this.entitySponsorRisks.splice(this.isEditIndex, 1);
+                this.entitySponsorRisksDetails.splice(this.isEditIndex, 1);
                 this.deleteRiskObj = null;
                 this.isSaving = false;
             }, err => {
@@ -230,12 +223,12 @@ export class EntitySponsorRiskComponent implements OnInit {
     }
 
     setSponsorRiskDetails(risk: any){
-        this.entitySponsorRisk.entityRiskId = risk.entityRiskId;
-        this.entitySponsorRisk.riskTypeCode = risk.riskTypeCode;
-        this.entitySponsorRisk.riskLevelCode = risk.riskLevelCode;
-        this.entitySponsorRisk.description = risk.description;
+        this.entitySponsorRiskRO.entityRiskId = risk.entityRiskId;
+        this.entitySponsorRiskRO.riskTypeCode = risk.riskTypeCode;
+        this.entitySponsorRiskRO.riskLevelCode = risk.riskLevelCode;
+        this.entitySponsorRiskRO.description = risk.description;
         this.defaultValue = risk?.riskLevelDescription ? risk?.riskLevelDescription : risk?.riskLevel?.description;
         this.selectedRiskTypeLookUpList = [this.entityRiskTypeList.find((_risk: any) => risk?.riskTypeCode ? risk?.riskTypeCode : risk?.riskType?.riskTypeCode === _risk.riskTypeCode)];
-        this.entitySponsorRisk.description = risk.description;
+        this.entitySponsorRiskRO.description = risk.description;
     }
 }

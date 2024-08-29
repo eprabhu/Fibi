@@ -4,7 +4,7 @@
             <mat-icon class="icon-bg me-2 my-2 coloured-icons fs-14" aria-hidden="true">warning</mat-icon>
             <span class="fs-16 col fw-medium" id="coi-entity-risk">{{sectionName}}<app-common-help-text
                     [subSectionId]="2610" [elementId]="'coi-entity-sponsor-risk'"></app-common-help-text></span>
-            <div class="col-auto" *ngIf="entitySponsorRisks?.length">
+            <div class="col-auto" *ngIf="entitySponsorRisksDetails?.length">
                 <button id="additional-address-add-button" class="btn btn-primary fs-14 d-inline-flex"
                     title="'Click here to industry details'" aria-label="'Click here to industry details'"
                     (click)="addSponsorRisk(true)">
@@ -12,13 +12,13 @@
                 </button>
             </div>
         </div>
-        <div *ngIf="!entitySponsorRisks?.length">
+        <div *ngIf="!entitySponsorRisksDetails?.length">
             <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Risk'"
                 (buttonAction)="addSponsorRisk($event)"></app-no-information>
         </div>
-        <div *ngIf="entitySponsorRisks?.length">
+        <div *ngIf="entitySponsorRisksDetails?.length">
             <div class="coi-card-regular d-flex align-items-between px-2 py-1 bg-white"
-                *ngFor="let risk of entitySponsorRisks; let isFirst = first; let isLast = last; let i = index"
+                *ngFor="let risk of entitySponsorRisksDetails; let isFirst = first; let isLast = last; let i = index"
                 [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''">
                 <div class="col-md-9 col-lg-10 coi-text-light fs-14">{{risk?.riskType ? risk?.riskType?.description :
                     risk?.riskTypeDescription}} -
@@ -37,12 +37,12 @@
                             (click)="editRisk(risk, i)">
                             <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
                         </button>
-                        <button
+                        <!-- <button
                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                             title="Click here to delete risk." aria-label="Click here to delete risk."
                             (click)="confirmDeleteRisk(risk, i)">
                             <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
-                        </button>
+                        </button> -->
                     </span>
                 </div>
             </div>
@@ -51,7 +51,7 @@
 </div>
 
 <!-- entity-sponsor-risk-modal -->
-<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addEntitySponsorRisk" role="dialog">
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addEntitySponsorRisk" role="dialog" tabindex="-1" aria-label="Add entity risk">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -98,7 +98,7 @@
                                 [elementId]="'coi-sponsor-risk-desc'"></app-common-help-text>
                         </label>
                         <textarea appAutoGrow class="form-control custom-height" id="coi-sponsor-risk-desc" rows="1"
-                            [(ngModel)]="entitySponsorRisk.description" appTailingSpaceRemover [limit]=2000
+                            [(ngModel)]="entitySponsorRiskRO.description" appTailingSpaceRemover [limit]=2000
                             appLengthValidator
                             [ngClass]="(mandatoryList?.has('riskDescription')) ? 'is-invalid d-block' : ''"
                             [styleList]="'mt-2 float-end word-count'" title="Risk Description"
@@ -123,7 +123,7 @@
     </div>
 </div>
 
-<app-coi-modal [modalConfig]="modalConfig" (modalAction)="postConfirmation($event)">
+<!-- <app-coi-modal [modalConfig]="modalConfig" (modalAction)="postConfirmation($event)">
     <ng-container modal-header>
         <span>Confirmation</span>
     </ng-container>
@@ -133,4 +133,4 @@
                 - {{deleteRiskObj?.riskLevel?.description ? deleteRiskObj?.riskLevel?.description :
                 deleteRiskObj?.riskLevelDescription}}</strong>?</p>
     </ng-container>
-</app-coi-modal>
+</app-coi-modal> -->

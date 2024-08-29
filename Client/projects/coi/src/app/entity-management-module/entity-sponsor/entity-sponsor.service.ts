@@ -2,24 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class EntitySponsorService {
+
+    entitySponsorDetails: any = {};
+
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-
-    saveSponsorRisk(sponsorRiskRO) {
-        return this._http.post(this._commonService.baseUrl + '/entity/sponsor/saveRisk', sponsorRiskRO);
-    }
-
-    fetchRiskType() {
-        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
-    }
-
-    fetchEntityDetails(entityId) {
+    
+    fetchEntitySponsorDetails(entityId) {
         return this._http.get(`${this._commonService.baseUrl}/entity/sponsor/fetch/${entityId}`);
+    }
+
+    saveSponsorRisk(sponsorRiskRO: any) {
+        return this._http.post(this._commonService.baseUrl + '/entity/sponsor/saveRisk', sponsorRiskRO);
     }
 
     deleteRisk(entityRiskId) {

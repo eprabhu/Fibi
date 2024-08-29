@@ -44,7 +44,7 @@ export class ApplyToAllModalComponent {
         return this.mandatoryList.size === 0;
     }
 
-    applyToAllmodalAction(modalAction: ModalActionEvent) {
+    applyToAllmodalAction(modalAction: ModalActionEvent): void {
         switch (modalAction.action) {
             case 'CLOSE_BTN':
             case 'SECONDARY_BTN':
