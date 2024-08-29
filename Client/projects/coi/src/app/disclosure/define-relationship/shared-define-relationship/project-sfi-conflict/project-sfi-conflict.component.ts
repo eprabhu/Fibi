@@ -120,7 +120,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
 
     saveProjectSfiConflict(sfiDetails: CoiDisclEntProjDetail, sfiIndex: number): void {
         if (this.validateProjectSfiConflict(sfiDetails, sfiIndex) && sfiDetails?.isDataChanged) {
-            this._commonService.setLoaderRestriction();
+            // this._commonService.setLoaderRestriction();
             this.$subscriptions.push(
                 this.defineRelationshipService.saveProjectSfiConflict(this.getProjectSfiRelationConflictRO(sfiDetails))
                     .subscribe((res: SaveProjectSfiConflict) => {
@@ -129,7 +129,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
                     }, (_error: any) => {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
                     }));
-            this._commonService.removeLoaderRestriction();
+            // this._commonService.removeLoaderRestriction();
         }
     }
 

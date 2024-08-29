@@ -27,7 +27,6 @@ export class DefineRelationshipComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
-        this.defineRelationshipService.clearAllServiceData();
     }
 
     private listenDisclosureHeaderChange(): void {

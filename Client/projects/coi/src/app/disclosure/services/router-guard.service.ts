@@ -7,6 +7,8 @@ import { CommonService } from '../../common/services/common.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './coi.service';
 import { map } from 'rxjs/operators';
 import { openCommonModal } from '../../common/utilities/custom-utilities';
+import { DefineRelationshipDataStoreService } from '../define-relationship/services/define-relationship-data-store.service';
+import { DefineRelationshipService } from '../define-relationship/services/define-relationship.service';
 
 @Injectable()
 export class RouterGuardService  {
@@ -20,7 +22,10 @@ export class RouterGuardService  {
         }
     };
     error: string;
-    constructor(private _dataStore: DataStoreService, private _commonService: CommonService, private _coiService: CoiService) { }
+    constructor(private _dataStore: DataStoreService, private _commonService: CommonService, private _coiService: CoiService,
+                private _defineRelationshipService: DefineRelationshipService,
+                private _defineRelationshipDataStore: DefineRelationshipDataStoreService,
+    ) { }
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
         this._coiService.certificationResponseErrors = [];
@@ -48,6 +53,9 @@ export class RouterGuardService  {
             openCommonModal('disclosure-unsaved-changes-modal');
             return false;
         } else {
+            // for clearing define relationship datas
+            this._defineRelationshipService.clearAllServiceData();
+            this._defineRelationshipDataStore.setStoreData([]);
             return true;
         }
     }
