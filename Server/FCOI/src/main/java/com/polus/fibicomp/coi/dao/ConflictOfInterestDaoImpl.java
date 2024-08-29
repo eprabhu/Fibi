@@ -28,6 +28,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.polus.core.constants.CoreConstants;
 import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
@@ -1557,7 +1558,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				DisclosureDetailDto detail = new DisclosureDetailDto();
 				if (moduleCode == Constants.AWARD_MODULE_CODE) {
 					detail.setModuleCode(Constants.AWARD_MODULE_CODE);
-					detail.setModuleItemId(rset.getInt("AWARD_ID"));
+					detail.setModuleItemId(rset.getString("AWARD_NUMBER"));
 					detail.setModuleItemKey(rset.getString("AWARD_NUMBER"));
 					detail.setTitle(rset.getString("TITLE"));
 					detail.setStartDate(rset.getTimestamp("BEGIN_DATE"));
@@ -1578,7 +1579,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				}
 				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
 					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
-					detail.setModuleItemId(rset.getInt("PROPOSAL_ID"));
+					detail.setModuleItemId(rset.getString("PROPOSAL_ID"));
 					detail.setModuleItemKey(rset.getString("PROPOSAL_ID"));
 					detail.setTitle(rset.getString("TITLE"));
 					detail.setStartDate(rset.getTimestamp("START_DATE"));
@@ -1600,6 +1601,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Exception in getProjectsBasedOnParams: {} ", e.getMessage());
+			throw new ApplicationException("Unable to fetch data!", e, CoreConstants.DB_PROC_ERROR);
 		}
 		return awardDetails;
 	}

@@ -124,11 +124,11 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                 .homeUnit(vo.getHomeUnit())
                 .dispositionStatusCode(DISPOSITION_STATUS_PENDING)
                 .reviewStatusCode(REVIEW_STATUS_PENDING)
-                .updatedBy(AuthenticatedUser.getLoginPersonId())
+                .updatedBy(vo.getPersonId())
                 .build();
         disclosureDao.saveOrUpdateCoiDisclosure(coiDisclosure);
         List<CoiDisclProjects> disclosureProjects = new ArrayList<>();
-        String loginPersonId = AuthenticatedUser.getLoginPersonId();
+        String loginPersonId = vo.getPersonId();
         if (vo.getFcoiTypeCode().equals(Constants.PROJECT_DISCL_FCOI_TYPE_CODE)) {
             CoiDisclProjects coiDisclProject = CoiDisclProjects.builder().
                     disclosureId(coiDisclosure.getDisclosureId())
@@ -167,7 +167,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_CREATED)
                     .disclosureId(coiDisclosure.getDisclosureId()).disclosureNumber(coiDisclosure.getDisclosureNumber())
                     .fcoiTypeCode(coiDisclosure.getFcoiTypeCode()).revisionComment(coiDisclosure.getRevisionComment())
-                    .reporter(AuthenticatedUser.getLoginUserFullName())
+                    .reporter(personDao.getPersonFullNameByPersonId(loginPersonId))
                     .build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (
@@ -307,10 +307,6 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             coiConflictHistory.setUpdatedBy(coiDisclEntProjDetails.getUpdatedBy());
             coiConflictHistory.setUpdateTimestamp(coiDisclEntProjDetails.getUpdateTimestamp());
             DisclosureActionLogDto actionLogDto = new DisclosureActionLogDto();
-//            List<CoiConflictHistory> coiConflictHistoryList = conflictOfInterestDao.getCoiConflictHistory(vo.getDisclosureDetailsId());
-//            actionLogDto.setActionTypeCode(coiConflictHistoryList.isEmpty()
-//                    ? Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS
-//                    : Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_CONFLICT_STATUS);
             actionLogDto.setActionTypeCode(actionTypeCode);
             actionLogDto.setNewConflictStatus(coiDisclEntProjDetails.getCoiProjConflictStatusType().getDescription());
             if (Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS.equalsIgnoreCase(actionTypeCode)) {
@@ -544,7 +540,6 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclComment.setCommentId(entityProjectRelation.getCommentId());
         disclComment.setComment(entityProjectRelation.getComment());
         disclComment.setComponentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE);        //Disclosure detail comment
-//		disclComment.setCommentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMMENT_TYPE);		//TODO Disclosure detail comment
         disclComment.setCommentPersonId(AuthenticatedUser.getLoginPersonId());
         disclComment.setDocumentOwnerPersonId(AuthenticatedUser.getLoginPersonId());
         disclComment.setIsPrivate(false);

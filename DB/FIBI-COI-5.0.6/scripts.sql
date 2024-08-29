@@ -1,0 +1,3 @@
+
+INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+VALUES ('31', 'Disclosure Synced', 'Disclosure Synced', now(), 'quickstart');

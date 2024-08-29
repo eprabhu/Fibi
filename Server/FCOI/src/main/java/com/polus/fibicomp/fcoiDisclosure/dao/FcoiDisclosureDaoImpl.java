@@ -11,6 +11,7 @@ import com.polus.core.constants.CoreConstants;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
@@ -59,6 +60,9 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
 
     @Value("${oracledb}")
     private String oracledb;
+
+    @Autowired
+    private ActionLogService actionLogService;
 
     @Override
     public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
@@ -844,11 +848,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             session.flush();
         } catch (Exception e) {
             logger.error("Exception on syncFcoiDisclProjectsAndEntities for coiDisclProjectId : {} | {}", coiDisclProjectId, e.getMessage());
-//            throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
-        } finally {
-
         }
-//        return null;
     }
 
     @Override
@@ -909,10 +909,13 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             statement.setInt(2, disclosureNumber);
             statement.setString(3, AuthenticatedUser.getLoginPersonId());
             statement.execute();
+            DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_SYNCED)
+                    .disclosureId(disclosureId).disclosureNumber(disclosureNumber)
+                    .reporter(AuthenticatedUser.getLoginUserFullName())
+                    .build();
+            actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Exception in syncFCOIDisclosure {}", e.getMessage());
-//            throw new ApplicationException("Exception in syncFCOIDisclosure ", e, CoreConstants.DB_PROC_ERROR);
         }
     }
 
