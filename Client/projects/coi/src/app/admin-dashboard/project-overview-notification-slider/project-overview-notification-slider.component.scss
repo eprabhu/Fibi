@@ -1,0 +1,33 @@
+.ck-editor__editable {
+    min-height: 100px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+::ng-deep .ck.ck-balloon-panel {
+    z-index: 1060 !important;
+}
+
+::ng-deep .ck.ck-editor__editable_inline {
+    border: 1px solid #d3d1d1 !important;
+    min-height: 100px;
+    max-height: 280px;
+    overflow-y: auto
+}
+
+.recipient-file-chips span {
+    display: inline-block;
+    padding: 3px 8px 3px 3px;
+    border-radius: 15px;
+    margin-right: 5px;
+    margin-top: 7px;
+    font-size: 1.2rem;
+}
+
+.text-color {
+    color: #fff;
+}
+
+.bg-recipient-user-fileChips {
+    background: #9D6589 !important;
+}

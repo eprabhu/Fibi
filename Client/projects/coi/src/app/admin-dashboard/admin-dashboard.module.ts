@@ -12,12 +12,13 @@ import { EntityDetailsModule } from '../disclosure/entity-details/entity-details
 import { ProjectOverviewComponent } from './project-overview/project-overview.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ProjectOverviewCommentsSliderComponent } from './project-overview-comments-slider/project-overview-comments-slider.component';
+import { ProjectOverviewNotificationSliderComponent } from './project-overview-notification-slider/project-overview-notification-slider.component';
 
 const routes: Routes = [{path: '', component: AdminDashboardComponent}];
 
 @NgModule({
     declarations: [
-        AdminDashboardComponent , ProjectOverviewComponent , ProjectOverviewCommentsSliderComponent
+        AdminDashboardComponent , ProjectOverviewComponent , ProjectOverviewCommentsSliderComponent , ProjectOverviewNotificationSliderComponent
     ],
     imports: [
         CommonModule,

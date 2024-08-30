@@ -298,3 +298,22 @@ export interface Unit {
     parentUnitName: any;
     organizationName: any;
 }
+
+export class NotificationObject {
+  subject: string;
+  message: string;
+  moduleItemKey: string;
+  recipients = [];
+  description: string;
+  disclosureId: number;
+  notifyType: string;
+  notificationTypeId: string;
+  personId: string;
+  projectTypeCode: string;
+  projectId: string;  
+}
+
+export class GetNotificationsRO{
+    moduleCode: number = 8;
+    subModuleCode: number = 0;
+}
