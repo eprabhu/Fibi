@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { EntireEntityDetails, EntityDetails, EntityRisk, EntityRiskProxyController, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskRO } from '../../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityRisk, EntityRiskProxyController, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskRO, RiskType, RiskLevel } from '../../shared/entity-interface';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
@@ -7,7 +7,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { EntityRiskSectionService } from './entity-risk-section.service';
-import { HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
 
 @Component({
@@ -28,7 +28,8 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     editIndex: number = -1;
     isOpenRiskModal = false;
     mandatoryList = new Map();
-    entityRiskTypeList: any[] = [];
+    entityRiskTypeList: RiskType[] = [];
+    entityRiskLevelList: RiskLevel[] = [];
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
     entityRiskModalDetails = new EntityRiskModalDetails();
@@ -58,14 +59,46 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                dependencies ===  'ENTITY_RISK_TYPE' ? this.fetchRisk() : this.getDataFromStore();
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             }));
     }
 
     private fetchRisk(): void {
-        this.entityRiskTypeList = this._dataStoreService.getFilterRiskByCode(this.riskCategoryCode);
+        this.fetchRiskTypes();
+        this.fetchRiskLevels();
     }
+
+    private fetchRiskLevels(): void {
+        this.$subscriptions.push(
+            this._entityRiskSectionService.fetchRiskLevels(this.getSectionCode())
+                .subscribe((data: any) => {
+                    this.entityRiskLevelList = data.map(item => item.entityRiskLevel);
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                }));
+    }
+
+    private fetchRiskTypes(): void {
+        this.$subscriptions.push(
+            this._entityRiskSectionService.fetchRiskTypes(this.riskCategoryCode)
+                .subscribe((data: RiskType[]) => {
+                    this.entityRiskTypeList = data;
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                }));
+    }
+
+    getSectionCode(): string {
+        switch (this.riskCategoryCode) {
+            case 'CO': return '4'; // Compliance - Attachment
+            case 'OR': return '3'; // Organization - Attachment
+            case 'SP': return '2'; // Sponsor - Attachment
+            case 'EN': return '1'; // General - Attachment
+            default: return '';
+        }
+    }
+
 
     private clearRiskDetails(): void {
         closeCommonModal(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID);
@@ -147,9 +180,10 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     private setSponsorRiskDetails(risk: EntityRisk): void {
         this.entityRiskModalDetails.entityRisk = deepCloneObject(risk);
-        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((_risk: any) => risk?.riskTypeCode === _risk.riskTypeCode)
+        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((_risk: any) => risk?.riskTypeCode === _risk.riskTypeCode);
+        const SELECTED_RISK_LEVEL = this.entityRiskTypeList.find((_risk: any) => risk?.riskLevelCode === _risk.riskLevelCode);
         this.entityRiskModalDetails.selectedRiskTypeLookUpList = [deepCloneObject(SELECTED_RISK_TYPE)];
-        this.entityRiskModalDetails.defaultRiskLevel = this.entityRiskModalDetails.entityRisk.riskLevel.description;
+        this.entityRiskModalDetails.selectedRiskLevelLookUpList = [deepCloneObject(SELECTED_RISK_LEVEL)];
     }
 
     onRiskTypeSelected(event: any[] | null): void {
@@ -159,7 +193,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     onRiskLevelSelected(event: any[] | null): void {
         this.entityRiskModalDetails.entityRisk.riskLevel = event ? event[0] : null;
-        this.entityRiskModalDetails.entityRisk.riskLevelCode = event ? event[0]?.code : null;
+        this.entityRiskModalDetails.entityRisk.riskLevelCode = event ? event[0]?.riskLevelCode : null;
     }
 
     riskModalActions(modalAction: ModalActionEvent): void {

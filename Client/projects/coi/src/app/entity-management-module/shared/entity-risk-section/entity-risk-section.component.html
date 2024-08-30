@@ -94,7 +94,8 @@
                         <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-org-risk-level'"></app-common-help-text>
                     </label>
                     <app-look-up (selectedResult)="onRiskLevelSelected($event)" [options]="entityRiskLevelOption"
-                        [defaultValue]="entityRiskModalDetails.defaultRiskLevel" [selectedLookUpList]="entityRiskModalDetails.selectedRiskLevelLookUpList"
+                        [isExternalArray]="true" [externalArray]="entityRiskLevelList"
+                        [selectedLookUpList]="entityRiskModalDetails.selectedRiskLevelLookUpList"
                         [uniqueId]="'coi-org-risk-level'" [isError]="mandatoryList?.has('riskLevel')"></app-look-up>
                     <div *ngIf="mandatoryList?.has('riskLevel')" class="invalid-feedback d-block fs-13">
                         {{mandatoryList?.get('riskLevel')}}

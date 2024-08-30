@@ -8,7 +8,7 @@ import { EntityManagementService } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { EntireEntityDetails, EntityDetails, showEntityToast } from '../../shared/entity-interface';
-import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntitySubAwardService } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
@@ -59,10 +59,8 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                if (dependencies !== 'ENTITY_RISK_TYPE') {
-                    this.getDataFromStore();
-                }
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             })
         );
     }
