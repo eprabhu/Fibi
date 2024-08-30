@@ -26,6 +26,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
     selectedType: any;
     selectedRegistrationType = [];
     isEditIndex: null | number = null;
+    isEditMode = false;
     deleteEntityRegistrationId = null;
     isSaving = false;
     entityRegistrationDefaultValue = '';
@@ -62,6 +63,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
         }
         this.entityId = entityData?.entityDetails?.entityId;
         this.entityRegistrations = entityData.entityRegistrations;
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     clearRegistrationDetails() {

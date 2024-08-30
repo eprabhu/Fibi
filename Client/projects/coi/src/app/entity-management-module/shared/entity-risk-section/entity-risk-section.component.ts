@@ -32,6 +32,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     entityRiskLevelList: RiskLevel[] = [];
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
+    isEditMode = false;
     entityRiskModalDetails = new EntityRiskModalDetails();
     entityRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#false#false';
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false'
@@ -55,6 +56,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     private listenDataChangeFromStore(): void {

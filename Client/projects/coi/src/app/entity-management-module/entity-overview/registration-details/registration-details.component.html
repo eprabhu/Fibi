@@ -4,7 +4,7 @@
             <label for="coi-entity-reg-details">
                 Registration Details<app-common-help-text [subSectionId]="2604" [elementId]="'coi-entity-reg-details'"></app-common-help-text>
             </label></div>
-        <div class="col-auto" *ngIf="entityRegistrations.length">
+        <div class="col-auto" *ngIf="entityRegistrations.length && isEditMode">
             <button id="additional-address-add-button"
                 class="btn btn-primary fs-14 d-inline-flex" title="'Click here to registration details'"
                 aria-label="'Click here to registration details'" (click)="addRegistrationDetails(true)">
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div *ngIf="!entityRegistrations.length">
-        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Registration Details'" (buttonAction)="addRegistrationDetails($event)"></app-no-information>
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Registration Details'" (buttonAction)="addRegistrationDetails($event)"></app-no-information>
     </div>
     <div *ngIf="entityRegistrations.length" class="row mx-0 row-gap-2">
         <div *ngFor="let registration of entityRegistrations;let isLast = last;let i = index"
@@ -25,7 +25,7 @@
                         <span class="d-flex coi-text-light fw-600">{{registration?.regNumber}}</span>
                     </div>
                     <div class="col-md-3 col-lg-2 d-flex align-items-center">
-                        <span class="d-flex  ms-auto">
+                        <span class="d-flex  ms-auto" *ngIf="isEditMode">
                         <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRelationship(registration, i)">edit</mat-icon>
                         <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDelete(registration, i)">delete</mat-icon>
                     </span>

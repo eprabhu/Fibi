@@ -31,6 +31,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     isOpenVersionModal = false;
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
+    isEditMode = false;
     currentAttachment: EntityAttachment;
     attachmentInputType: AttachmentInputType = '';
     filteredEntityAttachmentsList: EntityAttachment[] = [];
@@ -58,6 +59,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     private listenDataChangeFromStore(): void {
@@ -69,9 +71,9 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
 
     /**
      * Filters the latest versions of entity attachments.
-     * 
+     *
      * This method processes the `entityAttachmentsList` to group attachments by their
-     * `attachmentNumber`, sorts them by `versionNumber`, and then stores only the latest 
+     * `attachmentNumber`, sorts them by `versionNumber`, and then stores only the latest
      * version in the `filteredEntityAttachmentsList`. If an attachment has older versions,
      * they are stored in the `versionList` property of the latest attachment.
      */

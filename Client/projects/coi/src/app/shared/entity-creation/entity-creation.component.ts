@@ -40,7 +40,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     @Input() initalProceed = new Subject();
     @Input() createEntityObj: Create_Entity = new Create_Entity();
     @Input() countryDetails: Country = new Country();
-    @Input() canNavigateToEntity:boolean = true;
+    @Input() canNavigateToEntity: boolean = true;
+    @Input() isEditMode = true;
     ownershipTypOptions = 'ENTITY_OWNERSHIP_TYPE#OWNERSHIP_TYPE_CODE#false#false';
     @Output() emitSaveObj = new EventEmitter<any>();
     @Output() emitEntityRO = new EventEmitter<any>();

@@ -32,6 +32,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     addressTypOptions = 'ENTITY_ADDRESS_TYPE#ADDRESS_TYPE_CODE#false#false';
     selectedAddressType = [];
     isEditIndex: null | number = null;
+    isEditMode = false;
     addressTypeDefaultValue = '';
     selectAddressType = null;
     selectedCountry = null;
@@ -135,6 +136,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         }
         this.entityId = entityData?.entityDetails?.entityId;
         this.additionalAddresses = entityData.entityMailingAddresses;
+        this.isEditMode = this._dataStorService.getEditMode();
     }
 
     private listenDataChangeFromStore() {

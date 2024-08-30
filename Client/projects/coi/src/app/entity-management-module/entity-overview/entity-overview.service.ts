@@ -39,14 +39,17 @@ export class EntityOverviewService {
     }
 
     fetchIndustryCategoryCode(categoryTypeCode) {
-        return this._http.get(`${this._commonService.baseUrl}/entity/fetchIndustryCategoryCode/${categoryTypeCode}`);
+        return this._http.get(`${this._commonService.baseUrl}/entity/fetchIndustryCategoryCode/${categoryTypeCode}`).toPromise();
     }
 
     updateIndustryDetails(industryObj) {
-        return this._http.post(`${this._commonService.baseUrl}/entity/updateIndustryDetails}`, industryObj);
+        return this._http.patch(`${this._commonService.baseUrl}/entity/updateIndustryDetails`, industryObj);
     }
-    deleteIndustryDetails(entityIndustryClassId) {
-        return this._http.delete(`${this._commonService.baseUrl}/entity/deleteIndustryDetails/${entityIndustryClassId}}`);
+    deleteIndustryDetailsByClassId(entityIndustryClassId) {
+        return this._http.delete(`${this._commonService.baseUrl}/entity/deleteIndustryDetailsByClassId/${entityIndustryClassId}`);
+    }
+    deleteIndustryDetailsByCatCode(industryCatCode) {
+        return this._http.delete(`${this._commonService.baseUrl}/entity/deleteIndustryDetails/${industryCatCode}`);
     }
 
     saveIndustryDetails(industryObj) {

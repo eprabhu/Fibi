@@ -15,6 +15,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     createEntityObj: Create_Entity = new Create_Entity();
     saveObj: Create_Entity = new Create_Entity();
     isCreateScreen = false;
+    isEditMode = false;
     @Input() sectionName: any;
     @Input() sectionId: any;
     $subscriptions: Subscription[] = [];
@@ -39,6 +40,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
         this.entityDetails = entityData.entityDetails;
         this.setCreateObj(this.entityDetails);
         this.entityCountryDetails = entityData?.entityDetails?.country;
+        this.isEditMode = this.dataStore.getEditMode();
     }
 
     setCreateObj(data) {

@@ -39,6 +39,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
     modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
     selectedRiskObj = null;
     isEditIndex: null | number = null;
+    isEditMode = false;
     defaultRiskType = '';
     defaultRiskLevel = '';
     selectedLookupType = [];
@@ -80,7 +81,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
                     return obj;
                 });
             }
-        }))
+        }));
     }
 
     private getDataFromStore() {
@@ -90,6 +91,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
         }
         this.entityId = entityData?.entityDetails?.entityId;
         this.entityRisks = entityData.entityRisks;
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     private listenDataChangeFromStore() {
