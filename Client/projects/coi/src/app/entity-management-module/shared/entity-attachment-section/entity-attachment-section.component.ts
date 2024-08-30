@@ -155,7 +155,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
 
     deleteAttachment(): void {
         this.$subscriptions.push(
-            this._attachmentSectionService.deleteAttachment(this.currentAttachment?.entityAttachmentId, this.currentAttachment?.fileDataId)
+            this._attachmentSectionService.deleteAttachment(this.currentAttachment?.attachmentNumber)
                 .subscribe((data: any) => {
                     this.deleteAttachmentAndVersions(this.updateIndex);
                     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully.');

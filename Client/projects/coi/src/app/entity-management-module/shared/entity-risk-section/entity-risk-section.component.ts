@@ -68,46 +68,47 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     private fetchRisk(): void {
         this.fetchRiskTypes();
-        this.fetchRiskLevels();
     }
 
-    private fetchRiskLevels(): void {
-        this.$subscriptions.push(
-            this._entityRiskSectionService.fetchRiskLevels(this.getSectionCode())
-                .subscribe((data: any) => {
-                    this.entityRiskLevelList = data.map(item => item.entityRiskLevel);
-                }, err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-                }));
+    private fetchRiskLevels(riskTypeCode: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (riskTypeCode) {
+                this.$subscriptions.push(
+                    this._entityRiskSectionService.fetchRiskLevels(riskTypeCode)
+                        .subscribe(
+                            (riskLevelList: RiskLevel[]) => {
+                                this.entityRiskLevelList = riskLevelList;
+                                resolve(this.entityRiskLevelList);
+                            },
+                            (err) => {
+                                this.entityRiskLevelList = [];
+                                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                                reject(err);
+                            }
+                        )
+                );
+            } else {
+                this.entityRiskLevelList = [];
+                resolve([]); // Resolving with an empty array if `riskTypeCode` is not provided
+            }
+        });
     }
 
     private fetchRiskTypes(): void {
         this.$subscriptions.push(
             this._entityRiskSectionService.fetchRiskTypes(this.riskCategoryCode)
-                .subscribe((data: RiskType[]) => {
-                    this.entityRiskTypeList = data;
+                .subscribe((riskTypeList: RiskType[]) => {
+                    this.entityRiskTypeList = riskTypeList;
                 }, err => {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 }));
     }
-
-    getSectionCode(): string {
-        switch (this.riskCategoryCode) {
-            case 'CO': return '4'; // Compliance - Attachment
-            case 'OR': return '3'; // Organization - Attachment
-            case 'SP': return '2'; // Sponsor - Attachment
-            case 'EN': return '1'; // General - Attachment
-            default: return '';
-        }
-    }
-
 
     private clearRiskDetails(): void {
         closeCommonModal(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID);
         setTimeout(() => {
             this.mandatoryList.clear();
             this.entityRiskModalDetails = new EntityRiskModalDetails();
-            this.entityRiskModalDetails.entityRisk.description = '';
         }, 200);
     }
 
@@ -168,29 +169,40 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     private entityMandatoryValidation(): boolean {
         this.mandatoryList.clear();
-        if (!this.entityRiskModalDetails.entityRisk.riskLevelCode) {
+        const { riskLevelCode, riskTypeCode, description, entityRiskId } = this.entityRiskModalDetails.entityRisk;
+        if (!riskLevelCode) {
             this.mandatoryList.set('riskLevel', 'Please select risk level.');
         }
-        if (!this.entityRiskModalDetails.entityRisk.riskTypeCode) {
+        if (!riskTypeCode) {
             this.mandatoryList.set('riskType', 'Please select risk type.');
+        } else {
+            const IS_TYPE_ALREADY_ADDED = this.entityRiskList?.find((_risk: EntityRisk) => _risk?.riskTypeCode === riskTypeCode && _risk?.entityRiskId !== entityRiskId)
+            if (IS_TYPE_ALREADY_ADDED) {
+                this.mandatoryList.set('riskType', 'Risk type is already added.');
+            }
         }
-        if (!this.entityRiskModalDetails.entityRisk.description) {
+        if (!description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
         }
+        
         return this.mandatoryList.size === 0;
     }
 
     private setSponsorRiskDetails(risk: EntityRisk): void {
         this.entityRiskModalDetails.entityRisk = deepCloneObject(risk);
-        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((_risk: any) => risk?.riskTypeCode === _risk.riskTypeCode);
-        const SELECTED_RISK_LEVEL = this.entityRiskTypeList.find((_risk: any) => risk?.riskLevelCode === _risk.riskLevelCode);
+        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((_risk: RiskType) => risk?.riskTypeCode === _risk.riskTypeCode);
+        const SELECTED_RISK_LEVEL = this.entityRiskLevelList.find((_risk: RiskLevel) => risk?.riskLevelCode === _risk.riskLevelCode);
         this.entityRiskModalDetails.selectedRiskTypeLookUpList = [deepCloneObject(SELECTED_RISK_TYPE)];
         this.entityRiskModalDetails.selectedRiskLevelLookUpList = [deepCloneObject(SELECTED_RISK_LEVEL)];
     }
 
     onRiskTypeSelected(event: any[] | null): void {
+        this.entityRiskModalDetails.entityRisk.riskLevel = null;
+        this.entityRiskModalDetails.entityRisk.riskLevelCode = null;
+        this.entityRiskModalDetails.selectedRiskLevelLookUpList = [];
         this.entityRiskModalDetails.entityRisk.riskType = event ? event[0] : null;
         this.entityRiskModalDetails.entityRisk.riskTypeCode = event ? event[0]?.riskTypeCode : null;
+        this.fetchRiskLevels(this.entityRiskModalDetails.entityRisk.riskTypeCode);
     }
 
     onRiskLevelSelected(event: any[] | null): void {
@@ -218,8 +230,9 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         }, 100);
     }
 
-    editEntityRisk(risk: EntityRisk, editIndex: number): void {
+    async editEntityRisk(risk: EntityRisk, editIndex: number): Promise<any> {
         this.editIndex = editIndex;
+        await this.fetchRiskLevels(risk?.riskTypeCode);
         this.setSponsorRiskDetails(risk);
         this.openAddEntityRiskModal(true);
     }

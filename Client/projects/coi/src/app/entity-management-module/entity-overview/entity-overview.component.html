@@ -23,6 +23,10 @@
         <app-other-details></app-other-details>
     </div>
 </div>
-<app-entity-risk  [sectionName]="commonService.getSectionName(overViewTab,'ENTITY_RISK')" [sectionId]="commonService.getSectionId(overViewTab,'ENTITY_RISK')"></app-entity-risk>
+<app-entity-risk-section [sectionName]="commonService.getSectionName(overViewTab,'ENTITY_RISK')"
+    [sectionId]="commonService.getSectionId(overViewTab,'OTHER_REFERENCE_IDS')"
+    [entityRiskList]="entityRisksList" [riskCategoryCode]="'EN'">
+</app-entity-risk-section>
+<!-- <app-entity-risk  [sectionName]="commonService.getSectionName(overViewTab,'ENTITY_RISK')" [sectionId]="commonService.getSectionId(overViewTab,'ENTITY_RISK')"></app-entity-risk> -->
 <app-other-reference-id  [sectionName]="commonService.getSectionName(overViewTab,'OTHER_REFERENCE_IDS')" [sectionId]="commonService.getSectionId(overViewTab,'OTHER_REFERENCE_IDS')"></app-other-reference-id>
 </div>
