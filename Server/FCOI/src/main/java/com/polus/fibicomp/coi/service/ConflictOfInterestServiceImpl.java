@@ -1308,13 +1308,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> checkEntityAdded(Integer entityNumber) {
-		PersonEntity personEntity = conflictOfInterestDao.fetchPersonEntityByEntityNumber(entityNumber, AuthenticatedUser.getLoginPersonId());
+	public ResponseEntity<Object> checkEntityAdded(Integer entityId) {
+		PersonEntity personEntity = conflictOfInterestDao.fetchPersonEntityByEntityId(entityId, AuthenticatedUser.getLoginPersonId());
 		if (personEntity != null) {
 			PersonEntityDto personEntityDto = new PersonEntityDto();
 			BeanUtils.copyProperties(personEntity, personEntityDto);
 			Entity coiEntityObj = conflictOfInterestDao.getEntityDetails(personEntity.getEntityId());
-//			personEntityDto.setEntityType(coiEntityObj.getEntityStatusType());
+			personEntityDto.setEntityOwnershipType(coiEntityObj.getEntityOwnershipType());
 			personEntityDto.setCountry(coiEntityObj.getCountry());
 			personEntityDto.setPersonFullName(personDao.getPersonFullNameByPersonId(personEntity.getPersonId()));
 			personEntityDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(personEntity.getUpdateUser()));

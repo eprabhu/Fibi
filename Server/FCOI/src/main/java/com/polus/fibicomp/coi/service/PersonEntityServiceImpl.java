@@ -398,7 +398,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             PersonEntity copiedPerEntVersion = copyPersonEntity(personEntityObj, personEntityObj.getVersionStatus());
             personEntityDto.setPersonEntityId(copiedPerEntVersion.getPersonEntityId());
         } else {
-            personEntityObj.setEntityId(conflictOfInterestDao.getMaxEntityId(personEntityObj.getEntityNumber()));
+//            personEntityObj.setEntityId(conflictOfInterestDao.getMaxEntityId(personEntityObj.getEntityNumber()));
         }
         fcoiDisclosureDao.updateDisclosureSyncNeededByPerEntId(personEntityObj.getPersonEntityId(), true);
         personEntityDto.setPersonEntityNumber(personEntityObj.getPersonEntityNumber());
