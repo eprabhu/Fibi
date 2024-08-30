@@ -17,6 +17,7 @@ public class SubAwdOrgRequestDTO {
 	private Integer entityId;
 	private Integer organizationId;
 	private String organizationTypeCode;
+	private String feedStatusCode;
 	private Date samExpirationDate;
 	private Date subAwdRiskAssmtDate;
 

@@ -13,8 +13,4 @@ export class EntityComplianceService {
         return this._http.get(`${this._commonService.baseUrl}/entity/compliance/fetch/${entityId}`);
     }
 
-    saveComplianceRisk(complianceRiskRO: any){
-        return this._http.post(this._commonService.baseUrl + '/entity/compliance/saveRisk', complianceRiskRO);
-    }
-
 }

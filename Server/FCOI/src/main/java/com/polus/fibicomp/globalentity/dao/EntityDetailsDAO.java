@@ -1,5 +1,7 @@
 package com.polus.fibicomp.globalentity.dao;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,5 +17,7 @@ public interface EntityDetailsDAO {
 	public void updateEntity(EntityRequestDTO dto);
 
 	public Entity fetchEntityDetails(Integer entityId);
+
+	public Map<String, Boolean> getEntityTabStatus(Integer entityId);
 
 }

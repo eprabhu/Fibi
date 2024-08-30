@@ -6,11 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { EntityCreationService } from './entity-creation.service';
 import { getEndPointOptionsForCountry } from './../../../../../fibi/src/app/common/services/end-point.config';
-import { isEmptyObject } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, hideModal, isEmptyObject, openModal } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {
     Country,
     Create_Entity,
     EntityOwnerShip,
+    removeToast,
     showEntityToast
 } from '../../entity-management-module/shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
@@ -39,7 +40,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     @Input() initalProceed = new Subject();
     @Input() createEntityObj: Create_Entity = new Create_Entity();
     @Input() countryDetails: Country = new Country();
-    @Input() canNavigateToEntity:boolean = true;
+    @Input() canNavigateToEntity: boolean = true;
+    @Input() isEditMode = true;
     ownershipTypOptions = 'ENTITY_OWNERSHIP_TYPE#OWNERSHIP_TYPE_CODE#false#false';
     @Output() emitSaveObj = new EventEmitter<any>();
     @Output() emitEntityRO = new EventEmitter<any>();
@@ -153,7 +155,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
             }
         } else {
             this.createEntityObj.entityOwnershipTypeCode = null;
-            this.createEntityObj.entityOwnerShip = null;
+            this.createEntityObj.entityOwnerShip = new EntityOwnerShip();
+            this.changeEvent('entityOwnershipTypeCode');
         }
     }
 
@@ -197,7 +200,19 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
             }
         ));
             this._commonService.removeLoaderRestriction();
+        } else if(this.mandatoryList.size){
+            if(this._commonService.isNavigationStopped) {
+                openModal('coi-entity-confirmation-modal');
+            }
         }
+    }
+
+    leaveSlider(){
+        removeToast('ERROR');
+        removeToast('SUCCESS');
+        this.setCommonChangesFlag(false);
+        hideModal('coi-entity-confirmation-modal');
+        this._router.navigateByUrl(this._commonService.attemptedPath);
     }
 
     setCommonChangesFlag(flag) {
@@ -229,6 +244,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         this.clearValidation('city');
         this.clearValidation('state');
         this.clearValidation('postCode');
+        this.clearValidation('ownershipType');
         if (!this.createEntityObj.entityName) {
             this.mandatoryList.set('entityName', 'Please enter entity name.');
         }
@@ -246,6 +262,9 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         }
         if (!this.createEntityObj.postCode) {
             this.mandatoryList.set('postCode', 'Please enter postal code.');
+        }
+        if (!this.createEntityObj.entityOwnershipTypeCode) {
+            this.mandatoryList.set('ownershipType', 'Please select ownership type.');
         }
     }
 
@@ -283,6 +302,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.changeEvent("dunsNumber");
                 }
             }));
+        } else {
+            this.changeEvent("dunsNumber");
         }
     }
 
@@ -296,6 +317,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.changeEvent('ueiNumber');
                 }
             }));
+        } else {
+            this.changeEvent("dunsNumber");
         }
     }
 
@@ -309,6 +332,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.changeEvent('cageNumber');
                 }
             }));
+        } else {
+            this.changeEvent("dunsNumber");
         }
     }
 

@@ -21,20 +21,6 @@
               </app-no-data-label>
             </span>
           </div>
-          <div class="d-inline-flex align-items-center">
-            <label class="coi-text-light">Risk: </label>
-            <span class="ml-2 coi-text-light fw-normal">
-              <div class="text-color fs-14 d-flex align-items-center">
-                <span class="text-secondary fs-14">
-                  <mat-icon
-                    class="{{commonService.getRiskColor(entityDetails?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                </span>
-                <app-no-data-label [valueToShow]="entityDetails?.entityRiskCategory">
-                  <span class="ms-1 mt-1 fw-normal">{{entityDetails?.entityRiskCategory?.description}}</span>
-                </app-no-data-label>
-              </div>
-            </span>
-          </div>
         </div>
       </div>
       <div class="row mt-2">
@@ -53,15 +39,15 @@
           </span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"
-          [attr.aria-label]="'Entity Type' + (entityDetails?.entityType?.description)">
-          <label for="coi-shared-entity-type" class="coi-text-light d-block">Entity Type</label>
+          [attr.aria-label]="'Ownership Type' + (entityDetails?.entityType?.description)">
+          <label for="coi-shared-entity-type" class="coi-text-light d-block">Ownership Type</label>
           <span class="coi-text-light fw-normal">
             <app-no-data-label [valueToShow]="entityDetails?.entityType?.description">
               <span id="coi-shared-entity-type">{{entityDetails?.entityType?.description}}</span>
             </app-no-data-label>
           </span>
         </div>
-       
+
       </div>
     </div>
   </div>

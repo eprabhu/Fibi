@@ -5,7 +5,7 @@ import { SubawardOrganisationTab } from '../shared/entity-constants';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntitySubAwardService } from './entity-subaward.service';
-import { EntireEntityDetails, EntityDetails, EntityRisk, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
@@ -21,6 +21,7 @@ export class EntitySubawardComponent implements OnInit {
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
     entitySubAwarRisksList: EntityRisk[] = [];
+    entitySubAwarAttachmentList: EntityAttachment[] = [];
 
     riskSubSectionId = '';
     riskSubSectionName = '';
@@ -59,16 +60,15 @@ export class EntitySubawardComponent implements OnInit {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                if (dependencies !==  'ENTITY_RISK_TYPE') {
-                    this.getDataFromStore();
-                }
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             }));
     }
 
     private fetchEntityDetails(entityId: string | number): void {
         this.$subscriptions.push(this._entitySubAwardService.fetchEntityOrganizationDetails(entityId).subscribe((data: SubAwardOrganization) => {
-            this.entitySubAwarRisksList = data.entityRisks;
+            this.entitySubAwarRisksList = data?.entityRisks ? data?.entityRisks : [];
+            this.entitySubAwarAttachmentList = data?.attachments ? data.attachments : [];
             this._entitySubAwardService.entitySubAwardOrganization.entityRisks = data.entityRisks;
             this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO = data?.subAwdOrgDetailsResponseDTO ?? new SubAwardOrganizationDetails();
             this.isLoading = false;

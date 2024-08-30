@@ -6,6 +6,9 @@
         </app-entity-risk-section>
     </div>
     <div class="mb-2">
-        <app-entity-compliance-attachments [sectionName]="commonService.getSectionName(overViewTab,'COMPLIANCE_ATTACHMENTS')" [sectionId]="commonService.getSectionId(overViewTab,'COMPLIANCE_ATTACHMENTS')"></app-entity-compliance-attachments>
+        <app-entity-attachment-section [sectionName]="commonService.getSectionName(overViewTab,'COMPLIANCE_ATTACHMENTS')"
+            [sectionId]="commonService.getSectionId(overViewTab,'COMPLIANCE_ATTACHMENTS')"
+            [entityAttachmentsList]="entityComplianceAttachmentList" [riskCategoryCode]="'CO'">
+        </app-entity-attachment-section>
     </div>
 </div>

@@ -11,9 +11,9 @@
         </app-entity-risk-section>
     </div>
     <div class="mb-2">
-        <app-entity-sponsor-attachments [sectionName]="commonService.getSectionName(overViewTab,'SPONSOR_ATTACHMENTS')"
+        <app-entity-attachment-section [sectionName]="commonService.getSectionName(overViewTab,'SPONSOR_ATTACHMENTS')"
             [sectionId]="commonService.getSectionId(overViewTab,'SPONSOR_ATTACHMENTS')"
-            >
-        </app-entity-sponsor-attachments>
+            [entityAttachmentsList]="entitySponsorAttachmentList" [riskCategoryCode]="'SP'">
+        </app-entity-attachment-section>
     </div>
 </div>

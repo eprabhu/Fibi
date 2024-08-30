@@ -1,5 +1,7 @@
 package com.polus.fibicomp.globalentity.dto;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +32,9 @@ public class EntityRequestDTO {
 	private String humanSubAssurance;
 	private String anumalWelfareAssurance;
 	private String animalAccreditation;
+	private String approvedBy;
+	private String entityStatusTypeCode;
+	private Timestamp approvedTimestamp;
+	private Boolean isDunsMatched;
 
 }

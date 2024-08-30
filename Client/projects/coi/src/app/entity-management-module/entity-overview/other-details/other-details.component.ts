@@ -39,11 +39,13 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     autoSaveRO: any = {};
     isOtherDetailsFormChanged: boolean;
     selectedLookupList = [];
+    selectedBusinessTypeList = [];
     isSaving = false;
     CONFIRMATIN_MODAL_ID = 'other-details-delete-confirm-modal'
     modalConfig = new COIModalConfig(this.CONFIRMATIN_MODAL_ID, 'Delete', 'Cancel');
     deleteForgeinNameObj = null;
     isEditIndex: null | number = null;
+    isEditMode = false;
     deletePriorNameObj = null;
 
     constructor(public commonService: CommonService, private _entityOverviewService: EntityOverviewService,
@@ -71,7 +73,13 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         if (this.entityDetails.currencyCode) {
             this.selectedLookupList.push({'code': this.entityDetails.currencyCode, 'description': null});
         }
+        if (this.entityDetails.entityBusinessType) {
+            this.selectedBusinessTypeList.push({'code': this.entityDetails?.entityBusinessType?.businessTypeCode,
+                description: this.entityDetails?.entityBusinessType?.description
+            });
+        }
         this.setOtherDetailsObject();
+        this.isEditMode = this.dataStore.getEditMode();
     }
 
     getCurrencyList() {

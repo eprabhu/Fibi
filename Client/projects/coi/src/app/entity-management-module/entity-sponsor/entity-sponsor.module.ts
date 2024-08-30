@@ -8,16 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SharedEntityManagementModule } from '../shared/shared-entity-management.module';
 import { EntitySponsorDetailsComponent } from './entity-sponsor-details/entity-sponsor-details.component';
-import { EntitySponsorRiskComponent } from './entity-sponsor-risk/entity-sponsor-risk.component';
-import { EntitySponsorAttachmentsComponent } from './entity-sponsor-attachments/entity-sponsor-attachments.component';
-import { AddAttachmentModalModule } from '../../common/header/add-attachment-modal/add-attachment-modal.module';
 
 @NgModule({
     declarations: [
         EntitySponsorComponent,
         EntitySponsorDetailsComponent,
-        EntitySponsorRiskComponent,
-        EntitySponsorAttachmentsComponent
     ],
     imports: [
         CommonModule,
@@ -26,7 +21,6 @@ import { AddAttachmentModalModule } from '../../common/header/add-attachment-mod
         SharedModule,
         MatIconModule,
         SharedComponentModule,
-        AddAttachmentModalModule,
         SharedEntityManagementModule
     ],
     providers: []

@@ -8,7 +8,7 @@ import { EntityManagementService } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { EntireEntityDetails, EntityDetails, showEntityToast } from '../../shared/entity-interface';
-import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntitySubAwardService } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
@@ -32,6 +32,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     entityDetails: EntityDetails;
     selectedLookupList: any[] = [];
     isRestrictSave = false;
+    isEditMode = false;
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService, private _entitySubAwardService: EntitySubAwardService) { }
 
@@ -55,14 +56,13 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
             this.samExpirationDate = getDateObjectFromTimeStamp(this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.samExpirationDate);
             this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
         }
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                if (dependencies !== 'ENTITY_RISK_TYPE') {
-                    this.getDataFromStore();
-                }
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             })
         );
     }

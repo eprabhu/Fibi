@@ -24,7 +24,9 @@ public interface CompanyDetailsService extends GlobalEntityService {
 	
 	ResponseEntity<String> updateIndustryDetails(IndustryDetailsRequestDTO dto);
 
-	ResponseEntity<String> deleteIndustryDetails(Integer entityIndustryClassId);
+	ResponseEntity<String> deleteIndustryDetailsByClassId(Integer entityIndustryClassId);
+
+	ResponseEntity<String> deleteIndustryDetailsByCatCode(String industryCatCode);
 
 	ResponseEntity<List<EntityIndustryClassification>> fetchIndustryDetails(Integer entityId);
 

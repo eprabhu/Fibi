@@ -3,7 +3,8 @@
     <ng-container content>
       <app-add-sfi *ngIf="sfiService?.isShowSfiNavBar && isShowAddSfiPage" [coiEntityManageId]="coiEntityManageId"
         [isEditEntity]="isEditEntity" [isSlider]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
-        [disclosureDetails]="disclosureDetails" [sfiSliderSectionConfig]="sfiSliderSectionConfig" (emitUpdateEvent)="emitEvent($event)"></app-add-sfi>
+        [disclosureDetails]="disclosureDetails" [sfiSliderSectionConfig]="sfiSliderSectionConfig"
+        [entitySectionConfig]="entitySectionConfig" (emitUpdateEvent)="emitEvent($event)"></app-add-sfi>
     </ng-container>
   </app-coi-slider>
 </ng-container>

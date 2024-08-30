@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { openCoiSlider } from '../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
@@ -7,13 +7,14 @@ import { EntityDataStoreService } from '../entity-data-store.service';
 import { EntityDetails } from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import { getCurrentTimeStamp, getDuration, getTimeInterval } from '../../common/utilities/date-utilities';
+import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 
 @Component({
   selector: 'app-header-details',
   templateUrl: './header-details.component.html',
   styleUrls: ['./header-details.component.scss']
 })
-export class HeaderDetailsComponent {
+export class HeaderDetailsComponent implements OnInit, OnDestroy {
 
     @ViewChild('mainEntityHeaders', { static: true }) mainEntityHeaders: ElementRef;
 
@@ -25,6 +26,7 @@ export class HeaderDetailsComponent {
     entityDetails: EntityDetails = new EntityDetails();
     entityFullAddress: string = '';
     latestPriorName: any;
+    isEditMode = false;
 
     constructor(public router: Router, public dataStore: EntityDataStoreService, public autoSaveService: AutoSaveService) {}
     ngOnInit() {
@@ -71,6 +73,7 @@ export class HeaderDetailsComponent {
         this.entityDetails = entityData.entityDetails;
         this.latestPriorName = entityData?.priorNames[0]?.priorNames;
         this.getEntityFullAddress();
+        this.isEditMode = this.dataStore.getEditMode();
     }
 
     getEntityFullAddress() {
@@ -132,5 +135,9 @@ export class HeaderDetailsComponent {
         timeString = timeString.concat(hours === 0 && minutes !== 0 ? minutes + ' min(s) ' : '');
         timeString = timeString.concat(hours === 0 && minutes === 0 && seconds !== 0 ? seconds + ' sec(s) ' : '');
         return timeString;
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
     }
 }

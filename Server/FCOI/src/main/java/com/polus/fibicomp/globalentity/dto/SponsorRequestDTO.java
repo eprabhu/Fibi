@@ -15,5 +15,7 @@ public class SponsorRequestDTO {
 	private Integer entityId;
 	private String acronym;
 	private String sponsorTypeCode;
+	private String feedStatusCode;
+	
 
 }

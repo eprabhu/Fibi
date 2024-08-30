@@ -169,4 +169,14 @@ public class EntityFileAttachmentDao {
 		session.createQuery(query).executeUpdate();
 	}
 
+	public List<EntityAttachment> getAttachByAttachNumber(Integer attachNumber) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<EntityAttachment> query = builder.createQuery(EntityAttachment.class);
+		Root<EntityAttachment> root = query.from(EntityAttachment.class);
+		query.where(builder.equal(root.get("attachmentNumber"), attachNumber));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
 }

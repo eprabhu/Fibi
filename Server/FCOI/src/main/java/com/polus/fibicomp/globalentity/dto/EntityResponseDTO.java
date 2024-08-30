@@ -1,15 +1,16 @@
 package com.polus.fibicomp.globalentity.dto;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.polus.fibicomp.globalentity.pojo.Entity;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityExternalIdMapping;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
 import com.polus.fibicomp.globalentity.pojo.EntityRegistration;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
-import com.polus.fibicomp.globalentity.pojo.Entity;
-import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,6 @@ public class EntityResponseDTO {
 	private List<PriorNameResponseDTO> priorNames;
 	private List<ForeignNameResponseDTO> foreignNames;
 	private List<EntityAttachment> attachments;
+	private Map<String, Boolean> entityTabStatus;
 
 }

@@ -9,7 +9,7 @@
                 </span>
             </div>
         </div>
-        <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)"
+        <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)" [isEditMode]="isEditMode"
         [saveMode]="'AUTO'" [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails"
         (emitSaveObj)="updateStoreData($event)"></app-entity-creation>
     </div>

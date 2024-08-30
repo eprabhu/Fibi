@@ -35,7 +35,7 @@ public class Entity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ENTITY_ID")
-	private int entityId;
+	private Integer entityId;
 
 	@Column(name = "PRIMARY_NAME")
 	private String entityName;
@@ -163,6 +163,10 @@ public class Entity implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
+
+	@Column(name = "IS_DUNS_MATCHED")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isDunsMatched;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK1"), name = "ENTITY_STATUS_TYPE_CODE", referencedColumnName = "ENTITY_STATUS_TYPE_CODE", insertable = false, updatable = false)

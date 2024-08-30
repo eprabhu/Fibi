@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs';
 import {EntityOverviewService} from '../entity-overview.service';
 import {EntityDataStoreService} from '../../entity-data-store.service';
 import {CommonService} from '../../../common/services/common.service';
-import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../app-constants';
+import {HTTP_ERROR_STATUS} from '../../../app-constants';
 import {COIModalConfig, ModalActionEvent} from '../../../shared-components/coi-modal/coi-modal.interface';
 import {closeCommonModal, openCommonModal} from '../../../common/utilities/custom-utilities';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -26,6 +26,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
     selectedType: any;
     selectedRegistrationType = [];
     isEditIndex: null | number = null;
+    isEditMode = false;
     deleteEntityRegistrationId = null;
     isSaving = false;
     entityRegistrationDefaultValue = '';
@@ -49,10 +50,8 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                if (dependencies !==  'ENTITY_RISK_TYPE') {
-                    this.getDataFromStore();
-                }
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             })
         );
     }
@@ -64,6 +63,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
         }
         this.entityId = entityData?.entityDetails?.entityId;
         this.entityRegistrations = entityData.entityRegistrations;
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     clearRegistrationDetails() {
