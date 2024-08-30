@@ -38,4 +38,7 @@ export class ProjectOverviewService {
         return this._http.delete(`${this._commonService.baseUrl}/project/deleteComment/${CommentId}`, { responseType: 'text' });
     }
 
+    sendNotification(params){
+        return this._http.patch(this._commonService.baseUrl + '/projectPersonNotify', params, { responseType: 'text' });
+    }
 }   

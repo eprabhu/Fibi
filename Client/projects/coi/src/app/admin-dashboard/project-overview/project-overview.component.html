@@ -226,7 +226,7 @@
                                         (keyup.space)="toggleSlider(index1)" id="coi-comment-btn-{{index1}}"
                                         title="Click here to open comment slider">
                                         <mat-icon aria-hidden="true" class="hyper-link me-1">rate_review</mat-icon>
-                                        <span class="me-2">{{projectData?.projectDetails?.commentCount && projectData.projectDetails.commentCount > 0  ? 'Comments('+projectData?.projectDetails?.commentCount + ')' : 'Comments'}}
+                                        <span>{{projectData?.projectDetails?.commentCount && projectData.projectDetails.commentCount > 0  ? 'Comments('+projectData?.projectDetails?.commentCount + ')' : 'Comments'}}
                                         </span>
                                     </button>
                                 </div>
@@ -448,14 +448,16 @@
                                                             (keyup.space)="redirectToDisclosure(keyPersonData)">
                                                             <mat-icon>visibility</mat-icon>
                                                         </button>
-                                                        <button *ngIf="(keyPersonData?.disclosureStatus === 'Pending') || 
-                                                        (!keyPersonData?.disclosureStatus  && !keyPersonData?.questionnaireCompleted)"
+                                                        <button *ngIf="(keyPersonData?.disclosureStatus === 'Pending' && keyPersonData?.disclosureId!= 0) || 
+                                                        (!keyPersonData?.disclosureStatus  && !keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureId!= 0)"
                                                             id="coi-keyperson-disclosure-notify-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                                                            title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure">
+                                                            title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure"
+                                                            (click)="toggleNotificationSlider(projectOverviewData?.projectOverviewDetails[index1] , index2)" (keyup.enter)="toggleNotificationSlider(index2)"
+                                                            (keyup.space)="toggleNotificationSlider(index2)">
                                                             <mat-icon>notifications_active</mat-icon>
                                                         </button>
-                                                        <span *ngIf="keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureStatus === 'Not Required'">--</span>
+                                                        <span *ngIf="(keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureStatus === 'Not Required') || keyPersonData?.disclosureId == 0">--</span>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -490,4 +492,13 @@
         <app-project-overview-comments-slider [dataForCommentSlider]="projectOverviewData?.projectOverviewDetails[getIndexForSlider]"
          (closePage)="closeHeaderSlider()" (commentCountUpdated)="handleCommentCount($event)"></app-project-overview-comments-slider>    
     </ng-container>
+
+    <!-- notification slider -->
+     <ng-container *ngIf="isShowNotificationSlider">
+        <app-project-overview-notification-slider [dataForNotificationSlider]="projectDetailsForSlider" [keypersonIndex]="selectedKeyPersonIndex"
+        (closePage)="closeHeaderSlider()" ></app-project-overview-notification-slider>
+     </ng-container>
+
+    <!-- notifications modal -->
+    
 </div>
