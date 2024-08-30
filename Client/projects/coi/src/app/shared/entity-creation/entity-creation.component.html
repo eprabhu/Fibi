@@ -23,7 +23,7 @@
                     Ownership Type
                     <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-ownership-type'"></app-common-help-text>
                 </label>
-                <app-look-up (selectedResult)="onOwnerShipTypeSelect($event)" [options]="ownershipTypOptions"
+                <app-look-up *ngIf="isEditMode" (selectedResult)="onOwnerShipTypeSelect($event)" [options]="ownershipTypOptions"
                     [isError]="mandatoryList?.has('ownershipType')"
                     [uniqueId]="'coi-entity-ownership-type'" [selectedLookUpList]="selectedOwnerShipType">
                 </app-look-up>
