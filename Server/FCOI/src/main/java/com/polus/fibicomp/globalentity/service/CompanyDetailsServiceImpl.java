@@ -87,7 +87,7 @@ public class CompanyDetailsServiceImpl implements CompanyDetailsService {
 	@Override
 	public ResponseEntity<String> updateIndustryDetails(IndustryDetailsRequestDTO dto) {
 		dto.getRemovedEntityIndustryClassIds().stream().forEach(id -> {
-			deleteIndustryDetails(id);
+			deleteIndustryDetailsByClassId(id);
 		});
 		dto.getAddedEntityIndustryCatIds().stream().forEach(id -> {
 			EntityIndustryClassification entity = mapDTOToEntity(dto.getEntityId(), id);
@@ -106,8 +106,15 @@ public class CompanyDetailsServiceImpl implements CompanyDetailsService {
 	}
 
 	@Override
-	public ResponseEntity<String> deleteIndustryDetails(Integer entityIndustryClassId) {
+	public ResponseEntity<String> deleteIndustryDetailsByClassId(Integer entityIndustryClassId) {
 		entityIndustryClassificationRepository.deleteByEntityIndustryClassId(entityIndustryClassId);
+		return new ResponseEntity<>(commonDao.convertObjectToJSON("Industry details deleted successfully"),
+				HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<String> deleteIndustryDetailsByCatCode(String industryCatCode) {
+		comapanyDetailsDAO.deleteIndustryDetailsByCatCode(industryCatCode);
 		return new ResponseEntity<>(commonDao.convertObjectToJSON("Industry details deleted successfully"),
 				HttpStatus.OK);
 	}

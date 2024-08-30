@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletOutputStream;
@@ -31,7 +32,12 @@ import com.polus.fibicomp.globalentity.dao.EntityFileAttachmentDao;
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.exception.EntityFileAttachmentException;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntitySectionAttachRef;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityAttachType;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
+import com.polus.fibicomp.globalentity.repository.ValidEntityAttachTypesRepository;
 
 @Transactional
 @Service
@@ -44,10 +50,13 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 	EntityFileAttachmentDao entityFileAttachmentDao;
 
 	@Autowired
+	private CommonService commonService;
+
+	@Autowired
 	private CommonDao commonDao;
 
 	@Autowired
-	private CommonService commonService;
+	private ValidEntityAttachTypesRepository validEntityAttachTypesRepository;
 
 	@Autowired
 	private PersonDao personDao;
@@ -60,7 +69,7 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 
 	@Override
 	@Transactional(rollbackFor = {EntityFileAttachmentException.class, IOException.class})
-	public ResponseEntity<Object> saveFileAttachment(MultipartFile[] files, String formDataJSON) {
+	public EntityFileRequestDto saveFileAttachment(MultipartFile[] files, String formDataJSON) {
 		final FileManagementOutputDto[] fileOutputHolder = new FileManagementOutputDto[1];
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -69,7 +78,7 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 			request.getNewAttachments().forEach(attach -> {
 				int count = index.getAndIncrement();
 				FileManagmentInputDto input = FileManagmentInputDto.builder().file(files[count])
-						.moduleCode(ENTITY_MODULE_CODE).moduleNumber(String.valueOf(attach.getEntityId()))
+						.moduleCode(ENTITY_MODULE_CODE).moduleNumber(String.valueOf(request.getEntityId()))
 						.updateUser(AuthenticatedUser.getLoginPersonId())
 						.build();
 				try {
@@ -81,24 +90,27 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 				attach.setFileDataId(fileOutputHolder[0].getFileDataId());
 				Integer attachId = entityFileAttachmentDao.saveEntityAttachmentDetail(attach);
 				entityFileAttachmentDao.saveEntitySecAttachRef(
-						EntitySectionAttachRef.builder().entityId(attach.getEntityId())
+						EntitySectionAttachRef.builder().entityId(request.getEntityId())
 								.sectionCode(request.getSectionCode()).entityAttachmentId(attachId).build());
 			});
+			return request;
 		} catch (Exception e) {
 			fileManagementService.removeFileOnException(fileOutputHolder[0].getFilePath(),
 					fileOutputHolder[0].getFileName());
 			throw new EntityFileAttachmentException(
 					"Exception in saveFileAttachment in EntityFileAttachmentService, " + e);
 		}
-		return new ResponseEntity<>(commonDao.convertObjectToJSON("Success"), HttpStatus.OK);
 	}
 
 	@Override
-	public String deleteEntityAttachment(EntityFileRequestDto request) {
-		fileManagementService.deleteFile(ENTITY_MODULE_CODE,request.getFileDataId());
-		entityFileAttachmentDao.deleteEntitySecAttachRef(request.getAttachmentId());
-		entityFileAttachmentDao.deleteEntityAttachment(request.getAttachmentId());
-		return "SUCCESS";
+	public ResponseEntity<String> deleteEntityAttachment(EntityFileRequestDto request) {
+		List<EntityAttachment> attachments = getAttachByAttachNumber(request.getAttachmentNumber());
+		attachments.stream().forEach(attach -> {
+			fileManagementService.deleteFile(ENTITY_MODULE_CODE,attach.getFileDataId());
+			entityFileAttachmentDao.deleteEntitySecAttachRef(attach.getEntityAttachmentId());
+			entityFileAttachmentDao.deleteEntityAttachment(attach.getEntityAttachmentId());
+		});
+		return new ResponseEntity<>(commonDao.convertObjectToJSON("Attachment deleted successfully"), HttpStatus.OK);
 	}
 
 	@Override
@@ -127,7 +139,7 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 	@Override
 	public void exportAllEntityAttachments(EntityFileRequestDto request, HttpServletResponse response) throws IOException {
 		List<Integer> attachmentIds = request.getAttachmentIds();
-		Integer entityId = Integer.parseInt(request.getEntityId());
+		Integer entityId = request.getEntityId();
 		if (attachmentIds != null && !attachmentIds.isEmpty()) {
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append("Entity_#")
@@ -167,13 +179,13 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 	}
 
 	@Override
-	public String updateEntityAttachmentDetails(EntityFileRequestDto request) {
+	public ResponseEntity<String> updateEntityAttachmentDetails(EntityFileRequestDto request) {
 		try {
 			entityFileAttachmentDao.updateEntityAttachmentDetail(request.getAttachmentId(), request.getDescription());
 		} catch (Exception e) {
 			throw new EntityFileAttachmentException("Exception in updateEntityAttachmentDetails in EntityFileAttachmentService, " + e);
 		}
-		return "SUCCESS";
+		return new ResponseEntity<>(commonDao.convertObjectToJSON("Attachment updated successfully"), HttpStatus.OK);
 	}
 
 	@Override
@@ -190,6 +202,20 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
         	attachment.setUpdateUserFullame(personDao.getPersonFullNameByPersonId(attachment.getUpdatedBy()));
         });
 		return attachments;
+	}
+
+	@Override
+	public ResponseEntity<List<EntityAttachmentType>> fetchAttachmentTypes(String sectionCode) {
+		List<EntityAttachmentType> validEntityAttachTypes = validEntityAttachTypesRepository.fetchBySectionCode(sectionCode).stream()
+	            .map(ValidEntityAttachType::getEntityAttachmentType)
+	            .collect(Collectors.toList());
+		return new ResponseEntity<>(validEntityAttachTypes, HttpStatus.OK);
+	}
+
+	@Override
+	public List<EntityAttachment> getAttachByAttachNumber(Integer attachNumber) {
+		List<EntityAttachment> attachmentsList = entityFileAttachmentDao.getAttachByAttachNumber(attachNumber);
+		return attachmentsList;
 	}
 
 }

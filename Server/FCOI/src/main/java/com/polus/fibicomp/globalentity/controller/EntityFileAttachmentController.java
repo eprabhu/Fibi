@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityAttachType;
 import com.polus.fibicomp.globalentity.service.EntityFileAttachmentService;
 
 @RestController
@@ -31,20 +33,19 @@ public class EntityFileAttachmentController {
 	EntityFileAttachmentService entityFileAttachmentService;
 
 	@PostMapping(value = "saveFile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<Object> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) {
-		return entityFileAttachmentService.saveFileAttachment(files, formDataJson);
+	public ResponseEntity<List<EntityAttachment>> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) {
+		EntityFileRequestDto dto = entityFileAttachmentService.saveFileAttachment(files, formDataJson);
+		return new ResponseEntity<>(entityFileAttachmentService.getAttachmentsBySectionCode(dto.getSectionCode(), dto.getEntityId()), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/updateAttachmentDetails", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<String> updateDisclAttachmentDetails(@RequestBody EntityFileRequestDto request) {
-		String response = entityFileAttachmentService.updateEntityAttachmentDetails(request);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return entityFileAttachmentService.updateEntityAttachmentDetails(request);
 	}
 
 	@PostMapping(value = "/deleteAttachment", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public String deleteDisclAttachment(@RequestBody EntityFileRequestDto request) {
-		String response = entityFileAttachmentService.deleteEntityAttachment(request);
-		return response;
+	public ResponseEntity<String> deleteDisclAttachment(@RequestBody EntityFileRequestDto request) {
+		return entityFileAttachmentService.deleteEntityAttachment(request);
 	}
 
 	@GetMapping(value = "/downloadAttachment", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -66,5 +67,15 @@ public class EntityFileAttachmentController {
    	public List<EntityAttachment> getAttachmentsByEntityId(@PathVariable("entityId") Integer entityId) {
    		return entityFileAttachmentService.getAttachmentsByEntityId(entityId);
    	}
+
+	@GetMapping("/getAttachByAttachNumber/{attachNumber}")
+   	public List<EntityAttachment> getAttachByAttachNumber(@PathVariable("attachNumber") Integer attachNumber) {
+   		return entityFileAttachmentService.getAttachByAttachNumber(attachNumber);
+   	}
+
+	@GetMapping(value = "/fetchAttachmentTypes/{sectionCode}")
+	public ResponseEntity<List<EntityAttachmentType>> fetchAttachmentTypes(@PathVariable(value = "sectionCode", required = true) final String sectionCode) {
+		return entityFileAttachmentService.fetchAttachmentTypes(sectionCode);
+	}
 
 }

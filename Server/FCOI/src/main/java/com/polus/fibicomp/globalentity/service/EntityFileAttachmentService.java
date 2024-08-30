@@ -10,21 +10,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
+import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
 
 public interface EntityFileAttachmentService {
 
-	ResponseEntity<Object> saveFileAttachment(MultipartFile[] files, String formDataJSON);
+	EntityFileRequestDto saveFileAttachment(MultipartFile[] files, String formDataJSON);
 
-	String deleteEntityAttachment(EntityFileRequestDto request);
+	ResponseEntity<String> deleteEntityAttachment(EntityFileRequestDto request);
 
 	ResponseEntity<byte[]> downloadEntityAttachment(Integer attachmentId);
 
 	void exportAllEntityAttachments(EntityFileRequestDto request, HttpServletResponse response) throws IOException;
 
-	String updateEntityAttachmentDetails(EntityFileRequestDto request);
+	ResponseEntity<String> updateEntityAttachmentDetails(EntityFileRequestDto request);
 
 	List<EntityAttachment> getAttachmentsBySectionCode(String sectionCode, Integer entityId);
 
 	List<EntityAttachment> getAttachmentsByEntityId(Integer entityId);
+
+	ResponseEntity<List<EntityAttachmentType>> fetchAttachmentTypes(String sectionCode);
+
+	List<EntityAttachment> getAttachByAttachNumber(Integer attachNumber);
 
 }

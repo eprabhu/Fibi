@@ -20,8 +20,10 @@ import com.polus.fibicomp.globalentity.dto.PriorNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
 import com.polus.fibicomp.globalentity.pojo.IndustryCategoryCode;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 
 @Service
 public interface GlobalEntityService {
@@ -101,7 +103,7 @@ public interface GlobalEntityService {
 		return null;
 	}
 
-	public default ResponseEntity<String> deleteIndustryDetails(Integer entityIndustryClassId) {
+	public default ResponseEntity<String> deleteIndustryDetailsByClassId(Integer entityIndustryClassId) {
 		return null;
 	}
 
@@ -154,7 +156,19 @@ public interface GlobalEntityService {
 		return null;
 	}
 
-	public default ResponseEntity<List<EntityRiskType>> fetchRiskTypes(){
+	public default ResponseEntity<List<EntityRiskType>> fetchRiskTypes(String riskCategoryCode){
+		return null;
+	}
+
+	public default ResponseEntity<String> verifyEntityDetails(Integer entityId) {
+		return null;
+	}
+
+	public default ResponseEntity<String> deleteIndustryDetailsByCatCode(String industryCatCode) {
+		return null;
+	}
+
+	public default ResponseEntity<List<EntityRiskLevel>> fetchRiskLevels(String riskTypeCode) {
 		return null;
 	}
 

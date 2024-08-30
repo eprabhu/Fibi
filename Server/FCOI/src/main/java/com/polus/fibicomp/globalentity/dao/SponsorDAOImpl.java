@@ -40,6 +40,9 @@ public class SponsorDAOImpl implements SponsorDAO {
 		if (dto.getAcronym() != null) {
 			hqlQuery.append(", e.acronym = :acronym");
 		}
+		if (dto.getFeedStatusCode() != null) {
+			hqlQuery.append(", e.feedStatusCode = :feedStatusCode");
+		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityId", dto.getEntityId());
@@ -50,6 +53,9 @@ public class SponsorDAOImpl implements SponsorDAO {
 		}
 		if (dto.getAcronym() != null) {
 			query.setParameter("acronym", dto.getAcronym());
+		}
+		if (dto.getFeedStatusCode() != null) {
+			query.setParameter("feedStatusCode", dto.getFeedStatusCode());
 		}
 		query.executeUpdate();
 	}

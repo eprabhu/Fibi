@@ -47,8 +47,16 @@ public class EntitySubOrgInfo implements Serializable {
     @Column(name = "ORGANIZATION_TYPE_CODE")
     private String organizationTypeCode;
 
+    @ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SUB_ORG_INFO_FK2"), name = "ORGANIZATION_TYPE_CODE", referencedColumnName = "ORGANIZATION_TYPE_CODE", insertable = false, updatable = false)
+	private EntityOrganizationType entityOrganizationType;
+
     @Column(name = "FEED_STATUS_CODE")
     private String feedStatusCode;
+
+    @ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SUB_ORG_INFO_FK3"), name = "FEED_STATUS_CODE", referencedColumnName = "FEED_STATUS_CODE", insertable = false, updatable = false)
+	private EntityFeedStatusType entityFeedStatusType;
 
     @Column(name = "IRS_TAX_EXEMPTION")
     private String irsTaxExemption;

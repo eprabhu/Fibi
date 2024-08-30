@@ -39,9 +39,11 @@ public class EntityFileRequestDto {
 
 	private String fileDataId;
 
+	private List<String> fileDataIds;
+
 	private String mimeType;
 
-	private String entityId;
+	private Integer entityId;
 
 	private String subModuleCode;
 
