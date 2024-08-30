@@ -2598,7 +2598,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				personEntity.getCoiEntity().setEntityId(rset.getInt("ENTITY_ID"));
 				personEntity.getCoiEntity().setEntityNumber(rset.getInt("ENTITY_NUMBER"));
 				personEntity.getCoiEntity().setEntityName(rset.getString(ENTITY_NAME));
-				personEntity.getCoiEntity().setEntityOwnershipType(EntityOwnershipType.builder().description(rset.getString("ENTITY_TYPE_CODE")).build());
+				personEntity.getCoiEntity().setPhoneNumber(rset.getString("PHONE_NUMBER"));
+				personEntity.getCoiEntity().setEntityOwnershipType(EntityOwnershipType.builder().description(rset.getString("ENTITY_TYPE")).build());
 				Country entityCountry = new Country();
 				entityCountry.setCountryName(rset.getString("COUNTRY"));
 				personEntity.getCoiEntity().setCountry(entityCountry);
