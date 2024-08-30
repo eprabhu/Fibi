@@ -1,0 +1,297 @@
+<ng-container>
+    <app-coi-slider (closeSlider)="validateSliderClose()" [elementId]="'coi-project-notification-slider'"
+        [overlay_z_index]="1056" [slider_z_index]="1057" [isHeaderNeeded]="true" [sliderWidth]="'w-50'">
+
+        <ng-container header>
+            <span id="">Notification</span>
+        </ng-container>
+
+        <ng-container content-sticky>
+            <div class="coi-box-red coi-border-grey border-secondary border-opacity-50 rounded-2 shadow-medium">
+                <div class=" fs-14 fw-500">
+                    <div class="row mb-2">
+                        <div class="col-md-9 col-lg-10 d-flex align-items-start coi-card-body-notch-container">
+                            <span class="coi-card-notch-ribbon shadow-sm" id="coi-comment-slider-project-type"
+                                [style.background-color]="dataForNotificationSlider?.projectDetails.projectBadgeColour"
+                                tabindex="-1"
+                                [attr.aria-label]="dataForNotificationSlider?.projectDetails?.projectType">
+                                {{dataForNotificationSlider?.projectDetails?.projectType}}
+                            </span>
+                            <div class="col-8 label-text fs-16 mt-1 ms-1">
+                                <div class="d-flex margin-left-negative gap-1">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
+                                    <span class="text-slice" id="coi-comment-slider-project-title"
+                                        [title]="dataForNotificationSlider.projectDetails.projectId + ' - ' + dataForNotificationSlider.projectDetails.title">
+                                        #{{dataForNotificationSlider.projectDetails.projectId+ ' - ' +
+                                        dataForNotificationSlider.projectDetails.title}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-3">
+
+                        <!-- princiapl investigator -->
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <label for="coi-comment-slider-pi" class="d-block coi-text-dark">Principal
+                                Investigator</label>
+                            <div tabindex="-1">
+                                <span [attr.aria-label]="dataForNotificationSlider?.projectDetails?.piName"
+                                    id="coi-comment-slider-pi">
+                                    <app-no-data-label
+                                        [valueToShow]="dataForNotificationSlider?.projectDetails?.piName">
+                                        <span class="coi-text-light text-slice"
+                                            [title]="dataForNotificationSlider?.projectDetails?.piName">{{dataForNotificationSlider?.projectDetails?.piName}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Lead Unit -->
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <label for="coi-comment-slider-leadunit" class="d-block coi-text-dark">Lead Unit</label>
+                            <div tabindex="-1">
+                                <span id="coi-comment-slider-leadunit">
+                                    <app-no-data-label
+                                        [valueToShow]="commonService.getPersonLeadUnitDetails({unitName: dataForNotificationSlider?.projectDetails?.leadUnitName, unitNumber: dataForNotificationSlider?.projectDetails?.leadUnitNumber})">
+                                        <span class="coi-text-light text-slice"
+                                            [title]="commonService.getPersonLeadUnitDetails({unitName: dataForNotificationSlider?.projectDetails?.leadUnitName, unitNumber: dataForNotificationSlider?.projectDetails?.leadUnitNumber})">
+                                            {{commonService.getPersonLeadUnitDetails({unitName:
+                                            dataForNotificationSlider?.projectDetails?.leadUnitName, unitNumber:
+                                            dataForNotificationSlider?.projectDetails?.leadUnitNumber})}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Project Status -->
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <label for="coi-comment-slider-project-status" class="d-block coi-text-dark">Project
+                                Status</label>
+                            <div tabindex="-1">
+                                <span id="coi-comment-slider-project-status">
+                                    <app-no-data-label
+                                        [valueToShow]="dataForNotificationSlider?.projectDetails?.projectStatus">
+                                        <span class="coi-text-light text-slice"
+                                            [title]="dataForNotificationSlider?.projectDetails?.projectStatus">
+                                            {{dataForNotificationSlider?.projectDetails?.projectStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- sponsor -->
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <label for="coi-comment-slider-sponsor" class="d-block coi-text-dark">Sponsor</label>
+                            <div tabindex="-1">
+                                <span
+                                    [attr.aria-label]="getFormattedSponsor(dataForNotificationSlider?.projectDetails?.sponsorCode, dataForNotificationSlider?.projectDetails?.sponsorName)"
+                                    id="coi-comment-slider-sponsor">
+                                    <app-no-data-label
+                                        [valueToShow]="getFormattedSponsor(dataForNotificationSlider?.projectDetails?.sponsorCode, dataForNotificationSlider?.projectDetails?.sponsorName)">
+                                        <span class="coi-text-light text-slice"
+                                            [title]="getFormattedSponsor(dataForNotificationSlider?.projectDetails?.sponsorCode, dataForNotificationSlider?.projectDetails?.sponsorName)">
+                                            {{getFormattedSponsor(dataForNotificationSlider?.projectDetails?.sponsorCode,
+                                            dataForNotificationSlider?.projectDetails?.sponsorName)}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <!-- prime sponsor -->
+                        <div class="col-lg-4 col-md-6 mb-2">
+                            <label for="coi-comment-slider-prime-sponsor" class="d-block coi-text-dark">Prime
+                                Sponsor</label>
+                            <div tabindex="-1">
+                                <span
+                                    [attr.aria-label]="getFormattedSponsor(dataForNotificationSlider?.projectDetails?.primeSponsorCode, dataForNotificationSlider?.projectDetails?.primeSponsorName)"
+                                    id="coi-comment-slider-prime-sponsor">
+                                    <app-no-data-label
+                                        [valueToShow]="getFormattedSponsor(dataForNotificationSlider?.projectDetails?.primeSponsorCode, dataForNotificationSlider?.projectDetails?.primeSponsorName)">
+                                        <span class="coi-text-light text-slice"
+                                            [title]="getFormattedSponsor(dataForNotificationSlider?.projectDetails?.primeSponsorCode, dataForNotificationSlider?.projectDetails?.primeSponsorName)">
+                                            {{getFormattedSponsor(dataForNotificationSlider?.projectDetails?.primeSponsorCode,
+                                            dataForNotificationSlider?.projectDetails?.primeSponsorName)}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- period -->
+                        <div class="col-lg-4 col-md-6 mb-2"
+                            [attr.aria-label]="'Period is ' + ((dataForNotificationSlider?.projectDetails?.projectStartDate || dataForNotificationSlider?.projectDetails?.projectEndDate) ?
+					    ((dataForNotificationSlider?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (dataForNotificationSlider?.projectDetails?.projectEndDate | dateFormatter))  : 'empty')">
+                            <label for="coi-comment-slider-period" class="d-block coi-text-dark">Period</label>
+                            <div>
+                                <span id="coi-comment-slider-period">
+                                    <app-no-data-label
+                                        [valueToShow]="dataForNotificationSlider?.projectDetails?.projectStartDate && dataForNotificationSlider?.projectDetails?.projectEndDate">
+                                        <span class="coi-text-light text-slice"
+                                            [title]="((dataForNotificationSlider?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (dataForNotificationSlider?.projectDetails?.projectEndDate | dateFormatter))">
+                                            {{dataForNotificationSlider?.projectDetails?.projectStartDate |
+                                            dateFormatter}} -
+                                            {{dataForNotificationSlider?.projectDetails?.projectEndDate |
+                                            dateFormatter}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container content>
+            <div class="card shadow-medium p-3 mb-3 mt-3">
+                <div class="form-row pb-0 mr-0">
+                    <div class="col-lg-12">
+                        <div class="row gap-1 align-items-center">
+                            <label for="coi-entity-sponsor-code" title='Subject' class="col-12 ms-1">To</label>
+                            <div class="col-6 align-items-baseline justify-content-center pe-0">
+                                <app-elastic [options]="elasticSearchOptionsForTo" [clearField]="clearField"
+                                    (click)="send = 'TO'" [placeHolder]="'Search person'"
+                                    [isError]="validationMap.get('recipients')"
+                                    (selectedResult)="selectedRecipient($event)">
+                                </app-elastic>
+                            </div>
+
+                            <!-- commenting the code of CC and BCC it will be enable form the next commit -->
+
+                            <!-- <a class="coi-anchor-link ms-2 text-nowrap fs-14 col-auto px-0" *ngIf="!isCcViewable"
+                                    (click)="isCcViewable = true">
+                                <i aria-hidden="true"></i>Add Cc</a>
+    
+                                <a class="coi-anchor-link ms-3 text-nowrap fs-14 col-auto px-0" *ngIf="!isBccViewable"
+                                (click)="isBccViewable = true">
+                                <i aria-hidden="true"></i>Add Bcc</a> -->
+                        </div>
+                        <div class="d-inline-flex flex-wrap mb-2 mt-1">
+                            <ng-container *ngFor="let recipients of notificationObject?.recipients">
+                                <div *ngIf="(recipients.recipientType == 'TO')"
+                                    class="badge rounded-pill bg-recipient-user-fileChips mt-1 ms-2">
+                                    <span class="text-color d-flex align-items-center">
+                                        <i class="mr-2 fa fa-user-o" aria-hidden="true"></i>
+                                        {{recipients.recipientName}}
+                                        <span class="fs-15" (click)="removeRecipient(recipients)">
+                                            <mat-icon>close</mat-icon>
+                                        </span>
+                                    </span>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <!-- commenting the code of CC and BCC it will be enable form the next commit -->
+
+                    <!-- <div *ngIf="isCcViewable" class="col-12">
+                            <div class="form-row mt-2">
+                                <div class="col mb-0">
+                                    <label title='Subject' class="d-block">Cc</label>
+                                    <div class="col-6 align-items-baseline justify-content-center">
+                                        <app-elastic [options]="elasticSearchOptionsForCc" [clearField]="clearField" (click)="send = 'CC'"
+                                            [placeHolder]="'Search person'" (selectedResult)="selectedRecipient($event)">
+                                        </app-elastic>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-inline-flex flex-wrap mb-2 mt-1">
+                                <ng-container *ngFor="let recipients of notificationObject?.recipients">
+                                    <div *ngIf="(recipients.recipientType == 'CC')" class="badge rounded-pill bg-recipient-user-fileChips mt-1 ms-2">
+                                        <span class="text-color d-flex align-items-center">
+                                            <i class="mr-2 fa fa-user-o"
+                                                aria-hidden="true"></i> {{recipients.recipientName}}
+                                                <span class="fs-15">
+                                                    <mat-icon>close</mat-icon>
+                                                </span>
+                                        </span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngIf="isBccViewable" class="col-lg-12">
+                            <label title='Subject' class="d-block">Bcc</label>
+                            <div class="col-6 align-items-baseline justify-content-center">
+                                <app-elastic [options]="elasticSearchOptionsForBcc" [clearField]="clearField" (click)="send = 'BCC'"
+                                    [placeHolder]="'Search person'" (selectedResult)="selectedRecipient($event)">
+                                </app-elastic>
+                            </div>
+                            <div class="d-inline-flex flex-wrap mb-2 mt-1">
+                                <ng-container *ngFor="let recipients of notificationObject?.recipients">
+                                    <div *ngIf="(recipients.recipientType == 'BCC')" class="badge rounded-pill bg-recipient-user-fileChips mt-1 ms-2">
+                                        <span class="text-color d-flex align-items-center">
+                                            <i class="mr-2 fa fa-user-o"
+                                                aria-hidden="true"></i> {{recipients.recipientName}}
+                                                <span class="fs-15">
+                                                    <mat-icon>close</mat-icon>
+                                                </span>
+                                        </span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div> -->
+                </div>
+                <div class="form-row pb-0 mr-0">
+                    <div class="mt-1 px-1">
+                        <label title="close" class="d-block">Notification Template</label>
+                        <app-look-up [options]='templateOptions' (selectedResult)="onTemplateSelect($event)"
+                            [defaultValue]="defaultTemplateLabel" [isExternalArray]="true"
+                            [externalArray]="notificationTemplates" [uniqueId]="'notification-template-lookup'">
+                        </app-look-up>
+                    </div>
+                </div>
+                <div class="form-row pb-0 mr-0">
+                    <div class="col-lg-12">
+                        <label title='Subject' class="d-block">
+                            <span class="mandatory">*</span>Subject</label>
+                        <input id="notification-msg-subject" class="form-control committeeBox dateBox"
+                            [ngClass]="validationMap.get('subject') ? 'coi-invalid-FieldBorder' : ''"
+                            [(ngModel)]="notificationObject.subject" placeholder="Please provide Subject">
+                        <div *ngIf="validationMap?.get('subject')" class="invalid-feedback d-block">
+                            <p class="warning-style m-0"><span
+                                    class="mandatory">{{validationMap?.get('subject')}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mr-0">
+                    <div class="form-row mr-0">
+                        <div class="col-lg-12">
+                            <label title='Message Body' class="d-block">
+                                <span class="mandatory">*</span>Message Body</label>
+                            <ng-container>
+                                <div class="alert alert-warning p-1 f-15 mb-2 d-flex align-items-center"
+                                    id="more-option-notify-msg-bdy">
+                                    <i class="fa fa-info-circle info-icon mx-2 mt-1" aria-hidden="true"></i>
+                                    <em>The editor does not support images.</em>
+                                </div>
+                                <div [ngClass]="validationMap.get('message') ? 'coi-invalid-FieldBorder ' : ''">
+                                    <ckeditor [(ngModel)]="notificationObject.message"
+                                        [id]="'coi-notification-msg-body'" [config]="editorConfig" [editor]="Editor"
+                                        (focus)="onEditorFocus()" (blur)="onEditorBlur()" (ready)="onReady($event)"
+                                        placeholder="Comment" row="1" maxlength="2000">
+                                    </ckeditor>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="validationMap?.get('body')">
+                    <p class="warning-style"><span class="mandatory">{{validationMap?.get('body')}}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button title="Click here to close" type="button" aria-label="Click here to close the popup"
+                    id="coi-notification-modal-close-btn" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal"
+                    (click)="clearNotifyFields()">
+                    Clear
+                </button>
+                <button type="button" title="Click here to notify the keyperson" class="btn btn-primary fs-14"
+                    aria-label="Click here to notify the keyperson" id="coi-notification-modal-notify-btn"
+                    (click)="sendNotification()">
+                    Notify
+                </button>
+            </div>
+        </ng-container>
+    </app-coi-slider>
+</ng-container>

@@ -576,4 +576,7 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
+    fetchAllNotifications(notificationRequest) {
+        return this._http.post(this.baseUrl + '/getNotifications', notificationRequest);
+    }
 }
