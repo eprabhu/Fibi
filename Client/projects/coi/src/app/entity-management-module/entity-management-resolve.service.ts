@@ -86,7 +86,10 @@ export class EntityPathResolveService{
         if(this._commonService.hasChangesAvailable) {
             this._commonService.isNavigationStopped = true;
             this._commonService.attemptedPath = nextState.url;
-            openModal('coi-entity-confirmation-modal');
+            let errToast = document.getElementById('error-toast');
+            if(errToast && !errToast?.classList.contains('invisible')) {
+                openModal('coi-entity-confirmation-modal');
+            }
             return false;
         } else {
             this._commonService.isNavigationStopped = false;

@@ -23,6 +23,7 @@ export class Create_Entity {
     animalAccreditation?: any;
     isDunsMatched?: any;
     entityOwnershipTypeCode: any;
+    businessTypeCode: any;
     entityOwnerShip: EntityOwnerShip = new EntityOwnerShip();
 }
 
@@ -82,6 +83,7 @@ export class OtherDetails {
     businessTypeCode?: any;
     activityText?: string = '';
     currencyCode?: string = '';
+    entityBusinessType: any;
 }
 
 export class EntityRisk {
@@ -231,6 +233,7 @@ export class EntityDetails {
     incorporatedIn: any;
     numberOfEmployees: any;
     federalEmployerId: any;
+    businessTypeCode: any;
 }
 
 export class Country {

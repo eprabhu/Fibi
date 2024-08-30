@@ -20,6 +20,7 @@ export class CommonService {
     authUrl = '';
     opaUrl = '';
     formUrl = '';
+    fibiCOIConnectUrl = '';
     EXTERNAL_APPLICATION_BASE_URL = '';
     EXTERNAL_PROPOSAL_URL = '';
     EXTERNAL_AWARD_URL = '';
@@ -118,7 +119,7 @@ export class CommonService {
         this.authUrl = configurationData.authUrl;
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
-        this.formUrl = configurationData.formUrl;
+        this.fibiCOIConnectUrl = configurationData.fibiCOIConnectUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;

@@ -63,6 +63,8 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore() {
+        this.selectedLookupList = [];
+        this.selectedBusinessTypeList = [];
         const entityData = this.dataStore.getData();
         if (!entityData || isEmptyObject(entityData)) {
             return;
@@ -73,9 +75,9 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         if (this.entityDetails.currencyCode) {
             this.selectedLookupList.push({'code': this.entityDetails.currencyCode, 'description': null});
         }
-        if (this.entityDetails.entityBusinessType) {
-            this.selectedBusinessTypeList.push({'code': this.entityDetails?.entityBusinessType?.businessTypeCode,
-                description: this.entityDetails?.entityBusinessType?.description
+        if (this.entityDetails.businessTypeCode) {
+            this.selectedBusinessTypeList.push({'code': this.entityDetails?.businessTypeCode,
+                description: null
             });
         }
         this.setOtherDetailsObject();

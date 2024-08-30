@@ -3,6 +3,9 @@ import { AttachmentTab, ComplianceTab, OverviewTabSection, SponsorTabSection, Su
 import { jumpToSection } from '../../common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { EntityDataStoreService } from '../entity-data-store.service';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { EntityManagementService } from '../entity-management.service';
 
 @Component({
   selector: 'app-right-panel',
@@ -15,11 +18,15 @@ export class RightPanelComponent {
     sectionDetails: [];
     selectedSectionId: any;
     $subscriptions: Subscription[] = [];
+    dunsNumber: any;
+    isDunsMatched: boolean;
 
-    constructor(private _router: Router) {}
+    constructor(private _router: Router, private _dataStorService: EntityDataStoreService, public entityManagementService: EntityManagementService) {}
 
     ngOnInit() {
         this.routerEventSubscription();
+        this.getDataFromStore();
+        this.listenDataChangeFromStore();
     }
 
     getCurrentTab(currentURL): any {
@@ -36,6 +43,21 @@ export class RightPanelComponent {
         } else {
             return '';
         }
+    }
+
+    private getDataFromStore() {
+        const entityData = this._dataStorService.getData();
+        if (isEmptyObject(entityData)) { return; }
+        this.dunsNumber = entityData?.entityDetails?.dunsNumber;
+        this.isDunsMatched = entityData?.entityDetails?.isDunsMatched;
+    }
+
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this._dataStorService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
+            })
+        );
     }
 
     getSectionDetails() {

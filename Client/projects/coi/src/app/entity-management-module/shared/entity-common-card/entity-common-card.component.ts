@@ -22,7 +22,7 @@ export class EntityCommonCardComponent {
     dunsNumber: any;
     isDunsMatched: boolean;
 
-    constructor(public _entityManagementService: EntityManagementService,
+    constructor(public entityManagementService: EntityManagementService,
         private _dataStorService: EntityDataStoreService) {}
 
     ngOnInit(){
