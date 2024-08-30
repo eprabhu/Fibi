@@ -78,7 +78,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     onSponsorTypeSelect(event){
         if(event){
             this.sponsorDetailsObj.sponsorTypeCode = event[0]?.code;
-            this.changeEvent('acronym');
+            this.changeEvent('sponsorTypeCode');
         }
         else{
             this.sponsorDetailsObj.sponsorTypeCode = null;
