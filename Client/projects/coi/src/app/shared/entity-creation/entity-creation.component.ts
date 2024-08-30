@@ -54,9 +54,10 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     localCAGE: any;
     selectedOwnerShipType: any = [];
     overViewTab = OverviewTabSection;
+    @Input() manualAutoSaveEvent = new Subject();
 
     constructor(private _entityCreateService: EntityCreationService, private _router: Router,private _route: ActivatedRoute,
-        private _commonService: CommonService, private _autoSaveService: AutoSaveService, private _informationHelpTextService: InformationAndHelpTextService) {}
+        private _commonService: CommonService, private _autoSaveService: AutoSaveService) {}
 
     ngOnInit() {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
@@ -67,7 +68,35 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         this.triggerExternalSave();
         this.triggerNumberCheck();
         this.autoSaveSubscribe();
+        this.subscribeManualAutoSaveEvent();
         this.setDefaultValues();
+    }
+
+    subscribeManualAutoSaveEvent() {
+        this.$subscriptions.push(this.manualAutoSaveEvent.subscribe((event: any) => {
+            if(event) {
+                let createEntityObj = new Create_Entity();
+                let test = this.createEntityObj.entityOwnerShip;
+                createEntityObj.entityName = event?.orgDetails?.primaryName;
+                createEntityObj.primaryAddressLine1 = event?.orgDetails?.primaryAddress?.streetAddress?.line1;
+                createEntityObj.primaryAddressLine2 = event?.orgDetails?.primaryAddress?.streetAddress?.line2;
+                createEntityObj.city = event?.orgDetails?.primaryAddress?.addressLocality?.name;
+                createEntityObj.state = event?.orgDetails?.primaryAddress?.addressRegion?.abbreviatedName;
+                createEntityObj.countryCode = event?.orgDetails?.primaryAddress?.addressCountry?.isoAlpha2Code;
+                createEntityObj.postCode = event?.orgDetails?.primaryAddress?.postalCode;
+                createEntityObj.dunsNumber = event?.orgDetails?.duns;
+                createEntityObj.phoneNumber = event?.orgDetails?.telephone[0]?.telephoneNumber;
+                createEntityObj.entityOwnershipTypeCode = this.createEntityObj.entityOwnershipTypeCode;
+                createEntityObj.isDunsMatched = event?.isDunsMatched;
+                this.createEntityObj = deepCloneObject(createEntityObj);
+                delete this.createEntityObj['entityOwnerShip'];
+                Object.keys(this.createEntityObj).forEach((ele) => {
+                    this.changeEvent(ele);
+                })
+                this.createEntityObj.entityOwnerShip = test;
+                this.createEntityObj.country ={'countryTwoCode':event?.orgDetails?.primaryAddress?.addressCountry?.isoAlpha2Code, 'countryName': event?.orgDetails?.primaryAddress?.addressCountry?.name}
+            }
+        }))
     }
 
     setDefaultValues() {
@@ -101,6 +130,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.saveEntity.subscribe((data) => {
             this.entityMandatoryValidation();
             if (!this.mandatoryList.size) {
+                delete this.createEntityObj['entityOwnerShip'];
                 this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
                     this.isFormDataChanged = false;
                     this.setCommonChangesFlag(false);
@@ -190,6 +220,9 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.autoSaveRO['country'] = this.createEntityObj['country'];
                 }
                 this.emitSaveObj.emit(this.autoSaveRO);
+                this.localDUNS = this.createEntityObj.dunsNumber;
+                this.localCAGE = this.createEntityObj.cageNumber;
+                this.localUEI = this.createEntityObj.ueiNumber;                
                 this.autoSaveRO = {};
                 this.isFormDataChanged = false;
                 this.setCommonChangesFlag(false);
@@ -221,6 +254,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
 
     navigateToRoute() {
         if(this._commonService.isNavigationStopped) {
+            hideModal('coi-entity-confirmation-modal');
             this._router.navigateByUrl(this._commonService.attemptedPath);
         }
     }
@@ -295,6 +329,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     checkForDuplicateDUNS() {
         this.clearValidation('duns');
         if(this.createEntityObj.dunsNumber && this.createEntityObj.dunsNumber != this.localDUNS) {
+            this.createEntityObj.isDunsMatched = false;
+            this.changeEvent("isDunsMatched");
             this.$subscriptions.push(this._entityCreateService.validateDUNS(this.createEntityObj.dunsNumber).subscribe((data:any) => {
                 if(data) {
                     this.mandatoryList.set('duns', 'An entity with this DUNS number already exists');

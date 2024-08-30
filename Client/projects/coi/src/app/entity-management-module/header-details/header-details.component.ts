@@ -1,13 +1,24 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { openCoiSlider } from '../../common/utilities/custom-utilities';
+import { closeCoiSlider, openCoiSlider } from '../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { EntityDetails } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityTabStatus, EntityDetailsCard } from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
-import { getCurrentTimeStamp, getDuration, getTimeInterval } from '../../common/utilities/date-utilities';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import { EntityManagementService } from '../entity-management.service';
+
+class DNBReqObj {
+    sourceDataName: string;
+    sourceDunsNumber: any;
+    emailAddress: string;
+    addressLine1: string;
+    addressLine2: string;
+    postalCode: string;
+    state: string;
+    countryCode: string;
+}import { ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
 
 @Component({
   selector: 'app-header-details',
@@ -27,19 +38,42 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     entityFullAddress: string = '';
     latestPriorName: any;
     isEditMode = false;
+    matchedEntites: any;
+    isOpenVerifyModal = false;
+    entityTabStatus = new EntityTabStatus();
 
-    constructor(public router: Router, public dataStore: EntityDataStoreService, public autoSaveService: AutoSaveService) {}
+    constructor(public router: Router, public dataStore: EntityDataStoreService,
+        public autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService) {}
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
     }
 
     viewSlider(event) {
+        this.$subscriptions.push(this._entityManagementService.getDunsMatch(this.getReqObj()).subscribe((data: any) => {
+        this.matchedEntites = data?.matchCandidates?.length ? data?.matchCandidates : [];
+        if(this.matchedEntites.length) {
+            this.matchedEntites.map(ele =>this.formatResponse(ele));
+        }
         this.showSlider = event;
         this.sliderElementId = 'duns-match-slider';
         setTimeout(() => {
             openCoiSlider(this.sliderElementId);
         });
+    }))
+    }
+
+    getReqObj(): any {
+        let reqObj = new DNBReqObj();
+        reqObj.sourceDataName = this.entityDetails.entityName;
+        reqObj.sourceDunsNumber = this.entityDetails.dunsNumber || '';
+        reqObj.addressLine1 = this.entityDetails.primaryAddressLine1;
+        reqObj.addressLine2 = this.entityDetails.primaryAddressLine2 || '';
+        reqObj.countryCode = this.entityDetails?.country?.countryTwoCode;
+        reqObj.state = '';
+        reqObj.postalCode = this.entityDetails.postCode || '';
+        reqObj.emailAddress = this.entityDetails.certifiedEmail || '';
+        return reqObj;
     }
 
     validateSliderClose() {
@@ -68,10 +102,11 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore() {
-        const entityData = this.dataStore.getData();
-        if (!entityData || isEmptyObject(entityData)) { return; }
-        this.entityDetails = entityData.entityDetails;
-        this.latestPriorName = entityData?.priorNames[0]?.priorNames;
+        const ENTITY_DATA: EntireEntityDetails = this.dataStore.getData();
+        if (!ENTITY_DATA || isEmptyObject(ENTITY_DATA)) { return; }
+        this.entityDetails = ENTITY_DATA.entityDetails;
+        this.latestPriorName = ENTITY_DATA?.priorNames[0]?.priorNames;
+        this.entityTabStatus = ENTITY_DATA.entityTabStatus
         this.getEntityFullAddress();
         this.isEditMode = this.dataStore.getEditMode();
     }
@@ -100,41 +135,31 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
             })
         );
     }
-    getTimeInterval() {
-        let timeString = '';
-        const startDate = this.autoSaveService.lastSavedTimeStamp;
-        const END_DATE = getCurrentTimeStamp();
-        if (startDate <= END_DATE) {
-            const seconds = Math.floor((END_DATE - (startDate)) / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const DATE_OBJ = getDuration(startDate, END_DATE);
-            const days = Math.floor(hours / 24);
-            if (days > 0) {
-                timeString = this.getTimeIntervalInDays(timeString, DATE_OBJ);
-            }
-            if (days === 0) {
-                timeString = this.getTimeIntervalInHours(timeString, hours, minutes, days, seconds);
-            }
-        }
-        return timeString ? 'Saved ' + timeString + 'ago..' : 'Saved Just Now..';
+
+    formatResponse(entity) {
+        entity.organization.entityName = entity.organization.primaryName;
+        entity.organization.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName;
+        entity.organization.DUNSNumber = entity.organization.duns;
+        entity.organization.entityAddress = entity.organization?.primaryAddress?.streetAddress?.line1 +
+            (entity.organization?.primaryAddress?.streetAddress?.line2 ? ','+ entity.organization?.primaryAddress?.streetAddress?.line2 : '' );
+        entity.organization.city = entity.organization?.primaryAddress?.addressLocality?.name;
+        entity.organization.country = entity.organization?.primaryAddress?.addressCountry?.name;
+        entity.organization.phoneNumber = entity?.organization?.telephone[0]?.telephoneNumber;
+        entity.organization.zipCode = entity.organization?.primaryAddress?.postalCode;
     }
 
-    private getTimeIntervalInDays(timeString, DATE_OBJ) {
-        timeString = timeString.concat(DATE_OBJ.durInYears !== 0 ? DATE_OBJ.durInYears + ' year(s) ' : '');
-        timeString = timeString.concat(DATE_OBJ.durInMonths !== 0 ? DATE_OBJ.durInMonths + ' month(s) ' : '');
-        timeString = timeString.concat(DATE_OBJ.durInDays !== 0 ? DATE_OBJ.durInDays + ' day(s) ' : '');
-        return timeString;
+    updateEntireEntity(isDunsMatched, entity) {
+        this._entityManagementService.triggerDUNSEntity.next({orgDetails : entity?.organization, isDunsMatched: isDunsMatched});
+        closeCoiSlider('duns-match-slider');
+        this.validateSliderClose();
     }
 
-    private getTimeIntervalInHours(timeString, hours, minutes, days, seconds) {
-        hours = hours - (days * 24);
-        minutes = minutes - (days * 24 * 60) - (hours * 60);
-        seconds = seconds - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
-        timeString = timeString.concat(hours !== 0 ? hours + ' hr(s) ' : '');
-        timeString = timeString.concat(hours === 0 && minutes !== 0 ? minutes + ' min(s) ' : '');
-        timeString = timeString.concat(hours === 0 && minutes === 0 && seconds !== 0 ? seconds + ' sec(s) ' : '');
-        return timeString;
+    openVerifyEntityModal(): void {
+        this.isOpenVerifyModal = true;
+    }
+
+    verifyModalAction(modalAction: ModalActionEvent): void {
+        this.isOpenVerifyModal = false;
     }
 
     ngOnDestroy() {

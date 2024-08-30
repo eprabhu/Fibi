@@ -3,6 +3,10 @@ import { AttachmentTab, ComplianceTab, OverviewTabSection, SponsorTabSection, Su
 import { jumpToSection } from '../../common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { EntityDataStoreService } from '../entity-data-store.service';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { EntityManagementService } from '../entity-management.service';
+import { EntireEntityDetails, EntityTabStatus } from '../shared/entity-interface';
 
 @Component({
   selector: 'app-right-panel',
@@ -15,11 +19,17 @@ export class RightPanelComponent {
     sectionDetails: [];
     selectedSectionId: any;
     $subscriptions: Subscription[] = [];
+    dunsNumber: any;
+    isDunsMatched: boolean;
+    tabDetails = new EntityTabStatus();
+    isEditMode: boolean;
 
-    constructor(private _router: Router) {}
+    constructor(private _router: Router, private _dataStorService: EntityDataStoreService, public entityManagementService: EntityManagementService) {}
 
     ngOnInit() {
         this.routerEventSubscription();
+        this.getDataFromStore();
+        this.listenDataChangeFromStore();
     }
 
     getCurrentTab(currentURL): any {
@@ -36,6 +46,23 @@ export class RightPanelComponent {
         } else {
             return '';
         }
+    }
+
+    private getDataFromStore() {
+        const ENTITY_DATA: EntireEntityDetails = this._dataStorService.getData();
+        if (isEmptyObject(ENTITY_DATA)) { return; }
+        this.dunsNumber = ENTITY_DATA?.entityDetails?.dunsNumber;
+        this.isDunsMatched = ENTITY_DATA?.entityDetails?.isDunsMatched;
+        this.tabDetails = ENTITY_DATA?.entityTabStatus;
+        this.isEditMode = this._dataStorService.getEditMode();
+    }
+
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this._dataStorService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
+            })
+        );
     }
 
     getSectionDetails() {

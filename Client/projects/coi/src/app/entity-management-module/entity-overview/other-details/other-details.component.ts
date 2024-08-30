@@ -63,6 +63,8 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore() {
+        this.selectedLookupList = [];
+        this.selectedBusinessTypeList = [];
         const entityData = this.dataStore.getData();
         if (!entityData || isEmptyObject(entityData)) {
             return;
@@ -73,9 +75,9 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         if (this.entityDetails.currencyCode) {
             this.selectedLookupList.push({'code': this.entityDetails.currencyCode, 'description': null});
         }
-        if (this.entityDetails.entityBusinessType) {
-            this.selectedBusinessTypeList.push({'code': this.entityDetails?.entityBusinessType?.businessTypeCode,
-                description: this.entityDetails?.entityBusinessType?.description
+        if (this.entityDetails.businessTypeCode) {
+            this.selectedBusinessTypeList.push({'code': this.entityDetails?.businessTypeCode,
+                description: null
             });
         }
         this.setOtherDetailsObject();
@@ -143,6 +145,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
             this.otherDetailsObj[key] = this.otherDetailsObj[key]?.trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
             this._autoSaveService.commonSaveTrigger$.next(true);
+            this._autoSaveService.autoSaveTrigger$.next();
         }
     }
 
@@ -173,7 +176,8 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     addOtherDetailsAPI() {
-        if (Object.keys(this.autoSaveRO).length) {
+        if (!this.isSaving && Object.keys(this.autoSaveRO).length) {
+            this.isSaving = true;
             this.autoSaveRO.entityId = this.entityDetails.entityId;
             this.commonService.setLoaderRestriction();
             this.$subscriptions.push(this._entityOverviewService.updateOtherDetails(this.autoSaveRO).subscribe((data) => {
@@ -181,9 +185,11 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
                 this.autoSaveRO = {};
                 this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
+                this.isSaving = false;
                 this.navigateToRoute();
                 showEntityToast('SUCCESS');
             }, err => {
+                this.isSaving = false;
                 console.log(err);
                 showEntityToast('ERROR');
             }));
@@ -198,49 +204,59 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     updatePriorName() {
-        this.commonService.setLoaderRestriction();
-        this.$subscriptions.push(this._entityOverviewService.updatePrioirNameDetails({
-            'entityId': this.entityDetails.entityId,
-            'priorName': this.otherDetailsObj['priorName']
-        }).subscribe((data: any) => {
-            this.priorNames.unshift({'priorNames': this.autoSaveRO['priorName'], 'id': data.id});
-            this.updateDataStore('priorNames');
-            delete this.autoSaveRO['priorName'];
-            delete this.otherDetailsObj['priorName'];
-            this.entityPriorName = '';
-            this.addOtherDetailsAPI();
-            this.commonService.hasChangesAvailable = false;
-            this.isOtherDetailsFormChanged = false;
-            this.navigateToRoute();
-            showEntityToast('SUCCESS');
-        }, err => {
-            console.log(err);
-            showEntityToast('ERROR');
-        }));
-        this.commonService.removeLoaderRestriction();
+        if (!this.isSaving) {
+            this.isSaving = true;
+            this.commonService.setLoaderRestriction();
+            this.$subscriptions.push(this._entityOverviewService.updatePrioirNameDetails({
+                'entityId': this.entityDetails.entityId,
+                'priorName': this.otherDetailsObj['priorName']
+            }).subscribe((data: any) => {
+                this.priorNames.unshift({'priorNames': this.autoSaveRO['priorName'], 'id': data.id});
+                this.updateDataStore('priorNames');
+                delete this.autoSaveRO['priorName'];
+                delete this.otherDetailsObj['priorName'];
+                this.entityPriorName = '';
+                this.addOtherDetailsAPI();
+                this.commonService.hasChangesAvailable = false;
+                this.isOtherDetailsFormChanged = false;
+                this.isSaving = false;
+                this.navigateToRoute();
+                showEntityToast('SUCCESS');
+            }, err => {
+                console.log(err);
+                this.isSaving = false;
+                showEntityToast('ERROR');
+            }));
+            this.commonService.removeLoaderRestriction();
+        }
     }
 
     updateAlternateName() {
-        this.commonService.setLoaderRestriction();
-        this.$subscriptions.push(this._entityOverviewService.updateAlternateNameDetails({
-            'entityId': this.entityDetails.entityId,
-            'foreignName': this.otherDetailsObj['foreignName']
-        }).subscribe((data: any) => {
-            this.foreignNames.unshift({'foreignName': this.autoSaveRO['foreignName'], 'id': data.id});
-            this.updateDataStore('foreignNames');
-            delete this.autoSaveRO['foreignName'];
-            delete this.otherDetailsObj['foreignName'];
-            this.entityForeignName = '';
-            this.addOtherDetailsAPI();
-            this.commonService.hasChangesAvailable = false;
-            this.isOtherDetailsFormChanged = false;
-            this.navigateToRoute();
-            showEntityToast('SUCCESS');
-        }, err => {
-            console.log(err);
-            showEntityToast('ERROR');
-        }));
-        this.commonService.removeLoaderRestriction();
+        if(!this.isSaving) {
+            this.isSaving = true;
+            this.commonService.setLoaderRestriction();
+            this.$subscriptions.push(this._entityOverviewService.updateAlternateNameDetails({
+                'entityId': this.entityDetails.entityId,
+                'foreignName': this.otherDetailsObj['foreignName']
+            }).subscribe((data: any) => {
+                this.foreignNames.unshift({'foreignName': this.autoSaveRO['foreignName'], 'id': data.id});
+                this.updateDataStore('foreignNames');
+                delete this.autoSaveRO['foreignName'];
+                delete this.otherDetailsObj['foreignName'];
+                this.entityForeignName = '';
+                this.addOtherDetailsAPI();
+                this.commonService.hasChangesAvailable = false;
+                this.isOtherDetailsFormChanged = false;
+                this.isSaving = false;
+                this.navigateToRoute();
+                showEntityToast('SUCCESS');
+            }, err => {
+                console.log(err);
+                this.isSaving = false;
+                showEntityToast('ERROR');
+            }));
+            this.commonService.removeLoaderRestriction();
+        }
     }
 
     addEntityPriorName() {

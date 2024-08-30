@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { CommonService } from '../../common/services/common.service';
 import { SubawardOrganisationTab } from '../shared/entity-constants';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntitySubAwardService } from './entity-subaward.service';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
@@ -78,4 +78,7 @@ export class EntitySubawardComponent implements OnInit {
         }));
     }
 
+    riskUpdated(entitySubAwarRisksList: EntityRisk[]): void {
+        this.entitySubAwarRisksList = deepCloneObject(entitySubAwarRisksList);
+    }
 }

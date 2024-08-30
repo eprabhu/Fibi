@@ -21,12 +21,14 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     entityDetails: EntityDetails = new EntityDetails();
     entityCountryDetails: Country = new Country();
+    manualAutoSaveEvent = new Subject();
 
-    constructor(public dataStore: EntityDataStoreService) {}
+    constructor(public dataStore: EntityDataStoreService, private _entityManagementService: EntityManagementService) {}
 
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.saveEntityFromDuns();
     }
 
     saveBasicEntityDetails(event) {
@@ -85,6 +87,12 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    saveEntityFromDuns() {
+        this.$subscriptions.push(this._entityManagementService.triggerDUNSEntity.subscribe((event: any) => {
+            this.manualAutoSaveEvent.next(event);
+        }))
     }
 
 }

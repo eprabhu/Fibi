@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EntireEntityDetails, EntityDetails, EntityRisk, EntityRiskProxyController, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskRO, RiskType, RiskLevel } from '../../shared/entity-interface';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
@@ -24,7 +24,10 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     @Input() entityRiskList: EntityRisk[];
     @Input() riskCategoryCode: EntityRiskCategoryCode;
 
+    @Output() riskUpdated: EventEmitter<EntityRisk[]> = new EventEmitter<EntityRisk[]>();
+
     isEditRisk = false;
+    isEditMode = false;
     editIndex: number = -1;
     isOpenRiskModal = false;
     mandatoryList = new Map();
@@ -32,7 +35,6 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     entityRiskLevelList: RiskLevel[] = [];
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
-    isEditMode = false;
     entityRiskModalDetails = new EntityRiskModalDetails();
     entityRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#false#false';
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false'
@@ -109,6 +111,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.mandatoryList.clear();
             this.entityRiskModalDetails = new EntityRiskModalDetails();
+            this.riskUpdated.emit(this.entityRiskList);
         }, 200);
     }
 
