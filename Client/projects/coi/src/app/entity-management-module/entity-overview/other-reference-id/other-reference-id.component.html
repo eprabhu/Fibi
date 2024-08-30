@@ -6,7 +6,7 @@
                     <mat-icon class="coi-mat-icon-size">domain</mat-icon>
                 </span>
                 <span class="fs-16 fw-medium" id="coi-entity-other-ref-id">{{sectionName}}<app-common-help-text [subSectionId]="2608" [elementId]="'coi-entity-other-ref-id'"></app-common-help-text></span>
-                <div class="col-auto ms-auto" *ngIf="externalReferences.length">
+                <div class="col-auto ms-auto" *ngIf="externalReferences.length && isEditMode">
                     <button id="additional-address-add-button"
                             class="btn btn-primary fs-14 d-inline-flex" title="'Click here to Add Other Reference Id'"
                             aria-label="'Click here to add Add Other Reference Id'" (click)="addOtherRefId(true)">
@@ -14,7 +14,7 @@
                     </button>
                 </div>
             </div>
-            <app-no-information *ngIf="!externalReferences.length" [isBorderNeeded]="false" [canShowAddButton]="true" [buttonName]="'Add Other Reference Id'" (buttonAction)="addOtherRefId($event)"></app-no-information>
+            <app-no-information *ngIf="!externalReferences.length" [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Other Reference Id'" (buttonAction)="addOtherRefId($event)"></app-no-information>
             <div *ngIf="externalReferences.length">
                 <div class="card px-2 py-1 bg-white" *ngFor="let ref of externalReferences; let isFirst = first; let isLast = last; let i = index" [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''" >
                    <div class="d-flex">
@@ -24,7 +24,7 @@
                            <span class="d-flex coi-text-light fw-600">{{ref?.description}}</span>
                        </div>
                        <div class="col-md-3 col-lg-2 d-flex align-items-center">
-                        <span class="d-flex  ms-auto">
+                        <span class="d-flex  ms-auto" *ngIf="isEditMode">
                             <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRef(ref, i)">edit</mat-icon>
                             <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDeleteRef(ref, i)">delete</mat-icon>
                         </span>

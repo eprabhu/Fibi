@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { showEntityToast, SponsorDetails } from '../../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
@@ -15,7 +15,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
     templateUrl: './entity-sponsor-details.component.html',
     styleUrls: ['./entity-sponsor-details.component.scss']
 })
-export class EntitySponsorDetailsComponent implements OnInit {
+export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
 
     @Input() sectionName: any;
     @Input() sectionId: any;
@@ -30,6 +30,7 @@ export class EntitySponsorDetailsComponent implements OnInit {
     autoSaveRO: any = {};
     $debounceEvent = new Subject<any>();
     isRestrictSave = false;
+    isEditMode = false;
 
 
     constructor(private _dataStoreService: EntityDataStoreService,
@@ -43,7 +44,7 @@ export class EntitySponsorDetailsComponent implements OnInit {
         this.triggerSingleSave();
         this.getDataFromStore();
         this.autoSaveSubscribe();
-        this.listenDataChangeFromStore();   
+        this.listenDataChangeFromStore();
     }
 
     ngOnDestroy(): void {
@@ -55,7 +56,7 @@ export class EntitySponsorDetailsComponent implements OnInit {
         if (isEmptyObject(entityData)) { return; }
         this.entityDetails = entityData?.entityDetails;
         this.setOtherDetailsObject();
-        
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     triggerSingleSave() {

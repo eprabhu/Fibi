@@ -203,6 +203,7 @@ export class EntityDetails {
     incorporationDate: any;
     certifiedEmail: string;
     activityText: any;
+    entityBusinessType?: any;
     primaryAddressLine1: string;
     primaryAddressLine2: string;
     city: string;

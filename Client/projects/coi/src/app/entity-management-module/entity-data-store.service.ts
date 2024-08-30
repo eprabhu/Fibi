@@ -12,6 +12,10 @@ export class EntityDataStoreService {
     entityRiskType: any[] = [];
     dataEvent = new Subject<string[]>();
 
+    getEditMode() {
+        return this.storeData?.entityDetails?.entityStatusType?.entityStatusTypeCode == '2';
+    }
+
     getData(keys?: Array<string>): any {
         if (!keys) {
             return this.structuredClone(this.storeData);

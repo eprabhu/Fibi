@@ -39,7 +39,6 @@ export class EntityDashboardComponent {
   EntitySearchOptions: any = {};
   countrySearchOptions: any = {};
   lookupValues = [];
-  riskLevelTypeOptions = 'entity_risk_category#RISK_CATEGORY_CODE#true#true';
   entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
   statusTypeOptions = 'EMPTY#EMPTY#true#true#true#true';
   verificationTypeOptions = 'entity_status#ENTITY_STATUS_CODE#true#true';
@@ -59,8 +58,6 @@ export class EntityDashboardComponent {
   isShowGraph = false;
   sortSectionsList = [
     { variableName: 'name', fieldName: 'Name' },
-    { variableName: 'entityType', fieldName: 'Entity Type' },
-    { variableName: 'riskLevel', fieldName: 'Risk' },
     { variableName: 'country', fieldName: 'Country' },
     { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
 ];

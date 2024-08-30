@@ -32,6 +32,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     entityDetails: EntityDetails;
     selectedLookupList: any[] = [];
     isRestrictSave = false;
+    isEditMode = false;
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService, private _entitySubAwardService: EntitySubAwardService) { }
 
@@ -55,6 +56,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
             this.samExpirationDate = getDateObjectFromTimeStamp(this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.samExpirationDate);
             this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
         }
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
     private listenDataChangeFromStore(): void {

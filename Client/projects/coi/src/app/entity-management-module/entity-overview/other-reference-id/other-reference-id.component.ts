@@ -25,6 +25,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
     externalReferences: EntityExternalIdMappings[] = [];
     selectedReference = null;
     isEditIndex = null;
+    isEditMode = false;
     isSaving = false;
     entityId = null;
     defaultRefType = null;
@@ -58,6 +59,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
         }
         this.entityId = entityData?.entityDetails?.entityId;
         this.externalReferences = entityData.entityExternalIdMappings;
+        this.isEditMode = this._dataStoreService.getEditMode();
     }
 
 

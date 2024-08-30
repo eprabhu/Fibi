@@ -11,7 +11,7 @@
                     <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-start-date'"></app-common-help-text>
                 </label>
             </div>
-            <div>
+            <div *ngIf="isEditMode">
                 <span class="dateField w-100">
                     <input matInput [matDatepicker]="otherDetailsStartDate" id="coi-other-details-start-date"
                         placeholder="{{datePlaceHolder}}" style="width: 100% !important" (click)="otherDetailsStartDate.open()"
@@ -25,6 +25,11 @@
                     </mat-datepicker>
                 </span>
             </div>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="entityDetails?.startDate">
+                    <span>{{entityDetails?.startDate | dateFormatter}}</span>
+                </app-no-data-label>
+            </span>
         </div>
         <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Incorporation Date">
@@ -34,7 +39,7 @@
                     <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-inc-date'"></app-common-help-text>
                 </label>
             </div>
-            <div>
+            <div *ngIf="isEditMode">
                 <span class="dateField w-100">
                     <input matInput [matDatepicker]="incorporationStartDate" id="coi-other-details-inc-date"
                         placeholder="{{datePlaceHolder}}" style="width: 100% !important"
@@ -49,6 +54,11 @@
                     </mat-datepicker>
                 </span>
             </div>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="entityDetails?.incorporationDate">
+                    <span>{{entityDetails?.incorporationDate | dateFormatter}}</span>
+                </app-no-data-label>
+            </span>
         </div>
         <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Incorporation In">
@@ -56,8 +66,11 @@
                 for="coi-other-details-inc-in">Incorporation In
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-inc-in'"></app-common-help-text>
             </label>
-            <input type="text" class="form-control fs-13" id="coi-other-details-inc-in"
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-inc-in"
                 [(ngModel)]="otherDetailsObj.incorporatedIn" (ngModelChange)="changeEvent('incorporatedIn')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.incorporatedIn"></app-no-data-label>
+            </span>
         </div>
     </div>
     <div class="row mb-3">
@@ -65,10 +78,13 @@
             <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help" for="coi-other-details-currency">Currency
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-currency'"></app-common-help-text>
             </label>
-            <app-look-up  (selectedResult)="onCurrencyLookupSelect($event)" [options]="coiCurrencyOptions"
+            <app-look-up *ngIf="isEditMode" (selectedResult)="onCurrencyLookupSelect($event)" [options]="coiCurrencyOptions"
             [isExternalArray]="true"  [externalArray]="coiCurrencyList"
             [uniqueId]="'coi-other-details-currency'" [selectedLookUpList]="selectedLookupList">
             </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="selectedLookupList[0]?.code"></app-no-data-label>
+            </span>
         </div>
         <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Congressional district">
@@ -76,8 +92,11 @@
                 for="coi-other-details-cong">Congressional district
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-cong'"></app-common-help-text>
             </label>
-            <input type="text" class="form-control fs-13" id="coi-other-details-cong"
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-cong"
                 [(ngModel)]="otherDetailsObj.congressionalDistrict" (ngModelChange)="changeEvent('congressionalDistrict')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.congressionalDistrict"></app-no-data-label>
+            </span>
         </div>
         <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
             aria-label="Federal Employer ID">
@@ -85,8 +104,11 @@
                 for="coi-other-details-fed-employer">Federal Employer ID
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-fed-employer'"></app-common-help-text>
             </label>
-            <input type="text" class="form-control fs-13" id="coi-other-details-fed-employer"
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-fed-employer"
                 [(ngModel)]="otherDetailsObj.federalEmployerId" (ngModelChange)="changeEvent('federalEmployerId')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.federalEmployerId"></app-no-data-label>
+            </span>
         </div>
     </div>
     <div class="row mb-md-0 mb-lg-3">
@@ -96,7 +118,7 @@
                 Entity Prior Name
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-prior-name'"></app-common-help-text>
             </label>
-            <div class="input-group">
+            <div class="input-group" *ngIf="isEditMode">
                 <input type="text" class="form-control fs-13" id="coi-other-details-prior-name"
                  aria-label="Enter phone number" aria-describedby="button-addon2"
                 [(ngModel)]="entityPriorName">
@@ -106,7 +128,7 @@
                     <mat-icon aria-hidden="true" class="mt-1">add</mat-icon>
                 </button>
             </div>
-            <span class="fileChips word-break-all mt-2" *ngIf="priorNames?.length" data-bs-toogle>
+            <span class="fileChips word-break-all d-block" [class.mt-2]="isEditMode" *ngIf="priorNames?.length" data-bs-toogle>
                     <span class="align-items-center cursor-pointer d-inline-flex mt-2 px-2 py-1"
                     data-bs-toggle="modal" data-bs-target="#entityPriorNameVersionModal" >
                         <span class="me-1 fs-12">{{priorNames[0]?.priorNames}}</span>
@@ -121,7 +143,7 @@
                 Foreign Name
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-foreign-name'"></app-common-help-text>
             </label>
-            <div class="input-group">
+            <div class="input-group" *ngIf="isEditMode">
                 <input type="text" class="form-control fs-13" id="coi-other-details-foreign-name"
                  aria-label="Enter phone number" aria-describedby="button-addon2"
                 [(ngModel)]="entityForeignName">
@@ -131,11 +153,11 @@
                     <mat-icon aria-hidden="true" class="mt-1">add</mat-icon>
                 </button>
             </div>
-            <span class="fileChips word-break-all mt-2" *ngIf="foreignNames?.length">
+            <span class="fileChips word-break-all d-block" [class.mt-2]="isEditMode" *ngIf="foreignNames?.length">
                 <ng-container *ngFor="let foreignName of foreignNames;let i = index;">
                     <span class="align-items-center cursor-pointer d-inline-flex mt-2 px-2 py-1 me-2">
                         <span class="me-1 fs-12">{{foreignName?.foreignName}}</span>
-                        <mat-icon class="fileChips-close fs-13 cursor-pointer" id="coi-alternate-name-delete" aria-hidden="true"
+                        <mat-icon *ngIf="isEditMode" class="fileChips-close fs-13 cursor-pointer" id="coi-alternate-name-delete" aria-hidden="true"
                             (click)="deleteEntityForeignName(foreignName, i)"
                             title="Remove this entity alternate number">clear</mat-icon>
                     </span>
@@ -148,8 +170,11 @@
                 for="coi-other-details-short-name">Entity Short Name
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-short-name'"></app-common-help-text>
             </label>
-            <input type="text" class="form-control fs-13" id="coi-other-details-short-name"
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-short-name"
                 [(ngModel)]="otherDetailsObj.shortName" (ngModelChange)="changeEvent('shortName')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.shortName"></app-no-data-label>
+            </span>
         </div>
     </div>
     <div class="row mb-md-0 mb-lg-3">
@@ -159,8 +184,11 @@
                 for="coi-other-details-employees">Number of employees
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-employees'"></app-common-help-text>
             </label>
-            <input type="text" class="form-control fs-13" id="coi-other-details-employees"
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-employees"
                 [(ngModel)]="otherDetailsObj.numberOfEmployees" (ngModelChange)="changeEvent('numberOfEmployees')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.numberOfEmployees"></app-no-data-label>
+            </span>
         </div>
         <div class="col-6" tabindex="-1"
             aria-label="Entity Business Type">
@@ -168,9 +196,12 @@
                 for="coi-other-details-bss-status">Entity Business Type
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-bss-status'"></app-common-help-text>
             </label>
-            <app-look-up (selectedResult)="onBusinessTypeSelect($event)" [options]="businessStatusTypeOptions"
-            [uniqueId]="'coi-other-details-bss-status'" [selectedLookUpList]="selectedLookupList">
+            <app-look-up *ngIf="isEditMode" (selectedResult)="onBusinessTypeSelect($event)" [options]="businessStatusTypeOptions"
+            [uniqueId]="'coi-other-details-bss-status'" [selectedLookUpList]="selectedBusinessTypeList">
             </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="selectedBusinessTypeList[0]?.description"></app-no-data-label>
+            </span>
         </div>
     </div>
     <div class="row mb-3">
@@ -179,8 +210,11 @@
                 for="coi-other-details-activity">Activity Text (Business Description)
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-activity'"></app-common-help-text>
             </label>
-            <input type="text" class="form-control fs-13" id="coi-other-details-activity"
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-activity"
                 [(ngModel)]="otherDetailsObj.activityText" (ngModelChange)="changeEvent('activityText')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.activityText"></app-no-data-label>
+            </span>
         </div>
     </div>
 </div>
@@ -203,7 +237,7 @@
                                 <th class="align-middle">
                                     Prior Name
                                 </th>
-                                <th class="align-middle w-1rem">
+                                <th class="align-middle w-1rem" *ngIf="isEditMode">
                                     Actions
                                 </th>
                             </tr>
@@ -214,7 +248,7 @@
                                 <td class="table-data fw-600 coi-text-light">
                                    {{priorName?.priorNames}}
                                 </td>
-                                <td class="align-middle text-center">
+                                <td class="align-middle text-center" *ngIf="isEditMode">
                                     <mat-icon aria-hidden="true" class="cursor-pointer" (click)="confirmDeleteName(priorName, i)">delete</mat-icon>
                                 </td>
                             </tr>
