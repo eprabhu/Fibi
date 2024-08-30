@@ -54,6 +54,11 @@
                     </div>
                 </div>
                 <div class="col-auto d-flex gap-2">
+                    <button id="coi-entity-verify-match-btn" (click)="navigateToBack()"
+                            class="btn btn-primary fs-14 d-flex align-items-center btn-sm"
+                            title="Click here to navigate back" aria-label="Click here to navigate back">
+                            <mat-icon aria-hidden="true">reply</mat-icon>
+                        </button>
                     <button *ngIf="isEditMode && entityDetails.entityStatusType.entityStatusTypeCode !== '1'" id="coi-entity-verify-btn"
                         class="btn btn-primary fs-14 d-flex align-items-center btn-sm"
                         (click)="openVerifyEntityModal()"
