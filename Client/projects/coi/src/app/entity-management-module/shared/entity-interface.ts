@@ -158,7 +158,7 @@ export class EntireEntityDetails {
     entityIndustryClassifications: any = [];
     entityMailingAddresses: any = [];
     entityRegistratios: any = [];
-    entitySponsor
+    entityRisks: EntityRisk[] = [];
 }
 
 export class EntityAttachmentDetails {

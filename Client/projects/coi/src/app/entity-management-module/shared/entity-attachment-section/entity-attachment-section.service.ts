@@ -30,8 +30,8 @@ export class EntityAttachmentModalService {
         return this._http.get(`${this._commonService.baseUrl}/entity/attachment/fetchAttachmentTypes/${sectionCode}`);
     }
 
-    deleteAttachment(attachmentId: number, fileDataId: string) {
-        return this._http.post(`${this._commonService.baseUrl}/entity/attachment/deleteAttachment`, { attachmentId, fileDataId });
+    deleteAttachment(attachmentNumber: number) {
+        return this._http.post(`${this._commonService.baseUrl}/entity/attachment/deleteAttachment`, {attachmentNumber});
     }
 
     updateAttachment(attachmentId: number, description: string) {

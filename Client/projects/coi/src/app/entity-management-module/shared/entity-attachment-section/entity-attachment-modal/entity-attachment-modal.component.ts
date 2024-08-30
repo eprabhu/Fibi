@@ -58,8 +58,8 @@ export class EntityAttachmentModalComponent implements OnInit {
     private fetchAttachmentTypes(): void {
         this.$subscriptions.push(
             this._attachmentSectionService.fetchAttachmentTypes(this.sectionCode)
-                .subscribe((data: any) => {
-                    this.attachmentTypes = data.map(item => item.entityAttachmentType);
+                .subscribe((attachmentTypes: EntityAttachmentType[]) => {
+                    this.attachmentTypes = attachmentTypes;
                     this.openAttachmentModal()
                 }, err => {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
