@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { EnitityVerifyComponent } from './enitity-verify.component';
+import { EnitityVerifyModalComponent } from './enitity-verify-modal.component';
 
-describe('EnitityVerifyComponent', () => {
-  let component: EnitityVerifyComponent;
-  let fixture: ComponentFixture<EnitityVerifyComponent>;
+describe('EnitityVerifyModalComponent', () => {
+  let component: EnitityVerifyModalComponent;
+  let fixture: ComponentFixture<EnitityVerifyModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnitityVerifyComponent ]
+      declarations: [ EnitityVerifyModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnitityVerifyComponent);
+    fixture = TestBed.createComponent(EnitityVerifyModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

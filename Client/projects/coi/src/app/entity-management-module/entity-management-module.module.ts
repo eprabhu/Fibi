@@ -12,6 +12,7 @@ import { SharedEntityManagementModule } from './shared/shared-entity-management.
 import { EntityDataStoreService } from './entity-data-store.service';
 import { EntityConfigurationResolveGuardService, EntityManagementResolveService, EntityPathResolveService } from './entity-management-resolve.service';
 import { EntityManagementService } from './entity-management.service';
+import { EnitityVerifyModalComponent } from './enitity-verify-modal/enitity-verify-modal.component';
 
 const routes: Routes = [
     {
@@ -36,6 +37,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         EntityManagementModuleComponent,
+        EnitityVerifyModalComponent,
         HeaderDetailsComponent,
         RightPanelComponent
     ],

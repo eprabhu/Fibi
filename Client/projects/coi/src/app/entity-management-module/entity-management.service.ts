@@ -19,12 +19,20 @@ export class EntityManagementService {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
     }
 
-    fetchRiskType() {
-        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
-    }
-
     getDunsMatch(test) {
         return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/cleansematch/entity/runCleanseMatch', test);
+    }
+
+    verifyEntity(entityId: string | number) {
+        return this._http.patch(`${this._commonService.baseUrl}/entity/verify/${entityId}`, {});
+    }
+
+    fetchEntitySponsorDetails(entityId) {
+        return this._http.get(`${this._commonService.baseUrl}/entity/sponsor/fetch/${entityId}`);
+    }
+
+    fetchEntityOrganizationDetails(entityId: string | number) {
+        return this._http.get(`${this._commonService.baseUrl}/entity/organization/fetch/${entityId}`);
     }
 
 }

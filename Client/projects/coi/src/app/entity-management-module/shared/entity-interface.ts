@@ -116,11 +116,11 @@ export interface RiskType {
 }
 
 export interface EntityStatusType {
-    entityStatusTypeCode: string;
-    description: string;
-    updateTimestamp: number;
-    updatedBy: string;
-    isActive: boolean;
+    entityStatusTypeCode?: string;
+    description?: string;
+    updateTimestamp?: number;
+    updatedBy?: string;
+    isActive?: boolean;
 }
 
 export interface RiskLevel {
@@ -155,12 +155,22 @@ export class EntityDetailsCard {
 }
 
 export class EntireEntityDetails {
-    entityAttachments: EntityAttachmentDetails;
-    entityDetails: EntityDetails;
-    entityIndustryClassifications: any = [];
-    entityMailingAddresses: any = [];
-    entityRegistratios: any = [];
-    entityRisks: EntityRisk[] = [];
+    priorNames?: any[] = [];
+    foreignNames?: any[] = [];
+    entityRisks?: EntityRisk[] = [];
+    entityRegistrations?: any[] = [];
+    entityMailingAddresses?: any[] = [];
+    entityDetails? = new EntityDetails();
+    attachments?: EntityAttachment[] = [];
+    entityTabStatus? = new EntityTabStatus();
+    entityIndustryClassifications?: any[] = [];
+    entityExternalIdMappings?: EntityExternalIdMappings[] = [];
+}
+
+export class EntityTabStatus {
+    entity_overview? = false;
+    entity_sub_org_info? = false;
+    entity_sponsor_info? = false;
 }
 
 export class EntityAttachmentDetails {
@@ -189,51 +199,75 @@ export interface EntityAttachmentType {
     updatedBy?: string
     isActive?: boolean
     isPrivate?: boolean
-  }
+}
 
 export class EntityDetails {
-    entityId: string | number;
-    entityName: string;
-    foreignName: string;
-    priorName: string;
-    shortName: string;
-    dunsNumber: any;
-    ueiNumber: any;
-    cageNumber: any;
-    websiteAddress: string;
-    startDate: any;
-    incorporationDate: any;
-    certifiedEmail: string;
-    activityText: any;
-    entityBusinessType?: any;
-    primaryAddressLine1: string;
-    primaryAddressLine2: string;
-    city: string;
-    state: string;
-    postCode: any;
-    isPubliclyTradedCompany: string;
-    approvedBy: string;
-    approvedTimestamp: string;
-    createdBy: string;
-    createTimestamp: string;
-    updatedBy: any;
-    updateTimestamp: any;
-    entityStatusTypeCode: string;
-    operatingStatusTypeCode: any;
-    businessEntityType: string;
-    currencyCode: string;
-    entitySourceTypeCode: string;
-    countryCode: string;
-    entityStatusType: EntityStatusType;
-    entityOperatingStatusType: string;
-    entitySourceType: string;
-    country: Country;
-    phoneNumber: any;
-    congressionalDistrict: any;
-    incorporatedIn: any;
-    numberOfEmployees: any;
-    federalEmployerId: any;
-    businessTypeCode: any;
+    entityId?: number;
+    entityName?: string;
+    foreignName?: any;
+    priorName?: any;
+    shortName?: string;
+    dunsNumber?: string;
+    ueiNumber?: any;
+    cageNumber?: any;
+    websiteAddress?: string;
+    startDate?: any;
+    incorporationDate?: any;
+    certifiedEmail?: string;
+    activityText?: string;
+    phoneNumber?: string;
+    primaryAddressLine1?: string;
+    primaryAddressLine2?: string;
+    city?: string;
+    state?: string;
+    postCode?: string;
+    humanSubAssurance?: any;
+    anumalWelfareAssurance?: any;
+    animalAccreditation?: any;
+    approvedBy?: string;
+    approvedTimestamp?: number;
+    createdBy?: string;
+    createTimestamp?: number;
+    updatedBy?: string;
+    updateTimestamp?: number;
+    entityStatusTypeCode?: string;
+    operatingStatusTypeCode?: any;
+    businessTypeCode?: string;
+    currencyCode?: string;
+    entitySourceTypeCode?: any;
+    countryCode?: string;
+    entityOwnershipTypeCode?: string;
+    incorporatedIn?: string;
+    congressionalDistrict?: string;
+    federalEmployerId?: string;
+    numberOfEmployees?: number;
+    entityNumber?: number;
+    versionNumber?: number;
+    versionStatus?: string;
+    isActive?: boolean;
+    isDunsMatched?: boolean;
+    entityStatusType?: EntityStatusType;
+    entityOperatingStatusType?: any;
+    entitySourceType?: any;
+    country?: Country;
+    entityOwnershipType?: EntityOwnershipType;
+    entityBusinessType?: EntityBusinessType;
+}
+
+export interface EntityOwnershipType {
+    ownershipTypeCode?: string
+    description?: string
+    updateTimestamp?: number
+    updatedBy?: string
+    isActive?: boolean
+}
+
+export interface EntityBusinessType {
+    businessTypeCode?: string
+    description?: string
+    updateTimestamp?: number
+    updatedBy?: string
+    isActive?: boolean
 }
 
 export class Country {
@@ -274,15 +308,15 @@ export function showEntityToast(type: 'SUCCESS' | 'ERROR') {
     }
 }
 
-export function removeToast(type: 'SUCCESS'|'ERROR') {
+export function removeToast(type: 'SUCCESS' | 'ERROR') {
     let successToast = document.getElementById('success-toast');
     let errorMsg = document.getElementById('error-toast');
-    if(type === 'SUCCESS') {
-        if(successToast) {
+    if (type === 'SUCCESS') {
+        if (successToast) {
             successToast.classList.add('invisible');
         }
     } else {
-        if(errorMsg) {
+        if (errorMsg) {
             errorMsg.classList.add('invisible');
         }
     }
@@ -296,27 +330,19 @@ export class EntitySponsorRisk {
     entityRiskId?: any;
 }
 
-export class SponsorDetails {
-    id?: number;
-    entityId?: any;
-    acronym?: string = '';
-    sponsorTypeCode?: string = '';
-    sponsorCode?: any;
-}
-
 export class EntityExternalIdMappings {
-    entityExternalMappingId: number;
-    entityId: number;
-    entity: any;
-    externalIdTypeCode: string;
-    entityExternalIdType: EntityExternalIdType;
-    entityExternalIdTypeDescription: any;
-    externalId: string;
-    description: string;
-    sponsorCode: any;
-    organizationId: any;
-    updatedBy: string;
-    updateTimestamp: number;
+    entityExternalMappingId?: number;
+    entityId?: number;
+    entity?: any;
+    externalIdTypeCode?: string;
+    entityExternalIdType?: EntityExternalIdType;
+    entityExternalIdTypeDescription?: any;
+    externalId?: string;
+    description?: string;
+    sponsorCode?: any;
+    organizationId?: any;
+    updatedBy?: string;
+    updateTimestamp?: number;
 }
 
 export interface EntityExternalIdType {
@@ -332,7 +358,19 @@ export class SubAwardOrganization {
     entityRisks?: EntityRisk[] = [];
     subAwdOrgDetailsResponseDTO? = new SubAwardOrganizationDetails();
 }
+export class EntitySponsor {
+    attachments?: any[] = [];
+    entityRisks?: EntityRisk[] = [];
+    sponsorDetailsResponseDTO? = new SponsorDetails();
+}
 
+export class SponsorDetails {
+    id?: number | null = null;
+    acronym?: string | null = null;
+    entityId?: number | null = null;
+    sponsorCode?: string | null = null;
+    sponsorTypeCode?: string | null = null;
+}
 export class SubAwardOrganizationDetails {
     id?: number | null = null;
     entityId?: string | number | null = null;
@@ -342,7 +380,7 @@ export class SubAwardOrganizationDetails {
     subAwdRiskAssmtDate?: any | null = null;
 }
 
-export class EntityRiskModalDetails  {
+export class EntityRiskModalDetails {
     entityRisk = new EntityRisk();
     selectedRiskTypeLookUpList: EntityRisk[] = [];
     selectedRiskLevelLookUpList: RiskLevel[] = [];
@@ -382,9 +420,9 @@ export interface EntityAttachment {
     updatedBy?: string;
     updateUserFullame?: string;
     versionList?: EntityAttachment[];
-  }
+}
 
-  export interface AttachmentSaveRO {
+export interface AttachmentSaveRO {
     fileName: string;
     mimeType: string;
     attachmentTypeCode: string | number;
