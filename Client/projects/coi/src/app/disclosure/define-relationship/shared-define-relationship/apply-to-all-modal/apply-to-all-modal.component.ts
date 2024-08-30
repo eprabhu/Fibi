@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DefineRelationshipService } from '../../services/define-relationship.service';
-import { ApplyToAllModal, COI, CoiDisclEntProjDetail, ProjectSfiRelationConflictRO, ProjectSfiRelations } from '../../../coi-interface';
+import { ApplyToAllModal, CoiDisclEntProjDetail, ProjectSfiRelationConflictRO, ProjectSfiRelations, SaveProjectSfiConflict } from '../../../coi-interface';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../app-constants';
 import { closeCommonModal } from '../../../../common/utilities/custom-utilities';
 import { ModalActionEvent } from '../../../../shared-components/coi-modal/coi-modal.interface';
@@ -44,7 +44,7 @@ export class ApplyToAllModalComponent {
         return this.mandatoryList.size === 0;
     }
 
-    applyToAllmodalAction(modalAction: ModalActionEvent) {
+    applyToAllmodalAction(modalAction: ModalActionEvent): void {
         switch (modalAction.action) {
             case 'CLOSE_BTN':
             case 'SECONDARY_BTN':
@@ -67,8 +67,9 @@ export class ApplyToAllModalComponent {
         if (this.validateApplyToAll()) {
             this.$subscriptions.push(
                 this.defineRelationshipService.saveProjectSfiConflict(this.getProjectSfiRelationConflictRO())
-                    .subscribe((res: ProjectSfiRelationConflictRO[]) => {
-                        this.updateApplyToAllResponse(res);
+                    .subscribe((res: SaveProjectSfiConflict) => {
+                        this.updateApplyToAllResponse(res.conflictDetails);
+                        this.defineRelationshipService.updateDisclosureConflictStatus(res.disclConflictStatusType);
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status saved successfully.');
                     }, (_error: any) => {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
@@ -101,7 +102,7 @@ export class ApplyToAllModalComponent {
                 coiDisclEntProjDetail.projectConflictStatusCode = UPDATE_DATA.projectConflictStatusCode;
             }
         });
-        const { conflictCount, conflictCompleted } = this.defineRelationshipService.getFormattedConflictCount(PROJECT_SFI_RELATION.coiDisclEntProjDetails)
+        const { conflictCount, conflictCompleted } = this.defineRelationshipService.getFormattedConflictData(PROJECT_SFI_RELATION.coiDisclEntProjDetails)
         PROJECT_SFI_RELATION.conflictCount = conflictCount;
         PROJECT_SFI_RELATION.conflictCompleted = conflictCompleted;
         this._defineRelationshipDataStore.updateOrReplaceProject(PROJECT_SFI_RELATION, ['coiDisclEntProjDetails', 'conflictCount', 'conflictCompleted']);

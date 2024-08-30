@@ -1,0 +1,64 @@
+<!-- verify modal -->
+<app-coi-modal [modalConfig]="entityVerifyModalConfig" (modalAction)="entityVerifyModalActions($event)">
+    <!-- header -->
+    <ng-container modal-header>
+        <span>Verify Entity</span>
+        <!-- <app-common-help-text *ngIf="attachmentHelpText" [helpTextHardCoded]="attachmentHelpText"></app-common-help-text> -->
+    </ng-container>
+    <!-- body -->
+    <ng-container modal-body>
+        <div class="row mx-0 gap-3">
+            <div class="col-12 px-3 py-2" [ngClass]="isComplete.entity ? 'border-light-success' : 'border-light-danger'">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <span class="coi-text-darker">Entity Information</span>
+                    <span class="d-inline-flex align-items-center badge fs-13 fw-normal py-2 px-3 rounded-5"
+                        [ngClass]="isComplete.entity ? 'text-bg-light-success' : 'text-bg-light-danger'">{{isComplete.entity ? 'Complete' : 'InComplete'}}</span>
+                </div>
+                <div *ngIf="!isComplete.entity" class="row mx-0 gap-2 mt-2">
+                    <div class="col-12 d-flex align-items-center">
+                        <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
+                        <span class="coi-text-dark ms-1">Basic Details</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 px-3 py-2" [ngClass]="isComplete.sponsor ? 'border-light-success' : 'border-light-warning'">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <span class="coi-text-darker">Sponsor</span>
+                    <span class="d-inline-flex align-items-center badge fs-13 fw-normal py-2 px-3 rounded-5"
+                        [ngClass]="isComplete.sponsor ? 'text-bg-light-success' : 'text-bg-light-warning'">{{isComplete.sponsor ? 'Complete' : 'InComplete'}}</span>
+                </div>
+                <!-- error list -->
+                <div *ngIf="!isComplete.sponsor" class="row mx-0 gap-2 mt-2">
+                    <ng-container>
+                        <div class="col-12 d-flex align-items-center">
+                            <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
+                            <span class="coi-text-dark ms-1">Sponsor Details</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-12 px-3 py-2" [ngClass]="isComplete.organization ? 'border-light-success' : 'border-light-warning'">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <span class="coi-text-darker">Sub-award Organization</span>
+                    <div class="d-inline-flex align-items-center badge fs-13 fw-normal py-2 px-3 rounded-5"
+                        [ngClass]="isComplete.organization ? 'text-bg-light-success' : 'text-bg-light-warning'">
+                        <span>{{isComplete.organization ? 'Complete' : 'InComplete'}}</span>
+                    </div>
+                </div>
+                <!-- error list -->
+                <div *ngIf="!isComplete.organization" class="row mx-0 gap-2 mt-2">
+                    <ng-container>
+                        <div *ngIf="!this.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationTypeCode" class="col-12 d-flex align-items-center">
+                            <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
+                            <span class="coi-text-dark ms-1">Sub-award Organization Details</span>
+                        </div>
+                        <div *ngIf="!this.entitySubAwardOrganization?.entityRisks?.length" class="col-12 d-flex align-items-center">
+                            <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
+                            <span class="coi-text-dark ms-1">Sub-award Organization Risk</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</app-coi-modal>

@@ -1,3 +1,4 @@
+import { DashboardProjectCount } from "../common/services/coi-common.interface";
 
 export class ProjectOverview {
     projectOverviewDetails: ProjectOverviewDetails[] = [];
@@ -274,7 +275,7 @@ export class CoiDashboardDisclosures {
     unitName: any;
     reviewerList: any;
     coiProjectTypeCode: string;
-    projectCount: any[];
+    projectCount: DashboardProjectCount[];
     projectNumber: string;
     projectTitle: string;
     projectBadgeColor: string;

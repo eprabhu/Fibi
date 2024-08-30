@@ -46,7 +46,8 @@
                     title="Click here to provide your description"
                     placeholder="Please provide the description here."
                     [attr.aria-label]="defineRelationshipService.applyToAllModal.comment"
-                    [class.is-invalid]="mandatoryList.has('CONFLICT_COMMENT')"></textarea>
+                    [class.is-invalid]="mandatoryList.has('CONFLICT_COMMENT')">
+                </textarea>
                 <!-- description error -->
                 <span *ngIf="mandatoryList.has('CONFLICT_COMMENT')" class="invalid-feedback">{{ mandatoryList.get('CONFLICT_COMMENT') }}</span>
             </div>

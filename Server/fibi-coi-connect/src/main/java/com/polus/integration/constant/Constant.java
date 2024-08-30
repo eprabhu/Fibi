@@ -1,7 +1,5 @@
 package com.polus.integration.constant;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public interface Constant {
@@ -22,6 +20,7 @@ public interface Constant {
     String ERROR_CODE = "ER004";
     // Module Code
     Integer AWARD_MODULE_CODE = 1;
+    Integer INST_PROPOSAL_MODULE_CODE = 2;
     Integer DEV_PROPOSAL_MODULE_CODE = 3;
     Integer COI_MODULE_CODE = 8;
     //SubModuleCode
@@ -31,8 +30,11 @@ public interface Constant {
     //Queue Action type
     String PROPOSAL_INTEGRATION_ACTION_TYPE = "PROPOSAL_INTEGRATION";
     String QUESTIONNAIRE_INTEGRATION_ACTION_TYPE = "PROPOSAL_QUESTIONNAIRE_INTEGRATION";
+    String INST_PROPOSAL_INTEGRATION_ACTION_TYPE = "INST_PROPOSAL_INTEGRATION";
+    String AWARD_INTEGRATION_ACTION_TYPE = "AWARD_INTEGRATION";
+    String ENTITY_COI_INTEGRATION_ACTION_TYPE = "ENTITY_COI_INTEGRATION";
 	String COI_PROJECT_TYPE_PROPOSAL = "3";
-	String PENDING_PROJECT = "pendingProject";
+	String PENDING_PROJECT = "projectDisclosure";
 	String FIBI_DIRECT_EXCHANGE = "FIBI.DIRECT.EXCHANGE";
 	String AC_TYPE_UPDATE = "U";
 	String AC_TYPE_INSERT = "I";
@@ -51,5 +53,8 @@ public interface Constant {
 	
 	String IS_PRIMARY_YES = "Y";
 	String IS_PRIMARY_NO = "N";
+	String ACTIVE = "A";
+	String IN_ACTIVE = "I";
+	String DISCLOSURE_TYPE_CODE_PROPOSAL = "2";
 
 }

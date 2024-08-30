@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
-import { CoiEntity, EntityDetails, RiskHistoryRO } from '../../entity-management/entity-details-interface';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { closeSlider, openCoiSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
@@ -16,7 +15,7 @@ import { InformationAndHelpTextService } from '../../common/services/information
 export class EntityRiskSliderComponent implements OnInit {
     @Input() isVisible = false;
     @Input() isOpenSlider = true;
-    @Input() entityDetails: CoiEntity = new CoiEntity();
+    @Input() entityDetails:any;
     @Input() Risk: any;
     @Output() closePage: EventEmitter<any> = new EventEmitter;
     @Input() entitySliderSectionConfig : any = {};
@@ -26,7 +25,7 @@ export class EntityRiskSliderComponent implements OnInit {
     coiConflictStatusType = [];
     isReadMore: boolean[] = [];
     riskValidationMap = new Map();
-    entityRiskRO: RiskHistoryRO = new RiskHistoryRO;
+    entityRiskRO: any;
     isStatusEdited = false;
     riskHistoryLogs: any = {};
     currentRiskCategorycode: any;
@@ -80,14 +79,14 @@ export class EntityRiskSliderComponent implements OnInit {
 
     clearConflictModal() {
         this.riskValidationMap.clear();
-        this.entityRiskRO = new RiskHistoryRO;
+        this.entityRiskRO = {};
         this.revisionComment = '';
         this.isStatusEdited = false;
         this.currentRiskType  = this.entityDetails.entityRiskCategory.description;
         this.currentRiskCategorycode = null;
     }
 
-    private getEntityRiskRO(): RiskHistoryRO {
+    private getEntityRiskRO() {
         this.entityRiskRO.entityId = this.entityDetails?.entityId;
         this.entityRiskRO.entityNumber = this.entityDetails?.entityNumber;
         this.entityRiskRO.riskCategoryCode = this.currentRiskCategorycode;
@@ -109,7 +108,7 @@ export class EntityRiskSliderComponent implements OnInit {
             }
         }))
     }
-    
+
     updateProjectRelationship() {
         if (this.checkForMandatory()) {
             this.$subscriptions.push(
@@ -183,7 +182,7 @@ export class EntityRiskSliderComponent implements OnInit {
     }
 
     getEntitySliderSectionConfig(){
-        this._informationAndHelpTextService.moduleConfiguration = this._commonService.getSectionCodeAsKeys(this.entitySliderSectionConfig);    
+        this._informationAndHelpTextService.moduleConfiguration = this._commonService.getSectionCodeAsKeys(this.entitySliderSectionConfig);
     }
 }
 

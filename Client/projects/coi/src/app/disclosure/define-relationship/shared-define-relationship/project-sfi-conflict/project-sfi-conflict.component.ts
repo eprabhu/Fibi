@@ -2,14 +2,14 @@ import { Component, OnInit, Input, ChangeDetectionStrategy, OnDestroy, ChangeDet
 import { CommonService } from '../../../../common/services/common.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { focusElementById, openCommonModal } from '../../../../common/utilities/custom-utilities';
-import { isEmptyObject } from '../../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, isEmptyObject } from '../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { DefineRelationshipService } from '../../services/define-relationship.service';
-import { COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, DefineRelationshipDataStore, ProjectSfiRelationConflictRO, ProjectSfiRelations } from '../../../coi-interface';
+import { COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, DefineRelationshipDataStore, ProjectSfiRelationConflictRO, ProjectSfiRelations, SaveProjectSfiConflict } from '../../../coi-interface';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from '../../../../app-constants';
+import { HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from '../../../../app-constants';
 import { DefineRelationshipDataStoreService } from '../../services/define-relationship-data-store.service';
-import { GlobalEventNotifier } from '../../../../common/services/coi-common.interace.ts';
+import { GlobalEventNotifier } from '../../../../common/services/coi-common.interface';
 
 @Component({
     selector: 'app-project-sfi-conflict',
@@ -88,7 +88,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
 
     private validateConflictStatus(sfiDetails: CoiDisclEntProjDetail, sfiIndex: number): boolean {
         this.mandatoryList.delete('CONFLICT_STATUS_' + sfiIndex);
-        if (!sfiDetails.projectConflictStatusCode) {
+        if (!sfiDetails?.projectConflictStatusCode) {
             this.mandatoryList.set('CONFLICT_STATUS_' + sfiIndex, 'Please select a conflict status.');
         }
         return !this.mandatoryList.has('CONFLICT_STATUS_' + sfiIndex);
@@ -112,34 +112,40 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
 
     validateDescription(sfiDetails: CoiDisclEntProjDetail, sfiIndex: number): boolean {
         this.mandatoryList.delete('CONFLICT_COMMENT_' + sfiIndex);
-        if (!sfiDetails.disclComment.comment) {
+        if (!sfiDetails?.disclComment?.comment) {
             this.mandatoryList.set('CONFLICT_COMMENT_' + sfiIndex, 'Please enter the description.');
         }
         return !this.mandatoryList.has('CONFLICT_COMMENT_' + sfiIndex);
     }
 
     saveProjectSfiConflict(sfiDetails: CoiDisclEntProjDetail, sfiIndex: number): void {
-        if (this.validateProjectSfiConflict(sfiDetails, sfiIndex)) {
+        if (this.validateProjectSfiConflict(sfiDetails, sfiIndex) && sfiDetails?.isDataChanged) {
+            // this._commonService.setLoaderRestriction();
             this.$subscriptions.push(
                 this.defineRelationshipService.saveProjectSfiConflict(this.getProjectSfiRelationConflictRO(sfiDetails))
-                    .subscribe((res: ProjectSfiRelationConflictRO[]) => {
-                        this.updateSfiDetails(sfiDetails, res[0]);
-                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status saved successfully.');
+                    .subscribe((res: SaveProjectSfiConflict) => {
+                        this.updateSfiDetails(sfiDetails, res.conflictDetails[0]);
+                        this.defineRelationshipService.updateDisclosureConflictStatus(res.disclConflictStatusType);
                     }, (_error: any) => {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
                     }));
+            // this._commonService.removeLoaderRestriction();
         }
     }
 
     private updateSfiDetails(sfiDetails: CoiDisclEntProjDetail, res?: ProjectSfiRelationConflictRO): void {
+        sfiDetails.isDataChanged = false;
         sfiDetails.disclComment.commentId = res ? res.commentId : sfiDetails.disclComment.commentId;
-        sfiDetails.coiProjConflictStatusType = this.defineRelationshipService.coiStatusList.find((type: CoiProjConflictStatusType) =>
+        const STATUS_TYPE = this.defineRelationshipService.coiStatusList.find((type: CoiProjConflictStatusType) =>
             type.projectConflictStatusCode === sfiDetails.projectConflictStatusCode
         );
-        const { conflictCount, conflictCompleted } = this.defineRelationshipService.getFormattedConflictCount(this.projectSfiRelation.coiDisclEntProjDetails);
+        sfiDetails.coiProjConflictStatusType = deepCloneObject(STATUS_TYPE);
+        const { conflictCount, conflictCompleted, conflictStatusCode, conflictStatus } = this.defineRelationshipService.getFormattedConflictData(this.projectSfiRelation.coiDisclEntProjDetails);
         this.projectSfiRelation.conflictCount = conflictCount;
+        this.projectSfiRelation.conflictStatus = conflictStatus;
         this.projectSfiRelation.conflictCompleted = conflictCompleted;
-        this._defineRelationshipDataStore.updateOrReplaceProject(this.projectSfiRelation, ['conflictCount', 'conflictCompleted']);
+        this.projectSfiRelation.conflictStatusCode = conflictStatusCode;
+        this._defineRelationshipDataStore.updateOrReplaceProject(this.projectSfiRelation, ['conflictCount', 'conflictCompleted', 'conflictStatus', 'conflictStatusCode']);
         this._defineRelationshipDataStore.updateCoiDisclEntProjDetails(this.projectSfiRelation.projectId, sfiDetails);
     }
 

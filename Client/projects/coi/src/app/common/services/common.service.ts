@@ -9,7 +9,7 @@ import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
-import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method } from './coi-common.interace.ts';
+import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method } from './coi-common.interface';
 
 @Injectable()
 export class CommonService {
@@ -20,6 +20,7 @@ export class CommonService {
     authUrl = '';
     opaUrl = '';
     formUrl = '';
+    fibiCOIConnectUrl = '';
     EXTERNAL_APPLICATION_BASE_URL = '';
     EXTERNAL_PROPOSAL_URL = '';
     EXTERNAL_AWARD_URL = '';
@@ -75,6 +76,10 @@ export class CommonService {
     modalPersonId: string = '';
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
     relationshipTypeCache = {};
+    entityURL: any;
+    hasChangesAvailable: boolean = false;
+    isNavigationStopped: boolean = false;
+    attemptedPath: string = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -114,7 +119,7 @@ export class CommonService {
         this.authUrl = configurationData.authUrl;
         this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
-        this.formUrl = configurationData.formUrl;
+        this.fibiCOIConnectUrl = configurationData.fibiCOIConnectUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -128,6 +133,7 @@ export class CommonService {
         this.EXTERNAL_APPLICATION_BASE_URL = configurationData.EXTERNAL_APPLICATION_BASE_URL;
         this.EXTERNAL_PROPOSAL_URL = configurationData.EXTERNAL_PROPOSAL_URL;
         this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
+        this.entityURL = configurationData.entityURL;
     }
 
     pageScroll(elementId) {
@@ -579,4 +585,19 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     fetchAllNotifications(notificationRequest) {
         return this._http.post(this.baseUrl + '/getNotifications', notificationRequest);
     }
+
+    getSectionName(tabName, section) {
+        let sectionDetails = tabName.get(section);
+        if(sectionDetails) {
+           return sectionDetails.sectionName;
+        }
+   }
+
+   getSectionId(tabName, section) {
+       let sectionDetails = tabName.get(section);
+       if(sectionDetails) {
+           return sectionDetails.sectionId;
+       }
+   }
+
 }

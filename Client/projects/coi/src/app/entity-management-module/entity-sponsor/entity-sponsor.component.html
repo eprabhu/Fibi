@@ -1,0 +1,19 @@
+<div *ngIf="!isLoading" class="card rounded-0">
+    <div class="mb-2">
+        <app-entity-sponsor-details [sectionName]="commonService.getSectionName(overViewTab,'SPONSOR_DETAILS')"
+            [sectionId]="commonService.getSectionId(overViewTab,'SPONSOR_DETAILS')">
+        </app-entity-sponsor-details>
+    </div>
+    <div class="mb-2">
+        <app-entity-risk-section [sectionName]="commonService.getSectionName(overViewTab,'SPONSOR_RISK')"
+            [sectionId]="commonService.getSectionId(overViewTab,'SPONSOR_RISK')"
+            [entityRiskList]="entitySponsorRiskList" [riskCategoryCode]="'SP'">
+        </app-entity-risk-section>
+    </div>
+    <div class="mb-2">
+        <app-entity-attachment-section [sectionName]="commonService.getSectionName(overViewTab,'SPONSOR_ATTACHMENTS')"
+            [sectionId]="commonService.getSectionId(overViewTab,'SPONSOR_ATTACHMENTS')"
+            [entityAttachmentsList]="entitySponsorAttachmentList" [riskCategoryCode]="'SP'">
+        </app-entity-attachment-section>
+    </div>
+</div>

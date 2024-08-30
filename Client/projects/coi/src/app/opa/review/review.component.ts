@@ -3,8 +3,8 @@ import { fadeInOutHeight } from '../../common/utilities/animations';
 import { ReviewService } from './review.service';
 import { CoiService } from '../../disclosure/services/coi.service';
 import { Subscription } from 'rxjs';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { GlobalEventNotifier } from '../../common/services/coi-common.interace.ts';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { GlobalEventNotifier } from '../../common/services/coi-common.interface';
 import { CommonService } from '../../common/services/common.service';
 
 @Component({

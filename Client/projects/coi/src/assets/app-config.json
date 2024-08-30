@@ -4,6 +4,8 @@
   "authUrl": "http://192.168.1.248/auth",
   "opaUrl": "http://192.168.1.248/opa",
   "formUrl":"http://192.168.1.248/",
+  "fibiCOIConnectUrl": "",
+  "entityURL": "/entity",
   "enableSSO": false,
   "enableGraph": true,
   "isElasticAuthentiaction": false,

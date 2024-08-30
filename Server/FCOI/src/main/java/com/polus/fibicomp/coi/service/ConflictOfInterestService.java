@@ -6,31 +6,30 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.core.inbox.pojo.Inbox;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
+import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
+import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
-import com.polus.core.inbox.pojo.Inbox;
-import com.polus.fibicomp.coi.pojo.Attachments;
-import com.polus.fibicomp.coi.dto.CommonRequestDto;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -41,7 +40,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return A list of entity
 	 */
-	List<CoiEntity> searchEntity(ConflictOfInterestVO vo);
+	List<Entity> searchEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get lookup table of sfi
@@ -126,7 +125,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return vo
 	 */
-	ResponseEntity<Object> saveOrUpdateCoiEntity(ConflictOfInterestVO vo);
+	ResponseEntity<Object> saveOrUpdateEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used to get entity details based on coiEntityId
@@ -385,4 +384,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes);
+
+	ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto);
 }

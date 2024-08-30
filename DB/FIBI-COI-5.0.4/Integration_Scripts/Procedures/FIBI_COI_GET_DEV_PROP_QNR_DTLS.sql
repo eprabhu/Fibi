@@ -21,14 +21,18 @@ BEGIN
                     '3' as COI_PROJECT_TYPE_CODE
 
 FROM   questionnaire_answer_header QAH
-LEFT JOIN questionnaire_answer QA
+INNER JOIN questionnaire_answer QA
               ON QA.QUESTIONNAIRE_AH_ID_FK =
                  QAH.QUESTIONNAIRE_ANSWER_HEADER_ID
-inner join question q on q.QUESTION_REF_ID = qa.QUESTION_REF_ID_FK
-left join QUESTIONNAIRE qn on qn.QUESTIONNAIRE_REF_ID = qah.QUESTIONNAIRE_REF_ID_FK
-LEFT JOIN PERSON P ON P.PERSON_ID = qah.module_sub_item_key
+INNER JOIN question q on q.QUESTION_REF_ID = qa.QUESTION_REF_ID_FK
+INNER JOIN QUESTIONNAIRE qn on qn.QUESTIONNAIRE_REF_ID = qah.QUESTIONNAIRE_REF_ID_FK
+INNER JOIN PERSON P ON P.PERSON_ID = qah.module_sub_item_key
+INNER JOIN EPS_PROP_PERSON EPP ON EPP.PROPOSAL_NUMBER = substr(QAH.module_item_key,1,instr(QAH.module_item_key,'|')-1)
+INNER JOIN EPS_PROP_PERSON_CERT_DETAILS EPPCD ON EPPCD.PROPOSAL_NUMBER = EPP.PROPOSAL_NUMBER 
+AND EPPCD.PROP_PERSON_NUMBER = EPP.PROP_PERSON_NUMBER
+
 WHERE  substr(QAH.module_item_key,1,instr(QAH.module_item_key,'|')-1) = AV_PROPOSAL_NUMBER  
        AND qn.QUESTIONNAIRE_ID =AV_QUESTIONNAIRE_ID     
        AND QAH.module_sub_item_key = AV_PERSON_ID ; 
-   
+       
 END;

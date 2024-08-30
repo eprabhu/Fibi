@@ -70,6 +70,9 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   ngOnChanges() {
     this.searchText = '';
     this.updateLookUpSettings();
+    if (this.isExternalArray) {
+        this.lookUpList = this.externalArray;
+    }
     if (this.selectedLookUpList?.length || this.defaultValue) {
       this.getLookUpValues();
     } else {
@@ -144,7 +147,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   private setSelectedLookUpList() {
     if (!this.selectedLookUpList?.length) return;
     this.selectedLookUpList.forEach(element => {
-      const foundValue = this.lookUpList.find(e => e.code === element.code || e.description === element.description);
+      const foundValue = this.lookUpList.find(e => (e.description && e.description === element.description) || (e.code && e.code === element.code));
       if (foundValue) {
         element.code = foundValue.code;
         element.description = foundValue.description;

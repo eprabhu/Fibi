@@ -1,3 +1,5 @@
+import { DashboardProjectCount } from "../common/services/coi-common.interface";
+
 export class AssignAdminRO {
     adminPersonId;
     adminGroupId = null;
@@ -126,6 +128,14 @@ export class DisclosureProjectData {
     disclosureStatusCount?: any[] = [];
 }
 
+export interface CountModalDisclosureProjectData extends DisclosureProjectData {
+    formattedLeadUnit: string;
+    formattedSponsor: string;
+    formattedPrimeSponsor: string;
+    formattedProjectHeader: string;
+    disclosureConflictBadge: string;
+}
+
 export class DisclosureProjectModalData {
     projectDetails: DisclosureProjectData | null = null;
     coiDisclosureId: number | null = null;
@@ -174,4 +184,35 @@ export interface FCOIDisclosureCreateRO {
     moduleCode?: number
     homeUnit: string
     personId: string
+}
+
+export interface COICountModalViewSlider {
+    isOpenSlider: boolean;
+    entityId: number | string;
+}
+
+export interface COICountModalClose {
+    isOpenCountModal: boolean;
+    content?: number | string;
+}
+
+export class COICountModal {
+    inputType: 'SFI_TAB' | 'DISCLOSURE_TAB' | '' = '';
+    moduleCode: number | null = null;
+    fcoiTypeCode: string | null = null;
+    projectHeader?: string | null = null;
+    projectTitle?: string | null = null;
+    projectNumber?: string | null = null;
+    personFullName: string | null = null;
+    disclosureType: string | null = null;
+    personUnit: {} | null = null;
+    disclosureId: number | null = null;
+    personId: string | null = null;
+    isOpenCountModal = false;
+}
+
+
+export interface COICountModalProjectUpdate {
+    projectCountList: DashboardProjectCount[];
+    updatedProjectsList: CountModalDisclosureProjectData[];
 }

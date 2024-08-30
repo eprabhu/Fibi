@@ -1,0 +1,241 @@
+package com.polus.fibicomp.globalentity.dao;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Map;
+
+import javax.persistence.Query;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.polus.core.applicationexception.dto.ApplicationException;
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.security.AuthenticatedUser;
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
+import com.polus.fibicomp.globalentity.pojo.Entity;
+
+import oracle.jdbc.OracleTypes;
+
+@Repository
+@Transactional
+public class EntityDetailsDAOImpl implements EntityDetailsDAO {
+
+	@Autowired
+	private HibernateTemplate hibernateTemplate;
+
+	@Autowired
+	private CommonDao commonDao;
+
+	@Value("${oracledb}")
+	private String oracledb;
+
+	protected static Logger logger = LogManager.getLogger(EntityDetailsDAOImpl.class.getName());
+
+	@Override
+	public int createEntity(Entity entity) {
+		hibernateTemplate.save(entity);
+		updateEntity(
+				EntityRequestDTO.builder().entityNumber(entity.getEntityId()).entityId(entity.getEntityId()).build());
+		return entity.getEntityId();
+	}
+
+	@Override
+	public void updateEntity(EntityRequestDTO dto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE Entity e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp ");
+		if (dto.getEntityName() != null) {
+			hqlQuery.append(", e.entityName = :entityName");
+		}
+		if (dto.getEntityNumber() != null) {
+			hqlQuery.append(", e.entityNumber = :entityNumber");
+		}
+		if (dto.getEntityOwnershipTypeCode() != null) {
+			hqlQuery.append(", e.entityOwnershipTypeCode = :entityOwnershipTypeCode");
+		}
+		if (dto.getPrimaryAddressLine1() != null) {
+			hqlQuery.append(", e.primaryAddressLine1 = :primaryAddressLine1");
+		}
+		if (dto.getPrimaryAddressLine2() != null) {
+			hqlQuery.append(", e.primaryAddressLine2 = :primaryAddressLine2");
+		}
+		if (dto.getCity() != null) {
+			hqlQuery.append(", e.city = :city");
+		}
+		if (dto.getState() != null) {
+			hqlQuery.append(", e.state = :state");
+		}
+		if (dto.getPostCode() != null) {
+			hqlQuery.append(", e.postCode = :postCode");
+		}
+		if (dto.getCountryCode() != null) {
+			hqlQuery.append(", e.countryCode = :countryCode");
+		}
+		if (dto.getCertifiedEmail() != null) {
+			hqlQuery.append(", e.certifiedEmail = :certifiedEmail");
+		}
+		if (dto.getWebsiteAddress() != null) {
+			hqlQuery.append(", e.websiteAddress = :websiteAddress");
+		}
+		if (dto.getDunsNumber() != null) {
+			hqlQuery.append(", e.dunsNumber = :dunsNumber");
+		}
+		if (dto.getUeiNumber() != null) {
+			hqlQuery.append(", e.ueiNumber = :ueiNumber");
+		}
+		if (dto.getCageNumber() != null) {
+			hqlQuery.append(", e.cageNumber = :cageNumber");
+		}
+		if (dto.getHumanSubAssurance() != null) {
+			hqlQuery.append(", e.humanSubAssurance = :humanSubAssurance");
+		}
+		if (dto.getAnumalWelfareAssurance() != null) {
+			hqlQuery.append(", e.anumalWelfareAssurance = :anumalWelfareAssurance");
+		}
+		if (dto.getAnimalAccreditation() != null) {
+			hqlQuery.append(", e.animalAccreditation = :animalAccreditation");
+		}
+		if (dto.getPhoneNumber() != null) {
+			hqlQuery.append(", e.phoneNumber = :phoneNumber");
+		}
+		if (dto.getApprovedBy() != null) {
+			hqlQuery.append(", e.approvedBy = :approvedBy");
+		}
+		if (dto.getApprovedTimestamp() != null) {
+			hqlQuery.append(", e.approvedTimestamp = :approvedTimestamp");
+		}
+		if (dto.getEntityStatusTypeCode() != null) {
+			hqlQuery.append(", e.entityStatusTypeCode = :entityStatusTypeCode");
+		}
+		if (dto.getIsDunsMatched() != null) {
+			hqlQuery.append(", e.isDunsMatched = :isDunsMatched");
+		}
+		hqlQuery.append(" WHERE e.entityId = :entityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		if (dto.getEntityName() != null) {
+			query.setParameter("entityName", dto.getEntityName());
+		}
+		if (dto.getEntityOwnershipTypeCode() != null) {
+			query.setParameter("entityOwnershipTypeCode", dto.getEntityOwnershipTypeCode());
+		}
+		if (dto.getPrimaryAddressLine1() != null) {
+			query.setParameter("primaryAddressLine1", dto.getPrimaryAddressLine1());
+		}
+		if (dto.getPrimaryAddressLine2() != null) {
+			query.setParameter("primaryAddressLine2", dto.getPrimaryAddressLine2());
+		}
+		if (dto.getCity() != null) {
+			query.setParameter("city", dto.getCity());
+		}
+		if (dto.getState() != null) {
+			query.setParameter("state", dto.getState());
+		}
+		if (dto.getPostCode() != null) {
+			query.setParameter("postCode", dto.getPostCode());
+		}
+		if (dto.getCountryCode() != null) {
+			query.setParameter("countryCode", dto.getCountryCode());
+		}
+		if (dto.getCertifiedEmail() != null) {
+			query.setParameter("certifiedEmail", dto.getCertifiedEmail());
+		}
+		if (dto.getWebsiteAddress() != null) {
+			query.setParameter("websiteAddress", dto.getWebsiteAddress());
+		}
+		if (dto.getDunsNumber() != null) {
+			query.setParameter("dunsNumber", dto.getDunsNumber());
+		}
+		if (dto.getUeiNumber() != null) {
+			query.setParameter("ueiNumber", dto.getUeiNumber());
+		}
+		if (dto.getCageNumber() != null) {
+			query.setParameter("cageNumber", dto.getCageNumber());
+		}
+		if (dto.getHumanSubAssurance() != null) {
+			query.setParameter("humanSubAssurance", dto.getHumanSubAssurance());
+		}
+		if (dto.getAnumalWelfareAssurance() != null) {
+			query.setParameter("anumalWelfareAssurance", dto.getAnumalWelfareAssurance());
+		}
+		if (dto.getAnimalAccreditation() != null) {
+			query.setParameter("animalAccreditation", dto.getAnimalAccreditation());
+		}
+		if (dto.getPhoneNumber() != null) {
+			query.setParameter("phoneNumber", dto.getPhoneNumber());
+		}
+		if (dto.getEntityNumber() != null) {
+			query.setParameter("entityNumber", dto.getEntityNumber());
+		}
+		if (dto.getApprovedBy() != null) {
+			query.setParameter("approvedBy", dto.getApprovedBy());
+		}
+		if (dto.getApprovedTimestamp() != null) {
+			query.setParameter("approvedTimestamp", dto.getApprovedTimestamp());
+		}
+		if (dto.getEntityStatusTypeCode() != null) {
+			query.setParameter("entityStatusTypeCode", dto.getEntityStatusTypeCode());
+		}
+		if (dto.getIsDunsMatched() != null) {
+			query.setParameter("isDunsMatched", dto.getIsDunsMatched());
+		}
+		query.setParameter("entityId", dto.getEntityId());
+		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.executeUpdate();
+	}
+
+	@Override
+	public Entity fetchEntityDetails(Integer entityId) {
+		return hibernateTemplate.get(Entity.class, entityId);
+	}
+
+	@Override
+	public Map<String, Boolean> getEntityTabStatus(Integer entityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		Map<String, Boolean> entityTabStatus = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_ENTITY_TAB_STATUS(?)}");
+				statement.setInt(1, entityId);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String functionCall = "{call GET_ENTITY_TAB_STATUS(?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setInt(1, entityId);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset != null && rset.next()) {
+				rset.getString("entity_sub_org_info");
+				rset.getString("entity_sponsor_info");
+				rset.getString("entity_overview");
+				entityTabStatus = Map.of(
+		                "entity_sub_org_info", rset.getBoolean("entity_sub_org_info"),
+		                "entity_sponsor_info", rset.getBoolean("entity_sponsor_info"),
+		                "entity_overview", rset.getBoolean("entity_overview")
+		            );
+			}
+		} catch (Exception e) {
+			logger.error("Exception on getEntityTabStatus {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch entity tab status", e, Constants.DB_PROC_ERROR);
+		}
+		return entityTabStatus;
+	}
+
+}

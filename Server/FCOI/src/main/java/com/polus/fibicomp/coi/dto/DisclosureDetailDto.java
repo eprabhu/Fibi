@@ -17,7 +17,7 @@ public class DisclosureDetailDto {
 
 	private Integer moduleCode;
 
-	private Integer moduleItemId;
+	private String moduleItemId;
 
 	private String moduleItemKey;
 

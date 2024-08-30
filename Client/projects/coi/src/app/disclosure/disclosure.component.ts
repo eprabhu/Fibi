@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { COI, CertifyDisclosureRO, RO, getApplicableQuestionnaireData } from './coi-interface';
+import { COI, CertifyDisclosureRO, CoiDisclosure, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -26,7 +26,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from './coi-interface';
-import { DefaultAssignAdminDetails, DisclosureProjectData, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
+import { COICountModal, DefaultAssignAdminDetails, DisclosureProjectData, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 
 @Component({
@@ -57,21 +57,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     personElasticOptions: any = {};
     categoryClearFiled: String;
     assigneeClearField: String;
-    isShowCountModal = false;
-    selectedModuleCode: any;
-    currentDisclosureId: any;
-    inputType: string;
-    disclosureSequenceStatusCode: any;
-    personId: string;
-    currentDisclosureNumber: number;
-    disclosureType: string;
     coiList = [];
     prevURL = '';
     userId: any;
     disclosureId: number;
     disclosureNumber: number;
     disclosureStatusCode: string;
-    fcoiTypeCode: any;
     deployMap = environment.deployUrl;
     isCOIReviewer = false;
     error = '';
@@ -114,6 +105,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     commentsRight: any = {};
     isUserCollapse = false;
     submitHelpTexts = '';
+    coiCountModal = new COICountModal();
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -388,7 +380,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.coiService
             .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
-                this.updateDisclosureReviewStatus(res.body.coiDisclosure);
+                this.updateDisclosureReviewStatus(res);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
                 if (_err.status === 405) {
@@ -404,9 +396,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             }));
     }
 
-    updateDisclosureReviewStatus(res) {
+    private updateDisclosureReviewStatus(res: any): void {
         this.coiData.coiDisclosure = deepCloneObject(res);
-        this.dataStore.updateStore(['coiDisclosure'], this.coiData);
+        this.dataStore.updateStore(['coiDisclosure'],  { coiDisclosure: this.coiData.coiDisclosure });
+        this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
     }
 
     triggerSave() {
@@ -469,33 +462,20 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'add-review-modal-trigger' : 'assign-reviewer-modal-trigger').click();
     }
 
-    openCountModal(moduleName, coiData, count = null) {
+    openCountModal(moduleCode: number, count = 0): void {
         if (count > 0) {
-            switch (moduleName) {
-                case 'sfi':
-                    this.selectedModuleCode = 8;
-                    break;
-                case 'award':
-                    this.selectedModuleCode = 1;
-                    break;
-                case 'proposal':
-                    this.selectedModuleCode = 3;
-                    break;
-                default:
-                    this.selectedModuleCode = 0;
-            }
-            this.fcoiTypeCode = coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode;
-            this.isShowCountModal = true;
-            this.currentDisclosureId = coiData?.coiDisclosure?.disclosureId;
-            this.currentDisclosureNumber = coiData?.coiDisclosure?.disclosureNumber;
-            this.disclosureType = moduleName;
-            this.inputType = 'DISCLOSURE_TAB';
-            this.disclosureSequenceStatusCode = coiData?.coiDisclosure?.disclosureStatusCode;
-            this.personId = coiData?.coiDisclosure?.person?.personId;
+            this.coiCountModal = {
+                personUnit: this.coiData?.coiDisclosure?.person?.unit,
+                moduleCode: moduleCode,
+                personId: this.coiData?.coiDisclosure?.person?.personId,
+                disclosureType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode === '2' ? this.coiData?.coiDisclosure?.coiProjectType?.description : 'FCOI',
+                inputType: 'DISCLOSURE_TAB',
+                fcoiTypeCode: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode,
+                disclosureId: this.coiData?.coiDisclosure?.disclosureId,
+                personFullName: this.coiData?.coiDisclosure?.person?.fullName,
+                isOpenCountModal: true
+            };
         }
-    }
-    closeModal(event) {
-        this.isShowCountModal = event;
     }
 
     openPersonDetailsModal(coiData: any): void {
@@ -746,7 +726,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     @HostListener('window:resize', ['$event'])
     listenScreenSize() {
         if(!this.isUserCollapse) {
-            // this.isCardExpanded = window.innerWidth > 1399;
+            this.isCardExpanded = window.innerWidth > 1399;
         }
         this.commonService.$globalEventNotifier.next({ uniqueId: 'COI_DISCLOSURE_HEADER_RESIZE', content: { isCardExpanded: this.isCardExpanded, isResize: true }});
     }

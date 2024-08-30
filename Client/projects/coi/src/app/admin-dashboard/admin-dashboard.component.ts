@@ -23,6 +23,7 @@ import { ElasticConfigService } from '../common/services/elastic-config.service'
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 import { CoiProjectOverviewRequest } from './admin-dashboard.interface';
 import { SortCountObj, CoiDashboardRequest, NameObject, CoiDashboardDisclosures } from './admin-dashboard.interface';
+import { COICountModal, COICountModalViewSlider } from '../shared-components/shared-interface';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -45,12 +46,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         tab: 'IN_PROGRESS',
         filter: 'did'
     };
-    isShowCountModal = false;
     isAssignAdminModalOpen = false;
-    selectedModuleCode: any;
-    currentDisclosureId: any;
-    currentDisclosureNumber: any;
-    disclosureType: any;
     datePlaceHolder = DATE_PLACEHOLDER;
     advancedSearch = { hasSFI: true };
     conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
@@ -85,8 +81,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         newSubmissionsCount: 0,
         reviewCommentsCount: 0
     };
-    inputType: any;
-    personId: any;
     comments: any[] = [];
     replyComment: any[] = [];
     searchText: any;
@@ -97,8 +91,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     countryClearField: string;
     isHover: boolean[] = [];
     isViewAdvanceSearch = true;
-    adminData: any;
-    fcoiTypeCode: any;
     hasReviewerRight = false;
     hasFCOIDiscosureRights = false;
     hasTravelDisclosureRights = false;
@@ -156,6 +148,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     elasticPersonSearchOptionsForProjectOverview: any = {};
     lookupValuesForProjectOverview = [];
     lookupArrayForProjectStatus: any[] = [];
+    coiCountModal = new COICountModal();
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -465,21 +458,19 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.localCOIRequestObject.property9 = country ? country.countryCode : null;
     }
 
-    closeModal(event) {
-        this.isShowCountModal = event;
-    }
-
     setSelectedModuleCode(moduleName: string, coi: CoiDashboardDisclosures, count: number | null = null, moduleCode: number = 0) {
         if (count > 0) {
-            this.selectedModuleCode = moduleCode;
-            this.adminData = coi;
-            this.fcoiTypeCode = coi?.fcoiTypeCode;
-            this.isShowCountModal = true;
-            this.currentDisclosureId = coi.coiDisclosureId;
-            this.currentDisclosureNumber = coi.coiDisclosureNumber;
-            this.disclosureType = moduleName;
-            this.inputType = 'DISCLOSURE_TAB';
-            this.personId = coi.personId;
+            this.coiCountModal = {
+                personUnit: coi?.unit,
+                moduleCode: moduleCode,
+                personId: coi?.personId,
+                disclosureType: moduleName,
+                inputType: 'DISCLOSURE_TAB',
+                fcoiTypeCode: coi?.fcoiTypeCode,
+                disclosureId: coi?.coiDisclosureId,
+                personFullName: coi?.disclosurePersonFullName,
+                isOpenCountModal: true
+            };
         }
     }
 
@@ -846,8 +837,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    viewSlider(event) {
-        this.showSlider = event.flag;
+    viewSlider(event: COICountModalViewSlider): void {
+        this.showSlider = event.isOpenSlider;
         this.entityId = event.entityId;
         this.sliderElementId = `admin-dashboard-entity-slider-${this.entityId}`;
         setTimeout(() => {
@@ -984,7 +975,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     getLookupDataForProjectStatus(): void {
         this.$subscriptions.push(this.coiAdminDashboardService.getLookupDataForProposalStatus().subscribe((res: any) => {
-            this.lookupArrayForProjectStatus = res; 
+            this.lookupArrayForProjectStatus = res;
         }))
     }
 }
