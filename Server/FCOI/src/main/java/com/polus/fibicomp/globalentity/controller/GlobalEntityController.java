@@ -31,8 +31,10 @@ import com.polus.fibicomp.globalentity.dto.PriorNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
 import com.polus.fibicomp.globalentity.pojo.IndustryCategoryCode;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 import com.polus.fibicomp.globalentity.service.GlobalEntityService;
 
 @RestController
@@ -93,15 +95,22 @@ public class GlobalEntityController {
 	}
 
 	@PatchMapping(value = "/updateIndustryDetails")
-	public ResponseEntity<String> updateIndustryDetails(@RequestBody IndustryDetailsRequestDTO dto) {
+	public ResponseEntity<List<EntityIndustryClassification>> updateIndustryDetails(@RequestBody IndustryDetailsRequestDTO dto) {
 		logger.info("Requesting for updateIndustryDetails");
-		return companyDetailsService.updateIndustryDetails(dto);
+		companyDetailsService.updateIndustryDetails(dto);
+		return companyDetailsService.fetchIndustryDetails(dto.getEntityId());
 	}
 
-	@DeleteMapping(value = "/deleteIndustryDetails/{entityIndustryClassId}")
-	public ResponseEntity<String> deleteIndustryDetails(@PathVariable(value = "entityIndustryClassId", required = true) final Integer entityIndustryClassId) {
-		logger.info("Requesting for deleteIndustryDetails");
-		return companyDetailsService.deleteIndustryDetails(entityIndustryClassId);
+	@DeleteMapping(value = "/deleteIndustryDetailsByClassId/{entityIndustryClassId}")
+	public ResponseEntity<String> deleteIndustryDetailsByClassId(@PathVariable(value = "entityIndustryClassId", required = true) final Integer entityIndustryClassId) {
+		logger.info("Requesting for deleteIndustryDetailsByClassId");
+		return companyDetailsService.deleteIndustryDetailsByClassId(entityIndustryClassId);
+	}
+
+	@DeleteMapping(value = "/deleteIndustryDetailsByCatCode/{industryCatCode}")
+	public ResponseEntity<String> deleteIndustryDetailsByCatCode(@PathVariable(value = "industryCatCode", required = true) final String industryCatCode) {
+		logger.info("Requesting for deleteIndustryDetailsByCatCode");
+		return companyDetailsService.deleteIndustryDetailsByCatCode(industryCatCode);
 	}
 
 	@PostMapping(value = "/saveRegistrationDetails")
@@ -242,10 +251,22 @@ public class GlobalEntityController {
 		return companyDetailsService.deleteForeignName(id);
 	}
 
-	@GetMapping(value = "/fetchRiskTypes")
-	public ResponseEntity<List<EntityRiskType>> fetchRiskTypes() {
+	@GetMapping(value = "/fetchRiskTypes/{riskCategoryCode}")
+	public ResponseEntity<List<EntityRiskType>> fetchRiskTypes(@PathVariable(value = "riskCategoryCode", required = true) final String riskCategoryCode) {
 		logger.info("Requesting for fetchRiskTypes");
-		return entityRiskService.fetchRiskTypes();
+		return entityRiskService.fetchRiskTypes(riskCategoryCode);
+	}
+
+	@GetMapping(value = "/fetchRiskLevels/{riskTypeCode}")
+	public ResponseEntity<List<EntityRiskLevel>> fetchRiskLevels(@PathVariable(value = "riskTypeCode", required = true) final String riskTypeCode) {
+		logger.info("Requesting for fetchRiskTypes");
+		return entityRiskService.fetchRiskLevels(riskTypeCode);
+	}
+
+	@PatchMapping(value = "/verify/{entityId}")
+	public ResponseEntity<String> verifyEntityDetails(@PathVariable(value = "entityId", required = true) final Integer entityId) {
+		logger.info("Requesting for verifyEntityDetails");
+		return globalEntityService.verifyEntityDetails(entityId);
 	}
 
 }

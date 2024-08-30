@@ -2,6 +2,7 @@ package com.polus.fibicomp.globalentity.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,12 @@ import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dto.EntityRiskRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 import com.polus.fibicomp.globalentity.repository.EntityRiskRepository;
 import com.polus.fibicomp.globalentity.repository.EntityRiskTypeRepository;
+import com.polus.fibicomp.globalentity.repository.ValidEntityRiskLevelRepository;
 
 @Service(value = "entityRiskService")
 @Transactional
@@ -33,6 +37,9 @@ public class EntityRiskServiceImpl implements EntityRiskService {
 
 	@Autowired
 	private EntityRiskTypeRepository entityRiskTypeRepository;
+
+	@Autowired
+	private ValidEntityRiskLevelRepository validEntityRiskLevelRepository;
 
 	@Override
 	public ResponseEntity<Map<String, Integer>> saveRisk(EntityRiskRequestDTO dto) {
@@ -60,8 +67,16 @@ public class EntityRiskServiceImpl implements EntityRiskService {
 	}
 
 	@Override
-	public ResponseEntity<List<EntityRiskType>> fetchRiskTypes() {
-		return new ResponseEntity<>(entityRiskTypeRepository.fetchRiskTypes(), HttpStatus.OK);
+	public ResponseEntity<List<EntityRiskType>> fetchRiskTypes(String riskCategoryCode) {
+		return new ResponseEntity<>(entityRiskTypeRepository.fetchRiskTypesByRiskCategoryCode(riskCategoryCode), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<List<EntityRiskLevel>> fetchRiskLevels(String riskTypeCode) {
+		List<EntityRiskLevel> entityRiskLevels = validEntityRiskLevelRepository.fetchByRiskTypeCode(riskTypeCode).stream()
+	            .map(ValidEntityRiskLevel::getEntityRiskLevel)
+	            .collect(Collectors.toList());
+		return new ResponseEntity<>(entityRiskLevels, HttpStatus.OK);
 	}
 
 }

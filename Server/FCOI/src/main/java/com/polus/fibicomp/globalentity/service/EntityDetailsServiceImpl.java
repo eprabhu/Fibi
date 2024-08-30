@@ -87,6 +87,9 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 
 	@Override
 	public ResponseEntity<String> updateEntityDetails(EntityRequestDTO dto) {
+		if (dto.getCountryCode() != null && dto.getCountryCode().length() == 2) {
+			dto.setCountryCode(commonDao.fetchCountryByCountryTwoCode(dto.getCountryCode()).getCountryCode());
+		}
 		entityDetailsDAO.updateEntity(dto);
 		return new ResponseEntity<>(commonDao.convertObjectToJSON("Entity updated successfully"), HttpStatus.OK);
 	}
@@ -103,11 +106,12 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		List<ForeignNameResponseDTO> foreignNames = companyDetailsService.fetchForeignNames(entityId);
 		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(GENERAL_SECTION_CODE, entityId);
 		Entity entityDetails = entityRepository.findByEntityId(entityId);
+		Map<String, Boolean> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
 		return new ResponseEntity<>(EntityResponseDTO.builder().entityDetails(entityDetails)
 				.entityIndustryClassifications(entityIndustryClassifications)
 				.entityMailingAddresses(entityMailingAddresses).entityRegistrations(entityRegistrations)
 				.entityRisks(entityRisks).entityExternalIdMappings(EntityExternalIdMappings).priorNames(priorNames)
-				.foreignNames(foreignNames).attachments(attachments).build(), HttpStatus.OK);
+				.foreignNames(foreignNames).attachments(attachments).entityTabStatus(entityTabStatus).build(), HttpStatus.OK);
 	}
 
 }

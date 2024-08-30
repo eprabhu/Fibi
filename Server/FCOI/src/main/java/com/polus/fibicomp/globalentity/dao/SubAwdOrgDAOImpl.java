@@ -46,6 +46,9 @@ public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 		if (dto.getSubAwdRiskAssmtDate() != null) {
 			hqlQuery.append(", e.subAwdRiskAssmtDate = :subAwdRiskAssmtDate");
 		}
+		if (dto.getFeedStatusCode() != null) {
+			hqlQuery.append(", e.feedStatusCode = :feedStatusCode");
+		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityId", dto.getEntityId());
@@ -62,6 +65,9 @@ public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 		}
 		if (dto.getSubAwdRiskAssmtDate() != null) {
 			query.setParameter("subAwdRiskAssmtDate", dto.getSubAwdRiskAssmtDate());
+		}
+		if (dto.getFeedStatusCode() != null) {
+			query.setParameter("feedStatusCode", dto.getFeedStatusCode());
 		}
 		query.executeUpdate();
 	}

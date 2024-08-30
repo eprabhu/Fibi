@@ -1,6 +1,10 @@
 package com.polus.fibicomp.globalentity.dao;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
 import com.polus.fibicomp.globalentity.pojo.EntityPriorName;
 import com.polus.fibicomp.globalentity.pojo.EntityRegistration;
+import com.polus.fibicomp.globalentity.pojo.IndustryCategoryCode;
 
 @Repository
 @Transactional
@@ -270,6 +275,20 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		query.executeUpdate();
+	}
+
+	@Override
+	public void deleteIndustryDetailsByCatCode(String industryCatCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaDelete<EntityIndustryClassification> deleteQuery = builder.createCriteriaDelete(EntityIndustryClassification.class);
+		Root<EntityIndustryClassification> root = deleteQuery.from(EntityIndustryClassification.class);
+		Subquery<Long> subquery = deleteQuery.subquery(Long.class);
+		Root<IndustryCategoryCode> subqueryRoot = subquery.from(IndustryCategoryCode.class);
+		subquery.select(subqueryRoot.get("industryCategoryId"))
+		    .where(builder.equal(subqueryRoot.get("industryCategoryCode"), industryCatCode));
+		deleteQuery.where(root.get("industryCategoryId").in(subquery));
+		session.createQuery(deleteQuery).executeUpdate();
 	}
 
 }

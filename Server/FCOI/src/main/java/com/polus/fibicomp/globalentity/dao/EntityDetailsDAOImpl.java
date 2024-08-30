@@ -1,17 +1,30 @@
 package com.polus.fibicomp.globalentity.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Map;
+
 import javax.persistence.Query;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
 import com.polus.core.security.AuthenticatedUser;
+import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.Entity;
+
+import oracle.jdbc.OracleTypes;
 
 @Repository
 @Transactional
@@ -22,6 +35,11 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 
 	@Autowired
 	private CommonDao commonDao;
+
+	@Value("${oracledb}")
+	private String oracledb;
+
+	protected static Logger logger = LogManager.getLogger(EntityDetailsDAOImpl.class.getName());
 
 	@Override
 	public int createEntity(Entity entity) {
@@ -90,6 +108,18 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getPhoneNumber() != null) {
 			hqlQuery.append(", e.phoneNumber = :phoneNumber");
 		}
+		if (dto.getApprovedBy() != null) {
+			hqlQuery.append(", e.approvedBy = :approvedBy");
+		}
+		if (dto.getApprovedTimestamp() != null) {
+			hqlQuery.append(", e.approvedTimestamp = :approvedTimestamp");
+		}
+		if (dto.getEntityStatusTypeCode() != null) {
+			hqlQuery.append(", e.entityStatusTypeCode = :entityStatusTypeCode");
+		}
+		if (dto.getIsDunsMatched() != null) {
+			hqlQuery.append(", e.isDunsMatched = :isDunsMatched");
+		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		if (dto.getEntityName() != null) {
@@ -146,6 +176,18 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getEntityNumber() != null) {
 			query.setParameter("entityNumber", dto.getEntityNumber());
 		}
+		if (dto.getApprovedBy() != null) {
+			query.setParameter("approvedBy", dto.getApprovedBy());
+		}
+		if (dto.getApprovedTimestamp() != null) {
+			query.setParameter("approvedTimestamp", dto.getApprovedTimestamp());
+		}
+		if (dto.getEntityStatusTypeCode() != null) {
+			query.setParameter("entityStatusTypeCode", dto.getEntityStatusTypeCode());
+		}
+		if (dto.getIsDunsMatched() != null) {
+			query.setParameter("isDunsMatched", dto.getIsDunsMatched());
+		}
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
@@ -155,6 +197,45 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	@Override
 	public Entity fetchEntityDetails(Integer entityId) {
 		return hibernateTemplate.get(Entity.class, entityId);
+	}
+
+	@Override
+	public Map<String, Boolean> getEntityTabStatus(Integer entityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		Map<String, Boolean> entityTabStatus = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_ENTITY_TAB_STATUS(?)}");
+				statement.setInt(1, entityId);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String functionCall = "{call GET_ENTITY_TAB_STATUS(?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setInt(1, entityId);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset != null && rset.next()) {
+				rset.getString("entity_sub_org_info");
+				rset.getString("entity_sponsor_info");
+				rset.getString("entity_overview");
+				entityTabStatus = Map.of(
+		                "entity_sub_org_info", rset.getBoolean("entity_sub_org_info"),
+		                "entity_sponsor_info", rset.getBoolean("entity_sponsor_info"),
+		                "entity_overview", rset.getBoolean("entity_overview")
+		            );
+			}
+		} catch (Exception e) {
+			logger.error("Exception on getEntityTabStatus {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch entity tab status", e, Constants.DB_PROC_ERROR);
+		}
+		return entityTabStatus;
 	}
 
 }

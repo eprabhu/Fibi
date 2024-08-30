@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.polus.fibicomp.globalentity.dto.EntityRiskRequestDTO;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
+import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 
 @Service
 public interface EntityRiskService extends GlobalEntityService {
@@ -18,6 +20,8 @@ public interface EntityRiskService extends GlobalEntityService {
 
 	ResponseEntity<String> deleteRisk(Integer entityRiskId);
 
-	ResponseEntity<List<EntityRiskType>> fetchRiskTypes();
+	ResponseEntity<List<EntityRiskType>> fetchRiskTypes(String riskCategoryCode);
+
+	ResponseEntity<List<EntityRiskLevel>> fetchRiskLevels(String riskTypeCode);
 
 }

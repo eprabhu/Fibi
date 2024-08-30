@@ -37,4 +37,6 @@ public interface CompanyDetailsDAO {
 
 	public void updateIndustryDetailsPrimaryFlag(int primaryCatId, Integer entityId);
 
+	public void deleteIndustryDetailsByCatCode(String industryCatCode);
+
 }
