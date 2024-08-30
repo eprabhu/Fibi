@@ -20,8 +20,10 @@ export class DefineRelationsRouterGuard implements CanActivate {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
+        // for clearing define relationship datas
+        this._defineRelationshipService.clearAllServiceData();
+        this._defineRelationshipDataStore.setStoreData([]);
         this._defineRelationshipService.isEditMode = _state.url.includes('create-disclosure/relationship');
-        this._defineRelationshipService.coiStatusList = []; // Clear any previous status list
         return new Observable<boolean>((observer: NextObserver<boolean>) => {
             forkJoin([
                 this.getLookups(),

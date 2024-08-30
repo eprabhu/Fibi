@@ -10,7 +10,7 @@ export class EntityDataStoreService {
     private storeData = new EntireEntityDetails();
     entitySectionConfig: any = {};
     entityRiskType: any[] = [];
-    dataEvent = new Subject<string[] | 'ENTITY_RISK_TYPE'>();
+    dataEvent = new Subject<string[]>();
 
     getData(keys?: Array<string>): any {
         if (!keys) {

@@ -33,17 +33,7 @@ export class EntityManagementModuleComponent implements OnInit, OnDestroy {
             "errorDetails": null
         }
         this.formatDUNSResponse();
-        this.fetchRisk();
         // this.result = this._route.snapshot.data.agreementDetails;
-    }
-
-    private fetchRisk(): void {
-        this.$subscriptions.push(this._entityManagementService.fetchRiskType().subscribe((data: any) => {
-            if(data?.length) {
-                this._dataStore.entityRiskType = data;
-                this._dataStore.dataEvent.next('ENTITY_RISK_TYPE');
-            }
-        }));
     }
 
     triggerAutoSave() {

@@ -4,7 +4,7 @@ import { EntityDataStoreService } from '../entity-data-store.service';
 import { SponsorTabSection } from '../shared/entity-constants';
 import { Subscription } from 'rxjs';
 import { EntitySponsorService } from './entity-sponsor.service';
-import { EntireEntityDetails, EntityDetails, EntityRisk } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk } from '../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 
@@ -20,6 +20,7 @@ export class EntitySponsorComponent {
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
     entitySponsorRiskList: EntityRisk[] = [];
+    entitySponsorAttachmentList: EntityAttachment[] = [];
     isLoading = true;
 
     constructor(public commonService: CommonService, public dataStore: EntityDataStoreService,
@@ -44,10 +45,8 @@ export class EntitySponsorComponent {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                if (dependencies !==  'ENTITY_RISK_TYPE') {
-                    this.getDataFromStore();
-                }
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             })
         );
     }
@@ -55,7 +54,8 @@ export class EntitySponsorComponent {
     fetchEntitySponsorDetails(entityId: string | number): void{
         this.$subscriptions.push(this._entitySponsorService.fetchEntitySponsorDetails(entityId).subscribe((data: any)=>{
             this._entitySponsorService.entitySponsorDetails = data;
-            this.entitySponsorRiskList = data.entityRisks;
+            this.entitySponsorRiskList = data?.entityRisks ? data.entityRisks : [];
+            this.entitySponsorAttachmentList = data?.attachments ? data.attachments : [];
             this.isLoading = false;      
         }, (_error: any) => {
             this.isLoading = false;
