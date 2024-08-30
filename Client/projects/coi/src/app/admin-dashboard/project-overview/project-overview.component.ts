@@ -2,13 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjectOverviewService } from '../project-overview.service';
 import { fadeInOutHeight, heightAnimation, leftSlideInOut, listAnimation, scaleOutAnimation, slideInAnimation, topSlideInOut } from '../../common/utilities/animations';
 import { CommonService } from '../../common/services/common.service';
-import { CoiProjectOverviewRequest, ProjectDetails, ProjectOverview } from '../admin-dashboard.interface';
+import { CoiProjectOverviewRequest, NotificationObject, ProjectDetails, ProjectOverview } from '../admin-dashboard.interface';
 import { POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
-
 @Component({
     selector: 'app-project-overview',
     templateUrl: './project-overview.component.html',
@@ -32,9 +31,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     currentFilter = '';
     isDesc: { [key: string]: boolean } = {};
     showSlider = false;
+    isShowNotificationSlider = false;
     private isInitialCall: boolean = true;
     totalPageCount: number | null = null;
     getIndexForSlider: number;
+    selectedKeyPersonIndex: number;
+    projectDetailsForSlider: any;
     currentSortStateKey: string | null = null;
     getFormattedSponsor = getFormattedSponsor;
 
@@ -188,8 +190,15 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         this.showSlider = true;
     }
 
+    toggleNotificationSlider(projectDetailsForSlider: number, index: number): void{
+        this.selectedKeyPersonIndex = index;
+        this.projectDetailsForSlider = projectDetailsForSlider;
+        this.isShowNotificationSlider = true;
+    }
+
     closeHeaderSlider(): void {
         this.showSlider = false;
+        this.isShowNotificationSlider = false;
     }
 
     actionsOnPageChange(event): void {

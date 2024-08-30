@@ -34,6 +34,7 @@ import com.polus.fibicomp.coi.dto.CompleteReivewRequestDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
+import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
@@ -479,4 +480,10 @@ public class ConflictOfInterestController {
     	logger.info("Request for getSFIRelationshipDetails");
    		return conflictOfInterestService.getSFIRelationshipDetails();
    	}
+
+	@PatchMapping("/projectPersonNotify")
+    public ResponseEntity<Object> projectPersonNotify(@RequestBody NotificationDto notificationDto) {
+        logger.info("Requesting for projectPersonNotify");
+        return conflictOfInterestService.projectPersonNotify(notificationDto);
+    }
 }

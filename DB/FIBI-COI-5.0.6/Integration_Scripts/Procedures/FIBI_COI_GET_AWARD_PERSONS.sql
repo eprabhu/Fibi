@@ -1,4 +1,4 @@
-create or replace PROCEDURE Fibi_coi_get_award_persons(
+create or replace PROCEDURE FIBI_COI_GET_AWARD_PERSONS(
 av_project_number IN award.award_number%TYPE,
 cur_generic       OUT SYS_REFCURSOR)
 IS
