@@ -3,14 +3,18 @@
         <div class="row">
             <div class="row mb-3">
                 <div class="col">
-                    <p class="mb-0 coi-text-darker fs-16" tabindex="-1"
-                        [attr.aria-label]="'entity name' + entityDetailsObj?.entityName">
-                        <span class="text-slice" [title]="entityDetailsObj?.entityName">{{entityDetailsObj?.entityName}}</span>
+                    <p class="mb-0 fs-16 d-flex align-items-baseline" tabindex="-1"
+                        [attr.aria-label]="'entity name' + entityDetailsObj?.organization?.entityName">
+                        <span class="text-slice coi-text-darker" [title]="entityDetailsObj?.organization?.entityName">{{entityDetailsObj?.organization?.entityName}}</span>
+                        <span class="fs-12 ms-1">({{getPercentage()}}% Matching)</span>
                     </p>
                 </div>
                 <div class="col-auto px-0">
-                    <button id="view-entity" aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14">
+                    <button *ngIf="!isShowUseBtn" id="view-entity-common-card" aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14">
                         View
+                    </button>
+                    <button *ngIf="isShowUseBtn" id="use-entity-common-card" (click)="sendEntityDetails()"aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14">
+                       {{isDunsMatched && dunsNumber == entityDetailsObj?.organization?.duns ? 'Used' : 'Use this'}}
                     </button>
                     <button id="view-entity" aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14 d-inline-flex collapse-button" (click)="isExpanded = !isExpanded">
                         <mat-icon *ngIf="!isExpanded">keyboard_arrow_down</mat-icon>
@@ -19,88 +23,70 @@
                 </div>
             </div>
             <div class="row mb-2">
+                <div tabindex="-1" class="col-lg-12 col-md-12 mb-lg-0 mb-sm-2 mb-2">
+                    <label class="coi-text-dark d-block">Primary Address</label>
+                    <span class="coi-text-light">
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.entityAddress">
+                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.organization?.entityAddress" id="coi-common-entity-card-value-entityAddress">
+                                {{entityDetailsObj?.organization?.entityAddress}}</span>
+                        </app-no-data-label>
+                    </span>
+               </div>
+            </div>
+            <div class="row mb-2">
                 <div tabindex="-1" class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
                     <label class="coi-text-dark d-block">City</label>
                     <span class="coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.city">
-                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.city" id="coi-common-entity-card-value-city">
-                                {{entityDetailsObj?.city}}</span>
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.city">
+                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.organization?.city" id="coi-common-entity-card-value-city">
+                                {{entityDetailsObj?.organization?.city}}</span>
+                        </app-no-data-label>
+                    </span>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
+                    <label class="coi-text-dark d-block">State/Province/Region</label>
+                    <span class="col coi-text-light">
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.state">
+                            <span [attr.aria-label]="entityDetailsObj?.organization?.state" class="grey-text text-slice"
+                                title="{{entityDetailsObj?.organization?.state}}" id="coi-common-entity-card-value-state">{{entityDetailsObj?.organization?.state}}</span>
                         </app-no-data-label>
                     </span>
                 </div>
                 <div tabindex="-1" class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
                     <label class="coi-text-dark d-block">Country</label>
                     <span class="coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.country">
-                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.country" id="coi-common-entity-card-value-country">
-                                {{entityDetailsObj?.country}}</span>
-                        </app-no-data-label>
-                    </span>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block"> State</label>
-                    <span class="col coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.state">
-                            <span [attr.aria-label]="entityDetailsObj?.state" class="grey-text text-slice"
-                                title="{{entityDetailsObj?.state}}" id="coi-common-entity-card-value-state">{{entityDetailsObj?.state}}</span>
-                        </app-no-data-label>
-                    </span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div tabindex="-1" class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block">D-U-N-S Number</label>
-                    <span class="coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.DUNSNumber">
-                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.DUNSNumber" id="coi-common-entity-card-value-DUNS-number">
-                                {{entityDetailsObj?.DUNSNumber}}</span>
-                        </app-no-data-label>
-                    </span>
-                </div>
-                <div tabindex="-1" class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block">UEI Number</label>
-                    <span class="coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.UEINumber">
-                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.UEINumber" id="coi-common-entity-card-value-UEI-number">
-                                {{entityDetailsObj?.UEINumber}}</span>
-                        </app-no-data-label>
-                    </span>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block"> CAGE Number</label>
-                    <span class="col coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.CAGENumber">
-                            <span [attr.aria-label]="entityDetailsObj?.CAGENumber" class="grey-text text-slice"
-                                title="{{entityDetailsObj?.CAGENumber}}" id="coi-common-entity-card-value-CAGE-number">{{entityDetailsObj?.CAGENumber}}</span>
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.country">
+                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.organization?.country" id="coi-common-entity-card-value-country">
+                                {{entityDetailsObj?.organization?.country}}</span>
                         </app-no-data-label>
                     </span>
                 </div>
             </div>
             <div class="row mb-2" *ngIf="isExpanded">
                 <div tabindex="-1" class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block">Website</label>
+                    <label class="coi-text-dark d-block">ZIP/Postal Code</label>
                     <span class="coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.website">
-                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.website" id="coi-common-entity-card-value-website">
-                                {{entityDetailsObj?.website}}</span>
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.zipCode">
+                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.organization?.zipCode" id="coi-common-entity-card-value-zipCode">
+                                {{entityDetailsObj?.organization?.zipCode}}</span>
                         </app-no-data-label>
                     </span>
                 </div>
                 <div tabindex="-1" class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block">Email</label>
+                    <label class="coi-text-dark d-block">D-U-N-S Number</label>
                     <span class="coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.email">
-                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.email" id="coi-common-entity-card-value-email">
-                                {{entityDetailsObj?.email}}</span>
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.DUNSNumber">
+                            <span class="coi-text-light" [attr.aria-label]="entityDetailsObj?.organization?.DUNSNumber" id="coi-common-entity-card-value-DUNS-number">
+                                {{entityDetailsObj?.organization?.DUNSNumber}}</span>
                         </app-no-data-label>
                     </span>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                    <label class="coi-text-dark d-block">Industry</label>
+                <div class="col-lg-4 col-md-6 mb-lg-0 mb-sm-2 mb-2">
+                    <label class="coi-text-dark d-block">Phone</label>
                     <span class="col coi-text-light">
-                        <app-no-data-label [valueToShow]="entityDetailsObj?.industry">
-                            <span [attr.aria-label]="entityDetailsObj?.industry" class="grey-text text-slice"
-                                title="{{entityDetailsObj?.industry}}" id="coi-common-entity-card-value-industry">{{entityDetailsObj?.industry}}</span>
+                        <app-no-data-label [valueToShow]="entityDetailsObj?.organization?.phoneNumber">
+                            <span [attr.aria-label]="entityDetailsObj?.organization?.phoneNumber" class="grey-text text-slice"
+                                title="{{entityDetailsObj?.organization?.phoneNumber}}" id="coi-common-entity-card-value-CAGE-number">{{entityDetailsObj?.organization?.phoneNumber}}</span>
                         </app-no-data-label>
                     </span>
                 </div>

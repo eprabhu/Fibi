@@ -121,10 +121,10 @@
 							<div class="row">
 								<!-- Entity Type -->
 								<div tabindex="-1" class="col-lg-3 col-md-6 mb-2">
-									<span class="coi-text-dark d-block" aria-label="Entity type is, ">Entity Type</span>
+									<span class="coi-text-dark d-block" aria-label="Entity type is, ">Ownership Type</span>
 									<span class="coi-text-light">
-										<app-no-data-label [valueToShow]="existingEntityDetails?.entityType?.description">
-											<span class="coi-text-light">{{existingEntityDetails?.entityType?.description}}</span>
+										<app-no-data-label [valueToShow]="existingEntityDetails?.entityOwnershipType?.description">
+											<span class="coi-text-light">{{existingEntityDetails?.entityOwnershipType?.description}}</span>
 										</app-no-data-label>
 									</span>
 								</div>
@@ -200,7 +200,7 @@
 				<ng-container *ngIf="isResultFromSearch">
 					<div class="mb-2">
 						<app-shared-entity-info-card *ngIf="isResultFromSearch"
-							[entityDetails]="entityDetails?.coiEntity" [viewMore]="true"
+							[entityDetails]="addEntityConfirmation" [viewMore]="true"
 							(emitEntityId)="viewEntityDetails($event)"></app-shared-entity-info-card>
 					</div>
 				</ng-container>
@@ -428,8 +428,8 @@
               <label  for="country" class="grey-text me-2"> Country</label>
               <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-country"> {{addEntityConfirmation?.country?.countryName}}</span>
             </div>
-            <div class="text-secondary fs-14 col-4 mb-15" tabindex="-1" [attr.aria-label]="'Entity Type' + (addEntityConfirmation?.entityType?.description)">
-              <label for="Entity Type" class="grey-text me-2">Entity Type</label>
+            <div class="text-secondary fs-14 col-4 mb-15" tabindex="-1" [attr.aria-label]="'Ownership Type' + (addEntityConfirmation?.entityType?.description)">
+              <label for="Ownership Type" class="grey-text me-2">Ownership Type</label>
               <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-entitytype"> {{addEntityConfirmation?.entityType?.description}}</span>
             </div>
 			<div class="text-secondary fs-14 col-4" tabindex="-1"
@@ -443,18 +443,6 @@
               <div>
 				<label for="Address" class="grey-text me-2">Address</label></div>
 				<app-read-more [valueToShow]="addEntityConfirmation?.address" [sliceCount]="55"></app-read-more>
-            </div>
-            <div class="col text-secondary fs-14 align-items-center mt-2" [attr.aria-label]="'Risk' + (addEntityConfirmation?.entityRiskCategory.description)">
-              <label for="Risk" class="fw-bold me-2">Risk</label>
-              <span class="fw-normal">
-                <div class="text-color fs-14 d-flex align-items-center">
-                  <span>
-                    <mat-icon
-                      class="{{_commonService.getRiskColor(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                  </span>
-                  <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
-                </div>
-              </span>
             </div>
           </div>
         </div>

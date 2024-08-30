@@ -11,9 +11,9 @@
         </app-entity-risk-section>
     </div>
     <div class="mb-2">
-        <app-entity-subaward-attachments
-            [sectionName]="attachmentSubSectionName"
-            [sectionId]="attachmentSubSectionId">
-        </app-entity-subaward-attachments>
+        <app-entity-attachment-section [sectionName]="attachmentSubSectionName"
+            [sectionId]="attachmentSubSectionId"
+            [entityAttachmentsList]="entitySubAwarAttachmentList" [riskCategoryCode]="'OR'">
+        </app-entity-attachment-section>
     </div>
 </div>

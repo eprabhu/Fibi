@@ -1,17 +1,17 @@
-import { Component, HostListener, Input } from '@angular/core';
-import { isValidEmailAddress, inputRestrictionForNumberField, phoneNumberValidation } from '../../../common/utilities/custom-utilities';
-import { getEndPointOptionsForCountry } from 'projects/fibi/src/app/common/services/end-point.config';
+import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import { Country, Create_Entity, EntityDetails } from '../../shared/entity-interface';
 import { isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
-import { Subscription } from 'rxjs';
+import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { Subject, Subscription } from 'rxjs';
+import { EntityManagementService } from '../../entity-management.service';
 
 @Component({
   selector: 'app-basic-details',
   templateUrl: './basic-details.component.html',
   styleUrls: ['./basic-details.component.scss']
 })
-export class BasicDetailsComponent {
+export class BasicDetailsComponent implements OnInit, OnDestroy {
     createEntityObj: Create_Entity = new Create_Entity();
     saveObj: Create_Entity = new Create_Entity();
     isCreateScreen = false;
@@ -59,6 +59,7 @@ export class BasicDetailsComponent {
             this.createEntityObj.animalAccreditation = data['animalAccreditation'];
             this.createEntityObj.phoneNumber = data['phoneNumber'];
             this.createEntityObj.entityOwnerShip = data['entityOwnershipType'];
+            this.createEntityObj.entityOwnershipTypeCode = data['entityOwnershipTypeCode'];
             this.createEntityObj.postCode = data['postCode'];
         }
     }
@@ -78,6 +79,10 @@ export class BasicDetailsComponent {
             });
             this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
         }
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
     }
 
 }

@@ -16,12 +16,17 @@
             </div>
             <div class="col-md-12 col-lg-3">
                 <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-ownership-type">
+                    <span class="mandatory me-1">*</span>
                     Ownership Type
                     <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-ownership-type'"></app-common-help-text>
                 </label>
                 <app-look-up (selectedResult)="onOwnerShipTypeSelect($event)" [options]="ownershipTypOptions"
+                    [isError]="mandatoryList?.has('ownershipType')"
                     [uniqueId]="'coi-entity-ownership-type'" [selectedLookUpList]="selectedOwnerShipType">
                 </app-look-up>
+                <span *ngIf="mandatoryList?.has('ownershipType')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('ownershipType')}}
+                </span>
             </div>
         </div>
         <div class="row mx-0 py-3">
@@ -221,3 +226,28 @@
             </div>
         </div>
 
+        <div class="modal fade mySkinDialog" data-bs-backdrop="static" [id]="'coi-entity-confirmation-modal'" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Confirmation
+                        </h5>
+                        <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Click to close">
+                        </button>
+                    </div>
+                    <div class="modal-body title-descriptions">
+                        <p>Do you want to discard changes and leave the page?</p>
+                    </div>
+                    <div class="modal-footer mx-2">
+                        <button type="button" class="btn btn-outline-secondary fs-14"
+                            (click)="leaveSlider()">
+                            Leave Page
+                        </button>
+                        <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
+                            Stay On Page
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>

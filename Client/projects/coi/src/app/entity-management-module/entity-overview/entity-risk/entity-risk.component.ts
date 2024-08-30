@@ -62,7 +62,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
     }
 
     onRiskSelected(event) {
-        if (event.length) {
+        if (event && event.length) {
             this.entityRisk.riskTypeCode = event[0].riskTypeCode;
             this.selectedRiskType = event[0];
         } else {
@@ -74,7 +74,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
     fetchRisk() {
         this.$subscriptions.push(this._entityOverviewService.fetchRiskType().subscribe((data: any) => {
             if (data?.length) {
-                this.entityRiskTypeList = data.filter(ele => ele.riskCategoryCode == 'EN').map(ele => {
+                this.entityRiskTypeList = data.map(ele => {
                     const obj = ele;
                     delete obj.riskCategoryCode;
                     return obj;
@@ -94,16 +94,14 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[] | 'ENTITY_RISK_TYPE') => {
-                if (dependencies !==  'ENTITY_RISK_TYPE') {
-                    this.getDataFromStore();
-                }
+            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
             })
         );
     }
 
     onRiskLevelSelected(event) {
-        if (event.length) {
+        if (event && event.length) {
             this.entityRisk.riskLevelCode = event[0].code;
             this.selectedRiskLevel = event[0];
         } else {

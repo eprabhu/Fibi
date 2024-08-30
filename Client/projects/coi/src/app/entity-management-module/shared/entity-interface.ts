@@ -1,5 +1,6 @@
 export type EntityRiskProxyController = '/organization' | '/sponsor' | '/compliance' | '';
 export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
+export type AttachmentInputType = 'REPLACE' | 'ADD' | 'DESCRIPTION_CHANGE' | '';
 
 export class Create_Entity {
     entityName: string = '';
@@ -20,8 +21,9 @@ export class Create_Entity {
     humanSubAssurance?: any;
     anumalWelfareAssurance?: any;
     animalAccreditation?: any;
+    isDunsMatched?: any;
     entityOwnershipTypeCode: any;
-    entityOwnerShip: EntityOwnerShip;
+    entityOwnerShip: EntityOwnerShip = new EntityOwnerShip();
 }
 
 export class EntityOwnerShip {
@@ -167,7 +169,7 @@ export class EntityAttachmentDetails {
     entityId: number;
     comment: string;
     attachmentTypeCode: string;
-    attachmentType: AttachmentType;
+    attachmentType: EntityAttachmentType;
     attachmentStatusCode: any;
     attachmentStatus: any;
     fileName: string;
@@ -178,13 +180,13 @@ export class EntityAttachmentDetails {
     updateUserFullame: string;
 }
 
-export interface AttachmentType {
-    attachmentTypeCode: string
-    description: string
-    updateTimestamp: number
-    updatedBy: string
-    isActive: boolean
-    isPrivate: boolean
+export interface EntityAttachmentType {
+    attachmentTypeCode?: string
+    description?: string
+    updateTimestamp?: number
+    updatedBy?: string
+    isActive?: boolean
+    isPrivate?: boolean
   }
 
 export class EntityDetails {
@@ -231,13 +233,13 @@ export class EntityDetails {
 }
 
 export class Country {
-    countryCode: string;
+    countryCode?: string;
     countryName: string;
-    currencyCode: string;
-    currency: Currency
-    updateTimeStamp: any;
-    updateUser: string;
-    countryTwoCode: any;
+    currencyCode?: string;
+    currency?: Currency
+    updateTimeStamp?: any;
+    updateUser?: string;
+    countryTwoCode?: any;
 }
 
 export class Currency {
@@ -264,6 +266,20 @@ export function showEntityToast(type: 'SUCCESS' | 'ERROR') {
         }
         if (successToast) {
             successToast.classList.add('invisible');
+        }
+    }
+}
+
+export function removeToast(type: 'SUCCESS'|'ERROR') {
+    let successToast = document.getElementById('success-toast');
+    let errorMsg = document.getElementById('error-toast');
+    if(type === 'SUCCESS') {
+        if(successToast) {
+            successToast.classList.add('invisible');
+        }
+    } else {
+        if(errorMsg) {
+            errorMsg.classList.add('invisible');
         }
     }
 }
@@ -308,8 +324,9 @@ export interface EntityExternalIdType {
 }
 
 export class SubAwardOrganization {
-    entityRisks: EntityRisk[] = [];
-    subAwdOrgDetailsResponseDTO = new SubAwardOrganizationDetails();
+    attachments?: any[] = [];
+    entityRisks?: EntityRisk[] = [];
+    subAwdOrgDetailsResponseDTO? = new SubAwardOrganizationDetails();
 }
 
 export class SubAwardOrganizationDetails {
@@ -325,7 +342,6 @@ export class EntityRiskModalDetails  {
     entityRisk = new EntityRisk();
     selectedRiskTypeLookUpList: EntityRisk[] = [];
     selectedRiskLevelLookUpList: RiskLevel[] = [];
-    defaultRiskLevel = '';
 }
 
 export class SaveAttachmentRo {
@@ -333,12 +349,51 @@ export class SaveAttachmentRo {
     newAttachments = new NewAttachments();
 }
 export class NewAttachments {
+    fileName?: string;
+    mimeType?: string;
+    attachmentTypeCode?: string;
+    entityId?: number;
+    comment?: string;
+    fileDataId?: null;
+    attachmentnumber?: number;
+    versionNumber?: number;
+}
+
+export interface EntityAttachment {
+    entityAttachmentId?: number;
+    attachmentNumber?: number;
+    versionNumber?: number;
+    versionStatus?: string
+    entityId?: string | number;
+    entity?: EntityDetails;
+    comment?: string;
+    attachmentTypeCode?: string;
+    attachmentType?: EntityAttachmentType;
+    attachmentStatusCode?: any;
+    attachmentStatus?: any;
+    fileName?: string;
+    mimeType?: string;
+    fileDataId?: string;
+    updateTimestamp?: number;
+    updatedBy?: string;
+    updateUserFullame?: string;
+    versionList?: EntityAttachment[];
+  }
+
+  export interface AttachmentSaveRO {
     fileName: string;
     mimeType: string;
-    attachmentTypeCode: string;
-    entityId: number;
+    attachmentTypeCode: string | number;
     comment: string;
-    fileDataId: null;
-    attachmentnumber: number;
+    fileDataId: string | null;
+}
+
+export interface AttachmentReplaceRO {
+    fileName: string;
+    mimeType: string;
+    attachmentTypeCode: string | number;
+    comment: string;
+    fileDataId: string | null;
+    attachmentNumber: number;
     versionNumber: number;
 }

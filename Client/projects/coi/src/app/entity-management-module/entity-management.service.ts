@@ -21,10 +21,6 @@ export class EntityManagementService {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
     }
 
-    fetchRiskType() {
-        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
-    }
-
 }
 
 

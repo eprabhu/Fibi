@@ -17,27 +17,27 @@ import { SharedEntityManagementModule } from '../shared/shared-entity-management
 import { EntityOverviewService } from './entity-overview.service';
 
 @NgModule({
-  declarations: [
-    EntityOverviewComponent,
-    BasicDetailsComponent,
-    IndustryDetailsComponent,
-    RegistrationDetailsComponent,
-    AdditionalAddressesComponent,
-    OtherDetailsComponent,
-    EntityRiskComponent,
-    OtherReferenceIdComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([{ path: '', component: EntityOverviewComponent}]),
-    FormsModule,
-    SharedModule,
-    MatIconModule,
-    SharedComponentModule,
-    SharedEntityManagementModule
-  ],
-  providers: [
-    EntityOverviewService
-  ]
+    declarations: [
+        EntityOverviewComponent,
+        BasicDetailsComponent,
+        IndustryDetailsComponent,
+        RegistrationDetailsComponent,
+        AdditionalAddressesComponent,
+        OtherDetailsComponent,
+        EntityRiskComponent,
+        OtherReferenceIdComponent
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild([{ path: '', component: EntityOverviewComponent }]),
+        FormsModule,
+        SharedModule,
+        MatIconModule,
+        SharedComponentModule,
+        SharedEntityManagementModule
+    ],
+    providers: [
+        EntityOverviewService
+    ]
 })
-export class EntityFormOverviewModule { }
+export class EntityFormOverviewModule {}

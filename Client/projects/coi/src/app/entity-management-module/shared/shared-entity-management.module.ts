@@ -3,26 +3,26 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { EntityCommonCardComponent } from './entity-common-card/entity-common-card.component';
-import { EntityAttachmentModalComponent } from './entity-attachment-modal/entity-attachment-modal.component';
 import { EntityRiskSectionComponent } from './entity-risk-section/entity-risk-section.component';
 import { FormsModule } from '@angular/forms';
+import { EntityAttachmentSectionModule } from './entity-attachment-section/entity-attachment-section.module';
 
 @NgModule({
     declarations: [
         EntityCommonCardComponent,
         EntityRiskSectionComponent,
-        EntityAttachmentModalComponent,
     ],
     imports: [
         FormsModule,
         CommonModule,
         SharedModule,
         SharedComponentModule,
+        EntityAttachmentSectionModule
     ],
     exports: [
         EntityCommonCardComponent,
         EntityRiskSectionComponent,
-        EntityAttachmentModalComponent,
+        EntityAttachmentSectionModule
     ]
 })
 export class SharedEntityManagementModule { }

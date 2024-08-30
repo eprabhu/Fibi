@@ -82,7 +82,7 @@ export class EntityOverviewService {
     }
 
     fetchRiskType() {
-        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
+        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes/EN');
     }
 
     updateOtherDetails(otherDetailsRO) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import { isValidEmailAddress, inputRestrictionForNumberField, phoneNumberValidation } from '../../common/utilities/custom-utilities';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
@@ -6,11 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { EntityCreationService } from './entity-creation.service';
 import { getEndPointOptionsForCountry } from './../../../../../fibi/src/app/common/services/end-point.config';
-import { isEmptyObject } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, hideModal, isEmptyObject, openModal } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {
     Country,
     Create_Entity,
     EntityOwnerShip,
+    removeToast,
     showEntityToast
 } from '../../entity-management-module/shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
@@ -26,7 +27,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
   styleUrls: ['./entity-creation.component.scss'],
   providers: [EntityCreationService]
 })
-export class EntityCreationComponent {
+export class EntityCreationComponent implements OnInit, OnDestroy {
 
     clearCountryField: any;
     countrySearchOptions: any;
@@ -85,20 +86,20 @@ export class EntityCreationComponent {
     }
 
     externalProccedSubscribe() {
-        this.initalProceed.subscribe((data) => {
+        this.$subscriptions.push(this.initalProceed.subscribe((data) => {
             if(data) {
                 this.entityMandatoryValidation();
                 if(!this.mandatoryList.size) {
                     this.emitEntityRO.emit(true);
                 }
             }
-        })
+        }));
     }
 
     triggerExternalSave() {
-        this.saveEntity.subscribe((data) => {
+        this.$subscriptions.push(this.saveEntity.subscribe((data) => {
             this.entityMandatoryValidation();
-            if(!this.mandatoryList.size) {
+            if (!this.mandatoryList.size) {
                 this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
                     this.isFormDataChanged = false;
                     this.setCommonChangesFlag(false);
@@ -114,7 +115,7 @@ export class EntityCreationComponent {
                     }
                 }));
             }
-        });
+        }));
     }
 
     triggerSingleSave() {
@@ -153,7 +154,8 @@ export class EntityCreationComponent {
             }
         } else {
             this.createEntityObj.entityOwnershipTypeCode = null;
-            this.createEntityObj.entityOwnerShip = null;
+            this.createEntityObj.entityOwnerShip = new EntityOwnerShip();
+            this.changeEvent('entityOwnershipTypeCode');
         }
     }
 
@@ -197,7 +199,19 @@ export class EntityCreationComponent {
             }
         ));
             this._commonService.removeLoaderRestriction();
+        } else if(this.mandatoryList.size){
+            if(this._commonService.isNavigationStopped) {
+                openModal('coi-entity-confirmation-modal');
+            }
         }
+    }
+
+    leaveSlider(){
+        removeToast('ERROR');
+        removeToast('SUCCESS');
+        this.setCommonChangesFlag(false);
+        hideModal('coi-entity-confirmation-modal');
+        this._router.navigateByUrl(this._commonService.attemptedPath);
     }
 
     setCommonChangesFlag(flag) {
@@ -229,6 +243,7 @@ export class EntityCreationComponent {
         this.clearValidation('city');
         this.clearValidation('state');
         this.clearValidation('postCode');
+        this.clearValidation('ownershipType');
         if (!this.createEntityObj.entityName) {
             this.mandatoryList.set('entityName', 'Please enter entity name.');
         }
@@ -246,6 +261,9 @@ export class EntityCreationComponent {
         }
         if (!this.createEntityObj.postCode) {
             this.mandatoryList.set('postCode', 'Please enter postal code.');
+        }
+        if (!this.createEntityObj.entityOwnershipTypeCode) {
+            this.mandatoryList.set('ownershipType', 'Please select ownership type.');
         }
     }
 
@@ -283,6 +301,8 @@ export class EntityCreationComponent {
                     this.changeEvent("dunsNumber");
                 }
             }));
+        } else {
+            this.changeEvent("dunsNumber");
         }
     }
 
@@ -296,6 +316,8 @@ export class EntityCreationComponent {
                     this.changeEvent('ueiNumber');
                 }
             }));
+        } else {
+            this.changeEvent("dunsNumber");
         }
     }
 
@@ -309,6 +331,8 @@ export class EntityCreationComponent {
                     this.changeEvent('cageNumber');
                 }
             }));
+        } else {
+            this.changeEvent("dunsNumber");
         }
     }
 

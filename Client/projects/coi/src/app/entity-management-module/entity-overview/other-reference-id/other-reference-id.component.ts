@@ -66,7 +66,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
     }
 
     onReferenceIdTypeSelected(event) {
-        if (event.length) {
+        if (event && event.length) {
             this.otherReferenceIdObj.externalIdTypeCode = event[0].code;
             this.selectedReference = event[0];
         } else {
