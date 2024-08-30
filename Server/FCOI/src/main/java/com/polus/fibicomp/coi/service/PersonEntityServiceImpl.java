@@ -163,7 +163,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         personEntity.setCreateUser(loginUsername);
         personEntity.setCreateTimestamp(currentTimestamp);
         personEntity.setUpdateTimestamp(currentTimestamp);
-        personEntity.setEntityId(conflictOfInterestDao.getMaxEntityId(personEntityObj.getEntityNumber()));
+//        personEntity.setEntityId(conflictOfInterestDao.getMaxEntityId(personEntityObj.getEntityNumber()));
         conflictOfInterestDao.saveOrUpdatePersonEntity(personEntity);
         conflictOfInterestDao.getCoiFinancialEntityDetails(personEntityObj.getPersonEntityId()).forEach(personEntityRelationship -> {
             PersonEntityRelationship relationship = new PersonEntityRelationship();
@@ -173,13 +173,13 @@ public class PersonEntityServiceImpl implements PersonEntityService {
             relationship.setUpdateUser(loginUsername);
             relationship.setUpdateTimestamp(currentTimestamp);
             conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(relationship);
+            copyPersonEntityQuestionnaireData(personEntityObj, personEntity,  personEntityRelationship.getValidPersonEntityRelTypeCode());
         });
-        copyPersonEntityQuestionnaireData(personEntityObj, personEntity);
         conflictOfInterestDao.updatePersonEntityVersionStatus(personEntityObj.getPersonEntityId(), Constants.COI_ARCHIVE_STATUS);
         return personEntity;
     }
 
-    private void copyPersonEntityQuestionnaireData(PersonEntity personEntityOld, PersonEntity personEntity) {
+    private void copyPersonEntityQuestionnaireData(PersonEntity personEntityOld, PersonEntity personEntity, Integer validPersonEntityRelTypeCode) {
         List<Integer> submoduleCodes = new ArrayList<>();
         QuestionnaireDataBus questionnaireDataBus = new QuestionnaireDataBus();
         questionnaireDataBus.setActionPersonId(AuthenticatedUser.getLoginPersonId());
@@ -190,6 +190,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         questionnaireDataBus.getModuleSubItemCodes().addAll(submoduleCodes);
         questionnaireDataBus.setModuleSubItemKey("0");
         questionnaireDataBus.setCopyModuleItemKey(personEntity.getPersonEntityId().toString());
+        questionnaireDataBus.setModuleSubItemKey(validPersonEntityRelTypeCode != null ? validPersonEntityRelTypeCode.toString() : null);
         questionnaireService.copyQuestionnaireForVersion(questionnaireDataBus, false);
     }
 
