@@ -1,4 +1,4 @@
-create or replace PROCEDURE Fibi_coi_get_inst_prop_persons(
+create or replace PROCEDURE FIBI_COI_GET_INST_PROP_PERSONS(
 av_proposal_number IN proposal.proposal_number%TYPE,
 cur_generic        OUT SYS_REFCURSOR)
 IS
