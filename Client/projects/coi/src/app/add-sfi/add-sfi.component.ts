@@ -78,6 +78,7 @@ export class AddSfiComponent implements OnInit {
     @Input() isSlider = false;
     @Input() revisionReason = '';
     @Input() sfiSliderSectionConfig: any;
+    @Input() entitySectionConfig: any;
 
     constructor(public sfiService: SfiService, private _activatedRoute: ActivatedRoute,
         public _commonService: CommonService, private _router: Router, public _navigationService: NavigationService,
@@ -93,6 +94,7 @@ export class AddSfiComponent implements OnInit {
 
     private checkIfSFIAlreadyAdded(entityId, event): void {
         this.mandatoryList.delete('entityAlreadyAdded');
+        this.addEntityConfirmation = null;
         this.$subscriptions.push(this.sfiService.isEntityAdded(entityId).subscribe((res: any) => {
             if (res) {
                 this.existingEntityDetails = res;
@@ -270,7 +272,8 @@ export class AddSfiComponent implements OnInit {
 
     confirmEntityDetails() {
         this.isResultFromSearch = true;
-        this.addEntityConfirmation = null;
+        this.entityDetails.entityName = this.addEntityConfirmation.entityName;
+        this.entityDetails.entityId = this.addEntityConfirmation.entityId;
     }
 
     clearEntityDetails() {
@@ -339,11 +342,12 @@ export class AddSfiComponent implements OnInit {
     }
 
     getSfiSliderSectionConfig(){
-        let a =  this._commonService.getSectionCodeAsKeys(
+        let SFI_CONFIG =  this._commonService.getSectionCodeAsKeys(
             this.isSlider ? this.sfiSliderSectionConfig : this._activatedRoute.snapshot.data.moduleConfig
         );
-        let b =  this._commonService.getSectionCodeAsKeys(this._activatedRoute.snapshot.data.entityConfig);
-        this._informationAndHelpTextService.moduleConfiguration = {...a, ...b};
+        let ENTITY_CONFIG =  this._commonService.getSectionCodeAsKeys(this.isSlider ? this.entitySectionConfig :
+            this._activatedRoute.snapshot.data.entityConfig);
+        this._informationAndHelpTextService.moduleConfiguration = {...SFI_CONFIG, ...ENTITY_CONFIG};
     }
 
     getIcon(key): string {

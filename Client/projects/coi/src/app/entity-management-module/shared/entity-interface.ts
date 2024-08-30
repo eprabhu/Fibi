@@ -21,8 +21,9 @@ export class Create_Entity {
     humanSubAssurance?: any;
     anumalWelfareAssurance?: any;
     animalAccreditation?: any;
+    isDunsMatched?: any;
     entityOwnershipTypeCode: any;
-    entityOwnerShip: EntityOwnerShip;
+    entityOwnerShip: EntityOwnerShip = new EntityOwnerShip();
 }
 
 export class EntityOwnerShip {
@@ -232,13 +233,13 @@ export class EntityDetails {
 }
 
 export class Country {
-    countryCode: string;
+    countryCode?: string;
     countryName: string;
-    currencyCode: string;
-    currency: Currency
-    updateTimeStamp: any;
-    updateUser: string;
-    countryTwoCode: any;
+    currencyCode?: string;
+    currency?: Currency
+    updateTimeStamp?: any;
+    updateUser?: string;
+    countryTwoCode?: any;
 }
 
 export class Currency {
@@ -265,6 +266,20 @@ export function showEntityToast(type: 'SUCCESS' | 'ERROR') {
         }
         if (successToast) {
             successToast.classList.add('invisible');
+        }
+    }
+}
+
+export function removeToast(type: 'SUCCESS'|'ERROR') {
+    let successToast = document.getElementById('success-toast');
+    let errorMsg = document.getElementById('error-toast');
+    if(type === 'SUCCESS') {
+        if(successToast) {
+            successToast.classList.add('invisible');
+        }
+    } else {
+        if(errorMsg) {
+            errorMsg.classList.add('invisible');
         }
     }
 }
