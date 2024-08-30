@@ -13,7 +13,7 @@
                     <button *ngIf="!isShowUseBtn" id="view-entity-common-card" aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14">
                         View
                     </button>
-                    <button *ngIf="isShowUseBtn" id="use-entity-common-card" (click)="sendEntityDetails()"aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14">
+                    <button *ngIf="isShowUseBtn" id="use-entity-common-card" [disabled]="isDunsMatched && dunsNumber == entityDetailsObj?.organization?.duns" (click)="sendEntityDetails()"aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14">
                        {{isDunsMatched && dunsNumber == entityDetailsObj?.organization?.duns ? 'Used' : 'Use this'}}
                     </button>
                     <button id="view-entity" aria-label="view entity details" title="View sfi details"  class="btn btn-outline-secondary ms-2 fs-14 d-inline-flex collapse-button" (click)="isExpanded = !isExpanded">

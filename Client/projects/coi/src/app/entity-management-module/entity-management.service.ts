@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { Subscription } from 'rxjs';
-import { showEntityToast } from './shared/entity-interface';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { Subject, Subscription } from 'rxjs';
 import { EntityDataStoreService } from './entity-data-store.service';
 
 @Injectable()
@@ -12,6 +9,7 @@ export class EntityManagementService {
 
     hasChangesAvailable: boolean;
     $subscriptions: Subscription[] = [];
+    triggerDUNSEntity = new Subject();
 
     constructor(private _commonService: CommonService, private _http: HttpClient,
         private _dataStore: EntityDataStoreService
@@ -19,6 +17,14 @@ export class EntityManagementService {
 
     getEntityDetails(entityId) {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
+    }
+
+    fetchRiskType() {
+        return this._http.get(this._commonService.baseUrl + '/entity/fetchRiskTypes');
+    }
+
+    getDunsMatch(test) {
+        return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/cleansematch/entity/runCleanseMatch', test);
     }
 
 }
