@@ -165,4 +165,8 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
     }
+
+    navigateToBack() {
+        this.router.navigate(['/coi/entity-dashboard'])
+    }
 }
