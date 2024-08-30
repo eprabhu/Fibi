@@ -851,5 +851,17 @@
     "/entity/verify/*" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
+    },
+    "/projectPersonNotify": {
+        "target": "http://10.199.100.140:8070/coi",
+        "secure": false
+    }, 
+    "/project/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/getNotifications": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
     }
 }

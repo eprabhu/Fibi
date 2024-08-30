@@ -34,7 +34,12 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     isRestrictSave = false;
     isEditMode = false;
 
-    constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService, private _entitySubAwardService: EntitySubAwardService) { }
+    constructor(public commonService: CommonService,
+                private _dataStoreService: EntityDataStoreService,
+                private _autoSaveService: AutoSaveService,
+                private _entityManagementService: EntityManagementService,
+                public entitySubAwardService: EntitySubAwardService
+    ) { }
 
     ngOnInit() {
         this.triggerSingleSave();
@@ -51,10 +56,10 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
-        if (this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode) {
-            this.selectedLookupList.push({ code: this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO.organizationTypeCode, description: null });
-            this.samExpirationDate = getDateObjectFromTimeStamp(this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.samExpirationDate);
-            this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
+        if (this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode) {
+            this.selectedLookupList.push({ code: this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO.organizationTypeCode, description: null });
+            this.samExpirationDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.samExpirationDate);
+            this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
         }
         this.isEditMode = this._dataStoreService.getEditMode();
     }
@@ -86,7 +91,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     autoSaveAPI(): void {
         if (this.dataChangeCounter > 0 && !this.isRestrictSave) {
             this.commonService.setLoaderRestriction();
-            if (this._entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.id) {
+            if (this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.id) {
                 this.updateSubAwardOrganizationDetails();
             } else {
                 this.isRestrictSave = true;
@@ -99,9 +104,9 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     private saveSubAwardOrganizationDetails(): void {
         this.autoSaveRO.entityId = this.entityDetails.entityId;
         this.$subscriptions.push(
-            this._entitySubAwardService.organizationDetailsAutoSave(this.autoSaveRO)
+            this.entitySubAwardService.organizationDetailsAutoSave(this.autoSaveRO)
                 .subscribe((data: any) => {
-                    this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO = {
+                    this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO = {
                         entityId: this.entityDetails.entityId,
                         id: data?.id,
                     }
@@ -119,7 +124,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     private updateSubAwardOrganizationDetails(): void {
         this.autoSaveRO.entityId = this.entityDetails.entityId;
         this.$subscriptions.push(
-            this._entitySubAwardService.updateOrganizationDetails(this.autoSaveRO)
+            this.entitySubAwardService.updateOrganizationDetails(this.autoSaveRO)
                 .subscribe((data: any) => {
                     this.autoSaveRO = {};
                     this._entityManagementService.hasChangesAvailable = false;
@@ -132,25 +137,25 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     onDateSelect(dateType: 'SAM_EXPIRATION' | 'RISK_ASSESSMENT'): void {
         if (dateType == 'SAM_EXPIRATION') {
-            this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.samExpirationDate = parseDateWithoutTimestamp(this.samExpirationDate);
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.samExpirationDate = parseDateWithoutTimestamp(this.samExpirationDate);
             this.changeEvent('samExpirationDate');
         }
         if (dateType == 'RISK_ASSESSMENT') {
-            this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.subAwdRiskAssmtDate = parseDateWithoutTimestamp(this.subAwdRiskAssmtDate)
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.subAwdRiskAssmtDate = parseDateWithoutTimestamp(this.subAwdRiskAssmtDate)
             this.changeEvent('subAwdRiskAssmtDate');
         }
     }
 
     changeEvent(key: string): void {
         this._entityManagementService.hasChangesAvailable = true;
-        if (this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO[key]) {
-            this.autoSaveRO[key] = this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO[key];
+        if (this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO[key]) {
+            this.autoSaveRO[key] = this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO[key];
             this.$debounceEvent.next(key);
         }
     }
 
     onOrganizationTypeSelect(event: any): void {
-        this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationTypeCode = event ? event[0]?.code : null;
+        this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationTypeCode = event ? event[0]?.code : null;
         this.changeEvent('organizationTypeCode');
     }
 }

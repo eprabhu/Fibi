@@ -16,3 +16,10 @@
 .rotate-icon {
     transform: rotate(-45deg);
 }
+
+.attachment-icon-container {
+    background-color: #DEE5F0;
+    mat-icon {
+        color: #0948B3 !important;
+    }
+}

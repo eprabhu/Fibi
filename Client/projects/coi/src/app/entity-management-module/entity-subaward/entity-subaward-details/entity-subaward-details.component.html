@@ -18,7 +18,8 @@
                 <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-subaward-orgID'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" id="coi-entity-subaward-orgID" title="Organization ID" aria-label="Organization ID"
-                maxlength="60" autocomplete="off" class="form-control" disabled />
+                maxlength="60" autocomplete="off" class="form-control" disabled 
+                [(ngModel)]="entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationId"/>
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="[]"></app-no-data-label>
             </span>
