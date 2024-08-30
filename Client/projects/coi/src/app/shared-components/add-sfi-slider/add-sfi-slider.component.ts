@@ -5,7 +5,7 @@ import { CommonService } from '../../common/services/common.service';
 import { ActivityService } from '../../disclosure/activity-track/activity.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { openCoiSlider } from '../../common/utilities/custom-utilities';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 
@@ -17,7 +17,8 @@ import { HTTP_ERROR_STATUS } from '../../app-constants';
 })
 export class AddSfiSliderComponent implements OnInit {
 
-    private readonly _moduleCode = 'SFI53';
+    private readonly _sfimoduleCode = 'SFI53';
+    private readonly _coimoduleCode = 'GE26';
 
     @Input() disclosureDetails: { disclosureId: any, disclosureNumber: any } = { disclosureId: null, disclosureNumber: null };
     @ViewChild('sfiNavOverlay', { static: true }) sfiNavOverlay: ElementRef;
@@ -29,20 +30,21 @@ export class AddSfiSliderComponent implements OnInit {
     @Input() revisionReason = '';
 
     sfiSliderSectionConfig: any;
+    entitySectionConfig: any;
     isShowAddSfiPage: boolean = false;
     $subscriptions: Subscription[] = [];
 
     constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
-        this.getSfiSectionConfig();    
+        this.getSfiSectionConfig();
     }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
     }
 
-    hideSfiNavBar() {       
+    hideSfiNavBar() {
         setTimeout(() => {
             this.sfiService.isShowSfiNavBar = false;
         },500);
@@ -68,9 +70,13 @@ export class AddSfiSliderComponent implements OnInit {
 
     getSfiSectionConfig() : void {
         this.$subscriptions.push(
-        this._commonService.getDashboardActiveModules(this._moduleCode).subscribe((data) => {
-            this.sfiSliderSectionConfig = data;
-            this.openSlider();
+            forkJoin([this._commonService.getDashboardActiveModules(this._sfimoduleCode), this._commonService.getDashboardActiveModules(this._coimoduleCode)])
+        .subscribe((data: any) => {
+            if(data.length) {
+                this.sfiSliderSectionConfig = data[0];
+                this.entitySectionConfig = data[1];
+                this.openSlider();
+            }
         },
             _err => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Fetching Active Modules.');

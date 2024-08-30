@@ -6,8 +6,7 @@ import { CommonService } from '../common/services/common.service';
 import { InformationAndHelpTextService } from '../common/services/informationAndHelpText.service';
 import { EntityManagementService } from './entity-management.service';
 import { catchError } from 'rxjs/operators';
-import { AutoSaveService } from '../common/services/auto-save.service';
-import { NavigationService } from '../common/services/navigation.service';
+import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Injectable()
 export class EntityManagementResolveService {
@@ -82,11 +81,12 @@ private redirectOnError(error) {
 @Injectable()
 export class EntityPathResolveService{
 
-  constructor(private _entityManagementService: EntityManagementService, private _commonService: CommonService) { }
+  constructor(private _commonService: CommonService) { }
     canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): any {
         if(this._commonService.hasChangesAvailable) {
             this._commonService.isNavigationStopped = true;
             this._commonService.attemptedPath = nextState.url;
+            openModal('coi-entity-confirmation-modal');
             return false;
         } else {
             this._commonService.isNavigationStopped = false;

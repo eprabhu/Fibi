@@ -2,8 +2,9 @@ import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import { Country, Create_Entity, EntityDetails } from '../../shared/entity-interface';
 import { isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
-import { Subscription } from 'rxjs';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { Subject, Subscription } from 'rxjs';
+import { EntityManagementService } from '../../entity-management.service';
 
 @Component({
   selector: 'app-basic-details',
@@ -58,6 +59,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
             this.createEntityObj.animalAccreditation = data['animalAccreditation'];
             this.createEntityObj.phoneNumber = data['phoneNumber'];
             this.createEntityObj.entityOwnerShip = data['entityOwnershipType'];
+            this.createEntityObj.entityOwnershipTypeCode = data['entityOwnershipTypeCode'];
             this.createEntityObj.postCode = data['postCode'];
         }
     }
