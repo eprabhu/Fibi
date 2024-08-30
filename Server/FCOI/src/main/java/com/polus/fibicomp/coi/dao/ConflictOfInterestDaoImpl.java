@@ -3062,12 +3062,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public PersonEntity fetchPersonEntityByEntityNumber(Integer entityNumber, String personId) {
+	public PersonEntity fetchPersonEntityByEntityId(Integer entityId, String personId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT pe FROM PersonEntity pe WHERE pe.entityNumber = :entityNumber AND pe.personId = :personId ORDER BY pe.versionNumber DESC");
+		hqlQuery.append("SELECT pe FROM PersonEntity pe WHERE pe.entityId = :entityId AND pe.personId = :personId ORDER BY pe.versionNumber DESC");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("entityNumber", entityNumber);
+		query.setParameter("entityId", entityId);
 		query.setParameter("personId", personId);
 		List result = query.getResultList();
 		if (result ==null || result.isEmpty()) {
