@@ -6,7 +6,7 @@
     </div>
     <div class="mb-2">
         <app-entity-risk-section [sectionName]="riskSubSectionName"
-            [sectionId]="riskSubSectionId"
+            [sectionId]="riskSubSectionId" (riskUpdated)="riskUpdated($event)"
             [entityRiskList]="entitySubAwarRisksList" [riskCategoryCode]="'OR'">
         </app-entity-risk-section>
     </div>

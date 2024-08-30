@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { EntityDetails, EntityDetailsCard } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityTabStatus, EntityDetailsCard } from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { EntityManagementService } from '../entity-management.service';
@@ -18,7 +18,8 @@ class DNBReqObj {
     postalCode: string;
     state: string;
     countryCode: string;
-}
+}import { ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
+
 @Component({
   selector: 'app-header-details',
   templateUrl: './header-details.component.html',
@@ -38,6 +39,8 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     latestPriorName: any;
     isEditMode = false;
     matchedEntites: any;
+    isOpenVerifyModal = false;
+    entityTabStatus = new EntityTabStatus();
 
     constructor(public router: Router, public dataStore: EntityDataStoreService,
         public autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService) {}
@@ -99,10 +102,11 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore() {
-        const entityData = this.dataStore.getData();
-        if (!entityData || isEmptyObject(entityData)) { return; }
-        this.entityDetails = entityData.entityDetails;
-        this.latestPriorName = entityData?.priorNames[0]?.priorNames;
+        const ENTITY_DATA: EntireEntityDetails = this.dataStore.getData();
+        if (!ENTITY_DATA || isEmptyObject(ENTITY_DATA)) { return; }
+        this.entityDetails = ENTITY_DATA.entityDetails;
+        this.latestPriorName = ENTITY_DATA?.priorNames[0]?.priorNames;
+        this.entityTabStatus = ENTITY_DATA.entityTabStatus
         this.getEntityFullAddress();
         this.isEditMode = this.dataStore.getEditMode();
     }
@@ -148,6 +152,14 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this._entityManagementService.triggerDUNSEntity.next({orgDetails : entity?.organization, isDunsMatched: isDunsMatched});
         closeCoiSlider('duns-match-slider');
         this.validateSliderClose();
+    }
+
+    openVerifyEntityModal(): void {
+        this.isOpenVerifyModal = true;
+    }
+
+    verifyModalAction(modalAction: ModalActionEvent): void {
+        this.isOpenVerifyModal = false;
     }
 
     ngOnDestroy() {

@@ -74,22 +74,14 @@
             <div class="card shadow-sm p-2">
                 <div class="row mx-2 mb-2 mt-3">
                     <!-- Attachment Type -->
-                    <div class="col-lg-3 col-12">
+                    <div class="col-lg-4 col-12">
                         <label for="coi-add-attachment-type" class="d-block coi-text-dark">
                             <span class="mandatory">*</span>
                             <span>Attachment Type</span>
                         </label>
                         <span id="coi-add-attachment-type"
                             class="coi-text-light">{{currentAttachment?.attachmentType?.description}}</span>
-                    </div>
-                    <!-- Description -->
-                    <div class="col-lg-5 col-12">
-                        <label for="coi-add-attachment-description" class="d-block coi-text-dark">Description</label>
-                        <textarea id="coi-add-attachment-description" rows="1" id="external-review-doc-popup-desc"
-                            [(ngModel)]="currentAttachment.comment" placeholder="Please enter the description."
-                            class="form-control" appLengthValidator [isShowLimiter]='true' [limit]="500">
-                        </textarea>
-                    </div>
+                    </div>                    
                     <!-- File Name -->
                     <div class="col-lg-4 col-12">
                         <label for="coi-attachment-filename" class="coi-text-dark">
@@ -97,6 +89,14 @@
                             <span>File Name</span>
                         </label>
                         <span id="coi-attachment-filename" class="d-block fs-14">{{currentAttachment?.fileName}}</span>
+                    </div>
+                    <!-- Description -->
+                    <div class="col-12 mt-3">
+                        <label for="coi-add-attachment-description" class="d-block coi-text-dark">Description</label>
+                        <textarea id="coi-add-attachment-description" rows="1" id="external-review-doc-popup-desc"
+                            [(ngModel)]="currentAttachment.comment" placeholder="Please enter the description."
+                            class="form-control" appLengthValidator [isShowLimiter]='true' [limit]="500">
+                        </textarea>
                     </div>
                 </div>
             </div>

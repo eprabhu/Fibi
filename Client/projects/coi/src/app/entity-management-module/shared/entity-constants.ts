@@ -9,10 +9,10 @@ const SPONSOR_RISK =  {sectionName: 'Sponsor Risk', sectionId: 'ES202'};
 const SPONSOR_ATTACHMENTS = {sectionName: 'Sponsor Attachments', sectionId: 'ES203'};
 const SPONSOR_QUESTIONNAIRE = {sectionName: 'Sponsor Questionnaire', sectionId: 'ES204'};
 
-const SUB_AWARD_ORGANISATION = {sectionName: 'Subaward Organization Details', sectionId: 'ES301'};
-const SUB_AWARD_RISK = {sectionName: 'Subaward Organization Risk', sectionId: 'ES302'};
-const SUB_AWARD_ATTACHMENTS = {sectionName: 'Subaward Organization Attachments', sectionId: 'ES303'};
-const SUB_AWARD_QUESTIONNAIRE = {sectionName: 'Subaward Organization Questionnaire', sectionId: 'ES304'};
+const SUB_AWARD_ORGANISATION = {sectionName: 'Sub-award Organization Details', sectionId: 'ES301'};
+const SUB_AWARD_RISK = {sectionName: 'Sub-award Organization Risk', sectionId: 'ES302'};
+const SUB_AWARD_ATTACHMENTS = {sectionName: 'Sub-award Organization Attachments', sectionId: 'ES303'};
+const SUB_AWARD_QUESTIONNAIRE = {sectionName: 'Sub-award Organization Questionnaire', sectionId: 'ES304'};
 
 const COMPLIANCE_RISK = {sectionName: 'Compliance Risk', sectionId: 'EC401'};
 const COMPLIANCE_ATTACHMENTS = {sectionName: 'Compliance Attachments', sectionId: 'EC402'};
