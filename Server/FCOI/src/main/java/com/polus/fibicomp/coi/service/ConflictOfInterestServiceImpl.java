@@ -36,6 +36,7 @@ import com.polus.core.inbox.pojo.Inbox;
 import com.polus.core.messageq.config.MessageQServiceRouter;
 import com.polus.core.messageq.vo.MessageQVO;
 import com.polus.core.messageq.vo.MessagingQueueProperties;
+import com.polus.core.notification.pojo.NotificationRecipient;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Country;
@@ -60,6 +61,7 @@ import com.polus.fibicomp.coi.dto.DisclosureHistoryResponse;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
+import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
@@ -194,7 +196,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String FCOI_DISCLOSURE = "FCOI_DISCLOSURE";
 	private static final String PROJECT_DISCLOSURE = "PROJECT_DISCLOSURE";
 
+	private static final String PROJECT_NOTIFY = "PROJECT_NOTIFY";
+	private static final String SINGLE_PERSON = "S";
+	private static final String NOTIFICATION_RECIPIENTS = "NOTIFICATION_RECIPIENTS";
+	private static final String ALL_PERSON = "A";
 
+	private static final String PROJECT_ID = "PROJECT_ID";
+
+	private static final String PROJECT_TITLE = "PROJECT_TITLE";
+
+	private static final String DISCLOSURE_STATUS = "DISCLOSURE_STATUS";
+
+	private static final String REPORTER_NAME = "REPORTER_NAME";
 
 	@Override
 	public List<Entity> searchEntity(ConflictOfInterestVO vo) {
@@ -2004,4 +2017,22 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         messageQServiceRouter.getMessagingQueueServiceBean().publishMessageToQueue(messageQVO);
     }
 
+	@Override
+	public ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto) {
+		Map<String, String> additionalDetails = new HashMap<>();
+		CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(notificationDto.getDisclosureId());
+		String recipientPersonIds = notificationDto.getRecipients().stream()
+				.map(NotificationRecipient::getRecipientPersonId).map(String::valueOf).collect(Collectors.joining(","));
+		additionalDetails.put(NOTIFICATION_RECIPIENTS, recipientPersonIds);
+		List<DisclosureDetailDto> projectDetails = conflictOfInterestDao.getProjectsBasedOnParams(
+				notificationDto.getProjectTypeCode(), null, null, notificationDto.getProjectId());
+		DisclosureDetailDto disclProjectDetail = projectDetails.get(0);
+		additionalDetails.put("notificationTypeId", notificationDto.getNotificationTypeId());
+		additionalDetails.put("PROJECT_ID", disclProjectDetail.getModuleItemKey());
+		additionalDetails.put("PROJECT_TITLE", disclProjectDetail.getTitle());
+		additionalDetails.put("DISCLOSURE_STATUS", disclosure.getCoiReviewStatusType().getDescription());
+		additionalDetails.put("REPORTER_NAME", personDao.getPersonFullNameByPersonId(disclosure.getPersonId()));
+		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, 0, null, additionalDetails);
+		return new ResponseEntity<>("Notification send successfully", HttpStatus.OK);
+	}
 }

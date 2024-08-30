@@ -19,6 +19,7 @@ import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
+import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
@@ -383,4 +384,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes);
+
+	ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto);
 }
