@@ -84,13 +84,15 @@ public class DnBCleanseMatchAPIService {
 
 					if (apiResponse.getError().getErrorCode() != null) {
 						response.setErrorCode(apiResponse.getError().getErrorCode());
-						response.setErrorDetails(apiResponse.getError().getErrorMessage());
+						response.setErrorMessage(apiResponse.getError().getErrorMessage());
 						List<ErrorDetail> errorDetails = apiResponse.getError().getErrorDetails();
-						response.setErrorDetails(
-								errorDetails
-									.stream()
-									.map(ErrorDetail::toString)
-									.collect(Collectors.joining("; ")));
+						if(errorDetails != null) {
+							response.setErrorDetails(
+									errorDetails
+										.stream()
+										.map(ErrorDetail::toString)
+										.collect(Collectors.joining("; ")));
+						}
 					}
 
 				}
