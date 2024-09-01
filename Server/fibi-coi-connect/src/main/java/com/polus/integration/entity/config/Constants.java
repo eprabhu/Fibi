@@ -1,4 +1,4 @@
-package com.polus.integration.entity.cleansematch.config;
+package com.polus.integration.entity.config;
 
 public final class Constants {
 	

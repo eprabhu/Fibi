@@ -1,11 +1,13 @@
-package com.polus.integration.entity.cleansematch.config;
+package com.polus.integration.entity.config;
 
 public enum ErrorCode {
 
 	DNB_BULK_MATCH_ERROR("FIBI_1001", "Error Processing Bulk Data"),
 	DNB_CLEANSE_MATCH_ERROR("FIBI_1002", "Error While Call Cleanse Match API."),
-	DNB_CLEANSE_MATCH_API_INVOKE("FIBI_1003", "Error While Call Cleanse Match API.");
-
+	DNB_CLEANSE_MATCH_API_INVOKE("FIBI_1003", "Error While Invoking Cleanse Match API."),
+	DNB_ENRICH_ERROR("FIBI_1004", "Error While calling run Enrich API."),
+	DNB_ENRICH_API_INVOKE("FIBI_1005", "Error While Invoking Cleanse Match API.");
+	
     private final String errorCode;
     private final String errorMessage;
 
