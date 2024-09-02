@@ -17,7 +17,7 @@ import com.polus.integration.entity.apitokenservice.TokenService;
 import reactor.core.publisher.Mono;
 
 @Service
-public class ReferenceDataAPIService {
+public class DnBReferenceDataAPIService {
 
 	@Autowired
 	private WebClient.Builder webClientBuilder;

@@ -18,13 +18,13 @@ import com.polus.integration.dnb.referencedata.entity.IndustryCategoryType;
 import com.polus.integration.dnb.referencedata.entity.RegistrationType;
 
 @Service
-public class DnBReferenceDataService {
+public class ReferenceDataService {
 
 	@Autowired
 	private ReferenceDataUrlBuilder urlBuilder;
 
 	@Autowired
-	private ReferenceDataAPIService apiService;
+	private DnBReferenceDataAPIService apiService;
 
 	@Autowired
 	private DnBReferenceDataDAO industryRefDataDAO;
@@ -222,7 +222,7 @@ public class DnBReferenceDataService {
 			dataObj.setIndustryCategoryCode(code.getCode());
 			dataObj.setIndustryCategoryTypeCode(typeCode);
 			dataObj.setDescription(code.getDescription());
-			dataObj.setIsActive("Y");
+			dataObj.setIsActive(Constant.DEFAULT_IS_ACTIVE_VALUE);
 			dataObj.setUpdateTimestamp(LocalDateTime.now());
 			dataObj.setUpdatedBy(Constant.UPDATE_BY);
 			entityList.add(dataObj);
