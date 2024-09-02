@@ -1,15 +1,17 @@
-package com.polus.integration.entity.cleansematch.service;
+package com.polus.integration.entity.enrich.service;
 
 import org.springframework.stereotype.Service;
 
 import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
 import com.polus.integration.entity.config.APIConfig;
+import com.polus.integration.entity.enrich.dto.DnBEntityEnrichRequestDTO;
 
 @Service
-public class CleanseMatchUrlBuilder {
+public class EnrichUrlBuilder {
 	private final APIConfig apiConfig;
+	private static final String DEFAULT_BLOCK_IDS = "companyinfo_L2_v1";
 
-	public CleanseMatchUrlBuilder(APIConfig apiConfig) {
+	public EnrichUrlBuilder(APIConfig apiConfig) {
 		this.apiConfig = apiConfig;
 	}
 
@@ -39,18 +41,23 @@ public class CleanseMatchUrlBuilder {
 		}
 	}
 
-	public String buildApiUrl(DnBEntityCleanseMatchRequestDTO entityMatch) {
-		String baseUrl = apiConfig.getCleansematch();		
-		return new UrlBuilder(baseUrl)
-				.addParam("duns", entityMatch.getSourceDunsNumber())
-				.addParam("name", entityMatch.getSourceDataName())
-				.addParam("countryISOAlpha2Code", entityMatch.getCountryCode())
-				.addParam("streetAddressLine1", entityMatch.getAddressLine1())
-				.addParam("addressLocality", entityMatch.getAddressLine2())
-				.addParam("addressRegion", entityMatch.getState())
-				.addParam("email", entityMatch.getEmailAddress())
-				.addParam("postalCode", entityMatch.getPostalCode()).build();
-	
+	public String buildApiUrl(DnBEntityEnrichRequestDTO entityMatch) {
+		String baseUrl = apiConfig.getEnrich();
+		String blockIDs = DEFAULT_BLOCK_IDS;
+
+		if (entityMatch.getDuns() == null) {
+			throw new RuntimeException("D-U-N-S Number should be provided");
+		}
+
+		baseUrl = String.join("/", baseUrl, entityMatch.getDuns());
+
+		if (entityMatch.getDatablock() != null) {
+			blockIDs = String.join(",", entityMatch.getDatablock());
+		}
+
+		baseUrl = new UrlBuilder(baseUrl).addParam("blockIDs", blockIDs).build();
+
+		return baseUrl;
 	}
 
 }
