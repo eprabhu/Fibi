@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.polus.integration.dnb.referencedata.service.DnBReferenceDataService;
+import com.polus.integration.dnb.referencedata.service.ReferenceDataService;
 
 @RestController
 @RequestMapping("referenceData")
@@ -25,7 +25,7 @@ public class DnBReferenceDataController {
 	
 	
 	@Autowired
-	DnBReferenceDataService service;
+	ReferenceDataService service;
 
 	@GetMapping("/ping")
 	public ResponseEntity<String> ping() {

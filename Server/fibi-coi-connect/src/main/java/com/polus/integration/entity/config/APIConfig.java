@@ -12,13 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class APIConfig {
-
-		@Value("${entity.dnb.api.url.cleansematch}")
-		private String cleansematch;
-		
-		@Value("${entity.dnb.api.url.referenceData}")
-		private String referenceData;
-		
+			
 		@Value("${entity.dnb.api.url.authToken}")
 		private String authToken;
 		
@@ -27,6 +21,16 @@ public class APIConfig {
 		
 		@Value("${entity.dnb.api.auth.customerSecret}")
 		private String customerSecret;
+		
+		@Value("${entity.dnb.api.url.cleansematch}")
+		private String cleansematch;
+		
+		@Value("${entity.dnb.api.url.referenceData}")
+		private String referenceData;
+		
+		@Value("${entity.dnb.api.url.enrich}")
+		private String enrich;
+		
 	
 
 }

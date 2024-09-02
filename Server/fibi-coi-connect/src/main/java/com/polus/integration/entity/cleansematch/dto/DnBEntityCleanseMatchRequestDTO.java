@@ -9,8 +9,6 @@ private String sourceDataName;
 
 private String sourceDunsNumber;
 
-private String uei;
-
 private String emailAddress;
 
 private String addressLine1;

@@ -2,7 +2,7 @@ package com.polus.integration.entity.cleansematch.dto;
 
 import java.util.List;
 
-import com.polus.integration.entity.cleansematch.dto.DnBAPIResponse.MatchCandidate;
+import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse.MatchCandidate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

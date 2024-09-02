@@ -793,7 +793,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     public List<SFIJsonDetailsDto> getPersonEntitiesByPersonId(String personId) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         StringBuilder hqlQuery = new StringBuilder();
-        hqlQuery.append("SELECT new com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto(");
+        hqlQuery.append("SELECT DISTINCT new com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto(");
         hqlQuery.append("pe.personEntityId, pe.personEntityNumber, pe.entityId) ");
         hqlQuery.append("FROM PersonEntity pe ");
         hqlQuery.append("JOIN PersonEntityRelationship er ON er.personEntityId = pe.personEntityId ");

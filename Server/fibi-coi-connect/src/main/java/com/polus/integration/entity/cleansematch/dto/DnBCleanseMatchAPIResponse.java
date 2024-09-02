@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DnBAPIResponse {	
+public class DnBCleanseMatchAPIResponse {	
 	private String HttpStatusCode;
     private TransactionDetail transactionDetail;
    // private InquiryDetail inquiryDetail;
