@@ -104,7 +104,9 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         if (!versionId.equals(personEntityId)) {
             personEntityId = versionId;
         }
-        personEntityId = copyPersonEntity(personEntity, personEntity.getVersionStatus()).getPersonEntityId();
+        if (conflictOfInterestDao.checkPersonEntityAdded(personEntityId)) {
+            personEntityId = copyPersonEntity(personEntity, personEntity.getVersionStatus()).getPersonEntityId();
+        }
         fcoiDisclosureDao.updateDisclosureSyncNeededByPerEntId(personEntity.getPersonEntityId(), true);
         List<PersonEntityRelationship> personEntityRelationshipList = new ArrayList<>();
         List<String> relationshipNames = new ArrayList<>();
