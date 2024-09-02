@@ -10,9 +10,7 @@ import com.polus.integration.entity.config.ErrorCode;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse;
 import com.polus.integration.entity.enrich.dto.DnBEntityEnrichRequestDTO;
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse;
-import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.ErrorDetail;
-import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization;
-
+import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse.Organization;
 @Service
 public class EntityEnrichService {
 
@@ -46,76 +44,192 @@ public class EntityEnrichService {
 		return apiService.callAPI(apiUrl);
 	}
 	
-
 	private EntityEnrichAPIResponse PrepareResponse(DnBEnrichAPIResponse apiResponse) {
 		EntityEnrichAPIResponse response = new EntityEnrichAPIResponse();
 		try {
 
-			if (apiResponse != null) {
-				response.setHttpStatusCode(apiResponse.getHttpStatusCode());
-				
-				if (apiResponse.getTransactionDetail() != null) {
-					response.setTransactionID(apiResponse.getTransactionDetail().getTransactionID());
-				}
-				
-				if (apiResponse.getOrganization() != null ) {
-					response.setOrganization(apiResponse.getOrganization());
-					
-				}
+			if (apiResponse == null) {
+				return response;
+			}
 
-				if (apiResponse.getError() != null) {
+			response.setHttpStatusCode(apiResponse.getHttpStatusCode());
+			if (apiResponse.getTransactionDetail() != null) {
+				response.setTransactionID(apiResponse.getTransactionDetail().getTransactionID());
+			}
 
-					if (apiResponse.getError().getErrorCode() != null) {
-						response.setErrorCode(apiResponse.getError().getErrorCode());
-						response.setErrorMessage(apiResponse.getError().getErrorMessage());
-						if(apiResponse.getError().getErrorDetails() != null) {
-							
-							List<ErrorDetail> errorDetails = apiResponse.getError().getErrorDetails();
-							
-							response.setErrorDetails(
-									errorDetails
-										.stream()
-										.map(ErrorDetail::toString)
-										.collect(Collectors.joining("; ")));
-							
-						}
-						
-					}
+			if (apiResponse.getOrganization() != null) {
+				com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization dnbOrg = apiResponse
+						.getOrganization();
+				Organization organization = setOrganizationResponse(dnbOrg);
+				response.setOrganization(organization);
 
-				}
+			}
+
+			if (apiResponse.getError() != null) {
+				PrepareErrorInfo(apiResponse, response);
 			}
 
 		} catch (Exception e) {
 			ErrorCode errorCode = ErrorCode.DNB_ENRICH_ERROR;
 			response.setErrorCode(errorCode.getErrorCode());
-			response.setErrorMessage("Error while API PrepareResponse for Cleanse Match");
+			response.setErrorMessage("Error while API PrepareResponse for Enrich API in Fibi Enrich Service");
 			response.setErrorDetails(e.getMessage());
 			response.setErrorCode(null);
 		}
 		return response;
 	}
+
+	private Organization setOrganizationResponse(
+			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization dnbOrg) {
+		Organization organization = new Organization();
+		organization.setDuns(dnbOrg.getDuns());
+		organization.setUei(getUEI(dnbOrg));
+		organization.setPrimaryName(dnbOrg.getPrimaryName());
+		organization.setRegisteredName(dnbOrg.getRegisteredName());
+		organization.setTradeStyleNames(getShortName(dnbOrg));
+		organization.setMultilingualPrimaryName(getForiegnName(dnbOrg));
+		organization.setIndustryCodes(dnbOrg.getIndustryCodes());
+		organization.setWebsiteAddress(getWebsite(dnbOrg));
+		organization.setDunsControlStatus(dnbOrg.getDunsControlStatus());
+		organization.setBusinessEntityType(dnbOrg.getBusinessEntityType());
+		organization.setPubliclyTradedCompany(isPubliclyTradedCompany(dnbOrg));
+		organization.setSummary(getCompanyProfile(dnbOrg));
+		organization.setTelephone(dnbOrg.getTelephone());
+		organization.setPrimaryAddress(dnbOrg.getPrimaryAddress());
+		organization.setMailingAddress(dnbOrg.getMailingAddress());
+		organization.setRegisteredAddress(dnbOrg.getRegisteredAddress());
+		organization.setDefaultCurrency(dnbOrg.getDefaultCurrency());
+		organization.setStartDate(dnbOrg.getStartDate());
+		organization.setIncorporatedDate(dnbOrg.getIncorporatedDate());
+		organization.setRegistrationNumbers(dnbOrg.getRegistrationNumbers());
+		organization.setNumberOfEmployees(getNoOfEmployees(dnbOrg));
+		organization.setStandalone(dnbOrg.isStandalone());
+		
+		return organization;
+	}
+
+	private void PrepareErrorInfo(DnBEnrichAPIResponse apiResponse, EntityEnrichAPIResponse response) {
+		if (apiResponse.getError().getErrorCode() != null) {
+			response.setErrorCode(apiResponse.getError().getErrorCode());
+			response.setErrorMessage(apiResponse.getError().getErrorMessage());
+			if (apiResponse.getError().getErrorDetails() != null) {
+
+				List<com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.ErrorDetail> errorDetails = apiResponse
+						.getError().getErrorDetails();
+
+				response.setErrorDetails(errorDetails.stream()
+						.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.ErrorDetail::toString)
+						.collect(Collectors.joining("; ")));
+
+			}
+
+		}
+	}
 	
 	
-	private String getUEI(Organization organization) {
-		return null;
+	private String getUEI(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+
+		if (organization.getRegistrationNumbers() == null) {
+			return null;		
+		}
+
+		String registrationNumber = organization
+									.getRegistrationNumbers()
+									.stream()
+									.filter(reg -> reg.getTypeDnBCode() == 37491) // This is the UEI code in DnB
+									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber::getRegistrationNumber)
+									.findFirst().orElse(null);
+
+		return registrationNumber;
+
+	}
+	
+	private Integer getNoOfEmployees(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+		if (organization.getNumberOfEmployees() == null) {
+			return null;		
+		}
+		
+		Integer noOfEmp = organization
+							.getNumberOfEmployees()
+							.stream()
+							.filter(emp -> emp.getInformationScopeDnBCode() == 9067)// to get the consolidated count
+							.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.NumberOfEmployees::getValue)
+							.findFirst().orElse(null);
+		
+		return noOfEmp;	
+		
 		
 	}
 	
-	private Integer getNoOfEmployees(Organization organization) {
-		return null;		
-	}
-	
-	private String getCompanyProfile(Organization organization) {
-		return null;
+	private String getCompanyProfile(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+		if (organization.getSummary() == null) {
+			return null;		
+		}
+
+		String companyProfile =  	organization
+									.getSummary()
+									.stream()
+									.filter(reg -> reg.getTextType().getDnbCode() == 32456) // This is the Short company profile in DnB
+									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Summary::getText)
+									.findFirst().orElse(null);
+
+		return companyProfile;
+
 		
 	}
 	
-	private boolean isPubliclyTradedCompany(Organization organization) {
+	private boolean isPubliclyTradedCompany(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+		
+		if (organization.getControlOwnershipType() == null) {
+			return false;
+		}
+		
+		if (organization.getControlOwnershipType().getDnbCode() == 9057) { //"Publicly Traded Company"
+			return true;
+		}
+		
 		return false;
 	}
 	
-	private String getForiegnName(Organization organization) {
-		return null;
+	private String getForiegnName(
+			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+
+		if (organization.getMultilingualPrimaryName() == null) {
+			return null;
+		}
+
+		String foriegnName = organization.getMultilingualPrimaryName().stream()
+				.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.MultilingualPrimaryName::getName)
+				.findFirst().orElse(null);
+
+		return foriegnName;
+
+	}
+	
+	private String getShortName(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+		
+		if (organization.getTradeStyleNames() == null) {
+			return null;
+		}
+
+		String shortName = organization.getTradeStyleNames()
+					.stream()
+					.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.TradeNameStyle::getName)
+					.findFirst().orElse(null);
+
+		return shortName;
+	}
+	
+	private String getWebsite(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+		if (organization.getWebsiteAddress() == null) {
+			return null;
+		}
+		String website = organization.getWebsiteAddress()
+					.stream()
+					.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Website::getDomainName)
+					.findFirst().orElse(null);
+
+		return website;
 	}
 	
 }

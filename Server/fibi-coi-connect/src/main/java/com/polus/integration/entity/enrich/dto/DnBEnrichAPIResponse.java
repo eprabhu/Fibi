@@ -154,9 +154,9 @@ public class DnBEnrichAPIResponse {
 	@Data
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class NumberOfEmployees {
-		private String value;
+		private Integer value;
 		private String informationScopeDescription;
-		private String informationScopeDnBCode;
+		private Integer informationScopeDnBCode;
 
 	}
 
@@ -189,6 +189,7 @@ public class DnBEnrichAPIResponse {
 	}
 
 	@Data
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class OperatingStatus {
 		private String description;
 		private int dnbCode;
