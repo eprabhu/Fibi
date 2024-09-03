@@ -24,7 +24,7 @@
     </div>
 </div>
 <app-entity-risk-section [sectionName]="commonService.getSectionName(overViewTab,'ENTITY_RISK')"
-    [sectionId]="commonService.getSectionId(overViewTab,'ENTITY_RISK')"
+    [sectionId]="commonService.getSectionId(overViewTab,'ENTITY_RISK')" [subSectionId]="riskSubSectionId"
     [entityRiskList]="entityRisksList" [riskCategoryCode]="'EN'" (riskUpdated)="riskUpdated($event)">
 </app-entity-risk-section>
 <app-other-reference-id  [sectionName]="commonService.getSectionName(overViewTab,'OTHER_REFERENCE_IDS')" [sectionId]="commonService.getSectionId(overViewTab,'OTHER_REFERENCE_IDS')"></app-other-reference-id>
