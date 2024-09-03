@@ -23,3 +23,11 @@ export class EntitySubAwardService {
     }
 
 }
+
+export function isOrganizationConditionSatisfied(subawardDetials) {
+    if(subawardDetials?.subAwdOrgDetailsResponseDTO?.organizationTypeCode && subawardDetials?.entityRisks?.length) {
+       return true;
+    } else {
+        return false;
+    }
+}

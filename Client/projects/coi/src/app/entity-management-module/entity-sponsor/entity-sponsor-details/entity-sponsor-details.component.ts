@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import { showEntityToast, SponsorDetails } from '../../shared/entity-interface';
+import { EntityTabStatus, showEntityToast, SponsorDetails } from '../../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
@@ -31,7 +31,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     $debounceEvent = new Subject<any>();
     isRestrictSave = false;
     isEditMode = false;
-
+    entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(private _dataStoreService: EntityDataStoreService,
                 private _autoSaveService: AutoSaveService,
@@ -57,6 +57,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         this.entityDetails = entityData?.entityDetails;
         this.setOtherDetailsObject();
         this.isEditMode = this._dataStoreService.getEditMode();
+        this.entityTabStatus = entityData?.entityTabStatus;
     }
 
     triggerSingleSave() {
@@ -120,6 +121,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                 showEntityToast('SUCCESS');
                 this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO = this.autoSaveRO;
                 this.sponsorDetailsObj = this.autoSaveRO;
+                this.updateSponsorCompleteFlag();
                 this.autoSaveRO = {};
                 this.isRestrictSave = false;
             }, err => {
@@ -139,11 +141,19 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                 this.dataChangeCounter--;
                 showEntityToast('SUCCESS');
                 this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorTypeCode = this.autoSaveRO.sponsorTypeCode;
+                this.updateSponsorCompleteFlag();
                 this.autoSaveRO = {};
             }, err => {
                 showEntityToast('ERROR');
             }));
             this.commonService.removeLoaderRestriction();
+        }
+    }
+
+    updateSponsorCompleteFlag() {
+        if(this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode) {
+            this.entityTabStatus.entity_sponsor_info = true;
+            this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
         }
     }
 

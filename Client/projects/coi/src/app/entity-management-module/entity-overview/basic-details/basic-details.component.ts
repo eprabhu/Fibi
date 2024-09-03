@@ -1,5 +1,5 @@
 import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
-import { Country, Create_Entity, EntityDetails } from '../../shared/entity-interface';
+import { Country, Create_Entity, EntityDetails, EntityTabStatus } from '../../shared/entity-interface';
 import { isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -22,6 +22,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     entityDetails: EntityDetails = new EntityDetails();
     entityCountryDetails: Country = new Country();
     manualAutoSaveEvent = new Subject();
+    entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(public dataStore: EntityDataStoreService, private _entityManagementService: EntityManagementService) {}
 
@@ -43,6 +44,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
         this.setCreateObj(this.entityDetails);
         this.entityCountryDetails = entityData?.entityDetails?.country;
         this.isEditMode = this.dataStore.getEditMode();
+        this.entityTabStatus = entityData?.entityTabStatus;
     }
 
     setCreateObj(data) {
@@ -77,11 +79,15 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateStoreData(event) {
-        if(!isEmptyObject(event)) {
-            Object.keys(event).forEach((ele) =>{
-                this.entityDetails[ele] = event[ele];
+        if(!isEmptyObject(event?.autoSaveRO)) {
+            Object.keys(event?.autoSaveRO).forEach((ele) =>{
+                this.entityDetails[ele] = event?.autoSaveRO[ele];
             });
             this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
+        }
+        if(event?.isMandatoryFilled) {
+            this.entityTabStatus.entity_overview = event?.isMandatoryFilled;
+            this.dataStore.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
         }
     }
 

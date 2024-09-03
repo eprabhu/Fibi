@@ -62,10 +62,10 @@ public class Entity implements Serializable {
 	private String websiteAddress;
 
 	@Column(name = "START_DATE")
-	private Date startDate;
+	private String startDate;
 
 	@Column(name = "INCORPORATION_DATE")
-	private Date incorporationDate;
+	private String incorporationDate;
 
 	@Column(name = "CERTIFIED_EMAIL")
 	private String certifiedEmail;

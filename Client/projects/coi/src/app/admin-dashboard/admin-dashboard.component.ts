@@ -468,6 +468,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 inputType: 'DISCLOSURE_TAB',
                 fcoiTypeCode: coi?.fcoiTypeCode,
                 disclosureId: coi?.coiDisclosureId,
+                projectHeader: coi?.projectHeader,
                 personFullName: coi?.disclosurePersonFullName,
                 isOpenCountModal: true
             };

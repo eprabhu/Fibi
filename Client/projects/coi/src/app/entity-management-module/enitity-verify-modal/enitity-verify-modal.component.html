@@ -3,61 +3,77 @@
     <!-- header -->
     <ng-container modal-header>
         <span>Verify Entity</span>
-        <!-- <app-common-help-text *ngIf="attachmentHelpText" [helpTextHardCoded]="attachmentHelpText"></app-common-help-text> -->
+        <app-common-help-text *ngIf="attachmentHelpText" [helpTextHardCoded]="attachmentHelpText"></app-common-help-text>
     </ng-container>
     <!-- body -->
     <ng-container modal-body>
         <div class="row mx-0 gap-3">
-            <div class="col-12 px-3 py-2" [ngClass]="isComplete.entity ? 'border-light-success' : 'border-light-danger'">
+            <!-- Entity Information -->
+            <div class="col-12 px-3 py-2 border rounded-2">
                 <div class="d-flex align-items-center justify-content-between gap-2">
                     <span class="coi-text-darker">Entity Information</span>
-                    <span class="d-inline-flex align-items-center badge fs-13 fw-normal py-2 px-3 rounded-5"
-                        [ngClass]="isComplete.entity ? 'text-bg-light-success' : 'text-bg-light-danger'">{{isComplete.entity ? 'Complete' : 'InComplete'}}</span>
+                    <span *ngIf="isComplete.entity" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!isComplete.entity" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
                 </div>
-                <div *ngIf="!isComplete.entity" class="row mx-0 gap-2 mt-2">
-                    <div class="col-12 d-flex align-items-center">
-                        <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
-                        <span class="coi-text-dark ms-1">Basic Details</span>
-                    </div>
-                </div>
+                <!-- Entity Information Error List -->
+                <ng-container *ngIf="!isComplete.entity">
+                    <ul class="m-0 p-0 list-unstyled">
+                        <li class="mt-1">
+                            <a tabindex="0" class="d-flex align-items-center link-primary"
+                                (click)="navigateToSection('entity-overview')" (keyup.enter)="navigateToSection('entity-overview')">
+                                <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
+                                <span class="fs-14 fw-normal ms-1 mt-1">Basic Details</span>
+                            </a>
+                        </li>
+                    </ul>
+                </ng-container>
             </div>
-            <div class="col-12 px-3 py-2" [ngClass]="isComplete.sponsor ? 'border-light-success' : 'border-light-warning'">
+            <!-- Sponsor -->
+            <div class="col-12 px-3 py-2 border rounded-2">
                 <div class="d-flex align-items-center justify-content-between gap-2">
                     <span class="coi-text-darker">Sponsor</span>
-                    <span class="d-inline-flex align-items-center badge fs-13 fw-normal py-2 px-3 rounded-5"
-                        [ngClass]="isComplete.sponsor ? 'text-bg-light-success' : 'text-bg-light-warning'">{{isComplete.sponsor ? 'Complete' : 'InComplete'}}</span>
+                    <span *ngIf="isComplete.sponsor" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!isComplete.sponsor" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
                 </div>
-                <!-- error list -->
-                <div *ngIf="!isComplete.sponsor" class="row mx-0 gap-2 mt-2">
-                    <ng-container>
-                        <div class="col-12 d-flex align-items-center">
-                            <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
-                            <span class="coi-text-dark ms-1">Sponsor Details</span>
-                        </div>
-                    </ng-container>
-                </div>
+                <!-- Sponsor Error List -->
+                <ng-container *ngIf="!isComplete.sponsor">
+                    <ul class="m-0 p-0 list-unstyled">
+                        <li class="mt-1">
+                            <a tabindex="0" class="d-flex align-items-center link-primary"
+                                (click)="navigateToSection('entity-sponsor')" (keyup.enter)="navigateToSection('entity-sponsor')">
+                                <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
+                                <span class="fs-14 fw-normal ms-1 mt-1">Sponsor Details</span>
+                            </a>
+                        </li>
+                    </ul>
+                </ng-container>
             </div>
-            <div class="col-12 px-3 py-2" [ngClass]="isComplete.organization ? 'border-light-success' : 'border-light-warning'">
+            <!-- Sub-award Organization -->
+            <div class="col-12 px-3 py-2 border rounded-2">
                 <div class="d-flex align-items-center justify-content-between gap-2">
                     <span class="coi-text-darker">Sub-award Organization</span>
-                    <div class="d-inline-flex align-items-center badge fs-13 fw-normal py-2 px-3 rounded-5"
-                        [ngClass]="isComplete.organization ? 'text-bg-light-success' : 'text-bg-light-warning'">
-                        <span>{{isComplete.organization ? 'Complete' : 'InComplete'}}</span>
-                    </div>
+                    <span *ngIf="isComplete.organization" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!isComplete.organization" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
                 </div>
-                <!-- error list -->
-                <div *ngIf="!isComplete.organization" class="row mx-0 gap-2 mt-2">
-                    <ng-container>
-                        <div *ngIf="!this.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationTypeCode" class="col-12 d-flex align-items-center">
-                            <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
-                            <span class="coi-text-dark ms-1">Sub-award Organization Details</span>
-                        </div>
-                        <div *ngIf="!this.entitySubAwardOrganization?.entityRisks?.length" class="col-12 d-flex align-items-center">
-                            <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
-                            <span class="coi-text-dark ms-1">Sub-award Organization Risk</span>
-                        </div>
-                    </ng-container>
-                </div>
+                <!-- Sub-award Organization Error List -->
+                <ng-container *ngIf="!isComplete.organization">
+                    <ul class="m-0 p-0 list-unstyled">
+                        <li *ngIf="!this.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode" class="mt-1">
+                            <a tabindex="0" class="d-flex align-items-center link-primary"
+                                (click)="navigateToSection('entity-subaward')" (keyup.enter)="navigateToSection('entity-subaward')">
+                                <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
+                                <span class="fs-14 fw-normal ms-1 mt-1">Sub-award Organization Details</span>
+                            </a>
+                        </li>
+                        <li *ngIf="!this.entitySubAwardOrganization?.entityRisks?.length" class="mt-2">
+                            <a tabindex="0" class="d-flex align-items-center link-primary"
+                                (click)="navigateToSection('entity-subaward')" (keyup.enter)="navigateToSection('entity-subaward')">
+                                <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
+                                <span class="fs-14 fw-normal ms-1 mt-1">Sub-award Organization Risk</span>
+                            </a>
+                        </li>
+                    </ul>
+                </ng-container>
             </div>
         </div>
     </ng-container>

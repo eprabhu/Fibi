@@ -71,11 +71,18 @@ public class CompanyDetailsServiceImpl implements CompanyDetailsService {
 
 	@Override
 	public void saveIndustryDetails(IndustryDetailsRequestDTO dto) {
+		if(dto.getPrimaryCatId()!=null){
+			removeCurrentPrimaryCatId(dto.getEntityId());
+		}
 		dto.getEntityIndustryCatIds().forEach(id -> {
 			EntityIndustryClassification entity = mapDTOToEntity(dto.getEntityId(), id);
 			entity.setIsPrimary(id.equals(dto.getPrimaryCatId()) ? true : false);
 			comapanyDetailsDAO.saveIndustryDetails(entity);
 		});
+	}
+
+	private void removeCurrentPrimaryCatId(Integer entityId) {
+		comapanyDetailsDAO.removeCurrentPrimaryCatId(entityId);
 	}
 
 	private EntityIndustryClassification mapDTOToEntity(Integer entityId, Integer industryCategoryId) {
@@ -94,14 +101,17 @@ public class CompanyDetailsServiceImpl implements CompanyDetailsService {
 			entity.setIsPrimary(false);
 			comapanyDetailsDAO.saveIndustryDetails(entity);
 		});
-		if (dto.getPrimaryCatId() != 0) {
+		if (dto.getPrimaryCatId() != null) {
 			updateIndustryDetailsPrimaryFlag(dto.getPrimaryCatId(), dto.getEntityId());
+		}
+		else if (Boolean.TRUE.equals(dto.getUpdatePrimaryCatId())) {
+			removeCurrentPrimaryCatId(dto.getEntityId());
 		}
 		return new ResponseEntity<>(commonDao.convertObjectToJSON("Industry details updated successfully"),
 				HttpStatus.OK);
 	}
 
-	private void updateIndustryDetailsPrimaryFlag(int primaryCatId, Integer entityId) {
+	private void updateIndustryDetailsPrimaryFlag(Integer primaryCatId, Integer entityId) {
 		comapanyDetailsDAO.updateIndustryDetailsPrimaryFlag(primaryCatId, entityId);
 	}
 

@@ -2,9 +2,11 @@
     <!-- header -->
     <ng-container modal-header>
         <div class="d-flex align-items-center">
-            <span class="me-1">{{ coiCountModal.moduleCode === 8 ? 'SFIs Attached to' : 'Projects Related to' }}:</span>
-            <span class="me-1">{{ coiCountModal.disclosureType }} Disclosure By {{ coiCountModal.personFullName }}</span>
-            <span class="text-slice" [title]="slicedHeaderPart">[ {{ slicedHeaderPart }} ]</span>
+            <span class="me-1 text-nowrap">{{ coiCountModal.moduleCode === 8 ? 'SFIs Attached to' : 'Projects Related to' }}:</span>
+            <span class="me-1 text-nowrap">{{ coiCountModal.disclosureType }} Disclosure By {{ coiCountModal.personFullName }}</span>
+            <span>[</span>
+            <span class="text-slice mx-1" [title]="slicedHeaderPart">{{ slicedHeaderPart }}</span>
+            <span class="me-3">]</span>
             <!-- <app-common-help-text [helpTextHardCoded]="''"></app-common-help-text> -->
         </div>
     </ng-container>

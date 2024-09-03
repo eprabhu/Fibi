@@ -1,9 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { deepCloneObject, hideModal, isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { IndustryDetails } from '../../shared/entity-interface';
+import {
+    deepCloneObject,
+    hideModal,
+    isEmptyObject,
+    openModal
+} from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import {IndustryDetails} from '../../shared/entity-interface';
 import {forkJoin, Subscription} from 'rxjs';
-import { EntityOverviewService } from '../entity-overview.service';
-import { EntityDataStoreService } from '../../entity-data-store.service';
+import {EntityOverviewService} from '../entity-overview.service';
+import {EntityDataStoreService} from '../../entity-data-store.service';
 import {COIModalConfig, ModalActionEvent} from '../../../shared-components/coi-modal/coi-modal.interface';
 import {closeCommonModal, openCommonModal} from '../../../common/utilities/custom-utilities';
 import {HTTP_ERROR_STATUS} from '../../../app-constants';
@@ -26,7 +31,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     entityIndustryCategories = [];
     industryCategoryDescriptionsList: any = [];
     entityId: any;
-    entityIndustryClassifications: any = [];
+    entityIndustryClassifications: any[] = [];
     entityIndustryClassificationsGrouping: any = {};
     categoryDescriptionList = [];
     categoryTypeList = [];
@@ -38,6 +43,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     isEditMode = false;
     selectedIndustry = null;
     isSaving = false;
+    addedCategoryIds: Set<number> = new Set();
     CONFIRMATION_MODAL_ID = 'industry-delete-confirm-modal';
     modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
 
@@ -91,9 +97,12 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
 
     async fetchIndustryDescription() {
         try {
-            const data = await this._entityOverviewService.fetchIndustryCategoryCode(this.industryCategoryTypeCode);
+            const data: any = await this._entityOverviewService.fetchIndustryCategoryCode(this.industryCategoryTypeCode);
             if (data) {
-                this.industryCategoryDescriptionsList = deepCloneObject(data);
+                this.industryCategoryDescriptionsList = this.isEditIndex == null ?
+                    data.filter(item => !this.addedCategoryIds.has(item.industryCategoryId)) : data;
+                this.industryCategoryDescriptionsList = this.industryCategoryDescriptionsList.map(item =>
+                    ({code: item.industryCategoryId, ...item}));
             }
         } catch (err) {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
@@ -145,7 +154,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         const entityData = this._dataStoreService.getData();
         if (isEmptyObject(entityData)) { return; }
         this.entityId = entityData?.entityDetails?.entityId;
-        this.entityIndustryClassifications = entityData.entityIndustryClassifications;
+        this.entityIndustryClassifications = entityData.entityIndustryClassifications || [];
         if (this.entityIndustryClassifications.length) {
             this.entityIndustryClassificationsGrouping = this.groupBy(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'description');
         }
@@ -189,6 +198,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
                 this.industryDetails.primaryCatId = catCode.industryCategoryId;
             }
             return {
+                code: catCode.industryCategoryId,
                 entityIndustryClassId: catCode.entityIndustryClassId,
                 industryCategoryId: catCode.industryCategoryId,
             description: catCode.industryCategoryCode.description,
@@ -217,22 +227,6 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         closeCommonModal(this.CONFIRMATION_MODAL_ID);
     }
 
-    deleteIndustryCode() {
-        if (!this.isSaving) {
-            this.isSaving = true;
-            this.$subscriptions.push(forkJoin(this.deleteCatCodeList.map(catCode => this._entityOverviewService
-                .deleteIndustryDetailsByCatCode(catCode))).subscribe((res) => {
-
-                this.updateDataStore();
-                this.clearIndustryDetails();
-                this.isSaving = false;
-            }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
-                this.isSaving = false;
-            }));
-        }
-    }
-
     deleteIndustryClass() {
         if (!this.isSaving) {
             this.isSaving = true;
@@ -254,7 +248,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     updateIndustryDetails() {
         if (!this.isSaving) {
             this.isSaving = true;
-            this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res) => {
+            this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res: any) => {
                 this.entityIndustryClassifications = res;
                 this.updateDataStore();
                 this.clearIndustryDetails();
@@ -271,7 +265,8 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
             entityId: this.entityId,
             removedEntityIndustryClassIds: this.removedEntityIndustryClassIds.map(item => item.entityIndustryClassId),
             addedEntityIndustryCatIds: this.addedEntityIndustryCatIds.map(item => item.industryCategoryId),
-            primaryCatId: this.getPrimaryCatId()
+            primaryCatId: this.getPrimaryCatId(),
+            updatePrimaryCatId: this.industryDetails.updatePrimaryCatId
         };
     }
 
@@ -283,6 +278,17 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         this._dataStoreService.updateStore(['entityIndustryClassifications'],
             { 'entityIndustryClassifications':  this.entityIndustryClassifications });
     }
+
+    clearPrimaryFlag() {
+        this.industryDetails.primaryCatId = '';
+        this.industryDetails.updatePrimaryCatId = true;
+    }
+
+    setPrimaryCatId(industryCategoryId) {
+        this.industryDetails.primaryCatId = industryCategoryId;
+        this.industryDetails.updatePrimaryCatId = true;
+    }
+
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);

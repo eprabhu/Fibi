@@ -47,6 +47,7 @@ export class IndustryDetails {
     entityId: any;
     entityIndustryCatIds: any = [];
     primaryCatId: any;
+    updatePrimaryCatId = false;
 }
 
 export class RegistrationDetails {
@@ -171,6 +172,10 @@ export class EntityTabStatus {
     entity_overview? = false;
     entity_sub_org_info? = false;
     entity_sponsor_info? = false;
+    organization_feed_status: string;
+    sponsor_feed_status: string;
+    organization_feed_status_code: any;
+    sponsor_feed_status_code: any;
 }
 
 export class EntityAttachmentDetails {
@@ -438,4 +443,10 @@ export interface AttachmentReplaceRO {
     fileDataId: string | null;
     attachmentNumber: number;
     versionNumber: number;
+}
+
+export class EntitySectionDetails {
+    sectionId = '';
+    sectionName = '';
+    subSectionId: number | null = null;
 }

@@ -3,6 +3,7 @@ package com.polus.fibicomp.globalentity.dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Query;
@@ -200,13 +201,13 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	}
 
 	@Override
-	public Map<String, Boolean> getEntityTabStatus(Integer entityId) {
+	public Map<String, Object> getEntityTabStatus(Integer entityId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		SessionImpl sessionImpl = (SessionImpl) session;
 		Connection connection = sessionImpl.connection();
 		CallableStatement statement = null;
 		ResultSet rset = null;
-		Map<String, Boolean> entityTabStatus = null;
+		Map<String, Object> entityTabStatus = new HashMap<>();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
 				statement = connection.prepareCall("{call GET_ENTITY_TAB_STATUS(?)}");
@@ -222,14 +223,13 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 				rset = (ResultSet) statement.getObject(1);
 			}
 			while (rset != null && rset.next()) {
-				rset.getString("entity_sub_org_info");
-				rset.getString("entity_sponsor_info");
-				rset.getString("entity_overview");
-				entityTabStatus = Map.of(
-		                "entity_sub_org_info", rset.getBoolean("entity_sub_org_info"),
-		                "entity_sponsor_info", rset.getBoolean("entity_sponsor_info"),
-		                "entity_overview", rset.getBoolean("entity_overview")
-		            );
+				entityTabStatus.put("entity_sub_org_info", rset.getBoolean("entity_sub_org_info"));
+				entityTabStatus.put("entity_sponsor_info", rset.getBoolean("entity_sponsor_info"));
+				entityTabStatus.put("entity_overview", rset.getBoolean("entity_overview"));
+				entityTabStatus.put("sponsor_feed_status", rset.getString("sponsor_feed_status") != null ? rset.getString("sponsor_feed_status") : "");
+				entityTabStatus.put("organization_feed_status", rset.getString("organization_feed_status") != null ? rset.getString("organization_feed_status") : "");
+				entityTabStatus.put("sponsor_feed_status_code", rset.getString("sponsor_feed_status_code") != null ? rset.getString("sponsor_feed_status_code") : "");
+				entityTabStatus.put("organization_feed_status_code", rset.getString("organization_feed_status_code") != null ? rset.getString("organization_feed_status_code") : "");
 			}
 		} catch (Exception e) {
 			logger.error("Exception on getEntityTabStatus {}", e.getMessage());

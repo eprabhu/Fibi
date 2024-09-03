@@ -18,6 +18,6 @@ public interface EntityDetailsDAO {
 
 	public Entity fetchEntityDetails(Integer entityId);
 
-	public Map<String, Boolean> getEntityTabStatus(Integer entityId);
+	public Map<String, Object> getEntityTabStatus(Integer entityId);
 
 }

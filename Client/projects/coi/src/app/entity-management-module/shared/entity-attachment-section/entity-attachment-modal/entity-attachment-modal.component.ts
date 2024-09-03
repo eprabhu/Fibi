@@ -35,6 +35,7 @@ export class EntityAttachmentModalComponent implements OnInit {
     @Input() currentAttachment: EntityAttachment;
     @Input() sectionCode: '1' | '2' | '3' | '4';
     @Input() attachmentInputType: 'REPLACE' | 'ADD' | 'DESCRIPTION_CHANGE' = 'ADD';
+    @Input() subSectionId: any;
 
     @Output() closeModal = new EventEmitter<EntityAttachment[] | EntityAttachment | null>();
 

@@ -10,10 +10,10 @@
                             <div class="row flex-grow-1 position-relative m-0">
                                 <div class="d-flex col-12 px-0 coi-card-header-notch-container">
                                     <!-- badge -->
-                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'" class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiProjectType?.description + ' disclosure'">
+                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'" class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiProjectType?.description + ' disclosure'">
                                         <span class="coi-card-notch-ribbon shadow-sm" [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
                                     </div>
-                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1' "class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="'FCOI disclosure'">
+                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '2' "class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="'FCOI disclosure'">
                                         <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip">FCOI</span>
                                     </div>
                                     <div class="col row m-0">

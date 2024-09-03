@@ -16,7 +16,7 @@ import { EntireEntityDetails, EntityTabStatus } from '../shared/entity-interface
 export class RightPanelComponent {
 
     currentTab: 'OVERVIEW' | 'SPONSOR' | 'SUBAWARD' | 'COMPLIANCE' | 'ATTACHMENTS' | '';
-    sectionDetails: [];
+    sectionDetails: any[] = [];
     selectedSectionId: any;
     $subscriptions: Subscription[] = [];
     dunsNumber: any;
@@ -65,41 +65,32 @@ export class RightPanelComponent {
         );
     }
 
-    getSectionDetails() {
-        this.sectionDetails = [];
+    private getSectionDetails(): any[] {
         switch(this.currentTab) {
             case 'OVERVIEW': {
-                this.sectionDetails = this.getArray(OverviewTabSection);
-                break;
+                return this.getArray(OverviewTabSection);
             }
             case 'SPONSOR': {
-                this.sectionDetails = this.getArray(SponsorTabSection);
-                break;
+                return this.getArray(SponsorTabSection);
             }
             case 'SUBAWARD': {
-                this.sectionDetails = this.getArray(SubawardOrganisationTab);
-                break;
+                return this.getArray(SubawardOrganisationTab);
             }
             case 'COMPLIANCE': {
-                this.sectionDetails = this.getArray(ComplianceTab);
-                break;
+                return this.getArray(ComplianceTab);
             }
             case 'ATTACHMENTS': {
-                this.sectionDetails = this.getArray(AttachmentTab);
-                break;
+                return this.getArray(AttachmentTab);
             }
             default: {
-                this.sectionDetails = [];
-                break;
+                return [];
             }
         }
     }
 
-    scrollToSelectedSection(section) {
+    scrollToSelectedSection(section: any) {
         this.selectedSectionId = section.sectionId;
-        const offset = (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100);
-        jumpToSection(this.selectedSectionId, offset);
-        // this.windowScroll(this.selectedSectionId);
+        this.entityManagementService.scrollToSelectedSection(this.selectedSectionId);
     }
 
     windowScroll(scrollTo: string) {
@@ -120,7 +111,8 @@ export class RightPanelComponent {
     routerEventSubscription() {
         this.$subscriptions.push(this._router.events.subscribe(event => {
             this.currentTab  = this.getCurrentTab(window.location.href);
-            this.getSectionDetails();
+            this.sectionDetails = this.getSectionDetails();
+            this.selectedSectionId = this.sectionDetails?.[0]?.sectionId;
         }));
       }
 

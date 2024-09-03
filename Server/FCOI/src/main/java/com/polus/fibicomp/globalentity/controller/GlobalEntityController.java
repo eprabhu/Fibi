@@ -34,7 +34,6 @@ import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
 import com.polus.fibicomp.globalentity.pojo.IndustryCategoryCode;
-import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 import com.polus.fibicomp.globalentity.service.GlobalEntityService;
 
 @RestController
@@ -264,9 +263,15 @@ public class GlobalEntityController {
 	}
 
 	@PatchMapping(value = "/verify/{entityId}")
-	public ResponseEntity<String> verifyEntityDetails(@PathVariable(value = "entityId", required = true) final Integer entityId) {
+	public ResponseEntity<Map<String, Object>> verifyEntityDetails(@PathVariable(value = "entityId", required = true) final Integer entityId) {
 		logger.info("Requesting for verifyEntityDetails");
 		return globalEntityService.verifyEntityDetails(entityId);
+	}
+
+	@GetMapping(value = "/fetchEntityTabStatus/{entityId}")
+	public Map<String, Object> fetchEntityTabStatus(@PathVariable(value = "entityId", required = true) final Integer entityId) {
+		logger.info("Requesting for fetchEntityDetails");
+		return globalEntityService.fetchEntityTabStatus(entityId);
 	}
 
 }

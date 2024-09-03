@@ -63,6 +63,12 @@ export class ModalADAOptions {
     /** @param secondaryBtnTitle - Title text for the secondary button, used for tooltips or accessibility. */
     secondaryBtnTitle: string;
 
+    /** @param isDisableSecondaryBtn - disable secondary button. */
+    isDisableSecondaryBtn: boolean;
+
+    /** @param isDisablePrimaryBtn - disable primary button. */
+    isDisablePrimaryBtn: boolean;
+
     /**
      * Constructor to initialize the properties of ModalADAOptions.
      * @param modalAriaLabel - ARIA label for the modal.

@@ -11,16 +11,17 @@
                     <!-- heading -->
                     <span class="fs-16 fw-medium" id="coi-entity-sponsor-attachments">
                         <span>{{sectionName}}</span>
-                        <app-common-help-text [subSectionId]="2611"
-                            [elementId]="'coi-entity-sponsor-attachments'"></app-common-help-text>
+                        <app-common-help-text [subSectionId]="subSectionId"
+                            [elementId]="'coi-sub-head-' + subSectionId"></app-common-help-text>
                     </span>
                 </div>
                 <!-- add attachment -->
                 <div class="col-auto" *ngIf="filteredEntityAttachmentsList?.length && isEditMode">
                     <button id="additional-address-add-button" class="btn btn-primary fs-14 d-inline-flex"
-                        title="'Click here to industry details'" aria-label="'Click here to industry details'"
+                        title="Click here to add attachment." aria-label="Click here to add attachment."
                         (click)="openAttachmentModal('ADD')">
-                        <mat-icon>add</mat-icon>Add Attachment
+                        <mat-icon aria-hidden="true" class="flex-shrink-0">add</mat-icon>
+                        <span>Add Attachment</span>
                     </button>
                 </div>
             </div>
@@ -120,7 +121,7 @@
     <!-- attachment modal -->
     <app-entity-attachment-modal *ngIf="isOpenAttachmentModal" (closeModal)="closeAttachmentModal($event)"
         [currentAttachment]="currentAttachment" [attachmentHelpText]="entityAttachmentHelpText"
-        [sectionCode]="getSectionCode()" [attachmentInputType]="attachmentInputType">
+        [sectionCode]="getSectionCode()" [attachmentInputType]="attachmentInputType" [subSectionId]="subSectionId">
     </app-entity-attachment-modal>
 
     <!-- confirmation modal -->

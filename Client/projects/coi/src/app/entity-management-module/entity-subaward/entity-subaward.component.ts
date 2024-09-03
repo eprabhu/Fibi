@@ -4,8 +4,8 @@ import { CommonService } from '../../common/services/common.service';
 import { SubawardOrganisationTab } from '../shared/entity-constants';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
-import { EntitySubAwardService } from './entity-subaward.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
+import { EntitySubAwardService, isOrganizationConditionSatisfied } from './entity-subaward.service';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
@@ -18,17 +18,15 @@ export class EntitySubawardComponent implements OnInit {
 
     overViewTab: any;
     isLoading = true;
+    orgDetailsSubSectionId = '';
+    orgDetailsSubSectionName = '';
     entityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
     entitySubAwarRisksList: EntityRisk[] = [];
+    riskSectionDetails = new EntitySectionDetails();
     entitySubAwarAttachmentList: EntityAttachment[] = [];
-
-    riskSubSectionId = '';
-    riskSubSectionName = '';
-    orgDetailsSubSectionId = '';
-    orgDetailsSubSectionName = '';
-    attachmentSubSectionId = '';
-    attachmentSubSectionName = '';
+    attachmentSectionDetails = new EntitySectionDetails();
+    entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _entitySubAwardService: EntitySubAwardService) { }
 
@@ -41,12 +39,14 @@ export class EntitySubawardComponent implements OnInit {
     }
 
     private setSectionIdAndName(): void {
-        this.riskSubSectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_RISK');
-        this.riskSubSectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_RISK');
+        this.riskSectionDetails.subSectionId = 2613;
+        this.attachmentSectionDetails.subSectionId = 2614;
+        this.riskSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_RISK');
+        this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_RISK');
         this.orgDetailsSubSectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_ORGANISATION');
         this.orgDetailsSubSectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_ORGANISATION');
-        this.attachmentSubSectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_ATTACHMENTS');
-        this.attachmentSubSectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_ATTACHMENTS');
+        this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_ATTACHMENTS');
+        this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_ATTACHMENTS');
     }
 
     private getDataFromStore(): void {
@@ -56,6 +56,7 @@ export class EntitySubawardComponent implements OnInit {
             this.fetchEntityDetails(ENTITY_DATA?.entityDetails?.entityId);
         }
         this.entityDetails = ENTITY_DATA.entityDetails;
+        this.entityTabStatus = ENTITY_DATA?.entityTabStatus;
     }
 
     private listenDataChangeFromStore(): void {
@@ -80,5 +81,13 @@ export class EntitySubawardComponent implements OnInit {
 
     riskUpdated(entitySubAwarRisksList: EntityRisk[]): void {
         this.entitySubAwarRisksList = deepCloneObject(entitySubAwarRisksList);
+        this._entitySubAwardService.entitySubAwardOrganization.entityRisks = this.entitySubAwarRisksList;
+        this.updateHeaderStatus();
     }
+    updateHeaderStatus() {
+        if(isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
+             this.entityTabStatus.entity_sub_org_info = true;
+             this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
+        }
+     }
 }

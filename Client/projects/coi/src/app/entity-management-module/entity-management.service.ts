@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 import { Subject, Subscription } from 'rxjs';
-import { EntityDataStoreService } from './entity-data-store.service';
+import { jumpToSection } from '../common/utilities/custom-utilities';
 
 @Injectable()
 export class EntityManagementService {
@@ -10,10 +10,15 @@ export class EntityManagementService {
     hasChangesAvailable: boolean;
     $subscriptions: Subscription[] = [];
     triggerDUNSEntity = new Subject();
+    selectedSectionId = '';
 
-    constructor(private _commonService: CommonService, private _http: HttpClient,
-        private _dataStore: EntityDataStoreService
-    ) { }
+    constructor(private _commonService: CommonService, private _http: HttpClient) { }
+
+    scrollToSelectedSection(sectionId: string) {
+        this.selectedSectionId = sectionId;
+        const offset = (document.getElementById('COI-DISCLOSURE-HEADER')?.getBoundingClientRect().height + 100);
+        jumpToSection(this.selectedSectionId, offset);
+    }
 
     getEntityDetails(entityId) {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
