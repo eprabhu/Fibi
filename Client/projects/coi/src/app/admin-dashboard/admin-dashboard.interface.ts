@@ -301,7 +301,7 @@ export interface Unit {
 
 export class NotificationObject {
   subject: string;
-  message: string;
+  message: string = '';
   moduleItemKey: string;
   recipients = [];
   description: string;
