@@ -45,7 +45,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.countrySearchOptions = getEndPointOptionsForCountry();
+        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.baseUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
     }

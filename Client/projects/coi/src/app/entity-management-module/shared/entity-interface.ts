@@ -47,6 +47,7 @@ export class IndustryDetails {
     entityId: any;
     entityIndustryCatIds: any = [];
     primaryCatId: any;
+    updatePrimaryCatId = false;
 }
 
 export class RegistrationDetails {
