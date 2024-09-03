@@ -1,7 +1,5 @@
 package com.polus.fibicomp.globalentity.dto;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class OtherDetailsRequestDTO {
 
 	private Integer entityId;
-	private Date startDate;
-	private Date incorporationDate;
+	private String startDate;
+	private String incorporationDate;
 	private String incorporatedIn;
 	private String congressionalDistrict;
 	private String currencyCode;
