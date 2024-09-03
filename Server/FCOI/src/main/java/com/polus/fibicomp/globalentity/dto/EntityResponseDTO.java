@@ -33,6 +33,6 @@ public class EntityResponseDTO {
 	private List<PriorNameResponseDTO> priorNames;
 	private List<ForeignNameResponseDTO> foreignNames;
 	private List<EntityAttachment> attachments;
-	private Map<String, Boolean> entityTabStatus;
+	private Map<String, Object> entityTabStatus;
 
 }

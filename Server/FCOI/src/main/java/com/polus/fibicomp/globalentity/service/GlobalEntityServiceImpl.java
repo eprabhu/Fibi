@@ -74,8 +74,8 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	}
 
 	@Override
-	public ResponseEntity<String> verifyEntityDetails(Integer entityId) {
-		Map<String, Boolean> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
+	public ResponseEntity<Map<String, Object>> verifyEntityDetails(Integer entityId) {
+		Map<String, Object> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
 		Set<String> requiredKeys = Set.of("entity_sponsor_info", "entity_sub_org_info");
 		boolean allRequiredTabsComplete = requiredKeys.stream()
 				.allMatch(key -> Boolean.TRUE.equals(entityTabStatus.get(key)));
@@ -87,7 +87,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
 		}
 		processEntityMessageToQ(null, entityId, null, null);
-		return new ResponseEntity<>(commonDao.convertObjectToJSON("Entity verified successfully"), HttpStatus.OK);
+		return new ResponseEntity<>(entityDetailsDAO.getEntityTabStatus(entityId), HttpStatus.OK);
 	}
 
 	public void processEntityMessageToQ(String actionType, Integer moduleItemKey, Integer moduleSubItemKey, Map<String, String> additionDetails) {
@@ -104,5 +104,10 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
         messageQVO.setAdditionalDetails(additionDetails);
         messageQServiceRouter.getMessagingQueueServiceBean().publishMessageToQueue(messageQVO);
     }
+
+	@Override
+	public Map<String, Object> fetchEntityTabStatus(Integer entityId) {
+		return entityDetailsDAO.getEntityTabStatus(entityId);
+	}
 
 }

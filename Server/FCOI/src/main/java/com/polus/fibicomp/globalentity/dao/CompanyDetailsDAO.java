@@ -39,4 +39,6 @@ public interface CompanyDetailsDAO {
 
 	public void deleteIndustryDetailsByCatCode(String industryCatCode);
 
+	public void removeCurrentPrimaryCatId(Integer entityId);
+
 }

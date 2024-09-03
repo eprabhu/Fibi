@@ -23,7 +23,6 @@ import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
 import com.polus.fibicomp.globalentity.pojo.IndustryCategoryCode;
-import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 
 @Service
 public interface GlobalEntityService {
@@ -160,7 +159,7 @@ public interface GlobalEntityService {
 		return null;
 	}
 
-	public default ResponseEntity<String> verifyEntityDetails(Integer entityId) {
+	public default ResponseEntity<Map<String, Object>> verifyEntityDetails(Integer entityId) {
 		return null;
 	}
 
@@ -169,6 +168,10 @@ public interface GlobalEntityService {
 	}
 
 	public default ResponseEntity<List<EntityRiskLevel>> fetchRiskLevels(String riskTypeCode) {
+		return null;
+	}
+
+	public default Map<String, Object> fetchEntityTabStatus(Integer entityId) {
 		return null;
 	}
 
