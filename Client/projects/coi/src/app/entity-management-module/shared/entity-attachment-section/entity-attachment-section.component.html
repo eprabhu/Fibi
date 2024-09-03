@@ -18,9 +18,10 @@
                 <!-- add attachment -->
                 <div class="col-auto" *ngIf="filteredEntityAttachmentsList?.length && isEditMode">
                     <button id="additional-address-add-button" class="btn btn-primary fs-14 d-inline-flex"
-                        title="'Click here to industry details'" aria-label="'Click here to industry details'"
+                        title="Click here to add attachment." aria-label="Click here to add attachment."
                         (click)="openAttachmentModal('ADD')">
-                        <mat-icon>add</mat-icon>Add Attachment
+                        <mat-icon aria-hidden="true" class="flex-shrink-0">add</mat-icon>
+                        <span>Add Attachment</span>
                     </button>
                 </div>
             </div>

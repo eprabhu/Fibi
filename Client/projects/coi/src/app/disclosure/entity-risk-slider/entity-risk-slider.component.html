@@ -13,15 +13,21 @@
                     <!-- Badge and Current Risk -->
                     <div class="col-12 d-flex mb-3 ps-0 align-items-start">
                         <div class="d-flex col align-items-center">
-                            <span class="coi-card-notch-ribbon shadow-sm me-2 {{getColorBadges(disclosureDetails)}}">
-                                <span>{{disclosureDetails.coiDisclosureFcoiType?.description}}</span>
-                            </span>
-                            <h4 class="mb-0 label-text f-16 me-5 d-flex align-items-center">
-                                <ng-container *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'">
-                                    <mat-icon *ngIf="disclosureDetails.fcoiTypeCode === '2'" aria-hidden="true" class="coi-text-light flex-shrink-0 me-1">text_snippet</mat-icon>
-                                    <mat-icon *ngIf="disclosureDetails.fcoiTypeCode === '3'" aria-hidden="true" class="coi-text-light flex-shrink-0 me-1">workspace_premium</mat-icon>
-                                    <span class="title-text text-slice" title="#{{projectDetails.moduleItemId}} - {{projectDetails.title}}">#{{projectDetails.moduleItemId}} - {{projectDetails.title}}</span>
-                                </ng-container>
+                            <ng-container *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                                <span [attr.aria-label]="disclosureDetails?.coiProjectType?.description + ' disclosure'" class="coi-card-notch-ribbon shadow-sm"
+                                    [style.backgroundColor]="disclosureDetails?.coiProjectType?.badgeColor">{{ disclosureDetails?.coiProjectType?.description }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode != '2' ">
+                                <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip" [attr.aria-label]="'FCOI disclosure'">FCOI</span>
+                            </ng-container>
+                            <h4 *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && projectDetails" class="mb-0 label-text f-16 me-5 d-flex align-items-center">
+                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 ms-1">{{projectDetails?.projectIcon}}</mat-icon>
+                                <a class="link-primary fs-6 text-slice"
+                                    title="Click here to view details of #{{ projectDetails?.projectNumber }} - {{ projectDetails?.title }}"
+                                    attr.aria-label="Click here to view details of #{{ projectDetails?.projectNumber }} - {{ projectDetails?.title }}"
+                                    (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
+                                    #{{ projectDetails?.projectNumber }} - {{ projectDetails?.title }}
+                                </a>
                             </h4>
                         </div>
                         <div class="col-auto align-items-start justify-content-end mt-1">
@@ -54,8 +60,8 @@
                     <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12">
                         <label class="coi-text-light d-block" for="coi-disclosure-risk-title">Title</label>
                         <span class="coi-text-light fw-normal">
-                            <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
-                                <span class="text-slice" id="coi-disclosure-risk-title" [title]="disclosureDetails?.personPrimaryTitle">{{disclosureDetails?.personPrimaryTitle}}</span>
+                            <app-no-data-label [valueToShow]="disclosureDetails?.person?.primaryTitle">
+                                <span class="text-slice" id="coi-disclosure-risk-title" [title]="disclosureDetails?.person?.primaryTitle">{{disclosureDetails?.person?.primaryTitle}}</span>
                             </app-no-data-label>
                         </span>
                     </div>
@@ -63,8 +69,8 @@
                     <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12">
                         <label class="coi-text-light d-block" for="coi-disclosure-risk-department">Department</label>
                         <span class="coi-text-light fw-normal">
-                            <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
-                                <span class="text-slice" id="coi-disclosure-risk-department" [title]="commonService.getPersonLeadUnitDetails(disclosureDetails?.unit)">{{commonService.getPersonLeadUnitDetails(disclosureDetails?.unit)}}</span>
+                            <app-no-data-label [valueToShow]="disclosureDetails?.person?.unit?.unitDetail">
+                                <span class="text-slice" id="coi-disclosure-risk-department" [title]="commonService.getPersonLeadUnitDetails(disclosureDetails?.person?.unit)">{{commonService.getPersonLeadUnitDetails(disclosureDetails?.person?.unit)}}</span>
                             </app-no-data-label>
                         </span>
                     </div>
@@ -72,8 +78,8 @@
                     <div class="col-xl col-lg-4 col-md-4 col-sm-6 col-12">
                         <label class="coi-text-light d-block" for="coi-disclosure-risk-mail">Person Email</label>
                         <span class="coi-text-light fw-normal">
-                            <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
-                                <span class="text-slice" id="coi-disclosure-risk-mail" [title]="disclosureDetails?.personEmail">{{disclosureDetails?.personEmail}}</span>
+                            <app-no-data-label [valueToShow]="disclosureDetails?.person?.emailAddress">
+                                <span class="text-slice" id="coi-disclosure-risk-mail" [title]="disclosureDetails?.person?.emailAddress">{{disclosureDetails?.person?.emailAddress}}</span>
                             </app-no-data-label>
                         </span>
                     </div>

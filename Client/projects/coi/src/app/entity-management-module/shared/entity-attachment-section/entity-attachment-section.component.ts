@@ -21,8 +21,8 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     @Input() sectionId: any;
     @Input() sectionName: any;
     @Input() subSectionId: any;
-    @Input() entityAttachmentsList: EntityAttachment[] = [];
     @Input() riskCategoryCode: EntityRiskCategoryCode;
+    @Input() entityAttachmentsList: EntityAttachment[] = [];
 
     updateIndex: number = null;
     entityAttachmentHelpText = '';

@@ -26,7 +26,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     entityIndustryCategories = [];
     industryCategoryDescriptionsList: any = [];
     entityId: any;
-    entityIndustryClassifications: any = [];
+    entityIndustryClassifications: any[] = [];
     entityIndustryClassificationsGrouping: any = {};
     categoryDescriptionList = [];
     categoryTypeList = [];
@@ -145,7 +145,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         const entityData = this._dataStoreService.getData();
         if (isEmptyObject(entityData)) { return; }
         this.entityId = entityData?.entityDetails?.entityId;
-        this.entityIndustryClassifications = entityData.entityIndustryClassifications;
+        this.entityIndustryClassifications = entityData.entityIndustryClassifications || [];
         if (this.entityIndustryClassifications.length) {
             this.entityIndustryClassificationsGrouping = this.groupBy(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'description');
         }
@@ -254,7 +254,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     updateIndustryDetails() {
         if (!this.isSaving) {
             this.isSaving = true;
-            this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res) => {
+            this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res: any) => {
                 this.entityIndustryClassifications = res;
                 this.updateDataStore();
                 this.clearIndustryDetails();

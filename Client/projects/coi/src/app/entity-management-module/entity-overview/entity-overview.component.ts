@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OverviewTabSection } from '../shared/entity-constants';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntireEntityDetails, EntityRisk } from '../shared/entity-interface';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
@@ -46,6 +46,11 @@ export class EntityOverviewComponent {
             return;
         }
         this.entityRisksList = ENTITY_DATA?.entityRisks;
+    }
+
+    riskUpdated(risksList: EntityRisk[]): void {
+        this.entityRisksList = deepCloneObject(risksList);
+        this._dataStoreService.updateStore(['entityRisks'], {'entityRisks': this.entityRisksList});
     }
 
 }
