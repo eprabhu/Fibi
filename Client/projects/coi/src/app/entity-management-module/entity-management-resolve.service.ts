@@ -86,8 +86,9 @@ export class EntityPathResolveService{
         if(this._commonService.hasChangesAvailable) {
             this._commonService.isNavigationStopped = true;
             this._commonService.attemptedPath = nextState.url;
+            var elements = document.getElementsByClassName("invalid-feedback");
             let errToast = document.getElementById('error-toast');
-            if(errToast && !errToast?.classList.contains('invisible')) {
+            if((errToast && !errToast?.classList.contains('invisible')) || (elements && elements.length)) {
                 openModal('coi-entity-confirmation-modal');
             }
             return false;

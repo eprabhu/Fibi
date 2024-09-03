@@ -135,6 +135,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
 
     private updateSfiDetails(sfiDetails: CoiDisclEntProjDetail, res?: ProjectSfiRelationConflictRO): void {
         sfiDetails.isDataChanged = false;
+        sfiDetails.prePersonEntityId = sfiDetails.personEntityId;
         sfiDetails.disclComment.commentId = res ? res.commentId : sfiDetails.disclComment.commentId;
         const STATUS_TYPE = this.defineRelationshipService.coiStatusList.find((type: CoiProjConflictStatusType) =>
             type.projectConflictStatusCode === sfiDetails.projectConflictStatusCode

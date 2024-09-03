@@ -172,6 +172,10 @@ export class EntityTabStatus {
     entity_overview? = false;
     entity_sub_org_info? = false;
     entity_sponsor_info? = false;
+    organization_feed_status: string;
+    sponsor_feed_status: string;
+    organization_feed_status_code: any;
+    sponsor_feed_status_code: any;
 }
 
 export class EntityAttachmentDetails {
