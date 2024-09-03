@@ -19,7 +19,7 @@
 	<description>This project is used to read and post data from KC and Fibi COI application.</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<jakarta.persistence.version>3.1.0</jakarta.persistence.version>
 	</properties>
 
