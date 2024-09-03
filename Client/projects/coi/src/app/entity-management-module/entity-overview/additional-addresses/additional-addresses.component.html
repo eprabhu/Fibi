@@ -4,7 +4,7 @@
             <label for="coi-entity-addirional-address">
                 Additional Addresses<app-common-help-text [subSectionId]="2605" [elementId]="'coi-entity-addirional-address'"></app-common-help-text>
             </label></div>
-        <div class="col-auto" *ngIf="additionalAddresses.length && isEditMode">
+        <div class="col-auto" *ngIf="additionalAddresses.length && isEditMode && canManageEntity">
             <button id="additional-address-add-button"
                 class="btn btn-primary fs-14 d-inline-flex" title="'Click here to add additional address"
                 aria-label="'Click here to'additional address" (click)="addIndustryDetails()">
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div *ngIf="!additionalAddresses.length">
-        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Additional Addresses'" (buttonAction)="addIndustryDetails($event)"></app-no-information>
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode && canManageEntity" [buttonName]="'Add Additional Addresses'" (buttonAction)="addIndustryDetails($event)"></app-no-information>
     </div>
     <div *ngIf="additionalAddresses.length">
         <div class="card mx-3 px-2 py-1 coi-entity-details-card" *ngFor="let address of additionalAddresses; let isLast = last;let i = index" [ngClass]="isLast ? 'mb-3' : 'mb-2'">

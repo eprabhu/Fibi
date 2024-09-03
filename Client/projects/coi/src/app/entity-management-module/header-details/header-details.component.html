@@ -61,7 +61,7 @@
                         <mat-icon aria-hidden="true">reply</mat-icon>
                     </button>
                     <!-- verify -->
-                    <button *ngIf="isEditMode && entityDetails.entityStatusType.entityStatusTypeCode !== '1'" id="coi-entity-verify-btn"
+                    <button *ngIf="isEditMode && entityDetails.entityStatusType.entityStatusTypeCode !== '1' && canVerifyEntity" id="coi-entity-verify-btn"
                         class="btn btn-primary fs-14 d-flex align-items-center btn-sm"
                         (click)="openVerifyEntityModal()"
                         title="Click here to verify entity." aria-label="Click here to verify entity.">
@@ -72,7 +72,7 @@
         </div>
         <!-- new top card ends -->
     </div>
-    <div class="col-12" *ngIf="isEditMode">
+    <div class="col-12" *ngIf="isEditMode && canManageEntity">
         <div class="card border-r-0 p-1">
             <span class="fs-14 px-2 py-1 rounded-1 matching-card d-flex align-items-center">
                 <mat-icon class="fs-16 me-1">info</mat-icon>

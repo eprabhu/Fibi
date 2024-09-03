@@ -8,6 +8,7 @@ import { EntireEntityDetails, EntityDetails, EntityTabStatus, EntityDetailsCard 
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { EntityManagementService } from '../entity-management.service';
+import { CommonService } from '../../common/services/common.service';
 
 class DNBReqObj {
     sourceDataName: string;
@@ -41,12 +42,17 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     matchedEntites: any;
     isOpenVerifyModal = false;
     entityTabStatus = new EntityTabStatus();
+    canVerifyEntity = false;
+    canManageEntity = false;
 
     constructor(public router: Router, public dataStore: EntityDataStoreService,
-        public autoSaveService: AutoSaveService, private _entityManagementService: EntityManagementService) {}
+        public autoSaveService: AutoSaveService,
+        private _entityManagementService: EntityManagementService,
+        private _commonService: CommonService) { }
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     viewSlider(event) {
@@ -168,5 +174,10 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
 
     navigateToBack() {
         this.router.navigate(['/coi/entity-dashboard'])
+    }
+
+    checkUserHasRight(): void {
+        this.canVerifyEntity = this._commonService.getAvailableRight(['VERIFY_ENTITY'], 'SOME');
+        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
 }

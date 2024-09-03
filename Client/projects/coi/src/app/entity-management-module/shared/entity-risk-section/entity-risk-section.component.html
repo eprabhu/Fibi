@@ -10,7 +10,7 @@
                     <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-sub-head-' + subSectionId"></app-common-help-text>
                 </span>
             </div>
-            <div class="col-auto" *ngIf="entityRiskList?.length && isEditMode">
+            <div class="col-auto" *ngIf="entityRiskList?.length && isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance || canManageEntityRisk)">
                 <button id="add-risk-details-button" class="btn btn-primary fs-14 d-inline-flex"
                     title="Click here to add risk details" aria-label="Click here to add risk details"
                     (click)="openAddEntityRiskModal(false)">
@@ -40,7 +40,7 @@
                 <div class="col-md-3 col-lg-2 d-flex align-items-center">
                     <span class="ms-auto d-flex" *ngIf="isEditMode">
                         <!-- edit -->
-                        <button id="coi-entity-sub-award-edit-{{riskIndex}}"
+                        <button *ngIf="entityRiskList?.length && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance || canManageEntityRisk)" id="coi-entity-sub-award-edit-{{riskIndex}}"
                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                             title="Click here to edit risk." aria-label="Click here to edit risk."
                             (click)="editEntityRisk(risk, riskIndex)">
@@ -59,7 +59,7 @@
         </div>
         <!-- no info card -->
         <ng-container *ngIf="!entityRiskList?.length">
-            <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Risk'"
+            <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance || canManageEntityRisk)" [buttonName]="'Add Risk'"
                 (buttonAction)="openAddEntityRiskModal(false)"></app-no-information>
         </ng-container>
     </div>

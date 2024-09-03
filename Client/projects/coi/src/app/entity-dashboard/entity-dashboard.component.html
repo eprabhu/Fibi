@@ -167,7 +167,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 d-flex align-items-end justify-content-end">
-                                    <button id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
+                                    <button *ngIf="isManageEntity" id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
                                     (keyup.enter)="viewDetails(entityListData)" (keyup.space)="viewDetails(entityListData)"
                                             aria-label="Click the button to the view Entity details"
                                             class="align-items-center btn btn-outline-secondary d-flex fs-14"

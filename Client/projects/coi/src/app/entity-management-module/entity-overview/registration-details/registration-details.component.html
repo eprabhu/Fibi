@@ -4,7 +4,7 @@
             <label for="coi-entity-reg-details">
                 Registration Details<app-common-help-text [subSectionId]="2604" [elementId]="'coi-entity-reg-details'"></app-common-help-text>
             </label></div>
-        <div class="col-auto" *ngIf="entityRegistrations.length && isEditMode">
+        <div class="col-auto" *ngIf="entityRegistrations.length && isEditMode && canManageEntity">
             <button id="additional-address-add-button"
                 class="btn btn-primary fs-14 d-inline-flex" title="'Click here to registration details'"
                 aria-label="'Click here to registration details'" (click)="addRegistrationDetails(true)">
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div *ngIf="!entityRegistrations.length">
-        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Registration Details'" (buttonAction)="addRegistrationDetails($event)"></app-no-information>
+        <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode && canManageEntity" [buttonName]="'Add Registration Details'" (buttonAction)="addRegistrationDetails($event)"></app-no-information>
     </div>
     <div *ngIf="entityRegistrations.length" class="row mx-0 row-gap-2">
         <div *ngFor="let registration of entityRegistrations;let isLast = last;let i = index"

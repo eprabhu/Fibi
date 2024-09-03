@@ -31,6 +31,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
     isSaving = false;
     entityRegistrationDefaultValue = '';
     modalConfig = new COIModalConfig('register-delete-confirm-modal', 'Delete', 'Cancel');
+    canManageEntity = false;
 
     constructor(private _entityOverviewService: EntityOverviewService,
                 private _dataStoreService: EntityDataStoreService,
@@ -46,6 +47,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore() {
@@ -197,6 +199,10 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    checkUserHasRight(): void {
+        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
 
 }

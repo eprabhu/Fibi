@@ -39,6 +39,9 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     CONFIRMATION_MODAL_ID: string = 'entity-attachment-delete-confirm-modal';
     versionModalConfig = new COIModalConfig(this.VERSION_MODAL_ID, '', 'Close', 'xl');
     confirmationModalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete Attachment', 'Cancel');
+    canManageEntitySponsor = false;
+    canManageEntityOrganization = false;
+    canManageEntityCompliance = false;
 
     constructor(private _commonService: CommonService,
         private _dataStoreService: EntityDataStoreService,
@@ -49,6 +52,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         this.listenDataChangeFromStore();
         this.getDataFromStore();
         this.filterLatestVersions();
+        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -239,6 +243,12 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
             this.isOpenVersionModal = false;
             this.updateIndex = null;
         }, 200);
+    }
+
+    checkUserHasRight(): void {
+        this.canManageEntitySponsor = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
+        this.canManageEntityOrganization = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
+        this.canManageEntityCompliance = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';                
     }
 
 }
