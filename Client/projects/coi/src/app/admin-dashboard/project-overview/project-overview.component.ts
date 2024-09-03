@@ -213,5 +213,33 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         this.projectOverviewData.projectOverviewDetails[this.getIndexForSlider].projectDetails.commentCount = updatedCount;
     }
 
+    getCertificationFlagDisplay(status: string): string {
+        switch (status) {
+            case 'COMPLETED':
+                return 'Completed';
+            case 'INCOMPLETE':
+                return 'Incomplete';
+            case 'NOT_REQUIRED':
+                return 'Not Required';
+            default:
+                return 'Incomplete';
+        }
+    }
+
+    getDisclosureStatusDisplay(status: string): string {
+        switch (status) {
+            case 'Pending':
+                return 'Pending';
+            case 'TO_BE_DETERMINED':
+                return '--';
+            case 'Completed':
+                return 'Completed';
+            case 'Not Required':
+                return 'Not Required';
+            default:
+                return 'Pending';
+        }
+    }
+
     setFilter(test: string): void { }
 }

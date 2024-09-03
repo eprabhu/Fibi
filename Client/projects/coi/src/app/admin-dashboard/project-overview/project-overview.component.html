@@ -286,14 +286,14 @@
                                                 </th>
 
                                                 <th style="width: 10%;" class="p-0 align-middle">
-                                                    <button title="{{ isDesc[index1 + '_questionnaireCompleted'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
+                                                    <button title="{{ isDesc[index1 + '_certificationFlag'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
                                                         class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
-                                                        aria-label="{{ isDesc[index1 + '_questionnaireCompleted'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
-                                                        (click)="onSortClick(index1, 'questionnaireCompleted')">
+                                                        aria-label="{{ isDesc[index1 + '_certificationFlag'] ? 'Click here to sort certification in ascending order' : 'Click here to sort certification in descending order' }}"
+                                                        (click)="onSortClick(index1, 'certificationFlag')">
                                                         <span class="coi-text-darker">Certification</span>
                                                         <i class="fa coi-text-light ms-2 coi-table-sort-icon" [ngClass]="{
-                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_questionnaireCompleted'],
-                                                            'fa-sort-alpha-desc': isDesc[index1 + '_questionnaireCompleted']}" aria-hidden="true"></i>
+                                                            'fa-sort-alpha-asc': !isDesc[index1 + '_certificationFlag'],
+                                                            'fa-sort-alpha-desc': isDesc[index1 + '_certificationFlag']}" aria-hidden="true"></i>
                                                     </button>
                                                 </th>
 
@@ -391,13 +391,13 @@
                                                 <!-- certification -->
                                                 <td class="px-1 coi-text-light">
                                                     <div class="m-0 mb-2 row py-1">
-                                                        <app-no-data-label [valueToShow]="keyPersonData?.questionnaireCompleted">
+                                                        <app-no-data-label [valueToShow]="getCertificationFlagDisplay(keyPersonData?.certificationFlag)">
                                                             <span
                                                                 class="align-items-center d-flex px-0" id="coi-project-overview-certification-{{index2}}">
                                                                 <span class="text-slice"
-                                                                    [title]="keyPersonData?.questionnaireCompleted ? 'Completed' : 'Incomplete'"
-                                                                    [attr.aria-label]="keyPersonData?.questionnaireCompleted ? 'Completed' : 'Incomplete'">
-                                                                    {{keyPersonData?.questionnaireCompleted ? 'Completed' : 'Incomplete'}}
+                                                                    [title]="getCertificationFlagDisplay(keyPersonData?.certificationFlag)"
+                                                                    [attr.aria-label]="getCertificationFlagDisplay(keyPersonData?.certificationFlag)">
+                                                                    {{ getCertificationFlagDisplay(keyPersonData?.certificationFlag) }}
                                                                 </span>
                                                             </span>
                                                         </app-no-data-label>
@@ -408,12 +408,12 @@
                                                 <td class="px-1 coi-text-light">
                                                     <div class="m-0 mb-2 row py-1">
                                                         <app-no-data-label
-                                                            [valueToShow]="keyPersonData?.disclosureStatus">
+                                                            [valueToShow]="getDisclosureStatusDisplay(keyPersonData?.disclosureStatus)">
                                                             <span class="align-items-center d-flex px-0" id="coi-project-overview-disclosure-{{index2}}">
                                                                 <span class="text-slice"
-                                                                    [title]="keyPersonData?.disclosureStatus"
-                                                                    [attr.aria-label]="keyPersonData?.disclosureStatus">
-                                                                    {{keyPersonData?.disclosureStatus}}
+                                                                    [title]="getDisclosureStatusDisplay(keyPersonData?.disclosureStatus)"
+                                                                    [attr.aria-label]="getDisclosureStatusDisplay(keyPersonData?.disclosureStatus)">
+                                                                    {{getDisclosureStatusDisplay(keyPersonData?.disclosureStatus)}}
                                                                 </span>
                                                             </span>
                                                         </app-no-data-label>
@@ -436,7 +436,7 @@
                                                 </td>
 
                                                 <!-- Actions -->
-                                                <td class="p-0">
+                                                <td class="p-0 align-middle">
                                                     <div class="d-flex justify-content-center">
                                                         <button
                                                             *ngIf="keyPersonData?.disclosureStatus == 'Completed'"
@@ -448,8 +448,7 @@
                                                             (keyup.space)="redirectToDisclosure(keyPersonData)">
                                                             <mat-icon>visibility</mat-icon>
                                                         </button>
-                                                        <button *ngIf="(keyPersonData?.disclosureStatus === 'Pending' && keyPersonData?.disclosureId!= 0) || 
-                                                        (!keyPersonData?.disclosureStatus  && !keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureId!= 0)"
+                                                        <button
                                                             id="coi-keyperson-disclosure-notify-btn-{{index2}}"
                                                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                                             title="Click here to notify the keyperson to complete their disclosure" aria-label="Click here to notify the keyperson to complete their disclosure"
@@ -457,7 +456,7 @@
                                                             (keyup.space)="toggleNotificationSlider(index2)">
                                                             <mat-icon>notifications_active</mat-icon>
                                                         </button>
-                                                        <span *ngIf="(keyPersonData?.questionnaireCompleted && keyPersonData?.disclosureStatus === 'Not Required') || keyPersonData?.disclosureId == 0">--</span>
+                                                        <span *ngIf="(keyPersonData?.certificationFlag && keyPersonData?.disclosureStatus === 'Not Required')">--</span>
                                                     </div>
                                                 </td>
                                             </tr>
