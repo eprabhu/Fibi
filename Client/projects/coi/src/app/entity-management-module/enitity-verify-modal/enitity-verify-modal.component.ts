@@ -6,7 +6,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { EntireEntityDetails, EntityDetails, EntitySponsor, SubAwardOrganization } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntitySponsor, EntityTabStatus, removeToast, SubAwardOrganization } from '../shared/entity-interface';
 import { EntityManagementService } from '../entity-management.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { Router } from '@angular/router';
@@ -31,6 +31,7 @@ export class EnitityVerifyModalComponent implements OnInit {
     entitySubAwardOrganization = new SubAwardOrganization();
     entityVerifyModalConfig = new COIModalConfig(this.ENTITY_VERIFY_MODAL_ID, 'Verify', 'Cancel', 'lg');
     attachmentHelpText = 'You are about to verify the entity.'
+    entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     @Output() verifyModalAction: EventEmitter<ModalActionEvent | null> = new EventEmitter<ModalActionEvent | null>();
 
@@ -97,14 +98,17 @@ export class EnitityVerifyModalComponent implements OnInit {
         if (this.isComplete.entity) {
             this.$subscriptions.push(
                 this._entityManagementService.verifyEntity(this.entityDetails.entityId)
-                    .subscribe((res) => {
+                    .subscribe((res: any) => {
+                        this.entityTabStatus = res;
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entity verified successfully.');
-                        this.entityDetails.entityStatusType ={
+                        this.entityDetails.entityStatusType = {
                             entityStatusTypeCode: "1",
                             description: "Verified",
                         }
-                        this._dataStoreService.updateStore(['entityDetails'], { entityDetails: this.entityDetails });
+                        this._dataStoreService.updateStore(['entityDetails', 'entityTabStatus'], { entityDetails: this.entityDetails, entityTabStatus: this.entityTabStatus})
                         this.closeEntityVerifyModal(modalAction);
+                        removeToast('ERROR');
+                        removeToast('SUCCESS');
                         this.navigateToSection('entity-overview');
                     }, (_error: any) => {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Entity verification failed. Please try again.');
@@ -141,6 +145,28 @@ export class EnitityVerifyModalComponent implements OnInit {
     navigateToSection(navigateTo: 'entity-overview' | 'entity-sponsor' | 'entity-subaward'): void {
         this.closeEntityVerifyModal(null);
         this._router.navigate([`/coi/manage-entity/${navigateTo}`], { queryParamsHandling: 'merge' } );
+    }
+
+    fetchEntitySponsorDetails(): void{
+        this.$subscriptions.push(
+            this._entityManagementService.fetchEntitySponsorDetails(this.entityDetails.entityId)
+                .subscribe((data: EntitySponsor)=>{
+                this.entitySponsorDetails = data;
+                this.isComplete.sponsor = !!this.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode;
+            }, (_error: any) => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }));
+    }
+
+    fetchEntityOrganizationDetails(): void{
+        this.$subscriptions.push(
+            this._entityManagementService.fetchEntityOrganizationDetails(this.entityDetails.entityId)
+                .subscribe((data: SubAwardOrganization)=>{
+                this.entitySubAwardOrganization = data;
+                this.isComplete.organization = !!this.entitySubAwardOrganization?.entityRisks?.length && !!this.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode;
+            }, (_error: any) => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            }));
     }
 
 }

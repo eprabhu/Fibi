@@ -99,6 +99,7 @@ export class ApplyToAllModalComponent {
             if (UPDATE_DATA) {
                 coiDisclEntProjDetail.disclComment.comment = UPDATE_DATA.comment;
                 coiDisclEntProjDetail.disclComment.commentId = UPDATE_DATA.commentId;
+                coiDisclEntProjDetail.prePersonEntityId = coiDisclEntProjDetail.personEntityId;
                 coiDisclEntProjDetail.projectConflictStatusCode = UPDATE_DATA.projectConflictStatusCode;
             }
         });
