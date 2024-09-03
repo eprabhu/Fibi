@@ -53,6 +53,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     };
     isCardExpanded = true;
     isUserCollapse = false;
+    canViewEntity = false;
 
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
@@ -71,6 +72,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
         this.listenForQuestionnaireSave();
         this.updatePersonEntityRelationships();
         this.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
+        this.checkUserHasRight();
     }
 
     checkForEditMode() {
@@ -528,6 +530,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
             case '4' : return 'supervisor_account';
             default: return;
         }
+    }
+
+    checkUserHasRight(): void {
+        this.canViewEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
     }
 
 }

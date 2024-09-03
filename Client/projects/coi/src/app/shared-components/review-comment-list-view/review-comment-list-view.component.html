@@ -1,5 +1,5 @@
 <!-- new comment section -->
-<div *ngFor="let subsection of groupedCommentsList | keyvalue;" class="pb-3 mt-3 px-1">
+<div *ngFor="let subsection of groupedCommentsList | keyvalue;" class="pb-3 mt-3">
     <label class="fs-16 fw-bold label-text px-4" *ngIf="isHeaderNeeded">{{getSectionName(subsection.value)}}</label>
     <ng-container *ngFor="let list of subsection.value;let subSectionIndex=index;let last = last">
     <div class="coi-border-grey coi-card-regular p-3">
@@ -25,7 +25,7 @@
                                     {{list?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                             </app-no-data-label>
                         </span>
-                        <div *ngIf="reviewCommentsService.editParentCommentId != list?.commentId && currentUserId == list?.commentBy" class="ms-auto col-auto">
+                        <div *ngIf="reviewCommentsService.editParentCommentId != list?.commentId && currentUserId == list?.commentBy && !isReplyComment" class="ms-auto col-auto">
                             <button [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
                                 class="btn-none more-info-icon rounded-circle d-inline-flex justify-content-center align-items-center">
                                 <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>

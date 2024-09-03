@@ -16,7 +16,7 @@
                     </span>
                 </div>
                 <!-- add attachment -->
-                <div class="col-auto" *ngIf="filteredEntityAttachmentsList?.length && isEditMode">
+                <div class="col-auto" *ngIf="filteredEntityAttachmentsList?.length && isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance)">
                     <button id="additional-address-add-button" class="btn btn-primary fs-14 d-inline-flex"
                         title="Click here to add attachment." aria-label="Click here to add attachment."
                         (click)="openAttachmentModal('ADD')">
@@ -70,35 +70,35 @@
                             <!-- actions -->
                             <div class="col-auto d-flex justify-content-center align-items-center">
                                 <!-- edit -->
-                                <button id="coi-entity-attachment-edit-{{i}}" *ngIf="isEditMode"
+                                <button id="coi-entity-attachment-edit-{{i}}" *ngIf="isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance)"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     title="Click here to edit attachment." aria-label="Click here to edit attachment."
                                     (click)="editEntityAttachment(attachment, i)">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
                                 </button>
                                 <!-- delete -->
-                                <button id="coi-entity-attachment-delete-{{i}}" *ngIf="isEditMode"
+                                <button id="coi-entity-attachment-delete-{{i}}" *ngIf="isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance)"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     title="Click here to delete attachment." aria-label="Click here to delete attachment."
                                     (click)="openDeleteConfirmModal(attachment, i)">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
                                 </button>
                                 <!-- download -->
-                                <button id="coi-entity-attachment-download-{{i}}"
+                                <button id="coi-entity-attachment-download-{{i}}" *ngIf="canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     title="Click here to download attachment." aria-label="Click here to download attachment."
                                     (click)="downloadAttachment(attachment)">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">download</mat-icon>
                                 </button>
                                 <!-- replace -->
-                                <button id="coi-entity-attachment-replace-{{i}}" *ngIf="isEditMode"
+                                <button id="coi-entity-attachment-replace-{{i}}" *ngIf="isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance)"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     title="Click here to replace attachment." aria-label="Click here to replace attachment."
                                     (click)="replaceAttachmentModal(attachment, i)">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">autorenew</mat-icon>
                                 </button>
                                 <!-- version -->
-                                <button id="coi-entity-attachment-version-{{i}}"
+                                <button id="coi-entity-attachment-version-{{i}}" *ngIf="canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                                     title="Click here to view file versions." aria-label="Click here to view file versions."
                                     (click)="openVersionModal(attachment, i)">
@@ -112,7 +112,7 @@
 
             <!-- no data -->
             <div *ngIf="!filteredEntityAttachmentsList?.length">
-                <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Attachment'"
+                <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode && (canManageEntitySponsor || canManageEntityOrganization || canManageEntityCompliance)" [buttonName]="'Add Attachment'"
                     (buttonAction)="openAttachmentModal('ADD')"></app-no-information>
             </div>
         </div>
