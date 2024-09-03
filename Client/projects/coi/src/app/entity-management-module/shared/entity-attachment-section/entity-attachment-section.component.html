@@ -11,8 +11,8 @@
                     <!-- heading -->
                     <span class="fs-16 fw-medium" id="coi-entity-sponsor-attachments">
                         <span>{{sectionName}}</span>
-                        <app-common-help-text [subSectionId]="2611"
-                            [elementId]="'coi-entity-sponsor-attachments'"></app-common-help-text>
+                        <app-common-help-text [subSectionId]="subSectionId"
+                            [elementId]="'coi-sub-head-' + subSectionId"></app-common-help-text>
                     </span>
                 </div>
                 <!-- add attachment -->
@@ -121,7 +121,7 @@
     <!-- attachment modal -->
     <app-entity-attachment-modal *ngIf="isOpenAttachmentModal" (closeModal)="closeAttachmentModal($event)"
         [currentAttachment]="currentAttachment" [attachmentHelpText]="entityAttachmentHelpText"
-        [sectionCode]="getSectionCode()" [attachmentInputType]="attachmentInputType">
+        [sectionCode]="getSectionCode()" [attachmentInputType]="attachmentInputType" [subSectionId]="subSectionId">
     </app-entity-attachment-modal>
 
     <!-- confirmation modal -->

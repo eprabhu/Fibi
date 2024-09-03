@@ -18,6 +18,7 @@ export class EntityOverviewComponent {
     coiEntity: any;
     entityRisksList: EntityRisk[] = [];
     $subscriptions: Subscription[] = [];
+    riskSubSectionId = 2607;
 
     constructor(public commonService: CommonService, public _dataStoreService: EntityDataStoreService) {}
 

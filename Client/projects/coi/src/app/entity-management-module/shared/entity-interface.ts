@@ -444,3 +444,9 @@ export interface AttachmentReplaceRO {
     attachmentNumber: number;
     versionNumber: number;
 }
+
+export class EntitySectionDetails {
+    sectionId = '';
+    sectionName = '';
+    subSectionId: number | null = null;
+}

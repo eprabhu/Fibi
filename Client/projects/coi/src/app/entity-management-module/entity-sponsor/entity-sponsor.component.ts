@@ -22,6 +22,8 @@ export class EntitySponsorComponent {
     entitySponsorRiskList: EntityRisk[] = [];
     entitySponsorAttachmentList: EntityAttachment[] = [];
     isLoading = true;
+    riskSubSectionId = 2610;
+    attachmentSubSectionId = 2611;
 
     constructor(public commonService: CommonService, public dataStore: EntityDataStoreService,
         private _entitySponsorService: EntitySponsorService, private _dataStoreService: EntityDataStoreService

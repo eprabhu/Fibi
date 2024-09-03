@@ -7,7 +7,7 @@
                 </span>
                 <span class="fs-16 fw-medium" id="coi-entity-subaward-risk">
                     {{sectionName}}
-                    <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-org'"></app-common-help-text>
+                    <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-sub-head-' + subSectionId"></app-common-help-text>
                 </span>
             </div>
             <div class="col-auto" *ngIf="entityRiskList?.length && isEditMode">
@@ -80,7 +80,7 @@
                     <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-org-risk-type">
                         <span class="mandatory me-1">*</span>
                         <span>Risk Type</span>
-                        <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-org-risk-type'"></app-common-help-text>
+                        <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-risk-type-' + subSectionId"></app-common-help-text>
                     </label>
                     <app-look-up (selectedResult)="onRiskTypeSelected($event)" [options]="entityRiskTypeOptions"
                         [isExternalArray]="true" [externalArray]="entityRiskTypeList"
@@ -94,7 +94,7 @@
                     <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-org-risk-level">
                         <span class="mandatory me-1">*</span>
                         <span>Risk Level</span>
-                        <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-org-risk-level'"></app-common-help-text>
+                        <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-risk-level-' + subSectionId"></app-common-help-text>
                     </label>
                     <app-look-up (selectedResult)="onRiskLevelSelected($event)" [options]="entityRiskLevelOption"
                         [isExternalArray]="true" [externalArray]="entityRiskLevelList"
@@ -108,7 +108,7 @@
                     <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-org-risk-desc">
                         <span class="mandatory me-1">*</span>
                         <span>Risk Description</span>
-                        <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-org-risk-desc'"></app-common-help-text>
+                        <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-risk-desc-' + subSectionId"></app-common-help-text>
                     </label>
                     <textarea appAutoGrow class="form-control" id="coi-org-risk-desc" rows="1"
                         [(ngModel)]="entityRiskModalDetails.entityRisk.description" appTailingSpaceRemover [limit]="2000"

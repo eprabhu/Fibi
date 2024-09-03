@@ -29,3 +29,24 @@ VALUES(4,"REPORTER_NAME","REPORTER_NAME",now(),"Will Smith");
 ALTER TABLE entity 
 CHANGE COLUMN START_DATE START_DATE VARCHAR(10) NULL DEFAULT NULL ,
 CHANGE COLUMN INCORPORATION_DATE INCORPORATION_DATE VARCHAR(10) NULL DEFAULT NULL ;
+
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2607'  WHERE (ELEMENT_ID = '1712');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2607' WHERE (ELEMENT_ID = '1555');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2607'  WHERE (ELEMENT_ID = '1643');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2607' WHERE (ELEMENT_ID = '1644');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2610' WHERE (ELEMENT_ID = '1715');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2610' WHERE (ELEMENT_ID = '1695');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2610' WHERE (ELEMENT_ID = '1694');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2610' WHERE (ELEMENT_ID = '1693');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2611' WHERE (ELEMENT_ID = '1716');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-entity-organization-lookup' WHERE (ELEMENT_ID = '1697');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2613' WHERE (ELEMENT_ID = '1720');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2613' WHERE (ELEMENT_ID = '1702');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2613' WHERE (ELEMENT_ID = '1701');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2613' WHERE (ELEMENT_ID = '1700');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2614' WHERE (ELEMENT_ID = '1721');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2615' WHERE (ELEMENT_ID = '1722');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2615' WHERE (ELEMENT_ID = '1705');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2615' WHERE (ELEMENT_ID = '1704');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2615' WHERE (ELEMENT_ID = '1703');
+UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2616' WHERE (ELEMENT_ID = '1724');

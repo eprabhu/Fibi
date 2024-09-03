@@ -22,6 +22,8 @@ export class EntityComplianceComponent {
     $subscriptions: Subscription[] = [];
     complianceEntityRiskList: EntityRisk[] = [];
     entityComplianceAttachmentList: EntityAttachment[] = [];
+    riskSubSectionId = 2615;
+    attachmentSubSectionId = 2616;
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _entityComplianceService: EntityComplianceService) { }
 
