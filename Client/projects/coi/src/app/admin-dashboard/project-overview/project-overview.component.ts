@@ -162,7 +162,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
             case 'Pending':
                 return 'yellow-badge';
             case 'Not Required':
-                return 'blue-badge';
+                return 'grey-badge';
             case 'Completed':
                 return 'green-badge';
             default:
@@ -174,12 +174,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         switch (status) {
             case 'Pending':
                 return 'yellow-badge';
-            case '2':
-                return 'blue-badge';
+            case 'N/A':
+                return 'grey-badge';
             case 'Completed':
                 return 'green-badge';
-            case '5':
-                return 'red-badge';
             default:
                 return 'red-badge';
         }

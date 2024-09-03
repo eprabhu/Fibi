@@ -319,9 +319,17 @@ select option {
     border-color: #b7adae !important;
 }
 
+.ck-editor__editable {
+    min-height: 100px; 
+    max-height: 300px;
+    overflow-y: auto
+}
+
 ::ng-deep .ck.ck-editor__editable_inline {
     border: 1px solid #d3d1d1 !important;
-    min-height: 100px;
+    min-height: 100px; 
+    max-height: 300px;
+    overflow-y: auto
 }
 
 .action-btn {

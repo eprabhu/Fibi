@@ -46,6 +46,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     addedCategoryIds: Set<number> = new Set();
     CONFIRMATION_MODAL_ID = 'industry-delete-confirm-modal';
     modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
+    canManageEntity = false;
 
     addIndustryDetails(event) {
         if (event) {
@@ -60,6 +61,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     clearIndustryDetails() {
@@ -292,5 +294,9 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    checkUserHasRight(): void {
+        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
 }

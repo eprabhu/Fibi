@@ -35,7 +35,7 @@ export class ModalDataBsOptions {
      */
     constructor(
         backdrop: boolean | 'static' = 'static',
-        keyboard: boolean = true,
+        keyboard: boolean = false,
         focus: boolean = true
     ) {
         this.backdrop = backdrop;

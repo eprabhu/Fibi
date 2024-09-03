@@ -40,6 +40,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     deletePrimaryKey = null;
     CONFIRMATION_MODAL_ID = 'address-delete-confirm-modal';
     modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
+    canManageEntity = false;
 
     constructor(private _entityOverviewService: EntityOverviewService, private _dataStorService: EntityDataStoreService, private _commonService: CommonService) {
     }
@@ -48,6 +49,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.baseUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     selectedCountryEvent(event: any): void {
@@ -255,5 +257,9 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    checkUserHasRight(): void {
+        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
 }

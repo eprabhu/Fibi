@@ -40,6 +40,10 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false'
     ENTITY_RISK_ADD_UPDATE_MODAL_ID: string = 'entity-risk-add-update-modal';
     entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID, 'Add Risk', 'Cancel', 'lg');
+    canManageEntitySponsor = false;
+    canManageEntityOrganization = false;
+    canManageEntityCompliance = false;
+    canManageEntityRisk = false;
 
     constructor(private _dataStoreService: EntityDataStoreService,
         private _commonService: CommonService, private _entityRiskSectionService: EntityRiskSectionService) { }
@@ -48,6 +52,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         this.listenDataChangeFromStore();
         this.getDataFromStore();
         this.fetchRiskTypes();
+        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -235,6 +240,13 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         await this.fetchRiskLevels(risk?.riskTypeCode);
         this.setSponsorRiskDetails(risk);
         this.openAddEntityRiskModal(true);
+    }
+
+    checkUserHasRight(): void {
+        this.canManageEntitySponsor = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
+        this.canManageEntityOrganization = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
+        this.canManageEntityCompliance = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
+        this.canManageEntityRisk = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME') && this.riskCategoryCode == 'EN';
     }
 
 }
