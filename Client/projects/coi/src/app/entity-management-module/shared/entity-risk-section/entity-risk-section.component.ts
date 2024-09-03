@@ -47,7 +47,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.listenDataChangeFromStore();
         this.getDataFromStore();
-        this.fetchRisk();
+        this.fetchRiskTypes();
     }
 
     ngOnDestroy(): void {
@@ -66,10 +66,6 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
                 this.getDataFromStore();
             }));
-    }
-
-    private fetchRisk(): void {
-        this.fetchRiskTypes();
     }
 
     private fetchRiskLevels(riskTypeCode: string): Promise<any> {
@@ -110,6 +106,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         closeCommonModal(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID);
         setTimeout(() => {
             this.mandatoryList.clear();
+            this.entityRiskLevelList = [];
             this.entityRiskModalDetails = new EntityRiskModalDetails();
             this.riskUpdated.emit(this.entityRiskList);
         }, 200);

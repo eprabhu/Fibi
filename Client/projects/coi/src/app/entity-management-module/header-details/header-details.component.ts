@@ -105,7 +105,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         const ENTITY_DATA: EntireEntityDetails = this.dataStore.getData();
         if (!ENTITY_DATA || isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
-        this.latestPriorName = ENTITY_DATA?.priorNames[0]?.priorNames;
+        this.latestPriorName = ENTITY_DATA?.priorNames?.[0]?.priorNames;
         this.entityTabStatus = ENTITY_DATA.entityTabStatus
         this.getEntityFullAddress();
         this.isEditMode = this.dataStore.getEditMode();
@@ -158,7 +158,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.isOpenVerifyModal = true;
     }
 
-    verifyModalAction(modalAction: ModalActionEvent): void {
+    verifyModalAction(modalAction: ModalActionEvent | null): void {
         this.isOpenVerifyModal = false;
     }
 

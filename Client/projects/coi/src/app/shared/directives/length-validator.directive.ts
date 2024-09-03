@@ -1,4 +1,4 @@
-import { Directive, Input, HostListener, ElementRef, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Directive, Input, HostListener, ElementRef, OnChanges, SimpleChanges, OnInit, OnDestroy } from '@angular/core';
 import { NgModel } from '@angular/forms';
 
 /**
@@ -22,7 +22,7 @@ import { NgModel } from '@angular/forms';
     selector: '[appLengthValidator]',
     providers: [NgModel],
 })
-export class LengthValidatorDirective implements OnInit, OnChanges {
+export class LengthValidatorDirective implements OnInit, OnChanges, OnDestroy {
 
     @Input() limit = 2000;
     @Input() elementId: string;
@@ -48,7 +48,6 @@ export class LengthValidatorDirective implements OnInit, OnChanges {
         }
     }
 
-
     ngOnChanges(changes: SimpleChanges) {
         if (changes.limit) {
             this.hostElement.maxLength = changes.limit.currentValue;
@@ -61,6 +60,10 @@ export class LengthValidatorDirective implements OnInit, OnChanges {
                 this.updateLimitValue();
             });
         }
+    }
+
+    ngOnDestroy(): void {
+        this.removeLimiterHTMLNode();
     }
 
     private addLimiterHTMLNode() {

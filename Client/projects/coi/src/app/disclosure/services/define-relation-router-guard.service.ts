@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of, forkJoin, NextObserver } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { DataStoreService } from './data-store.service';
 import { CommonService } from '../../common/services/common.service';
 import { DefineRelationshipService } from '../define-relationship/services/define-relationship.service';

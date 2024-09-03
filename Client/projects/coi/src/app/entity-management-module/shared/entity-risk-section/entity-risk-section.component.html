@@ -12,7 +12,7 @@
             </div>
             <div class="col-auto" *ngIf="entityRiskList?.length && isEditMode">
                 <button id="add-risk-details-button" class="btn btn-primary fs-14 d-inline-flex"
-                    title="'Click here to add risk details'" aria-label="'Click here to add risk details'"
+                    title="Click here to add risk details" aria-label="Click here to add risk details"
                     (click)="openAddEntityRiskModal(false)">
                     <mat-icon aria-hidden="true">add</mat-icon>
                     <span>Add Risk Details</span>
@@ -22,12 +22,15 @@
         <!-- sub award risks -->
         <div *ngIf="entityRiskList?.length">
             <div *ngFor="let risk of entityRiskList; let isFirst = first; let isLast = last; let riskIndex = index"
-                class="coi-card-regular d-flex align-items-between px-2 py-1 bg-white"
+                class="coi-card-regular d-flex align-items-between p-3 shadow-sm"
                 [ngClass]="isFirst ? 'my-2' : !isLast ? 'mb-2' : ''">
                 <!-- risk type -->
                 <div class="col-md-9 col-lg-10 coi-text-light fs-14">
                     <span>{{risk?.riskType ? risk?.riskType?.description : risk?.riskTypeDescription}} - </span>
-                    <span [ngClass]="risk?.riskLevelCode == 3 ? 'text-danger' : risk?.riskLevelCode == 2 ? 'text-warning' : 'text-success'"
+                    <span [class.text-danger]="risk?.riskLevel?.riskLevelCode == 3 || risk?.riskLevelDescription == 'High'"
+                        [class.text-warning]="risk?.riskLevel?.riskLevelCode == 2 || risk?.riskLevelDescription == 'Medium'"
+                        [class.text-success]="risk?.riskLevel?.riskLevelCode == 1 || risk?.riskLevelDescription == 'Low'"
+                        [class.text-muted]="risk?.riskLevel?.riskLevelCode > 3 || risk?.riskLevelDescription == 'NA' || risk?.riskLevelDescription == 'Undetermined'"
                         class="fw-bold">{{risk?.riskLevel?.description}}</span>
                     <div class="d-flex fs-14 mt-1">
                         <span>{{risk?.description}}</span>
@@ -67,7 +70,7 @@
 
         <!-- header -->
         <ng-container modal-header>
-            <span>Add Entity Risk</span>
+            <span>{{ isEditRisk ? 'Edit' : 'Add' }} {{ sectionName }}</span>
         </ng-container>
 
         <!-- body -->

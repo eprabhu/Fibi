@@ -42,7 +42,7 @@ export class EntityRiskSliderComponent implements OnInit {
 		public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
 		public commonService: CommonService,
 		public _dataFormatPipe: DateFormatPipeWithTimeZone,
-        public coiService: CoiService) { }
+		public coiService: CoiService) {}
 
 	ngOnInit() {
 		this.getRiskLookup();
@@ -50,7 +50,7 @@ export class EntityRiskSliderComponent implements OnInit {
 	}
 
 	clearValidationOnValueChange(TYPE): void {
-		TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode'), this.isStatusEdited = true;
+		TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') : this.riskValidationMap.delete('riskLevelCode'), this.isStatusEdited = true;
 	}
 
 	private getRiskLookup(): void {
@@ -59,20 +59,20 @@ export class EntityRiskSliderComponent implements OnInit {
 		}))
 	}
 
-    checkForModification() {
-        this.$subscriptions.push(this.coiService.riskAlreadyModified({
-            'riskCategoryCode': this.disclosureDetails.riskCategoryCode,
-            'disclosureId': this.disclosureDetails.disclosureId
-        }).subscribe((data: any) => {
-            this.saveRisk();
-        }, err => {
-            if (err.status === 405) {
-                this.coiService.concurrentUpdateAction = 'Disclosure Risk Status';
-            } else {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-            }
-        }))
-    }
+	checkForModification() {
+		this.$subscriptions.push(this.coiService.riskAlreadyModified({
+			'riskCategoryCode': this.disclosureDetails.riskCategoryCode,
+			'disclosureId': this.disclosureDetails.disclosureId
+		}).subscribe((data: any) => {
+			this.saveRisk();
+		}, err => {
+			if (err.status === 405) {
+				this.coiService.concurrentUpdateAction = 'Disclosure Risk Status';
+			} else {
+				this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+			}
+		}))
+	}
 
 	saveRisk(): void {
 		if (this.checkForMandatory()) {
@@ -129,7 +129,7 @@ export class EntityRiskSliderComponent implements OnInit {
 		}
 	}
 
-	private  getDisclosureRiskHistory(flag = true): void {
+	private getDisclosureRiskHistory(flag = true): void {
 		this.$subscriptions.push(this._entityRiskSliderService.getDisclosureRiskHistory(
 			{
 				'disclosureId': this.disclosureDetails.disclosureId,
@@ -139,13 +139,9 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.updateHistoryLogs(data);
 				this.isReadMore = [];
 				if (flag) {
-						openCoiSlider('disclosure-entity-risk-slider');		
+					openCoiSlider('disclosure-entity-risk-slider');
 				}
 			}));
-	}
-
-	modalHeader(projectDetails): string {
-		return `# ${projectDetails.moduleItemId} - ${projectDetails.title}`;
 	}
 
 	private updateHistoryLogs(data: any): void {
@@ -159,44 +155,15 @@ export class EntityRiskSliderComponent implements OnInit {
 		}
 	}
 
-	getDisclosureTitleName(fcoiTypeCode: any): string {
-		switch (fcoiTypeCode) {
-			case '1':
-				return 'FCOI';
-			case '2':
-				return 'Proposal';
-			case '3':
-				return 'Award';
-			case '4':
-				return 'FCOI';
-		}
-	}
-
-	getColorBadges(disclosure): string {
-		if (disclosure?.travelDisclosureId) {
-			return 'bg-travel-clip';
-		}
-		switch (disclosure.fcoiTypeCode) {
-			case '1':
-				return 'bg-fcoi-clip';
-			case '2':
-				return 'bg-proposal-clip';
-			case '3':
-				return 'bg-award-clip';
-			default:
-				return;
-		}
-	}
-
 	isEmptyHistory(): boolean {
 		return isEmptyObject(this.disclosureHistoryLogs);
 	}
 
 	ngOnDestroy(): void {
-        subscriptionHandler(this.$subscriptions);
-    }
+		subscriptionHandler(this.$subscriptions);
+	}
 
-	sortNull() {return 0;}
+	sortNull() { return 0; }
 
 	validateSliderClose() {
 		(this.isStatusEdited || this.riskComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
@@ -216,5 +183,9 @@ export class EntityRiskSliderComponent implements OnInit {
 
 	isFieldValueChanges(): boolean {
 		return !!((this.isStatusEdited || this.riskComment));
-	 }
+	}
+
+	redirectToProjectDetails(): void {
+		this.commonService.redirectToProjectDetails(this.projectDetails.projectId, this.projectDetails.projectTypeCode);
+	}
 }
