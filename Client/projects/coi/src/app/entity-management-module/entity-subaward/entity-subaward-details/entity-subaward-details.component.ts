@@ -7,9 +7,9 @@ import { EntityDataStoreService } from '../../entity-data-store.service';
 import { EntityManagementService } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
-import { EntireEntityDetails, EntityDetails, showEntityToast } from '../../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityTabStatus, showEntityToast } from '../../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { EntitySubAwardService } from '../entity-subaward.service';
+import { EntitySubAwardService, isOrganizationConditionSatisfied } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
@@ -33,6 +33,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     selectedLookupList: any[] = [];
     isRestrictSave = false;
     isEditMode = false;
+    entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(public commonService: CommonService,
                 private _dataStoreService: EntityDataStoreService,
@@ -62,6 +63,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
             this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
         }
         this.isEditMode = this._dataStoreService.getEditMode();
+        this.entityTabStatus = ENTITY_DATA?.entityTabStatus;
     }
 
     private listenDataChangeFromStore(): void {
@@ -106,10 +108,9 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this.entitySubAwardService.organizationDetailsAutoSave(this.autoSaveRO)
                 .subscribe((data: any) => {
-                    this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO = {
-                        entityId: this.entityDetails.entityId,
-                        id: data?.id,
-                    }
+                    this.updateHeaderStatus();
+                    this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityId = this.entityDetails.entityId;
+                    this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.id = data?.id;
                     this.autoSaveRO = {};
                     this.isRestrictSave = false;
                     this._entityManagementService.hasChangesAvailable = false;
@@ -126,6 +127,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this.entitySubAwardService.updateOrganizationDetails(this.autoSaveRO)
                 .subscribe((data: any) => {
+                    this.updateHeaderStatus();
                     this.autoSaveRO = {};
                     this._entityManagementService.hasChangesAvailable = false;
                     this.dataChangeCounter--;
@@ -158,4 +160,12 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationTypeCode = event ? event[0]?.code : null;
         this.changeEvent('organizationTypeCode');
     }
+
+    updateHeaderStatus() {
+       if(isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization)) {
+            this.entityTabStatus.entity_sub_org_info = true;
+            this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
+       }
+    }
+
 }

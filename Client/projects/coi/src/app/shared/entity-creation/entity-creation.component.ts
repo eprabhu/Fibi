@@ -219,7 +219,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                 if(this.autoSaveRO.hasOwnProperty('countryCode')) {
                     this.autoSaveRO['country'] = this.createEntityObj['country'];
                 }
-                this.emitSaveObj.emit(this.autoSaveRO);
+                this.emitSaveObj.emit({'autoSaveRO': this.autoSaveRO, 'isMandatoryFilled': true});
                 this.localDUNS = this.createEntityObj.dunsNumber;
                 this.localCAGE = this.createEntityObj.cageNumber;
                 this.localUEI = this.createEntityObj.ueiNumber;                
