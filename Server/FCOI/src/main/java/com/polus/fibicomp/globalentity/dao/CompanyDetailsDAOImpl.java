@@ -265,7 +265,7 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE EntityIndustryClassification e ").append("SET e.isPrimary = CASE ")
-				.append("WHEN e.entityId = :entityId AND e.isPrimary = 'Y' THEN 'N' ")
+				.append("WHEN e.entityId = :entityId AND e.isPrimary = 'Y' AND e.industryCategoryId != :primaryCatId THEN 'N' ")
 				.append("WHEN e.entityId = :entityId AND e.industryCategoryId = :primaryCatId THEN 'Y' ")
 				.append("ELSE e.isPrimary END, ").append("e.updatedBy = :updatedBy, ")
 				.append("e.updateTimestamp = :updateTimestamp");
@@ -289,6 +289,20 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 		    .where(builder.equal(subqueryRoot.get("industryCategoryCode"), industryCatCode));
 		deleteQuery.where(root.get("industryCategoryId").in(subquery));
 		session.createQuery(deleteQuery).executeUpdate();
+	}
+
+	@Override
+	public void removeCurrentPrimaryCatId(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE EntityIndustryClassification e ").append("SET e.isPrimary = 'N', ")
+				.append("e.updatedBy = :updatedBy, ").append("e.updateTimestamp = :updateTimestamp ")
+				.append("WHERE e.entityId = :entityId AND e.isPrimary = 'Y'");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.executeUpdate();
 	}
 
 }

@@ -106,7 +106,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		List<ForeignNameResponseDTO> foreignNames = companyDetailsService.fetchForeignNames(entityId);
 		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(GENERAL_SECTION_CODE, entityId);
 		Entity entityDetails = entityRepository.findByEntityId(entityId);
-		Map<String, Boolean> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
+		Map<String, Object> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
 		return new ResponseEntity<>(EntityResponseDTO.builder().entityDetails(entityDetails)
 				.entityIndustryClassifications(entityIndustryClassifications)
 				.entityMailingAddresses(entityMailingAddresses).entityRegistrations(entityRegistrations)

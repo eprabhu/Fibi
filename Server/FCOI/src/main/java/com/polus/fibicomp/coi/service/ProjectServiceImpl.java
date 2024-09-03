@@ -37,6 +37,8 @@ public class ProjectServiceImpl implements ProjectService {
 	private static final String DISCLOSURE_NOT_REQUIRED = "Not Required";
 	private static final String DISCLOSURE_COMPLETED = "Completed";
 	private static final String DISCLOSURE_PENDING = "Pending";
+	private static final String DISCLOSURE_TO_BE_DETERMINED = "TO_BE_DETERMINED";
+	private static final String DISCLOSURE_REVIEW_NA = "N/A";
 	private static final String PROJECT_TYPE_PROPOSAL = "Proposal";
 
 	@Autowired
@@ -126,27 +128,31 @@ public class ProjectServiceImpl implements ProjectService {
 						.keyPersonId(project.getKeyPersonId()).keyPersonName(project.getKeyPersonName())
 						.keyPersonRole(project.getKeyPersonRole()).homeUnitName(project.getHomeUnitName())
 						.homeUnitNumber(project.getHomeUnitNumber())
-						.questionnaireCompleted(project.getQuestionnaireCompleted())
+						.certificationFlag(project.getCertificationFlag())
 						.disclosureId(project.getDisclosureId());
-				if (project.getQuestionnaireCompleted()) {
-					if (Boolean.TRUE.equals(project.getDisclsoureNeeded())) {
+				if ("REQUIRED".equals(project.getDisclosureRequiredFlag())) {
 						if (Boolean.TRUE.equals(project.getDisclosureSubmitted())) {
 							dto.disclosureStatus(DISCLOSURE_COMPLETED);
 						} else {
 							dto.disclosureStatus(DISCLOSURE_PENDING);
 						}
 						dto.disclosureReviewStatus(project.getDisclosureReviewStatus());
-					} else if (Boolean.FALSE.equals(project.getDisclsoureNeeded())) {
+					} 
+				else if ("NOT_REQUIRED".equals(project.getDisclosureRequiredFlag())) {
 						dto.disclosureStatus(DISCLOSURE_NOT_REQUIRED);
+						dto.disclosureReviewStatus(DISCLOSURE_REVIEW_NA);
+					}else {
+						dto.disclosureStatus(DISCLOSURE_TO_BE_DETERMINED);
 					}
-				}
 				return dto.build();
 			}).collect(Collectors.toList());
-			if (keyPersonDetails.stream().allMatch(dto -> DISCLOSURE_NOT_REQUIRED.equals(dto.getDisclosureStatus()))
-					|| keyPersonDetails.stream().anyMatch(dto -> dto.getDisclosureStatus() == null)) {
+			if (keyPersonDetails.stream().anyMatch(dto -> DISCLOSURE_TO_BE_DETERMINED.equals(dto.getDisclosureStatus()))) {
 				disclosureSubmissionStatus = null;
+			}
+			else if (keyPersonDetails.stream().allMatch(dto -> DISCLOSURE_NOT_REQUIRED.equals(dto.getDisclosureStatus()))) {
+				disclosureSubmissionStatus = DISCLOSURE_NOT_REQUIRED;
 			} else if (keyPersonDetails.stream()
-					.filter(dto -> !DISCLOSURE_NOT_REQUIRED.equalsIgnoreCase(dto.getDisclosureStatus()))
+					.filter(dto -> ! DISCLOSURE_NOT_REQUIRED.equalsIgnoreCase(dto.getDisclosureStatus()))
 					.allMatch(dto -> DISCLOSURE_COMPLETED.equals(dto.getDisclosureStatus()))) {
 				disclosureSubmissionStatus = DISCLOSURE_COMPLETED;
 			} else {
@@ -154,6 +160,8 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 			if (disclosureSubmissionStatus == null) {
 			    disclosureReviewStatus = null;
+			}else if (disclosureSubmissionStatus.equals(DISCLOSURE_NOT_REQUIRED)) {
+				disclosureReviewStatus = DISCLOSURE_REVIEW_NA;
 			} else if (DISCLOSURE_COMPLETED.equals(disclosureSubmissionStatus) || DISCLOSURE_PENDING.equals(disclosureSubmissionStatus)) {
 				boolean allReviewsCompleted = keyPersonDetails.stream()
 						.filter(dto -> !DISCLOSURE_NOT_REQUIRED.equals(dto.getDisclosureStatus()))

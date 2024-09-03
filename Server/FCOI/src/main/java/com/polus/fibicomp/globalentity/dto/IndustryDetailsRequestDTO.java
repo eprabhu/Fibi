@@ -19,6 +19,8 @@ public class IndustryDetailsRequestDTO {
 	private List<Integer> addedEntityIndustryCatIds;
 	private Integer entityIndustryCatId;
 	private String entityIndustryClassId;
-	private int primaryCatId;
+	private Integer primaryCatId;
+	@Builder.Default
+	private Boolean updatePrimaryCatId = Boolean.FALSE;
 
 }
