@@ -104,8 +104,9 @@
                                         <div class="px-2" title="Click to toggle for primary">
                                             <span class="py-1" aria-label="Disclosures_has_sfi">
                                                 <a *ngIf="industryDetails.primaryCatId == category?.industryCategoryId" class="pl-2"
-                                                    (click)="industryDetails.primaryCatId = ''" tabindex="0"
-                                                    (keyup.enter)="industryDetails.primaryCatId = ''" (keyup.space)="industryDetails.primaryCatId = ''"
+                                                   (click)="clearPrimaryFlag()" tabindex="0"
+                                                   (keyup.enter)="clearPrimaryFlag()"
+                                                   (keyup.space)="clearPrimaryFlag()"
                                                      aria-label="Click here to remove primary" title="Click here to set primary">
                                                     <label class="switch">
                                                         <input id="coi-add-sfi-sponsor-research" type="checkbox" checked>
@@ -113,7 +114,9 @@
                                                     </label>
                                                 </a>
                                                 <a *ngIf="industryDetails.primaryCatId != category?.industryCategoryId" class="pl-2"
-                                                    (click)="industryDetails.primaryCatId = category?.industryCategoryId" (keyup.enter)="industryDetails.primaryCatId = category?.industryCategoryId" (keyup.space)="industryDetails.primaryCatId = category?.industryCategoryId"
+                                                   (click)="setPrimaryCatId(category?.industryCategoryId)"
+                                                   (keyup.enter)="setPrimaryCatId(category?.industryCategoryId)"
+                                                   (keyup.space)="setPrimaryCatId(category?.industryCategoryId)"
                                                      tabindex="0" aria-label="Click here to set primary" title="Click here to set primary">
                                                     <label class="switch">
                                                         <input id="coi-add-sfi-sponsor-research-unchecked" type="checkbox">

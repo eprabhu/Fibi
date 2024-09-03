@@ -43,8 +43,8 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">{{isEditIndex != null ? 'Edit':'Add'}} Registration Details</h4>
-				<button type="button" class="btn-close" id="coi-add-registration-details-close-btn" title="Click here to close" data-bs-dismiss="modal"
-					aria-label="Click here to close"></button>
+				<button type="button" class="btn-close" id="coi-add-registration-details-close-btn"
+                        title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close" (click)="clearRegistrationDetails()"></button>
 			</div>
 			<div class="modal-body">
 				<div class="row">

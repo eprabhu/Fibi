@@ -85,6 +85,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                 if (data) {
                     const registration: any = {};
                     registration.entityRegistrationId = data.entityRegistrationId;
+                    registration.regTypeCode = this.selectedType[0].code;
                     registration.registrationTypeDescription = this.selectedType[0]?.description;
                     registration.regNumber = this.registrationDetails.regNumber;
                     this.entityRegistrations.push(registration);
