@@ -121,7 +121,7 @@ export class CoiService {
     }
 
     riskAlreadyModified(params: any) {
-        return this._http.post(`${this._commonService.baseUrl}/disclosure/riskStatus`, params);
+        return this._http.post(`${this._commonService.baseUrl}/fcoiDisclosure/riskStatus`, params);
     }
 
     getDisclosureProjectList(disclosureId: number) {

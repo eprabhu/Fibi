@@ -331,6 +331,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                 fcoiTypeCode: disclosure?.fcoiTypeCode,
                 disclosureId: disclosure?.coiDisclosureId,
                 personFullName: disclosure?.disclosurePersonFullName,
+                projectHeader: disclosure?.projectHeader,
                 isOpenCountModal: true
             };
         }

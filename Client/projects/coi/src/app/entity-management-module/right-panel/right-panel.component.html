@@ -43,10 +43,10 @@
         <div class="row">
             <div *ngFor="let section of sectionDetails; let isFirst = first" class="p-0">
                 <div class="border-bottom fs-14 mx-2 py-3 d-flex cursor-pointer" [class.border-top]="isFirst"
-                (click)="scrollToSelectedSection(section)" [class.selected-section]="section.sectionId === selectedSectionId">
-                <mat-icon *ngIf="section.sectionId === selectedSectionId" class="ms-2">chevron_left</mat-icon>
-                <span [class.left-padding]="section.sectionId !== selectedSectionId" [class.ms-2]="section.sectionId === selectedSectionId">{{section?.sectionName}}</span>
-            </div>
+                    (click)="scrollToSelectedSection(section)" [class.selected-section]="section.sectionId === selectedSectionId">
+                    <mat-icon *ngIf="section.sectionId === selectedSectionId" class="ms-2">chevron_left</mat-icon>
+                    <span [class.left-padding]="section.sectionId !== selectedSectionId" [class.ms-2]="section.sectionId === selectedSectionId">{{section?.sectionName}}</span>
+                </div>
             </div>
         </div>
     </div>

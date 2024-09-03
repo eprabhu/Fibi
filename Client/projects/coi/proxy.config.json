@@ -95,6 +95,26 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
+    "/fcoiDisclosure/reviseDisclosure": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/fcoiDisclosure/risk": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/fcoiDisclosure/modifyRisk": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/fcoiDisclosure/history": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/fcoiDisclosure/riskStatus": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
     "/getSFIDashboard": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -136,10 +156,6 @@
         "secure": false
     },
     "/evaluateDisclosureQuestionnaire": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/fcoiDisclosure/reviseDisclosure": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
@@ -412,30 +428,6 @@
         "secure": false
     },
     "/loadAwardsForDisclosure": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/disclosure/*": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/disclosure/risk": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/disclosure/modifyRisk": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/disclosure/riskStatus": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/disclosure/history": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/disclosure/historyDashboard": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
