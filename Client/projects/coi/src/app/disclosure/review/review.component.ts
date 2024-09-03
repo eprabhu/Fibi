@@ -4,7 +4,7 @@ import { CoiService } from '../services/coi.service';
 import { ReviewService } from './review.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { GlobalEventNotifier } from '../../common/services/coi-common.interace.ts';
+import { GlobalEventNotifier } from '../../common/services/coi-common.interface';
 import { CommonService } from '../../common/services/common.service';
 
 @Component({

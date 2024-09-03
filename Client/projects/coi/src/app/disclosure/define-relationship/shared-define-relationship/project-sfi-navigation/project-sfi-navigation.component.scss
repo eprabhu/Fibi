@@ -84,16 +84,7 @@
     color: #a8a1a1;
 }
 
-.coi-circle-icons {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-}
-
+.scrollspy-section-activate a,
 .coi-active-scrollspy a {
     background-color: #eef2f4 !important;
 }

@@ -165,7 +165,7 @@ public class CoiDisclosure implements Serializable {
 	private String createUserFullName;
 
 	@Transient
-	private Integer numberOfSFI;
+	private Long numberOfSFI;
 
 	@Transient
 	private String adminGroupName;

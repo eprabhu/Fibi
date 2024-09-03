@@ -1,0 +1,47 @@
+<div class="card p-1 h-100">
+    <div class="min-height-right-panel coi-nav-tab-sticky">
+        <div class="row fs-14 m-2 py-1 rounded-1 matching-card">
+            <div class="col-12">
+                <span class="coi-text-light d-block">DUNS Number</span>
+                <span class="d-flex">
+                    <span class="coi-text-light text-slice" [title]="dunsNumber">
+                        {{dunsNumber}}
+                    </span>
+                    <span class="align-items-center badge d-inline-flex fw-normal fs-13 px-2 rounded-5 text-bg-light-success" *ngIf="dunsNumber && isDunsMatched">
+                        <mat-icon class="me-1 fs-13">check_circle</mat-icon>
+                        <span>Matched</span>
+                    </span>
+                    <span class="align-items-center badge d-inline-flex fw-normal fs-13 px-2 rounded-5 text-bg-light-danger" *ngIf="!dunsNumber || !isDunsMatched">
+                        <mat-icon class="me-1 fs-13">cancel</mat-icon>
+                        <span>UnMatched</span>
+                    </span>
+                </span>
+            </div>
+            <div class="col-12 mt-2">
+                <span class="coi-text-light d-block">Sponsor</span>
+                <span class="align-items-center badge d-inline-flex fs-13 fw-normal px-2 rounded-5" [ngClass]="(tabDetails?.sponsor_feed_status_code == 2 || tabDetails?.sponsor_feed_status_code == 3) ? 'text-bg-light-success' : 'text-bg-light-danger'">
+                    <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.sponsor_feed_status_code == 2 || tabDetails?.sponsor_feed_status_code == 3)">check_circle</mat-icon>
+                    <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.sponsor_feed_status_code == 1 || tabDetails?.sponsor_feed_status_code == 4 || !tabDetails?.sponsor_feed_status_code)">cancel</mat-icon>
+                    <span>{{tabDetails?.sponsor_feed_status ? tabDetails?.sponsor_feed_status : 'Not Ready For Feed'}}</span>
+                </span>
+            </div>
+            <div class="col-12 mt-2">
+                <span class="coi-text-light d-block">Sub-award Organization</span>
+                <span class="align-items-center badge d-inline-flex fs-13 fw-normal px-2 rounded-5" [ngClass]="(tabDetails?.organization_feed_status_code == 2 || tabDetails?.organization_feed_status_code == 3) ? 'text-bg-light-success' : 'text-bg-light-danger'">
+                    <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.organization_feed_status_code == 2 || tabDetails?.organization_feed_status_code == 3)">check_circle</mat-icon>
+                    <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.organization_feed_status_code == 1 || tabDetails?.organization_feed_status_code == 4 || !tabDetails?.organization_feed_status_code)">cancel</mat-icon>
+                    <span>{{tabDetails?.organization_feed_status ? tabDetails?.organization_feed_status : 'Not Ready For Feed'}}</span>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let section of sectionDetails; let isFirst = first" class="p-0">
+                <div class="border-bottom fs-14 mx-2 py-3 d-flex cursor-pointer" [class.border-top]="isFirst"
+                    (click)="scrollToSelectedSection(section)" [class.selected-section]="section.sectionId === selectedSectionId">
+                    <mat-icon *ngIf="section.sectionId === selectedSectionId" class="ms-2">chevron_left</mat-icon>
+                    <span [class.left-padding]="section.sectionId !== selectedSectionId" [class.ms-2]="section.sectionId === selectedSectionId">{{section?.sectionName}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

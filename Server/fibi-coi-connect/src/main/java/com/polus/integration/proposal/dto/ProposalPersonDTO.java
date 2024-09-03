@@ -24,6 +24,10 @@ public class ProposalPersonDTO {
 
 	private BigDecimal percentageOfEffort;
 
+	private String certificationFlag;
+
+	private String disclosureReqFlag;
+
 	private String attribute1Label;
 
 	private String attribute1Value;

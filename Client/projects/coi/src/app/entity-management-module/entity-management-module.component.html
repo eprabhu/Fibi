@@ -1,0 +1,30 @@
+
+<div calss="container">
+    <div class="row mx-0">
+        <div class="col-md-9 col-xl-10">
+            <app-header-details></app-header-details>
+            <div>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <div class="col-md-3 col-xl-2 p-0">
+            <app-right-panel></app-right-panel>
+        </div>
+    </div>
+</div>
+
+<div id="error-toast" class="app-toast invisible alert alert-danger fs-14 px-3">
+    <span class="d-flex">
+     Changes not saved in {{_autoSaveService.getUnsavedChanges()}} <mat-icon class="ms-2 me-2" aria-hidden="true">cloud_off</mat-icon>
+    <!-- <ng-container *ngIf="_autoSaveService.getShowableUnsavedSections().length">
+        <span class="link-primary"
+            *ngFor="let warning of _autoSaveService.getShowableUnsavedSections(); let isLast = last"
+            (click)="_autoSaveService.navigateToError(warning)">{{warning.name}}{{!isLast?',':''}}
+        </span>
+    </ng-container> -->
+     <span class="link-primary" tabindex="0" role="link" (click)="triggerAutoSave()"
+         attr.aria-label="Click here to Retry" title="Click here to Retry">
+         Retry?
+     </span>
+    </span>
+ </div>

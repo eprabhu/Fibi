@@ -1,12 +1,12 @@
 <ng-container *ngIf="isActivateObserverOption">
 	<div tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2" id="scrollspy_view_0" [enableRepeatedLoad]="true"
 		(visibleInViewport)="defineRelationshipService.updateScrollSpyConfig($event, 0);" [initialDelayTimeToObserve]="200"
-		[minHeight]="0" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI801')">
+		minHeight="auto" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI801')">
 		<app-screening-questionnaire-summary></app-screening-questionnaire-summary>
 	</div>
 	<div tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2" id="scrollspy_view_1" [enableRepeatedLoad]="true"
 		(visibleInViewport)="defineRelationshipService.updateScrollSpyConfig($event, 1);" [initialDelayTimeToObserve]="200"
-		[minHeight]="0" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI802')">
+		minHeight="auto" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI802')">
 		<app-sfi-summary></app-sfi-summary>
 	</div>
 	<div id="scrollspy_view_2">
@@ -14,7 +14,7 @@
 	</div>
 	<div tabindex="-1" appVisibleInViewport class="coi-scrollspy-left z-index-2" id="scrollspy_view_3" [enableRepeatedLoad]="true"
 		(visibleInViewport)="defineRelationshipService.updateScrollSpyConfig($event,  coiService.isExpandSummaryBySection['COI803'] ? this.filteredProjectSfiRelationsList.length + 2 : 2);" [initialDelayTimeToObserve]="200"
-		[minHeight]="0" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI804')">
+		minHeight="auto" [intersectionObserverOptions]="intersectionObserverOptions" (focus)="coiService.setActiveSection('COI804')">
 		<app-certify-summary></app-certify-summary>
 	</div>
 </ng-container>

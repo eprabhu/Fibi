@@ -53,11 +53,11 @@ public class COIFinancialEntityDto {
 		this.entityVersionNumber = entityVersionNumber;
 	}
 
-	public String getCoiEntityName() {
+	public String getEntityName() {
 		return coiEntityName;
 	}
 
-	public void setCoiEntityName(String coiEntityName) {
+	public void setEntityName(String coiEntityName) {
 		this.coiEntityName = coiEntityName;
 	}
 
@@ -125,28 +125,28 @@ public class COIFinancialEntityDto {
 		this.involvementEndDate = involvementEndDate;
 	}
 
-	public String getCoiEntityType() {
+	public String getEntityType() {
 		return coiEntityType;
 	}
 
-	public void setCoiEntityType(String CoiEntityType) {
-		this.coiEntityType = CoiEntityType;
+	public void setEntityType(String EntityType) {
+		this.coiEntityType = EntityType;
 	}
 
-	public String getCoiEntityCountry() {
+	public String getEntityCountry() {
 		return coiEntityCountry;
 	}
 
-	public void setCoiEntityCountry(String CoiEntityCountry) {
-		this.coiEntityCountry = CoiEntityCountry;
+	public void setEntityCountry(String EntityCountry) {
+		this.coiEntityCountry = EntityCountry;
 	}
 
-	public String getCoiEntityEmail() {
+	public String getEntityEmail() {
 		return coiEntityEmail;
 	}
 
-	public void setCoiEntityEmail(String CoiEntityEmail) {
-		this.coiEntityEmail = CoiEntityEmail;
+	public void setEntityEmail(String EntityEmail) {
+		this.coiEntityEmail = EntityEmail;
 	}
 
 	public String getRelationshipTypes() {

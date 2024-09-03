@@ -49,14 +49,14 @@ public class DisclosureController {
     @Autowired
     private UserDocumentAuthorization documentAuthorization;
 
-    //  /createDisclosure
+    //  createDisclosure
     @PostMapping
     public ResponseEntity<Object> createDisclosure(@RequestBody CoiDisclosureDto vo) throws JsonProcessingException {
         logger.info("Request for createDisclosure");
         return disclosureService.createDisclosure(vo);
     }
 
-    //loadDisclosure
+    //  loadDisclosure
     @GetMapping("/fetch/{disclosureId}")
     public ResponseEntity<Object> loadDisclosure(@PathVariable("disclosureId") Integer disclosureId) {
         logger.info("Request for loadDisclosure");
@@ -164,10 +164,9 @@ public class DisclosureController {
         return disclosureService.validateConflicts(disclosureId);
     }
 
-    @GetMapping("/validate/{moduleCode}/{moduleItemId}")
-    public ResponseEntity<Object> validateDisclosure(@PathVariable("moduleCode") Integer moduleCode,
-                                                     @PathVariable("moduleItemId") String moduleItemId) {
-        return disclosureService.validateDisclosure(moduleCode, moduleItemId);
+    @PostMapping("/validate")
+    public ResponseEntity<Object> validateDisclosure(@RequestBody CoiDisclosureDto disclosureDto) {
+        return disclosureService.validateDisclosure(disclosureDto);
     }
 
     @PatchMapping("/assignAdmin")
@@ -190,5 +189,10 @@ public class DisclosureController {
     @PutMapping("/integration/syncNeeded")
     public void updateFcoiDisclSyncNeedStatus(@RequestBody DisclosureProjectDto projectDto) {
         disclosureService.updateFcoiDisclSyncNeedStatus(projectDto);
+    }
+
+    @PutMapping("/integration/detachProject")
+    public void detachFcoiDisclProject(@RequestBody DisclosureProjectDto projectDto) {
+        disclosureService.detachFcoiDisclProject(projectDto);
     }
 }

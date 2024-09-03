@@ -4,8 +4,8 @@
         <div class="col-md-12 col-lg-12">
             <div class="align-items-center d-inline-flex">
                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">apartment</mat-icon>
-                <app-no-data-label [valueToShow]="cardDetails?.entityType">
-                    <span class="ms-1 text-slice fw-bold" [title]="cardDetails?.entityName"><span class="coi-text-light">{{cardDetails?.entityName}}</span></span>
+                <app-no-data-label [valueToShow]="entityDetails?.entityName">
+                    <span class="ms-1 text-slice fw-bold" [title]="entityDetails?.entityName"><span class="coi-text-light">{{entityDetails?.entityName}}</span></span>
                 </app-no-data-label>
             </div>
         </div>
@@ -13,8 +13,8 @@
             <div class="col-md-6 col-lg-4 mt-2">
                 <div class="align-items-center d-inline-flex">
                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">domain</mat-icon>
-                    <app-no-data-label [valueToShow]="cardDetails?.entityType">
-                        <span class="ms-1 text-slice fw-bold" [title]="cardDetails?.entityType"><span class="coi-text-light">{{cardDetails?.entityType}}</span></span>
+                    <app-no-data-label [valueToShow]="entityDetails?.entityOwnershipType?.description">
+                        <span class="ms-1 text-slice fw-bold" [title]="entityDetails?.entityOwnershipType?.description"><span class="coi-text-light">{{entityDetails?.entityOwnershipType?.description}}</span></span>
                     </app-no-data-label>
                 </div>
             </div>

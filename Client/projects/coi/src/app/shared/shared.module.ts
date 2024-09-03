@@ -44,7 +44,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
-import { CountModalComponent } from './count-modal/count-modal.component';
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
 import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
 import { SfiService } from '../disclosure/sfi/sfi.service';
@@ -60,6 +59,7 @@ import { CommonInformationComponent } from './common-information/common-informat
 import { VisibleInViewportDirective } from './directives/visibleInViewport.directive';
 import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
 import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
+import { EntityCreationComponent } from './entity-creation/entity-creation.component';
 
 @NgModule({
     imports: [
@@ -84,8 +84,8 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
         DragNDragDirective, CustomTagRemoverPipe, PaginationComponent,
-        CountModalComponent, ActivityComponent, NoDataLabelComponent, RichTextComponent, HostContainerDirective, ReadMoreComponent,
-        TailingSpaceRemoverDirective, CommonHelpTextComponent, CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent],
+        ActivityComponent, NoDataLabelComponent, RichTextComponent, HostContainerDirective, ReadMoreComponent,
+        TailingSpaceRemoverDirective, CommonHelpTextComponent, CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent, EntityCreationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -125,7 +125,6 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         MatIconModule,
         CdkMenuModule,
         MatMenuModule,
-        CountModalComponent,
         ActivityComponent,
         NoDataLabelComponent,
         RichTextComponent,
@@ -137,6 +136,7 @@ import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
         CommonInformationComponent,
         VisibleInViewportDirective,
         SkeletonLoaderComponent,
+        EntityCreationComponent
     ],
 
     providers: [

@@ -1,0 +1,31 @@
+<div class="card rounded-0">
+<app-basic-details [sectionName]="commonService.getSectionName(overViewTab,'BASIC_DETAILS')" [sectionId]="commonService.getSectionId(overViewTab,'BASIC_DETAILS')"></app-basic-details>
+<div class="m-3 p-3 grey-border rounded-2" [id]="commonService.getSectionId(overViewTab,'COMPANY_DETAILS')">
+    <div class="row mb-2">
+        <div class="col-12 d-flex align-items-center coloured-bg-header">
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
+                <mat-icon class="coi-mat-icon-size">apartment</mat-icon>
+            </span>
+            <span class="fs-16 fw-medium" id="coi-entity-company-details">{{commonService.getSectionName(overViewTab,'COMPANY_DETAILS')}}<app-common-help-text [subSectionId]="2603" [elementId]="'coi-entity-company-details'"></app-common-help-text>
+            </span>
+        </div>
+    </div>
+    <div class="mb-2">
+        <app-industry-details></app-industry-details>
+    </div>
+    <div class="mb-2">
+        <app-registration-details></app-registration-details>
+    </div>
+    <div class="mb-2">
+        <app-additional-addresses></app-additional-addresses>
+    </div>
+    <div class="mb-2">
+        <app-other-details></app-other-details>
+    </div>
+</div>
+<app-entity-risk-section [sectionName]="commonService.getSectionName(overViewTab,'ENTITY_RISK')"
+    [sectionId]="commonService.getSectionId(overViewTab,'ENTITY_RISK')" [subSectionId]="riskSubSectionId"
+    [entityRiskList]="entityRisksList" [riskCategoryCode]="'EN'" (riskUpdated)="riskUpdated($event)">
+</app-entity-risk-section>
+<app-other-reference-id  [sectionName]="commonService.getSectionName(overViewTab,'OTHER_REFERENCE_IDS')" [sectionId]="commonService.getSectionId(overViewTab,'OTHER_REFERENCE_IDS')"></app-other-reference-id>
+</div>

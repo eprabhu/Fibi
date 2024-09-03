@@ -24,4 +24,5 @@ public interface ActionTypes {
     String PROJECT_REASSIGN_ADMIN = "PROJECT_REASSIGN_ADMIN"; //Project Disclosure Reassign Administrator
     String FCOI_RESUBMIT = "FCOI_RESUBMIT"; // FCOI Disclosure Resubmit/Re-certify
     String PROJECT_RESUBMIT = "PROJECT_RESUBMIT";  // Project Disclosure Resubmit/Re-certify
+    String PROJECT_NOTIFY = "PROJECT_NOTIFY"; // Incomplete Project Disclosure Notification
 }

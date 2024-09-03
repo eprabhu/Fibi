@@ -32,7 +32,7 @@
     </button>
 </div>
 <div *ngIf="coiService.isExpandSummaryBySection['COI802']">
-    <ng-container *ngIf="isShowNoDataCard">
+    <ng-container *ngIf="isLoading">
         <ng-container *ngIf="coiFinancialEntityDetails?.length">
             <div class="pb-2"
                 *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">

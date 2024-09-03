@@ -188,7 +188,7 @@ public interface FcoiDisclosureDao {
      * @param entityProjectRelation
      * @return
      */
-    List<Integer> fetchDisclProjectEntityRelIds(ProjectEntityRequestDto entityProjectRelation);
+    List<Object[]> fetchDisclProjectEntityRelIds(ProjectEntityRequestDto entityProjectRelation);
 
     /**
      * This method is used to check if SFI is completed for a disclosure
@@ -271,7 +271,7 @@ public interface FcoiDisclosureDao {
      * @param disclosureId
      * @return
      */
-    Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
+    Long getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
 
     /**
      * This method is used to validate
@@ -378,5 +378,11 @@ public interface FcoiDisclosureDao {
      *
      * @param disclComment
      */
-    void saveOrUpdateDisclComment(DisclComment disclComment);
+    DisclComment saveOrUpdateDisclComment(DisclComment disclComment);
+
+    /**
+     *
+     * @param projectDto
+     */
+    void detachFcoiDisclProject(DisclosureProjectDto projectDto);
 }

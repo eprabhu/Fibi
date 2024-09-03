@@ -1,0 +1,275 @@
+<div class="card px-3">
+    <div class="fs-16 my-1">
+        <label for="coi-entity-other-details">
+            Other Details<app-common-help-text [subSectionId]="2606" [elementId]="'coi-entity-other-details'"></app-common-help-text>
+        </label></div>
+    <div class="row mb-md-0 mb-lg-3 mt-3">
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-3 mb-xl-0" tabindex="-1" aria-label="Start Date">
+            <div class="d-flex">
+                <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                    for="coi-other-details-start-date">Start Date
+                    <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-start-date'"></app-common-help-text>
+                </label>
+            </div>
+            <div *ngIf="isEditMode">
+                <span class="dateField w-100">
+                    <input matInput [matDatepicker]="otherDetailsStartDate" id="coi-other-details-start-date"
+                        placeholder="{{datePlaceHolder}}" style="width: 100% !important" (click)="otherDetailsStartDate.open()"
+                        autocomplete="off" class="d-inline-block form-control"
+                        [(ngModel)]="startDate" (ngModelChange)="onDateSelect('START')"
+                        (keypress)="commonService._keyPress($event, 'date')" />
+                    <i title="Click here to select Start date" (click)="otherDetailsStartDate.open()"
+                        (keyup.enter)="otherDetailsStartDate.open()" (keyup.space)="otherDetailsStartDate.open()"
+                        class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click here to select date"></i>
+                    <mat-datepicker #otherDetailsStartDate>
+                    </mat-datepicker>
+                </span>
+            </div>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="entityDetails?.startDate">
+                    <span>{{entityDetails?.startDate | dateFormatter}}</span>
+                </app-no-data-label>
+            </span>
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
+            aria-label="Incorporation Date">
+            <div class="d-flex">
+                <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                    for="coi-other-details-inc-date">Incorporation Date
+                    <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-inc-date'"></app-common-help-text>
+                </label>
+            </div>
+            <div *ngIf="isEditMode">
+                <span class="dateField w-100">
+                    <input matInput [matDatepicker]="incorporationStartDate" id="coi-other-details-inc-date"
+                        placeholder="{{datePlaceHolder}}" style="width: 100% !important"
+                        (click)="incorporationStartDate.open()" autocomplete="off" class="d-inline-block form-control"
+                        [(ngModel)]="incorporationDate" (ngModelChange)="onDateSelect('INCORPORATION')"
+                        (keypress)="commonService._keyPress($event, 'date')" />
+                    <i title="Click here to select incorporation date" (click)="incorporationStartDate.open()"
+                        (keyup.enter)="incorporationStartDate.open()" (keyup.space)="incorporationStartDate.open()"
+                        class="fa fa-calendar fa-large insidePicker hand-cursor"
+                        title="Click here to select incorporation date"></i>
+                    <mat-datepicker #incorporationStartDate>
+                    </mat-datepicker>
+                </span>
+            </div>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="entityDetails?.incorporationDate">
+                    <span>{{entityDetails?.incorporationDate | dateFormatter}}</span>
+                </app-no-data-label>
+            </span>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
+            aria-label="Incorporation In">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-inc-in">Incorporation In
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-inc-in'"></app-common-help-text>
+            </label>
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-inc-in"
+                [(ngModel)]="otherDetailsObj.incorporatedIn" (ngModelChange)="changeEvent('incorporatedIn')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.incorporatedIn"></app-no-data-label>
+            </span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-3 mb-xl-0" tabindex="-1" aria-label="Currency">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help" for="coi-other-details-currency">Currency
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-currency'"></app-common-help-text>
+            </label>
+            <app-look-up *ngIf="isEditMode" (selectedResult)="onCurrencyLookupSelect($event)" [options]="coiCurrencyOptions"
+            [isExternalArray]="true"  [externalArray]="coiCurrencyList"
+            [uniqueId]="'coi-other-details-currency'" [selectedLookUpList]="selectedLookupList">
+            </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="selectedLookupList[0]?.code"></app-no-data-label>
+            </span>
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
+            aria-label="Congressional district">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-cong">Congressional district
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-cong'"></app-common-help-text>
+            </label>
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-cong"
+                [(ngModel)]="otherDetailsObj.congressionalDistrict" (ngModelChange)="changeEvent('congressionalDistrict')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.congressionalDistrict"></app-no-data-label>
+            </span>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
+            aria-label="Federal Employer ID">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-fed-employer">Federal Employer ID
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-fed-employer'"></app-common-help-text>
+            </label>
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-fed-employer"
+                [(ngModel)]="otherDetailsObj.federalEmployerId" (ngModelChange)="changeEvent('federalEmployerId')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.federalEmployerId"></app-no-data-label>
+            </span>
+        </div>
+    </div>
+    <div class="row mb-md-0 mb-lg-3">
+        <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-3 mb-xl-0" tabindex="-1"
+            aria-label="Entity Prior Name">
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-details-prior-name">
+                Entity Prior Name
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-prior-name'"></app-common-help-text>
+            </label>
+            <div class="input-group" *ngIf="isEditMode">
+                <input type="text" class="form-control fs-13" id="coi-other-details-prior-name"
+                 aria-label="Enter phone number" aria-describedby="button-addon2"
+                [(ngModel)]="entityPriorName">
+                <button id="coi-other-details-entity-prior-name-add-btn"
+                    class="btn btn-primary phone-no-btn fs-14 rounded-0 px-2 py-0" title="Click here to add entity prior name"
+                    aria-label="Click here to add entity prior name" (click)="addEntityPriorName()">
+                    <mat-icon aria-hidden="true" class="mt-1">add</mat-icon>
+                </button>
+            </div>
+            <span class="fileChips word-break-all d-block" [class.mt-2]="isEditMode" *ngIf="priorNames?.length" data-bs-toogle>
+                    <span class="align-items-center cursor-pointer d-inline-flex mt-2 px-2 py-1"
+                    data-bs-toggle="modal" data-bs-target="#entityPriorNameVersionModal" >
+                        <span class="me-1 fs-12">{{priorNames[0]?.priorNames}}</span>
+                        <mat-icon class="fileChips-close fs-13" id="coi-prior-name-histort" aria-hidden="true"
+                        title="Entity prior name history">history</mat-icon>
+                    </span>
+            </span>
+        </div>
+        <div class="col-4" tabindex="-1"
+            aria-label="Entity Foreign Name">
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-other-details-foreign-name">
+                Foreign Name
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-foreign-name'"></app-common-help-text>
+            </label>
+            <div class="input-group" *ngIf="isEditMode">
+                <input type="text" class="form-control fs-13" id="coi-other-details-foreign-name"
+                 aria-label="Enter phone number" aria-describedby="button-addon2"
+                [(ngModel)]="entityForeignName">
+                <button id="coi-other-details-entity-alternate-name-add-btn" class="btn btn-primary phone-no-btn fs-14 rounded-0 px-2 py-0"
+                    title="Click here to add entity alternate name" aria-label="Click here to add entity prior name"
+                    (click)="addEntityAlternatename()">
+                    <mat-icon aria-hidden="true" class="mt-1">add</mat-icon>
+                </button>
+            </div>
+            <span class="fileChips word-break-all d-block" [class.mt-2]="isEditMode" *ngIf="foreignNames?.length">
+                <ng-container *ngFor="let foreignName of foreignNames;let i = index;">
+                    <span class="align-items-center cursor-pointer d-inline-flex mt-2 px-2 py-1 me-2">
+                        <span class="me-1 fs-12">{{foreignName?.foreignName}}</span>
+                        <mat-icon *ngIf="isEditMode" class="fileChips-close fs-13 cursor-pointer" id="coi-alternate-name-delete" aria-hidden="true"
+                            (click)="deleteEntityForeignName(foreignName, i)"
+                            title="Remove this entity alternate number">clear</mat-icon>
+                    </span>
+                </ng-container>
+            </span>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0" tabindex="-1"
+            aria-label="Entity Short Name">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-short-name">Entity Short Name
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-short-name'"></app-common-help-text>
+            </label>
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-short-name"
+                [(ngModel)]="otherDetailsObj.shortName" (ngModelChange)="changeEvent('shortName')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.shortName"></app-no-data-label>
+            </span>
+        </div>
+    </div>
+    <div class="row mb-md-0 mb-lg-3">
+        <div class="col-6" tabindex="-1"
+            aria-label="Number of employees">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-employees">Number of employees
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-employees'"></app-common-help-text>
+            </label>
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-employees"
+                [(ngModel)]="otherDetailsObj.numberOfEmployees" (ngModelChange)="changeEvent('numberOfEmployees')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.numberOfEmployees"></app-no-data-label>
+            </span>
+        </div>
+        <div class="col-6" tabindex="-1"
+            aria-label="Entity Business Type">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-bss-status">Entity Business Type
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-bss-status'"></app-common-help-text>
+            </label>
+            <app-look-up *ngIf="isEditMode" (selectedResult)="onBusinessTypeSelect($event)" [options]="businessStatusTypeOptions"
+            [uniqueId]="'coi-other-details-bss-status'" [selectedLookUpList]="selectedBusinessTypeList">
+            </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="selectedBusinessTypeList[0]?.description"></app-no-data-label>
+            </span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12" tabindex="-1" aria-label="Activity Text">
+            <label class="d-block fw-500 fs-14 pb-1 label-text coi-label-help"
+                for="coi-other-details-activity">Activity Text (Business Description)
+                <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-activity'"></app-common-help-text>
+            </label>
+            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-activity"
+                [(ngModel)]="otherDetailsObj.activityText" (ngModelChange)="changeEvent('activityText')">
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="otherDetailsObj.activityText"></app-no-data-label>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!--Prior name version pop-up-->
+<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="entityPriorNameVersionModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Prior Names History</h4>
+                <button type="button" class="btn-close" id="coi-matching-entitiess-modal-close-btn"
+                    title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive coi-table-striped">
+                    <table *ngIf="priorNames.length" class="table table-bordered fs-14 fw-medium table-striped"
+                        id="coi-entity-industry-category">
+                        <thead>
+                            <tr class="header-border table-light" id="coi-entity-industry-category-thead">
+                                <th class="align-middle">
+                                    Prior Name
+                                </th>
+                                <th class="align-middle w-1rem" *ngIf="isEditMode">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="white-bg">
+                            <tr *ngFor="let priorName of priorNames; let i = index"
+                                class="tr-hover">
+                                <td class="table-data fw-600 coi-text-light">
+                                   {{priorName?.priorNames}}
+                                </td>
+                                <td class="align-middle text-center" *ngIf="isEditMode">
+                                    <mat-icon aria-hidden="true" class="cursor-pointer" (click)="confirmDeleteName(priorName, i)">delete</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" id="coi-matching-entitiess-modal-cancel-btn"
+                    data-bs-dismiss="modal" type="button" title="Click here to cancel">Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-coi-modal [modalConfig]="modalConfig" (modalAction)="postConfirmation($event)">
+    <ng-container modal-header>
+        <span>Confirmation</span>
+    </ng-container>
+    <ng-container modal-body>
+        <p>Do you want to delete <strong>{{deletePriorNameObj?.id ? deletePriorNameObj?.priorNames : deleteForgeinNameObj?.foreignName}}</strong>?</p>
+    </ng-container>
+</app-coi-modal>

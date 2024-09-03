@@ -27,6 +27,7 @@ import { EntityDetailsCardComponent } from './entity-details-card/entity-details
 import { SharedProjectDetailsModalComponent } from './shared-project-details-modal/shared-project-details-modal.component';
 import { CoiModalComponent } from './coi-modal/coi-modal.component';
 import { ScrollSpyComponent } from './scroll-spy/scroll-spy.component';
+import { CoiCountModalComponent } from './coi-count-modal/coi-count-modal.component';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { ScrollSpyComponent } from './scroll-spy/scroll-spy.component';
     SharedProjectDetailsModalComponent,
     EntityDetailsCardComponent,
     CoiModalComponent,
-    ScrollSpyComponent
+    ScrollSpyComponent,
+    CoiCountModalComponent
   ],
   exports: [
     NoInformationComponent,
@@ -82,7 +84,8 @@ import { ScrollSpyComponent } from './scroll-spy/scroll-spy.component';
     EntityDetailsCardComponent,
     SharedProjectDetailsModalComponent,
     CoiModalComponent,
-    ScrollSpyComponent
+    ScrollSpyComponent,
+    CoiCountModalComponent
   ]
 })
 export class SharedComponentModule { }

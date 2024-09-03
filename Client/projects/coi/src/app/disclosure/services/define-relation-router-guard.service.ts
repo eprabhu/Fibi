@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of, forkJoin, NextObserver } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { DataStoreService } from './data-store.service';
 import { CommonService } from '../../common/services/common.service';
 import { DefineRelationshipService } from '../define-relationship/services/define-relationship.service';
@@ -20,8 +19,10 @@ export class DefineRelationsRouterGuard implements CanActivate {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
+        // for clearing define relationship datas
+        this._defineRelationshipService.clearAllServiceData();
+        this._defineRelationshipDataStore.setStoreData([]);
         this._defineRelationshipService.isEditMode = _state.url.includes('create-disclosure/relationship');
-        this._defineRelationshipService.coiStatusList = []; // Clear any previous status list
         return new Observable<boolean>((observer: NextObserver<boolean>) => {
             forkJoin([
                 this.getLookups(),
@@ -54,9 +55,7 @@ export class DefineRelationsRouterGuard implements CanActivate {
 
         return this._defineRelationshipService.getProjectRelations(PROJECT_SFI_RELATION).pipe(
             map((res: any) => {
-                if (res) {
-                    this._defineRelationshipDataStore.setStoreData(res);
-                }
+                this._defineRelationshipDataStore.setStoreData(res ? res : []);
                 this._defineRelationshipService.configureScrollSpy();
                 return res; // Return the response for further processing in subscribe
             }),

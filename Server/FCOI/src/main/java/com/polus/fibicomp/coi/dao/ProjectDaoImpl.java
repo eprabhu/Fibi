@@ -140,20 +140,14 @@ public class ProjectDaoImpl implements ProjectDao {
 						.projectStatus(rset.getString("PROJECT_STATUS"))
 						.disclosureSubmitted(rset.getString("DISCLOSURE_COMPLETION_STATUS").equals("Yes") ? Boolean.TRUE
 								: Boolean.FALSE)
-						.questionnaireCompleted(rset.getString("QUESTIONNAIRE_COMPLETION_STATUS").equals("Completed") ? Boolean.TRUE
-								: Boolean.FALSE)
+						.disclosureRequiredFlag(rset.getString("DISCLOSURE_REQUIRED_FLAG"))
+						.certificationFlag(rset.getString("CERTIFICATION_FLAG"))
 						.disclosureReviewStatus(rset.getString("DISCLOSURE_REVIEW_STATUS"))
 						.disclosureId(rset.getInt("DISCLOSURE_ID")).projectType(rset.getString("PROJECT_TYPE"))
 						.projectTypeCode(rset.getString("PROJECT_TYPE_CODE"))
 						.projectBadgeColour(rset.getString("BADGE_COLOR"))
 						.updateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
 						.commentCount(rset.getInt("COMMENT_COUNT")).build();
-				String disclosureNeededStatus = rset.getString("DISCLOSURE_NEEDED_STATUS");
-				if (disclosureNeededStatus.equals(DISCLOSURE_REQUIRED)) {
-					projectOverview.setDisclsoureNeeded(Boolean.TRUE);
-				} else if (disclosureNeededStatus.equals(DISCLOSURE_NOT_REQUIRED)) {
-					projectOverview.setDisclsoureNeeded(Boolean.FALSE);
-				}
 				projectOverviewList.add(projectOverview);
 			}
 		} catch (Exception e) {

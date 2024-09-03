@@ -14,7 +14,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from './common/services/dashboard-guard.service';
 import {NavigationService} from './common/services/navigation.service';
-import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
 import { LeftNavBarComponent } from './common/left-nav-bar/left-nav-bar.component';
 import {MatMenuModule} from "@angular/material/menu";
@@ -27,6 +26,7 @@ import { LoginGuard } from './common/services/guards/login-guard.service';
 import { ElasticConfigService } from './common/services/elastic-config.service';
 import { InformationAndHelpTextService } from './common/services/informationAndHelpText.service';
 import { SharedModule } from './shared/shared.module';
+import { AutoSaveService } from './common/services/auto-save.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -57,7 +57,6 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         HeaderService,
         DashboardGuardService,
         ElasticConfigService,
-        EntityManagementGuardService,
         {
             provide: APP_INITIALIZER,
             useFactory: getappConfiguration,
@@ -74,7 +73,9 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         }, NavigationService,
         AdminRouteGuardService,
         LoginGuard,
-        InformationAndHelpTextService],
+        InformationAndHelpTextService,
+        AutoSaveService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

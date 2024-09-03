@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
 import { ADMIN_DASHBOARD_RIGHTS, CONSULTING_REDIRECT_URL, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
-import { LoginPersonDetails } from '../services/coi-common.interace.ts';
+import { LoginPersonDetails } from '../services/coi-common.interface';
 
 declare const $: any;
 class ChangePassword {
@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     reviseObject: any = { revisionComment: null, disclosureId: null };
     isShowNavBarOverlay = false;
     notesHelpTexts = `You can view and edit notes under the 'My Notes' tab.`;
+    addAttachmentHelpText: string= '';
 
     constructor(public router: Router,
                 public commonService: CommonService, public headerService: HeaderService) {
@@ -198,6 +199,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     closeModal() {
         this.commonService.isOpenAttachmentModal = false;
+        this.addAttachmentHelpText = '';
     }
 
     outputEventAction(event) {
@@ -310,6 +312,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 this.closeAddNote();
             }
         }
+    }
+
+    openAttachmentModal(){
+        this.commonService.isOpenAttachmentModal = true
+        this.addAttachmentHelpText = `You can view and edit attachments under the 'My Attachments' tab.`;
     }
 
 }

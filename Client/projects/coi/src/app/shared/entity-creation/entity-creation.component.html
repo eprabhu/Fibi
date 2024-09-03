@@ -1,0 +1,318 @@
+
+        <div class="row mb-3">
+            <div class="col-md-12 col-lg-9 mb-sm-2 mb-md-2 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-name">
+                    <span *ngIf="isEditMode" class="mandatory me-1">*</span>
+                    Entity Name
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-name'"></app-common-help-text>
+                </label>
+                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-name"
+                [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
+                [(ngModel)]="createEntityObj.entityName" (ngModelChange)="changeEvent('entityName')"
+                appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                <span *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('entityName')}}
+                </span>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.entityName"></app-no-data-label>
+                </span>
+            </div>
+            <div class="col-md-12 col-lg-3">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-ownership-type">
+                    <span *ngIf="isEditMode" class="mandatory me-1">*</span>
+                    Ownership Type
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-ownership-type'"></app-common-help-text>
+                </label>
+                <app-look-up *ngIf="isEditMode" (selectedResult)="onOwnerShipTypeSelect($event)" [options]="ownershipTypOptions"
+                    [isError]="mandatoryList?.has('ownershipType')"
+                    [uniqueId]="'coi-entity-ownership-type'" [selectedLookUpList]="selectedOwnerShipType">
+                </app-look-up>
+                <span *ngIf="mandatoryList?.has('ownershipType')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('ownershipType')}}
+                </span>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="selectedOwnerShipType[0]?.description"></app-no-data-label>
+                </span>
+            </div>
+        </div>
+        <div class="row mx-0 py-3">
+            <div class="card" [class.grey-background]="!isCreateScreen">
+                <div class="color-black mb-2">
+                    <label class="form-check-label colour-black relation-header px-2 fs-14 label-text coi-label-help" [class.grey-background]="!isCreateScreen">Primary Address
+                    </label>
+                </div>
+                <div class="row mt-2 mb-3">
+                    <div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-address-1">
+                            <span *ngIf="isEditMode" class="mandatory me-1">*</span>
+                            Address Line 1
+                            <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-address-1'"></app-common-help-text>
+                        </label>
+                        <ng-container *ngIf="isEditMode">
+                            <input type="text" class="form-control fs-13" id="coi-entity-address-1"
+                                   [ngClass]="(mandatoryList?.has('primaryAddressLine1')) ? 'is-invalid d-block' : ''"
+                                   [(ngModel)]="createEntityObj.primaryAddressLine1" (ngModelChange)="changeEvent('primaryAddressLine1')"
+                                   appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                            <span *ngIf="mandatoryList?.has('primaryAddressLine1')" class="invalid-feedback d-inline fs-13">
+                            {{mandatoryList?.get('primaryAddressLine1')}}
+                        </span>
+                        </ng-container>
+                        <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                            <app-no-data-label [valueToShow]="createEntityObj.primaryAddressLine1"></app-no-data-label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-address-2">
+                            Address Line 2
+                            <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-address-2'"></app-common-help-text>
+                        </label>
+                        <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-address-2"
+                        [(ngModel)]="createEntityObj.primaryAddressLine2"
+                        (ngModelChange)="changeEvent('primaryAddressLine2')"
+                        appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                        <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                            <app-no-data-label [valueToShow]="createEntityObj.primaryAddressLine2"></app-no-data-label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12 col-lg-6 col-xl-3 mb-md-3 mb-xl-0">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-city">
+                            <span *ngIf="isEditMode" class="mandatory me-1">*</span>City
+                            <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-city'"></app-common-help-text>
+                        </label>
+                        <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-city"
+                        [ngClass]="(mandatoryList?.has('city')) ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="createEntityObj.city" (ngModelChange)="changeEvent('city')"
+                        appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                        <span *ngIf="mandatoryList?.has('city')" class="invalid-feedback d-inline fs-13">
+                            {{mandatoryList?.get('city')}}
+                        </span>
+                        <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                            <app-no-data-label [valueToShow]="createEntityObj.city"></app-no-data-label>
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-3 mb-md-3 mb-xl-0">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-state">
+                            <span *ngIf="isEditMode" class="mandatory me-1">*</span>State/Province/Region
+                            <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-state'"></app-common-help-text>
+                        </label>
+                        <ng-container *ngIf="isEditMode">
+                            <input type="text" class="form-control fs-13" id="coi-entity-state"
+                                   [ngClass]="(mandatoryList?.has('state')) ? 'is-invalid d-block' : ''"
+                                   [(ngModel)]="createEntityObj.state" (ngModelChange)="changeEvent('state')"
+                                   appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                            <span *ngIf="mandatoryList?.has('state')" class="invalid-feedback  d-inline fs-13">
+                            {{mandatoryList?.get('state')}}
+                        </span>
+                        </ng-container>
+                        <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                            <app-no-data-label [valueToShow]="createEntityObj.state"></app-no-data-label>
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-3 mb-md-3 mb-lg-0">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-postCode">
+                            <span *ngIf="isEditMode" class="mandatory me-1">*</span>ZIP/Postal Code
+                            <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-postCode'"></app-common-help-text>
+                        </label>
+                        <ng-container *ngIf="isEditMode">
+                            <input type="text" class="form-control fs-13" id="coi-entity-postCode"
+                                   [ngClass]="(mandatoryList?.has('postCode')) ? 'is-invalid d-block' : ''"
+                                   [(ngModel)]="createEntityObj.postCode" (ngModelChange)="changeEvent('postCode')"
+                                   appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                            <span *ngIf="mandatoryList?.has('postCode')" class="invalid-feedback  d-inline fs-13">
+                            {{mandatoryList?.get('postCode')}}
+                        </span>
+                        </ng-container>
+                        <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                            <app-no-data-label [valueToShow]="createEntityObj.postCode"></app-no-data-label>
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-3">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-country">
+                            <span *ngIf="isEditMode" class="mandatory me-1">*</span>Country
+                            <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-country'"></app-common-help-text>
+                        </label>
+                        <ng-container *ngIf="isEditMode">
+                            <app-endpoint-search [clearField]="clearCountryField" [uniqueId]="'coi-entity-country'"
+                                                 [httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
+                                                 class="w-100 mt-4" [isError]="mandatoryList?.has('country')">
+                            </app-endpoint-search>
+                            <span *ngIf="mandatoryList?.has('country')" class="invalid-feedback  d-inline fs-13">
+                            {{mandatoryList?.get('country')}}
+                        </span>
+                        </ng-container>
+                        <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                            <app-no-data-label [valueToShow]="countrySearchOptions.defaultValue"></app-no-data-label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-md-0 mb-lg-3">
+            <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-xl-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-phone">
+                    Phone
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-phone'"></app-common-help-text>
+                </label>
+                <ng-container *ngIf="isEditMode">
+                    <input type="text" class="form-control fs-13"  id="coi-entity-phone"
+                           [ngClass]="(mandatoryList?.has('phone')) ? 'is-invalid d-block' : ''"
+                           (focusout)="validateAndAddPhoneNumber()"
+                           [(ngModel)]="createEntityObj.phoneNumber" (ngModelChange)="clearValidation('phone')" (keypress)="checkForValidPhoneNumber($event)"
+                           appLengthValidator [limit]=15 [styleList]="'float-end word-count'">
+                    <span *ngIf="mandatoryList?.has('phone')" class="invalid-feedback  d-inline fs-13">
+                    {{mandatoryList?.get('phone')}}
+                </span>
+                </ng-container>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.phoneNumber"></app-no-data-label>
+                </span>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-certifiedEmail">
+                    Email Address
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-certifiedEmail'"></app-common-help-text>
+                </label>
+                <ng-container *ngIf="isEditMode">
+                    <input type="text" class="form-control fs-13" id="coi-entity-certifiedEmail"
+                           [ngClass]="(mandatoryList?.has('certifiedEmail')) ? 'is-invalid d-block' : ''"
+                           [(ngModel)]="createEntityObj.certifiedEmail"
+                           (focusout)="validateEmail()" (ngModelChange)="clearValidation('certifiedEmail')">
+                    <div *ngIf="mandatoryList?.has('certifiedEmail')" class="invalid-feedback d-block fs-13">
+                        {{mandatoryList?.get('certifiedEmail')}}
+                    </div>
+                </ng-container>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.certifiedEmail"></app-no-data-label>
+                </span>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-websiteAddress">
+                    Website
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-websiteAddress'"></app-common-help-text>
+                </label>
+                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-websiteAddress" [(ngModel)]="createEntityObj.websiteAddress" (ngModelChange)="changeEvent('websiteAddress')">
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.websiteAddress"></app-no-data-label>
+                </span>
+            </div>
+        </div>
+        <div class="row mb-md-0 mb-lg-3">
+            <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-xl-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-dunsNumber">
+                    DUNS Number
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-dunsNumber'"></app-common-help-text>
+                </label>
+                <ng-container *ngIf="isEditMode">
+                    <input type="text" class="form-control fs-13" id="coi-entity-dunsNumber" [(ngModel)]="createEntityObj.dunsNumber"
+                           [ngClass]="(mandatoryList?.has('duns')) ? 'is-invalid d-block' : ''"
+                           (ngModelChange)="clearValidation('duns');numberChangeEvent()"
+                           appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                    <span *ngIf="mandatoryList?.has('duns')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('duns')}}
+                </span>
+                </ng-container>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.dunsNumber"></app-no-data-label>
+                </span>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-UEI">
+                    UEI Number
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-UEI'"></app-common-help-text>
+                </label>
+                <ng-container *ngIf="isEditMode">
+                    <input type="text" class="form-control fs-13" id="coi-entity-UEI" [(ngModel)]="createEntityObj.ueiNumber"
+                           [ngClass]="(mandatoryList?.has('uei')) ? 'is-invalid d-block' : ''"
+                           (ngModelChange)="clearValidation('uei');numberChangeEvent()"
+                           appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                    <span *ngIf="mandatoryList?.has('uei')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('uei')}}
+                </span>
+                </ng-container>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.ueiNumber"></app-no-data-label></span>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-CAGE">
+                    CAGE Number
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-CAGE'"></app-common-help-text>
+                </label>
+                <ng-container *ngIf="isEditMode">
+                    <input type="text" class="form-control fs-13" id="coi-entity-CAGE"
+                           [ngClass]="(mandatoryList?.has('cage')) ? 'is-invalid d-block' : ''"
+                           [(ngModel)]="createEntityObj.cageNumber" (ngModelChange)="clearValidation('cage');numberChangeEvent()"
+                           appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                    <span *ngIf="mandatoryList?.has('cage')" class="invalid-feedback d-inline fs-13">
+                    {{mandatoryList?.get('cage')}}
+                </span>
+                </ng-container>
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.cageNumber"></app-no-data-label></span>
+            </div>
+        </div>
+        <div class="row mb-md-0 mb-lg-3 mb-xl-0" *ngIf="!isCreateScreen">
+            <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-xl-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-human-assurance">
+                    Human Sub Assurance
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-human-assurance'"></app-common-help-text>
+                </label>
+                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-human-assurance"
+                [(ngModel)]="createEntityObj.humanSubAssurance" (ngModelChange)="changeEvent('humanSubAssurance')"
+                appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.humanSubAssurance"></app-no-data-label></span>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-animal-assurance">
+                    Animal Welfare Assurance
+                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-animal-assurance'"></app-common-help-text>
+                </label>
+                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-animal-assurance"
+                [(ngModel)]="createEntityObj.anumalWelfareAssurance" (ngModelChange)="changeEvent('anumalWelfareAssurance')"
+                appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.anumalWelfareAssurance"></app-no-data-label></span>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xl-4 mb-md-3 mb-lg-0">
+                <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-aaalac">
+                   AAALAC (Animal Accreditaion)
+                   <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-aaalac'"></app-common-help-text>
+                </label>
+                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-aaalac"
+                [(ngModel)]="createEntityObj.animalAccreditation" (ngModelChange)="changeEvent('animalAccreditation')"
+                appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+
+                <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                    <app-no-data-label [valueToShow]="createEntityObj.animalAccreditation"></app-no-data-label></span>
+            </div>
+        </div>
+
+        <div class="modal fade mySkinDialog" data-bs-backdrop="static" [id]="'coi-entity-confirmation-modal'" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Confirmation
+                        </h5>
+                        <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Click to close">
+                        </button>
+                    </div>
+                    <div class="modal-body title-descriptions">
+                        <p>Do you want to discard changes and leave the page?</p>
+                    </div>
+                    <div class="modal-footer mx-2">
+                        <button type="button" class="btn btn-outline-secondary fs-14"
+                            (click)="leaveSlider()">
+                            Leave Page
+                        </button>
+                        <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
+                            Stay On Page
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>

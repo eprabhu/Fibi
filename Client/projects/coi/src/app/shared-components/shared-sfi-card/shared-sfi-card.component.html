@@ -34,11 +34,11 @@
             <div class="col-lg-12 col-xl-9 col-md-12">
                 <div class="row">
                     <div tabindex="-1" class="col-lg-3 col-md-6 mb-lg-0 mb-sm-2 mb-2">
-                        <label class="coi-text-dark d-block">Entity Type</label>
+                        <label class="coi-text-dark d-block">Ownership Type</label>
                         <span class="coi-text-light">
-                            <app-no-data-label [valueToShow]="SFIObject?.entityType">
-                                <span class="coi-text-light" [attr.aria-label]="SFIObject?.entityType" id="coi-shared-sfi-card-value-entity-type">
-                                    {{SFIObject?.entityType}}</span>
+                            <app-no-data-label [valueToShow]="reqObject?.coiEntity?.entityOwnershipType?.description">
+                                <span class="coi-text-light" [attr.aria-label]="reqObject?.coiEntity?.entityOwnershipType?.description" id="coi-shared-sfi-card-value-entity-type">
+                                    {{reqObject?.coiEntity?.entityOwnershipType?.description}}</span>
                             </app-no-data-label>
                         </span>
                     </div>

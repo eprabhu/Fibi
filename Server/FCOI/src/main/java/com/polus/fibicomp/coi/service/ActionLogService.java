@@ -9,7 +9,7 @@ import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCommonDto;
@@ -23,7 +23,7 @@ public interface ActionLogService {
      * @param coiEntity
      * @param comment
      */
-    void saveEntityActionLog(String actionLogTypeCode, CoiEntity coiEntity, String comment);
+    void saveEntityActionLog(String actionLogTypeCode, Entity coiEntity, String comment);
 
     /**
      *
