@@ -20,6 +20,6 @@ public class RegistrationDetailsRequestDTO {
 	private String regTypeCode;
 	private String regNumber;
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private String isActive;
+	private Boolean isActive;
 
 }

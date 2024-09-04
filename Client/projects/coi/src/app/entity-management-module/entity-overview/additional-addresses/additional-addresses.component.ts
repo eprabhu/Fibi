@@ -65,7 +65,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     clearAdditionalAddress() {
         this.mandatoryList.clear();
         this.additionalAddressObj = new AdditionalAddress();
-        this.countrySearchOptions = getEndPointOptionsForCountry();
+        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.isEditIndex = null;
         this.addressTypeDefaultValue = '';
         this.selectAddressType = null;
@@ -193,7 +193,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         this.additionalAddressObj.addressLine2 = address.addressLine2;
         this.additionalAddressObj.countryCode = address.countryCode;
         this.selectedCountry = address.country;
-        this.countrySearchOptions = getEndPointOptionsForCountry();
+        this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.countrySearchOptions.defaultValue = address.country.countryName;
         this.additionalAddressObj.city = address.city;
         this.additionalAddressObj.state = address.state;
