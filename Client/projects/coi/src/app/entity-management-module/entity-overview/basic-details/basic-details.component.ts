@@ -5,6 +5,7 @@ import { EntityDataStoreService } from '../../entity-data-store.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subject, Subscription } from 'rxjs';
 import { EntityManagementService } from '../../entity-management.service';
+import {CommonService} from '../../../common/services/common.service';
 
 @Component({
   selector: 'app-basic-details',
@@ -23,11 +24,12 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     entityCountryDetails: Country = new Country();
     entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
-    constructor(public dataStore: EntityDataStoreService, private _entityManagementService: EntityManagementService) {}
+    constructor(public dataStore: EntityDataStoreService, private _entityManagementService: EntityManagementService, private _commonService: CommonService) {}
 
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     saveBasicEntityDetails(event) {
@@ -91,6 +93,13 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    checkUserHasRight(): void {
+        const hasRight = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        if (!hasRight) {
+            this.isEditMode = false;
+        }
     }
 
 }

@@ -47,6 +47,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.autoSaveSubscribe();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -166,6 +167,13 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
             this.entityTabStatus.entity_sub_org_info = true;
             this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
        }
+    }
+
+    checkUserHasRight(): void {
+        const hasRight = this.commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME');
+        if (!hasRight) {
+            this.isEditMode = false;
+        }
     }
 
 }

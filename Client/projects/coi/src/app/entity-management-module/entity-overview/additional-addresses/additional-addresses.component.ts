@@ -260,6 +260,9 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     }
 
     checkUserHasRight(): void {
-        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        const hasRight = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        if (!hasRight) {
+            this.isEditMode = false;
+        }
     }
 }

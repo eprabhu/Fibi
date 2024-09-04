@@ -45,6 +45,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.autoSaveSubscribe();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -170,5 +171,12 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                 this.getDataFromStore();
             })
         );
+    }
+
+    checkUserHasRight(): void {
+        const hasRight = this.commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME');
+        if(!hasRight) {
+            this.isEditMode = false;
+        }
     }
 }
