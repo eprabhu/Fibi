@@ -35,10 +35,10 @@ public interface CompanyDetailsDAO {
 
 	public int saveForeignName(EntityForeignName entity);
 
-	public void updateIndustryDetailsPrimaryFlag(int primaryCatId, Integer entityId);
-
 	public void deleteIndustryDetailsByCatCode(String industryCatCode);
 
 	public void removeCurrentPrimaryCatId(Integer entityId);
+
+	public void setNewPrimaryCatId(Integer entityId, Integer primaryCatId);
 
 }

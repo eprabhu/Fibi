@@ -101,18 +101,18 @@ public class CompanyDetailsServiceImpl implements CompanyDetailsService {
 			entity.setIsPrimary(false);
 			comapanyDetailsDAO.saveIndustryDetails(entity);
 		});
-		if (dto.getPrimaryCatId() != null) {
-			updateIndustryDetailsPrimaryFlag(dto.getPrimaryCatId(), dto.getEntityId());
-		}
-		else if (Boolean.TRUE.equals(dto.getUpdatePrimaryCatId())) {
+		if (Boolean.TRUE.equals(dto.getUpdatePrimaryCatId())) {
 			removeCurrentPrimaryCatId(dto.getEntityId());
+			if (dto.getPrimaryCatId() != null) {
+				updateIndustryDetailsPrimaryFlag(dto.getPrimaryCatId(), dto.getEntityId());
+			}
 		}
 		return new ResponseEntity<>(commonDao.convertObjectToJSON("Industry details updated successfully"),
 				HttpStatus.OK);
 	}
 
 	private void updateIndustryDetailsPrimaryFlag(Integer primaryCatId, Integer entityId) {
-		comapanyDetailsDAO.updateIndustryDetailsPrimaryFlag(primaryCatId, entityId);
+		comapanyDetailsDAO.setNewPrimaryCatId(entityId, primaryCatId);
 	}
 
 	@Override
