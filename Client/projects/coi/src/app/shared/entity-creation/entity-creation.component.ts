@@ -68,35 +68,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         this.triggerExternalSave();
         this.triggerNumberCheck();
         this.autoSaveSubscribe();
-        this.subscribeManualAutoSaveEvent();
         this.setDefaultValues();
-    }
-
-    subscribeManualAutoSaveEvent() {
-        this.$subscriptions.push(this.manualAutoSaveEvent.subscribe((event: any) => {
-            if(event) {
-                let createEntityObj = new Create_Entity();
-                let test = this.createEntityObj.entityOwnerShip;
-                createEntityObj.entityName = event?.orgDetails?.primaryName;
-                createEntityObj.primaryAddressLine1 = event?.orgDetails?.primaryAddress?.streetAddress?.line1;
-                createEntityObj.primaryAddressLine2 = event?.orgDetails?.primaryAddress?.streetAddress?.line2;
-                createEntityObj.city = event?.orgDetails?.primaryAddress?.addressLocality?.name;
-                createEntityObj.state = event?.orgDetails?.primaryAddress?.addressRegion?.abbreviatedName;
-                createEntityObj.countryCode = event?.orgDetails?.primaryAddress?.addressCountry?.isoAlpha2Code;
-                createEntityObj.postCode = event?.orgDetails?.primaryAddress?.postalCode;
-                createEntityObj.dunsNumber = event?.orgDetails?.duns;
-                createEntityObj.phoneNumber = event?.orgDetails?.telephone[0]?.telephoneNumber;
-                createEntityObj.entityOwnershipTypeCode = this.createEntityObj.entityOwnershipTypeCode;
-                createEntityObj.isDunsMatched = event?.isDunsMatched;
-                this.createEntityObj = deepCloneObject(createEntityObj);
-                delete this.createEntityObj['entityOwnerShip'];
-                Object.keys(this.createEntityObj).forEach((ele) => {
-                    this.changeEvent(ele);
-                })
-                this.createEntityObj.entityOwnerShip = test;
-                this.createEntityObj.country ={'countryTwoCode':event?.orgDetails?.primaryAddress?.addressCountry?.isoAlpha2Code, 'countryName': event?.orgDetails?.primaryAddress?.addressCountry?.name}
-            }
-        }))
     }
 
     setDefaultValues() {
