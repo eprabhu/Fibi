@@ -583,7 +583,7 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     }
 
     fetchAllNotifications(notificationRequest) {
-        return this._http.post(this.baseUrl + '/getNotifications', notificationRequest);
+        return this._http.post(this.fibiUrl + '/getNotifications', notificationRequest);
     }
 
     getSectionName(tabName, section) {
