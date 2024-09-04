@@ -4,7 +4,7 @@ UPDATE dyn_section_config SET DESCRIPTION = 'Entity Overview' WHERE (SECTION_COD
 INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
 VALUES ('31', 'Disclosure Synced', 'Disclosure Synced', now(), 'quickstart');
 
-INSERT INTO notification_type(NOTIFICATION_TYPE_ID,MODULE_CODE,SUB_MODULE_CODE,DESCRIPTION,SUBJECT,MESSAGE,PROMPT_USER,IS_ACTIVE,CREATE_USER,CREATE_TIMESTAMP,UPDATE_USER,UPDATE_TIMESTAMP) VALUES(8014,8,0,"Notify Incomplete Disclosure","Action required: Disclosure Submission Request","<p>Dear {COI_DISCL_PROJECT#REPORTER_NAME},</p> <p>We kindly request you to complete and submit your disclosure for the following:</p> <p><strong>Project:</strong> {COI_DISCL_PROJECT#PROJECT_ID} - {COI_DISCL_PROJECT#PROJECT_TITLE}</p> <p><strong>Disclosure Status:</strong> {COI_DISCL_PROJECT#DISCLOSURE_STATUS}</p> <p><br /><span >Please login to COI and access your disclosure at {APPLICATION_URL} to complete and submit your disclosure.</span></p> <p>&nbsp;</p>","Y","Y","quickstart",now(),"ADMIN"now());
+INSERT INTO notification_type(NOTIFICATION_TYPE_ID,MODULE_CODE,SUB_MODULE_CODE,DESCRIPTION,SUBJECT,MESSAGE,PROMPT_USER,IS_ACTIVE,CREATE_USER,CREATE_TIMESTAMP,UPDATE_USER,UPDATE_TIMESTAMP) VALUES(8014,8,0,"Notify Incomplete Disclosure","Action required: Disclosure Submission Request","<p>Dear {COI_DISCL_PROJECT#REPORTER_NAME},</p> <p>We kindly request you to complete and submit your disclosure for the following:</p> <p><strong>Project:</strong> {COI_DISCL_PROJECT#PROJECT_ID} - {COI_DISCL_PROJECT#PROJECT_TITLE}</p> <p><strong>Disclosure Status:</strong> {COI_DISCL_PROJECT#DISCLOSURE_STATUS}</p> <p><br /><span >Please login to COI and access your disclosure at {APPLICATION_URL} to complete and submit your disclosure.</span></p> <p>&nbsp;</p>","Y","Y","quickstart",now(),"ADMIN",now());
 
 INSERT INTO module_action_type(MODULE_ACTION_TYPE_ID,ACTION_TYPE,MODULE_CODE,SUB_MODULE_CODE,IS_ACTIVE,DESCRIPTION,UPDATE_TIMESTAMP,UPDATE_USER) VALUES(23,"PROJECT_NOTIFY",8,0,"Y","Notify Incomplete ProjectDisclosure",now(),"ADMIN");
 INSERT INTO notify_action_type_map(NOTIFICATION_TYPE_ID,MODULE_ACTION_TYPE_ID,UPDATE_TIMESTAMP, UPDATE_USER)VALUES(8014,23,now(), "quickstart");
@@ -30,28 +30,27 @@ ALTER TABLE entity
 CHANGE COLUMN START_DATE START_DATE VARCHAR(10) NULL DEFAULT NULL ,
 CHANGE COLUMN INCORPORATION_DATE INCORPORATION_DATE VARCHAR(10) NULL DEFAULT NULL ;
 
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2607'  WHERE (ELEMENT_ID = '1712');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2607' WHERE (ELEMENT_ID = '1555');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2607'  WHERE (ELEMENT_ID = '1643');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2607' WHERE (ELEMENT_ID = '1644');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2610' WHERE (ELEMENT_ID = '1715');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2610' WHERE (ELEMENT_ID = '1695');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2610' WHERE (ELEMENT_ID = '1694');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2610' WHERE (ELEMENT_ID = '1693');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2611' WHERE (ELEMENT_ID = '1716');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-entity-organization-lookup' WHERE (ELEMENT_ID = '1697');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2613' WHERE (ELEMENT_ID = '1720');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2613' WHERE (ELEMENT_ID = '1702');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2613' WHERE (ELEMENT_ID = '1701');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2613' WHERE (ELEMENT_ID = '1700');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2614' WHERE (ELEMENT_ID = '1721');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2615' WHERE (ELEMENT_ID = '1722');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-desc-2615' WHERE (ELEMENT_ID = '1705');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-level-2615' WHERE (ELEMENT_ID = '1704');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-risk-type-2615' WHERE (ELEMENT_ID = '1703');
-UPDATE dyn_element_config SET UI_REFERENCE_ID = 'coi-sub-head-2616' WHERE (ELEMENT_ID = '1724');
 
 ALTER TABLE entity_telephone 
 MODIFY COLUMN TELEPHONE_NUMBER BIGINT;
 
 ALTER TABLE industry_category_code CHANGE COLUMN INDUSTRY_CATEGORY_ID INDUSTRY_CATEGORY_ID INT NOT NULL AUTO_INCREMENT ;
+
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1643');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1583');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1584');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1622');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1603');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1604');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1605');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1625');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1626');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1612');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1628');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1629');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1613');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1614');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1615');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1630');
+DELETE FROM dyn_element_config WHERE (ELEMENT_ID = '1631');
+
