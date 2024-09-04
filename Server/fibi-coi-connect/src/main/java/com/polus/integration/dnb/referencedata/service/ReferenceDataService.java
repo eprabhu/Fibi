@@ -33,7 +33,7 @@ public class ReferenceDataService {
 		try {
 			String apiUrl = buildApiUrl(code);
 			ArrayList<DnBReferenceDataDTO> responseReferenceData = callDnBReferenceAPI(apiUrl);
-			responseReferenceData = filteredRequiredIndustryType(responseReferenceData);
+			//responseReferenceData = filteredRequiredIndustryType(responseReferenceData);
 			saveIndustryType(responseReferenceData);
 
 			saveIndustryCodeForType(responseReferenceData);
@@ -205,10 +205,15 @@ public class ReferenceDataService {
 
 			String apiUrl = buildApiUrl(type.getCode());
 			ArrayList<DnBReferenceDataDTO> responseIndustryCode = callDnBReferenceAPI(apiUrl);
-
-			truncateIndustryCodeForType(type.getCode());
-			saveIndustryCode(type.getCode(), responseIndustryCode);
-
+			if(responseIndustryCode != null) {
+				//truncateIndustryCodeForType(type.getCode());
+				try {
+					saveIndustryCode(type.getCode(), responseIndustryCode);
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}
@@ -218,14 +223,19 @@ public class ReferenceDataService {
 		List<IndustryCategoryCode> entityList = new ArrayList<>();
 
 		for (DnBReferenceDataDTO code : responseIndustryCode) {
-			IndustryCategoryCode dataObj = new IndustryCategoryCode();
-			dataObj.setIndustryCategoryCode(code.getCode());
-			dataObj.setIndustryCategoryTypeCode(typeCode);
-			dataObj.setDescription(code.getDescription());
-			dataObj.setIsActive(Constant.DEFAULT_IS_ACTIVE_VALUE);
-			dataObj.setUpdateTimestamp(LocalDateTime.now());
-			dataObj.setUpdatedBy(Constant.UPDATE_BY);
-			entityList.add(dataObj);
+			try {
+				IndustryCategoryCode dataObj = new IndustryCategoryCode();
+				dataObj.setIndustryCategoryId(industryRefDataDAO.getIndustryCodeId(typeCode, code.getCode()));
+				dataObj.setIndustryCategoryCode(code.getCode());
+				dataObj.setIndustryCategoryTypeCode(typeCode);
+				dataObj.setDescription(code.getDescription());
+				dataObj.setIsActive(Constant.DEFAULT_IS_ACTIVE_VALUE);
+				dataObj.setUpdateTimestamp(LocalDateTime.now());
+				dataObj.setUpdatedBy(Constant.UPDATE_BY);
+				entityList.add(dataObj);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		industryRefDataDAO.saveIndustryCategoryCodeList(entityList);
 

@@ -11,6 +11,8 @@ public class DnBEntityEnrichRequestDTO {
 	
 	private Integer entityId;
 	
+	private String actionPersonId;
+	
 	private List<String> datablock;
 
 }
