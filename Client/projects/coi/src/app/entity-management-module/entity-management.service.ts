@@ -9,7 +9,6 @@ export class EntityManagementService {
 
     hasChangesAvailable: boolean;
     $subscriptions: Subscription[] = [];
-    triggerDUNSEntity = new Subject();
     selectedSectionId = '';
 
     constructor(private _commonService: CommonService, private _http: HttpClient) { }
@@ -24,8 +23,8 @@ export class EntityManagementService {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetch/${entityId}`);
     }
 
-    getDunsMatch(test) {
-        return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/cleansematch/entity/runCleanseMatch', test);
+    getDunsMatch(cleanseRequest) {
+        return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/cleansematch/entity/runCleanseMatch', cleanseRequest);
     }
 
     verifyEntity(entityId: string | number) {
@@ -38,6 +37,14 @@ export class EntityManagementService {
 
     fetchEntityOrganizationDetails(entityId: string | number) {
         return this._http.get(`${this._commonService.baseUrl}/entity/organization/fetch/${entityId}`);
+    }
+
+    updateIsDUNSMatchFlag(changedRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/update', changedRO);
+    }
+
+    triggerEnrichAPI(enrichRequest) {
+        return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/enrich/entity/runEnrich', enrichRequest);
     }
 
 }
