@@ -201,6 +201,7 @@ public class DnBEnrichAPIResponse {
 	public static class Telephone {
 		private String telephoneNumber;
 		private boolean isUnreachable;
+		private String isdCode;
 	}
 
 	@Data

@@ -41,6 +41,10 @@ public class DnBReferenceDataDAO {
 	@Autowired
 	private EntityOperatingStatusTypeRepository operatingStatusTypeRepository;
 		
+	public Integer getIndustryCodeId(String typeCode, String code) {		
+		return codeRepository.getId(typeCode,code);
+	}
+	
 	
 	public void saveIndustryCategoryCode(IndustryCategoryCode entity) {		
 		codeRepository.save(entity);
