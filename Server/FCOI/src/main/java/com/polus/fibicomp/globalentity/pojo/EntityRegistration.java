@@ -55,7 +55,7 @@ public class EntityRegistration implements Serializable {
 
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
-	private String isActive;
+	private Boolean isActive;
 
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
