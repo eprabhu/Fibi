@@ -46,7 +46,6 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     addedCategoryIds: Set<number> = new Set();
     CONFIRMATION_MODAL_ID = 'industry-delete-confirm-modal';
     modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
-    canManageEntity = false;
 
     addIndustryDetails(event) {
         if (event) {
@@ -297,6 +296,9 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     }
 
     checkUserHasRight(): void {
-        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        const hasRight = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        if (!hasRight) {
+            this.isEditMode = false;
+        }
     }
 }

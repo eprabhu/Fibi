@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.polus.integration.constant.Constant;
 import com.polus.integration.entity.config.ErrorCode;
+import com.polus.integration.entity.enrich.dao.EntityEnrichDAO;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse;
 import com.polus.integration.entity.enrich.dto.DnBEntityEnrichRequestDTO;
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse;
@@ -19,6 +21,9 @@ public class EntityEnrichService {
 
 	@Autowired
 	private DnBEnrichAPIService apiService;
+	
+	@Autowired
+	private EntityEnrichDAO dao;
 
 	public EntityEnrichAPIResponse runEnrich(DnBEntityEnrichRequestDTO request) {
 		EntityEnrichAPIResponse response = new EntityEnrichAPIResponse();
@@ -26,6 +31,9 @@ public class EntityEnrichService {
 			String apiUrl = buildApiUrl(request);
 			DnBEnrichAPIResponse dnbResponse = callAPI(apiUrl);
 			response = PrepareResponse(dnbResponse);
+			String actionPersonId = (request.getActionPersonId() != null? request.getActionPersonId() : Constant.UPDATE_BY);
+			refreshDatabase(request.getEntityId(),actionPersonId, response );
+			
 		} catch (Exception e) {
 			ErrorCode errorCode = ErrorCode.DNB_ENRICH_ERROR;
 			response.setErrorCode(errorCode.getErrorCode());
@@ -34,6 +42,24 @@ public class EntityEnrichService {
 		}
 
 		return response;
+	}
+
+	private void refreshDatabase(Integer entityId,String actionPersonId, EntityEnrichAPIResponse response) {
+		
+		if(response.getOrganization() == null) {
+			return;
+		}
+		
+		try {
+			
+			dao.refreshEntityHeaderInfo(entityId,actionPersonId, response.getOrganization());
+			dao.refreshEntityIndustryCode(entityId,actionPersonId, response.getOrganization().getIndustryCodes());
+			dao.refreshEntityRegistration(entityId,actionPersonId, response.getOrganization().getRegistrationNumbers());
+			dao.refreshEntityTelephone(entityId,actionPersonId, response.getOrganization().getTelephone());
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String buildApiUrl(DnBEntityEnrichRequestDTO request) {
