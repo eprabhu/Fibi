@@ -53,6 +53,7 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
         this.fetchRisk();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     ngOnDestroy() {
@@ -249,5 +250,12 @@ export class EntityRiskComponent implements OnInit, OnDestroy {
 
     updateDataStore() {
         this._dataStoreService.updateStore(['entityRisks'], {'entityRisks': this.entityRisks});
+    }
+
+    checkUserHasRight(): void {
+        const hasRight = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        if (!hasRight) {
+            this.isEditMode = false;
+        }
     }
 }
