@@ -161,6 +161,14 @@ public class EntityEnrichDAO {
 	   return null;
    }   
    private String getPrimaryTelephone(List<Telephone> telephone) {
+	   if(telephone == null) {
+		   return null;
+	   }
+	   
+	   if(telephone != null && telephone.isEmpty()) {
+		   return null;
+	   }
+	   
 	   if(telephone != null && telephone.get(0) != null) {
 		   return telephone.get(0).getTelephoneNumber();
 	   }	   
