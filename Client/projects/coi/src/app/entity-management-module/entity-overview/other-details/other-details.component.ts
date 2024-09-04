@@ -60,6 +60,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.autoSaveSubscribe();
         this.listenDataChangeFromStore();
+        this.checkUserHasRight();
     }
 
     private getDataFromStore() {
@@ -369,6 +370,13 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.commonService.hasChangesAvailable = false;
         subscriptionHandler(this.$subscriptions);
+    }
+
+    checkUserHasRight(): void {
+        const hasRight = this.commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        if (!hasRight) {
+            this.isEditMode = false;
+        }
     }
 
 }

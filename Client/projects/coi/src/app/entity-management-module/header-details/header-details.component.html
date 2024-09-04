@@ -155,7 +155,7 @@
 </div>
 
 <ng-container *ngIf="showSlider">
-    <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index]="1057" [overlay_z_index]="1056"
+    <app-coi-slider (closeSlider)="validateSliderClose()"
         [elementId]="sliderElementId" [isHeaderNeeded]="true" [sliderWidth]="'w-50'">
 
         <ng-container header>
@@ -167,7 +167,7 @@
             <ng-container *ngIf="matchedEntites?.length">
                 <ng-container *ngFor="let entity of matchedEntites">
                     <app-entity-common-card [isShowUseBtn]="true" [entityDetailsObj]="entity"
-                        (emitEntityDetails)="updateEntireEntity($event, entity)"></app-entity-common-card>
+                        (emitEntityDetails)="openConfirmationModal(entity)"></app-entity-common-card>
                 </ng-container>
             </ng-container>
         </ng-container>
@@ -177,3 +177,14 @@
 <ng-container *ngIf="isOpenVerifyModal">
     <app-enitity-verify-modal (verifyModalAction)="verifyModalAction($event)"></app-enitity-verify-modal>
 </ng-container>
+
+<!-- DUNS match confirmation pop-up starts -->
+<app-coi-modal [modalConfig]="dunsMatchConfirmationModalConfig" (modalAction)="callEnrichAPI($event)">
+    <ng-container modal-header>
+        <span>Confirmation</span>
+    </ng-container>
+    <ng-container modal-body>
+        <p>Are you sure to use this DUNS match?</p>
+    </ng-container>
+</app-coi-modal>
+<!-- DUNS match confirmation pop-up ends -->

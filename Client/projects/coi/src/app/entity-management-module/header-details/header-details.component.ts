@@ -1,8 +1,8 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { closeCoiSlider, openCoiSlider } from '../../common/utilities/custom-utilities';
+import { closeCommonModal, openCoiSlider, openCommonModal } from '../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { EntireEntityDetails, EntityDetails, EntityTabStatus, EntityDetailsCard } from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
@@ -19,7 +19,8 @@ class DNBReqObj {
     postalCode: string;
     state: string;
     countryCode: string;
-}import { ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
+}import { COIModalConfig, ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
   selector: 'app-header-details',
@@ -44,12 +45,19 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     entityTabStatus = new EntityTabStatus();
     canVerifyEntity = false;
     canManageEntity = false;
+    ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID: string = 'use_duns_match_entity_confirmation_modal';
+    dunsMatchConfirmationModalConfig = new COIModalConfig(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID, 'Use this', 'Cancel', '');
+    selectedDUNSNumber: string;
+    isSaving = false;
 
     constructor(public router: Router, public dataStore: EntityDataStoreService,
         public autoSaveService: AutoSaveService,
         private _entityManagementService: EntityManagementService,
-        private _commonService: CommonService) { }
+        private _commonService: CommonService,
+    ) { }
     ngOnInit() {
+        this.dunsMatchConfirmationModalConfig.dataBsOptions.focus = false;
+        this.dunsMatchConfirmationModalConfig.dataBsOptions.keyboard = true;
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.checkUserHasRight();
@@ -83,6 +91,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     validateSliderClose() {
+        closeCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
         setTimeout(() => {
             this.showSlider = false;
             this.sliderElementId = '';
@@ -143,21 +152,15 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     formatResponse(entity) {
-        entity.organization.entityName = entity.organization.primaryName;
-        entity.organization.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName;
+        entity.organization.entityName = entity.organization.primaryName || '';
+        entity.organization.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName || '';
         entity.organization.DUNSNumber = entity.organization.duns;
-        entity.organization.entityAddress = entity.organization?.primaryAddress?.streetAddress?.line1 +
+        entity.organization.entityAddress = (entity.organization?.primaryAddress?.streetAddress?.line1 ? entity.organization?.primaryAddress?.streetAddress?.line1 : '') +
             (entity.organization?.primaryAddress?.streetAddress?.line2 ? ','+ entity.organization?.primaryAddress?.streetAddress?.line2 : '' );
-        entity.organization.city = entity.organization?.primaryAddress?.addressLocality?.name;
-        entity.organization.country = entity.organization?.primaryAddress?.addressCountry?.name;
-        entity.organization.phoneNumber = entity?.organization?.telephone[0]?.telephoneNumber;
-        entity.organization.zipCode = entity.organization?.primaryAddress?.postalCode;
-    }
-
-    updateEntireEntity(isDunsMatched, entity) {
-        this._entityManagementService.triggerDUNSEntity.next({orgDetails : entity?.organization, isDunsMatched: isDunsMatched});
-        closeCoiSlider('duns-match-slider');
-        this.validateSliderClose();
+        entity.organization.city = entity.organization?.primaryAddress?.addressLocality?.name || '';
+        entity.organization.country = entity.organization?.primaryAddress?.addressCountry?.name || '';
+        entity.organization.phoneNumber = entity?.organization?.telephone[0]?.telephoneNumber || '';
+        entity.organization.zipCode = entity.organization?.primaryAddress?.postalCode || '';
     }
 
     openVerifyEntityModal(): void {
@@ -168,10 +171,6 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.isOpenVerifyModal = false;
     }
 
-    ngOnDestroy() {
-        subscriptionHandler(this.$subscriptions);
-    }
-
     navigateToBack() {
         this.router.navigate(['/coi/entity-dashboard'])
     }
@@ -180,4 +179,72 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.canVerifyEntity = this._commonService.getAvailableRight(['VERIFY_ENTITY'], 'SOME');
         this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
+    openConfirmationModal(entity) {
+        this.selectedDUNSNumber = entity?.organization?.DUNSNumber;
+        openCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
+    }
+
+    callEnrichAPI(event) {
+        if (event.action === 'PRIMARY_BTN') {
+            this.validateSliderClose();
+            this.triggerEnrichAPICall();
+        }
+        closeCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
+    }
+
+    triggerEnrichAPICall() {
+        if (!this.isSaving) {
+            this.isSaving = true;
+            this.$subscriptions.push(this._entityManagementService.triggerEnrichAPI({
+                duns: this.selectedDUNSNumber,
+                entityId: this.entityDetails.entityId,
+                actionPersonId: this._commonService.getCurrentUserDetail('personID')
+            }).subscribe((data: any) => {
+                if (data?.httpStatusCode == '200') {
+                    this.updateEntityDetails();
+                } else {
+                    this.isSaving = false;
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                }
+            }, error => {
+                this.isSaving = false;
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+            }
+            ));
+        }
+    }
+
+    updateEntityDetails() {
+        this.$subscriptions.push(forkJoin(this.generatHTTPRequest()).subscribe((response: any) => {
+            if (response.length) {
+                this.isSaving = false;
+                if (response[0]) {
+                    this.dataStore.setStoreData(response[0]);
+                }
+                if (response[1]) {
+                    this.entityDetails.isDunsMatched = true;
+                    this.dataStore.updateStore(['entityDetails'], { 'entityDetails': this.entityDetails })
+                }
+            }
+
+        }, error => {
+            this.isSaving = false;
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+        }));
+    }
+
+    generatHTTPRequest() {
+        let httpRequest = [];
+        httpRequest.push(this._entityManagementService.getEntityDetails(this.entityDetails.entityId));
+        httpRequest.push(this._entityManagementService.updateIsDUNSMatchFlag({
+            entityId: this.entityDetails.entityId,
+            isDunsMatched: true
+        }));
+        return httpRequest;
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
 }

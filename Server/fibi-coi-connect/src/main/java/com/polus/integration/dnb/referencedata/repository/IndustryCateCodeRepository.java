@@ -15,4 +15,9 @@ public interface IndustryCateCodeRepository extends JpaRepository<IndustryCatego
     @Modifying
     @Query("DELETE FROM IndustryCategoryCode i WHERE i.industryCategoryTypeCode = :typeCode")
     void deleteByIndustryCategoryTypeCode(String typeCode);
+    
+    @Query("SELECT i.industryCategoryId FROM IndustryCategoryCode i WHERE i.industryCategoryTypeCode = :typeCode and i.industryCategoryCode = :code "  )
+    Integer getId(String typeCode, String code);
+    
+    
 }
