@@ -18,7 +18,7 @@ export class CoiTravelDisclosure {
     isSponsoredTravel: boolean;
     personId: string;
     noOfDays: number;
-    homeUnit: string;
+    homeUnit: string | null;
     description: string;
     travelDisclosureId?: number;
     travelEntityName?: string;
@@ -35,10 +35,10 @@ export interface TravelDisclosureTraveller {
 }
 
 export class TravelCreateModalDetails {
-    homeUnit: null;
-    description: string;
-    personId: string;
-    homeUnitName: null;
+    homeUnit: string | null;
+    description: string | null;
+    personId: string | null;
+    homeUnitName: string | null;
 }
 
 export class TravelDisclosure {
