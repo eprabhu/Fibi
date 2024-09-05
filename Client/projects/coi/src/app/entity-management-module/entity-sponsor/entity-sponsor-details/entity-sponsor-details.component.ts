@@ -141,7 +141,12 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                 this._entityManagementService.hasChangesAvailable = false;
                 this.dataChangeCounter--;
                 showEntityToast('SUCCESS');
-                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorTypeCode = this.autoSaveRO.sponsorTypeCode;
+                if(this.autoSaveRO.acronym) {
+                    this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;
+                }
+                if(this.autoSaveRO.sponsorTypeCode) {
+                    this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorTypeCode = this.autoSaveRO.sponsorTypeCode;
+                }
                 this.updateSponsorCompleteFlag();
                 this.autoSaveRO = {};
             }, err => {
@@ -161,8 +166,6 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     setDetailsForUpdate(){
         this.autoSaveRO.entityId = this.entityDetails.entityId;
         this.autoSaveRO.sponsorTypeCode = this.sponsorDetailsObj.sponsorTypeCode
-        this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO = this.autoSaveRO;
-
     }
 
     private listenDataChangeFromStore() {

@@ -22,7 +22,7 @@
                 <span class="align-items-center badge d-inline-flex fs-13 fw-normal px-2 rounded-5" [ngClass]="(tabDetails?.sponsor_feed_status_code == 2 || tabDetails?.sponsor_feed_status_code == 3) ? 'text-bg-light-success' : 'text-bg-light-danger'">
                     <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.sponsor_feed_status_code == 2 || tabDetails?.sponsor_feed_status_code == 3)">check_circle</mat-icon>
                     <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.sponsor_feed_status_code == 1 || tabDetails?.sponsor_feed_status_code == 4 || !tabDetails?.sponsor_feed_status_code)">cancel</mat-icon>
-                    <span>{{tabDetails?.sponsor_feed_status ? tabDetails?.sponsor_feed_status : 'Not Ready For Feed'}}</span>
+                    <span>{{tabDetails?.sponsor_feed_status ? tabDetails?.sponsor_feed_status : 'Not Ready to Feed'}}</span>
                 </span>
             </div>
             <div class="col-12 mt-2">
@@ -30,7 +30,7 @@
                 <span class="align-items-center badge d-inline-flex fs-13 fw-normal px-2 rounded-5" [ngClass]="(tabDetails?.organization_feed_status_code == 2 || tabDetails?.organization_feed_status_code == 3) ? 'text-bg-light-success' : 'text-bg-light-danger'">
                     <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.organization_feed_status_code == 2 || tabDetails?.organization_feed_status_code == 3)">check_circle</mat-icon>
                     <mat-icon class="me-1 fs-13" *ngIf="(tabDetails?.organization_feed_status_code == 1 || tabDetails?.organization_feed_status_code == 4 || !tabDetails?.organization_feed_status_code)">cancel</mat-icon>
-                    <span>{{tabDetails?.organization_feed_status ? tabDetails?.organization_feed_status : 'Not Ready For Feed'}}</span>
+                    <span>{{tabDetails?.organization_feed_status ? tabDetails?.organization_feed_status : 'Not Ready to Feed'}}</span>
                 </span>
             </div>
         </div>

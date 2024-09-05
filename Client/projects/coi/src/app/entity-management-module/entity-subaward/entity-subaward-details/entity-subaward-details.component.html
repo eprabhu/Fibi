@@ -21,7 +21,9 @@
                 maxlength="60" autocomplete="off" class="form-control" disabled 
                 [(ngModel)]="entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationId"/>
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
-                <app-no-data-label [valueToShow]="[]"></app-no-data-label>
+                <app-no-data-label [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationId">
+                    <span>{{entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationId}}</span>
+                </app-no-data-label>
             </span>
         </div>
         <!-- Organization Type -->
