@@ -49,7 +49,7 @@ export class EntityDashboardComponent {
   isShowEntityList = false;
   isShowAllProposalList = false;
   rightList: string;
-  isManageEntity: boolean;
+  canViewEntity: boolean;
   sortCountObj: SortCountObj;
   localCOIRequestObject: EntityDashboardRequest = new EntityDashboardRequest();
   result: any;
@@ -235,7 +235,7 @@ export class EntityDashboardComponent {
   }
 
   checkUserHasRight(): void {
-    this.isManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
+    this.canViewEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE','VERIFY_ENTITY'], 'SOME');
   }
 
 setEventTypeFlag() {
