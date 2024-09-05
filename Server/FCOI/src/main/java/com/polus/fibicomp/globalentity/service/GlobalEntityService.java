@@ -19,6 +19,8 @@ import com.polus.fibicomp.globalentity.dto.OtherDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
+import com.polus.fibicomp.globalentity.dto.validateDuplicateResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
@@ -172,6 +174,10 @@ public interface GlobalEntityService {
 	}
 
 	public default Map<String, Object> fetchEntityTabStatus(Integer entityId) {
+		return null;
+	}
+
+	public default List<validateDuplicateResponseDTO> validateDuplicate(ValidateDuplicateRequestDTO dto) {
 		return null;
 	}
 
