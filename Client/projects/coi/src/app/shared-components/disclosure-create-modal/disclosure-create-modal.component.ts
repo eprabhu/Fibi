@@ -230,7 +230,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                     });
             } else {
                 this.getCreateTravelRequestObject();
-                this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL], { queryParams: { disclosureId: null }, queryParamsHandling: 'merge'});
+                this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL], { queryParams: { disclosureId: null } });
             }
             this.clearModal();
         }
