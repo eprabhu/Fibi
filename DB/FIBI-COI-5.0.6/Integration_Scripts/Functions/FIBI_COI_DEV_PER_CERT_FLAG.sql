@@ -37,18 +37,19 @@ BEGIN
 			
 	END IF;
 	
-	select COUNT(questionnaire_answer_header_id) INTO LI_COUNT		
-	from questionnaire_answer_header 
-	where module_Item_code = '3'
-	and module_sub_item_code = LS_SUB_ITEM_CODE
-	and  substr(module_item_key,1,(instr(module_item_key,'|')-1)) = AV_PROPOSAL_NUMBER
-	and module_sub_item_key = AV_PERSON_ID
-	and questionnaire_completed_flag = 'Y'
-	and questionnaire_ref_id_fk IN  (
-										select t1.questionnaire_ref_id_fk
-										from questionnaire_usage t1
-										where t1.module_Item_code = '3'
-										and t1.module_sub_item_code = LS_SUB_ITEM_CODE
+		select COUNT(QUESTIONNAIRE_ANSWER_HEADER_ID) INTO LI_COUNT
+		FROM QUESTIONNAIRE_ANSWER_HEADER QAH
+		INNER JOIN EPS_PROP_PERSON_CERT_DETAILS EPPCD ON EPPCD.PROPOSAL_NUMBER = substr(QAH.MODULE_ITEM_KEY,1,instr(QAH.MODULE_ITEM_KEY,'|')-1)
+		AND EPPCD.CERTIFIED_BY = QAH.MODULE_SUB_ITEM_KEY
+		WHERE MODULE_ITEM_CODE = '3' 
+		AND MODULE_SUB_ITEM_CODE = LS_SUB_ITEM_CODE
+		and substr(QAH.module_item_key,1,(instr(QAH.module_item_key,'|')-1)) = AV_PROPOSAL_NUMBER
+		AND QAH.module_sub_item_key = AV_PERSON_ID 
+		AND QUESTIONNAIRE_REF_ID_FK IN  (
+										SELECT T1.QUESTIONNAIRE_REF_ID_FK
+										FROM QUESTIONNAIRE_USAGE T1
+										WHERE T1.MODULE_ITEM_CODE = '3'
+										AND T1.MODULE_SUB_ITEM_CODE = LS_SUB_ITEM_CODE
 								 );
 	
 		

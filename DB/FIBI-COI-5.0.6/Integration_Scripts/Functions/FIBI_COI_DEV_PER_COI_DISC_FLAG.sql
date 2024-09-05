@@ -45,12 +45,13 @@ BEGIN
 	select count(t2.question_id) INTO LI_COUNT
 	from questionnaire_answer_header  t0
     inner join questionnaire_answer t1 on t0.questionnaire_answer_header_id = t1.questionnaire_ah_id_fk
-    inner join question t2 on t2.question_ref_id = t1.question_ref_id_fk  
+    inner join question t2 on t2.question_ref_id = t1.question_ref_id_fk
+	INNER JOIN EPS_PROP_PERSON_CERT_DETAILS EPPCD ON EPPCD.PROPOSAL_NUMBER = substr(t0.MODULE_ITEM_KEY,1,instr(t0.MODULE_ITEM_KEY,'|')-1) 
+    AND EPPCD.CERTIFIED_BY = t0.MODULE_SUB_ITEM_KEY
 	where t0.module_Item_code = '3'
 	and t0.module_sub_item_code = LS_SUB_ITEM_CODE
 	and substr(t0.module_item_key,1,(instr(t0.module_item_key,'|')-1)) = AV_PROPOSAL_NUMBER
 	and t0.module_sub_item_key =  AV_PERSON_ID
-	and t0.questionnaire_completed_flag = 'Y'
 	and t0.questionnaire_ref_id_fk IN  (
 										select s1.questionnaire_ref_id_fk
 										from questionnaire_usage s1
