@@ -191,6 +191,11 @@ public class EntityEnrichDAO {
    }
    private Integer getBusinessEntityType(DefaultType businessEntityType) {
 	   if(businessEntityType != null ) {
+		   
+		   if(businessEntityType.getDnbCode()== 0) {
+			   return null;
+		   }
+		   
 		   return businessEntityType.getDnbCode();
 	   }
 	   return null;
