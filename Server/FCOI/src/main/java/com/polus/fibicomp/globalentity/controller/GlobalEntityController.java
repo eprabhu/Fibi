@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,8 @@ import com.polus.fibicomp.globalentity.dto.OtherDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
+import com.polus.fibicomp.globalentity.dto.validateDuplicateResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
@@ -272,6 +275,12 @@ public class GlobalEntityController {
 	public Map<String, Object> fetchEntityTabStatus(@PathVariable(value = "entityId", required = true) final Integer entityId) {
 		logger.info("Requesting for fetchEntityDetails");
 		return globalEntityService.fetchEntityTabStatus(entityId);
+	}
+
+	@PostMapping(value = "/validateDuplicate")
+	public ResponseEntity<List<validateDuplicateResponseDTO>> validateDuplicate(@RequestBody ValidateDuplicateRequestDTO dto) {
+		logger.info("Requesting for validateDuplicate");
+		return new ResponseEntity<>(globalEntityService.validateDuplicate(dto), HttpStatus.OK);
 	}
 
 }
