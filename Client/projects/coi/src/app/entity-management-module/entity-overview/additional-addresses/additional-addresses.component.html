@@ -51,10 +51,10 @@
                             <app-common-help-text [subSectionId]="2605" [elementId]="'coi-entity-address-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onAddressTypeSelect($event)" [options]="addressTypOptions" [uniqueId]="'coi-entity-address-type'"
-                        [isError]="mandatoryList?.has('addressType')" [selectedLookUpList]="selectedAddressType" [defaultValue]="addressTypeDefaultValue">
+                        [isError]="mandatoryList?.has('addressTypeCode')" [selectedLookUpList]="selectedAddressType" [defaultValue]="addressTypeDefaultValue">
                         </app-look-up>
-                        <span *ngIf="mandatoryList?.has('addressType')" class="invalid-feedback d-inline fs-13">
-                            {{mandatoryList?.get('addressType')}}
+                        <span *ngIf="mandatoryList?.has('addressTypeCode')" class="invalid-feedback d-inline fs-13">
+                            {{mandatoryList?.get('addressTypeCode')}}
                         </span>
                     </div>
                 </div>

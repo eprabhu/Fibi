@@ -50,6 +50,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     isAddAssignModalOpen = false;
     needDescriptionField = false;
     isTravelAdministrator = false;
+    isShowPersonEntityDetails = false;
 
     reasonHelpText = '';
     currentPersonId = '';
@@ -314,6 +315,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.personEntityDetails.homeUnit = this.travelDisclosure?.homeUnitNumber;
         this.personEntityDetails.personEmail = this.travelDisclosure.personEmail;
         this.personEntityDetails.personPrimaryTitle = this.travelDisclosure.personPrimaryTitle;
+        this.isShowPersonEntityDetails = true;
     }
 
     openConflictSlider(): void {

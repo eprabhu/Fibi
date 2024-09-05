@@ -151,10 +151,10 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         window.scrollTo(0, 0);
         const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
         this.travelDisclosureRO = new CoiTravelDisclosure();
-        this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit;
-        this.travelDisclosureRO.description = travelCreateModalDetails.description;
-        this.travelDisclosureRO.purposeOfTheTrip = travelCreateModalDetails.description;
-        this.travelDisclosureRO.personId = travelCreateModalDetails.personId;
+        this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit || '';
+        this.travelDisclosureRO.description = travelCreateModalDetails.description || '';
+        this.travelDisclosureRO.purposeOfTheTrip = travelCreateModalDetails.description || '';
+        this.travelDisclosureRO.personId = travelCreateModalDetails.personId || '';
         this.setLocalDateObject(travelCreateModalDetails);
         this.clearEntityDetails();
         this.destination = null;
@@ -310,8 +310,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.travelResObject.homeUnitName = response.travellerUnitDetails.unitName;
         this.travelResObject.homeUnitNumber = response.travellerUnitDetails.unitNumber;
         this.travelResObject.travelEntityName = response.entityDetails.entityName;
-        this.travelResObject.entityType = response.entityDetails.entityType.description;
-        this.travelResObject.entityTypeCode = response.entityDetails.entityType.entityTypeCode;
+        this.travelResObject.entityType = response.entityDetails.entityOwnershipType?.description;
+        this.travelResObject.entityTypeCode = response.entityDetails.entityOwnershipType?.ownershipTypeCode;
         this.travelResObject.countryCode = response.entityDetails.country.countryCode;
         this.travelResObject.country = response.entityDetails.country.countryName;
         this.travelResObject.entityAddress = response.entityDetails.address;
