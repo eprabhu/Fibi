@@ -72,6 +72,7 @@ public class PersonEntityServiceImpl implements PersonEntityService {
         personEntity.setPersonId(AuthenticatedUser.getLoginPersonId());
         personEntity.setUpdateUser(loginUserName);
         personEntity.setCreateUser(loginUserName);
+        personEntity.setEntityNumber(personEntity.getEntityId());
         conflictOfInterestDao.saveOrUpdatePersonEntity(personEntity);
         for (Integer relTypeCode : personEntity.getValidPersonEntityRelTypeCodes()) {
             PersonEntityRelationship personEntityRelation = new PersonEntityRelationship();
