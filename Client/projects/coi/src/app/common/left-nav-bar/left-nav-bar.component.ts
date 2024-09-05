@@ -15,7 +15,7 @@ export class LeftNavBarComponent implements OnInit {
     isAdministrator = false;
     isOPAAdministrator = false;
     canViewAdminDashboard = false;
-    isManageEntity = false;
+    canOpenEntity = false;
     @ViewChild('sideBarMenu', {static: true}) sideBarMenu: ElementRef;
 
     constructor(private _commonService: CommonService, public _router: Router) {
@@ -47,7 +47,7 @@ export class LeftNavBarComponent implements OnInit {
     }
 
     checkUserHasRight(): void {
-        this.isManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
+        this.canOpenEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE','VERIFY_ENTITY'], 'SOME');
         this.canViewAdminDashboard = this._commonService.getAvailableRight(['APPLICATION_ADMINISTRATOR',
                 'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
                 'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
