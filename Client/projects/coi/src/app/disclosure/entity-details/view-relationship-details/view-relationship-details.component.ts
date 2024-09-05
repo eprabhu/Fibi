@@ -533,7 +533,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy {
     }
 
     checkUserHasRight(): void {
-        this.canViewEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
+        this.canViewEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE','VERIFY_ENTITY'], 'SOME');
     }
 
 }

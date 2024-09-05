@@ -2,11 +2,11 @@
     <div class="fs-18 fw-bold mb-2" tabindex="-1" aria-label="Manage Entity Dashboard">Entity Management</div>
     <div [@fadeInOutHeight]>
         <section class="coi-dashboard-tab-sticky coi-custom-top">
-            <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex align-items-center border shadow-sm">
+            <div *ngIf="canViewEntity" class="row bg-white mx-0 d-flex align-items-center border shadow-sm">
                 <nav class="d-flex justify-content-between align-items-center ps-0 border-bottom flex-wrap">
                     <!-- new tab design -->
                     <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fw-semibold mb-8" role="tablist">
-                        <li *ngIf="isManageEntity" class="nav-item" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
+                        <li *ngIf="canViewEntity" class="nav-item" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
                             tabindex="0" id="coi-entity-management-all-entities" role="tab"
                             (keyup.enter)="entityTabName('ALL_ENTITIES')" (keyup.space)="entityTabName('ALL_ENTITIES')"
                             (click)="entityTabName('ALL_ENTITIES')" title="Click here to view All Entities"
@@ -14,7 +14,7 @@
                             <a class="nav-link p-3 fs-6 align-self-center" role="tab">All Entities</a>
                         </li>
                         <li class="separator px-0"></li>
-                        <li *ngIf="isManageEntity" tabindex="0" class="nav-item" id="coi-entity-management-unverified-entities"
+                        <li *ngIf="canViewEntity" tabindex="0" class="nav-item" id="coi-entity-management-unverified-entities"
                             [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="tab"
                             (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
                             (click)="entityTabName('UNVERIFIED')" title="Click here to view Unverified Entities"
@@ -96,7 +96,7 @@
                 </div>
             </div>
             <!-- Sorting pannel -->
-            <div class="sort-div border mt-2 px-3" *ngIf="isShowEntityList && isManageEntity && entityList.length">
+            <div class="sort-div border mt-2 px-3" *ngIf="isShowEntityList && canViewEntity && entityList.length">
                 <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
                 <button id="coi-entity-management-sort-btn" *ngFor="let sortSection of sortSectionsList"
                     attr.aria-labelledby="coi-entity-list-sort-{{index}}" (click)="sortResult(sortSection?.variableName)"
@@ -167,7 +167,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 d-flex align-items-end justify-content-end">
-                                    <button *ngIf="isManageEntity" id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
+                                    <button *ngIf="canViewEntity" id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
                                     (keyup.enter)="viewDetails(entityListData)" (keyup.space)="viewDetails(entityListData)"
                                             aria-label="Click the button to the view Entity details"
                                             class="align-items-center btn btn-outline-secondary d-flex fs-14"
