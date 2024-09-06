@@ -31,7 +31,7 @@
                             <mat-icon class="me-3">tune</mat-icon>
                             Advanced Search
                         </button>
-                        <button aria-label="Add new Entity" class="btn coi-icon-btn btn-outline-secondary"
+                        <button *ngIf="isManageEntity" aria-label="Add new Entity" class="btn coi-icon-btn btn-outline-secondary"
                             id="coi-entity-management-add-new-entity-btn" title="Click here to add an entity"
                             aria-label="Click here to add a new entity" (click)="addNewEntity()">
                             <mat-icon class="me-1">add</mat-icon>

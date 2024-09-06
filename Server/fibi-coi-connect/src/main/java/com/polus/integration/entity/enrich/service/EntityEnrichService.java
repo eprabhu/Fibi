@@ -56,7 +56,7 @@ public class EntityEnrichService {
 			dao.refreshEntityIndustryCode(entityId,actionPersonId, response.getOrganization().getIndustryCodes());
 			dao.refreshEntityRegistration(entityId,actionPersonId, response.getOrganization().getRegistrationNumbers());
 			dao.refreshEntityTelephone(entityId,actionPersonId, response.getOrganization().getTelephone());
-			
+			dao.refreshForiegnName(entityId, actionPersonId, response.getOrganization().getMultilingualPrimaryName());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -113,7 +113,8 @@ public class EntityEnrichService {
 		organization.setPrimaryName(dnbOrg.getPrimaryName());
 		organization.setRegisteredName(dnbOrg.getRegisteredName());
 		organization.setTradeStyleNames(getShortName(dnbOrg));
-		organization.setMultilingualPrimaryName(getForiegnName(dnbOrg));
+		//organization.setMultilingualPrimaryName(getForiegnName(dnbOrg));
+		organization.setMultilingualPrimaryName(dnbOrg.getMultilingualPrimaryName());
 		organization.setIndustryCodes(dnbOrg.getIndustryCodes());
 		organization.setWebsiteAddress(getWebsite(dnbOrg));
 		organization.setDunsControlStatus(dnbOrg.getDunsControlStatus());
