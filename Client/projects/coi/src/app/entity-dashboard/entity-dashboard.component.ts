@@ -56,6 +56,7 @@ export class EntityDashboardComponent {
   isActiveDisclosureAvailable: boolean;
   isLoading = false;
   isShowGraph = false;
+  isManageEntity = false;
   sortSectionsList = [
     { variableName: 'name', fieldName: 'Name' },
     { variableName: 'country', fieldName: 'Country' },
@@ -236,6 +237,7 @@ export class EntityDashboardComponent {
 
   checkUserHasRight(): void {
     this.canViewEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE','VERIFY_ENTITY'], 'SOME');
+    this.isManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
   }
 
 setEventTypeFlag() {
