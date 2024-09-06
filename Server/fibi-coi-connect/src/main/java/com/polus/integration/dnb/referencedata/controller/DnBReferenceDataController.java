@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.integration.dnb.referencedata.service.ReferenceDataService;
+import com.polus.integration.feedentity.dao.EntityIntegrationDao;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("referenceData")
 public class DnBReferenceDataController {
@@ -60,6 +64,26 @@ public class DnBReferenceDataController {
 	public ResponseEntity<String> loadOperatingStatusType() {
 		service.loadOperatingStatusType(DnB_OPERATING_STATUS_TYPE_VALUE);
 		return new ResponseEntity<String>("Completed Operating Status Type Loading", HttpStatus.OK);		
+	}
+	
+	@GetMapping("/loadAll")
+	public ResponseEntity<String> loadAll() {		
+		service.loadOperatingStatusType(DnB_OPERATING_STATUS_TYPE_VALUE);
+		log.info("Completed loading Operating status");
+		
+		service.loadFamilyRoleType(DnB_FAMILY_TREE_ROLE_TYPE_VALUE);
+		log.info("Completed loading Family Tree Role Type");
+		
+		service.loadBusinessEntityType(DnB_BUSINESS_ENTITY_TYPE_VALUE);
+		log.info("Completed loading Business Entity Type");
+		
+		service.loadRegistrationNumberType(DnB_REGISTRATION_NUMBER_TYPE_VALUE);
+		log.info("Completed loading Registration Number Type");
+		
+		service.loadIndustryCodeType(DnB_INDUSTRY_CODE_TYPE_VALUE);
+		log.info("Completed loading Industry Code Type");
+		
+		return new ResponseEntity<String>("Completed Loading All DnB Lookup data", HttpStatus.OK);		
 	}
 		
 }

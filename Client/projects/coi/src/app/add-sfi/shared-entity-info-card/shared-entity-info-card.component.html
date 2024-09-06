@@ -33,17 +33,22 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12" [attr.aria-label]="'Address' + (entityDetails?.address)">
           <label for="coi-shared-entity-address" class="coi-text-light d-block">Address</label>
           <span class="coi-text-light fw-normal">
-            <app-no-data-label [valueToShow]="entityDetails?.address">
-                <span class="text-slice" id="coi-shared-entity-address" [title]="entityDetails?.address"> {{entityDetails?.address}}</span>
+            <app-no-data-label [valueToShow]="entityDetails?.address ? entityDetails?.address : entityDetails?.primaryAddressLine1">
+                <span class="text-slice" id="coi-shared-entity-address"
+                      [title]="entityDetails?.address ? entityDetails?.address : entityDetails?.primaryAddressLine1"
+                > {{entityDetails?.address ? entityDetails?.address : entityDetails?.primaryAddressLine1}}</span>
             </app-no-data-label>
           </span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"
-          [attr.aria-label]="'Ownership Type' + (entityDetails?.entityType?.description)">
+          [attr.aria-label]="'Ownership Type ' + (entityDetails?.entityType?.description ?
+          entityDetails?.entityType?.description : entityDetails?.entityOwnershipType?.description)">
           <label for="coi-shared-entity-type" class="coi-text-light d-block">Ownership Type</label>
           <span class="coi-text-light fw-normal">
-            <app-no-data-label [valueToShow]="entityDetails?.entityType?.description">
-              <span id="coi-shared-entity-type">{{entityDetails?.entityType?.description}}</span>
+            <app-no-data-label [valueToShow]="entityDetails?.entityType?.description ?
+          entityDetails?.entityType?.description : entityDetails?.entityOwnershipType?.description">
+              <span id="coi-shared-entity-type">{{entityDetails?.entityType?.description ?
+                  entityDetails?.entityType?.description : entityDetails?.entityOwnershipType?.description}}</span>
             </app-no-data-label>
           </span>
         </div>

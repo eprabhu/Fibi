@@ -14,6 +14,7 @@ import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DefaultType;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DetailedAddress;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DunsControlStatus;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.IndustryCode;
+import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.MultilingualPrimaryName;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Telephone;
 
@@ -26,12 +27,14 @@ public class EntityEnrichDAO {
     
         
    public void refreshEntityHeaderInfo(Integer entityId, String actionPersonId, Organization res) {
+
+	   try {
 	   String sql = "{call ENRICH_ENTITY_HEADER(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
        jdbcTemplate.update(sql,
     		   entityId, 
-    		   res.getPrimaryName(),
-    		   res.getMultilingualPrimaryName(),
+    		   res.getPrimaryName(),    		   
+    		   null, //  it will be removed res.getMultilingualPrimaryName(),
     		   res.getPriorName(),
     		   res.getTradeStyleNames(),
     		   res.getDuns(),
@@ -59,30 +62,38 @@ public class EntityEnrichDAO {
     		   res.getAnimalAccreditaion(),
     		   actionPersonId
     		   );
+       
+	   }catch(Exception e) {
+		   e.printStackTrace();
+	   }
               
    }
    
 	public void refreshEntityIndustryCode(Integer entityId, String actionPersonId, List<IndustryCode> industryCodes) {
-
-		if (industryCodes == null || industryCodes.isEmpty()) {
-			return;
-		}
-		String sql = "{call ENRICH_ENTITY_INDUSTRY_CATE(?,?,?,?,?,?)}";
-		for (IndustryCode input : industryCodes) {
-
-			jdbcTemplate.update(sql, 
-					entityId,
-					actionPersonId,
-					input.getCode(),
-					input.getDescription(),
-					input.getTypeDescription(), 
-					input.getTypeDnBCode());
-		}
+		try {
+			if (industryCodes == null || industryCodes.isEmpty()) {
+				return;
+			}
+			String sql = "{call ENRICH_ENTITY_INDUSTRY_CATE(?,?,?,?,?,?)}";
+			for (IndustryCode input : industryCodes) {
+	
+				jdbcTemplate.update(sql, 
+						entityId,
+						actionPersonId,
+						input.getCode(),
+						input.getDescription(),
+						input.getTypeDescription(), 
+						input.getTypeDnBCode());
+			}
+		
+		}catch(Exception e) {
+		   e.printStackTrace();
+	    }
 
 	}
    
    public void refreshEntityRegistration(Integer entityId, String actionPersonId, List<RegistrationNumber> registrationNumbers) {
-	   
+	  try { 
 	   			if (registrationNumbers == null || registrationNumbers.isEmpty()) {
 					return;
 				}
@@ -95,12 +106,16 @@ public class EntityEnrichDAO {
 							input.getTypeDescription(),							
 							input.getTypeDnBCode(),
 							actionPersonId);
-				}	   
+				}
+	   }catch(Exception e) {
+		   e.printStackTrace();
+	   }		
 	   
    }
 
    public void refreshEntityTelephone(Integer entityId, String actionPersonId, List<Telephone> telephone) {
-   
+	   
+	   try {
 	   		if (telephone == null || telephone.isEmpty()) {
 				return;
 			}
@@ -112,7 +127,11 @@ public class EntityEnrichDAO {
 						input.getTelephoneNumber(),
 						input.getIsdCode(),
 						actionPersonId);
-			}	  
+			}
+	   }catch(Exception e) {
+		   e.printStackTrace();
+	   }	
+			
    }
    
    public void refreshEntityTradeName(Integer entityId, String actionPersonId, EntityEnrichAPIResponse response) {
@@ -200,4 +219,30 @@ public class EntityEnrichDAO {
 	   }
 	   return null;
    }  
+   
+   
+	public void refreshForiegnName(Integer entityId, String actionPersonId,
+			List<MultilingualPrimaryName> multilingualPrimaryName) {
+
+		try {
+			if (multilingualPrimaryName == null || multilingualPrimaryName.isEmpty()) {
+				return;
+			}		
+			
+			
+			String sql = "{call ENRICH_FOREIGN_NAME(?,?,?)}";
+			for (MultilingualPrimaryName input : multilingualPrimaryName) {
+				
+				if(input.getLanguage() != null && input.getLanguage().getDnbCode() == 331) { //English name not need to add
+					continue;
+				}
+					
+				jdbcTemplate.update(sql, entityId, input.getName(), actionPersonId);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 }
