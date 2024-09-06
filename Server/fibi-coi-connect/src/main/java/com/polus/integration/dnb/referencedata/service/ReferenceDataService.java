@@ -33,7 +33,7 @@ public class ReferenceDataService {
 		try {
 			String apiUrl = buildApiUrl(code);
 			ArrayList<DnBReferenceDataDTO> responseReferenceData = callDnBReferenceAPI(apiUrl);
-			//responseReferenceData = filteredRequiredIndustryType(responseReferenceData);
+			responseReferenceData = filteredRequiredIndustryType(responseReferenceData);
 			saveIndustryType(responseReferenceData);
 
 			saveIndustryCodeForType(responseReferenceData);
