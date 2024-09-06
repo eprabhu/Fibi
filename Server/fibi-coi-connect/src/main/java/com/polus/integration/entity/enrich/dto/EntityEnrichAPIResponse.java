@@ -6,6 +6,7 @@ import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DefaultType;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DetailedAddress;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DunsControlStatus;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.IndustryCode;
+import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.MultilingualPrimaryName;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Telephone;
 
@@ -39,9 +40,9 @@ public class EntityEnrichAPIResponse {
 		private String registeredName;
 		private String tradeStyleNames;
 		private String priorName;
-		private String multilingualPrimaryName;
+		//private String multilingualPrimaryName;
 		//private List<TradeNameStyle> tradeStyleNames;
-		//private List<MultilingualPrimaryName> multilingualPrimaryName;
+		private List<MultilingualPrimaryName> multilingualPrimaryName;
 		private List<IndustryCode> industryCodes;
 		private String websiteAddress;
 		//private List<Website> websiteAddress;
