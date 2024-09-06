@@ -228,45 +228,26 @@
                     (keyup.space)="clearEntityDetails()"></button>
             </div>
             <div class="modal-body">
-                <div class="row pt-1 d-flex">
-                    <div class="text-secondary fs-14 col-3 mb-15" tabindex="-1"
-                        [attr.aria-label]="'Country' + (addEntityConfirmation?.country?.countryName)">
-                        <label for="country" class="grey-text me-2"> Country</label>
-                        <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-country">
-                            {{addEntityConfirmation?.country?.countryName}}</span>
+                <div class="mx-1 row pt-1 d-flex">
+                    <div class="text-secondary fs-14 col-4 mb-15" tabindex="-1" [attr.aria-label]="'Country' + (addEntityConfirmation?.country?.countryName)">
+                        <label  for="country" class="grey-text me-2"> Country</label>
+                        <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-country"> {{addEntityConfirmation?.country?.countryName}}</span>
                     </div>
-                    <div class="text-secondary fs-14 col-4 mb-15" tabindex="-1"
-                        [attr.aria-label]="'Entity Type' + (addEntityConfirmation?.entityType?.description)">
-                        <label for="Entity Type" class="grey-text me-2">Entity Type</label>
-                        <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-entitytype">
-                            {{addEntityConfirmation?.entityType?.description}}</span>
+                    <div class="text-secondary fs-14 col-4 mb-15" tabindex="-1" [attr.aria-label]="'Ownership Type' + (addEntityConfirmation?.entityType?.description)">
+                        <label for="Ownership Type" class="grey-text me-2">Ownership Type</label>
+                        <span class="d-flex fs-14 fw-normal" id="coi-add-sfi-entity-details-modal-value-entitytype"> {{addEntityConfirmation?.entityType?.description}}</span>
                     </div>
-                    <div class="col text-secondary fs-14 align-items-center col-2"
-                        [attr.aria-label]="'Risk' + (addEntityConfirmation?.entityRiskCategory.description)">
-                        <label for="Risk" class="fw-bold me-2">Risk</label>
-                        <span class="fw-normal">
-                            <div class="text-color fs-14 d-flex align-items-center">
-                                <span>
-                                    <mat-icon aria-hidden="true"
-                                        class="{{commonService.getRiskColor(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
-                                </span>
-                                <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
-                            </div>
-                        </span>
+                    <div class="text-secondary fs-14 col-4" tabindex="-1"
+                         [attr.aria-label]="'Entity Status' + (addEntityConfirmation?.isActive ? 'Active' : 'Inactive')">
+                        <label for="Entity Status" class="grey-text me-2 d-block">Entity Status</label>
+                        <span class="badge f-14 px-3 py-2 rounded-pill"
+                              [ngClass]="addEntityConfirmation?.isActive ? 'text-bg-success' : 'text-bg-secondary'" id="coi-add-sfi-entity-details-modal-value-entity-status">
+					{{addEntityConfirmation?.isActive ? 'Active':'Inactive'}}</span>
                     </div>
-                    <div class="text-secondary fs-14 col-3 text-end" tabindex="-1"
-                    [attr.aria-label]="'Entity Status' + (addEntityConfirmation?.isActive ? 'Active' : 'Inactive')">
-                    <span class="badge f-14 px-3 py-2 rounded-pill mt-2"
-                        [ngClass]="addEntityConfirmation?.isActive ? 'text-bg-success' : 'text-bg-secondary'"
-                        id="coi-add-sfi-entity-details-modal-value-entity-status">
-                        {{addEntityConfirmation?.isActive ? 'Active':'Inactive'}}</span>
-                </div>
-                    <div class="text-secondary fs-14 col-12 mt-2" tabindex="-1"
-                        [attr.aria-label]="'Address' + (addEntityConfirmation?.address)">
+                    <div class="text-secondary fs-14 col-8 mt-2" tabindex="-1" [attr.aria-label]="'Address' + (addEntityConfirmation?.address)">
                         <div>
-                            <label for="Address" class="grey-text me-2">Address</label>
-                        </div>
-                        <app-read-more [valueToShow]="addEntityConfirmation?.address" [sliceCount]="80"></app-read-more>
+                            <label for="Address" class="grey-text me-2">Address</label></div>
+                        <app-read-more [valueToShow]="addEntityConfirmation?.address" [sliceCount]="55"></app-read-more>
                     </div>
                 </div>
             </div>
