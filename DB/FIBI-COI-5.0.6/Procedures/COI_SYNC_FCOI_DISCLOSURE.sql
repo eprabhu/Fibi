@@ -117,7 +117,7 @@ CREATE PROCEDURE `COI_SYNC_FCOI_DISCLOSURE`(
                                     OR (T1.PCK = 'PCK' AND T1.KEY_PERSON_ROLE_CODE IN(1,2,3))
                                 )
     						)
-    						AND T1.AWARD_STATUS_CODE IN (1,5,3)
+    						AND T1.AWARD_STATUS_CODE IN (1,6,3)
     						AND T4.FCOI_NEEDED = 'Y' AND T4.IS_ACTIVE = 'Y'
     					))
     				);
