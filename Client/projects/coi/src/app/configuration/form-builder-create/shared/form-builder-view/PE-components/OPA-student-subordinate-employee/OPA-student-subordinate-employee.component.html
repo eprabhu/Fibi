@@ -69,8 +69,8 @@
                             <select class="form-control form-select" id="person-type" name='person-type-select'
                                 [(ngModel)]="studentSubordinateData.opaPersonTypeCode">
                                 <option [value]='null'>--Select Type--</option>
-                                <option *ngFor="let type of opaPersonTypeList" [value]="type?.OPA_PERSON_TYPE_CODE">
-                                    {{type?.DESCRIPTION}}</option>
+                                <option *ngFor="let type of opaPersonTypeList" [value]="type?.opaPersonTypeCode">
+                                    {{type?.description}}</option>
                             </select>
                         </div>
                         <div class="col-6">
@@ -97,14 +97,14 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="stud-sub-description-work" class="form-label">Describe the type of work </label>{{studentSubordinateData.natureOfWork}}
+                            <label for="stud-sub-description-work" class="form-label">Describe the type of work </label>
                             <textarea appAutoGrow class="form-control" rows="1" name="stud-sub-description"
                                 [(ngModel)]="studentSubordinateData.natureOfWork" appLengthValidator
                                 [limit]=4000>
                             </textarea>
                         </div>
                         <div class="col-12">
-                            <label for="stud-sub-description-relationship" class="form-label">Relationship with student/subordinate</label>{{studentSubordinateData.relationWithPerson}}
+                            <label for="stud-sub-description-relationship" class="form-label">Relationship with student/subordinate</label>
                             <textarea appAutoGrow class="form-control" rows="1" name="stud-sub-description-relationship"
                                 [(ngModel)]="studentSubordinateData.relationWithPerson" appLengthValidator
                                 [limit]=4000>
