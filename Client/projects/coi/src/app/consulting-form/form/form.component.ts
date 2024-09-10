@@ -5,7 +5,7 @@ import { getEndPointOptionsForCountry } from '../../configuration/form-builder-c
 import { CommonService } from '../../common/services/common.service';
 import { EntityDetails, EntitySaveRO, ExistingEntityDetails } from './form-interface';
 import { setEntityObjectFromElasticResult } from '../../common/utilities/elastic-utilities';
-import { Subscription } from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import { FormService } from './form-service.service';
 import { deepCloneObject, isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
@@ -16,6 +16,7 @@ import { DataStoreService } from '../services/data-store.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { HttpResponse } from '@angular/common/http';
 import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
+import {Country, Create_Entity} from "../../entity-management-module/shared/entity-interface";
 
 @Component({
     selector: 'app-form',
@@ -43,6 +44,8 @@ export class FormComponent {
     emailWarningMsg = '';
     entityDetailsAlreadySave: any;
     showTextAreaLimiter: boolean;
+    triggerSaveEntity = new Subject();
+    newCreateEntityObj = new Create_Entity();
 
     constructor(private _elasticConfig: ElasticConfigService, public commonService: CommonService, private _formService: FormService,
         private _router: Router, public consultingService: ConsultingService, public dataStore: DataStoreService
@@ -78,6 +81,7 @@ export class FormComponent {
         this.isNewEntityFromSearch = true;
         this.entityDetails.coiEntity.entityName = event;
         this.entitySearchOptions.defaultValue = event;
+        this.newCreateEntityObj.entityName = event;
         this.consultingService.isDataChangeAvailableInEntity = true;
         this.canShowEntityFields = true;
         this.showTextAreaLimiter = true;
@@ -143,6 +147,7 @@ export class FormComponent {
 
     clearEntityDetails(): void{
         this.clearField = new String('true');
+        this.newCreateEntityObj = new Create_Entity();
         this.addEntityConfirmation = null;
         this.canShowEntityFields = false;
         this.resetEntity();
@@ -193,7 +198,7 @@ export class FormComponent {
             if(!this.mandatoryList.size) {
                 if (this.consultingService.isDataChangeAvailableInEntity) {
                     if (this.canShowEntityFields) {
-                        this.addNewEntityInitally();
+                        this.triggerSaveEntity.next();
                     } else {
                         this.saveFormForExistingSFI();
                     }
@@ -452,9 +457,29 @@ export class FormComponent {
         this.consultingService.canDisableSubmit = this.entityDetails.coiEntity.entityName ? false : true;
     }
 
+    postEntitySave(event: {entityId: number, entityName: string}) {
+        this.setEntityForCard(event.entityId);
+        this.canShowEntityFields = false;
+        this.isNewEntityFromSearch = false;
+        this.isResultFromSearch = true;
+        this.entitySearchOptions = this._elasticConfig.getElasticForActiveEntity();
+        this.entitySearchOptions.defaultValue = event.entityName;
+        this.createNewSFIWithEntity();
+    }
+
+    setEntityForCard(entityId) {
+        this.entityDetails.coiEntity.entityId = entityId;
+        this.entityDetails.coiEntity.entityNumber = entityId;
+        this.entityDetails.coiEntity.entityName = this.newCreateEntityObj.entityName;
+        this.entityDetails.coiEntity.isActive = true;
+        this.entityDetails.coiEntity.country.countryName = this.newCreateEntityObj.countryCode;
+        this.entityDetails.coiEntity.address = this.newCreateEntityObj.primaryAddressLine1;
+    }
+
  onEntityChanges() {
     this.consultingService.isDataChangeAvailableInEntity = true;
     this.checkForSubmitDisable();
  }
+
 
 }
