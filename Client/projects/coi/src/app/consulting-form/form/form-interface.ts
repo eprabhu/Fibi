@@ -22,7 +22,7 @@ export interface EntityStatus {
     updateTimestamp: number;
   }
 
-  export interface Country {
+  export class Country {
     countryCode: string;
     countryName: string;
     currencyCode: string;
@@ -50,7 +50,7 @@ export interface EntityStatus {
     entityTypeCode?: string = null;
     entityType?: EntityType;
     countryCode?: string;
-    country?: Country;
+    country?: Country = new Country();
     phone?: string;
     city?: string;
     address?: string;
