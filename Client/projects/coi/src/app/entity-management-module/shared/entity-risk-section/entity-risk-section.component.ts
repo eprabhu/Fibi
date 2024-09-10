@@ -239,11 +239,11 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     }
 
     checkUserHasRight(): void {
-        const canManageEntitySponsor = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
-        const canManageEntityOrganization = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
-        const canManageEntityCompliance = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
-        const canManageEntityRisk = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME') && this.riskCategoryCode == 'EN';
-        if (!canManageEntitySponsor && !canManageEntityOrganization && !canManageEntityCompliance && !canManageEntityRisk) {
+        const CAN_MANAGE_ENTITY_SPONSOR = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
+        const CAN_MANAGE_ENTITY_ORGANIZATION = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
+        const CAN_MANAGE_ENTITY_COMPLIANCE = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
+        const CAN_MANAGE_ENTITY_RISK = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME') && this.riskCategoryCode == 'EN';
+        if (!CAN_MANAGE_ENTITY_SPONSOR && !CAN_MANAGE_ENTITY_ORGANIZATION && !CAN_MANAGE_ENTITY_COMPLIANCE && !CAN_MANAGE_ENTITY_RISK) {
             this.isEditMode = false;
         }
     }
