@@ -39,7 +39,7 @@ export class EntityAttachmentModalComponent implements OnInit {
 
     @Output() closeModal = new EventEmitter<EntityAttachment[] | EntityAttachment | null>();
 
-    constructor(private _attachmentSectionService: EntityAttachmentModalService, private _commonService: CommonService, public _router: Router, private _dataStoreService: EntityDataStoreService) {}
+    constructor(private _attachmentSectionService: EntityAttachmentModalService, public commonService: CommonService, public _router: Router, private _dataStoreService: EntityDataStoreService) {}
 
     ngOnInit(): void {
         if (this.attachmentInputType === 'ADD') {
@@ -63,7 +63,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                     this.attachmentTypes = attachmentTypes;
                     this.openAttachmentModal()
                 }, err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                     this.closeModal.emit(null);
                 }));
     }
@@ -254,7 +254,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                 toastMsg = 'Something went wrong, Please try again.';
                 break;
         }
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
+        this.commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
     }
 
 
@@ -275,7 +275,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                 toastMsg = 'Something went wrong, Please try again.';
                 break;
         }
-        this._commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
+        this.commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
     }
 
     attachmentModalActions(modalAction: ModalActionEvent): void {
