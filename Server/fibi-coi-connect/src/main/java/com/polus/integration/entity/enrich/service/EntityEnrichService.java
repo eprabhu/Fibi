@@ -199,12 +199,22 @@ public class EntityEnrichService {
 									.filter(reg -> reg.getTextType().getDnbCode() == 32456) // This is the Short company profile in DnB
 									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Summary::getText)
 									.findFirst().orElse(null);
+		
+		companyProfile = removeHTMLTags(companyProfile);
 
 		return companyProfile;
 
 		
 	}
 	
+	private String removeHTMLTags(String companyProfile) {		
+		if(companyProfile == null) {
+			return companyProfile;
+		}		
+		companyProfile = companyProfile.replaceAll("<[^>]*>", "");		
+		return companyProfile;
+	}
+
 	private boolean isPubliclyTradedCompany(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 		
 		if (organization.getControlOwnershipType() == null) {
