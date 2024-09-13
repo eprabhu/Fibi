@@ -210,9 +210,13 @@
                 for="coi-other-details-activity">Activity Text (Business Description)
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-activity'"></app-common-help-text>
             </label>
-            <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-activity"
-                [(ngModel)]="otherDetailsObj.activityText" (ngModelChange)="changeEvent('activityText')">
-            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+            <textarea *ngIf="isEditMode" class="form-control fs-13" rows="5"
+                [(ngModel)]="otherDetailsObj.activityText" (ngModelChange)="changeEvent('activityText')"
+                id="coi-other-details-activity" name="coi-other-details-activity"
+                appLengthValidator [limit]="2000" spellcheck="false"
+                placeholder="">
+            </textarea>
+            <span *ngIf="!isEditMode" class="coi-text-light d-block fw-500 new-line-property">
                 <app-no-data-label [valueToShow]="otherDetailsObj.activityText"></app-no-data-label>
             </span>
         </div>
@@ -220,7 +224,7 @@
 </div>
 
 <!--Prior name version pop-up-->
-<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="entityPriorNameVersionModal" role="dialog">
+<div class="modal fade mySkinDialog" data-bs-backdrop="static" id="entityPriorNameVersionModal" role="dialog" tabindex="-1" aria-label="Prior names history">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
