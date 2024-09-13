@@ -840,6 +840,10 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
+    "/entity/validateDuplicate" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
     "/fibi-coi-connect/cleansematch/entity/runCleanseMatch" : {
         "target": "http://10.199.100.23:9090/",
         "secure": false

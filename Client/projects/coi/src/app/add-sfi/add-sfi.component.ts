@@ -67,8 +67,7 @@ export class AddSfiComponent implements OnInit {
         involvementEndDate: null
     }
     isNewEntityFromSearch = false;
-    saveEntity = new Subject();
-    initalProceed = new Subject();
+    $performAction = new Subject<'SAVE_AND_VALIDATE'|'VALIDATE_ONLY'>();
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -244,9 +243,9 @@ export class AddSfiComponent implements OnInit {
         }
         this.checkMandatoryFilled();
         if(!this.mandatoryList.size) {
-            this.entityDetails.entityId ? this.saveAdditionalDetails() : this.saveEntity.next(true);
+            this.entityDetails.entityId ? this.saveAdditionalDetails() : this.$performAction.next('SAVE_AND_VALIDATE');
         } else {
-            this.initalProceed.next(true);
+            this.$performAction.next('VALIDATE_ONLY');
         }
     }
 

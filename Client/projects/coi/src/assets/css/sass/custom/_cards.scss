@@ -52,9 +52,9 @@
         flex-wrap: wrap;
         height: 49px;
         background-color: transparent;
-        border: 0;      
+        border: 0;
         padding: 1rem 1.875rem !important;
-        
+
         .card-toolbar {
             display: flex;
             align-items: center;
@@ -178,7 +178,7 @@
     .card-body {
         padding: 1rem 1.875rem !important;
     }
-  
+
   .border-dashed {
     border-style: dashed !important;
     border-color: var(--theme-text-gray-300);
@@ -254,7 +254,7 @@
 
 //boxes
 
-.coi-box-red {  
+.coi-box-red {
     background-color: var(--theme-box-red-bg-color);
     border-style: dashed !important;
     border-width: 1px;
@@ -544,4 +544,8 @@
 .count-badge{
     background: #7b68ee;
     color: #fff;
+}
+
+.card-light-gray-border {
+    border: 1px solid #E3E3E3 !important;
 }

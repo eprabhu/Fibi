@@ -1,54 +1,43 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedEntityManagementModule } from '../shared/shared-entity-management.module';
-import { Create_Entity } from '../shared/entity-interface';
-import { hideModal, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { Create_Entity, DuplicateCheckObj, EntityDupCheckConfig } from '../shared/entity-interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
-import {NavigationService} from "../../common/services/navigation.service";
+import { NavigationService } from "../../common/services/navigation.service";
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
-  selector: 'app-create-entity',
-  templateUrl: './create-entity.component.html',
-  styleUrls: ['./create-entity.component.scss'],
-  imports: [SharedModule, SharedEntityManagementModule],
-  standalone: true
+    selector: 'app-create-entity',
+    templateUrl: './create-entity.component.html',
+    styleUrls: ['./create-entity.component.scss'],
+    imports: [SharedModule, SharedEntityManagementModule, FormsModule, CommonModule],
+    standalone: true
 })
 export class CreateEntityComponent implements OnInit {
 
     constructor(private _activatedRoute: ActivatedRoute,
-                private _navigationService: NavigationService,
-                private _router: Router,
-                public _commonService: CommonService,
-                private _informationAndHelpTextService: InformationAndHelpTextService) {}
+        private _navigationService: NavigationService,
+        private _router: Router,
+        public _commonService: CommonService,
+        private _informationAndHelpTextService: InformationAndHelpTextService) { }
 
-    createEntityObj: Create_Entity = new Create_Entity();
-    saveEntity = new Subject();
-    initalProceed = new Subject();
-
+    createEntityObj = new Create_Entity();
+    $performAction = new Subject<'SAVE_AND_VALIDATE'|'VALIDATE_ONLY'>();
+    dupCheckPayload: DuplicateCheckObj;
+    entityDupCheckConfig = new EntityDupCheckConfig();
     ngOnInit() {
         this._informationAndHelpTextService.moduleConfiguration = this._commonService
             .getSectionCodeAsKeys(this._activatedRoute.snapshot.data.entityConfig);
         window.scroll(0, 0);
     }
 
-    saveBasicEntityDetails(event) {
-        // if(event) {
-        //     openModal('entityProceedCheckMatch');
-        // }
-    }
-
-    createEntity() {
-        // this.saveEntity.next(true);
-        // hideModal('entityProceedCheckMatch');
-    }
-
     proceedCreateEntity() {
-        this.saveEntity.next(true);
-
-        // this.initalProceed.next(true);
+        this.$performAction.next('VALIDATE_ONLY');
     }
 
     goBack() {
@@ -56,6 +45,17 @@ export class CreateEntityComponent implements OnInit {
             this._router.navigateByUrl(this._navigationService.previousURL);
         } else {
             this._commonService.redirectionBasedOnRights();
+        }
+    }
+
+    getMandatoryResponse(event: DuplicateCheckObj) {
+        this.entityDupCheckConfig.duplicateView = 'MODAL_VIEW';
+        this.dupCheckPayload = deepCloneObject(event);
+    }
+
+    duplicateCheckResponse(event: 'CLOSE_BTN' | 'SECONDARY_BTN' | 'PRIMARY_BTN' | 'NOT_FOUND') {
+        if(event === 'PRIMARY_BTN' || event === 'NOT_FOUND') {
+            this.$performAction.next('SAVE_AND_VALIDATE');
         }
     }
 }

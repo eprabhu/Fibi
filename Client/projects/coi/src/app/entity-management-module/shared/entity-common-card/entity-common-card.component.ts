@@ -1,48 +1,59 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EntityDetailsCard } from '../entity-interface';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EntityManagementService } from '../../entity-management.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { EntityCardDetails } from '../entity-interface';
+import { Router } from '@angular/router';
+import { isEmptyObject, openInNewTab } from '../../../common/utilities/custom-utilities';
+import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 
-@Component({
-  selector: 'app-entity-common-card',
-  templateUrl: './entity-common-card.component.html',
-  styleUrls: ['./entity-common-card.component.scss']
-})
-export class EntityCommonCardComponent {
-
-    isExpanded = false;
-    @Input() isShowUseBtn = false;
-    @Input()  entityDetailsObj: any;
-    @Output() emitEntityDetails = new EventEmitter<any>();
-    dunsResponse: any;
-    $subscriptions: Subscription[] = [];
-    dunsNumber: any;
+export class DunsMatchDetails {
+    matchedDunsNumber: string;
     isDunsMatched: boolean;
+}
+@Component({
+    selector: 'app-entity-common-card',
+    templateUrl: './entity-common-card.component.html',
+    styleUrls: ['./entity-common-card.component.scss']
+})
+export class EntityCommonCardComponent implements OnInit, OnDestroy {
+    isExpanded = false;
+    $subscriptions: Subscription[] = [];
+    dunsMatchDetails = new DunsMatchDetails();
+    isDunsMatchAlreadyDone = false;
+
+    @Input() detailsSource: 'DUNS' | 'LOCAL' = 'LOCAL';
+    @Input() entityDetailsObj = new EntityCardDetails();
+    @Output() emitCardNextAction = new EventEmitter<'USE' | 'OPEN_MODAL'>();
 
     constructor(public entityManagementService: EntityManagementService,
-        private _dataStorService: EntityDataStoreService) {}
+        private _dataStorService: EntityDataStoreService, private _router: Router) { }
 
-    ngOnInit(){
+    ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        if (this.detailsSource === 'DUNS') {
+            this.setMatchingPercentage();
+        }
     }
 
-    getPercentage() {
-        return ((this.entityDetailsObj?.matchQualityInformation?.confidenceCode)/10) * 100;
+    setMatchingPercentage() {
+        this.entityDetailsObj.matchQualityInformation = ((this.entityDetailsObj?.matchQualityInformation) / 10) * 100;
     }
 
     sendEntityDetails() {
-        this.emitEntityDetails.emit(true);
+        this.emitCardNextAction.emit('USE');
     }
 
     private getDataFromStore() {
-        const entityData = this._dataStorService.getData();
-        if (isEmptyObject(entityData)) { return; }
-        this.dunsNumber = entityData?.entityDetails?.dunsNumber;
-        this.isDunsMatched = entityData?.entityDetails?.isDunsMatched;
+        const ENTITY_DATA = this._dataStorService.getData();
+        if (ENTITY_DATA && !isEmptyObject(ENTITY_DATA)) {
+            this.dunsMatchDetails.matchedDunsNumber = ENTITY_DATA?.entityDetails?.dunsNumber;
+            this.dunsMatchDetails.isDunsMatched = ENTITY_DATA?.entityDetails?.isDunsMatched;
+            this.isDunsMatchAlreadyDone = this.dunsMatchDetails.isDunsMatched && this.dunsMatchDetails.matchedDunsNumber == this.entityDetailsObj?.dunsNumber;
+        } else {
+            return;
+        }
     }
 
     private listenDataChangeFromStore() {
@@ -51,6 +62,10 @@ export class EntityCommonCardComponent {
                 this.getDataFromStore();
             })
         );
+    }
+
+    openEntity(): void {
+        openInNewTab('manage-entity/entity-overview?', ['entityManageId'], [this.entityDetailsObj.entityId]);
     }
 
     ngOnDestroy() {

@@ -165,9 +165,9 @@
         <!-- modal content -->
         <ng-container content>
             <ng-container *ngIf="matchedEntites?.length">
-                <ng-container *ngFor="let entity of matchedEntites">
-                    <app-entity-common-card [isShowUseBtn]="true" [entityDetailsObj]="entity"
-                        (emitEntityDetails)="openConfirmationModal(entity)"></app-entity-common-card>
+                <ng-container *ngFor="let entity of cardDetails">
+                    <app-entity-common-card [detailsSource]="'DUNS'" [entityDetailsObj]="entity"
+                        (emitCardNextAction)="openConfirmationModal($event, entity)"></app-entity-common-card>
                 </ng-container>
             </ng-container>
         </ng-container>

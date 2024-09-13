@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { forkJoin, Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus, EntityDetailsCard } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityCardDetails, EntityDetails, EntityTabStatus } from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { EntityManagementService } from '../entity-management.service';
@@ -49,6 +49,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     dunsMatchConfirmationModalConfig = new COIModalConfig(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID, 'Use this', 'Cancel', '');
     selectedDUNSNumber: string;
     isSaving = false;
+    cardDetails: EntityCardDetails[] = [];
 
     constructor(public router: Router, public dataStore: EntityDataStoreService,
         public autoSaveService: AutoSaveService,
@@ -64,10 +65,13 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     viewSlider(event) {
+        this.cardDetails = [];
         this.$subscriptions.push(this._entityManagementService.getDunsMatch(this.getReqObj()).subscribe((data: any) => {
         this.matchedEntites = data?.matchCandidates?.length ? data?.matchCandidates : [];
         if(this.matchedEntites.length) {
-            this.matchedEntites.map(ele =>this.formatResponse(ele));
+            this.matchedEntites.forEach((ele: any) => {
+                this.cardDetails.push(this.formatResponse(ele));
+            })
         }
         this.showSlider = event;
         this.sliderElementId = 'duns-match-slider';
@@ -152,15 +156,18 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     formatResponse(entity) {
-        entity.organization.entityName = entity.organization.primaryName || '';
-        entity.organization.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName || '';
-        entity.organization.DUNSNumber = entity.organization.duns;
-        entity.organization.entityAddress = (entity.organization?.primaryAddress?.streetAddress?.line1 ? entity.organization?.primaryAddress?.streetAddress?.line1 : '') +
-            (entity.organization?.primaryAddress?.streetAddress?.line2 ? ','+ entity.organization?.primaryAddress?.streetAddress?.line2 : '' );
-        entity.organization.city = entity.organization?.primaryAddress?.addressLocality?.name || '';
-        entity.organization.country = entity.organization?.primaryAddress?.addressCountry?.name || '';
-        entity.organization.phoneNumber = entity?.organization?.telephone[0]?.telephoneNumber || '';
-        entity.organization.zipCode = entity.organization?.primaryAddress?.postalCode || '';
+        let entityDetails: EntityCardDetails = new EntityCardDetails();
+        entityDetails.entityName = entity.organization.primaryName || '';
+        entityDetails.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName || '';
+        entityDetails.dunsNumber = entity.organization.duns;
+        entityDetails.primaryAddress = (entity.organization?.primaryAddress?.streetAddress?.line1 ? entity.organization?.primaryAddress?.streetAddress?.line1 : '') +
+        (entity.organization?.primaryAddress?.streetAddress?.line2 ? ','+ entity.organization?.primaryAddress?.streetAddress?.line2 : '' );
+        entityDetails.city = entity.organization?.primaryAddress?.addressLocality?.name || '';
+        entityDetails.country = entity.organization?.primaryAddress?.addressCountry?.name || '';
+        entityDetails.phone = entity?.organization?.telephone[0]?.telephoneNumber || '';
+        entityDetails.postalCode = entity.organization?.primaryAddress?.postalCode || '';
+        entityDetails.matchQualityInformation = entity?.matchQualityInformation?.confidenceCode;
+        return entityDetails;
     }
 
     openVerifyEntityModal(): void {
@@ -179,9 +186,11 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.canVerifyEntity = this._commonService.getAvailableRight(['VERIFY_ENTITY'], 'SOME');
         this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
-    openConfirmationModal(entity) {
-        this.selectedDUNSNumber = entity?.organization?.DUNSNumber;
-        openCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
+    openConfirmationModal(event: 'USE' | 'OPEN_MODAL',entity: EntityCardDetails) {
+        if(event == 'USE') {
+            this.selectedDUNSNumber = entity.dunsNumber;
+            openCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
+        }
     }
 
     callEnrichAPI(event) {
