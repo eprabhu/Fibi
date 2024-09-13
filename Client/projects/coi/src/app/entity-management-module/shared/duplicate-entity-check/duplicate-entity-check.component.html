@@ -1,0 +1,24 @@
+<ng-container *ngIf="entityDupCheckConfig.duplicateView === 'CARD_VIEW'">
+    <ng-container *ngFor="let entity of matchedDuplicateEntites">
+        <app-entity-common-card [entityDetailsObj]="entity" [detailsSource]="'LOCAL'"></app-entity-common-card>
+    </ng-container>
+</ng-container>
+
+<app-coi-modal [modalConfig]="duplicateEntityModalConfig" (modalAction)="modalAction($event)">
+    <!-- header -->
+    <ng-container modal-header>
+        <span>{{entityDupCheckConfig?.modalHeader}}</span>
+    </ng-container>
+    <!-- body -->
+    <ng-container modal-body>
+        <div class="d-flex alert alert-primary mb-0 py-2 mt-2">
+            <mat-icon class="mat-icon material-icons flex-shrink-0" aria-hidden="true">info</mat-icon>
+            <p class="fs-14 mb-0 ms-2">
+                <span class="d-flex algin-items-start">{{entityDupCheckConfig?.modalHelpText}}</span>
+            </p>
+        </div>
+        <ng-container *ngFor="let entity of matchedDuplicateEntites">
+            <app-entity-common-card [entityDetailsObj]="entity" [detailsSource]="'LOCAL'"></app-entity-common-card>
+        </ng-container>
+    </ng-container>
+</app-coi-modal>

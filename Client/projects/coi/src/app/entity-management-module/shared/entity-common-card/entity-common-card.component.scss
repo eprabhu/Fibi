@@ -1,8 +1,14 @@
-.card {
-    border: 1px solid #E3E3E3 !important;
+.toggle-btn {
+    width: 35px;
+    height: 35px;
 }
 
-.collapse-button {
-    padding-left: 4px !important;
-    padding-right: 4px !important;
+.icon-bg {
+    border-radius: 50%;
+    background-color: var(--theme-entity-icon-bg-color);
+    padding: 7px;
+}
+
+.coloured-icon {
+    color: var(--theme-entity-icon-color) !important;
 }

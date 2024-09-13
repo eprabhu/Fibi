@@ -138,3 +138,5 @@ export const DISCLOSURE_CONFLICT_STATUS_BADGE: { [key: string]: string } = {
   '5': CLASS_BROWN_BADGE,
   '6': CLASS_RED_BADGE,
 };
+
+export const COMMON_ERROR_TOAST_MSG = 'Something went wrong, please try again.';
