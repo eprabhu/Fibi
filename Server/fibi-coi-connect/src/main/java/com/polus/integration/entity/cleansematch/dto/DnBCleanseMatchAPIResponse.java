@@ -106,6 +106,7 @@ public class DnBCleanseMatchAPIResponse {
         private int displaySequence;
         private Organization organization;
         private MatchQualityInformation matchQualityInformation;
+        private EntityInfoDTO entity;
     }
 
     @Data

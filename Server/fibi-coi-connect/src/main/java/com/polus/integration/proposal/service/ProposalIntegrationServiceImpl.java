@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import com.polus.integration.constant.Constant;
 import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
 import com.polus.integration.proposal.dao.ProposalIntegrationDao;
+import com.polus.integration.proposal.dao.ProposalIntegrationDaoImpl;
 import com.polus.integration.proposal.dto.ProposalDTO;
 import com.polus.integration.proposal.dto.ProposalPersonDTO;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
@@ -26,6 +28,7 @@ import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrQstnMapping;
 import com.polus.integration.proposal.repository.ProposalQnAIntegrationRepository;
 import com.polus.integration.proposal.vo.CreateProposalDisclosureVO;
+import com.polus.integration.proposal.vo.MarkVoidVO;
 import com.polus.integration.proposal.vo.ProcessProposalDisclosureVO;
 import com.polus.integration.proposal.vo.QuestionnaireVO;
 import com.polus.integration.proposal.vo.ValidateDisclosureVO;
@@ -33,20 +36,21 @@ import com.polus.questionnaire.dto.FetchQnrAnsHeaderDto;
 import com.polus.questionnaire.dto.GetQNRDetailsDto;
 import com.polus.questionnaire.dto.QuestionnaireSaveDto;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
 import com.polus.integration.proposal.repository.ProposalIntegrationRepository;
 import com.polus.integration.proposal.repository.ProposalPersonIntegrationRepository;
 
 
-@Transactional
+
 @Service
 @Slf4j
 public class ProposalIntegrationServiceImpl implements ProposalIntegrationService {
 
 	@Autowired
 	private ProposalIntegrationRepository proposalIntegrationRepository;
-
+	
 	@Autowired
 	private ProposalPersonIntegrationRepository proposalPersonIntegrationRepository;
 
@@ -74,82 +78,105 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	private static final String QUESTION_ID = "QUESTION_ID";
 	private static final String CHECKBOX = "Checkbox";
 	private static final String ANSWER_TYPE = "ANSWER_TYPE";
-
+	
+	private static final String PROPOSAL_DEACTIVATE_STATUS = "8";
+	private static final String REMARK_PROPOSAL_VOID = "This proposal has been marked as Deactivated in the Source System (Kuali Coeus).";
+	private static final String REMARK_PROPOSAL_PERSON_VOID = "Proposals Person has been inactive in the Source System (Kuali Coeus).";
+	
+	
 	@Override
 	public void feedProposalDetails(ProposalDTO proposalDTO) {
 		try {
 			COIIntegrationProposal proposal = proposalIntegrationRepository.findProposalByProposalNumber(proposalDTO.getProposalNumber());
-			if (proposal != null) {
-				saveOrUpdateCOIProposalDetails(proposalDTO, proposal);
-			} else {
-				COIIntegrationProposal coiIntegrationProposal = new COIIntegrationProposal();
-				coiIntegrationProposal.setFirstFedTimestamp(integrationDao.getCurrentTimestamp());
-				saveOrUpdateCOIProposalDetails(proposalDTO, coiIntegrationProposal);
+			COIIntegrationProposal coiIntegrationProposal = (proposal != null) ? proposal : new COIIntegrationProposal();
+			if (proposal == null) {
+			    coiIntegrationProposal.setFirstFedTimestamp(integrationDao.getCurrentTimestamp());
 			}
-			prepareProposalPersonDetail(proposalDTO);
+			saveDevProposalDetails(proposalDTO, coiIntegrationProposal);
+			saveProposalPersonDetail(proposalDTO);
+			
 		} catch (Exception e) {
 	        log.error("Error saving proposal details for ProposalDTO: {}", proposalDTO, e.getMessage());
 	        throw new MQRouterException("ER004", "Error saving proposal details for ProposalDTO: {}", e, e.getMessage(), devProposalIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE, Constant.COI_MODULE_CODE, Constant.COI_INTEGRATION_SUB_MODULE_CODE, Constant.PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
 	}
 
-	private void saveOrUpdateCOIProposalDetails(ProposalDTO proposalDTO, COIIntegrationProposal coiIntegrationProposal) {
-		coiIntegrationProposal.setProposalNumber(proposalDTO.getProposalNumber());
-		coiIntegrationProposal.setIpNumber(proposalDTO.getIpNumber());
-		coiIntegrationProposal.setSponsorGrantNumber(proposalDTO.getSponsorGrantNumber());
-		coiIntegrationProposal.setVersionNumber(proposalDTO.getVersionNumber());
-        coiIntegrationProposal.setProposalStartDate(proposalDTO.getStartDate());
-        coiIntegrationProposal.setProposalEndDate(proposalDTO.getEndDate());
-        coiIntegrationProposal.setSponsorCode(proposalDTO.getSponsorCode());
-        coiIntegrationProposal.setSponsorName(proposalDTO.getSponsorName());
-        coiIntegrationProposal.setPrimeSponsorCode(proposalDTO.getPrimeSponsorCode());
-        coiIntegrationProposal.setPrimeSponsorName(proposalDTO.getPrimeSponsorName());
-        coiIntegrationProposal.setLeadUnit(proposalDTO.getLeadUnit());
-        coiIntegrationProposal.setLeadUnitName(proposalDTO.getLeadUnitName());
-        coiIntegrationProposal.setProposalStatusCode(proposalDTO.getProposalStatusCode());
-        coiIntegrationProposal.setProposalStatus(proposalDTO.getProposalStatus());
-        coiIntegrationProposal.setProposalTypeCode(proposalDTO.getProposalTypeCode());
-        coiIntegrationProposal.setProposalType(proposalDTO.getProposalType());
-        coiIntegrationProposal.setTitle(proposalDTO.getTitle());
-        coiIntegrationProposal.setLastFedTimestamp(integrationDao.getCurrentTimestamp());  
-        coiIntegrationProposal.setDocumentUrl(proposalDTO.getDocumentUrl());
-        coiIntegrationProposal.setSrcSysUpdateTimestamp(proposalDTO.getSrcSysUpdateTimestamp());
-        coiIntegrationProposal.setSrcSysUpdateUsername(proposalDTO.getSrcSysUpdateUsername());
-        coiIntegrationProposal.setAttribute1Label(proposalDTO.getAttribute1Label());
-        coiIntegrationProposal.setAttribute1Value(proposalDTO.getAttribute1Value());
-        coiIntegrationProposal.setAttribute2Label(proposalDTO.getAttribute2Label());
-        coiIntegrationProposal.setAttribute2Value(proposalDTO.getAttribute2Value());
-        coiIntegrationProposal.setAttribute3Label(proposalDTO.getAttribute3Label());
-        coiIntegrationProposal.setAttribute3Value(proposalDTO.getAttribute3Value());
-        coiIntegrationProposal.setAttribute4Label(proposalDTO.getAttribute4Label());
-        coiIntegrationProposal.setAttribute4Value(proposalDTO.getAttribute4Value());
-        coiIntegrationProposal.setAttribute5Label(proposalDTO.getAttribute5Label());
-        coiIntegrationProposal.setAttribute5Value(proposalDTO.getAttribute5Value());
-        proposalIntegrationRepository.save(coiIntegrationProposal);
+	private void saveDevProposalDetails(ProposalDTO proposalDTO, COIIntegrationProposal coiIntegrationProposal) {
+		
+		coiIntegrationProposal = setProposalEntityObject(proposalDTO, coiIntegrationProposal);
+		try {
+			proposalIntegrationDao.saveProposal(coiIntegrationProposal);
+
+			if (PROPOSAL_DEACTIVATE_STATUS.equals(coiIntegrationProposal.getProposalStatusCode())) {
+				MarkVoidVO vo = prepareMarkProposalVoidVO(coiIntegrationProposal.getProposalNumber());
+				fcoiFeignClient.makeDisclosureVoid(vo);
+			}
+
+		} catch (DataAccessException dae) {
+			log.error("Data access error while saving proposal: ", dae);
+
+		} catch (FeignException fe) {
+			log.error("Error while voiding disclosure: ", fe);
+
+		} catch (Exception e) {
+			log.error("General error while saving proposal or voiding disclosure: ", e);
+
+		}
 	}
 
-	private void prepareProposalPersonDetail(ProposalDTO proposalDTO) {
+
+	private void saveProposalPersonDetail(ProposalDTO proposalDTO) {
 		List<COIIntegrationProposalPerson> proposalPersons = proposalPersonIntegrationRepository.findProposalPersonsByProposalNumber(proposalDTO.getProposalNumber());
-		saveOrUpdateProposalPersonDetail(proposalDTO.getProposalPersons(), proposalPersons);
+		saveProposalPerson(proposalDTO.getProposalPersons(), proposalPersons);
 	}
 
-	private void saveOrUpdateProposalPersonDetail(List<ProposalPersonDTO> proposalPersonDTOs, List<COIIntegrationProposalPerson> proposalPersons) {
+	private void saveProposalPerson(List<ProposalPersonDTO> proposalPersonDTOs, List<COIIntegrationProposalPerson> proposalPersons) {
+		
 		proposalPersonDTOs.forEach(proposalPersonDTO -> {
+			
 			COIIntegrationProposalPerson proposalPerson = proposalPersons.stream()
 					.filter(person -> person.getKeyPersonId().equals(proposalPersonDTO.getKeyPersonId())
 							&& person.getKeyPersonRole().equals(proposalPersonDTO.getKeyPersonRole())
 							&& person.getProposalNumber().equals(proposalPersonDTO.getProposalNumber()))
 					.findFirst().orElse(new COIIntegrationProposalPerson());
 			preparePersonDetail(proposalPerson, proposalPersonDTO);
-			proposalPersonIntegrationRepository.save(proposalPerson);
+			try {
+				proposalIntegrationDao.saveProposalPerson(proposalPerson);
+			} catch (Exception e) {
+				log.error("Error in saving proposal saveProposalPerson {}", proposalPerson, e.getMessage());
+			}
+			
 		});
+		
+		checkAndDeactivatePerson(proposalPersonDTOs, proposalPersons);
+		
+	}
+
+	private void checkAndDeactivatePerson(List<ProposalPersonDTO> proposalPersonDTOs,
+			List<COIIntegrationProposalPerson> proposalPersons) {
 		Set<String> incomingKeyPersonIds = proposalPersonDTOs.stream()
 				.map(proposalPersonDTO -> proposalPersonDTO.getKeyPersonId()).collect(Collectors.toSet());
 		proposalPersons.stream()
 				.filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
 				.forEach(existingPerson -> {
-					existingPerson.setStatus(Constant.IN_ACTIVE);
-					proposalPersonIntegrationRepository.save(existingPerson);
+					
+					existingPerson.setStatus(Constant.INACTIVE);
+					
+					try {
+						proposalIntegrationDao.saveProposalPerson(existingPerson);
+						MarkVoidVO vo = prepareMarkProposalPersonVoidVO(existingPerson.getProposalNumber(), existingPerson.getKeyPersonId());
+						fcoiFeignClient.makeDisclosureVoid(vo);
+						
+					} catch (DataAccessException dae) {
+						log.error("Error in checkAndDeactivatePerson {}: ", dae);
+
+					} catch (FeignException fe) {
+						log.error("Error in checkAndDeactivatePerson {}: ", fe);
+
+					} catch (Exception e) {
+						log.error("Error in checkAndDeactivatePerson {}", existingPerson, e.getMessage());
+					}
+					
 				});
 	}
 
@@ -176,6 +203,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	@Override
+	@Transactional
 	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> questionnaireVOs) {
 		try {
 			log.info("feedPersonQuestionnaireAndCreateDisclosure .... ");
@@ -198,6 +226,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
 	}
 
+	@Transactional
 	private void saveOrUpdateQuestionAnswer(List<COIIntegrationPropQuestAns> questAnswers, List<QuestionnaireVO> questionnaireVOs) {
 		questionnaireVOs.forEach(vo -> {
 			COIIntegrationPropQuestAns integrationPropQuestAns = questAnswers.stream()
@@ -209,6 +238,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		});
 	}
 
+	@Transactional
 	private COIIntegrationPropQuestAns prepareQuestionAnswer(COIIntegrationPropQuestAns integrationPropQuestAns, QuestionnaireVO vo) {
 		integrationPropQuestAns.setAnswer(vo.getAnswer());
 		integrationPropQuestAns.setQuestionId(vo.getQuestionId());
@@ -224,7 +254,8 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		integrationPropQuestAns.setAttribute3Value(vo.getAttribute3Value());
 		return integrationPropQuestAns;
 	}
-
+	
+	@Transactional
 	private void prepareValidateAndCreateDisclosure(QuestionnaireVO vo) {
 		ProcessProposalDisclosureVO processProposalDisclosureVO = new ProcessProposalDisclosureVO();
 		processProposalDisclosureVO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
@@ -235,6 +266,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		validateAndCreateDisclosure(createValidateDisclosureVO(vo), processProposalDisclosureVO, vo.getQuestionnaireId());
 	}
 
+	@Transactional
 	private ValidateDisclosureVO createValidateDisclosureVO(QuestionnaireVO vo) {
 		ValidateDisclosureVO disclosureVO = new ValidateDisclosureVO();
 	    disclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE.toString());
@@ -244,6 +276,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public void validateAndCreateDisclosure(ValidateDisclosureVO validateDisclosureVO, ProcessProposalDisclosureVO vo, Integer questionnaireId) {			
 		try {
 			Boolean canCreateDisclosure = proposalIntegrationDao.canCreateProjectDisclosure(questionnaireId, vo.getPersonId(), vo.getModuleItemId().toString());
@@ -274,6 +307,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
     }
 
+	@Transactional
 	private void syncQuestionniareAnswers(Map<String, Object> coiDisclosure, ProcessProposalDisclosureVO vo, Integer questionnaireId) {
 		QuestionnaireVO questionnaireVO = new QuestionnaireVO();
 		questionnaireVO.setProposalNumber(vo.getModuleItemId().toString());
@@ -284,6 +318,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		getQuestionnaire(questionnaireVO);
 	}
 
+	@Transactional
 	private CreateProposalDisclosureVO prepareCreateProposalDisclosureResponse(ProcessProposalDisclosureVO vo) {
 		CreateProposalDisclosureVO disclosureVO = new CreateProposalDisclosureVO();
 		disclosureVO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
@@ -295,6 +330,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	    return disclosureVO;
 	}
 
+	
 	private String getQuestionnaire(QuestionnaireVO vo) {
 		try {
 			FibiCoiQnrMapping  qnrMapping = proposalIntegrationDao.getQuestionnaireMappingInfo(vo.getQuestionnaireId());
@@ -307,6 +343,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
 	}
 
+	
 	private QuestionnaireSaveDto prepareQuestionnaireAnswersToSave(FibiCoiQnrMapping qnrMapping, GetQNRDetailsDto questionnaire, QuestionnaireVO vo) {
 		QuestionnaireSaveDto questionnaireSaveDto = new QuestionnaireSaveDto();
 		questionnaireSaveDto.setModuleItemCode(Constant.COI_MODULE_CODE);
@@ -321,6 +358,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		return saveQuestionnaireAnswers(questionnaireSaveDto, qnrMapping.getQuestions(), vo.getPersonId(), Integer.parseInt(vo.getProposalNumber()), vo.getDisclosureId(), vo.getQuestionnaireId(), questionnaire.getQuestionnaireAnswerHeaderId());
 	}
 
+	@Transactional
 	private GetQNRDetailsDto getQuestionnaireByParam(GetQNRDetailsDto questionnaire, Integer fibiQuestionnaireId, String moduleItemKey) {
 		Integer questionnaireAnswerHeaderId = getQuestionnaireAnswerHeaderId(moduleItemKey, fibiQuestionnaireId);
 		questionnaire.setQuestionnaireAnswerHeaderId(questionnaireAnswerHeaderId);
@@ -330,6 +368,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		return proposalIntegrationDao.getQuestionnaireDetails(questionnaire);
 	}
 
+	
 	private Integer getQuestionnaireAnswerHeaderId(String disclosureId, Integer fibiQnrId) {
 		FetchQnrAnsHeaderDto ansHeaderDto = new FetchQnrAnsHeaderDto();
 		ansHeaderDto.setModuleItemCode(Constant.COI_MODULE_CODE);
@@ -376,5 +415,57 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
 	}
 
+	private COIIntegrationProposal setProposalEntityObject(ProposalDTO proposalDTO, COIIntegrationProposal coiIntegrationProposal) {
+		coiIntegrationProposal.setProposalNumber(proposalDTO.getProposalNumber());
+		coiIntegrationProposal.setIpNumber(proposalDTO.getIpNumber());
+		coiIntegrationProposal.setSponsorGrantNumber(proposalDTO.getSponsorGrantNumber());
+		coiIntegrationProposal.setVersionNumber(proposalDTO.getVersionNumber());
+        coiIntegrationProposal.setProposalStartDate(proposalDTO.getStartDate());
+        coiIntegrationProposal.setProposalEndDate(proposalDTO.getEndDate());
+        coiIntegrationProposal.setSponsorCode(proposalDTO.getSponsorCode());
+        coiIntegrationProposal.setSponsorName(proposalDTO.getSponsorName());
+        coiIntegrationProposal.setPrimeSponsorCode(proposalDTO.getPrimeSponsorCode());
+        coiIntegrationProposal.setPrimeSponsorName(proposalDTO.getPrimeSponsorName());
+        coiIntegrationProposal.setLeadUnit(proposalDTO.getLeadUnit());
+        coiIntegrationProposal.setLeadUnitName(proposalDTO.getLeadUnitName());
+        coiIntegrationProposal.setProposalStatusCode(proposalDTO.getProposalStatusCode());
+        coiIntegrationProposal.setProposalStatus(proposalDTO.getProposalStatus());
+        coiIntegrationProposal.setProposalTypeCode(proposalDTO.getProposalTypeCode());
+        coiIntegrationProposal.setProposalType(proposalDTO.getProposalType());
+        coiIntegrationProposal.setTitle(proposalDTO.getTitle());
+        coiIntegrationProposal.setLastFedTimestamp(integrationDao.getCurrentTimestamp());  
+        coiIntegrationProposal.setDocumentUrl(proposalDTO.getDocumentUrl());
+        coiIntegrationProposal.setSrcSysUpdateTimestamp(proposalDTO.getSrcSysUpdateTimestamp());
+        coiIntegrationProposal.setSrcSysUpdateUsername(proposalDTO.getSrcSysUpdateUsername());
+        coiIntegrationProposal.setAttribute1Label(proposalDTO.getAttribute1Label());
+        coiIntegrationProposal.setAttribute1Value(proposalDTO.getAttribute1Value());
+        coiIntegrationProposal.setAttribute2Label(proposalDTO.getAttribute2Label());
+        coiIntegrationProposal.setAttribute2Value(proposalDTO.getAttribute2Value());
+        coiIntegrationProposal.setAttribute3Label(proposalDTO.getAttribute3Label());
+        coiIntegrationProposal.setAttribute3Value(proposalDTO.getAttribute3Value());
+        coiIntegrationProposal.setAttribute4Label(proposalDTO.getAttribute4Label());
+        coiIntegrationProposal.setAttribute4Value(proposalDTO.getAttribute4Value());
+        coiIntegrationProposal.setAttribute5Label(proposalDTO.getAttribute5Label());
+        coiIntegrationProposal.setAttribute5Value(proposalDTO.getAttribute5Value());
+        
+        return coiIntegrationProposal;
+	}
+
+	private MarkVoidVO prepareMarkProposalVoidVO(String proposalNumber) {
+		return prepareMarkVoidVO(proposalNumber, null,REMARK_PROPOSAL_VOID);
+	}
+
+	private MarkVoidVO prepareMarkProposalPersonVoidVO(String proposalNumber, String personId) {
+		return prepareMarkVoidVO(proposalNumber, personId,REMARK_PROPOSAL_PERSON_VOID);
+	}
+
+	private MarkVoidVO prepareMarkVoidVO(String proposalNumber, String personId, String remark) {
+		return MarkVoidVO.builder()
+						 .moduleCode(Constant.DEV_PROPOSAL_MODULE_CODE)
+						 .moduleItemKey(proposalNumber)
+						 .remark(remark)
+						 .personId(personId)
+						 .build();
+	}
 
 }
