@@ -17,6 +17,7 @@ import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse.Organizat
 import com.polus.integration.service.IntegrationService;
 import com.polus.integration.vo.COIActionLogVO;
 
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -181,7 +182,7 @@ public class EntityEnrichService {
 		return pickRegistrationNumber(UEI_DNB_REGISTRATION_TYPE, organization);
 
 	}
-
+  
 	private Integer getNoOfEmployees(
 			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 
@@ -244,7 +245,6 @@ public class EntityEnrichService {
 
 	private String getForiegnName(
 			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
-
 		return handleException(() -> {
 			if (organization.getMultilingualPrimaryName() == null) {
 				return null;
@@ -253,7 +253,6 @@ public class EntityEnrichService {
 			String foriegnName = organization.getMultilingualPrimaryName().stream()
 					.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.MultilingualPrimaryName::getName)
 					.findFirst().orElse(null);
-
 			return foriegnName;
 		});
 
@@ -273,11 +272,9 @@ public class EntityEnrichService {
 
 			return shortName;
 		});
-
 	}
 
 	private String getWebsite(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
-
 		return handleException(() -> {
 			if (organization.getWebsiteAddress() == null) {
 				return null;
@@ -298,7 +295,6 @@ public class EntityEnrichService {
 
 	private String pickRegistrationNumber(Integer registrationTypeCode,
 			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
-
 		return handleException(() -> {
 			if (organization.getRegistrationNumbers() == null) {
 				return null;
@@ -345,6 +341,5 @@ public class EntityEnrichService {
 													  .dunsNumber(dunsNumber)
 													  .build()
 				);
-		
 	}	
 }
