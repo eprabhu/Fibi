@@ -40,6 +40,7 @@ import com.polus.core.notification.pojo.NotificationRecipient;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Country;
+import com.polus.core.pojo.FileType;
 import com.polus.core.pojo.Unit;
 import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.core.questionnaire.service.QuestionnaireService;
@@ -2035,4 +2036,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, 0, null, additionalDetails);
 		return new ResponseEntity<>("Notification send successfully", HttpStatus.OK);
 	}
+
+	@Override
+	public Map<String, List<FileType>> fetchRequiredParams() {
+		List<FileType> fileTypes = conflictOfInterestDao.getAllFileTypes();
+		Map<String, List<FileType>> response = new HashMap<>();
+	    response.put("fileTypes", fileTypes);
+	    return response;
+	}
+
 }
