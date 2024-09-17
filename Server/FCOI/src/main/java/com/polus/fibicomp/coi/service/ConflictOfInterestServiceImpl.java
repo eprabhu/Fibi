@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import com.polus.core.constants.CoreConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -245,6 +246,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> saveOrUpdateCoiReview(ConflictOfInterestVO vo){
+		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getCoiReview().getDisclosureId())) {
+			throw new ApplicationException("Disclosure is in void status!", CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+		}
 		String actionTypeCode = null;
 		CoiReview coiReview = vo.getCoiReview();
 		if (coiReview.getCoiReviewId() == null && conflictOfInterestDao.isReviewAdded(coiReview)) {
@@ -333,6 +337,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public List<CoiReview> getCoiReview(Integer disclosureId){
+		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
+			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+		}
 		List<CoiReview> coiReviews = conflictOfInterestDao.getCoiReview(disclosureId);
 		coiReviews.forEach(coiReview -> {
 			coiReview.setAssigneePersonName(personDao.getPersonFullNameByPersonId(coiReview.getAssigneePersonId()));
@@ -342,6 +349,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> startReview(ConflictOfInterestVO vo){
+		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getCoiReview().getDisclosureId())) {
+			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+		}
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		if (conflictOfInterestDao.isReviewStatus(vo.getCoiReview().getCoiReviewId(),
 				Arrays.asList(Constants.COI_REVIEWER_REVIEW_STATUS_START, Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED))) {
@@ -402,6 +412,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		CoiDisclosure disclObj = fcoiDisclosureDao.loadDisclosure(vo.getCoiReview().getDisclosureId());
 		if (disclObj.getReviewStatusCode().equalsIgnoreCase(REVIEW_STATUS_RETURNED)) {
 			return new ResponseEntity<>("Disclosure already returned", HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		if (disclObj.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
+			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
 		}
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		conflictOfInterestDao.startReview(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED,
@@ -467,6 +480,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (coiReview == null) {
 				return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
 			}
+			if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, coiReview.getDisclosureId())) {
+				throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+			}
 			conflictOfInterestDao.deleteReviewAssigneeHistory(coiReviewId);
 
 			reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder()
@@ -523,6 +539,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber){
+		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
+			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+		}
 		return completeReview(disclosureId, disclosureNumber, false);
 	}
 
@@ -1376,38 +1395,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return null;
 	}
 
-//	private void saveOrUpdateCoiConflictHistory(ConflictOfInterestVO vo) {
-//		CoiConflictHistory coiConflictHistory = new CoiConflictHistory();
-//		CoiDisclEntProjDetails coiDisclEntProjDetails = conflictOfInterestDao.getProjectRelationship(vo.getDisclosureDetailsId());
-//		String exisitingConflcitStatus = conflictOfInterestDao.getConflictHistoryStatusCodeByDisclId(vo.getDisclosureDetailsId());
-//		if (!coiDisclEntProjDetails.getProjectConflictStatusCode().equals(exisitingConflcitStatus)) {
-//			DisclComment disclComment = getDisclProjectConflictComment(coiDisclEntProjDetails.getDisclosureId(), vo.getDisclosureDetailsId());
-//			coiConflictHistory.setConflictStatusCode(coiDisclEntProjDetails.getProjectConflictStatusCode());
-//			coiConflictHistory.setComment(disclComment.getComment());
-//			coiConflictHistory.setDisclosureId(vo.getDisclosureId());
-//			coiConflictHistory.setDisclosureDetailsId(vo.getDisclosureDetailsId());
-//			coiConflictHistory.setUpdateUser(coiDisclEntProjDetails.getUpdateUser());
-//			coiConflictHistory.setUpdateTimestamp(coiDisclEntProjDetails.getUpdateTimestamp());
-//			List<CoiConflictHistory> coiConflictHistoryList = conflictOfInterestDao.getCoiConflictHistory(vo.getDisclosureDetailsId());
-//			DisclosureActionLogDto actionLogDto = new DisclosureActionLogDto();
-//			actionLogDto.setActionTypeCode(coiConflictHistoryList.isEmpty()
-//							? Constants.COI_DISCLOSURE_ACTION_LOG_ADD_CONFLICT_STATUS
-//							: Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_CONFLICT_STATUS);
-//			actionLogDto.setNewConflictStatus(coiDisclEntProjDetails.getCoiProjConflictStatusType().getDescription());
-//			if (coiConflictHistoryList.isEmpty()) {
-//				actionLogDto.setReporter(personDao.getUserFullNameByUserName(disclComment.getUpdateUser()));
-//			} else {
-//				actionLogDto.setConflictStatus(conflictOfInterestDao
-//						.getCoiConflictStatusByStatusCode(coiConflictHistoryList.get(0).getConflictStatusCode()));
-//				actionLogDto.setAdministratorName(vo.getReporterFullName() == null
-//							? AuthenticatedUser.getLoginUserFullName()
-//							: vo.getReporterFullName());
-//			}
-//			coiConflictHistory.setMessage(actionLogService.getFormattedMessageByActionType(actionLogDto));
-//			conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
-//		}
-//	}
-
 	@Override
 	public ResponseEntity<Object> fetchAllRelationshipTypes() {
 		return new ResponseEntity<>(conflictOfInterestDao.fetchAllRelationshipTypes(), HttpStatus.OK);
@@ -1518,6 +1505,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
     public ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description) {
         CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(disclosureId);
+		if (disclosure.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
+			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+		}
         if ((!SUBMITTED_FOR_REVIEW.equalsIgnoreCase(disclosure.getReviewStatusCode()))
                 || (disclosure.getAdminPersonId() != null) || (disclosure.getAdminGroupId() != null)) {
             return new ResponseEntity<>("Disclosure already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);

@@ -11,6 +11,7 @@ import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
@@ -194,5 +195,10 @@ public class DisclosureController {
     @PutMapping("/integration/detachProject")
     public void detachFcoiDisclProject(@RequestBody DisclosureProjectDto projectDto) {
         disclosureService.detachFcoiDisclProject(projectDto);
+    }
+
+    @PostMapping("/integration/makeVoid")
+    public void makeDisclosureVoid(@RequestBody IntegrationRequestDto integrationRequestDto) {
+        disclosureService.makeDisclosureVoid(integrationRequestDto);
     }
 }

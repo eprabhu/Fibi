@@ -205,4 +205,5 @@ public interface Constants {
     String DISCLOSURE_TYPE_CODE_PROPOSAL = "2";
     String DISCLOSURE_TYPE_CODE_REVISION = "4";
     String PROJECT_DISCL_FCOI_TYPE_CODE = "2";
+    String COI_DISCL_VOID_DISPOSITION_STATUS = "2";
 }

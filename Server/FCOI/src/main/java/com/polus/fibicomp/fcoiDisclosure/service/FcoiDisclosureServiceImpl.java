@@ -15,6 +15,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.constants.ActionTypes;
 import com.polus.fibicomp.constants.StaticPlaceholders;
+import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
@@ -187,6 +188,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         CoiDisclosureDto coiDisclosureDto = new CoiDisclosureDto();
         ConflictOfInterestVO vo = new ConflictOfInterestVO();
         CoiDisclosure coiDisclosure = disclosureDao.loadDisclosure(disclosureId);
+        if (coiDisclosure.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
+            return new ResponseEntity<>("Disclosure is in void status!",HttpStatus.METHOD_NOT_ALLOWED);
+        }
         BeanUtils.copyProperties(coiDisclosure, coiDisclosureDto, "countryOfCitizenshipDetails", "countryDetails", "currency");
         if (Objects.equals(coiDisclosure.getFcoiTypeCode(), PROJECT_DISCLOSURE_TYPE_CODE)) {
             List<DisclosureProjectDto> disclProjects = disclosureDao.getDisclosureProjects(disclosureId);
@@ -211,6 +215,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         CoiDisclosure coiDisclosureObj = disclosureDao.loadDisclosure(coiDisclosureDto.getDisclosureId());
         if (coiDisclosureObj.getReviewStatusCode().equals(DISCLOSURE_REVIEW_IN_PROGRESS) || coiDisclosureObj.getReviewStatusCode().equals(SUBMITTED_FOR_REVIEW) || coiDisclosureObj.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED) || coiDisclosureObj.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED)) {
             return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
+        if (coiDisclosureObj.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
+            return new ResponseEntity<>("Disclosure is in void status!",HttpStatus.METHOD_NOT_ALLOWED);
         }
         setDisclosureReviewStatusCode(coiDisclosureDto, coiDisclosureObj);
         coiDisclosureDto.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
@@ -331,6 +338,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             return new ResponseEntity<>("Risk is already updated", HttpStatus.METHOD_NOT_ALLOWED);
         }
         CoiDisclosure disclosure = disclosureDao.loadDisclosure(disclosureDto.getDisclosureId());
+        if (disclosure.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
+            return new ResponseEntity<>("Disclosure is in void status!",HttpStatus.METHOD_NOT_ALLOWED);
+        }
         CoiRiskCategory risk = disclosureDao.getRiskCategoryStatusByCode(disclosureDto.getRiskCategoryCode());
         disclosureDto.setUpdateTimestamp(disclosureDao.updateDisclosureRiskCategory(disclosureDto));
         DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber()).riskCategory(disclosure.getCoiRiskCategory().getDescription()).riskCategoryCode(disclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription()).newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK).administratorName(AuthenticatedUser.getLoginUserFullName()).fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosureDto.getRevisionComment()).build();
@@ -374,6 +384,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     public List<DisclosureProjectDto> getDisclProjectEntityRelations(ProjectEntityRequestDto vo) {
         if (disclosureDao.isProjectSFISyncNeeded(vo.getDisclosureId())) {
             disclosureDao.syncFCOIDisclosure(vo.getDisclosureId(), vo.getDisclosureNumber());
+        }
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         }
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
@@ -426,6 +439,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public List<PersonEntityRelationshipDto> getDisclosureEntityRelations(ProjectEntityRequestDto vo) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
         CompletableFuture<List<DisclosureProjectDto>> projectsFuture =
@@ -514,6 +530,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> saveDisclosureConflict(ProjectEntityRequestDto vo) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         disclosureDao.saveOrUpdateCoiDisclEntProjDetails(vo);
         List<ProjectEntityRequestDto> projectEntityRequestDtos = new ArrayList<>();
         if (vo.getApplyAll()) {
@@ -638,6 +657,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         if (disclosureDao.isDisclEntProjConflictAdded(vo.getConflictStatusCode(), vo.getCoiDisclProjectEntityRelId())) {
             return new ResponseEntity<>("Conflict already updated", HttpStatus.METHOD_NOT_ALLOWED);
         }
@@ -661,6 +683,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> validateConflicts(Integer disclosureId) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         CoiConflictStatusTypeDto statusCode = disclosureDao.validateConflicts(disclosureId);
         return new ResponseEntity<>(statusCode, HttpStatus.OK);
     }
@@ -697,6 +722,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, dto.getDisclosureId())) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         if ((dto.getActionType().equals("R") && (disclosureDao.isSameAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())))
                 || (dto.getActionType().equals("A") && disclosureDao.isAdminPersonOrGroupAdded(dto.getDisclosureId()))) {
             return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
@@ -774,12 +802,18 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public void syncFCOIDisclosure(CoiDisclosureDto coiDisclosureDto) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, coiDisclosureDto.getDisclosureId())) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         disclosureDao.syncFCOIDisclosure(coiDisclosureDto.getDisclosureId(),
                 coiDisclosureDto.getDisclosureNumber());
     }
 
     @Override
     public ResponseEntity<Object> evaluateValidation(Integer disclosureId, Integer disclosureNumber) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
         disclosureDao.syncFCOIDisclosure(disclosureId, disclosureNumber);
         List<COIValidateDto> coiValidateDtoList = disclosureDao.evaluateValidation(disclosureId, AuthenticatedUser.getLoginPersonId());
         return new ResponseEntity<>(coiValidateDtoList, HttpStatus.OK);
@@ -793,5 +827,10 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     @Override
     public void detachFcoiDisclProject(DisclosureProjectDto projectDto) {
         disclosureDao.detachFcoiDisclProject(projectDto);
+    }
+
+    @Override
+    public void makeDisclosureVoid(IntegrationRequestDto integrationRequestDto) {
+        disclosureDao.makeDisclosureVoid(integrationRequestDto);
     }
 }
