@@ -1,6 +1,7 @@
 package com.polus.integration.entity.enrich.service;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,10 @@ import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse;
 import com.polus.integration.entity.enrich.dto.DnBEntityEnrichRequestDTO;
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse;
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse.Organization;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EntityEnrichService {
 
@@ -62,7 +67,7 @@ public class EntityEnrichService {
 			dao.refreshEntityTelephone(entityId,actionPersonId, response.getOrganization().getTelephone());
 			dao.refreshForiegnName(entityId, actionPersonId, response.getOrganization().getMultilingualPrimaryName());
 		}catch(Exception e) {
-			e.printStackTrace();
+			log.error("DnB ENRICH API: Exception while refreshDatabase, error "+ e.getMessage());
 		}
 	}
 
@@ -102,9 +107,8 @@ public class EntityEnrichService {
 		} catch (Exception e) {
 			ErrorCode errorCode = ErrorCode.DNB_ENRICH_ERROR;
 			response.setErrorCode(errorCode.getErrorCode());
-			response.setErrorMessage("Error while API PrepareResponse for Enrich API in Fibi Enrich Service");
+			response.setErrorMessage("Error while API PrepareResponse for Enrich API in Fibi Enrich Service. \n Exception: "+e.getMessage());
 			response.setErrorDetails(e.getMessage());
-			response.setErrorCode(null);
 		}
 		return response;
 	}
@@ -166,38 +170,42 @@ public class EntityEnrichService {
 	}
 	
 	private Integer getNoOfEmployees(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
-		if (organization.getNumberOfEmployees() == null) {
-			return null;		
-		}
 		
-		Integer noOfEmp = organization
-							.getNumberOfEmployees()
-							.stream()
-							.filter(emp -> emp.getInformationScopeDnBCode() == 9067)// to get the consolidated count
-							.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.NumberOfEmployees::getValue)
-							.findFirst().orElse(null);
-		
-		return noOfEmp;	
-		
+		return handleException( () -> {
+			if (organization.getNumberOfEmployees() == null) {
+				return null;		
+			}
+			
+			Integer noOfEmp = organization
+								.getNumberOfEmployees()
+								.stream()
+								.filter(emp -> emp.getInformationScopeDnBCode() == 9067)// to get the consolidated count
+								.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.NumberOfEmployees::getValue)
+								.findFirst().orElse(null);
+			
+			return noOfEmp;	
+		});
 		
 	}
 	
 	private String getCompanyProfile(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
-		if (organization.getSummary() == null) {
-			return null;		
-		}
-
-		String companyProfile =  	organization
-									.getSummary()
-									.stream()
-									.filter(reg -> reg.getTextType().getDnbCode() == 32456) // This is the Short company profile in DnB
-									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Summary::getText)
-									.findFirst().orElse(null);
-		
-		companyProfile = removeHTMLTags(companyProfile);
-
-		return companyProfile;
-
+			
+		return handleException( () -> {	
+			if (organization.getSummary() == null) {
+				return null;		
+			}
+	
+			String companyProfile =  	organization
+										.getSummary()
+										.stream()
+										.filter(reg -> reg.getTextType().getDnbCode() == 32456) // This is the Short company profile in DnB
+										.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Summary::getText)
+										.findFirst().orElse(null);
+			
+			companyProfile = removeHTMLTags(companyProfile);
+	
+			return companyProfile;
+		});
 		
 	}
 	
@@ -225,42 +233,50 @@ public class EntityEnrichService {
 	private String getForiegnName(
 			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 
-		if (organization.getMultilingualPrimaryName() == null) {
-			return null;
-		}
-
-		String foriegnName = organization.getMultilingualPrimaryName().stream()
-				.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.MultilingualPrimaryName::getName)
-				.findFirst().orElse(null);
-
-		return foriegnName;
+		return handleException( () -> {
+			if (organization.getMultilingualPrimaryName() == null) {
+				return null;
+			}
+	
+			String foriegnName = organization.getMultilingualPrimaryName().stream()
+					.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.MultilingualPrimaryName::getName)
+					.findFirst().orElse(null);
+	
+			return foriegnName;
+		});
 
 	}
 	
 	private String getShortName(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 		
-		if (organization.getTradeStyleNames() == null) {
-			return null;
-		}
-
-		String shortName = organization.getTradeStyleNames()
-					.stream()
-					.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.TradeNameStyle::getName)
-					.findFirst().orElse(null);
-
-		return shortName;
+		return handleException( () -> {
+			if (organization.getTradeStyleNames() == null) {
+				return null;
+			}
+	
+			String shortName = organization.getTradeStyleNames()
+						.stream()
+						.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.TradeNameStyle::getName)
+						.findFirst().orElse(null);
+	
+			return shortName;
+		});
+		
 	}
 	
 	private String getWebsite(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
-		if (organization.getWebsiteAddress() == null) {
-			return null;
-		}
-		String website = organization.getWebsiteAddress()
-					.stream()
-					.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Website::getDomainName)
-					.findFirst().orElse(null);
-
-		return website;
+		
+		return handleException( () -> {
+			if (organization.getWebsiteAddress() == null) {
+				return null;
+			}
+			String website = organization.getWebsiteAddress()
+						.stream()
+						.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Website::getUrl)
+						.findFirst().orElse(null);
+	
+			return website;
+		});	
 	}
 	
 	private String getFederalEmployerId(
@@ -272,18 +288,30 @@ public class EntityEnrichService {
 	private String pickRegistrationNumber( Integer registrationTypeCode,
 			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 		
-		if (organization.getRegistrationNumbers() == null) {
-			return null;		
-		}
-
-		String registrationNumber = organization
-									.getRegistrationNumbers()
-									.stream()
-									.filter(reg -> reg.getTypeDnBCode() == registrationTypeCode)
-									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber::getRegistrationNumber)
-									.findFirst().orElse(null);
-
-		return registrationNumber;
-	}		
+		return handleException( () -> {
+			if (organization.getRegistrationNumbers() == null) {
+				return null;		
+			}
 	
+			String registrationNumber = organization
+										.getRegistrationNumbers()
+										.stream()
+										.filter(reg -> reg.getTypeDnBCode() == registrationTypeCode)
+										.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber::getRegistrationNumber)
+										.findFirst().orElse(null);
+	
+			return registrationNumber;
+		 });
+		
+	}		
+
+
+	private <T> T handleException(Supplier<T> supplier) {
+	    try {
+	        return supplier.get();
+	    } catch (Exception e) {	       
+	    	log.error("DnB ENRICH API: Exception while handleException, error "+ e.getMessage());
+	        return null;
+	    }
+	}	
 }

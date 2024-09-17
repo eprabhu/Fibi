@@ -6,13 +6,18 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.polus.integration.entity.cleansematch.dto.BulkCleanseMatchAPIResponse;
+import com.polus.integration.entity.cleansematch.dao.EntityCleanseMatchDAO;
 import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse;
+import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse.ErrorDetail;
+import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse.MatchCandidate;
 import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
 import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
-import com.polus.integration.entity.cleansematch.dto.DnBCleanseMatchAPIResponse.ErrorDetail;
+import com.polus.integration.entity.cleansematch.dto.EntityInfoDTO;
 import com.polus.integration.entity.config.ErrorCode;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EntityCleanseMatchService {
 
@@ -21,6 +26,9 @@ public class EntityCleanseMatchService {
 
 	@Autowired
 	private DnBCleanseMatchAPIService apiService;
+	
+	@Autowired
+	private EntityCleanseMatchDAO dao;
 
 	public EntityCleanseMatchAPIResponse runCleanseMatch(DnBEntityCleanseMatchRequestDTO request) {
 		EntityCleanseMatchAPIResponse response = new EntityCleanseMatchAPIResponse();		 
@@ -57,7 +65,8 @@ public class EntityCleanseMatchService {
 				}
 				response.setCandidatesMatchedQuantity(apiResponse.getCandidatesMatchedQuantity());
 				if (apiResponse.getMatchCandidates() != null && !apiResponse.getMatchCandidates().isEmpty()) {
-					response.setMatchCandidates(apiResponse.getMatchCandidates());					
+					response.setMatchCandidates(apiResponse.getMatchCandidates());	
+					response = CheckEntityExistenceByDUNS(response);
 				}
 
 				if (apiResponse.getError() != null) {
@@ -83,9 +92,47 @@ public class EntityCleanseMatchService {
 			response.setErrorCode(errorCode.getErrorCode());
 			response.setErrorMessage("Error while API PrepareResponse for Cleanse Match");
 			response.setErrorDetails(e.getMessage());
-			response.setErrorCode(null);
 		}
+		
+		
 		return response;
+	}
+
+	private EntityCleanseMatchAPIResponse CheckEntityExistenceByDUNS(EntityCleanseMatchAPIResponse response) {
+
+		try {
+			response.getMatchCandidates().parallelStream().forEach( data -> {
+				if (DunsIsEmpty(data)) {
+					return;
+				}
+	
+				String dunsNumber = data.getOrganization().getDuns();
+	
+				EntityInfoDTO entityInfo = dao.getEntityInfoByDUNS(dunsNumber);
+				data.setEntity(entityInfo);	
+				
+			});
+			
+		}catch(Exception e) {
+			log.error("CLEANSE MATCH API: Exception while CheckEntityExistenceByDUNS, error "+ e.getMessage());
+		}
+
+		return response;
+	}
+
+	private boolean DunsIsEmpty(MatchCandidate data) {
+		if(data == null) {
+			return true;
+		}
+		
+		if(data.getOrganization() == null) {
+			return true;
+		}
+		
+		if(data.getOrganization().getDuns() == null) {
+			return true;
+		}
+		return false;
 	}
 	
 	
