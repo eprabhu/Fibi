@@ -4,9 +4,14 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +28,7 @@ import com.polus.core.common.dao.CommonDao;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
+import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.Entity;
 
 import oracle.jdbc.OracleTypes;
@@ -43,7 +49,7 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	protected static Logger logger = LogManager.getLogger(EntityDetailsDAOImpl.class.getName());
 
 	@Override
-	public int createEntity(Entity entity) {
+	public Integer createEntity(Entity entity) {
 		hibernateTemplate.save(entity);
 		updateEntity(
 				EntityRequestDTO.builder().entityNumber(entity.getEntityId()).entityId(entity.getEntityId()).build());
@@ -121,6 +127,12 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getIsDunsMatched() != null) {
 			hqlQuery.append(", e.isDunsMatched = :isDunsMatched");
 		}
+		if (dto.getDocumentStatusTypeCode() != null) {
+			hqlQuery.append(", e.documentStatusTypeCode = :documentStatusTypeCode");
+		}
+		if (dto.getOriginalEntityId() != null) {
+			hqlQuery.append(", e.originalEntityId = :originalEntityId");
+		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		if (dto.getEntityName() != null) {
@@ -189,6 +201,12 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getIsDunsMatched() != null) {
 			query.setParameter("isDunsMatched", dto.getIsDunsMatched());
 		}
+		if (dto.getDocumentStatusTypeCode() != null) {
+			query.setParameter("documentStatusTypeCode", dto.getDocumentStatusTypeCode());
+		}
+		if (dto.getOriginalEntityId() != null) {
+			query.setParameter("originalEntityId", dto.getOriginalEntityId());
+		}
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
@@ -236,6 +254,32 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 			throw new ApplicationException("Unable to fetch entity tab status", e, Constants.DB_PROC_ERROR);
 		}
 		return entityTabStatus;
+	}
+
+	@Override
+	public List<Entity> validateDuplicateByParams(ValidateDuplicateRequestDTO dto) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Entity> cq = cb.createQuery(Entity.class);
+		Root<Entity> entity = cq.from(Entity.class);
+		Predicate entityNamePredicate = cb.like(cb.lower(cb.trim(entity.get("entityName"))), "%" + dto.getEntityName().trim().toLowerCase() + "%");
+		Predicate addressLine1Predicate1 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%");
+		Predicate addressLine1Predicate2 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%");
+		Predicate addressLine2Predicate1 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%");
+		Predicate addressLine2Predicate2 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%");
+		Predicate countryPredicate = cb.equal(entity.get("countryCode"), dto.getCountryCode());
+		Predicate finalPredicate = cb.and(
+		    cb.or(
+		        entityNamePredicate, 
+		        addressLine1Predicate1, 
+		        addressLine1Predicate2, 
+		        addressLine2Predicate1, 
+		        addressLine2Predicate2
+		    ), 
+		    countryPredicate
+		);
+		cq.where(finalPredicate);
+		return session.createQuery(cq).getResultList();
 	}
 
 }

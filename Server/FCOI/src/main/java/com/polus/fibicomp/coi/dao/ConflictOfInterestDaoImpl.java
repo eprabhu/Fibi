@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
@@ -28,9 +27,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import com.polus.core.constants.CoreConstants;
-import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -43,14 +39,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.inbox.pojo.Inbox;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.pojo.Country;
+import com.polus.core.pojo.FileType;
 import com.polus.core.pojo.Unit;
 import com.polus.core.roles.pojo.AdminGroup;
 import com.polus.core.security.AuthenticatedUser;
-import com.polus.fibicomp.coi.dto.COIValidateDataDto;
-import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -63,23 +59,15 @@ import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.globalentity.pojo.Entity;
-import com.polus.fibicomp.globalentity.pojo.EntityOwnershipType;
-import com.polus.fibicomp.globalentity.pojo.EntityStatusType;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
@@ -109,6 +97,15 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.coi.vo.DashBoardProfile;
 import com.polus.fibicomp.coi.vo.DisclosureView;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
+import com.polus.fibicomp.globalentity.pojo.Entity;
+import com.polus.fibicomp.globalentity.pojo.EntityOwnershipType;
+import com.polus.fibicomp.globalentity.pojo.EntityStatusType;
 import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 
@@ -4088,4 +4085,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
         return (Boolean) query.getSingleResult();
 	}
 
+	@Override
+	public List<FileType> getAllFileTypes() {
+		return hibernateTemplate.loadAll(FileType.class);
+	}
 }

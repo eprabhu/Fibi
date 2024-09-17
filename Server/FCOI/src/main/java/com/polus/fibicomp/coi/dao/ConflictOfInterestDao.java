@@ -5,39 +5,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.polus.core.inbox.pojo.Inbox;
-import com.polus.core.pojo.Country;
-import com.polus.core.pojo.Unit;
-import com.polus.fibicomp.coi.vo.DashBoardProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.coi.dto.COIValidateDto;
+import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.pojo.Country;
+import com.polus.core.pojo.FileType;
+import com.polus.core.pojo.Unit;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
-import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
@@ -62,8 +54,16 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
+import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.coi.vo.DashBoardProfile;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
+import com.polus.fibicomp.globalentity.pojo.Entity;
+import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 
 @Transactional
 @Service
@@ -1140,5 +1140,11 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	public boolean isTravelDisclosureRiskStatusModified(String riskCategoryCode, Integer travelDisclosureId);
+
+	/**
+	 * This method is used to fetch all file types
+	 * @return List of file types
+	 */
+	public List<FileType> getAllFileTypes();
 
 }

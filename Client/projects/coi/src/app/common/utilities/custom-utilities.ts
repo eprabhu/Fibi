@@ -195,7 +195,7 @@ export function isExistSearchWord (object: any, searchText: string, searchKeys: 
     for (const key of searchKeys) {
         if (typeof key === 'string' && key.startsWith('[') && key.endsWith(']')) {
             const keyCombination = key.slice(1, -1); // Remove the brackets
-            const delimiter = keyCombination.includes(' - ') ? ' - ' : 
+            const delimiter = keyCombination.includes(' - ') ? ' - ' :
                               keyCombination.includes(':') ? ':' : ' ';
             const keys = keyCombination.split(delimiter).map(k => k.trim());
             const combinedValue = keys.map(k => object[k] ? object[k].toString() : '').join(delimiter);
@@ -269,4 +269,14 @@ export function inputRestrictionForNumberField(input: any) {
         return null;
     }
 }
+
+/**
+ * check if an object is having no key value pairs.
+ * checks explicitly if the given variable is of type Object.
+ * @param obj
+ */
+export function isEmptyObject(obj: any): boolean {
+    return obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
+}
+
 

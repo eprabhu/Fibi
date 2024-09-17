@@ -3,6 +3,8 @@ package com.polus.integration.proposal.dao;
 
 import org.springframework.stereotype.Service;
 
+import com.polus.integration.proposal.pojo.COIIntegrationProposal;
+import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
 import com.polus.questionnaire.dto.FetchQnrAnsHeaderDto;
 import com.polus.questionnaire.dto.GetQNRDetailsDto;
@@ -55,4 +57,18 @@ public interface ProposalIntegrationDao {
 	 */
 	public Boolean canCreateProjectDisclosure(Integer questionnaireId, String personId, String proposalNumber);
 
+	/**
+	 * @param COIIntegrationProposal
+	 * @return
+	 */
+	public void saveProposal(COIIntegrationProposal coiIntegrationProposal) throws Exception;
+
+	
+	/**
+	 * @param COIIntegrationProposalPerson
+	 * @return
+	 */
+	public void saveProposalPerson(COIIntegrationProposalPerson proposalPerson) throws Exception;	
+	
+	
 }

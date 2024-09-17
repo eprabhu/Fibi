@@ -124,6 +124,9 @@ public class Entity implements Serializable {
 	@Column(name = "OPERATING_STATUS_TYPE_CODE")
 	private String operatingStatusTypeCode;
 
+	@Column(name = "DOCUMENT_STATUS_TYPE_CODE")
+	private String documentStatusTypeCode;
+
 	@Column(name = "BUSINESS_TYPE_CODE")
 	private String businessTypeCode;
 
@@ -168,6 +171,9 @@ public class Entity implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isDunsMatched;
 
+	@Column(name = "ORIGINAL_ENTITY_ID")
+	private Integer originalEntityId;
+
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK1"), name = "ENTITY_STATUS_TYPE_CODE", referencedColumnName = "ENTITY_STATUS_TYPE_CODE", insertable = false, updatable = false)
 	private EntityStatusType entityStatusType;
@@ -191,5 +197,9 @@ public class Entity implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK6"), name = "BUSINESS_TYPE_CODE", referencedColumnName = "BUSINESS_TYPE_CODE", insertable = false, updatable = false)
 	private EntityBusinessType entityBusinessType;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK7"), name = "DOCUMENT_STATUS_TYPE_CODE", referencedColumnName = "DOCUMENT_STATUS_TYPE_CODE", insertable = false, updatable = false)
+	private EntityDocumentStatusType entityDocumentStatusType;
 
 }

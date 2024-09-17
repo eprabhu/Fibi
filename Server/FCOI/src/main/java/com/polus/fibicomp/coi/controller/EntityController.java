@@ -1,19 +1,19 @@
 package com.polus.fibicomp.coi.controller;
 
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.CommonRequestDto;
-import com.polus.fibicomp.coi.service.ActionLogService;
-import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
+import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 
 @RestController
 @RequestMapping("/coi")
 public class EntityController {
-
-    @Autowired
-    private ActionLogService actionLogService;
 
     @Autowired
     private ConflictOfInterestService conflictOfInterestService;
@@ -21,16 +21,6 @@ public class EntityController {
     @PostMapping("/entity/modifyRisk")
     public ResponseEntity<Object> modifyRisk(@RequestBody CoiEntityDto entityDto) {
         return conflictOfInterestService.modifyRisk(entityDto);
-    }
-
-    @GetMapping("/entity/riskHistory/{entityId}")
-    public ResponseEntity<Object> fetchEntityRiskHistory(@PathVariable("entityId") Integer entityId) {
-        return conflictOfInterestService.fetchEntityRiskHistory(entityId);
-    }
-
-    @PostMapping("/entity/history")
-    public ResponseEntity<Object> fetchEntityHistory(@RequestBody CoiEntityDto coiEntityDto) {
-        return conflictOfInterestService.fetchEntityHistory(coiEntityDto);
     }
 
     @PostMapping("/getEntityWithRelationShipInfo")

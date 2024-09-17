@@ -124,9 +124,6 @@
     </div>
 </div>
 
-<app-add-attachment-modal *ngIf="commonService.isOpenAttachmentModal" (closeModal)="closeModal($event)" [attachmentHelpText]="addAttachmentHelpText">
-</app-add-attachment-modal>
-
 <app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
                              [activeDisclosures]="headerService.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
 </app-disclosure-create-modal>

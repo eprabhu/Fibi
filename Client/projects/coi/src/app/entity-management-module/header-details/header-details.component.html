@@ -28,7 +28,7 @@
                             <span class="d-flex align-items-center mt-1">
                                 <mat-icon aria-hidden="true"
                                     class="fw-bolder flex-shrink-0 coi-mat-icon-size me-1 coloured-icons">location_on</mat-icon>
-                                <span class="text-slice coi-text-light  fs-13">{{entityFullAddress}}</span>
+                                <span class="text-slice coi-text-light fs-13" [title]="entityFullAddress">{{entityFullAddress}}</span>
                             </span>
                         </div>
                         <div class="d-flex">
@@ -36,19 +36,19 @@
                             <span class="d-flex align-items-center mt-1 me-3" *ngIf="entityDetails?.phoneNumber">
                                 <mat-icon aria-hidden="true"
                                     class="fw-bolder flex-shrink-0 coi-mat-icon-size me-1 coloured-icons">call</mat-icon>
-                                <span class="text-slice coi-text-light fs-13">{{entityDetails?.phoneNumber}}</span>
+                                <span class="text-slice coi-text-light fs-13" [title]="entityDetails?.phoneNumber">{{entityDetails?.phoneNumber}}</span>
                             </span>
                             <!-- title -->
                             <span class="d-flex align-items-center mt-1 me-3" *ngIf="entityDetails?.certifiedEmail">
                                 <mat-icon aria-hidden="true"
                                     class="fw-bolder flex-shrink-0 coi-mat-icon-size me-1 coloured-icons">mail</mat-icon>
-                                <span class="text-slice coi-text-light fs-13">{{entityDetails?.certifiedEmail}}</span>
+                                <span class="text-slice coi-text-light fs-13" [title]="entityDetails?.certifiedEmail">{{entityDetails?.certifiedEmail}}</span>
                             </span>
                             <!-- title -->
                             <span class="d-flex align-items-center mt-1" *ngIf="entityDetails?.websiteAddress">
                                 <mat-icon aria-hidden="true"
                                     class="fw-bolder flex-shrink-0 coi-mat-icon-size me-1 coloured-icons">language</mat-icon>
-                                <span class="text-slice coi-text-light fs-13">{{entityDetails?.websiteAddress}}</span>
+                                <span class="text-slice coi-text-light fs-13" [title]="entityDetails?.websiteAddress">{{entityDetails?.websiteAddress}}</span>
                             </span>
                         </div>
                     </div>
@@ -165,9 +165,9 @@
         <!-- modal content -->
         <ng-container content>
             <ng-container *ngIf="matchedEntites?.length">
-                <ng-container *ngFor="let entity of matchedEntites">
-                    <app-entity-common-card [isShowUseBtn]="true" [entityDetailsObj]="entity"
-                        (emitEntityDetails)="openConfirmationModal(entity)"></app-entity-common-card>
+                <ng-container *ngFor="let entity of cardDetails">
+                    <app-entity-common-card [detailsSource]="'DUNS'" [entityDetailsObj]="entity"
+                        (emitCardNextAction)="openConfirmationModal($event, entity)"></app-entity-common-card>
                 </ng-container>
             </ng-container>
         </ng-container>
