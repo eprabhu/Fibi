@@ -1,86 +1,66 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../app-constants';
-import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Router } from '@angular/router';
-import { EntityAttachmentModalService } from '../entity-attachment-section.service';
-import { CommonService } from '../../../../common/services/common.service';
-import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { EntireEntityDetails, EntityAttachment, EntityAttachmentType, EntityDetails } from '../../entity-interface';
-import { EntityDataStoreService } from '../../../entity-data-store.service';
+import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { COIModalConfig, ModalActionEvent } from 'projects/coi/src/app/shared-components/coi-modal/coi-modal.interface';
 import { closeCommonModal, openCommonModal } from 'projects/coi/src/app/common/utilities/custom-utilities';
-import { AttachmentReplaceRO, AttachmentSaveRO } from 'projects/coi/src/app/common/services/coi-common.interface';
+import { CommonService } from '../../common/services/common.service';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { SharedAttachmentModalService } from './shared-attachment-modal.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { COIAttachment, CoiAttachmentType } from '../../attachments/attachment-interface';
+import { AttachmentSaveRO, AttachmentReplaceRO } from '../../common/services/coi-common.interface';
 
 @Component({
-    selector: 'app-entity-attachment-modal',
-    templateUrl: './entity-attachment-modal.component.html',
-    styleUrls: ['./entity-attachment-modal.component.scss']
+    selector: 'app-shared-attachment-modal',
+    templateUrl: './shared-attachment-modal.component.html',
+    styleUrls: ['./shared-attachment-modal.component.scss'],
+    providers: [SharedAttachmentModalService]
 })
-export class EntityAttachmentModalComponent implements OnInit {
+export class SharedAttachmentModalComponent implements OnInit {
 
     isSaving = false;
     uploadedFiles = [];
     attachmentErrorMsg = '';
     $subscriptions: Subscription[] = [];
-    entityDetails = new EntityDetails();
     newAttachments: Array<AttachmentSaveRO> = [];
-    attachmentTypes: EntityAttachmentType[] = [];
+    attachmentTypes: any[] = [];
     selectedAttachmentDescriptions: string[] = [];
-    selectedAttachmentType: EntityAttachmentType[] = [];
-    ENTITY_ATTACHMENT_MODAL_ID: string = 'entity-attachment-modal';
-    entityAttachmentTypeOption = 'ENTITY_ATTACHMENT_TYPE#ATTACHMENT_TYPE_CODE#false#false';
-    entityAttachmentModalConfig = new COIModalConfig(this.ENTITY_ATTACHMENT_MODAL_ID, 'Add Risk', 'Cancel', 'xl');
+    selectedAttachmentType: any[] = [];
+    COI_ATTACHMENT_MODAL_ID: string = 'coi-attachment-modal';
+    coiAttachmentModalConfig = new COIModalConfig(this.COI_ATTACHMENT_MODAL_ID, 'Add Attachment', 'Cancel', 'xl');
 
     @Input() attachmentHelpText: string;
-    @Input() currentAttachment: EntityAttachment;
-    @Input() sectionCode: '1' | '2' | '3' | '4';
+    @Input() currentAttachment: COIAttachment;
     @Input() attachmentInputType: 'REPLACE' | 'ADD' | 'DESCRIPTION_CHANGE' = 'ADD';
-    @Input() subSectionId: any;
 
-    @Output() closeModal = new EventEmitter<EntityAttachment[] | EntityAttachment | null>();
-
-    constructor(private _attachmentSectionService: EntityAttachmentModalService, public commonService: CommonService, public _router: Router, private _dataStoreService: EntityDataStoreService) {}
+    constructor(public commonService: CommonService, public _router: Router, private _attachmentService: SharedAttachmentModalService) { }
 
     ngOnInit(): void {
-        if (this.attachmentInputType === 'ADD') {
-            this.fetchAttachmentTypes();
-        } else {
-            setTimeout(() => {
-                this.openAttachmentModal();
-            }, 50)
-        }
-        this.getDataFromStore();
+        this.attachmentInputType === 'ADD' ? this.getAttachmentType() : this.openAttachmentModal();
     }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
     }
 
-    private fetchAttachmentTypes(): void {
-        this.$subscriptions.push(
-            this._attachmentSectionService.fetchAttachmentTypes(this.sectionCode)
-                .subscribe((attachmentTypes: EntityAttachmentType[]) => {
-                    this.attachmentTypes = attachmentTypes;
-                    this.openAttachmentModal()
-                }, err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-                    this.closeModal.emit(null);
-                }));
+    private getAttachmentType(): void {
+        this.$subscriptions.push(this._attachmentService.getAttachmentTypes().subscribe((attachmentTypes: CoiAttachmentType[]) => {
+            this.attachmentTypes = attachmentTypes;
+            this.openAttachmentModal()
+        }, (_err) => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }));
     }
 
     private openAttachmentModal(): void {
-        this.entityAttachmentModalConfig.namings.primaryBtnName = this.getPrimaryBtnName();
-        openCommonModal(this.ENTITY_ATTACHMENT_MODAL_ID);
+        setTimeout(() => {
+            this.coiAttachmentModalConfig.namings.primaryBtnName = this.getPrimaryBtnName();
+            openCommonModal(this.COI_ATTACHMENT_MODAL_ID);
+        }, 50);
     }
 
-    private getDataFromStore(): void {
-        const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
-        if (isEmptyObject(ENTITY_DATA)) { return; }
-        this.entityDetails = ENTITY_DATA.entityDetails;
-    }
-
-    fileDrop(files: any) {
+    fileDrop(files: any[]): void {
         this.attachmentErrorMsg = '';
         if (this.attachmentInputType === 'REPLACE') {
             this.updateReplaceAttachmentDetails(files, 0);
@@ -93,47 +73,28 @@ export class EntityAttachmentModalComponent implements OnInit {
     * @param files
     * @param index
     */
-    updateReplaceAttachmentDetails(files, index) {
+    private updateReplaceAttachmentDetails(files, index): void {
         if (files.length === 1) {
             this.uploadedFiles = [];
             this.uploadedFiles.push(files[index]);
-            this.selectedAttachmentDescriptions[index] = deepCloneObject(this.currentAttachment.comment);
+            this.selectedAttachmentDescriptions[index] = deepCloneObject(this.currentAttachment.description);
         } else {
             this.attachmentErrorMsg = 'Please choose only one document to replace.';
         }
     }
 
-    private updateAddAttachmentDetails(): void {
+    private setAttachmentsForSave(): void {
+        this.newAttachments = [];
         this.uploadedFiles.forEach((ele, index) => {
             const attachment: AttachmentSaveRO = {
                 fileDataId: null,
                 fileName: ele.name,
                 mimeType: ele.type,
-                comment: this.selectedAttachmentDescriptions[index],
-                attachmentTypeCode: this.selectedAttachmentType[index]?.attachmentTypeCode
+                description: this.selectedAttachmentDescriptions[index],
+                attaTypeCode: this.selectedAttachmentType[index]?.attaTypeCode
             };
             this.newAttachments.push(attachment);
         });
-    }
-    private getReplaceAttachmentRO(): { sectionCode: string, newAttachments: AttachmentReplaceRO[], entityId: string | number } {
-        const REPLACE_ATTACHMENT_RO: AttachmentReplaceRO[] = []
-        this.uploadedFiles.forEach((ele, index) => {
-            const attachment: AttachmentReplaceRO = {
-                fileDataId: null,
-                fileName: ele.name,
-                mimeType: ele.type,
-                comment: this.selectedAttachmentDescriptions[index],
-                versionNumber: this.currentAttachment?.versionNumber,
-                attachmentNumber: this.currentAttachment?.attachmentNumber,
-                attachmentTypeCode: this.currentAttachment?.attachmentTypeCode,
-            };
-            REPLACE_ATTACHMENT_RO.push(attachment);
-        });
-        return {
-            sectionCode: this.sectionCode,
-            entityId: this.entityDetails.entityId,
-            newAttachments: REPLACE_ATTACHMENT_RO
-        }
     }
 
     deleteFromUploadedFileList(index: number): void {
@@ -148,63 +109,86 @@ export class EntityAttachmentModalComponent implements OnInit {
         arrayName.splice(index, 1);
     }
 
-    saveAttachments(): void {
-        this.checkMandatory();
-        if (!this.attachmentErrorMsg && !this.isSaving) {
-            this.isSaving = true;
-            this.updateAddAttachmentDetails();
-            this.$subscriptions.push(this._attachmentSectionService.saveAttachment({
-                sectionCode: this.sectionCode,
-                newAttachments: this.newAttachments,
-                entityId: this.entityDetails?.entityId
-            }, this.uploadedFiles).subscribe((data: any) => {
-                this.clearAttachments(data)
-                this.showSuccessToast();
-            }, err => {
-                this.isSaving = false;
-                this.showErrorToast();
-            }));
-        }
-    }
-
-    replaceAttachments(): void {
-        this.attachmentErrorMsg = '';
-        this.validateFiles();
-        if (!this.attachmentErrorMsg && !this.isSaving) {
+    private saveAttachments(): void {
+        if (!this.isSaving && this.validateAttachment()) {
             this.isSaving = true;
             this.$subscriptions.push(
-                this._attachmentSectionService.saveAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
+                this._attachmentService.saveAttachment(this.getSaveAttachmentRO(), this.uploadedFiles)
                     .subscribe((data: any) => {
-                        this.clearAttachments(data)
+                        this.isSaving = false;
+                        this.clearAttachments(data);
                         this.showSuccessToast();
-                    }, err => {
+                    }, (_err: any) => {
                         this.isSaving = false;
                         this.showErrorToast();
                     }));
         }
     }
 
-    updateAttachments(): void {
+    private getSaveAttachmentRO(): { personId: string, newAttachments: any } {
+        this.setAttachmentsForSave();
+        return {
+            personId: this.commonService.getCurrentUserDetail('personID'),
+            newAttachments: this.newAttachments
+        };
+    }
+
+    private replaceAttachments(): void {
+        this.attachmentErrorMsg = '';
+        this.validateFiles();
+        if (!this.attachmentErrorMsg && !this.isSaving) {
+            this.isSaving = true;
+            this.$subscriptions.push(
+                this._attachmentService.saveAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
+                    .subscribe((data: any) => {
+                        this.clearAttachments(data)
+                        this.showSuccessToast();
+                    }, err => {
+                        this.isSaving = false;
+                        this.showErrorToast();
+            }));
+        }
+    }
+
+    private getReplaceAttachmentRO(): { newAttachments: AttachmentReplaceRO[] } {
+        const REPLACE_ATTACHMENT_RO: AttachmentReplaceRO[] = []
+        this.uploadedFiles.forEach((ele, index) => {
+            const attachment: AttachmentReplaceRO = {
+                fileDataId: null,
+                fileName: ele.name,
+                mimeType: ele.type,
+                description: this.selectedAttachmentDescriptions[index],
+                attaTypeCode: this.currentAttachment?.attaTypeCode,
+                versionNumber: this.currentAttachment?.versionNumber,
+                attachmentNumber: this.currentAttachment?.attachmentNumber,
+            };
+            REPLACE_ATTACHMENT_RO.push(attachment);
+        });
+        return { newAttachments: REPLACE_ATTACHMENT_RO };
+    }
+
+    private updateAttachments(): void {
         this.$subscriptions.push(
-            this._attachmentSectionService.updateAttachment(this.currentAttachment.entityAttachmentId, this.currentAttachment.comment)
+            this._attachmentService.updateAttachment(this.currentAttachment.attachmentId, this.currentAttachment.description)
                 .subscribe((data: any) => {
                     this.clearAttachments(this.currentAttachment);
                     this.showSuccessToast();
-                }, err => {
+                }, (_err) => {
                     this.isSaving = false;
                     this.showErrorToast();
                 }));
     }
 
-    private checkMandatory(): void {
+    private validateAttachment(): boolean {
         this.attachmentErrorMsg = '';
         this.validateFiles();
         this.validateAttachmentType();
+        return !this.attachmentErrorMsg;
     }
 
     private validateAttachmentType(): void {
         this.uploadedFiles.forEach((ele, index) => {
-            if (this.selectedAttachmentType[index]?.attachmentTypeCode == null || !this.selectedAttachmentType[index]?.attachmentTypeCode) {
+            if (this.selectedAttachmentType[index]?.attaTypeCode == null || !this.selectedAttachmentType[index]?.attaTypeCode) {
                 this.attachmentErrorMsg = 'Please select attachment type for each attachment.';
             }
         });
@@ -216,28 +200,29 @@ export class EntityAttachmentModalComponent implements OnInit {
         }
     }
 
-    clearAttachments(emitData: any = null): void {
-        closeCommonModal(this.ENTITY_ATTACHMENT_MODAL_ID);
+    private clearAttachments(updatedAttachment: COIAttachment = null): void {
+        closeCommonModal(this.COI_ATTACHMENT_MODAL_ID);
+        this.emitAttachments(updatedAttachment);
         setTimeout(() => {
             this.isSaving = false;
             this.uploadedFiles = [];
             this.newAttachments = [];
             this.selectedAttachmentDescriptions = [];
             this.selectedAttachmentType = [];
-            this.closeModal.emit(emitData);
+            this.commonService.closeCommonAttachmentModal();
         }, 200);
     }
 
-    clearValidation(): void {
-        this.attachmentErrorMsg = '';
+    private emitAttachments(updatedAttachment: COIAttachment): void {
+        this.commonService.$updateLatestAttachment.next({ attachment: updatedAttachment, attachmentInputType: this.attachmentInputType });
     }
 
-    onAttachmentTypeSelected(event: any, uploadIndex: number) {
+    onAttachmentTypeSelected(event: any, uploadIndex: number): void {
         this.selectedAttachmentType[uploadIndex] = event?.[0] ? event?.[0] : null;
     }
 
     /** shows success toast based on replace attachment or not */
-    showSuccessToast() {
+    private showSuccessToast(): void {
         let toastMsg: string;
         switch (this.attachmentInputType) {
             case 'REPLACE':
@@ -258,7 +243,7 @@ export class EntityAttachmentModalComponent implements OnInit {
 
 
     /** shows error toast based on replace attachment or not and wab enabled or not */
-    showErrorToast() {
+    private showErrorToast(): void {
         let toastMsg: string;
         switch (this.attachmentInputType) {
             case 'REPLACE':
@@ -288,7 +273,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         }
     }
 
-    attachmentActions(): void {
+    private attachmentActions(): void {
         switch (this.attachmentInputType) {
             case 'ADD': return this.saveAttachments();
             case 'REPLACE': return this.replaceAttachments();
@@ -297,7 +282,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         }
     }
 
-    getPrimaryBtnName(): string {
+    private getPrimaryBtnName(): string {
         switch (this.attachmentInputType) {
             case 'ADD': return 'Add Attachment';
             case 'REPLACE': return 'Replace Attachment';
@@ -307,7 +292,7 @@ export class EntityAttachmentModalComponent implements OnInit {
     }
 
     @HostListener('document:keydown.escape', ['$event'])
-    handleEscapeEvent(event: any): void {
+    private handleEscapeEvent(event: any): void {
         if ((event.key === 'Escape' || event.key === 'Esc')) {
             this.clearAttachments();
         }

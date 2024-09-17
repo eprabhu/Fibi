@@ -55,8 +55,16 @@
 
 
 <!-- Shared Person Details Modal Starts -->
- <ng-container *ngIf="commonService.modalPersonId">
+<ng-container *ngIf="commonService.modalPersonId">
     <app-personal-details-modal [personId]="commonService.modalPersonId"></app-personal-details-modal>
- </ng-container>
+</ng-container>
 <!-- Shared Person Details Modal Ends -->
 
+
+<!-- coi-attachment modal starts -->
+ <ng-container *ngIf="commonService.CoiAttachmentModalInfo.isOpenAttachmentModal">
+     <app-shared-attachment-modal [currentAttachment]="commonService.CoiAttachmentModalInfo.coiCurrentAttachment"
+        [attachmentInputType]="commonService.CoiAttachmentModalInfo.attachmentModalInputType">
+     </app-shared-attachment-modal>
+ </ng-container>
+<!-- coi-attachment modal ends -->

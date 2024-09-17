@@ -28,6 +28,7 @@ import { SharedProjectDetailsModalComponent } from './shared-project-details-mod
 import { CoiModalComponent } from './coi-modal/coi-modal.component';
 import { ScrollSpyComponent } from './scroll-spy/scroll-spy.component';
 import { CoiCountModalComponent } from './coi-count-modal/coi-count-modal.component';
+import { SharedAttachmentModalComponent } from './shared-attachment-modal/shared-attachment-modal.component';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { CoiCountModalComponent } from './coi-count-modal/coi-count-modal.compon
     EntityDetailsCardComponent,
     CoiModalComponent,
     ScrollSpyComponent,
-    CoiCountModalComponent
+    CoiCountModalComponent,
+    SharedAttachmentModalComponent
   ],
   exports: [
     NoInformationComponent,
@@ -85,7 +87,8 @@ import { CoiCountModalComponent } from './coi-count-modal/coi-count-modal.compon
     SharedProjectDetailsModalComponent,
     CoiModalComponent,
     ScrollSpyComponent,
-    CoiCountModalComponent
+    CoiCountModalComponent,
+    SharedAttachmentModalComponent
   ]
 })
 export class SharedComponentModule { }

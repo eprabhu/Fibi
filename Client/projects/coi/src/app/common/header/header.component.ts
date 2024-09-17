@@ -197,11 +197,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.noteComment = '';
     }
 
-    closeModal() {
-        this.commonService.isOpenAttachmentModal = false;
-        this.addAttachmentHelpText = '';
-    }
-
     outputEventAction(event) {
         if (event.closeModal != null) {
             this.isShowCreateOrReviseModal = event.closeModal;
@@ -314,9 +309,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    openAttachmentModal(){
-        this.commonService.isOpenAttachmentModal = true
-        this.addAttachmentHelpText = `You can view and edit attachments under the 'My Attachments' tab.`;
+    openAttachmentModal(): void {
+        this.commonService.openCommonAttachmentModal('ADD');
     }
-
 }

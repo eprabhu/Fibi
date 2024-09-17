@@ -1,15 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AttachmentInputType, EntireEntityDetails, EntityAttachment, EntityDetails, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskProxyController } from '../entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRiskCategoryCode } from '../entity-interface';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { deepCloneObject, fileDownloader, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
 import { EntityAttachmentModalService } from './entity-attachment-section.service';
+import { AttachmentInputType } from '../../../attachments/attachment-interface';
 
 @Component({
     selector: 'app-entity-attachment-section',
