@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
-import com.polus.fibicomp.globalentity.pojo.ValidEntityAttachType;
 import com.polus.fibicomp.globalentity.service.EntityFileAttachmentService;
 
 @RestController

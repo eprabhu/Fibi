@@ -1,4 +1,4 @@
-package com.polus.fibicomp.coi.pojo;
+package com.polus.fibicomp.globalentity.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,4 +34,5 @@ public class EntityActionType {
 
     @Column(name = "UPDATE_TIMESTAMP")
     private Timestamp updateTimestamp;
+
 }

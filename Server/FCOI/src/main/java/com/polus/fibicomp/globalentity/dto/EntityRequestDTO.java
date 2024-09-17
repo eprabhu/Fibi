@@ -34,7 +34,10 @@ public class EntityRequestDTO {
 	private String animalAccreditation;
 	private String approvedBy;
 	private String entityStatusTypeCode;
+	private String documentStatusTypeCode;
 	private Timestamp approvedTimestamp;
 	private Boolean isDunsMatched;
+	private Integer originalEntityId;
+	private String updatedBy;
 
 }

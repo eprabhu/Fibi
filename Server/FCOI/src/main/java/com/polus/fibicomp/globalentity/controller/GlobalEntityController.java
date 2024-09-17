@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.core.pojo.Currency;
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
+import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.AddressDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityResponseDTO;
@@ -27,10 +29,12 @@ import com.polus.fibicomp.globalentity.dto.ExternalReferenceRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.IndustryDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.OtherDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.ResponseMessageDTO;
 import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.validateDuplicateResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
@@ -281,6 +285,24 @@ public class GlobalEntityController {
 	public ResponseEntity<List<validateDuplicateResponseDTO>> validateDuplicate(@RequestBody ValidateDuplicateRequestDTO dto) {
 		logger.info("Requesting for validateDuplicate");
 		return new ResponseEntity<>(globalEntityService.validateDuplicate(dto), HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/markDuplicate")
+	public ResponseEntity<ResponseMessageDTO> markDuplicate(@RequestBody MarkDuplicateRequestDTO dto) {
+		logger.info("Requesting for markDuplicate");
+		return new ResponseEntity<>(globalEntityService.markDuplicate(dto), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/fetchHistory/{entityId}")
+	public List<EntityActionLogDto> fetchHistory(@PathVariable(value = "entityId", required = true) final Integer entityId) {
+		logger.info("Requesting for fetchHistory");
+		return globalEntityService.fetchHistory(entityId);
+	}
+
+	@PostMapping(value = "/logAction")
+	public ResponseEntity<ResponseMessageDTO> logAction(@RequestBody ActionLogRequestDTO dto) {
+		logger.info("Requesting for logAction");
+		return new ResponseEntity<>(globalEntityService.logAction(dto), HttpStatus.OK);
 	}
 
 }

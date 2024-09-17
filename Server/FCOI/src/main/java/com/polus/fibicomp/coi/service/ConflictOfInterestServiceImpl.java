@@ -855,14 +855,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			CoiRiskCategory coiRiskCategory = conflictOfInterestDao.getRiskCategoryStatusByCode(coiTravelDisclosure.getRiskCategoryCode());
 			coiTravelDisclosure.setRiskLevel(coiRiskCategory.getDescription());
 		}
-		try {
-			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_CREATED)
-					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
-					.comment(vo.getDescription()).reporter(AuthenticatedUser.getLoginUserFullName())
-					.build();
-			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
-		} catch (Exception e) {
-			logger.error("createTravelDisclosure : {}", e.getMessage());
+		if (vo.getTravelDisclosureId() == null) {
+			try {
+				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder()
+						.actionTypeCode(ACTION_LOG_CREATED)
+						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId())
+						.travelNumber(coiTravelDisclosure.getTravelNumber()).comment(vo.getDescription())
+						.reporter(AuthenticatedUser.getLoginUserFullName()).build();
+				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+			} catch (Exception e) {
+				logger.error("createTravelDisclosure : {}", e.getMessage());
+			}
 		}
 		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
 	}
@@ -1477,17 +1480,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 //		actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE, entityCopy, entityDto.getRevisionReason());
 //		return new ResponseEntity<>(entityDto, HttpStatus.OK);
 		return null;
-	}
-
-	@Override
-	public ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId) {
-		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Arrays.asList(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE,
-				Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE)), HttpStatus.OK);
-	}
-
-	@Override
-	public ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto) {
-		return new ResponseEntity<>(actionLogService.fetchAllEntityActionLog(coiEntityDto), HttpStatus.OK);
 	}
 
 	@Override
