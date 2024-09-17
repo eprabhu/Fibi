@@ -14,7 +14,7 @@ import com.polus.fibicomp.globalentity.pojo.Entity;
 @Service
 public interface EntityDetailsDAO {
 
-	public int createEntity(Entity entity);
+	public Integer createEntity(Entity entity);
 
 	public void updateEntity(EntityRequestDTO dto);
 

@@ -251,20 +251,6 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> modifyRisk(CoiEntityDto entityDto);
 
-	/**
-	 * This method is used to fetch all risk history of an entity
-	 * @param entityId
-	 * @return
-	 */
-	ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId);
-
-	/**
-	 * This method is used to fetch Entity Action Log
-	 * @param coiEntityDto
-	 * @return
-	 */
-	ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto);
-
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
 	ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description);

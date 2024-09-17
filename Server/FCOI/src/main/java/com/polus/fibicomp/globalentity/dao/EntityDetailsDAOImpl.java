@@ -49,7 +49,7 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	protected static Logger logger = LogManager.getLogger(EntityDetailsDAOImpl.class.getName());
 
 	@Override
-	public int createEntity(Entity entity) {
+	public Integer createEntity(Entity entity) {
 		hibernateTemplate.save(entity);
 		updateEntity(
 				EntityRequestDTO.builder().entityNumber(entity.getEntityId()).entityId(entity.getEntityId()).build());
@@ -127,6 +127,12 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		if (dto.getIsDunsMatched() != null) {
 			hqlQuery.append(", e.isDunsMatched = :isDunsMatched");
 		}
+		if (dto.getDocumentStatusTypeCode() != null) {
+			hqlQuery.append(", e.documentStatusTypeCode = :documentStatusTypeCode");
+		}
+		if (dto.getOriginalEntityId() != null) {
+			hqlQuery.append(", e.originalEntityId = :originalEntityId");
+		}
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		if (dto.getEntityName() != null) {
@@ -194,6 +200,12 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		}
 		if (dto.getIsDunsMatched() != null) {
 			query.setParameter("isDunsMatched", dto.getIsDunsMatched());
+		}
+		if (dto.getDocumentStatusTypeCode() != null) {
+			query.setParameter("documentStatusTypeCode", dto.getDocumentStatusTypeCode());
+		}
+		if (dto.getOriginalEntityId() != null) {
+			query.setParameter("originalEntityId", dto.getOriginalEntityId());
 		}
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());

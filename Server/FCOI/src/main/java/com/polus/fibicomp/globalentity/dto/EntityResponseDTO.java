@@ -34,5 +34,6 @@ public class EntityResponseDTO {
 	private List<ForeignNameResponseDTO> foreignNames;
 	private List<EntityAttachment> attachments;
 	private Map<String, Object> entityTabStatus;
+	private String originalName;
 
 }

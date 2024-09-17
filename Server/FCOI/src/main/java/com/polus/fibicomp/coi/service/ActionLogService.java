@@ -4,26 +4,15 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
-import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
-import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCommonDto;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
 
 public interface ActionLogService {
-
-    /**
-     * This method is used to build and save Entity Action Log
-     * @param actionLogTypeCode
-     * @param coiEntity
-     * @param comment
-     */
-    void saveEntityActionLog(String actionLogTypeCode, Entity coiEntity, String comment);
 
     /**
      *
@@ -39,21 +28,6 @@ public interface ActionLogService {
 	ResponseEntity<Object> getDisclosureHistoryById(Integer disclosureId);
 
 	void saveTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
-
-    /**
-     * This method is used to fetch entity action log by following @params
-     * @param entityId
-     * @param actionLogCodes
-     * @return
-     */
-    List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes);
-
-    /**
-     * This method is used to fetch all entity action log based on entity number
-     * @param coiEntityDto
-     * @return
-     */
-    List<EntityActionLogDto> fetchAllEntityActionLog(CoiEntityDto coiEntityDto);
 
     /**
      * This method is used to fetch disclosure action log

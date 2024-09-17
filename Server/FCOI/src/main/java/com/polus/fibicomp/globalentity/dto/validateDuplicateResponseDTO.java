@@ -13,8 +13,8 @@ public class validateDuplicateResponseDTO {
 
 	private Integer entityId;
 	private String entityName;
-	private String primaryAddressLine2;
 	private String primaryAddressLine1;
+	private String primaryAddressLine2;
 	private String country;
 	private String city;
 	private String state;
@@ -25,5 +25,7 @@ public class validateDuplicateResponseDTO {
 	private String email;
 	private String sponsorCode;
 	private Integer organizationId;
+	private String postalCode;
+	private String phone;
 
 }
