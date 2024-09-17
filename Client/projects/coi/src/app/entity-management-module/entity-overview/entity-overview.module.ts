@@ -11,7 +11,6 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
 import { RegistrationDetailsComponent } from './registration-details/registration-details.component';
 import { AdditionalAddressesComponent } from './additional-addresses/additional-addresses.component';
 import { OtherDetailsComponent } from './other-details/other-details.component';
-import { EntityRiskComponent } from './entity-risk/entity-risk.component';
 import { OtherReferenceIdComponent } from './other-reference-id/other-reference-id.component';
 import { SharedEntityManagementModule } from '../shared/shared-entity-management.module';
 import { EntityOverviewService } from './entity-overview.service';
@@ -24,7 +23,6 @@ import { EntityOverviewService } from './entity-overview.service';
         RegistrationDetailsComponent,
         AdditionalAddressesComponent,
         OtherDetailsComponent,
-        EntityRiskComponent,
         OtherReferenceIdComponent
     ],
     imports: [

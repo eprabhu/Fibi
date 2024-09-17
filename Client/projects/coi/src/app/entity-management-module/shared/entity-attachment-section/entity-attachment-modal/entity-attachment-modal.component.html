@@ -11,7 +11,7 @@
         <ng-container *ngIf="attachmentInputType !== 'DESCRIPTION_CHANGE'">
             <!-- file drop -->
             <div>
-                <app-file-drop [multiple]="true" (filesDropEvent)="fileDrop($event)"></app-file-drop>
+                <app-file-drop [multiple]="true" [fileAccept]="commonService.generalFileType" (filesDropEvent)="fileDrop($event)"></app-file-drop>
             </div>
             <!-- uploaded list -->
             <ng-container *ngIf="uploadedFiles.length > 0">
@@ -81,7 +81,7 @@
         </ng-container>
 
         <!-- for update description -->
-        <ng-conatiner *ngIf="attachmentInputType === 'DESCRIPTION_CHANGE'" class="modal-body">
+        <ng-container *ngIf="attachmentInputType === 'DESCRIPTION_CHANGE'">
             <div class="card shadow-sm p-2">
                 <div class="row mx-2 mb-2 mt-3">
                     <!-- Attachment Type -->
@@ -120,6 +120,6 @@
                     </div>
                 </div>
             </div>
-        </ng-conatiner>
+        </ng-container>
     </ng-container>
 </app-coi-modal>
