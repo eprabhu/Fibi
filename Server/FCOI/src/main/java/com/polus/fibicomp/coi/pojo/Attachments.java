@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,21 +30,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ATTACHMENTS")
 public class Attachments implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "ATTACHMENT_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer attachmentId;
-	
+
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ATTACHMENTS1_FK1"), name = "ATTA_TYPE_CODE", referencedColumnName = "ATTA_TYPE_CODE", insertable = false, updatable = false)
 	private DisclAttaType disclAttaTypeDetails;
-	
+
 	@Column(name = "PERSON_ID")
 	private String personId;
-	
+
 	@Column(name = "ATTA_TYPE_CODE")
 	private String attaTypeCode;
 
@@ -76,5 +75,11 @@ public class Attachments implements Serializable {
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
+
+	@Column(name = "ATTACHMENT_NUMBER")
+	private Integer attachmentNumber;
+
+	@Column(name = "VERSION_NUMBER")
+	private Integer versionNumber;
 
 }

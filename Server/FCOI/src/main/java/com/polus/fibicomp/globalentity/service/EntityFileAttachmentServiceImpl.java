@@ -11,9 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +31,8 @@ import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.exception.EntityFileAttachmentException;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
-import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntitySectionAttachRef;
 import com.polus.fibicomp.globalentity.pojo.ValidEntityAttachType;
-import com.polus.fibicomp.globalentity.pojo.ValidEntityRiskLevel;
 import com.polus.fibicomp.globalentity.repository.ValidEntityAttachTypesRepository;
 
 @Transactional
@@ -119,21 +115,11 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 		ResponseEntity<byte[]> attachmentData = null;
 		try {
 			FileManagementOutputDto fileData = fileManagementService.downloadFile(ENTITY_MODULE_CODE, attachment.getFileDataId());
-			attachmentData = setAttachmentContent(fileData.getOriginalFileName(), fileData.getData());
+			attachmentData = commonService.setAttachmentContent(fileData.getOriginalFileName(), fileData.getData());
 		} catch (Exception e) {
 			throw new EntityFileAttachmentException("Exception in downloadEntityAttachment in EntityFileAttachmentService, " + e);
 		}
 		return attachmentData;
-	}
-
-	private ResponseEntity<byte[]> setAttachmentContent(String fileName, byte[] data) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType("application/octet-stream"));
-		headers.setContentDispositionFormData(fileName, fileName);
-		headers.setContentLength(data.length);
-		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-		headers.setPragma("public");
-		return new ResponseEntity<>(data, headers, HttpStatus.OK);
 	}
 
 	@Override
