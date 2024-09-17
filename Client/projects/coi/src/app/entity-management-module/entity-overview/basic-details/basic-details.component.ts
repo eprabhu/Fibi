@@ -15,7 +15,6 @@ import {CommonService} from '../../../common/services/common.service';
 export class BasicDetailsComponent implements OnInit, OnDestroy {
     createEntityObj: Create_Entity = new Create_Entity();
     saveObj: Create_Entity = new Create_Entity();
-    isCreateScreen = false;
     isEditMode = false;
     @Input() sectionName: any;
     @Input() sectionId: any;
@@ -30,11 +29,6 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.checkUserHasRight();
-    }
-
-    saveBasicEntityDetails(event) {
-        this.saveObj = event.createEntityObj;
-        openModal('entityProceedCheckMatch');
     }
 
     private getDataFromStore() {

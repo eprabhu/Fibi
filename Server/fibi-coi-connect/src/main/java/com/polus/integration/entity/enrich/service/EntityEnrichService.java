@@ -24,6 +24,10 @@ public class EntityEnrichService {
 	
 	@Autowired
 	private EntityEnrichDAO dao;
+	
+	private static final Integer UEI_DNB_REGISTRATION_TYPE = 37491;
+	
+	private static final Integer FEDERAL_EMPLOYER_ID_DNB_REGISTRATION_TYPE = 6863;
 
 	public EntityEnrichAPIResponse runEnrich(DnBEntityEnrichRequestDTO request) {
 		EntityEnrichAPIResponse response = new EntityEnrichAPIResponse();
@@ -113,6 +117,7 @@ public class EntityEnrichService {
 		organization.setPrimaryName(dnbOrg.getPrimaryName());
 		organization.setRegisteredName(dnbOrg.getRegisteredName());
 		organization.setTradeStyleNames(getShortName(dnbOrg));
+		organization.setFederalEmployerId(getFederalEmployerId(dnbOrg));
 		//organization.setMultilingualPrimaryName(getForiegnName(dnbOrg));
 		organization.setMultilingualPrimaryName(dnbOrg.getMultilingualPrimaryName());
 		organization.setIndustryCodes(dnbOrg.getIndustryCodes());
@@ -156,18 +161,7 @@ public class EntityEnrichService {
 	
 	private String getUEI(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 
-		if (organization.getRegistrationNumbers() == null) {
-			return null;		
-		}
-
-		String registrationNumber = organization
-									.getRegistrationNumbers()
-									.stream()
-									.filter(reg -> reg.getTypeDnBCode() == 37491) // This is the UEI code in DnB
-									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber::getRegistrationNumber)
-									.findFirst().orElse(null);
-
-		return registrationNumber;
+		return pickRegistrationNumber(UEI_DNB_REGISTRATION_TYPE, organization);
 
 	}
 	
@@ -199,12 +193,22 @@ public class EntityEnrichService {
 									.filter(reg -> reg.getTextType().getDnbCode() == 32456) // This is the Short company profile in DnB
 									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Summary::getText)
 									.findFirst().orElse(null);
+		
+		companyProfile = removeHTMLTags(companyProfile);
 
 		return companyProfile;
 
 		
 	}
 	
+	private String removeHTMLTags(String companyProfile) {		
+		if(companyProfile == null) {
+			return companyProfile;
+		}		
+		companyProfile = companyProfile.replaceAll("<[^>]*>", "");		
+		return companyProfile;
+	}
+
 	private boolean isPubliclyTradedCompany(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
 		
 		if (organization.getControlOwnershipType() == null) {
@@ -258,5 +262,28 @@ public class EntityEnrichService {
 
 		return website;
 	}
+	
+	private String getFederalEmployerId(
+			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+
+		return pickRegistrationNumber(FEDERAL_EMPLOYER_ID_DNB_REGISTRATION_TYPE, organization);
+	}
+
+	private String pickRegistrationNumber( Integer registrationTypeCode,
+			com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.Organization organization) {
+		
+		if (organization.getRegistrationNumbers() == null) {
+			return null;		
+		}
+
+		String registrationNumber = organization
+									.getRegistrationNumbers()
+									.stream()
+									.filter(reg -> reg.getTypeDnBCode() == registrationTypeCode)
+									.map(com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.RegistrationNumber::getRegistrationNumber)
+									.findFirst().orElse(null);
+
+		return registrationNumber;
+	}		
 	
 }

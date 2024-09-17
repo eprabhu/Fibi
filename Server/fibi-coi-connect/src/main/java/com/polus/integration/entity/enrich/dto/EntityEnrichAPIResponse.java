@@ -32,6 +32,7 @@ public class EntityEnrichAPIResponse {
 	public static class Organization {
 		private String duns;
 		private String uei;
+		private String federalEmployerId;
 		private String cageNumber;
 		private String humanSubAssurance;
 		private String animalWelfareAssurance;

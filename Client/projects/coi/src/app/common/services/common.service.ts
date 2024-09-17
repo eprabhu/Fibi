@@ -54,7 +54,7 @@ export class CommonService {
     elasticDelimiter = '';
     elasticPassword = '';
     elasticIndexUrl = '';
-    generalFileType = 'pdf';
+    generalFileType = 'pdf, doc, docx, csv, xml, ppt, pptx, txt, xls, xlsx, zip, json, xlsm, msg, jpg, jpeg';
     appLoaderContent = '';
     isEnableLock = false;
     isPreventDefaultLoader = false;

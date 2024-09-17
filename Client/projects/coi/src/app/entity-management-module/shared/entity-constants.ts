@@ -3,6 +3,7 @@ const COMPANY_DETAILS = {sectionName: 'Company Details', sectionId: 'EO102'};
 const ENTITY_RISK = {sectionName: 'Entity Risk', sectionId: 'EO103'};
 const OTHER_REFERENCE_IDS = {sectionName: 'Other Reference IDs', sectionId: 'EO104'};
 const ADDITIONAL_INFORMATION =  {sectionName: 'Additional Information', sectionId: 'EO105'};
+const ENTITY_ATTACHMENTS = {sectionName: 'Entity Attachments', sectionId: 'EO106'}
 
 const SPONSOR_DETAILS =  {sectionName: 'Sponsor Details', sectionId: 'ES201'};
 const SPONSOR_RISK =  {sectionName: 'Sponsor Risk', sectionId: 'ES202'};
@@ -28,6 +29,7 @@ export const OverviewTabSection = new Map([
     ['COMPANY_DETAILS' , COMPANY_DETAILS],
     ['ENTITY_RISK' , ENTITY_RISK],
     ['OTHER_REFERENCE_IDS' , OTHER_REFERENCE_IDS],
+    ['ENTITY_ATTACHMENTS' , ENTITY_ATTACHMENTS]
     // ['ADDITIONAL_INFORMATION' , ADDITIONAL_INFORMATION],
 ]);
 
