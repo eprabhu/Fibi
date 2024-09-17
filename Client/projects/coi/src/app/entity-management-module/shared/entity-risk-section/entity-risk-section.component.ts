@@ -171,16 +171,13 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     private entityMandatoryValidation(): boolean {
         this.mandatoryList.clear();
         const { riskLevelCode, riskTypeCode, description, entityRiskId } = this.entityRiskModalDetails.entityRisk;
-        if (!riskLevelCode) {
-            this.mandatoryList.set('riskLevel', 'Please select risk level.');
-        }
         if (!riskTypeCode) {
             this.mandatoryList.set('riskType', 'Please select risk type.');
-        } else {
-            const IS_TYPE_ALREADY_ADDED = this.entityRiskList?.find((_risk: EntityRisk) => _risk?.riskTypeCode === riskTypeCode && _risk?.entityRiskId !== entityRiskId)
-            if (IS_TYPE_ALREADY_ADDED) {
-                this.mandatoryList.set('riskType', 'Risk type is already added.');
-            }
+        } else if (this.getHasDuplicateTypeCode(riskTypeCode, entityRiskId)) {
+            this.mandatoryList.set('riskType', 'The risk type has already been added. Please edit the existing type to make any changes.');
+        }
+        if (!riskLevelCode) {
+            this.mandatoryList.set('riskLevel', 'Please select risk level.');
         }
         if (!description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
@@ -189,10 +186,14 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         return this.mandatoryList.size === 0;
     }
 
-    private setSponsorRiskDetails(risk: EntityRisk): void {
-        this.entityRiskModalDetails.entityRisk = deepCloneObject(risk);
-        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((_risk: RiskType) => risk?.riskTypeCode === _risk.riskTypeCode);
-        const SELECTED_RISK_LEVEL = this.entityRiskLevelList.find((_risk: RiskLevel) => risk?.riskLevelCode === _risk.riskLevelCode);
+    private getHasDuplicateTypeCode(riskTypeCode: string, entityRiskId: number | null): boolean {
+        return this.entityRiskList?.some((risk: EntityRisk) => risk?.riskTypeCode === riskTypeCode && risk?.entityRiskId !== entityRiskId);
+    }
+
+    private setSponsorRiskDetails(entityRisk: EntityRisk): void {
+        this.entityRiskModalDetails.entityRisk = deepCloneObject(entityRisk);
+        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((risk: RiskType) => entityRisk?.riskTypeCode === risk.riskTypeCode);
+        const SELECTED_RISK_LEVEL = this.entityRiskLevelList.find((risk: RiskLevel) => entityRisk?.riskLevelCode === risk.riskLevelCode);
         this.entityRiskModalDetails.selectedRiskTypeLookUpList = [deepCloneObject(SELECTED_RISK_TYPE)];
         this.entityRiskModalDetails.selectedRiskLevelLookUpList = [deepCloneObject(SELECTED_RISK_LEVEL)];
     }

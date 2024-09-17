@@ -90,10 +90,10 @@ export class OtherDetails {
 }
 
 export class EntityRisk {
-    riskTypeCode: any = '';
-    riskLevelCode: any = '';
-    description: string = '';
-    entityId: any;
+    riskTypeCode = '';
+    riskLevelCode = '';
+    description = '';
+    entityId: number | null = null;
     entityRiskId?: number | null = null;
     entity?: EntityDetails;
     riskLevel?: RiskLevel;
@@ -146,13 +146,33 @@ export class EntireEntityDetails {
     priorNames?: any[] = [];
     foreignNames?: any[] = [];
     entityRisks?: EntityRisk[] = [];
-    entityRegistrations?: any[] = [];
+    entityRegistrations?: EntityRegistration[] = [];
     entityMailingAddresses?: any[] = [];
     entityDetails? = new EntityDetails();
     attachments?: EntityAttachment[] = [];
     entityTabStatus? = new EntityTabStatus();
     entityIndustryClassifications?: any[] = [];
     entityExternalIdMappings?: EntityExternalIdMappings[] = [];
+}
+
+export class EntityRegistration {
+    entityRegistrationId?: number;
+    entityId?: number;
+    entity?: EntityDetails;
+    regTypeCode?: string;
+    registrationType?: RegistrationType;
+    regNumber?: string;
+    isActive?: boolean | null;
+    updateTimestamp?: number;
+    updatedBy?: string;
+}
+
+export class RegistrationType {
+    regTypeCode?: string;
+    description?: string;
+    updateTimestamp?: number;
+    updatedBy?: string;
+    isActive?: boolean;
 }
 
 export class EntityTabStatus {

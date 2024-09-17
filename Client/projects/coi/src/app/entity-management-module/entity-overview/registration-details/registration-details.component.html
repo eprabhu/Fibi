@@ -2,12 +2,14 @@
     <div class="mx-3 my-1 d-flex align-items-center">
         <div class="col fs-16 my-2">
             <label for="coi-entity-reg-details">
-                Registration Details<app-common-help-text [subSectionId]="2604" [elementId]="'coi-entity-reg-details'"></app-common-help-text>
-            </label></div>
+                <span>Registration Details</span>
+                <app-common-help-text [subSectionId]="2604" [elementId]="'coi-entity-reg-details'"></app-common-help-text>
+            </label>
+        </div>
         <div class="col-auto" *ngIf="entityRegistrations.length && isEditMode && canManageEntity">
             <button id="additional-address-add-button"
-                class="btn btn-primary fs-14 d-inline-flex" title="'Click here to registration details'"
-                aria-label="'Click here to registration details'" (click)="addRegistrationDetails(true)">
+                class="btn btn-primary fs-14 d-inline-flex" title="Click here to add registration details"
+                aria-label="Click here to add registration details" (click)="addRegistrationDetails(true)">
                 <mat-icon>add</mat-icon>Add Registration Details
             </button>
         </div>
@@ -38,11 +40,12 @@
 </div>
 
 <!-- open add industry confirmation -->
-<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addRegistrationDetails" role="dialog">
+<div class="modal modal-lg fade mySkinDialog" data-bs-backdrop="static" id="addRegistrationDetails"
+    role="dialog" tabindex="-1" aria-labelledby="addRegistrationDetails-header">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">{{isEditIndex != null ? 'Edit':'Add'}} Registration Details</h4>
+				<h4 class="modal-title" id="addRegistrationDetails-header">{{isEditIndex != null ? 'Edit':'Add'}} Registration Details</h4>
 				<button type="button" class="btn-close" id="coi-add-registration-details-close-btn"
                         title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close" (click)="clearRegistrationDetails()"></button>
 			</div>
@@ -54,7 +57,7 @@
                             <app-common-help-text [subSectionId]="2604" [elementId]="'coi-entity-registration-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="entityRegistrationTypeSelect($event)" [options]="entityRegistrationTypeOption"
-                            [uniqueId]="'coi-entity-registration-type'" [isError]="mandatoryList?.has('regTypeCode')"
+                            [uniqueId]="'coi-entity-registration-type'" [isError]="mandatoryList?.has('regTypeCode')" [isDisabled]="isEditIndex!=null"
                             [selectedLookUpList]="selectedRegistrationType" [defaultValue]="entityRegistrationDefaultValue">
                         </app-look-up>
                         <div *ngIf="mandatoryList?.has('regTypeCode')" class="invalid-feedback d-block fs-13" tabindex="-1"
@@ -67,9 +70,9 @@
                             <span class="mandatory me-1">*</span>Entity Registration Number
                             <app-common-help-text [subSectionId]="2604" [elementId]="'coi-entity-registration-number'"></app-common-help-text>
                         </label>
-                        <input type="text" class="form-control fs-13" id="coi-entity-name"
-                        [ngClass]="(mandatoryList?.has('registrationNumber')) ? 'is-invalid d-block' : ''"
-                        [(ngModel)]="registrationDetails.regNumber">
+                        <input type="text" class="form-control fs-13" id="coi-entity-name" name="coi-entity-name"
+                            [ngClass]="(mandatoryList?.has('registrationNumber')) ? 'is-invalid d-block' : ''"
+                            [(ngModel)]="registrationDetails.regNumber">
                         <div *ngIf="mandatoryList?.has('registrationNumber')" class="invalid-feedback d-block fs-13">
                             {{mandatoryList?.get('registrationNumber')}}
                         </div>
@@ -77,11 +80,17 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-outline-secondary" id="coi-add-entity-registration-details-cancel-btn" data-bs-dismiss="modal" type="button"
-				title="Click here to cancel" (click)="clearRegistrationDetails()">Cancel
+				<button class="btn btn-outline-secondary" id="coi-add-entity-registration-details-cancel-btn"
+                    name="coi-add-entity-registration-details-cancel-btn" type="button"
+                    title="Click here to cancel" aria-label="Click here to cancel" (click)="clearRegistrationDetails()">
+                    Cancel
 				</button>
-				<button class="btn btn-primary me-0" id="coi-add-entity-registration-details-add-btn" type="button"
-					title="Click here to add entity registration details" aria-label="Click here to add" (click)="isEditIndex != null ? editRegistration():addRegistration()">{{isEditIndex != null ? 'Edit':'Add'}} Registration
+				<button class="btn btn-primary me-0" id="coi-add-entity-registration-details-add-btn"
+                    name="coi-add-entity-registration-details-add-btn" type="button"
+					title="Click here to {{isEditIndex != null ? 'edit': 'add'}} entity registration details"
+                    attr.aria-label="Click here to {{isEditIndex != null ? 'edit': 'add'}} entity registration details"
+                    (click)="isEditIndex != null ? editRegistration() : addRegistration()">
+                    {{isEditIndex != null ? 'Edit':'Add'}} Registration
 				</button>
 			</div>
 		</div>
