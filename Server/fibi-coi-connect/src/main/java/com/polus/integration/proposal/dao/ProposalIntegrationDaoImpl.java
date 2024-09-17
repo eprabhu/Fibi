@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
+import com.polus.integration.proposal.pojo.COIIntegrationProposal;
+import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
+import com.polus.integration.proposal.repository.ProposalIntegrationRepository;
+import com.polus.integration.proposal.repository.ProposalPersonIntegrationRepository;
 import com.polus.questionnaire.dto.FetchQnrAnsHeaderDto;
 import com.polus.questionnaire.dto.GetQNRDetailsDto;
 import com.polus.questionnaire.dto.QuestionnaireSaveDto;
@@ -32,6 +36,12 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 
 	@Autowired
 	private QuestionnaireEngineServiceImpl questionnaireService;
+	
+	@Autowired
+	private ProposalIntegrationRepository proposalIntegrationRepository;
+	
+	@Autowired
+	private ProposalPersonIntegrationRepository proposalPersonIntegrationRepository;
 
 	@Override
 	public FibiCoiQnrMapping getQuestionnaireMappingInfo(Integer questionnaireId) {
@@ -97,6 +107,17 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	        e.printStackTrace();
 	        return false;
 	    }
+	}
+	
+	@Override
+	public void saveProposal(COIIntegrationProposal coiIntegrationProposal) {
+		 proposalIntegrationRepository.save(coiIntegrationProposal);
+	}
+
+	@Override
+	public void saveProposalPerson(COIIntegrationProposalPerson proposalPerson) throws Exception {
+		proposalPersonIntegrationRepository.save(proposalPerson);
+		
 	}
 
 }
