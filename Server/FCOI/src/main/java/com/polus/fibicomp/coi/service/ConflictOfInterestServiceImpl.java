@@ -708,14 +708,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> getAllSystemEntityList(CoiDashboardVO vo) {
-		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
-		conflictOfInterestVO.setEntityList(conflictOfInterestDao.getAllSystemEntityList(vo));
-		conflictOfInterestVO.setEntityCount(conflictOfInterestDao.getAllSystemEntityListCount(vo));
-		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
-	}
-
-	@Override
 	public ResponseEntity<Object> getAllCoiTravelDisclosureList() {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
 		vo.setCoiTravelDisclosureList(conflictOfInterestDao.getAllCoiTravelDisclosureList(vo));
