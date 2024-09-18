@@ -26,7 +26,7 @@
                             <!-- add case -->
                             <ng-container *ngIf="attachmentInputType === 'ADD'">
                                 <app-look-up (selectedResult)="onAttachmentTypeSelected($event, i)"
-                                    [externalArray]="attachmentTypes" [isExternalArray]="true" [options]="''"
+                                    [externalArray]="attachmentTypes" [isExternalArray]="true" [options]="attachmentLookupTypes"
                                     [isError]="attachmentErrorMsg" [selectedLookUpList]="selectedLookUpList"
                                     [uniqueId]="'coi-add-attachment-type' + i">
                                 </app-look-up>

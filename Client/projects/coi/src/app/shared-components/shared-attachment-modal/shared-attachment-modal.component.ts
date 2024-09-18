@@ -27,6 +27,7 @@ export class SharedAttachmentModalComponent implements OnInit {
     attachmentTypes: any[] = [];
     selectedAttachmentDescriptions: string[] = [];
     selectedAttachmentType: any[] = [];
+    attachmentLookupTypes = 'EMPTY#EMPTY#false#false'
     COI_ATTACHMENT_MODAL_ID: string = 'coi-attachment-modal';
     coiAttachmentModalConfig = new COIModalConfig(this.COI_ATTACHMENT_MODAL_ID, 'Add Attachment', 'Cancel', 'xl');
 
