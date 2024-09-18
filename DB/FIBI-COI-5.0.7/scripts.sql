@@ -18,3 +18,11 @@ truncate entity_action_log;
 set foreign_key_checks = 0;
 truncate entity_action_type;
 set foreign_key_checks = 1;
+
+
+ALTER TABLE attachments
+ADD COLUMN VERSION_NUMBER INT;
+
+ALTER TABLE attachments
+ADD COLUMN ATTACHMENT_NUMBER INT;
+
