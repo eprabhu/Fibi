@@ -157,8 +157,6 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo);
 
-	ResponseEntity<Object> getAllSystemEntityList(CoiDashboardVO vo);
-
 	ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo);
 
 	ResponseEntity<Object> getAllCoiTravelDisclosureList();

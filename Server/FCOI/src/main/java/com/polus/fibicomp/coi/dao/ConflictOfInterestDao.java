@@ -506,8 +506,6 @@ public interface ConflictOfInterestDao {
 
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, String searchString, Integer moduleItemKey);
 
-	public List<Entity> getAllSystemEntityList(CoiDashboardVO vo);
-
 	public CoiTravelDisclosure saveOrUpdateCoiTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
 
 	public List<CoiTravelDisclosure> getAllCoiTravelDisclosureList(ConflictOfInterestVO vo);
@@ -575,8 +573,6 @@ public interface ConflictOfInterestDao {
 	public List<CoiTravelerStatusType> loadTravelStatusTypesLookup();
 	
 	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes(Integer personEntityId);
-
-	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
 
 //	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
 
