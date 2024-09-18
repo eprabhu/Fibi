@@ -28,7 +28,7 @@
             <input *ngIf="isEditMode" type="text" id="coi-entity-sponsor-Acronym" placeholder=""
                 title="Sponsor Acronym" aria-label="Sponsor Acronym" maxlength="60"
                 autocomplete="off" class="form-control"
-                [(ngModel)]="sponsorDetailsObj.acronym" (blur)="changeEvent('acronym')"/>
+                [(ngModel)]="sponsorDetailsObj.acronym" (ngModelChange)="changeEvent('acronym')"/>
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="sponsorDetailsObj.acronym"></app-no-data-label>
             </span>
