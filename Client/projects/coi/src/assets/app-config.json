@@ -15,7 +15,7 @@
   "elasticAuthScheme": "Basic",
   "elasticIndexUrl": "http://192.168.1.149:9200/",
   "indexValue": "",
-  "fibiApplicationUrl":"http://192.168.1.149/fibi/",
+  "fibiApplicationUrl":"http://192.168.1.149:90/fibi/",
   "EXTERNAL_APPLICATION_BASE_URL": "",
   "EXTERNAL_PROPOSAL_URL": "",
   "EXTERNAL_AWARD_URL": ""
