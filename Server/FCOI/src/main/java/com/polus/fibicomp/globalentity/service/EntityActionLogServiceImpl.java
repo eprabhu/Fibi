@@ -57,8 +57,9 @@ public class EntityActionLogServiceImpl implements EntityActionLogService {
 
     private String buildEntityLogMessage(String message, ActionLogRequestDTO dto) {
         Map<String, String> placeholdersAndValues = new HashMap<>();
-        placeholdersAndValues.put("{ENTITY_NAME}", dto.getEntityName());
-        placeholdersAndValues.put("{ADMIN_NAME}", personDao.getPersonFullNameByPersonId(AuthenticatedUser.getLoginPersonId()));
+		placeholdersAndValues.put("{ADMIN_NAME}", dto.getUpdatedBy() != null 
+						? personDao.getPersonFullNameByPersonId(dto.getUpdatedBy()) 
+						: personDao.getPersonFullNameByPersonId(AuthenticatedUser.getLoginPersonId()));
         placeholdersAndValues.put("{DUNS_NUMBER}", dto.getDunsNumber());
         placeholdersAndValues.put("{TAB_NAME}", dto.getTabName());
         return renderPlaceholders(message, placeholdersAndValues);
