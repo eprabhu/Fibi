@@ -47,6 +47,10 @@ export class EntityManagementService {
         return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/enrich/entity/runEnrich', enrichRequest);
     }
 
+    entityHistory(entityId) {
+        return this._http.get(`${this._commonService.baseUrl}/entity/fetchHistory/${entityId}`);
+    }
+
 }
 
 

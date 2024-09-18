@@ -211,7 +211,7 @@ export class CommonService {
         this.isEvaluation = parameters.isEvaluation;
         this.isMapRouting = parameters.isMapRouting;
         this.isEvaluationAndMapRouting = parameters.isEvaluationAndMapRouting;
-        if (parameters.fileTypes && parameters.fileTypes.length) {
+        if (parameters.fileTypes?.length) {
             this.generalFileType = parameters.fileTypes[0] ? parameters.fileTypes[0].extension : null;
             this.cvFileType = parameters.fileTypes[1] ? parameters.fileTypes[1].extension : null;
             this.claimFileType = parameters.fileTypes[2] ? parameters.fileTypes[2].extension : null;
