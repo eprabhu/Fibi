@@ -67,7 +67,7 @@
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-inc-in'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-inc-in"
-                [(ngModel)]="otherDetailsObj.incorporatedIn" (ngModelChange)="changeEvent('incorporatedIn')">
+                [(ngModel)]="otherDetailsObj.incorporatedIn" (blur)="changeEvent('incorporatedIn')">
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="otherDetailsObj.incorporatedIn"></app-no-data-label>
             </span>
@@ -93,7 +93,7 @@
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-cong'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-cong"
-                [(ngModel)]="otherDetailsObj.congressionalDistrict" (ngModelChange)="changeEvent('congressionalDistrict')">
+                [(ngModel)]="otherDetailsObj.congressionalDistrict" (blur)="changeEvent('congressionalDistrict')">
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="otherDetailsObj.congressionalDistrict"></app-no-data-label>
             </span>
@@ -105,7 +105,7 @@
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-fed-employer'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-fed-employer"
-                [(ngModel)]="otherDetailsObj.federalEmployerId" (ngModelChange)="changeEvent('federalEmployerId')">
+                [(ngModel)]="otherDetailsObj.federalEmployerId" (blur)="changeEvent('federalEmployerId')">
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="otherDetailsObj.federalEmployerId"></app-no-data-label>
             </span>
@@ -171,7 +171,7 @@
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-short-name'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-short-name"
-                [(ngModel)]="otherDetailsObj.shortName" (ngModelChange)="changeEvent('shortName')">
+                [(ngModel)]="otherDetailsObj.shortName" (blur)="changeEvent('shortName')">
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="otherDetailsObj.shortName"></app-no-data-label>
             </span>
@@ -185,7 +185,7 @@
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-employees'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-employees"
-                [(ngModel)]="otherDetailsObj.numberOfEmployees" (ngModelChange)="changeEvent('numberOfEmployees')">
+                [(ngModel)]="otherDetailsObj.numberOfEmployees" (blur)="changeEvent('numberOfEmployees')">
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="otherDetailsObj.numberOfEmployees"></app-no-data-label>
             </span>

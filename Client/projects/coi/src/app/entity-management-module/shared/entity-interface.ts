@@ -12,7 +12,7 @@ export class Create_Entity {
     state: string = '';
     postCode: number;
     countryCode: string = '';
-    country: Country;
+    country: Country = new Country();
     phoneNumber: any;
     certifiedEmail: any = '';
     websiteAddress: any = '';
@@ -179,7 +179,9 @@ export class EntityTabStatus {
     entity_sub_org_info? = false;
     entity_sponsor_info? = false;
     organization_feed_status: string;
+    organization_id: string;
     sponsor_feed_status: string;
+    sponsor_code: string;
     organization_feed_status_code: any;
     sponsor_feed_status_code: any;
 }
@@ -380,15 +382,31 @@ export class SponsorDetails {
     acronym?: string | null = null;
     entityId?: number | null = null;
     sponsorCode?: string | null = null;
-    sponsorTypeCode?: string | null = null;
+    sponsorType?: SponsorType | null = new SponsorType();
+}
+export class SponsorType {
+    code: string;
+    description: string;
+    budgetCategoryCode: any;
+    fromGlMapping: any;
+    toGlMapping: any;
+    isActive: boolean;
 }
 export class SubAwardOrganizationDetails {
     id?: number | null = null;
     entityId?: string | number | null = null;
     organizationId?: number | null = null;
-    organizationTypeCode?: string | null = null;
+    entityOrganizationType: EntityOrganizationType = new EntityOrganizationType();
     samExpirationDate?: any | null = null;
     subAwdRiskAssmtDate?: any | null = null;
+}
+
+export class EntityOrganizationType {
+    organizationTypeCode: string;
+    description: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    isActive: boolean;
 }
 
 export class EntityRiskModalDetails {

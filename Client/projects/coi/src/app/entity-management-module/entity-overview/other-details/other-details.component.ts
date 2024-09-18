@@ -28,7 +28,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     incorporationDate: any;
     otherDetailsObj: OtherDetails = new OtherDetails();
     datePlaceHolder = DATE_PLACEHOLDER;
-    coiCurrencyOptions = 'EMPTY#EMPTY#false#false';
+    coiCurrencyOptions = 'EMPTY#EMPTY#false#true';
     businessStatusTypeOptions = 'entity_business_type#BUSINESS_TYPE_CODE#false#false'
     $debounceEvent = new Subject<any>();
     $subscriptions: Subscription[] = [];
@@ -41,6 +41,8 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     selectedLookupList = [];
     selectedBusinessTypeList = [];
     isSaving = false;
+    isSavingForForeign = false;
+    isSavingForPrior = false;
     CONFIRMATIN_MODAL_ID = 'other-details-delete-confirm-modal'
     modalConfig = new COIModalConfig(this.CONFIRMATIN_MODAL_ID, 'Delete', 'Cancel');
     deleteForgeinNameObj = null;
@@ -141,11 +143,9 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
 
     immediateAPICall(key) {
         this.isOtherDetailsFormChanged = true;
-        this.commonService.hasChangesAvailable = true;
         if(this.otherDetailsObj[key]) {
             this.otherDetailsObj[key] = this.otherDetailsObj[key]?.trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
-            this._autoSaveService.commonSaveTrigger$.next(true);
             this._autoSaveService.autoSaveTrigger$.next();
         }
     }
@@ -155,8 +155,8 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     changeEvent(key) {
+        this.commonService.setChangesAvailable(true);
         this.isOtherDetailsFormChanged = true;
-        this.commonService.hasChangesAvailable = true;
         if(this.otherDetailsObj[key]) {
             this.otherDetailsObj[key] = this.otherDetailsObj[key].trim();
             this.autoSaveRO[key] = this.otherDetailsObj[key];
@@ -184,11 +184,10 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this._entityOverviewService.updateOtherDetails(this.autoSaveRO).subscribe((data) => {
                 this.updateStoreData(this.autoSaveRO);
                 this.autoSaveRO = {};
-                this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
                 this.isSaving = false;
-                this.navigateToRoute();
                 showEntityToast('SUCCESS');
+                this.commonService.setChangesAvailable(false);
             }, err => {
                 this.isSaving = false;
                 console.log(err);
@@ -198,16 +197,9 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
-    navigateToRoute() {
-        if(this.commonService.isNavigationStopped) {
-            this._router.navigateByUrl(this.commonService.attemptedPath);
-        }
-    }
-
     updatePriorName() {
-        if (!this.isSaving) {
-            this.isSaving = true;
-            this.commonService.setLoaderRestriction();
+        if (!this.isSavingForPrior) {
+            this.isSavingForPrior = true;
             this.$subscriptions.push(this._entityOverviewService.updatePrioirNameDetails({
                 'entityId': this.entityDetails.entityId,
                 'priorName': this.otherDetailsObj['priorName']
@@ -218,24 +210,21 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
                 delete this.otherDetailsObj['priorName'];
                 this.entityPriorName = '';
                 this.addOtherDetailsAPI();
-                this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
-                this.isSaving = false;
-                this.navigateToRoute();
+                this.isSavingForPrior = false;
                 showEntityToast('SUCCESS');
+                this.commonService.setChangesAvailable(false);
             }, err => {
                 console.log(err);
-                this.isSaving = false;
+                this.isSavingForPrior = false;
                 showEntityToast('ERROR');
             }));
-            this.commonService.removeLoaderRestriction();
         }
     }
 
     updateAlternateName() {
-        if(!this.isSaving) {
-            this.isSaving = true;
-            this.commonService.setLoaderRestriction();
+        if(!this.isSavingForForeign) {
+            this.isSavingForForeign = true;
             this.$subscriptions.push(this._entityOverviewService.updateAlternateNameDetails({
                 'entityId': this.entityDetails.entityId,
                 'foreignName': this.otherDetailsObj['foreignName']
@@ -246,17 +235,15 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
                 delete this.otherDetailsObj['foreignName'];
                 this.entityForeignName = '';
                 this.addOtherDetailsAPI();
-                this.commonService.hasChangesAvailable = false;
                 this.isOtherDetailsFormChanged = false;
-                this.isSaving = false;
-                this.navigateToRoute();
+                this.isSavingForForeign = false;
                 showEntityToast('SUCCESS');
+                this.commonService.setChangesAvailable(false);
             }, err => {
                 console.log(err);
-                this.isSaving = false;
+                this.isSavingForForeign = false;
                 showEntityToast('ERROR');
             }));
-            this.commonService.removeLoaderRestriction();
         }
     }
 
@@ -281,6 +268,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     onDateSelect(dateType: 'START' | 'INCORPORATION') {
+        this.commonService.setChangesAvailable(true);
         if (dateType == 'START') {
             this.otherDetailsObj.startDate = parseDateWithoutTimestamp(this.startDate);
             this.changeEvent('startDate');
@@ -368,7 +356,6 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.commonService.hasChangesAvailable = false;
         subscriptionHandler(this.$subscriptions);
     }
 

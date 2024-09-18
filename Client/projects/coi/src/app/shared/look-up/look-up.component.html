@@ -7,11 +7,11 @@
       (+{{(selectedLookUpList?.length || 0) - 1}} {{selectedLookUpList?.length === 2 ? 'other' : 'others'}})
     </span>
   </mat-select-trigger>
-  <div *ngIf="isEnableSearch" class="mat-option">
+  <div *ngIf="isEnableSearch" class="mat-option sticky-top p-2 bg-white border">
     <input type="text" class="form-control" [(ngModel)]="searchText" (ngModelChange)="checkIfAllOptionsSelected()" placeholder="Search">
   </div>
   <mat-option *ngIf="isMultiple" #lookupSelectAll [value]="'SELECT_ALL'"> Select All </mat-option>
-  <mat-option *ngIf="!isMultiple" [value]="null"> --select-- </mat-option>
+  <mat-option *ngIf="!isMultiple" [value]="null" disabled hidden> --select-- </mat-option>
   <mat-option *ngFor="let lookup of lookUpList | lookupFilter : searchText" [value]="lookup.code || lookup.description">
     <span [innerHTML]="lookup.description"></span>
   </mat-option>

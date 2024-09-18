@@ -8,7 +8,7 @@
                 </label>
                 <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-name"
                 [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''"
-                [(ngModel)]="createEntityObj.entityName" (ngModelChange)="changeEvent('entityName')"
+                [(ngModel)]="createEntityObj.entityName" (blur)="changeEvent('entityName')"
                 appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
                 <span *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-inline fs-13">
                     {{mandatoryList?.get('entityName')}}
@@ -51,7 +51,7 @@
                         <ng-container *ngIf="isEditMode">
                             <input type="text" class="form-control fs-13" id="coi-entity-address-1"
                                    [ngClass]="(mandatoryList?.has('primaryAddressLine1')) ? 'is-invalid d-block' : ''"
-                                   [(ngModel)]="createEntityObj.primaryAddressLine1" (ngModelChange)="changeEvent('primaryAddressLine1')"
+                                   [(ngModel)]="createEntityObj.primaryAddressLine1" (blur)="changeEvent('primaryAddressLine1')"
                                    appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
                             <span *ngIf="mandatoryList?.has('primaryAddressLine1')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('primaryAddressLine1')}}
@@ -70,7 +70,7 @@
                         </label>
                         <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-address-2"
                         [(ngModel)]="createEntityObj.primaryAddressLine2"
-                        (ngModelChange)="changeEvent('primaryAddressLine2')"
+                        (blur)="changeEvent('primaryAddressLine2')"
                         appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
                         <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                             <app-no-data-label [valueToShow]="createEntityObj.primaryAddressLine2"></app-no-data-label>
@@ -85,7 +85,7 @@
                         </label>
                         <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-city"
                         [ngClass]="(mandatoryList?.has('city')) ? 'is-invalid d-block' : ''"
-                        [(ngModel)]="createEntityObj.city" (ngModelChange)="changeEvent('city')"
+                        [(ngModel)]="createEntityObj.city" (blur)="changeEvent('city')"
                         appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                         <span *ngIf="mandatoryList?.has('city')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('city')}}
@@ -102,7 +102,7 @@
                         <ng-container *ngIf="isEditMode">
                             <input type="text" class="form-control fs-13" id="coi-entity-state"
                                    [ngClass]="(mandatoryList?.has('state')) ? 'is-invalid d-block' : ''"
-                                   [(ngModel)]="createEntityObj.state" (ngModelChange)="changeEvent('state')"
+                                   [(ngModel)]="createEntityObj.state" (blur)="changeEvent('state')"
                                    appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                             <span *ngIf="mandatoryList?.has('state')" class="invalid-feedback  d-inline fs-13">
                             {{mandatoryList?.get('state')}}
@@ -120,7 +120,7 @@
                         <ng-container *ngIf="isEditMode">
                             <input type="text" class="form-control fs-13" id="coi-entity-postCode"
                                    [ngClass]="(mandatoryList?.has('postCode')) ? 'is-invalid d-block' : ''"
-                                   [(ngModel)]="createEntityObj.postCode" (ngModelChange)="changeEvent('postCode')"
+                                   [(ngModel)]="createEntityObj.postCode" (blur)="changeEvent('postCode')"
                                    appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                             <span *ngIf="mandatoryList?.has('postCode')" class="invalid-feedback  d-inline fs-13">
                             {{mandatoryList?.get('postCode')}}
@@ -194,7 +194,7 @@
                     Website
                     <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-websiteAddress'"></app-common-help-text>
                 </label>
-                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-websiteAddress" [(ngModel)]="createEntityObj.websiteAddress" (ngModelChange)="changeEvent('websiteAddress')">
+                <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-websiteAddress" [(ngModel)]="createEntityObj.websiteAddress" (blur)="changeEvent('websiteAddress')">
                 <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                     <app-no-data-label [valueToShow]="createEntityObj.websiteAddress"></app-no-data-label>
                 </span>
@@ -261,7 +261,7 @@
                     <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-human-assurance'"></app-common-help-text>
                 </label>
                 <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-human-assurance"
-                [(ngModel)]="createEntityObj.humanSubAssurance" (ngModelChange)="changeEvent('humanSubAssurance')"
+                [(ngModel)]="createEntityObj.humanSubAssurance" (blur)="changeEvent('humanSubAssurance')"
                 appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                 <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                     <app-no-data-label [valueToShow]="createEntityObj.humanSubAssurance"></app-no-data-label></span>
@@ -272,7 +272,7 @@
                     <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-animal-assurance'"></app-common-help-text>
                 </label>
                 <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-animal-assurance"
-                [(ngModel)]="createEntityObj.anumalWelfareAssurance" (ngModelChange)="changeEvent('anumalWelfareAssurance')"
+                [(ngModel)]="createEntityObj.anumalWelfareAssurance" (blur)="changeEvent('anumalWelfareAssurance')"
                 appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                 <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                     <app-no-data-label [valueToShow]="createEntityObj.anumalWelfareAssurance"></app-no-data-label></span>
@@ -283,7 +283,7 @@
                    <app-common-help-text [subSectionId]="2602" [elementId]="'coi-entity-aaalac'"></app-common-help-text>
                 </label>
                 <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-entity-aaalac"
-                [(ngModel)]="createEntityObj.animalAccreditation" (ngModelChange)="changeEvent('animalAccreditation')"
+                [(ngModel)]="createEntityObj.animalAccreditation" (blur)="changeEvent('animalAccreditation')"
                 appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
 
                 <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
@@ -291,30 +291,4 @@
             </div>
         </div>
 
-        <div class="modal fade mySkinDialog" data-bs-backdrop="static" [id]="'coi-entity-confirmation-modal'" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Confirmation
-                        </h5>
-                        <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" title="Click here to close"
-                        aria-label="Click here to close">
-                        </button>
-                    </div>
-                    <div class="modal-body title-descriptions">
-                        <p>Do you want to discard changes and leave the page?</p>
-                    </div>
-                    <div class="modal-footer mx-2">
-                        <button type="button" class="btn btn-outline-secondary fs-14" id="entity-overview-leave-page"
-                            (click)="leaveSlider()" title="Click here to leave page">
-                            Leave Page
-                        </button>
-                        <button type="button" class="btn btn-primary fs-14" id="entity-overview-stay-on-page"
-                        data-bs-dismiss="modal" title="Click here to stay on page">
-                            Stay On Page
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
