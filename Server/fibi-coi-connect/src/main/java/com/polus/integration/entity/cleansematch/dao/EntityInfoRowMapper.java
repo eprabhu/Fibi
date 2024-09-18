@@ -29,6 +29,7 @@ public class EntityInfoRowMapper implements RowMapper<EntityInfoDTO> {
         dto.setEmail(rs.getString("CERTIFIED_EMAIL"));
         dto.setIsActive(rs.getString("IS_ACTIVE"));
         dto.setSponsorCode(rs.getString("SPONSOR_CODE"));
+        dto.setPhoneNumber(rs.getString("PHONE_NUMBER"));
         dto.setOrganizationId(rs.getObject("ORGANIZATION_ID") != null ? rs.getInt("ORGANIZATION_ID") : null);
         return dto;
     }
