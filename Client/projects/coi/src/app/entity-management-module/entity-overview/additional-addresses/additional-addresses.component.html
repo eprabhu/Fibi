@@ -86,34 +86,18 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-6">
-                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-add-country">
-                            <span class="mandatory me-1">*</span>
-                            Country
-                            <app-common-help-text [subSectionId]="2605" [elementId]="'coi-entity-add-country'"></app-common-help-text>
-                        </label>
-                        <app-endpoint-search [clearField]="clearCountryField" [uniqueId]="'coi-entity-add-country'"
-								[httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
-								class="w-100 mt-4" [isError]="mandatoryList?.has('countryCode')">
-                        </app-endpoint-search>
-                        <div *ngIf="mandatoryList?.has('countryCode')" class="invalid-feedback d-block fs-13">
-                            {{mandatoryList?.get('countryCode')}}
-                        </div>
-                    </div>
-                    <div class="col-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-add-city">
                             <span class="mandatory me-1">*</span>
                             City
                             <app-common-help-text [subSectionId]="2605" [elementId]="'coi-entity-add-city'"></app-common-help-text>
                         </label>
                         <input type="text" class="form-control fs-13" id="coi-entity-add-city" [(ngModel)]="additionalAddressObj.city"
-                        [ngClass]="(mandatoryList?.has('city')) ? 'is-invalid d-block' : ''"
-                        appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                               [ngClass]="(mandatoryList?.has('city')) ? 'is-invalid d-block' : ''"
+                               appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                         <span *ngIf="mandatoryList?.has('city')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('city')}}
                         </span>
                     </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-add-state">
                             <span class="mandatory me-1">*</span>
@@ -121,12 +105,14 @@
                             <app-common-help-text [subSectionId]="2605" [elementId]="'coi-entity-add-state'"></app-common-help-text>
                         </label>
                         <input type="text" class="form-control fs-13" id="coi-entity-add-state" [(ngModel)]="additionalAddressObj.state"
-                        [ngClass]="(mandatoryList?.has('state')) ? 'is-invalid d-block' : ''"
-                        appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
+                               [ngClass]="(mandatoryList?.has('state')) ? 'is-invalid d-block' : ''"
+                               appLengthValidator [limit]=30 [styleList]="'float-end word-count'">
                         <span *ngIf="mandatoryList?.has('state')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('state')}}
                         </span>
                     </div>
+                </div>
+                <div class="row mb-3">
                     <div class="col-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-add-postCode">
                             <span class="mandatory me-1">*</span>
@@ -139,6 +125,20 @@
                         <span *ngIf="mandatoryList?.has('postCode')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('postCode')}}
                         </span>
+                    </div>
+                    <div class="col-6">
+                        <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-add-country">
+                            <span class="mandatory me-1">*</span>
+                            Country
+                            <app-common-help-text [subSectionId]="2605" [elementId]="'coi-entity-add-country'"></app-common-help-text>
+                        </label>
+                        <app-endpoint-search [clearField]="clearCountryField" [uniqueId]="'coi-entity-add-country'"
+                                             [httpOptions]="countrySearchOptions" (onSelect)="selectedCountryEvent($event)"
+                                             class="w-100 mt-4" [isError]="mandatoryList?.has('countryCode')">
+                        </app-endpoint-search>
+                        <div *ngIf="mandatoryList?.has('countryCode')" class="invalid-feedback d-block fs-13">
+                            {{mandatoryList?.get('countryCode')}}
+                        </div>
                     </div>
                     <!-- <div class="col-4">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-type">

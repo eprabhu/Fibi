@@ -4,7 +4,13 @@ import { Router } from '@angular/router';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { forkJoin, Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { EntireEntityDetails, EntityCardDetails, EntityDetails, EntityTabStatus } from '../shared/entity-interface';
+import {
+    EntireEntityDetails,
+    EntityCardDetails,
+    EntityDetails,
+    EntityTabStatus,
+    removeToast
+} from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { EntityManagementService } from '../entity-management.service';
@@ -125,7 +131,8 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         if (!ENTITY_DATA || isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
         this.latestPriorName = ENTITY_DATA?.priorNames?.[0]?.priorNames;
-        this.entityTabStatus = ENTITY_DATA.entityTabStatus
+        this.entityTabStatus = ENTITY_DATA.entityTabStatus;
+        this.entityTabStatus.entity_overview = this.dataStore.getIsEntityMandatoryFilled();
         this.getEntityFullAddress();
         this.isEditMode = this.dataStore.getEditMode();
     }
@@ -243,13 +250,24 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     generatHTTPRequest() {
-        let httpRequest = [];
+        const httpRequest = [];
         httpRequest.push(this._entityManagementService.getEntityDetails(this.entityDetails.entityId));
         httpRequest.push(this._entityManagementService.updateIsDUNSMatchFlag({
             entityId: this.entityDetails.entityId,
             isDunsMatched: true
         }));
         return httpRequest;
+    }
+
+    leaveSlider() {
+        removeToast('ERROR');
+        removeToast('SUCCESS');
+        this._commonService.setChangesAvailable(false);
+    }
+
+    resetNavigationStop() {
+        this._commonService.isNavigationStopped = false;
+        this._commonService.attemptedPath = '';
     }
 
     ngOnDestroy() {

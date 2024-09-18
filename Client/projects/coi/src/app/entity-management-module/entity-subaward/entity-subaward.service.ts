@@ -24,9 +24,9 @@ export class EntitySubAwardService {
 
 }
 
-export function isOrganizationConditionSatisfied(subawardDetials) {
-    if(subawardDetials?.subAwdOrgDetailsResponseDTO?.organizationTypeCode && subawardDetials?.entityRisks?.length) {
-       return true;
+export function isOrganizationConditionSatisfied(subawardDetials: SubAwardOrganization) {
+    if (subawardDetials?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode && subawardDetials?.entityRisks?.length) {
+        return true;
     } else {
         return false;
     }

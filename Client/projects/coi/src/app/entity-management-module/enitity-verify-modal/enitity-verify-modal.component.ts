@@ -49,7 +49,7 @@ export class EnitityVerifyModalComponent implements OnInit {
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
     }
-    
+
     private loadEntityDetails(): void {
         forkJoin({
             sponsor: this._entityManagementService.fetchEntitySponsorDetails(this.entityDetails.entityId),
@@ -70,20 +70,18 @@ export class EnitityVerifyModalComponent implements OnInit {
 
     private setSponsorAndOrgaizationData(result: { sponsor: Object; organization: Object; }) {
         this.entitySponsorDetails = result.sponsor;
-        this.isComplete.sponsor = !!this.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode;
+        this.isComplete.sponsor = !!this.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorType?.code;
         // set organization details
         this.entitySubAwardOrganization = result.organization;
         const { entityRisks, subAwdOrgDetailsResponseDTO } = this.entitySubAwardOrganization || {};
-        this.isComplete.organization = !!entityRisks?.length && !!subAwdOrgDetailsResponseDTO?.organizationTypeCode;
+        this.isComplete.organization = !!entityRisks?.length && !!subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode;
     }
 
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
-        // All Mandatory fields(Entity Name,Ownership Type,Addres 1, City,State,Country,Zip/postal code)
-        const { entityName, entityOwnershipTypeCode, primaryAddressLine1 , city, state, country, postCode} = this.entityDetails;
-        this.isComplete.entity = !!entityName && !!entityOwnershipTypeCode && !!primaryAddressLine1 && !!city && !!state && !!country && !!postCode;
+        this.isComplete.entity = this._dataStoreService.getIsEntityMandatoryFilled();
         this.entityVerifyModalConfig.ADAOptions.isDisablePrimaryBtn = !this.isComplete.entity;
     }
 
@@ -145,28 +143,6 @@ export class EnitityVerifyModalComponent implements OnInit {
     navigateToSection(navigateTo: 'entity-overview' | 'entity-sponsor' | 'entity-subaward'): void {
         this.closeEntityVerifyModal(null);
         this._router.navigate([`/coi/manage-entity/${navigateTo}`], { queryParamsHandling: 'merge' } );
-    }
-
-    fetchEntitySponsorDetails(): void{
-        this.$subscriptions.push(
-            this._entityManagementService.fetchEntitySponsorDetails(this.entityDetails.entityId)
-                .subscribe((data: EntitySponsor)=>{
-                this.entitySponsorDetails = data;
-                this.isComplete.sponsor = !!this.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode;
-            }, (_error: any) => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-            }));
-    }
-
-    fetchEntityOrganizationDetails(): void{
-        this.$subscriptions.push(
-            this._entityManagementService.fetchEntityOrganizationDetails(this.entityDetails.entityId)
-                .subscribe((data: SubAwardOrganization)=>{
-                this.entitySubAwardOrganization = data;
-                this.isComplete.organization = !!this.entitySubAwardOrganization?.entityRisks?.length && !!this.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode;
-            }, (_error: any) => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-            }));
     }
 
 }

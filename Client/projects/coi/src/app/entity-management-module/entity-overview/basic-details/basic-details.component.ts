@@ -73,15 +73,11 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateStoreData(event) {
-        if(!isEmptyObject(event?.autoSaveRO)) {
-            Object.keys(event?.autoSaveRO).forEach((ele) =>{
+        if (!isEmptyObject(event?.autoSaveRO)) {
+            Object.keys(event?.autoSaveRO).forEach((ele) => {
                 this.entityDetails[ele] = event?.autoSaveRO[ele];
             });
             this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
-        }
-        if(event?.isMandatoryFilled) {
-            this.entityTabStatus.entity_overview = event?.isMandatoryFilled;
-            this.dataStore.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
         }
     }
 

@@ -16,6 +16,18 @@ export class EntityDataStoreService {
         return this.storeData?.entityDetails?.entityStatusType?.entityStatusTypeCode == '2';
     }
 
+    // All Mandatory fields(Entity Name,Ownership Type, Addres 1, City,State,Country,Zip/postal code)
+    getIsEntityMandatoryFilled() {
+        if (this.storeData.entityDetails) {
+            const {
+                entityName, entityOwnershipTypeCode, primaryAddressLine1,
+                city, state, country, postCode
+            } = this.storeData.entityDetails;
+            return !!entityName && !!entityOwnershipTypeCode && !!primaryAddressLine1 && !!city && !!state && !!country && !!postCode;
+        }
+        return false;
+    }
+
     getData(keys?: Array<string>): any {
         if (!keys) {
             return this.structuredClone(this.storeData);

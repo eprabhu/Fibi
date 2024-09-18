@@ -11,6 +11,7 @@ import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
 import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method, CoiAttachmentModalInfo } from './coi-common.interface';
 import { AttachmentInputType, COIAttachment } from '../../attachments/attachment-interface';
+import {hideModal} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 
 @Injectable()
 export class CommonService {
@@ -78,7 +79,7 @@ export class CommonService {
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
     relationshipTypeCache = {};
     entityURL: any;
-    hasChangesAvailable: boolean = false;
+    hasChangesAvailable = false;
     isNavigationStopped: boolean = false;
     attemptedPath: string = '';
     CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
@@ -616,6 +617,20 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 
     closeCommonAttachmentModal(): void {
         this.CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
+    }
+
+    setChangesAvailable(hasChange: boolean) {
+        this.hasChangesAvailable = hasChange;
+        if (!hasChange) {
+            this.navigateToRoute();
+        }
+    }
+
+    navigateToRoute() {
+        if (this.isNavigationStopped) {
+            hideModal('coi-entity-confirmation-modal');
+            this._router.navigateByUrl(this.attemptedPath);
+        }
     }
 
 }
