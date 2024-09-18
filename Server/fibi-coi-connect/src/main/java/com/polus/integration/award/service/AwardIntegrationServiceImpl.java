@@ -106,7 +106,7 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 	                .collect(Collectors.toSet());
 	        projectPersons.stream().filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
 	                .forEach(existingPerson -> {
-	                    existingPerson.setStatus(Constant.IN_ACTIVE);
+	                    existingPerson.setStatus(Constant.INACTIVE);
 	                    projectPersonRepository.save(existingPerson);
 	                });
 

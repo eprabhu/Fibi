@@ -107,7 +107,7 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
 	                .collect(Collectors.toSet());
 	        proposalPersons.stream().filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
 	                .forEach(existingPerson -> {
-	                    existingPerson.setStatus(Constant.IN_ACTIVE);
+	                    existingPerson.setStatus(Constant.INACTIVE);
 	                    projectPersonRepository.save(existingPerson);
 	                });
 	    } catch (DataAccessException e) {
