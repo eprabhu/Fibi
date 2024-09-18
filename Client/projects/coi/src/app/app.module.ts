@@ -20,7 +20,6 @@ import {MatMenuModule} from "@angular/material/menu";
 import { SharedComponentModule } from './shared-components/shared-component.module';
 import { FormsModule } from '@angular/forms';
 import { DragDirective } from './common/header/drag.directive';
-import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
 import {HeaderService} from "./common/header/header.service";
 import { LoginGuard } from './common/services/guards/login-guard.service';
 import { ElasticConfigService } from './common/services/elastic-config.service';
@@ -51,7 +50,6 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         MatMenuModule,
         SharedModule,
         FormsModule,
-        AddAttachmentModalModule
     ],
     providers: [CommonService,
         HeaderService,

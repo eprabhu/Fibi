@@ -1,6 +1,5 @@
 export type EntityRiskProxyController = '/organization' | '/sponsor' | '/compliance' | '';
 export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
-export type AttachmentInputType = 'REPLACE' | 'ADD' | 'DESCRIPTION_CHANGE' | '';
 export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found';
 export const ENTITY_DUPLICATE_MARKING_MODAL_ID = 'entity_duplicate_marking';
 
@@ -432,24 +431,6 @@ export interface EntityAttachment {
     updatedBy?: string;
     updateUserFullame?: string;
     versionList?: EntityAttachment[];
-}
-
-export interface AttachmentSaveRO {
-    fileName: string;
-    mimeType: string;
-    attachmentTypeCode: string | number;
-    comment: string;
-    fileDataId: string | null;
-}
-
-export interface AttachmentReplaceRO {
-    fileName: string;
-    mimeType: string;
-    attachmentTypeCode: string | number;
-    comment: string;
-    fileDataId: string | null;
-    attachmentNumber: number;
-    versionNumber: number;
 }
 
 export class EntitySectionDetails {

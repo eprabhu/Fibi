@@ -17,7 +17,7 @@ public class EntityCleanseMatchAPIResponse {
 	private String httpStatusCode;	
 	private String transactionID;
 	private Integer candidatesMatchedQuantity;
-	private List<MatchCandidate> matchCandidates;
+	private List<MatchCandidate> matchCandidates;	
 	private String errorCode;
 	private String errorMessage;
 	private String errorDetails;

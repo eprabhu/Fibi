@@ -1,4 +1,8 @@
 { 
+    "/entity/fetchHistory/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
     "/projectPersonNotify": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -866,6 +870,22 @@
     },
     "/getNotifications": {
         "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/deleteAttachment": {
+        "target": "http://10.199.100.140:8070/coi",
+        "secure": false
+    },
+    "/downloadAttachment": {
+        "target": "http://10.199.100.140:8070/coi",
+        "secure": false
+    },
+    "/updateAttachmentDetails": {
+        "target": "http://10.199.100.140:8070/coi",
+        "secure": false
+    },
+    "/entity/validateDuplicate" : {
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     }
 }

@@ -145,3 +145,9 @@
 .coi-table-sort-btn:focus .coi-table-sort-icon {
     color: var(--theme-primary-color) !important;
 }
+
+.coi-btn-attachment-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}

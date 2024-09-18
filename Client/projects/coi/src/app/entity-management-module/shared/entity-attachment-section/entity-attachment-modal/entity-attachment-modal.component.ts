@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 import { EntityAttachmentModalService } from '../entity-attachment-section.service';
 import { CommonService } from '../../../../common/services/common.service';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { AttachmentReplaceRO, AttachmentSaveRO, EntireEntityDetails, EntityAttachment, EntityAttachmentType, EntityDetails } from '../../entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityAttachmentType, EntityDetails } from '../../entity-interface';
 import { EntityDataStoreService } from '../../../entity-data-store.service';
 import { COIModalConfig, ModalActionEvent } from 'projects/coi/src/app/shared-components/coi-modal/coi-modal.interface';
 import { closeCommonModal, openCommonModal } from 'projects/coi/src/app/common/utilities/custom-utilities';
+import { AttachmentReplaceRO, AttachmentSaveRO } from 'projects/coi/src/app/common/services/coi-common.interface';
 
 @Component({
     selector: 'app-entity-attachment-modal',
@@ -84,9 +85,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         if (this.attachmentInputType === 'REPLACE') {
             this.updateReplaceAttachmentDetails(files, 0);
         } else {
-            for (let index = 0; index < files.length; index++) {
-                this.uploadedFiles.push(files[index]);
-            }
+            this.uploadedFiles.push(...files);
         }
     }
 
@@ -174,7 +173,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         if (!this.attachmentErrorMsg && !this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(
-                this._attachmentSectionService.replaceAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
+                this._attachmentSectionService.saveAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
                     .subscribe((data: any) => {
                         this.clearAttachments(data)
                         this.showSuccessToast();

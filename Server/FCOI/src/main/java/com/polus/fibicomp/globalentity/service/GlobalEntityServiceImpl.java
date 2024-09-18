@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,14 @@ import com.polus.core.messageq.vo.MessageQVO;
 import com.polus.core.messageq.vo.MessagingQueueProperties;
 import com.polus.core.pojo.Currency;
 import com.polus.core.security.AuthenticatedUser;
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.globalentity.dao.EntityDetailsDAO;
 import com.polus.fibicomp.globalentity.dao.SponsorDAO;
 import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
+import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
+import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
+import com.polus.fibicomp.globalentity.dto.ResponseMessageDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
@@ -66,7 +72,14 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	@Autowired
 	private EntitySubOrgInfoRepository entitySubOrgInfoRepository;
 
+	@Autowired
+    private EntityActionLogService actionLogService;
+
+	protected static Logger logger = LogManager.getLogger(GlobalEntityServiceImpl.class.getName());
 	private static final Integer ENTITY_MODULE_CODE = 26;
+	private static final String DOCUMENT_STATUS_FLAG_DUPLICATE = "3";
+	private static final String VERIFY_ACTION_LOG_CODE = "4";
+	private static final String DUPLICATE_ACTION_LOG_CODE = "7";
 
 	@Override
 	public ResponseEntity<Boolean> isDunsNumberExists(String dunsNumber) {
@@ -102,6 +115,14 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
 		}
 		processEntityMessageToQ(null, entityId, null, null);
+		try {
+			Entity entityDetails = entityRepository.findByEntityId(entityId);
+			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityNumber(entityId)
+					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).build();
+			actionLogService.saveEntityActionLog(VERIFY_ACTION_LOG_CODE, logDTO, null);
+		} catch (Exception e) {
+			logger.error("Exception in saveEntityActionLog in verifyEntityDetails");
+		}
 		return new ResponseEntity<>(entityDetailsDAO.getEntityTabStatus(entityId), HttpStatus.OK);
 	}
 
@@ -143,9 +164,39 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 				.primaryAddressLine2(entity.getPrimaryAddressLine2()).country(entity.getCountry().getCountryName())
 				.city(entity.getCity()).state(entity.getState()).dunsNumber(entity.getDunsNumber())
 				.ueiNumber(entity.getUeiNumber()).cageNumber(entity.getCageNumber()).website(entity.getWebsiteAddress())
-				.email(entity.getCertifiedEmail())
+				.email(entity.getCertifiedEmail()).postalCode(entity.getPostCode()).phone(entity.getPhoneNumber())
 				.sponsorCode(sponsorDetails != null ? sponsorDetails.getSponsorCode() : null)
 				.organizationId(organizationDetails != null ? organizationDetails.getOrganizationId() : null).build();
+	}
+
+	@Override
+	public ResponseMessageDTO markDuplicate(MarkDuplicateRequestDTO dto) {
+		entityDetailsDAO.updateEntity(EntityRequestDTO.builder().documentStatusTypeCode(DOCUMENT_STATUS_FLAG_DUPLICATE)
+				.entityId(dto.getDuplicateEntityId()).originalEntityId(dto.getOriginalEntityId()).build());
+		try {
+			Entity entityDetails = entityRepository.findByEntityId(dto.getDuplicateEntityId());
+			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityDetails.getEntityId()).entityNumber(entityDetails.getEntityId())
+					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).build();
+			actionLogService.saveEntityActionLog(DUPLICATE_ACTION_LOG_CODE, logDTO, dto.getDescription());
+		} catch (Exception e) {
+			logger.error("Exception in saveEntityActionLog in markDuplicate");
+		}
+		return new ResponseMessageDTO("Entity marked as duplicate successfully");
+	}
+
+	@Override
+	public List<EntityActionLogDto> fetchHistory(Integer entityId) {
+		return actionLogService.fetchAllEntityActionLog(entityId);
+	}
+
+	@Override
+	public ResponseMessageDTO logAction(ActionLogRequestDTO dto) {
+		try {
+			actionLogService.saveEntityActionLog(dto.getActionLogCode(), dto, null);
+		} catch (Exception e) {
+			logger.error("Exception in saveEntityActionLog in logAction");
+		}
+		return new ResponseMessageDTO("Entity action log saved successfully");
 	}
 
 }

@@ -41,6 +41,7 @@ import com.polus.core.notification.pojo.NotificationRecipient;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.person.pojo.Person;
 import com.polus.core.pojo.Country;
+import com.polus.core.pojo.FileType;
 import com.polus.core.pojo.Unit;
 import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.core.questionnaire.service.QuestionnaireService;
@@ -874,14 +875,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			CoiRiskCategory coiRiskCategory = conflictOfInterestDao.getRiskCategoryStatusByCode(coiTravelDisclosure.getRiskCategoryCode());
 			coiTravelDisclosure.setRiskLevel(coiRiskCategory.getDescription());
 		}
-		try {
-			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_CREATED)
-					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
-					.comment(vo.getDescription()).reporter(AuthenticatedUser.getLoginUserFullName())
-					.build();
-			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
-		} catch (Exception e) {
-			logger.error("createTravelDisclosure : {}", e.getMessage());
+		if (vo.getTravelDisclosureId() == null) {
+			try {
+				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder()
+						.actionTypeCode(ACTION_LOG_CREATED)
+						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId())
+						.travelNumber(coiTravelDisclosure.getTravelNumber()).comment(vo.getDescription())
+						.reporter(AuthenticatedUser.getLoginUserFullName()).build();
+				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+			} catch (Exception e) {
+				logger.error("createTravelDisclosure : {}", e.getMessage());
+			}
 		}
 		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
 	}
@@ -1467,17 +1471,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId) {
-		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Arrays.asList(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE,
-				Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE)), HttpStatus.OK);
-	}
-
-	@Override
-	public ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto) {
-		return new ResponseEntity<>(actionLogService.fetchAllEntityActionLog(coiEntityDto), HttpStatus.OK);
-	}
-
-	@Override
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber) {
 		List<CoiTravelHistoryDto> travelHistories = new ArrayList<>();
 		List<CoiTravelDisclosure> historyList = conflictOfInterestDao.loadTravelDisclosureHistory(personId, entityNumber);
@@ -2025,4 +2018,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, 0, null, additionalDetails);
 		return new ResponseEntity<>("Notification send successfully", HttpStatus.OK);
 	}
+
+	@Override
+	public Map<String, List<FileType>> fetchRequiredParams() {
+		List<FileType> fileTypes = conflictOfInterestDao.getAllFileTypes();
+		Map<String, List<FileType>> response = new HashMap<>();
+	    response.put("fileTypes", fileTypes);
+	    return response;
+	}
+
 }

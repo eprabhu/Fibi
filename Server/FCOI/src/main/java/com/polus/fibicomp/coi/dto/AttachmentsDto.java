@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 public class AttachmentsDto {
 
 	private Integer attachmentId;
-	
+
 	private String personId;
-	
+
 	private String attaTypeCode;
 
 	private String fileName;
@@ -33,9 +33,9 @@ public class AttachmentsDto {
 	private String fileDataId;
 	
 	private String moduleNumber;
-	
+
 	private MultipartFile file;
-	
+
 	private List<Attachments> newAttachments;
 
 	private String createUser;
@@ -45,4 +45,8 @@ public class AttachmentsDto {
 	private String updateUser;
 
 	private Timestamp updateTimestamp;
+
+	private Integer attachmentNumber;
+
+	private Integer versionNumber;
 }

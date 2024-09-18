@@ -3,6 +3,8 @@ package com.polus.fibicomp.globalentity.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import com.polus.core.common.dao.CommonDao;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dao.EntityDetailsDAO;
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
+import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityResponseDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameResponseDTO;
@@ -64,12 +67,26 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 	@Autowired
 	private EntityFileAttachmentService entityFileAttachmentService;
 
+	@Autowired
+    private EntityActionLogService actionLogService;
+
+	protected static Logger logger = LogManager.getLogger(EntityDetailsServiceImpl.class.getName());
 	private static final String GENERAL_SECTION_CODE = "1";
+	private static final String DOCUMENT_STATUS_ACTIVE = "1";
+	private static final String CREATE_ACTION_LOG_CODE = "1";
 
 	@Override
 	public ResponseEntity<Map<String, Integer>> createEntity(EntityRequestDTO dto) {
 		Entity entity = mapDTOToEntity(dto);
-		return new ResponseEntity<>(Map.of("entityId", entityDetailsDAO.createEntity(entity)), HttpStatus.OK);
+		Integer entityId = entityDetailsDAO.createEntity(entity);
+		try {
+			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityNumber(entityId)
+					.entityName(entity.getEntityName()).updatedBy(entity.getUpdatedBy()).build();
+			actionLogService.saveEntityActionLog(CREATE_ACTION_LOG_CODE, logDTO, null);
+		} catch (Exception e) {
+			logger.error("Exception in saveEntityActionLog in createEntity");
+		}
+		return new ResponseEntity<>(Map.of("entityId", entityId), HttpStatus.OK);
 	}
 
 	private Entity mapDTOToEntity(EntityRequestDTO dto) {
@@ -81,6 +98,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 				.dunsNumber(dto.getDunsNumber()).ueiNumber(dto.getUeiNumber()).cageNumber(dto.getCageNumber()).entityStatusTypeCode("2")
 				.updatedBy(AuthenticatedUser.getLoginPersonId()).updateTimestamp(commonDao.getCurrentTimestamp())
 				.createdBy(AuthenticatedUser.getLoginPersonId()).createTimestamp(commonDao.getCurrentTimestamp())
+				.documentStatusTypeCode(DOCUMENT_STATUS_ACTIVE)
 				.versionNumber(1).versionStatus("ACTIVE").isActive(Boolean.TRUE)
 				.build();
 	}
@@ -96,6 +114,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 
 	@Override
 	public ResponseEntity<EntityResponseDTO> fetchEntityDetails(Integer entityId) {
+		String originalName = null;
 		List<EntityIndustryClassification> entityIndustryClassifications = entityIndustryClassificationRepository
 				.findByEntityId(entityId);
 		List<EntityRegistration> entityRegistrations = entityRegistrationRepository.findByEntityId(entityId);
@@ -106,12 +125,16 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		List<ForeignNameResponseDTO> foreignNames = companyDetailsService.fetchForeignNames(entityId);
 		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(GENERAL_SECTION_CODE, entityId);
 		Entity entityDetails = entityRepository.findByEntityId(entityId);
+		if (entityDetails.getOriginalEntityId() != null) {
+			originalName = entityRepository.fetchEntityNameByEntityId(entityId);
+		}
 		Map<String, Object> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
 		return new ResponseEntity<>(EntityResponseDTO.builder().entityDetails(entityDetails)
 				.entityIndustryClassifications(entityIndustryClassifications)
 				.entityMailingAddresses(entityMailingAddresses).entityRegistrations(entityRegistrations)
 				.entityRisks(entityRisks).entityExternalIdMappings(EntityExternalIdMappings).priorNames(priorNames)
-				.foreignNames(foreignNames).attachments(attachments).entityTabStatus(entityTabStatus).build(), HttpStatus.OK);
+				.foreignNames(foreignNames).attachments(attachments).entityTabStatus(entityTabStatus).originalName(originalName)
+				.build(), HttpStatus.OK);
 	}
 
 }

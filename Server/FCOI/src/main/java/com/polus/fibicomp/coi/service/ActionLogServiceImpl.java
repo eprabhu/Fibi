@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.polus.core.common.dao.CommonDao;
-import com.polus.core.person.dao.PersonDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,53 +15,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.core.common.dao.CommonDao;
+import com.polus.core.person.dao.PersonDao;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
-import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.HistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityActionLogDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
-import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
-import com.polus.fibicomp.coi.pojo.EntityActionLog;
-import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
 import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.repository.ActionLogDao;
-import com.polus.fibicomp.coi.repository.DisclosureActionLogRepository;
-import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
-import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.disclosures.consultingdisclosure.dto.ConsultDisclCommonDto;
 import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLog;
 import com.polus.fibicomp.disclosures.consultingdisclosure.pojo.ConsultingDisclActionLogType;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
-import com.polus.fibicomp.opa.pojo.OPAActionLogType;
-import com.polus.core.security.AuthenticatedUser;;
+import com.polus.fibicomp.opa.pojo.OPAActionLogType;;
 
 @Service
 @Transactional
 public class ActionLogServiceImpl implements ActionLogService {
 
-//    @Autowired
-//    private EntityActionLogRepository entityActionLogRepository;
-//
-//    @Autowired
-//    private EntityActionTypeRepository entityActionTypeRepository;
-
     @Autowired
     private ActionLogDao actionLogDao;
-
-    @Autowired
-    private DisclosureActionLogRepository disclosureActionLogRepository;
-
-    @Autowired
-    private DisclosureActionTypeRepository disclosureActionTypeRepository;
 
     @Autowired
 	private CommonDao commonDao;
@@ -75,44 +55,12 @@ public class ActionLogServiceImpl implements ActionLogService {
     @Autowired
 	private PersonDao personDao;
 
-    @Autowired
-    private TravelDisclosureActionLogRepository travelDisclosureActionLogRepository;
-
     private static final String DISCLOSURE_TYPE_FCOI = "FCOI";
 	private static final String DISCLOSURE_TYPE_PROJECT = "Project";
 	private static final String DISCLOSURE_TYPE_TRAVEL = "Travel";
 	private static final String TYPE_CODE_FCOI = "1";
 	private static final String TYPE_CODE_PROPOSAL = "2";
 	private static final String TYPE_CODE_AWARD = "3";
-
-    @Override
-    public void saveEntityActionLog(String actionLogTypeCode, Entity coiEntity, String comment) {
-        EntityActionType entityActionType = actionLogDao.getEntityActionType(actionLogTypeCode);
-        if (entityActionType != null) {
-            String message = buildEntityLogMessage(entityActionType.getMessage(), coiEntity);
-            EntityActionLog actionLog = EntityActionLog.builder().actionTypeCode(actionLogTypeCode)
-                    .entityId(coiEntity.getEntityId())
-                    .entityNumber(coiEntity.getEntityNumber())
-                    .description(message)
-                    .comment(comment)
-                    .updateTimestamp(commonDao.getCurrentTimestamp())
-                    .updateUser(AuthenticatedUser.getLoginUserName()).build();
-            actionLogDao.saveObject(actionLog);
-        }
-    }
-
-    private String buildEntityLogMessage(String message, Entity coiEntity) {
-        Map<String, String> placeholdersAndValues = new HashMap<>();
-        placeholdersAndValues.put("{ENTITY_NAME}", coiEntity.getEntityName());
-//        placeholdersAndValues.put("{PERSON_NAME}", coiEntity.getCreateUserFullName());
-//        placeholdersAndValues.put("{ADMIN_NAME}", coiEntity.getUpdatedUserFullName());
-        placeholdersAndValues.put("{UPDATE_TIMESTAMP}", coiEntity.getUpdateTimestamp().toString());
-//        placeholdersAndValues.put("{RISK}", coiEntity.getEntityRiskCategory() != null ? coiEntity.getEntityRiskCategory().getDescription() : "");
-//        if (coiEntity.getNewRiskCategory() != null) {
-//            placeholdersAndValues.put("{NEW_RISK}", coiEntity.getNewRiskCategory().getDescription());
-//        }
-        return renderPlaceholders(message, placeholdersAndValues);
-    }
 
     private String renderPlaceholders(String message, Map<String, String> replacementParameters) {
         if (replacementParameters != null) {
@@ -257,30 +205,6 @@ public class ActionLogServiceImpl implements ActionLogService {
         }
 		return renderPlaceholders(message, placeholdersAndValues);
 	}
-
-    @Override
-    public List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes) {
-        List<EntityActionLogDto> entityLogs = new ArrayList<>();
-        actionLogDao.fetchEntityActionLog(entityId, actionLogCodes).forEach(entityActionLog -> {
-            EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
-            BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
-            entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));
-            entityLogs.add(entityActionLogDto);
-        });
-        return entityLogs;
-    }
-
-    @Override
-    public List<EntityActionLogDto> fetchAllEntityActionLog(CoiEntityDto coiEntityDto) {
-        List<EntityActionLogDto> entityLogs = new ArrayList<>();
-        actionLogDao.fetchAllEntityActionLog(coiEntityDto).forEach(entityActionLog -> {
-            EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
-            BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
-            entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));
-            entityLogs.add(entityActionLogDto);
-        });
-        return entityLogs;
-    }
 
     @Override
     public List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto) {

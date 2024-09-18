@@ -22,4 +22,7 @@ public interface GlobalEntityRepository extends JpaRepository<Entity, Integer> {
 	@Query(value = "SELECT COUNT(*) FROM ENTITY WHERE CAGE_NUMBER = :cageNumber", nativeQuery = true)
 	int isCageNumberExists(@Param("cageNumber") String cageNumber);
 
+	@Query(value = "SELECT PRIMARY_NAME FROM ENTITY WHERE ENTITY_ID = :entityId", nativeQuery = true)
+	String fetchEntityNameByEntityId(@Param("entityId") Integer entityId);
+
 }

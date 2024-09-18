@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,13 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.pojo.FileType;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.CompleteReivewRequestDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
@@ -486,4 +488,11 @@ public class ConflictOfInterestController {
         logger.info("Requesting for projectPersonNotify");
         return conflictOfInterestService.projectPersonNotify(notificationDto);
     }
+
+	@GetMapping(value = "/fetchRequiredParams")
+	public Map<String, List<FileType>> fetchRequiredParams(HttpServletRequest request) throws Exception {
+		logger.info("Requesting for fetchRequiredParams");
+		return conflictOfInterestService.fetchRequiredParams();
+	}
+
 }

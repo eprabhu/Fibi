@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.pojo.FileType;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -251,20 +252,6 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> modifyRisk(CoiEntityDto entityDto);
 
-	/**
-	 * This method is used to fetch all risk history of an entity
-	 * @param entityId
-	 * @return
-	 */
-	ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId);
-
-	/**
-	 * This method is used to fetch Entity Action Log
-	 * @param coiEntityDto
-	 * @return
-	 */
-	ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto);
-
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
 	ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description);
@@ -385,5 +372,17 @@ public interface ConflictOfInterestService {
 	 */
 	String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes);
 
+	/**
+	 * For notifying person
+	 * @param notificationDto
+	 * @return
+	 */
 	ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto);
+	
+	/**
+	 * fetches the required parameters
+	 * @return
+	 */
+	Map<String, List<FileType>> fetchRequiredParams();
+
 }
