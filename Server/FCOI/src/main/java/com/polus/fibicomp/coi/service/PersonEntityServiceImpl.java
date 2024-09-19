@@ -1,6 +1,8 @@
 package com.polus.fibicomp.coi.service;
 
+import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.core.questionnaire.service.QuestionnaireService;
@@ -16,6 +18,7 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
 import com.polus.core.security.AuthenticatedUser;
+import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,6 +58,9 @@ public class PersonEntityServiceImpl implements PersonEntityService {
 
     @Autowired
     private FcoiDisclosureDao fcoiDisclosureDao;
+
+    @Autowired
+    private FcoiDisclosureService fcoiDisclosureService;
 
     private static final String IS_FORM_COMPLETED = "isFormCompleted";
 
@@ -355,18 +361,15 @@ public class PersonEntityServiceImpl implements PersonEntityService {
 
     @Override
     public ResponseEntity<Object> getSFIOfDisclosure(ConflictOfInterestVO vo) {
+        if (vo.getDisclosureId() != null && vo.getDispositionStatusCode() != null) {
+            if (!vo.getDispositionStatusCode().equals(Constants.COI_DISCL_DISPOSITION_STATUS_VOID) &&
+                    fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_VOID, vo.getDisclosureId())) {
+                throw new ApplicationException("Disclosure is in void status!", CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+            }
+        }
     	Map<String, Object> responseData = new HashMap<>();
 		List<PersonEntity> personEntities  = conflictOfInterestDao.getSFIOfDisclosure(vo);
-//		Integer disclosureId = vo.getDisclosureId() != null ? vo.getDisclosureId() : null;
-//		String personId = disclosureId == null ? vo.getPersonId() : null;
-//		List<PersonEntityRelationshipDto> personEntityRelationshipDto = conflictOfInterestDao.getPersonEntities(disclosureId, personId, null);
-		personEntities.forEach(personEntity -> {personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao.getValidPersonEntityRelTypes(personEntity.getPersonEntityId()));
-//												personEntity.setPersonEntityRelationshipDto(personEntityRelationshipDto
-//														.stream()
-//											            .filter(dto -> personEntity.getPersonEntityId().equals(dto.getPersonEntityId()))
-//											            .findFirst()
-//											            .orElse(null));
-        });
+		personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao.getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
 		if(vo.getFilterType().equalsIgnoreCase("Financial")) {
 			responseData.put("isProjectPresent", conflictOfInterestDao.isProjectPresent(vo));
 			personEntities.forEach(personEntity -> personEntity.setSfiCompleted(fcoiDisclosureDao.isSFICompletedForDisclosure(personEntity.getPersonEntityId(), vo.getDisclosureId())));

@@ -18,6 +18,8 @@ import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
 import com.polus.core.constants.CoreConstants;
+import com.polus.fibicomp.fcoiDisclosure.service.FCOIDisclProjectService;
+import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -67,6 +69,7 @@ import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
@@ -153,6 +156,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Autowired
 	private FcoiDisclosureDao fcoiDisclosureDao;
+
+	@Autowired
+	private FcoiDisclosureService fcoiDisclosureService;
+
+	@Autowired
+	private FCOIDisclProjectService projectService;
 
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
@@ -247,9 +256,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> saveOrUpdateCoiReview(ConflictOfInterestVO vo){
-		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getCoiReview().getDisclosureId())) {
-			throw new ApplicationException("Disclosure is in void status!", CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-		}
+		fcoiDisclosureService.checkDispositionStatusIsVoid(vo.getCoiReview().getDisclosureId());
 		String actionTypeCode = null;
 		CoiReview coiReview = vo.getCoiReview();
 		if (coiReview.getCoiReviewId() == null && conflictOfInterestDao.isReviewAdded(coiReview)) {
@@ -337,22 +344,21 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public List<CoiReview> getCoiReview(Integer disclosureId){
-		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
+	public List<CoiReview> getCoiReview(CoiDisclosureDto disclosureDto){
+		if (!disclosureDto.getDispositionStatusCode().equals(Constants.COI_DISCL_DISPOSITION_STATUS_VOID) &&
+				fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_VOID, disclosureDto.getDisclosureId())) {
 			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		List<CoiReview> coiReviews = conflictOfInterestDao.getCoiReview(disclosureId);
+		List<CoiReview> coiReviews = conflictOfInterestDao.getCoiReview(disclosureDto.getDisclosureId());
 		coiReviews.forEach(coiReview -> {
 			coiReview.setAssigneePersonName(personDao.getPersonFullNameByPersonId(coiReview.getAssigneePersonId()));
 		});
-		return conflictOfInterestDao.getCoiReview(disclosureId);
+		return conflictOfInterestDao.getCoiReview(disclosureDto.getDisclosureId());
 	}
 
 	@Override
 	public ResponseEntity<Object> startReview(ConflictOfInterestVO vo){
-		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getCoiReview().getDisclosureId())) {
-			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-		}
+		fcoiDisclosureService.checkDispositionStatusIsVoid(vo.getCoiReview().getDisclosureId());
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		if (conflictOfInterestDao.isReviewStatus(vo.getCoiReview().getCoiReviewId(),
 				Arrays.asList(Constants.COI_REVIEWER_REVIEW_STATUS_START, Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED))) {
@@ -414,9 +420,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if (disclObj.getReviewStatusCode().equalsIgnoreCase(REVIEW_STATUS_RETURNED)) {
 			return new ResponseEntity<>("Disclosure already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		if (disclObj.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
-			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-		}
+		fcoiDisclosureService.checkDispositionStatusIsVoid(disclObj.getDispositionStatusCode());
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		conflictOfInterestDao.startReview(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED,
 				vo.getCoiReview().getCoiReviewId(), vo.getCoiReview().getEndDate());
@@ -481,9 +485,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (coiReview == null) {
 				return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
 			}
-			if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, coiReview.getDisclosureId())) {
-				throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-			}
+			fcoiDisclosureService.checkDispositionStatusIsVoid(coiReview.getDisclosureId());
 			conflictOfInterestDao.deleteReviewAssigneeHistory(coiReviewId);
 
 			reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder()
@@ -540,9 +542,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber){
-		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
-			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-		}
+		fcoiDisclosureService.checkDispositionStatusIsVoid(disclosureId);
 		return completeReview(disclosureId, disclosureNumber, false);
 	}
 
@@ -1490,10 +1490,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
     public ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description) {
         CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(disclosureId);
-		if (disclosure.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
-			throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-		}
-        if ((!SUBMITTED_FOR_REVIEW.equalsIgnoreCase(disclosure.getReviewStatusCode()))
+		fcoiDisclosureService.checkDispositionStatusIsVoid(disclosure.getDispositionStatusCode());
+		if ((!SUBMITTED_FOR_REVIEW.equalsIgnoreCase(disclosure.getReviewStatusCode()))
                 || (disclosure.getAdminPersonId() != null) || (disclosure.getAdminGroupId() != null)) {
             return new ResponseEntity<>("Disclosure already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);
         }
@@ -1729,7 +1727,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 //				disclosureId, null, null);
 //		List<DisclosureDetailDto> projectList = Stream.concat(proposalDetails.stream(), awardDetails.stream())
 //				.collect(Collectors.toList());
-		List<DisclosureProjectDto> projectList = fcoiDisclosureDao.getDisclosureProjects(disclosureId);
+
+		List<DisclosureProjectDto> projectList;
+		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)){
+			projectList = projectService.getDisclProjectDetailsFromSnapshot(disclosureId);
+		} else {
+			projectList = fcoiDisclosureDao.getDisclosureProjects(disclosureId);
+		}
+
 		projectList.stream().forEach(project -> {
 			List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
 			fcoiDisclosureDao.getProjectRelationshipByParam(project.getModuleCode(), Integer.valueOf(project.getProjectId()),personId,
@@ -1917,6 +1922,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (disclosure.getFcoiTypeCode().equals("1")) {
 				conflictOfInterestDao.archiveDisclosureOldVersions(disclosureId, disclosureNumber);
 			}
+			fcoiDisclosureDao.generateProjectSnapshot(disclosureId, disclosure.getPersonId());
 			try {
 				DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
 						.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_REVIEW_COMPLETED).disclosureId(disclosure.getDisclosureId())

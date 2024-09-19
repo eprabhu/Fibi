@@ -171,4 +171,16 @@ public interface FcoiDisclosureService {
      * @param integrationRequestDto
      */
     void makeDisclosureVoid(IntegrationRequestDto integrationRequestDto);
+
+    /**
+     * Check disposition status is void
+     * @param dispositionStatusCode
+     */
+    void checkDispositionStatusIsVoid(String dispositionStatusCode);
+
+    /**
+     * Check disclosure's disposition status is void
+     * @param disclosureId
+     */
+    void checkDispositionStatusIsVoid(Integer disclosureId);
 }

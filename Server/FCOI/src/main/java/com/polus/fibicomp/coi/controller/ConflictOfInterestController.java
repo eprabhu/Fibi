@@ -39,6 +39,7 @@ import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
@@ -103,10 +104,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.saveOrUpdateCoiReview(vo);
 	}
 
-	@GetMapping("/getCoiReview/{disclosureId}")
-	public List<CoiReview> getCoiReview(@PathVariable("disclosureId") Integer disclosureId) {
+	@PostMapping("/getCoiReview")
+	public List<CoiReview> getCoiReview(@RequestBody CoiDisclosureDto disclosureDto) {
 		logger.info("Requesting for getCoiReview");
-		return conflictOfInterestService.getCoiReview(disclosureId);
+		return conflictOfInterestService.getCoiReview(disclosureDto);
 	}
 
 	@PostMapping("/startCOIReview")

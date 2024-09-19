@@ -90,6 +90,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     @Autowired
     private ConflictOfInterestService coiService;
 
+    @Autowired
+    private FCOIDisclProjectService projectService;
+
     @Override
     public ResponseEntity<Object> createDisclosure(CoiDisclosureDto vo) throws JsonProcessingException {
         Map<String, Object> validatedObject = disclosureDao.validateProjectDisclosure(vo.getPersonId(), vo.getModuleCode(), vo.getModuleItemKey());
@@ -189,12 +192,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         CoiDisclosureDto coiDisclosureDto = new CoiDisclosureDto();
         ConflictOfInterestVO vo = new ConflictOfInterestVO();
         CoiDisclosure coiDisclosure = disclosureDao.loadDisclosure(disclosureId);
-        if (coiDisclosure.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
-            return new ResponseEntity<>("Disclosure is in void status!",HttpStatus.METHOD_NOT_ALLOWED);
-        }
         BeanUtils.copyProperties(coiDisclosure, coiDisclosureDto, "countryOfCitizenshipDetails", "countryDetails", "currency");
         if (Objects.equals(coiDisclosure.getFcoiTypeCode(), PROJECT_DISCLOSURE_TYPE_CODE)) {
-            List<DisclosureProjectDto> disclProjects = disclosureDao.getDisclosureProjects(disclosureId);
+            List<DisclosureProjectDto> disclProjects = getDisclProjectsByDispStatus(disclosureId);
             vo.setProjectDetail(disclProjects.get(0));
         }
         coiDisclosureDto.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdatedBy()));
@@ -211,15 +211,23 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
 
+    private List<DisclosureProjectDto> getDisclProjectsByDispStatus(Integer disclosureId) {
+        List<DisclosureProjectDto> disclProjects;
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)){
+            disclProjects = projectService.getDisclProjectDetailsFromSnapshot(disclosureId);
+        } else {
+            disclProjects = disclosureDao.getDisclosureProjects(disclosureId);
+        }
+        return disclProjects;
+    }
+
     @Override
     public ResponseEntity<Object> certifyDisclosure(CoiDisclosureDto coiDisclosureDto) {
         CoiDisclosure coiDisclosureObj = disclosureDao.loadDisclosure(coiDisclosureDto.getDisclosureId());
         if (coiDisclosureObj.getReviewStatusCode().equals(DISCLOSURE_REVIEW_IN_PROGRESS) || coiDisclosureObj.getReviewStatusCode().equals(SUBMITTED_FOR_REVIEW) || coiDisclosureObj.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED) || coiDisclosureObj.getReviewStatusCode().equals(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED)) {
             return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
-        if (coiDisclosureObj.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
-            return new ResponseEntity<>("Disclosure is in void status!",HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(coiDisclosureObj.getDispositionStatusCode());
         setDisclosureReviewStatusCode(coiDisclosureDto, coiDisclosureObj);
         coiDisclosureDto.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
         Calendar cal = Calendar.getInstance();
@@ -339,9 +347,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             return new ResponseEntity<>("Risk is already updated", HttpStatus.METHOD_NOT_ALLOWED);
         }
         CoiDisclosure disclosure = disclosureDao.loadDisclosure(disclosureDto.getDisclosureId());
-        if (disclosure.getDispositionStatusCode().equals(Constants.COI_DISCL_VOID_DISPOSITION_STATUS)) {
-            return new ResponseEntity<>("Disclosure is in void status!",HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(disclosure.getDispositionStatusCode());
         CoiRiskCategory risk = disclosureDao.getRiskCategoryStatusByCode(disclosureDto.getRiskCategoryCode());
         disclosureDto.setUpdateTimestamp(disclosureDao.updateDisclosureRiskCategory(disclosureDto));
         DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber()).riskCategory(disclosure.getCoiRiskCategory().getDescription()).riskCategoryCode(disclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription()).newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK).administratorName(AuthenticatedUser.getLoginUserFullName()).fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosureDto.getRevisionComment()).build();
@@ -370,7 +376,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> getDisclosureProjects(Integer disclosureId) {
-        return new ResponseEntity<>(disclosureDao.getDisclosureProjects(disclosureId), HttpStatus.OK);
+        return new ResponseEntity<>(getDisclProjectsByDispStatus(disclosureId), HttpStatus.OK);
     }
 
     @Override
@@ -386,13 +392,18 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         if (disclosureDao.isProjectSFISyncNeeded(vo.getDisclosureId())) {
             disclosureDao.syncFCOIDisclosure(vo.getDisclosureId(), vo.getDisclosureNumber());
         }
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
+        if (!vo.getDispositionStatusCode().equals(Constants.COI_DISCL_DISPOSITION_STATUS_VOID) &&
+                disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_VOID, vo.getDisclosureId())) {
             throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         }
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
-        CompletableFuture<List<DisclosureProjectDto>> projectsFuture =
-                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
+        CompletableFuture<List<DisclosureProjectDto>> projectsFuture;
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, vo.getDisclosureId())){
+            projectsFuture = CompletableFuture.supplyAsync(() -> projectService.getDisclProjectDetailsFromSnapshot(vo.getDisclosureId()));
+        } else {
+            projectsFuture = CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
+        }
         CompletableFuture<List<PersonEntityRelationshipDto>> personEntityRelationshipFuture =
                 CompletableFuture.supplyAsync(() -> coiDao.getPersonEntities(vo.getDisclosureId(), vo.getPersonId(), null));
         CompletableFuture<Void> allOf = CompletableFuture.allOf(
@@ -441,13 +452,18 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public List<PersonEntityRelationshipDto> getDisclosureEntityRelations(ProjectEntityRequestDto vo) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
+        if (!vo.getDispositionStatusCode().equals(Constants.COI_DISCL_DISPOSITION_STATUS_VOID) &&
+                disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_VOID, vo.getDisclosureId())) {
             throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         }
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
-        CompletableFuture<List<DisclosureProjectDto>> projectsFuture =
-                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
+        CompletableFuture<List<DisclosureProjectDto>> projectsFuture;
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, vo.getDisclosureId())){
+            projectsFuture = CompletableFuture.supplyAsync(() -> projectService.getDisclProjectDetailsFromSnapshot(vo.getDisclosureId()));
+        } else {
+            projectsFuture = CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
+        }
         CompletableFuture<List<PersonEntityRelationshipDto>> personEntityRelationshipFuture =
                 CompletableFuture.supplyAsync(() -> coiDao.getPersonEntities(vo.getDisclosureId(), vo.getPersonId(), null));
         CompletableFuture<Void> allOf = CompletableFuture.allOf(
@@ -536,9 +552,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> saveDisclosureConflict(ProjectEntityRequestDto vo) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(vo.getDisclosureId());
         disclosureDao.saveOrUpdateCoiDisclEntProjDetails(vo);
         List<ProjectEntityRequestDto> projectEntityRequestDtos = new ArrayList<>();
         if (vo.getApplyAll()) {
@@ -629,7 +643,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     }
 
     private CoiDisclosure copyDisclosure(CoiDisclosure disclosure, CoiDisclosure copyDisclosure) {
-        copyDisclosure.setFcoiTypeCode(disclosure.getFcoiTypeCode());
+        copyDisclosure.setFcoiTypeCode(Constants.DISCLOSURE_TYPE_CODE_REVISION);
         copyDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
         copyDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
         copyDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
@@ -663,9 +677,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, vo.getDisclosureId())) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(vo.getDisclosureId());
         if (disclosureDao.isDisclEntProjConflictAdded(vo.getConflictStatusCode(), vo.getCoiDisclProjectEntityRelId())) {
             return new ResponseEntity<>("Conflict already updated", HttpStatus.METHOD_NOT_ALLOWED);
         }
@@ -689,9 +701,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> validateConflicts(Integer disclosureId) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(disclosureId);
         CoiConflictStatusTypeDto statusCode = disclosureDao.validateConflicts(disclosureId);
         return new ResponseEntity<>(statusCode, HttpStatus.OK);
     }
@@ -728,9 +738,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, dto.getDisclosureId())) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(dto.getDisclosureId());
         if ((dto.getActionType().equals("R") && (disclosureDao.isSameAdminPersonOrGroupAdded(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId())))
                 || (dto.getActionType().equals("A") && disclosureDao.isAdminPersonOrGroupAdded(dto.getDisclosureId()))) {
             return new ResponseEntity<>("Admin already assigned", HttpStatus.METHOD_NOT_ALLOWED);
@@ -808,18 +816,14 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public void syncFCOIDisclosure(CoiDisclosureDto coiDisclosureDto) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, coiDisclosureDto.getDisclosureId())) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(coiDisclosureDto.getDisclosureId());
         disclosureDao.syncFCOIDisclosure(coiDisclosureDto.getDisclosureId(),
                 coiDisclosureDto.getDisclosureNumber());
     }
 
     @Override
     public ResponseEntity<Object> evaluateValidation(Integer disclosureId, Integer disclosureNumber) {
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_VOID_DISPOSITION_STATUS, disclosureId)) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
-        }
+        checkDispositionStatusIsVoid(disclosureId);
         disclosureDao.syncFCOIDisclosure(disclosureId, disclosureNumber);
         List<COIValidateDto> coiValidateDtoList = disclosureDao.evaluateValidation(disclosureId, AuthenticatedUser.getLoginPersonId());
         return new ResponseEntity<>(coiValidateDtoList, HttpStatus.OK);
@@ -839,4 +843,19 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     public void makeDisclosureVoid(IntegrationRequestDto integrationRequestDto) {
         disclosureDao.makeDisclosureVoid(integrationRequestDto);
     }
+
+    @Override
+    public void checkDispositionStatusIsVoid(String dispositionStatusCode) {
+        if (dispositionStatusCode.equals(Constants.COI_DISCL_DISPOSITION_STATUS_VOID)) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
+    }
+
+    @Override
+    public void checkDispositionStatusIsVoid(Integer disclosureId) {
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_VOID, disclosureId)) {
+            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+        }
+    }
+
 }

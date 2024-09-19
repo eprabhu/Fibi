@@ -19,6 +19,12 @@ set foreign_key_checks = 0;
 truncate entity_action_type;
 set foreign_key_checks = 1;
 
+ALTER TABLE `coi_disclosure`
+ADD COLUMN `REMARK` VARCHAR(225) NULL;
+
+ALTER TABLE `coi_discl_projects`
+ADD COLUMN `PROJECT_SNAPSHOT` JSON NULL;
+
 
 ALTER TABLE attachments
 ADD COLUMN VERSION_NUMBER INT;

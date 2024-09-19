@@ -65,4 +65,5 @@ public class DisclosureProjectDto {
 	private String certificationFlag;
 	private String disclosureRequiredFlag;
 	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
+	private String accountNumber;
 }

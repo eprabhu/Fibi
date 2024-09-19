@@ -6,6 +6,7 @@ import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
@@ -400,4 +401,24 @@ public interface FcoiDisclosureDao {
      * @return
      */
     boolean isDisclDispositionInStatus(String dispositionStatusCode, Integer disclosureId);
+
+    /**
+     * Snapshotting disclosure projects
+     * @param disclosureId
+     * @param personId
+     */
+    void generateProjectSnapshot(Integer disclosureId, String personId);
+
+    /**
+     *
+     * @param disclosureId
+     * @return
+     */
+    List<CoiDisclProjects> getCoiDisclProjects(Integer disclosureId);
+
+    /**
+     *
+     * @return
+     */
+    List<CoiProjectType> getCoiProjectTypes();
 }
