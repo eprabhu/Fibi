@@ -168,6 +168,10 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     onOrganizationTypeSelect(event: any): void {
         const { code, description } = event ? event[0] : { code: null, description: null };
+        if (!this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityOrganizationType) {
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityOrganizationType =
+                new EntityOrganizationType();
+        }
         const entityOrganizationType =
             this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityOrganizationType;
         entityOrganizationType.organizationTypeCode = code;
