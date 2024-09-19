@@ -10,31 +10,25 @@
             <div class="col-lg-9 mb-3 mb-lg-0 mb-md-3 px-0">
                 <div class="row m-0">
                     <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
-                        <span class="d-flex align-items-center">
-                            <span tabindex="-1" [attr.aria-label]="disclosure?.fcoiType"
-                                class="coi-card-notch-ribbon shadow-sm {{getColorBadges(disclosure)}}">
-                                <span>{{disclosure?.fcoiType}}</span>
-                            </span>
-                        </span>
-                        <h4 class="d-flex align-items-baseline fs-14 mb-0 ms-1"
-                            *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'">
-                            <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'"
-                                tabindex="-1" [attr.aria-label]="disclosure?.projectHeader">
-                                <span class="d-flex">
-                                    <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
-                                        *ngIf="disclosure?.fcoiTypeCode==2">text_snippet</mat-icon>
-                                    <mat-icon aria-hidden="true" class="coi-text-light me-1 flex-shrink-0"
-                                        *ngIf="disclosure?.fcoiTypeCode==3">workspace_premium</mat-icon>
-                                    <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
-                                        (click)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
-                                        (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
-                                        (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.disclosureId)"
-                                        [title]="'Click here to view details of ' + disclosure?.projectHeader"
-                                        [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
-                                        <span class="text-slice">{{disclosure?.projectHeader}}</span>
-                                    </a>
-                                </span>
-                            </span>
+                        <div class="d-flex align-items-center">
+                            <span *ngIf="disclosure.fcoiTypeCode === '2'" class="coi-card-notch-ribbon shadow-sm"
+                                [style.backgroundColor]="disclosure.projectBadgeColor"
+                                [attr.aria-label]="disclosure?.projectType + ' disclosure'" tabindex="-1"
+                                id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.projectType }}</span>
+                            <span *ngIf="disclosure.fcoiTypeCode !== '2'" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
+                                aria-label="'FCOI disclosure" tabindex="-1" id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
+                        </div>
+                        <h4 *ngIf="disclosure.fcoiTypeCode === '2'" class="fs-14 mb-0 ms-1">
+                            <div class="d-flex align-items-center">
+                                <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{ disclosure.projectIcon }}</mat-icon>
+                                <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
+                                    (click)="commonService.openProjectHierarchySlider(disclosure?.projectTypeCode, disclosure?.projectNumber)"
+                                    (keyup.enter)="commonService.openProjectHierarchySlider(disclosure?.projectTypeCode, disclosure?.projectNumber)"
+                                    [title]="'Click here to view details of ' + disclosure?.projectHeader"
+                                    [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
+                                    <span class="text-slice">{{ disclosure?.projectHeader }}</span>
+                                </a>
+                            </div>
                         </h4>
                     </div>
                 </div>

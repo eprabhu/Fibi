@@ -751,8 +751,7 @@
                                             [attr.aria-label]="disclosure?.projectType + ' disclosure'" tabindex="-1"
                                             id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.projectType }}</span>
                                         <span *ngIf="disclosure.fcoiTypeCode !== '2'" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
-                                            [attr.aria-label]="disclosure?.projectType + ' disclosure'" tabindex="-1"
-                                            id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
+                                            aria-label="FCOI disclosure" tabindex="-1" id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
                                             class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex">
@@ -765,9 +764,9 @@
                                                 <span class="pipe mx-1"></span>
                                                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{disclosure.projectIcon}}</mat-icon>
                                                 <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
-                                                    (click)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
-                                                    (keyup.enter)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
-                                                    (keyup.space)="commonService.openProjectDetailsModal(null, disclosure?.coiDisclosureId)"
+                                                    (click)="commonService.openProjectHierarchySlider(disclosure?.coiProjectTypeCode, disclosure?.projectNumber)"
+                                                    (keyup.enter)="commonService.openProjectHierarchySlider(disclosure?.coiProjectTypeCode, disclosure?.projectNumber)"
+                                                    (keyup.space)="commonService.openProjectHierarchySlider(disclosure?.coiProjectTypeCode, disclosure?.projectNumber)"
                                                     [title]="'Click here to view details of ' + disclosure?.projectHeader"
                                                     [attr.aria-label]="'Click here to view details of ' + disclosure?.projectHeader">
                                                     <span class="text-slice">{{disclosure?.projectHeader}}</span>

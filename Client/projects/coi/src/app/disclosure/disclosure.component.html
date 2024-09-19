@@ -23,7 +23,7 @@
                                                 <mat-icon aria-hidden="true"
                                                     class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
                                                 <a class="link-primary cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal(coiData)"
-                                                    (keyup.enter)="openPersonDetailsModal(coiData)" (keyup.space)="openPersonDetailsModal(coiData)"
+                                                    (keyup.enter)="openPersonDetailsModal(coiData)"
                                                     attr.aria-label="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}"
                                                     title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}
                                                 </a>
@@ -38,7 +38,6 @@
                                                 </span> | -->
                                                 <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
                                                     role="link" (keyup.enter)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
-                                                    (keyup.space)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
                                                     [title]="coiData?.coiDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
                                                     [attr.aria-label]="coiData?.coiDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
                                                     [ngClass]="coiData?.coiDisclosure?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
@@ -47,7 +46,6 @@
                                                 </a> |
                                                 <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)" role="link"
                                                     (keyup.enter)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)"
-                                                    (keyup.space)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)"
                                                     [title]="coiData?.coiDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
                                                     [attr.aria-label]="coiData?.coiDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
                                                     [ngClass]="coiData?.coiDisclosure?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="0"
@@ -57,7 +55,6 @@
                                                 <a class="ms-2 fs-13"
                                                     (click)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)" role="link"
                                                     (keyup.enter)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)"
-                                                    (keyup.space)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)"
                                                     [title]="coiData?.coiDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
                                                     [attr.aria-label]="coiData?.coiDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
                                                     [ngClass]="coiData?.coiDisclosure?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
@@ -93,10 +90,10 @@
                                 </div>
                                 <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && coiData?.projectDetail" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">{{coiData?.projectDetail?.projectIcon}}</mat-icon>
-                                    <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
+                                    <a tabindex="0" class="link-primary fs-6 text-slice" (click)="openProjectHierarchySlider()"
                                         title="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
                                         attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
-                                        (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
+                                        (keyup.enter)="openProjectHierarchySlider()">
                                         #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}
                                     </a>
                                 </h3>

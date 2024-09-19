@@ -1,3 +1,5 @@
+$gap: 0.875rem;
+
 //Cards
 
 // .card {
@@ -561,4 +563,106 @@
     border: 1px dashed var(--theme-entity-matching-card-border-color);
     background-color: var(--theme-entity-matching-card-bg-color);
     color: var(--theme-entity-matching-card-border-color);
+}
+
+.coi-card-bg-body, 
+.coi-card-bg-body .card-header, 
+.coi-card-bg-body .card-body {
+    background-color: var(--theme-body-bg-color) !important;
+}
+
+.coi-hierarchy {
+    .coi-hierarchy-container {
+        display: flex;
+        min-width: 250px;
+        width: 100%;
+        padding-left: 40px;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+
+        // For all child elements except the first
+        &:not(:first-child)::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2.5px;
+            background-color: #d3d3d3;
+            top: 30px;
+            left: 20px;
+        }
+
+        &:not(:first-child)::after {
+            content: '';
+            position: absolute;
+            width: 2.5px;
+            height: calc(32.5px + #{$gap});
+            background-color: #d3d3d3;
+            top: -#{$gap};
+            left: 20px;
+        }
+
+        &:first-child {
+            padding-left: 0;
+            min-width: 250px;
+        }
+
+        &:not(:last-of-type) {
+            &::after {
+                height: calc(100% + #{$gap}) !important;
+            }
+        }
+
+        .coi-hierarchy-node {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: #{$gap};
+            width: 100%;
+            z-index: 2;
+
+            .coi-hierarchy-project-icon {
+                transform: scale(0.9);
+            }
+
+            .coi-hierarchy-node-link {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                width: 100%;
+                height: 65px;
+                background: white;
+                outline: none;
+                border-radius: .4rem;
+                padding: 0.5rem 0.875rem;
+                border: 1px solid #d3d3d3;
+                color: var(--theme-text-gray-700);
+                font-size: var(--theme-font-size);
+                font-weight: 400;
+                z-index: 3;
+
+                &:hover {
+                    font-weight: 600;
+                    background-color: #fff8dd;
+                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+                }
+
+                &:focus {
+                    font-weight: 600;
+                    background-color: #f7edc2;
+                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+                }
+
+                &.coi-hierarchy-node-link-active {
+                    font-weight: 600;
+                    color: var(--theme-text-gray-800) !important;
+                    border: 1px dashed #ffc700;
+                    background-color: #fff8dd;
+                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+    }
 }

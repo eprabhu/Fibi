@@ -58,10 +58,10 @@ export class ScrollSpyComponent implements OnInit, OnChanges, OnDestroy {
         if (!isActiveKeyNavigation) {
             return;
         }
-        const activeElement = document.activeElement;
-        const validTags = ['INPUT', 'BUTTON', 'TEXTAREA'];
+        const ACTIVE_ELEMENT = document.activeElement;
+        const INVALID_TAGS = ['INPUT', 'BUTTON', 'TEXTAREA'];
         const FOCUS_ELEMENT_ITEM_CLASS = focusedSection === 'LEFT' ? contentItemClass : navItemClass;
-        if (validTags.includes(activeElement.tagName) && !activeElement.classList.contains(FOCUS_ELEMENT_ITEM_CLASS)) {
+        if (INVALID_TAGS.includes(ACTIVE_ELEMENT.tagName) && !ACTIVE_ELEMENT.classList.contains(FOCUS_ELEMENT_ITEM_CLASS)) {
             return;
         }
 
@@ -99,13 +99,13 @@ export class ScrollSpyComponent implements OnInit, OnChanges, OnDestroy {
         const SCROLL_COUNTER = elementVisiblePercentageList.indexOf(Math.max(...elementVisiblePercentageList));
         if (SCROLL_COUNTER >= 0 && this.scrollSpyConfiguration.activeCounter != SCROLL_COUNTER && !this.isMouseClicked) {
             this.previousCounter = deepCloneObject(this.scrollSpyConfiguration.activeCounter);
-            this.scrollSpyConfiguration.activeCounter = deepCloneObject(SCROLL_COUNTER)
+            this.scrollSpyConfiguration.activeCounter = deepCloneObject(SCROLL_COUNTER);
             this.scrollRight(false);
             this.emitContentChanged(this.getElementByCounter('LEFT'), true);
         }
         setTimeout(() => {
             this.isMouseClicked = false;
-        }, 200)
+        }, 200);
     }
 
     private updateFocusedSection(section: 'LEFT' | 'RIGHT'): void {

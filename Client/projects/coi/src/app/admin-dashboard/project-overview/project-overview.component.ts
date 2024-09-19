@@ -130,27 +130,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    openProjectDetailsModal(projectDetails: ProjectDetails): void {
-        const SELECTED_PROJECT_DETAILS = {
-            title: projectDetails?.title,
-            sponsorName: projectDetails?.sponsorName,
-            sponsorCode : projectDetails?.sponsorCode,
-            homeUnitName: projectDetails?.leadUnitName,
-            projectEndDate: projectDetails?.projectEndDate,
-            projectId: projectDetails?.projectId,
-            homeUnitNumber: projectDetails?.leadUnitNumber,
-            reporterRole: projectDetails?.reporterRole,
-            projectStartDate: projectDetails?.projectStartDate,
-            projectStatus: projectDetails?.projectStatus,
-            projectTypeCode: projectDetails?.projectTypeCode,
-            piName: projectDetails?.piName,
-            primeSponsorName: projectDetails?.primeSponsorName,
-            primeSponsorCode: projectDetails?.primeSponsorCode,
-            projectType: projectDetails.projectType,
-            projectBadgeColour: projectDetails.projectBadgeColour,
-            projectNumber: projectDetails?.projectId
-        }
-        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS, null, false);
+    openProjectHierarchySlider(projectDetails: ProjectDetails): void {
+        this.commonService.openProjectHierarchySlider(projectDetails?.projectTypeCode, projectDetails?.projectNumber);
     }
 
     openPersonDetailsModal(personID: string): any {

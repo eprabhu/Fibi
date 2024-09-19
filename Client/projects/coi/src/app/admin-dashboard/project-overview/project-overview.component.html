@@ -39,14 +39,13 @@
                                             {{projectData?.projectDetails?.projectType}}
                                         </span>
                                         <div class="d-flex align-items-end">
-                                            <mat-icon aria-hidden="true"
-                                                class="coi-text-light flex-shrink-0">article</mat-icon>
-                                            <a class="link-primary fs-6 text-slice fw-600 lh-1" id="coi-project-overview-title-{{index1}}" tabindex="0"
-                                                (click)="openProjectDetailsModal(projectData.projectDetails)" (keyup.enter)="openProjectDetailsModal(projectData.projectDetails)"
-                                                (keyup.space)="openProjectDetailsModal(projectData.projectDetails)"
-                                                [title]="'Click here to view details of #'+ projectData?.projectDetails?.projectId + ' - ' + projectData?.projectDetails?.title"
-                                                role="link">
-                                                #{{projectData?.projectDetails?.projectId + ' - ' + projectData?.projectDetails?.title}}
+                                            <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{projectData?.projectDetails?.projectIcon}}</mat-icon>
+                                            <a class="link-primary fs-6 text-slice fw-600 lh-1" id="coi-project-overview-title-{{index1}}"
+                                                (click)="openProjectHierarchySlider(projectData.projectDetails)" (keyup.enter)="openProjectHierarchySlider(projectData.projectDetails)"
+                                                (keyup.space)="openProjectHierarchySlider(projectData.projectDetails)" tabindex="0"
+                                                [title]="'Click here to view details of #'+ projectData?.projectDetails?.projectNumber + ' - ' + projectData?.projectDetails?.title"
+                                                [attr.aria-label]="'Click here to view details of '+ projectData?.projectDetails?.projectNumber + ' - ' + projectData?.projectDetails?.title">
+                                                <span>#{{projectData?.projectDetails?.projectNumber + ' - ' + projectData?.projectDetails?.title}}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -86,8 +85,7 @@
                                     <!-- Project status -->
                                     <div class="col-lg-4 col-md-6 mb-2">
                                         <label for="coi-project-overview-Project-status"
-                                            class="d-block coi-text-dark">Project
-                                            Status </label>
+                                            class="d-block coi-text-dark">{{projectData?.projectDetails?.projectType}} Status</label>
                                         <div tabindex="-1">
                                             <span id="coi-project-overview-Project-status-{{index1}}">
                                                 <app-no-data-label

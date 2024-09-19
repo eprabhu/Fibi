@@ -530,9 +530,8 @@
                                                 <span class="pipe mx-1"></span>
                                                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{coi.projectIcon}}</mat-icon>
                                                 <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
-                                                    (click)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                    (keyup.enter)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
-                                                    (keyup.space)="commonService.openProjectDetailsModal(null, coi?.coiDisclosureId)"
+                                                    (click)="commonService.openProjectHierarchySlider(coi?.coiProjectTypeCode, coi?.projectNumber)"
+                                                    (keyup.enter)="commonService.openProjectHierarchySlider(coi?.coiProjectTypeCode, coi?.projectNumber)"
                                                     [title]="'Click here to view details of ' + coi?.projectHeader"
                                                     [attr.aria-label]="'Click here to view details of ' + coi?.projectHeader">
                                                     <span class="text-slice">{{coi?.projectHeader}}</span>

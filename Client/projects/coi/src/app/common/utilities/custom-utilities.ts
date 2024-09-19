@@ -52,14 +52,15 @@ export function getFormattedAmount(amount: number): string {
  */
 export function openInNewTab(path: string, queryParamKeys: Array<any>, queryParamValues: Array<any>) {
     if (path && queryParamKeys && queryParamValues && queryParamKeys.length === queryParamValues.length) {
-        let url = '';
+        let QUERY_PARAMS = '';
         queryParamKeys.forEach((key, index) => {
             if (queryParamValues[index]) {
-                (index === 0) ? url = key + '=' + queryParamValues[index] : url = url + '&' + key + '=' + queryParamValues[index];
+                (index === 0) ? QUERY_PARAMS = key + '=' + queryParamValues[index] : QUERY_PARAMS = QUERY_PARAMS + '&' + key + '=' + queryParamValues[index];
             }
         });
-        url = window.location.origin + window.location.pathname + '#/coi/' + path + url;
-        window.location.hash.split(/[/?]/).includes('dashboard') ? window.open(url, '_self') : window.open(url, url);
+        const COI_PATH = path.includes('/coi/') ? path : '/coi/' + path;
+        const URL = window.location.origin + window.location.pathname + '#' + COI_PATH + QUERY_PARAMS;
+        window.location.hash.split(/[/?]/).includes('dashboard') ? window.open(URL, '_self') : window.open(URL, URL);
     }
 }
 

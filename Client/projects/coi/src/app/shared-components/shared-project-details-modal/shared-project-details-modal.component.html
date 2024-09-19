@@ -63,8 +63,8 @@
                     </div>
                     <!-- Project Status -->
                     <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mb-3"
-                        [attr.aria-label]="'Project status is ' + (selectedProject?.projectDetails?.projectStatus ? selectedProject?.projectDetails?.projectStatus : 'empty')">
-                        <label for="coi-relationship-status-modal" class="coi-text-dark d-block">Project Status</label>
+                        [attr.aria-label]="selectedProject?.projectDetails?.projectType + ' status is ' + (selectedProject?.projectDetails?.projectStatus ? selectedProject?.projectDetails?.projectStatus : 'empty')">
+                        <label for="coi-relationship-status-modal" class="coi-text-dark d-block">{{selectedProject?.projectDetails?.projectType}} Status</label>
                         <div id="coi-relationship-status-modal" class="text-slice">
                             <app-no-data-label [valueToShow]="selectedProject?.projectDetails?.projectStatus">
                                 <span class="coi-text-light"

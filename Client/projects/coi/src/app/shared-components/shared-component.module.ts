@@ -29,6 +29,10 @@ import { CoiModalComponent } from './coi-modal/coi-modal.component';
 import { ScrollSpyComponent } from './scroll-spy/scroll-spy.component';
 import { CoiCountModalComponent } from './coi-count-modal/coi-count-modal.component';
 import { SharedAttachmentModalComponent } from './shared-attachment-modal/shared-attachment-modal.component';
+import { ProjectHierarchySliderComponent } from './project-hierarchy-slider/project-hierarchy-slider.component';
+import { ProjectHierarchyComponent } from './project-hierarchy-slider/project-hierarchy/project-hierarchy.component';
+import { SharedProjectDetailsCardComponent } from './shared-project-details-card/shared-project-details-card.component';
+import { DisclosureProjectKeypersonComponent } from './disclosure-project-keyperson/disclosure-project-keyperson.component';
 
 @NgModule({
   imports: [
@@ -63,7 +67,11 @@ import { SharedAttachmentModalComponent } from './shared-attachment-modal/shared
     CoiModalComponent,
     ScrollSpyComponent,
     CoiCountModalComponent,
-    SharedAttachmentModalComponent
+    SharedAttachmentModalComponent,
+    ProjectHierarchySliderComponent,
+    ProjectHierarchyComponent,
+    SharedProjectDetailsCardComponent,
+    DisclosureProjectKeypersonComponent
   ],
   exports: [
     NoInformationComponent,
@@ -88,7 +96,11 @@ import { SharedAttachmentModalComponent } from './shared-attachment-modal/shared
     CoiModalComponent,
     ScrollSpyComponent,
     CoiCountModalComponent,
-    SharedAttachmentModalComponent
+    SharedAttachmentModalComponent,
+    ProjectHierarchySliderComponent,
+    ProjectHierarchyComponent,
+    SharedProjectDetailsCardComponent,
+    DisclosureProjectKeypersonComponent
   ]
 })
 export class SharedComponentModule { }
