@@ -1,6 +1,6 @@
 export type EntityRiskProxyController = '/organization' | '/sponsor' | '/compliance' | '';
 export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
-export type AttachmentInputType = 'REPLACE' | 'ADD' | 'DESCRIPTION_CHANGE' | '';
+export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found';
 
 export class Create_Entity {
     entityName: string = '';
@@ -11,7 +11,7 @@ export class Create_Entity {
     state: string = '';
     postCode: number;
     countryCode: string = '';
-    country: Country;
+    country: Country = new Country();
     phoneNumber: any;
     certifiedEmail: any = '';
     websiteAddress: any = '';
@@ -25,6 +25,7 @@ export class Create_Entity {
     entityOwnershipTypeCode: any;
     businessTypeCode: any;
     entityOwnerShip: EntityOwnerShip = new EntityOwnerShip();
+    entityStatusTypeCode: string;
 }
 
 export class EntityOwnerShip {
@@ -88,10 +89,10 @@ export class OtherDetails {
 }
 
 export class EntityRisk {
-    riskTypeCode: any = '';
-    riskLevelCode: any = '';
-    description: string = '';
-    entityId: any;
+    riskTypeCode = '';
+    riskLevelCode = '';
+    description = '';
+    entityId: number | null = null;
     entityRiskId?: number | null = null;
     entity?: EntityDetails;
     riskLevel?: RiskLevel;
@@ -140,32 +141,38 @@ export class OtherReferenceId {
     entityExternalMappingId?: number;
 }
 
-export class EntityDetailsCard {
-    entityName: string = 'Google';
-    entityMatchPercent?: number = 10;
-    entityAddress: string = '122; Parkway in Mountain View; California';
-    DUNSNumber: any = '1221212121';
-    country: any = 'USA';
-    city: any = 'Mountain View';
-    website: any = 'www.google.com';
-    email: any = 'google@gmail.com';
-    industry: any = 'Cloud Computing';
-    state: any = 'Texas';
-    UEINumber: any = '1212121212';
-    CAGENumber: any = '32121212212';
-}
-
 export class EntireEntityDetails {
     priorNames?: any[] = [];
     foreignNames?: any[] = [];
     entityRisks?: EntityRisk[] = [];
-    entityRegistrations?: any[] = [];
+    entityRegistrations?: EntityRegistration[] = [];
     entityMailingAddresses?: any[] = [];
     entityDetails? = new EntityDetails();
     attachments?: EntityAttachment[] = [];
     entityTabStatus? = new EntityTabStatus();
     entityIndustryClassifications?: any[] = [];
     entityExternalIdMappings?: EntityExternalIdMappings[] = [];
+    originalName: string;
+}
+
+export class EntityRegistration {
+    entityRegistrationId?: number;
+    entityId?: number;
+    entity?: EntityDetails;
+    regTypeCode?: string;
+    registrationType?: RegistrationType;
+    regNumber?: string;
+    isActive?: boolean | null;
+    updateTimestamp?: number;
+    updatedBy?: string;
+}
+
+export class RegistrationType {
+    regTypeCode?: string;
+    description?: string;
+    updateTimestamp?: number;
+    updatedBy?: string;
+    isActive?: boolean;
 }
 
 export class EntityTabStatus {
@@ -173,7 +180,9 @@ export class EntityTabStatus {
     entity_sub_org_info? = false;
     entity_sponsor_info? = false;
     organization_feed_status: string;
+    organization_id: string;
     sponsor_feed_status: string;
+    sponsor_code: string;
     organization_feed_status_code: any;
     sponsor_feed_status_code: any;
 }
@@ -254,9 +263,19 @@ export class EntityDetails {
     entityStatusType?: EntityStatusType;
     entityOperatingStatusType?: any;
     entitySourceType?: any;
+    originalEntityId: any;
     country?: Country;
     entityOwnershipType?: EntityOwnershipType;
     entityBusinessType?: EntityBusinessType;
+    entityDocumentStatusType?: EntityDocumentStatusType;
+}
+
+export interface EntityDocumentStatusType {
+    documentStatusTypeCode?: string
+    description?: string
+    updateTimestamp?: number
+    updatedBy?: string
+    isActive?: boolean
 }
 
 export interface EntityOwnershipType {
@@ -374,15 +393,31 @@ export class SponsorDetails {
     acronym?: string | null = null;
     entityId?: number | null = null;
     sponsorCode?: string | null = null;
-    sponsorTypeCode?: string | null = null;
+    sponsorType?: SponsorType | null = new SponsorType();
+}
+export class SponsorType {
+    code: string;
+    description: string;
+    budgetCategoryCode: any;
+    fromGlMapping: any;
+    toGlMapping: any;
+    isActive: boolean;
 }
 export class SubAwardOrganizationDetails {
     id?: number | null = null;
     entityId?: string | number | null = null;
     organizationId?: number | null = null;
-    organizationTypeCode?: string | null = null;
+    entityOrganizationType: EntityOrganizationType = new EntityOrganizationType();
     samExpirationDate?: any | null = null;
     subAwdRiskAssmtDate?: any | null = null;
+}
+
+export class EntityOrganizationType {
+    organizationTypeCode: string;
+    description: string;
+    updateTimestamp: number;
+    updatedBy: string;
+    isActive: boolean;
 }
 
 export class EntityRiskModalDetails {
@@ -427,26 +462,66 @@ export interface EntityAttachment {
     versionList?: EntityAttachment[];
 }
 
-export interface AttachmentSaveRO {
-    fileName: string;
-    mimeType: string;
-    attachmentTypeCode: string | number;
-    comment: string;
-    fileDataId: string | null;
-}
-
-export interface AttachmentReplaceRO {
-    fileName: string;
-    mimeType: string;
-    attachmentTypeCode: string | number;
-    comment: string;
-    fileDataId: string | null;
-    attachmentNumber: number;
-    versionNumber: number;
-}
-
 export class EntitySectionDetails {
     sectionId = '';
     sectionName = '';
     subSectionId: number | null = null;
+}
+
+export class EntityCardDetails {
+    entityName?: string;
+    primaryAddress?: string;
+    city?: string;
+    state?: string;
+    country?: Country;
+    dunsNumber?: any;
+    ueiNumber?: any;
+    cageNumber?: any;
+    website?: string;
+    email?: string;
+    phone?: any;
+    phoneNumber?: any;
+    sponsorCode?: any;
+    organizationId?: any;
+    matchQualityInformation?: any;
+    postalCode?: any;
+    entityId?: any;
+    primaryAddressLine1?: string;
+    primaryAddressLine2?: string;
+    duplicateEntityDetails?: EntityCardDetails;
+}
+
+export class DuplicateCheckObj{
+    entityName : string;
+    primaryAddressLine1: string;
+    primaryAddressLine2: string;
+    countryCode: string;
+}
+
+export class EntityDupCheckConfig{
+    duplicateView: 'MODAL_VIEW' | 'CARD_VIEW' = 'MODAL_VIEW';
+    modalHeader?: string = 'Matching Entities Found'; //based on mode optional
+    modalPrimaryButton?: string = 'Create New';
+    modalHelpText?: string = `The details you entered match the following entities in our system. Please review the list below. If you still wish to create a new entity, you can skip this step and click on '${this.modalPrimaryButton}'.`;
+}
+
+export class DupMarkingModalConfig {
+    modalHeader: string =  'Confirmation';
+    modalPrimaryButton: string = 'Mark this as duplicate';
+    modalHelpText: string = 'The currently opened entity should be marked as a duplicate of the following entity.';
+}
+
+export class EntityDetailsInPopup {
+    entityName: string;
+    entityId: any;
+    fullAddress: string;
+    phone: any;
+    website: string;
+    email: string;
+}
+
+export class DuplicateMarkingAPIReq {
+    originalEntityId: any;
+    duplicateEntityId: any;
+    description: string;
 }

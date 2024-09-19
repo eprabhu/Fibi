@@ -63,6 +63,7 @@ export class OpaDashboardComponent implements OnInit {
     opaDispositionStatusOption = 'OPA_DISPOSITION_STATUS_TYPE#DISPOSITION_STATUS_CODE#true#true';
     opaEmployeeRoleTypeOption = 'EMPTY#EMPTY#true#true';
     isShowOptions = false;
+    isOPAReviewer = false;
 
     @ViewChild('mainHeaders', { static: true }) mainHeaders: ElementRef;
 
@@ -73,6 +74,7 @@ export class OpaDashboardComponent implements OnInit {
 
     async ngOnInit() {
         this.isShowAdminDashboard = this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
+        this.isOPAReviewer = this.commonService.isOPAReviewer;
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();

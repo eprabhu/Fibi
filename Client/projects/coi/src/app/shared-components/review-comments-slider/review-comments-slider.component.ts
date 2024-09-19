@@ -30,6 +30,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     @Input() projectDetails: any = null;
     @Input() selectedProject: any;
     @Input() reviewList: any = null;
+    @Input() isViewMode = false;
     isSaving = false;
     $subscriptions: Subscription[] = [];
     isReadMore = false;
@@ -589,12 +590,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     openSFI(personEntityId) {
         this.validateSliderClose();
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'view' } })
-    }
-
-    openProjectDetails() {
-        if (this.selectedProjectDetails) {
-           this.commonService.openProjectDetailsModal(this.selectedProjectDetails, null)
-        }
     }
 
     showTaskNavBar() {

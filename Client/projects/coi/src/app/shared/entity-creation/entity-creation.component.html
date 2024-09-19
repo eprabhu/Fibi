@@ -36,9 +36,9 @@
             </div>
         </div>
         <div class="row mx-0 py-3">
-            <div class="card" [class.grey-background]="!isCreateScreen">
+            <div class="card" [class.grey-background]="!isCreateView">
                 <div class="color-black mb-2">
-                    <label class="form-check-label colour-black relation-header px-2 fs-14 label-text coi-label-help" [class.grey-background]="!isCreateScreen">Primary Address
+                    <label class="form-check-label colour-black relation-header px-2 fs-14 label-text coi-label-help" [class.grey-background]="!isCreateView">Primary Address
                     </label>
                 </div>
                 <div class="row mt-2 mb-3">
@@ -254,7 +254,7 @@
                     <app-no-data-label [valueToShow]="createEntityObj.cageNumber"></app-no-data-label></span>
             </div>
         </div>
-        <div class="row mb-md-0 mb-lg-3 mb-xl-0" *ngIf="!isCreateScreen">
+        <div class="row mb-md-0 mb-lg-3 mb-xl-0" *ngIf="!isCreateView">
             <div class="col-md-12 col-lg-6 col-xl-4 mb-md-3 mb-xl-0">
                 <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-human-assurance">
                     Human Sub Assurance
@@ -291,30 +291,4 @@
             </div>
         </div>
 
-        <div class="modal fade mySkinDialog" data-bs-backdrop="static" [id]="'coi-entity-confirmation-modal'" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Confirmation
-                        </h5>
-                        <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" title="Click here to close"
-                        aria-label="Click here to close">
-                        </button>
-                    </div>
-                    <div class="modal-body title-descriptions">
-                        <p>Do you want to discard changes and leave the page?</p>
-                    </div>
-                    <div class="modal-footer mx-2">
-                        <button type="button" class="btn btn-outline-secondary fs-14" id="entity-overview-leave-page"
-                            (click)="leaveSlider()" title="Click here to leave page">
-                            Leave Page
-                        </button>
-                        <button type="button" class="btn btn-primary fs-14" id="entity-overview-stay-on-page"
-                        data-bs-dismiss="modal" title="Click here to stay on page">
-                            Stay On Page
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+

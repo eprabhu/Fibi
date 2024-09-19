@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse;
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse.Organization;
-import com.polus.integration.constant.Constant;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DefaultType;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DetailedAddress;
 import com.polus.integration.entity.enrich.dto.DnBEnrichAPIResponse.DunsControlStatus;
@@ -29,7 +28,7 @@ public class EntityEnrichDAO {
    public void refreshEntityHeaderInfo(Integer entityId, String actionPersonId, Organization res) {
 
 	   try {
-	   String sql = "{call ENRICH_ENTITY_HEADER(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+	   String sql = "{call ENRICH_ENTITY_HEADER(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
        jdbcTemplate.update(sql,
     		   entityId, 
@@ -40,6 +39,7 @@ public class EntityEnrichDAO {
     		   res.getDuns(),
     		   res.getUei(),
     		   res.getCageNumber(),
+    		   res.getFederalEmployerId(),
     		   getOwnershipType(res.isPubliclyTradedCompany()),
     		   getOperatingStatusType(res.getDunsControlStatus()),
     		   getBusinessEntityType(res.getBusinessEntityType()),

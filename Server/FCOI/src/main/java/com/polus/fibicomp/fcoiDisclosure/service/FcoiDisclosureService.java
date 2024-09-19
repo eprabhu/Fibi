@@ -6,6 +6,7 @@ import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import org.springframework.http.ResponseEntity;
 
@@ -164,4 +165,22 @@ public interface FcoiDisclosureService {
      * @param projectDto
      */
     void detachFcoiDisclProject(DisclosureProjectDto projectDto);
+
+    /**
+     *
+     * @param integrationRequestDto
+     */
+    void makeDisclosureVoid(IntegrationRequestDto integrationRequestDto);
+
+    /**
+     * Check disposition status is void
+     * @param dispositionStatusCode
+     */
+    void checkDispositionStatusIsVoid(String dispositionStatusCode);
+
+    /**
+     * Check disclosure's disposition status is void
+     * @param disclosureId
+     */
+    void checkDispositionStatusIsVoid(Integer disclosureId);
 }

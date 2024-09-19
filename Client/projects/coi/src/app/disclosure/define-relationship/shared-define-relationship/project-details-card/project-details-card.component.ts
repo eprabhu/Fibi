@@ -41,7 +41,7 @@ export class ProjectDetailsCardComponent {
     private listenDataChangeFromRelationStore(): void {
         this.$subscriptions.push(
             this._defineRelationshipDataStore.$relationsChanged.subscribe((changes: DefineRelationshipDataStore) => {
-                if (changes.projectId == 'All' || changes.projectId == this.projectSfiRelation.projectId) {
+                if (changes.projectId == 'ALL' || changes.projectId == this.projectSfiRelation.projectId) {
                     this.setSponsorAndPrimeSponsor();
                     this._cdr.markForCheck();
                 }
@@ -50,6 +50,10 @@ export class ProjectDetailsCardComponent {
 
     openReviewerComment(): void {
         this.defineRelationshipService.openReviewerComment(this.projectSfiRelation, 'RELATIONSHIP');
+    }
+
+    openProjectHierarchySlider(): void {
+        this.commonService.openProjectHierarchySlider(this.projectSfiRelation.moduleCode, this.projectSfiRelation.projectNumber);
     }
 
 }

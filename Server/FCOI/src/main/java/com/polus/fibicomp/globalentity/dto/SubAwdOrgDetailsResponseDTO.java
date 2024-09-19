@@ -2,6 +2,8 @@ package com.polus.fibicomp.globalentity.dto;
 
 import java.util.Date;
 
+import com.polus.fibicomp.globalentity.pojo.EntityOrganizationType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +18,7 @@ public class SubAwdOrgDetailsResponseDTO {
 	private Integer entityId;
 	private Integer id;
 	private Integer organizationId;
-	private String organizationTypeCode;
+	private EntityOrganizationType entityOrganizationType;
 	private Date samExpirationDate;
 	private Date subAwdRiskAssmtDate;
 

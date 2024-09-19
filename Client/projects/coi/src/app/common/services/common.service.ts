@@ -4,12 +4,15 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {Toast} from 'bootstrap';
-import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
-import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method } from './coi-common.interface';
+import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method, CoiAttachmentModalInfo } from './coi-common.interface';
+import { AttachmentInputType, COIAttachment } from '../../attachments/attachment-interface';
+import { hideModal } from "../../../../../fibi/src/app/common/utilities/custom-utilities";
+import { ProjectHierarchySliderPayload } from '../../shared-components/project-hierarchy-slider/services/project-hierarchy-slider.interface';
 
 @Injectable()
 export class CommonService {
@@ -30,6 +33,7 @@ export class CommonService {
     isMapRouting: boolean;
     isEvaluationAndMapRouting: boolean;
     cvFileType: any = [];
+    wordFileType: any = [];
     claimFileType: any = [];
     enableSSO = false;
     rightsArray: any = [];
@@ -54,7 +58,7 @@ export class CommonService {
     elasticDelimiter = '';
     elasticPassword = '';
     elasticIndexUrl = '';
-    generalFileType = 'pdf';
+    generalFileType: any = [];
     appLoaderContent = '';
     isEnableLock = false;
     isPreventDefaultLoader = false;
@@ -71,15 +75,17 @@ export class CommonService {
     $updateLatestNote = new Subject();
     $updateLatestAttachment = new Subject();
     isShowCreateNoteModal = false;
-    isOpenAttachmentModal = false;
-    projectDetailsModalInfo: DisclosureProjectModalData = new DisclosureProjectModalData();
+    projectDetailsModalInfo = new DisclosureProjectModalData();
     modalPersonId: string = '';
     $globalEventNotifier = new Subject<GlobalEventNotifier>();
     relationshipTypeCache = {};
     entityURL: any;
-    hasChangesAvailable: boolean = false;
+    hasChangesAvailable = false;
     isNavigationStopped: boolean = false;
     attemptedPath: string = '';
+    CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
+    isEntityModified = false;
+    projectHierarchySliderInfo = new ProjectHierarchySliderPayload();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -94,6 +100,8 @@ export class CommonService {
             try {
                 const loginUserDetails: any = await this.authLogin();
                 this.onSuccessFullLogin(loginUserDetails);
+                const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
+                this.assignSystemParameters(SYSTEM_PARAMETERS);
                 resolve(true);
             } catch (e) {
                 this.onFailedLogin(e);
@@ -197,7 +205,7 @@ export class CommonService {
     }
 
     getRequiredParameters() {
-        return this._http.get(this.baseUrl + '/fetchRequiredParams').toPromise();
+        return this._http.get(this.fibiUrl + '/fetchRequiredParams').toPromise();
     }
 
     /**
@@ -207,9 +215,11 @@ export class CommonService {
         this.isEvaluation = parameters.isEvaluation;
         this.isMapRouting = parameters.isMapRouting;
         this.isEvaluationAndMapRouting = parameters.isEvaluationAndMapRouting;
-        if (parameters.fileTypes && parameters.fileTypes.length) {
+        if (parameters.fileTypes?.length) {
+            this.generalFileType = parameters.fileTypes[0] ? parameters.fileTypes[0].extension : null;
             this.cvFileType = parameters.fileTypes[1] ? parameters.fileTypes[1].extension : null;
             this.claimFileType = parameters.fileTypes[2] ? parameters.fileTypes[2].extension : null;
+            this.wordFileType = parameters.fileTypes[3] ? parameters.fileTypes[3].extension : null;
         }
         this.isWafEnabled = parameters.isWafEnabled;
         this.canAddOrganization = parameters.canUserAddOrganization;
@@ -476,6 +486,11 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }
     }
 
+    redirectToPersonDetails(personId: string): void {
+        const URL = this.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personId}`;
+        window.open(URL);
+    }
+
     setLoaderRestriction(): void {
         this.isPreventDefaultLoader = true;
     }
@@ -497,6 +512,20 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         setTimeout(() => {
             this.projectDetailsModalInfo = new DisclosureProjectModalData();
         }, 200);
+    }
+
+    openProjectHierarchySlider(projectTypeCode: string | number | null, projectNumber: string | null): void {
+        if (projectTypeCode && projectNumber) {
+            this.projectHierarchySliderInfo.projectTypeCode = projectTypeCode;
+            this.projectHierarchySliderInfo.projectNumber = projectNumber;
+            this.projectHierarchySliderInfo.isOpenSlider = true;
+        } else {
+            this.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+        }
+    }
+
+    closeProjectHierarchySlider(): void {
+        this.projectHierarchySliderInfo = new ProjectHierarchySliderPayload();
     }
 
     openPersonDetailsModal(personId: string): void {
@@ -599,5 +628,31 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
            return sectionDetails.sectionId;
        }
    }
+
+    openCommonAttachmentModal(attachmentInputType: AttachmentInputType, currentAttachment: COIAttachment = null): void {
+        this.CoiAttachmentModalInfo = {
+            attachmentModalInputType: attachmentInputType,
+            coiCurrentAttachment: currentAttachment,
+            isOpenAttachmentModal: true,
+        }
+    }
+
+    closeCommonAttachmentModal(): void {
+        this.CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
+    }
+
+    setChangesAvailable(hasChange: boolean) {
+        this.hasChangesAvailable = hasChange;
+        if (!hasChange) {
+            this.navigateToRoute();
+        }
+    }
+
+    navigateToRoute() {
+        if (this.isNavigationStopped) {
+            hideModal('coi-entity-confirmation-modal');
+            this._router.navigateByUrl(this.attemptedPath);
+        }
+    }
 
 }

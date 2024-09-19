@@ -20,11 +20,11 @@
     --theme-gutter-x: 3rem;
     --theme-gutter-y: 1.5rem;
     --theme-separator-border: 1px solid #DBDFE9;
-    --theme-box-shadow: 0px 0px 80px 50px rgba(206, 213, 225, 0.12);  
+    --theme-box-shadow: 0px 0px 80px 50px rgba(206, 213, 225, 0.12);
 
     --theme-font-size: 0.875rem;
     --theme-line-height: 1.5;
-    --theme-electric-blue: rgba(44, 119, 244, .1);    
+    --theme-electric-blue: rgba(44, 119, 244, .1);
 }
 
 
@@ -69,6 +69,11 @@ $--theme-navtab-bg-color: --theme-navtab-bg-color;
 //boxes
 $--theme-box-red-bg-color: --theme-box-red-bg-color;
 
+//entity
+$--theme-entity-icon-color: --theme-entity-icon-color;
+$--theme-entity-icon-bg-color: --theme-entity-icon-bg-color;
+$--theme-entity-matching-card-border-color: --theme-entity-matching-card-border-color;
+$--theme-entity-matching-card-bg-color: --theme-entity-matching-card-bg-color;
 
 // Font size
 
@@ -99,11 +104,11 @@ $--theme-text-gray-900: --theme-text-gray-900;
 
 $theme-map-default: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #f1f1f1,    
+    $--theme-body-bg-color: #f1f1f1,
     $--theme-primary-color: var(--theme-blue),
     $--theme-primary-color-light: lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
-    
+
     $--theme-header-bg-color:  var(--theme-white),
     $--theme-header-text-color: var(--theme-text-gray-600),
     $--theme-header-box-shadow: none,
@@ -134,17 +139,21 @@ $theme-map-default: (
 
     $--theme-navtab-bg-color: #E4F1FF,
     $--theme-box-red-bg-color: var(--theme-pale-red),
-    
 
+    $--theme-entity-icon-color: #0948b2,
+    $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 
 $theme-map-light: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #FCFCFD,    
+    $--theme-body-bg-color: #FCFCFD,
     $--theme-primary-color:  var(--theme-blue),
     $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
-    
+
     $--theme-header-bg-color:  var(--theme-white),
     $--theme-header-text-color: var(--theme-text-gray-600),
     $--theme-header-box-shadow: none,
@@ -175,17 +184,21 @@ $theme-map-light: (
 
     $--theme-navtab-bg-color: #E4F1FF,
     $--theme-box-red-bg-color: var(--theme-pale-red),
-    
 
+    $--theme-entity-icon-color: #0948b2,
+    $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 
 $theme-map-dark: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #151521,    
+    $--theme-body-bg-color: #151521,
     $--theme-primary-color:  var(--theme-blue),
     $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
-    
+
     $--theme-header-bg-color: #1e1e2d,
     $--theme-header-text-color:  var(--theme-white),
     $--theme-header-box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05),
@@ -226,16 +239,21 @@ $theme-map-dark: (
 
     $--theme-navtab-bg-color: #1e1e2d,
     $--theme-box-red-bg-color: #1e1e2d,
-    
+
+    $--theme-entity-icon-color: #0948b2,
+    $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 //#a92034
 $theme-map-red: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #FCFCFD,    
+    $--theme-body-bg-color: #FCFCFD,
     $--theme-primary-color:  var(--theme-blue),
     $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
-    
+
     $--theme-header-bg-color:  var(--theme-white),
     $--theme-header-text-color: var(--theme-text-gray-600),
     $--theme-header-box-shadow: none,
@@ -266,16 +284,21 @@ $theme-map-red: (
 
     $--theme-navtab-bg-color: #E4F1FF,
     $--theme-box-red-bg-color: var(--theme-pale-red),
-    
+
+    $--theme-entity-icon-color: #0948b2,
+    $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 
 $theme-map-blue: (
     $--theme-body-color:  var(--theme-white),
-    $--theme-body-bg-color: #f1f1f1,    
+    $--theme-body-bg-color: #f1f1f1,
     $--theme-primary-color:  var(--theme-blue),
     $--theme-primary-color-light:  lighten(#007DEC, 50%),
     $--theme-primary-color-inverse:  var(--theme-white),
-    
+
     $--theme-header-bg-color:  var(--theme-white),
     $--theme-header-text-color: var(--theme-text-gray-600),
     $--theme-header-box-shadow: none,
@@ -306,6 +329,10 @@ $theme-map-blue: (
 
     $--theme-navtab-bg-color: #E4F1FF,
     $--theme-box-red-bg-color: var(--theme-pale-red),
-    
 
+    $--theme-entity-icon-color: #0948b2,
+    $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );

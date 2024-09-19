@@ -4,9 +4,10 @@ import { EntityDataStoreService } from '../entity-data-store.service';
 import { SponsorTabSection } from '../shared/entity-constants';
 import { Subscription } from 'rxjs';
 import { EntitySponsorService } from './entity-sponsor.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails } from '../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-entity-sponsor',
@@ -22,8 +23,9 @@ export class EntitySponsorComponent {
     entitySponsorRiskList: EntityRisk[] = [];
     entitySponsorAttachmentList: EntityAttachment[] = [];
     isLoading = true;
-    riskSubSectionId = 2610;
-    attachmentSubSectionId = 2611;
+    sponsorDetails = new EntitySectionDetails();
+    riskSectionDetails = new EntitySectionDetails();
+    attachmentSectionDetails = new EntitySectionDetails();
 
     constructor(public commonService: CommonService, public dataStore: EntityDataStoreService,
         private _entitySponsorService: EntitySponsorService, private _dataStoreService: EntityDataStoreService
@@ -34,7 +36,23 @@ export class EntitySponsorComponent {
         this.overViewTab = SponsorTabSection;
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.setSectionIdAndName();
     }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    private setSectionIdAndName(){
+        this.riskSectionDetails.subSectionId = 2610;
+        this.attachmentSectionDetails.subSectionId = 2611;
+        this.sponsorDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SPONSOR_DETAILS');
+        this.sponsorDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SPONSOR_DETAILS');
+        this.riskSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SPONSOR_RISK');
+        this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SPONSOR_RISK');
+        this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SPONSOR_ATTACHMENTS');
+        this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SPONSOR_ATTACHMENTS');
+    } 
 
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();

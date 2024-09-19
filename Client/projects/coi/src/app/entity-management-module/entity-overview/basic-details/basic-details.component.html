@@ -1,16 +1,14 @@
-<ng-container *ngIf="!isCreateScreen">
-    <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
-        <div class="row mb-2">
-            <div class="col-12 d-flex align-items-center coloured-bg-header">
-                <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
-                    <mat-icon class="coi-mat-icon-size">newspaper</mat-icon>
-                </span>
-                <span class="fs-16 fw-medium" id="entity-basic-details">{{sectionName}}<app-common-help-text [subSectionId]="2602" [elementId]="'entity-basic-details'"></app-common-help-text>
-                </span>
-            </div>
+<div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+    <div class="row mb-2">
+        <div class="col-12 d-flex align-items-center coloured-bg-header">
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex">
+                <mat-icon class="coi-mat-icon-size" aria-hidden="true">newspaper</mat-icon>
+            </span>
+            <span class="fs-16 fw-medium" id="entity-basic-details">{{sectionName}}</span>
+            <app-common-help-text [subSectionId]="2602" [elementId]="'entity-basic-details'"></app-common-help-text>
         </div>
-        <app-entity-creation [isCreateScreen]="isCreateScreen" (emitEntityRO)="saveBasicEntityDetails($event)" [isEditMode]="isEditMode"
-        [saveMode]="'AUTO'" [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails" [manualAutoSaveEvent]="manualAutoSaveEvent"
-        (emitSaveObj)="updateStoreData($event)"></app-entity-creation>
     </div>
-</ng-container>
+    <app-entity-creation [isCreateView]="false" [isEditMode]="isEditMode" [saveMode]="'AUTO'"
+        [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails"
+        (emitAutoSaveObj)="updateStoreData($event)"></app-entity-creation>
+</div>

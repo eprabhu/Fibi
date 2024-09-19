@@ -83,6 +83,8 @@ public class COIFileAttachmentDao {
 			.createTimestamp(commonDao.getCurrentTimestamp())
 			.updateUser(AuthenticatedUser.getLoginUserName())
 			.updateTimestamp(commonDao.getCurrentTimestamp())
+			.attachmentNumber(request.getAttachmentNumber())
+			.versionNumber(request.getVersionNumber())
 			.build();
 			hibernateTemplate.saveOrUpdate(attachment);
 			return attachment;

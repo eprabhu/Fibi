@@ -23,7 +23,7 @@
                                                 <mat-icon aria-hidden="true"
                                                     class="fw-bolder coi-text-light flex-shrink-0 coi-mat-icon-size me-1">person</mat-icon>
                                                 <a class="link-primary cursor-pointer text-slice" tabindex="0" (click)="openPersonDetailsModal(coiData)"
-                                                    (keyup.enter)="openPersonDetailsModal(coiData)" (keyup.space)="openPersonDetailsModal(coiData)"
+                                                    (keyup.enter)="openPersonDetailsModal(coiData)"
                                                     attr.aria-label="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}"
                                                     title="Click here to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}
                                                 </a>
@@ -38,7 +38,6 @@
                                                 </span> | -->
                                                 <a class="ms-2 me-2 fs-13" (click)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
                                                     role="link" (keyup.enter)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
-                                                    (keyup.space)="openSlider('ENTITY', coiData?.coiDisclosure?.personEntitiesCount)"
                                                     [title]="coiData?.coiDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
                                                     [attr.aria-label]="coiData?.coiDisclosure?.personEntitiesCount ? 'Click here to view entities' : ''"
                                                     [ngClass]="coiData?.coiDisclosure?.personEntitiesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
@@ -47,7 +46,6 @@
                                                 </a> |
                                                 <a class="ms-2 me-2 fs-13" (click)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)" role="link"
                                                     (keyup.enter)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)"
-                                                    (keyup.space)="openSlider('NOTES', coiData?.coiDisclosure?.personNotesCount)"
                                                     [title]="coiData?.coiDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
                                                     [attr.aria-label]="coiData?.coiDisclosure?.personNotesCount ? 'Click here to view notes' : ''"
                                                     [ngClass]="coiData?.coiDisclosure?.personNotesCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'" tabindex="0"
@@ -57,7 +55,6 @@
                                                 <a class="ms-2 fs-13"
                                                     (click)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)" role="link"
                                                     (keyup.enter)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)"
-                                                    (keyup.space)="openSlider('ATTACHMENTS', coiData?.coiDisclosure?.personAttachmentsCount)"
                                                     [title]="coiData?.coiDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
                                                     [attr.aria-label]="coiData?.coiDisclosure?.personAttachmentsCount ? 'Click here to view attachments' : ''"
                                                     [ngClass]="coiData?.coiDisclosure?.personAttachmentsCount ? 'link-primary cursor-pointer' : 'coi-text-light text-decoration-none'"
@@ -93,10 +90,10 @@
                                 </div>
                                 <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && coiData?.projectDetail" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">{{coiData?.projectDetail?.projectIcon}}</mat-icon>
-                                    <a class="link-primary fs-6 text-slice" (click)="openProjectDetailsModal()"
+                                    <a tabindex="0" class="link-primary fs-6 text-slice" (click)="openProjectHierarchySlider()"
                                         title="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
                                         attr.aria-label="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
-                                        (keyup.enter)="openProjectDetailsModal()" (keyup.space)="openProjectDetailsModal()">
+                                        (keyup.enter)="openProjectHierarchySlider()">
                                         #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}
                                     </a>
                                 </h3>
@@ -235,7 +232,7 @@
                                 </button>
                                 <button (click)="sfiService.isShowSfiNavBar = true" title="Click here to add new SFI"
                                     *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')"
-                                    aria-label="Click to add new SFI"
+                                    aria-label="Click here to add new SFI"
                                     class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-inline-flex justify-content-center w-100 align-items-center col fs-14"
                                     [ngClass]="isCardExpanded ? 'col-12' : 'col'">
                                     <mat-icon aria-hidden="true" class="me-2">add</mat-icon>
@@ -243,7 +240,7 @@
                                 </button>
                                 <button (click)="triggerSave()"
                                     *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                                    title="Click here to save your progress" aria-label="Click to save your progress"
+                                    title="Click here to save your progress" aria-label="Click here to save your progress"
                                     class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                     [disabled]="coiService.currentActiveQuestionnaire?.MODULE_SUB_ITEM_CODE == EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE"
                                     [ngClass]="isCardExpanded ? 'col-12' : 'col'">
@@ -251,7 +248,7 @@
                                     <span class="ms-2" *ngIf="isCardExpanded">Save</span>
                                 </button>
                                 <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
-                                    *ngIf="router.url.includes('create-disclosure/certification')" title="Click to submit your disclosure"
+                                    *ngIf="router.url.includes('create-disclosure/certification') && dataStore.getEditModeForCOI()" title="Click here to submit your disclosure"
                                     aria-label="Click here to submit your disclosure"
                                     class="btn btn-primary d-inline-flex align-items-center justify-content-center fs-14"
                                     [ngClass]="isCardExpanded ? 'col-12' : 'col'">
@@ -270,7 +267,7 @@
                                         <span class="ms-2" *ngIf="isCardExpanded">Previous</span>
                                     </button>
     
-                                    <button
+                                    <button aria-label="Click here to add new review comment"
                                         title="Click here to add new review comment"
                                         (click)="openReviewComment()"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col">
@@ -279,15 +276,14 @@
                                     </button>
                                     <!-- more option button for expanded & collapsed card -->
                                     <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
-                                    <button
-                                    [matMenuTriggerFor]="beforeMenu"
+                                    <button [matMenuTriggerFor]="beforeMenu"
                                         class="btn btn-outline-grey d-inline-flex align-items-center justify-content-center col"
-                                        role="button" title="Click for More Actions" aria-label="Click for More Actions">
+                                        title="Click here for more actions" aria-label="Click here for more actions">
                                         <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
                                     </button>
     
-                                    <ng-container *ngIf="!coiData.coiDisclosure?.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
-                                        <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" aria-label="Click to Assign Administrator/Admin Group"
+                                    <ng-container *ngIf="!coiData.coiDisclosure?.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight() && dataStore.getEditModeForCOI()">
+                                        <button title="Click here to assign administrator/admin group" aria-label="Click here to assign administrator/admin group"
                                             class="fs-14 btn btn-primary d-inline-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col'}}"
                                             (click)="openAddAssignModal();">
                                             <mat-icon aria-hidden="true">group_add</mat-icon>
@@ -297,8 +293,9 @@
     
                                     <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
                                     <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                        <ng-container *ngIf="coiData.coiDisclosure?.adminPersonId && ['3', '7', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && getManageDisclosureRight()">
-                                            <button mat-menu-item title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                        <ng-container *ngIf="coiData.coiDisclosure?.adminPersonId && ['3', '7', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
+                                            && getManageDisclosureRight() && dataStore.getEditModeForCOI()">
+                                            <button mat-menu-item title="Click here to reassign administrator/admin group" aria-label="Click here to reassign administrator/admin group"
                                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                                 (click)="openAddAssignModal();"
                                                 [ngClass]="(coiData.coiDisclosure?.adminPersonId || coiData.coiDisclosure?.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
@@ -307,8 +304,8 @@
                                             </button>
                                         </ng-container>
     
-                                        <ng-container *ngIf="checkForModifyRisk()">
-                                            <button mat-menu-item title="Click to Modify Risk" area-describedby="Click to Modify Risk"
+                                        <ng-container *ngIf="checkForModifyRisk() && dataStore.getEditModeForCOI()">
+                                            <button mat-menu-item title="Click here to modify risk" aria-label="Click here to modify risk"
                                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                                 (click)="openRiskSlider();">
                                                 <mat-icon aria-hidden="true" class="material-icons-round">warning</mat-icon>
@@ -319,8 +316,8 @@
                                         <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                                         <!-- check logged person & disclosure created person is same -->
                                         <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure?.adminPersonId) &&
-                                        (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw"
-                                            area-describedby="Click to Withdraw"
+                                            (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.personId) && dataStore.getEditModeForCOI()"
+                                            title="Click here to withdraw disclosure" aria-label="Click here to withdraw disclosure"
                                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                             (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg, withdrawModalHelpText);">
                                             <mat-icon aria-hidden="true">logout</mat-icon>
@@ -331,22 +328,23 @@
                                         <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                                         <!-- Check logged person and administrator are same -->
                                     <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
-                                    (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
+                                        (commonService?.getCurrentUserDetail('personID') == coiData?.coiDisclosure?.adminPersonId) && dataStore.getEditModeForCOI()"
+                                        title="Click here to return disclosure" aria-label="Click here to return disclosure"
                                         (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg, returnModalHelpText);"
                                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                         <mat-icon aria-hidden="true" class="returnIcon">refresh</mat-icon>
                                         <span class="ms-1 fw-medium fs-14">Return</span>
                                     </button>
     
-                                    <button mat-menu-item title="Click to Notify"
+                                    <button mat-menu-item title="Click here to notify" aria-label="Click here to notify"
                                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                         <mat-icon aria-hidden="true" class="returnIcon">notifications</mat-icon>
                                         <span class="ms-1 fw-medium fs-14">Notify</span>
                                     </button>
                                 </mat-menu>
     
-                                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
-                                    title="Click to start review" area-describedby="Click to start review"
+                                <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7' && dataStore.getEditModeForCOI()"
+                                    title="Click here to start review" aria-label="Click here to start review"
                                     (click)="updateCoiReview('START')"
                                     id="start-review-btn"
                                     [ngClass]="isCardExpanded? 'col-12' : 'col'"
@@ -355,32 +353,32 @@
                                     <span class="ms-2" *ngIf="isCardExpanded"> Start Review </span>
                                 </button>
     
-                                    <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"
-                                    title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
+                                <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7' && dataStore.getEditModeForCOI()"
+                                    title="Click here to complete review" aria-label="Click here to complete review" (click)="updateCoiReview('COMPLETE')"
                                     id="complete-review-btn"
                                     [ngClass]="isCardExpanded? 'col-12' : 'col'"
                                     class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                                     <mat-icon aria-hidden="true" class="material-icons-outlined">stop_circle</mat-icon>
                                     <span class="ms-2" *ngIf="isCardExpanded"> Complete Review </span>
-                                    </button>
-                                    <button *ngIf="coiService.isCOIAdministrator &&
-                                                    ((coiService.isReviewActionCompleted
-                                                    && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
-                                                    && (commonService?.getCurrentUserDetail('personID') == coiData.coiDisclosure?.adminPersonId))
-                                                    ||
-                                                    (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
-                                                    && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))"
-                                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                                            [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click here to complete final review"
-                                            data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
-                                        <mat-icon aria-hidden="true">done</mat-icon>
-                                        <span class="ms-2" *ngIf="isCardExpanded"> Complete Final Review </span>
-                                    </button>
-                                    <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
-                                        <label class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
-                                        <span class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}}
-                                            <span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
-                                    </div>
+                                </button>
+                                <button *ngIf="coiService.isCOIAdministrator && ((coiService.isReviewActionCompleted
+                                    && ['3', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)
+                                    && (commonService?.getCurrentUserDetail('personID') == coiData.coiDisclosure?.adminPersonId))
+                                    || (coiData?.coiDisclosure?.conflictStatusCode == COI_CONFLICT_STATUS_TYPE.NO_CONFLICT_WITHOUT_SFI
+                                    && coiData?.coiDisclosure?.reviewStatusCode == COI_REVIEW_STATUS_TYPE.SUBMITTED))
+                                    && dataStore.getEditModeForCOI()"
+                                    class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                                    [ngClass]="isCardExpanded? 'col-12' : 'col'" title="Click here to complete final review"
+                                    aria-label="Click here to complete final review"
+                                    data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
+                                    <mat-icon aria-hidden="true">done</mat-icon>
+                                    <span class="ms-2" *ngIf="isCardExpanded"> Complete Final Review </span>
+                                </button>
+                                <div class="{{isCardExpanded ? 'mt-3' : 'mt-0'}} col-12">
+                                    <label for="coi-last-update" class="coi-text-lighter fs-13 fw-medium"  [ngClass]="!!isCardExpanded ? 'd-block' : 'me-1'">Last Updated By</label>
+                                    <span id="coi-last-update" class="coi-text-dark fs-13 fw-normal">{{coiData?.coiDisclosure?.updateUserFullName}}
+                                        <span class="coi-text-lighter fs-13 fw-medium"> On </span>{{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -395,12 +393,12 @@
                     <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active"
                             title="Click here to view the disclosure screening form"
-                            area-describedby="Click here to view the disclosure screening form">Disclosure</div>
+                            aria-label="Click here to view the disclosure screening form">Disclosure</div>
                     </div>
                     <div *ngIf="canShowReviewerTab || coiService.isCOIAdministrator" [routerLink]="['review']"
                         class="navigation-box border-end" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active" title="Click here to view the reviews"
-                            area-describedby="Click here to view the reviews">Reviews</div>
+                            aria-label="Click here to view the reviews">Reviews</div>
                     </div>
                     <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
                         title="click to view history" role="button">
@@ -533,7 +531,7 @@
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Warning!</h4>
-                <button aria-label="Click to close" title="Click to close" class="btn-close" data-bs-dismiss="modal" type="button">
+                <button aria-label="Click here to close" title="Click here to close" class="btn-close" data-bs-dismiss="modal" type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -548,7 +546,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" aria-label="Click to close" title="Click to close"
+                <button class="btn btn-outline-secondary fs-14" aria-label="Click here to close" title="Click here to close"
                     data-bs-dismiss="modal" type="button">Close
                 </button>
             </div>
@@ -567,7 +565,7 @@
                 <h5 class="modal-title" id="coi-add-review-modal-header">Add Review for
                     {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by
                     {{coiData?.coiDisclosure?.person?.fullName}}</h5>
-                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Click to close" title="Click to close"
+                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Click here to close" title="Click here to close"
                     (click)="assignReviewerActionDetails = {}">
                 </button>
             </div>
@@ -594,9 +592,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close"
-                    type="button" aria-label="Click to close" title="Click to close" (click)="assignReviewerActionDetails = {}">Close</button>
+                    type="button" aria-label="Click here to close" title="Click here to close" (click)="assignReviewerActionDetails = {}">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                    (click)="saveOrUpdateCoiReview();" type="button" aria-label="Click to Add" title="Click to Add">Add</button>
+                    (click)="saveOrUpdateCoiReview();" type="button" aria-label="Click here to Add" title="Click here to Add">Add</button>
             </div>
         </div>
     </div>
@@ -614,7 +612,7 @@
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Screening Questionnaire</h4>
-                <button aria-label="Click to close" title="Click to close" class="btn-close mx-3" data-bs-dismiss="modal" type="button">
+                <button aria-label="Click here to close" title="Click here to close" class="btn-close mx-3" data-bs-dismiss="modal" type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -643,7 +641,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button aria-label="Click to close" title="Click to close"
+                <button aria-label="Click here to close" title="Click here to close"
                     class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Close
                 </button>
             </div>
@@ -680,7 +678,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Validation</h5>
-                <button type="button" (click)="coiService.submitResponseErrors = [];" class="btn-close" data-bs-dismiss="modal" aria-label="Click to close"></button>
+                <button type="button" (click)="coiService.submitResponseErrors = [];" class="btn-close" data-bs-dismiss="modal" aria-label="Click here to close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -767,7 +765,7 @@
 
 <div *ngIf="coiService.isShowCommentNavBar">
     <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="coiData.coiDisclosure" [disclosureType]="'COI'"
-    [projectDetails]="coiData.projectDetail" [reviewList]="reviewList"></app-review-comments-slider>
+    [projectDetails]="coiData.projectDetail" [reviewList]="reviewList" [isViewMode]="coiData?.coiDisclosure?.dispositionStatusCode === '2'"></app-review-comments-slider>
 </div>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->

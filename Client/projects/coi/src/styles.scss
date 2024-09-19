@@ -84,17 +84,21 @@
     padding-top: 0.6rem !important;
 }
 
-/* Mat select styles for lookup component end */
+.mat-mdc-select-panel {
+    padding: 0 !important;
+}
+
+    /* Mat select styles for lookup component end */
 
 .cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
     position: absolute !important;
     right: 5px;
-    top:7px
+    top: 8px;
 }
 
 .cdk-overlay-pane:not(.mat-mdc-select-panel-below) div.mat-mdc-select-panel {
     position: relative;
-    right: 7px;
+    right: 12px;
 }
 
 .mat-mdc-select-trigger {
@@ -273,6 +277,11 @@
         color: var(--theme-text-gray-700) !important;
         font-weight: 400;
     }
+}
+
+.coi-table-last-border-0 tr:last-child,
+.coi-table-last-border-0 tr:last-child td {
+  border-bottom: 0;
 }
 
 .link-primary {
@@ -503,7 +512,7 @@
     min-height: 200px;
 }
 
-.coi-anchor-link {	
+.coi-anchor-link {
 	text-decoration: underline !important;
 	cursor: pointer;
 	font-weight: 500;

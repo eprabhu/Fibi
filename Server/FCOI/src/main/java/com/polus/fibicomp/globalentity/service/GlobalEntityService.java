@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.polus.core.pojo.Currency;
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
+import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.AddressDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityResponseDTO;
@@ -15,10 +17,14 @@ import com.polus.fibicomp.globalentity.dto.ExternalReferenceRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.IndustryDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.OtherDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameRequestDTO;
 import com.polus.fibicomp.globalentity.dto.PriorNameResponseDTO;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.ResponseMessageDTO;
+import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
+import com.polus.fibicomp.globalentity.dto.validateDuplicateResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskLevel;
 import com.polus.fibicomp.globalentity.pojo.EntityRiskType;
@@ -172,6 +178,22 @@ public interface GlobalEntityService {
 	}
 
 	public default Map<String, Object> fetchEntityTabStatus(Integer entityId) {
+		return null;
+	}
+
+	public default List<validateDuplicateResponseDTO> validateDuplicate(ValidateDuplicateRequestDTO dto) {
+		return null;
+	}
+
+	public default ResponseMessageDTO markDuplicate(MarkDuplicateRequestDTO dto) {
+		return null;
+	}
+
+	public default List<EntityActionLogDto> fetchHistory(Integer entityId) {
+		return null;
+	}
+
+	public default ResponseMessageDTO logAction(ActionLogRequestDTO dto) {
 		return null;
 	}
 

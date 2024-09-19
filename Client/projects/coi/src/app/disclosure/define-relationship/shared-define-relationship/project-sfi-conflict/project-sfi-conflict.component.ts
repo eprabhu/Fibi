@@ -7,9 +7,10 @@ import { DefineRelationshipService } from '../../services/define-relationship.se
 import { COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, DefineRelationshipDataStore, ProjectSfiRelationConflictRO, ProjectSfiRelations, SaveProjectSfiConflict } from '../../../coi-interface';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
-import { HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from '../../../../app-constants';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from '../../../../app-constants';
 import { DefineRelationshipDataStoreService } from '../../services/define-relationship-data-store.service';
 import { GlobalEventNotifier } from '../../../../common/services/coi-common.interface';
+import { CoiService } from '../../../services/coi.service';
 
 @Component({
     selector: 'app-project-sfi-conflict',
@@ -30,6 +31,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
     helpText = `Click 'Apply to All' to update the Conflict of Interest (COI) status and description simultaneously for all Project SFI relationships.`;
 
     constructor(private _commonService: CommonService,
+        private _coiService: CoiService,
         public defineRelationshipService: DefineRelationshipService,
         private _dataStore: DataStoreService, private _cdr: ChangeDetectorRef,
         private _defineRelationshipDataStore: DefineRelationshipDataStoreService) { }
@@ -62,7 +64,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
     private listenDataChangeFromRelationStore(): void {
         this.$subscriptions.push(
             this._defineRelationshipDataStore.$relationsChanged.subscribe((changes: DefineRelationshipDataStore) => {
-                if (changes.projectId == 'All' || changes.projectId == this.projectSfiRelation.projectId) {
+                if (changes.projectId == 'ALL' || changes.projectId == this.projectSfiRelation.projectId) {
                     this._cdr.markForCheck();
                 }
             })
@@ -126,8 +128,12 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
                     .subscribe((res: SaveProjectSfiConflict) => {
                         this.updateSfiDetails(sfiDetails, res.conflictDetails[0]);
                         this.defineRelationshipService.updateDisclosureConflictStatus(res.disclConflictStatusType);
-                    }, (_error: any) => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                    }, (error: any) => {
+                        if (error.status === 405) {
+                            this._coiService.concurrentUpdateAction = 'Modify Conflict';
+                        } else {
+                            this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                        }
                     }));
             // this._commonService.removeLoaderRestriction();
         }

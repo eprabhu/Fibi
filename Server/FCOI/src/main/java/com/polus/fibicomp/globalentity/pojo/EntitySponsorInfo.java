@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.polus.core.pojo.SponsorType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,8 +48,16 @@ public class EntitySponsorInfo implements Serializable {
     @Column(name = "FEED_STATUS_CODE")
     private String feedStatusCode;
 
+    @ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SPONSOR_INFO_FK2"), name = "FEED_STATUS_CODE", referencedColumnName = "FEED_STATUS_CODE", insertable = false, updatable = false)
+	private EntityFeedStatusType entityFeedStatusType;
+
     @Column(name = "SPONSOR_TYPE_CODE")
     private String sponsorTypeCode;
+
+    @ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_SPONSOR_INFO_FK3"), name = "SPONSOR_TYPE_CODE", referencedColumnName = "SPONSOR_TYPE_CODE", insertable = false, updatable = false)
+	private SponsorType sponsorType;
 
     @Column(name = "ACRONYM")
     private String acronym;

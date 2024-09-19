@@ -25,7 +25,7 @@
                                     {{list?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                             </app-no-data-label>
                         </span>
-                        <div *ngIf="reviewCommentsService.editParentCommentId != list?.commentId && currentUserId == list?.commentBy && !isReplyComment" class="ms-auto col-auto">
+                        <div *ngIf="reviewCommentsService.editParentCommentId != list?.commentId && currentUserId == list?.commentBy && !isReplyComment && !isViewMode" class="ms-auto col-auto">
                             <button [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
                                 class="btn-none more-info-icon rounded-circle d-inline-flex justify-content-center align-items-center">
                                 <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <!-- parent comment edit text editor -->
-                    <ng-container *ngIf="reviewCommentsService.editParentCommentId == list?.commentId && reviewCommentsService.isEditParentComment">
+                    <ng-container *ngIf="reviewCommentsService.editParentCommentId == list?.commentId && reviewCommentsService.isEditParentComment && !isViewMode">
                         <div class="col p-0 mt-3">
                             <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
                                 <ckeditor [(ngModel)]="list.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
@@ -81,16 +81,16 @@
                         </app-no-data-label>
                     </div>
                     <div class="col-12 d-flex gap-2 align-items-center mt-3">
-                        <button *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId" id="coi-commment-reply-btn" 
-                        class="align-items-baseline btn btn-sm btn-tertiary d-inline-flex position-relative" title="Click here to add reply comment"
-                        aria-label="Click here to add reply comment" (click)="replyComment(list,index)">
+                        <button *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId && !isViewMode" id="coi-commment-reply-btn" 
+                            class="align-items-baseline btn btn-sm btn-tertiary d-inline-flex position-relative" title="Click here to add reply comment"
+                            aria-label="Click here to add reply comment" (click)="replyComment(list,index)">
                             <i aria-hidden="true" class="fa fa-reply me-1"></i>
                             <span class="me-2">Reply</span>
                         </button>
                     </div>
                 </div>
                 <!-- reply comment text editor -->
-                <div *ngIf="commentDetails?.parentCommentId === list?.commentId && isReplyComment" class="row m-0">
+                <div *ngIf="commentDetails?.parentCommentId === list?.commentId && isReplyComment && !isViewMode" class="row m-0">
                     <div class="col-12 p-0 mt-3" id="person-main-commment-editor">
                         <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
                             <ckeditor [(ngModel)]="commentDetails.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
@@ -137,7 +137,7 @@
                                         </app-no-data-label>
                                     </span>
                                 </div>
-                                <div *ngIf="commentDetails.commentId != replyComment.commentId && currentUserId == replyComment?.commentBy" class="col-auto">
+                                <div *ngIf="commentDetails.commentId != replyComment.commentId && currentUserId == replyComment?.commentBy && !isViewMode" class="col-auto">
                                     <button [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
                                         class="btn-none more-info-icon rounded-circle d-inline-flex justify-content-center align-items-center">
                                         <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
@@ -174,7 +174,7 @@
                         </div>
                         
                         <!-- edit child comment text editor -->
-                        <ng-container *ngIf="commentDetails.commentId == replyComment.commentId && isEditComment">
+                        <ng-container *ngIf="commentDetails.commentId == replyComment.commentId && isEditComment && !isViewMode">
                             <div class="col-12 mt-3">
                                 <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
                                     <ckeditor [(ngModel)]="commentDetails.comment" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)"
@@ -209,3 +209,8 @@
 </ng-container>
 </div>
 <!-- new comment section end -->
+
+<!-- no data card for no single comments -->
+<ng-container *ngIf="!commentReviewerList.length && isViewMode">
+    <app-no-information customClass="mt-0"></app-no-information>
+</ng-container>

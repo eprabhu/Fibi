@@ -12,9 +12,11 @@ import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
@@ -1083,5 +1085,94 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             logger.error("Exception on detachFcoiDisclProject : {} | {} | {}", projectDto.getModuleCode(),projectDto.getProjectNumber(), e.getMessage());
             throw new ApplicationException("Unable to fetch disclosure", e, Constants.DB_PROC_ERROR);
         }
+    }
+
+    @Override
+    public void makeDisclosureVoid(IntegrationRequestDto integrationRequestDto) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection connection = sessionImpl.connection();
+        CallableStatement statement = null;
+        try {
+            if (oracledb.equalsIgnoreCase("N")) {
+                statement = connection.prepareCall("{call COI_DISCL_VOID_DEACTIVATED_PROJECT(?,?,?,?)}");
+                statement.setInt(1, integrationRequestDto.getModuleCode());
+                statement.setString(2, integrationRequestDto.getModuleItemKey());
+                statement.setString(3, integrationRequestDto.getPersonId());
+                statement.setString(4, integrationRequestDto.getRemark());
+            } else if (oracledb.equalsIgnoreCase("Y")) {
+                String functionCall = "{call COI_DISCL_VOID_DEACTIVATED_PROJECT(?,?,?,?,?)}";
+                statement = connection.prepareCall(functionCall);
+                statement.registerOutParameter(1, OracleTypes.CURSOR);
+                statement.setInt(2, integrationRequestDto.getModuleCode());
+                statement.setString(2, integrationRequestDto.getModuleItemKey());
+                statement.setString(3, integrationRequestDto.getPersonId());
+                statement.setString(4, integrationRequestDto.getRemark());
+            }
+            Objects.requireNonNull(statement).execute();
+        } catch (Exception e) {
+            logger.error("Exception on makeDisclosureVoid : {} | {} | {}", integrationRequestDto.getModuleCode(),integrationRequestDto.getModuleItemKey(), e.getMessage());
+            throw new ApplicationException("Unable to make the disclosure void", e, Constants.DB_PROC_ERROR);
+        }
+    }
+
+    @Override
+    public boolean isDisclDispositionInStatus(String dispositionStatusCode, Integer disclosureId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then true else false end ");
+        hqlQuery.append("FROM CoiDisclosure c WHERE  c.dispositionStatusCode = :dispositionStatusCode ");
+        hqlQuery.append("AND c.disclosureId = : disclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("dispositionStatusCode", dispositionStatusCode);
+        query.setParameter("disclosureId", disclosureId);
+        return (boolean) query.getSingleResult();
+    }
+
+
+    @Override
+    public void generateProjectSnapshot(Integer disclosureId, String personId) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection connection = sessionImpl.connection();
+        CallableStatement statement = null;
+        try {
+            if (oracledb.equalsIgnoreCase("N")) {
+                statement = connection.prepareCall("{call COI_DISCL_GENERATE_JSON_PROJECT_SNAPSHOT(?,?)}");
+                statement.setInt(1, disclosureId);
+                statement.setString(2, personId);
+            } else if (oracledb.equalsIgnoreCase("Y")) {
+                String functionCall = "{call COI_DISCL_GENERATE_JSON_PROJECT_SNAPSHOT(?,?,?)}";
+                statement = connection.prepareCall(functionCall);
+                statement.registerOutParameter(1, OracleTypes.CURSOR);
+                statement.setInt(2, disclosureId);
+                statement.setString(3, personId);
+            }
+            Objects.requireNonNull(statement).execute();
+        } catch (Exception e) {
+            logger.error("Exception on generateProjectSnapshot : {}", e.getMessage());
+//            throw new ApplicationException("Unable to generate project snapshot!", e, Constants.DB_PROC_ERROR);
+        }
+    }
+
+
+    @Override
+    public List<CoiDisclProjects> getCoiDisclProjects(Integer disclosureId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT c FROM CoiDisclProjects c ");
+        hqlQuery.append("WHERE c.disclosureId = : disclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("disclosureId", disclosureId);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<CoiProjectType> getCoiProjectTypes() {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT c FROM CoiProjectType c ");
+        Query query = session.createQuery(hqlQuery.toString());
+        return query.getResultList();
     }
 }

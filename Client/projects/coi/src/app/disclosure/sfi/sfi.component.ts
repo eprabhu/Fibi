@@ -1,16 +1,15 @@
-import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, interval } from 'rxjs';
-
 import { SfiService } from './sfi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
-import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG } from '../../app-constants';
 import { debounce, switchMap } from 'rxjs/operators';
 import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
-import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { jumpToSection, openCoiSlider } from '../../common/utilities/custom-utilities';
+import { CoiService } from '../services/coi.service';
 
 @Component({
     selector: 'app-sfi',
@@ -26,6 +25,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     @Input()  isEditMode: any;
     @Input()  personId: any;
     @Input()  focusSFIId: any;
+    @Input() dispositionStatusCode: string = null;
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
@@ -57,7 +57,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _commonService: CommonService,
-        private elementRef: ElementRef) {
+        private _coiService: CoiService) {
     }
 
     ngOnInit() {
@@ -91,6 +91,12 @@ export class SfiComponent implements OnInit, OnDestroy {
                     }
             });
             }
+        }, (_error: any) => {
+            if (_error.status === 405) {
+                this._coiService.concurrentUpdateAction = 'Disclosure';
+            } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+            }
         }));
     }
 
@@ -103,6 +109,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         requestObj.personId = this.personId;
         requestObj.reviewStatusCode = this.reviewStatus;
         requestObj.searchWord = this.searchText;
+        requestObj.dispositionStatusCode = this.dispositionStatusCode;
         return requestObj;
     }
 

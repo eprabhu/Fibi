@@ -5,7 +5,8 @@ import { CommonService } from '../../common/services/common.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL, CONSULTING_REDIRECT_URL,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL,
-    HTTP_ERROR_STATUS
+    HTTP_ERROR_STATUS,
+    DISCLOSURE_TYPE
 } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
@@ -388,7 +389,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.completeDisclosureList = [];
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({ 'filterType': this.currentSelected.filter }).subscribe((data: any) => {
-            this.completeDisclosureList = this.getAllDisclosureHistories(data);;
+            this.completeDisclosureList = this.getAllDisclosureHistories(data);
             this.loadingComplete();
         }));
     }
@@ -438,7 +439,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     getActiveFCOI() {
         this.fcoiDatesRemaining();
         return this.headerService.activeDisclosures.filter(disclosure =>
-            disclosure?.fcoiTypeCode === '1');
+            ([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)));
     }
 
     private fcoiDatesRemaining() {
@@ -447,10 +448,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.hasActiveOPA = false;
         this.hasPendingOPA = false;
         this.headerService.activeDisclosures.forEach(disclosure => {
-            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
+            if (([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus == 'PENDING') {
                 this.hasPendingFCOI = true;
             }
-            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
+            if (([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus !== 'PENDING') {
                 this.hasActiveFCOI = true;
             }
         });
@@ -463,7 +464,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             }
         });
         const disclosureDate = this.headerService.activeDisclosures.filter(disclosure =>
-            disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+            ([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus !== 'PENDING');
         if (disclosureDate[0]) {
             const expirationDate = (disclosureDate[0].expirationDate);
             const currentDate = new Date().getTime();

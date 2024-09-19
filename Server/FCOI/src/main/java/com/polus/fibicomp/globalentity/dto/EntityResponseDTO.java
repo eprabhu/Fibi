@@ -3,7 +3,6 @@ package com.polus.fibicomp.globalentity.dto;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityExternalIdMapping;
@@ -21,7 +20,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EntityResponseDTO {
 
 	private Entity entityDetails;
@@ -34,5 +32,6 @@ public class EntityResponseDTO {
 	private List<ForeignNameResponseDTO> foreignNames;
 	private List<EntityAttachment> attachments;
 	private Map<String, Object> entityTabStatus;
+	private String originalName;
 
 }

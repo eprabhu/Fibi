@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
@@ -28,9 +27,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import com.polus.core.constants.CoreConstants;
-import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -43,14 +39,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.inbox.pojo.Inbox;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.pojo.Country;
+import com.polus.core.pojo.FileType;
 import com.polus.core.pojo.Unit;
 import com.polus.core.roles.pojo.AdminGroup;
 import com.polus.core.security.AuthenticatedUser;
-import com.polus.fibicomp.coi.dto.COIValidateDataDto;
-import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -63,23 +59,15 @@ import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.globalentity.pojo.Entity;
-import com.polus.fibicomp.globalentity.pojo.EntityOwnershipType;
-import com.polus.fibicomp.globalentity.pojo.EntityStatusType;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
 import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
-import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
@@ -109,6 +97,14 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.coi.vo.DashBoardProfile;
 import com.polus.fibicomp.coi.vo.DisclosureView;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
+import com.polus.fibicomp.globalentity.pojo.Entity;
+import com.polus.fibicomp.globalentity.pojo.EntityOwnershipType;
 import com.polus.fibicomp.reviewcomments.pojos.CoiReviewCommentTag;
 import com.polus.fibicomp.reviewcomments.pojos.DisclComment;
 
@@ -1605,94 +1601,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		}
 		return awardDetails;
 	}
-
-	@Override
-	public List<Entity> getAllSystemEntityList(CoiDashboardVO vo) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		CallableStatement statement = null;
-		ResultSet resultSet = null;
-		List<Entity> resultEntityList = new ArrayList<>();
-		String tabName = vo.getTabName();
-		Integer currentPage = vo.getCurrentPage();
-		Integer pageNumber = vo.getPageNumber();
-		String isAdvancedSearch = vo.getAdvancedSearch();
-		Boolean isDownload = vo.getIsDownload();
-		Map<String, String> sort = vo.getSort();
-		String entityName = vo.getProperty1();
-		String country = vo.getProperty2();
-		String entityStatus = vo.getProperty20() != null && !vo.getProperty20().isEmpty() ? String.join(",", vo.getProperty20()) : "";
-		String entityType = vo.getProperty21() != null && !vo.getProperty21().isEmpty() ? String.join(",", vo.getProperty21()) : "";
-		String entityRiskLevel = vo.getProperty22() != null && !vo.getProperty22().isEmpty() ? String.join(",", vo.getProperty22()) : "";
-		Boolean hasSFI = vo.getProperty18();
-		Boolean hasDisclosure = vo.getProperty19();
-		String entityVerificationStatus = vo.getProperty24() != null && !vo.getProperty24().isEmpty() ? String.join(",", vo.getProperty24()) : "";
-		try {
-			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_ALL_SYSTEM_ENTITY_LIST(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-				statement.setString(1, tabName);
-				statement.setString(2, setCOISortOrder(sort));
-				statement.setInt(3, (pageNumber == null ? 0 : pageNumber));
-				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
-				statement.setString(5, country);
-				statement.setBoolean(6, isDownload);
-				statement.setString(7, isAdvancedSearch);
-				statement.setString(8, entityStatus);
-				statement.setString(9, entityType);
-				statement.setString(10, entityRiskLevel);
-				statement.setBoolean(11, hasSFI);
-				statement.setBoolean(12, hasDisclosure);
-				statement.setString(13, entityName);
-				statement.setString(14, entityVerificationStatus);
-				statement.execute();
-				resultSet = statement.getResultSet();
-			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String procedureName = "GET_ALL_SYSTEM_ENTITY_LIST";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
-				statement = connection.prepareCall(functionCall);
-				statement.registerOutParameter(1, OracleTypes.CURSOR);
-				statement.setString(2, tabName);
-				statement.setString(3, setCOISortOrder(sort));
-				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
-				statement.setInt(5, (pageNumber == null ? 0 : pageNumber));
-				statement.setString(6, country);
-				statement.setBoolean(7, isDownload);
-				statement.setString(8, isAdvancedSearch);
-				statement.setString(9, entityStatus);
-				statement.setString(10, entityType);
-				statement.setString(11, entityRiskLevel);
-				statement.setBoolean(12, hasSFI);
-				statement.setBoolean(13, hasDisclosure);
-				statement.setString(14, entityName);
-				statement.setString(15, entityVerificationStatus);
-				statement.execute();
-				resultSet = (ResultSet) statement.getObject(1);
-			}
-			while (resultSet.next()) {
-				Entity coiEntity =  new Entity();
-				coiEntity.setEntityId(resultSet.getInt("ENTITY_ID"));
-				coiEntity.setEntityNumber(resultSet.getInt("ENTITY_NUMBER"));
-				coiEntity.setEntityName(resultSet.getString(ENTITY_NAME));
-				Country entityCountry = new Country();
-				entityCountry.setCountryName(resultSet.getString("COUNTRY"));
-				coiEntity.setCountry(entityCountry);
-//				coiEntity.setCountryDescription(resultSet.getString("COUNTRY"));
-				coiEntity.setEntityOwnershipType(EntityOwnershipType.builder().description(resultSet.getString("ENTITY_TYPE")).build());
-//				coiEntity.setEntityTypeDescription(resultSet.getString("ENTITY_TYPE"));
-//				coiEntity.setRiskLevelDescription(resultSet.getString("RISK_LEVEL"));
-				coiEntity.setEntityStatusType(EntityStatusType.builder().description(resultSet.getString("STATUS"))
-						.entityStatusTypeCode(resultSet.getString("ENTITY_STATUS_TYPE_CODE")).build());
-//				coiEntity.setStatusDescription(resultSet.getString("STATUS"));
-				coiEntity.setIsActive(resultSet.getString("IS_ACTIVE").equals("Y") ? true : false);
-//				coiEntity.setEntityStatusCode(resultSet.getString("ENTITY_STATUS_CODE"));
-				resultEntityList.add(coiEntity);
-			}
-		} catch (SQLException e) {
-			logger.error("Error in getAllSystemEntityList {}", e.getMessage());
-		}
-		return resultEntityList;
-	}
 	
 	@Override
 	public CoiTravelDisclosure saveOrUpdateCoiTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure) {
@@ -2332,78 +2240,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.select(rootCOIFinancialEntity.get("validPersonEntityRelType")); 
 		query.where(builder.equal(rootCOIFinancialEntity.get("personEntityId"), personEntityId));
 		return session.createQuery(query).getResultList();
-	}
-
-	@Override
-	public Integer getAllSystemEntityListCount(CoiDashboardVO vo) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		CallableStatement statement = null;
-		ResultSet resultSet = null;
-		String tabName = vo.getTabName();
-		Integer currentPage = vo.getCurrentPage();
-		Integer pageNumber = vo.getPageNumber();
-		String isAdvancedSearch = vo.getAdvancedSearch();
-		Boolean isDownload = vo.getIsDownload();
-		Map<String, String> sort = vo.getSort();
-		String entityName = vo.getProperty1();
-		String country = vo.getProperty2();
-		String entityStatus = vo.getProperty20() != null && !vo.getProperty20().isEmpty() ? String.join(",", vo.getProperty20()) : "";
-		String entityType = vo.getProperty21() != null && !vo.getProperty21().isEmpty() ? String.join(",", vo.getProperty21()) : "";
-		String entityRiskLevel = vo.getProperty22() != null && !vo.getProperty22().isEmpty() ? String.join(",", vo.getProperty22()) : "";
-		Boolean hasSFI = vo.getProperty18();
-		Boolean hasDisclosure = vo.getProperty19();
-		String entityVerificationStatus = vo.getProperty24() != null && !vo.getProperty24().isEmpty() ? String.join(",", vo.getProperty24()) : "";
-		Integer count = null;
-		try {
-			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_ALL_SYSTEM_ENTITY_LIST_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-				statement.setString(1, tabName);
-				statement.setString(2, setCOISortOrder(sort));
-				statement.setInt(3, (pageNumber == null ? 0 : pageNumber));
-				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
-				statement.setString(5, country);
-				statement.setBoolean(6, isDownload);
-				statement.setString(7, isAdvancedSearch);
-				statement.setString(8, entityStatus);
-				statement.setString(9, entityType);
-				statement.setString(10, entityRiskLevel);
-				statement.setBoolean(11, hasSFI);
-				statement.setBoolean(12, hasDisclosure);
-				statement.setString(13, entityName);
-				statement.setString(14, entityVerificationStatus);
-				statement.execute();
-				resultSet = statement.getResultSet();
-			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String procedureName = "GET_ALL_SYSTEM_ENTITY_LIST_COUNT";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
-				statement = connection.prepareCall(functionCall);
-				statement.registerOutParameter(1, OracleTypes.CURSOR);
-				statement.setString(2, tabName);
-				statement.setString(3, setCOISortOrder(sort));
-				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
-				statement.setInt(5, (pageNumber == null ? 0 : pageNumber));
-				statement.setString(6, country);
-				statement.setBoolean(7, isDownload);
-				statement.setString(8, isAdvancedSearch);
-				statement.setString(9, entityStatus);
-				statement.setString(10, entityType);
-				statement.setString(11, entityRiskLevel);
-				statement.setBoolean(12, hasSFI);
-				statement.setBoolean(13, hasDisclosure);
-				statement.setString(14, entityName);
-				statement.setString(15, entityVerificationStatus);
-				statement.execute();
-				resultSet = (ResultSet) statement.getObject(1);
-			}
-			while (resultSet.next()) {
-				 count = Integer.parseInt(resultSet.getString(1));
-			}
-		} catch (SQLException e) {
-			logger.error("Error in GET_ALL_SYSTEM_ENTITY_LIST_COUNT {}", e.getMessage());
-		}
-		return count;
 	}
 
 //	@Override
@@ -3153,6 +2989,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureHistory.setUpdateTimeStamp(rset.getTimestamp(UPDATE_TIMESTAMP));
 				disclosureHistory.setProjectTitle(rset.getString("PROJECT_TITLE"));
 				disclosureHistory.setProjectNumber(rset.getString("PROJECT_NUMBER"));
+				disclosureHistory.setProjectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"));
+				disclosureHistory.setProjectType(rset.getString("PROJECT_TYPE"));
+				disclosureHistory.setProjectIcon(rset.getString("PROJECT_ICON"));
+				disclosureHistory.setProjectBadgeColor(rset.getString("BADGE_COLOR"));
 				disclosureHistoryList.add(disclosureHistory);
 			}
 
@@ -4088,4 +3928,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
         return (Boolean) query.getSingleResult();
 	}
 
+	@Override
+	public List<FileType> getAllFileTypes() {
+		return hibernateTemplate.loadAll(FileType.class);
+	}
 }

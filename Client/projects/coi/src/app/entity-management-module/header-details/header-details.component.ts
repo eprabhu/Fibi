@@ -1,13 +1,19 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { closeCommonModal, openCoiSlider, openCommonModal } from '../../common/utilities/custom-utilities';
-import { Router } from '@angular/router';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { closeCommonModal, openCoiSlider, openCommonModal, openInNewTab } from '../../common/utilities/custom-utilities';
+import { ActivatedRoute, Router } from '@angular/router';
+import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { forkJoin, Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus, EntityDetailsCard } from '../shared/entity-interface';
+import {
+    EntireEntityDetails,
+    EntityCardDetails,
+    EntityDetails,
+    EntityTabStatus,
+    removeToast
+} from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { EntityManagementService } from '../entity-management.service';
+import { EntityManagementService, getEntityFullAddress } from '../entity-management.service';
 import { CommonService } from '../../common/services/common.service';
 
 class DNBReqObj {
@@ -20,7 +26,8 @@ class DNBReqObj {
     state: string;
     countryCode: string;
 }import { COIModalConfig, ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
+import { NavigationService } from '../../common/services/navigation.service';
 
 @Component({
   selector: 'app-header-details',
@@ -49,11 +56,21 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     dunsMatchConfirmationModalConfig = new COIModalConfig(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID, 'Use this', 'Cancel', '');
     selectedDUNSNumber: string;
     isSaving = false;
+    cardDetails: EntityCardDetails[] = [];
+    canModifyEntity = false;
+    duplicateEntityDetails = new EntityCardDetails();
+    badgeClass: string;
+    originalEntityName: string;
+    ENTITY_VERIFIED = ENTITY_VERIFICATION_STATUS.VERIFIED;
+    ENTITY_UNVERIFIED = ENTITY_VERIFICATION_STATUS.UNVERIFIED;
+    ENTITY_DUPLICATE = ENTITY_DOCUMNET_STATUS_TYPE.DUPLICATE;
 
     constructor(public router: Router, public dataStore: EntityDataStoreService,
         public autoSaveService: AutoSaveService,
         private _entityManagementService: EntityManagementService,
         private _commonService: CommonService,
+        private _route: ActivatedRoute,
+        private _navigationService: NavigationService
     ) { }
     ngOnInit() {
         this.dunsMatchConfirmationModalConfig.dataBsOptions.focus = false;
@@ -64,10 +81,13 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     viewSlider(event) {
+        this.cardDetails = [];
         this.$subscriptions.push(this._entityManagementService.getDunsMatch(this.getReqObj()).subscribe((data: any) => {
         this.matchedEntites = data?.matchCandidates?.length ? data?.matchCandidates : [];
         if(this.matchedEntites.length) {
-            this.matchedEntites.map(ele =>this.formatResponse(ele));
+            this.matchedEntites.forEach((ele: any) => {
+                this.cardDetails.push(this.formatResponse(ele));
+            })
         }
         this.showSlider = event;
         this.sliderElementId = 'duns-match-slider';
@@ -121,26 +141,17 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         if (!ENTITY_DATA || isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
         this.latestPriorName = ENTITY_DATA?.priorNames?.[0]?.priorNames;
-        this.entityTabStatus = ENTITY_DATA.entityTabStatus
-        this.getEntityFullAddress();
+        this.entityTabStatus = ENTITY_DATA.entityTabStatus;
+        this.entityTabStatus.entity_overview = this.dataStore.getIsEntityMandatoryFilled();
+        this.entityFullAddress = getEntityFullAddress(this.entityDetails);
         this.isEditMode = this.dataStore.getEditMode();
+        this.canModifyEntity = this.getCanModifyEntity();
+        this.badgeClass = this.getBadgeClass();
+        this.originalEntityName = ENTITY_DATA?.originalName;
     }
 
-    getEntityFullAddress() {
-        let address = this.entityDetails?.primaryAddressLine1;
-        if (this.entityDetails?.primaryAddressLine2) {
-            address = address + ' , ' + this.entityDetails?.primaryAddressLine2;
-        }
-        if(this.entityDetails?.city) {
-            address = address + ' , ' + this.entityDetails?.city;
-        }
-        if(this.entityDetails?.state) {
-            address = address + ' , ' + this.entityDetails?.state;
-        }
-        if(this.entityDetails?.country?.countryName) {
-            address = address + ' , ' + this.entityDetails?.country?.countryName;
-        }
-        this.entityFullAddress = address;
+    getBadgeClass(): string {
+       return this.entityDetails?.entityDocumentStatusType?.documentStatusTypeCode === ENTITY_DOCUMNET_STATUS_TYPE.DUPLICATE ? 'text-bg-warning' : 'text-bg-success';
     }
 
     private listenDataChangeFromStore() {
@@ -152,15 +163,19 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     formatResponse(entity) {
-        entity.organization.entityName = entity.organization.primaryName || '';
-        entity.organization.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName || '';
-        entity.organization.DUNSNumber = entity.organization.duns;
-        entity.organization.entityAddress = (entity.organization?.primaryAddress?.streetAddress?.line1 ? entity.organization?.primaryAddress?.streetAddress?.line1 : '') +
-            (entity.organization?.primaryAddress?.streetAddress?.line2 ? ','+ entity.organization?.primaryAddress?.streetAddress?.line2 : '' );
-        entity.organization.city = entity.organization?.primaryAddress?.addressLocality?.name || '';
-        entity.organization.country = entity.organization?.primaryAddress?.addressCountry?.name || '';
-        entity.organization.phoneNumber = entity?.organization?.telephone[0]?.telephoneNumber || '';
-        entity.organization.zipCode = entity.organization?.primaryAddress?.postalCode || '';
+        let entityDetails: EntityCardDetails = new EntityCardDetails();
+        entityDetails.entityName = entity.organization.primaryName || '';
+        entityDetails.state = entity.organization?.primaryAddress?.addressRegion?.abbreviatedName || '';
+        entityDetails.dunsNumber = entity.organization.duns;
+        entityDetails.primaryAddress = (entity.organization?.primaryAddress?.streetAddress?.line1 ? entity.organization?.primaryAddress?.streetAddress?.line1 : '') +
+        (entity.organization?.primaryAddress?.streetAddress?.line2 ? ','+ entity.organization?.primaryAddress?.streetAddress?.line2 : '' );
+        entityDetails.city = entity.organization?.primaryAddress?.addressLocality?.name || '';
+        entityDetails.country = entity.organization?.primaryAddress?.addressCountry?.name || '';
+        entityDetails.phone = entity?.organization?.telephone[0]?.telephoneNumber || '';
+        entityDetails.postalCode = entity.organization?.primaryAddress?.postalCode || '';
+        entityDetails.matchQualityInformation = entity?.matchQualityInformation?.confidenceCode;
+        entityDetails.duplicateEntityDetails = entity?.entity ? deepCloneObject(entity?.entity) : null;
+        return entityDetails;
     }
 
     openVerifyEntityModal(): void {
@@ -179,9 +194,19 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.canVerifyEntity = this._commonService.getAvailableRight(['VERIFY_ENTITY'], 'SOME');
         this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
-    openConfirmationModal(entity) {
-        this.selectedDUNSNumber = entity?.organization?.DUNSNumber;
-        openCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
+
+    getCanModifyEntity(): boolean {
+        return this._commonService.getAvailableRight(['MANAGE_ENTITY', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE', 'MANAGE_ENTITY_SPONSOR'], 'SOME') &&
+        !this._commonService.isEntityModified && this.entityDetails?.entityStatusType?.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED && !this.isEditMode &&
+        this.entityDetails?.entityDocumentStatusType?.documentStatusTypeCode === ENTITY_DOCUMNET_STATUS_TYPE.ACTIVE;
+    }
+    openConfirmationModal(event: 'USE' | 'OPEN_MODAL',entity: EntityCardDetails) {
+        if(event === 'USE') {
+            this.selectedDUNSNumber = entity.dunsNumber;
+            openCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
+        } else if(event === 'OPEN_MODAL') {
+            this.duplicateEntityDetails = deepCloneObject(entity.duplicateEntityDetails);
+        }
     }
 
     callEnrichAPI(event) {
@@ -234,13 +259,32 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     generatHTTPRequest() {
-        let httpRequest = [];
+        const httpRequest = [];
         httpRequest.push(this._entityManagementService.getEntityDetails(this.entityDetails.entityId));
         httpRequest.push(this._entityManagementService.updateIsDUNSMatchFlag({
             entityId: this.entityDetails.entityId,
             isDunsMatched: true
         }));
         return httpRequest;
+    }
+
+    leaveSlider() {
+        removeToast('ERROR');
+        removeToast('SUCCESS');
+        this._commonService.setChangesAvailable(false);
+    }
+
+    resetNavigationStop() {
+        this._commonService.isNavigationStopped = false;
+        this._commonService.attemptedPath = '';
+    }
+
+    modifyEntity(): void {
+        this.dataStore.updateModifiedFlag(this.entityDetails, true);
+    }
+
+    openEntity(): void{
+        openInNewTab('manage-entity/entity-overview?', ['entityManageId'], [this.entityDetails?.originalEntityId]);
     }
 
     ngOnDestroy() {

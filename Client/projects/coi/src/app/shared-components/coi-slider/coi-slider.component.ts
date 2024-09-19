@@ -18,7 +18,7 @@ export class CoiSliderComponent implements OnInit {
     @Input() isChangedFieldValue = false;
     @Output() closeSlider: EventEmitter<undefined> = new EventEmitter<undefined>();
     @Input() elementId = 'coiSlider';
-    @Input() sliderWidth: 'w-25' | 'w-50' | 'w-75' | 'w-100' | 'w-auto' = 'w-75';
+    @Input() sliderWidth: 'w-25' | 'w-50' | 'w-75' | 'w-100' | 'w-auto' | string = 'w-75';
     @ViewChild('SliderParentElement', { static: true }) sliderParentElement: ElementRef;
     @ViewChild('Backdrop', { static: false }) backdrop: ElementRef;
 
@@ -30,7 +30,6 @@ export class CoiSliderComponent implements OnInit {
                 this.backdrop.nativeElement.style.zIndex = this.overlay_z_index;
                 this.sliderParentElement.nativeElement.style.zIndex = this.slider_z_index;
             }
-            this.sliderParentElement.nativeElement.classList.add(this.sliderWidth);
             this.backdrop.nativeElement.classList.add('show');
             this.isEnableSlider = true;
         });
@@ -54,9 +53,9 @@ export class CoiSliderComponent implements OnInit {
         }
     }
 
-    leaveSlider() {  
+    leaveSlider() {
         this.emitCloseSlider();
     }
 
-    
+
 }

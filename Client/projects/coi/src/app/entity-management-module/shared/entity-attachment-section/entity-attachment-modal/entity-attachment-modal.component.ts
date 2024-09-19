@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 import { EntityAttachmentModalService } from '../entity-attachment-section.service';
 import { CommonService } from '../../../../common/services/common.service';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { AttachmentReplaceRO, AttachmentSaveRO, EntireEntityDetails, EntityAttachment, EntityAttachmentType, EntityDetails } from '../../entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityAttachmentType, EntityDetails } from '../../entity-interface';
 import { EntityDataStoreService } from '../../../entity-data-store.service';
 import { COIModalConfig, ModalActionEvent } from 'projects/coi/src/app/shared-components/coi-modal/coi-modal.interface';
 import { closeCommonModal, openCommonModal } from 'projects/coi/src/app/common/utilities/custom-utilities';
+import { AttachmentReplaceRO, AttachmentSaveRO } from 'projects/coi/src/app/common/services/coi-common.interface';
 
 @Component({
     selector: 'app-entity-attachment-modal',
@@ -39,7 +40,7 @@ export class EntityAttachmentModalComponent implements OnInit {
 
     @Output() closeModal = new EventEmitter<EntityAttachment[] | EntityAttachment | null>();
 
-    constructor(private _attachmentSectionService: EntityAttachmentModalService, private _commonService: CommonService, public _router: Router, private _dataStoreService: EntityDataStoreService) {}
+    constructor(private _attachmentSectionService: EntityAttachmentModalService, public commonService: CommonService, public _router: Router, private _dataStoreService: EntityDataStoreService) {}
 
     ngOnInit(): void {
         if (this.attachmentInputType === 'ADD') {
@@ -63,7 +64,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                     this.attachmentTypes = attachmentTypes;
                     this.openAttachmentModal()
                 }, err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                     this.closeModal.emit(null);
                 }));
     }
@@ -84,9 +85,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         if (this.attachmentInputType === 'REPLACE') {
             this.updateReplaceAttachmentDetails(files, 0);
         } else {
-            for (let index = 0; index < files.length; index++) {
-                this.uploadedFiles.push(files[index]);
-            }
+            this.uploadedFiles.push(...files);
         }
     }
 
@@ -159,6 +158,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                 newAttachments: this.newAttachments,
                 entityId: this.entityDetails?.entityId
             }, this.uploadedFiles).subscribe((data: any) => {
+                this._dataStoreService.enableModificationHistoryTracking();
                 this.clearAttachments(data)
                 this.showSuccessToast();
             }, err => {
@@ -174,8 +174,9 @@ export class EntityAttachmentModalComponent implements OnInit {
         if (!this.attachmentErrorMsg && !this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(
-                this._attachmentSectionService.replaceAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
+                this._attachmentSectionService.saveAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
                     .subscribe((data: any) => {
+                        this._dataStoreService.enableModificationHistoryTracking();
                         this.clearAttachments(data)
                         this.showSuccessToast();
                     }, err => {
@@ -189,6 +190,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         this.$subscriptions.push(
             this._attachmentSectionService.updateAttachment(this.currentAttachment.entityAttachmentId, this.currentAttachment.comment)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.clearAttachments(this.currentAttachment);
                     this.showSuccessToast();
                 }, err => {
@@ -254,7 +256,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                 toastMsg = 'Something went wrong, Please try again.';
                 break;
         }
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
+        this.commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
     }
 
 
@@ -275,7 +277,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                 toastMsg = 'Something went wrong, Please try again.';
                 break;
         }
-        this._commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
+        this.commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
     }
 
     attachmentModalActions(modalAction: ModalActionEvent): void {

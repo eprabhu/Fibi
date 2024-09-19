@@ -2,9 +2,11 @@ package com.polus.fibicomp.fcoiDisclosure.dao;
 
 import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
@@ -385,4 +387,38 @@ public interface FcoiDisclosureDao {
      * @param projectDto
      */
     void detachFcoiDisclProject(DisclosureProjectDto projectDto);
+
+    /**
+     * This method is used to make the disclosure's disposition status to void using certain conditions
+     * @param integrationRequestDto
+     */
+    void makeDisclosureVoid(IntegrationRequestDto integrationRequestDto);
+
+    /**
+     * Checking  the disclosure is of disposition status
+     * @param dispositionStatusCode
+     * @param disclosureId
+     * @return
+     */
+    boolean isDisclDispositionInStatus(String dispositionStatusCode, Integer disclosureId);
+
+    /**
+     * Snapshotting disclosure projects
+     * @param disclosureId
+     * @param personId
+     */
+    void generateProjectSnapshot(Integer disclosureId, String personId);
+
+    /**
+     *
+     * @param disclosureId
+     * @return
+     */
+    List<CoiDisclProjects> getCoiDisclProjects(Integer disclosureId);
+
+    /**
+     *
+     * @return
+     */
+    List<CoiProjectType> getCoiProjectTypes();
 }

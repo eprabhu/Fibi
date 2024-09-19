@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DATE_PLACEHOLDER } from '../../../app-constants';
+import { DATE_PLACEHOLDER, ENTITY_VERIFICATION_STATUS } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 import { AutoSaveService } from '../../../common/services/auto-save.service';
@@ -7,7 +7,7 @@ import { EntityDataStoreService } from '../../entity-data-store.service';
 import { EntityManagementService } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus, showEntityToast } from '../../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityOrganizationType, EntityTabStatus, showEntityToast } from '../../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
@@ -51,18 +51,21 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        subscriptionHandler(this.$subscriptions)
+        subscriptionHandler(this.$subscriptions);
     }
 
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
-        if (this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode) {
-            this.selectedLookupList.push({ code: this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO.organizationTypeCode, description: null });
-            this.samExpirationDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.samExpirationDate);
-            this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
+        if (this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode) {
+            this.selectedLookupList.push({
+                code: this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO.entityOrganizationType?.organizationTypeCode,
+                description: null
+            });
         }
+        this.samExpirationDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.samExpirationDate);
+        this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
         this.isEditMode = this._dataStoreService.getEditMode();
         this.entityTabStatus = ENTITY_DATA?.entityTabStatus;
     }
@@ -106,17 +109,21 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private saveSubAwardOrganizationDetails(): void {
         this.autoSaveRO.entityId = this.entityDetails.entityId;
+        this.addFeedStatusInRO();
         this.$subscriptions.push(
             this.entitySubAwardService.organizationDetailsAutoSave(this.autoSaveRO)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateHeaderStatus();
-                    this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityId = this.entityDetails.entityId;
+                    this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityId =
+                        this.entityDetails.entityId;
                     this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.id = data?.id;
+                    this.updateEntireFeed();
                     this.autoSaveRO = {};
                     this.isRestrictSave = false;
-                    this._entityManagementService.hasChangesAvailable = false;
                     this.dataChangeCounter--;
                     showEntityToast('SUCCESS');
+                    this.commonService.setChangesAvailable(false);
                 }, (_error: any) => {
                     this.isRestrictSave = false;
                     showEntityToast('ERROR');
@@ -125,40 +132,68 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private updateSubAwardOrganizationDetails(): void {
         this.autoSaveRO.entityId = this.entityDetails.entityId;
+        this.addFeedStatusInRO();
         this.$subscriptions.push(
             this.entitySubAwardService.updateOrganizationDetails(this.autoSaveRO)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateHeaderStatus();
+                    this.updateEntireFeed();
                     this.autoSaveRO = {};
-                    this._entityManagementService.hasChangesAvailable = false;
                     this.dataChangeCounter--;
                     showEntityToast('SUCCESS');
+                    this.commonService.setChangesAvailable(false);
                 }, (_error: any) => {
                     showEntityToast('ERROR');
                 }));
     }
 
+    private addFeedStatusInRO(): void {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')) {
+            this.autoSaveRO.feedStatusCode = '2';
+        }
+    }
+
+    private updateEntireFeed(): void {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')) {
+            this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');
+        }
+    }
+
     onDateSelect(dateType: 'SAM_EXPIRATION' | 'RISK_ASSESSMENT'): void {
+        this.commonService.setChangesAvailable(true);
         if (dateType == 'SAM_EXPIRATION') {
-            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.samExpirationDate = parseDateWithoutTimestamp(this.samExpirationDate);
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.samExpirationDate =
+                parseDateWithoutTimestamp(this.samExpirationDate);
             this.changeEvent('samExpirationDate');
         }
         if (dateType == 'RISK_ASSESSMENT') {
-            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.subAwdRiskAssmtDate = parseDateWithoutTimestamp(this.subAwdRiskAssmtDate)
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.subAwdRiskAssmtDate =
+                parseDateWithoutTimestamp(this.subAwdRiskAssmtDate);
             this.changeEvent('subAwdRiskAssmtDate');
         }
     }
 
     changeEvent(key: string): void {
-        this._entityManagementService.hasChangesAvailable = true;
-        if (this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO[key]) {
-            this.autoSaveRO[key] = this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO[key];
+       this.commonService.setChangesAvailable(true);
+        const IS_ORG_TYPE_CODE = key === 'organizationTypeCode';
+        const serviceDTO = this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO;
+        if (serviceDTO[key] || IS_ORG_TYPE_CODE) {
+            this.autoSaveRO[key] = IS_ORG_TYPE_CODE ? serviceDTO.entityOrganizationType.organizationTypeCode : serviceDTO[key];
             this.$debounceEvent.next(key);
         }
     }
 
     onOrganizationTypeSelect(event: any): void {
-        this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationTypeCode = event ? event[0]?.code : null;
+        const { code, description } = event ? event[0] : { code: null, description: null };
+        if (!this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityOrganizationType) {
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityOrganizationType =
+                new EntityOrganizationType();
+        }
+        const entityOrganizationType =
+            this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityOrganizationType;
+        entityOrganizationType.organizationTypeCode = code;
+        entityOrganizationType.description = description;
         this.changeEvent('organizationTypeCode');
     }
 

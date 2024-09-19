@@ -1,16 +1,15 @@
 <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
     <div class="row mb-2">
         <div class="col-12 d-flex align-items-center coloured-bg-header">
-            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
-                <mat-icon class="coi-mat-icon-size">newspaper</mat-icon>
-            </span>
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex"><mat-icon class="coi-mat-icon-size" aria-hidden="true">newspaper</mat-icon></span>
             <span class="fs-16 fw-medium" id="coi-entity-sponsor-details">{{sectionName}}<app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-details'"></app-common-help-text>
             </span>
         </div>
     </div>
     <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12">
-            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsor-code">Sponsor code
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsor-code">
+                <span>Sponsor Code</span>
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-code'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" id="coi-entity-sponsor-code" title="Sponsor code"
@@ -22,7 +21,8 @@
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-md-0">
-            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsor-Acronym">Sponsor Acronym
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsor-Acronym">
+                <span>Sponsor Acronym</span>
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsor-Acronym'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" id="coi-entity-sponsor-Acronym" placeholder=""
@@ -35,13 +35,17 @@
         </div>
 
         <div class="col-xl-4 col-lg-4 col-md-6 col-12 col-sm-12 mt-sm-2 mt-lg-0">
-            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsortype-lookup">Sponsor Type
+            <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sponsortype-lookup">
+                <span>Sponsor Type</span>
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsortype-lookup'"></app-common-help-text>
             </label>
-            <app-look-up (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorTypeOption'
-                         [defaultValue]="sponsorDetailsObj?.sponsorTypeCode" [isDisabled]="!isEditMode"
-            [uniqueId]="'coi-entity-sponsortype-lookup'">
+            <app-look-up *ngIf="isEditMode" (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorTypeOption'
+                         [defaultValue]="sponsorDetailsObj?.sponsorType?.description"
+                         [uniqueId]="'coi-entity-sponsortype-lookup'">
             </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="sponsorDetailsObj?.sponsorType?.description"></app-no-data-label>
+            </span>
         </div>
     </div>
 </div>

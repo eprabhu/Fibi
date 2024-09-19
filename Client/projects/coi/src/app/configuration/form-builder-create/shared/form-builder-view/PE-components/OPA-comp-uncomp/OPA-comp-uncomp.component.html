@@ -71,9 +71,9 @@
                 <td class="text-end text-middle">{{data.numOfDaysSummer}}</td>
                 <td class="text-end text-middle">{{data.numOfDaysAcademic}}</td>
                 <td class="text-middle text-center" *ngIf="isFormEditable">
-                    <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit"
+                    <mat-icon class="mr-2" (click)="editEntityItem(data, index)" title="Edit"
                         data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id">edit</mat-icon>
-                    <mat-icon class="small-icon" (click)="compUnCompData = data; deleteIndex = index; entityDetails = compUnCompData?.entityInfo;"
+                    <mat-icon (click)="compUnCompData = data; deleteIndex = index; entityDetails = compUnCompData?.entityInfo;"
                         data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP_DELETE'+id"
                         title="Delete">delete</mat-icon>
                 </td>
@@ -153,9 +153,9 @@
                                         <div class="col-9">
                                             <span class="align-items-center d-flex">
                                                 <span class="shadow-sm align-items-center d-flex" tabindex="-1"
-                                                    [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
-                    'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
-                                                    [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isFormCompleted)}}</span>
+                                                    [attr.aria-label]="item?.personEntityVersionStatus === 'ACTIVE' ? 'Active' : 'Inactive'"
+                                                    [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isFormCompleted)">
+                                                    {{getDescriptionForStatus(item.personEntityVersionStatus,item.isFormCompleted)}}</span>
                                                 <p class="entity-title mt-3 clickable-content">
                                                     <strong class="fs-14" tabindex="0" (click)="viewSlider(item.personEntityId)"
                                                         [attr.aria-label]="'entity name' + item?.entityName">
@@ -214,7 +214,7 @@
                                         </div>
                                         <div class="col-3 d-flex justify-content-between text-secondary fs-12">
                                             <div tabindex="-1">
-                                                <span class="fw-bold me-2 " [attr.aria-label]="Involvement"> Involvement
+                                                <span class="fw-bold me-2 " [attr.aria-label]="'Involvement'"> Involvement
                                                     : </span>
                                                 <form-no-data-label [valueToShow]="item?.involvementStartDate">
                                                     <span> {{item?.involvementStartDate|dateFormatter }} - {{
@@ -272,26 +272,8 @@
                                         <span class="fs-14 fw-400">{{entityDetails?.countryName}}</span>
                                     </div>
                                     <div class="col-4 text-secondary fs-14">
-                                        <span class="fw-bold me-2">Entity Type :</span>
+                                        <span class="fw-bold me-2">Ownership Type :</span>
                                         <span class="fs-14 fw-400">{{entityDetails?.entityType}}</span>
-                                    </div>
-                                    <div class="col-4 text-secondary fs-14 d-flex align-items-center">
-                                        <span class="fw-bold me-2">Risk : </span>
-                                        <span class="ml-2 grey-text fw-normal">
-                                            <div class="text-color fs-14 d-flex align-items-center">
-                                                <span class="text-secondary fs-14 mt-3">
-                                                    <span class="text-secondary fs-14">
-                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
-                                                            class="invalid material-icons-round">warning</mat-icon>
-                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
-                                                            class="medium-risk material-icons-round">warning</mat-icon>
-                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
-                                                            class="low-risk material-icons-round">warning</mat-icon>
-                                                    </span>
-                                                </span>
-                                                <span>{{entityDetails?.entityRiskCategory}}</span>
-                                            </div>
-                                        </span>
                                     </div>
                                 </div>
                                 <div class="mx-1 row pt-1 d-flex align-items-center" *ngIf="entityDetails?.personEntityId">

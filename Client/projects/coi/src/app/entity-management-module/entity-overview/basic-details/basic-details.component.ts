@@ -1,11 +1,13 @@
-import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { Country, Create_Entity, EntityDetails, EntityTabStatus } from '../../shared/entity-interface';
-import { isEmptyObject, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { Subject, Subscription } from 'rxjs';
-import { EntityManagementService } from '../../entity-management.service';
+import { forkJoin, Subscription } from 'rxjs';
 import {CommonService} from '../../../common/services/common.service';
+import { ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../../app-constants';
+import { ActivatedRoute } from '@angular/router';
+import { EntityManagementService } from '../../entity-management.service';
 
 @Component({
   selector: 'app-basic-details',
@@ -15,7 +17,6 @@ import {CommonService} from '../../../common/services/common.service';
 export class BasicDetailsComponent implements OnInit, OnDestroy {
     createEntityObj: Create_Entity = new Create_Entity();
     saveObj: Create_Entity = new Create_Entity();
-    isCreateScreen = false;
     isEditMode = false;
     @Input() sectionName: any;
     @Input() sectionId: any;
@@ -24,17 +25,12 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     entityCountryDetails: Country = new Country();
     entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
-    constructor(public dataStore: EntityDataStoreService, private _entityManagementService: EntityManagementService, private _commonService: CommonService) {}
+    constructor(public dataStore: EntityDataStoreService, private _commonService: CommonService, private _route: ActivatedRoute, private _entityManagementService: EntityManagementService) {}
 
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.checkUserHasRight();
-    }
-
-    saveBasicEntityDetails(event) {
-        this.saveObj = event.createEntityObj;
-        openModal('entityProceedCheckMatch');
     }
 
     private getDataFromStore() {
@@ -79,16 +75,35 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateStoreData(event) {
-        if(!isEmptyObject(event?.autoSaveRO)) {
-            Object.keys(event?.autoSaveRO).forEach((ele) =>{
+        if (!isEmptyObject(event?.autoSaveRO)) {
+            Object.keys(event?.autoSaveRO).forEach((ele) => {
                 this.entityDetails[ele] = event?.autoSaveRO[ele];
             });
             this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
+            this.callFeedStatusAPI(event?.autoSaveRO);
         }
-        if(event?.isMandatoryFilled) {
-            this.entityTabStatus.entity_overview = event?.isMandatoryFilled;
-            this.dataStore.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
+        this.dataStore.enableModificationHistoryTracking();
+    }
+
+    private callFeedStatusAPI(saveReq): void {
+        if (saveReq.hasOwnProperty('entityName') && this.entityDetails.entityStatusType.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED) {
+            this.$subscriptions.push(
+                forkJoin(this.getApiCalls()).subscribe((data: [] = []) => {
+                    this.dataStore.updateFeedStatus(this.entityTabStatus, 'BOTH');
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating feed status.');
+                }
+                ));
         }
+    }
+
+    private getApiCalls(): any[] {
+        const REQUEST = [];
+        const REQ_OBJ = { entityId: this._route.snapshot.queryParamMap.get('entityManageId'), feedStatusCode: '2' }
+        REQUEST.push(
+            this._entityManagementService.updateSponsorDetails(REQ_OBJ),
+            this._entityManagementService.updateOrganizationDetails(REQ_OBJ))
+        return REQUEST;
     }
 
     ngOnDestroy() {
@@ -101,5 +116,4 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
             this.isEditMode = false;
         }
     }
-
 }

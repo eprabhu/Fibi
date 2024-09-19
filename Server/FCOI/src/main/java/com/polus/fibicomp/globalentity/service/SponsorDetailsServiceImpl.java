@@ -48,7 +48,7 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	}
 
 	private EntitySponsorInfo mapDTOToEntity(SponsorRequestDTO dto) {
-		return EntitySponsorInfo.builder().entityId(dto.getEntityId()).acronym(dto.getAcronym()).sponsorTypeCode(dto.getSponsorTypeCode()).build();
+		return EntitySponsorInfo.builder().entityId(dto.getEntityId()).acronym(dto.getAcronym()).sponsorTypeCode(dto.getSponsorTypeCode()).feedStatusCode(dto.getFeedStatusCode()).build();
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 			return SponsorDetailsResponseDTO.builder().entityId(entitySponsorInfo.getEntityId())
 					.acronym(entitySponsorInfo.getAcronym()).id(entitySponsorInfo.getId())
 					.sponsorCode(entitySponsorInfo.getSponsorCode())
-					.sponsorTypeCode(entitySponsorInfo.getSponsorTypeCode()).build();
+					.sponsorType(entitySponsorInfo.getSponsorType()).build();
 		} else {
 			return null;
 		}

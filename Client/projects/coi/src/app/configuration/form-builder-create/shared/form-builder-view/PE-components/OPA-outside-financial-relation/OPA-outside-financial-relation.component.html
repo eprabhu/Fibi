@@ -145,8 +145,8 @@
                                     </div>
                                     <div class="col-3 d-flex align-items-center justify-content-end">
                                         <span class="badge f-14 px-3 py-2 rounded-pill"
-                                            [ngClass]="SFIObject?.isActive ? SFIObject.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
-                                            {{SFIObject?.isActive ? SFIObject.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
+                                            [ngClass]="item?.personEntityVersionStatus != 'INACTIVE' ? item.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                            {{item?.personEntityVersionStatus != 'INACTIVE' ? item.isFormCompleted ? 'Complete' : 'Incomplete' : 'Inactive'}}</span>
                                         </div>
                                 </div>
                                 <div class="mb-2 row">
@@ -248,32 +248,14 @@
                                 <div class="col-lg-3 d-flex align-items-center justify-content-end">
                                     <span tabindex="-1" *ngIf="entityDetails?.personEntityId && editIndex > -1"
                                         class="badge f-14 px-3 py-2 rounded-pill me-3"
-                                        [ngClass]="entityDetails?.sfiVersionStatus ? entityDetails?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
-                                        {{entityDetails?.sfiVersionStatus ? entityDetails?.isFormCompleted ? 'Complete' : 'Incomplete' :
+                                        [ngClass]="entityDetails?.sfiVersionStatus != 'INACTIVE'? entityDetails?.isFormCompleted == 'Y' ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                        {{entityDetails?.sfiVersionStatus != 'INACTIVE' ? entityDetails?.isFormCompleted == 'Y' ? 'Complete' : 'Incomplete' :
                                         'Inactive'}}</span>
                                     <span tabindex="-1" *ngIf="entityDetails?.personEntityId && editIndex == -1"
                                         class="badge f-14 px-3 py-2 rounded-pill me-3"
-                                        [ngClass]="entityDetails?.personEntityVersionStatus ? entityDetails?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
-                                        {{entityDetails?.personEntityVersionStatus ? entityDetails?.isFormCompleted ? 'Complete' :
+                                        [ngClass]="entityDetails?.personEntityVersionStatus != 'INACTIVE' ? entityDetails?.isFormCompleted ? 'text-bg-success' : 'text-bg-warning' : 'text-bg-secondary'">
+                                        {{entityDetails?.personEntityVersionStatus != 'INACTIVE' ? entityDetails?.isFormCompleted ? 'Complete' :
                                         'Incomplete' : 'Inactive'}}</span>
-                                    <div class="d-inline-flex align-items-center">
-                                        <label class="coi-text-light me-1">Risk: </label>
-                                        <span class="coi-text-light fw-normal">
-                                            <div class="text-color fs-14 d-flex align-items-center">
-                                                <span class="text-secondary fs-14 mt-3">
-                                                    <span class="text-secondary fs-14">
-                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
-                                                            class="invalid material-icons-round me-1">warning</mat-icon>
-                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
-                                                            class="medium-risk material-icons-round me-1">warning</mat-icon>
-                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
-                                                            class="low-risk material-icons-round me-1">warning</mat-icon>
-                                                    </span>
-                                                </span>
-                                                <span>{{entityDetails?.entityRiskCategory}}</span>
-                                            </div>
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -282,7 +264,7 @@
                                     <span class="fs-14 fw-400">{{entityDetails?.countryName}}</span>
                                 </div>
                                 <div class="col-4 text-secondary fs-14">
-                                    <label class="fw-bold me-2 d-block">Entity Type</label>
+                                    <label class="fw-bold me-2 d-block">Ownership Type</label>
                                     <span class="fs-14 fw-400">{{entityDetails?.entityType}}</span>
                                 </div>
                                 <div class="col-12">
@@ -317,7 +299,7 @@
                                     </div>
                                 </div>
                             </div>
-                
+
                         </div>
                     </div>
                 </div>

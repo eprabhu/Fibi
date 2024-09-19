@@ -22,10 +22,11 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
     SfiDetailsList: any[] = [];
     currentActiveModuleCode: number;
     $subscriptions: Subscription[] = [];
+    COI_COUNT_MODAL_ID = 'coi-count-modal';
     projectCountList: DashboardProjectCount[] = [];
     projectsList: CountModalDisclosureProjectData[] = [];
     filteredProjectsList: CountModalDisclosureProjectData[] = [];
-    countModalConfig = new COIModalConfig('coi-count-modal', '', 'Close', 'xl');
+    countModalConfig = new COIModalConfig(this.COI_COUNT_MODAL_ID, '', 'Close', 'xl');
 
     @Input() coiCountModal = new COICountModal();
 
@@ -58,6 +59,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
             filterType: '',
             searchWord: '',
             reviewStatusCode: '',
+            dispositionStatusCode: null,
             personId: this.coiCountModal.personId,
             disclosureId: this.coiCountModal.disclosureId
         };
@@ -68,7 +70,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
             this._coiCountModalService.getSFICount(this.getRequestObject())
                 .subscribe((data: any) => {
                     this.SfiDetailsList = data.personEntities;
-                    openCommonModal('coi-count-modal');
+                    openCommonModal(this.COI_COUNT_MODAL_ID);
                 }, (_error: any) => {
                     this.closeCoiCountModal();
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
@@ -80,7 +82,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
             this._coiCountModalService.getDisclosureProjects(this.coiCountModal.disclosureId)
                 .subscribe((projectList: any) => {
                     this.setProjectList(projectList);
-                    openCommonModal('coi-count-modal');
+                    openCommonModal(this.COI_COUNT_MODAL_ID);
                 }, (_error: any) => {
                     this.closeCoiCountModal();
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
@@ -136,7 +138,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
             this._coiCountModalService.getDisclosureDetails(this.coiCountModal.disclosureId)
                 .subscribe((data: any) => {
                     this.SfiDetailsList = data;
-                    openCommonModal('coi-count-modal');
+                    openCommonModal(this.COI_COUNT_MODAL_ID);
                 }, (_error: any) => {
                     this.closeCoiCountModal();
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
@@ -169,7 +171,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
     }
 
     closeCoiCountModal(): void {
-        closeCommonModal('coi-count-modal');
+        closeCommonModal(this.COI_COUNT_MODAL_ID);
         setTimeout(() => {
             this.coiCountModal = new COICountModal();
             this.coiCountModalChange.emit(this.coiCountModal);

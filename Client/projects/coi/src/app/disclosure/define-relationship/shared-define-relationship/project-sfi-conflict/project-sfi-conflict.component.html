@@ -39,7 +39,7 @@
                                     class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
                                     (click)="onSortClick('projectConflictStatusCode')">
                                     <span class="coi-text-darker">Conflicts and Relationship</span>
-                                    <i class="fa coi-text-light ms-2 coi-table-sort-icon" aria-hidden="true" 
+                                    <i class="fa coi-text-light ms-2 coi-table-sort-icon" aria-hidden="true"
                                         [ngClass]="isDesc['projectConflictStatusCode'] ? 'fa-sort-alpha-desc' : 'fa-sort-alpha-asc'"></i>
                                 </button>
                             </th>
@@ -53,7 +53,7 @@
                                     class="btn-none w-100 h-100 px-3 py-2 mt-0 d-flex align-items-center coi-table-sort-btn"
                                     (click)="onSortClick('projectConflictStatusCode')">
                                     <span class="coi-text-darker">Conflict Status</span>
-                                    <i class="fa coi-text-light ms-2 coi-table-sort-icon" aria-hidden="true" 
+                                    <i class="fa coi-text-light ms-2 coi-table-sort-icon" aria-hidden="true"
                                         [ngClass]="isDesc['projectConflictStatusCode'] ? 'fa-sort-alpha-desc' : 'fa-sort-alpha-asc'"></i>
                                 </button>
                             </th>
@@ -147,7 +147,7 @@
                                     <span *ngIf="mandatoryList.has('CONFLICT_STATUS_' + sfiIndex)"
                                         class="invalid-feedback">{{ mandatoryList.get('CONFLICT_STATUS_' + sfiIndex) }}</span>
                                 </div>
-    
+
                                 <!-- description -->
                                 <div class="mb-1">
                                     <label for="coi_sfi_conflict_comment_{{projectSfiRelation?.projectId}}_{{coiDisclEntProjDetail?.entityId}}_{{sfiIndex}}"
@@ -188,7 +188,7 @@
                                                 <span class="{{PROJECT_CONFLICT_STATUS_BADGE[coiDisclEntProjDetail?.projectConflictStatusCode]}}"></span>
                                                 <span id="coi_project_relationship_conflict-status_{{projectSfiRelation?.projectId}}_{{coiDisclEntProjDetail?.entityId}}"
                                                     class="badgeFont">{{coiDisclEntProjDetail?.coiProjConflictStatusType?.description}}</span>
-                                            </div>   
+                                            </div>
                                         </app-no-data-label>
                                     </div>
                                 </td>
@@ -197,7 +197,7 @@
                                     <div class="d-flex align-items-center justify-content-center w-100 h-100">
                                         <!-- conflict slider -->
                                         <button class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 coi-scale-9 mt-0"
-                                            title="Click here to open conflict slider" aria-label="Click here to open conflict slider"
+                                            title="Click to view the relationship between SFIs and projects" aria-label="Click to view the relationship between SFIs and projects"
                                             (click)="openAddConflictSlider(coiDisclEntProjDetail)">
                                             <span aria-hidden="true" class="btn-secondary-svg"></span>
                                         </button>

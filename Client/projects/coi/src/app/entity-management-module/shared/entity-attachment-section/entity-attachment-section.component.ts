@@ -1,15 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AttachmentInputType, EntireEntityDetails, EntityAttachment, EntityDetails, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskProxyController } from '../entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRiskCategoryCode } from '../entity-interface';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { deepCloneObject, fileDownloader, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
 import { EntityAttachmentModalService } from './entity-attachment-section.service';
+import { AttachmentInputType } from '../../../attachments/attachment-interface';
 
 @Component({
     selector: 'app-entity-attachment-section',
@@ -38,7 +38,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     VERSION_MODAL_ID: string = 'entity-attachment-delete-confirm-modal';
     CONFIRMATION_MODAL_ID: string = 'entity-attachment-delete-confirm-modal';
     versionModalConfig = new COIModalConfig(this.VERSION_MODAL_ID, '', 'Close', 'xl');
-    confirmationModalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete Attachment', 'Cancel');    
+    confirmationModalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete Attachment', 'Cancel');
 
     constructor(private _commonService: CommonService,
         private _dataStoreService: EntityDataStoreService,
@@ -158,6 +158,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this._attachmentSectionService.deleteAttachment(this.currentAttachment?.attachmentNumber)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.deleteAttachmentAndVersions(this.updateIndex);
                     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully.');
                 }, (_error) => {
@@ -243,10 +244,11 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     }
 
     checkUserHasRight(): void {
-        const canManageEntitySponsor = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
-        const canManageEntityOrganization = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
-        const canManageEntityCompliance = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
-        if (!canManageEntitySponsor && !canManageEntityOrganization && !canManageEntityCompliance) {
+        const CAN_MANAGE_ENTITY_SPONSOR = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
+        const CAN_MANAGE_ENTITY_ORGANIZATION = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
+        const CAN_MANAGE_ENTITY_COMPLIANCE = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
+        const CAN_MANAGE_ENTITY_ATTACHMENT = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME') && this.riskCategoryCode == 'EN';
+        if (!CAN_MANAGE_ENTITY_SPONSOR && !CAN_MANAGE_ENTITY_ORGANIZATION && !CAN_MANAGE_ENTITY_COMPLIANCE && !CAN_MANAGE_ENTITY_ATTACHMENT) {
             this.isEditMode = false;
         }
     }

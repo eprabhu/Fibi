@@ -1,15 +1,15 @@
 <div *ngIf="!isLoading" class="card rounded-0">
     <div class="mb-2">
-        <app-entity-risk-section [sectionName]="commonService.getSectionName(overViewTab,'COMPLIANCE_RISK')"
-            [sectionId]="commonService.getSectionId(overViewTab,'COMPLIANCE_RISK')"
-            [subSectionId]="riskSubSectionId"
+        <app-entity-risk-section [sectionName]="riskSectionDetails.sectionName"
+            [sectionId]="riskSectionDetails.sectionId"
+            [subSectionId]="riskSectionDetails.subSectionId"
             [entityRiskList]="complianceEntityRiskList" [riskCategoryCode]="'CO'">
         </app-entity-risk-section>
     </div>
     <div class="mb-2">
-        <app-entity-attachment-section [sectionName]="commonService.getSectionName(overViewTab,'COMPLIANCE_ATTACHMENTS')"
-            [sectionId]="commonService.getSectionId(overViewTab,'COMPLIANCE_ATTACHMENTS')"
-            [subSectionId]="attachmentSubSectionId"
+        <app-entity-attachment-section [sectionName]="attachmentSectionDetails.sectionName"
+            [sectionId]="attachmentSectionDetails.sectionId"
+            [subSectionId]="attachmentSectionDetails.subSectionId"
             [entityAttachmentsList]="entityComplianceAttachmentList" [riskCategoryCode]="'CO'">
         </app-entity-attachment-section>
     </div>

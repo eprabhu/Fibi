@@ -17,5 +17,4 @@ public class EntityActionLogDto {
     private String comment;
     private String updateUser;
     private Timestamp updateTimestamp;
-    private String updateUserFullName;
 }

@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,18 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.pojo.FileType;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.CompleteReivewRequestDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
@@ -101,10 +104,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.saveOrUpdateCoiReview(vo);
 	}
 
-	@GetMapping("/getCoiReview/{disclosureId}")
-	public List<CoiReview> getCoiReview(@PathVariable("disclosureId") Integer disclosureId) {
+	@PostMapping("/getCoiReview")
+	public List<CoiReview> getCoiReview(@RequestBody CoiDisclosureDto disclosureDto) {
 		logger.info("Requesting for getCoiReview");
-		return conflictOfInterestService.getCoiReview(disclosureId);
+		return conflictOfInterestService.getCoiReview(disclosureDto);
 	}
 
 	@PostMapping("/startCOIReview")
@@ -220,12 +223,6 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> setEntityStatus(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for setEntityStatus");
 		return conflictOfInterestService.setEntityStatus(vo);
-	}
-	
-	@PostMapping("/getAllSystemEntityList")
-	public ResponseEntity<Object> getAllSystemEntityList(@RequestBody CoiDashboardVO vo) {
-		logger.info("Requesting for getAllSystemEntityList");
-		return conflictOfInterestService.getAllSystemEntityList(vo);
 	}
 
 	@GetMapping("/getCoiProjectTypes")
@@ -462,7 +459,7 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.deleteNote(noteId);
 	}
 
-	@PostMapping(value = "/saveOrUpdateAttachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/saveOrUpdateAttachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			@RequestParam("formDataJson") String formDataJson) {
 		logger.info("Request for saveOrUpdateAttachments");
@@ -486,4 +483,11 @@ public class ConflictOfInterestController {
         logger.info("Requesting for projectPersonNotify");
         return conflictOfInterestService.projectPersonNotify(notificationDto);
     }
+
+	@GetMapping(value = "/fetchRequiredParams")
+	public Map<String, List<FileType>> fetchRequiredParams(HttpServletRequest request) throws Exception {
+		logger.info("Requesting for fetchRequiredParams");
+		return conflictOfInterestService.fetchRequiredParams();
+	}
+
 }

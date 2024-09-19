@@ -664,7 +664,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     selectedEvent(event) {
-        this.localCOIRequestObject.property8 = event ? event.entity_id : null;
+        this.localCOIRequestObject.property8 = event ? event.entity_name : null;
         this.localSearchDefaultValues.entityName = event ? event.entity_name : null;
     }
 

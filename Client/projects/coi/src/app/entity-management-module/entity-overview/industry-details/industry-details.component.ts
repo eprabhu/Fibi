@@ -23,7 +23,7 @@ import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utiliti
 export class IndustryDetailsComponent implements OnInit, OnDestroy {
 
     industryDetails: IndustryDetails = new IndustryDetails();
-    industryCategoryTypeOptions = 'INDUSTRY_CATEGORY_TYPE#INDUSTRY_CATEGORY_TYPE_CODE#false#false';
+    industryCategoryTypeOptions = 'INDUSTRY_CATEGORY_TYPE#INDUSTRY_CATEGORY_TYPE_CODE#false#true';
     industryCategoryDescriptionOptions = 'EMPTY#EMPTY#true#true';
     mandatoryList = new Map();
     $subscriptions: Subscription[] = [];
@@ -47,12 +47,6 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     CONFIRMATION_MODAL_ID = 'industry-delete-confirm-modal';
     modalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete', 'Cancel');
 
-    addIndustryDetails(event) {
-        if (event) {
-            openModal('addIndustryDetails');
-        }
-    }
-
     constructor(private _entityOverviewService: EntityOverviewService,
                 private _dataStoreService: EntityDataStoreService,
                 private _commonService: CommonService) {}
@@ -63,30 +57,37 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         this.checkUserHasRight();
     }
 
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
     clearIndustryDetails() {
-        this.mandatoryList.clear();
-        this.industryDetails = new IndustryDetails();
-        this.categoryTypeList = [];
-        this.categoryDescriptionList = [];
-        this.industryCategoryTypeCode = null;
-        this.entityIndustryCategories = [];
-        this.deleteClassList  = [];
-        this.deleteCatCodeList = [];
-        this.addedEntityIndustryCatIds = [];
-        this.removedEntityIndustryClassIds = [];
-        this.isEditIndex = null;
-        this.selectedIndustry = null;
         hideModal('addIndustryDetails');
+        setTimeout(() => {
+            this.mandatoryList.clear();
+            this.industryDetails = new IndustryDetails();
+            this.categoryTypeList = [];
+            this.categoryDescriptionList = [];
+            this.industryCategoryTypeCode = null;
+            this.entityIndustryCategories = [];
+            this.deleteClassList  = [];
+            this.deleteCatCodeList = [];
+            this.addedEntityIndustryCatIds = [];
+            this.removedEntityIndustryClassIds = [];
+            this.isEditIndex = null;
+            this.selectedIndustry = null;
+            this.isSaving = false;
+        }, 200);
     }
 
     addIndustry() {
-        this.entityMandatoryValidation();
-        if (!this.mandatoryList.size) {
+        if (!this.isSaving && this.validateEntityindustry()) {
             this.isEditIndex != null ? this.updateIndustryDetails() : this.saveIndustryDetails();
         }
     }
 
     onIndustryCategoryTypeSelect(event) {
+        this.entityIndustryCategories = [];
         this.industryCategoryDescriptionsList = [];
         if (event && event.length) {
             this.industryCategoryTypeCode = event[0].code;
@@ -111,25 +112,31 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     }
 
 
-    entityMandatoryValidation(): void {
+    validateEntityindustry(): boolean {
         this.mandatoryList.clear();
         if (!this.industryCategoryTypeCode || !this.industryCategoryTypeCode.length) {
             this.mandatoryList.set('industryCategoryTypeCode', 'Please select industry category type.');
+        } else if (this.isEditIndex === null && this.getHasDuplicateTypeCode()) {
+            this.mandatoryList.set('industryCategoryTypeCode', 'The industry category type has already been added. Please edit the existing type to make any changes.');
         }
         if (!this.entityIndustryCategories || !this.entityIndustryCategories.length) {
             this.mandatoryList.set('industryCategroyDescription', 'Please select industry category description.');
         }
+        return this.mandatoryList.size === 0;
+    }
+
+    private getHasDuplicateTypeCode(): boolean {
+        const INDUSTRY_TYPE_CODE_GROUP = this.groupBy(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'industryCategoryTypeCode');
+        return this.industryCategoryTypeCode && INDUSTRY_TYPE_CODE_GROUP?.hasOwnProperty(this.industryCategoryTypeCode);
     }
 
     onIndustryCategoryDescriptionSelect(event) {
         if (event && event.length) {
             this.entityIndustryCategories = event;
             const fullDataCatIds = this.entityIndustryClassifications.map(it => it.industryCategoryId);
-            this.addedEntityIndustryCatIds = this.entityIndustryCategories
-                .filter(item => !fullDataCatIds.includes(item.industryCategoryId));
+            this.addedEntityIndustryCatIds = this.entityIndustryCategories?.filter((item: any) => !fullDataCatIds.includes(item.industryCategoryId));
             const newAddedCatIds = this.entityIndustryCategories.map(it => it.industryCategoryId);
-            this.removedEntityIndustryClassIds = this.selectedIndustry.value
-                .filter(item => !newAddedCatIds.includes(item.industryCategoryId));
+            this.removedEntityIndustryClassIds = this.selectedIndustry?.value?.filter((item: any) => !newAddedCatIds.includes(item.industryCategoryId));
         } else {
             this.entityIndustryCategories = [];
         }
@@ -137,9 +144,15 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
 
     saveIndustryDetails() {
         this.setReqObj();
+        this.isSaving = true;
         this.$subscriptions.push(this._entityOverviewService.saveIndustryDetails(this.industryDetails).subscribe((data: any) => {
+            this._dataStoreService.enableModificationHistoryTracking();
             this._dataStoreService.updateStore(['entityIndustryClassifications'], { 'entityIndustryClassifications':  data });
+            this.isSaving = false;
             this.clearIndustryDetails();
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+            this.isSaving = false;
         }));
     }
 
@@ -171,7 +184,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     }
 
     groupBy(jsonData, key, innerKey, secondInnerKey) {
-        return jsonData.reduce((relationsTypeGroup, item) => {
+        return jsonData?.reduce((relationsTypeGroup, item) => {
             (relationsTypeGroup[item[key][innerKey][secondInnerKey]] = relationsTypeGroup[item[key][innerKey][secondInnerKey]] || []).push(item);
             return relationsTypeGroup;
         }, {});
@@ -236,6 +249,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
                 delete this.entityIndustryClassificationsGrouping[this.selectedIndustry.key];
                 this.entityIndustryClassifications = this.entityIndustryClassifications
                     .filter(items => !this.deleteClassList.includes(items.entityIndustryClassId));
+                this._dataStoreService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearIndustryDetails();
                 this.isSaving = false;
@@ -247,18 +261,17 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateIndustryDetails() {
-        if (!this.isSaving) {
-            this.isSaving = true;
-            this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res: any) => {
-                this.entityIndustryClassifications = res;
-                this.updateDataStore();
-                this.clearIndustryDetails();
-                this.isSaving = false;
-            }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
-                this.isSaving = false;
-            }));
-        }
+        this.isSaving = true;
+        this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res: any) => {
+            this.entityIndustryClassifications = res;
+            this._dataStoreService.enableModificationHistoryTracking();
+            this.updateDataStore();
+            this.clearIndustryDetails();
+            this.isSaving = false;
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+            this.isSaving = false;
+        }));
     }
 
     generateUpdateObj() {
@@ -290,15 +303,20 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         this.industryDetails.updatePrimaryCatId = true;
     }
 
-
-    ngOnDestroy() {
-        subscriptionHandler(this.$subscriptions);
-    }
-
     checkUserHasRight(): void {
         const hasRight = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
         if (!hasRight) {
             this.isEditMode = false;
+        }
+    }
+
+    addIndustryDetails(event) {
+        if (event) {
+            openModal('addIndustryDetails', {
+                backdrop: 'static',
+                keyboard: true,
+                focus: false
+              });
         }
     }
 }

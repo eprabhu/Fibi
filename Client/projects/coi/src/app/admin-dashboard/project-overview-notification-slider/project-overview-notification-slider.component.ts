@@ -259,4 +259,8 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
         const INDEX = this.notificationObject.recipients.findIndex(item => ((data.recipientPersonId && item.recipientPersonId === data.recipientPersonId)));
         this.notificationObject.recipients.splice(INDEX, 1);
     }
+
+    redirectToProjectDetails(): void {
+        this.commonService.redirectToProjectDetails(this.dataForNotificationSlider?.projectDetails?.projectId, this.dataForNotificationSlider?.projectDetails?.projectTypeCode);
+    }
 }

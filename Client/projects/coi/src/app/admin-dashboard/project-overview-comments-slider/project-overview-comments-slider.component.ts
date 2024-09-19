@@ -242,4 +242,8 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     onEditorBlur() {
         this.isEditorFocused = false;
     }
+
+    redirectToProjectDetails(): void {
+        this.commonService.redirectToProjectDetails(this.dataForCommentSlider?.projectDetails?.projectId, this.dataForCommentSlider?.projectDetails?.projectTypeCode);
+    }
 }

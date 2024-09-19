@@ -41,7 +41,7 @@
             </div>
             <div *ngIf="!IS_SFI_PROJECT_SWITCH && defineRelationshipService.isEditMode" class="col-12 px-3 d-flex align-items-center gap-1 mb-2 lh-1">
                 <span class="coi-text-darker fs-16">Projects</span>
-                <span class="fs-10 count-badge badge rounded-pill align-items-center justify-content-center d-inline-flex rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
+                <span class="d-inline-flex align-items-center justify-content-center fs-10 count-badge badge rounded-pill rounded-circle">{{filteredProjectSfiRelationsList?.length}}</span>
             </div>
             <div *ngIf="coiService.isExpandSummaryBySection['COI803']" class="p-0 mb-3 border-bottom"></div>
             <ng-container *ngIf="coiService.isExpandSummaryBySection['COI803'] && projectSfiRelationsList?.length">

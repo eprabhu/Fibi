@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.core.inbox.pojo.Inbox;
+import com.polus.core.pojo.FileType;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -21,6 +22,7 @@ import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
@@ -64,10 +66,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used for get CoiReview based on disclosureId
-	 * @param disclosureId
+	 * @param disclosureDto
 	 * @return List of CoiReview
 	 */
-	List<CoiReview> getCoiReview(Integer disclosureId);
+	List<CoiReview> getCoiReview(CoiDisclosureDto disclosureDto);
 
 	/**
 	 * This method is used for Start review
@@ -155,8 +157,6 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> getAllEntityList(ConflictOfInterestVO vo);
 
 	ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo);
-
-	ResponseEntity<Object> getAllSystemEntityList(CoiDashboardVO vo);
 
 	ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo);
 
@@ -250,20 +250,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> modifyRisk(CoiEntityDto entityDto);
-
-	/**
-	 * This method is used to fetch all risk history of an entity
-	 * @param entityId
-	 * @return
-	 */
-	ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId);
-
-	/**
-	 * This method is used to fetch Entity Action Log
-	 * @param coiEntityDto
-	 * @return
-	 */
-	ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto);
 
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
@@ -385,5 +371,17 @@ public interface ConflictOfInterestService {
 	 */
 	String getDisclosureActionType(String fcoiType, Map<String, String> actionTypes);
 
+	/**
+	 * For notifying person
+	 * @param notificationDto
+	 * @return
+	 */
 	ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto);
+	
+	/**
+	 * fetches the required parameters
+	 * @return
+	 */
+	Map<String, List<FileType>> fetchRequiredParams();
+
 }

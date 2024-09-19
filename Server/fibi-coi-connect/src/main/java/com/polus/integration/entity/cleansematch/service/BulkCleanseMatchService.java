@@ -24,6 +24,9 @@ import com.polus.integration.entity.cleansematch.entity.StageDnBEntityMatch;
 import com.polus.integration.entity.config.Constants;
 import com.polus.integration.entity.config.ErrorCode;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class BulkCleanseMatchService {
 
@@ -70,7 +73,8 @@ public class BulkCleanseMatchService {
 					dnbEntityMatchRepository.save(entityMatch);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("BULK CLEANSE MATCH API: Exception while startBulkCleanseMatch, error "+ e.getMessage());
+			
 			}
 		}
 
@@ -105,7 +109,7 @@ public class BulkCleanseMatchService {
 				String fullResponse = objectMapper.writeValueAsString(response.getFullResponse());
 				entityMatch.setResponse(fullResponse);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				log.error("BULK CLEANSE MATCH API: Exception while prepareDBSaveObject, error "+ e.getMessage());
 			}
 
 		}
@@ -115,7 +119,7 @@ public class BulkCleanseMatchService {
 				String bestMatch = objectMapper.writeValueAsString(response.getHighestMatch());
 				entityMatch.setBestMatchResult(bestMatch);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				log.error("BULK CLEANSE MATCH API: Exception while prepareDBSaveObject finding Best Match, error "+ e.getMessage());
 			}
 
 		}
@@ -129,7 +133,7 @@ public class BulkCleanseMatchService {
 				String matchResult = objectMapper.writeValueAsString(response.getMatchCandidates());
 				entityMatch.setMatchedResults(matchResult);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				log.error("BULK CLEANSE MATCH API: Exception while prepareDBSaveObject finding Match, error "+ e.getMessage());
 			}
 		}
 
@@ -202,7 +206,6 @@ public class BulkCleanseMatchService {
 			response.setErrorCode(errorCode.getErrorCode());
 			response.setErrorMessage("Error while API PrepareResponse for Cleanse Match");
 			response.setErrorDetails(e.getMessage());
-			response.setErrorCode(null);
 		}
 		return response;
 	}

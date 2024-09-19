@@ -158,6 +158,9 @@ public class CoiDisclosure implements Serializable {
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
 
+	@Column(name = "REMARK")
+	private String remark;
+
 	@Transient
 	private String updateUserFullName;
 
@@ -181,5 +184,14 @@ public class CoiDisclosure implements Serializable {
 
 	@Transient
 	private String personPrimaryTitle;
+
+	@Transient
+	private Long personNotesCount;
+
+	@Transient
+	private Long personAttachmentsCount;
+
+	@Transient
+	private Integer personEntitiesCount;
 
 }

@@ -138,3 +138,20 @@ export const DISCLOSURE_CONFLICT_STATUS_BADGE: { [key: string]: string } = {
   '5': CLASS_BROWN_BADGE,
   '6': CLASS_RED_BADGE,
 };
+
+export const COMMON_ERROR_TOAST_MSG = 'Something went wrong, please try again.';
+
+export const ENTITY_DOCUMNET_STATUS_TYPE = {
+    DUPLICATE: '3',
+    ACTIVE: '1'
+}
+
+export const ENTITY_VERIFICATION_STATUS = {
+    VERIFIED: '1',
+    UNVERIFIED: '2'
+}
+
+export const DISCLOSURE_TYPE = {
+    FCOI: '1',
+    REVISION: '3'
+}

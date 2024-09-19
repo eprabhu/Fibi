@@ -54,7 +54,7 @@ public interface Constant {
 	String IS_PRIMARY_YES = "Y";
 	String IS_PRIMARY_NO = "N";
 	String ACTIVE = "A";
-	String IN_ACTIVE = "I";
+	String INACTIVE = "I";
 	String DISCLOSURE_TYPE_CODE_PROPOSAL = "2";
 
 }

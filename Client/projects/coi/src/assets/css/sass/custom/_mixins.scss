@@ -3,3 +3,24 @@
         #{$key}: $value;
     }
 }
+
+$breakpoints: (
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px,
+    xxxl: 1600px
+);
+
+$unit: '%';
+// Utility class for width sizes
+@each $breakKey, $breakValue in $breakpoints {
+    @each $size in (25, 50, 75, 90, 100) {
+        .w-#{$breakKey}-#{$size} {
+            @media (min-width: $breakValue) {
+                width: #{$size}#{$unit} !important;
+            }
+        }
+    }
+}

@@ -39,7 +39,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     entityRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#false#false';
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false'
     ENTITY_RISK_ADD_UPDATE_MODAL_ID: string = 'entity-risk-add-update-modal';
-    entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID, 'Add Risk', 'Cancel', 'lg');    
+    entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID, 'Add Risk', 'Cancel', 'lg');
 
     constructor(private _dataStoreService: EntityDataStoreService,
         private _commonService: CommonService, private _entityRiskSectionService: EntityRiskSectionService) { }
@@ -123,6 +123,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         this.entityRiskModalDetails.entityRisk.entityId = this.entityDetails.entityId;
         this.$subscriptions.push(this._entityRiskSectionService.saveEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk added successfully.');
+            this._dataStoreService.enableModificationHistoryTracking();
             this.addNewRiskDetails(data.entityRiskId);
             this.clearRiskDetails();
         }))
@@ -143,6 +144,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     private updateEntityRisk(): void {
         this.$subscriptions.push(this._entityRiskSectionService.updateEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk updated successfully.');
+            this._dataStoreService.enableModificationHistoryTracking();
             this.updateExistingRiskDetails()
             this.clearRiskDetails();
         }))
@@ -171,28 +173,29 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     private entityMandatoryValidation(): boolean {
         this.mandatoryList.clear();
         const { riskLevelCode, riskTypeCode, description, entityRiskId } = this.entityRiskModalDetails.entityRisk;
-        if (!riskLevelCode) {
-            this.mandatoryList.set('riskLevel', 'Please select risk level.');
-        }
         if (!riskTypeCode) {
             this.mandatoryList.set('riskType', 'Please select risk type.');
-        } else {
-            const IS_TYPE_ALREADY_ADDED = this.entityRiskList?.find((_risk: EntityRisk) => _risk?.riskTypeCode === riskTypeCode && _risk?.entityRiskId !== entityRiskId)
-            if (IS_TYPE_ALREADY_ADDED) {
-                this.mandatoryList.set('riskType', 'Risk type is already added.');
-            }
+        } else if (this.getHasDuplicateTypeCode(riskTypeCode, entityRiskId)) {
+            this.mandatoryList.set('riskType', 'The risk type has already been added. Please edit the existing type to make any changes.');
+        }
+        if (!riskLevelCode) {
+            this.mandatoryList.set('riskLevel', 'Please select risk level.');
         }
         if (!description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
         }
-        
+
         return this.mandatoryList.size === 0;
     }
 
-    private setSponsorRiskDetails(risk: EntityRisk): void {
-        this.entityRiskModalDetails.entityRisk = deepCloneObject(risk);
-        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((_risk: RiskType) => risk?.riskTypeCode === _risk.riskTypeCode);
-        const SELECTED_RISK_LEVEL = this.entityRiskLevelList.find((_risk: RiskLevel) => risk?.riskLevelCode === _risk.riskLevelCode);
+    private getHasDuplicateTypeCode(riskTypeCode: string, entityRiskId: number | null): boolean {
+        return this.entityRiskList?.some((risk: EntityRisk) => risk?.riskTypeCode === riskTypeCode && risk?.entityRiskId !== entityRiskId);
+    }
+
+    private setSponsorRiskDetails(entityRisk: EntityRisk): void {
+        this.entityRiskModalDetails.entityRisk = deepCloneObject(entityRisk);
+        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((risk: RiskType) => entityRisk?.riskTypeCode === risk.riskTypeCode);
+        const SELECTED_RISK_LEVEL = this.entityRiskLevelList.find((risk: RiskLevel) => entityRisk?.riskLevelCode === risk.riskLevelCode);
         this.entityRiskModalDetails.selectedRiskTypeLookUpList = [deepCloneObject(SELECTED_RISK_TYPE)];
         this.entityRiskModalDetails.selectedRiskLevelLookUpList = [deepCloneObject(SELECTED_RISK_LEVEL)];
     }
@@ -239,11 +242,11 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     }
 
     checkUserHasRight(): void {
-        const canManageEntitySponsor = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
-        const canManageEntityOrganization = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
-        const canManageEntityCompliance = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
-        const canManageEntityRisk = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME') && this.riskCategoryCode == 'EN';
-        if (!canManageEntitySponsor && !canManageEntityOrganization && !canManageEntityCompliance && !canManageEntityRisk) {
+        const CAN_MANAGE_ENTITY_SPONSOR = this._commonService.getAvailableRight(['MANAGE_ENTITY_SPONSOR'], 'SOME') && this.riskCategoryCode == 'SP';
+        const CAN_MANAGE_ENTITY_ORGANIZATION = this._commonService.getAvailableRight(['MANAGE_ENTITY_ORGANIZATION'], 'SOME') && this.riskCategoryCode == 'OR';
+        const CAN_MANAGE_ENTITY_COMPLIANCE = this._commonService.getAvailableRight(['MANAGE_ENTITY_COMPLIANCE'], 'SOME') && this.riskCategoryCode == 'CO';
+        const CAN_MANAGE_ENTITY_RISK = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME') && this.riskCategoryCode == 'EN';
+        if (!CAN_MANAGE_ENTITY_SPONSOR && !CAN_MANAGE_ENTITY_ORGANIZATION && !CAN_MANAGE_ENTITY_COMPLIANCE && !CAN_MANAGE_ENTITY_RISK) {
             this.isEditMode = false;
         }
     }

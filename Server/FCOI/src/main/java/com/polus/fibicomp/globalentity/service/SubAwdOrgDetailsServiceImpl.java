@@ -50,7 +50,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 	private EntitySubOrgInfo mapDTOToEntity(SubAwdOrgRequestDTO dto) {
 		return EntitySubOrgInfo.builder().entityId(dto.getEntityId()).samExpirationDate(dto.getSamExpirationDate())
 				.subAwdRiskAssmtDate(dto.getSubAwdRiskAssmtDate()).organizationId(dto.getOrganizationId())
-				.organizationTypeCode(dto.getOrganizationTypeCode()).build();
+				.organizationTypeCode(dto.getOrganizationTypeCode()).feedStatusCode(dto.getFeedStatusCode()).build();
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 			return SubAwdOrgDetailsResponseDTO.builder().entityId(entitySubOrgInfos.getEntityId())
 					.id(entitySubOrgInfos.getId())
 					.organizationId(entitySubOrgInfos.getOrganizationId())
-					.organizationTypeCode(entitySubOrgInfos.getOrganizationTypeCode())
+					.entityOrganizationType(entitySubOrgInfos.getEntityOrganizationType())
 					.samExpirationDate(entitySubOrgInfos.getSamExpirationDate())
 					.subAwdRiskAssmtDate(entitySubOrgInfos.getSubAwdRiskAssmtDate()).build();
 		} else {

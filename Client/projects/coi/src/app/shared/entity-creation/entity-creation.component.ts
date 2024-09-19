@@ -6,18 +6,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { EntityCreationService } from './entity-creation.service';
 import { getEndPointOptionsForCountry } from './../../../../../fibi/src/app/common/services/end-point.config';
-import { deepCloneObject, hideModal, isEmptyObject, openModal } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {
     Country,
     Create_Entity,
+    DuplicateCheckObj,
     EntityOwnerShip,
-    removeToast,
     showEntityToast
 } from '../../entity-management-module/shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import { OverviewTabSection } from '../../entity-management-module/shared/entity-constants';
-import { EntityManagementService } from '../../entity-management-module/entity-management.service';
-import { InformationAndHelpTextService } from '../../common/services/informationAndHelpText.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 
@@ -33,18 +31,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     countrySearchOptions: any;
     mandatoryList = new Map();
     $subscriptions: Subscription[] = [];
-    autoSaveRO: any = {};
-    @Input() isCreateScreen = false;
-    @Input() saveMode: 'AUTO' | 'EXTERNAL' = 'EXTERNAL';
-    @Input() saveEntity = new Subject();
-    @Input() initalProceed = new Subject();
-    @Input() createEntityObj: Create_Entity = new Create_Entity();
-    @Input() countryDetails: Country = new Country();
-    @Input() canNavigateToEntity: boolean = true;
-    @Input() isEditMode = true;
     ownershipTypOptions = 'ENTITY_OWNERSHIP_TYPE#OWNERSHIP_TYPE_CODE#false#false';
-    @Output() emitSaveObj = new EventEmitter<any>();
-    @Output() emitEntityRO = new EventEmitter<any>();
+    autoSaveRO: any = {};
     $debounceEvent = new Subject<any>();
     $debounceNumberEvent = new Subject<any>();
     changedKeys= [];
@@ -54,7 +42,16 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     localCAGE: any;
     selectedOwnerShipType: any = [];
     overViewTab = OverviewTabSection;
-    @Input() manualAutoSaveEvent = new Subject();
+    @Input() isCreateView = false;
+    @Input() saveMode: 'AUTO' | 'EXTERNAL' = 'EXTERNAL';
+    @Input() createEntityObj = new Create_Entity();
+    @Input() countryDetails = new Country();
+    @Input() canNavigateToEntity = true;
+    @Input() isEditMode = true;
+    @Input() $performAction = new Subject<'SAVE_AND_VALIDATE'|'VALIDATE_ONLY'>();
+    @Output() emitAutoSaveObj = new EventEmitter<any>();
+    @Output() emitEntityDetails = new EventEmitter<any>();
+    @Output() emitMandatoryResponse = new EventEmitter<DuplicateCheckObj>();
 
     constructor(private _entityCreateService: EntityCreationService, private _router: Router,private _route: ActivatedRoute,
         private _commonService: CommonService, private _autoSaveService: AutoSaveService) {}
@@ -63,9 +60,8 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.isFormDataChanged = false;
         this.setCommonChangesFlag(false);
-        this.externalProccedSubscribe();
         this.triggerSingleSave();
-        this.triggerExternalSave();
+        this.listenManadatoryCheck();
         this.triggerNumberCheck();
         this.autoSaveSubscribe();
         this.setDefaultValues();
@@ -87,36 +83,38 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         }
     }
 
-    externalProccedSubscribe() {
-        this.$subscriptions.push(this.initalProceed.subscribe((data) => {
-            if(data) {
-                this.entityMandatoryValidation();
-                if(!this.mandatoryList.size) {
-                    this.emitEntityRO.emit(true);
-                }
+    listenManadatoryCheck() {
+        this.$subscriptions.push(this.$performAction.subscribe((data: 'SAVE_AND_VALIDATE'|'VALIDATE_ONLY') => {
+            this.entityMandatoryValidation();
+            if(!this.mandatoryList.size && data === 'VALIDATE_ONLY') {
+                const ENTITY_DETAILS = new DuplicateCheckObj();
+                ENTITY_DETAILS.entityName = this.createEntityObj.entityName;
+                ENTITY_DETAILS.countryCode = this.createEntityObj.countryCode;
+                ENTITY_DETAILS.primaryAddressLine1 = this.createEntityObj.primaryAddressLine1;
+                ENTITY_DETAILS.primaryAddressLine2 = this.createEntityObj.primaryAddressLine2;
+                this.emitMandatoryResponse.emit(ENTITY_DETAILS);
+            }
+            if(data === 'SAVE_AND_VALIDATE' && !this.mandatoryList.size) {
+                this.saveEntity();
             }
         }));
     }
 
-    triggerExternalSave() {
-        this.$subscriptions.push(this.saveEntity.subscribe((data) => {
-            this.entityMandatoryValidation();
-            if (!this.mandatoryList.size) {
-                delete this.createEntityObj['entityOwnerShip'];
-                this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
-                    this.isFormDataChanged = false;
-                    this.setCommonChangesFlag(false);
-                    if(this.canNavigateToEntity) {
-                        this._router.navigate(['/coi/manage-entity/entity-overview'],
-                            { queryParams: { entityManageId: data.entityId } }
-                        );
-                    } else {
-                        this.emitSaveObj.emit({
-                            'entityId': data.entityId,
-                            'entityName': this.createEntityObj.entityName
-                    });
-                    }
-                }));
+    saveEntity() {
+        delete this.createEntityObj['entityOwnerShip'];
+        delete this.createEntityObj['country'];
+        this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
+            this.isFormDataChanged = false;
+            this.setCommonChangesFlag(false);
+            if (this.canNavigateToEntity) {
+                this._router.navigate(['/coi/manage-entity/entity-overview'],
+                    { queryParams: { entityManageId: data.entityId } }
+                );
+            } else {
+                this.emitEntityDetails.emit({
+                    'entityId': data.entityId,
+                    'entityName': this.createEntityObj.entityName
+            });
             }
         }));
     }
@@ -125,7 +123,6 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(2000))).subscribe((data: any) => {
           if (data) {
             this._autoSaveService.commonSaveTrigger$.next(true);
-            // this.autoSaveAPI();
           }
         }
         ));
@@ -150,7 +147,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         if(event && event.length) {
             this.createEntityObj.entityOwnershipTypeCode = event[0].code;
             this.changeEvent('entityOwnershipTypeCode');
-            if (!this.isCreateScreen) {
+            if (!this.isCreateView) {
                 this.createEntityObj.entityOwnerShip = new EntityOwnerShip();
                 this.createEntityObj.entityOwnerShip.ownershipTypeCode = event[0].code;
                 this.createEntityObj.entityOwnerShip.description = event[0].description;
@@ -191,51 +188,31 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                 if(this.autoSaveRO.hasOwnProperty('countryCode')) {
                     this.autoSaveRO['country'] = this.createEntityObj['country'];
                 }
-                this.emitSaveObj.emit({'autoSaveRO': this.autoSaveRO, 'isMandatoryFilled': true});
+                this.emitAutoSaveObj.emit({'autoSaveRO': this.autoSaveRO});
                 this.localDUNS = this.createEntityObj.dunsNumber;
                 this.localCAGE = this.createEntityObj.cageNumber;
-                this.localUEI = this.createEntityObj.ueiNumber;                
+                this.localUEI = this.createEntityObj.ueiNumber;
                 this.autoSaveRO = {};
                 this.isFormDataChanged = false;
-                this.setCommonChangesFlag(false);
-                this.navigateToRoute();
                 showEntityToast('SUCCESS');
+                this.setCommonChangesFlag(false);
             }, err => {
                 showEntityToast('ERROR');
             }
         ));
             this._commonService.removeLoaderRestriction();
-        } else if(this.mandatoryList.size){
-            if(this._commonService.isNavigationStopped) {
-                openModal('coi-entity-confirmation-modal');
-            }
         }
-    }
-
-    leaveSlider(){
-        removeToast('ERROR');
-        removeToast('SUCCESS');
-        this.setCommonChangesFlag(false);
-        hideModal('coi-entity-confirmation-modal');
-        this._router.navigateByUrl(this._commonService.attemptedPath);
     }
 
     setCommonChangesFlag(flag) {
-        this._commonService.hasChangesAvailable = this.isCreateScreen ? false : flag;
-    }
-
-    navigateToRoute() {
-        if(this._commonService.isNavigationStopped) {
-            hideModal('coi-entity-confirmation-modal');
-            this._router.navigateByUrl(this._commonService.attemptedPath);
-        }
+        this._commonService.setChangesAvailable(this.isCreateView ? false : flag);
     }
 
     selectedCountryEvent(event: any): void {
         if(event) {
             this.createEntityObj.countryCode = event.countryCode;
             this.changeEvent('countryCode');
-            if(!this.isCreateScreen) {
+            if(!this.isCreateView) {
                 this.createEntityObj.country = event;
             }
         } else {
@@ -283,7 +260,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     validateEmail() {
         this.clearValidation('certifiedEmail');
         if(this.createEntityObj.certifiedEmail && !isValidEmailAddress(this.createEntityObj.certifiedEmail)) {
-            this.mandatoryList.set('certifiedEmail', 'Please enter valid certifiedEmail.');
+            this.mandatoryList.set('certifiedEmail', 'Please enter valid email address.');
         } else {
             this.changeEvent('certifiedEmail');
         }
@@ -303,6 +280,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         if(this.createEntityObj.dunsNumber && this.createEntityObj.dunsNumber != this.localDUNS) {
             this.createEntityObj.isDunsMatched = false;
             this.changeEvent("isDunsMatched");
+            this._commonService.setLoaderRestriction();
             this.$subscriptions.push(this._entityCreateService.validateDUNS(this.createEntityObj.dunsNumber).subscribe((data:any) => {
                 if(data) {
                     this.mandatoryList.set('duns', 'An entity with this DUNS number already exists');
@@ -310,6 +288,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.changeEvent("dunsNumber");
                 }
             }));
+            this._commonService.removeLoaderRestriction();
         } else {
             this.changeEvent("dunsNumber");
         }
@@ -318,6 +297,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     checkForDuplicateUEI() {
         this.clearValidation('uei');
         if(this.createEntityObj.ueiNumber && this.createEntityObj.ueiNumber != this.localUEI) {
+            this._commonService.setLoaderRestriction();
             this.$subscriptions.push(this._entityCreateService.validateUEI(this.createEntityObj.ueiNumber).subscribe((data:any) => {
                 if(data) {
                     this.mandatoryList.set('uei', 'An entity with this UEI number already exists');
@@ -325,6 +305,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.changeEvent('ueiNumber');
                 }
             }));
+            this._commonService.removeLoaderRestriction();
         } else {
             this.changeEvent("dunsNumber");
         }
@@ -333,6 +314,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
     checkForDuplicateCAGE() {
         this.clearValidation('cage');
         if(this.createEntityObj.cageNumber && this.createEntityObj.cageNumber != this.localCAGE) {
+            this._commonService.setLoaderRestriction();
             this.$subscriptions.push(this._entityCreateService.validateCAGE(this.createEntityObj.cageNumber).subscribe((data:any) => {
                 if(data) {
                     this.mandatoryList.set('cage', 'An entity with this CAGE number already exists');
@@ -340,6 +322,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
                     this.changeEvent('cageNumber');
                 }
             }));
+            this._commonService.removeLoaderRestriction();
         } else {
             this.changeEvent("dunsNumber");
         }

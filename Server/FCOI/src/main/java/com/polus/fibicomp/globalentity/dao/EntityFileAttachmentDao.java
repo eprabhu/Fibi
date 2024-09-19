@@ -33,15 +33,17 @@ public class EntityFileAttachmentDao {
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
-	
+
 	@Autowired
 	private CommonDao commonDao;
+
+	public static final String ATTACHMENT_COUNTER = "ATTACHMENT_COUNTER";
 
     @Transactional(rollbackFor = {EntityFileAttachmentException.class})
 	public Integer saveEntityAttachmentDetail(EntityAttachment attach) {
 		try {
 			EntityAttachment entity = EntityAttachment.builder()
-					.attachmentNumber(attach.getAttachmentNumber() != null ? attach.getAttachmentNumber() : getNextAttachmentNumber())
+					.attachmentNumber(attach.getAttachmentNumber() != null ? attach.getAttachmentNumber() : getNextAttachmentNumber(ATTACHMENT_COUNTER))
 					.versionNumber(attach.getVersionNumber() != null ? attach.getVersionNumber() + 1 : 1)
 					.attachmentTypeCode(attach.getAttachmentTypeCode())
 					.fileDataId(attach.getFileDataId())
@@ -59,7 +61,7 @@ public class EntityFileAttachmentDao {
 		}
 	}
 
-	private Integer getNextAttachmentNumber() {
+	public Integer getNextAttachmentNumber(String attachmentCounterName) {
 		Session session = hibernateTemplate.getSessionFactory().openSession();
 		SessionImpl sessionImpl = (SessionImpl) session;
 		Connection connection = sessionImpl.connection();
@@ -67,16 +69,17 @@ public class EntityFileAttachmentDao {
 		ResultSet resultSet = null;
 		Integer attachmentNumber = null;
 		try {
-			statement = connection.prepareCall("{call GENERATE_ATTACHMENT_NUMBER}");
+			statement = connection.prepareCall("{call GENERATE_ATTACHMENT_NUMBER(?)}");
+			statement.setString(1,attachmentCounterName);
 			statement.execute();
 			resultSet = statement.getResultSet();
 			if (statement.getMoreResults()) {
 				resultSet = statement.getResultSet();
 				while (resultSet.next()) {
-					if (resultSet.getInt("NEXT_VALUE") == 0) {
+					if (resultSet.getInt("LI_NEXT_VALUE") == 0) {
 						throw new ApplicationException("Unable to acquire lock", Constants.JAVA_ERROR);
 					}
-					attachmentNumber = resultSet.getInt("NEXT_VALUE");
+					attachmentNumber = resultSet.getInt("LI_NEXT_VALUE");
 				}
 			}
 		} catch (SQLException e) {

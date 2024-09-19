@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.polus.integration.constant.Constant;
+import com.polus.integration.dnb.referencedata.controller.DnBReferenceDataController;
 import com.polus.integration.dnb.referencedata.dao.DnBReferenceDataDAO;
 import com.polus.integration.dnb.referencedata.dto.DnBReferenceDataDTO;
 import com.polus.integration.dnb.referencedata.entity.EntityBusinessType;
@@ -17,6 +18,9 @@ import com.polus.integration.dnb.referencedata.entity.IndustryCategoryCode;
 import com.polus.integration.dnb.referencedata.entity.IndustryCategoryType;
 import com.polus.integration.dnb.referencedata.entity.RegistrationType;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ReferenceDataService {
 
@@ -39,7 +43,7 @@ public class ReferenceDataService {
 			saveIndustryCodeForType(responseReferenceData);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("<---- ERDNB Reference Data ---> : Error Loading loadIndustryCodeType. "+ e.getMessage());
 		}
 
 	}

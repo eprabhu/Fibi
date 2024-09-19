@@ -20,7 +20,8 @@ import {
     REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE,
-    EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE
+    EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE,
+    COMMON_ERROR_TOAST_MSG
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { openCommonModal } from '../common/utilities/custom-utilities';
@@ -50,7 +51,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     clickedOption: any;
     disclosureDetailsForSFI = { disclosureId: null, disclosureNumber: null };
     NO_DATA_FOUND_MESSAGE = NO_DATA_FOUND_MESSAGE;
-
     assignReviewerActionDetails: any = {};
     assignReviewerActionValidation = new Map();
     adminGroupsCompleterOptions: any = {};
@@ -341,6 +341,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.getSfiDetails();
             }, err => {
                 this.isSaving = false;
+                if (err.status === 405) {
+                    this.coiService.concurrentUpdateAction = 'Submit Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                }
             }));
     }
     private getDataFromStore() {
@@ -514,7 +519,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     getCoiReview() {
-        this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+        this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.dispositionStatusCode).subscribe((data: any) => {
             if (data) {
                 this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(data);
                 this.reviewList = data;
@@ -557,10 +562,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.count = data.count;
                 this.errorCheck();
             }
+        }, (_error: any) => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
         }));
     }
 
-    getRequestObject() {
+    getRequestObject(): RO {
       const REQ_OBJ = new RO();
       REQ_OBJ.currentPage = 0;
       REQ_OBJ.disclosureId = this.coiData.coiDisclosure.disclosureId;
@@ -569,6 +576,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
       REQ_OBJ.personId = this.coiData.coiDisclosure.person.personId;
       REQ_OBJ.reviewStatusCode = this.coiData.coiDisclosure.reviewStatusCode;
       REQ_OBJ.searchWord = '';
+      REQ_OBJ.dispositionStatusCode = this.coiData.coiDisclosure.dispositionStatusCode;
       return REQ_OBJ;
     }
 
@@ -748,9 +756,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         });
     }
 
-    openProjectDetailsModal(): void {
-        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = this.coiData.projectDetail;
-        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
+    openProjectHierarchySlider(): void {
+        this.commonService.openProjectHierarchySlider(this.coiData?.projectDetail?.moduleCode, this.coiData?.projectDetail?.projectNumber);
     }
 
 }

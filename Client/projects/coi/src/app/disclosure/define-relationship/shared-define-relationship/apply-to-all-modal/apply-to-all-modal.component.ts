@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { DefineRelationshipService } from '../../services/define-relationship.service';
 import { ApplyToAllModal, CoiDisclEntProjDetail, ProjectSfiRelationConflictRO, ProjectSfiRelations, SaveProjectSfiConflict } from '../../../coi-interface';
-import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../app-constants';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG } from '../../../../app-constants';
 import { closeCommonModal } from '../../../../common/utilities/custom-utilities';
 import { ModalActionEvent } from '../../../../shared-components/coi-modal/coi-modal.interface';
 import { Subscription } from 'rxjs';
 import { DataStoreService } from '../../../services/data-store.service';
 import { CommonService } from '../../../../common/services/common.service';
 import { DefineRelationshipDataStoreService } from '../../services/define-relationship-data-store.service';
+import { CoiService } from '../../../services/coi.service';
 
 @Component({
     selector: 'app-apply-to-all-modal',
@@ -19,7 +20,8 @@ export class ApplyToAllModalComponent {
     $subscriptions: Subscription[] = [];
     mandatoryList: Map<string, string> = new Map();
 
-    constructor(private _dataStore: DataStoreService,
+    constructor(private _coiService: CoiService,
+                private _dataStore: DataStoreService,
                 private _commonService: CommonService,
                 public defineRelationshipService: DefineRelationshipService,
                 private _defineRelationshipDataStore: DefineRelationshipDataStoreService) { }
@@ -71,8 +73,13 @@ export class ApplyToAllModalComponent {
                         this.updateApplyToAllResponse(res.conflictDetails);
                         this.defineRelationshipService.updateDisclosureConflictStatus(res.disclConflictStatusType);
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status saved successfully.');
-                    }, (_error: any) => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                    }, (error: any) => {
+                        if (error.status === 405) {
+                            this.clearApplyToAllModal();
+                            this._coiService.concurrentUpdateAction = 'Disclosure';
+                        } else {
+                            this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                        }
                     }));
         }
     }

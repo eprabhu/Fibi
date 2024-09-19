@@ -68,20 +68,27 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
         this.isEditMode = this._dataStoreService.getEditMode();
     }
 
+    private getHasDuplicateTypeCode(regTypeCode: string, entityRegistrationId: number | null): boolean {
+        return this.entityRegistrations?.some((risk: any) => risk?.regTypeCode === regTypeCode && risk?.entityRegistrationId !== entityRegistrationId);
+    }
+
     clearRegistrationDetails() {
-        this.registrationDetails = new RegistrationDetails();
-        this.mandatoryList.clear();
-        this.selectedType = '';
-        this.selectedRegistrationType = [];
-        this.entityRegistrationDefaultValue = '';
-        this.isEditIndex = null;
-        this.deleteEntityRegistrationId = null;
         hideModal('addRegistrationDetails');
+        setTimeout(() => {
+            this.registrationDetails = new RegistrationDetails();
+            this.mandatoryList.clear();
+            this.selectedType = '';
+            this.selectedRegistrationType = [];
+            this.entityRegistrationDefaultValue = '';
+            this.isEditIndex = null;
+            this.isSaving = false;
+            this.deleteEntityRegistrationId = null;
+        }, 200);
     }
 
     addRegistration() {
-        this.entityMandatoryValidation();
-        if (!this.mandatoryList.size) {
+        if (!this.isSaving && this.validateEntityRegistration()) {
+            this.isSaving = true;
             this.registrationDetails.entityId = this.entityId;
             this.$subscriptions.push(this._entityOverviewService.addRegistrationDetails(this.registrationDetails).subscribe((data: any) => {
                 if (data) {
@@ -90,10 +97,14 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                     registration.regTypeCode = this.selectedType[0].code;
                     registration.registrationTypeDescription = this.selectedType[0]?.description;
                     registration.regNumber = this.registrationDetails.regNumber;
-                    this.entityRegistrations.push(registration);
+                    this.entityRegistrations.unshift(registration);
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                 }
                 this.clearRegistrationDetails();
+            }, (_err: any) => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                this.isSaving = false;
             }));
         }
     }
@@ -108,14 +119,18 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
-    entityMandatoryValidation(): void {
+    validateEntityRegistration(): boolean {
         this.mandatoryList.clear();
-        if (!this.registrationDetails.regTypeCode) {
+        const { regTypeCode, regNumber, entityRegistrationId } = this.registrationDetails;
+        if (!regTypeCode) {
             this.mandatoryList.set('regTypeCode', 'Please select registration type.');
+        }  else if (this.getHasDuplicateTypeCode(regTypeCode, entityRegistrationId)) {
+            this.mandatoryList.set('regTypeCode', 'The registration type has already been added. Please edit the existing type to make any changes.');
         }
-        if (!this.registrationDetails.regNumber) {
+        if (!regNumber) {
             this.mandatoryList.set('registrationNumber', 'Please enter registration number.');
         }
+        return this.mandatoryList.size === 0;
     }
 
     editRelationship(registration: any, index: number) {
@@ -134,28 +149,26 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
     }
 
     editRegistration() {
-        if (!this.isSaving) {
+        if (!this.isSaving && this.validateEntityRegistration()) {
             this.isSaving = true;
-            this.entityMandatoryValidation();
-            if (!this.mandatoryList.size) {
-                this.registrationDetails.entityId = this.entityId;
-                this.$subscriptions.push(this._entityOverviewService
-                    .updateRegistrationDetails(this.registrationDetails).subscribe((data: any) => {
-                        if (data) {
-                            this.entityRegistrations[this.isEditIndex].registrationTypeDescription = this.selectedType
-                            && this.selectedType[0] ? this.selectedType[0]?.description : this.entityRegistrationDefaultValue;
-                            this.entityRegistrations[this.isEditIndex].regNumber = this.registrationDetails.regNumber;
-                            this.entityRegistrations[this.isEditIndex].regTypeCode = this.registrationDetails.regTypeCode;
-                            this.entityRegistrations[this.isEditIndex].registrationType = null;
-                            this.updateDataStore();
-                        }
-                        this.clearRegistrationDetails();
-                        this.isSaving = false;
-                    }, err => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
-                        this.isSaving = false;
-                    }));
-            }
+            this.registrationDetails.entityId = this.entityId;
+            this.$subscriptions.push(this._entityOverviewService
+                .updateRegistrationDetails(this.registrationDetails).subscribe((data: any) => {
+                    if (data) {
+                        this.entityRegistrations[this.isEditIndex].registrationTypeDescription = this.selectedType
+                        && this.selectedType[0] ? this.selectedType[0]?.description : this.entityRegistrationDefaultValue;
+                        this.entityRegistrations[this.isEditIndex].regNumber = this.registrationDetails.regNumber;
+                        this.entityRegistrations[this.isEditIndex].regTypeCode = this.registrationDetails.regTypeCode;
+                        this.entityRegistrations[this.isEditIndex].registrationType = null;
+                        this.updateDataStore();
+                    }
+                    this._dataStoreService.enableModificationHistoryTracking();
+                    this.clearRegistrationDetails();
+                    this.isSaving = false;
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                    this.isSaving = false;
+                }));
         }
     }
 
@@ -182,6 +195,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this._entityOverviewService.deleteRegistrationDetails(entityRegistrationId).subscribe((data: any) => {
                 if (data) {
                     this.entityRegistrations.splice(this.isEditIndex, 1);
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                     this.clearRegistrationDetails();
                     this.isSaving = false;
