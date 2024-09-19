@@ -10,7 +10,7 @@ export interface ProjectOverviewDetails {
     keyPersonDetails: KeyPersonDetail[];
     projectDetails: ProjectDetails;
 }
-export interface KeyPersonDetail {
+export class KeyPersonDetail {
     moduleCode: any
     projectId: any
     projectNumber: any

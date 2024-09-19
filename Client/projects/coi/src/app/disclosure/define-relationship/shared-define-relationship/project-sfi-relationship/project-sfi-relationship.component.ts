@@ -68,7 +68,7 @@ export class ProjectSfiRelationshipComponent implements OnInit, OnDestroy {
     private listenDataChangeFromRelationStore(): void {
         this.$subscriptions.push(
             this._defineRelationshipDataStore.$relationsChanged.subscribe((changes: DefineRelationshipDataStore) => {
-                if (changes.projectId === 'All' || changes.searchChanged || changes.updatedKeys.includes('coiDisclEntProjDetails')) {
+                if (changes.projectId === 'ALL' || changes.searchChanged || changes.updatedKeys.includes('coiDisclEntProjDetails')) {
                     this.getDataFromRelationStore();
                 }
             })

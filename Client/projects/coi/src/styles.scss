@@ -279,6 +279,11 @@
     }
 }
 
+.coi-table-last-border-0 tr:last-child,
+.coi-table-last-border-0 tr:last-child td {
+  border-bottom: 0;
+}
+
 .link-primary {
     text-decoration: none !important;
     cursor: pointer;

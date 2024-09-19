@@ -756,9 +756,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         });
     }
 
-    openProjectDetailsModal(): void {
-        const SELECTED_PROJECT_DETAILS: DisclosureProjectData = this.coiData.projectDetail;
-        this.commonService.openProjectDetailsModal(SELECTED_PROJECT_DETAILS);
+    openProjectHierarchySlider(): void {
+        this.commonService.openProjectHierarchySlider(this.coiData?.projectDetail?.moduleCode, this.coiData?.projectDetail?.projectNumber);
     }
 
 }

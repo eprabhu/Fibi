@@ -869,15 +869,15 @@
         "secure": false
     },
     "/deleteAttachment": {
-        "target": "http://10.199.100.140:8070/coi",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/downloadAttachment": {
-        "target": "http://10.199.100.140:8070/coi",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/updateAttachmentDetails": {
-        "target": "http://10.199.100.140:8070/coi",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/entity/validateDuplicate" : {
@@ -890,6 +890,14 @@
     },
     "/entity/logAction": {
         "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/hierarchy/projectTree/*": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/hierarchy/projectDetails/*": {
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     }
 

@@ -16,12 +16,15 @@
                                 [attr.aria-label]="dataForCommentSlider?.projectDetails?.projectType">
                                 {{dataForCommentSlider?.projectDetails?.projectType}}
                             </span>
-                            <div class="col-8 label-text fs-16 mt-1 ms-1">
-                                <div class="d-flex margin-left-negative gap-1">
-                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">article</mat-icon>
-                                    <span class="text-slice" id="coi-comment-slider-project-title"
-                                        [title]="dataForCommentSlider.projectDetails.projectId + ' - ' + dataForCommentSlider.projectDetails.title">
-                                        #{{dataForCommentSlider.projectDetails.projectId+ ' - ' + dataForCommentSlider.projectDetails.title}}</span>
+                            <div class="col-8 fs-16 mt-auto">
+                                <div class="d-flex ms-1 align-items-end">
+                                    <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 coi-scale-9">{{dataForCommentSlider?.projectDetails?.projectIcon}}</mat-icon>
+                                    <a class="link-primary fs-6 text-slice fw-600 lh-1" id="coi-project-overview-comments"
+                                        (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()" tabindex="0"
+                                        [title]="'Click here to view details of #'+ dataForCommentSlider?.projectDetails?.projectNumber + ' - ' + dataForCommentSlider?.projectDetails?.title"
+                                        [attr.aria-label]="'Click here to view details of '+ dataForCommentSlider?.projectDetails?.projectNumber + ' - ' + dataForCommentSlider?.projectDetails?.title">
+                                        <span>#{{dataForCommentSlider?.projectDetails?.projectNumber + ' - ' + dataForCommentSlider?.projectDetails?.title}}</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +60,7 @@
 
                         <!-- Project Status -->
                         <div class="col-lg-4 col-md-6 mb-2">
-                            <label for="coi-comment-slider-project-status" class="d-block coi-text-dark">Project Status</label>
+                            <label for="coi-comment-slider-project-status" class="d-block coi-text-dark">{{dataForCommentSlider?.projectDetails?.projectType}} Status</label>
                             <div tabindex="-1">
                                 <span id="coi-comment-slider-project-status">
                                     <app-no-data-label [valueToShow]="dataForCommentSlider?.projectDetails?.projectStatus">

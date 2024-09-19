@@ -389,7 +389,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.completeDisclosureList = [];
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({ 'filterType': this.currentSelected.filter }).subscribe((data: any) => {
-            this.completeDisclosureList = this.getAllDisclosureHistories(data);;
+            this.completeDisclosureList = this.getAllDisclosureHistories(data);
             this.loadingComplete();
         }));
     }

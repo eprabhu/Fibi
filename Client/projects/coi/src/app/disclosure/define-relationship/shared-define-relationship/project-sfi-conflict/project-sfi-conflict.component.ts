@@ -64,7 +64,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
     private listenDataChangeFromRelationStore(): void {
         this.$subscriptions.push(
             this._defineRelationshipDataStore.$relationsChanged.subscribe((changes: DefineRelationshipDataStore) => {
-                if (changes.projectId == 'All' || changes.projectId == this.projectSfiRelation.projectId) {
+                if (changes.projectId == 'ALL' || changes.projectId == this.projectSfiRelation.projectId) {
                     this._cdr.markForCheck();
                 }
             })

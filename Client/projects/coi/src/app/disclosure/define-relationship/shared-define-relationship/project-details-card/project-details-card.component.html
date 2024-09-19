@@ -10,8 +10,7 @@
                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 coi-scale-9">{{projectSfiRelation?.projectIcon}}</mat-icon>
                     <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600 lh-1"
                         id="coi_project_realtionship_title_link_{{projectSfiRelation?.projectId}}"
-                        (click)="commonService.openProjectDetailsModal(projectSfiRelation, null)"
-                        (keyup.enter)="commonService.openProjectDetailsModal(projectSfiRelation, null)"
+                        (click)="openProjectHierarchySlider()" (keyup.enter)="openProjectHierarchySlider()"
                         [title]="'Click here to view details of #' + projectSfiRelation?.projectNumber + ' -' + projectSfiRelation?.title"
                         [attr.aria-label]="'Click here to view details of #' + projectSfiRelation?.projectNumber + ' -' + projectSfiRelation?.title">
                         <span class="text-slice">#{{projectSfiRelation?.projectNumber}} - {{projectSfiRelation?.title}}</span>
@@ -26,7 +25,7 @@
                     <span class="{{DISCLOSURE_CONFLICT_STATUS_BADGE[projectSfiRelation?.conflictStatusCode]}}"></span>
                     <span class="badgeFont" id="coi_project_relationship_conflict-status_{{projectSfiRelation?.projectId}}">{{projectSfiRelation?.conflictStatus}}</span>
                 </div>
-                <p *ngIf="!projectSfiRelation?.coiDisclEntProjDetails?.length" class="f-14 fw-500 mb-0 pe-2">No SFI(s) Attached</p>
+                <p *ngIf="!projectSfiRelation?.coiDisclEntProjDetails?.length" class="f-14 fw-500 mb-0 pe-2" [class.mt-2]="defineRelationshipService.isEditMode">No SFI(s) Attached</p>
 
                 <!-- comments -->
                 <button *ngIf="!defineRelationshipService.isEditMode" class="align-items-start btn btn-sm btn-tertiary d-inline-flex add-activity-button mt-2 mb-1"
@@ -77,8 +76,8 @@
             </div>
             <!-- Project Status -->
             <div tabindex="-1" class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-3"
-                [attr.aria-label]="'Project status is ' + (projectSfiRelation?.projectStatus ? projectSfiRelation?.projectStatus : 'empty')">
-                <label for="coi_project_relationship_status_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">Project Status</label>
+                [attr.aria-label]="projectSfiRelation?.projectType + ' status is ' + (projectSfiRelation?.projectStatus ? projectSfiRelation?.projectStatus : 'empty')">
+                <label for="coi_project_relationship_status_{{projectSfiRelation?.projectId}}" class="coi-text-dark d-block">{{projectSfiRelation?.projectType}} Status</label>
                 <div id="coi_project_relationship_status_{{projectSfiRelation?.projectId}}">
                     <app-no-data-label [valueToShow]="projectSfiRelation?.projectStatus">
                         <span class="coi-text-light text-slice" [attr.aria-label]="projectSfiRelation?.projectStatus"

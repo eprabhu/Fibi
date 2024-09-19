@@ -592,12 +592,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'view' } })
     }
 
-    openProjectDetails() {
-        if (this.selectedProjectDetails) {
-           this.commonService.openProjectDetailsModal(this.selectedProjectDetails, null)
-        }
-    }
-
     showTaskNavBar() {
         const slider = document.querySelector('.slider-base');
         slider.classList.add('slider-opened');
