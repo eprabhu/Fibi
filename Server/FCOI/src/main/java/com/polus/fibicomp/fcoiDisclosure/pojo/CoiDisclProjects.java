@@ -56,6 +56,9 @@ public class CoiDisclProjects {
     @OneToMany(mappedBy = "coiDisclProject", cascade = CascadeType.ALL, orphanRemoval = true)
     List<CoiDisclProjectEntityRel> disclProjectEntityRels;
 
+    @Column(name = "PROJECT_SNAPSHOT")
+    private String projectSnapshot;
+
     @LastModifiedBy
     @Column(name = "UPDATED_BY")
     private String updatedBy;

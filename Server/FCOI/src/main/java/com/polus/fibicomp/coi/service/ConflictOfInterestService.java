@@ -22,6 +22,7 @@ import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
@@ -65,10 +66,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used for get CoiReview based on disclosureId
-	 * @param disclosureId
+	 * @param disclosureDto
 	 * @return List of CoiReview
 	 */
-	List<CoiReview> getCoiReview(Integer disclosureId);
+	List<CoiReview> getCoiReview(CoiDisclosureDto disclosureDto);
 
 	/**
 	 * This method is used for Start review

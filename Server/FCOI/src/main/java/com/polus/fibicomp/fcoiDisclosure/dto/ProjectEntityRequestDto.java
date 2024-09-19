@@ -21,4 +21,5 @@ public class ProjectEntityRequestDto {
     private Integer personEntityId;
     private Boolean relationshipSFIMode;
     private Boolean applyAll;
+    private String dispositionStatusCode;
 }
