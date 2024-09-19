@@ -280,13 +280,14 @@ export class CommentRequest {
 }
 
 export class RO {
-    'disclosureId' = null;
-    'reviewStatusCode' = '';
-    'personId': any;
-    'filterType': string = 'ALL';
-    'currentPage': any = 1;
-    'pageNumber': any = 20;
-    'searchWord': any;
+    disclosureId = null;
+    reviewStatusCode = '';
+    personId: any;
+    filterType: string = 'ALL';
+    currentPage: any = 1;
+    pageNumber: any = 20;
+    searchWord: any;
+    dispositionStatusCode: string = null;
 }
 
 export interface getApplicableQuestionnaireData {
@@ -605,6 +606,7 @@ export class ProjectSfiRelationLoadRO {
     personId: string | null = null;
     disclosureId: number | null = null;
     disclosureNumber: number | null = null;
+    dispositionStatusCode: string = '';
 }
 
 export class ProjectSfiRelationConflictRO {

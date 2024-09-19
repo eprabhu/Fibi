@@ -52,7 +52,7 @@
                                     <img class="proposal-icon me-1" src="{{deployMap}}assets/images/qstnr.png" alt="icon">
                                     <span class="fs-6">{{coiSubSectionsTitle}}</span>
                                 </span>
-                                <button *ngIf="(commentList.length) && !showAddComment"
+                                <button *ngIf="(commentList.length) && !showAddComment && !isViewMode"
                                     class="btn btn-sm btn-tertiary d-inline-flex align-self-end text-nowrap flex-shrink-0" id="coi-add-comment-btn"
                                     (click)="showAddComment = !showAddComment" title="Click here to add new comments"
                                     aria-label="Click here to add new comments">
@@ -70,7 +70,7 @@
                                         {{coiSubSectionsTitle}}
                                     </a>
                                 </span>
-                                <button *ngIf="(commentList.length) && !showAddComment"
+                                <button *ngIf="(commentList.length) && !showAddComment && !isViewMode"
                                     class="btn btn-sm btn-tertiary d-inline-flex align-self-end text-nowrap flex-shrink-0" id="coi-add-comment-btn"
                                     (click)="showAddComment = !showAddComment" title="Click here to add new comments"
                                     aria-label="Click here to add new comments">
@@ -92,7 +92,7 @@
                                                         #{{selectedProjectDetails?.projectNumber}}- {{selectedProjectDetails?.title}}
                                                     </a>
                             </span>
-                            <button *ngIf="(commentList.length) && !showAddComment"
+                            <button *ngIf="(commentList.length) && !showAddComment && !isViewMode"
                                     class="btn btn-sm btn-tertiary d-inline-flex align-self-end text-nowrap flex-shrink-0" id="coi-add-comment-btn"
                                     (click)="showAddComment = !showAddComment" title="Click here to add new comments"
                                     aria-label="Click here to add new comments">
@@ -106,7 +106,7 @@
                                         <span class="d-flex">
                                             <span class="fs-6">{{coiSubSectionsTitle}}</span>
                                         </span>
-                                        <button *ngIf="(commentList.length) && !showAddComment"
+                                        <button *ngIf="(commentList.length) && !showAddComment && !isViewMode"
                                             class="btn btn-sm btn-tertiary d-inline-flex align-self-end text-nowrap flex-shrink-0" id="coi-add-comment-btn"
                                             (click)="showAddComment = !showAddComment" title="Click here to add new comments"
                                             aria-label="Click here to add new comments">
@@ -355,7 +355,7 @@
         </ng-container>
         <ng-container content>
             <div class="text-end mt-3" *ngIf="!isReviewComment('4') && !isReviewComment('5') && !isReviewComment('6') && !isReviewComment('8') && !isReviewComment('10') && !isReviewComment('11')">
-                <button *ngIf="(commentList.length) && !showAddComment" class="btn btn-sm btn-tertiary d-inline-flex position-relative"
+                <button *ngIf="(commentList.length) && !showAddComment && !isViewMode" class="btn btn-sm btn-tertiary d-inline-flex position-relative"
                     id="coi-add-comment-btn" (click)="showAddComment = !showAddComment" title="Click here to add new comments" aria-label="Click here to add new comments">
                     <mat-icon aria-hidden="true" class="hyper-link me-1">add</mat-icon>Add Comment</button>
             </div>
@@ -363,7 +363,7 @@
             <mat-icon>add</mat-icon>
            Add Comment
         </button> -->
-        <div class="card pt-2 px-2 shadow-medium pb-3 mt-3" *ngIf="(commentList.length === 0) || showAddComment">
+        <div class="card pt-2 px-2 shadow-medium pb-3 mt-3" *ngIf="(!commentList.length || showAddComment) && !isViewMode">
             <div class="p-3 br-12 pb-0">
                 <div [ngClass]="mandatoryMap.has('comment') ? 'invalid-FieldBorder' : ''">
                     <ckeditor [(ngModel)]="reviewCommentDetails.comment" [editor]="Editor" [config]="editorConfig"
@@ -386,6 +386,7 @@
                 </div>
             </div>
         </div>
+
         <app-review-comment-list-view [commentReviewerList]="commentList"
             [reviewTypeList]="reviewTypeList?.coiSectionsTypeList"
             [selectedReviewType]="selectedReviewType.coiSectionsTypeCode"
@@ -393,7 +394,7 @@
             (editReviewParentComment)="editReviewerParentComment($event)"
             (emitReplayCommentDetails)="addReplayComment($event)" [disclosureDetails]="disclosureDetails"
             (deleteChidReviewComment)="removeChidReviewComment($event)"
-            [disclosureType]="disclosureType"
+            [disclosureType]="disclosureType" [isViewMode]="isViewMode"
             [reviewCommentDetails]="reviewCommentDetails"
             [isHeaderNeeded]="['3', '9'].includes(reviewCommentDetails.componentTypeCode)"></app-review-comment-list-view>
         </ng-container>

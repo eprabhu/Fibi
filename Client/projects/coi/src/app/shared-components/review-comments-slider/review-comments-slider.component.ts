@@ -30,6 +30,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     @Input() projectDetails: any = null;
     @Input() selectedProject: any;
     @Input() reviewList: any = null;
+    @Input() isViewMode = false;
     isSaving = false;
     $subscriptions: Subscription[] = [];
     isReadMore = false;

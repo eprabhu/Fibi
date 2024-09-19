@@ -1,6 +1,7 @@
 
 <app-sfi [isTriggeredFromSlider]="false" 
 [reviewStatus]="coiData.coiDisclosure.reviewStatusCode" 
-[isEditMode]="dataStore.getEditModeForCOI()" 
+[isEditMode]="dataStore.getEditModeForCOI()"
+[dispositionStatusCode]="coiData.coiDisclosure.dispositionStatusCode"
 [personId]="coiData.coiDisclosure.personId"
 [focusSFIId]="_coiService.focusSFIId"></app-sfi>

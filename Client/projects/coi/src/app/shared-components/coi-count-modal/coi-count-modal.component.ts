@@ -58,6 +58,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
             filterType: '',
             searchWord: '',
             reviewStatusCode: '',
+            dispositionStatusCode: null,
             personId: this.coiCountModal.personId,
             disclosureId: this.coiCountModal.disclosureId
         };

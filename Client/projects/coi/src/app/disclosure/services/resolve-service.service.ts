@@ -39,9 +39,9 @@ export class ResolveServiceService {
                 }
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
-                    this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
+                    this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure, route);
                     if (['3', '4', '7', '8'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
-                        this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
+                        this.getCoiReview(res[0].coiDisclosure, observer);
                     } else {
                         observer.next(true);
                         observer.complete();
@@ -55,18 +55,22 @@ export class ResolveServiceService {
 
     }
 
-    // 1 - pending, 5 - withdrawn, 6 - reutrned
-    rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
+    // 2 - void => dispositionStatusCode
+    // 1 - pending, 5 - withdrawn, 6 - returned => reviewStatusCode
+    rerouteIfWrongPath(currentPath: string, coiDisclosure: any, route) {
+        const { reviewStatusCode, personId, dispositionStatusCode } = coiDisclosure;
+        const IS_DISCLOSURE_VOID = dispositionStatusCode === '2';
+        const IS_CREATE_URL = currentPath.includes('create-disclosure');
+        const IS_READY_FOR_REVIEW = !['1', '5', '6'].includes(reviewStatusCode);
+        const IS_CREATE_PERSON = personId === this._commonService.currentUserDetails.personID;
         let reRoutePath;
-        if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personID ) {
+        if (!IS_CREATE_URL && !IS_READY_FOR_REVIEW && IS_CREATE_PERSON && !IS_DISCLOSURE_VOID) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
-        } else if (!['1','5','6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
-            reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
-        } else if ((['5', '1', '6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure') && this._commonService.currentUserDetails.personID != personId)) {
+        } else if (IS_CREATE_URL && (IS_READY_FOR_REVIEW || IS_DISCLOSURE_VOID || (!IS_READY_FOR_REVIEW && !IS_CREATE_PERSON))) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {
-            this._router.navigate([reRoutePath], {queryParams: {disclosureId: route.queryParamMap.get('disclosureId')}});
+            this._router.navigate([reRoutePath], { queryParams: { disclosureId: route.queryParamMap.get('disclosureId') } });
         }
     }
 
@@ -109,9 +113,9 @@ export class ResolveServiceService {
         }
     }
 
-    getCoiReview(disclosureId, observer) {
+    getCoiReview(coiDisclosure: any, observer: any) {
         this.$subscriptions.push(
-            this._coiService.getCoiReview(disclosureId).subscribe((res: any) => {
+            this._coiService.getCoiReview(coiDisclosure.disclosureId, coiDisclosure.dispositionStatusCode).subscribe((res: any) => {
                 this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: res });
                 this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(res);
                 const reviewerDetail = this.getLoggedInReviewerInfo(res);

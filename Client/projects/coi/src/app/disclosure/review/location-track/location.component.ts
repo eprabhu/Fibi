@@ -59,7 +59,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     constructor(
         private _elasticConfigService: ElasticConfigService,
         public reviewService: ReviewService,
-        private _dataStore: DataStoreService,
+        public dataStore: DataStoreService,
         public _commonService: CommonService,
         public coiService: CoiService
     ) { }
@@ -116,7 +116,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
+            this.dataStore.dataEvent.subscribe((dependencies: string[]) => {
                 if (dependencies.some((dep) => this.dependencies.includes(dep))) {
                     this.isExpanded = true;
                     this.getDataFromStore();
@@ -126,7 +126,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore() {
-        const DATA = this._dataStore.getData(this.dependencies);
+        const DATA = this.dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
         this.disclosurePerson = DATA.person;
         this.projectDetail = DATA.projectDetail;
@@ -137,7 +137,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
 
     getCoiReview() {
-      const DATA = this._dataStore.getData(['coiReviewerList']);
+      const DATA = this.dataStore.getData(['coiReviewerList']);
       this.reviewerList = DATA.coiReviewerList || [];
     }
 
@@ -208,7 +208,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     updateReviewDetails() {
-        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
+        this.dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
         this.startOrCompleteReview();
     }
 
@@ -242,7 +242,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.reviewerList.splice(this.modifyIndex, 1);
             this.coiDisclosure.coiReviewStatusType = response.coiReviewStatusType;
             this.updateTimeAndUser(response);
-            this._dataStore.updateStore(['coiReviewerList' , 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
+            this.dataStore.updateStore(['coiReviewerList' , 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
              this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
              this.startOrCompleteReview();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
@@ -259,7 +259,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     modifyReviewComment(reviewDetails) {
-        let coiData = this._dataStore.getData();
+        let coiData = this.dataStore.getData();
         const disclosureDetails:coiReviewComment = {
             documentOwnerPersonId: coiData.coiDisclosure.person.personId,
             componentTypeCode: '8',

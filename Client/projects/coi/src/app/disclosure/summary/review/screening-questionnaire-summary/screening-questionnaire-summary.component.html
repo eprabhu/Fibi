@@ -1,5 +1,5 @@
 <div id="COI801" class="position-relative">
-    <div *ngIf="!coiService.isExpandSummaryBySection['COI801'] || !activeQuestionnaire" class="main-title d-flex flex-end justify-content-between px-1 pb-2">
+    <div *ngIf="!coiService.isExpandSummaryBySection['COI801'] || !activeQuestionnaire" class="border-bottom pt-3 pb-2 ps-2 pe-1">
         <h3 class="fs-16">
             <span class="d-flex align-items-center">
                 <strong tabindex="-1" aria-label="Disclosure Screening Form">Disclosure Screening Form</strong>
@@ -9,7 +9,7 @@
                 </span>
             </span>
         </h3>
-        <button class="d-flex justify-content-center align-items-center toggle-btn border btn p-0 rounded-5 shadow-sm"
+        <button class="d-flex justify-content-center align-items-center toggle-btn border btn p-0 rounded-5 shadow-sm mt-2"
             [attr.aria-label]="'Click here to ' + (coiService.isExpandSummaryBySection['COI801'] ? 'collapse' : 'expand') + ' disclosure screening form.'"
             (click)="coiService.isExpandSummaryBySection['COI801'] = !coiService.isExpandSummaryBySection['COI801']"
             [title]="'Click here to ' + (coiService.isExpandSummaryBySection['COI801'] ? 'collapse' : 'expand') + ' disclosure screening form.'">

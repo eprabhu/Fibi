@@ -16,6 +16,7 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 })
 export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChanges {
 
+	@Input() isViewMode = false;
 	@Input() commentReviewerList: any = [];
 	@Input() reviewTypeList: any = [];
 	@Input() disclosureDetails: any;
@@ -23,6 +24,7 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 	@Input() disclosureType:any;
 	@Input() reviewCommentDetails:any;
 	@Input() isHeaderNeeded:any = false;
+
 	@Output() deleteReviewComment: EventEmitter<any> = new EventEmitter<any>();
 	@Output() editReviewParentComment: EventEmitter<any> = new EventEmitter<any>();
 	@Output() emitReplayCommentDetails: EventEmitter<any> = new EventEmitter<any>();
