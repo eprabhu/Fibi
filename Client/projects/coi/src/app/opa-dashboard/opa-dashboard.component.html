@@ -40,6 +40,7 @@
                             New Submissions
                         </li>
                         <li class="separator" *ngIf="isShowAdminDashboard"></li>
+                        <ng-container *ngIf="isShowAdminDashboard || isOPAReviewer">
                         <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabIndex="0" id="coi-opa-dashboard-my-reviews"
                             (keyup.space)="changeTab('MY_REVIEWS')"
                             [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
@@ -59,6 +60,7 @@
                             [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'All Reviews'">
                             All Reviews
                         </li>
+                    </ng-container>
                     </ul>
                     <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
                         <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0 adv-search" id="advanced-search" tabindex="0"

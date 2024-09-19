@@ -700,6 +700,10 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
+    "/entity/getEntityDashboardData": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
     "/entity/*" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -849,11 +853,11 @@
         "secure": false
     },
     "/fibi-coi-connect/cleansematch/entity/runCleanseMatch" : {
-        "target": "http://10.199.100.23:9090/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/fibi-coi-connect/enrich/entity/runEnrich" : {
-        "target": "http://10.199.100.23:9090/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/entity/verify/*" : {
@@ -888,4 +892,5 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     }
+
 }

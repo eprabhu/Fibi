@@ -80,7 +80,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		Entity entity = mapDTOToEntity(dto);
 		Integer entityId = entityDetailsDAO.createEntity(entity);
 		try {
-			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityNumber(entityId)
+			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId)
 					.entityName(entity.getEntityName()).updatedBy(entity.getUpdatedBy()).build();
 			actionLogService.saveEntityActionLog(CREATE_ACTION_LOG_CODE, logDTO, null);
 		} catch (Exception e) {

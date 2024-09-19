@@ -10,7 +10,6 @@ export class EntityDashboardService {
   constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
   sort: any;
-  coiRequestObject = new EntityDashboardRequest();
   entityDashDefaultValues = new EntityDashDefaultValues();
   isShowEntityNavBar = false;
   searchDefaultValues: NameObject = new NameObject();
@@ -19,31 +18,31 @@ export class EntityDashboardService {
   isAdvanceSearch: any;
   statusCodes: any = [
     {code: 'Y', description: 'Active'},
-    {code: 'N', description: 'Inactive'}
+    {code: 'N', description: 'Inactive'},
+    {code: 'D', description: 'Duplicate'},
   ];
   concurrentUpdateAction = '';
+  entitySearchRequestObject = new EntityDashboardSearchRequest();
+  sortCountObj: any = {};
 
   getAllSystemEntityList(params) {
-    return this._http.post(this._commonService.baseUrl + '/getAllSystemEntityList', params);
+    return this._http.post(this._commonService.baseUrl + '/entity/getEntityDashboardData', params);
   }
 }
 
-export class EntityDashboardRequest {
-    property1 = '';
-    isDownload = false;
-    property2 = '';
-    property20 = [];
-    property21 = [];
-    property22 = [];
-    property24 = [];
-    property18 = false;
-    property19 = false;
-    sort: any = {'updateTimeStamp': 'desc'};
-    tabName = '';
-    advancedSearch = 'L';
-    currentPage = 1;
-    pageNumber = 20;
-  }
+export class EntityDashboardSearchRequest{
+  [key: string]: any;
+  entityDashboardData: any = {
+      SORT_TYPE : {UPDATE_TIMESTAMP: 'DESC'},
+      LIMIT: 20,
+      PAGED: 0,
+      TYPE: 'A',
+      TAB_TYPE: 'ALL_ENTITY',
+      UNLIMITED: false
+  };
+  currentPage = 1;
+}
+
   export class RelationshipDashboardRequest {
     property1 = null;
     property2 = null;

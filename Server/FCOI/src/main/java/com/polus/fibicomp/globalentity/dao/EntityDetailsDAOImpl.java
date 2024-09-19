@@ -284,4 +284,33 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 		return session.createQuery(cq).getResultList();
 	}
 
+	@Override
+	public void updateDocWithOriginalEntity(Integer duplicateEntityId, Integer originalEntityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call UPD_DOCS_WITH_ORG_ENTITY(?,?)}");
+				statement.setInt(1, duplicateEntityId);
+				statement.setInt(2, originalEntityId);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String functionCall = "{call UPD_DOC_WITH_ORG_ENTITY(?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setInt(1, duplicateEntityId);
+				statement.setInt(2, originalEntityId);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+		} catch (Exception e) {
+			logger.error("Exception on updateDocWithOriginalEntity {}", e.getMessage());
+			throw new ApplicationException("Exception on updateDocWithOriginalEntity", e, Constants.DB_PROC_ERROR);
+		}
+	}
+
 }

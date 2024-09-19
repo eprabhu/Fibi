@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from './entity-subaward.service';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-entity-subaward',
@@ -36,6 +37,10 @@ export class EntitySubawardComponent implements OnInit {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.setSectionIdAndName();
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
     }
 
     private setSectionIdAndName(): void {

@@ -24,4 +24,6 @@ public interface EntityDetailsDAO {
 
 	public List<Entity> validateDuplicateByParams(ValidateDuplicateRequestDTO dto);
 
+	public void updateDocWithOriginalEntity(Integer duplicateEntityId, Integer originalEntityId);
+
 }
