@@ -68,7 +68,7 @@ export class EntityManagementService {
 export function getEntityFullAddress(entityDetails, valuesToAdd = ['primaryAddressLine1', 'primaryAddressLine2', 'city', 'state' ]): string {
     let address = '';
     Object.keys(entityDetails).forEach((ele: string) => {
-        if(valuesToAdd.includes(ele)) {
+        if(valuesToAdd.includes(ele) && entityDetails[ele]) {
             address = address + (address ? ' , ' : '') + entityDetails[ele];
         }
     })
