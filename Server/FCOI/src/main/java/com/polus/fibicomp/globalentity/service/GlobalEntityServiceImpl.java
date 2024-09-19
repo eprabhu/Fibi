@@ -117,7 +117,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 		processEntityMessageToQ(null, entityId, null, null);
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(entityId);
-			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityNumber(entityId)
+			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId)
 					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).build();
 			actionLogService.saveEntityActionLog(VERIFY_ACTION_LOG_CODE, logDTO, null);
 		} catch (Exception e) {
@@ -173,9 +173,10 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	public ResponseMessageDTO markDuplicate(MarkDuplicateRequestDTO dto) {
 		entityDetailsDAO.updateEntity(EntityRequestDTO.builder().documentStatusTypeCode(DOCUMENT_STATUS_FLAG_DUPLICATE)
 				.entityId(dto.getDuplicateEntityId()).originalEntityId(dto.getOriginalEntityId()).build());
+		entityDetailsDAO.updateDocWithOriginalEntity(dto.getDuplicateEntityId(), dto.getOriginalEntityId());
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(dto.getDuplicateEntityId());
-			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityDetails.getEntityId()).entityNumber(entityDetails.getEntityId())
+			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityDetails.getEntityId())
 					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).build();
 			actionLogService.saveEntityActionLog(DUPLICATE_ACTION_LOG_CODE, logDTO, dto.getDescription());
 		} catch (Exception e) {
