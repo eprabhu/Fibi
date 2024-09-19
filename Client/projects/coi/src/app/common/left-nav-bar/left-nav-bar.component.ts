@@ -16,6 +16,8 @@ export class LeftNavBarComponent implements OnInit {
     isOPAAdministrator = false;
     canViewAdminDashboard = false;
     canOpenEntity = false;
+    canViewFCOIDashboard = false;
+    canViewOPADashboard = false;
     @ViewChild('sideBarMenu', {static: true}) sideBarMenu: ElementRef;
 
     constructor(private _commonService: CommonService, public _router: Router) {
@@ -47,11 +49,17 @@ export class LeftNavBarComponent implements OnInit {
     }
 
     checkUserHasRight(): void {
-        this.canOpenEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE','VERIFY_ENTITY'], 'SOME');
+        this.canOpenEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE', 'VERIFY_ENTITY'], 'SOME');
         this.canViewAdminDashboard = this._commonService.getAvailableRight(['APPLICATION_ADMINISTRATOR',
-                'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
-                'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
+            'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
+            'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
             'SOME');
+        this.canViewFCOIDashboard = this._commonService.getAvailableRight([
+            'MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE', 'VIEW_PROJECT_DISCLOSURE',
+            'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE', 'MANAGE_CONSULTING_DISCLOSURE',
+            'VIEW_CONSULTING_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE_OVERVIEW'],
+            'SOME') || this._commonService.isCoiReviewer;
+        this.canViewOPADashboard = this._commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE'], 'SOME') || this._commonService.isOPAReviewer;
     }
 
     scrollToTop(): void {
