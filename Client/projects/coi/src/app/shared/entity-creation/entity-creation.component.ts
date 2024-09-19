@@ -6,13 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { EntityCreationService } from './entity-creation.service';
 import { getEndPointOptionsForCountry } from './../../../../../fibi/src/app/common/services/end-point.config';
-import { hideModal, isEmptyObject, openModal } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {
     Country,
     Create_Entity,
     DuplicateCheckObj,
     EntityOwnerShip,
-    removeToast,
     showEntityToast
 } from '../../entity-management-module/shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
@@ -103,6 +102,7 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
 
     saveEntity() {
         delete this.createEntityObj['entityOwnerShip'];
+        delete this.createEntityObj['country'];
         this.$subscriptions.push(this._entityCreateService.createEntity(this.createEntityObj).subscribe((data: any) => {
             this.isFormDataChanged = false;
             this.setCommonChangesFlag(false);

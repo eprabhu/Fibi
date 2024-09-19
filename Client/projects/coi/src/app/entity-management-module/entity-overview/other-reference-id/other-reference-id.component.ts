@@ -117,6 +117,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
                 newReference.entityExternalMappingId = res.entityExternalMappingId;
                 newReference.entityExternalIdType = this.selectedReference;
                 this.externalReferences.push(newReference);
+                this._dataStoreService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearOtherReferenceID();
                 this.isSaving = false;
@@ -162,6 +163,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
                 .deleteExternalReference(this.selectedReference.entityExternalMappingId)
                 .subscribe((res: any) => {
                     this.externalReferences.splice(this.isEditIndex, 1);
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                     this.clearOtherReferenceID();
                     this.isSaving = false;
@@ -177,6 +179,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
             this.isSaving = true;
             this.otherReferenceIdObj.entityId = this.entityId;
             this.$subscriptions.push(this._entityOverviewService.updateExternalReference(this.otherReferenceIdObj).subscribe((res: any) => {
+                this._dataStoreService.enableModificationHistoryTracking();
                 this.updateExternalReferences();
                 this.updateDataStore();
                 this.clearOtherReferenceID();

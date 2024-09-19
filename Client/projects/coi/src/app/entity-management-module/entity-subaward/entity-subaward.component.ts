@@ -6,8 +6,8 @@ import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/uti
 import { Subscription } from 'rxjs';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from './entity-subaward.service';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+import { COMMON_ERROR_TOAST_MSG, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-entity-subaward',
@@ -88,7 +88,20 @@ export class EntitySubawardComponent implements OnInit {
         this.entitySubAwarRisksList = deepCloneObject(entitySubAwarRisksList);
         this._entitySubAwardService.entitySubAwardOrganization.entityRisks = this.entitySubAwarRisksList;
         this.updateHeaderStatus();
+        this.updateFeedStatus();
     }
+
+    updateFeedStatus() {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED) {
+            const REQ_OBJ = {feedStatusCode : '2', entityId : this.entityDetails?.entityId };
+            this.$subscriptions.push(this._entitySubAwardService.updateOrganizationDetails(REQ_OBJ).subscribe((data: string) => {
+                this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');
+            },
+                err => { this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG); }
+            ));
+        }
+    }
+
     updateHeaderStatus() {
         if(isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
              this.entityTabStatus.entity_sub_org_info = true;

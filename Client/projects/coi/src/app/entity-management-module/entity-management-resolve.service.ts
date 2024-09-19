@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { forkJoin, Observable, Subscriber } from 'rxjs';
 import { EntityDataStoreService } from './entity-data-store.service';
 import { CommonService } from '../common/services/common.service';
@@ -7,6 +7,7 @@ import { InformationAndHelpTextService } from '../common/services/informationAnd
 import { EntityManagementService } from './entity-management.service';
 import { catchError } from 'rxjs/operators';
 import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS } from '../app-constants';
 
 @Injectable()
 export class EntityManagementResolveService {
@@ -115,3 +116,51 @@ export class EntityConfigurationResolveGuardService {
 
 }
 
+@Injectable()
+export class EntityHistroyLogService {
+
+    constructor(private _entityManageService: EntityManagementService, private _dataStore: EntityDataStoreService, private _commonService: CommonService) { }
+    canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> {
+        return new Observable<boolean>((observer: Subscriber<boolean>) => {
+            const TAB_NAME = this.getTabName(currentRoute?.routeConfig?.path);
+            if (this._dataStore.canLogModificationHistory && TAB_NAME) {
+                this._entityManageService.logFeedHistory({
+                    entityId: currentRoute.queryParamMap.get('entityManageId'),
+                    actionLogCode: 8,
+                    tabName: TAB_NAME
+                }).subscribe((res: string) => {
+                    this._dataStore.canLogModificationHistory = false;
+                    observer.next(true);
+                    observer.complete();
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG)//error msg meaningful.
+                    observer.next(false);
+                    observer.complete();
+                });
+            } else {
+                observer.next(true);
+                observer.complete();
+            }
+        });
+    }
+
+    getTabName(path): string {
+        switch (true) {
+            case path.includes('entity-overview'):
+                return 'Overview';
+            case path.includes('entity-sponsor'):
+               return 'Sponsor';
+            case path.includes('entity-subaward'):
+               return 'Subward-Organisation';
+            case path.includes('entity-compliance'):
+               return 'Compliance';
+            case path.includes('entity-notes'):
+               return 'Notes';
+            case path.includes('entity-attachments'):
+               return 'Attachments';
+            default:
+                return '';
+        }
+    }
+
+}

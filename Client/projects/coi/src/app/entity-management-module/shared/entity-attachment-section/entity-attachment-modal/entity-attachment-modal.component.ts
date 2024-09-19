@@ -158,6 +158,7 @@ export class EntityAttachmentModalComponent implements OnInit {
                 newAttachments: this.newAttachments,
                 entityId: this.entityDetails?.entityId
             }, this.uploadedFiles).subscribe((data: any) => {
+                this._dataStoreService.enableModificationHistoryTracking();
                 this.clearAttachments(data)
                 this.showSuccessToast();
             }, err => {
@@ -175,6 +176,7 @@ export class EntityAttachmentModalComponent implements OnInit {
             this.$subscriptions.push(
                 this._attachmentSectionService.saveAttachment(this.getReplaceAttachmentRO(), this.uploadedFiles)
                     .subscribe((data: any) => {
+                        this._dataStoreService.enableModificationHistoryTracking();
                         this.clearAttachments(data)
                         this.showSuccessToast();
                     }, err => {
@@ -188,6 +190,7 @@ export class EntityAttachmentModalComponent implements OnInit {
         this.$subscriptions.push(
             this._attachmentSectionService.updateAttachment(this.currentAttachment.entityAttachmentId, this.currentAttachment.comment)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.clearAttachments(this.currentAttachment);
                     this.showSuccessToast();
                 }, err => {

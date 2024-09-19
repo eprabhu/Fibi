@@ -9,6 +9,7 @@ import { EntitySponsorService } from '../entity-sponsor.service';
 import { CommonService } from '../../../common/services/common.service';
 import { debounce } from 'rxjs/operators';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { ENTITY_VERIFICATION_STATUS } from '../../../app-constants';
 
 @Component({
     selector: 'app-entity-sponsor-details',
@@ -122,13 +123,14 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         if(Object.keys(this.autoSaveRO).length) {
             this.commonService.setLoaderRestriction();
             this.autoSaveRO.entityId = this.entityDetails.entityId;
+            this.addFeedStatusInRO();
             this.$subscriptions.push(this.entitySponsorService.SponsorDetailsAutoSave(this.autoSaveRO).subscribe((data) => {
                 this.dataChangeCounter--;
+                this._dataStoreService.enableModificationHistoryTracking();
                 showEntityToast('SUCCESS');
-                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;
-                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType = this.sponsorDetailsObj.sponsorType;
                 this.sponsorDetailsObj = this.autoSaveRO;
                 this.updateSponsorCompleteFlag();
+                this.updateEntireFeed();
                 this.autoSaveRO = {};
                 this.isRestrictSave = false;
                 this.commonService.setChangesAvailable(false);
@@ -139,13 +141,26 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
             this.commonService.removeLoaderRestriction();
         }
     }
+    private updateEntireFeed(): void {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+           this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'SPONSOR');
+        }
+    }
+
+    private addFeedStatusInRO(): void {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+            this.autoSaveRO.feedStatusCode = '2';
+        }
+    }
 
     addOtherDetailsAPI() {
         if(Object.keys(this.autoSaveRO).length) {
             this.setDetailsForUpdate();
             this.commonService.setLoaderRestriction();
+            this.addFeedStatusInRO();
             this.$subscriptions.push(this.entitySponsorService.updateSponsorDetails(this.autoSaveRO).subscribe((data) => {
                 this.dataChangeCounter--;
+                this._dataStoreService.enableModificationHistoryTracking();
                 showEntityToast('SUCCESS');
                 if (this.autoSaveRO.acronym) {
                     this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;
@@ -154,6 +169,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                     this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType = this.sponsorDetailsObj.sponsorType;
                 }
                 this.updateSponsorCompleteFlag();
+                this.updateEntireFeed();
                 this.autoSaveRO = {};
                 this.commonService.setChangesAvailable(false);
             }, err => {

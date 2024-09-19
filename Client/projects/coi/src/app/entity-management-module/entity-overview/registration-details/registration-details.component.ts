@@ -98,6 +98,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                     registration.registrationTypeDescription = this.selectedType[0]?.description;
                     registration.regNumber = this.registrationDetails.regNumber;
                     this.entityRegistrations.unshift(registration);
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                 }
                 this.clearRegistrationDetails();
@@ -161,6 +162,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                         this.entityRegistrations[this.isEditIndex].registrationType = null;
                         this.updateDataStore();
                     }
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.clearRegistrationDetails();
                     this.isSaving = false;
                 }, err => {
@@ -193,6 +195,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this._entityOverviewService.deleteRegistrationDetails(entityRegistrationId).subscribe((data: any) => {
                 if (data) {
                     this.entityRegistrations.splice(this.isEditIndex, 1);
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                     this.clearRegistrationDetails();
                     this.isSaving = false;

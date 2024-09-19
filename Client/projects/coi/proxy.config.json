@@ -1,4 +1,4 @@
-{ 
+{
     "/entity/fetchHistory/*" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -104,7 +104,7 @@
         "secure": false
     },
     "/fcoiDisclosure/reviseDisclosure": {
-        "target": "http://10.199.100.34:9090/coi",
+        "target": "http://10.199.100.23:9090/coi",
         "secure": false
     },
     "/fcoiDisclosure/risk": {
@@ -848,26 +848,18 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
-    "/entity/validateDuplicate" : {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
     "/fibi-coi-connect/cleansematch/entity/runCleanseMatch" : {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.33:8000/",
         "secure": false
     },
     "/fibi-coi-connect/enrich/entity/runEnrich" : {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.33:8000/",
         "secure": false
     },
     "/entity/verify/*" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
-    "/projectPersonNotify": {
-        "target": "http://10.199.100.140:8070/coi",
-        "secure": false
-    }, 
     "/project/*" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -890,6 +882,14 @@
     },
     "/entity/validateDuplicate" : {
         "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/markDuplicate": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/entity/logAction": {
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     }
 

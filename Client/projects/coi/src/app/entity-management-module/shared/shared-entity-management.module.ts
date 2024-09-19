@@ -7,12 +7,16 @@ import { EntityRiskSectionComponent } from './entity-risk-section/entity-risk-se
 import { FormsModule } from '@angular/forms';
 import { EntityAttachmentSectionModule } from './entity-attachment-section/entity-attachment-section.module';
 import { DuplicateEntityCheckComponent } from './duplicate-entity-check/duplicate-entity-check.component';
+import { DuplicateMarkingConfirmationComponent } from './duplicate-marking-confirmation/duplicate-marking-confirmation.component';
+import { EntityDetailsPopupCardComponent } from './entity-details-popup-card/entity-details-popup-card.component';
 
 @NgModule({
     declarations: [
         EntityCommonCardComponent,
         EntityRiskSectionComponent,
         DuplicateEntityCheckComponent,
+        DuplicateMarkingConfirmationComponent,
+        EntityDetailsPopupCardComponent,
     ],
     imports: [
         FormsModule,
@@ -26,6 +30,8 @@ import { DuplicateEntityCheckComponent } from './duplicate-entity-check/duplicat
         EntityRiskSectionComponent,
         EntityAttachmentSectionModule,
         DuplicateEntityCheckComponent,
+        EntityDetailsPopupCardComponent,
+        DuplicateMarkingConfirmationComponent
     ]
 })
 export class SharedEntityManagementModule { }

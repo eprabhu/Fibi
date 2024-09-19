@@ -83,6 +83,7 @@ export class CommonService {
     isNavigationStopped: boolean = false;
     attemptedPath: string = '';
     CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
+    isEntityModified = false;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }

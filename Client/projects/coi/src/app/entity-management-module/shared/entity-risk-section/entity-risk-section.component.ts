@@ -39,7 +39,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     entityRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#false#false';
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false'
     ENTITY_RISK_ADD_UPDATE_MODAL_ID: string = 'entity-risk-add-update-modal';
-    entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID, 'Add Risk', 'Cancel', 'lg');    
+    entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID, 'Add Risk', 'Cancel', 'lg');
 
     constructor(private _dataStoreService: EntityDataStoreService,
         private _commonService: CommonService, private _entityRiskSectionService: EntityRiskSectionService) { }
@@ -123,6 +123,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         this.entityRiskModalDetails.entityRisk.entityId = this.entityDetails.entityId;
         this.$subscriptions.push(this._entityRiskSectionService.saveEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk added successfully.');
+            this._dataStoreService.enableModificationHistoryTracking();
             this.addNewRiskDetails(data.entityRiskId);
             this.clearRiskDetails();
         }))
@@ -143,6 +144,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     private updateEntityRisk(): void {
         this.$subscriptions.push(this._entityRiskSectionService.updateEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk updated successfully.');
+            this._dataStoreService.enableModificationHistoryTracking();
             this.updateExistingRiskDetails()
             this.clearRiskDetails();
         }))
@@ -182,7 +184,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         if (!description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
         }
-        
+
         return this.mandatoryList.size === 0;
     }
 

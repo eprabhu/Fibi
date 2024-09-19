@@ -1,7 +1,6 @@
 export type EntityRiskProxyController = '/organization' | '/sponsor' | '/compliance' | '';
 export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
 export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found';
-export const ENTITY_DUPLICATE_MARKING_MODAL_ID = 'entity_duplicate_marking';
 
 export class Create_Entity {
     entityName: string = '';
@@ -26,6 +25,7 @@ export class Create_Entity {
     entityOwnershipTypeCode: any;
     businessTypeCode: any;
     entityOwnerShip: EntityOwnerShip = new EntityOwnerShip();
+    entityStatusTypeCode: string;
 }
 
 export class EntityOwnerShip {
@@ -152,6 +152,7 @@ export class EntireEntityDetails {
     entityTabStatus? = new EntityTabStatus();
     entityIndustryClassifications?: any[] = [];
     entityExternalIdMappings?: EntityExternalIdMappings[] = [];
+    originalName: string;
 }
 
 export class EntityRegistration {
@@ -262,9 +263,19 @@ export class EntityDetails {
     entityStatusType?: EntityStatusType;
     entityOperatingStatusType?: any;
     entitySourceType?: any;
+    originalEntityId: any;
     country?: Country;
     entityOwnershipType?: EntityOwnershipType;
     entityBusinessType?: EntityBusinessType;
+    entityDocumentStatusType?: EntityDocumentStatusType;
+}
+
+export interface EntityDocumentStatusType {
+    documentStatusTypeCode?: string
+    description?: string
+    updateTimestamp?: number
+    updatedBy?: string
+    isActive?: boolean
 }
 
 export interface EntityOwnershipType {
@@ -469,6 +480,7 @@ export class EntityCardDetails {
     website?: string;
     email?: string;
     phone?: any;
+    phoneNumber?: any;
     sponsorCode?: any;
     organizationId?: any;
     matchQualityInformation?: any;
@@ -476,6 +488,7 @@ export class EntityCardDetails {
     entityId?: any;
     primaryAddressLine1?: string;
     primaryAddressLine2?: string;
+    duplicateEntityDetails?: EntityCardDetails;
 }
 
 export class DuplicateCheckObj{
@@ -494,7 +507,8 @@ export class EntityDupCheckConfig{
 
 export class DupMarkingModalConfig {
     modalHeader: string =  'Confirmation';
-    modalPrimaryButton: string = 'Mark as duplicate';
+    modalPrimaryButton: string = 'Mark this as duplicate';
+    modalHelpText: string = 'The currently opened entity should be marked as a duplicate of the following entity.';
 }
 
 export class EntityDetailsInPopup {
@@ -504,4 +518,10 @@ export class EntityDetailsInPopup {
     phone: any;
     website: string;
     email: string;
+}
+
+export class DuplicateMarkingAPIReq {
+    originalEntityId: any;
+    duplicateEntityId: any;
+    description: string;
 }

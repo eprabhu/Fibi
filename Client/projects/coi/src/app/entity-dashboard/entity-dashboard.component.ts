@@ -62,7 +62,7 @@ export class EntityDashboardComponent {
     { variableName: 'COUNTRY', fieldName: 'Country' },
     { variableName: 'OWNERSHIP_TYPE', fieldName: 'Ownership Type' },
     { variableName: 'ENTITY_STATUS', fieldName: 'Entity Status' },
-    { variableName: 'UPDATE_TIMESTAMP', fieldName: 'Last Updated' }    
+    { variableName: 'UPDATE_TIMESTAMP', fieldName: 'Last Updated' }
 ];
   mandatoryList = new Map();
 
@@ -72,6 +72,7 @@ export class EntityDashboardComponent {
   advanceSearchProperties:any = {};
   clearEntityName: String;
   isSearchFormInvalid: boolean = false;
+  canModifyEntity: boolean;
 
   constructor(private _router: Router,
     public entityDashboardService: EntityDashboardService,
@@ -126,7 +127,7 @@ export class EntityDashboardComponent {
       this.isShowAllProposalList = true;
     }
   }
-  
+
   checkForAdvanceSearch() {
     if ( this.entityDashboardService.isAdvanceSearch) {
        this.isViewAdvanceSearch = true;
@@ -145,12 +146,12 @@ export class EntityDashboardComponent {
     this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: coi.id } });
   }
 
- viewListOfEntity() { 
+ viewListOfEntity() {
     this.$subscriptions.push(this.$entityList.pipe(
       switchMap(() => {
         this.isLoading = true;
         return this.entityDashboardService.getAllSystemEntityList(this.getDashboardRO());
-        
+
       })).subscribe((res: any) => {
         this.isShowEntityList = true;
         this.entityList = res.dashboardResponses || [];
@@ -172,7 +173,7 @@ export class EntityDashboardComponent {
 		}
 		return RO;
 	}
-	
+
 	getSortType(obj): string {
 		const keyValuePairs = Object.entries(obj)
 			.map(([key, value]) => `${key} ${value}`)
@@ -243,10 +244,10 @@ export class EntityDashboardComponent {
     if(this.isSearchFormInvalid) {
       return;
     }
-  
+
     this.entityList = [];
   this.switchAdvanceSearchProperties(this.entityDashboardService.entitySearchRequestObject, this.tempEntitySearchRequestObject);
-  
+
     this.$entityList.next();
     this.isShowEntityList = true;
     this.isShowAllProposalList = true;
@@ -256,7 +257,7 @@ export class EntityDashboardComponent {
     switchAdvanceSearchProperties(destination, source) {
       this.advanceSearchProperties.TAB_TYPE = destination.entityDashboardData.TAB_TYPE;
       this.advanceSearchProperties.SORT_TYPE = destination.entityDashboardData.SORT_TYPE;
-      
+
       const singleInputFieldKeys = [
         'PRIMARY_NAME',
         'PRIMARY_ADDRESS_LINE_1',
@@ -279,7 +280,7 @@ export class EntityDashboardComponent {
           delete this.advanceSearchProperties[property];
         }
       }
-  
+
       const multipleInputFieldKeys = ['ENTITY_STATUS_TYPE_CODE', 'VERIFICATION_STATUS', 'OWNERSHIP_TYPE_CODE'];
       multipleInputFieldKeys.forEach(property => {
         if (source[property]) {
@@ -289,7 +290,7 @@ export class EntityDashboardComponent {
           delete destination.entityDashboardData[property];
         }
       });
-      
+
       Object.assign(this.tempEntitySearchRequestObject, this.entityDashboardService.entitySearchRequestObject.entityDashboardData);
       Object.assign(destination.entityDashboardData, this.advanceSearchProperties);
     }
@@ -339,7 +340,12 @@ export class EntityDashboardComponent {
 	}
 
   viewDetails(entityListData) {
-    this._router.navigate(['/coi/manage-entity/entity-overview'], { queryParams: { entityManageId: entityListData.entityId } });
+    this._router.navigate(['/coi/manage-entity/entity-overview'], { queryParams: { entityManageId: entityListData.entityId} });
+  }
+
+  modifyEntity(entityListData) {
+    this._commonService.isEntityModified = true;
+    this.viewDetails(entityListData);
   }
 
   actionsOnPageChange(event) {
@@ -350,7 +356,8 @@ export class EntityDashboardComponent {
   }
 
   checkUserHasRight(): void {
-    this.canViewEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE','VERIFY_ENTITY'], 'SOME');
+    this.canModifyEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE'], 'SOME');
+    this.canViewEntity = (this.canModifyEntity || this._commonService.getAvailableRight(['VIEW_ENTITY','VERIFY_ENTITY'], 'SOME'));
     this.isManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
   }
 

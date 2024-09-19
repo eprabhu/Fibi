@@ -72,6 +72,8 @@ $--theme-box-red-bg-color: --theme-box-red-bg-color;
 //entity
 $--theme-entity-icon-color: --theme-entity-icon-color;
 $--theme-entity-icon-bg-color: --theme-entity-icon-bg-color;
+$--theme-entity-matching-card-border-color: --theme-entity-matching-card-border-color;
+$--theme-entity-matching-card-bg-color: --theme-entity-matching-card-bg-color;
 
 // Font size
 
@@ -140,6 +142,9 @@ $theme-map-default: (
 
     $--theme-entity-icon-color: #0948b2,
     $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 
 $theme-map-light: (
@@ -183,6 +188,8 @@ $theme-map-light: (
     $--theme-entity-icon-color: #0948b2,
     $--theme-entity-icon-bg-color: #dfe5f0,
 
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 
 $theme-map-dark: (
@@ -236,6 +243,8 @@ $theme-map-dark: (
     $--theme-entity-icon-color: #0948b2,
     $--theme-entity-icon-bg-color: #dfe5f0,
 
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 //#a92034
 $theme-map-red: (
@@ -278,6 +287,9 @@ $theme-map-red: (
 
     $--theme-entity-icon-color: #0948b2,
     $--theme-entity-icon-bg-color: #dfe5f0,
+
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
 
 $theme-map-blue: (
@@ -321,4 +333,6 @@ $theme-map-blue: (
     $--theme-entity-icon-color: #0948b2,
     $--theme-entity-icon-bg-color: #dfe5f0,
 
+    $--theme-entity-matching-card-border-color: #673e21,
+    $--theme-entity-matching-card-bg-color: #fff7f1,
 );
