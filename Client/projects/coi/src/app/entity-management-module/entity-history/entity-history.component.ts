@@ -8,6 +8,8 @@ import { EntireEntityDetails } from '../shared/entity-interface';
 import { isEmptyObject } from '../../common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'app-entity-history',
@@ -37,6 +39,10 @@ export class EntityHistoryComponent {
         this.listenDataChangeFromStore();
     }
 
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) {
@@ -48,7 +54,7 @@ export class EntityHistoryComponent {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.pipe(debounceTime(200), distinctUntilChanged()).subscribe((dependencies: string[]) => {
                 this.getDataFromStore();
             })
         );
