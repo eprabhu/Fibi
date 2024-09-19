@@ -2989,6 +2989,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureHistory.setUpdateTimeStamp(rset.getTimestamp(UPDATE_TIMESTAMP));
 				disclosureHistory.setProjectTitle(rset.getString("PROJECT_TITLE"));
 				disclosureHistory.setProjectNumber(rset.getString("PROJECT_NUMBER"));
+				disclosureHistory.setProjectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"));
+				disclosureHistory.setProjectType(rset.getString("PROJECT_TYPE"));
+				disclosureHistory.setProjectIcon(rset.getString("PROJECT_ICON"));
+				disclosureHistory.setProjectBadgeColor(rset.getString("BADGE_COLOR"));
 				disclosureHistoryList.add(disclosureHistory);
 			}
 

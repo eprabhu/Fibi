@@ -125,6 +125,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		try {
 			while (rset != null && rset.next()) {
 				DisclosureProjectDto projectOverview = DisclosureProjectDto.builder()
+						.projectNumber(rset.getString("PROJECT_NUMBER"))
 						.projectId(rset.getString("PROJECT_ID")).title(rset.getString("TITLE"))
 						.piName(rset.getString("PI_NAME")).keyPersonId(rset.getString("KEY_PERSON_ID"))
 						.keyPersonName(rset.getString("KEY_PERSON_NAME"))
@@ -146,6 +147,7 @@ public class ProjectDaoImpl implements ProjectDao {
 						.disclosureId(rset.getInt("DISCLOSURE_ID")).projectType(rset.getString("PROJECT_TYPE"))
 						.projectTypeCode(rset.getString("PROJECT_TYPE_CODE"))
 						.projectBadgeColour(rset.getString("BADGE_COLOR"))
+						.projectIcon(rset.getString("PROJECT_ICON"))
 						.updateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
 						.commentCount(rset.getInt("COMMENT_COUNT")).build();
 				projectOverviewList.add(projectOverview);

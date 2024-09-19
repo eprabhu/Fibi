@@ -38,5 +38,9 @@ public class DisclosureHistoryDto {
     private Timestamp updateTimeStamp;
     private String projectNumber;
     private String projectTitle;
+    private String projectTypeCode;
+    private String projectType;
+    private String projectIcon;
+    private String projectBadgeColor;
 
 }

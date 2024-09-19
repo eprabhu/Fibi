@@ -174,6 +174,7 @@ public class ProjectServiceImpl implements ProjectService {
 					.filter(dto -> !DISCLOSURE_COMPLETED.equals(dto.getDisclosureReviewStatus())).count();
 			DisclosureProjectDto project = entry.getValue().get(0);
 			DisclosureProjectDto projectDetails = DisclosureProjectDto.builder().projectId(project.getProjectId())
+					.projectNumber(project.getProjectNumber())
 					.leadUnitName(project.getLeadUnitName()).leadUnitNumber(project.getLeadUnitNumber())
 					.sponsorCode(project.getSponsorCode()).sponsorName(project.getSponsorName())
 					.primeSponsorCode(project.getPrimeSponsorCode()).primeSponsorName(project.getPrimeSponsorName())
@@ -182,6 +183,7 @@ public class ProjectServiceImpl implements ProjectService {
 					.submissionStatus(disclosureSubmissionStatus).disclosureReviewStatus(disclosureReviewStatus)
 					.completeCount(completeCount).inCompletCount(inCompletCount).projectType(project.getProjectType())
 					.projectTypeCode(project.getProjectTypeCode()).projectBadgeColour(project.getProjectBadgeColour())
+					.projectIcon(project.getProjectIcon())
 					.updateTimestamp(project.getUpdateTimestamp()).piName(project.getPiName())
 					.commentCount(project.getCommentCount()).keyPersonCount(keyPersonDetails.size()).build();
 			ProjectOverviewDto projectOverview = new ProjectOverviewDto();
