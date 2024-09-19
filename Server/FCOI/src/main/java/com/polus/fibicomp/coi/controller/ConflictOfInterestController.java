@@ -223,12 +223,6 @@ public class ConflictOfInterestController {
 		logger.info("Requesting for setEntityStatus");
 		return conflictOfInterestService.setEntityStatus(vo);
 	}
-	
-	@PostMapping("/getAllSystemEntityList")
-	public ResponseEntity<Object> getAllSystemEntityList(@RequestBody CoiDashboardVO vo) {
-		logger.info("Requesting for getAllSystemEntityList");
-		return conflictOfInterestService.getAllSystemEntityList(vo);
-	}
 
 	@GetMapping("/getCoiProjectTypes")
 	public ResponseEntity<Object> getCoiProjectTypes() {
@@ -464,7 +458,7 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.deleteNote(noteId);
 	}
 
-	@PostMapping(value = "/saveOrUpdateAttachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/saveOrUpdateAttachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			@RequestParam("formDataJson") String formDataJson) {
 		logger.info("Request for saveOrUpdateAttachments");

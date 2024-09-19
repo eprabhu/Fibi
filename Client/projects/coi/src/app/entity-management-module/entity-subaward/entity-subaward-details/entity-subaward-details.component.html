@@ -18,7 +18,7 @@
                 <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-subaward-orgID'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" id="coi-entity-subaward-orgID" title="Organization ID" aria-label="Organization ID"
-                maxlength="60" autocomplete="off" class="form-control" disabled 
+                maxlength="60" autocomplete="off" class="form-control" disabled
                 [(ngModel)]="entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationId"/>
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationId">
@@ -32,9 +32,14 @@
                 <span>Organization Type</span>
                 <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-organization-lookup'"></app-common-help-text>
             </label>
-            <app-look-up [options]="ORGANIZATION_TYPE_OPTIONS" [isDisabled]="!isEditMode" [selectedLookUpList]="selectedLookupList"
+            <app-look-up *ngIf="isEditMode" [options]="ORGANIZATION_TYPE_OPTIONS" [selectedLookUpList]="selectedLookupList"
                 [uniqueId]="'coi-entity-organisation-type-lookup'" (selectedResult)="onOrganizationTypeSelect($event)">
             </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode">
+                    <span>{{entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.description}}</span>
+                </app-no-data-label>
+            </span>
         </div>
 
         <!-- SAM Expiration Date -->

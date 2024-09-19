@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import { EntityTabStatus, showEntityToast, SponsorDetails } from '../../shared/entity-interface';
+import {EntityTabStatus, showEntityToast, SponsorDetails, SponsorType} from '../../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
@@ -71,19 +71,20 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         ));
     }
 
-    setOtherDetailsObject(){
-        this.sponsorDetailsObj.acronym = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.acronym ? this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.acronym : '';
-        this.sponsorDetailsObj.sponsorTypeCode = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode ? this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode : '';
-        this.sponsorDetailsObj.sponsorCode = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorCode ? this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorCode : '';
+    setOtherDetailsObject() {
+        const sponsorDetails = this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO;
+        this.sponsorDetailsObj.acronym = sponsorDetails?.acronym ?? '';
+        this.sponsorDetailsObj.sponsorType = sponsorDetails?.sponsorType ?? new SponsorType();
+        this.sponsorDetailsObj.sponsorCode = sponsorDetails?.sponsorCode ?? '';
     }
 
-    onSponsorTypeSelect(event){
-        if(event){
-            this.sponsorDetailsObj.sponsorTypeCode = event[0]?.code;
+    onSponsorTypeSelect(event) {
+        if (event) {
+            this.sponsorDetailsObj.sponsorType.code = event[0]?.code;
+            this.sponsorDetailsObj.sponsorType.description = event[0]?.description;
             this.changeEvent('sponsorTypeCode');
-        }
-        else{
-            this.sponsorDetailsObj.sponsorTypeCode = null;
+        } else {
+            this.sponsorDetailsObj.sponsorType = null;
         }
     }
 
@@ -92,10 +93,15 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     changeEvent(key) {
-        this._entityManagementService.hasChangesAvailable = true;
-        if(this.sponsorDetailsObj[key]) {
-            this.sponsorDetailsObj[key] = this.sponsorDetailsObj[key].trim();
-            this.autoSaveRO[key] = this.sponsorDetailsObj[key];
+        this.commonService.setChangesAvailable(true);
+        const IS_SPONSOR_TYPE = key === 'sponsorTypeCode';
+        if(this.sponsorDetailsObj[key] || IS_SPONSOR_TYPE) {
+            if (IS_SPONSOR_TYPE) {
+                this.autoSaveRO['sponsorTypeCode'] = this.sponsorDetailsObj.sponsorType.code;
+            } else {
+                this.sponsorDetailsObj[key] = this.sponsorDetailsObj[key].trim();
+                this.autoSaveRO[key] = this.sponsorDetailsObj[key];
+            }
             this.$debounceEvent.next(true);
         }
     }
@@ -117,14 +123,15 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
             this.commonService.setLoaderRestriction();
             this.autoSaveRO.entityId = this.entityDetails.entityId;
             this.$subscriptions.push(this.entitySponsorService.SponsorDetailsAutoSave(this.autoSaveRO).subscribe((data) => {
-                this._entityManagementService.hasChangesAvailable = false;
                 this.dataChangeCounter--;
                 showEntityToast('SUCCESS');
-                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO = this.autoSaveRO;
+                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;
+                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType = this.sponsorDetailsObj.sponsorType;
                 this.sponsorDetailsObj = this.autoSaveRO;
                 this.updateSponsorCompleteFlag();
                 this.autoSaveRO = {};
                 this.isRestrictSave = false;
+                this.commonService.setChangesAvailable(false);
             }, err => {
                 showEntityToast('ERROR');
                 this.isRestrictSave = false;
@@ -138,17 +145,17 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
             this.setDetailsForUpdate();
             this.commonService.setLoaderRestriction();
             this.$subscriptions.push(this.entitySponsorService.updateSponsorDetails(this.autoSaveRO).subscribe((data) => {
-                this._entityManagementService.hasChangesAvailable = false;
                 this.dataChangeCounter--;
                 showEntityToast('SUCCESS');
-                if(this.autoSaveRO.acronym) {
+                if (this.autoSaveRO.acronym) {
                     this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;
                 }
-                if(this.autoSaveRO.sponsorTypeCode) {
-                    this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorTypeCode = this.autoSaveRO.sponsorTypeCode;
+                if (this.autoSaveRO.sponsorTypeCode) {
+                    this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType = this.sponsorDetailsObj.sponsorType;
                 }
                 this.updateSponsorCompleteFlag();
                 this.autoSaveRO = {};
+                this.commonService.setChangesAvailable(false);
             }, err => {
                 showEntityToast('ERROR');
             }));
@@ -157,7 +164,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateSponsorCompleteFlag() {
-        if(this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorTypeCode) {
+        if(this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorType?.code) {
             this.entityTabStatus.entity_sponsor_info = true;
             this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
         }
@@ -165,7 +172,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
 
     setDetailsForUpdate(){
         this.autoSaveRO.entityId = this.entityDetails.entityId;
-        this.autoSaveRO.sponsorTypeCode = this.sponsorDetailsObj.sponsorTypeCode
+        this.autoSaveRO.sponsorTypeCode = this.sponsorDetailsObj.sponsorType.code;
     }
 
     private listenDataChangeFromStore() {

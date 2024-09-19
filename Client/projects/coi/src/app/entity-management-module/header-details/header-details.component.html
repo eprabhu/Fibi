@@ -17,7 +17,7 @@
                             <div>
                                 <span class="fs-18 fw-medium">{{entityDetails?.entityName}}</span>
                                 <span *ngIf="latestPriorName" class="fs-13 ms-1"> {{'('}}Formerly known as
-                                    {{latestPriorName}}{{')'}}</span>
+                                    <strong>{{latestPriorName}}</strong>{{')'}}</span>
                                 <span>
                                     <span class="badge ms-2 px-2 rounded-pill text-bg-success"> Active</span>
                                 </span>
@@ -188,3 +188,32 @@
     </ng-container>
 </app-coi-modal>
 <!-- DUNS match confirmation pop-up ends -->
+
+
+<div class="modal fade mySkinDialog" data-bs-backdrop="static" [id]="'coi-entity-confirmation-modal'" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Confirmation
+                </h5>
+                <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" title="Click here to close"
+                        aria-label="Click here to close">
+                </button>
+            </div>
+            <div class="modal-body title-descriptions">
+                <p>Do you want to discard changes and leave the page?</p>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary fs-14" id="entity-overview-leave-page"
+                        (click)="leaveSlider()" title="Click here to leave page">
+                    Leave Page
+                </button>
+                <button (click)="resetNavigationStop()" type="button" class="btn btn-primary fs-14" id="entity-overview-stay-on-page"
+                        data-bs-dismiss="modal" title="Click here to stay on page">
+                    Stay On Page
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

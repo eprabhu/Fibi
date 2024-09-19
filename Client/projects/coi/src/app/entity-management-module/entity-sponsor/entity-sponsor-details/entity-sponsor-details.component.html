@@ -39,10 +39,13 @@
                 <span>Sponsor Type</span>
                 <app-common-help-text [subSectionId]="2609" [elementId]="'coi-entity-sponsortype-lookup'"></app-common-help-text>
             </label>
-            <app-look-up (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorTypeOption'
-                [defaultValue]="sponsorDetailsObj?.sponsorTypeCode" [isDisabled]="!isEditMode"
-                [uniqueId]="'coi-entity-sponsortype-lookup'">
+            <app-look-up *ngIf="isEditMode" (selectedResult)="onSponsorTypeSelect($event)" [options]='entitySponsorTypeOption'
+                         [defaultValue]="sponsorDetailsObj?.sponsorType?.description"
+                         [uniqueId]="'coi-entity-sponsortype-lookup'">
             </app-look-up>
+            <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
+                <app-no-data-label [valueToShow]="sponsorDetailsObj?.sponsorType?.description"></app-no-data-label>
+            </span>
         </div>
     </div>
 </div>

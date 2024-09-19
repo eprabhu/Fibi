@@ -79,16 +79,18 @@ private redirectOnError(error) {
 }
 
 @Injectable()
-export class EntityPathResolveService{
+export class EntityPathResolveService {
 
-  constructor(private _commonService: CommonService) { }
+    constructor(private _commonService: CommonService) {
+    }
+
     canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): any {
-        if(this._commonService.hasChangesAvailable) {
+        if (this._commonService.hasChangesAvailable) {
             this._commonService.isNavigationStopped = true;
             this._commonService.attemptedPath = nextState.url;
-            var elements = document.getElementsByClassName("invalid-feedback");
-            let errToast = document.getElementById('error-toast');
-            if((errToast && !errToast?.classList.contains('invisible')) || (elements && elements.length)) {
+            const elements = document.getElementsByClassName('invalid-feedback');
+            const errToast = document.getElementById('error-toast');
+            if ((errToast && !errToast?.classList.contains('invisible')) || (elements && elements.length)) {
                 openModal('coi-entity-confirmation-modal');
             }
             return false;

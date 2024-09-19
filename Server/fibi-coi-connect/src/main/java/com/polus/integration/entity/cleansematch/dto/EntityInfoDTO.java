@@ -22,5 +22,6 @@ public class EntityInfoDTO {
     private String email;
     private String isActive;
     private String sponsorCode;
+    private String phoneNumber;
     private Integer organizationId; 
 }
