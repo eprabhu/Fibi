@@ -155,7 +155,7 @@ public class HierarchyDao {
 	            statement.registerOutParameter(1, OracleTypes.CURSOR);
 	            statement.setInt(2, moduleCode);
 	            statement.setString(3, projectNumber);
-	            statement.setString(3, keyPersonId);
+	            statement.setString(4, keyPersonId);
 	            statement.execute();
 	            rset = (ResultSet) statement.getObject(1);
 	        }
