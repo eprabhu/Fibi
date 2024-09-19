@@ -1919,6 +1919,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(disclosureId);
 			disclosure.setAdminPersonName(AuthenticatedUser.getLoginUserFullName());
 			disclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
+			disclosure.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(AuthenticatedUser.getLoginPersonId()));
+			disclosure.setPersonNotesCount(conflictOfInterestDao.personNotesCount(AuthenticatedUser.getLoginPersonId()));
+			disclosure.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(AuthenticatedUser.getLoginPersonId()).build()));
 			if (disclosure.getFcoiTypeCode().equals("1")) {
 				conflictOfInterestDao.archiveDisclosureOldVersions(disclosureId, disclosureNumber);
 			}

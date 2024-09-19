@@ -73,7 +73,7 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 			return SponsorDetailsResponseDTO.builder().entityId(entitySponsorInfo.getEntityId())
 					.acronym(entitySponsorInfo.getAcronym()).id(entitySponsorInfo.getId())
 					.sponsorCode(entitySponsorInfo.getSponsorCode())
-					.sponsorTypeCode(entitySponsorInfo.getSponsorTypeCode()).build();
+					.sponsorType(entitySponsorInfo.getSponsorType()).build();
 		} else {
 			return null;
 		}

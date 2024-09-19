@@ -1,5 +1,7 @@
 package com.polus.fibicomp.globalentity.dto;
 
+import com.polus.core.pojo.SponsorType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,6 @@ public class SponsorDetailsResponseDTO {
 	private Integer id;
 	private String sponsorCode;
 	private String acronym;
-	private String sponsorTypeCode;
+	private SponsorType sponsorType;
 
 }

@@ -35,6 +35,10 @@ public class EntityDashboardController {
 			List<String> validationMessages = new ArrayList<>();
 			Map<String, Object> globalEntityDashboard = vo.getEntityDashboardData();
 			globalEntityDashboard.put("PERSON_ID", vo.getPersonId());
+			String sortType = (String) globalEntityDashboard.get("SORT_TYPE");
+			if (sortType == null || sortType.isEmpty()) {
+				globalEntityDashboard.put("SORT_TYPE", "UPDATE_TIMESTAMP DESC");
+			}
 			log.info("globalEntityDashboard : {}", globalEntityDashboard);
 
 			if (!entityDashboardService.validateEntityDashboardData(globalEntityDashboard, validationMessages)) {

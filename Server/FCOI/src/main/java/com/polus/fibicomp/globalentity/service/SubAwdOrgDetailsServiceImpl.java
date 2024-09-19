@@ -75,7 +75,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 			return SubAwdOrgDetailsResponseDTO.builder().entityId(entitySubOrgInfos.getEntityId())
 					.id(entitySubOrgInfos.getId())
 					.organizationId(entitySubOrgInfos.getOrganizationId())
-					.organizationTypeCode(entitySubOrgInfos.getOrganizationTypeCode())
+					.entityOrganizationType(entitySubOrgInfos.getEntityOrganizationType())
 					.samExpirationDate(entitySubOrgInfos.getSamExpirationDate())
 					.subAwdRiskAssmtDate(entitySubOrgInfos.getSubAwdRiskAssmtDate()).build();
 		} else {
