@@ -73,7 +73,7 @@ export class DuplicateMarkingConfirmationComponent implements OnInit, OnChanges,
                 this.isSaving = false;
                 removeToast('ERROR');
                 removeToast('SUCCESS');
-                this._dataStorService.updateStore(['entityDetails', 'orginialName'], { entityDetails: this.entityDetails, originalName: this.originalEntityName });
+                this._dataStorService.updateStore(['entityDetails', 'originalName'], { entityDetails: this.entityDetails, originalName: this.originalEntityName });
                 this.clearValuesAndCloseModal();
                 this.emitAPISuccess.emit(true);
             }, err => {
