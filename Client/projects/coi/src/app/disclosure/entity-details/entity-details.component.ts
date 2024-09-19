@@ -43,7 +43,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
         this.entityDetailService.activeTab = 'QUESTIONNAIRE';
         this.isTriggeredFromSlider = this.checkForSFIOpenedFromSlider();
         this.getQueryParams();
-        await this.getDefinedRelationships();
         this.getAvailableRelationship();
         this.listenToAddRelationModal();
         this.listenToLeaveConfirmationModal();
@@ -80,25 +79,6 @@ export class EntityDetailsComponent implements OnInit, OnDestroy {
                 this.entityDetailService.groupedRelations = groupBy(deepCloneObject(this.entityDetailService.remainingRelationships), "coiDisclosureType", "description");
             }
         }
-    }
-
-    getDefinedRelationships() {
-        const REQ_BODY = {
-            'personEntityId': this.entityId
-        };
-        return new Promise<boolean>((resolve) => {
-            this.$subscriptions.push(this.entityDetailService.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
-                if (res.length) {
-                    this.entityDetailService.definedRelationships = res || [];
-                } else {
-                    this.entityDetailService.activeTab = 'RELATION_DETAILS';
-                }
-                resolve(true);
-            }, error => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-                resolve(false);
-            }));
-        });
     }
 
     ngOnDestroy(): void {

@@ -58,10 +58,6 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityId}`);
   }
 
-  getPersonEntityRelationship(params) {
-    return this._http.post(this._commonService.baseUrl + '/personEntity/getRelationship', params);
-  }
-
   loadSFILookups() {
     return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
   }
