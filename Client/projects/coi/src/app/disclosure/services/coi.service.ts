@@ -80,8 +80,8 @@ export class CoiService {
         return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
     }
 
-    getCoiReview(disclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/getCoiReview/${disclosureId}`);
+    getCoiReview(disclosureId: number, dispositionStatusCode: string) {
+        return this._http.post(`${this._commonService.baseUrl}/getCoiReview`, {disclosureId, dispositionStatusCode});
     }
 
     startCOIReview(params: any) {

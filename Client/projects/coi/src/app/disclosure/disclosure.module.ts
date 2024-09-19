@@ -51,7 +51,7 @@ const routes: Routes = [
                 loadChildren: () => import('./attachment/attachment.module').then(m => m.AttachmentModule)
             },
             {
-                path: 'review', canDeactivate: [RouterGuardService], canActivate: [ReviewRouteGuardService, ResolveServiceService],
+                path: 'review', canDeactivate: [RouterGuardService], canActivate: [ReviewRouteGuardService],
                 loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)
             },
             {

@@ -13,10 +13,10 @@
   </div>
 </div> -->
 
-<div class="main-title d-flex flex-end justify-content-between px-1 pb-2 position-relative" id="COI802">
+<div class="position-relative d-flex align-items-center justify-content-between border-bottom pt-3 pb-2 ps-2 pe-1" id="COI802">
     <h3 class="fs-16">
         <span class="d-flex align-items-center">
-            <strong tabindex="0" aria-label="Significant Financial Interest (SFI)">Significant Financial Interest (SFI)
+            <strong tabindex="-1" aria-label="Significant Financial Interest (SFI)">Significant Financial Interest (SFI)
             </strong>
             <span class="d-inline-block" data-bs-toggle="tooltip" title="View SFI details." data-bs-placement="top">
                 <mat-icon class="ms-1 f-16 position-relative mt-1 text-secondary"
@@ -24,7 +24,7 @@
             </span>
         </span>
     </h3>
-    <button class="d-flex justify-content-center align-items-center btn toggle-btn border rounded-5 shadow-sm p-0"
+    <button class="position-static d-flex justify-content-center align-items-center btn toggle-btn border rounded-5 shadow-sm p-0"
         [attr.aria-label]="'Click here to ' + (coiService.isExpandSummaryBySection['COI802'] ? 'collapse' : 'expand') + ' Significant Financial Interest'"
         [title]="coiService.isExpandSummaryBySection['COI802'] ? 'Click here to collapse Significant Financial Interest (SFI)' : 'Click here to expand Significant Financial Interest (SFI)'"
         (click)="coiService.isExpandSummaryBySection['COI802'] = !coiService.isExpandSummaryBySection['COI802']">

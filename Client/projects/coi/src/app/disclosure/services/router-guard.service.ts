@@ -7,6 +7,7 @@ import { CommonService } from '../../common/services/common.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './coi.service';
 import { map } from 'rxjs/operators';
 import { openCommonModal } from '../../common/utilities/custom-utilities';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Injectable()
 export class RouterGuardService  {
@@ -39,6 +40,12 @@ export class RouterGuardService  {
                     res[1].map((error) => {
                         this._coiService.certificationResponseErrors.push( error);
                     });
+                }, (err: any) => {
+                    if (err.status === 405) {
+                        this._coiService.concurrentUpdateAction = 'Certification';
+                    } else {
+                        this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                    }
                 });
         });
     }

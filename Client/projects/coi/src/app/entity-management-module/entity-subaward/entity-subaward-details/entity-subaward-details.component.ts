@@ -7,7 +7,7 @@ import { EntityDataStoreService } from '../../entity-data-store.service';
 import { EntityManagementService } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus, showEntityToast } from '../../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityOrganizationType, EntityTabStatus, showEntityToast } from '../../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';

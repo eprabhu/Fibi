@@ -5,13 +5,16 @@ import { catchError, map } from 'rxjs/operators';
 import { DataStoreService } from './data-store.service';
 import { CommonService } from '../../common/services/common.service';
 import { DefineRelationshipService } from '../define-relationship/services/define-relationship.service';
-import { COI } from '../coi-interface';
+import { COI, ProjectSfiRelationLoadRO } from '../coi-interface';
 import { DefineRelationshipDataStoreService } from '../define-relationship/services/define-relationship-data-store.service';
+import { CoiService } from './coi.service';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Injectable()
 export class DefineRelationsRouterGuard implements CanActivate {
 
     constructor(
+        private _coiService: CoiService,
         private _dataStore: DataStoreService,
         private _commonService: CommonService,
         private _defineRelationshipService: DefineRelationshipService,
@@ -29,40 +32,32 @@ export class DefineRelationsRouterGuard implements CanActivate {
                 this.getProjectRelations()
             ]).subscribe((res: any) => {
                 observer.next(true);
+                this._defineRelationshipService.coiStatusList = res[0].coiProjConflictStatusTypes; // for lookup api integration
+                this._defineRelationshipDataStore.setStoreData(res[1] ? res[1] : []); // for relationship api integration
+                this._defineRelationshipService.configureScrollSpy();
+            }, (err: any) => {
+                if (err.status === 405) {
+                    this._coiService.concurrentUpdateAction = 'Relationships';
+                } else {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                }
             });
         });
     }
 
     private getLookups(): Observable<any> {
-        return this._defineRelationshipService.lookups().pipe(
-            map((res: any) => {
-                this._defineRelationshipService.coiStatusList = res.coiProjConflictStatusTypes;
-                return res; // Return the response for further processing in subscribe
-            }),
-            catchError((_error: any) => {
-                return of(null); // Return null on error
-            })
-        );
+        return this._defineRelationshipService.lookups();
     }
 
     private getProjectRelations(): Observable<any> {
         const COI_DATA: COI = this._dataStore.getData();
-        const PROJECT_SFI_RELATION = {
+        const PROJECT_SFI_RELATION: ProjectSfiRelationLoadRO = {
+            personId: COI_DATA.coiDisclosure.person.personId,
             disclosureId: COI_DATA.coiDisclosure.disclosureId,
             disclosureNumber: COI_DATA.coiDisclosure.disclosureNumber,
-            personId: COI_DATA.coiDisclosure.person.personId
+            dispositionStatusCode: COI_DATA.coiDisclosure.dispositionStatusCode
         };
-
-        return this._defineRelationshipService.getProjectRelations(PROJECT_SFI_RELATION).pipe(
-            map((res: any) => {
-                this._defineRelationshipDataStore.setStoreData(res ? res : []);
-                this._defineRelationshipService.configureScrollSpy();
-                return res; // Return the response for further processing in subscribe
-            }),
-            catchError((_error: any) => {
-                return of(null); // Return null on error
-            })
-        );
+        return this._defineRelationshipService.getProjectRelations(PROJECT_SFI_RELATION);
     }
 
 }

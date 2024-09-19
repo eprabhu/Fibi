@@ -53,6 +53,6 @@
 <ng-container *ngIf="defineRelationshipService.addConflictSlider.isOpenSlider">
     <app-add-conflict-slider [addConflictSlider]="defineRelationshipService.addConflictSlider"
         [coiStatusList]="defineRelationshipService.coiStatusList" (closePage)="closeAddConflictSlider($event)"
-        [isEditMode]="['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode == 1 && (loginPersonId == coiData?.coiDisclosure?.adminPersonId)">
+        [isEditMode]="['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode === '1' && (loginPersonId == coiData?.coiDisclosure?.adminPersonId)">
     </app-add-conflict-slider>
 </ng-container>
