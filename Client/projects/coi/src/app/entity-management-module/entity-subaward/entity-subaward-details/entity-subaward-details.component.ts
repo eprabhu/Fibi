@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DATE_PLACEHOLDER } from '../../../app-constants';
+import { DATE_PLACEHOLDER, ENTITY_VERIFICATION_STATUS } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 import { AutoSaveService } from '../../../common/services/auto-save.service';
@@ -109,6 +109,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private saveSubAwardOrganizationDetails(): void {
         this.autoSaveRO.entityId = this.entityDetails.entityId;
+        this.addFeedStatusInRO();
         this.$subscriptions.push(
             this.entitySubAwardService.organizationDetailsAutoSave(this.autoSaveRO)
                 .subscribe((data: any) => {
@@ -116,6 +117,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
                     this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityId =
                         this.entityDetails.entityId;
                     this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.id = data?.id;
+                    this.updateEntireFeed();
                     this.autoSaveRO = {};
                     this.isRestrictSave = false;
                     this.dataChangeCounter--;
@@ -129,10 +131,12 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private updateSubAwardOrganizationDetails(): void {
         this.autoSaveRO.entityId = this.entityDetails.entityId;
+        this.addFeedStatusInRO();
         this.$subscriptions.push(
             this.entitySubAwardService.updateOrganizationDetails(this.autoSaveRO)
                 .subscribe((data: any) => {
                     this.updateHeaderStatus();
+                    this.updateEntireFeed();
                     this.autoSaveRO = {};
                     this.dataChangeCounter--;
                     showEntityToast('SUCCESS');
@@ -140,6 +144,18 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
                 }, (_error: any) => {
                     showEntityToast('ERROR');
                 }));
+    }
+
+    private addFeedStatusInRO(): void {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')) {
+            this.autoSaveRO.feedStatusCode = '2';
+        }
+    }
+
+    private updateEntireFeed(): void {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')) {
+            this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');
+        }
     }
 
     onDateSelect(dateType: 'SAM_EXPIRATION' | 'RISK_ASSESSMENT'): void {

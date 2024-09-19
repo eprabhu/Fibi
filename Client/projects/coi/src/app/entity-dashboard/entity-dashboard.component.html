@@ -122,7 +122,7 @@
                         <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Email" tabindex="-1" aria-label="Email">
                             <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Email</label>
                             <input type="text" id="adv-search-Proposal-title" placeholder="Email" title="Click here to search by Email" aria-label="Email search field"
-                            maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.CERTIFIED_EMAIL" (focusout)="validateEmail()" 
+                            maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.CERTIFIED_EMAIL" (focusout)="validateEmail()"
                             [ngClass]="(mandatoryList?.has('certifiedEmail')) ? 'is-invalid d-block' : ''" (ngModelChange)="clearValidation('certifiedEmail')" />
                             <div *ngIf="mandatoryList?.has('certifiedEmail')" class="invalid-feedback d-block fs-13">
                                 {{mandatoryList?.get('certifiedEmail')}}
@@ -147,7 +147,7 @@
                                 [options]="verificationTypeOptions" [selectedLookUpList]="lookupValues['VERIFICATION_STATUS']"
                                 class="text-secondary fs-13" [uniqueId]="'adv-entity-verification'">
                             </app-look-up>
-                        </div>                                                                                                                                                                                                                        
+                        </div>
                         <!-- Foreign name -->
                         <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Foreign Name" tabindex="-1" aria-label="Foreign Name">
                             <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Foreign Name</label>
@@ -161,7 +161,7 @@
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.PRIOR_NAME" />
                         </div>
 
-                        
+
                         <div class="col d-flex justify-content-end mt-4 align-items-end">
                             <button id="coi-entity-management-clear-btn" class="btn btn-outline-secondary  fs-14 py-2 mx-2"
                                 aria-label="Clear" (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
@@ -223,8 +223,8 @@
                                             <span *ngIf="entityListData?.entityVerificationStatus == 'Verified'" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" class="rounded-pill f-14 fw-700 me-2 px-3 py-2 badge rounded-5 py-0 text-bg-success align-items-center d-inline-flex"
                                                 title="{{entityListData?.entityName}} is Verified">
-                                                <mat-icon class="me-1 fs-13">check_circle</mat-icon>Verified</span>                                            
-                                            <span class="badge f-14 px-3 py-2 rounded-pill text-bg-warning" 
+                                                <mat-icon class="me-1 fs-13">check_circle</mat-icon>Verified</span>
+                                            <span class="badge f-14 px-3 py-2 rounded-pill text-bg-warning"
                                             [ngClass]="{'text-bg-success': entityListData?.entityStatus === 'Active', 'text-bg-secondary': entityListData?.entityStatus === 'Inactive', 'text-bg-warning': entityListData?.entityStatus === 'Duplicate'}">
                                                 {{entityListData?.entityStatus}}</span>
 
@@ -322,12 +322,17 @@
                                             </app-no-data-label>
                                             </span>
                                         </div>
-                                        <div  class="col-lg-3 col-md-6 mb-2 d-flex justify-content-end">
-                                            <button *ngIf="canViewEntity" id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
-                                    (keyup.enter)="viewDetails(entityListData)" (keyup.space)="viewDetails(entityListData)"
-                                            aria-label="Click the button to the view Entity details"
-                                            class="align-items-center btn btn-outline-secondary d-flex fs-14"
-                                            title="Click here to view entity details">
+                                <div class="col-lg-3 d-flex align-items-end justify-content-end">
+                                    <button *ngIf="canModifyEntity && entityListData?.entityVerificationStatus === 'Verified' && entityListData?.entityStatus === 'Active'"
+                                        id="coi-entity-management-edit-btn" (click)="modifyEntity(entityListData)"
+                                        aria-label="Click here to modify entity details"
+                                        class="align-items-center btn btn-outline-secondary d-flex fs-14 me-2" title="Click here to modify entity details">
+                                        <mat-icon class="me-1">edit</mat-icon>
+                                        Modify
+                                    </button>
+                                    <button *ngIf="canViewEntity" id="coi-entity-management-view-btn" (click)="viewDetails(entityListData)"
+                                        aria-label="Click here to view entity details" class="align-items-center btn btn-outline-secondary d-flex fs-14"
+                                        title="Click here to view entity details">
                                         <mat-icon class="me-1">visibility</mat-icon>
                                         View
                                     </button>
