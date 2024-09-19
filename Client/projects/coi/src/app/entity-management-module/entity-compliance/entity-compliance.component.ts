@@ -3,10 +3,11 @@ import { EntityDataStoreService } from '../entity-data-store.service';
 import { CommonService } from '../../common/services/common.service';
 import { ComplianceTab } from '../shared/entity-constants';
 import { EntityComplianceService } from './entity-compliance.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, SubAwardOrganization } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails, SubAwardOrganization } from '../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-entity-compliance',
@@ -22,8 +23,9 @@ export class EntityComplianceComponent {
     $subscriptions: Subscription[] = [];
     complianceEntityRiskList: EntityRisk[] = [];
     entityComplianceAttachmentList: EntityAttachment[] = [];
-    riskSubSectionId = 2615;
-    attachmentSubSectionId = 2616;
+    riskSectionDetails = new EntitySectionDetails();
+    attachmentSectionDetails = new EntitySectionDetails();
+
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _entityComplianceService: EntityComplianceService) { }
 
@@ -32,8 +34,21 @@ export class EntityComplianceComponent {
         this.overViewTab = ComplianceTab;
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.setSectionIdAndName();
     }
 
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    private setSectionIdAndName(){
+        this.riskSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'COMPLIANCE_RISK');
+        this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'COMPLIANCE_RISK');
+        this.riskSectionDetails.subSectionId = 2615;
+        this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'COMPLIANCE_ATTACHMENTS');
+        this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'COMPLIANCE_ATTACHMENTS');
+        this.attachmentSectionDetails.subSectionId = 2616;
+    }
 
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
