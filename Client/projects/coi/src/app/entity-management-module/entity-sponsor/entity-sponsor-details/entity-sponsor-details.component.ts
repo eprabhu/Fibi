@@ -126,6 +126,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
             this.addFeedStatusInRO();
             this.$subscriptions.push(this.entitySponsorService.SponsorDetailsAutoSave(this.autoSaveRO).subscribe((data) => {
                 this.dataChangeCounter--;
+                this._dataStoreService.enableModificationHistoryTracking();
                 showEntityToast('SUCCESS');
                 this.sponsorDetailsObj = this.autoSaveRO;
                 this.updateSponsorCompleteFlag();
@@ -159,6 +160,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
             this.addFeedStatusInRO();
             this.$subscriptions.push(this.entitySponsorService.updateSponsorDetails(this.autoSaveRO).subscribe((data) => {
                 this.dataChangeCounter--;
+                this._dataStoreService.enableModificationHistoryTracking();
                 showEntityToast('SUCCESS');
                 if (this.autoSaveRO.acronym) {
                     this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;

@@ -146,6 +146,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         this.setReqObj();
         this.isSaving = true;
         this.$subscriptions.push(this._entityOverviewService.saveIndustryDetails(this.industryDetails).subscribe((data: any) => {
+            this._dataStoreService.enableModificationHistoryTracking();
             this._dataStoreService.updateStore(['entityIndustryClassifications'], { 'entityIndustryClassifications':  data });
             this.isSaving = false;
             this.clearIndustryDetails();
@@ -248,6 +249,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
                 delete this.entityIndustryClassificationsGrouping[this.selectedIndustry.key];
                 this.entityIndustryClassifications = this.entityIndustryClassifications
                     .filter(items => !this.deleteClassList.includes(items.entityIndustryClassId));
+                this._dataStoreService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearIndustryDetails();
                 this.isSaving = false;
@@ -262,6 +264,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         this.isSaving = true;
         this.$subscriptions.push(this._entityOverviewService.updateIndustryDetails(this.generateUpdateObj()).subscribe((res: any) => {
             this.entityIndustryClassifications = res;
+            this._dataStoreService.enableModificationHistoryTracking();
             this.updateDataStore();
             this.clearIndustryDetails();
             this.isSaving = false;

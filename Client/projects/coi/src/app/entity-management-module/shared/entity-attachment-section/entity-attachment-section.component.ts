@@ -38,7 +38,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     VERSION_MODAL_ID: string = 'entity-attachment-delete-confirm-modal';
     CONFIRMATION_MODAL_ID: string = 'entity-attachment-delete-confirm-modal';
     versionModalConfig = new COIModalConfig(this.VERSION_MODAL_ID, '', 'Close', 'xl');
-    confirmationModalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete Attachment', 'Cancel');    
+    confirmationModalConfig = new COIModalConfig(this.CONFIRMATION_MODAL_ID, 'Delete Attachment', 'Cancel');
 
     constructor(private _commonService: CommonService,
         private _dataStoreService: EntityDataStoreService,
@@ -158,6 +158,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this._attachmentSectionService.deleteAttachment(this.currentAttachment?.attachmentNumber)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.deleteAttachmentAndVersions(this.updateIndex);
                     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully.');
                 }, (_error) => {

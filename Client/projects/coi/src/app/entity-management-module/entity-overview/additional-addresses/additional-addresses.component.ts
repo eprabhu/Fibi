@@ -85,6 +85,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
                 newAddress.country = this.selectedCountry;
                 newAddress.entityAddressType = this.selectAddressType;
                 this.additionalAddresses.push(newAddress);
+                this._dataStorService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearAdditionalAddress();
             }))
@@ -215,6 +216,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
                     this.additionalAddresses[this.isEditIndex].city = this.additionalAddressObj.city;
                     this.additionalAddresses[this.isEditIndex].state = this.additionalAddressObj.state;
                     this.additionalAddresses[this.isEditIndex].postCode = this.additionalAddressObj.postCode;
+                    this._dataStorService.enableModificationHistoryTracking();
                     this.updateDataStore();
                     this.clearAdditionalAddress();
                     this.isSaving = false;
@@ -241,6 +243,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
             this.isSaving = true;
             this.$subscriptions.push(this._entityOverviewService.deleteAdditionalAddress(this.deletePrimaryKey).subscribe((res: any) => {
                 this.additionalAddresses.splice(this.isEditIndex, 1);
+                this._dataStorService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearAdditionalAddress();
                 this.isSaving = false;

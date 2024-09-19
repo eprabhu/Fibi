@@ -113,6 +113,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this.entitySubAwardService.organizationDetailsAutoSave(this.autoSaveRO)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateHeaderStatus();
                     this.entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.entityId =
                         this.entityDetails.entityId;
@@ -135,6 +136,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this.entitySubAwardService.updateOrganizationDetails(this.autoSaveRO)
                 .subscribe((data: any) => {
+                    this._dataStoreService.enableModificationHistoryTracking();
                     this.updateHeaderStatus();
                     this.updateEntireFeed();
                     this.autoSaveRO = {};
