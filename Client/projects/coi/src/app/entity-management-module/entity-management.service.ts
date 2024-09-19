@@ -43,6 +43,10 @@ export class EntityManagementService {
         return this._http.patch(this._commonService.baseUrl + '/entity/update', changedRO);
     }
 
+    logFeedHistory(tabDetails) {
+        return this._http.post(this._commonService.baseUrl + '/entity/logAction', tabDetails);
+    }
+
     triggerEnrichAPI(enrichRequest) {
         return this._http.post(this._commonService.fibiCOIConnectUrl + '/fibi-coi-connect/enrich/entity/runEnrich', enrichRequest);
     }
@@ -51,6 +55,27 @@ export class EntityManagementService {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetchHistory/${entityId}`);
     }
 
+    updateOrganizationDetails(changedRO) {
+        return this._http.patch(`${this._commonService.baseUrl}/entity/organization/update`, changedRO);
+    }
+
+    updateSponsorDetails(changedRO) {
+        return this._http.patch(this._commonService.baseUrl + '/entity/sponsor/update', changedRO);
+    }
+
+}
+
+export function getEntityFullAddress(entityDetails, valuesToAdd = ['primaryAddressLine1', 'primaryAddressLine2', 'city', 'state' ]): string {
+    let address = '';
+    Object.keys(entityDetails).forEach((ele: string) => {
+        if(valuesToAdd.includes(ele)) {
+            address = address + (address ? ' , ' : '') + entityDetails[ele];
+        }
+    })
+    if (entityDetails?.country?.countryName) {
+        address = address + (address ? ' , ' : '') + entityDetails?.country?.countryName;
+    }
+    return address;
 }
 
 

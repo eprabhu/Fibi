@@ -18,10 +18,10 @@
                 <div class="align-items-center d-flex gap-2 ms-auto">
                     <button *ngIf="detailsSource === 'LOCAL'" id="view-entity-common-card"
                         aria-label="Click here to view entity details" title="Click here to view entity details"
-                        class="btn btn-outline-secondary fs-14" name="view-entity-common-card" (click)="openEntity()">
+                        class="btn btn-outline-secondary fs-14" name="view-entity-common-card" (click)="openEntity(entityDetailsObj?.entityId)">
                         View
                     </button>
-                    <button *ngIf="detailsSource === 'DUNS'" id="use-entity-common-card"
+                    <button *ngIf="detailsSource === 'DUNS' && !isDuplicateEntityAvailable" id="use-entity-common-card"
                         [disabled]="isDunsMatchAlreadyDone" (click)="sendEntityDetails()"
                         aria-label="Click here to use this entity" title="Click here to use this entity"
                         [class.btn-primary]="isDunsMatchAlreadyDone" class="btn btn-outline-secondary fs-14"
@@ -210,6 +210,31 @@
                                 {{entityDetailsObj?.ueiNumber}}</span>
                         </app-no-data-label>
                     </span>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isDuplicateEntityAvailable && !isDunsMatchAlreadyDone">
+                <div class="col-12">
+                    <div class="d-flex rounded-1 matching-card mb-0 py-2 mt-2 px-2 align-items-center justify-content-between">
+                        <p class="fs-14 mb-0">
+                            <span class="d-flex algin-items-start" *ngIf="!isAlreadyMarkedAsDuplicate">Entity with this DUNS number already
+                                exist.</span>
+                            <span class="d-flex algin-items-start" *ngIf="isAlreadyMarkedAsDuplicate">The currently opened entity is marked as
+                                a duplicate of this entity.</span>
+                        </p>
+                        <div>
+                            <button id="view-original-entity-duns-common-card" aria-label="Click here to view entity details"
+                                title="Click here to view entity details" class="btn btn-outline-secondary fs-14 me-2"
+                                name="view-original-entity-duns-common-card"
+                                (click)="openEntity(entityDetailsObj?.duplicateEntityDetails?.entityId)">
+                                View
+                            </button>
+                            <button id="mark-as-duplicate-entity-common-card" *ngIf="!isAlreadyMarkedAsDuplicate"
+                                (click)="openMarkAsDuplicateModal()" aria-label="Click here to mark as duplicate this entity"
+                                title="Click here to mark as duplicate this entity" class="btn btn-primary fs-14"
+                                name="mark-as-duplicate-entity-common-card">Mark as Duplicate
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </ng-container>
         </div>

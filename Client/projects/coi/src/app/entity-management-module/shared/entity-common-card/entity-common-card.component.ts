@@ -21,6 +21,8 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     dunsMatchDetails = new DunsMatchDetails();
     isDunsMatchAlreadyDone = false;
+    isDuplicateEntityAvailable = false;
+    isAlreadyMarkedAsDuplicate = false;
 
     @Input() detailsSource: 'DUNS' | 'LOCAL' = 'LOCAL';
     @Input() entityDetailsObj = new EntityCardDetails();
@@ -35,6 +37,7 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
         if (this.detailsSource === 'DUNS') {
             this.setMatchingPercentage();
         }
+        this.isDuplicateEntityAvailable = this.entityDetailsObj.duplicateEntityDetails && !isEmptyObject(this.entityDetailsObj.duplicateEntityDetails);
     }
 
     setMatchingPercentage() {
@@ -45,12 +48,17 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
         this.emitCardNextAction.emit('USE');
     }
 
+    openMarkAsDuplicateModal(): void {
+        this.emitCardNextAction.emit('OPEN_MODAL');
+    }
+
     private getDataFromStore() {
         const ENTITY_DATA = this._dataStorService.getData();
         if (ENTITY_DATA && !isEmptyObject(ENTITY_DATA)) {
             this.dunsMatchDetails.matchedDunsNumber = ENTITY_DATA?.entityDetails?.dunsNumber;
             this.dunsMatchDetails.isDunsMatched = ENTITY_DATA?.entityDetails?.isDunsMatched;
             this.isDunsMatchAlreadyDone = this.dunsMatchDetails.isDunsMatched && this.dunsMatchDetails.matchedDunsNumber == this.entityDetailsObj?.dunsNumber;
+            this.isAlreadyMarkedAsDuplicate = ENTITY_DATA?.entityDetails?.originalEntityId == this.entityDetailsObj?.duplicateEntityDetails?.entityId;
         } else {
             return;
         }
@@ -64,8 +72,8 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
         );
     }
 
-    openEntity(): void {
-        openInNewTab('manage-entity/entity-overview?', ['entityManageId'], [this.entityDetailsObj.entityId]);
+    openEntity(entityId: any): void {
+        openInNewTab('manage-entity/entity-overview?', ['entityManageId'], [entityId]);
     }
 
     ngOnDestroy() {

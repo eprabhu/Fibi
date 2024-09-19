@@ -5,23 +5,31 @@
             <div class="row mx-0 gap-2 coloured-bg-header align-items-center">
                 <div class="col d-flex align-items-center py-2 rounded-top-3">
                     <span class="icon-bg me-3 my-2 coloured-icons fs-24 d-inline-flex align-items-center justify-content-center custom_icon_size"
-                        aria-hidden="true" [class.verified-border]="!isEditMode">
+                        aria-hidden="true" [class.verified-border]="entityDetails?.entityStatusType?.entityStatusTypeCode === ENTITY_VERIFIED">
                         <mat-icon class="font-size">domain</mat-icon>
                     </span>
-                    <span *ngIf="!isEditMode" class="align-items-center d-flex badge fw-normal fs-11 rounded-5 text-bg-light-verify">
+                    <span *ngIf="entityDetails?.entityStatusType?.entityStatusTypeCode === ENTITY_VERIFIED" class="align-items-center d-flex badge fw-normal fs-11 rounded-5 text-bg-light-verify">
                         <mat-icon class="me-1 fs-13">check_circle</mat-icon>
                         <span>Verified</span>
                     </span>
                     <div>
-                        <div class="d-flex align-items-baseline">
-                            <div>
-                                <span class="fs-18 fw-medium">{{entityDetails?.entityName}}</span>
-                                <span *ngIf="latestPriorName" class="fs-13 ms-1"> {{'('}}Formerly known as
+                        <div class="align-items-center d-inline-flex">
+                                <span class="fs-18 fw-medium text-slice" [title]="entityDetails?.entityName">{{entityDetails?.entityName}}</span>
+                                <span *ngIf="latestPriorName" class="fs-13 ms-1 text-slice" [title]="latestPriorName"> {{'('}}Formerly known as
                                     <strong>{{latestPriorName}}</strong>{{')'}}</span>
                                 <span>
-                                    <span class="badge ms-2 px-2 rounded-pill text-bg-success"> Active</span>
+                                    <span class="badge ms-2 px-2 rounded-pill {{badgeClass}}">
+                                        {{entityDetails?.entityDocumentStatusType?.description}}
+                                    </span>
                                 </span>
-                            </div>
+                        </div>
+                        <div class="fs-14 d-flex align-items-center" *ngIf="originalEntityName && entityDetails?.entityDocumentStatusType?.documentStatusTypeCode === ENTITY_DUPLICATE"
+                        (click)="openEntity()">
+                                <span class="link-primary me-1">
+                                    <app-common-help-text [helpTextHardCoded]="'This is the genuine entity. Click to view details'" [placement]="'bottom'"></app-common-help-text>
+                                    <span class="ms-1">{{originalEntityName}}</span>
+                                </span>
+                                <mat-icon aria-hidden="true" class="fs-16 ms-1">open_in_new</mat-icon>
                         </div>
                         <div class="d-flex">
                             <!-- home unit -->
@@ -61,11 +69,18 @@
                         <mat-icon aria-hidden="true">reply</mat-icon>
                     </button>
                     <!-- verify -->
-                    <button *ngIf="isEditMode && entityDetails.entityStatusType.entityStatusTypeCode !== '1' && canVerifyEntity" id="coi-entity-verify-btn"
+                    <button *ngIf="isEditMode && entityDetails?.entityStatusType?.entityStatusTypeCode !== ENTITY_VERIFIED && canVerifyEntity" id="coi-entity-verify-btn"
                         class="btn btn-primary fs-14 d-flex align-items-center btn-sm"
                         (click)="openVerifyEntityModal()"
-                        title="Click here to verify entity." aria-label="Click here to verify entity.">
+                        title="Click here to verify entity" aria-label="Click here to verify entity">
                         Verify
+                    </button>
+                    <button *ngIf="canModifyEntity" id="coi-entity-modify-btn"
+                        name="coi-entity-modify-btn"
+                        class="btn btn-primary fs-14 d-flex align-items-center btn-sm"
+                        (click)="modifyEntity()"
+                        title="Click here to modify entity" aria-label="Click here to modify entity">
+                        Modify
                     </button>
                 </div>
             </div>
@@ -156,7 +171,7 @@
 
 <ng-container *ngIf="showSlider">
     <app-coi-slider (closeSlider)="validateSliderClose()"
-        [elementId]="sliderElementId" [isHeaderNeeded]="true" [sliderWidth]="'w-50'">
+        [elementId]="sliderElementId" [isHeaderNeeded]="true" [sliderWidth]="'w-md-90 w-lg-75 w-xxl-50 w-100'">
 
         <ng-container header>
             <span id="coi-entity-duns-match-header">{{matchedEntites?.length}} DnB Matching Entities</span>
@@ -189,7 +204,6 @@
 </app-coi-modal>
 <!-- DUNS match confirmation pop-up ends -->
 
-
 <div class="modal fade mySkinDialog" data-bs-backdrop="static" [id]="'coi-entity-confirmation-modal'" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -217,3 +231,4 @@
         </div>
     </div>
 </div>
+<app-duplicate-marking-confirmation [duplicateEntityDetails]="duplicateEntityDetails" (emitAPISuccess)="validateSliderClose()"></app-duplicate-marking-confirmation>
