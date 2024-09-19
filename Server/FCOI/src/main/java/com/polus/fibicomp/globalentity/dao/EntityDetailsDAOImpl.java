@@ -248,6 +248,8 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 				entityTabStatus.put("organization_feed_status", rset.getString("organization_feed_status") != null ? rset.getString("organization_feed_status") : "");
 				entityTabStatus.put("sponsor_feed_status_code", rset.getString("sponsor_feed_status_code") != null ? rset.getString("sponsor_feed_status_code") : "");
 				entityTabStatus.put("organization_feed_status_code", rset.getString("organization_feed_status_code") != null ? rset.getString("organization_feed_status_code") : "");
+				entityTabStatus.put("organization_id", rset.getString("organization_id") != null ? rset.getString("organization_id") : "");
+				entityTabStatus.put("sponsor_code", rset.getString("sponsor_code") != null ? rset.getString("sponsor_code") : "");
 			}
 		} catch (Exception e) {
 			logger.error("Exception on getEntityTabStatus {}", e.getMessage());
