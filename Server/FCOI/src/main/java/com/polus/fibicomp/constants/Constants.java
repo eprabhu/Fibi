@@ -1,7 +1,5 @@
 package com.polus.fibicomp.constants;
 
-import java.math.BigDecimal;
-
 public interface Constants {
 
 
@@ -24,6 +22,7 @@ public interface Constants {
 
     // Module Code
     Integer AWARD_MODULE_CODE = 1;
+    Integer INST_PROPOSAL_MODULE_CODE = 2;
     Integer DEV_PROPOSAL_MODULE_CODE = 3;
 
     String YES = "Y";
