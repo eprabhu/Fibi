@@ -43,3 +43,11 @@ ALTER TABLE `ENTITY_SPONSOR_INFO`
 	REFERENCES `SPONSOR_TYPE` (`SPONSOR_TYPE_CODE`)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION;
+
+-- Updating key person role order as PI > COI > KP
+UPDATE `eps_prop_person_role` SET `SORT_ID` = '5' WHERE (`PROP_PERSON_ROLE_ID` = '1');
+UPDATE `eps_prop_person_role` SET `SORT_ID` = '7' WHERE (`PROP_PERSON_ROLE_ID` = '2');
+UPDATE `eps_prop_person_role` SET `SORT_ID` = '3' WHERE (`PROP_PERSON_ROLE_ID` = '4');
+UPDATE `eps_prop_person_role` SET `SORT_ID` = '4' WHERE (`PROP_PERSON_ROLE_ID` = '5');
+UPDATE `eps_prop_person_role` SET `SORT_ID` = '8' WHERE (`PROP_PERSON_ROLE_ID` = '7');
+UPDATE `eps_prop_person_role` SET `SORT_ID` = '6' WHERE (`PROP_PERSON_ROLE_ID` = '6');
