@@ -97,7 +97,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                     registration.regTypeCode = this.selectedType[0].code;
                     registration.registrationTypeDescription = this.selectedType[0]?.description;
                     registration.regNumber = this.registrationDetails.regNumber;
-                    this.entityRegistrations.unshift(registration);
+                    this.entityRegistrations.push(registration);
                     this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                 }
