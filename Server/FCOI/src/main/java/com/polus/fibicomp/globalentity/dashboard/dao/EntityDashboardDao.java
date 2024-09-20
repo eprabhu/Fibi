@@ -85,6 +85,9 @@ public class EntityDashboardDao {
 					dashboardResponse.setWebsiteAddress(resultSet.getString("WEBSITE_ADDRESS"));
 					dashboardResponse.setEntityStatus(resultSet.getString("ENTITY_STATUS"));
 					dashboardResponse.setEntityVerificationStatus(resultSet.getString("VERIFICATION_STATUS"));
+					dashboardResponse.setEntityStatusTypeCode(resultSet.getString("ENTITY_STATUS_TYPE_CODE"));
+					dashboardResponse.setDocumentStatusTypeCode(resultSet.getString("DOCUMENT_STATUS_TYPE_CODE"));
+					dashboardResponse.setOwnershipTypeCode(resultSet.getString("ENTITY_OWNERSHIP_TYPE_CODE"));;
 					dashboardResponses.add(dashboardResponse);
 				}
 				entityDashboard.setDashboardResponses(dashboardResponses);
