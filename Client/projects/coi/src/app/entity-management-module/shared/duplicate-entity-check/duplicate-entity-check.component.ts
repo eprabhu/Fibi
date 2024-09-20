@@ -32,6 +32,9 @@ export class DuplicateEntityCheckComponent implements OnChanges, OnDestroy {
         }
     }
     private performDuplicateCheck(): void {
+        if(!this.dupCheckPayload.primaryAddressLine2) {
+            delete this.dupCheckPayload['primaryAddressLine2'];
+        }
         this.$subscriptions.push(this._duplicateCheckService.checkForDuplicate(this.dupCheckPayload).subscribe((data: EntityCardDetails[] = []) => {
             if (data?.length) {
                 this.matchedDuplicateEntites = data;

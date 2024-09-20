@@ -102,7 +102,8 @@ export class EnitityVerifyModalComponent implements OnInit {
                         this.entityDetails.entityStatusType = {
                             entityStatusTypeCode: "1",
                             description: "Verified",
-                        }
+                        };
+                        this.entityDetails.entityStatusTypeCode = '1';
                         this._dataStoreService.updateStore(['entityDetails', 'entityTabStatus'], { entityDetails: this.entityDetails, entityTabStatus: this.entityTabStatus})
                         this.closeEntityVerifyModal(modalAction);
                         removeToast('ERROR');

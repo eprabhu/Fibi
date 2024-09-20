@@ -1,16 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
+import { EntitySponsor } from '../shared/entity-interface';
 
 @Injectable()
 export class EntitySponsorService {
 
-    entitySponsorDetails: any = {};
-
-
+    entitySponsorDetails = new EntitySponsor();
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    
+
     fetchEntitySponsorDetails(entityId) {
         return this._http.get(`${this._commonService.baseUrl}/entity/sponsor/fetch/${entityId}`);
     }

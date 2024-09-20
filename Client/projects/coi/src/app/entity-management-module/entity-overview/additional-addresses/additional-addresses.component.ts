@@ -49,7 +49,6 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     selectedCountryEvent(event: any): void {
@@ -140,6 +139,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         this.entityId = entityData?.entityDetails?.entityId;
         this.additionalAddresses = entityData.entityMailingAddresses;
         this.isEditMode = this._dataStorService.getEditMode();
+        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore() {
@@ -202,30 +202,27 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     }
 
     editIndustry() {
-        if (!this.isSaving) {
+        this.entityMandatoryValidation();
+        if (!this.mandatoryList.size && !this.isSaving) {
             this.isSaving = true;
-            this.entityMandatoryValidation();
-            if (!this.mandatoryList.size) {
-                this.$subscriptions.push(this._entityOverviewService.updateAdditionalAddresses(this.additionalAddressObj).subscribe((res: any) => {
-                    this.additionalAddresses[this.isEditIndex].addressTypeCode = this.additionalAddressObj.addressTypeCode;
-                    this.additionalAddresses[this.isEditIndex].addressLine1 = this.additionalAddressObj.addressLine1;
-                    this.additionalAddresses[this.isEditIndex].addressLine2 = this.additionalAddressObj.addressLine2;
-                    this.additionalAddresses[this.isEditIndex].countryCode = this.additionalAddressObj.countryCode;
-                    this.additionalAddresses[this.isEditIndex].country = this.selectedCountry;
-                    this.additionalAddresses[this.isEditIndex].entityAddressType = this.selectAddressType;
-                    this.additionalAddresses[this.isEditIndex].city = this.additionalAddressObj.city;
-                    this.additionalAddresses[this.isEditIndex].state = this.additionalAddressObj.state;
-                    this.additionalAddresses[this.isEditIndex].postCode = this.additionalAddressObj.postCode;
-                    this._dataStorService.enableModificationHistoryTracking();
-                    this.updateDataStore();
-                    this.clearAdditionalAddress();
-                    this.isSaving = false;
-                }, err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
-                    this.isSaving = false;
-                }));
-            }
-
+            this.$subscriptions.push(this._entityOverviewService.updateAdditionalAddresses(this.additionalAddressObj).subscribe((res: any) => {
+                this.additionalAddresses[this.isEditIndex].addressTypeCode = this.additionalAddressObj.addressTypeCode;
+                this.additionalAddresses[this.isEditIndex].addressLine1 = this.additionalAddressObj.addressLine1;
+                this.additionalAddresses[this.isEditIndex].addressLine2 = this.additionalAddressObj.addressLine2;
+                this.additionalAddresses[this.isEditIndex].countryCode = this.additionalAddressObj.countryCode;
+                this.additionalAddresses[this.isEditIndex].country = this.selectedCountry;
+                this.additionalAddresses[this.isEditIndex].entityAddressType = this.selectAddressType;
+                this.additionalAddresses[this.isEditIndex].city = this.additionalAddressObj.city;
+                this.additionalAddresses[this.isEditIndex].state = this.additionalAddressObj.state;
+                this.additionalAddresses[this.isEditIndex].postCode = this.additionalAddressObj.postCode;
+                this._dataStorService.enableModificationHistoryTracking();
+                this.updateDataStore();
+                this.clearAdditionalAddress();
+                this.isSaving = false;
+            }, err => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+                this.isSaving = false;
+            }));
         }
     }
 

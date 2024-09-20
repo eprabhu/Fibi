@@ -62,7 +62,6 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.autoSaveSubscribe();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     private getDataFromStore() {
@@ -85,6 +84,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         }
         this.setOtherDetailsObject();
         this.isEditMode = this.dataStore.getEditMode();
+        this.checkUserHasRight();
     }
 
     getCurrencyList() {

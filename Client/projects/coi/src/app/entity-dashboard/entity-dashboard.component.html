@@ -61,16 +61,16 @@
                                 [uniqueId]="'adv-entity-verification'">
                             </app-look-up>
                         </div>
-                        <!-- Address1 -->
-                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Address1" tabindex="-1" aria-label="Address1">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Address1</label>
-                            <input type="text" id="adv-search-Proposal-title" placeholder="Address1" title="Click here to search by Address1" aria-label="Address1 search field"
+                        <!-- Address Line 1 -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Address Line 1" tabindex="-1" aria-label="Address Line 1">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Address Line 1</label>
+                            <input type="text" id="adv-search-Proposal-title" placeholder="Address Line 1" title="Click here to search by Address Line 1" aria-label="Address Line 1 search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.PRIMARY_ADDRESS_LINE_1" />
                         </div>
-                        <!-- Address -->
-                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Address2" tabindex="-1" aria-label="Address2">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Address2</label>
-                            <input type="text" id="adv-search-Proposal-title" placeholder="Address2" title="Click here to search by Address2" aria-label="Address2 search field"
+                        <!-- Address Line 2 -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Address Line 2" tabindex="-1" aria-label="Address2">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Address Line 2</label>
+                            <input type="text" id="adv-search-Proposal-title" placeholder="Address Line 2" title="Click here to search by Address Line 2" aria-label="Address Line 2 search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.PRIMARY_ADDRESS_LINE_2" />
                         </div>
                         <!-- City -->
@@ -79,10 +79,10 @@
                             <input type="text" id="adv-search-Proposal-title" placeholder="City" title="Click here to search by City" aria-label="City search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.CITY" />
                         </div>
-                        <!-- State -->
-                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by State" tabindex="-1" aria-label="State">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">State</label>
-                            <input type="text" id="adv-search-Proposal-title" placeholder="State" title="Click here to search by State" aria-label="State search field"
+                        <!-- State/Province/Region -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by State/Province/Region" tabindex="-1" aria-label="State or Province or Region">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">State/Province/Region</label>
+                            <input type="text" id="adv-search-Proposal-title" placeholder="State/Province/Region" title="Click here to search by State/Province/Region" aria-label="State or Province or Region search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.STATE" />
                         </div>
                         <!-- Country search field -->
@@ -94,10 +94,10 @@
                                 [placeHolder]="'Type here to search by Country'" [uniqueId]="'adv-entity-country'">
                             </app-endpoint-search>
                         </div>
-                        <!-- Duns Number -->
-                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Duns Number" tabindex="-1" aria-label="Duns Number">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Duns Number</label>
-                            <input type="text" id="adv-search-Proposal-title" placeholder="Duns Number" title="Click here to search by Duns Number" aria-label="Duns Number search field"
+                        <!-- DUNS Number -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by DUNS Number" tabindex="-1" aria-label="DUNS Number">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">DUNS Number</label>
+                            <input type="text" id="adv-search-Proposal-title" placeholder="DUNS Number" title="Click here to search by DUNS Number" aria-label="DUNS Number search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.DUNS_NUMBER" />
                         </div>
                         <!-- UEI Number -->
@@ -118,31 +118,30 @@
                             <input type="text" id="adv-search-Proposal-title" placeholder="Website" title="Click here to search by Website" aria-label="Website search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.WEBSITE_ADDRESS" />
                         </div>
-                        <!-- Email -->
-                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Email" tabindex="-1" aria-label="Email">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Email</label>
-                            <input type="text" id="adv-search-Proposal-title" placeholder="Email" title="Click here to search by Email" aria-label="Email search field"
+                        <!-- Email Address-->
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Email Address" tabindex="-1" aria-label="Email Address">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-ownership-type">Email Address</label>
+                            <input type="text" id="adv-search-Proposal-title" placeholder="Email Address" title="Click here to search by Email Address" aria-label="Email Address search field"
                             maxlength="60" autocomplete="off" class="form-control" [(ngModel)]="tempEntitySearchRequestObject.CERTIFIED_EMAIL" (focusout)="validateEmail()"
                             [ngClass]="(mandatoryList?.has('certifiedEmail')) ? 'is-invalid d-block' : ''" (ngModelChange)="clearValidation('certifiedEmail')" />
                             <div *ngIf="mandatoryList?.has('certifiedEmail')" class="invalid-feedback d-block fs-13">
                                 {{mandatoryList?.get('certifiedEmail')}}
                             </div>
                         </div>
-                        <!-- Entity status dropdown(lookup) -->
-                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Status" tabindex="-1"
-                            aria-label="Entity status dropdown" role="searchbox">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-status">Entity status</label>
+                        <!-- Entity Status dropdown(lookup) -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6 col-12" title="Click to search by Entity Status" tabindex="-1"
+                            aria-label="Entity Status dropdown" role="searchbox">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-status">Entity Status</label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'ENTITY_STATUS_TYPE_CODE')" [options]="statusTypeOptions"
                                 [selectedLookUpList]="lookupValues['ENTITY_STATUS_TYPE_CODE']"
-                                [externalArray]="entityDashboardService.statusCodes" [isExternalArray]="true"
-                                class=" text-secondary fs-13" [uniqueId]="'adv-disclosure-type'">
+                                class=" text-secondary fs-13" [uniqueId]="'adv-disclosure-status'">
                             </app-look-up>
                         </div>
-                        <!-- Entity Verification status -->
+                        <!-- Entity Verification Status -->
                         <div *ngIf="activeTabName !== 'UNVERIFIED'" class="col-xl-3 col-lg-4 col-sm-6 col-12"
-                            title="Click to search by Entity Verification status" tabindex="-1"
-                            aria-label="Entity Verification status dropdown" role="searchbox">
-                            <label class="fw-bold fs-14 d-block" for="adv-entity-verification">Entity Verification status</label>
+                            title="Click to search by Entity Verification Status" tabindex="-1"
+                            aria-label="Entity Verification Status dropdown" role="searchbox">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-verification">Entity Verification Status</label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'VERIFICATION_STATUS')"
                                 [options]="verificationTypeOptions" [selectedLookUpList]="lookupValues['VERIFICATION_STATUS']"
                                 class="text-secondary fs-13" [uniqueId]="'adv-entity-verification'">
@@ -209,23 +208,23 @@
                                 <div class="col-12 mb-3">
                                     <div class="row">
                                         <div class="col">
-                                            <p [attr.aria-label]="'Entity Status ' + (entityListData?.entityStatus === 'Active' ? 'Active' : 'Inactive') +
-                        'Entity Name' + entityListData?.entityName + 'Verified Status' + 'Unverified'"
+                                            <p [attr.aria-label]="'Entity Status ' + entityListData?.documentStatusTypeCode === ENTITY_ACTIVE ? 'Active' : entityListData?.documentStatusTypeCode === ENTITY_DUPLICATE ? 'Duplicate' : 'Inactive' +
+                        'Entity Name' + entityListData?.entityName + 'Verified Status' + entityListData?.entityStatusTypeCode === ENTITY_VERIFIED ? 'Verified' : 'Unverified'"
                                                class="my-auto mb-0 coi-text-darker fs-6">
                                                 <span class="text-slice" [title]="entityListData?.entityName">{{entityListData?.entityName}}</span>
                                             </p>
                                         </div>
                                         <div class="align-content-center d-flex col-auto text-end">
-                                            <span *ngIf="entityListData?.entityVerificationStatus === 'Unverified'" data-bs-toggle="tooltip"
+                                            <span *ngIf="entityListData?.entityStatusTypeCode === ENTITY_UNVERIFIED" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" class="info-text rounded-pill f-14 me-2 px-3 py-1 rounded-5 py-0"
                                                 title="{{entityListData?.entityName}} is Unverified"><i aria-hidden="true"
                                                     class="fa fa-times me-2"></i>Unverified</span>
-                                            <span *ngIf="entityListData?.entityVerificationStatus == 'Verified'" data-bs-toggle="tooltip"
+                                            <span *ngIf="entityListData?.entityStatusTypeCode === ENTITY_VERIFIED" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" class="rounded-pill f-14 fw-700 me-2 px-3 py-2 badge rounded-5 py-0 text-bg-success align-items-center d-inline-flex"
                                                 title="{{entityListData?.entityName}} is Verified">
                                                 <mat-icon class="me-1 fs-13">check_circle</mat-icon>Verified</span>
                                             <span class="badge f-14 px-3 py-2 rounded-pill text-bg-warning"
-                                            [ngClass]="{'text-bg-success': entityListData?.entityStatus === 'Active', 'text-bg-secondary': entityListData?.entityStatus === 'Inactive', 'text-bg-warning': entityListData?.entityStatus === 'Duplicate'}">
+                                            [ngClass]="{'text-bg-success': entityListData?.documentStatusTypeCode === ENTITY_ACTIVE, 'text-bg-secondary': entityListData?.documentStatusTypeCode === ENTITY_INACTIVE, 'text-bg-warning': entityListData?.documentStatusTypeCode === ENTITY_DUPLICATE}">
                                                 {{entityListData?.entityStatus}}</span>
 
 
@@ -244,7 +243,7 @@
                                         </div>
                                         <div class="col-lg-3 col-md-6 mb-2"
                                              [attr.aria-label]="'Country ' + (entityListData?.primaryAddressLine1)">
-                                            <label class="coi-text-dark d-block">Address1</label>
+                                            <label class="coi-text-dark d-block">Address Line 1</label>
                                             <span class="coi-text-light"><app-no-data-label
                                                 [valueToShow]="entityListData?.primaryAddressLine1">
                                             </app-no-data-label>
@@ -252,7 +251,7 @@
                                         </div>
                                         <div class="col-lg-3 col-md-6 mb-2"
                                              [attr.aria-label]="'Country ' + (entityListData?.primaryAddressLine2)">
-                                            <label class="coi-text-dark d-block">Address2</label>
+                                            <label class="coi-text-dark d-block">Address Line 2</label>
                                             <span class="coi-text-light"><app-no-data-label
                                                 [valueToShow]="entityListData?.primaryAddressLine2">
                                             </app-no-data-label>
@@ -276,7 +275,7 @@
                                         </div>
                                         <div class="col-lg-3 col-md-6 mb-2"
                                              [attr.aria-label]="'Country ' + (entityListData?.state)">
-                                            <label class="coi-text-dark d-block">State</label>
+                                            <label class="coi-text-dark d-block">State/Province/Region</label>
                                             <span class="coi-text-light"><app-no-data-label
                                                 [valueToShow]="entityListData?.state">
                                             </app-no-data-label>
@@ -284,7 +283,7 @@
                                         </div>
                                         <div class="col-lg-3 col-md-6 mb-2"
                                              [attr.aria-label]="'Country ' + (entityListData?.dunsNumber)">
-                                            <label class="coi-text-dark d-block">Duns Number</label>
+                                            <label class="coi-text-dark d-block">DUNS Number</label>
                                             <span class="coi-text-light"><app-no-data-label
                                                 [valueToShow]="entityListData?.dunsNumber">
                                             </app-no-data-label>
@@ -316,14 +315,14 @@
                                         </div>
                                         <div class="col-lg-3 col-md-6 mb-2"
                                              [attr.aria-label]="'Country ' + (entityListData?.certifiedEmail)">
-                                            <label class="coi-text-dark d-block">Email</label>
+                                            <label class="coi-text-dark d-block">Email Address</label>
                                             <span class="coi-text-light"><app-no-data-label
                                                 [valueToShow]="entityListData?.certifiedEmail">
                                             </app-no-data-label>
                                             </span>
                                         </div>
                                 <div class="col-lg-3 d-flex align-items-end justify-content-end">
-                                    <button *ngIf="canModifyEntity && entityListData?.entityVerificationStatus === 'Verified' && entityListData?.entityStatus === 'Active'"
+                                    <button *ngIf="canModifyEntity && entityListData?.entityStatusTypeCode === ENTITY_VERIFIED && entityListData?.documentStatusTypeCode === ENTITY_ACTIVE"
                                         id="coi-entity-management-edit-btn" (click)="modifyEntity(entityListData)"
                                         aria-label="Click here to modify entity details"
                                         class="align-items-center btn btn-outline-secondary d-flex fs-14 me-2" title="Click here to modify entity details">
@@ -357,12 +356,9 @@
         <div [hidden]="isLoading" tabindex="-1" *ngIf="entityList.length>0 && isShowEntityList"
              class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
-                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount"
-                                [defaultCurrentPage]="entityDashboardService.entitySearchRequestObject.currentPage">
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
                 </app-pagination>
             </nav>
-
-
         </div>
     </div>
 </section>

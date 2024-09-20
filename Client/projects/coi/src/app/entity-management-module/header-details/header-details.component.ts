@@ -77,7 +77,6 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.dunsMatchConfirmationModalConfig.dataBsOptions.keyboard = true;
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     viewSlider(event) {
@@ -148,6 +147,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.canModifyEntity = this.getCanModifyEntity();
         this.badgeClass = this.getBadgeClass();
         this.originalEntityName = ENTITY_DATA?.originalName;
+        this.checkUserHasRight();
     }
 
     getBadgeClass(): string {
