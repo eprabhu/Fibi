@@ -3,6 +3,7 @@ package com.polus.fibicomp.globalentity.dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,27 +262,47 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	@Override
 	public List<Entity> validateDuplicateByParams(ValidateDuplicateRequestDTO dto) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		CriteriaBuilder cb = session.getCriteriaBuilder();
-		CriteriaQuery<Entity> cq = cb.createQuery(Entity.class);
-		Root<Entity> entity = cq.from(Entity.class);
-		Predicate entityNamePredicate = cb.like(cb.lower(cb.trim(entity.get("entityName"))), "%" + dto.getEntityName().trim().toLowerCase() + "%");
-		Predicate addressLine1Predicate1 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%");
-		Predicate addressLine1Predicate2 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%");
-		Predicate addressLine2Predicate1 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%");
-		Predicate addressLine2Predicate2 = cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%");
-		Predicate countryPredicate = cb.equal(entity.get("countryCode"), dto.getCountryCode());
-		Predicate finalPredicate = cb.and(
-		    cb.or(
-		        entityNamePredicate, 
-		        addressLine1Predicate1, 
-		        addressLine1Predicate2, 
-		        addressLine2Predicate1, 
-		        addressLine2Predicate2
-		    ), 
-		    countryPredicate
-		);
-		cq.where(finalPredicate);
-		return session.createQuery(cq).getResultList();
+	    CriteriaBuilder cb = session.getCriteriaBuilder();
+	    CriteriaQuery<Entity> cq = cb.createQuery(Entity.class);
+	    Root<Entity> entity = cq.from(Entity.class);
+	    List<Predicate> predicates = new ArrayList<>();
+	    if (dto.getEntityName() != null && !dto.getEntityName().trim().isEmpty()) {
+	        Predicate entityNamePredicate = cb.like(
+	            cb.lower(cb.trim(entity.get("entityName"))),
+	            "%" + dto.getEntityName().trim().toLowerCase() + "%"
+	        );
+	        predicates.add(entityNamePredicate);
+	    }
+	    if (dto.getPrimaryAddressLine1() != null && !dto.getPrimaryAddressLine1().trim().isEmpty()) {
+	        Predicate addressLine1Predicate1 = cb.and(
+	            cb.isNotNull(entity.get("primaryAddressLine1")),
+	            cb.notEqual(cb.trim(entity.get("primaryAddressLine1")), ""),
+	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%")
+	        );
+	        Predicate addressLine1Predicate2 = cb.and(
+	            cb.isNotNull(entity.get("primaryAddressLine2")),
+	            cb.notEqual(cb.trim(entity.get("primaryAddressLine2")), ""),
+	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%")
+	        );
+	        predicates.add(cb.or(addressLine1Predicate1, addressLine1Predicate2));
+	    }
+	    if (dto.getPrimaryAddressLine2() != null && !dto.getPrimaryAddressLine2().trim().isEmpty()) {
+	        Predicate addressLine2Predicate1 = cb.and(
+	            cb.isNotNull(entity.get("primaryAddressLine2")),
+	            cb.notEqual(cb.trim(entity.get("primaryAddressLine2")), ""),
+	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%")
+	        );
+	        Predicate addressLine2Predicate2 = cb.and(
+	            cb.isNotNull(entity.get("primaryAddressLine1")),
+	            cb.notEqual(cb.trim(entity.get("primaryAddressLine1")), ""),
+	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%")
+	        );
+	        predicates.add(cb.or(addressLine2Predicate1, addressLine2Predicate2));
+	    }
+	    Predicate countryPredicate = cb.equal(entity.get("countryCode"), dto.getCountryCode());
+	    predicates.add(countryPredicate);
+	    cq.where(cb.and(predicates.toArray(new Predicate[0])));
+	    return session.createQuery(cq).getResultList();
 	}
 
 	@Override
