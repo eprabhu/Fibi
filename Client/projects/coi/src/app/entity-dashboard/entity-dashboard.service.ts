@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 import { HttpClient } from '@angular/common/http';
+import { HTTP_ERROR_STATUS } from '../app-constants';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +29,10 @@ export class EntityDashboardService {
   sortCountObj: any = {};
 
   getAllSystemEntityList(params) {
-    return this._http.post(this._commonService.baseUrl + '/entity/getEntityDashboardData', params);
+    return this._http.post(this._commonService.baseUrl + '/entity/getEntityDashboardData', params).pipe(catchError((err) => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching Entity List failed. Please try again.');
+        return of();
+      }));
   }
 }
 
@@ -40,7 +46,6 @@ export class EntityDashboardSearchRequest{
       TAB_TYPE: 'ALL_ENTITY',
       UNLIMITED: false
   };
-  currentPage = 1;
 }
 
   export class RelationshipDashboardRequest {

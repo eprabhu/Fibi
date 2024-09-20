@@ -49,7 +49,6 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     selectedCountryEvent(event: any): void {
@@ -140,6 +139,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         this.entityId = entityData?.entityDetails?.entityId;
         this.additionalAddresses = entityData.entityMailingAddresses;
         this.isEditMode = this._dataStorService.getEditMode();
+        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore() {

@@ -47,7 +47,6 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.autoSaveSubscribe();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -68,6 +67,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
         this.subAwdRiskAssmtDate = getDateObjectFromTimeStamp(this.entitySubAwardService.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.subAwdRiskAssmtDate);
         this.isEditMode = this._dataStoreService.getEditMode();
         this.entityTabStatus = ENTITY_DATA?.entityTabStatus;
+        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore(): void {
@@ -149,13 +149,15 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     }
 
     private addFeedStatusInRO(): void {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')) {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')
+            && isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization)) {
             this.autoSaveRO.feedStatusCode = '2';
         }
     }
 
     private updateEntireFeed(): void {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')) {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')
+            && isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization)) {
             this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');
         }
     }

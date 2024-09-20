@@ -46,7 +46,6 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.autoSaveSubscribe();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -60,6 +59,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         this.setOtherDetailsObject();
         this.isEditMode = this._dataStoreService.getEditMode();
         this.entityTabStatus = entityData?.entityTabStatus;
+        this.checkUserHasRight();
     }
 
     triggerSingleSave() {
@@ -109,7 +109,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
 
     autoSaveAPI() {
         if (this.dataChangeCounter > 0 && !this.isRestrictSave) {
-            if (!this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO) {
+            if (!this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.id) {
                 this.isRestrictSave = true;
                 this.addNewDetail();
             }
@@ -124,12 +124,24 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
             this.commonService.setLoaderRestriction();
             this.autoSaveRO.entityId = this.entityDetails.entityId;
             this.addFeedStatusInRO();
-            this.$subscriptions.push(this.entitySponsorService.SponsorDetailsAutoSave(this.autoSaveRO).subscribe((data) => {
+            this.$subscriptions.push(this.entitySponsorService.SponsorDetailsAutoSave(this.autoSaveRO).subscribe((data: any) => {
                 this.dataChangeCounter--;
                 this._dataStoreService.enableModificationHistoryTracking();
+                this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO = {
+                    id: data
+                }
+                if(this.autoSaveRO.acronym) {
+                    this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.acronym = this.autoSaveRO.acronym;
+                    this.sponsorDetailsObj.acronym = this.autoSaveRO.acronym;
+                }
+                if(this.autoSaveRO.sponsorTypeCode) {
+                    this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorCode = this.autoSaveRO.sponsorTypeCode;
+                    this.sponsorDetailsObj.sponsorCode = this.autoSaveRO.sponsorTypeCode;
+                }
                 showEntityToast('SUCCESS');
-                this.sponsorDetailsObj = this.autoSaveRO;
-                this.updateSponsorCompleteFlag();
+                if (this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+                    this.updateSponsorCompleteFlag();
+                }
                 this.updateEntireFeed();
                 this.autoSaveRO = {};
                 this.isRestrictSave = false;
@@ -168,7 +180,9 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                 if (this.autoSaveRO.sponsorTypeCode) {
                     this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType = this.sponsorDetailsObj.sponsorType;
                 }
-                this.updateSponsorCompleteFlag();
+                if (this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+                    this.updateSponsorCompleteFlag();
+                }
                 this.updateEntireFeed();
                 this.autoSaveRO = {};
                 this.commonService.setChangesAvailable(false);
@@ -180,10 +194,8 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     updateSponsorCompleteFlag() {
-        if(this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorType?.code) {
-            this.entityTabStatus.entity_sponsor_info = true;
-            this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
-        }
+        this.entityTabStatus.entity_sponsor_info = true;
+        this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
     }
 
     setDetailsForUpdate(){

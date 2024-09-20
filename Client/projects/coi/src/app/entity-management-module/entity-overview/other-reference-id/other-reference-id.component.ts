@@ -43,7 +43,6 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     listenDataChangeFromStore() {
@@ -62,6 +61,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
         this.entityId = entityData?.entityDetails?.entityId;
         this.externalReferences = entityData.entityExternalIdMappings;
         this.isEditMode = this._dataStoreService.getEditMode();
+        this.checkUserHasRight();
     }
 
 

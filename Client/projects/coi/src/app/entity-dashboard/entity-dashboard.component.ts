@@ -5,7 +5,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 import { GraphDetail } from 'projects/shared/src/lib/graph/interface';
 import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { HTTP_ERROR_STATUS } from '../app-constants';
+import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { NavigationService } from '../common/services/navigation.service';
@@ -41,7 +41,7 @@ export class EntityDashboardComponent {
   countrySearchOptions: any = {};
   lookupValues = [];
   entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
-  statusTypeOptions = 'EMPTY#EMPTY#true#true#true#true';
+  statusTypeOptions = 'entity_document_status_type#DOCUMENT_STATUS_TYPE_CODE#true#true#true#true';
   verificationTypeOptions = 'entity_status#ENTITY_STATUS_CODE#true#true';
   ownershipTypeOptions = 'entity_ownership_type#OWNERSHIP_TYPE_CODE#true#true';
   $entityList = new Subject();
@@ -73,6 +73,11 @@ export class EntityDashboardComponent {
   clearEntityName: String;
   isSearchFormInvalid: boolean = false;
   canModifyEntity: boolean;
+  ENTITY_ACTIVE = ENTITY_DOCUMNET_STATUS_TYPE.ACTIVE;
+  ENTITY_DUPLICATE = ENTITY_DOCUMNET_STATUS_TYPE.DUPLICATE;
+  ENTITY_INACTIVE = ENTITY_DOCUMNET_STATUS_TYPE.INACTIVE;
+  ENTITY_VERIFIED = ENTITY_VERIFICATION_STATUS.VERIFIED;
+  ENTITY_UNVERIFIED = ENTITY_VERIFICATION_STATUS.UNVERIFIED;
 
   constructor(private _router: Router,
     public entityDashboardService: EntityDashboardService,
@@ -131,6 +136,8 @@ export class EntityDashboardComponent {
   checkForAdvanceSearch() {
     if ( this.entityDashboardService.isAdvanceSearch) {
        this.isViewAdvanceSearch = true;
+    } else {
+        this.entityDashboardService.entitySearchRequestObject = new EntityDashboardSearchRequest();
     }
     if (this.activeTabName === 'ALL_ENTITY') {
       this.isViewAdvanceSearch = true;
@@ -244,10 +251,10 @@ export class EntityDashboardComponent {
     if(this.isSearchFormInvalid) {
       return;
     }
-
+    this.tempEntitySearchRequestObject.entityDashboardData.PAGED = 0;
+    this.entityDashboardService.entitySearchRequestObject.entityDashboardData.PAGED = 0;
     this.entityList = [];
-  this.switchAdvanceSearchProperties(this.entityDashboardService.entitySearchRequestObject, this.tempEntitySearchRequestObject);
-
+    this.switchAdvanceSearchProperties(this.entityDashboardService.entitySearchRequestObject, this.tempEntitySearchRequestObject);
     this.$entityList.next();
     this.isShowEntityList = true;
     this.isShowAllProposalList = true;
@@ -275,7 +282,7 @@ export class EntityDashboardComponent {
       ];
       for (const property of singleInputFieldKeys) {
         if (source[property]) {
-          this.advanceSearchProperties[property] = source[property];
+          this.advanceSearchProperties[property] = source[property].trim();
         } else {
           delete this.advanceSearchProperties[property];
         }
@@ -349,10 +356,8 @@ export class EntityDashboardComponent {
   }
 
   actionsOnPageChange(event) {
-    if (this.entityDashboardService.entitySearchRequestObject.currentPage != event) {
-      this.entityDashboardService.entitySearchRequestObject.currentPage = event;
+      this.entityDashboardService.entitySearchRequestObject.entityDashboardData.PAGED = event-1;
       this.$entityList.next();
-    }
   }
 
   checkUserHasRight(): void {

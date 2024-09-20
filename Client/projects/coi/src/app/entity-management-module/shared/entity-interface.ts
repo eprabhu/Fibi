@@ -264,6 +264,7 @@ export class EntityDetails {
     entityOperatingStatusType?: any;
     entitySourceType?: any;
     originalEntityId: any;
+    documentStatusTypeCode?: any;
     country?: Country;
     entityOwnershipType?: EntityOwnershipType;
     entityBusinessType?: EntityBusinessType;

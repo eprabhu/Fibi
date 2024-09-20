@@ -701,11 +701,7 @@
         "secure": false
     },
     "/entity/getEntityDashboardData": {
-        "target": "http://10.199.100.34:9090/coi",
-        "secure": false
-    },
-    "/entity/*" : {
-        "target": "http://10.199.100.34:9090/coi",
+        "target": "http://10.199.100.3:8070/coi",
         "secure": false
     },
     "/getDisclosureDetailsForSFI/*" : {
@@ -885,11 +881,11 @@
         "secure": false
     },
     "/entity/markDuplicate": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/entity/logAction": {
-        "target": "http://10.199.100.34:9090/",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/hierarchy/projectTree/*": {

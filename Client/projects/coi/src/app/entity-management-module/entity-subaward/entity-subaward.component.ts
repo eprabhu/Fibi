@@ -92,7 +92,7 @@ export class EntitySubawardComponent implements OnInit {
     }
 
     updateFeedStatus() {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED) {
+        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
             const REQ_OBJ = {feedStatusCode : '2', entityId : this.entityDetails?.entityId };
             this.$subscriptions.push(this._entitySubAwardService.updateOrganizationDetails(REQ_OBJ).subscribe((data: string) => {
                 this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');

@@ -143,7 +143,8 @@ export const COMMON_ERROR_TOAST_MSG = 'Something went wrong, please try again.';
 
 export const ENTITY_DOCUMNET_STATUS_TYPE = {
     DUPLICATE: '3',
-    ACTIVE: '1'
+    ACTIVE: '1',
+    INACTIVE: '2'
 }
 
 export const ENTITY_VERIFICATION_STATUS = {

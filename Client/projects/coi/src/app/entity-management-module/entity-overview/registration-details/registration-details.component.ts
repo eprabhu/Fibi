@@ -47,7 +47,6 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore() {
@@ -66,6 +65,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
         this.entityId = entityData?.entityDetails?.entityId;
         this.entityRegistrations = entityData.entityRegistrations;
         this.isEditMode = this._dataStoreService.getEditMode();
+        this.checkUserHasRight();
     }
 
     private getHasDuplicateTypeCode(regTypeCode: string, entityRegistrationId: number | null): boolean {

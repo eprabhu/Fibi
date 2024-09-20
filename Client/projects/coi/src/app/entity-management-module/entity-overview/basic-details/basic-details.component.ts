@@ -30,7 +30,6 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     private getDataFromStore() {
@@ -41,6 +40,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
         this.entityCountryDetails = entityData?.entityDetails?.country;
         this.isEditMode = this.dataStore.getEditMode();
         this.entityTabStatus = entityData?.entityTabStatus;
+        this.checkUserHasRight();
     }
 
     setCreateObj(data) {

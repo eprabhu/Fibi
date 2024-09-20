@@ -54,7 +54,6 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.checkUserHasRight();
     }
 
     ngOnDestroy() {
@@ -173,6 +172,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
             this.entityIndustryClassificationsGrouping = this.groupBy(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'description');
         }
         this.isEditMode = this._dataStoreService.getEditMode();
+        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore() {
