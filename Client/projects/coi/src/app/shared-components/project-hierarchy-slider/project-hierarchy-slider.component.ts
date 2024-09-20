@@ -86,7 +86,6 @@ export class ProjectHierarchySliderComponent implements OnInit, OnDestroy {
         this._commonService.removeLoaderRestriction();
     }
 
-
     private openHierarchySlider(): void {
         setTimeout(() => {
             openCoiSlider(this.COI_HIERARCHY_SLIDER_ID);
