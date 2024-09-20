@@ -49,7 +49,6 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         this.listenDataChangeFromStore();
         this.getDataFromStore();
         this.filterLatestVersions();
-        this.checkUserHasRight();
     }
 
     ngOnDestroy(): void {
@@ -61,6 +60,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         if (isEmptyObject(ENTITY_DATA)) { return; }
         this.entityDetails = ENTITY_DATA.entityDetails;
         this.isEditMode = this._dataStoreService.getEditMode();
+        this.checkUserHasRight();
     }
 
     private listenDataChangeFromStore(): void {

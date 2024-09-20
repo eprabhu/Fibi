@@ -152,7 +152,7 @@ BEGIN
 
         ELSEIF AV_TAB_TYPE = 'ALL_REVIEWS' THEN
 
-        				SET TAB_QUERY = CONCAT(TAB_QUERY,' AND (T1.REVIEW_STATUS_CODE IN (4,7,8) AND T1.VERSION_STATUS IN (''PENDING'', ''ACTIVE'') 
+        				SET TAB_QUERY = CONCAT(TAB_QUERY,' AND (T1.REVIEW_STATUS_CODE IN (8, 4) AND T1.VERSION_STATUS IN (''PENDING'', ''ACTIVE'') 
 					AND (''', AV_PERSON_ID, ''' IN (SELECT T34.ASSIGNEE_PERSON_ID WHERE T34.REVIEW_STATUS_TYPE_CODE = 2)))
 					OR (T1.DISPOSITION_STATUS_CODE = 1 AND T1.REVIEW_STATUS_CODE IN (3,7,8) AND T1.VERSION_STATUS = ''PENDING''
 					AND( T1.ADMIN_PERSON_ID = ''', AV_PERSON_ID ,'''
@@ -355,14 +355,14 @@ BEGIN
         									    COALESCE(T14.PROPOSAL_TITLE, T21.IP_TITLE, T15.AWARD_TITLE)
         									ELSE
         									    CASE WHEN T1.FCOI_TYPE_CODE = 2 AND T50.PROJECT_SNAPSHOT IS NOT NULL THEN
-        									        T50.PROJECT_SNAPSHOT->>''$.PROJECT_TITLE''
+        									        CONVERT(T50.PROJECT_SNAPSHOT->>''$.PROJECT_TITLE'' USING latin1) COLLATE latin1_swedish_ci
         									    ELSE NULL END
         									END AS PROJECT_TITLE,
         									CASE WHEN T1.FCOI_TYPE_CODE = 2 AND T50.PROJECT_SNAPSHOT IS NULL THEN
         									    COALESCE(T14.PROPOSAL_ID, T21.IP_NUMBER, T15.AWARD_NUMBER)
         									ELSE
         									    CASE WHEN T1.FCOI_TYPE_CODE = 2 AND T50.PROJECT_SNAPSHOT IS NOT NULL THEN
-                                                    T50.PROJECT_SNAPSHOT->>''$.PROJECT_NUMBER''
+                                                    CONVERT(T50.PROJECT_SNAPSHOT->>''$.PROJECT_TITLE'' USING latin1) COLLATE latin1_swedish_ci
                                                 ELSE NULL END
                                             END AS PROJECT_NUMBER,
         									T22.BADGE_COLOR,

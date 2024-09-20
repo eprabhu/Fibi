@@ -68,6 +68,7 @@ export class DuplicateMarkingConfirmationComponent implements OnInit, OnChanges,
             this.$subscriptions.push(this._dupMarkingService.markAsDuplicate(this.getRequestObj()).subscribe((data: any) => {
                 this.entityDetails.entityDocumentStatusType.documentStatusTypeCode = '3';
                 this.entityDetails.entityDocumentStatusType.description = 'Duplicate';
+                this.entityDetails.documentStatusTypeCode = '3';
                 this.entityDetails.originalEntityId = this.duplicateEntityDetails.entityId;
                 this.originalEntityName = this.duplicateEntityDetails.entityName;
                 this.isSaving = false;
