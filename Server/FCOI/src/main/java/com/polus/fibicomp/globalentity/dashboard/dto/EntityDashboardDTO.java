@@ -9,13 +9,7 @@ import lombok.Setter;
 @Setter
 public class EntityDashboardDTO {
 
-	private Integer pageNumber;
-
-	private Integer currentPage;
-
 	private String personId;
-
-	private Boolean isDownload;
 
 	private Map<String, Object> entityDashboardData;
 

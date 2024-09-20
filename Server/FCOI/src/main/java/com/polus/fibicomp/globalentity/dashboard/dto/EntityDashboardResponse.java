@@ -23,5 +23,8 @@ public class EntityDashboardResponse {
 	private String certifiedEmail;
 	private String entityStatus;
 	private String entityVerificationStatus;
+	private String entityStatusTypeCode;
+	private String documentStatusTypeCode;
+	private String ownershipTypeCode;
 
 }
